@@ -1,14 +1,14 @@
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router-dom'
 import About from './components/About'
 
-function App() {
+function App () {
   return (
     <div className="App">
       <Route>
-          <Route path="/about" element={<About />}/>
+        <Route path="/about" element={<About />}/>
       </Route>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
