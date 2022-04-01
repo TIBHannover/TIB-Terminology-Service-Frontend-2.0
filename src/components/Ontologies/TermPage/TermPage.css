@@ -1,0 +1,17 @@
+.term-detail-label{
+    font-weight: bold !important;
+    font-size: 15px !important;
+    background-color: rgb(202, 219, 245);
+    padding: 5px;
+    text-align: center;
+}
+
+.term-detail-value{
+    padding: 7px;
+    font-size: 15px !important;
+    text-align: justify !important;
+}
+
+.term-page-row{
+    border-bottom: 1px solid black;
+}
