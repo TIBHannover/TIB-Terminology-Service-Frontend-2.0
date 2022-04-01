@@ -1,12 +1,9 @@
-import { Route } from 'react-router-dom'
-import About from './components/About'
+import Header from './components/common/Header/Header'
 
 function App () {
   return (
     <div className="App">
-      <Route>
-        <Route path="/about" element={<About />}/>
-      </Route>
+      {<Header appName={undefined} headers={undefined}/>}
     </div>
   )
 }
