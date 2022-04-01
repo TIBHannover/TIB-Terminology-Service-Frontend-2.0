@@ -1,0 +1,32 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 90%;
+  }
+  
+  td, th {
+    border: 1px solid #dad2d2;
+    text-align: left;
+    padding: 8px;
+  }
+  
+
+  .ontology-info-table-prop{
+    background-color: #dddddd;
+  }
+
+  .ontology-stats-table-prop{
+    background-color: #dddddd;
+  }
+
+  .ontology-download-table-prop{
+      background-color: #dddddd;
+  }
+
+  #info-table-wrapper{
+    padding-left: 30px;
+  }
+
+  #ontology-download-wrapper{
+    padding-left: 30px;
+  }
