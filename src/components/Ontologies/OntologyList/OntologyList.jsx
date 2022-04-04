@@ -30,7 +30,7 @@ class OntologyList extends React.Component {
     this.handlePagination = this.handlePagination.bind(this)
     this.filterFacet = this.filterFacet.bind(this)
     this.handleSortChange = this.handleSortChange.bind(this)
-    this.ontology_has_searchKey = this.ontology_has_searchKey(this)
+    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this)
   }
 
 
@@ -150,17 +150,23 @@ class OntologyList extends React.Component {
    * @returns boolean
    */
   ontology_has_searchKey(ontology, value){
-    // if (ontology.ontologyId.includes(value)) {
-    //   return true;
-    // }
-    // if (ontology.config.title.includes(value)) {
-    //   return true;
-    // }
-    // if (ontology.config.description.includes(value)) {
-    //   return true;
-    // }
-
-    return true;
+    try{
+      if (ontology.ontologyId.includes(value)) {
+        return true;
+      }
+      if (ontology.config.title.includes(value)) {
+        return true;
+      }
+      if (ontology.config.description.includes(value)) {
+        return true;
+      }
+  
+      return false;
+    }
+    catch (e){
+      console.info(e);
+      return false;
+    }
   }
 
 
@@ -249,7 +255,7 @@ class OntologyList extends React.Component {
                       <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
                         <Grid item xs={8}>
                           <div className="ontology-card-title">
-                            <h4><b>{item.config.title} ({item.name}) </b></h4>
+                            <h4><b>{item.config.title} ({item.ontologyId}) </b></h4>
                           </div>
                           <div className="ontology-card-description">
                             <p>{item.config.description}</p>
