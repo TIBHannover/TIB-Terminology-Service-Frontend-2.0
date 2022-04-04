@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
-// import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
+import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
       <Header />
         <Routes>
           <Route path="/ontologies" element={<OntologyList/>}/>
-          {/* <Route path="/ontologies/:OntologyId" element={<OntologyDetail/>}/> */}
+          <Route path="/ontologies/:OntologyId" element={<OntologyDetail/>}/>
         </Routes>
       <Footer />
       </BrowserRouter>

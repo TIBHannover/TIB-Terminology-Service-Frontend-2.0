@@ -19,7 +19,13 @@ export function getClassName (classid: string) {
     })
 }
 
-export function getOntologyDetail (ontologyid: string) {
+
+/**
+ * Get an ontology detail
+ * @param ontologyid 
+ * @returns 
+ */
+export async function getOntologyDetail (ontologyid: string) {
   return fetch(
     'https://service.tib.eu/ts4tib/api/ontologies/:OntologyId' +
         encodeURIComponent(ontologyid),
@@ -33,10 +39,10 @@ export function getOntologyDetail (ontologyid: string) {
   )
     .then((s) => s.json())
     .then((s) => {
-      return { OntologyID: ontologyid, prefLabel: s.config?.title }
+      return s;
     })
     .catch((s) => {
-      return { OntologyID: ontologyid, prefLabel: undefined }
+      return undefined
     })
 }
 
