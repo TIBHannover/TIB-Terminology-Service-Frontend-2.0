@@ -40,10 +40,14 @@ export function getOntologyDetail (ontologyid: string) {
     })
 }
 
-export function getChemOntologies (ontologyid: string) {
+
+/**
+ * Get the ontology list for chem
+ * @returns A list
+ */
+export function getChemOntologies (){
   return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM' +
-        encodeURIComponent(ontologyid),
+    'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM',
     {
       method: 'GET',
       headers: {
@@ -54,12 +58,13 @@ export function getChemOntologies (ontologyid: string) {
   )
     .then((s) => s.json())
     .then((s) => {
-      return { OntologyID: ontologyid, prefLabel: s.config?.title }
+      return s;
     })
     .catch((s) => {
-      return { OntologyID: ontologyid, prefLabel: undefined }
+      return [];
     })
 }
+
 
 export function fetchConceptById (id: string) {
   return fetch(

@@ -1,11 +1,14 @@
-import React from 'react'
-import PaginationCustom from '../pagination'
-import './OntologyList.css'
-import { Link } from 'react-router-dom'
-import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
-import Select from '@material-ui/core/Select'
-import InputLabel from '@material-ui/core/InputLabel'
+import React from 'react';
+import PaginationCustom from '../pagination';
+import './OntologyList.css';
+import { Link } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import { getChemOntologies } from '../../../api/nfdi4chemapi';
+
+
 
 class OntologyList extends React.Component {
   constructor (props) {
@@ -21,17 +24,20 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'termsCount'
+      sortField: 'numberOfTerms'
     })
-    this.ontologiesAjax()
+    this.getAllOntologies()
     this.handlePagination = this.handlePagination.bind(this)
     this.filterFacet = this.filterFacet.bind(this)
     this.handleSortChange = this.handleSortChange.bind(this)
+    this.ontology_has_searchKey = this.ontology_has_searchKey(this)
   }
 
+
+
   /**
-     * Set the target backend endpoint based the input
-     *
+     * Set the target 
+     * 
      * @param {*} target
      * @returns
      */
@@ -46,6 +52,8 @@ class OntologyList extends React.Component {
     return ''
   }
 
+
+
   /**
      * Handle the click on the pagination
      * @param {*} value
@@ -59,6 +67,8 @@ class OntologyList extends React.Component {
     })
   }
 
+
+
   /**
      * Count the number of pages for the pagination
      * @returns
@@ -67,43 +77,44 @@ class OntologyList extends React.Component {
     return (Math.ceil(this.state.ontologies.length / this.state.pageSize))
   }
 
-  /**
-     * Ajax request to fetch the list of ontologies from the backend
-     */
-  ontologiesAjax () {
-    const url = this.getTargetEndPoint(this.state.target)
-    fetch((this.props.url ?? 'http://localhost:8080') + url, {
-      method: 'GET', mode: 'cors'
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          const hiddenStatus = []
-          for (let i = 0; i < result.length; i++) {
-            if (i < this.state.pageSize) {
-              hiddenStatus[i] = true
-            } else {
-              hiddenStatus[i] = false
-            }
-          }
-          this.setState({
-            isLoaded: true,
-            ontologies: this.sortBasedOnKey(result, 'termsCount'),
-            unFilteredOntologies: this.sortBasedOnKey(result, 'termsCount'),
-            ontologiesHiddenStatus: hiddenStatus,
-            unFilteredHiddenStatus: hiddenStatus,
-            ontologyListContent: this.createOntologyList()
 
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
+
+  /**
+     * Get the list of Chem ontologies from TIB ts
+     */
+  getAllOntologies () {
+    
+    try{
+      allOntologies = getChemOntologies();
+      const hiddenStatus = []
+      for (let i = 0; i < allOntologies.length; i++) {
+          if (i < this.state.pageSize) {
+            hiddenStatus[i] = true
+          } else {
+            hiddenStatus[i] = false
+          }
+      }
+  
+      this.setState({
+        isLoaded: true,
+        ontologies: this.sortBasedOnKey(result, this.state.sortField),
+        unFilteredOntologies: this.sortBasedOnKey(result, this.state.sortField),
+        ontologiesHiddenStatus: hiddenStatus,
+        unFilteredHiddenStatus: hiddenStatus,
+        ontologyListContent: this.createOntologyList()
+      });
+    }
+
+    catch(error){
+      this.setState({
+        isLoaded: true,
+        error
+      });
+    }
+  
   }
+
+
 
   /**
        * Handle the pagination change. This function has to be passed to the Pagination component
@@ -120,6 +131,7 @@ class OntologyList extends React.Component {
     })
   }
 
+
   /**
        * Handle the change in the search box. Calls the filter function
        *
@@ -129,6 +141,29 @@ class OntologyList extends React.Component {
   filterWordChange = (e, value) => {
     this.filterFacet(e.target.value)
   }
+
+
+  /**
+   * Search in an ontology metadata to check if it contains a value
+   * @param {ontology} ontology
+   * @param {string} value 
+   * @returns boolean
+   */
+  ontology_has_searchKey(ontology, value){
+    if (ontology.ontologyId.includes(value)) {
+      return true;
+    }
+    if (ontology.config.title.includes(value)) {
+      return true;
+    }
+    if (ontology.config.description.includes(value)) {
+      return true;
+    }
+
+    return false;
+  }
+
+
 
   /**
        * Fiters the list of ontologies
@@ -150,7 +185,7 @@ class OntologyList extends React.Component {
     const hiddenStatus = []
     for (let i = 0; i < this.state.unFilteredOntologies.length; i++) {
       const ontology = this.state.unFilteredOntologies[i]
-      if (ontology.name.includes(value) || ontology.description.includes(value)) {
+      if (this.ontology_has_searchKey(ontology, value)) {
         filtered.push(ontology)
         if (filtered.length <= this.state.pageSize) {
           hiddenStatus.push(true)
@@ -166,6 +201,8 @@ class OntologyList extends React.Component {
     })
   }
 
+
+
   /**
      * Sort an array of objects based on a key
      *
@@ -179,6 +216,8 @@ class OntologyList extends React.Component {
       return ((x < y) ? 1 : ((x > y) ? -1 : 0))
     })
   }
+
+
 
   /**
      * Handle the change in the sort dropDown menu
@@ -194,6 +233,8 @@ class OntologyList extends React.Component {
     })
   }
 
+
+
   /**
      * Create the ontology list view
      *
@@ -204,14 +245,14 @@ class OntologyList extends React.Component {
     for (let i = 0; i < this.state.ontologies.length; i++) {
       const item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&
-                    <Link to={'/ontologies/' + item.id} key={i} className="ontology-card-link">
-                      <Grid container className="ontology-card" id={'ontology_' + i} key={item.id}>
+                    <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
+                      <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
                         <Grid item xs={8}>
                           <div className="ontology-card-title">
-                            <h4><b>{item.name}</b></h4>
+                            <h4><b>{item.config.title} ({item.name}) </b></h4>
                           </div>
                           <div className="ontology-card-description">
-                            <p>{item.description}</p>
+                            <p>{item.config.description}</p>
                           </div>
                         </Grid>
                         <Grid item xs={4} className="ontology-card-meta-data">
@@ -219,7 +260,7 @@ class OntologyList extends React.Component {
                             <h4>Last Update:</h4>
                             {item.updated}
                             <h4>Classes Count:</h4>
-                            {item.termsCount}
+                            {item.numberOfTerms}
                           </div>
                         </Grid>
                       </Grid>
@@ -258,10 +299,10 @@ class OntologyList extends React.Component {
                 onChange={this.handleSortChange}
                 id="ontology-sort-dropdown"
               >
-                <option value={'termsCount'}>Classes Count</option>
+                <option value={'numberOfTerms'}>Classes Count</option>
                 <option value={'updated'}>Recently Updated</option>
-                <option value={'individualsCount'}>Individuals Count</option>
-                <option value={'propertiesCount'}>Properties Count</option>
+                <option value={'numberOfIndividuals'}>Individuals Count</option>
+                <option value={'numberOfProperties'}>Properties Count</option>
               </Select>
             </Grid>
           </Grid>
