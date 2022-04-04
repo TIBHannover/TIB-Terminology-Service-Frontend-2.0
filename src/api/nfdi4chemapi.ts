@@ -2,7 +2,7 @@ const callSetting = {
   Accept: 'application/json',
   'Content-Type': 'application/json'
 }
-
+const size = 100;
 
 /**
  * Get the ontology list for chem
@@ -54,24 +54,45 @@ export async function getOntologyDetail (ontologyid: string) {
  * @param ontologyId 
  */
 export async function getOntologyRootTerms(ontologyId:string) {
-  let ontology = await getOntologyDetail(ontologyId);
-  let termsLink = ontology['_links']['terms']['href'];
-  return fetch(
-    termsLink + '/roots',
-    {
-      method: 'GET',
-      headers: callSetting
+  try{
+    let ontology = await getOntologyDetail(ontologyId);
+    let termsLink = ontology['_links']['terms']['href'];
+    let pageCount = await getPageCount(termsLink + '/roots');
+    let terms:Array<any> = [];
+    for(let page=0; page < pageCount; page++){
+        let url = termsLink + "/roots?page=" + page + "&size=" + size;      
+        let res =  await (await fetch(url, {method: 'GET', headers: callSetting})).json();
+        if(page == 0){
+            terms = res;
+        }
+        else{
+            terms = terms.concat(res);
+        }      
     }
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return s['_embedded']['terms'];
-    })
-    .catch((s) => {
-      return undefined
-    })
+    
+    return terms;
+
+  }
+  catch(e){
+    return undefined
+  }
+  
 }
 
+
+
+
+
+
+/**
+ * get the page field from json result (TS api paginates the results)
+ * @param url 
+ * @returns 
+ */
+async function getPageCount(url: string){
+  let answer = await (await fetch(url, {method: 'GET', headers: callSetting})).json();
+  return Math.ceil(answer['page']['totalElements'] / size);
+}
 
 
 

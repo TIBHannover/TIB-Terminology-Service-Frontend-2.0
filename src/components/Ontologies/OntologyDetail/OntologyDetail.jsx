@@ -53,7 +53,6 @@ class OntologyDetail extends React.Component {
   }
 
 
-
   /**
      * Get the ontology root classes 
      */
@@ -73,7 +72,7 @@ class OntologyDetail extends React.Component {
     }
   }
 
-  
+
 
   /**
      * Get the ontology root properties from the backend
