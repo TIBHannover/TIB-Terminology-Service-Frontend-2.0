@@ -40,6 +40,27 @@ export function getOntologyDetail (ontologyid: string) {
     })
 }
 
+export function getChemOntologies (ontologyid: string) {
+  return fetch(
+    'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM' +
+        encodeURIComponent(ontologyid),
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+    .then((s) => s.json())
+    .then((s) => {
+      return { OntologyID: ontologyid, prefLabel: s.config?.title }
+    })
+    .catch((s) => {
+      return { OntologyID: ontologyid, prefLabel: undefined }
+    })
+}
+
 export function fetchConceptById (id: string) {
   return fetch(
     'https://service.tib.eu/ts4tib/api/terms' +
