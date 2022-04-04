@@ -80,6 +80,35 @@ export async function getOntologyRootTerms(ontologyId:string) {
 }
 
 
+/**
+ * fetch  the root properties for an ontology
+ * @param ontologyId 
+ */
+ export async function getOntologyRootProperties(ontologyId:string) {
+  try{
+    let ontology = await getOntologyDetail(ontologyId);
+    let propertiesLink = ontology['_links']['properties']['href'];
+    let pageCount = await getPageCount(propertiesLink + '/roots');
+    let props:Array<any> = [];
+    for(let page=0; page < pageCount; page++){
+        let url = propertiesLink + "/roots?page=" + page + "&size=" + size;      
+        let res =  await (await fetch(url, {method: 'GET', headers: callSetting})).json();
+        if(page == 0){
+          props = res;
+        }
+        else{
+          props = props.concat(res);
+        }      
+    }
+    
+    return props;
+
+  }
+  catch(e){
+    return undefined
+  }
+  
+}
 
 
 
@@ -93,6 +122,7 @@ async function getPageCount(url: string){
   let answer = await (await fetch(url, {method: 'GET', headers: callSetting})).json();
   return Math.ceil(answer['page']['totalElements'] / size);
 }
+
 
 
 
