@@ -1,3 +1,81 @@
+const callSetting = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json'
+}
+
+
+/**
+ * Get the ontology list for chem
+ * @returns A list
+ */
+ export async function getChemOntologies (){
+  return fetch(
+    'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM',
+    {
+      method: 'GET',
+      headers: callSetting
+    }
+  )
+    .then((s) => s.json())
+    .then((s) => {
+      return s['_embedded']['ontologies'];
+    })
+    .catch((s) => {
+      return [];
+    })
+}
+
+
+/**
+ * Get an ontology detail
+ * @param ontologyid 
+ * @returns 
+ */
+export async function getOntologyDetail (ontologyid: string) {
+  return fetch(
+    'https://service.tib.eu/ts4tib/api/ontologies/:OntologyId' +
+        encodeURIComponent(ontologyid),
+    {
+      method: 'GET',
+      headers: callSetting
+    }
+  )
+    .then((s) => s.json())
+    .then((s) => {
+      return s;
+    })
+    .catch((s) => {
+      return undefined
+    })
+}
+
+/**
+ * fetch  the root terms (classes) for an ontology
+ * @param ontologyId 
+ */
+export async function getOntologyRootTerms(ontologyId:string) {
+  let ontology = await getOntologyDetail(ontologyId);
+  let termsLink = ontology['_links']['terms']['href'];
+  return fetch(
+    termsLink + '/roots',
+    {
+      method: 'GET',
+      headers: callSetting
+    }
+  )
+    .then((s) => s.json())
+    .then((s) => {
+      return s['_embedded']['terms'];
+    })
+    .catch((s) => {
+      return undefined
+    })
+}
+
+
+
+
+
 export function getClassName (classid: string) {
   return fetch(
     'https://service.tib.eu/ts4tib/api/ontologies/' +
@@ -19,57 +97,6 @@ export function getClassName (classid: string) {
     })
 }
 
-
-/**
- * Get an ontology detail
- * @param ontologyid 
- * @returns 
- */
-export async function getOntologyDetail (ontologyid: string) {
-  return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/:OntologyId' +
-        encodeURIComponent(ontologyid),
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return s;
-    })
-    .catch((s) => {
-      return undefined
-    })
-}
-
-
-/**
- * Get the ontology list for chem
- * @returns A list
- */
-export async function getChemOntologies (){
-  return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM',
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return s['_embedded']['ontologies'];
-    })
-    .catch((s) => {
-      return [];
-    })
-}
 
 
 export function fetchConceptById (id: string) {

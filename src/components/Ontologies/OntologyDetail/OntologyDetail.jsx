@@ -8,7 +8,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import ClassTree from '../ClassTree/ClassTree'
 import PropertyTree from '../PropertyTree/PropertyTree'
-import {getOntologyDetail} from '../../../api/nfdi4chemapi';
+import {getOntologyDetail, getOntologyRootTerms} from '../../../api/nfdi4chemapi';
 
 class OntologyDetail extends React.Component {
   constructor (props) {
@@ -54,31 +54,26 @@ class OntologyDetail extends React.Component {
 
 
 
-
   /**
-     * Get the ontology root classes from the backend
+     * Get the ontology root classes 
      */
   getRootTerms () {
-    const url = '/rootterms/' + this.state.ontologyId
-    fetch((this.props.url ?? 'http://localhost:8080') + url, {
-      method: 'GET', mode: 'cors'
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isRootTermsLoaded: true,
-            rootTerms: result
-          })
-        },
-        (error) => {
-          this.setState({
-            isRootTermsLoaded: true,
-            errorRootTerms: error
-          })
-        }
-      )
+    let rootTerms = await getOntologyRootTerms(this.state.ontologyId);
+    if (typeof rootTerms != undefined){
+      this.setState({
+        isRootTermsLoaded: true,
+        rootTerms: rootTerms
+      });
+    }
+    else{
+      this.setState({
+        isRootTermsLoaded: true,
+        errorRootTerms: error
+      });
+    }
   }
+
+  
 
   /**
      * Get the ontology root properties from the backend
