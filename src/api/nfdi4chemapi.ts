@@ -19,6 +19,27 @@ export function getClassName (classid: string) {
     })
 }
 
+export function getOntologyDetail (ontologyid: string) {
+  return fetch(
+    'https://service.tib.eu/ts4tib/api/ontologies/:OntologyId' +
+        encodeURIComponent(ontologyid),
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+    .then((s) => s.json())
+    .then((s) => {
+      return { OntologyID: ontologyid, prefLabel: s.config?.title }
+    })
+    .catch((s) => {
+      return { OntologyID: ontologyid, prefLabel: undefined }
+    })
+}
+
 export function fetchConceptById (id: string) {
   return fetch(
     'https://service.tib.eu/ts4tib/api/terms' +
