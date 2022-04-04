@@ -2,8 +2,8 @@ import React from 'react'
 import './ClassTree.css'
 import Grid from '@material-ui/core/Grid'
 import TreeView from '@material-ui/lab/TreeView'
-import StyledTreeItem from './widgets/styledTreeItem'
-import TermPage from '../termPage/termPage'
+import StyledTreeItem from './widgets/StyledTreeItem'
+import TermPage from '../TermPage/TermPage'
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons'
 
 class ClassTree extends React.Component {
