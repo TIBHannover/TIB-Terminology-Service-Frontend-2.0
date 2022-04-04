@@ -60,7 +60,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
     let terms:Array<any> = [];
     for(let page=0; page < pageCount; page++){
         let url = termsLink + "/roots?page=" + page + "&size=" + size;      
-        let res =  await (await fetch(url, {method: 'GET', headers: callSetting})).json();
+        let res =  await (await fetch(url, {method: 'GET', mode: 'no-cors', headers: callSetting})).json();
         if(page == 0){
             terms = res;
         }
@@ -91,7 +91,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
     let props:Array<any> = [];
     for(let page=0; page < pageCount; page++){
         let url = propertiesLink + "/roots?page=" + page + "&size=" + size;      
-        let res =  await (await fetch(url, {method: 'GET', headers: callSetting})).json();
+        let res =  await (await fetch(url, {method: 'GET', mode: 'no-cors', headers: callSetting})).json();
         if(page == 0){
           props = res;
         }
@@ -118,7 +118,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
  * @returns 
  */
 async function getPageCount(url: string){
-  let answer = await (await fetch(url, {method: 'GET', headers: callSetting})).json();
+  let answer = await (await fetch(url, {method: 'GET', mode: 'no-cors', headers: callSetting})).json();
   return Math.ceil(answer['page']['totalElements'] / size);
 }
 
