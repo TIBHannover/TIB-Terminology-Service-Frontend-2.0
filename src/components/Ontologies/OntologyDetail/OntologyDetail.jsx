@@ -1,13 +1,13 @@
 import React from 'react'
-import './ontologyDetail.css'
+import './OntologyDetail.css'
 import OntologyInfoBox from './widgets/infoBox'
 import OntologyStatsBox from './widgets/stats'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import ClassTree from '../classTree/classTree'
-import PropertyTree from '../propertyTree/propertyTree'
+import ClassTree from '../ClassTree/ClassTree'
+import PropertyTree from '../PropertyTree/PropertyTree'
 
 class OntologyPage extends React.Component {
   constructor (props) {
