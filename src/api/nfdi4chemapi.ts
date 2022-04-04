@@ -1,6 +1,6 @@
 export function getClassName (classid: string) {
   return fetch(
-    'https://semanticlookup.zbmed.de/ols/api/ontologies/' +
+    'https://service.tib.eu/ts4tib/api/ontologies/' +
         encodeURIComponent(classid),
     {
       method: 'GET',
