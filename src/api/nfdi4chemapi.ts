@@ -118,8 +118,6 @@ export const fetch_data = (url: string) => {
     }
   })
     .then((res) => res.json())
-    // eslint-disable-next-line node/handle-callback-err
-    // eslint-disable-next-line handle-callback-err
     .catch((err) => {
       return []
     })
