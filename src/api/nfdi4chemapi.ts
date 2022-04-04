@@ -21,7 +21,7 @@ export function getClassName (classid: string) {
 
 export function fetchConceptById (id: string) {
   return fetch(
-    'https://semanticlookup.zbmed.de/ols/api/terms/' +
+    'https://service.tib.eu/ts4tib/api/terms' +
         encodeURIComponent(encodeURIComponent(id)),
     {
       method: 'GET',
@@ -43,7 +43,7 @@ export function autocompleteConcept (text: string, ontology:string|undefined) {
     quert = '&ontology=' + ontology
   }
   return fetch(
-    'https://semanticlookup.zbmed.de/ols/api/select?queryFields=label,synonym,short_form,obo_id&groupField=true&type=class&q=' + text + quert,
+    'https://service.tib.eu/ts4tib/api/select?queryFields=label,synonym,short_form,obo_id&groupField=true&type=class&q=' + text + quert,
     {
       method: 'GET',
       headers: {
