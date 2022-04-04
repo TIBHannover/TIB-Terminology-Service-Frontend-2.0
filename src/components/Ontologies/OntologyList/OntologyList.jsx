@@ -82,11 +82,11 @@ class OntologyList extends React.Component {
   /**
      * Get the list of Chem ontologies from TIB ts
      */
-  getAllOntologies () {
+  async getAllOntologies () {
     
     try{
-      const allOntologies = getChemOntologies();
-      const hiddenStatus = []
+      const allOntologies = await getChemOntologies();
+      let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
             hiddenStatus[i] = true
@@ -150,18 +150,17 @@ class OntologyList extends React.Component {
    * @returns boolean
    */
   ontology_has_searchKey(ontology, value){
-    console.info(ontology);
-    if (ontology.ontologyId.includes(value)) {
-      return true;
-    }
-    if (ontology.config.title.includes(value)) {
-      return true;
-    }
-    if (ontology.config.description.includes(value)) {
-      return true;
-    }
+    // if (ontology.ontologyId.includes(value)) {
+    //   return true;
+    // }
+    // if (ontology.config.title.includes(value)) {
+    //   return true;
+    // }
+    // if (ontology.config.description.includes(value)) {
+    //   return true;
+    // }
 
-    return false;
+    return true;
   }
 
 

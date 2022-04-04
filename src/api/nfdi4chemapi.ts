@@ -45,7 +45,7 @@ export function getOntologyDetail (ontologyid: string) {
  * Get the ontology list for chem
  * @returns A list
  */
-export function getChemOntologies (){
+export async function getChemOntologies (){
   return fetch(
     'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM',
     {
@@ -58,7 +58,7 @@ export function getChemOntologies (){
   )
     .then((s) => s.json())
     .then((s) => {
-      return s;
+      return s['_embedded']['ontologies'];
     })
     .catch((s) => {
       return [];
