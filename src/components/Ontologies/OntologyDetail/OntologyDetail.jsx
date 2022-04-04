@@ -1,14 +1,14 @@
 import React from 'react'
 import './OntologyDetail.css'
 import OntologyInfoBox from './widgets/infoBox'
-import OntologyStatsBox from './widgets/stats'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import ClassTree from '../ClassTree/ClassTree'
-import PropertyTree from '../PropertyTree/PropertyTree'
-import {getOntologyDetail, getOntologyRootTerms} from '../../../api/nfdi4chemapi';
+import OntologyStatsBox from './widgets/stats';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import ClassTree from '../ClassTree/ClassTree';
+import PropertyTree from '../PropertyTree/PropertyTree';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
 
 class OntologyDetail extends React.Component {
   constructor (props) {
@@ -56,7 +56,7 @@ class OntologyDetail extends React.Component {
   /**
      * Get the ontology root classes 
      */
-  getRootTerms () {
+  async getRootTerms () {
     let rootTerms = await getOntologyRootTerms(this.state.ontologyId);
     if (typeof rootTerms != undefined){
       this.setState({
@@ -77,24 +77,18 @@ class OntologyDetail extends React.Component {
   /**
      * Get the ontology root properties from the backend
      */
-  getRootProps () {
-    const url = '/rootproperties/' + this.state.ontologyId
-    fetch((this.props.url ?? 'http://localhost:8080') + url, {
-      method: 'GET', mode: 'cors'
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            rootProps: result
-          })
-        },
-        // eslint-disable-next-line handle-callback-err
-        (error) => {
-
-        }
-      )
+  async getRootProps () {
+    let rootProps = await getOntologyRootProperties(this.state.ontologyId);
+    if (typeof rootProps != undefined){
+      this.setState({
+        rootProps: rootProps
+      });
+    }
+   
   }
+
+
+
 
   /**
      * Handle the tab change in the ontology detail Top menu
@@ -127,11 +121,15 @@ class OntologyDetail extends React.Component {
     }
   }
 
+
+
   componentDidMount () {
     this.getOntology()
     this.getRootTerms()
     this.getRootProps()
   }
+
+
 
   render () {
     if (this.state.error) {

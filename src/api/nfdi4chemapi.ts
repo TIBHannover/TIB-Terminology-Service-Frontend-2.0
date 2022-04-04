@@ -33,8 +33,7 @@ const size = 100;
  */
 export async function getOntologyDetail (ontologyid: string) {
   return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/:OntologyId' +
-        encodeURIComponent(ontologyid),
+    'https://service.tib.eu/ts4tib/api/ontologies/' + encodeURIComponent(ontologyid),
     {
       method: 'GET',
       headers: callSetting

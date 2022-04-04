@@ -1,8 +1,6 @@
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
-import { Route } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
-import { Routes } from "react-router-dom";
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
 import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
 
@@ -11,12 +9,12 @@ function App() {
     <div className="App">
      
       <BrowserRouter>
-      <Header />
-        <Routes>
-          <Route path="/ontologies" element={<OntologyList/>}/>
-          <Route path="/ontologies/:OntologyId" element={<OntologyDetail/>}/>
-        </Routes>
-      <Footer />
+        <Header />
+        <Switch>
+          <Route exact path="/ontologies" component={OntologyList}/>
+          <Route exact path="/ontologies/:ontologyId" component={OntologyDetail}/>
+        </Switch>
+        <Footer />
       </BrowserRouter>
     </div>
   );
