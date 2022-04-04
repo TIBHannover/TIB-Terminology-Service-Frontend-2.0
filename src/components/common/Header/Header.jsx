@@ -1,130 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react';
+import { Navbar } from '../../common/Navbar/Navbar'
 
-import {
-  AppBar,
-  ClickAwayListener,
-  Grid,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-  Typography
-} from '@material-ui/core'
-import {
-  withStyles,
-  StylesProvider,
-  createGenerateClassName
-} from '@material-ui/core/styles'
-import MenuIcon from '@material-ui/icons/Menu'
+import './Header.css';
 
-const generateClassName = createGenerateClassName({
-  productionPrefix: 'c'
-})
-
-const styles = {
-  appBar: {
-    background: 'white',
-    padding: 10,
-    boxShadow:
-      '-6px 2px 0px -1px rgba(0, 0, 0, 0.1), 3px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)'
-  },
-  gridItem: {
-    paddingLeft: 10,
-    paddingRight: 35
-  },
-  paper: {
-    marginRight: 20
-  }
-}
-const Header = ({ appName, headers, classes }) => {
-  const [open, setOpen] = useState(false)
-  const anchorRef = useRef(null)
-
-  const handleToggle = () => {
-    setOpen(prevOpen => !prevOpen)
-  }
-
-  const handleClose = event => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return
-    }
-
-    setOpen(false)
-  }
-
-  const prevOpen = useRef(open)
-  useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus()
-    }
-
-    prevOpen.current = open
-  }, [open])
+function Header () {
 
   return (
-    <StylesProvider generateClassName={generateClassName}>
-      <div>
-        <AppBar position="sticky" className={classes.appBar}>
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item className={classes.gridItem}>
-              <Typography variant="h5" style={{ color: 'grey' }}>
-                {appName}
-              </Typography>
-            </Grid>
-            <Grid item className={classes.gridItem}>
-              <MenuIcon
-                style={{ color: 'black' }}
-                ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-              />
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === 'bottom' ? 'center top' : 'center bottom'
-                    }}
-                  >
-                    <ClickAwayListener onClickAway={handleClose}>
-                      <Paper className={classes.paper}>
-                        <MenuList autoFocusItem={open} id="menu-list-grow">
-                          {headers.map(link => (
-                            // eslint-disable-next-line react/jsx-key
-                            <MenuItem
-                              onClick={event => {
-                                window.open(link.link, '_blank')
-                                handleClose(event)
-                              }}
-                            >
-                              {link.label}
-                            </MenuItem>
-                          ))}
-                        </MenuList>
-                      </Paper>
-                    </ClickAwayListener>
-                  </Grow>
-                )}
-              </Popper>
-            </Grid>
-          </Grid>
-        </AppBar>
-      </div>
-    </StylesProvider>
+    <section className="header">
+      <section className="header-top">
+        <section className="header-top__logo">
+          <img src={"https://www.nfdi4chem.de/wp-content/uploads/2021/11/cropped-NFDI4Chem-Logo-Claim_mehrfarbig_schwarz-e1636478409489.png"} alt="nfdi4chem logo" height={90} width={180} />
+        </section>
+        <section className="header-top__navbar">
+          <section className="header-top__navigation">
+            <Navbar />
+          </section>
+          <hr className="header-top__seperator" />
+        </section>
+      </section>
+    </section>
   )
 }
-export default withStyles(styles)(Header)
+
+export default Header;
