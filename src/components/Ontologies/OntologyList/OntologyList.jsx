@@ -1,5 +1,5 @@
 import React from 'react';
-import PaginationCustom from '../pagination';
+import PaginationCustom from '../Pagination/Pagination';
 import './OntologyList.css';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
@@ -85,7 +85,7 @@ class OntologyList extends React.Component {
   getAllOntologies () {
     
     try{
-      allOntologies = getChemOntologies();
+      const allOntologies = getChemOntologies();
       const hiddenStatus = []
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -97,8 +97,8 @@ class OntologyList extends React.Component {
   
       this.setState({
         isLoaded: true,
-        ontologies: this.sortBasedOnKey(result, this.state.sortField),
-        unFilteredOntologies: this.sortBasedOnKey(result, this.state.sortField),
+        ontologies: this.sortBasedOnKey(allOntologies, this.state.sortField),
+        unFilteredOntologies: this.sortBasedOnKey(allOntologies, this.state.sortField),
         ontologiesHiddenStatus: hiddenStatus,
         unFilteredHiddenStatus: hiddenStatus,
         ontologyListContent: this.createOntologyList()
@@ -150,6 +150,7 @@ class OntologyList extends React.Component {
    * @returns boolean
    */
   ontology_has_searchKey(ontology, value){
+    console.info(ontology);
     if (ontology.ontologyId.includes(value)) {
       return true;
     }

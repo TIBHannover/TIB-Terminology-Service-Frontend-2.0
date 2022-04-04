@@ -1,18 +1,23 @@
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
 import { Route } from "react-router-dom";
-import Ontologies from "./components/Ontologies/Ontologies";
-import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
+import { BrowserRouter } from "react-router-dom";
+import { Routes } from "react-router-dom";
+import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
+// import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
 
 function App() {
   return (
     <div className="App">
+     
+      <BrowserRouter>
       <Header />
-      <Route>
-        <Route path="/ontologies" element={<Ontologies/>}/>
-        <Route path="/ontologies/:OntologyId" element={<OntologyDetail/>}/>
-      </Route>
+        <Routes>
+          <Route path="/ontologies" element={<OntologyList/>}/>
+          {/* <Route path="/ontologies/:OntologyId" element={<OntologyDetail/>}/> */}
+        </Routes>
       <Footer />
+      </BrowserRouter>
     </div>
   );
 }
