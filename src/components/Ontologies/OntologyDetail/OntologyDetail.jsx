@@ -9,13 +9,17 @@ import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@mui/material/CircularProgress';
 import ClassTree from '../ClassTree/ClassTree';
 import PropertyTree from '../PropertyTree/PropertyTree';
+import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
+
+
 
 class OntologyDetail extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
       ontologyId: props.match.params.ontologyId,
+      requestedTab: props.match.params.tab,
       ontology: null,
       error: null,
       isLoaded: false,
@@ -29,7 +33,47 @@ class OntologyDetail extends React.Component {
       rootProps: [],
       waiting: false
     })
-    this.tabChange = this.tabChange.bind(this)
+    this.tabChange = this.tabChange.bind(this);
+    this.setTabOnLoad = this.setTabOnLoad.bind(this);
+  }
+
+
+
+  /**
+   * Set the active tab and its page on load
+   */
+  setTabOnLoad(){
+    let requestedTab = this.state.requestedTab;
+    if (requestedTab == 'terms'){
+      this.setState({
+        overViewTab: false,
+        termsTab: true,
+        propTab: false,
+        activeTab: 1,
+        waiting: false
+
+      });
+    }
+    else if (requestedTab == 'props'){
+      this.setState({
+        overViewTab: false,
+        termsTab: false,
+        propTab: true,
+        activeTab: 2,
+        waiting: false
+
+      });
+    }
+    else{
+      this.setState({
+        overViewTab: true,
+        termsTab: false,
+        propTab: false,
+        activeTab: 0,
+        waiting: false
+
+      });
+    }
   }
 
 
@@ -130,11 +174,11 @@ class OntologyDetail extends React.Component {
   }
 
 
-
   componentDidMount () {
-    this.getOntology()
-    this.getRootTerms()
-    this.getRootProps()
+    this.getOntology();
+    this.getRootTerms();
+    this.getRootProps();
+    this.setTabOnLoad();
   }
 
 
@@ -155,10 +199,10 @@ class OntologyDetail extends React.Component {
               onChange={this.tabChange}
               aria-label="disabled tabs example"
             >
-              <Tab label="Overview" />
-              <Tab label="Classes" />
-              <Tab label="Properties"/>
-              <Tab label="Mappings"/>
+              <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
+              <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
+              <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
+              <Tab label="Mappings"  to={"/ontologies/" + this.state.ontologyId + "/mapping"}  component={Link} />
             </Tabs>
           </Paper>
           {!this.state.waiting && this.state.overViewTab &&
@@ -189,5 +233,6 @@ class OntologyDetail extends React.Component {
     }
   }
 }
+
 
 export default OntologyDetail

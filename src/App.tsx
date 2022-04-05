@@ -3,6 +3,8 @@ import Header from "./components/common/Header/Header";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
 import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
+import ClassTree from "./components/Ontologies/ClassTree/ClassTree";
+import PropertyTree from "./components/Ontologies/PropertyTree/PropertyTree";
 
 function App() {
   return (
@@ -12,7 +14,7 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/ontologies" component={OntologyList}/>
-          <Route exact path="/ontologies/:ontologyId" component={OntologyDetail}/>
+          <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
         </Switch>
         <Footer />
       </BrowserRouter>
