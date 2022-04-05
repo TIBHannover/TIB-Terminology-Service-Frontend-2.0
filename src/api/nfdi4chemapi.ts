@@ -1,7 +1,7 @@
-const callSetting = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json'
-}
+const callHeader = {
+  'Accept': 'application/json'
+};
+const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 100;
 
 /**
@@ -11,10 +11,7 @@ const size = 100;
  export async function getChemOntologies (){
   return fetch(
     'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM',
-    {
-      method: 'GET',
-      headers: callSetting
-    }
+    getCallSetting
   )
     .then((s) => s.json())
     .then((s) => {
@@ -34,16 +31,13 @@ const size = 100;
 export async function getOntologyDetail (ontologyid: string) {
   return fetch(
     'https://service.tib.eu/ts4tib/api/ontologies/' + encodeURIComponent(ontologyid),
-    {
-      method: 'GET',
-      headers: callSetting
-    }
+    getCallSetting
   )
     .then((s) => s.json())
     .then((s) => {
       return s;
     })
-    .catch((s) => {
+    .catch((e) => {
       return undefined
     })
 }
@@ -60,12 +54,12 @@ export async function getOntologyRootTerms(ontologyId:string) {
     let terms:Array<any> = [];
     for(let page=0; page < pageCount; page++){
         let url = termsLink + "/roots?page=" + page + "&size=" + size;      
-        let res =  await (await fetch(url, {method: 'GET', mode: 'no-cors', headers: callSetting})).json();
+        let res =  await (await fetch(url, getCallSetting)).json();
         if(page == 0){
-            terms = res;
+            terms = res['_embedded']['terms'];
         }
         else{
-            terms = terms.concat(res);
+            terms = terms.concat(res['_embedded']['terms']);
         }      
     }
     
@@ -91,12 +85,12 @@ export async function getOntologyRootTerms(ontologyId:string) {
     let props:Array<any> = [];
     for(let page=0; page < pageCount; page++){
         let url = propertiesLink + "/roots?page=" + page + "&size=" + size;      
-        let res =  await (await fetch(url, {method: 'GET', mode: 'no-cors', headers: callSetting})).json();
+        let res =  await (await fetch(url, getCallSetting)).json();
         if(page == 0){
-          props = res;
+          props = res['_embedded']['properties'];
         }
         else{
-          props = props.concat(res);
+          props = props.concat(res['_embedded']['properties']);
         }      
     }
     
@@ -104,12 +98,11 @@ export async function getOntologyRootTerms(ontologyId:string) {
 
   }
   catch(e){
+    console.info(e);
     return undefined
   }
   
 }
-
-
 
 
 /**
@@ -118,7 +111,8 @@ export async function getOntologyRootTerms(ontologyId:string) {
  * @returns 
  */
 async function getPageCount(url: string){
-  let answer = await (await fetch(url, {method: 'GET', mode: 'no-cors', headers: callSetting})).json();
+  let answer = await fetch(url, getCallSetting);
+  answer = await answer.json();
   return Math.ceil(answer['page']['totalElements'] / size);
 }
 
