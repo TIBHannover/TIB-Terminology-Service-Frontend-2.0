@@ -55,7 +55,7 @@ class ClassTree extends React.Component {
     if (node.short_form === shortForm && node.has_children) {
       let childrenNodes = await getChildren(node['_links']['children']['href'], 'term');
       if (childrenNodes.length > 0){
-        node.children = data;
+        node.children = childrenNodes;
         this.setState({
           expandedNodes: expanded,
           currentExpandedTerm: node

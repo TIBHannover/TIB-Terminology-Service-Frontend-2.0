@@ -63,7 +63,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return terms;
+    return processForTree(terms);
 
   }
   catch(e){
@@ -94,7 +94,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return props;
+    return processForTree(props);
 
   }
   catch(e){
@@ -128,10 +128,10 @@ export async function getChildren(childrenLink: string, mode: string){
       let data = await fetch(childrenLink, getCallSetting);
       data = await data.json();
       if (mode === 'term'){
-        return data['_embedded']['terms']
+        return processForTree(data['_embedded']['terms']); 
       }
       else{
-        return data['_embedded']['properties']
+        return processForTree(data['_embedded']['properties']);
       }
   }
   catch(e){
@@ -139,6 +139,21 @@ export async function getChildren(childrenLink: string, mode: string){
   }
 }
 
+
+/**
+ * This function process each node (term/property) obtainded from API call to match with the tree view. 
+ * A tree node needs: children, id (beside existing metadata) 
+ * @param listOfNodes 
+ */
+function processForTree(listOfNodes: Array<any>){
+  let processedListOfNodes: Array<any> = [];
+  for(let i=0; i < listOfNodes.length; i++){
+    listOfNodes[i]['children'] = [];
+    listOfNodes[i]['id'] = listOfNodes[i]['obo_id'];
+    processedListOfNodes.push(listOfNodes[i]);
+  }
+  return processedListOfNodes;
+}
 
 
 
