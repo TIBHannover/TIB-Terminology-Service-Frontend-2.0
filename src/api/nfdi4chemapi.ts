@@ -117,6 +117,28 @@ async function getPageCount(url: string){
 }
 
 
+/**
+ * Get the children of a node (term/property) to load in the tree view.
+ * @param childrenLink 
+ * @param mode
+ * @returns 
+ */
+export async function getChildren(childrenLink: string, mode: string){
+  try{
+      let data = await fetch(childrenLink, getCallSetting);
+      data = await data.json();
+      if (mode === 'term'){
+        return data['_embedded']['terms']
+      }
+      else{
+        return data['_embedded']['properties']
+      }
+  }
+  catch(e){
+      return [];
+  }
+}
+
 
 
 
