@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import CircularProgress from '@mui/material/CircularProgress';
 import ClassTree from '../ClassTree/ClassTree';
 import PropertyTree from '../PropertyTree/PropertyTree';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
@@ -25,7 +26,8 @@ class OntologyDetail extends React.Component {
       propTab: false,
       activeTab: 0,
       rootTerms: [],
-      rootProps: []
+      rootProps: [],
+      waiting: false
     })
     this.tabChange = this.tabChange.bind(this)
   }
@@ -97,26 +99,32 @@ class OntologyDetail extends React.Component {
      * @param {*} value
      */
   tabChange = (e, value) => {
+    this.setState({
+      waiting: true
+    });
     if (value === 0) { // overview
       this.setState({
         overViewTab: true,
         termsTab: false,
         propTab: false,
-        activeTab: 0
+        activeTab: 0,
+        waiting: false
       })
     } else if (value === 1) { // terms (classes)
       this.setState({
         overViewTab: false,
         termsTab: true,
         propTab: false,
-        activeTab: 1
+        activeTab: 1,
+        waiting: false
       })
     } else { // properties
       this.setState({
         overViewTab: false,
         termsTab: false,
         propTab: true,
-        activeTab: 2
+        activeTab: 2,
+        waiting: false
       })
     }
   }
@@ -153,7 +161,7 @@ class OntologyDetail extends React.Component {
               <Tab label="Mappings"/>
             </Tabs>
           </Paper>
-          {this.state.overViewTab &&
+          {!this.state.waiting && this.state.overViewTab &&
                         <Grid container>
                           <Grid item xs={8}>
                             <OntologyInfoBox ontology={this.state.ontology} />
@@ -163,17 +171,18 @@ class OntologyDetail extends React.Component {
                           </Grid>
                         </Grid>
           }
-          {this.state.termsTab &&
+          {!this.state.waiting && this.state.termsTab &&
                         <ClassTree
                           rootTerms={this.state.rootTerms}
                         />
           }
 
-          {this.state.propTab &&
+          {!this.state.waiting && this.state.propTab &&
                         <PropertyTree
                           rootProps={this.state.rootProps}
                         />
           }
+          {this.state.waiting && <CircularProgress />}
         </div>
 
       )
