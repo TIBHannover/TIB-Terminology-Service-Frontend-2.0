@@ -78,6 +78,9 @@ class PropertyTree extends React.Component {
      * @param {*} value
      */
   handleChange = (e, value) => {
+    this.setState({
+      expandedNodes:value
+    });
     const vNodes = this.state.visitedNodes
     if (!vNodes.includes(value[0])) {
       vNodes.push(value[0])
