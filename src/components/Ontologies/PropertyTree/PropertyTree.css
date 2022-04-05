@@ -1,0 +1,7 @@
+#props-tree-container{
+    height: 1000px;
+    overflow-y: scroll;
+    padding-bottom: 500px;
+    padding-top: 50px;
+    z-index: 999;
+}

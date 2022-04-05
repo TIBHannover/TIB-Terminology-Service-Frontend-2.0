@@ -46,7 +46,7 @@ class OntologyDetail extends React.Component {
     else{
       this.setState({
         isLoaded: true,
-        error
+        error: 'Can not get this ontology'
       });
     }
 
@@ -67,7 +67,7 @@ class OntologyDetail extends React.Component {
     else{
       this.setState({
         isRootTermsLoaded: true,
-        errorRootTerms: error
+        errorRootTerms: 'Can not get this ontology root terms'
       });
     }
   }

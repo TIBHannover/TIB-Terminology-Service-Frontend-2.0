@@ -1,5 +1,5 @@
 import React from 'react'
-import './ClassTree.css'
+import './ClassTree.css';
 import Grid from '@material-ui/core/Grid'
 import TreeView from '@material-ui/lab/TreeView'
 import StyledTreeItem from './widgets/StyledTreeItem'
@@ -131,7 +131,7 @@ class ClassTree extends React.Component {
 
   render () {
     return (
-      <Grid container spacing={4} id="term-view-container">
+      <Grid container spacing={0} id="term-view-container">
         <Grid item xs={5} id="terms-tree-container">
           <TreeView
             defaultCollapseIcon={<MinusSquare />}

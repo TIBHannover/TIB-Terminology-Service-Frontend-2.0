@@ -2,9 +2,16 @@
     padding: 20px;
 }
 
-
 .tree-element > .MuiTreeItem-content > .MuiTypography-root{
     font-size: 14px;
-    margin-bottom: 5px;
+    margin-bottom: 5px;   
+}
+
+#terms-tree-container{
+    height: 1000px;
+    overflow-y: scroll;
+    padding-bottom: 500px;
+    padding-top: 50px;
+    z-index: 999;
     
 }
