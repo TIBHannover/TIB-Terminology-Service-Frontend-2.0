@@ -60,7 +60,7 @@ class PropertyPage extends React.Component {
               <Typography className="property-detail-label">Definition</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
-              {this.formatText(this.props.property.definition)}
+              {this.formatText(this.props.property['annotation']['definition source'])}
             </Grid>
           </Grid>
         </Grid>
@@ -80,7 +80,7 @@ class PropertyPage extends React.Component {
               <Typography className="property-detail-label">Ontology</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
-              {this.formatText(this.props.property.ontologyId)}
+              {this.formatText(this.props.property.ontology_name)}
             </Grid>
           </Grid>
         </Grid>
@@ -90,7 +90,7 @@ class PropertyPage extends React.Component {
               <Typography className="property-detail-label">Curation Status</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
-              {this.formatText(this.props.property.curation_status)}
+              {this.formatText(this.props.property['annotation']['has curation status'])}
             </Grid>
           </Grid>
         </Grid>
@@ -100,7 +100,7 @@ class PropertyPage extends React.Component {
               <Typography className="property-detail-label">Editor</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
-              {this.formatText(this.props.property.editor)}
+              {this.formatText(this.props.property['annotation']['term editor'])}
             </Grid>
           </Grid>
         </Grid>
@@ -110,7 +110,7 @@ class PropertyPage extends React.Component {
               <Typography className="property-detail-label">Is Defined By</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
-              {this.formatText(this.props.property.isDefinedBy)}
+              {this.formatText(this.props.property['annotation']['isDefinedBy'])}
             </Grid>
           </Grid>
         </Grid>
