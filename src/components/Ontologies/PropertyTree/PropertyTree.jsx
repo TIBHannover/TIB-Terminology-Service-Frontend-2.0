@@ -146,7 +146,7 @@ class PropertyTree extends React.Component {
             {this.createTree(this.state.treeData)}
           </TreeView>
         </Grid>
-        {this.state.showPropertyDetailPage && <Grid item xs={7}>
+        {this.state.showPropertyDetailPage && <Grid item xs={7} id="props-table-container">
           <PropertyPage
             property={this.state.selectedProperty}
           />

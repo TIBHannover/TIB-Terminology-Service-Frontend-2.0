@@ -145,7 +145,7 @@ class ClassTree extends React.Component {
             {this.createTree(this.state.treeData)}
           </TreeView>
         </Grid>
-        {this.state.showTermDetailPage && <Grid item xs={7}>
+        {this.state.showTermDetailPage && <Grid item xs={7} id="terms-table-container">
           <TermPage
             term={this.state.selectedTerm}
           />
