@@ -1,9 +1,11 @@
-import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import TreeView from '@material-ui/lab/TreeView'
-import StyledTreeItem from './widgets/StyledTreeItem'
-import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons'
-import PropertyPage from '../PropertyPage/PropertyPage'
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import TreeView from '@material-ui/lab/TreeView';
+import StyledTreeItem from './widgets/StyledTreeItem';
+import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
+import PropertyPage from '../PropertyPage/PropertyPage';
+import {getChildren} from '../../../api/nfdi4chemapi';
+
 
 class PropertyTree extends React.Component {
   constructor (props) {
@@ -20,19 +22,6 @@ class PropertyTree extends React.Component {
     })
   }
 
-  /**
-     * Fetch call for getting childrens of a property
-     * @param {*} link
-     * @returns
-     */
-  getChildrenAjax (link) {
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ childrenLink: link })
-    }
-    return fetch('/propertychildren', requestOptions)
-  }
 
   /**
      * Construct the classes(terms) tree
@@ -54,34 +43,33 @@ class PropertyTree extends React.Component {
     })
   }
 
+
+
   /**
      * Expand a node on the tree
      * @param {*} node
      * @param {*} shortForm
      * @param {*} expanded
      */
-  updateNodeInTree (node, shortForm, expanded) {
+  async updateNodeInTree (node, shortForm, expanded) {
     if (node.short_form === shortForm && node.has_children) {
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ childrenLink: node.childrenLink })
-      }
-      fetch('/propertychildren', requestOptions)
-        .then(response => response.json())
-        .then((data) => {
-          node.children = data
-          this.setState({
-            expandedNodes: expanded,
-            currentExpandedTerm: node
-          })
-        })
-    } else if (node.has_children) {
+      let childrenNodes = await getChildren(node['_links']['children']['href'], 'property');
+      if (childrenNodes.length > 0){
+        node.children = childrenNodes;
+        this.setState({
+          expandedNodes: expanded,
+          currentExpandedTerm: node
+        });
+      }   
+    } 
+    else if (node.has_children) {
       for (let i = 0; i < node.children.length; i++) {
         this.updateNodeInTree(node.children[i], shortForm, expanded)
       }
     }
   }
+
+
 
   /**
      * handle toggle node on the tree. calls node expansion
@@ -105,6 +93,8 @@ class PropertyTree extends React.Component {
     })
   }
 
+
+
   /**
      * find the selected node on the tree. Used in term detail component
      * @param {*} node
@@ -123,6 +113,8 @@ class PropertyTree extends React.Component {
     }
   }
 
+
+
   /**
      * Event handler for selecting a node in a tree
      * @param {*} e
@@ -134,6 +126,8 @@ class PropertyTree extends React.Component {
       this.findSelectedProperty(tree[i], value)
     }
   }
+
+
 
   render () {
     return (
