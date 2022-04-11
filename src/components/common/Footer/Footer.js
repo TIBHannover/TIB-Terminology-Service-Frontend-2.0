@@ -7,6 +7,7 @@ import TIB_LOGO from '../../../assets/img/TIB_Logo_en.png';
 import DFG_LOGO from '../../../assets/img/dfg_logo.png';
 import CHEM_LOGO from '../../../assets/img/favicon-nfdi4chem.PNG'
 import styled from 'styled-components';
+import './Footer.css'
 
 const FooterWrapper = styled.div`
     background: #e0e2ea;
@@ -128,7 +129,7 @@ const Footer = () => (
                 <Row className="mt-4">
                     <PartnerLogoCol md={4} style={{}}>
                         <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '50px' }} />
+                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '60px' }} />
                         </a>
                     </PartnerLogoCol>
                     <Col md={8}>
@@ -137,7 +138,7 @@ const Footer = () => (
                         <img
                             src={DFG_LOGO}
                             alt="NFDI4Chem is supported by DFG under project number 441958208"
-                            style={{ borderWidth: 0, height: '50px' }}
+                            style={{ borderWidth: 0, height: '60px' }}
                         />
                         </PartnerLogoCol>
                         </Row>
