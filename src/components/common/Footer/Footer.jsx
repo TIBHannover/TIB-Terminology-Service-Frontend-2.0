@@ -1,6 +1,4 @@
 import { Container, Row, Col, Badge } from 'reactstrap';
-import ROUTES from 'constants/routes';
-import ROUTES_CMS from 'constants/routesCms';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -49,19 +47,19 @@ const Footer = () => (
     <FooterWrapper>
         <Container>
             <footer className="pt-4 pb-4">
-                <h1 className="sr-only">More information about ORKG</h1>
+                <h1 className="sr-only">More information about NFDI4Chem</h1>
                 <Row>
                     <FooterCol md={3}>
-                        <h2 className="h5">ORKG</h2>
+                        <h2 className="h5">NFDI4Chem</h2>
                         <hr className="me-5" />
                         <Row>
                             <div className="float-start col-md-3">
-                                <Link to={ROUTES.HOME}>
+                                <Link to={{pathname: "https://www.nfdi4chem.de/"}}>
                                     <Logo style={{ height: '80px' }} />
                                 </Link>
                             </div>
                             <div className="col-md-8 description">
-                                The Open Research Knowledge Graph aims to describe research papers in a structured manner
+                            NFDI4Chem is an initiative to build an open and FAIR infrastructure for research data management in chemistry.
                             </div>
                         </Row>
                     </FooterCol>
@@ -70,10 +68,10 @@ const Footer = () => (
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
                             <li>
-                                <Link to={reverse(ROUTES.ABOUT, {})}>About us</Link>
+                                <Link to={{pathname: "https://www.nfdi4chem.de/index.php/konsortium/"}}>About us</Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.HELP_CENTER}>Help center</Link>
+                                <Link to={{pathname: "https://www.nfdi4chem.de/index.php/helpdesk/"}}>Helpdesk</Link>
                             </li>
                             {/*<li>
                                 <a href="https://projects.tib.eu/orkg/get-involved/" target="_blank" rel="noopener noreferrer">
@@ -81,13 +79,13 @@ const Footer = () => (
                                 </a>
                             </li>*/}
                             <li>
-                                <Link to={reverse(ROUTES.PAGE, { url: ROUTES_CMS.DATA_PROTECTION })}>Data protection</Link>
+                                <Link to={""}>Data protection</Link>
                             </li>
                             <li>
-                                <Link to={reverse(ROUTES.PAGE, { url: ROUTES_CMS.TERMS_OF_USE })}>Terms of use</Link>
+                                <Link to={""}>Terms of use</Link>
                             </li>
                             <li>
-                                <Link to={reverse(ROUTES.PAGE, { url: ROUTES_CMS.IMPRINT })}>Imprint</Link>
+                                <Link to={""}>Imprint</Link>
                             </li>
                         </ul>
                     </FooterCol>
@@ -96,21 +94,15 @@ const Footer = () => (
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
                             <li>
-                                <Link to={ROUTES.DATA}>Data Access</Link>
-                            </li>
-                            <li>
-                                <Link to={ROUTES.CHANGELOG}>Changelog</Link>
-                            </li>
-                            <li>
-                                <a href="https://gitlab.com/TIBHannover/orkg/orkg-frontend/" target="_blank" rel="noopener noreferrer">
+                                <a href="" target="_blank" rel="noopener noreferrer">
                                     GitLab
                                 </a>
                             </li>
                             <li>
-                                <Link to={reverse(ROUTES.PAGE, { url: ROUTES_CMS.ACCESSIBILITY_STATEMENT })}>Accessibility</Link>
+                                <Link to={""}>Accessibility</Link>
                             </li>
                             <li>
-                                <Link to={reverse(ROUTES.PAGE, { url: ROUTES_CMS.LICENSE })}>License</Link>
+                                <Link to={""}>License</Link>
                             </li>
                         </ul>
                     </FooterCol>
@@ -119,21 +111,15 @@ const Footer = () => (
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
                             <li>
-                                <TwitterLink href="https://twitter.com/orkg_org" target="_blank" rel="noopener noreferrer">
+                                <TwitterLink href="https://twitter.com/Nfdi4Chem" target="_blank" rel="noopener noreferrer">
                                     Follow us
                                     <Icon className="ms-2" icon={faTwitter} />
                                 </TwitterLink>
                             </li>
                             <li>
-                                <Link to={reverse(ROUTES.PAGE, { url: ROUTES_CMS.CONTACT })}>Contact us</Link>
-                            </li>
-                            <li>
-                                <a href="https://gitlab.com/TIBHannover/orkg/orkg-frontend/issues" target="_blank" rel="noopener noreferrer">
+                                <a href="" target="_blank" rel="noopener noreferrer">
                                     Report an issue
                                 </a>
-                            </li>
-                            <li>
-                                <i className="me-3">Version</i> <Badge color="info">GIT_VERSION</Badge>
                             </li>
                         </ul>
                     </FooterCol>
