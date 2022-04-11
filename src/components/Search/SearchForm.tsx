@@ -26,8 +26,7 @@ export function SearchForm() {
 
     return (
         <div className="container">
-          <TextField
-          fullWidth
+          <input type="text" className="col-md-12 input" style={{marginTop: 10}}
           onChange={handleChange}
           value={value}
           placeholder="Search NFDI4Chem TS"
