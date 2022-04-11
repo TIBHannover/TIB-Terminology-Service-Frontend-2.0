@@ -1,15 +1,10 @@
 import { TextField } from "@material-ui/core";
 import { useState, useEffect, FormEvent } from "react";
 
-export interface Term {
-    id: string;
-    description: string;
-    boolean: false;
-  }
-
 export function SearchForm() {
     const [value, setValue] = useState('');
     const [termsSearch, setTermsSearch] = useState('');
+    const [resultexist, setresultexist] = useState(false);
 
     const autoSearch =async (query:string) => {
         const result = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${query}`)
@@ -30,18 +25,13 @@ export function SearchForm() {
       };
 
     return (
-        <div className="App">
-          <h1>NFDI4Chem Terminology Service</h1>
+        <div className="container">
           <TextField
           fullWidth
           onChange={handleChange}
           value={value}
           placeholder="Search NFDI4Chem TS"
         />
-          <form className="searchForm" onSubmit={event => search(event)} >
-            <input id="searchText" type="text" />
-            <button>Search</button>
-          </form>
         </div>
       );
 }
