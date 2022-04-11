@@ -1,4 +1,4 @@
-import { Container, Row, Col, Badge } from 'reactstrap';
+import { Container, Row, Col} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -6,7 +6,6 @@ import { ReactComponent as Logo } from 'assets/img/vertical_logo.svg';
 import TIB_LOGO from 'assets/img/TIB_Logo_en.png';
 import DFG_LOGO from 'assets/img/dfg-logo.png';
 import styled from 'styled-components';
-import { reverse } from 'named-urls';
 
 const FooterWrapper = styled.div`
     background: #e0e2ea;
@@ -133,47 +132,17 @@ const Footer = () => (
                     </PartnerLogoCol>
                     <Col md={8}>
                         <Row className="g-0">
-                            <Col md={4} style={{ textAlign: 'center' }}>
-                                <a href="https://www.uni-hannover.de/en/" target="_blank" rel="noopener noreferrer">
-                                    <img src={LUH_LOGO} alt="Logo Leibniz University Hannover" style={{ borderWidth: 0, height: '45px' }} />
-                                </a>
-                            </Col>
-                            <Col md={4} style={{ textAlign: 'center' }}>
-                                <a href="https://www.l3s.de/en/" target="_blank" rel="noopener noreferrer">
-                                    <img src={L3S_LOGO} alt="Logo L3S Research Center" style={{ borderWidth: 0, height: '50px' }} />
-                                </a>
-                            </Col>
-                            <Col md={4} style={{ textAlign: 'center' }}>
-                                <a href="https://infai.org/en/" target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        src={INFAI_LOGO}
-                                        alt="Logo  Institute for Applied Informatics (InfAI)"
-                                        style={{ borderWidth: 0, height: '45px' }}
-                                    />
-                                </a>
-                            </Col>
+                        <PartnerLogoCol md={{ size: 3, order: 1, offset: 3 }} style={{ textAlign: 'center' }}>
+                        <img
+                            src={DFG_LOGO}
+                            alt="NFDI4Chem is supported by DFG under project number 441958208"
+                            style={{ borderWidth: 0, height: '50px' }}
+                        />
+                        </PartnerLogoCol>
                         </Row>
                     </Col>
                 </Row>
                 <hr style={{ width: '50%', margin: '1rem auto' }} />
-                <Row>
-                    <PartnerLogoCol md={{ size: 3, order: 1, offset: 3 }} style={{ textAlign: 'center' }}>
-                        <img
-                            src={EU_LOGO}
-                            alt="Co-funded by the Horizon 2020 programme of the European Union"
-                            style={{ borderWidth: 0, height: '50px' }}
-                        />
-                    </PartnerLogoCol>
-                    <PartnerLogoCol md={{ size: 3, order: 2, offset: 0 }} style={{ textAlign: 'center' }}>
-                        <a
-                            href="https://marketplace.eosc-portal.eu/services/open-research-knowledge-graph-orkg"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img src={EOSC_LOGO} alt="European Open Science Cloud (EOSC)" style={{ borderWidth: 0, height: '45px' }} />
-                        </a>
-                    </PartnerLogoCol>
-                </Row>
             </footer>
         </Container>
     </FooterWrapper>
