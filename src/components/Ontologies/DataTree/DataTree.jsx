@@ -22,9 +22,11 @@ class ClassTree extends React.Component {
       showNodeDetailPage: false,
       componentIdentity: "",
       termTree: false,
-      propertyTree: false
+      propertyTree: false,
+      targetNode: ""
     })
     this.setTreeData = this.setTreeData.bind(this);
+    this.processTarget = this.processTarget.bind(this);
   }
 
 
@@ -36,6 +38,7 @@ class ClassTree extends React.Component {
   setTreeData(){
     let rootNodes = this.props.rootNodes;
     let componentIdentity = this.props.componentIdentity;
+    this.processTarget();
     if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
         if(componentIdentity == 'term'){
             this.setState({
@@ -58,6 +61,21 @@ class ClassTree extends React.Component {
        
     }
   }
+
+  /**
+   * process and get the target. The target is an specific target node (term/property) given in the url.
+   * @param {*} nodes 
+   * @returns 
+   */
+  processTarget(){
+      let target = this.props.target;
+      if(target != undefined){
+          let nodeId = target;
+          console.info(nodeId);
+      }
+  }
+
+
 
   
   /**

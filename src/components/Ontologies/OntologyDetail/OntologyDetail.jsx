@@ -9,6 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@mui/material/CircularProgress';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
+import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
 
 
@@ -30,7 +31,8 @@ class OntologyDetail extends React.Component {
       activeTab: 0,
       rootTerms: [],
       rootProps: [],
-      waiting: false
+      waiting: false,
+      targetQueryString: " ",
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -59,7 +61,8 @@ class OntologyDetail extends React.Component {
    * Set the active tab and its page on load
    */
   setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;    
+    let requestedTab = this.props.match.params.tab;
+    let targetQueryParams = queryString.parse(this.props.location.search);
     let lastRequestedTab = this.state.lastRequestedTab;
     if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
       this.setState({
@@ -68,7 +71,8 @@ class OntologyDetail extends React.Component {
         propTab: false,
         activeTab: 1,
         waiting: false,
-        lastRequestedTab: requestedTab
+        lastRequestedTab: requestedTab,
+        targetQueryString: targetQueryParams.target
       });
     }
     else if (requestedTab != lastRequestedTab && requestedTab == 'props'){
@@ -239,6 +243,7 @@ class OntologyDetail extends React.Component {
                         <DataTree
                           rootNodes={this.state.rootTerms}
                           componentIdentity={'term'}
+                          target={this.state.targetQueryString}
                           key={'termTreePage'}                 
                         />
           }
@@ -247,6 +252,7 @@ class OntologyDetail extends React.Component {
                         <DataTree
                           rootNodes={this.state.rootProps}
                           componentIdentity={'property'}
+                          target={this.state.targetQueryString}
                           key={'propertyTreePage'}  
                         />
           }
