@@ -31,8 +31,7 @@ class OntologyDetail extends React.Component {
       activeTab: 0,
       rootTerms: [],
       rootProps: [],
-      waiting: false,
-      updateKey: 0
+      waiting: false
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -71,10 +70,7 @@ class OntologyDetail extends React.Component {
         propTab: false,
         activeTab: 1,
         waiting: false,
-        lastRequestedTab: requestedTab,
-        updateKey: keyValue + 1
-
-
+        lastRequestedTab: requestedTab
       });
     }
     else if (requestedTab != lastRequestedTab && requestedTab == 'props'){
@@ -245,8 +241,7 @@ class OntologyDetail extends React.Component {
           }
           {!this.state.waiting && this.state.termsTab &&
                         <ClassTree
-                          rootTerms={this.state.rootTerms}
-                          key={this.state.updateKey}
+                          rootTerms={this.state.rootTerms}                          
                         />
           }
 
