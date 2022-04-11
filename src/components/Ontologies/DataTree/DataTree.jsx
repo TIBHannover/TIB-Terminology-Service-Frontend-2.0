@@ -1,5 +1,5 @@
 import React from 'react';
-import './ClassTree.css';
+import './DataTree.css';
 import Grid from '@material-ui/core/Grid';
 import TreeView from '@material-ui/lab/TreeView';
 import StyledTreeItem from './widgets/StyledTreeItem';
@@ -19,7 +19,10 @@ class ClassTree extends React.Component {
       currentExpandedTerm: '',
       currentClickedTerm: '',
       selectedNode: '',
-      showNodeDetailPage: false
+      showNodeDetailPage: false,
+      componentIdentity: "",
+      termTree: false,
+      propertyTree: false
     })
     this.setTreeData = this.setTreeData.bind(this);
   }
@@ -31,18 +34,34 @@ class ClassTree extends React.Component {
    * @returns 
    */
   setTreeData(){
-    let rootTerms = this.props.rootTerms;
-    if (rootTerms.length != 0 && this.state.rootTerms.length == 0){
-      this.setState({
-        rootTerms: rootTerms,
-        treeData: rootTerms
-      });
+    let rootNodes = this.props.rootNodes;
+    let componentIdentity = this.props.componentIdentity;
+    if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
+        if(componentIdentity == 'term'){
+            this.setState({
+                rootNodes: rootNodes,
+                treeData: rootNodes,
+                componentIdentity: componentIdentity,
+                termTree: true,
+                propertyTree: false
+              });
+        }
+        else if(componentIdentity == 'property'){
+            this.setState({
+                rootNodes: rootNodes,
+                treeData: rootNodes,
+                componentIdentity: componentIdentity,
+                termTree: false,
+                propertyTree: true
+              });
+        }
+       
     }
   }
 
   
   /**
-     * Construct the classes(terms) tree
+     * Construct the tree
      * @param {*} nodes
      * @returns
      */
@@ -71,7 +90,7 @@ class ClassTree extends React.Component {
      */
  async updateNodeInTree (node, shortForm, expanded) {
     if (node.short_form === shortForm && node.has_children) {
-      let childrenNodes = await getChildren(node['_links']['children']['href'], 'term');
+      let childrenNodes = await getChildren(node['_links']['children']['href'], this.state.componentIdentity);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({
@@ -124,8 +143,8 @@ class ClassTree extends React.Component {
   findSelectedTerm (node, shortForm) {
     if (node.short_form === shortForm) {
       this.setState({
-        selectedTerm: node,
-        showTermDetailPage: true
+        selectedNode: node,
+        showNodeDetailPage: true
       })
     } else if (node.has_children) {
       for (let i = 0; i < node.children.length; i++) {
@@ -159,27 +178,56 @@ class ClassTree extends React.Component {
   
 
   render () {
+      
     return (
-      <Grid container spacing={0} id="term-view-container">
-        <Grid item xs={5} id="terms-tree-container">
-          <TreeView
-            defaultCollapseIcon={<MinusSquare />}
-            defaultExpandIcon={<PlusSquare />}
-            defaultEndIcon={<CloseSquare />}
-            expanded={this.state.expandedNodes}
-            onNodeToggle={this.handleChange}
-            onNodeSelect={this.handleSelect}
+        <div>
+             { this.state.termTree &&
+                <Grid container spacing={0} id="term-view-container">
+                    <Grid item xs={5} id="terms-tree-container">
+                        <TreeView
+                        defaultCollapseIcon={<MinusSquare />}
+                        defaultExpandIcon={<PlusSquare />}
+                        defaultEndIcon={<CloseSquare />}
+                        expanded={this.state.expandedNodes}
+                        onNodeToggle={this.handleChange}
+                        onNodeSelect={this.handleSelect}
 
-          >
-            {this.createTree(this.state.treeData)}
-          </TreeView>
-        </Grid>
-        {this.state.showTermDetailPage && <Grid item xs={7} id="terms-table-container">
-          <TermPage
-            term={this.state.selectedTerm}
-          />
-        </Grid>}
-      </Grid>
+                        >
+                        {this.createTree(this.state.treeData)}
+                        </TreeView>
+                    </Grid>
+                    {this.state.showNodeDetailPage && <Grid item xs={7} id="terms-table-container">
+                        <TermPage
+                        term={this.state.selectedNode}
+                        />
+                    </Grid>}
+                </Grid> 
+             }
+             { this.state.propertyTree && 
+                <Grid container spacing={0} id="term-view-container">
+                    <Grid item xs={5} id="props-tree-container">
+                    <TreeView
+                        defaultCollapseIcon={<MinusSquare />}
+                        defaultExpandIcon={<PlusSquare />}
+                        defaultEndIcon={<CloseSquare />}
+                        expanded={this.state.expandedNodes}
+                        onNodeToggle={this.handleChange}
+                        onNodeSelect={this.handleSelect}
+
+                    >
+                        {this.createTree(this.state.treeData)}
+                    </TreeView>
+                    </Grid>
+                    {this.state.showNodeDetailPage && <Grid item xs={7} id="props-table-container">
+                    <PropertyPage
+                        property={this.state.selectedNode}
+                    />
+                    </Grid>}
+
+                </Grid>             
+             }
+        </div>
+     
     )
   }
 }

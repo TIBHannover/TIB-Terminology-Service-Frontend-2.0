@@ -7,8 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@mui/material/CircularProgress';
-import ClassTree from '../ClassTree/ClassTree';
-import PropertyTree from '../PropertyTree/PropertyTree';
+import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
 
@@ -227,7 +226,7 @@ class OntologyDetail extends React.Component {
             </Tabs>
           </Paper>
           {!this.state.waiting && this.state.overViewTab &&
-                        <Grid container>
+                        <Grid container key={'ontolofyOverviewPage'}  >
                           <Grid item xs={8}>
                             <OntologyInfoBox ontology={this.state.ontology} />
                           </Grid>
@@ -237,14 +236,18 @@ class OntologyDetail extends React.Component {
                         </Grid>
           }
           {!this.state.waiting && this.state.termsTab &&
-                        <ClassTree
-                          rootTerms={this.state.rootTerms}                          
+                        <DataTree
+                          rootNodes={this.state.rootTerms}
+                          componentIdentity={'term'}
+                          key={'termTreePage'}                 
                         />
           }
 
           {!this.state.waiting && this.state.propTab &&
-                        <PropertyTree
-                          rootProps={this.state.rootProps}
+                        <DataTree
+                          rootNodes={this.state.rootProps}
+                          componentIdentity={'property'}
+                          key={'propertyTreePage'}  
                         />
           }
           {this.state.waiting && <CircularProgress />}
