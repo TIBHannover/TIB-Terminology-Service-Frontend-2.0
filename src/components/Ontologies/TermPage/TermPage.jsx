@@ -60,7 +60,7 @@ class TermPage extends React.Component {
               <Typography className="term-detail-label">Definition</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
-              {this.formatText(this.props.term.definition)}
+              {this.formatText(this.props.term.annotation.definition)}
             </Grid>
           </Grid>
         </Grid>
@@ -80,7 +80,7 @@ class TermPage extends React.Component {
               <Typography className="term-detail-label">Ontology</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
-              {this.formatText(this.props.term.ontologyId)}
+              {this.formatText(this.props.term.ontology_name)}
             </Grid>
           </Grid>
         </Grid>
@@ -90,7 +90,7 @@ class TermPage extends React.Component {
               <Typography className="term-detail-label">Example Usage</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
-              {this.formatText(this.props.term.example_usage)}
+              {this.formatText(this.props.term.annotation.example_usage)}
             </Grid>
           </Grid>
         </Grid>
@@ -100,7 +100,7 @@ class TermPage extends React.Component {
               <Typography className="term-detail-label">Editor Note</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
-              {this.formatText(this.props.term.editor_note)}
+              {this.formatText(this.props.term.annotation.editor_note)}
             </Grid>
           </Grid>
         </Grid>
@@ -110,7 +110,7 @@ class TermPage extends React.Component {
               <Typography className="term-detail-label">Is Defined By</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
-              {this.formatText(this.props.term.isDefinedBy)}
+              {this.formatText(this.props.term.annotation.isDefinedBy)}
             </Grid>
           </Grid>
         </Grid>

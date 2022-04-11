@@ -11,15 +11,32 @@ class ClassTree extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
-      rootTerms: this.props.rootTerms,
+      rootTerms: [],
       expandedNodes: [],
-      treeData: this.props.rootTerms,
+      treeData: [],
       visitedNodes: [],
       currentExpandedTerm: '',
       currentClickedTerm: '',
       selectedTerm: '',
       showTermDetailPage: false
     })
+    this.setTreeData = this.setTreeData.bind(this);
+  }
+
+
+  /**
+   * set data from input props
+   * @param {*} nodes 
+   * @returns 
+   */
+  setTreeData(){
+    let rootTerms = this.props.rootTerms;
+    if (rootTerms.length != 0 && this.state.rootTerms.length == 0){
+      this.setState({
+        rootTerms: rootTerms,
+        treeData: rootTerms
+      });
+    }
   }
 
   
@@ -131,6 +148,14 @@ class ClassTree extends React.Component {
   }
 
 
+  componentDidMount(){
+    this.setTreeData();
+  }
+
+  componentDidUpdate(){
+    this.setTreeData();
+  }
+  
 
   render () {
     return (

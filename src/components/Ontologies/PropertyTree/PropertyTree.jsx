@@ -12,15 +12,33 @@ class PropertyTree extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
-      rootPops: this.props.rootProps,
+      rootProps: [],
       expandedNodes: [],
-      treeData: this.props.rootProps,
+      treeData: [],
       visitedNodes: [],
       currentExpandedTerm: '',
       currentClickedTerm: '',
       selectedProperty: '',
       showPropertyDetailPage: false
     })
+
+    this.setTreeData = this.setTreeData.bind(this);
+  }
+
+
+  /**
+   * set data from input props
+   * @param {*} nodes 
+   * @returns 
+   */
+   setTreeData(){
+    let rootProps = this.props.rootProps;
+    if (rootProps.length != 0 && this.state.rootProps.length == 0){
+      this.setState({
+        rootProps: rootProps,
+        treeData: rootProps
+      });
+    }
   }
 
 
@@ -131,6 +149,14 @@ class PropertyTree extends React.Component {
     }
   }
 
+  
+  componentDidMount(){
+    this.setTreeData();
+  }
+
+  componentDidUpdate(){
+    this.setTreeData();
+  }
 
 
   render () {
