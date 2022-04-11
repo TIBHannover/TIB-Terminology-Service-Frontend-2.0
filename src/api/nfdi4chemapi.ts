@@ -149,7 +149,7 @@ function processForTree(listOfNodes: Array<any>){
   let processedListOfNodes: Array<any> = [];
   for(let i=0; i < listOfNodes.length; i++){
     listOfNodes[i]['children'] = [];
-    listOfNodes[i]['id'] = listOfNodes[i]['obo_id'];
+    listOfNodes[i]['id'] = listOfNodes[i]['iri'];
     processedListOfNodes.push(listOfNodes[i]);
   }
   return processedListOfNodes;

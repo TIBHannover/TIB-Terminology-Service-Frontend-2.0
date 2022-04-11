@@ -154,8 +154,6 @@ class OntologyDetail extends React.Component {
   }
 
 
-
-
   /**
      * Handle the tab change in the ontology detail Top menu
      *
