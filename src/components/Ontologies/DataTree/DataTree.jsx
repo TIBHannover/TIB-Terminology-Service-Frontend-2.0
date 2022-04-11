@@ -23,7 +23,7 @@ class ClassTree extends React.Component {
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      targetNode: ""
+      targetNodeIri: ""
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -68,14 +68,15 @@ class ClassTree extends React.Component {
    * @returns 
    */
   processTarget(){
-      let target = this.props.target;
-      if(target != undefined){
-          let nodeId = target;
-          console.info(nodeId);
+      let target = this.props.iri;
+      if(target != undefined && this.state.targetNodeIri != target){
+        console.info(target);
+          this.setState({
+              targetNodeIri: target 
+          });
+          
       }
   }
-
-
 
   
   /**

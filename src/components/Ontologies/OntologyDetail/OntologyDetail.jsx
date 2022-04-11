@@ -32,7 +32,8 @@ class OntologyDetail extends React.Component {
       rootTerms: [],
       rootProps: [],
       waiting: false,
-      targetQueryString: " ",
+      targetTermIri: " ",
+      targetPropertyIri: " "
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -72,7 +73,7 @@ class OntologyDetail extends React.Component {
         activeTab: 1,
         waiting: false,
         lastRequestedTab: requestedTab,
-        targetQueryString: targetQueryParams.target
+        targetTermIri: targetQueryParams.iri
       });
     }
     else if (requestedTab != lastRequestedTab && requestedTab == 'props'){
@@ -82,7 +83,8 @@ class OntologyDetail extends React.Component {
         propTab: true,
         activeTab: 2,
         waiting: false,
-        lastRequestedTab: requestedTab
+        lastRequestedTab: requestedTab,
+        targetPropertyIri: targetQueryParams.iri
 
       });
     }
@@ -243,7 +245,7 @@ class OntologyDetail extends React.Component {
                         <DataTree
                           rootNodes={this.state.rootTerms}
                           componentIdentity={'term'}
-                          target={this.state.targetQueryString}
+                          iri={this.state.targetTermIri}
                           key={'termTreePage'}                 
                         />
           }
@@ -252,7 +254,7 @@ class OntologyDetail extends React.Component {
                         <DataTree
                           rootNodes={this.state.rootProps}
                           componentIdentity={'property'}
-                          target={this.state.targetQueryString}
+                          iri={this.state.targetPropertyIri}
                           key={'propertyTreePage'}  
                         />
           }
