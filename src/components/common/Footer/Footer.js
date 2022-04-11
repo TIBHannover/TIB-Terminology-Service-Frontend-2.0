@@ -1,10 +1,11 @@
 import { Container, Row, Col} from 'reactstrap';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { ReactComponent as Logo } from 'assets/img/vertical_logo.svg';
-import TIB_LOGO from 'assets/img/TIB_Logo_en.png';
-import DFG_LOGO from 'assets/img/dfg-logo.png';
+import { ReactComponent as Logo } from '../../../assets/img/vertical_logo.svg';
+import TIB_LOGO from '../../../assets/img/TIB_Logo_en.png';
+import DFG_LOGO from '../../../assets/img/dfg_logo.png';
 import styled from 'styled-components';
 
 const FooterWrapper = styled.div`
@@ -123,26 +124,6 @@ const Footer = () => (
                         </ul>
                     </FooterCol>
                 </Row>
-                <hr style={{ width: '70%', margin: '1rem auto' }} />
-                <Row className="mt-4">
-                    <PartnerLogoCol md={4} style={{}}>
-                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '50px' }} />
-                        </a>
-                    </PartnerLogoCol>
-                    <Col md={8}>
-                        <Row className="g-0">
-                        <PartnerLogoCol md={{ size: 3, order: 1, offset: 3 }} style={{ textAlign: 'center' }}>
-                        <img
-                            src={DFG_LOGO}
-                            alt="NFDI4Chem is supported by DFG under project number 441958208"
-                            style={{ borderWidth: 0, height: '50px' }}
-                        />
-                        </PartnerLogoCol>
-                        </Row>
-                    </Col>
-                </Row>
-                <hr style={{ width: '50%', margin: '1rem auto' }} />
             </footer>
         </Container>
     </FooterWrapper>
