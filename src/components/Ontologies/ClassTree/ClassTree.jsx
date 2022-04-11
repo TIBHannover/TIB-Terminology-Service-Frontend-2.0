@@ -31,7 +31,6 @@ class ClassTree extends React.Component {
    */
   setTreeData(){
     let rootTerms = this.props.rootTerms;
-    console.info(rootTerms);
     if (rootTerms.length != 0 && this.state.rootTerms.length == 0){
       this.setState({
         rootTerms: rootTerms,

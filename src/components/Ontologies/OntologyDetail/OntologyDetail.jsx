@@ -62,7 +62,6 @@ class OntologyDetail extends React.Component {
   setTabOnLoad(){
     let requestedTab = this.props.match.params.tab;    
     let lastRequestedTab = this.state.lastRequestedTab;
-    let keyValue = this.state.updateKey
     if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
       this.setState({
         overViewTab: false,
