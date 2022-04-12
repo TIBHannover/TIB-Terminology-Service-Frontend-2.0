@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import './SearchForm.css'
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -49,7 +50,7 @@ class SearchForm extends React.Component{
                     placeholder="Search NFDI4Chem TS"
                 />
             {this.state.result &&
-                <div className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
+                <div id = "terms-tree-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
           </div>
           )
       }
