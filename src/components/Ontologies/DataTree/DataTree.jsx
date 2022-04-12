@@ -6,8 +6,8 @@ import StyledTreeItem from './widgets/StyledTreeItem';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
-import {getChildren, getTreeRoutes} from '../../../api/nfdi4chemapi';
-import { click } from '@testing-library/user-event/dist/click';
+import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/nfdi4chemapi';
+
 
 class ClassTree extends React.Component {
   constructor (props) {
@@ -25,7 +25,8 @@ class ClassTree extends React.Component {
       termTree: false,
       propertyTree: false,
       targetNodeIri: "",
-      openTreeRoute: []
+      openTreeRoute: [],
+      isTreeRouteShown: false
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -50,7 +51,7 @@ class ClassTree extends React.Component {
                 termTree: true,
                 propertyTree: false
               });
-              this.processTarget(componentIdentity, rootNodes);
+              this.processTarget(componentIdentity, rootNodes);              
         }
         else if(componentIdentity == 'property'){
             this.setState({
@@ -60,7 +61,7 @@ class ClassTree extends React.Component {
                 termTree: false,
                 propertyTree: true
               });
-              this.processTarget(componentIdentity, rootNodes);
+              this.processTarget(componentIdentity, rootNodes);              
         }
        
     }
@@ -77,16 +78,21 @@ class ClassTree extends React.Component {
       if(target != undefined && this.state.targetNodeIri != target){
         let ancestors = [];
         if(componentIdentity == "term"){
-          ancestors = await getTreeRoutes(target, 'terms', [], false);
+          await getTreeRoutes(target, 'terms', ancestors)
+          let node = await getNodeByIri(target, 'terms');
+          ancestors.unshift(node['short_form']);
         }
         else{
-          ancestors = await getTreeRoutes(target, 'properties', [], false);
+          await getTreeRoutes(target, 'properties', ancestors);
+          let node = await getNodeByIri(target, 'properties');
+          ancestors.unshift(node['short_form']);
         }
         
         this.setState({
             targetNodeIri: target,
             openTreeRoute: ancestors
         });
+
           
       }
   }
@@ -99,16 +105,19 @@ class ClassTree extends React.Component {
    */
   expandTreeByTarget(){
     let routes = this.state.openTreeRoute;
-    console.info(routes);
+    let isShown = this.state.isTreeRouteShown;
     routes = routes.reverse();
-    if (routes.length > 0){
+    // console.info(isShown);
+    // console.info(routes);
+    // console.info('-----');
+    if (routes.length > 0 && !isShown){
       for(let i=0; i < routes.length; i++){
         let treeElement = document.getElementById('tree_element_' + routes[i]);
+        // console.info(treeElement);
         if(treeElement !== null && treeElement.getElementsByTagName('ul').length == 0){
           treeElement.getElementsByClassName('MuiTreeItem-content')[0].click();
         }
       }
-      
     }
   }
 
@@ -174,6 +183,7 @@ class ClassTree extends React.Component {
   handleChange = (e, value) => {
     this.setState({
       expandedNodes:value
+      // isTreeRouteShown: true
     });
     const vNodes = this.state.visitedNodes
     if (!vNodes.includes(value[0])) {
