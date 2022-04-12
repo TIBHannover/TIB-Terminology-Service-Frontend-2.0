@@ -6,7 +6,7 @@ import StyledTreeItem from './widgets/StyledTreeItem';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
-import {getChildren, getAllAncestors} from '../../../api/nfdi4chemapi';
+import {getChildren, getTreeRoutes} from '../../../api/nfdi4chemapi';
 
 class ClassTree extends React.Component {
   constructor (props) {
@@ -38,7 +38,6 @@ class ClassTree extends React.Component {
   setTreeData(){
     let rootNodes = this.props.rootNodes;
     let componentIdentity = this.props.componentIdentity;
-    this.processTarget();
     if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
         if(componentIdentity == 'term'){
             this.setState({
@@ -48,6 +47,7 @@ class ClassTree extends React.Component {
                 termTree: true,
                 propertyTree: false
               });
+              this.processTarget(componentIdentity, rootNodes);
         }
         else if(componentIdentity == 'property'){
             this.setState({
@@ -67,15 +67,23 @@ class ClassTree extends React.Component {
    * @param {*} nodes 
    * @returns 
    */
-  async processTarget(){
+  async processTarget(componentIdentity, rootNodes){
       let target = this.props.iri;
+      target = target.trim();
       if(target != undefined && this.state.targetNodeIri != target){
           this.setState({
               targetNodeIri: target 
           });
           
-          let ancestors = await getAllAncestors(target);
-          console.info(ancestors);
+          if(componentIdentity == "term"){
+            let ancestors = await getTreeRoutes(target, 'terms', [], false);
+            console.info(ancestors);
+          }
+          else{
+            let ancestors = await getTreeRoutes(target, 'properties', [], false);
+            // console.info(ancestors);
+          }
+          
 
 
 
@@ -114,7 +122,7 @@ class ClassTree extends React.Component {
      */
  async updateNodeInTree (node, shortForm, expanded) {
     if (node.short_form === shortForm && node.has_children) {
-      let childrenNodes = await getChildren(node['_links']['children']['href'], this.state.componentIdentity);
+      let childrenNodes = await getChildren(node['_links']['hierarchicalChildren']['href'], this.state.componentIdentity);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({

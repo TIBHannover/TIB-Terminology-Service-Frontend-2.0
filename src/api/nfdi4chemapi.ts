@@ -142,32 +142,52 @@ export async function getChildren(childrenLink: string, mode: string){
 
 /**
  * Get a route in a tree to reach to an specific node. Used in opening an specific term/propert
- * @param 
+ * @param ontologyId
+ * @param nodeIri
+ * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(nodeIri:string) {
-  let ancestors:Array<string> = [];
-  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
-  let result =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
-  if (result['_embedded']['terms']['is_root'] == true){
-    return ancestors;
-  }
-  else{
-    while(true){
-      let url = result['_embedded']['terms'][0]['_links']['parents']['href'];
-      result =  await (await fetch(url, getCallSetting)).json();
-      if(result['page']['totalElements'] == 0){
-        break;
-      }
-      ancestors.push(result['_embedded']['terms'][0]['short_form']);
-      if(result['_embedded']['terms']['is_root'] == true){
-        break;
-      }
-    } 
+export async function getTreeRoutes(nodeIri:string, mode:string,  allRoutes: Array<any>, isDetected:boolean) {
+    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
+    let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+    node = node['_embedded'][mode];
+    // console.info(node[0]);
+    if(typeof node[0]['_links']['hierarchicalParents'] !== 'undefined' && node[0]['is_root'] != true){
+      let allParents =  await (await fetch(node[0]['_links']['hierarchicalParents']['href'], getCallSetting)).json();
+      allParents = allParents['_embedded'][mode];
+      // console.info(allParents);
+      allRoutes.push(allParents[0]['short_form']);
+      getTreeRoutes(allParents[0]['iri'], mode, allRoutes, isDetected);
+    }
+    else if(typeof node[0] !== 'undefined' &&  node[0]['is_root'] == true){
+      allRoutes.push(node[0]['short_form']);
+      return allRoutes;
+    }
+    else{
+      return allRoutes;
+    }
+    return allRoutes;
 
-    return ancestors;
-  }
 }
+
+
+
+/**
+ * Get all descendants for a node in a term/property tree.
+ * @param nodeDescendantsLink
+ * @param mode (terms/properties) 
+ * @returns 
+ */
+async function getAllDescendants(nodeDescendantsLink:string, mode:string) {
+    let allDescendents: Array<string> = [];
+    let results =  await (await fetch(nodeDescendantsLink, getCallSetting)).json();
+    for(let i=0; i < results['_embedded'][mode].length; i++){
+      allDescendents.push(results['_embedded'][mode][i]['iri'])
+    }
+
+    return allDescendents;
+}
+
 
 
 /**
@@ -183,6 +203,22 @@ function processForTree(listOfNodes: Array<any>){
     processedListOfNodes.push(listOfNodes[i]);
   }
   return processedListOfNodes;
+}
+
+
+/**
+ * check if a node exist in a list of nodes obtain from API
+ * @param nodesList
+ * @param nodeIri
+ * @returns 
+ */
+function nodeExistInList(nodesList: Array<any>, nodeIri:string){
+  for(let i=0; i < nodesList.length; i++){
+    if (nodesList[i]['iri'] === nodeIri){
+      return true;
+    }
+  }
+  return false;
 }
 
 
