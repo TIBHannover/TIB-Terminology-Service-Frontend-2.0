@@ -9,13 +9,16 @@ class SearchForm extends React.Component{
           result: false,
           searchResult: []
         })
+        this.handleChange = this.handleChange.bind(this);
+        this.createResultList = this.createResultList.bind(this);
       }
+      
 
       async handleChange(term){
-          console.info(term)
+          term = term.target.value;
         if (term.length > 0){
             let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${term}`)
-            searchResult =  (await searchResult.json()).results;
+            searchResult =  (await searchResult.json())['response']['docs'];
             
          this.setState({
              searchResult: searchResult,
@@ -26,9 +29,14 @@ class SearchForm extends React.Component{
 
       createResultList(){
           const resultList = []
+          console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={''} key={i} className="container"/>)
+                <Link to={''} key={i} className="container">
+                    <div>
+                        {this.state.searchResult[i]['autosuggest']}
+                    </div>
+                </Link>)
           }
           return resultList
       }
@@ -41,7 +49,7 @@ class SearchForm extends React.Component{
                     placeholder="Search NFDI4Chem TS"
                 />
             {this.state.result &&
-                <div>{this.createResultList()}</div>}
+                <div className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
           </div>
           )
       }
