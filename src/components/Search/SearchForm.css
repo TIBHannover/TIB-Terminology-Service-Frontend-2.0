@@ -1,0 +1,9 @@
+#terms-tree-container{
+    height: 200px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    z-index: 999;
+    padding-left: 10x;
+    padding-right: 10px;
+}
