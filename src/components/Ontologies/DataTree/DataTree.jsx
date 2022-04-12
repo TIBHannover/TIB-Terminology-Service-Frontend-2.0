@@ -7,6 +7,7 @@ import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
 import {getChildren, getTreeRoutes} from '../../../api/nfdi4chemapi';
+import { click } from '@testing-library/user-event/dist/click';
 
 class ClassTree extends React.Component {
   constructor (props) {
@@ -23,10 +24,12 @@ class ClassTree extends React.Component {
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      targetNodeIri: ""
+      targetNodeIri: "",
+      openTreeRoute: []
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
+    this.expandTreeByTarget = this.expandTreeByTarget.bind(this);
   }
 
 
@@ -57,6 +60,7 @@ class ClassTree extends React.Component {
                 termTree: false,
                 propertyTree: true
               });
+              this.processTarget(componentIdentity, rootNodes);
         }
        
     }
@@ -71,24 +75,41 @@ class ClassTree extends React.Component {
       let target = this.props.iri;
       target = target.trim();
       if(target != undefined && this.state.targetNodeIri != target){
-          this.setState({
-              targetNodeIri: target 
-          });
-          
-          if(componentIdentity == "term"){
-            let ancestors = await getTreeRoutes(target, 'terms', [], false);
-            console.info(ancestors);
-          }
-          else{
-            let ancestors = await getTreeRoutes(target, 'properties', [], false);
-            // console.info(ancestors);
-          }
-          
-
-
-
+        let ancestors = [];
+        if(componentIdentity == "term"){
+          ancestors = await getTreeRoutes(target, 'terms', [], false);
+        }
+        else{
+          ancestors = await getTreeRoutes(target, 'properties', [], false);
+        }
+        
+        this.setState({
+            targetNodeIri: target,
+            openTreeRoute: ancestors
+        });
           
       }
+  }
+
+  /**
+   * Exapand the tree when there is an input target (term/property). Used for showing the selected term/property detail when 
+   * called directy by url via 'iri' 
+   * @param {*} nodes 
+   * @returns 
+   */
+  expandTreeByTarget(){
+    let routes = this.state.openTreeRoute;
+    console.info(routes);
+    routes = routes.reverse();
+    if (routes.length > 0){
+      for(let i=0; i < routes.length; i++){
+        let treeElement = document.getElementById('tree_element_' + routes[i]);
+        if(treeElement !== null && treeElement.getElementsByTagName('ul').length == 0){
+          treeElement.getElementsByClassName('MuiTreeItem-content')[0].click();
+        }
+      }
+      
+    }
   }
 
   
@@ -100,7 +121,12 @@ class ClassTree extends React.Component {
   createTree = (nodes) => {
     return nodes.map((el) => {
       return (
-        <StyledTreeItem key={el.id} nodeId={el.short_form} label={el.label} className="tree-element"
+        <StyledTreeItem 
+          key={el.id} 
+          nodeId={el.short_form} 
+          label={el.label} 
+          className="tree-element"
+          id={"tree_element_" + el.short_form}
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
           defaultEndIcon={<CloseSquare />}>
@@ -206,6 +232,7 @@ class ClassTree extends React.Component {
 
   componentDidUpdate(){
     this.setTreeData();
+    this.expandTreeByTarget();
   }
   
 

@@ -160,12 +160,9 @@ export async function getTreeRoutes(nodeIri:string, mode:string,  allRoutes: Arr
       getTreeRoutes(allParents[0]['iri'], mode, allRoutes, isDetected);
     }
     else if(typeof node[0] !== 'undefined' &&  node[0]['is_root'] == true){
-      allRoutes.push(node[0]['short_form']);
       return allRoutes;
     }
-    else{
-      return allRoutes;
-    }
+    
     return allRoutes;
 
 }
