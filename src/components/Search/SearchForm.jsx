@@ -55,7 +55,7 @@ class SearchForm extends React.Component{
                     placeholder="Search NFDI4Chem TS"
                 />
             {this.state.result &&
-                <div id = "terms-tree-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
           </div>
           )
       }
