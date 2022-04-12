@@ -1,11 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 class SearchForm extends React.Component{
     constructor (props) {
         super(props)
         this.state = ({
           term: "",
-          result: false
+          result: false,
+          searchResult: []
         })
       }
 
@@ -22,14 +24,25 @@ class SearchForm extends React.Component{
         }
       }
 
+      createResultList(){
+          const resultList = []
+          for(let i=0; i < this.state.term.length; i++){
+            const item = this.state.term[i]
+            resultList.push(this.state.term &&
+                <Link to={''} key={i} className=""/>)
+          }
+          return resultList
+      }
+
       render(){
           return(
             <div className="container">
+                <input type="text" className="col-md-12 input" style={{marginTop: 10}}
+                    onChange={this.handleChange}
+                    placeholder="Search NFDI4Chem TS"
+                />
             {this.state.result &&
-            <input type="text" className="col-md-12 input" style={{marginTop: 10}}
-            onChange={this.handleChange}
-            placeholder="Search NFDI4Chem TS"
-          />}
+                <div>{this.createResultList()}</div>}
           </div>
           )
       }
