@@ -11,14 +11,14 @@ class SearchForm extends React.Component{
         })
       }
 
-      async autoSearch(){
-        let result = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=`)
-        return (await result.json()).results;
-      }
-
       async handleChange(term){
-        if (term > 0){
+          console.info(term)
+        if (term.length > 0){
+            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${term}`)
+            searchResult =  (await searchResult.json()).results;
+            
          this.setState({
+             searchResult: searchResult,
              result: true
          });
         }
@@ -26,10 +26,9 @@ class SearchForm extends React.Component{
 
       createResultList(){
           const resultList = []
-          for(let i=0; i < this.state.term.length; i++){
-            const item = this.state.term[i]
-            resultList.push(this.state.term &&
-                <Link to={''} key={i} className=""/>)
+          for(let i=0; i < this.state.searchResult.length; i++){
+            resultList.push(
+                <Link to={''} key={i} className="container"/>)
           }
           return resultList
       }
