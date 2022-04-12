@@ -1,10 +1,7 @@
-import { TextField } from "@material-ui/core";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect } from "react";
 
 export function SearchForm() {
     const [value, setValue] = useState('');
-    const [termsSearch, setTermsSearch] = useState('');
-    const [resultexist, setresultexist] = useState(false);
 
     const autoSearch =async (query:string) => {
         const result = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${query}`)
@@ -14,14 +11,6 @@ export function SearchForm() {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
         autoSearch(event.target.value);
-      };
-    
-    const search = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const input = form.querySelector('#searchText') as HTMLInputElement;
-        setTermsSearch(input.value);
-        input.value = '';
       };
 
     return (
