@@ -141,6 +141,36 @@ export async function getChildren(childrenLink: string, mode: string){
 
 
 /**
+ * Get a route in a tree to reach to an specific node. Used in opening an specific term/propert
+ * @param 
+ * @returns 
+ */
+export async function getTreeRoutes(nodeIri:string) {
+  let ancestors:Array<string> = [];
+  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
+  let result =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+  if (result['_embedded']['terms']['is_root'] == true){
+    return ancestors;
+  }
+  else{
+    while(true){
+      let url = result['_embedded']['terms'][0]['_links']['parents']['href'];
+      result =  await (await fetch(url, getCallSetting)).json();
+      if(result['page']['totalElements'] == 0){
+        break;
+      }
+      ancestors.push(result['_embedded']['terms'][0]['short_form']);
+      if(result['_embedded']['terms']['is_root'] == true){
+        break;
+      }
+    } 
+
+    return ancestors;
+  }
+}
+
+
+/**
  * This function process each node (term/property) obtainded from API call to match with the tree view. 
  * A tree node needs: children, id (beside existing metadata) 
  * @param listOfNodes 

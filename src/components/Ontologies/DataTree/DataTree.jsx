@@ -6,7 +6,7 @@ import StyledTreeItem from './widgets/StyledTreeItem';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
-import {getChildren} from '../../../api/nfdi4chemapi';
+import {getChildren, getAllAncestors} from '../../../api/nfdi4chemapi';
 
 class ClassTree extends React.Component {
   constructor (props) {
@@ -67,13 +67,18 @@ class ClassTree extends React.Component {
    * @param {*} nodes 
    * @returns 
    */
-  processTarget(){
+  async processTarget(){
       let target = this.props.iri;
       if(target != undefined && this.state.targetNodeIri != target){
-        console.info(target);
           this.setState({
               targetNodeIri: target 
           });
+          
+          let ancestors = await getAllAncestors(target);
+          console.info(ancestors);
+
+
+
           
       }
   }
@@ -232,6 +237,7 @@ class ClassTree extends React.Component {
                         expanded={this.state.expandedNodes}
                         onNodeToggle={this.handleChange}
                         onNodeSelect={this.handleSelect}
+                        defaultExpanded={this.state.expandedNodes}
 
                     >
                         {this.createTree(this.state.treeData)}
