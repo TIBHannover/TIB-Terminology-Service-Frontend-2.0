@@ -20,11 +20,16 @@ class SearchForm extends React.Component{
         if (term.length > 0){
             let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${term}`)
             searchResult =  (await searchResult.json())['response']['docs'];
-            
          this.setState({
              searchResult: searchResult,
              result: true
          });
+        }
+        else if (term.length == 0){
+            this.setState({
+                result: false
+            });
+            
         }
       }
 
