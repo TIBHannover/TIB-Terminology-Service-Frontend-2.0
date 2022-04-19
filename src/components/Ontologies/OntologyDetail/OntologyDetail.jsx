@@ -33,7 +33,9 @@ class OntologyDetail extends React.Component {
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
-      targetPropertyIri: " "
+      targetPropertyIri: " ",
+      alreadyExistedTermsInTree: {},
+      alreadyExistedPropsInTree: {}
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -128,11 +130,12 @@ class OntologyDetail extends React.Component {
      * Get the ontology root classes 
      */
   async getRootTerms (ontologyId) {
-    let rootTerms = await getOntologyRootTerms(ontologyId);
+    let [rootTerms, alreadyExistedTermsInTree] = await getOntologyRootTerms(ontologyId);
     if (typeof rootTerms != undefined){
       this.setState({
         isRootTermsLoaded: true,
-        rootTerms: rootTerms
+        rootTerms: rootTerms,
+        alreadyExistedTermsInTree: alreadyExistedTermsInTree
       });
     }
     else{
@@ -149,10 +152,11 @@ class OntologyDetail extends React.Component {
      * Get the ontology root properties from the backend
      */
   async getRootProps (ontologyId) {
-    let rootProps = await getOntologyRootProperties(ontologyId);
+    let [rootProps, alreadyExistedPropsInTree] = await getOntologyRootProperties(ontologyId);
     if (typeof rootProps != undefined){
       this.setState({
-        rootProps: rootProps
+        rootProps: rootProps,
+        alreadyExistedPropsInTree: alreadyExistedPropsInTree
       });
     }
    
@@ -246,7 +250,8 @@ class OntologyDetail extends React.Component {
                           rootNodes={this.state.rootTerms}
                           componentIdentity={'term'}
                           iri={this.state.targetTermIri}
-                          key={'termTreePage'}                 
+                          key={'termTreePage'}
+                          existedNodes={this.state.alreadyExistedTermsInTree}                 
                         />
           }
 
@@ -255,7 +260,8 @@ class OntologyDetail extends React.Component {
                           rootNodes={this.state.rootProps}
                           componentIdentity={'property'}
                           iri={this.state.targetPropertyIri}
-                          key={'propertyTreePage'}  
+                          key={'propertyTreePage'}
+                          existedNodes={this.state.alreadyExistedPropsInTree}
                         />
           }
           {this.state.waiting && <CircularProgress />}

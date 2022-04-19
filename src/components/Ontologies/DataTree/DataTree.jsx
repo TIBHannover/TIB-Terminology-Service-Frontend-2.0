@@ -26,7 +26,8 @@ class ClassTree extends React.Component {
       propertyTree: false,
       targetNodeIri: "",
       openTreeRoute: [],
-      isTreeRouteShown: false
+      isTreeRouteShown: false,
+      alreadyExistedNodesInTree: {}
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -39,7 +40,7 @@ class ClassTree extends React.Component {
    * @param {*} nodes 
    * @returns 
    */
-  setTreeData(){
+  async setTreeData(){
     let rootNodes = this.props.rootNodes;
     let componentIdentity = this.props.componentIdentity;
     if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
@@ -49,9 +50,11 @@ class ClassTree extends React.Component {
                 treeData: rootNodes,
                 componentIdentity: componentIdentity,
                 termTree: true,
-                propertyTree: false
+                propertyTree: false,
+                alreadyExistedNodesInTree: this.props.existedNodes
               });
-              this.processTarget(componentIdentity, rootNodes);              
+              await this.processTarget(componentIdentity, rootNodes);
+              this.expandTreeByTarget();       
         }
         else if(componentIdentity == 'property'){
             this.setState({
@@ -59,7 +62,8 @@ class ClassTree extends React.Component {
                 treeData: rootNodes,
                 componentIdentity: componentIdentity,
                 termTree: false,
-                propertyTree: true
+                propertyTree: true,
+                alreadyExistedNodesInTree: this.props.existedNodes
               });
               this.processTarget(componentIdentity, rootNodes);              
         }
@@ -74,6 +78,13 @@ class ClassTree extends React.Component {
    */
   async processTarget(componentIdentity, rootNodes){
       let target = this.props.iri;
+      if (!target){
+        this.setState({
+          targetNodeIri: false,
+          openTreeRoute: [],
+        });
+        return 0;
+      }
       target = target.trim();
       if(target != undefined && this.state.targetNodeIri != target){
         let ancestors = [];
@@ -90,7 +101,7 @@ class ClassTree extends React.Component {
         
         this.setState({
             targetNodeIri: target,
-            openTreeRoute: ancestors
+            openTreeRoute: ancestors,
         });
 
           
@@ -103,14 +114,14 @@ class ClassTree extends React.Component {
    * @param {*} nodes 
    * @returns 
    */
-  expandTreeByTarget(){
+ expandTreeByTarget(){
     let routes = this.state.openTreeRoute;
     let isShown = this.state.isTreeRouteShown;
     routes = routes.reverse();
     // console.info(isShown);
     // console.info(routes);
     // console.info('-----');
-    if (routes.length > 0 && !isShown){
+    if (routes.length > 0){
       for(let i=0; i < routes.length; i++){
         let treeElement = document.getElementById('tree_element_' + routes[i]);
         // console.info(treeElement);
@@ -132,10 +143,10 @@ class ClassTree extends React.Component {
       return (
         <StyledTreeItem 
           key={el.id} 
-          nodeId={el.short_form} 
+          nodeId={el.modified_short_form} 
           label={el.label} 
           className="tree-element"
-          id={"tree_element_" + el.short_form}
+          id={"tree_element_" + el.modified_short_form}
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
           defaultEndIcon={<CloseSquare />}>
@@ -156,13 +167,14 @@ class ClassTree extends React.Component {
      * @param {*} expanded
      */
  async updateNodeInTree (node, shortForm, expanded) {
-    if (node.short_form === shortForm && node.has_children) {
-      let childrenNodes = await getChildren(node['_links']['hierarchicalChildren']['href'], this.state.componentIdentity);
+    if (node.modified_short_form === shortForm && node.has_children) {
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node['_links']['hierarchicalChildren']['href'], this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({
           expandedNodes: expanded,
-          currentExpandedTerm: node
+          currentExpandedTerm: node,
+          alreadyExistedNodesInTree: alreadyExistedNodesInTree
         });
       }      
     } 
@@ -182,8 +194,8 @@ class ClassTree extends React.Component {
      */
   handleChange = (e, value) => {
     this.setState({
-      expandedNodes:value
-      // isTreeRouteShown: true
+      expandedNodes:value,
+      isTreeRouteShown: true
     });
     const vNodes = this.state.visitedNodes
     if (!vNodes.includes(value[0])) {
@@ -209,7 +221,7 @@ class ClassTree extends React.Component {
      * @param {*} shortForm
      */
   findSelectedTerm (node, shortForm) {
-    if (node.short_form === shortForm) {
+    if (node.modified_short_form === shortForm) {
       this.setState({
         selectedNode: node,
         showNodeDetailPage: true
@@ -242,7 +254,6 @@ class ClassTree extends React.Component {
 
   componentDidUpdate(){
     this.setTreeData();
-    this.expandTreeByTarget();
   }
   
 

@@ -63,7 +63,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree(terms);
+    return processForTree(terms, {});
 
   }
   catch(e){
@@ -94,7 +94,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree(props);
+    return processForTree(props, {});
 
   }
   catch(e){
@@ -123,15 +123,15 @@ async function getPageCount(url: string){
  * @param mode
  * @returns 
  */
-export async function getChildren(childrenLink: string, mode: string){
+export async function getChildren(childrenLink: string, mode: string, alreadyExistedNodesInTree: {[id:string]: number}){
   try{
       let data = await fetch(childrenLink, getCallSetting);
       data = await data.json();
       if (mode === 'term'){
-        return processForTree(data['_embedded']['terms']); 
+        return processForTree(data['_embedded']['terms'], alreadyExistedNodesInTree); 
       }
       else{
-        return processForTree(data['_embedded']['properties']);
+        return processForTree(data['_embedded']['properties'], alreadyExistedNodesInTree);
       }
   }
   catch(e){
@@ -178,14 +178,23 @@ export async function getNodeByIri(nodeIri:string, mode:string) {
  * A tree node needs: children, id (beside existing metadata) 
  * @param listOfNodes 
  */
-function processForTree(listOfNodes: Array<any>){
+function processForTree(listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}){
   let processedListOfNodes: Array<any> = [];
   for(let i=0; i < listOfNodes.length; i++){
     listOfNodes[i]['children'] = [];
     listOfNodes[i]['id'] = listOfNodes[i]['iri'];
+    if(Object.keys(alreadyExistedNodesInTree).includes(listOfNodes[i]['short_form'])){
+      listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_' + alreadyExistedNodesInTree[listOfNodes[i]['short_form']];
+      alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = alreadyExistedNodesInTree[listOfNodes[i]['short_form']] + 1;
+    }
+    else{
+      listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_0';
+      alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = 1;
+    }
     processedListOfNodes.push(listOfNodes[i]);
+    
   }
-  return processedListOfNodes;
+  return [processedListOfNodes, alreadyExistedNodesInTree];
 }
 
 
