@@ -147,21 +147,36 @@ export async function getChildren(childrenLink: string, mode: string, alreadyExi
  * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(nodeIri:string, mode:string,  allRoutes: Array<any>) {
-    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
-    let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
-    node = node['_embedded'][mode];
-    // console.info(node[0]);
-    if(typeof node[0]['_links']['hierarchicalParents'] !== 'undefined' && node[0]['is_root'] != true){
-      let allParents =  await (await fetch(node[0]['_links']['hierarchicalParents']['href'], getCallSetting)).json();
-      allParents = allParents['_embedded'][mode];
-      // console.info(allParents);
-      allRoutes.push(allParents[0]['short_form']);
-      await getTreeRoutes(allParents[0]['iri'], mode, allRoutes);
+export async function getTreeRoutes(rootNodes: Array<any>, nodeIri:string, mode:string, allRoutes: Array<any>) {
+    let route: Array<any> = [];
+    for(let i=0; i < rootNodes.length; i++){
+        
     }
-    else if(typeof node[0] !== 'undefined' &&  node[0]['is_root'] == true){
-      return allRoutes;
-    }
+  
+  
+  
+  
+  
+  
+  // let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
+    // let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+    // node = node['_embedded'][mode];
+    // // console.info(node[0]);
+    // if(typeof node[0]['_links']['hierarchicalParents'] !== 'undefined' && node[0]['is_root'] != true){
+    //   let allParents =  await (await fetch(node[0]['_links']['hierarchicalParents']['href'], getCallSetting)).json();
+    //   allParents = allParents['_embedded'][mode];
+    //   // console.info(allParents);
+    //   let temp: Array<any> = [];
+    //   for(let i=0; i < allParents.length; i++){        
+    //     route.push(allParents[i]['short_form']);
+    //   }
+    //   await getTreeRoutes(allParents[0]['iri'], mode, route, allRoutes);
+    // }
+    // else if(typeof node[0] !== 'undefined' &&  node[0]['is_root'] == true){
+    //   allRoutes.push(route);
+    //   route = [];
+      
+    // }
 
 }
 

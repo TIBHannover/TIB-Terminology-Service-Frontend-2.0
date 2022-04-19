@@ -89,12 +89,13 @@ class ClassTree extends React.Component {
       if(target != undefined && this.state.targetNodeIri != target){
         let ancestors = [];
         if(componentIdentity == "term"){
-          await getTreeRoutes(target, 'terms', ancestors)
+          await getTreeRoutes(target, 'terms', [], ancestors);
+          console.info(ancestors);
           let node = await getNodeByIri(target, 'terms');
           ancestors.unshift(node['short_form']);
         }
         else{
-          await getTreeRoutes(target, 'properties', ancestors);
+          await getTreeRoutes(target, 'properties', [], ancestors);
           let node = await getNodeByIri(target, 'properties');
           ancestors.unshift(node['short_form']);
         }
@@ -116,20 +117,30 @@ class ClassTree extends React.Component {
    */
  expandTreeByTarget(){
     let routes = this.state.openTreeRoute;
-    let isShown = this.state.isTreeRouteShown;
-    routes = routes.reverse();
-    // console.info(isShown);
-    // console.info(routes);
-    // console.info('-----');
-    if (routes.length > 0){
-      for(let i=0; i < routes.length; i++){
-        let treeElement = document.getElementById('tree_element_' + routes[i]);
-        // console.info(treeElement);
-        if(treeElement !== null && treeElement.getElementsByTagName('ul').length == 0){
-          treeElement.getElementsByClassName('MuiTreeItem-content')[0].click();
-        }
-      }
-    }
+    let visitedNodes = routes;
+    // routes = routes.reverse();
+    // if (routes.length > 0){
+    //   while(visitedNodes.length > 0){
+    //     for(let i=0; i < routes.length; i++){
+    //       let treeElement = document.querySelectorAll('[id^="tree_element_' + routes[i] + '"]');
+    //       if (treeElement === null || treeElement.length === 0){
+    //         continue;
+    //       }
+    //       let index = visitedNodes.indexOf(routes[i]);
+    //       if (index > -1) {
+    //         visitedNodes = visitedNodes.splice(index, 1);
+    //       }
+
+    //       for(let j=0; j < treeElement.length; j++){
+    //         if(treeElement[j] !== null && treeElement[j].getElementsByTagName('ul').length == 0){
+    //           treeElement[j].getElementsByClassName('MuiTreeItem-content')[0].click();
+    //         }
+    //       }
+    //     }
+    //      routes = visitedNodes;
+    //      console.info(visitedNodes);
+    //   }
+    // }
   }
 
   
