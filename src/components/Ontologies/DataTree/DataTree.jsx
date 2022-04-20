@@ -16,6 +16,7 @@ class ClassTree extends React.Component {
       rootNodes: [],
       expandedNodes: [],
       treeData: [],
+      originalTreeData: [],
       visitedNodes: [],
       currentExpandedTerm: '',
       currentClickedTerm: '',
@@ -44,22 +45,23 @@ class ClassTree extends React.Component {
     let rootNodes = this.props.rootNodes;
     let componentIdentity = this.props.componentIdentity;
     if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
-        if(componentIdentity == 'term'){
+        if(componentIdentity == 'term'){         
             this.setState({
                 rootNodes: rootNodes,
                 treeData: rootNodes,
+                originalTreeData: rootNodes,
                 componentIdentity: componentIdentity,
                 termTree: true,
                 propertyTree: false,
                 alreadyExistedNodesInTree: this.props.existedNodes
               });
-              await this.processTarget(componentIdentity, rootNodes);
-              this.expandTreeByTarget();       
+              await this.processTarget(componentIdentity, rootNodes);       
         }
         else if(componentIdentity == 'property'){
             this.setState({
                 rootNodes: rootNodes,
                 treeData: rootNodes,
+                originalTreeData: rootNodes,
                 componentIdentity: componentIdentity,
                 termTree: false,
                 propertyTree: true,
@@ -88,21 +90,21 @@ class ClassTree extends React.Component {
       target = target.trim();
       if(target != undefined && this.state.targetNodeIri != target){
         let ancestors = [];
+        let customTreeData = [];
         if(componentIdentity == "term"){
-          await getTreeRoutes(target, 'terms', [], ancestors);
-          console.info(ancestors);
-          let node = await getNodeByIri(target, 'terms');
-          ancestors.unshift(node['short_form']);
+          await getTreeRoutes(target, 'terms', ancestors, customTreeData);
+          // console.info(ancestors);
         }
         else{
-          await getTreeRoutes(target, 'properties', [], ancestors);
-          let node = await getNodeByIri(target, 'properties');
-          ancestors.unshift(node['short_form']);
+          await getTreeRoutes(target, 'properties', ancestors, customTreeData);          
         }
         
         this.setState({
             targetNodeIri: target,
             openTreeRoute: ancestors,
+            treeData:customTreeData
+        }, () => {
+          this.expandTreeByTarget();
         });
 
           
@@ -117,30 +119,19 @@ class ClassTree extends React.Component {
    */
  expandTreeByTarget(){
     let routes = this.state.openTreeRoute;
-    let visitedNodes = routes;
-    // routes = routes.reverse();
-    // if (routes.length > 0){
-    //   while(visitedNodes.length > 0){
-    //     for(let i=0; i < routes.length; i++){
-    //       let treeElement = document.querySelectorAll('[id^="tree_element_' + routes[i] + '"]');
-    //       if (treeElement === null || treeElement.length === 0){
-    //         continue;
-    //       }
-    //       let index = visitedNodes.indexOf(routes[i]);
-    //       if (index > -1) {
-    //         visitedNodes = visitedNodes.splice(index, 1);
-    //       }
+    let expandedNodes = [];
+    for(let i=0; i < routes.length; i++){
+      let theRoute = routes[i];
+      for(let j=0; j < theRoute.length; j++){
+        if(!expandedNodes.includes(theRoute[j])){
+          expandedNodes.push(theRoute[j]);
+        }
+      }
+    }
+    this.setState({
+      expandedNodes: expandedNodes
+    });
 
-    //       for(let j=0; j < treeElement.length; j++){
-    //         if(treeElement[j] !== null && treeElement[j].getElementsByTagName('ul').length == 0){
-    //           treeElement[j].getElementsByClassName('MuiTreeItem-content')[0].click();
-    //         }
-    //       }
-    //     }
-    //      routes = visitedNodes;
-    //      console.info(visitedNodes);
-    //   }
-    // }
   }
 
   
@@ -205,8 +196,7 @@ class ClassTree extends React.Component {
      */
   handleChange = (e, value) => {
     this.setState({
-      expandedNodes:value,
-      isTreeRouteShown: true
+      expandedNodes:value
     });
     const vNodes = this.state.visitedNodes
     if (!vNodes.includes(value[0])) {
@@ -282,7 +272,7 @@ class ClassTree extends React.Component {
                         expanded={this.state.expandedNodes}
                         onNodeToggle={this.handleChange}
                         onNodeSelect={this.handleSelect}
-
+                        defaultExpanded={this.state.expandedNodes}
                         >
                         {this.createTree(this.state.treeData)}
                         </TreeView>

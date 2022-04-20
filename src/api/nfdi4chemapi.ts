@@ -147,38 +147,62 @@ export async function getChildren(childrenLink: string, mode: string, alreadyExi
  * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(rootNodes: Array<any>, nodeIri:string, mode:string, allRoutes: Array<any>) {
-    let route: Array<any> = [];
-    for(let i=0; i < rootNodes.length; i++){
-        
+export async function getTreeRoutes(nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>) {
+  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
+  let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+  let rootNodes: Array<any> = [];
+  node = node['_embedded'][mode];
+  if(typeof node[0]['_links']['hierarchicalAncestors'] !== 'undefined' && node[0]['is_root'] != true){
+    let allAncestors =  await (await fetch(node[0]['_links']['hierarchicalAncestors']['href'], getCallSetting)).json();
+    allAncestors = allAncestors['_embedded'][mode];
+    for(let i=0; i < allAncestors.length; i++){
+      if(allAncestors[i]['is_root'] && allAncestors[i]['label'] != "Thing"){
+        rootNodes.push(allAncestors[i]);
+      }
     }
+    allAncestors.push(node[0]);
+    for(let i=0; i < rootNodes.length; i++){  
+      rootNodes[i]['children'] = [];
+      rootNodes[i]['modified_short_form'] = rootNodes[i]['short_form'];
+      treeData.push(rootNodes[i]);  
+      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i]);
+    }
+  }
   
-  
-  
-  
-  
-  
-  // let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
-    // let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
-    // node = node['_embedded'][mode];
-    // // console.info(node[0]);
-    // if(typeof node[0]['_links']['hierarchicalParents'] !== 'undefined' && node[0]['is_root'] != true){
-    //   let allParents =  await (await fetch(node[0]['_links']['hierarchicalParents']['href'], getCallSetting)).json();
-    //   allParents = allParents['_embedded'][mode];
-    //   // console.info(allParents);
-    //   let temp: Array<any> = [];
-    //   for(let i=0; i < allParents.length; i++){        
-    //     route.push(allParents[i]['short_form']);
-    //   }
-    //   await getTreeRoutes(allParents[0]['iri'], mode, route, allRoutes);
-    // }
-    // else if(typeof node[0] !== 'undefined' &&  node[0]['is_root'] == true){
-    //   allRoutes.push(route);
-    //   route = [];
-      
-    // }
-
 }
+
+
+
+async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>) {  
+  if(node['short_form'] == target['short_form']){
+    allRoutes.push(route);
+    // treeData['children'].push(target);
+    return true;
+  }
+  else if(typeof node['_links']['hierarchicalChildren'] !== 'undefined'){
+    let children = await (await fetch(node['_links']['hierarchicalChildren']['href'], getCallSetting)).json();
+    children = children['_embedded'][mode];
+    for(let j=0; j < children.length; j++){
+      if(nodeExistInList(allAncestors, children[j]['iri'])){        
+        route.push(children[j]['short_form']);
+        children[j]['children'] = [];
+        children[j]['modified_short_form'] = children[j]['short_form'];
+        treeData['children'].push(children[j]);
+        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1]);
+        // if(answer == true){          
+        //   // allRoutes.push(route);
+        //   // route = [rootNode];
+        // }
+      }
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+
+
 
 
 export async function getNodeByIri(nodeIri:string, mode:string) {
