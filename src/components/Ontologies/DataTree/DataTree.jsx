@@ -29,7 +29,9 @@ class ClassTree extends React.Component {
       openTreeRoute: [],
       isTreeRouteShown: false,
       alreadyExistedNodesInTree: {},
-      ontologyId: ''
+      ontologyId: '',
+      childrenFieldName:'',
+      ancestorsFieldName: ''
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -56,9 +58,13 @@ class ClassTree extends React.Component {
                 termTree: true,
                 propertyTree: false,
                 alreadyExistedNodesInTree: this.props.existedNodes,
-                ontologyId: ontologyId
+                ontologyId: ontologyId,
+                childrenFieldName: "hierarchicalChildren",
+                ancestorsFieldName: "hierarchicalAncestors"
+              }, async () => {
+                await this.processTarget(componentIdentity, rootNodes);
               });
-              await this.processTarget(componentIdentity, rootNodes);       
+              
         }
         else if(componentIdentity == 'property'){
             this.setState({
@@ -69,9 +75,13 @@ class ClassTree extends React.Component {
                 termTree: false,
                 propertyTree: true,
                 alreadyExistedNodesInTree: this.props.existedNodes,
-                ontologyId: ontologyId
+                ontologyId: ontologyId,
+                childrenFieldName: "children",
+                ancestorsFieldName: "ancestors"
+              }, async () => {
+                await this.processTarget(componentIdentity, rootNodes);
               });
-              await this.processTarget(componentIdentity, rootNodes);              
+              
         }
        
     }
@@ -94,15 +104,16 @@ class ClassTree extends React.Component {
         return 0;
       }
       target = target.trim();
+      target = encodeURIComponent(target);
       if(target != undefined && this.state.targetNodeIri != target){
         let ancestors = [];
         let customTreeData = [];
         if(componentIdentity == "term"){
-          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData); 
+          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData, this.state.childrenFieldName, this.state.ancestorsFieldName); 
           mode = "terms";         
         }
         else{
-          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData);
+          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData, this.state.childrenFieldName, this.state.ancestorsFieldName);
           mode = "properties";          
         }
         
@@ -181,7 +192,7 @@ class ClassTree extends React.Component {
      */
  async updateNodeInTree (node, shortForm, expanded) {
     if (node.modified_short_form === shortForm && node.has_children) {
-      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node['_links']['hierarchicalChildren']['href'], this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node['_links'][this.state.childrenFieldName]['href'], this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({

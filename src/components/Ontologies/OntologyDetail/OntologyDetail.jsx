@@ -66,6 +66,7 @@ class OntologyDetail extends React.Component {
   setTabOnLoad(){
     let requestedTab = this.props.match.params.tab;
     let targetQueryParams = queryString.parse(this.props.location.search);
+    console.info(this.props.location.search);
     let lastRequestedTab = this.state.lastRequestedTab;
     if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
       this.setState({
@@ -252,7 +253,7 @@ class OntologyDetail extends React.Component {
                           iri={this.state.targetTermIri}
                           key={'termTreePage'}
                           existedNodes={this.state.alreadyExistedTermsInTree}
-                          ontology={this.state.ontologyId}                 
+                          ontology={this.state.ontologyId}                           
                         />
           }
 
@@ -263,7 +264,7 @@ class OntologyDetail extends React.Component {
                           iri={this.state.targetPropertyIri}
                           key={'propertyTreePage'}
                           existedNodes={this.state.alreadyExistedPropsInTree}
-                          ontology={this.state.ontologyId}
+                          ontology={this.state.ontologyId}                          
                         />
           }
           {this.state.waiting && <CircularProgress />}

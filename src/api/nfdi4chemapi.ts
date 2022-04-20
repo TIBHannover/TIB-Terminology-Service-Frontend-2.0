@@ -147,13 +147,13 @@ export async function getChildren(childrenLink: string, mode: string, alreadyExi
  * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>) {
-  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/terms";
+export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {
+  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
   let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
   let rootNodes: Array<any> = [];
   node = node['_embedded'][mode];
-  if(typeof node[0]['_links']['hierarchicalAncestors'] !== 'undefined' && node[0]['is_root'] != true){
-    let allAncestors =  await (await fetch(node[0]['_links']['hierarchicalAncestors']['href'], getCallSetting)).json();
+  if(typeof node[0]['_links'][ancestorFieldName] !== 'undefined' && node[0]['is_root'] != true){
+    let allAncestors =  await (await fetch(node[0]['_links'][ancestorFieldName]['href'], getCallSetting)).json();
     allAncestors = allAncestors['_embedded'][mode];
     for(let i=0; i < allAncestors.length; i++){
       if(allAncestors[i]['is_root'] && allAncestors[i]['label'] != "Thing"){
@@ -165,7 +165,7 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
       rootNodes[i]['children'] = [];
       rootNodes[i]['modified_short_form'] = rootNodes[i]['short_form'];
       treeData.push(rootNodes[i]);  
-      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i]);
+      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i], childFieldName, ancestorFieldName);
     }
   }
   
@@ -173,13 +173,13 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
 
 
 
-async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>) {  
+async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {  
   if(node['short_form'] == target['short_form']){
     allRoutes.push(route);
     return true;
   }
-  else if(typeof node['_links']['hierarchicalChildren'] !== 'undefined'){
-    let children = await (await fetch(node['_links']['hierarchicalChildren']['href'], getCallSetting)).json();
+  else if(typeof node['_links'][childFieldName] !== 'undefined'){
+    let children = await (await fetch(node['_links'][childFieldName]['href'], getCallSetting)).json();
     children = children['_embedded'][mode];
     for(let j=0; j < children.length; j++){
       if(nodeExistInList(allAncestors, children[j]['iri'])){        
@@ -187,7 +187,7 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
         children[j]['children'] = [];
         children[j]['modified_short_form'] = children[j]['short_form'];
         treeData['children'].push(children[j]);
-        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1]);
+        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1], childFieldName, ancestorFieldName);
       }
     }
   }
@@ -199,7 +199,7 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
 
 
 export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
-    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/terms";
+    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
     let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
     return node['_embedded'][mode][0];
 }
