@@ -84,6 +84,7 @@ class ClassTree extends React.Component {
    */
   async processTarget(componentIdentity, rootNodes){
       let target = this.props.iri;
+      let mode = '';
       let ontologyId = this.props.ontology;
       if (!target){
         this.setState({
@@ -97,11 +98,12 @@ class ClassTree extends React.Component {
         let ancestors = [];
         let customTreeData = [];
         if(componentIdentity == "term"){
-          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData);
-          // console.info(ancestors);
+          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData); 
+          mode = "terms";         
         }
         else{
-          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData);          
+          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData);
+          mode = "properties";          
         }
         
         this.setState({
@@ -109,7 +111,7 @@ class ClassTree extends React.Component {
             openTreeRoute: ancestors,
             treeData:customTreeData
         }, () => {
-          this.expandTreeByTarget();
+          this.expandTreeByTarget(target, mode, ontologyId);
         });
 
           
@@ -122,7 +124,7 @@ class ClassTree extends React.Component {
    * @param {*} nodes 
    * @returns 
    */
- expandTreeByTarget(){
+ expandTreeByTarget(targetNodeIri, mode, ontologyId){
     let routes = this.state.openTreeRoute;
     let expandedNodes = [];
     for(let i=0; i < routes.length; i++){
@@ -135,6 +137,10 @@ class ClassTree extends React.Component {
     }
     this.setState({
       expandedNodes: expandedNodes
+    }, async() => {
+      let node = await getNodeByIri(ontologyId, targetNodeIri, mode);
+      let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'] + '"]');
+      targetElement[0].getElementsByClassName('MuiTreeItem-content')[0].click();
     });
 
   }

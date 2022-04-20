@@ -198,10 +198,8 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
 
 
 
-
-
-export async function getNodeByIri(nodeIri:string, mode:string) {
-    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
+export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
+    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/terms";
     let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
     return node['_embedded'][mode][0];
 }
