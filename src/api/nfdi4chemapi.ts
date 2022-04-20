@@ -63,7 +63,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree(terms);
+    return processForTree(terms, {});
 
   }
   catch(e){
@@ -94,7 +94,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree(props);
+    return processForTree(props, {});
 
   }
   catch(e){
@@ -123,15 +123,15 @@ async function getPageCount(url: string){
  * @param mode
  * @returns 
  */
-export async function getChildren(childrenLink: string, mode: string){
+export async function getChildren(childrenLink: string, mode: string, alreadyExistedNodesInTree: {[id:string]: number}){
   try{
       let data = await fetch(childrenLink, getCallSetting);
       data = await data.json();
       if (mode === 'term'){
-        return processForTree(data['_embedded']['terms']); 
+        return processForTree(data['_embedded']['terms'], alreadyExistedNodesInTree); 
       }
       else{
-        return processForTree(data['_embedded']['properties']);
+        return processForTree(data['_embedded']['properties'], alreadyExistedNodesInTree);
       }
   }
   catch(e){
@@ -141,19 +141,112 @@ export async function getChildren(childrenLink: string, mode: string){
 
 
 /**
+ * Get a route in a tree to reach to an specific node. Used in opening an specific term/propert
+ * @param ontologyId
+ * @param nodeIri
+ * @param mode (terms/properties)
+ * @returns 
+ */
+export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {
+  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
+  let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+  let rootNodes: Array<any> = [];
+  node = node['_embedded'][mode];
+  if(typeof node[0]['_links'][ancestorFieldName] !== 'undefined' && node[0]['is_root'] != true){
+    let allAncestors =  await (await fetch(node[0]['_links'][ancestorFieldName]['href'], getCallSetting)).json();
+    allAncestors = allAncestors['_embedded'][mode];
+    for(let i=0; i < allAncestors.length; i++){
+      if(allAncestors[i]['is_root'] && allAncestors[i]['label'] != "Thing"){
+        rootNodes.push(allAncestors[i]);
+      }
+    }
+    allAncestors.push(node[0]);
+    for(let i=0; i < rootNodes.length; i++){  
+      rootNodes[i]['children'] = [];
+      rootNodes[i]['modified_short_form'] = rootNodes[i]['short_form'];
+      treeData.push(rootNodes[i]);  
+      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i], childFieldName, ancestorFieldName);
+    }
+  }
+  
+}
+
+
+
+async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {  
+  if(node['short_form'] == target['short_form']){
+    allRoutes.push(route);
+    return true;
+  }
+  else if(typeof node['_links'][childFieldName] !== 'undefined'){
+    let children = await (await fetch(node['_links'][childFieldName]['href'], getCallSetting)).json();
+    children = children['_embedded'][mode];
+    for(let j=0; j < children.length; j++){
+      if(nodeExistInList(allAncestors, children[j]['iri'])){        
+        route.push(children[j]['short_form']);
+        children[j]['children'] = [];
+        children[j]['modified_short_form'] = children[j]['short_form'];
+        treeData['children'].push(children[j]);
+        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1], childFieldName, ancestorFieldName);
+      }
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+
+
+export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
+    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
+    let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+    return node['_embedded'][mode][0];
+}
+
+
+/**
  * This function process each node (term/property) obtainded from API call to match with the tree view. 
  * A tree node needs: children, id (beside existing metadata) 
  * @param listOfNodes 
  */
-function processForTree(listOfNodes: Array<any>){
+function processForTree(listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}){
   let processedListOfNodes: Array<any> = [];
   for(let i=0; i < listOfNodes.length; i++){
     listOfNodes[i]['children'] = [];
     listOfNodes[i]['id'] = listOfNodes[i]['iri'];
+    if(Object.keys(alreadyExistedNodesInTree).includes(listOfNodes[i]['short_form'])){
+      listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_' + alreadyExistedNodesInTree[listOfNodes[i]['short_form']];
+      alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = alreadyExistedNodesInTree[listOfNodes[i]['short_form']] + 1;
+    }
+    else{
+      listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_0';
+      alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = 1;
+    }
     processedListOfNodes.push(listOfNodes[i]);
+    
   }
-  return processedListOfNodes;
+  return [processedListOfNodes, alreadyExistedNodesInTree];
 }
+
+
+/**
+ * check if a node exist in a list of nodes obtain from API
+ * @param nodesList
+ * @param nodeIri
+ * @returns 
+ */
+function nodeExistInList(nodesList: Array<any>, nodeIri:string){
+  for(let i=0; i < nodesList.length; i++){
+    if (nodesList[i]['iri'] === nodeIri){
+      return true;
+    }
+  }
+  return false;
+}
+
+
+
 
 
 

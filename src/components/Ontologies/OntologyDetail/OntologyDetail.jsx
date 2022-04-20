@@ -9,6 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@mui/material/CircularProgress';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
+import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
 
 
@@ -30,7 +31,11 @@ class OntologyDetail extends React.Component {
       activeTab: 0,
       rootTerms: [],
       rootProps: [],
-      waiting: false
+      waiting: false,
+      targetTermIri: " ",
+      targetPropertyIri: " ",
+      alreadyExistedTermsInTree: {},
+      alreadyExistedPropsInTree: {}
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -59,7 +64,9 @@ class OntologyDetail extends React.Component {
    * Set the active tab and its page on load
    */
   setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;    
+    let requestedTab = this.props.match.params.tab;
+    let targetQueryParams = queryString.parse(this.props.location.search);
+    console.info(this.props.location.search);
     let lastRequestedTab = this.state.lastRequestedTab;
     if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
       this.setState({
@@ -68,7 +75,8 @@ class OntologyDetail extends React.Component {
         propTab: false,
         activeTab: 1,
         waiting: false,
-        lastRequestedTab: requestedTab
+        lastRequestedTab: requestedTab,
+        targetTermIri: targetQueryParams.iri
       });
     }
     else if (requestedTab != lastRequestedTab && requestedTab == 'props'){
@@ -78,7 +86,8 @@ class OntologyDetail extends React.Component {
         propTab: true,
         activeTab: 2,
         waiting: false,
-        lastRequestedTab: requestedTab
+        lastRequestedTab: requestedTab,
+        targetPropertyIri: targetQueryParams.iri
 
       });
     }
@@ -122,11 +131,12 @@ class OntologyDetail extends React.Component {
      * Get the ontology root classes 
      */
   async getRootTerms (ontologyId) {
-    let rootTerms = await getOntologyRootTerms(ontologyId);
+    let [rootTerms, alreadyExistedTermsInTree] = await getOntologyRootTerms(ontologyId);
     if (typeof rootTerms != undefined){
       this.setState({
         isRootTermsLoaded: true,
-        rootTerms: rootTerms
+        rootTerms: rootTerms,
+        alreadyExistedTermsInTree: alreadyExistedTermsInTree
       });
     }
     else{
@@ -143,10 +153,11 @@ class OntologyDetail extends React.Component {
      * Get the ontology root properties from the backend
      */
   async getRootProps (ontologyId) {
-    let rootProps = await getOntologyRootProperties(ontologyId);
+    let [rootProps, alreadyExistedPropsInTree] = await getOntologyRootProperties(ontologyId);
     if (typeof rootProps != undefined){
       this.setState({
-        rootProps: rootProps
+        rootProps: rootProps,
+        alreadyExistedPropsInTree: alreadyExistedPropsInTree
       });
     }
    
@@ -239,7 +250,10 @@ class OntologyDetail extends React.Component {
                         <DataTree
                           rootNodes={this.state.rootTerms}
                           componentIdentity={'term'}
-                          key={'termTreePage'}                 
+                          iri={this.state.targetTermIri}
+                          key={'termTreePage'}
+                          existedNodes={this.state.alreadyExistedTermsInTree}
+                          ontology={this.state.ontologyId}                           
                         />
           }
 
@@ -247,7 +261,10 @@ class OntologyDetail extends React.Component {
                         <DataTree
                           rootNodes={this.state.rootProps}
                           componentIdentity={'property'}
-                          key={'propertyTreePage'}  
+                          iri={this.state.targetPropertyIri}
+                          key={'propertyTreePage'}
+                          existedNodes={this.state.alreadyExistedPropsInTree}
+                          ontology={this.state.ontologyId}                          
                         />
           }
           {this.state.waiting && <CircularProgress />}

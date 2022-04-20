@@ -6,7 +6,8 @@ import StyledTreeItem from './widgets/StyledTreeItem';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
-import {getChildren} from '../../../api/nfdi4chemapi';
+import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/nfdi4chemapi';
+
 
 class ClassTree extends React.Component {
   constructor (props) {
@@ -15,6 +16,7 @@ class ClassTree extends React.Component {
       rootNodes: [],
       expandedNodes: [],
       treeData: [],
+      originalTreeData: [],
       visitedNodes: [],
       currentExpandedTerm: '',
       currentClickedTerm: '',
@@ -22,9 +24,18 @@ class ClassTree extends React.Component {
       showNodeDetailPage: false,
       componentIdentity: "",
       termTree: false,
-      propertyTree: false
+      propertyTree: false,
+      targetNodeIri: "",
+      openTreeRoute: [],
+      isTreeRouteShown: false,
+      alreadyExistedNodesInTree: {},
+      ontologyId: '',
+      childrenFieldName:'',
+      ancestorsFieldName: ''
     })
     this.setTreeData = this.setTreeData.bind(this);
+    this.processTarget = this.processTarget.bind(this);
+    this.expandTreeByTarget = this.expandTreeByTarget.bind(this);
   }
 
 
@@ -33,30 +44,116 @@ class ClassTree extends React.Component {
    * @param {*} nodes 
    * @returns 
    */
-  setTreeData(){
+  async setTreeData(){
     let rootNodes = this.props.rootNodes;
+    let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
     if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
-        if(componentIdentity == 'term'){
+        if(componentIdentity == 'term'){         
             this.setState({
                 rootNodes: rootNodes,
                 treeData: rootNodes,
+                originalTreeData: rootNodes,
                 componentIdentity: componentIdentity,
                 termTree: true,
-                propertyTree: false
+                propertyTree: false,
+                alreadyExistedNodesInTree: this.props.existedNodes,
+                ontologyId: ontologyId,
+                childrenFieldName: "hierarchicalChildren",
+                ancestorsFieldName: "hierarchicalAncestors"
+              }, async () => {
+                await this.processTarget(componentIdentity, rootNodes);
               });
+              
         }
         else if(componentIdentity == 'property'){
             this.setState({
                 rootNodes: rootNodes,
                 treeData: rootNodes,
+                originalTreeData: rootNodes,
                 componentIdentity: componentIdentity,
                 termTree: false,
-                propertyTree: true
+                propertyTree: true,
+                alreadyExistedNodesInTree: this.props.existedNodes,
+                ontologyId: ontologyId,
+                childrenFieldName: "children",
+                ancestorsFieldName: "ancestors"
+              }, async () => {
+                await this.processTarget(componentIdentity, rootNodes);
               });
+              
         }
        
     }
+  }
+
+  /**
+   * process and get the target. The target is an specific target node (term/property) given in the url.
+   * @param {*} nodes 
+   * @returns 
+   */
+  async processTarget(componentIdentity, rootNodes){
+      let target = this.props.iri;
+      let mode = '';
+      let ontologyId = this.props.ontology;
+      if (!target){
+        this.setState({
+          targetNodeIri: false,
+          openTreeRoute: [],
+        });
+        return 0;
+      }
+      target = target.trim();
+      target = encodeURIComponent(target);
+      if(target != undefined && this.state.targetNodeIri != target){
+        let ancestors = [];
+        let customTreeData = [];
+        if(componentIdentity == "term"){
+          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData, this.state.childrenFieldName, this.state.ancestorsFieldName); 
+          mode = "terms";         
+        }
+        else{
+          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData, this.state.childrenFieldName, this.state.ancestorsFieldName);
+          mode = "properties";          
+        }
+        
+        this.setState({
+            targetNodeIri: target,
+            openTreeRoute: ancestors,
+            treeData:customTreeData
+        }, () => {
+          this.expandTreeByTarget(target, mode, ontologyId);
+        });
+
+          
+      }
+  }
+
+  /**
+   * Exapand the tree when there is an input target (term/property). Used for showing the selected term/property detail when 
+   * called directy by url via 'iri' 
+   * @param {*} nodes 
+   * @returns 
+   */
+ expandTreeByTarget(targetNodeIri, mode, ontologyId){
+    let routes = this.state.openTreeRoute;
+    let expandedNodes = [];
+    for(let i=0; i < routes.length; i++){
+      let theRoute = routes[i];
+      for(let j=0; j < theRoute.length; j++){
+        if(!expandedNodes.includes(theRoute[j])){
+          expandedNodes.push(theRoute[j]);
+        }
+      }
+    }
+    this.setState({
+      expandedNodes: expandedNodes
+    }, async() => {
+      let node = await getNodeByIri(ontologyId, targetNodeIri, mode);
+      let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'] + '"]');
+      targetElement[0].getElementsByClassName('MuiTreeItem-content')[0].click();
+    });
+
   }
 
   
@@ -68,7 +165,12 @@ class ClassTree extends React.Component {
   createTree = (nodes) => {
     return nodes.map((el) => {
       return (
-        <StyledTreeItem key={el.id} nodeId={el.short_form} label={el.label} className="tree-element"
+        <StyledTreeItem 
+          key={el.id} 
+          nodeId={el.modified_short_form} 
+          label={el.label} 
+          className="tree-element"
+          id={"tree_element_" + el.modified_short_form}
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
           defaultEndIcon={<CloseSquare />}>
@@ -89,13 +191,14 @@ class ClassTree extends React.Component {
      * @param {*} expanded
      */
  async updateNodeInTree (node, shortForm, expanded) {
-    if (node.short_form === shortForm && node.has_children) {
-      let childrenNodes = await getChildren(node['_links']['children']['href'], this.state.componentIdentity);
+    if (node.modified_short_form === shortForm && node.has_children) {
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node['_links'][this.state.childrenFieldName]['href'], this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({
           expandedNodes: expanded,
-          currentExpandedTerm: node
+          currentExpandedTerm: node,
+          alreadyExistedNodesInTree: alreadyExistedNodesInTree
         });
       }      
     } 
@@ -141,7 +244,7 @@ class ClassTree extends React.Component {
      * @param {*} shortForm
      */
   findSelectedTerm (node, shortForm) {
-    if (node.short_form === shortForm) {
+    if (node.modified_short_form === shortForm) {
       this.setState({
         selectedNode: node,
         showNodeDetailPage: true
@@ -191,7 +294,7 @@ class ClassTree extends React.Component {
                         expanded={this.state.expandedNodes}
                         onNodeToggle={this.handleChange}
                         onNodeSelect={this.handleSelect}
-
+                        defaultExpanded={this.state.expandedNodes}
                         >
                         {this.createTree(this.state.treeData)}
                         </TreeView>
@@ -213,6 +316,7 @@ class ClassTree extends React.Component {
                         expanded={this.state.expandedNodes}
                         onNodeToggle={this.handleChange}
                         onNodeSelect={this.handleSelect}
+                        defaultExpanded={this.state.expandedNodes}
 
                     >
                         {this.createTree(this.state.treeData)}
