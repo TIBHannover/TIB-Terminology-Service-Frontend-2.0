@@ -28,7 +28,8 @@ class ClassTree extends React.Component {
       targetNodeIri: "",
       openTreeRoute: [],
       isTreeRouteShown: false,
-      alreadyExistedNodesInTree: {}
+      alreadyExistedNodesInTree: {},
+      ontologyId: ''
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -43,6 +44,7 @@ class ClassTree extends React.Component {
    */
   async setTreeData(){
     let rootNodes = this.props.rootNodes;
+    let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
     if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
         if(componentIdentity == 'term'){         
@@ -53,7 +55,8 @@ class ClassTree extends React.Component {
                 componentIdentity: componentIdentity,
                 termTree: true,
                 propertyTree: false,
-                alreadyExistedNodesInTree: this.props.existedNodes
+                alreadyExistedNodesInTree: this.props.existedNodes,
+                ontologyId: ontologyId
               });
               await this.processTarget(componentIdentity, rootNodes);       
         }
@@ -65,9 +68,10 @@ class ClassTree extends React.Component {
                 componentIdentity: componentIdentity,
                 termTree: false,
                 propertyTree: true,
-                alreadyExistedNodesInTree: this.props.existedNodes
+                alreadyExistedNodesInTree: this.props.existedNodes,
+                ontologyId: ontologyId
               });
-              this.processTarget(componentIdentity, rootNodes);              
+              await this.processTarget(componentIdentity, rootNodes);              
         }
        
     }
@@ -80,6 +84,7 @@ class ClassTree extends React.Component {
    */
   async processTarget(componentIdentity, rootNodes){
       let target = this.props.iri;
+      let ontologyId = this.props.ontology;
       if (!target){
         this.setState({
           targetNodeIri: false,
@@ -92,11 +97,11 @@ class ClassTree extends React.Component {
         let ancestors = [];
         let customTreeData = [];
         if(componentIdentity == "term"){
-          await getTreeRoutes(target, 'terms', ancestors, customTreeData);
+          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData);
           // console.info(ancestors);
         }
         else{
-          await getTreeRoutes(target, 'properties', ancestors, customTreeData);          
+          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData);          
         }
         
         this.setState({

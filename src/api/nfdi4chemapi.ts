@@ -147,8 +147,8 @@ export async function getChildren(childrenLink: string, mode: string, alreadyExi
  * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>) {
-  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/ms/terms";
+export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>) {
+  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/terms";
   let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
   let rootNodes: Array<any> = [];
   node = node['_embedded'][mode];
@@ -176,7 +176,6 @@ export async function getTreeRoutes(nodeIri:string, mode:string, allRoutes: Arra
 async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>) {  
   if(node['short_form'] == target['short_form']){
     allRoutes.push(route);
-    // treeData['children'].push(target);
     return true;
   }
   else if(typeof node['_links']['hierarchicalChildren'] !== 'undefined'){
@@ -189,10 +188,6 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
         children[j]['modified_short_form'] = children[j]['short_form'];
         treeData['children'].push(children[j]);
         let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1]);
-        // if(answer == true){          
-        //   // allRoutes.push(route);
-        //   // route = [rootNode];
-        // }
       }
     }
   }

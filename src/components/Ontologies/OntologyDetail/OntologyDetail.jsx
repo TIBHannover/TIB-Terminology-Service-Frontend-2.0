@@ -251,7 +251,8 @@ class OntologyDetail extends React.Component {
                           componentIdentity={'term'}
                           iri={this.state.targetTermIri}
                           key={'termTreePage'}
-                          existedNodes={this.state.alreadyExistedTermsInTree}                 
+                          existedNodes={this.state.alreadyExistedTermsInTree}
+                          ontology={this.state.ontologyId}                 
                         />
           }
 
@@ -262,6 +263,7 @@ class OntologyDetail extends React.Component {
                           iri={this.state.targetPropertyIri}
                           key={'propertyTreePage'}
                           existedNodes={this.state.alreadyExistedPropsInTree}
+                          ontology={this.state.ontologyId}
                         />
           }
           {this.state.waiting && <CircularProgress />}
