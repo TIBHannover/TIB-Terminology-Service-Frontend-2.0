@@ -20,11 +20,16 @@ class SearchForm extends React.Component{
         if (term.length > 0){
             let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${term}`)
             searchResult =  (await searchResult.json())['response']['docs'];
-            
          this.setState({
              searchResult: searchResult,
              result: true
          });
+        }
+        else if (term.length == 0){
+            this.setState({
+                result: false
+            });
+            
         }
       }
 
@@ -50,7 +55,7 @@ class SearchForm extends React.Component{
                     placeholder="Search NFDI4Chem TS"
                 />
             {this.state.result &&
-                <div id = "terms-tree-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
           </div>
           )
       }
