@@ -29,6 +29,14 @@ class SearchResult extends React.Component{
         
     }
   }
+
+  render(){
+    return(
+      <div id="searchterm-wrapper">
+        
+      </div>
+    )
+  }
 }
 
 export default SearchResult;
