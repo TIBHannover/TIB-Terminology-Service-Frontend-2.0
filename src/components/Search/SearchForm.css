@@ -12,7 +12,13 @@
 }
 
 #search-icon{
-    float: right;
+    margin-left: 7px;
+    margin-bottom: 0.1em;
+    margin-bottom: 0;
+    line-height: 0.88em;
+    position: relative;
+    vertical-align: top;
+
 }
 
 #button {
