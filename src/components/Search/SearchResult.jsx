@@ -42,28 +42,12 @@ class SearchResult extends React.Component{
    createSearchResultList () {
     const SearchResultList = []
     for (let i = 0; i < this.state.searchResult.length; i++) {
-      const item = this.state.ontologies[i]
-      SearchResultList.push(this.state.ontologiesHiddenStatus[i] &&
-                    <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
-                      <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
-                        <Grid item xs={8}>
-                          <div className="ontology-card-title">
-                            <h4><b>{item.config.title} ({item.ontologyId}) </b></h4>
-                          </div>
-                          <div className="ontology-card-description">
-                            <p>{item.config.description}</p>
-                          </div>
-                        </Grid>
-                        <Grid item xs={4} className="ontology-card-meta-data">
-                          <div>
-                            <h4>Last Update:</h4>
-                            {item.updated}
-                            <h4>Classes Count:</h4>
-                            {item.numberOfTerms}
-                          </div>
-                        </Grid>
-                      </Grid>
-                    </Link>
+      SearchResultList.push(
+        <Link to={''} key={i} className="result-term-link">
+        <div>
+            {this.state.searchResult[i]['search results']}
+        </div>
+    </Link>
       )
     }
 
