@@ -13,7 +13,9 @@ class SearchResult extends React.Component{
         this.state = ({
           term: "",
           result: false,
-          searchResult: []
+          searchResult: [],
+          pageNumber: 1,
+          pageSize: 5
         })
     }
 
@@ -55,7 +57,7 @@ class SearchResult extends React.Component{
      * @returns
      */
   pageCount () {
-    return (Math.ceil(this.state.ontologies.length / this.state.pageSize))
+    return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
   }
 
 
