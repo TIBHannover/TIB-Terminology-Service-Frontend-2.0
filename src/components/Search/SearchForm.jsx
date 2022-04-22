@@ -33,12 +33,12 @@ class SearchForm extends React.Component{
         }
       }
 
-      createResultList(){
+      createResultList(term){
           const resultList = []
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={''} key={i} className="container">
+                <Link to={`https://service.tib.eu/ts4tib/api/search?q=${term}`} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
