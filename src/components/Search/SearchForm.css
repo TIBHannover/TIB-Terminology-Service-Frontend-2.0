@@ -7,3 +7,17 @@
     padding-left: 10x;
     padding-right: 10px;
 }
+#search-box {
+        border-right: 0;
+}
+
+#search-icon{
+    float: right;
+}
+
+#button {
+        border: 1px solid #ced4da;
+        border-left: 0 !important;
+        
+}
+

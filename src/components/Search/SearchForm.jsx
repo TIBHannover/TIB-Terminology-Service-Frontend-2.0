@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import './SearchForm.css'
+import { Form, Input, Button, InputGroup } from 'reactstrap';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -49,14 +52,20 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-            <div className="container">
+            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={''} style={{ minWidth: 57 }}>
+                <InputGroup>
                 <input type="text" className="col-md-12 input" style={{marginTop: 10}}
                     onChange={this.handleChange}
                     placeholder="Search NFDI4Chem TS"
                 />
+                <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
+                    <Icon icon={faSearch} />
+                </Button>
+                </InputGroup>
+
             {this.state.result &&
                 <div id = "autocomplete-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
-          </div>
+          </Form>
           )
       }
 
