@@ -9,5 +9,12 @@
 }
 #facet-ontologies-list{
     background-color: white;
-    border-radius: 25px;
+    border-radius: 15px;
+}
+
+.ontoloyRow:hover{
+    background-color: rgb(75, 238, 170);
+    border-radius: 15px;
+    margin-left: -15px;
+    margin-right: -15px;
 }
