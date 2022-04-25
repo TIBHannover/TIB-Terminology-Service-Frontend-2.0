@@ -40,7 +40,17 @@ class Facet extends React.Component{
 
 
     render(){
-        return(<p>test</p>);
+        return(
+            <div class="row" id="search-facet-container-box">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            hh
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

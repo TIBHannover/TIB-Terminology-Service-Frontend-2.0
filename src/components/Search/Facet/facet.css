@@ -1,0 +1,10 @@
+#search-facet-container-box{
+    width: 20%;
+    background-color: rgb(226, 245, 244);
+    height: 1000px;
+    margin-left: 20px;
+    margin-top: 40px;
+    border-radius: 15px;
+    padding: 10px;
+
+}
