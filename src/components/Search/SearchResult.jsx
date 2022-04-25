@@ -38,18 +38,19 @@ class SearchResult extends React.Component{
   }
 
   async transportTerm(searchResultItem){
+      let url = "";
       if(searchResultItem.type === 'class'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/terms/' + searchResultItem.iri
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/terms/' + searchResultItem.iri;
       }
       else if(searchResultItem.type === 'properties'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/properties/' + searchResultItem.iri
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/properties/' + searchResultItem.iri;
       } 
       
       else if(searchResultItem.type === 'ontology'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology;
       }
-      else(searchResultItem.type === 'individuals'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri
+      else if(searchResultItem.type === 'individuals'){
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri;
       }
   }
 
@@ -82,12 +83,12 @@ class SearchResult extends React.Component{
      *
      * @returns
      */
-   createSearchResultList () {
+   createSearchResultList (searchResultItem) {
     const SearchResultList = []
     for (let i = 0; i < this.state.searchResult.length; i++) {
       SearchResultList.push(
         <Link to={this.transportTerm(this.state.searchResult[i])} key={i} className="result-term-link">
-        <Grid container className="search-result-card" key={enteredTerm}>
+        <Grid container className="search-result-card" key={searchResultItem}>
           <Grid item xs={8}>
             <div className="search-card-title">
               <h4><b>{searchResultItem.id} {searchResultItem.short_form} </b></h4>

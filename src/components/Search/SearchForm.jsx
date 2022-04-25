@@ -38,7 +38,7 @@ class SearchForm extends React.Component{
       }
 
       async submitHandler(event){
-          this.searching(event)
+          searching(event)
       }
 
       createResultList(enteredTerm){
