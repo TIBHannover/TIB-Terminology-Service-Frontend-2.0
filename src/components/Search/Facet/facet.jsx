@@ -13,7 +13,8 @@ class Facet extends React.Component{
             allOntologies: [],
             allOntologiesIds: [],
             ontologiesLoaded: false,
-            ontologiesResultCount: []
+            ontologiesResultCount: [],
+            resultTypes: []
         });
         this.getAllOntologies = this.getAllOntologies.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -25,9 +26,12 @@ class Facet extends React.Component{
      */
     getAllOntologies(){
         if(!this.state.ontologiesLoaded){
-            let allOntologies = this.props.searchResults;
+            let facetData = this.props.facetData;
+            facetData = facetData["facet_fields"];
+            let allTypes = facetData["type"];
             let allIds = [];
             let ontologyResultCount = [];
+            let allOntologies = facetData["ontology_prefix"];
             for(let i=0; i < allOntologies.length; i++){
                 if(!allIds.includes(allOntologies[i]['ontology_name'])){
                     allIds.push(allOntologies[i]['ontology_name']);
@@ -41,7 +45,8 @@ class Facet extends React.Component{
                 ontologiesLoaded: true,
                 allOntologies: allOntologies,
                 ontologiesResultCount: ontologyResultCount,
-                allOntologiesIds: allIds
+                allOntologiesIds: allIds,
+                resultTypes: allTypes
             });
         }
     }

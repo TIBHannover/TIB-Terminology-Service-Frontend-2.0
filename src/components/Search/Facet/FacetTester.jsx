@@ -6,7 +6,12 @@ class FacetTester extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            searchResult: [{"ontology_name": "ms", "type": "class"}, {"ontology_name": "chebi", "type": "class"}, {"ontology_name": "ms", "type": "property"}]
+            searchResult: {
+                "facet_fields": {
+                    "ontology_prefix": ["CHEBI", 213, "MS", 94, "HP", 0],
+                    "type": ["class", 523, "individual", 0, "property", 6, "ontology", 1]
+                } 
+            }
         });
     }
 
@@ -15,7 +20,7 @@ class FacetTester extends React.Component{
             <div class="row">
                 <div class="col-sm-3">
                     <Facet 
-                        searchResults={this.state.searchResult}
+                        facetData={this.state.searchResult}
                     />
                 </div>
                 <div class="col-sm-9">
