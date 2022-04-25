@@ -16,6 +16,7 @@ class Facet extends React.Component{
         });
         this.getAllOntologies = this.getAllOntologies.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
+        this.createTypesCheckboxList = this.createTypesCheckboxList.bind(this);
     }
 
 
@@ -29,6 +30,7 @@ class Facet extends React.Component{
             let allTypes = facetData["type"];
             let allOntologies = facetData["ontology_prefix"];
             let ontologyFacetData = {};
+            let types = {};
             for(let i=0; i < allOntologies.length; i++){
                 if(i % 2 == 0){
                     if(allOntologies[i + 1] !== 0){
@@ -36,12 +38,48 @@ class Facet extends React.Component{
                     }                    
                 }
             }
+            for(let i=0; i < allTypes.length; i++){
+                if(i % 2 == 0){
+                    if(allTypes[i + 1] !== 0){
+                        types[allTypes[i]] = allTypes[i + 1];
+                    }                    
+                }
+            }
             this.setState({
                 ontologiesLoaded: true,
-                resultTypes: allTypes,
+                resultTypes: types,
                 ontologyFacetData: ontologyFacetData
             });
         }
+    }
+
+
+    /**
+     * Create the list of types checkboxes
+     * @returns 
+     */
+    createTypesCheckboxList(){
+        let allTypes = this.state.resultTypes;
+        let result = [];
+        for(let type in allTypes){
+            result.push(
+                <div class="row typeRow"  key={type}>
+                    <div class="col-sm-8">
+                        <FormGroup>
+                            <FormControlLabel 
+                                control={<Checkbox/>}
+                                label={type}
+                                key={type}
+                            />
+                        </FormGroup>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="result-count">{allTypes[type]}</div>
+                    </div>                    
+                </div>
+            );
+        }
+        return result;
     }
 
 
@@ -64,7 +102,7 @@ class Facet extends React.Component{
                         </FormGroup>
                     </div>
                     <div class="col-sm-4">
-                        <div class="ontology-result-count">{ontologyFacetData[ontologyId]}</div>
+                        <div class="result-count">{ontologyFacetData[ontologyId]}</div>
                     </div>                    
                     <hr/>
                 </div>
@@ -90,7 +128,7 @@ class Facet extends React.Component{
                     <h6>{"Result types:"}</h6>
                      <div class="row" id="facet-types-list">                            
                         <div class="col-sm-12">
-                            {this.createOntologiesCheckboxList()}
+                            {this.createTypesCheckboxList()}
                         </div>
                     </div>
                     <h6>{"Ontologies:"}</h6>

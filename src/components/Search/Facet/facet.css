@@ -1,7 +1,7 @@
 #search-facet-container-box{
     /* width: 20%; */
     background-color: rgb(226, 245, 244);
-    height: 1000px;
+    height: auto;
     margin-left: 20px;
     margin-top: 40px;
     border-radius: 15px;
@@ -26,7 +26,7 @@
 
 }
 
-.ontology-result-count{
+.result-count{
     border-radius: 50px;
     background-color: blue;
     color: white;
