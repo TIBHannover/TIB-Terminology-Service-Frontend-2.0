@@ -41,9 +41,16 @@ class SearchResult extends React.Component{
       if(searchResultItem.type === 'class'){
         url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/terms/' + searchResultItem.iri
       }
-      else(searchResultItem.type === 'properties'){
+      else if(searchResultItem.type === 'properties'){
         url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/properties/' + searchResultItem.iri
-      }        
+      } 
+      
+      else if(searchResultItem.type === 'ontology'){
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology
+      }
+      else(searchResultItem.type === 'individuals'){
+        'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri
+      }
   }
 
   /**
