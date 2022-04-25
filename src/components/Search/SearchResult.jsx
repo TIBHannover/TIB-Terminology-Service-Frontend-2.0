@@ -37,6 +37,11 @@ class SearchResult extends React.Component{
     }
   }
 
+  async transportTerm(enteredTerm){
+    enteredTerm = enteredTerm.target.value;
+    this.searching(enteredTerm)
+  }
+
   /**
      * Handle the click on the pagination
      * @param {*} value
