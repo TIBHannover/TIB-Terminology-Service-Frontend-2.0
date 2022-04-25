@@ -37,9 +37,13 @@ class SearchResult extends React.Component{
     }
   }
 
-  async transportTerm(enteredTerm){
-    enteredTerm = enteredTerm.target.value;
-    this.searching(enteredTerm)
+  async transportTerm(searchResultItem){
+      if(searchResultItem.type === 'class'){
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/terms/' + searchResultItem.iri
+      }
+      else(searchResultItem.type === 'properties'){
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/properties/' + searchResultItem.iri
+      }        
   }
 
   /**
@@ -75,7 +79,7 @@ class SearchResult extends React.Component{
     const SearchResultList = []
     for (let i = 0; i < this.state.searchResult.length; i++) {
       SearchResultList.push(
-        <Link to={this.transportTerm} key={i} className="result-term-link">
+        <Link to={this.transportTerm(this.state.searchResult[i])} key={i} className="result-term-link">
         <div>
             {this.state.searchResult[i]['search results']}
         </div>
