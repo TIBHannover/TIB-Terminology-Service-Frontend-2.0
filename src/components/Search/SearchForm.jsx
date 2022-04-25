@@ -16,6 +16,8 @@ class SearchForm extends React.Component{
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
+        this.submitHandler = this.submitHandler.bind(this);
+        this.searching = this.searching.bind(this);
       }
       
 
@@ -39,6 +41,9 @@ class SearchForm extends React.Component{
 
       async submitHandler(event){
           searching(event)
+      }
+      componentDidMount () {
+        this.searching();
       }
 
       createResultList(enteredTerm){
