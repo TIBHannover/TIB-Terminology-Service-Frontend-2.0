@@ -49,7 +49,7 @@ class SearchResult extends React.Component{
         url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology
       }
       else(searchResultItem.type === 'individuals'){
-        'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri
+        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri
       }
   }
 
