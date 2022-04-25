@@ -17,4 +17,14 @@
     border-radius: 15px;
     margin-left: -15px;
     margin-right: -15px;
+
+}
+
+.ontology-result-count{
+    border-radius: 50px;
+    background-color: blue;
+    color: white;
+    padding: auto;
+    margin-top: 10px;
+    text-align: center;
 }

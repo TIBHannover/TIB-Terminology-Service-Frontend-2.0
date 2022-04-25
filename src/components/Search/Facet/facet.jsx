@@ -46,14 +46,19 @@ class Facet extends React.Component{
         let result = [];
         for(let i=0; i < Ids.length; i++){
             result.push(
-                <div class="ontoloyRow"  key={Ids[i]}>
-                    <FormGroup>
-                        <FormControlLabel 
-                            control={<Checkbox/>}
-                            label={Ids[i]}
-                            key={Ids[i]}
-                        />
-                    </FormGroup>
+                <div class="row ontoloyRow"  key={Ids[i]}>
+                    <div class="col-sm-10">
+                        <FormGroup>
+                            <FormControlLabel 
+                                control={<Checkbox/>}
+                                label={Ids[i]}
+                                key={Ids[i]}
+                            />
+                        </FormGroup>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="ontology-result-count">0</div>
+                    </div>                    
                     <hr/>
                 </div>
             );
