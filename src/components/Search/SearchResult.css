@@ -6,3 +6,12 @@
     overflow-x: hidden;
     overflow-y: hidden;
 }
+#search-result-card{
+    border: 1px black solid;
+    background-color: rgb(245, 250, 253);
+    margin-top: 10px;
+    padding: 10px;
+    margin-right: 5px;
+    height: auto;
+    text-align: justify;
+}

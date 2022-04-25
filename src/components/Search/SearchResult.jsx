@@ -87,9 +87,11 @@ class SearchResult extends React.Component{
     for (let i = 0; i < this.state.searchResult.length; i++) {
       SearchResultList.push(
         <Link to={this.transportTerm(this.state.searchResult[i])} key={i} className="result-term-link">
-        <div>
+        <Grid container className="search-result-card" key={enteredTerm}>
+         <div>
             {this.state.searchResult[i]['search results']}
-        </div>
+         </div>
+        </Grid>
     </Link>
       )
     }
