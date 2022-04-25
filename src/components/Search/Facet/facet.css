@@ -10,6 +10,7 @@
 #facet-ontologies-list{
     background-color: white;
     border-radius: 15px;
+    padding-top: 15px;
 }
 
 #facet-types-list{
@@ -21,9 +22,11 @@
 .ontoloyRow:hover{
     background-color: rgb(75, 238, 170);
     border-radius: 15px;
-    margin-left: -15px;
-    margin-right: -15px;
+}
 
+.typeRow:hover{
+    background-color: rgb(75, 238, 170);
+    border-radius: 15px;
 }
 
 .result-count{

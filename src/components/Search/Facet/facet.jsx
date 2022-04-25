@@ -91,21 +91,24 @@ class Facet extends React.Component{
         let result = [];
         for(let ontologyId in ontologyFacetData){
             result.push(
-                <div class="row ontoloyRow"  key={ontologyId}>
-                    <div class="col-sm-8">
-                        <FormGroup>
-                            <FormControlLabel 
-                                control={<Checkbox/>}
-                                label={ontologyId}
-                                key={ontologyId}
-                            />
-                        </FormGroup>
+                <div key={ontologyId}>
+                    <div class="row ontoloyRow">
+                        <div class="col-sm-8">
+                            <FormGroup>
+                                <FormControlLabel 
+                                    control={<Checkbox/>}
+                                    label={ontologyId}
+                                    key={ontologyId}
+                                />
+                            </FormGroup>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="result-count">{ontologyFacetData[ontologyId]}</div>
+                        </div>                    
                     </div>
-                    <div class="col-sm-4">
-                        <div class="result-count">{ontologyFacetData[ontologyId]}</div>
-                    </div>                    
                     <hr/>
                 </div>
+                
             );
         }
         return result;
