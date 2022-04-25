@@ -4,6 +4,7 @@ import './SearchForm.css'
 import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { searching } from './SearchResult'
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -41,7 +42,7 @@ class SearchForm extends React.Component{
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`} key={i} className="container">
+                <Link to={searching} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
