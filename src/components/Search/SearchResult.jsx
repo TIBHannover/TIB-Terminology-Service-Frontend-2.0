@@ -92,11 +92,14 @@ class SearchResult extends React.Component{
             <div className="search-card-title">
               <h4><b>{searchResultItem.id} {searchResultItem.short_form} </b></h4>
             </div>
-            <div className="iri-card">
+            <div className="searchresult-iri">
               {searchResultItem.iri}
             </div>
             <div className="searchresult-card-description">
               <p>{searchResultItem.description}</p>
+            </div>
+            <div className="searchresult-ontology">
+              <p>{searchResultItem.ontology_prefix}</p>
             </div>
           </Grid>
         </Grid>
