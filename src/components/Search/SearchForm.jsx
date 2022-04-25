@@ -9,7 +9,7 @@ class SearchForm extends React.Component{
     constructor (props) {
         super(props)
         this.state = ({
-          term: "",
+          enteredTerm: "",
           result: false,
           searchResult: []
         })
@@ -18,17 +18,17 @@ class SearchForm extends React.Component{
       }
       
 
-      async handleChange(term){
-          term = term.target.value;
-        if (term.length > 0){
-            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${term}`)
+      async handleChange(enteredTerm){
+          enteredTerm = enteredTerm.target.value;
+        if (enteredTerm.length > 0){
+            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
             searchResult =  (await searchResult.json())['response']['docs'];
          this.setState({
              searchResult: searchResult,
              result: true
          });
         }
-        else if (term.length == 0){
+        else if (enteredTerm.length == 0){
             this.setState({
                 result: false
             });
@@ -36,12 +36,12 @@ class SearchForm extends React.Component{
         }
       }
 
-      createResultList(term){
+      createResultList(enteredTerm){
           const resultList = []
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={`https://service.tib.eu/ts4tib/api/search?q=${term}`} key={i} className="container">
+                <Link to={`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
