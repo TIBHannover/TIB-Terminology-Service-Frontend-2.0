@@ -75,7 +75,7 @@ class SearchResult extends React.Component{
     const SearchResultList = []
     for (let i = 0; i < this.state.searchResult.length; i++) {
       SearchResultList.push(
-        <Link to={''} key={i} className="result-term-link">
+        <Link to={this.transportTerm} key={i} className="result-term-link">
         <div>
             {this.state.searchResult[i]['search results']}
         </div>
