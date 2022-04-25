@@ -37,12 +37,16 @@ class SearchForm extends React.Component{
         }
       }
 
+      async submitHandler(event){
+          this.searching(event)
+      }
+
       createResultList(enteredTerm){
           const resultList = []
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={searching} key={i} className="container">
+                <Link to={this.submitHandler} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
@@ -57,6 +61,7 @@ class SearchForm extends React.Component{
                 <InputGroup>
                 <Input type="text" className="col-md-12 input" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
+                    onSubmit={this.submitHandler}
                     placeholder="Search NFDI4Chem TS"
                 />
                 <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
