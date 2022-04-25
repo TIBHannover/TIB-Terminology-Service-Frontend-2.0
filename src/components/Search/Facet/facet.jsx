@@ -12,18 +12,22 @@ class Facet extends React.Component{
         this.state = ({
             ontologiesLoaded: false,
             resultTypes: [],
-            ontologyFacetData: {}
+            ontologyFacetData: {},
+            selectedOntologies: [],
+            selectedTypes: []
         });
-        this.getAllOntologies = this.getAllOntologies.bind(this);
+        this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
         this.createTypesCheckboxList = this.createTypesCheckboxList.bind(this);
+        this.handleOntologyCheckBoxClick = this.handleOntologyCheckBoxClick.bind(this);
+        this.handleTypesCheckBoxClick = this.handleTypesCheckBoxClick.bind(this);
     }
 
 
     /**
      * process the search result array to get the existing ontologies and their result count
      */
-    getAllOntologies(){
+    processFacetData(){
         if(!this.state.ontologiesLoaded){
             let facetData = this.props.facetData;
             facetData = facetData["facet_fields"];
@@ -64,16 +68,17 @@ class Facet extends React.Component{
         for(let type in allTypes){
             result.push(
                 <div class="row typeRow"  key={type}>
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <FormGroup>
                             <FormControlLabel 
-                                control={<Checkbox/>}
+                                control={<Checkbox  onClick={this.handleTypesCheckBoxClick} />}
                                 label={type}
-                                key={type}
+                                key={type}                                
+                                value={type}
                             />
                         </FormGroup>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="result-count">{allTypes[type]}</div>
                     </div>                    
                 </div>
@@ -93,16 +98,17 @@ class Facet extends React.Component{
             result.push(
                 <div key={ontologyId}>
                     <div class="row ontoloyRow">
-                        <div class="col-sm-8">
+                        <div class="col-sm-9">
                             <FormGroup>
                                 <FormControlLabel 
-                                    control={<Checkbox/>}
+                                    control={<Checkbox onClick={this.handleOntologyCheckBoxClick} />}
                                     label={ontologyId}
                                     key={ontologyId}
+                                    value={ontologyId}
                                 />
                             </FormGroup>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="result-count">{ontologyFacetData[ontologyId]}</div>
                         </div>                    
                     </div>
@@ -115,12 +121,55 @@ class Facet extends React.Component{
     }
 
 
+    /**
+     * Handle click on the ontologies checkboxes
+     */
+    handleOntologyCheckBoxClick(e){
+        let selectedOntologies = this.state.selectedOntologies;
+        if(e.target.checked){
+            selectedOntologies.push(e.target.value);
+            this.setState({
+                selectedOntologies: selectedOntologies
+            });
+        }
+        else{
+            let index = selectedOntologies.indexOf(e.target.value);
+            selectedOntologies.splice(index, 1);
+            this.setState({
+                selectedOntologies: selectedOntologies
+            });
+        }                
+    }
+
+
+    /**
+     * Handle click on the type checkboxes
+     */
+     handleTypesCheckBoxClick(e){
+        let selectedTypes = this.state.selectedTypes;
+        if(e.target.checked){
+            selectedTypes.push(e.target.value);
+            this.setState({
+                selectedTypes: selectedTypes
+            });
+        }
+        else{
+            let index = selectedTypes.indexOf(e.target.value);
+            selectedTypes.splice(index, 1);
+            this.setState({
+                selectedTypes: selectedTypes
+            });
+        }                
+    }
+
+
+
     componentDidMount(){
-        this.getAllOntologies();
+        this.processFacetData();
     }
 
     componentDidUpdate(){
-        this.getAllOntologies();
+        this.processFacetData();
     }
 
 
