@@ -12,7 +12,8 @@ class Facet extends React.Component{
         this.state = ({
             allOntologies: [],
             allOntologiesIds: [],
-            ontologiesLoaded: false
+            ontologiesLoaded: false,
+            ontologiesResultCount: []
         });
         this.getAllOntologies = this.getAllOntologies.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -20,18 +21,26 @@ class Facet extends React.Component{
 
 
     /**
-     * Get a list of all ontologies
+     * process the search result array to get the existing ontologies and their result count
      */
-    async getAllOntologies(){
+    getAllOntologies(){
         if(!this.state.ontologiesLoaded){
-            let allOntologies = await getChemOntologies();
+            let allOntologies = this.props.searchResults;
             let allIds = [];
+            let ontologyResultCount = [];
             for(let i=0; i < allOntologies.length; i++){
-                allIds.push(allOntologies[i]['ontologyId']);
+                if(!allIds.includes(allOntologies[i]['ontology_name'])){
+                    allIds.push(allOntologies[i]['ontology_name']);
+                    ontologyResultCount.push(1);
+                }
+                else{
+                    ontologyResultCount[allIds.indexOf(allOntologies[i]['ontology_name'])] += 1;
+                }                                
             }
             this.setState({
                 ontologiesLoaded: true,
                 allOntologies: allOntologies,
+                ontologiesResultCount: ontologyResultCount,
                 allOntologiesIds: allIds
             });
         }
@@ -41,13 +50,13 @@ class Facet extends React.Component{
     /**
      * Create the list of ontologies checkbox view
      */
-    createOntologiesCheckboxList(){
+    createOntologiesCheckboxList(){       
         let Ids = this.state.allOntologiesIds;
         let result = [];
         for(let i=0; i < Ids.length; i++){
             result.push(
                 <div class="row ontoloyRow"  key={Ids[i]}>
-                    <div class="col-sm-10">
+                    <div class="col-sm-8">
                         <FormGroup>
                             <FormControlLabel 
                                 control={<Checkbox/>}
@@ -56,8 +65,8 @@ class Facet extends React.Component{
                             />
                         </FormGroup>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="ontology-result-count">0</div>
+                    <div class="col-sm-4">
+                        <div class="ontology-result-count">{this.state.ontologiesResultCount[i]}</div>
                     </div>                    
                     <hr/>
                 </div>
@@ -68,6 +77,10 @@ class Facet extends React.Component{
 
 
     componentDidMount(){
+        this.getAllOntologies();
+    }
+
+    componentDidUpdate(){
         this.getAllOntologies();
     }
 

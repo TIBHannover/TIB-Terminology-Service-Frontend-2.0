@@ -1,5 +1,5 @@
 #search-facet-container-box{
-    width: 20%;
+    /* width: 20%; */
     background-color: rgb(226, 245, 244);
     height: 1000px;
     margin-left: 20px;
@@ -27,4 +27,5 @@
     padding: auto;
     margin-top: 10px;
     text-align: center;
+    width: auto;
 }
