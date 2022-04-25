@@ -86,7 +86,7 @@ class SearchResult extends React.Component{
       <div id="searchterm-wrapper">
         <Grid container spacing={3}>
             <Grid item xs={10} id="search-list-grid">
-              {this.createOntologyList()}
+              {this.SearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
                 clickHandler={this.handlePagination}
