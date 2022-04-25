@@ -1,5 +1,8 @@
 import React from "react";
 import './facet.css';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import {getChemOntologies} from '../../../api/nfdi4chemapi';
 
 
@@ -12,6 +15,7 @@ class Facet extends React.Component{
             ontologiesLoaded: false
         });
         this.getAllOntologies = this.getAllOntologies.bind(this);
+        this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
     }
 
 
@@ -34,6 +38,27 @@ class Facet extends React.Component{
     }
 
 
+    /**
+     * Create the list of ontologies checkbox view
+     */
+    createOntologiesCheckboxList(){
+        let Ids = this.state.allOntologiesIds;
+        let result = [];
+        for(let i=0; i < Ids.length; i++){
+            result.push(
+                <FormGroup>
+                    <FormControlLabel 
+                        control={<Checkbox/>}
+                        label={Ids[i]}
+                        key={Ids[i]}
+                    />
+                </FormGroup>
+            );
+        }
+        return result;
+    }
+
+
     componentDidMount(){
         this.getAllOntologies();
     }
@@ -43,9 +68,9 @@ class Facet extends React.Component{
         return(
             <div class="row" id="search-facet-container-box">
                 <div class="col-sm-12">
-                    <div class="row">
+                    <div class="row" id="facet-ontologies-list">                            
                         <div class="col-sm-12">
-                            hh
+                            {this.createOntologiesCheckboxList()}
                         </div>
                     </div>
                 </div>

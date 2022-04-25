@@ -5,6 +5,9 @@
     margin-left: 20px;
     margin-top: 40px;
     border-radius: 15px;
-    padding: 10px;
-
+    padding: 40px;
+}
+#facet-ontologies-list{
+    background-color: white;
+    border-radius: 25px;
 }
