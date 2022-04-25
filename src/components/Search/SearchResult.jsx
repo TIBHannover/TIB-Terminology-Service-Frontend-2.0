@@ -11,7 +11,7 @@ class SearchResult extends React.Component{
     constructor(props){
         super(props)
         this.state = ({
-          term: "",
+          enteredTerm: "",
           result: false,
           searchResult: [],
           pageNumber: 1,
@@ -19,17 +19,17 @@ class SearchResult extends React.Component{
         })
     }
 
-    async searching(term){
-      term = term.target.value;
-    if (term.length > 0){
-        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${term}`)
+    async searching(enteredTerm){
+      enteredTerm = enteredTerm.target.value;
+    if (enteredTerm.length > 0){
+        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
         searchResult =  (await searchResult.json())['response']['docs'];
      this.setState({
          searchResult: searchResult,
          result: true
      });
     }
-    else if (term.length == 0){
+    else if (enteredTerm.length == 0){
         this.setState({
             result: false
         });
