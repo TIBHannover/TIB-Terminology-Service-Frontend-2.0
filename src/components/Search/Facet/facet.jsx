@@ -3,18 +3,16 @@ import './facet.css';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import {getChemOntologies} from '../../../api/nfdi4chemapi';
+
 
 
 class Facet extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            allOntologies: [],
-            allOntologiesIds: [],
             ontologiesLoaded: false,
-            ontologiesResultCount: [],
-            resultTypes: []
+            resultTypes: [],
+            ontologyFacetData: {}
         });
         this.getAllOntologies = this.getAllOntologies.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -29,24 +27,19 @@ class Facet extends React.Component{
             let facetData = this.props.facetData;
             facetData = facetData["facet_fields"];
             let allTypes = facetData["type"];
-            let allIds = [];
-            let ontologyResultCount = [];
             let allOntologies = facetData["ontology_prefix"];
+            let ontologyFacetData = {};
             for(let i=0; i < allOntologies.length; i++){
-                if(!allIds.includes(allOntologies[i]['ontology_name'])){
-                    allIds.push(allOntologies[i]['ontology_name']);
-                    ontologyResultCount.push(1);
+                if(i % 2 == 0){
+                    if(allOntologies[i + 1] !== 0){
+                        ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
+                    }                    
                 }
-                else{
-                    ontologyResultCount[allIds.indexOf(allOntologies[i]['ontology_name'])] += 1;
-                }                                
             }
             this.setState({
                 ontologiesLoaded: true,
-                allOntologies: allOntologies,
-                ontologiesResultCount: ontologyResultCount,
-                allOntologiesIds: allIds,
-                resultTypes: allTypes
+                resultTypes: allTypes,
+                ontologyFacetData: ontologyFacetData
             });
         }
     }
@@ -56,22 +49,22 @@ class Facet extends React.Component{
      * Create the list of ontologies checkbox view
      */
     createOntologiesCheckboxList(){       
-        let Ids = this.state.allOntologiesIds;
+        let ontologyFacetData = this.state.ontologyFacetData;
         let result = [];
-        for(let i=0; i < Ids.length; i++){
+        for(let ontologyId in ontologyFacetData){
             result.push(
-                <div class="row ontoloyRow"  key={Ids[i]}>
+                <div class="row ontoloyRow"  key={ontologyId}>
                     <div class="col-sm-8">
                         <FormGroup>
                             <FormControlLabel 
                                 control={<Checkbox/>}
-                                label={Ids[i]}
-                                key={Ids[i]}
+                                label={ontologyId}
+                                key={ontologyId}
                             />
                         </FormGroup>
                     </div>
                     <div class="col-sm-4">
-                        <div class="ontology-result-count">{this.state.ontologiesResultCount[i]}</div>
+                        <div class="ontology-result-count">{ontologyFacetData[ontologyId]}</div>
                     </div>                    
                     <hr/>
                 </div>
