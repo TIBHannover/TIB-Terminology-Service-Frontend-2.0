@@ -88,9 +88,17 @@ class SearchResult extends React.Component{
       SearchResultList.push(
         <Link to={this.transportTerm(this.state.searchResult[i])} key={i} className="result-term-link">
         <Grid container className="search-result-card" key={enteredTerm}>
-         <div>
-            {this.state.searchResult[i]['search results']}
-         </div>
+          <Grid item xs={8}>
+            <div className="search-card-title">
+              <h4><b>{searchResultItem.id} {searchResultItem.short_form} </b></h4>
+            </div>
+            <div className="iri-card">
+              {searchResultItem.iri}
+            </div>
+            <div className="searchresult-card-description">
+              <p>{searchResultItem.description}</p>
+            </div>
+          </Grid>
         </Grid>
     </Link>
       )
