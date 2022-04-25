@@ -65,8 +65,7 @@ class OntologyDetail extends React.Component {
    */
   setTabOnLoad(){
     let requestedTab = this.props.match.params.tab;
-    let targetQueryParams = queryString.parse(this.props.location.search);
-    console.info(this.props.location.search);
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;
     if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
       this.setState({
