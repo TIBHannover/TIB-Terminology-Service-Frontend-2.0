@@ -2,10 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import './SearchResult.css'
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import PaginationCustom from './Pagination';
+import queryString from 'query-string';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -15,26 +13,36 @@ class SearchResult extends React.Component{
           result: false,
           searchResult: [],
           pageNumber: 1,
-          pageSize: 5
+          pageSize: 5,
+          searchResults: [],
+          isLoaded: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.searching = this.searching.bind(this)
         this.transportTerm = this.transportTerm.bind(this)
     }
 
-    async searching(enteredTerm){
-      enteredTerm = enteredTerm.target.value;
+    async searching(){
+      let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+  
+      let enteredTerm = targetQueryParams.q
+      console.info(enteredTerm)
+
     if (enteredTerm.length > 0){
         let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
         searchResult =  (await searchResult.json())['response']['docs'];
      this.setState({
          searchResult: searchResult,
-         result: true
+         result: true,
+         isLoaded: true
      });
+     
     }
     else if (enteredTerm.length == 0){
         this.setState({
-            result: false
+            result: false,
+            isLoaded: true,
+            searchResult: []
         });
         
     }
@@ -81,13 +89,17 @@ class SearchResult extends React.Component{
   }
 
   componentDidMount(){
-    this.searching()
-    this.transportTerm()
+    if(!this.state.isLoaded ){
+      this.searching()
+    } 
+    //this.transportTerm()
   }
 
   componentDidUpdate(){
-    this.searching()
-    this.transportTerm()
+    if(!this.state.isLoaded ){
+      this.searching()
+    } 
+    //this.transportTerm()
   }
 
 
@@ -96,32 +108,34 @@ class SearchResult extends React.Component{
      *
      * @returns
      */
-   createSearchResultList (searchResultItem) {
+   createSearchResultList () {
+     let searchResultItem = this.state.searchResult
+     console.info(this.state.searchResult)
     const SearchResultList = []
-    for (let i = 0; i < this.state.searchResult.length; i++) {
+    for (let i = 0; i < searchResultItem.length; i++) {
       SearchResultList.push(
-        <Link to={this.transportTerm(this.state.searchResult[i])} key={i} className="result-term-link">
+        <Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">
         <Grid container className="search-result-card" key={searchResultItem}>
           <Grid item xs={8}>
             <div className="search-card-title">
-              <h4><b>{searchResultItem.id} {searchResultItem.short_form} </b></h4>
+              <h4><b>{searchResultItem[i].label} {searchResultItem[i].short_form} </b></h4>
             </div>
             <div className="searchresult-iri">
-              {searchResultItem.iri}
+              {searchResultItem[i].iri}
             </div>
             <div className="searchresult-card-description">
-              <p>{searchResultItem.description}</p>
+              <p>{searchResultItem[i].description}</p>
             </div>
             <div className="searchresult-ontology">
-              <p>{searchResultItem.ontology_prefix}</p>
+              <p>{searchResultItem[i].ontology_prefix}</p>
             </div>
           </Grid>
         </Grid>
     </Link>
       )
     }
-
-    return SearchResultList
+     return SearchResultList
+    
   }
 
   render(){
@@ -129,7 +143,7 @@ class SearchResult extends React.Component{
       <div id="searchterm-wrapper">
         <Grid container spacing={3}>
             <Grid item xs={10} id="search-list-grid">
-              {this.SearchResultList()}
+              {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
                 clickHandler={this.handlePagination}

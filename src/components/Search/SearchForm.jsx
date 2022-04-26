@@ -5,6 +5,7 @@ import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
+
 class SearchForm extends React.Component{
     constructor (props) {
         super(props)
@@ -15,7 +16,7 @@ class SearchForm extends React.Component{
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
-        //this.submitHandler = this.submitHandler.bind(this);    
+        this.submitHandler = this.submitHandler.bind(this);    
       }
       
 
@@ -40,23 +41,23 @@ class SearchForm extends React.Component{
       }
 
 
-    //   async submitHandler(enteredTerm){
-    //     enteredTerm = enteredTerm.target.value;
-    //     if (enteredTerm.length > 0){
-    //         <Link to={'/search?q=' + this.state.enteredTerm} />
-    //      this.setState({
-    //          result: true,
-    //          enteredTerm: enteredTerm
-    //      });
-    //     }
-    //     else if (enteredTerm.length == 0){
-    //         this.setState({
-    //             result: false,
-    //             enteredTerm: ""
-    //         });
-            
-    //     }
-    //   }
+      async submitHandler(enteredTerm){
+        enteredTerm = enteredTerm.target.value;
+    if (enteredTerm.length > 0){
+        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
+        searchResult =  (await searchResult.json())['response']['docs'];
+     this.setState({
+         searchResult: searchResult,
+         result: true
+     });
+    }
+    else if (enteredTerm.length == 0){
+        this.setState({
+            result: false
+        });
+        
+    }
+      }
       
 
       createResultList(){
@@ -75,14 +76,14 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={<Link to={'/search?q=' + this.state.enteredTerm} />} style={{ minWidth: 57 }}>
+            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={this.submitHandler} style={{ minWidth: 57 }}>
                 <InputGroup>
                 <Input type="text" className="col-md-12 input" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
                     placeholder="Search NFDI4Chem TS"
                 />
                 <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
-                    <Icon icon={faSearch} onClick={<Link to={'/search?q=' + this.state.enteredTerm} />}/>
+                    <Icon icon={faSearch}/>
                 </Button>
                 </InputGroup>
 
