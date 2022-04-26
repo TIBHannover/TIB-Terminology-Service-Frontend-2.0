@@ -150,7 +150,7 @@ class ClassTree extends React.Component {
       expandedNodes: expandedNodes
     }, async() => {
       let node = await getNodeByIri(ontologyId, targetNodeIri, mode);
-      let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'] + '"]');
+      let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'].trim() + '"]');      
       targetElement[0].getElementsByClassName('MuiTreeItem-content')[0].click();
     });
 
