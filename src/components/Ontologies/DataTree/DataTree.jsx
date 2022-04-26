@@ -310,8 +310,11 @@ class ClassTree extends React.Component {
       
     return (
         <div>
-            {this.state.searchWaiting && <CircularProgress />}
-
+             {this.state.searchWaiting && 
+                <div className='loading-sign-div'>
+                <CircularProgress  size={100} />
+                </div>
+              }  
              { !this.state.searchWaiting && this.state.termTree &&
                 <Grid container spacing={0} id="term-view-container">
                     <Grid item xs={5} id="terms-tree-container">
