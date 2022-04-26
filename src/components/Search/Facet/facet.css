@@ -1,0 +1,40 @@
+#search-facet-container-box{
+    /* width: 20%; */
+    background-color: rgb(226, 245, 244);
+    height: auto;
+    margin-left: 20px;
+    margin-top: 40px;
+    border-radius: 15px;
+    padding: 40px;
+}
+#facet-ontologies-list{
+    background-color: white;
+    border-radius: 15px;
+    padding-top: 15px;
+}
+
+#facet-types-list{
+    background-color: white;
+    border-radius: 15px;
+    margin-bottom: 50px;
+}
+
+.ontoloyRow:hover{
+    background-color: rgb(75, 238, 170);
+    border-radius: 15px;
+}
+
+.typeRow:hover{
+    background-color: rgb(75, 238, 170);
+    border-radius: 15px;
+}
+
+.result-count{
+    border-radius: 50px;
+    background-color: blue;
+    color: white;
+    padding: auto;
+    margin-top: 10px;
+    text-align: center;
+    width: auto;
+}

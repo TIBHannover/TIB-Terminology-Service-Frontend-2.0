@@ -67,7 +67,7 @@ class TermPage extends React.Component {
         <Grid item xs={12} className="term-page-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">IRI</Typography>
+              <Typography className="term-detail-label">Iri</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
               {this.formatText(this.props.term.iri, true)}

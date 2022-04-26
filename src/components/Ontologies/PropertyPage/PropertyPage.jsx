@@ -67,7 +67,7 @@ class PropertyPage extends React.Component {
         <Grid item xs={12} className="property-page-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="property-detail-label">IRI</Typography>
+              <Typography className="property-detail-label">Iri</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
               {this.formatText(this.props.property.iri, true)}
