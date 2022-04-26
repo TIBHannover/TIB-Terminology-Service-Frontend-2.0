@@ -18,6 +18,7 @@ function App() {
           <Route exact path="/" component={Home}/>
           <Route exact path="/ontologies" component={OntologyList}/>
           <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
+          <Route exact path="/search" component={SearchResult} />
         </Switch>
         <Footer />
       </BrowserRouter>
