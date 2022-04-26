@@ -145,15 +145,14 @@ class ClassTree extends React.Component {
           expandedNodes.push(theRoute[j]);
         }
       }
-    }
+    }    
     this.setState({
       expandedNodes: expandedNodes
     }, async() => {
       let node = await getNodeByIri(ontologyId, targetNodeIri, mode);
-      let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'].trim() + '"]');      
+      let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'].trim() + '"]');
       targetElement[0].getElementsByClassName('MuiTreeItem-content')[0].click();
     });
-
   }
 
   
