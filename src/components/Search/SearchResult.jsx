@@ -87,14 +87,14 @@ class SearchResult extends React.Component{
     if(!this.state.isLoaded ){
       this.searching()
     } 
-    //this.transportTerm()
+    this.transportTerm()
   }
 
   componentDidUpdate(){
     if(!this.state.isLoaded ){
       this.searching()
     } 
-    //this.transportTerm()
+    this.transportTerm()
   }
 
 
