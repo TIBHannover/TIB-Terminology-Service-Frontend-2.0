@@ -62,7 +62,7 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={''} style={{ minWidth: 57 }}>
+            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={this.submitHandler} style={{ minWidth: 57 }}>
                 <InputGroup>
                 <Input type="text" className="col-md-12 input" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
