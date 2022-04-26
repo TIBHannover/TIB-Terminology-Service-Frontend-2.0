@@ -7,3 +7,23 @@
     padding-left: 10x;
     padding-right: 10px;
 }
+#search-box {
+        border-right: 0;
+}
+
+#search-icon{
+    margin-left: 7px;
+    margin-bottom: 0.1em;
+    margin-bottom: 0;
+    line-height: 0.88em;
+    position: relative;
+    vertical-align: top;
+
+}
+
+#button {
+        border: 1px solid #ced4da;
+        border-left: 0 !important;
+        
+}
+
