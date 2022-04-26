@@ -1,3 +1,4 @@
+import { on } from "events";
 import React from "react";
 import Facet from './facet'
 
@@ -11,7 +12,23 @@ class FacetTester extends React.Component{
                     "ontology_prefix": ["CHEBI", 213, "MS", 94, "HP", 0],
                     "type": ["class", 523, "individual", 0, "property", 6, "ontology", 1]
                 } 
-            }
+            },
+            result: []
+        });
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(ontologies, types){
+        let result = [];
+        for(let i=0; i<ontologies.length; i++){
+            result.push(
+                <div key={ontologies[i]}>
+                    {ontologies[i]}
+                </div>
+            );
+        }
+        this.setState({
+            result: result
         });
     }
 
@@ -21,10 +38,11 @@ class FacetTester extends React.Component{
                 <div class="col-sm-3">
                     <Facet 
                         facetData={this.state.searchResult}
+                        handleChange={this.handleChange}
                     />
                 </div>
                 <div class="col-sm-9">
-                    search result
+                   {this.state.result}
                 </div>
             </div>
         );

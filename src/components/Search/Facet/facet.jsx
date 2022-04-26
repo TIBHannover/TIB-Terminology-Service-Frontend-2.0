@@ -118,6 +118,7 @@ class Facet extends React.Component{
             );
         }
         return result;
+
     }
 
 
@@ -138,7 +139,8 @@ class Facet extends React.Component{
             this.setState({
                 selectedOntologies: selectedOntologies
             });
-        }                
+        }
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);                
     }
 
 
@@ -159,7 +161,8 @@ class Facet extends React.Component{
             this.setState({
                 selectedTypes: selectedTypes
             });
-        }                
+        }
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);            
     }
 
 
