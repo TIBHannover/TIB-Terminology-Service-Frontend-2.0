@@ -38,6 +38,7 @@ class ClassTree extends React.Component {
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
     this.expandTreeByTarget = this.expandTreeByTarget.bind(this);
+    this.handleResetTreeBtn = this.handleResetTreeBtn.bind(this);
   }
 
 
@@ -258,6 +259,28 @@ class ClassTree extends React.Component {
   }
 
 
+  /**
+   * handle the click on the reset button tree. 
+   * @param {*} e 
+   * @param {*} value 
+   */
+  handleResetTreeBtn(){
+    let initialTreeData = this.state.originalTreeData;
+    this.setState({
+      treeData: initialTreeData,
+      expandedNodes: [],
+      visitedNodes: [],
+      currentExpandedTerm: '',
+      currentClickedTerm: '',
+      selectedNode: '',
+      showNodeDetailPage: false,
+      targetNodeIri: "",
+      openTreeRoute: [],
+      isTreeRouteShown: false
+    });
+  }
+
+
 
   /**
      * Event handler for selecting a node in a tree
@@ -288,7 +311,14 @@ class ClassTree extends React.Component {
              { this.state.termTree &&
                 <Grid container spacing={0} id="term-view-container">
                     <Grid item xs={5} id="terms-tree-container">
-                        <Button variant="contained" className='reset-tree-btn' startIcon={<RestartAltIcon />}>Reset Tree</Button> 
+                        <Button 
+                          variant="contained" 
+                          className='reset-tree-btn' 
+                          startIcon={<RestartAltIcon />}
+                          onClick={this.handleResetTreeBtn}
+                          >
+                          Reset Tree
+                        </Button> 
                         <hr />
                         <TreeView
                         defaultCollapseIcon={<MinusSquare />}
@@ -312,18 +342,27 @@ class ClassTree extends React.Component {
              { this.state.propertyTree && 
                 <Grid container spacing={0} id="prop-view-container">
                     <Grid item xs={5} id="props-tree-container">
-                    <TreeView
-                        defaultCollapseIcon={<MinusSquare />}
-                        defaultExpandIcon={<PlusSquare />}
-                        defaultEndIcon={<CloseSquare />}
-                        expanded={this.state.expandedNodes}
-                        onNodeToggle={this.handleChange}
-                        onNodeSelect={this.handleSelect}
-                        defaultExpanded={this.state.expandedNodes}
+                      <Button 
+                            variant="contained" 
+                            className='reset-tree-btn' 
+                            startIcon={<RestartAltIcon />}
+                            onClick={this.handleResetTreeBtn}
+                            >
+                            Reset Tree
+                          </Button> 
+                          <hr />
+                      <TreeView
+                          defaultCollapseIcon={<MinusSquare />}
+                          defaultExpandIcon={<PlusSquare />}
+                          defaultEndIcon={<CloseSquare />}
+                          expanded={this.state.expandedNodes}
+                          onNodeToggle={this.handleChange}
+                          onNodeSelect={this.handleSelect}
+                          defaultExpanded={this.state.expandedNodes}
 
-                    >
-                        {this.createTree(this.state.treeData)}
-                    </TreeView>
+                      >
+                          {this.createTree(this.state.treeData)}
+                      </TreeView>
                     </Grid>
                     {this.state.showNodeDetailPage && <Grid item xs={7} id="props-table-container">
                     <PropertyPage
