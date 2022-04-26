@@ -42,6 +42,7 @@ export async function getOntologyDetail (ontologyid: string) {
     })
 }
 
+
 /**
  * fetch  the root terms (classes) for an ontology
  * @param ontologyId 
@@ -167,6 +168,12 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
       treeData.push(rootNodes[i]);  
       await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i], childFieldName, ancestorFieldName);
     }
+  }
+  else if(node[0]['is_root'] == true){
+    allRoutes.push([node[0]['short_form']]);
+    node[0]['children'] = [];
+    node[0]['modified_short_form'] = node[0]['short_form'];
+    treeData.push(node[0]);
   }
   
 }
