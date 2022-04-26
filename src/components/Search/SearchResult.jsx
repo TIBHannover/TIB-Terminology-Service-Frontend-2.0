@@ -24,27 +24,22 @@ class SearchResult extends React.Component{
 
     async searching(){
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-  
       let enteredTerm = targetQueryParams.q
-      console.info(enteredTerm)
-
-    if (enteredTerm.length > 0){
+      if (enteredTerm.length > 0){
         let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
         searchResult =  (await searchResult.json())['response']['docs'];
-     this.setState({
+      this.setState({
          searchResult: searchResult,
          result: true,
          isLoaded: true
-     });
-     
+     });  
     }
     else if (enteredTerm.length == 0){
         this.setState({
             result: false,
             isLoaded: true,
             searchResult: []
-        });
-        
+        });  
     }
   }
 
