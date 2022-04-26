@@ -5,8 +5,18 @@
     padding: 10px;
     margin-right: 5px;
     height: auto;
-    text-align: justify;
-    
+    text-align: justify;    
+}
+
+.ontology-card:hover{
+    background-color: #aee7f3;
+}
+
+.ontology-card-link{
+    text-decoration: none;
+}
+.ontology-card-link:hover{
+    color: black;
 }
 
 .ontology-card-description{
