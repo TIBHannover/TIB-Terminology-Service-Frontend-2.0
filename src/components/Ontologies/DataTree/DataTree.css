@@ -1,4 +1,4 @@
-#term-view-container{
+#term-view-container, #prop-view-container{
     padding: 20px;
 }
 
@@ -37,4 +37,8 @@
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 20px;
+}
+
+.reset-tree-btn{
+    margin-bottom: 10px !important;
 }

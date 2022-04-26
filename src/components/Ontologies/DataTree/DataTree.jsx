@@ -6,6 +6,8 @@ import StyledTreeItem from './widgets/StyledTreeItem';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
+import Button from '@mui/material/Button';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/nfdi4chemapi';
 
 
@@ -286,6 +288,8 @@ class ClassTree extends React.Component {
              { this.state.termTree &&
                 <Grid container spacing={0} id="term-view-container">
                     <Grid item xs={5} id="terms-tree-container">
+                        <Button variant="contained" className='reset-tree-btn' startIcon={<RestartAltIcon />}>Reset Tree</Button> 
+                        <hr />
                         <TreeView
                         defaultCollapseIcon={<MinusSquare />}
                         defaultExpandIcon={<PlusSquare />}
@@ -306,7 +310,7 @@ class ClassTree extends React.Component {
                 </Grid> 
              }
              { this.state.propertyTree && 
-                <Grid container spacing={0} id="term-view-container">
+                <Grid container spacing={0} id="prop-view-container">
                     <Grid item xs={5} id="props-tree-container">
                     <TreeView
                         defaultCollapseIcon={<MinusSquare />}
