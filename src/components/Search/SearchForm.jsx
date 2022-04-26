@@ -15,7 +15,7 @@ class SearchForm extends React.Component{
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);    
+        //this.submitHandler = this.submitHandler.bind(this);    
       }
       
 
@@ -82,7 +82,7 @@ class SearchForm extends React.Component{
                     placeholder="Search NFDI4Chem TS"
                 />
                 <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
-                    <Icon icon={faSearch} />
+                    <Icon icon={faSearch} onClick={<Link to={'/search?q=' + this.state.enteredTerm} />}/>
                 </Button>
                 </InputGroup>
 

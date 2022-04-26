@@ -17,6 +17,9 @@ class SearchResult extends React.Component{
           pageNumber: 1,
           pageSize: 5
         })
+        this.createSearchResultList = this.createSearchResultList.bind(this)
+        this.searching = this.searching.bind(this)
+        this.transportTerm = this.transportTerm.bind(this)
     }
 
     async searching(enteredTerm){
@@ -75,6 +78,16 @@ class SearchResult extends React.Component{
      */
   pageCount () {
     return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
+  }
+
+  componentDidMount(){
+    this.searching()
+    this.transportTerm()
+  }
+
+  componentDidUpdate(){
+    this.searching()
+    this.transportTerm()
   }
 
 
