@@ -8,6 +8,7 @@ import PropertyPage from '../PropertyPage/PropertyPage';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import CircularProgress from '@mui/material/CircularProgress';
 import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/nfdi4chemapi';
 
 
@@ -33,7 +34,8 @@ class ClassTree extends React.Component {
       alreadyExistedNodesInTree: {},
       ontologyId: '',
       childrenFieldName:'',
-      ancestorsFieldName: ''
+      ancestorsFieldName: '',
+      searchWaiting: true
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -103,6 +105,7 @@ class ClassTree extends React.Component {
         this.setState({
           targetNodeIri: false,
           openTreeRoute: [],
+          searchWaiting: false
         });
         return 0;
       }
@@ -123,12 +126,11 @@ class ClassTree extends React.Component {
         this.setState({
             targetNodeIri: target,
             openTreeRoute: ancestors,
-            treeData:customTreeData
+            treeData:customTreeData,
+            searchWaiting: false
         }, () => {
           this.expandTreeByTarget(target, mode, ontologyId);
-        });
-
-          
+        });          
       }
   }
 
@@ -154,7 +156,7 @@ class ClassTree extends React.Component {
     }, async() => {
       let node = await getNodeByIri(ontologyId, targetNodeIri, mode);
       let targetElement = document.querySelectorAll('[id^="tree_element_' + node['short_form'].trim() + '"]');
-      targetElement[0].getElementsByClassName('MuiTreeItem-content')[0].click();
+      targetElement[0].getElementsByClassName('MuiTreeItem-content')[0].click();      
     });
   }
 
@@ -308,7 +310,9 @@ class ClassTree extends React.Component {
       
     return (
         <div>
-             { this.state.termTree &&
+            {this.state.searchWaiting && <CircularProgress />}
+
+             { !this.state.searchWaiting && this.state.termTree &&
                 <Grid container spacing={0} id="term-view-container">
                     <Grid item xs={5} id="terms-tree-container">
                         <Button 
@@ -339,7 +343,7 @@ class ClassTree extends React.Component {
                     </Grid>}
                 </Grid> 
              }
-             { this.state.propertyTree && 
+             { !this.state.searchWaiting && this.state.propertyTree && 
                 <Grid container spacing={0} id="prop-view-container">
                     <Grid item xs={5} id="props-tree-container">
                       <Button 
