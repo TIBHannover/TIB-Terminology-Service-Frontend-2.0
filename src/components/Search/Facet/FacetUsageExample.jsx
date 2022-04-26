@@ -20,10 +20,10 @@ class FacetTester extends React.Component{
 
     handleChange(ontologies, types){
         let result = [];
-        for(let i=0; i<ontologies.length; i++){
+        for(let i=0; i<types.length; i++){
             result.push(
-                <div key={ontologies[i]}>
-                    {ontologies[i]}
+                <div key={types[i]}>
+                    {types[i]}
                 </div>
             );
         }

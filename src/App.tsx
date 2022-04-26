@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
 import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
 import Home from "./components/Home/Home";
-import FacetTester from "./components/Search/Facet/FacetTester";
 
 
 
@@ -18,7 +17,6 @@ function App() {
           <Route exact path="/" component={Home}/>
           <Route exact path="/ontologies" component={OntologyList}/>
           <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
-          <Route exact path="/search" component={FacetTester}/>
         </Switch>
         <Footer />
       </BrowserRouter>
