@@ -18,6 +18,7 @@ class SearchResult extends React.Component{
           isLoaded: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
+        this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         this.transportTerm = this.transportTerm.bind(this)
     }
