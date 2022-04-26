@@ -4,7 +4,6 @@ import './SearchForm.css'
 import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import SearchResult from './SearchResult'
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -27,33 +26,45 @@ class SearchForm extends React.Component{
             searchResult =  (await searchResult.json())['response']['docs'];
          this.setState({
              searchResult: searchResult,
-             result: true
+             result: true,
+             enteredTerm: enteredTerm
          });
         }
         else if (enteredTerm.length == 0){
             this.setState({
-                result: false
+                result: false,
+                enteredTerm: ""
             });
             
         }
       }
 
-      setSearchResult(){
-          
-      }
 
-
-      async submitHandler(enteredTerm){
-        <Link to={'/search?q=' + enteredTerm} />
-      }
+    //   async submitHandler(enteredTerm){
+    //     enteredTerm = enteredTerm.target.value;
+    //     if (enteredTerm.length > 0){
+    //         <Link to={'/search?q=' + this.state.enteredTerm} />
+    //      this.setState({
+    //          result: true,
+    //          enteredTerm: enteredTerm
+    //      });
+    //     }
+    //     else if (enteredTerm.length == 0){
+    //         this.setState({
+    //             result: false,
+    //             enteredTerm: ""
+    //         });
+            
+    //     }
+    //   }
       
 
-      createResultList(enteredTerm){
+      createResultList(){
           const resultList = []
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={'/search?q=' + enteredTerm} key={i} className="container">
+                <Link to={'/search?q=' + this.state.enteredTerm} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
@@ -64,11 +75,10 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={this.submitHandler} style={{ minWidth: 57 }}>
+            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={<Link to={'/search?q=' + this.state.enteredTerm} />} style={{ minWidth: 57 }}>
                 <InputGroup>
                 <Input type="text" className="col-md-12 input" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
-                    onSubmit={this.submitHandler}
                     placeholder="Search NFDI4Chem TS"
                 />
                 <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
