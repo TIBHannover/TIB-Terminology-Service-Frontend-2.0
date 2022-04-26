@@ -1,44 +1,71 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import './SearchForm.css'
+import { Form, Input, Button, InputGroup } from 'reactstrap';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+
 
 class SearchForm extends React.Component{
     constructor (props) {
         super(props)
         this.state = ({
-          term: "",
+          enteredTerm: "",
           result: false,
           searchResult: []
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
+        this.submitHandler = this.submitHandler.bind(this);    
       }
       
 
-      async handleChange(term){
-          term = term.target.value;
-        if (term.length > 0){
-            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${term}`)
+      async handleChange(enteredTerm){
+          enteredTerm = enteredTerm.target.value;
+        if (enteredTerm.length > 0){
+            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
             searchResult =  (await searchResult.json())['response']['docs'];
          this.setState({
              searchResult: searchResult,
-             result: true
+             result: true,
+             enteredTerm: enteredTerm
          });
         }
-        else if (term.length == 0){
+        else if (enteredTerm.length == 0){
             this.setState({
-                result: false
+                result: false,
+                enteredTerm: ""
             });
             
         }
       }
+
+
+      async submitHandler(enteredTerm){
+        enteredTerm = enteredTerm.target.value;
+    if (enteredTerm.length > 0){
+        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
+        searchResult =  (await searchResult.json())['response']['docs'];
+     this.setState({
+         searchResult: searchResult,
+         result: true
+     });
+    }
+    else if (enteredTerm.length == 0){
+        this.setState({
+            result: false
+        });
+        
+    }
+      }
+      
 
       createResultList(){
           const resultList = []
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={''} key={i} className="container">
+                <Link to={'/search?q=' + this.state.enteredTerm} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
@@ -49,14 +76,20 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-            <div className="container">
-                <input type="text" className="col-md-12 input" style={{marginTop: 10}}
+            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={this.submitHandler} style={{ minWidth: 57 }}>
+                <InputGroup>
+                <Input type="text" className="col-md-12 input" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
                     placeholder="Search NFDI4Chem TS"
                 />
+                <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
+                    <Icon icon={faSearch}/>
+                </Button>
+                </InputGroup>
+
             {this.state.result &&
                 <div id = "autocomplete-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
-          </div>
+          </Form>
           )
       }
 
