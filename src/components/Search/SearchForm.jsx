@@ -4,7 +4,7 @@ import './SearchForm.css'
 import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import SearchResult, { searching } from './SearchResult'
+import SearchResult from './SearchResult'
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -17,7 +17,7 @@ class SearchForm extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
-        this.searching = this.searching.bind(this);
+        this.SearchResult = this.SearchResult.bind(this);
       }
       
 
@@ -40,10 +40,10 @@ class SearchForm extends React.Component{
       }
 
       async submitHandler(event){
-          searching(event)
+          
       }
       componentDidMount () {
-        this.searching();
+        this.SearchResult();
       }
 
       createResultList(enteredTerm){
