@@ -16,8 +16,7 @@ class SearchForm extends React.Component{
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
-        this.SearchResult = this.SearchResult.bind(this);
+        this.submitHandler = this.submitHandler.bind(this);    
       }
       
 
@@ -39,19 +38,22 @@ class SearchForm extends React.Component{
         }
       }
 
-      async submitHandler(event){
+      setSearchResult(){
           
       }
-      componentDidMount () {
-        this.SearchResult();
+
+
+      async submitHandler(enteredTerm){
+        <Link to={'/search?q=' + enteredTerm} />
       }
+      
 
       createResultList(enteredTerm){
           const resultList = []
           console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={`https://service.tib.eu/ts4tib/api/search?q=${resultList[i]}`} key={i} className="container">
+                <Link to={'/search?q=' + enteredTerm} key={i} className="container">
                     <div>
                         {this.state.searchResult[i]['autosuggest']}
                     </div>
