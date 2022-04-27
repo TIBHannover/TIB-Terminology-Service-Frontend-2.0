@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
 function PaginationCustom (props) {
   const classes = useStyles()
   const [currentPage, setCurrentPage] = useState(1);
-  const [count, setCount] = useState(null);
-  const [nextPage, setNextPage] = useState(null);
-  const [previousPage, setPreviousPage] = useState(null);
+  const [count, setCount] = useState();
+  const [nextPage, setNextPage] = useState();
+  const [previousPage, setPreviousPage] = useState();
   const [valid, setValid] = useState(false);
 
 useEffect(() => {
-  fetch(`http://127.0.0.1:8000/api/software/?p=${currentPage}`)
+  fetch("/search?q=" + "start= ${currentPage}")
       .then(response => response.json())
       .then(data => {
         setCount(data.count);
@@ -35,6 +35,13 @@ useEffect(() => {
       })
 }, [currentPage]);
 
+const incrementPageNumber = () => setCurrentPage(prevPage => prevPage + 10);
+
+const decrementPageNumber = () => {
+  if(currentPage <= 1) return; 
+  setCurrentPage(prevPage => prevPage - 10);
+}
+
   return (
     <div className={classes.root}>
       <Pagination
@@ -43,7 +50,6 @@ useEffect(() => {
         variant="outlined"
         count={props.count}
         page={props.page}
-        onChange={handleChange}
       />
     </div>
   )
