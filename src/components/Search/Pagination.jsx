@@ -38,10 +38,26 @@ function PaginationCustom (props) {
 
     getComments();
   }, [limit]);
-  const handleChange = (event, value) => {
-    props.clickHandler(value)
-    setPage(value)
-  }
+  
+  const fetchComments = async (currentPage) => {
+    const res = await fetch(
+      `http://service.tib.eu/ts4tib/api/search?q=` + `&start=${currentPage}`
+    );
+    const data = await res.json();
+    return data;
+  };
+
+  const handlePageClick = async (data) => {
+    console.log(data.selected);
+
+    let currentPage = data.selected + 1;
+
+    const commentsFormServer = await fetchComments(currentPage);
+
+    setItems(commentsFormServer);
+    // scroll to the top
+    //window.scrollTo(0, 0)
+  };
 
   return (
     <div className={classes.root}>
@@ -51,7 +67,7 @@ function PaginationCustom (props) {
         variant="outlined"
         count={props.count}
         page={props.page}
-        onChange={handleChange}
+        onChange={handlePageClick}
       />
     </div>
   )
