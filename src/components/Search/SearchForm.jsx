@@ -90,7 +90,7 @@ class SearchForm extends React.Component{
                 </InputGroup>
 
             {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={''}>{this.createResultList()}</div>}
           </Form>
           )
       }
