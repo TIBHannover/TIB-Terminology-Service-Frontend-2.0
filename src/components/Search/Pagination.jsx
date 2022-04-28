@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Pagination from '@material-ui/lab/Pagination'
 import { useState, useEffect } from 'react'
+import ReactPaginate from 'react-paginate'
 
 const useStyles = makeStyles((theme) => ({
   // root: {
@@ -52,22 +53,33 @@ function PaginationCustom (props) {
 
     let currentPage = data.selected + 1;
 
-    const commentsFormServer = await fetchSearchResults(currentPage);
+    const resultsFormServer = await fetchSearchResults(currentPage);
 
-    setItems(commentsFormServer);
+    setItems(resultsFormServer);
     // scroll to the top
     //window.scrollTo(0, 0)
   };
 
   return (
     <div className={classes.root}>
-      <Pagination
-        className={classes.pag}
-        shape='rounded'
-        variant="outlined"
-        count={props.count}
-        page={props.page}
-        onChange={handlePageClick}
+      <ReactPaginate
+        previousLabel={"previous"}
+        nextLabel={"next"}
+        breakLabel={"..."}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination justify-content-center"}
+        pageClassName={"page-item"}
+        pageLinkClassName={"page-link"}
+        previousClassName={"page-item"}
+        previousLinkClassName={"page-link"}
+        nextClassName={"page-item"}
+        nextLinkClassName={"page-link"}
+        breakClassName={"page-item"}
+        breakLinkClassName={"page-link"}
+        activeClassName={"active"}
       />
     </div>
   )

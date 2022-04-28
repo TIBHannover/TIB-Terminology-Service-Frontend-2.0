@@ -154,7 +154,7 @@ class SearchResult extends React.Component{
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
-                clickHandler={this.handlePagination}
+                clickHandler={this.props.handlePageClick}
                 page={this.state.pageNumber}
               />
             </Grid>
