@@ -67,7 +67,9 @@ class SearchForm extends React.Component{
             resultList.push(
                 <Link to={'/search?q=' + this.state.enteredTerm} key={i} className="container">
                     <div>
-                        {this.state.searchResult[i]['autosuggest']}
+                      <Link to={'search?q=' } key={i}>
+                         {this.state.searchResult[i]['autosuggest']}
+                      </Link>
                     </div>
                 </Link>)
           }
