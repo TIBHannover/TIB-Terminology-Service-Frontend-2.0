@@ -25,7 +25,7 @@ function PaginationCustom (props) {
   let limit = 10;
 
   useEffect(() => {
-    const getComments = async () => {
+    const getSearchResults = async () => {
       const res = await fetch(
         `http://service.tib.eu/ts4tib/api/search?q=` + `&start=1`
       );
@@ -36,10 +36,10 @@ function PaginationCustom (props) {
       setItems(data);
     };
 
-    getComments();
+    getSearchResults();
   }, [limit]);
   
-  const fetchComments = async (currentPage) => {
+  const fetchSearchResults = async (currentPage) => {
     const res = await fetch(
       `http://service.tib.eu/ts4tib/api/search?q=` + `&start=${currentPage}`
     );
@@ -52,7 +52,7 @@ function PaginationCustom (props) {
 
     let currentPage = data.selected + 1;
 
-    const commentsFormServer = await fetchComments(currentPage);
+    const commentsFormServer = await fetchSearchResults(currentPage);
 
     setItems(commentsFormServer);
     // scroll to the top
