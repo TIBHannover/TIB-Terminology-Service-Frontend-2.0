@@ -128,7 +128,7 @@ class SearchResult extends React.Component{
         <Grid container className="search-result-card" key={searchResultItem}>
           <Grid item xs={8}>
             <div className="search-card-title">
-              <h4><b>{searchResultItem[i].label} {searchResultItem[i].short_form} </b></h4>
+              <h4><b>{searchResultItem[i].label} <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
             </div>
             <div className="searchresult-iri">
               {searchResultItem[i].iri}
