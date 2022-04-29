@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import PaginationCustom from './Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 
 class SearchResult extends React.Component{
     constructor(props){
