@@ -137,7 +137,7 @@ class SearchResult extends React.Component{
               <p>{searchResultItem[i].description}</p>
             </div>
             <div className="searchresult-ontology">
-              <p>{searchResultItem[i].ontology_prefix}</p>
+              <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
             </div>
           </Grid>
         </Grid>
