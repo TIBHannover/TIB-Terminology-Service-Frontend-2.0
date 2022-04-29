@@ -130,7 +130,7 @@ class SearchResult extends React.Component{
             <div className="search-card-title">
               <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
             </div>
-            <div className="searchresult-iri">
+            <div className="searchresult-iri" style={{fontSize: "13px"}}>
               {searchResultItem[i].iri}
             </div>
             <div className="searchresult-card-description">
