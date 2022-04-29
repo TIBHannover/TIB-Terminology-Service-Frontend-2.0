@@ -125,7 +125,7 @@ class SearchResult extends React.Component{
     for (let i = 0; i < searchResultItem.length; i++) {
       SearchResultList.push(
         
-        <Grid container className="search-result-card" key={searchResultItem}>
+        <Grid container className="search-result-card" key={searchResultItem} style={{border: "1px black solid", backgroundColor: "rgb(245, 250, 253)", marginTop: "10px", padding: "10px", marginRight: "5px", height: "auto",textAlign: "justify"}}>
           <Grid item xs={8}>
             <div className="search-card-title">
               <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
