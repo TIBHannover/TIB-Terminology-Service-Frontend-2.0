@@ -15,7 +15,14 @@
     height: auto;
     text-align: justify;
 }
-#search-card-description{
+#searchresult-card-description{
     font-size: 14px;
     margin-top: 30px;  
+    text-decoration: none;
+}
+#result-term-link{
+    text-decoration: none;
+}
+#searchresult-iri{
+    font-size: 5px
 }

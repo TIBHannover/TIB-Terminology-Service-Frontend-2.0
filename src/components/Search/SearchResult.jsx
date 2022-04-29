@@ -124,11 +124,11 @@ class SearchResult extends React.Component{
     const SearchResultList = []
     for (let i = 0; i < searchResultItem.length; i++) {
       SearchResultList.push(
-        <Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">
+        
         <Grid container className="search-result-card" key={searchResultItem}>
           <Grid item xs={8}>
             <div className="search-card-title">
-              <h4><b>{searchResultItem[i].label} <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+              <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
             </div>
             <div className="searchresult-iri">
               {searchResultItem[i].iri}
@@ -141,7 +141,7 @@ class SearchResult extends React.Component{
             </div>
           </Grid>
         </Grid>
-    </Link>
+    
       )
     }
      return SearchResultList
