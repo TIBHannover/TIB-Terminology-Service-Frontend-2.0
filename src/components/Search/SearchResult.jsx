@@ -152,7 +152,7 @@ class SearchResult extends React.Component{
         <div id="search-title">
         <h2>Search Results</h2>
         </div>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={4}>
             <FacetTester/>
           </Grid>
