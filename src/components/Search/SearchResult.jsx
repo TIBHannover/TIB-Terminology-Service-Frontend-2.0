@@ -124,7 +124,7 @@ class SearchResult extends React.Component{
     const SearchResultList = []
     for (let i = 0; i < searchResultItem.length; i++) {
       SearchResultList.push(
-        <Grid container className="search-result-card" key={searchResultItem} spacing={1}>
+        <Grid container className="search-result-card" key={searchResultItem}>
           <Grid item xs={8}>
             <div className="search-card-title">
               <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
@@ -152,11 +152,8 @@ class SearchResult extends React.Component{
         <div id="search-title">
         <h2>Search Results</h2>
         </div>
-        <Grid container spacing={1}>
-          <Grid item xs={4}>
-            <FacetTester/>
-          </Grid>
-          <Grid item xs={8} id="search-list-grid">
+        <Grid container spacing={3}>
+          <Grid item xs={10} id="search-list-grid">
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
