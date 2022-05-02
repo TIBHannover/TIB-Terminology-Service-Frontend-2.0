@@ -58,6 +58,15 @@ class SearchForm extends React.Component{
         
     }
       }
+    
+    async suggestionHandler(selectedTerm){
+        let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+        selection =  (await selection.json())['response']['docs'];
+        this.setState({
+            selection: selection,
+            result: true
+          });
+      }
       
 
       createResultList(){
@@ -67,7 +76,7 @@ class SearchForm extends React.Component{
             resultList.push(
                 <Link to={'/search?q=' + this.state.enteredTerm} key={i} className="container">
                     <div>
-                        {this.state.searchResult[i]['autosuggest']}
+                         {this.state.searchResult[i]['autosuggest']}
                     </div>
                 </Link>)
           }
@@ -88,7 +97,7 @@ class SearchForm extends React.Component{
                 </InputGroup>
 
             {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center">{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
           </Form>
           )
       }

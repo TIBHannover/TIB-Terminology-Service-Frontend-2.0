@@ -4,6 +4,7 @@ import './SearchResult.css'
 import Grid from '@material-ui/core/Grid';
 import PaginationCustom from './Pagination';
 import queryString from 'query-string';
+import Button from '@mui/material/Button';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -18,6 +19,7 @@ class SearchResult extends React.Component{
           isLoaded: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
+        this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         this.transportTerm = this.transportTerm.bind(this)
     }
@@ -83,6 +85,18 @@ class SearchResult extends React.Component{
     return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
   }
 
+  /**
+       * Handle the pagination change. This function has to be passed to the Pagination component
+       */
+   paginationHandler () {
+    const down = (this.state.pageNumber - 1) * this.state.pageSize
+    const up = down + (this.state.pageSize - 1)
+    const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
+    for (let i = down; i <= up; i++) {
+      hiddenStatus[i] = true
+    }
+  }
+
   componentDidMount(){
     if(!this.state.isLoaded ){
       this.searching()
@@ -109,11 +123,11 @@ class SearchResult extends React.Component{
     const SearchResultList = []
     for (let i = 0; i < searchResultItem.length; i++) {
       SearchResultList.push(
-        <Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">
+        
         <Grid container className="search-result-card" key={searchResultItem}>
           <Grid item xs={8}>
             <div className="search-card-title">
-              <h4><b>{searchResultItem[i].label} {searchResultItem[i].short_form} </b></h4>
+              <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
             </div>
             <div className="searchresult-iri">
               {searchResultItem[i].iri}
@@ -122,11 +136,11 @@ class SearchResult extends React.Component{
               <p>{searchResultItem[i].description}</p>
             </div>
             <div className="searchresult-ontology">
-              <p>{searchResultItem[i].ontology_prefix}</p>
+              <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
             </div>
           </Grid>
         </Grid>
-    </Link>
+    
       )
     }
      return SearchResultList
@@ -136,12 +150,15 @@ class SearchResult extends React.Component{
   render(){
     return(
       <div id="searchterm-wrapper">
+        <div id="search-title">
+        <h2>Search Results</h2>
+        </div>
         <Grid container spacing={3}>
             <Grid item xs={10} id="search-list-grid">
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
-                clickHandler={this.handlePagination}
+                clickHandler={this.props.handlePageClick}
                 page={this.state.pageNumber}
               />
             </Grid>
