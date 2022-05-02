@@ -35,7 +35,7 @@ class FacetTester extends React.Component{
     render(){
         return(
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-9">
                     <Facet 
                         facetData={this.state.searchResult}
                         handleChange={this.handleChange}

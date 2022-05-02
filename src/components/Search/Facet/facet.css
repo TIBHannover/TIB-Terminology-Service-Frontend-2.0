@@ -2,10 +2,10 @@
     /* width: 20%; */
     background-color: rgb(226, 245, 244);
     height: auto;
-    margin-left: 20px;
-    margin-top: 40px;
+    margin-left: 10px;
+    margin-top: 20px;
     border-radius: 15px;
-    padding: 40px;
+    padding: 20px;
 }
 #facet-ontologies-list{
     background-color: white;
@@ -16,7 +16,7 @@
 #facet-types-list{
     background-color: white;
     border-radius: 15px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .ontoloyRow:hover{

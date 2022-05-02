@@ -153,7 +153,10 @@ class SearchResult extends React.Component{
         <h2>Search Results</h2>
         </div>
         <Grid container spacing={3}>
-          <Grid item xs={10} id="search-list-grid">
+          <Grid item xs={4}>
+            <FacetTester/>
+          </Grid>
+          <Grid item xs={8} id="search-list-grid">
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
