@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-filename-extension */
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
+
 
 
 
@@ -14,14 +15,11 @@ function formatCreators (creators) {
 }
 
 
-function copyLinkToCipboard(e){
-  let targetLink = e.currentTarget.getAttribute('targetlink');
-  navigator.clipboard.writeText(targetLink);
-}
 
 
 function OntologyInfoBox (props) {
-  const ontology = props.ontology
+  const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
+  const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
   }
@@ -39,12 +37,17 @@ function OntologyInfoBox (props) {
                 variant="contained" 
                 className='copy-link-btn'                
                 targetlink={ontology.config.id} 
-                onClick={copyLinkToCipboard}            
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.id);
+                  setOntologyIriCopied(true);
+                }}            
               >copy</Button>
-              <CheckIcon 
-                fontSize="large"
-                id=""
-              />            
+              {ontologyIriCopied && 
+                  <CheckIcon 
+                    fontSize="large"
+                    id=""
+                  />
+              }            
             </td>
           </tr>
           <tr>
