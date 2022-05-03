@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import PaginationCustom from './Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
-import FacetTester from './Facet/FacetUsageExample';
+import Facet from './Facet/facet';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -14,13 +14,14 @@ class SearchResult extends React.Component{
           enteredTerm: "",
           result: false,
           searchResult: [],
+          facetFields: [],
           pageNumber: 1,
           pageSize: 5,
           searchResults: [],
           isLoaded: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
-        this.handlePagination = this.handlePagination.bind(this)
+        // this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         this.transportTerm = this.transportTerm.bind(this)
     }
@@ -30,17 +31,19 @@ class SearchResult extends React.Component{
       let enteredTerm = targetQueryParams.q
       if (enteredTerm.length > 0){
         let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
-        searchResult =  (await searchResult.json())['response']['docs'];
+        let resultJson = (await searchResult.json());
+        searchResult =  resultJson['response']['docs'];
+        let facetFields = resultJson['facet_counts']['facet_fields'];
+        console.info(searchResult)
       this.setState({
          searchResult: searchResult,
+         facetFields: facetFields,
          result: true,
-         isLoaded: true
      });  
     }
     else if (enteredTerm.length == 0){
         this.setState({
             result: false,
-            isLoaded: true,
             searchResult: []
         });  
     }
@@ -67,14 +70,14 @@ class SearchResult extends React.Component{
      * Handle the click on the pagination
      * @param {*} value
      */
-   handlePagination (value) {
-    this.setState({
-      pageNumber: value,
-      paginationReset: false
-    }, () => {
-      this.paginationHandler()
-    })
-  }
+  //  handlePagination (value) {
+  //   this.setState({
+  //     pageNumber: value,
+  //     paginationReset: false
+  //   }, () => {
+  //     this.paginationHandler()
+  //   })
+  // }
 
 
 
@@ -89,27 +92,27 @@ class SearchResult extends React.Component{
   /**
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
-   paginationHandler () {
-    const down = (this.state.pageNumber - 1) * this.state.pageSize
-    const up = down + (this.state.pageSize - 1)
-    const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
-    for (let i = down; i <= up; i++) {
-      hiddenStatus[i] = true
-    }
-  }
+  //  paginationHandler () {
+  //   const down = (this.state.pageNumber - 1) * this.state.pageSize
+  //   const up = down + (this.state.pageSize - 1)
+  //   const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
+  //   for (let i = down; i <= up; i++) {
+  //     hiddenStatus[i] = true
+  //   }
+  // }
 
   componentDidMount(){
     if(!this.state.isLoaded ){
       this.searching()
     } 
-    this.transportTerm()
+    //this.transportTerm()
   }
 
   componentDidUpdate(){
-    if(!this.state.isLoaded ){
-      this.searching()
-    } 
-    this.transportTerm()
+    // if(!this.state.isLoaded ){
+    //   this.searching()
+    // } 
+    // this.transportTerm()
   }
 
 
@@ -119,31 +122,36 @@ class SearchResult extends React.Component{
      * @returns
      */
    createSearchResultList () {
-     let searchResultItem = this.state.searchResult
-     console.info(this.state.searchResult)
-    const SearchResultList = []
-    for (let i = 0; i < searchResultItem.length; i++) {
-      SearchResultList.push(
-        <Grid container className="search-result-card" key={searchResultItem}>
-          <Grid item xs={8}>
-            <div className="search-card-title">
-              <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
-            </div>
-            <div className="searchresult-iri">
-              {searchResultItem[i].iri}
-            </div>
-            <div className="searchresult-card-description">
-              <p>{searchResultItem[i].description}</p>
-            </div>
-            <div className="searchresult-ontology">
-              <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
-            </div>
-          </Grid>
-        </Grid>   
-      )
-    }
-     return SearchResultList
-    
+     if(this.state.result){
+       this.setState({
+         isLoaded: true
+       });
+      let searchResultItem = this.state.searchResult
+      console.info(this.state.searchResult)
+     const SearchResultList = []
+     for (let i = 0; i < searchResultItem.length; i++) {
+       SearchResultList.push(
+         <Grid container className="search-result-card" key={searchResultItem}>
+           <Grid item xs={8}>
+             <div className="search-card-title">
+               <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+             </div>
+             <div className="searchresult-iri">
+               {searchResultItem[i].iri}
+             </div>
+             <div className="searchresult-card-description">
+               <p>{searchResultItem[i].description}</p>
+             </div>
+             <div className="searchresult-ontology">
+               <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
+             </div>
+           </Grid>
+         </Grid>   
+       )
+     }
+      return SearchResultList
+
+     }
   }
 
   render(){
@@ -153,16 +161,18 @@ class SearchResult extends React.Component{
         <h2>Search Results</h2>
         </div>
         <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <FacetTester/>
+          <Grid item xs={4}>{this.state.result && <Facet
+               facetData = {this.state.facetFields}
+            />}
+            
           </Grid>
           <Grid item xs={8} id="search-list-grid">
               {this.createSearchResultList()}
-              <PaginationCustom
+              {/* <PaginationCustom
                 count={this.pageCount()}
                 clickHandler={this.props.handlePageClick}
                 page={this.state.pageNumber}
-              />
+              /> */}
             </Grid>
           </Grid>
         
