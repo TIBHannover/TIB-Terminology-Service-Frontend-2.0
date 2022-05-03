@@ -14,6 +14,9 @@ class SearchResult extends React.Component{
           enteredTerm: "",
           result: false,
           searchResult: [],
+          originalSearchResult: [],
+          selectedOntologies: [],
+          selectedTypes: [],
           facetFields: [],
           pageNumber: 1,
           pageSize: 5,
@@ -23,7 +26,7 @@ class SearchResult extends React.Component{
         this.createSearchResultList = this.createSearchResultList.bind(this)
         // this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
-        this.transportTerm = this.transportTerm.bind(this)
+        //this.transportTerm = this.transportTerm.bind(this)
     }
 
     async searching(){
@@ -149,8 +152,14 @@ class SearchResult extends React.Component{
         )
       }       
         return SearchResultList
-
      }
+  }
+
+  handleSelection(ontologies, types){
+     this.setState({
+       selectedOntologies: ontologies,
+       selectedTypes: types,
+     })
   }
 
   render(){
@@ -162,6 +171,7 @@ class SearchResult extends React.Component{
         <Grid container spacing={8}>
           <Grid item xs={4}>{this.state.result && <Facet
                facetData = {this.state.facetFields}
+               handleChange = {this.handleSelection}
             />}
             
           </Grid>
