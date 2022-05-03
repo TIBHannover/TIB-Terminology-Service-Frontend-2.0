@@ -30,30 +30,39 @@ class Facet extends React.Component{
     processFacetData(){
         if(!this.state.ontologiesLoaded){
             let facetData = this.props.facetData;
-            facetData = facetData["facet_fields"];
-            let allTypes = facetData["type"];
-            let allOntologies = facetData["ontology_prefix"];
-            let ontologyFacetData = {};
-            let types = {};
-            for(let i=0; i < allOntologies.length; i++){
-                if(i % 2 == 0){
-                    if(allOntologies[i + 1] !== 0){
-                        ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
-                    }                    
-                }
+            if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
+                this.setState({
+                    ontologiesLoaded: false,
+                    resultTypes: {},
+                    ontologyFacetData: {}
+                });
             }
-            for(let i=0; i < allTypes.length; i++){
-                if(i % 2 == 0){
-                    if(allTypes[i + 1] !== 0){
-                        types[allTypes[i]] = allTypes[i + 1];
-                    }                    
+            else{
+                facetData = facetData["facet_fields"];
+                let allTypes = facetData["type"];
+                let allOntologies = facetData["ontology_prefix"];
+                let ontologyFacetData = {};
+                let types = {};
+                for(let i=0; i < allOntologies.length; i++){
+                    if(i % 2 == 0){
+                        if(allOntologies[i + 1] !== 0){
+                            ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
+                        }                    
+                    }
                 }
-            }
-            this.setState({
-                ontologiesLoaded: true,
-                resultTypes: types,
-                ontologyFacetData: ontologyFacetData
-            });
+                for(let i=0; i < allTypes.length; i++){
+                    if(i % 2 == 0){
+                        if(allTypes[i + 1] !== 0){
+                            types[allTypes[i]] = allTypes[i + 1];
+                        }                    
+                    }
+                }
+                this.setState({
+                    ontologiesLoaded: true,
+                    resultTypes: types,
+                    ontologyFacetData: ontologyFacetData
+                });
+            }            
         }
     }
 
