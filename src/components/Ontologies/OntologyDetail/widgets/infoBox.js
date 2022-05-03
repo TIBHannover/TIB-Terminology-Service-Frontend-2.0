@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
+import DownloadIcon from '@mui/icons-material/Download';
 
 
 function formatCreators (creators) {
@@ -143,7 +144,12 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-info-table-prop"><b>Download</b></td>
             <td>
-              {ontology.download}
+              <Button 
+                  variant="contained" 
+                  className='download-ontology-btn'
+                  startIcon={<DownloadIcon />}
+                  href={ontology.config.id}                                                  
+                >owl</Button>
             </td>
           </tr>
         </tbody>
