@@ -135,13 +135,13 @@ class Facet extends React.Component{
     handleOntologyCheckBoxClick(e){
         let selectedOntologies = this.state.selectedOntologies;
         if(e.target.checked){
-            selectedOntologies.push(e.target.value);
+            selectedOntologies.push(e.target.value.toUpperCase());
             this.setState({
                 selectedOntologies: selectedOntologies
             });
         }
         else{
-            let index = selectedOntologies.indexOf(e.target.value);
+            let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
             selectedOntologies.splice(index, 1);
             this.setState({
                 selectedOntologies: selectedOntologies
