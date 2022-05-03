@@ -31,4 +31,13 @@ table {
     padding-left: 30px;
   }
 
+  .copy-link-btn{
+    margin-left: 20px !important;
+    font-size: 10px !important;
+    padding: 5px !important;
+    background-color: rgb(32, 128, 73) !important;
+    height: 20px;
+    width: 20px;
+  }
+
   

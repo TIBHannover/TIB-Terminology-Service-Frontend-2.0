@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import Button from '@mui/material/Button';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
+
+
 
 function formatCreators (creators) {
   let answer = ''
@@ -16,6 +18,7 @@ function copyLinkToCipboard(e){
   let targetLink = e.currentTarget.getAttribute('targetlink');
   navigator.clipboard.writeText(targetLink);
 }
+
 
 function OntologyInfoBox (props) {
   const ontology = props.ontology
@@ -34,12 +37,14 @@ function OntologyInfoBox (props) {
               <a href={ontology.config.id} target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
               <Button 
                 variant="contained" 
-                className='copy-link-btn'
-                id="copy-ontology-iri"
+                className='copy-link-btn'                
                 targetlink={ontology.config.id} 
-                startIcon={<ContentCopyIcon />}
-                onClick={copyLinkToCipboard}
-              />
+                onClick={copyLinkToCipboard}            
+              >copy</Button>
+              <CheckIcon 
+                fontSize="large"
+                id=""
+              />            
             </td>
           </tr>
           <tr>
