@@ -43,7 +43,8 @@ class SearchResult extends React.Component{
           originalSearchResult: searchResult,
           facetFields: facetFields,
           result: true,
-          isLoaded: true
+          isLoaded: true,
+          enteredTerm: enteredTerm
         });  
       }
       else if (enteredTerm.length == 0){
@@ -52,7 +53,8 @@ class SearchResult extends React.Component{
               searchResult: [],
               facetFields: [],
               originalSearchResult: [],
-              isLoaded: true
+              isLoaded: true,
+              enteredTerm: enteredTerm
           });  
       }
   }
@@ -183,7 +185,7 @@ class SearchResult extends React.Component{
     return(
       <div id="searchterm-wrapper">
         <div id="search-title">
-        <h2>Search Results</h2>
+        <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
         </div>
         <Grid container spacing={8}>
           <Grid item xs={4}>{this.state.result && <Facet
