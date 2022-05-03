@@ -168,18 +168,31 @@ class SearchResult extends React.Component{
     else{
       let filteredSearchResult = [];
       let currentResults = this.state.originalSearchResult;
-      for(let i=0; i<currentResults.length; i++){        
-         if(ontologies.includes(currentResults[i]['ontology_name'].toUpperCase())){
-           filteredSearchResult.push(currentResults[i]);
-         }
+      if(ontologies.length === 0){
+        filteredSearchResult = currentResults;
       }
-      for(let i=0; i<currentResults.length; i++){        
-        if(types.includes(currentResults[i]['type'])){
-          filteredSearchResult.push(currentResults[i]);
-        }
-     }
+      else{
+        for(let i=0; i<currentResults.length; i++){        
+          if(ontologies.includes(currentResults[i]['ontology_name'].toUpperCase())){
+            filteredSearchResult.push(currentResults[i]);
+          }
+       }
+      }
+      
+      let newFiltered = [];
+      if(types.length === 0){
+        newFiltered = filteredSearchResult;
+      }
+      else{
+        for(let i=0; i<filteredSearchResult.length; i++){        
+          if(types.includes(filteredSearchResult[i]['type'])){
+            newFiltered.push(filteredSearchResult[i]);
+          }
+       }
+      }
+      
      this.setState({
-       searchResult: filteredSearchResult,
+       searchResult: newFiltered,
        result: true,
        isFiltered: true
      })
