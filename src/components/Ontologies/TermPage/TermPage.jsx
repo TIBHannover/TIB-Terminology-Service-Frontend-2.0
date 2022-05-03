@@ -12,7 +12,7 @@ class TermPage extends React.Component {
       label_xs: 2,
       value_xs: 10,
       iriIsCopied: false,
-      prevTerm: ""
+      prevTerm: this.props.term.label
     })
   }
 
@@ -96,8 +96,7 @@ class TermPage extends React.Component {
               >copy</Button>
               {this.state.iriIsCopied && 
                   <CheckIcon 
-                    fontSize="large"
-                    id=""
+                    fontSize="large"                    
                   />
               }      
             </Grid>
