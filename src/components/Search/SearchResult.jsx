@@ -34,19 +34,21 @@ class SearchResult extends React.Component{
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts']['facet_fields'];
-        console.info(searchResult)
-      this.setState({
-         searchResult: searchResult,
-         facetFields: facetFields,
-         result: true,
-     });  
-    }
-    else if (enteredTerm.length == 0){
         this.setState({
-            result: false,
-            searchResult: []
+          searchResult: searchResult,
+          facetFields: facetFields,
+          result: true,
+          isLoaded: true
         });  
-    }
+      }
+      else if (enteredTerm.length == 0){
+          this.setState({
+              result: false,
+              searchResult: [],
+              facetFields: [],
+              isLoaded: true
+          });  
+      }
   }
 
   async transportTerm(searchResultItem){
@@ -102,18 +104,19 @@ class SearchResult extends React.Component{
   // }
 
   componentDidMount(){
-    if(!this.state.isLoaded ){
-      this.searching()
+    console.info(this.state.isLoaded);
+    if(!this.state.isLoaded){
+      this.searching();
     } 
     //this.transportTerm()
   }
 
-  componentDidUpdate(){
-    // if(!this.state.isLoaded ){
-    //   this.searching()
-    // } 
-    // this.transportTerm()
-  }
+  // componentDidUpdate(){
+  //   // if(!this.state.isLoaded ){
+  //   //   this.searching()
+  //   // } 
+  //   // this.transportTerm()
+  // }
 
 
   /**
@@ -123,33 +126,29 @@ class SearchResult extends React.Component{
      */
    createSearchResultList () {
      if(this.state.result){
-       this.setState({
-         isLoaded: true
-       });
       let searchResultItem = this.state.searchResult
-      console.info(this.state.searchResult)
-     const SearchResultList = []
-     for (let i = 0; i < searchResultItem.length; i++) {
-       SearchResultList.push(
-         <Grid container className="search-result-card" key={searchResultItem}>
-           <Grid item xs={8}>
-             <div className="search-card-title">
-               <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
-             </div>
-             <div className="searchresult-iri">
-               {searchResultItem[i].iri}
-             </div>
-             <div className="searchresult-card-description">
-               <p>{searchResultItem[i].description}</p>
-             </div>
-             <div className="searchresult-ontology">
-               <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
-             </div>
-           </Grid>
-         </Grid>   
-       )
-     }
-      return SearchResultList
+      const SearchResultList = []
+      for (let i = 0; i < searchResultItem.length; i++) {
+        SearchResultList.push(
+          <Grid container className="search-result-card" key={searchResultItem}>
+            <Grid item xs={8}>
+              <div className="search-card-title">
+                <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+              </div>
+              <div className="searchresult-iri">
+                {searchResultItem[i].iri}
+              </div>
+              <div className="searchresult-card-description">
+                <p>{searchResultItem[i].description}</p>
+              </div>
+              <div className="searchresult-ontology">
+                <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
+              </div>
+            </Grid>
+          </Grid>   
+        )
+      }       
+        return SearchResultList
 
      }
   }

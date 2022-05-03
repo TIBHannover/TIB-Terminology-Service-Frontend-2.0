@@ -10,7 +10,7 @@ class Facet extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            ontologiesLoaded: false,
+            resultLoaded: false,
             resultTypes: [],
             ontologyFacetData: {},
             selectedOntologies: [],
@@ -32,7 +32,7 @@ class Facet extends React.Component{
             let facetData = this.props.facetData;
             if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
                 this.setState({
-                    ontologiesLoaded: false,
+                    resultLoaded: true,
                     resultTypes: {},
                     ontologyFacetData: {}
                 });
@@ -58,7 +58,7 @@ class Facet extends React.Component{
                     }
                 }
                 this.setState({
-                    ontologiesLoaded: true,
+                    resultLoaded: true,
                     resultTypes: types,
                     ontologyFacetData: ontologyFacetData
                 });
@@ -177,11 +177,15 @@ class Facet extends React.Component{
 
 
     componentDidMount(){
-        this.processFacetData();
+        if(!this.state.resultLoaded){
+            this.processFacetData();
+        }        
     }
 
     componentDidUpdate(){
-        this.processFacetData();
+        if(!this.state.resultLoaded){
+            this.processFacetData();
+        }
     }
 
 
