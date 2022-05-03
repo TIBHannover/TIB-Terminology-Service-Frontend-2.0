@@ -4,8 +4,6 @@ import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 
 
-
-
 function formatCreators (creators) {
   let answer = ''
   for (let i = 0; i < creators.length; i++) {
@@ -13,8 +11,6 @@ function formatCreators (creators) {
   }
   return answer
 }
-
-
 
 
 function OntologyInfoBox (props) {
@@ -38,8 +34,7 @@ function OntologyInfoBox (props) {
               <a href={ontology.config.id} target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
               <Button 
                 variant="contained" 
-                className='copy-link-btn'                
-                targetlink={ontology.config.id} 
+                className='copy-link-btn'                                
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.id);
                   setOntologyIriCopied(true);
@@ -50,8 +45,7 @@ function OntologyInfoBox (props) {
               >copy</Button>
               {ontologyIriCopied && 
                   <CheckIcon 
-                    fontSize="large"
-                    id=""
+                    fontSize="large"                    
                   />
               }            
             </td>
@@ -62,8 +56,7 @@ function OntologyInfoBox (props) {
               <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
               <Button 
                 variant="contained" 
-                className='copy-link-btn'                
-                targetlink={ontology.config.versionIri} 
+                className='copy-link-btn'                                
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.versionIri);
                   setOntologyVersionCopied(true);
@@ -74,8 +67,7 @@ function OntologyInfoBox (props) {
               >copy</Button>
               {ontologyVersionCopied && 
                   <CheckIcon 
-                    fontSize="large"
-                    id=""
+                    fontSize="large"                    
                   />
               }      
             </td>
@@ -92,8 +84,7 @@ function OntologyInfoBox (props) {
               <a href={ontology.config.homepage} target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
               <Button 
                 variant="contained" 
-                className='copy-link-btn'                
-                targetlink={ontology.config.homepage} 
+                className='copy-link-btn'                                 
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.homepage);
                   setOntologyHomepageCopied(true);
@@ -104,8 +95,7 @@ function OntologyInfoBox (props) {
               >copy</Button>
               {ontologyHomepageCopied && 
                   <CheckIcon 
-                    fontSize="large"
-                    id=""
+                    fontSize="large"                    
                   />
               }
             </td>
@@ -116,8 +106,7 @@ function OntologyInfoBox (props) {
               <a href={ontology.config.tracker} target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
               <Button 
                 variant="contained" 
-                className='copy-link-btn'                
-                targetlink={ontology.config.tracker} 
+                className='copy-link-btn'                                
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.tracker);
                   setOntologyTrackerCopied(true);
@@ -128,8 +117,7 @@ function OntologyInfoBox (props) {
               >copy</Button>
               {ontologyTrackerCopied && 
                   <CheckIcon 
-                    fontSize="large"
-                    id=""
+                    fontSize="large"       
                   />
               }
             </td>
