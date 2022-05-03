@@ -167,7 +167,9 @@ class SearchResult extends React.Component{
       let filteredSearchResult = [];
       let currentResults = this.state.originalSearchResult;
       for(let i=0; i<currentResults.length; i++){
-         if(ontologies.includes(currentResults[i]['ontology_name'])){
+        console.info(currentResults[i]['ontology_name'].toLowerCase());
+        console.info(ontologies);
+         if(ontologies.includes(currentResults[i]['ontology_name'].toUpperCase())){
            filteredSearchResult.push(currentResults[i]);
          }
       }
