@@ -150,6 +150,12 @@ function OntologyInfoBox (props) {
                   startIcon={<DownloadIcon />}
                   href={ontology.config.id}                                                  
                 >owl</Button>
+              <Button 
+                  variant="contained" 
+                  className='download-ontology-btn'
+                  startIcon={<DownloadIcon />}
+                  href=""                                                 
+                >Ontology metadata as JSON</Button>
             </td>
           </tr>
         </tbody>
