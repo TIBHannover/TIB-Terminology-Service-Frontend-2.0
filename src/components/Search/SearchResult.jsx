@@ -160,6 +160,16 @@ class SearchResult extends React.Component{
        selectedOntologies: ontologies,
        selectedTypes: types,
      })
+     for(let i=0; i<types.length; i++){
+       if(types === ['types']){
+         this.state.searchResult.push(
+             types[i]
+         )
+       }
+     }
+     this.setState({
+       originalSearchResult: this.state.searchResult
+     })
   }
 
   render(){
