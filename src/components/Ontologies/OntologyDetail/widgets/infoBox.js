@@ -19,6 +19,7 @@ function OntologyInfoBox (props) {
   const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
   const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
   const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
+  const [ontologyObject, setOntologyObject]  = useState(props.ontology);
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
@@ -154,7 +155,17 @@ function OntologyInfoBox (props) {
                   variant="contained" 
                   className='download-ontology-btn'
                   startIcon={<DownloadIcon />}
-                  href=""                                                 
+                  onClick={async () => {                    
+                    const jsonFile = JSON.stringify(ontologyObject);
+                    const blob = new Blob([jsonFile],{type:'application/json'});
+                    const href = await URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = href;
+                    link.download = ontologyObject.ontologyId + "_metadata.json";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
                 >Ontology metadata as JSON</Button>
             </td>
           </tr>
