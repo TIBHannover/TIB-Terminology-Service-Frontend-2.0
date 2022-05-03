@@ -27,43 +27,41 @@ class Facet extends React.Component{
     /**
      * process the search result array to get the existing ontologies and their result count
      */
-    processFacetData(){
-        if(!this.state.ontologiesLoaded){
-            let facetData = this.props.facetData;
-            if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
-                this.setState({
-                    resultLoaded: true,
-                    resultTypes: {},
-                    ontologyFacetData: {}
-                });
-            }
-            else{
-                facetData = facetData["facet_fields"];
-                let allTypes = facetData["type"];
-                let allOntologies = facetData["ontology_prefix"];
-                let ontologyFacetData = {};
-                let types = {};
-                for(let i=0; i < allOntologies.length; i++){
-                    if(i % 2 == 0){
-                        if(allOntologies[i + 1] !== 0){
-                            ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
-                        }                    
-                    }
-                }
-                for(let i=0; i < allTypes.length; i++){
-                    if(i % 2 == 0){
-                        if(allTypes[i + 1] !== 0){
-                            types[allTypes[i]] = allTypes[i + 1];
-                        }                    
-                    }
-                }
-                this.setState({
-                    resultLoaded: true,
-                    resultTypes: types,
-                    ontologyFacetData: ontologyFacetData
-                });
-            }            
+    processFacetData(){        
+        let facetData = this.props.facetData;
+        if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
+            this.setState({
+                resultLoaded: true,
+                resultTypes: {},
+                ontologyFacetData: {}
+            });
         }
+        else{
+            facetData = facetData["facet_fields"];
+            let allTypes = facetData["type"];
+            let allOntologies = facetData["ontology_prefix"];
+            let ontologyFacetData = {};
+            let types = {};
+            for(let i=0; i < allOntologies.length; i++){
+                if(i % 2 == 0){
+                    if(allOntologies[i + 1] !== 0){
+                        ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
+                    }                    
+                }
+            }
+            for(let i=0; i < allTypes.length; i++){
+                if(i % 2 == 0){
+                    if(allTypes[i + 1] !== 0){
+                        types[allTypes[i]] = allTypes[i + 1];
+                    }                    
+                }
+            }
+            this.setState({
+                resultLoaded: true,
+                resultTypes: types,
+                ontologyFacetData: ontologyFacetData
+            });
+        }                    
     }
 
 

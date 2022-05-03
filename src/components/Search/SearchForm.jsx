@@ -72,7 +72,6 @@ class SearchForm extends React.Component{
 
       createResultList(){
           const resultList = []
-          console.info(this.state);
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
                 <Link to={'/search?q=' + this.state.enteredTerm} key={i} className="container">

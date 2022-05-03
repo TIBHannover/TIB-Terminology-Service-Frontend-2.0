@@ -33,7 +33,7 @@ class SearchResult extends React.Component{
         let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
-        let facetFields = resultJson['facet_counts']['facet_fields'];
+        let facetFields = resultJson['facet_counts'];
         this.setState({
           searchResult: searchResult,
           facetFields: facetFields,
