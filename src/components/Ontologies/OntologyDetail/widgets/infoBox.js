@@ -20,6 +20,8 @@ function formatCreators (creators) {
 function OntologyInfoBox (props) {
   const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
   const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
+  const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
+  const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
@@ -82,12 +84,42 @@ function OntologyInfoBox (props) {
             <td className="ontology-info-table-prop"><b>HomePage</b></td>
             <td>
               <a href={ontology.config.homepage} target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                
+                targetlink={ontology.config.homepage} 
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.homepage);
+                  setOntologyHomepageCopied(true);
+                }}            
+              >copy</Button>
+              {ontologyHomepageCopied && 
+                  <CheckIcon 
+                    fontSize="large"
+                    id=""
+                  />
+              }
             </td>
           </tr>
           <tr>
             <td className="ontology-info-table-prop"><b>Issue tracker</b></td>
             <td>
               <a href={ontology.config.tracker} target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                
+                targetlink={ontology.config.tracker} 
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.tracker);
+                  setOntologyTrackerCopied(true);
+                }}            
+              >copy</Button>
+              {ontologyTrackerCopied && 
+                  <CheckIcon 
+                    fontSize="large"
+                    id=""
+                  />
+              }
             </td>
           </tr>
           <tr>
