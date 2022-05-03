@@ -9,7 +9,7 @@ function Header () {
     <section className="header">
       <section className="header-top">
         <section className="header-top__logo">
-          <img src={"https://www.nfdi4chem.de/wp-content/uploads/2021/11/cropped-NFDI4Chem-Logo-Claim_mehrfarbig_schwarz-e1636478409489.png"} alt="nfdi4chem logo" height={90} width={180} />
+          <img src={"https://www.nfdi4chem.de/wp-content/uploads/2021/11/cropped-NFDI4Chem-Logo-Claim_mehrfarbig_schwarz-e1636478409489.png"} alt="nfdi4chem logo" height={100} width={280} />
         </section>
         <section className="header-top__navbar">
           <section className="header-top__navigation">

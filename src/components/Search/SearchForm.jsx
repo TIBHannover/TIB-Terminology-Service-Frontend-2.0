@@ -4,6 +4,7 @@ import './SearchForm.css'
 import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { useHistory } from 'react-router-dom';
 
 
 class SearchForm extends React.Component{
@@ -16,7 +17,8 @@ class SearchForm extends React.Component{
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);    
+        this.submitHandler = this.submitHandler.bind(this);  
+        this.suggestionHandler = this.suggestionHandler.bind(this);  
       }
       
 
@@ -41,25 +43,14 @@ class SearchForm extends React.Component{
       }
 
 
-      async submitHandler(enteredTerm){
-        enteredTerm = enteredTerm.target.value;
-    if (enteredTerm.length > 0){
-        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
-        searchResult =  (await searchResult.json())['response']['docs'];
-     this.setState({
-         searchResult: searchResult,
-         result: true
-     });
+    submitHandler(event){  
+        let enteredTerm = document.getElementById('search-input').value;
+        window.location.replace('/search?q=' + enteredTerm);
     }
-    else if (enteredTerm.length == 0){
-        this.setState({
-            result: false
-        });
-        
-    }
-      }
+    
     
     async suggestionHandler(selectedTerm){
+        console.info(selectedTerm);
         let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
         selection =  (await selection.json())['response']['docs'];
         this.setState({
@@ -70,11 +61,10 @@ class SearchForm extends React.Component{
       
 
       createResultList(){
-          const resultList = []
-          console.info(this.state);
+          const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={'/search?q=' + this.state.enteredTerm} key={i} className="container">
+                <Link to={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
                     <div>
                          {this.state.searchResult[i]['autosuggest']}
                     </div>
@@ -85,20 +75,17 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-            <Form className="mt-2 mt-md-0 mx-2 search-box mb-2 mb-md-0" inline onSubmit={this.submitHandler} style={{ minWidth: 57 }}>
-                <InputGroup>
-                <Input type="text" className="col-md-12 input" style={{marginTop: 3.8}}
+              <div>
+                   <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
                     placeholder="Search NFDI4Chem TS"
-                />
-                <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit">
-                    <Icon icon={faSearch}/>
-                </Button>
-                </InputGroup>
-
-            {this.state.result &&
+                    />
+                    <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
+                        <Icon icon={faSearch}/>
+                    </Button>
+                    {this.state.result &&
                 <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-          </Form>
+              </div>
           )
       }
 

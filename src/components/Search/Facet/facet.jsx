@@ -10,7 +10,7 @@ class Facet extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            ontologiesLoaded: false,
+            resultLoaded: false,
             resultTypes: [],
             ontologyFacetData: {},
             selectedOntologies: [],
@@ -27,9 +27,16 @@ class Facet extends React.Component{
     /**
      * process the search result array to get the existing ontologies and their result count
      */
-    processFacetData(){
-        if(!this.state.ontologiesLoaded){
-            let facetData = this.props.facetData;
+    processFacetData(){        
+        let facetData = this.props.facetData;
+        if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
+            this.setState({
+                resultLoaded: true,
+                resultTypes: {},
+                ontologyFacetData: {}
+            });
+        }
+        else{
             facetData = facetData["facet_fields"];
             let allTypes = facetData["type"];
             let allOntologies = facetData["ontology_prefix"];
@@ -50,11 +57,11 @@ class Facet extends React.Component{
                 }
             }
             this.setState({
-                ontologiesLoaded: true,
+                resultLoaded: true,
                 resultTypes: types,
                 ontologyFacetData: ontologyFacetData
             });
-        }
+        }                    
     }
 
 
@@ -128,13 +135,13 @@ class Facet extends React.Component{
     handleOntologyCheckBoxClick(e){
         let selectedOntologies = this.state.selectedOntologies;
         if(e.target.checked){
-            selectedOntologies.push(e.target.value);
+            selectedOntologies.push(e.target.value.toUpperCase());
             this.setState({
                 selectedOntologies: selectedOntologies
             });
         }
         else{
-            let index = selectedOntologies.indexOf(e.target.value);
+            let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
             selectedOntologies.splice(index, 1);
             this.setState({
                 selectedOntologies: selectedOntologies
@@ -168,11 +175,15 @@ class Facet extends React.Component{
 
 
     componentDidMount(){
-        this.processFacetData();
+        if(!this.state.resultLoaded){
+            this.processFacetData();
+        }        
     }
 
     componentDidUpdate(){
-        this.processFacetData();
+        if(!this.state.resultLoaded){
+            this.processFacetData();
+        }
     }
 
 
