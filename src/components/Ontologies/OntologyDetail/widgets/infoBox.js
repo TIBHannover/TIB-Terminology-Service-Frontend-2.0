@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
+import DownloadIcon from '@mui/icons-material/Download';
 
 
 function formatCreators (creators) {
@@ -18,6 +19,7 @@ function OntologyInfoBox (props) {
   const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
   const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
   const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
+  const [ontologyObject, setOntologyObject]  = useState(props.ontology);
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
@@ -143,7 +145,28 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-info-table-prop"><b>Download</b></td>
             <td>
-              {ontology.download}
+              <Button 
+                  variant="contained" 
+                  className='download-ontology-btn'
+                  startIcon={<DownloadIcon />}
+                  href={ontology.config.id}                                                  
+                >owl</Button>
+              <Button 
+                  variant="contained" 
+                  className='download-ontology-btn'
+                  startIcon={<DownloadIcon />}
+                  onClick={async () => {                    
+                    const jsonFile = JSON.stringify(ontologyObject);
+                    const blob = new Blob([jsonFile],{type:'application/json'});
+                    const href = await URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = href;
+                    link.download = ontologyObject.ontologyId + "_metadata.json";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                >Ontology metadata as JSON</Button>
             </td>
           </tr>
         </tbody>
