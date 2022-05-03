@@ -1,5 +1,8 @@
 /* eslint-disable react/jsx-filename-extension */
-import React from 'react'
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import CheckIcon from '@mui/icons-material/Check';
+
 
 function formatCreators (creators) {
   let answer = ''
@@ -9,8 +12,13 @@ function formatCreators (creators) {
   return answer
 }
 
+
 function OntologyInfoBox (props) {
-  const ontology = props.ontology
+  const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
+  const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
+  const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
+  const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
+  const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
   }
@@ -24,12 +32,44 @@ function OntologyInfoBox (props) {
             <td className="ontology-info-table-prop"><b>Ontology IRI</b></td>
             <td>
               <a href={ontology.config.id} target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                                
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.id);
+                  setOntologyIriCopied(true);
+                  setOntologyVersionCopied(false);
+                  setOntologyHomepageCopied(false);
+                  setOntologyTrackerCopied(false);
+                }}            
+              >copy</Button>
+              {ontologyIriCopied && 
+                  <CheckIcon 
+                    fontSize="large"                    
+                  />
+              }            
             </td>
           </tr>
           <tr>
             <td className="ontology-info-table-prop"><b>Version IRI</b></td>
             <td>
               <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                                
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.versionIri);
+                  setOntologyVersionCopied(true);
+                  setOntologyIriCopied(false);                  
+                  setOntologyHomepageCopied(false);
+                  setOntologyTrackerCopied(false);
+                }}            
+              >copy</Button>
+              {ontologyVersionCopied && 
+                  <CheckIcon 
+                    fontSize="large"                    
+                  />
+              }      
             </td>
           </tr>
           <tr>
@@ -42,12 +82,44 @@ function OntologyInfoBox (props) {
             <td className="ontology-info-table-prop"><b>HomePage</b></td>
             <td>
               <a href={ontology.config.homepage} target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                                 
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.homepage);
+                  setOntologyHomepageCopied(true);
+                  setOntologyIriCopied(false);
+                  setOntologyVersionCopied(false);                  
+                  setOntologyTrackerCopied(false);
+                }}            
+              >copy</Button>
+              {ontologyHomepageCopied && 
+                  <CheckIcon 
+                    fontSize="large"                    
+                  />
+              }
             </td>
           </tr>
           <tr>
             <td className="ontology-info-table-prop"><b>Issue tracker</b></td>
             <td>
               <a href={ontology.config.tracker} target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                                
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.tracker);
+                  setOntologyTrackerCopied(true);
+                  setOntologyIriCopied(false);
+                  setOntologyVersionCopied(false);
+                  setOntologyHomepageCopied(false);                
+                }}            
+              >copy</Button>
+              {ontologyTrackerCopied && 
+                  <CheckIcon 
+                    fontSize="large"       
+                  />
+              }
             </td>
           </tr>
           <tr>
