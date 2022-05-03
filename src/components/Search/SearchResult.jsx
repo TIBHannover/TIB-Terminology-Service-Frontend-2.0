@@ -19,14 +19,15 @@ class SearchResult extends React.Component{
           selectedTypes: [],
           facetFields: [],
           pageNumber: 1,
-          pageSize: 5,
-          searchResults: [],
-          isLoaded: false
+          pageSize: 5,         
+          isLoaded: false,
+          isFiltered: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
         // this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         //this.transportTerm = this.transportTerm.bind(this)
+        this.handleSelection = this.handleSelection.bind(this);
     }
 
     async searching(){
@@ -39,6 +40,7 @@ class SearchResult extends React.Component{
         let facetFields = resultJson['facet_counts'];
         this.setState({
           searchResult: searchResult,
+          originalSearchResult: searchResult,
           facetFields: facetFields,
           result: true,
           isLoaded: true
@@ -49,6 +51,7 @@ class SearchResult extends React.Component{
               result: false,
               searchResult: [],
               facetFields: [],
+              originalSearchResult: [],
               isLoaded: true
           });  
       }
@@ -107,8 +110,7 @@ class SearchResult extends React.Component{
   // }
 
   componentDidMount(){
-    console.info(this.state.isLoaded);
-    if(!this.state.isLoaded){
+    if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
     } 
     //this.transportTerm()
@@ -128,8 +130,10 @@ class SearchResult extends React.Component{
      * @returns
      */
    createSearchResultList () {
+    //  console.info( this.state.searchResult);
      if(this.state.result){
       let searchResultItem = this.state.searchResult
+      console.info(searchResultItem);
       const SearchResultList = []
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
@@ -156,30 +160,25 @@ class SearchResult extends React.Component{
   }
 
   handleSelection(ontologies, types){
-     this.setState({
-       selectedOntologies: ontologies,
-       selectedTypes: types,
-     })
-     for(let i=0; i<types.length; i++){
-       if(types === ['types']){
-         this.state.searchResult.push(
-             types[i]
-         )
-       }
-     }
-     this.setState({
-       originalSearchResult: this.state.searchResult
-     })
-     for(let i=0; i<ontologies.length; i++){
-      if(ontologies === ['ontology_name']){
-        this.state.searchResult.push(
-            ontologies[i]
-        )
+    if(ontologies.length === 0 && types.length === 0){
+      this.setState({
+        searchResult: this.state.originalSearchResult
+      });
+    } 
+    else{
+      let filteredSearchResult = [];
+      let currentResults = this.state.originalSearchResult;
+      for(let i=0; i<currentResults.length; i++){
+         if(ontologies.includes(currentResults[i]['ontology_name'])){
+           filteredSearchResult.push(currentResults[i]);
+         }
       }
+     this.setState({
+       searchResult: filteredSearchResult,
+       result: true,
+       isFiltered: true
+     })
     }
-    this.setState({
-      originalSearchResult: this.state.searchResult
-    })
   }
 
   render(){
