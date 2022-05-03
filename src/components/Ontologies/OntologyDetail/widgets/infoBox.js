@@ -19,6 +19,7 @@ function formatCreators (creators) {
 
 function OntologyInfoBox (props) {
   const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
+  const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
@@ -54,6 +55,21 @@ function OntologyInfoBox (props) {
             <td className="ontology-info-table-prop"><b>Version IRI</b></td>
             <td>
               <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                
+                targetlink={ontology.config.versionIri} 
+                onClick={() => {                  
+                  navigator.clipboard.writeText(ontology.config.versionIri);
+                  setOntologyVersionCopied(true);
+                }}            
+              >copy</Button>
+              {ontologyVersionCopied && 
+                  <CheckIcon 
+                    fontSize="large"
+                    id=""
+                  />
+              }      
             </td>
           </tr>
           <tr>
