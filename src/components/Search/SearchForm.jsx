@@ -16,7 +16,8 @@ class SearchForm extends React.Component{
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);    
+        this.submitHandler = this.submitHandler.bind(this);  
+        this.suggestionHandler = this.suggestionHandler.bind(this);  
       }
       
 
