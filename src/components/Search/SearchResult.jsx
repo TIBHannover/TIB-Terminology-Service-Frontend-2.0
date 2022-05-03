@@ -170,6 +170,16 @@ class SearchResult extends React.Component{
      this.setState({
        originalSearchResult: this.state.searchResult
      })
+     for(let i=0; i<ontologies.length; i++){
+      if(ontologies === ['ontology_name']){
+        this.state.searchResult.push(
+            ontologies[i]
+        )
+      }
+    }
+    this.setState({
+      originalSearchResult: this.state.searchResult
+    })
   }
 
   render(){
