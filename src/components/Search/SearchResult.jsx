@@ -173,6 +173,11 @@ class SearchResult extends React.Component{
            filteredSearchResult.push(currentResults[i]);
          }
       }
+      for(let i=0; i<currentResults.length; i++){        
+        if(types.includes(currentResults[i]['type'])){
+          filteredSearchResult.push(currentResults[i]);
+        }
+     }
      this.setState({
        searchResult: filteredSearchResult,
        result: true,
@@ -188,13 +193,13 @@ class SearchResult extends React.Component{
         <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
         </div>
         <Grid container spacing={8}>
-          <Grid item xs={4}>{this.state.result && <Facet
+          <Grid item xs={3}>{this.state.result && <Facet
                facetData = {this.state.facetFields}
                handleChange = {this.handleSelection}
             />}
             
           </Grid>
-          <Grid item xs={8} id="search-list-grid">
+          <Grid item xs={9} id="search-list-grid">
               {this.createSearchResultList()}
               {/* <PaginationCustom
                 count={this.pageCount()}
