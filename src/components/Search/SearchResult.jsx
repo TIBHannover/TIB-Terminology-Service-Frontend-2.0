@@ -129,18 +129,16 @@ class SearchResult extends React.Component{
      *
      * @returns
      */
-   createSearchResultList () {
-    //  console.info( this.state.searchResult);
+   createSearchResultList () {   
      if(this.state.result){
       let searchResultItem = this.state.searchResult
-      console.info(searchResultItem);
-      const SearchResultList = []
+      const SearchResultList = [];
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
-          <Grid container className="search-result-card" key={searchResultItem}>
+          <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={8}>
               <div className="search-card-title">
-                <h4><b><Link to={this.transportTerm(searchResultItem[i])} key={i} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+                <h4><b><Link to={this.transportTerm(searchResultItem[i])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
