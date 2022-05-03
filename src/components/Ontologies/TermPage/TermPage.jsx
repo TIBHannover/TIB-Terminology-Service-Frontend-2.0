@@ -1,14 +1,18 @@
-import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core'
-import './TermPage.css'
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
+import './TermPage.css';
+import Button from '@mui/material/Button';
+import CheckIcon from '@mui/icons-material/Check';
 
 class TermPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
       label_xs: 2,
-      value_xs: 10
+      value_xs: 10,
+      iriIsCopied: false,
+      prevTerm: this.props.term.label
     })
   }
 
@@ -19,6 +23,15 @@ class TermPage extends React.Component {
       return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
     }
     return text
+  }
+
+  componentDidUpdate(){
+    if(this.state.prevTerm != this.props.term.label){
+      this.setState({
+        iriIsCopied: false,
+        prevTerm: this.props.term.label
+      });
+    }
   }
 
   render () {
@@ -71,6 +84,21 @@ class TermPage extends React.Component {
             </Grid>
             <Grid item xs={this.state.value_xs} className="term-detail-value">
               {this.formatText(this.props.term.iri, true)}
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                                
+                onClick={() => {                  
+                  navigator.clipboard.writeText(this.props.term.iri);
+                  this.setState({
+                    iriIsCopied: true
+                  });
+                }}            
+              >copy</Button>
+              {this.state.iriIsCopied && 
+                  <CheckIcon 
+                    fontSize="large"                    
+                  />
+              }      
             </Grid>
           </Grid>
         </Grid>

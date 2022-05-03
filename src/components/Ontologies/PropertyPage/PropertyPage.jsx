@@ -1,14 +1,18 @@
-import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core'
-import './PropertyPage.css'
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
+import './PropertyPage.css';
+import Button from '@mui/material/Button';
+import CheckIcon from '@mui/icons-material/Check';
 
 class PropertyPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
       label_xs: 2,
-      value_xs: 10
+      value_xs: 10,
+      iriIsCopied: false,
+      prevProperty: this.props.property.label
     })
   }
 
@@ -19,6 +23,16 @@ class PropertyPage extends React.Component {
       return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
     }
     return text
+  }
+
+
+  componentDidUpdate(){
+    if(this.state.prevProperty != this.props.property.label){
+      this.setState({
+        iriIsCopied: false,
+        prevProperty: this.props.property.label
+      });
+    }
   }
 
   render () {
@@ -71,6 +85,21 @@ class PropertyPage extends React.Component {
             </Grid>
             <Grid item xs={this.state.value_xs} className="property-detail-value">
               {this.formatText(this.props.property.iri, true)}
+              <Button 
+                variant="contained" 
+                className='copy-link-btn'                                
+                onClick={() => {                  
+                  navigator.clipboard.writeText(this.props.property.iri);
+                  this.setState({
+                    iriIsCopied: true
+                  });
+                }}            
+              >copy</Button>
+              {this.state.iriIsCopied && 
+                  <CheckIcon 
+                    fontSize="large"
+                  />
+              }      
             </Grid>
           </Grid>
         </Grid>
