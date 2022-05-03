@@ -43,6 +43,9 @@ function OntologyInfoBox (props) {
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.id);
                   setOntologyIriCopied(true);
+                  setOntologyVersionCopied(false);
+                  setOntologyHomepageCopied(false);
+                  setOntologyTrackerCopied(false);
                 }}            
               >copy</Button>
               {ontologyIriCopied && 
@@ -64,6 +67,9 @@ function OntologyInfoBox (props) {
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.versionIri);
                   setOntologyVersionCopied(true);
+                  setOntologyIriCopied(false);                  
+                  setOntologyHomepageCopied(false);
+                  setOntologyTrackerCopied(false);
                 }}            
               >copy</Button>
               {ontologyVersionCopied && 
@@ -91,6 +97,9 @@ function OntologyInfoBox (props) {
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.homepage);
                   setOntologyHomepageCopied(true);
+                  setOntologyIriCopied(false);
+                  setOntologyVersionCopied(false);                  
+                  setOntologyTrackerCopied(false);
                 }}            
               >copy</Button>
               {ontologyHomepageCopied && 
@@ -112,6 +121,9 @@ function OntologyInfoBox (props) {
                 onClick={() => {                  
                   navigator.clipboard.writeText(ontology.config.tracker);
                   setOntologyTrackerCopied(true);
+                  setOntologyIriCopied(false);
+                  setOntologyVersionCopied(false);
+                  setOntologyHomepageCopied(false);                
                 }}            
               >copy</Button>
               {ontologyTrackerCopied && 
