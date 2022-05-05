@@ -12,7 +12,8 @@ class Pagination extends React.Component{
       endIndex: 9
     })
     this.paginating = this.paginating.bind(this)
-    this.handlePageClick = this.handlePageClick.bind(this)
+    this.prevClick = this.prevClick.bind(this)
+    this.nextClick = this.nextClick.bind(this)
   }
 
   async paginating(searchTerm){
@@ -50,9 +51,10 @@ class Pagination extends React.Component{
   render(){
     return(
       <div className="pagination-elements">
+        <h4> Showing results from {this.startIndex} to {this.endIndex} of {this.totalResults} results</h4>
         <ReactPaginate
-           previousLabel={"previous"}
-           nextLabel={"next"}
+           previousLabel={"Previous"}{...this.prevClick}
+           nextLabel={"Next"}{...this.nextClick}
            onPageChange={''}   
         />
 
