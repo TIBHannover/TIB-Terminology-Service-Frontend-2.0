@@ -7,7 +7,9 @@ class Pagination extends React.Component{
     super(props)
     this.setState({
       searchResult: [],
-      searchTerm: ''
+      searchTerm: '',
+      startIndex: 0,
+      endIndex: 9
     })
     this.paginating = this.paginating.bind(this)
     this.handlePageClick = this.handlePageClick.bind(this)
@@ -25,6 +27,20 @@ class Pagination extends React.Component{
          searchResult: searchResult,
          paginationFields: paginationFields
       })    
+  }
+
+  prevClick(prevstate){
+    this.setState({
+      startIndex : prevstate.startIndex - 10,
+      endIndex : prevstate.endIndex - 10
+  })
+  }
+
+  nextClick(prevstate){
+    this.setState({
+      startIndex : prevstate.startIndex + 10,
+      endIndex : prevstate.endIndex + 10
+  })
   }
 
   handlePageClick(){
