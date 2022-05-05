@@ -13,11 +13,18 @@ class Pagination extends React.Component{
     this.handlePageClick = this.handlePageClick.bind(this)
   }
 
-  async paginating(){
+  async paginating(searchTerm){
+    let totalResults = this.props.totalResults;
     let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${searchTerm}`)
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
-        let paginationFields = resultJson['response'];     
+        let paginationFields = resultJson['response']; 
+        paginationFields = searchResult + ['start']
+        totalResults = totalResults['numsFound'] 
+      this.setState({
+         searchResult: searchResult,
+         paginationFields: paginationFields
+      })    
   }
 
   handlePageClick(){
@@ -30,7 +37,7 @@ class Pagination extends React.Component{
         <ReactPaginate
            previousLabel={"previous"}
            nextLabel={"next"}
-           onPageChange={handlePageClick}   
+           onPageChange={''}   
         />
 
       </div>
