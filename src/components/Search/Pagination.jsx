@@ -7,6 +7,7 @@ class Pagination extends React.Component{
     super(props)
     this.setState({
       searchResult: [],
+      paginated: false,
       searchTerm: '',
       startIndex: 0,
       endIndex: 9
@@ -17,16 +18,16 @@ class Pagination extends React.Component{
   }
 
   async paginating(searchTerm){
-    let totalResults = this.props.totalResults;
     let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${searchTerm}`)
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
         let paginationFields = resultJson['response']; 
-        paginationFields = searchResult + ['start']
-        totalResults = totalResults['numsFound'] 
+        let startIndex = paginationFields['start']
+        let totalResults = paginationFields['numsFound'] 
       this.setState({
          searchResult: searchResult,
-         paginationFields: paginationFields
+         paginationFields: paginationFields,
+         paginated: true
       })    
   }
 
