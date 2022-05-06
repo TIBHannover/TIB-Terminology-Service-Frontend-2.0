@@ -18,8 +18,8 @@ class SearchResult extends React.Component{
           selectedOntologies: [],
           selectedTypes: [],
           facetFields: [],
-          pageNumber: 1,
-          pageSize: 5,         
+          startIndex: 0,
+          endIndex: 9,         
           isLoaded: false,
           isFiltered: false
         })
@@ -95,9 +95,9 @@ class SearchResult extends React.Component{
      * Count the number of pages for the pagination
      * @returns
      */
-  pageCount () {
-    return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
-  }
+  // pageCount () {
+  //   return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
+  // }
 
   /**
        * Handle the pagination change. This function has to be passed to the Pagination component
@@ -214,11 +214,11 @@ class SearchResult extends React.Component{
           </Grid>
           <Grid item xs={9} id="search-list-grid">
               {this.createSearchResultList()}
-              {/* <Pagination
-                count={this.pageCount()}
-                clickHandler={this.props.handlePageClick}
-                page={this.state.pageNumber}
-              /> */}
+              <h4> Showing results from {this.state.startIndex} to {this.state.endIndex} of {this.totalResults} results</h4>
+              <Pagination
+                previousLabel={"Previous"}{...this.prevClick}
+                nextLabel={"Next"}{...this.nextClick} 
+              />
             </Grid>
           </Grid>
         
