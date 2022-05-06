@@ -22,7 +22,7 @@ class Pagination extends React.Component{
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
         let paginationFields = resultJson['response']; 
-        let startIndex = paginationFields['start']
+        this.state.startIndex = paginationFields['start']
         let totalResults = paginationFields['numsFound'] 
       this.setState({
          searchResult: searchResult,
@@ -31,22 +31,22 @@ class Pagination extends React.Component{
       })    
   }
 
-  prevClick(prevstate){
+  prevClick(){
+    let searchResult = this.state.searchResult + `&start=${this.state.startIndex}`
     this.setState({
-      startIndex : prevstate.startIndex - 10,
-      endIndex : prevstate.endIndex - 10
+      searchResult: searchResult,
+      startIndex : this.state.startIndex - 10,
+      endIndex : this.state.endIndex - 10
   })
   }
 
-  nextClick(prevstate){
+  nextClick(){
+    let searchResult = this.state.searchResult + `&start=${this.state.startIndex}`
     this.setState({
-      startIndex : prevstate.startIndex + 10,
-      endIndex : prevstate.endIndex + 10
+      searchResult: searchResult, 
+      startIndex : this.state.startIndex + 10,
+      endIndex : this.state.endIndex + 10
   })
-  }
-
-  handlePageClick(){
-
   }
   
   render(){
@@ -55,8 +55,7 @@ class Pagination extends React.Component{
         <h4> Showing results from {this.startIndex} to {this.endIndex} of {this.totalResults} results</h4>
         <ReactPaginate
            previousLabel={"Previous"}{...this.prevClick}
-           nextLabel={"Next"}{...this.nextClick}
-           onPageChange={''}   
+           nextLabel={"Next"}{...this.nextClick} 
         />
 
       </div>
