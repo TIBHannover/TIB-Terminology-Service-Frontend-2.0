@@ -109,16 +109,15 @@ class SearchResult extends React.Component{
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
    async paginationHandler () {
-     const baseSearchUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}`
      let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-     let targetUrl = await fetch (baseSearchUrl + `&start=${rangeCount}`)
+     let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`)
      console.info(targetUrl)
      let resultJson = (await targetUrl.json());
      let newResults = resultJson['response']['docs']
      console.info(resultJson)
      this.setState({
        rangeCount: rangeCount,
-       newResults: newResults
+       searchResult: newResults
     })
   }
 
