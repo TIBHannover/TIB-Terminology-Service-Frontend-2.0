@@ -18,13 +18,15 @@ class SearchResult extends React.Component{
           selectedOntologies: [],
           selectedTypes: [],
           facetFields: [],
+          startIndex: 0,
+          endIndex: 9,  
           pageNumber: 1,
-          pageSize: 5,         
+          pageSize: 10,       
           isLoaded: false,
           isFiltered: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
-        // this.handlePagination = this.handlePagination.bind(this)
+        this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         //this.transportTerm = this.transportTerm.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
@@ -38,10 +40,14 @@ class SearchResult extends React.Component{
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
+        let paginationResult = resultJson['response']
+        let totalResults = paginationResult['numFound']
         this.setState({
           searchResult: searchResult,
           originalSearchResult: searchResult,
           facetFields: facetFields,
+          paginationResult: paginationResult,
+          totalResults: totalResults,
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm
@@ -80,14 +86,14 @@ class SearchResult extends React.Component{
      * Handle the click on the pagination
      * @param {*} value
      */
-  //  handlePagination (value) {
-  //   this.setState({
-  //     pageNumber: value,
-  //     paginationReset: false
-  //   }, () => {
-  //     this.paginationHandler()
-  //   })
-  // }
+   handlePagination (value) {
+    this.setState({
+      pageNumber: value,
+      paginationReset: false
+    }, () => {
+      this.paginationHandler()
+    })
+  }
 
 
 
@@ -96,20 +102,24 @@ class SearchResult extends React.Component{
      * @returns
      */
   pageCount () {
-    return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
+    return (Math.ceil(this.state.totalResults / this.state.pageSize))
   }
 
   /**
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
-  //  paginationHandler () {
-  //   const down = (this.state.pageNumber - 1) * this.state.pageSize
-  //   const up = down + (this.state.pageSize - 1)
-  //   const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
-  //   for (let i = down; i <= up; i++) {
-  //     hiddenStatus[i] = true
-  //   }
-  // }
+   async paginationHandler () {
+     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+     let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`)
+     console.info(targetUrl)
+     let resultJson = (await targetUrl.json());
+     let newResults = resultJson['response']['docs']
+     console.info(resultJson)
+     this.setState({
+       rangeCount: rangeCount,
+       searchResult: newResults
+    })
+  }
 
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
@@ -214,11 +224,11 @@ class SearchResult extends React.Component{
           </Grid>
           <Grid item xs={9} id="search-list-grid">
               {this.createSearchResultList()}
-              {/* <PaginationCustom
+              <PaginationCustom
                 count={this.pageCount()}
-                clickHandler={this.props.handlePageClick}
+                clickHandler={this.handlePagination}
                 page={this.state.pageNumber}
-              /> */}
+              />
             </Grid>
           </Grid>
         
