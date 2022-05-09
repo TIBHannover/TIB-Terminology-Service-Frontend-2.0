@@ -198,7 +198,7 @@ class ClassTree extends React.Component {
      */
  async updateNodeInTree (node, shortForm, expanded) {
     if (node.modified_short_form === shortForm && node.has_children) {
-      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node['_links'][this.state.childrenFieldName]['href'], this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({
