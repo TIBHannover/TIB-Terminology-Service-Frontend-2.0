@@ -40,10 +40,14 @@ class SearchResult extends React.Component{
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
+        let paginationResult = resultJson['response']
+        let totalResults = paginationResult['numFound']
         this.setState({
           searchResult: searchResult,
           originalSearchResult: searchResult,
           facetFields: facetFields,
+          paginationResult: paginationResult,
+          totalResults: totalResults,
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm
@@ -98,7 +102,8 @@ class SearchResult extends React.Component{
      * @returns
      */
   pageCount () {
-    return (Math.ceil(this.state.searchResult.length / this.state.pageSize))
+    console.info(this.state.totalResults)
+    return (Math.ceil(this.state.totalResults / this.state.pageSize))
   }
 
   /**
@@ -109,10 +114,8 @@ class SearchResult extends React.Component{
      let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
      let targetUrl = await fetch (baseSearchUrl + `&start=${rangeCount}`)
      let resultJson = (await targetUrl.json());
-     let paginationResult = resultJson['response']
      this.setState({
        rangeCount: rangeCount,
-       paginationResult: paginationResult  
     })
   }
 
