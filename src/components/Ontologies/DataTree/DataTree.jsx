@@ -9,7 +9,7 @@ import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CircularProgress from '@mui/material/CircularProgress';
-import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/nfdi4chemapi';
+import {getChildren, getTreeRoutes, getNodeByIri, hasPartOfRelation} from '../../../api/nfdi4chemapi';
 
 
 class ClassTree extends React.Component {
@@ -40,10 +40,9 @@ class ClassTree extends React.Component {
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
     this.expandTreeByTarget = this.expandTreeByTarget.bind(this);
-    this.handleResetTreeBtn = this.handleResetTreeBtn.bind(this);
+    this.handleResetTreeBtn = this.handleResetTreeBtn.bind(this);   
+
   }
-
-
   /**
    * set data from input props
    * @param {*} nodes 
@@ -134,6 +133,8 @@ class ClassTree extends React.Component {
       }
   }
 
+
+
   /**
    * Exapand the tree when there is an input target (term/property). Used for showing the selected term/property detail when 
    * called directy by url via 'iri' 
@@ -166,18 +167,22 @@ class ClassTree extends React.Component {
      * @param {*} nodes
      * @returns
      */
-  createTree = (nodes) => {
+  createTree =  (nodes) => {    
     return nodes.map((el) => {
       return (
         <StyledTreeItem 
           key={el.id} 
           nodeId={el.modified_short_form} 
-          label={el.label} 
+          label={  el.part_of
+                  ? <div><span class="p-icon-style">P</span>  {el.label}</div>
+                  : <div>{el.label}</div>
+            }   
           className="tree-element"
           id={"tree_element_" + el.modified_short_form}
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
-          defaultEndIcon={<CloseSquare />}>
+          defaultEndIcon={<CloseSquare />}
+          >
           {Array.isArray(el.children) && el.children.length > 0
             ? this.createTree(el.children)
             : el.has_children}
@@ -196,7 +201,7 @@ class ClassTree extends React.Component {
      */
  async updateNodeInTree (node, shortForm, expanded) {
     if (node.modified_short_form === shortForm && node.has_children) {
-      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node['_links'][this.state.childrenFieldName]['href'], this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
       if (childrenNodes.length > 0){
         node.children = childrenNodes;
         this.setState({
