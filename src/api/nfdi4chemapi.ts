@@ -10,7 +10,11 @@ const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
  * @returns A list
  */
  export async function getAllOntologies (){
-  return fetch(OntologiesBaseServiceUrl, getCallSetting)
+  let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
+  answer = await answer.json();
+  let ontologiesCount = answer['page']['totalElements'];
+  let targetUrl = OntologiesBaseServiceUrl + '?page=0&size=' + ontologiesCount;
+  return fetch(targetUrl, getCallSetting)
     .then((s) => s.json())
     .then((s) => {
       return s['_embedded']['ontologies'];
