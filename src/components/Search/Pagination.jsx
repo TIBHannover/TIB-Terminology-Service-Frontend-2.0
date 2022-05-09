@@ -27,6 +27,7 @@ class Pagination extends React.Component{
       this.setState({
          searchResult: searchResult,
          paginationFields: paginationFields,
+         totalResults: totalResults,
          paginated: true
       })    
   }
@@ -52,7 +53,7 @@ class Pagination extends React.Component{
   render(){
     return(
       <div className="pagination-elements">
-        <h4> Showing results from {this.startIndex} to {this.endIndex} of {this.totalResults} results</h4>
+        <h4> Showing results from {this.state.startIndex} to {this.state.endIndex} of {this.state.totalResults} results</h4>
          <div className="click-elements">
             <h4>Previous{this.prevClick}</h4>
             <h4>Next{this.nextClick}</h4>
