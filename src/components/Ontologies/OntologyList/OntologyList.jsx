@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import { getChemOntologies } from '../../../api/nfdi4chemapi';
+import { getAllOntologies } from '../../../api/nfdi4chemapi';
 
 
 
@@ -85,7 +85,7 @@ class OntologyList extends React.Component {
   async getAllOntologies () {
     
     try{
-      const allOntologies = await getChemOntologies();
+      const allOntologies = await getAllOntologies();
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
