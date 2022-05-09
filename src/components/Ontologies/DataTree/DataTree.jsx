@@ -167,17 +167,19 @@ class ClassTree extends React.Component {
      * @returns
      */
   createTree = (nodes) => {
+    let pIcon = React.createElement("div", [], "P  ");
     return nodes.map((el) => {
       return (
         <StyledTreeItem 
           key={el.id} 
           nodeId={el.modified_short_form} 
-          label={el.label} 
+          label={<div><span class="p-icon-style">P</span>  {el.label}</div>}   
           className="tree-element"
           id={"tree_element_" + el.modified_short_form}
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
-          defaultEndIcon={<CloseSquare />}>
+          defaultEndIcon={<CloseSquare />}
+          >
           {Array.isArray(el.children) && el.children.length > 0
             ? this.createTree(el.children)
             : el.has_children}
