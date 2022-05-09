@@ -53,11 +53,10 @@ class Pagination extends React.Component{
     return(
       <div className="pagination-elements">
         <h4> Showing results from {this.startIndex} to {this.endIndex} of {this.totalResults} results</h4>
-        <ReactPaginate
-           previousLabel={"Previous"}{...this.prevClick}
-           nextLabel={"Next"}{...this.nextClick} 
-        />
-
+         <div className="click-elements">
+            <h4>Previous{this.prevClick}</h4>
+            <h4>Next{this.nextClick}</h4>
+         </div>
       </div>
     )
   }
