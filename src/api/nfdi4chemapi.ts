@@ -183,7 +183,20 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
 }
 
 
-
+/**
+ * Find a node in the tree and build the node path
+ * @param node 
+ * @param target 
+ * @param mode 
+ * @param allAncestors 
+ * @param route 
+ * @param allRoutes 
+ * @param rootNode 
+ * @param treeData 
+ * @param childFieldName 
+ * @param ancestorFieldName 
+ * @returns 
+ */
 async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {  
   if(node['short_form'] == target['short_form']){
     allRoutes.push(route);
@@ -208,7 +221,13 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
 }
 
 
-
+/**
+ * Get a node metadata by its iri
+ * @param ontology 
+ * @param nodeIri 
+ * @param mode 
+ * @returns 
+ */
 export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
     let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
     let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
@@ -218,7 +237,7 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string)
 
 /**
  * This function process each node (term/property) obtainded from API call to match with the tree view. 
- * A tree node needs: children, id (beside existing metadata) 
+ * A tree node needs: children, parent, and id (beside existing metadata) 
  * @param listOfNodes 
  */
 function processForTree(parentIri:string, listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}){
@@ -258,7 +277,20 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
 }
 
 
+/**
+ * check if a node has part of relation with its parent. 
+ * @param node 
+ * @param parentIri 
+ */
+export async function hasPartOfRelation(node:any, parentIri:string, mode:string) {
+  if (typeof(node['_links']['part_of']['href']) === 'undefined' || parentIri === ""){
+    return false;
+  }
+  let partOfParents = await(await (await fetch(node['_links']['part_of']['href'], getCallSetting)).json());
+  partOfParents = partOfParents['_embedded'][mode];
+  return nodeExistInList(partOfParents, parentIri);
 
+}
 
 
 
