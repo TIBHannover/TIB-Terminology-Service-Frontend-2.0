@@ -66,7 +66,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree("", terms, {});
+    return processForTree("", terms, {}, "term");
 
   }
   catch(e){
@@ -97,7 +97,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree("", props, {});
+    return processForTree("", props, {}, "property");
 
   }
   catch(e){
@@ -131,12 +131,12 @@ export async function getChildren(node:any, childrenFieldName:string, mode: stri
       if (mode === 'term'){
         let data = await fetch(node['_links'][childrenFieldName]['href'], getCallSetting);
         data = await data.json();
-        return processForTree(node['iri'], data['_embedded']['terms'], alreadyExistedNodesInTree); 
+        return processForTree(node['iri'], data['_embedded']['terms'], alreadyExistedNodesInTree, mode); 
       }
       else{
         let data = await fetch(node['_links'][childrenFieldName]['href'], getCallSetting);
         data = await data.json();
-        return processForTree(node['iri'], data['_embedded']['properties'], alreadyExistedNodesInTree);
+        return processForTree(node['iri'], data['_embedded']['properties'], alreadyExistedNodesInTree, mode);
       }
   }
   catch(e){
@@ -240,12 +240,13 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string)
  * A tree node needs: children, parent, and id (beside existing metadata) 
  * @param listOfNodes 
  */
-function processForTree(parentIri:string, listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}){
+async function processForTree(parentIri:string, listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}, mode:string){
   let processedListOfNodes: Array<any> = [];
   for(let i=0; i < listOfNodes.length; i++){
     listOfNodes[i]['children'] = [];
     listOfNodes[i]['parentIri'] = parentIri;
     listOfNodes[i]['id'] = listOfNodes[i]['iri'];
+    listOfNodes[i]['part_of'] = await hasPartOfRelation(listOfNodes[i], mode);
     if(Object.keys(alreadyExistedNodesInTree).includes(listOfNodes[i]['short_form'])){
       listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_' + alreadyExistedNodesInTree[listOfNodes[i]['short_form']];
       alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = alreadyExistedNodesInTree[listOfNodes[i]['short_form']] + 1;
@@ -282,14 +283,19 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
  * @param node 
  * @param parentIri 
  */
-export async function hasPartOfRelation(node:any, parentIri:string, mode:string) {
-  if (typeof(node['_links']['part_of']['href']) === 'undefined' || parentIri === ""){
-    return false;
-  }
-  let partOfParents = await(await (await fetch(node['_links']['part_of']['href'], getCallSetting)).json());
-  partOfParents = partOfParents['_embedded'][mode];
-  return nodeExistInList(partOfParents, parentIri);
-
+export async function hasPartOfRelation(node:any, mode:string) {    
+    if (typeof(node['_links']['part_of']) === 'undefined' || node['parentIri'] === ""){
+      return false;
+    }
+    let partOfParents = await (await fetch(node['_links']['part_of']['href'], getCallSetting)).json();
+    if(mode === 'term'){
+      partOfParents = partOfParents['_embedded']['terms'];
+    }
+    else{
+      partOfParents = partOfParents['_embedded']['properties'];
+    }
+    
+    return nodeExistInList(partOfParents,  node['parentIri']);
 }
 
 

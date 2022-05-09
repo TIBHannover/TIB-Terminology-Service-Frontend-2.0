@@ -9,7 +9,7 @@ import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CircularProgress from '@mui/material/CircularProgress';
-import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/nfdi4chemapi';
+import {getChildren, getTreeRoutes, getNodeByIri, hasPartOfRelation} from '../../../api/nfdi4chemapi';
 
 
 class ClassTree extends React.Component {
@@ -40,10 +40,9 @@ class ClassTree extends React.Component {
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
     this.expandTreeByTarget = this.expandTreeByTarget.bind(this);
-    this.handleResetTreeBtn = this.handleResetTreeBtn.bind(this);
+    this.handleResetTreeBtn = this.handleResetTreeBtn.bind(this);   
+
   }
-
-
   /**
    * set data from input props
    * @param {*} nodes 
@@ -134,6 +133,8 @@ class ClassTree extends React.Component {
       }
   }
 
+
+
   /**
    * Exapand the tree when there is an input target (term/property). Used for showing the selected term/property detail when 
    * called directy by url via 'iri' 
@@ -166,14 +167,16 @@ class ClassTree extends React.Component {
      * @param {*} nodes
      * @returns
      */
-  createTree = (nodes) => {
-    let pIcon = React.createElement("div", [], "P  ");
+  createTree =  (nodes) => {    
     return nodes.map((el) => {
       return (
         <StyledTreeItem 
           key={el.id} 
           nodeId={el.modified_short_form} 
-          label={<div><span class="p-icon-style">P</span>  {el.label}</div>}   
+          label={  el.part_of
+                  ? <div><span class="p-icon-style">P</span>  {el.label}</div>
+                  : <div>{el.label}</div>
+            }   
           className="tree-element"
           id={"tree_element_" + el.modified_short_form}
           defaultCollapseIcon={<MinusSquare />}
