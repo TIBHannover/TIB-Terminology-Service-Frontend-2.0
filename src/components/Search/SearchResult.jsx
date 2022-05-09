@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import './SearchResult.css'
 import Grid from '@material-ui/core/Grid';
-import Pagination from './Pagination';
+import PaginationCustom from './Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
@@ -214,8 +214,6 @@ class SearchResult extends React.Component{
           </Grid>
           <Grid item xs={9} id="search-list-grid">
               {this.createSearchResultList()}
-              <h4> Showing results from {this.state.startIndex} to {this.state.endIndex} of {this.totalResults} results</h4>
-              <Pagination/>
             </Grid>
           </Grid>
         
