@@ -102,7 +102,6 @@ class SearchResult extends React.Component{
      * @returns
      */
   pageCount () {
-    console.info(this.state.totalResults)
     return (Math.ceil(this.state.totalResults / this.state.pageSize))
   }
 
@@ -113,9 +112,13 @@ class SearchResult extends React.Component{
      const baseSearchUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}`
      let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
      let targetUrl = await fetch (baseSearchUrl + `&start=${rangeCount}`)
+     console.info(targetUrl)
      let resultJson = (await targetUrl.json());
+     let newResults = resultJson['response']['docs']
+     console.info(resultJson)
      this.setState({
        rangeCount: rangeCount,
+       newResults: newResults
     })
   }
 
