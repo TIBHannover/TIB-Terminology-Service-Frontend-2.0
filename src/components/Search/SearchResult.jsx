@@ -104,14 +104,17 @@ class SearchResult extends React.Component{
   /**
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
-  //  paginationHandler () {
-  //   const down = (this.state.pageNumber - 1) * this.state.pageSize
-  //   const up = down + (this.state.pageSize - 1)
-  //   const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
-  //   for (let i = down; i <= up; i++) {
-  //     hiddenStatus[i] = true
-  //   }
-  // }
+   paginationHandler () {
+    const down = (this.state.pageNumber - 1) * this.state.pageSize
+    const up = down + (this.state.pageSize - 1)
+    const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
+    for (let i = down; i <= up; i++) {
+      hiddenStatus[i] = true
+    }
+    this.setState({
+      
+    })
+  }
 
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
