@@ -21,7 +21,7 @@ class SearchResult extends React.Component{
           startIndex: 0,
           endIndex: 9,  
           pageNumber: 1,
-          pageSize: 5,       
+          pageSize: 10,       
           isLoaded: false,
           isFiltered: false
         })
@@ -104,15 +104,15 @@ class SearchResult extends React.Component{
   /**
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
-   paginationHandler () {
-    const down = (this.state.pageNumber - 1) * this.state.pageSize
-    const up = down + (this.state.pageSize - 1)
-    const hiddenStatus = new Array(this.state.searchResult.length).fill(false)
-    for (let i = down; i <= up; i++) {
-      hiddenStatus[i] = true
-    }
-    this.setState({
-      
+   async paginationHandler () {
+     const baseSearchUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}`
+     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+     let targetUrl = await fetch (baseSearchUrl + `&start=${rangeCount}`)
+     let resultJson = (await targetUrl.json());
+     let paginationResult = resultJson['response']
+     this.setState({
+       rangeCount: rangeCount,
+       paginationResult: paginationResult  
     })
   }
 
