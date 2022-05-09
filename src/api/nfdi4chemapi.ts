@@ -3,16 +3,14 @@ const callHeader = {
 };
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 100;
+const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
 
 /**
  * Get the ontology list for chem
  * @returns A list
  */
- export async function getChemOntologies (){
-  return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/filterby?schema=collection&classification=NFDI4CHEM',
-    getCallSetting
-  )
+ export async function getAllOntologies (){
+  return fetch(OntologiesBaseServiceUrl, getCallSetting)
     .then((s) => s.json())
     .then((s) => {
       return s['_embedded']['ontologies'];
@@ -30,7 +28,7 @@ const size = 100;
  */
 export async function getOntologyDetail (ontologyid: string) {
   return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/' + encodeURIComponent(ontologyid),
+    OntologiesBaseServiceUrl + '/' + encodeURIComponent(ontologyid),
     getCallSetting
   )
     .then((s) => s.json())
