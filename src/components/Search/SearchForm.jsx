@@ -49,7 +49,6 @@ class SearchForm extends React.Component{
     
     
     async suggestionHandler(selectedTerm){
-        console.info(selectedTerm);
         let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
         selection =  (await selection.json())['response']['docs'];
         this.setState({
