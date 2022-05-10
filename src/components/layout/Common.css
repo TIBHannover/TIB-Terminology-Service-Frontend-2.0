@@ -1,0 +1,91 @@
+/* 
+    This is the css script for styling common components.
+    This page includes the header, footer, homepage, and Navbar.
+*/
+
+/* 
+-------------------------------------
+The Header styles 
+-------------------------------------
+*/
+
+.header {
+    /* 
+       The style for overall header dimensions
+    */
+    margin-top: 20px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+  
+.header-top {
+    /* 
+       The style for the autocomplete field
+    */
+    display: flex;
+    width: 100%;
+    height: 200px;
+  }
+  
+.header-top__logo {
+    /* 
+       The style for the project logo dimensions in header
+    */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+.header-logo {
+    /* 
+       The style for the project logo
+    */
+    color: inherit;
+    text-decoration: inherit;
+    font-family: RobotoThin;
+    font-size: 100px;
+  }
+  
+.header-top__navbar {
+    /* 
+       The style for adjusting header dimensions with navbar
+    */
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+  
+.header-top__seperator {
+    /* 
+       The style for header top
+    */
+    width: 100%;
+    border: none;
+    height: 2px;
+    margin-top: 2px;
+    background-color: black;
+  }
+  
+.header-top__navigation {
+    /* 
+       The style for header navigation
+    */
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 55px;
+  }
+  
+.header-bottom {
+    /* 
+       The style for header and bottom elements
+    */
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 6px;
+  }
