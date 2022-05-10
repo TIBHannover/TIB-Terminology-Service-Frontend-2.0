@@ -1,0 +1,20 @@
+/* 
+    This is the css script for styling the application.
+    Here you can style header, footer, buttons, colors, and etc.
+*/
+
+
+/* 
+-------------------------------------
+The Tree view styles (for both classes and properties)
+-------------------------------------
+*/
+
+.tree-view-container{
+    /* 
+        The tree page containers. It includes both the tree view and the detail table.
+    */
+    padding: 20px;
+}
+
+

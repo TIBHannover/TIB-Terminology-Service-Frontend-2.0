@@ -1,5 +1,5 @@
 import React from 'react';
-import './DataTree.css';
+import '../../layout/applicationStyles.css';
 import Grid from '@material-ui/core/Grid';
 import TreeView from '@material-ui/lab/TreeView';
 import StyledTreeItem from './widgets/StyledTreeItem';
@@ -321,7 +321,7 @@ class ClassTree extends React.Component {
                 </div>
               }  
              { !this.state.searchWaiting && this.state.termTree &&
-                <Grid container spacing={0} id="term-view-container">
+                <Grid container spacing={0} class="tree-view-container">
                     <Grid item xs={5} id="terms-tree-container">
                         <Button 
                           variant="contained" 
@@ -352,7 +352,7 @@ class ClassTree extends React.Component {
                 </Grid> 
              }
              { !this.state.searchWaiting && this.state.propertyTree && 
-                <Grid container spacing={0} id="prop-view-container">
+                <Grid container spacing={0} class="tree-view-container">
                     <Grid item xs={5} id="props-tree-container">
                       <Button 
                             variant="contained" 
