@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../layout/applicationStyles.css';
+import '../../layout/ontologyDetailPage.css';
 import Grid from '@material-ui/core/Grid';
 import TreeView from '@material-ui/lab/TreeView';
 import StyledTreeItem from './widgets/StyledTreeItem';

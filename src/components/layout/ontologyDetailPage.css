@@ -1,6 +1,6 @@
 /* 
-    This is the css script for styling the application.
-    Here you can style header, footer, buttons, colors, and etc.
+    This is the css script for styling ontology detail page and its components.
+    The ontology detail page includes the general ontology overview, class tree, property tree, and Mapping.
 */
 
 
@@ -16,5 +16,6 @@ The Tree view styles (for both classes and properties)
     */
     padding: 20px;
 }
+
 
 
