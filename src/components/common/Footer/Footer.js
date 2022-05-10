@@ -7,7 +7,6 @@ import TIB_LOGO from '../../../assets/img/TIB_Logo_en.png';
 import DFG_LOGO from '../../../assets/img/dfg_logo.png';
 import CHEM_LOGO from '../../../assets/img/favicon-nfdi4chem.PNG'
 import styled from 'styled-components';
-import './Footer.css'
 
 const FooterWrapper = styled.div`
     background: #e0e2ea;

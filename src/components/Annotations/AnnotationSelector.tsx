@@ -4,7 +4,7 @@ import chroma from 'chroma-js'
 import React, { Fragment, useState } from 'react'
 import { Facet } from '../../api'
 import { useQueries } from 'react-query'
-import { getClassName } from '../../api/nfdi4chemapi'
+import { getClassName } from '../../api/fetchData'
 
 interface AnnotationsProps {
   annotations: Facet;

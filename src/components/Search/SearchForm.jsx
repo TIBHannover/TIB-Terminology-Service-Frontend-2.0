@@ -1,10 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import './SearchForm.css'
+import '../layout/Search.css'
 import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { useHistory } from 'react-router-dom';
 
 
 class SearchForm extends React.Component{
@@ -50,7 +49,6 @@ class SearchForm extends React.Component{
     
     
     async suggestionHandler(selectedTerm){
-        console.info(selectedTerm);
         let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
         selection =  (await selection.json())['response']['docs'];
         this.setState({

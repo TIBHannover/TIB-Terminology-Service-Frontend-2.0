@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import './SearchResult.css'
+import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import PaginationCustom from './Pagination';
 import queryString from 'query-string';

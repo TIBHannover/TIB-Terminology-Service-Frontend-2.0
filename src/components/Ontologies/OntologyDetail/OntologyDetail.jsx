@@ -1,5 +1,5 @@
 import React from 'react'
-import './OntologyDetail.css'
+import '../../layout/ontologies.css';
 import OntologyInfoBox from './widgets/infoBox'
 import OntologyStatsBox from './widgets/stats';
 import Grid from '@material-ui/core/Grid';
@@ -10,7 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/fetchData';
 
 
 

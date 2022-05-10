@@ -1,12 +1,12 @@
 import React from 'react';
 import PaginationCustom from '../Pagination/Pagination';
-import './OntologyList.css';
+import '../../layout/ontologies.css';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import { getAllOntologies } from '../../../api/nfdi4chemapi';
+import { getAllOntologies } from '../../../api/fetchData';
 
 
 
