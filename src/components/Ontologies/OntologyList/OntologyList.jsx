@@ -1,6 +1,6 @@
 import React from 'react';
 import PaginationCustom from '../Pagination/Pagination';
-import './OntologyList.css';
+import '../../layout/ontologies.css';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';

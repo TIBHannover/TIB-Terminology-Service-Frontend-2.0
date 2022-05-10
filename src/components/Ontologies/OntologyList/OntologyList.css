@@ -1,63 +1,19 @@
-.ontology-card{
-    border: 1px black solid;
-    background-color: rgb(245, 250, 253);
-    margin-top: 10px;
-    padding: 10px;
-    margin-right: 5px;
-    height: auto;
-    text-align: justify;    
-}
 
-.ontology-card:hover{
-    background-color: #aee7f3;
-}
 
-.ontology-card-link{
-    text-decoration: none;
-}
-.ontology-card-link:hover{
-    color: black;
-}
 
-.ontology-card-description{
-    font-size: 14px;
-    margin-top: 30px;
-}
 
-#ontology-filter > div{
-    margin-top: 40px;
-}
 
-.ontology-card-meta-data > div{
-    margin-right: 0;
-    margin-left: 30%;
-}
 
-#ontologyList-wrapper-div{
-    margin-top: 30px;
-    padding-top: 5px;
-    margin-left: 50px;
-    margin-bottom: 10px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
 
-#ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root{
-    width: 80%;
-    background-color: white;
 
-}
 
-#ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root > .MuiOutlinedInput-root > .MuiInputBase-input{
-    font-size: 15px;
-}
 
-.ontology-card-link{
-    color: black;
-}
 
-#ontologylist-sort-grid> .MuiInputBase-root{
-    width: 60%;
-    font-size: 15px;
-    padding-bottom: 5px;
-}
+
+
+
+
+
+
+
+
