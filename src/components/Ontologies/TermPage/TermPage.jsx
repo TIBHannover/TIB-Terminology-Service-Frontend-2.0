@@ -115,6 +115,16 @@ class TermPage extends React.Component {
         <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
+              <Typography className="node-metadata-label">SubClass of</Typography>
+            </Grid>
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
+                
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className="node-detail-table-row">
+          <Grid container>
+            <Grid item xs={this.state.label_xs}>
               <Typography className="node-metadata-label">Example Usage</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
