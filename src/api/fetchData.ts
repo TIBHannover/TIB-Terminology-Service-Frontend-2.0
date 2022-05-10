@@ -175,7 +175,7 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
     let allAncestors =  await (await fetch(node[0]['_links'][ancestorFieldName]['href'], getCallSetting)).json();
     allAncestors = allAncestors['_embedded'][mode];
     for(let i=0; i < allAncestors.length; i++){
-      if(allAncestors[i]['is_root'] && allAncestors[i]['label'] != "Thing"){
+      if(allAncestors[i]['is_root'] &&  !["TopObjectProperty", "Thing"].includes(allAncestors[i]['label'])){
         rootNodes.push(allAncestors[i]);
       }
     }
@@ -221,8 +221,19 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
     return true;
   }
   else if(typeof node['_links'][childFieldName] !== 'undefined'){
-    let children = await (await fetch(node['_links'][childFieldName]['href'], getCallSetting)).json();
-    children = children['_embedded'][mode];
+    let pageCount = await getPageCount(node['_links'][childFieldName]['href']);
+    let children:Array<any> = [];
+    for(let page=0; page < pageCount; page++){
+        let url = node['_links'][childFieldName]['href'] + "?page=" + page + "&size=" + size; 
+        let res =  await (await fetch(url, getCallSetting)).json();
+        if(page == 0){
+          children = res['_embedded'][mode];
+        }
+        else{
+          children = children.concat(res['_embedded'][mode]);
+        }      
+    }
+
     for(let j=0; j < children.length; j++){
       if(nodeExistInList(allAncestors, children[j]['iri'])){        
         route.push(children[j]['short_form']);
