@@ -34,7 +34,8 @@ function OntologyInfoBox (props) {
             <td className="ontology-info-table-prop"><b>Ontology IRI</b></td>
             <td>
               <a href={ontology.config.id} target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
-              <Button 
+              {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
+                ? <Button 
                 variant="contained" 
                 className='copy-link-btn'                                
                 onClick={() => {                  
@@ -43,8 +44,10 @@ function OntologyInfoBox (props) {
                   setOntologyVersionCopied(false);
                   setOntologyHomepageCopied(false);
                   setOntologyTrackerCopied(false);
-                }}            
+                }}
               >copy</Button>
+              : ""
+              }
               {ontologyIriCopied && 
                   <CheckIcon 
                     fontSize="large"                    
@@ -106,17 +109,20 @@ function OntologyInfoBox (props) {
             <td className="ontology-info-table-prop"><b>Issue tracker</b></td>
             <td>
               <a href={ontology.config.tracker} target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
-              <Button 
-                variant="contained" 
-                className='copy-link-btn'                                
-                onClick={() => {                  
-                  navigator.clipboard.writeText(ontology.config.tracker);
-                  setOntologyTrackerCopied(true);
-                  setOntologyIriCopied(false);
-                  setOntologyVersionCopied(false);
-                  setOntologyHomepageCopied(false);                
-                }}            
-              >copy</Button>
+              {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
+                ? <Button 
+                  variant="contained" 
+                  className='copy-link-btn'                                
+                  onClick={() => {                  
+                    navigator.clipboard.writeText(ontology.config.tracker);
+                    setOntologyTrackerCopied(true);
+                    setOntologyIriCopied(false);
+                    setOntologyVersionCopied(false);
+                    setOntologyHomepageCopied(false);                
+                  }}            
+                >copy</Button>
+                : ""
+                }
               {ontologyTrackerCopied && 
                   <CheckIcon 
                     fontSize="large"       
