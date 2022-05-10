@@ -89,3 +89,32 @@ The Header styles
     align-items: center;
     margin-top: 6px;
   }
+
+  
+/* 
+-------------------------------------
+The Navbar styles 
+-------------------------------------
+*/
+
+.navbar {
+    /* 
+       The style for navabr dimensions
+    */
+    display: flex;
+    flex-direction: row;
+  }
+  
+.navbar-item {
+    /* 
+       The style for elements in navbar
+    */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+    color: inherit;
+    text-decoration: inherit;
+    text-transform: uppercase;
+    outline: none;
+  }
