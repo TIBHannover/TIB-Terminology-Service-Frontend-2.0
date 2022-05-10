@@ -3,7 +3,7 @@ import { Node } from '@elastic/eui/src/components/tree_view/tree_view'
 
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { fetch_data, get_url_prefix } from '../../../../api/nfdi4chemapi'
+import { fetch_data, get_url_prefix } from '../../../../api/fetchData'
 
 /**
  * Response from OLS

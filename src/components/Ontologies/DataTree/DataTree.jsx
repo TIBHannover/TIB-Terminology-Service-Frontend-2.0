@@ -9,7 +9,7 @@ import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CircularProgress from '@mui/material/CircularProgress';
-import {getChildren, getTreeRoutes, getNodeByIri, hasPartOfRelation} from '../../../api/nfdi4chemapi';
+import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/fetchData';
 
 
 class ClassTree extends React.Component {

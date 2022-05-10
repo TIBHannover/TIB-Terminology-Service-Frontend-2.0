@@ -10,7 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/nfdi4chemapi';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/fetchData';
 
 
 
