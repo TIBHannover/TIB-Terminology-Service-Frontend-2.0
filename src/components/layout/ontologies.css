@@ -188,7 +188,7 @@ The ontology detail page styles. It contains the ontology overview page.
 
 /* 
 -------------------------------------
-The Tree view styles (for both classes and properties)
+The Tree view and detail table styles (for both classes and properties)
 -------------------------------------
 */
 
@@ -264,3 +264,32 @@ The Tree view styles (for both classes and properties)
 }
 
 
+.node-metadata-label{
+    /* 
+        The metadata label style for nodes (class/property)  in the detail table. 
+    */
+
+    font-weight: bold !important;
+    font-size: 15px !important;
+    background-color: rgb(202, 219, 245);
+    padding: 5px;
+    text-align: center;
+}
+
+.node-metadata-value{
+    /* 
+        The metadata value style for nodes (class/property)  in the detail table. 
+    */
+
+    padding: 7px;
+    font-size: 15px !important;
+    text-align: justify !important;
+}
+
+.node-detail-table-row{
+    /* 
+        The table row style for nodes (class/property)  in the detail table. 
+    */
+
+    border-bottom: 1px solid black;
+}
