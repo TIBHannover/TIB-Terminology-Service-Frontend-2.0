@@ -9,7 +9,7 @@
 The Search form styles 
 -------------------------------------
 */
-.autocomplete-container{
+#autocomplete-container{
     height: 200px;
     overflow-y: scroll;
     padding-bottom: 20px;
@@ -18,11 +18,11 @@ The Search form styles
     padding-left: 10x;
     padding-right: 10px;
 }
-.search-box {
+#search-box {
         border-right: 0;
 }
 
-.search-icon{
+#search-icon{
     margin-left: 7px;
     margin-bottom: 0.1em;
     margin-bottom: 0;
@@ -31,7 +31,7 @@ The Search form styles
     vertical-align: top;
 }
 
-.button {
+#button {
         border: 1px solid #ced4da;
         border-left: 0 !important;       
 }
