@@ -17,5 +17,68 @@ The Tree view styles (for both classes and properties)
     padding: 20px;
 }
 
+.tree-element > .MuiTreeItem-content > .MuiTypography-root{
+    /* 
+        The style for the elements (nodes) label in the tree.     
+    */
+
+    font-size: 14px;
+    margin-bottom: 5px;   
+}
+
+.tree-container{
+    /*
+        The styles for the tree view container. 
+        It is responsible for the left part of the tree page that keeps the tree inside. 
+     */
+
+    height: 1000px;
+    overflow-y: scroll;
+    padding-bottom: 500px;
+    padding-top: 50px;
+    z-index: 999;
+    padding-left: 10x;
+    padding-right: 10px;
+}
+
+.node-table-container{
+    /* 
+        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
+    */
+
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+}
+
+.reset-tree-btn{
+    /* 
+        The styles for the Reset Tree button.
+    */
+
+    margin-bottom: 10px !important;
+}
+
+.loading-sign-div{
+    /* 
+        The styles for the loading sign while loading a tree view.
+    */
+
+    margin-left: 100px;
+    margin-top: 100px;    
+}
+
+.p-icon-style{
+    /* 
+        The styles for the P symbol. 
+        The symbol shows the "part_of" relation between a node and its parent in the tree.
+    */
+    
+    background-color: blue;
+    color: white;
+    padding: 5px;
+    border-radius: 50px;
+    font-size: 10px;
+}
 
 

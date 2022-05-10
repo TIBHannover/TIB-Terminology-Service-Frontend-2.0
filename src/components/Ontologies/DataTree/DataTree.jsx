@@ -321,8 +321,8 @@ class ClassTree extends React.Component {
                 </div>
               }  
              { !this.state.searchWaiting && this.state.termTree &&
-                <Grid container spacing={0} class="tree-view-container">
-                    <Grid item xs={5} id="terms-tree-container">
+                <Grid container spacing={0} className="tree-view-container">
+                    <Grid item xs={5} className="tree-container">
                         <Button 
                           variant="contained" 
                           className='reset-tree-btn' 
@@ -344,7 +344,7 @@ class ClassTree extends React.Component {
                         {this.createTree(this.state.treeData)}
                         </TreeView>
                     </Grid>
-                    {this.state.showNodeDetailPage && <Grid item xs={7} id="terms-table-container">
+                    {this.state.showNodeDetailPage && <Grid item xs={7} className="node-table-container">
                         <TermPage
                         term={this.state.selectedNode}
                         />
@@ -352,8 +352,8 @@ class ClassTree extends React.Component {
                 </Grid> 
              }
              { !this.state.searchWaiting && this.state.propertyTree && 
-                <Grid container spacing={0} class="tree-view-container">
-                    <Grid item xs={5} id="props-tree-container">
+                <Grid container spacing={0} className="tree-view-container">
+                    <Grid item xs={5} className="tree-container">
                       <Button 
                             variant="contained" 
                             className='reset-tree-btn' 
@@ -376,7 +376,7 @@ class ClassTree extends React.Component {
                           {this.createTree(this.state.treeData)}
                       </TreeView>
                     </Grid>
-                    {this.state.showNodeDetailPage && <Grid item xs={7} id="props-table-container">
+                    {this.state.showNodeDetailPage && <Grid item xs={7} className="node-table-container">
                     <PropertyPage
                         property={this.state.selectedNode}
                     />
