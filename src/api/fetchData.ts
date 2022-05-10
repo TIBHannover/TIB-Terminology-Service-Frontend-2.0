@@ -2,7 +2,7 @@ const callHeader = {
   'Accept': 'application/json'
 };
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
-const size = 100;
+const size = 1000;
 const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
 
 /**
@@ -129,9 +129,20 @@ async function getPageCount(url: string){
 export async function getChildren(node:any, childrenFieldName:string, mode: string, alreadyExistedNodesInTree: {[id:string]: number}){ 
   try{      
       if (mode === 'term'){
-        let data = await fetch(node['_links'][childrenFieldName]['href'], getCallSetting);
-        data = await data.json();
-        return processForTree(node['iri'], data['_embedded']['terms'], alreadyExistedNodesInTree, mode); 
+        let pageCount = await getPageCount(node['_links'][childrenFieldName]['href']);
+        let children:Array<any> = [];
+        for(let page=0; page < pageCount; page++){
+          let url = node['_links'][childrenFieldName]['href'] + "?page=" + page + "&size=" + size; 
+          let res =  await (await fetch(url, getCallSetting)).json();
+          if(page == 0){
+            children = res['_embedded']['terms'];
+          }
+          else{
+            children = children.concat(res['_embedded']['terms']);
+          }      
+        }
+        
+        return processForTree(node['iri'], children, alreadyExistedNodesInTree, mode); 
       }
       else{
         let data = await fetch(node['_links'][childrenFieldName]['href'], getCallSetting);
