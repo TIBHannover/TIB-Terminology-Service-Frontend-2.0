@@ -1,7 +1,7 @@
 import React from 'react';
+import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
-import './TermPage.css';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -37,52 +37,52 @@ class TermPage extends React.Component {
   render () {
     return (
       <Grid container spacing={2}>
-        <Grid item xs={12} spacing={4} className="term-page-row">
+        <Grid item xs={12} spacing={4} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Label</Typography>
+              <Typography className="node-metadata-label">Label</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.label)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Short Form</Typography>
+              <Typography className="node-metadata-label">Short Form</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.short_form)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Description</Typography>
+              <Typography className="node-metadata-label">Description</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.description)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Definition</Typography>
+              <Typography className="node-metadata-label">Definition</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.annotation.definition)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Iri</Typography>
+              <Typography className="node-metadata-label">Iri</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.iri, true)}
               <Button 
                 variant="contained" 
@@ -102,42 +102,42 @@ class TermPage extends React.Component {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Ontology</Typography>
+              <Typography className="node-metadata-label">Ontology</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.ontology_name)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Example Usage</Typography>
+              <Typography className="node-metadata-label">Example Usage</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.annotation.example_usage)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Editor Note</Typography>
+              <Typography className="node-metadata-label">Editor Note</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.annotation.editor_note)}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} className="term-page-row">
+        <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
-              <Typography className="term-detail-label">Is Defined By</Typography>
+              <Typography className="node-metadata-label">Is Defined By</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="term-detail-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.props.term.annotation.isDefinedBy)}
             </Grid>
           </Grid>
