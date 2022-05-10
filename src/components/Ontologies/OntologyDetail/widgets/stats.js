@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react'
 
 function OntologyStatsBox (props) {
@@ -10,22 +9,22 @@ function OntologyStatsBox (props) {
   return (
     <div id="stats-table-wrapper">
       <h4><b>Metrics</b></h4>
-      <table>
+      <table className="ontology-detail-table">
         <tbody>
           <tr>
-            <td className="ontology-stats-table-prop"><b>Number of Classes</b></td>
+            <td className="ontology-overview-table-id-column"><b>Number of Classes</b></td>
             <td>
               {ontology.numberOfTerms}
             </td>
           </tr>
           <tr>
-            <td className="ontology-stats-table-prop"><b>Number of Properties</b></td>
+            <td className="ontology-overview-table-id-column"><b>Number of Properties</b></td>
             <td>
               {ontology.numberOfProperties}
             </td>
           </tr>
           <tr>
-            <td className="ontology-stats-table-prop"><b>Number of Individuals</b></td>
+            <td className="ontology-overview-table-id-column"><b>Number of Individuals</b></td>
             <td>
               {ontology.numberOfIndividuals}
             </td>

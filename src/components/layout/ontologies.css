@@ -1,7 +1,72 @@
 /* 
-    This is the css script for styling ontology detail page and its components.
-    The ontology detail page includes the general ontology overview, class tree, property tree, and Mapping.
+    This is the css script for styling ontology related pages and their components.
+    The ontology pages includes the general ontology overview, class tree, property tree, Mapping, and ontology list view.
 */
+
+
+/* 
+-------------------------------------
+The ontology detail page styles. It contains the ontology overview page.
+-------------------------------------
+*/
+
+.ontology-detail-table{
+    /* 
+        The styles for the ontology ovewview tables (Detail and Metrics) 
+    */
+
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 90%;
+}
+
+.ontology-detail-table  td, th{
+    /* 
+        The styles for the ontology ovewview tables (Detail and Metrics) rows. 
+    */
+
+    border: 1px solid #dad2d2;
+    text-align: left;
+    padding: 8px;
+}
+
+.ontology-overview-table-id-column{
+    /* 
+        The style for the Identifiers columns in the ontology tables in the ovewview page.
+    */
+    
+    background-color: #dddddd;
+}
+
+.ontology-detail-table-wrapper{
+    /* 
+        The wrapper style for the tables in the ontology overview.  
+    */
+
+    padding-left: 30px;
+}
+
+.copy-link-btn{
+    /* 
+        The styles for the copy link (url) buttons. 
+    */
+
+    margin-left: 20px !important;
+    font-size: 10px !important;
+    padding: 5px !important;
+    background-color: rgb(32, 128, 73) !important;
+    height: 20px;
+    width: 20px;
+}
+
+.download-ontology-btn{
+    /* 
+        The styles for the download buttons for an ontology. 
+    */
+
+    margin-right: 20px !important;
+}
+
 
 
 /* 
