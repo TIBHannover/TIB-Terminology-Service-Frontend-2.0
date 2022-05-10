@@ -128,27 +128,30 @@ async function getPageCount(url: string){
  */
 export async function getChildren(node:any, childrenFieldName:string, mode: string, alreadyExistedNodesInTree: {[id:string]: number}){ 
   try{      
+
+      let extractName = "";
       if (mode === 'term'){
-        let pageCount = await getPageCount(node['_links'][childrenFieldName]['href']);
-        let children:Array<any> = [];
-        for(let page=0; page < pageCount; page++){
+          extractName = "terms";
+      }
+      else{
+          extractName = "properties";
+      }
+
+      let pageCount = await getPageCount(node['_links'][childrenFieldName]['href']);
+      let children:Array<any> = [];
+      for(let page=0; page < pageCount; page++){
           let url = node['_links'][childrenFieldName]['href'] + "?page=" + page + "&size=" + size; 
           let res =  await (await fetch(url, getCallSetting)).json();
           if(page == 0){
-            children = res['_embedded']['terms'];
+            children = res['_embedded'][extractName];
           }
           else{
-            children = children.concat(res['_embedded']['terms']);
+            children = children.concat(res['_embedded'][extractName]);
           }      
-        }
-        
-        return processForTree(node['iri'], children, alreadyExistedNodesInTree, mode); 
       }
-      else{
-        let data = await fetch(node['_links'][childrenFieldName]['href'], getCallSetting);
-        data = await data.json();
-        return processForTree(node['iri'], data['_embedded']['properties'], alreadyExistedNodesInTree, mode);
-      }
+      
+      return processForTree(node['iri'], children, alreadyExistedNodesInTree, mode); 
+
   }
   catch(e){
       return [];
