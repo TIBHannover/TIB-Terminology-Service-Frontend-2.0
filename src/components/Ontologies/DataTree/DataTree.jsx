@@ -173,7 +173,7 @@ class ClassTree extends React.Component {
         <StyledTreeItem 
           key={el.id} 
           nodeId={el.modified_short_form}
-          pathToNode={el.path_to_node}
+          pathtonode={el.path_to_node}
           label={  el.part_of
                   ? <div><span class="p-icon-style">P</span>  {el.label}</div>
                   : <div>{el.label}</div>
@@ -227,8 +227,8 @@ class ClassTree extends React.Component {
      * @param {*} value
      */
   handleChange = (e, value) => {
-    console.info(e.target);
-    console.info(value);
+    let pathToNode = e.target.parentElement.parentElement.parentElement.getAttribute('pathtonode');
+    pathToNode = pathToNode.split(',');
     this.setState({
       expandedNodes:value
     });
