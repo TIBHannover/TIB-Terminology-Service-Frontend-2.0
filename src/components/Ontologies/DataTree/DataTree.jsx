@@ -200,7 +200,7 @@ class ClassTree extends React.Component {
      * @param {*} shortForm
      * @param {*} expanded
      */
- async updateNodeInTree (node, shortForm, expanded) {
+ async updateNodeInTree (node, shortForm, expanded, pathToNode) {
     if (node.modified_short_form === shortForm && node.has_children) {
       let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
       if (childrenNodes.length > 0){
@@ -214,7 +214,9 @@ class ClassTree extends React.Component {
     } 
     else if (node.has_children) {
       for (let i = 0; i < node.children.length; i++) {
-        this.updateNodeInTree(node.children[i], shortForm, expanded)
+        if(pathToNode.includes(node.children[i].modified_short_form)){
+          this.updateNodeInTree(node.children[i], shortForm, expanded, pathToNode);
+        }        
       }
     }
   }
@@ -226,7 +228,7 @@ class ClassTree extends React.Component {
      * @param {*} e
      * @param {*} value
      */
-  handleChange = (e, value) => {
+  handleChange = async (e, value) => {
     let pathToNode = e.target.parentElement.parentElement.parentElement.getAttribute('pathtonode');
     pathToNode = pathToNode.split(',');
     this.setState({
@@ -235,13 +237,56 @@ class ClassTree extends React.Component {
     const vNodes = this.state.visitedNodes
     if (!vNodes.includes(value[0])) {
       vNodes.push(value[0])
-      const tree = this.state.treeData
-      for (let i = 0; i < tree.length; i++) {
-        this.updateNodeInTree(tree[i], value[0], value)
-        this.setState({
-          treeData: tree
-        })
+      let treeObject = "";
+      if(pathToNode[0] === ""){
+        // root node
+        const tree = this.state.treeData;
+        treeObject = tree.find(node => node.modified_short_form === value[0]);
+        let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeObject, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+        if (childrenNodes.length > 0){
+          treeObject.children = childrenNodes;
+          this.setState({
+            expandedNodes: value,
+            currentExpandedTerm: treeObject,
+            alreadyExistedNodesInTree: alreadyExistedNodesInTree,
+            treeData: tree
+          });
+        }      
+
       }
+      else{
+        const tree = this.state.treeData;
+        let subTree = tree.find(node => node.modified_short_form === pathToNode[0]);
+        for (let i = 1; i < pathToNode.length; i++) {
+          treeObject = subTree.find(node => node.modified_short_form === pathToNode[i]);
+          subTree = treeObject.children;
+        }
+        treeObject = subTree.find(node => node.modified_short_form === value[0]);
+        let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeObject, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+        if (childrenNodes.length > 0){
+          treeObject.children = childrenNodes;
+          this.setState({
+            expandedNodes: value,
+            currentExpandedTerm: treeObject,
+            alreadyExistedNodesInTree: alreadyExistedNodesInTree,
+            treeData: tree
+          });
+        }
+      }
+
+      
+
+
+
+      // for (let i = 0; i < tree.length; i++) {
+      //   if(pathToNode[0] !== "" && !pathToNode.includes(tree[i].modified_short_form)){
+      //     continue;
+      //   }
+      //   this.updateNodeInTree(tree[i], value[0], value, pathToNode);
+      //   this.setState({
+      //     treeData: tree
+      //   })
+      // }
     }
     this.setState({
       visitedNodes: vNodes
