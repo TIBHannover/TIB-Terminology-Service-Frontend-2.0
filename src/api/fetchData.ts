@@ -2,7 +2,7 @@ const callHeader = {
   'Accept': 'application/json'
 };
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
-const size = 1000;
+const size = 10000;
 const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
 
 /**
@@ -55,6 +55,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
     let termsLink = ontology['_links']['terms']['href'];
     let pageCount = await getPageCount(termsLink + '/roots');
     let terms:Array<any> = [];
+    // pageCount = 1;
     for(let page=0; page < pageCount; page++){
         let url = termsLink + "/roots?page=" + page + "&size=" + size;      
         let res =  await (await fetch(url, getCallSetting)).json();
@@ -66,7 +67,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree("", terms, {}, "term");
+    return processForTree(null, terms, {}, "term");
 
   }
   catch(e){
@@ -97,7 +98,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree("", props, {}, "property");
+    return processForTree(null , props, {}, "property");
 
   }
   catch(e){
@@ -150,7 +151,7 @@ export async function getChildren(node:any, childrenFieldName:string, mode: stri
           }      
       }
       
-      return processForTree(node['iri'], children, alreadyExistedNodesInTree, mode); 
+      return processForTree(node, children, alreadyExistedNodesInTree, mode); 
 
   }
   catch(e){
@@ -276,11 +277,21 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string)
  * A tree node needs: children, parent, and id (beside existing metadata) 
  * @param listOfNodes 
  */
-async function processForTree(parentIri:string, listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}, mode:string){
-  let processedListOfNodes: Array<any> = [];
+async function processForTree(parentNode:any, listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}, mode:string){
+  let processedListOfNodes: Array<any> = [];  
   for(let i=0; i < listOfNodes.length; i++){
     listOfNodes[i]['children'] = [];
-    listOfNodes[i]['parentIri'] = parentIri;
+    if(parentNode == null){
+      // root node
+      listOfNodes[i]['parentIri'] = "";
+      listOfNodes[i]['path_to_node'] = [];
+    }
+    else{
+      listOfNodes[i]['parentIri'] = parentNode['iri'];
+      listOfNodes[i]['path_to_node'] = [...parentNode['path_to_node']];
+      listOfNodes[i]['path_to_node'].push(parentNode['modified_short_form']);
+    }   
+    
     listOfNodes[i]['id'] = listOfNodes[i]['iri'];
     listOfNodes[i]['part_of'] = await hasPartOfRelation(listOfNodes[i], mode);
     if(Object.keys(alreadyExistedNodesInTree).includes(listOfNodes[i]['short_form'])){
