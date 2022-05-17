@@ -101,9 +101,9 @@ async suggestionHandler(selectedTerm){
     const resultList = []          
     for(let i=0; i < this.state.suggestionResult.length; i++){
       resultList.push(
-          <Link to={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
+          <Link to={'/search?q=' + encodeURIComponent(this.state.suggestionResult[i]['autosuggest'])} key={i} className="container">
               <div>
-                   {this.state.searchResult[i]['autosuggest']}
+                   {this.state.suggestionResult[i]['autosuggest']}
               </div>
           </Link>)
     }
@@ -258,8 +258,8 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         <div>
-        <TextField className="col-md-12 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
-                    onChange={this.handleChange}
+        <TextField className="col-md-9 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
+                    onChange={this.suggestionChange}
                     placeholder="Search NFDI4Chem TS"
                     InputProps={{
                         endAdornment: (
@@ -270,7 +270,7 @@ async suggestionHandler(selectedTerm){
                       }}
                     />
               {this.state.result &&
-            <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+            <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
         <div id="search-title">
         <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
