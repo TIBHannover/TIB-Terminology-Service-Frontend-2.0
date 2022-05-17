@@ -73,11 +73,18 @@ class SearchForm extends React.Component{
           return resultList
       }
 
+      _handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          this.submitHandler();
+        }
+      }
+
       render(){
           return(
               <div>
                    <TextField className="col-md-12 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
+                    onKeyDown={this._handleKeyDown}
                     placeholder="Search NFDI4Chem TS"
                     InputProps={{
                         endAdornment: (

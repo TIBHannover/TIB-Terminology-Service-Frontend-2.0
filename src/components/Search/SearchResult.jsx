@@ -40,6 +40,7 @@ class SearchResult extends React.Component{
         this.handleSelection = this.handleSelection.bind(this);
         this.createResultList = this.createResultList.bind(this);
         this.suggestionChange = this.suggestionChange.bind(this);
+        this.suggestionHandler = this.suggestionHandler.bind(this);
     }
 
     async searching(){
@@ -95,10 +96,10 @@ class SearchResult extends React.Component{
 }
 
 async suggestionHandler(selectedTerm){
-  let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
-  selection =  (await selection.json())['response']['docs'];
+  let newSearchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+  newSearchResult =  (await newSearchResult.json())['response']['docs'];
   this.setState({
-      selection: selection,
+      searchResult: newSearchResult,
       suggestResult: true
     });
 }
