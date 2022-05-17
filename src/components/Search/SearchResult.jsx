@@ -17,6 +17,7 @@ class SearchResult extends React.Component{
           enteredTerm: "",
           result: false,
           searchResult: [],
+          suggestionResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
@@ -68,10 +69,29 @@ class SearchResult extends React.Component{
           });  
       }
   }
+  async suggestionChange(enteredTerm){
+    enteredTerm = enteredTerm.target.value;
+  if (enteredTerm.length > 0){
+      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
+      suggestionResult =  (await suggestionResult.json())['response']['docs'];
+   this.setState({
+       suggestionResult: suggestionResult,
+       result: true,
+       enteredTerm: enteredTerm
+   });
+  }
+  else if (enteredTerm.length == 0){
+      this.setState({
+          result: false,
+          enteredTerm: ""
+      });
+      
+  }
+}
 
   createResultList(){
     const resultList = []          
-    for(let i=0; i < this.state.searchResult.length; i++){
+    for(let i=0; i < this.state.suggestionResult.length; i++){
       resultList.push(
           <Link to={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
               <div>
@@ -231,7 +251,7 @@ class SearchResult extends React.Component{
       <div id="searchterm-wrapper">
         <div>
            <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
-              onChange={this.handleChange}
+              onChange={this.suggestionChange}
               placeholder="Search NFDI4Chem TS"
                 />
             <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
