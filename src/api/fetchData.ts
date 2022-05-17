@@ -284,12 +284,12 @@ async function processForTree(parentNode:any, listOfNodes: Array<any>, alreadyEx
     if(parentNode == null){
       // root node
       listOfNodes[i]['parentIri'] = "";
-      listOfNodes[i]['path_to_node'] = [];
+      // listOfNodes[i]['path_to_node'] = [];
     }
     else{
       listOfNodes[i]['parentIri'] = parentNode['iri'];
-      listOfNodes[i]['path_to_node'] = [...parentNode['path_to_node']];
-      listOfNodes[i]['path_to_node'].push(parentNode['modified_short_form']);
+      // listOfNodes[i]['path_to_node'] = [...parentNode['path_to_node']];
+      // listOfNodes[i]['path_to_node'].push(parentNode['modified_short_form']);
     }   
     
     listOfNodes[i]['id'] = listOfNodes[i]['iri'];

@@ -35,12 +35,14 @@ class ClassTree extends React.Component {
       ontologyId: '',
       childrenFieldName:'',
       ancestorsFieldName: '',
-      searchWaiting: true
+      searchWaiting: true,
+      treeDataFlatPointers: {}
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
     this.expandTreeByTarget = this.expandTreeByTarget.bind(this);
     this.handleResetTreeBtn = this.handleResetTreeBtn.bind(this);   
+    this.setTreeDataPointers = this.setTreeDataPointers.bind(this);
 
   }
   /**
@@ -64,7 +66,8 @@ class ClassTree extends React.Component {
                 alreadyExistedNodesInTree: this.props.existedNodes,
                 ontologyId: ontologyId,
                 childrenFieldName: "hierarchicalChildren",
-                ancestorsFieldName: "hierarchicalAncestors"
+                ancestorsFieldName: "hierarchicalAncestors",
+                treeDataFlatPointers: this.setTreeDataPointers(rootNodes)
               }, async () => {
                 await this.processTarget(componentIdentity, rootNodes);
               });
@@ -81,7 +84,8 @@ class ClassTree extends React.Component {
                 alreadyExistedNodesInTree: this.props.existedNodes,
                 ontologyId: ontologyId,
                 childrenFieldName: "children",
-                ancestorsFieldName: "ancestors"
+                ancestorsFieldName: "ancestors",
+                treeDataFlatPointers: this.setTreeDataPointers(rootNodes)
               }, async () => {
                 await this.processTarget(componentIdentity, rootNodes);
               });
@@ -90,6 +94,18 @@ class ClassTree extends React.Component {
        
     }
   }
+
+
+  setTreeDataPointers(newTreeDataNodes){
+    let currentPointres = this.state.treeDataFlatPointers;
+    for(let i=0; i < newTreeDataNodes.length; i++){
+      currentPointres[newTreeDataNodes[i]["modified_short_form"]] = newTreeDataNodes[i];
+    }
+    return currentPointres;
+  }
+
+
+
 
   /**
    * process and get the target. The target is an specific target node (term/property) given in the url.
@@ -172,8 +188,7 @@ class ClassTree extends React.Component {
       return (
         <StyledTreeItem 
           key={el.id} 
-          nodeId={el.modified_short_form}
-          pathtonode={el.path_to_node}
+          nodeId={el.modified_short_form}          
           label={  el.part_of
                   ? <div><span class="p-icon-style">P</span>  {el.label}</div>
                   : <div>{el.label}</div>
@@ -195,99 +210,32 @@ class ClassTree extends React.Component {
 
 
   /**
-     * Expand a node on the tree
-     * @param {*} node
-     * @param {*} shortForm
-     * @param {*} expanded
-     */
- async updateNodeInTree (node, shortForm, expanded, pathToNode) {
-    if (node.modified_short_form === shortForm && node.has_children) {
-      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(node, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
-      if (childrenNodes.length > 0){
-        node.children = childrenNodes;
-        this.setState({
-          expandedNodes: expanded,
-          currentExpandedTerm: node,
-          alreadyExistedNodesInTree: alreadyExistedNodesInTree
-        });
-      }      
-    } 
-    else if (node.has_children) {
-      for (let i = 0; i < node.children.length; i++) {
-        if(pathToNode.includes(node.children[i].modified_short_form)){
-          this.updateNodeInTree(node.children[i], shortForm, expanded, pathToNode);
-        }        
-      }
-    }
-  }
-
-
-
-  /**
      * handle toggle node on the tree. calls node expansion
      * @param {*} e
      * @param {*} value
      */
   handleChange = async (e, value) => {
-    let pathToNode = e.target.parentElement.parentElement.parentElement.getAttribute('pathtonode');
-    pathToNode = pathToNode.split(',');
     this.setState({
       expandedNodes:value
     });
     const vNodes = this.state.visitedNodes
     if (!vNodes.includes(value[0])) {
       vNodes.push(value[0])
-      let treeObject = "";
-      if(pathToNode[0] === ""){
-        // root node
-        const tree = this.state.treeData;
-        treeObject = tree.find(node => node.modified_short_form === value[0]);
-        let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeObject, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
-        if (childrenNodes.length > 0){
-          treeObject.children = childrenNodes;
+      let treeDataPointers = this.state.treeDataFlatPointers;
+      let tree = this.state.treeData;     
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeDataPointers[value[0]], this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+      if (childrenNodes.length > 0){
+        treeDataPointers[value[0]].children = childrenNodes;
           this.setState({
             expandedNodes: value,
-            currentExpandedTerm: treeObject,
+            currentExpandedTerm: treeDataPointers[value[0]],
             alreadyExistedNodesInTree: alreadyExistedNodesInTree,
-            treeData: tree
+            treeData: tree,
+            treeDataFlatPointers: this.setTreeDataPointers(childrenNodes)
           });
-        }      
-
-      }
-      else{
-        const tree = this.state.treeData;
-        let subTree = tree.find(node => node.modified_short_form === pathToNode[0]);
-        for (let i = 1; i < pathToNode.length; i++) {
-          treeObject = subTree.find(node => node.modified_short_form === pathToNode[i]);
-          subTree = treeObject.children;
-        }
-        treeObject = subTree.find(node => node.modified_short_form === value[0]);
-        let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeObject, this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
-        if (childrenNodes.length > 0){
-          treeObject.children = childrenNodes;
-          this.setState({
-            expandedNodes: value,
-            currentExpandedTerm: treeObject,
-            alreadyExistedNodesInTree: alreadyExistedNodesInTree,
-            treeData: tree
-          });
-        }
-      }
-
-      
-
-
-
-      // for (let i = 0; i < tree.length; i++) {
-      //   if(pathToNode[0] !== "" && !pathToNode.includes(tree[i].modified_short_form)){
-      //     continue;
-      //   }
-      //   this.updateNodeInTree(tree[i], value[0], value, pathToNode);
-      //   this.setState({
-      //     treeData: tree
-      //   })
-      // }
+      }      
     }
+
     this.setState({
       visitedNodes: vNodes
     })
