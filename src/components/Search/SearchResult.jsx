@@ -17,7 +17,9 @@ class SearchResult extends React.Component{
         super(props)
         this.state = ({
           enteredTerm: "",
+          newEnteredTerm: "",
           result: false,
+          suggestResult: false,
           searchResult: [],
           suggestionResult: [],
           originalSearchResult: [],
@@ -72,21 +74,21 @@ class SearchResult extends React.Component{
           });  
       }
   }
-  async suggestionChange(enteredTerm){
-    enteredTerm = enteredTerm.target.value;
-  if (enteredTerm.length > 0){
-      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
+  async suggestionChange(newEnteredTerm){
+    newEnteredTerm = newEnteredTerm.target.value;
+  if (newEnteredTerm.length > 0){
+      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${newEnteredTerm}`)
       suggestionResult =  (await suggestionResult.json())['response']['docs'];
    this.setState({
        suggestionResult: suggestionResult,
-       result: true,
-       enteredTerm: enteredTerm
+       suggestResult: true,
+       newEnteredTerm: newEnteredTerm
    });
   }
-  else if (enteredTerm.length == 0){
+  else if (newEnteredTerm.length == 0){
       this.setState({
-          result: false,
-          enteredTerm: ""
+          suggestResult: false,
+          newEnteredTerm: ""
       });
       
   }
@@ -97,7 +99,7 @@ async suggestionHandler(selectedTerm){
   selection =  (await selection.json())['response']['docs'];
   this.setState({
       selection: selection,
-      result: true
+      suggestResult: true
     });
 }
 
@@ -276,7 +278,7 @@ async suggestionHandler(selectedTerm){
         <FormGroup>
             <FormControlLabel control={<Checkbox />} label="Exact Match" />
         </FormGroup>
-              {this.state.result &&
+              {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
         <div id="search-title">
