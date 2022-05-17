@@ -8,6 +8,9 @@ import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
 import {  TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -258,7 +261,7 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         <div>
-        <TextField className="col-md-9 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
+        <TextField className="col-md-9 input" id="result-input" variant="outlined" style={{marginTop: 3.8}}
                     onChange={this.suggestionChange}
                     placeholder="Search NFDI4Chem TS"
                     InputProps={{
@@ -269,6 +272,9 @@ async suggestionHandler(selectedTerm){
                         ),
                       }}
                     />
+        <FormGroup>
+            <FormControlLabel control={<Checkbox />} label="Exact Match" />
+        </FormGroup>
               {this.state.result &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
