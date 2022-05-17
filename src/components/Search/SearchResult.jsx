@@ -33,6 +33,7 @@ class SearchResult extends React.Component{
         this.searching = this.searching.bind(this)
         //this.transportTerm = this.transportTerm.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
+        this.createResultList = this.createResultList.bind(this);
     }
 
     async searching(){
@@ -67,6 +68,19 @@ class SearchResult extends React.Component{
           });  
       }
   }
+
+  createResultList(){
+    const resultList = []          
+    for(let i=0; i < this.state.searchResult.length; i++){
+      resultList.push(
+          <Link to={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
+              <div>
+                   {this.state.searchResult[i]['autosuggest']}
+              </div>
+          </Link>)
+    }
+    return resultList
+}
 
   async transportTerm(searchResultItem){
       let url = "";
@@ -216,16 +230,16 @@ class SearchResult extends React.Component{
     return(
       <div id="searchterm-wrapper">
         <div>
-                   <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
-                    onChange={this.handleChange}
-                    placeholder="Search NFDI4Chem TS"
-                    />
-                    <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
-                        <Icon icon={faSearch}/>
-                    </Button>
-                    {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-              </div>
+           <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
+              onChange={this.handleChange}
+              placeholder="Search NFDI4Chem TS"
+                />
+            <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
+                <Icon icon={faSearch}/>
+            </Button>
+              {this.state.result &&
+            <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+        </div>
         <div id="search-title">
         <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
         </div>
