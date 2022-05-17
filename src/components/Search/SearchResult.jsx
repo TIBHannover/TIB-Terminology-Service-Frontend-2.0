@@ -9,6 +9,8 @@ import Facet from './Facet/facet';
 import { Form, Input, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import {  TextField, IconButton } from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -250,13 +252,17 @@ class SearchResult extends React.Component{
     return(
       <div id="searchterm-wrapper">
         <div>
-           <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
-              onChange={this.suggestionChange}
-              placeholder="Search NFDI4Chem TS"
-                />
-            <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
-                <Icon icon={faSearch}/>
-            </Button>
+        <TextField className="col-md-12 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
+                    onChange={this.handleChange}
+                    placeholder="Search NFDI4Chem TS"
+                    InputProps={{
+                        endAdornment: (
+                          <IconButton>
+                            <SearchOutlined onClick={this.submitHandler}/>
+                          </IconButton>
+                        ),
+                      }}
+                    />
               {this.state.result &&
             <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
