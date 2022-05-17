@@ -6,6 +6,9 @@ import PaginationCustom from './Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
+import { Form, Input, InputGroup } from 'reactstrap';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -212,6 +215,17 @@ class SearchResult extends React.Component{
   render(){
     return(
       <div id="searchterm-wrapper">
+        <div>
+                   <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
+                    onChange={this.handleChange}
+                    placeholder="Search NFDI4Chem TS"
+                    />
+                    <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
+                        <Icon icon={faSearch}/>
+                    </Button>
+                    {this.state.result &&
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+              </div>
         <div id="search-title">
         <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
         </div>
