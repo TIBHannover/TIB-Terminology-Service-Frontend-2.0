@@ -6,9 +6,6 @@ import PaginationCustom from './Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
-import { Form, Input, InputGroup } from 'reactstrap';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import {  TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 
@@ -89,6 +86,15 @@ class SearchResult extends React.Component{
       });
       
   }
+}
+
+async suggestionHandler(selectedTerm){
+  let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+  selection =  (await selection.json())['response']['docs'];
+  this.setState({
+      selection: selection,
+      result: true
+    });
 }
 
   createResultList(){
