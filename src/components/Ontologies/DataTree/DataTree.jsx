@@ -106,7 +106,13 @@ class ClassTree extends React.Component {
   setTreeDataPointers(newTreeDataNodes){
     let currentPointres = this.state.treeDataFlatPointers;
     for(let i=0; i < newTreeDataNodes.length; i++){
-      currentPointres[newTreeDataNodes[i]["modified_short_form"]] = newTreeDataNodes[i];
+      if(newTreeDataNodes[i]['is_root']){
+        currentPointres[String(i + 1)] = newTreeDataNodes[i];
+      }
+      else{
+        currentPointres[newTreeDataNodes[i]["id"]] = newTreeDataNodes[i];
+      }
+      
     }
     return currentPointres;
   }
@@ -191,17 +197,24 @@ class ClassTree extends React.Component {
      * @returns
      */
   createTree =  (nodes) => {    
-    return nodes.map((el) => {
+    return nodes.map((el, index) => {
       return (
         <StyledTreeItem 
-          key={el.id} 
-          nodeId={el.modified_short_form}          
-          label={  el.part_of
-                  ? <div><span class="p-icon-style">P</span>  {el.label}</div>
-                  : <div>{el.label}</div>
+          key={el.iri}
+          id={ el.is_root
+            ? String(index + 1) 
+            : el.id
+          }
+          nodeId={ el.is_root
+            ? String(index + 1) 
+            : el.id
+          }          
+          label={  el.label
+                  // ? <div><span class="p-icon-style">P</span>  {el.label}</div>
+                  ? <div>{el.label}</div>
+                  : <div>{el.text}</div>
             }   
-          className="tree-element"
-          id={"tree_element_" + el.modified_short_form}
+          className="tree-element"          
           defaultCollapseIcon={<MinusSquare />}
           defaultExpandIcon={<PlusSquare />}
           defaultEndIcon={<CloseSquare />}
@@ -230,7 +243,7 @@ class ClassTree extends React.Component {
       vNodes.push(value[0])
       let treeDataPointers = this.state.treeDataFlatPointers;
       let tree = this.state.treeData;     
-      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeDataPointers[value[0]], this.state.childrenFieldName, this.state.componentIdentity, this.state.alreadyExistedNodesInTree);
+      let [childrenNodes, alreadyExistedNodesInTree] = await getChildren(treeDataPointers[value[0]], value[0], this.state.childrenFieldName, this.state.componentIdentity);
       if (childrenNodes.length > 0){
         treeDataPointers[value[0]].children = childrenNodes;
           this.setState({
@@ -246,26 +259,6 @@ class ClassTree extends React.Component {
     this.setState({
       visitedNodes: vNodes
     })
-  }
-
-
-
-  /**
-     * find the selected node on the tree. Used in node detail component
-     * @param {*} node
-     * @param {*} shortForm
-     */
-  findSelectedTerm (node, shortForm) {
-    if (node.modified_short_form === shortForm) {
-      this.setState({
-        selectedNode: node,
-        showNodeDetailPage: true
-      })
-    } else if (node.has_children) {
-      for (let i = 0; i < node.children.length; i++) {
-        this.findSelectedTerm(node.children[i], shortForm)
-      }
-    }
   }
 
 
@@ -300,16 +293,11 @@ class ClassTree extends React.Component {
      * @param {*} value
      */
   handleSelect = (e, value) => {   
-    let targetNode = this.state.treeDataFlatPointers[value];
-    console.info(this.state.treeDataFlatPointers);
+    let targetNode = this.state.treeDataFlatPointers[value];    
     this.setState({
       selectedNode: targetNode,
       showNodeDetailPage: true
     })
-    // const tree = this.state.treeData
-    // for (let i = 0; i < tree.length; i++) {
-    //   this.findSelectedTerm(tree[i], value)
-    // }
   }
 
 
@@ -356,9 +344,9 @@ class ClassTree extends React.Component {
                         </TreeView>
                     </Grid>
                     {this.state.showNodeDetailPage && <Grid item xs={7} className="node-table-container">
-                        <TermPage
+                        {/* <TermPage
                         term={this.state.selectedNode}
-                        />
+                        /> */}
                     </Grid>}
                 </Grid> 
              }
