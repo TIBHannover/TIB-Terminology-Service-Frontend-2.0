@@ -36,7 +36,8 @@ class ClassTree extends React.Component {
       childrenFieldName:'',
       ancestorsFieldName: '',
       searchWaiting: true,
-      treeDataFlatPointers: {}
+      treeDataFlatPointers: {},
+      originalTreeDataFlatPointers: {}
     })
     this.setTreeData = this.setTreeData.bind(this);
     this.processTarget = this.processTarget.bind(this);
@@ -67,7 +68,8 @@ class ClassTree extends React.Component {
                 ontologyId: ontologyId,
                 childrenFieldName: "hierarchicalChildren",
                 ancestorsFieldName: "hierarchicalAncestors",
-                treeDataFlatPointers: this.setTreeDataPointers(rootNodes)
+                treeDataFlatPointers: this.setTreeDataPointers(rootNodes),
+                originalTreeDataFlatPointers: this.setTreeDataPointers(rootNodes)
               }, async () => {
                 await this.processTarget(componentIdentity, rootNodes);
               });
@@ -85,7 +87,8 @@ class ClassTree extends React.Component {
                 ontologyId: ontologyId,
                 childrenFieldName: "children",
                 ancestorsFieldName: "ancestors",
-                treeDataFlatPointers: this.setTreeDataPointers(rootNodes)
+                treeDataFlatPointers: this.setTreeDataPointers(rootNodes),
+                originalTreeDataFlatPointers: this.setTreeDataPointers(rootNodes)
               }, async () => {
                 await this.processTarget(componentIdentity, rootNodes);
               });
@@ -95,7 +98,11 @@ class ClassTree extends React.Component {
     }
   }
 
-
+  /**
+   * Map a heirachial tree data to a flat array for direct access to each node
+   * @param {*} newTreeDataNodes 
+   * @returns 
+   */
   setTreeDataPointers(newTreeDataNodes){
     let currentPointres = this.state.treeDataFlatPointers;
     for(let i=0; i < newTreeDataNodes.length; i++){
@@ -103,8 +110,6 @@ class ClassTree extends React.Component {
     }
     return currentPointres;
   }
-
-
 
 
   /**
@@ -129,12 +134,13 @@ class ClassTree extends React.Component {
       if(target != undefined && this.state.targetNodeIri != target){
         let ancestors = [];
         let customTreeData = [];
+        let customTreeDataPointers = {};
         if(componentIdentity == "term"){
-          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData, this.state.childrenFieldName, this.state.ancestorsFieldName); 
+          await getTreeRoutes(ontologyId, target, 'terms', ancestors, customTreeData, customTreeDataPointers, this.state.childrenFieldName, this.state.ancestorsFieldName); 
           mode = "terms";         
         }
         else{
-          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData, this.state.childrenFieldName, this.state.ancestorsFieldName);
+          await getTreeRoutes(ontologyId, target, 'properties', ancestors, customTreeData, customTreeDataPointers, this.state.childrenFieldName, this.state.ancestorsFieldName);
           mode = "properties";          
         }
         
@@ -142,7 +148,8 @@ class ClassTree extends React.Component {
             targetNodeIri: target,
             openTreeRoute: ancestors,
             treeData:customTreeData,
-            searchWaiting: false
+            searchWaiting: false,
+            treeDataFlatPointers: customTreeDataPointers
         }, () => {
           this.expandTreeByTarget(target, mode, ontologyId);
         });          
@@ -244,7 +251,7 @@ class ClassTree extends React.Component {
 
 
   /**
-     * find the selected node on the tree. Used in term detail component
+     * find the selected node on the tree. Used in node detail component
      * @param {*} node
      * @param {*} shortForm
      */
@@ -269,8 +276,10 @@ class ClassTree extends React.Component {
    */
   handleResetTreeBtn(){
     let initialTreeData = this.state.originalTreeData;
+    let treeDataPointer = this. originalTreeDataFlatPointers;
     this.setState({
       treeData: initialTreeData,
+      treeDataFlatPointers: treeDataPointer,
       expandedNodes: [],
       visitedNodes: [],
       currentExpandedTerm: '',
@@ -290,11 +299,17 @@ class ClassTree extends React.Component {
      * @param {*} e
      * @param {*} value
      */
-  handleSelect = (e, value) => {
-    const tree = this.state.treeData
-    for (let i = 0; i < tree.length; i++) {
-      this.findSelectedTerm(tree[i], value)
-    }
+  handleSelect = (e, value) => {   
+    let targetNode = this.state.treeDataFlatPointers[value];
+    console.info(this.state.treeDataFlatPointers);
+    this.setState({
+      selectedNode: targetNode,
+      showNodeDetailPage: true
+    })
+    // const tree = this.state.treeData
+    // for (let i = 0; i < tree.length; i++) {
+    //   this.findSelectedTerm(tree[i], value)
+    // }
   }
 
 

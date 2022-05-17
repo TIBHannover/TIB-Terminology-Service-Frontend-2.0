@@ -167,7 +167,7 @@ export async function getChildren(node:any, childrenFieldName:string, mode: stri
  * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {
+export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>, treeDataPointers:{[id:string]: any}, childFieldName:string, ancestorFieldName:string) {
   let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
   let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
   let rootNodes: Array<any> = [];
@@ -186,8 +186,9 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
       rootNodes[i]['modified_short_form'] = rootNodes[i]['short_form'];
       rootNodes[i]['parentIri'] = "";
       rootNodes[i]['part_of'] = false;
-      treeData.push(rootNodes[i]);  
-      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i], childFieldName, ancestorFieldName);
+      treeData.push(rootNodes[i]); 
+      treeDataPointers[rootNodes[i]['modified_short_form']] =  rootNodes[i];
+      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i], treeDataPointers, childFieldName, ancestorFieldName);
     }
   }
   else if(node[0]['is_root'] == true){
@@ -197,6 +198,7 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
     node[0]['parentIri'] = "";
     node[0]['part_of'] = false;
     treeData.push(node[0]);
+    treeDataPointers[node[0]['modified_short_form']] =  node[0];
   }
   
 }
@@ -216,7 +218,7 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
  * @param ancestorFieldName 
  * @returns 
  */
-async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>, childFieldName:string, ancestorFieldName:string) {  
+async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>, treeDataPointers:{[id:string]: any}, childFieldName:string, ancestorFieldName:string) {  
   if(node['short_form'] == target['short_form']){
     allRoutes.push(route);
     return true;
@@ -248,7 +250,8 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
           children[j]['part_of'] = await hasPartOfRelation(children[j], "property");
         }
         treeData['children'].push(children[j]);
-        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1], childFieldName, ancestorFieldName);
+        treeDataPointers[children[j]["modified_short_form"]] = children[j];
+        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1], treeDataPointers, childFieldName, ancestorFieldName);
       }
     }
   }
