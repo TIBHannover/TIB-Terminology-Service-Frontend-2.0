@@ -37,6 +37,7 @@ class SearchResult extends React.Component{
         //this.transportTerm = this.transportTerm.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
         this.createResultList = this.createResultList.bind(this);
+        this.suggestionChange = this.suggestionChange.bind(this);
     }
 
     async searching(){
