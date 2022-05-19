@@ -261,6 +261,11 @@ async suggestionHandler(selectedTerm){
     }
   }
 
+  submitHandler(event){  
+    let enteredTerm = document.getElementById('search-input').value;
+    window.location.replace('/search?q=' + enteredTerm);
+}
+
   _handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.submitHandler();
