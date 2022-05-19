@@ -261,12 +261,19 @@ async suggestionHandler(selectedTerm){
     }
   }
 
+  _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.submitHandler();
+    }
+  }
+
   render(){
     return(
       <div id="searchterm-wrapper">
         <div>
         <TextField className="col-md-9 input" id="result-input" variant="outlined" style={{marginTop: 3.8}}
                     onChange={this.suggestionChange}
+                    onKeyDown={this._handleKeyDown}
                     placeholder="Search NFDI4Chem TS"
                     InputProps={{
                         endAdornment: (
