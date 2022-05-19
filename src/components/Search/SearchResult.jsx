@@ -272,6 +272,18 @@ async suggestionHandler(selectedTerm){
     }
   }
 
+  async exactHandler(term){
+    if(term > 0){
+      let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${term}&exact=on`)
+      let resultJson =  (await exactResult.json());
+      exactResult = resultJson['response']['docs'];
+    }
+    this.setState({
+      searchResult: exactResult, 
+      result: true                  
+    })
+  }
+
   render(){
     return(
       <div id="searchterm-wrapper">
@@ -289,7 +301,7 @@ async suggestionHandler(selectedTerm){
                       }}
                     />
         <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Exact Match" />
+            <FormControlLabel onClick={this.exactHandler} control={<Checkbox />} label="Exact Match" />
         </FormGroup>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
