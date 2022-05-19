@@ -262,8 +262,8 @@ async suggestionHandler(selectedTerm){
   }
 
   submitHandler(event){  
-    let enteredTerm = document.getElementById('search-input').value;
-    window.location.replace('/search?q=' + enteredTerm);
+    let newEnteredTerm = document.getElementById('search-input').value;
+    window.location.replace('/search?q=' + newEnteredTerm);
 }
 
   _handleKeyDown = (e) => {
