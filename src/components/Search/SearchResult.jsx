@@ -278,10 +278,10 @@ async suggestionHandler(selectedTerm){
       let resultJson =  (await exactResult.json());
       exactResult = resultJson['response']['docs'];
     }
-    this.setState({
-      searchResult: exactResult, 
-      result: true                  
-    })
+    // this.setState({
+    //   searchResult: exactResult, 
+    //   result: true                  
+    // })
   }
 
   render(){
