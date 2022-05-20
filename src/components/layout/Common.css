@@ -13,7 +13,7 @@ The Header styles
     /* 
        The style for overall header dimensions
     */
-    margin-top: 20px;
+    margin-top: 30px;
     display: flex;
     flex: 1;
     flex-direction: column;
