@@ -4,6 +4,8 @@ import '../layout/Search.css'
 import { Form, Input, Button, InputGroup } from 'reactstrap';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import {  TextField, IconButton } from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
 
 
 class SearchForm extends React.Component{
@@ -71,16 +73,28 @@ class SearchForm extends React.Component{
           return resultList
       }
 
+      _handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          this.submitHandler();
+        }
+      }
+
       render(){
           return(
               <div>
-                   <Input type="text" className="col-md-12 input" id="search-input" style={{marginTop: 3.8}}
+                   <TextField className="col-md-12 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
                     onChange={this.handleChange}
+                    onKeyDown={this._handleKeyDown}
                     placeholder="Search NFDI4Chem TS"
+                    InputProps={{
+                        endAdornment: (
+                          <IconButton>
+                            <SearchOutlined onClick={this.submitHandler}/>
+                          </IconButton>
+                        ),
+                      }}
                     />
-                    <Button id="button-main-search" className="ps-2 pe-2 search-icon" type="submit" onClick={this.submitHandler}>
-                        <Icon icon={faSearch}/>
-                    </Button>
+                    
                     {this.state.result &&
                 <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
               </div>

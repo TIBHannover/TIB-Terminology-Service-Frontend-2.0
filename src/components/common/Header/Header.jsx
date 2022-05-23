@@ -9,7 +9,7 @@ function Header () {
     <section className="header">
       <section className="header-top">
         <section className="header-top__logo">
-          <img src={"https://www.nfdi4chem.de/wp-content/uploads/2021/11/cropped-NFDI4Chem-Logo-Claim_mehrfarbig_schwarz-e1636478409489.png"} alt="nfdi4chem logo" height={100} width={280} />
+          <img src={"https://www.tib.eu/typo3conf/ext/tib_tmpl_bootstrap/Resources/Public/gfx/logos/tib-full-en.svg"} alt="tib logo" height={200} width={480} />
         </section>
         <section className="header-top__navbar">
           <section className="header-top__navigation">

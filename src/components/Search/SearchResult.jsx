@@ -6,14 +6,22 @@ import PaginationCustom from './Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
+import {  TextField, IconButton } from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 class SearchResult extends React.Component{
     constructor(props){
         super(props)
         this.state = ({
           enteredTerm: "",
+          newEnteredTerm: "",
           result: false,
+          suggestResult: false,
           searchResult: [],
+          suggestionResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
@@ -30,6 +38,9 @@ class SearchResult extends React.Component{
         this.searching = this.searching.bind(this)
         //this.transportTerm = this.transportTerm.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
+        this.createResultList = this.createResultList.bind(this);
+        this.suggestionChange = this.suggestionChange.bind(this);
+        this.suggestionHandler = this.suggestionHandler.bind(this);
     }
 
     async searching(){
@@ -64,6 +75,47 @@ class SearchResult extends React.Component{
           });  
       }
   }
+  async suggestionChange(newEnteredTerm){
+    newEnteredTerm = newEnteredTerm.target.value;
+  if (newEnteredTerm.length > 0){
+      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${newEnteredTerm}`)
+      suggestionResult =  (await suggestionResult.json())['response']['docs'];
+   this.setState({
+       suggestionResult: suggestionResult,
+       suggestResult: true,
+       newEnteredTerm: newEnteredTerm
+   });
+  }
+  else if (newEnteredTerm.length == 0){
+      this.setState({
+          suggestResult: false,
+          newEnteredTerm: ""
+      });
+      
+  }
+}
+
+async suggestionHandler(selectedTerm){
+  let newSearchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+  newSearchResult =  (await newSearchResult.json())['response']['docs'];
+  this.setState({
+      searchResult: newSearchResult,
+      suggestResult: true
+    });
+}
+
+  createResultList(){
+    const resultList = []          
+    for(let i=0; i < this.state.suggestionResult.length; i++){
+      resultList.push(
+          <Link to={'/search?q=' + encodeURIComponent(this.state.suggestionResult[i]['autosuggest'])} key={i} className="container">
+              <div>
+                   {this.state.suggestionResult[i]['autosuggest']}
+              </div>
+          </Link>)
+    }
+    return resultList
+}
 
   async transportTerm(searchResultItem){
       let url = "";
@@ -209,9 +261,51 @@ class SearchResult extends React.Component{
     }
   }
 
+  async exactHandler(term){
+    if(term > 0){
+      let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${term}&exact=on`)
+      let resultJson =  (await exactResult.json());
+      exactResult = resultJson['response']['docs'];
+    }
+    // this.setState({
+    //   searchResult: exactResult, 
+    //   result: true                  
+    // })
+  }
+
+  submitHandler(event){  
+    let newEnteredTerm = document.getElementById('search-input').value;
+    window.location.replace('/search?q=' + newEnteredTerm);
+}
+
+  _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.submitHandler();
+    }
+  }
+
   render(){
     return(
       <div id="searchterm-wrapper">
+        <div>
+        <TextField className="col-md-9 input" id="result-input" variant="outlined" style={{marginTop: 3.8}}
+                    onChange={this.suggestionChange}
+                    onKeyDown={this._handleKeyDown}
+                    placeholder="Search NFDI4Chem TS"
+                    InputProps={{
+                        endAdornment: (
+                          <IconButton>
+                            <SearchOutlined onClick={this.submitHandler}/>
+                          </IconButton>
+                        ),
+                      }}
+                    />
+        <FormGroup>
+            <FormControlLabel onClick={this.exactHandler} control={<Checkbox />} label="Exact Match" />
+        </FormGroup>
+              {this.state.suggestResult &&
+            <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+        </div>
         <div id="search-title">
         <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
         </div>
