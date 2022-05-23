@@ -49,21 +49,7 @@ const Footer = () => (
             <footer className="pt-4 pb-4">
                 <h1 className="sr-only">More information about NFDI4Chem</h1>
                 <Row>
-                    <FooterCol md={3}>
-                        <h2 className="h5">NFDI4Chem</h2>
-                        <hr className="me-5" />
-                        <Row>
-                            <div className="float-start col-md-3">
-                                <Link to={{pathname: "https://www.nfdi4chem.de/"}}>
-                                    <img src={CHEM_LOGO} alt="logo nfdi4chem" style={{ height: '55px' }} />
-                                </Link>
-                            </div>
-                            <div className="col-md-8 description">
-                            NFDI4Chem is an initiative to build an open and FAIR infrastructure for research data management in chemistry.
-                            </div>
-                        </Row>
-                    </FooterCol>
-                    <FooterCol md={3}>
+                    <FooterCol md={4}>
                         <h2 className="h5">About</h2>
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
@@ -89,7 +75,7 @@ const Footer = () => (
                             </li>
                         </ul>
                     </FooterCol>
-                    <FooterCol md={3}>
+                    <FooterCol md={4}>
                         <h2 className="h5">Technical</h2>
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
@@ -106,7 +92,7 @@ const Footer = () => (
                             </li>
                         </ul>
                     </FooterCol>
-                    <FooterCol md={3}>
+                    <FooterCol md={4}>
                         <h2 className="h5">More</h2>
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
