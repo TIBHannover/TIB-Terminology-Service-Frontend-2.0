@@ -45,7 +45,6 @@ const Footer = () => (
     <FooterWrapper>
         <Container>
             <footer className="pt-4 pb-4">
-                <h1 className="sr-only">More information about TS</h1>
                 <Row>
                     <FooterCol md={4}>
                         <h2 className="h5">About</h2>
