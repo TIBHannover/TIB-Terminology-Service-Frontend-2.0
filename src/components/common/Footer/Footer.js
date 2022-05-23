@@ -2,10 +2,8 @@ import { Container, Row, Col} from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import TIB_LOGO from '../../../assets/img/TIB_Logo_en.png';
 import DFG_LOGO from '../../../assets/img/dfg_logo.png';
-import CHEM_LOGO from '../../../assets/img/favicon-nfdi4chem.PNG'
 import styled from 'styled-components';
 
 const FooterWrapper = styled.div`
@@ -47,23 +45,9 @@ const Footer = () => (
     <FooterWrapper>
         <Container>
             <footer className="pt-4 pb-4">
-                <h1 className="sr-only">More information about NFDI4Chem</h1>
+                <h1 className="sr-only">More information about TS</h1>
                 <Row>
-                    <FooterCol md={3}>
-                        <h2 className="h5">NFDI4Chem</h2>
-                        <hr className="me-5" />
-                        <Row>
-                            <div className="float-start col-md-3">
-                                <Link to={{pathname: "https://www.nfdi4chem.de/"}}>
-                                    <img src={CHEM_LOGO} alt="logo nfdi4chem" style={{ height: '55px' }} />
-                                </Link>
-                            </div>
-                            <div className="col-md-8 description">
-                            NFDI4Chem is an initiative to build an open and FAIR infrastructure for research data management in chemistry.
-                            </div>
-                        </Row>
-                    </FooterCol>
-                    <FooterCol md={3}>
+                    <FooterCol md={4}>
                         <h2 className="h5">About</h2>
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
@@ -89,59 +73,28 @@ const Footer = () => (
                             </li>
                         </ul>
                     </FooterCol>
-                    <FooterCol md={3}>
-                        <h2 className="h5">Technical</h2>
+                    <FooterCol md={4}>
+                        <h2 className="h5">Maintainer</h2>
                         <hr className="me-5" />
-                        <ul className="p-0" style={{ listStyle: 'none' }}>
-                            <li>
-                                <a href="" target="_blank" rel="noopener noreferrer">
-                                    GitLab
-                                </a>
-                            </li>
-                            <li>
-                                <Link to={""}>Accessibility</Link>
-                            </li>
-                            <li>
-                                <Link to={""}>License</Link>
-                            </li>
-                        </ul>
-                    </FooterCol>
-                    <FooterCol md={3}>
-                        <h2 className="h5">More</h2>
-                        <hr className="me-5" />
-                        <ul className="p-0" style={{ listStyle: 'none' }}>
-                            <li>
-                                <TwitterLink href="https://twitter.com/Nfdi4Chem" target="_blank" rel="noopener noreferrer">
-                                    Follow us
-                                    <Icon className="ms-2" icon={faTwitter} />
-                                </TwitterLink>
-                            </li>
-                            <li>
-                                <a href="" target="_blank" rel="noopener noreferrer">
-                                    Report an issue
-                                </a>
-                            </li>
-                        </ul>
-                    </FooterCol>
-                </Row>
-                <hr style={{ width: '70%', margin: '1rem auto' }} />
-                <Row className="mt-4">
-                    <PartnerLogoCol md={4} style={{}}>
+                        <PartnerLogoCol md={4} style={{}}>
                         <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '60px' }} />
+                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '80px' }} />
                         </a>
                     </PartnerLogoCol>
-                    <Col md={8}>
-                        <Row className="g-0">
-                        <PartnerLogoCol md={{ size: 3, order: 1, offset: 3 }} style={{ textAlign: 'center' }}>
+                    </FooterCol>
+                    <FooterCol md={4}>
+                        <h2 className="h5">Funding</h2>
+                        <hr className="me-5" />
+                        <PartnerLogoCol md={4} style={{ textAlign: 'center' }}>
+                        <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
                         <img
                             src={DFG_LOGO}
-                            alt="NFDI4Chem is supported by DFG under project number 441958208"
-                            style={{ borderWidth: 0, height: '60px' }}
+                            alt=""
+                            style={{ borderWidth: 0, height: '80px' }}
                         />
+                        </a>
                         </PartnerLogoCol>
-                        </Row>
-                    </Col>
+                    </FooterCol>
                 </Row>
             </footer>
         </Container>
