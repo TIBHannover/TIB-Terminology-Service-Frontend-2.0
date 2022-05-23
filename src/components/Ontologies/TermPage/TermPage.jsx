@@ -11,7 +11,7 @@ class TermPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
-      data: "",
+      data: true,
       label_xs: 2,
       value_xs: 10,
       iriIsCopied: false,
@@ -43,7 +43,7 @@ class TermPage extends React.Component {
  async initiateTheTableView(){
     let targetIri = this.props.iri;
     let ontology = this.props.ontology;
-    let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), "terms");
+    let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), "terms");    
     this.setState({
       prevTerm: node.iri,
       data: node
@@ -53,14 +53,14 @@ class TermPage extends React.Component {
 
 
   componentDidMount(){
-    if(this.state.prevTerm != this.props.iri){
+    if(this.state.data && this.state.prevTerm != this.props.iri){
       this.initiateTheTableView();      
     }
   }
 
 
   componentDidUpdate(){
-    if(this.state.prevTerm != this.props.iri){
+    if(this.state.data && this.state.prevTerm != this.props.iri){
       this.initiateTheTableView();
       this.setState({
         iriIsCopied: false,        

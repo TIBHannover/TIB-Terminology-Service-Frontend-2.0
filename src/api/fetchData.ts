@@ -281,7 +281,11 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
  */
 export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
     let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
-    let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
+    let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
+    if (node.status === 404){
+      return false;
+    }
+    node = await node.json();
     return node['_embedded'][mode][0];
 }
 
