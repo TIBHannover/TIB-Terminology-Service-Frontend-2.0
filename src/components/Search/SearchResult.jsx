@@ -261,17 +261,6 @@ async suggestionHandler(selectedTerm){
     }
   }
 
-  submitHandler(event){  
-    let newEnteredTerm = document.getElementById('search-input').value;
-    window.location.replace('/search?q=' + newEnteredTerm);
-}
-
-  _handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      this.submitHandler();
-    }
-  }
-
   async exactHandler(term){
     if(term > 0){
       let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${term}&exact=on`)
@@ -282,6 +271,17 @@ async suggestionHandler(selectedTerm){
     //   searchResult: exactResult, 
     //   result: true                  
     // })
+  }
+
+  submitHandler(event){  
+    let newEnteredTerm = document.getElementById('search-input').value;
+    window.location.replace('/search?q=' + newEnteredTerm);
+}
+
+  _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.submitHandler();
+    }
   }
 
   render(){
