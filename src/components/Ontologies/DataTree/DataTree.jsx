@@ -5,6 +5,8 @@ import TreeView from '@material-ui/lab/TreeView';
 import StyledTreeItem from './widgets/StyledTreeItem';
 import { MinusSquare, PlusSquare, CloseSquare } from './widgets/icons';
 import CircularProgress from '@mui/material/CircularProgress';
+import TermPage from '../TermPage/TermPage';
+import PropertyPage from '../PropertyPage/PropertyPage';
 
 
 
@@ -12,7 +14,6 @@ class ClassTree extends React.Component {
     constructor (props) {
         super(props);
         this.state = ({
-            rootNodes: [],
             expandedNodes: [],
             treeData: [],
             originalTreeData: [],
@@ -32,8 +33,6 @@ class ClassTree extends React.Component {
             childrenFieldName:'',
             ancestorsFieldName: '',
             searchWaiting: true,
-            treeDataFlatPointers: {},
-            originalTreeDataFlatPointers: {},
             isTreeLoaded: false
           })
           this.setTreeData = this.setTreeData.bind(this);        
@@ -43,19 +42,33 @@ class ClassTree extends React.Component {
     async setTreeData(){        
         let ontologyId = this.props.ontology;
         let componentIdentity = this.props.componentIdentity;
+        let urlSubPath = "";
+        let isTermtree = "";
+        if(componentIdentity === "term"){
+          urlSubPath = "/termtree";
+          isTermtree = true;
+        }
+        else if (componentIdentity === "property"){
+          urlSubPath = "/propertytree";
+          isTermtree = false;
+        }
+
         let callHeader = {
             'Accept': 'application/json'
           };
         let getCallSetting = {method: 'GET', headers: callHeader};
-        // let url = "https://service.tib.eu/ts4tib/api/ontologies/uat/concepthierarchy?find_roots=SCHEMA&narrower=false&individual_count=1000000";
-        let url = "http://terminology02.develop.service.tib.eu:8080/ts4tib/api/ontologies/" + ontologyId + "/termtree?includeObsoletes=false";
-        let res =  await (await fetch(url, getCallSetting)).json();
+        let url = "https://service.tib.eu/ts4tib/api/ontologies/uat/concepthierarchy?find_roots=SCHEMA&narrower=false&individual_count=1000000";
+        // let url = "http://terminology02.develop.service.tib.eu:8080/ts4tib/api/ontologies/" + ontologyId +  urlSubPath + "?includeObsoletes=false";
+        let data =  await (await fetch(url, getCallSetting)).json();
         this.setState({
-            treeData: res,
+            treeData: data,
+            originalTreeData: data,
             ontologyId: ontologyId,
-            isTreeLoaded: true
+            isTreeLoaded: true,
+            componentIdentity: componentIdentity,
+            termTree: isTermtree,
+            propertyTree: !isTermtree
         });
-
     }
 
 
@@ -70,6 +83,7 @@ class ClassTree extends React.Component {
               defaultCollapseIcon={<MinusSquare />}
               defaultExpandIcon={<PlusSquare />}
               defaultEndIcon={<CloseSquare />}
+              data-node={JSON.stringify(el.data)}              
               >
               {Array.isArray(el.children) && !el.leaf
                 ? this.createTree(el.children)
@@ -88,7 +102,11 @@ class ClassTree extends React.Component {
       }
 
       handleSelect = (e, value) => {   
-        
+         let node = JSON.parse(e.currentTarget.offsetParent.dataset.node);
+        this.setState({
+          selectedNode: node,
+          showNodeDetailPage: true
+        })
       }
 
       componentDidMount(){
@@ -97,13 +115,7 @@ class ClassTree extends React.Component {
           }
         
       }
-    
-      componentDidUpdate(){
-        if(!this.state.isTreeLoaded){
-            this.setTreeData();
-          }
-      }
-    
+         
 
       render () {
       
@@ -129,11 +141,19 @@ class ClassTree extends React.Component {
                               {this.createTree(this.state.treeData)}
                             </TreeView>                                                
                         </Grid>
-                        {this.state.showNodeDetailPage && <Grid item xs={7} className="node-table-container">
-                            {/* <TermPage
-                            term={this.state.selectedNode}
-                            /> */}
-                        </Grid>}
+                        {this.state.showNodeDetailPage && 
+                        <Grid item xs={7} className="node-table-container">                      
+                            {this.state.termTree &&  
+                            <TermPage
+                              term={this.state.selectedNode}
+                            />
+                            }
+                            {this.state.propertyTree &&  
+                            <PropertyPage
+                              property={this.state.selectedNode}
+                              />
+                            }
+                        </Grid>}                            
                     </Grid> 
                  }
                  
