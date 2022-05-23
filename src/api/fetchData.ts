@@ -145,8 +145,6 @@ export async function getChildren(node:any, nodeId:any, childrenFieldName:string
       let url = OntologiesBaseServiceUrl + "/";
       url += node["ontology_name"] + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(node["iri"])) + "/jstree/children/" + nodeId;
       let res =  await (await fetch(url, getCallSetting)).json(); 
-      // console.info(res);
-      console.info(url);
       return [res, []];
 
       // let pageCount = await getPageCount(node['_links'][childrenFieldName]['href']);
