@@ -145,7 +145,8 @@ class ClassTree extends React.Component {
                         <Grid item xs={7} className="node-table-container">                      
                             {this.state.termTree &&  
                             <TermPage
-                              term={this.state.selectedNode}
+                              iri={this.state.selectedNode.iri}
+                              ontology={this.state.selectedNode.ontology_name}
                             />
                             }
                             {this.state.propertyTree &&  
