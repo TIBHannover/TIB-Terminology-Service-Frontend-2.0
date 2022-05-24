@@ -221,29 +221,22 @@ async suggestionHandler(selectedTerm){
   }
 
   async handleSelection(ontologies, types){
-    if(ontologies.length === 0 && types.length === 0){
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+      ontologies.forEach(item => {
+          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+        }) 
+      types.forEach(item => {
+          baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+        })      
+      let targetUrl = await fetch(baseUrl)
+      let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
       this.setState({
-        searchResult: this.state.originalSearchResult
-      });
-    } 
-    else{
-      let filteredSearchResult = [];
-      let currentResults = this.state.originalSearchResult;
-      if(ontologies.length === 0){
-        filteredSearchResult = currentResults;
-      }
-      else{
-        let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-        let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
-        ontologies.forEach(item => {
-            baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-          })       
-        let targetUrl = await fetch(baseUrl)
-        let resultJson = (await targetUrl.json());
-        let filteredSearchResult = resultJson['response']['docs']
-       }
-      }
-  }
+        searchResult: filteredSearchResults
+       })
+     }
+     
+
 
   async exactHandler(term){
     if(term > 0){
