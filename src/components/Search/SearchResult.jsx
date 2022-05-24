@@ -236,13 +236,11 @@ async suggestionHandler(selectedTerm){
         let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
         let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
         ontologies.forEach(item => {
-            baseUrl = baseUrl + `&ontology=${item}`;
+            baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
           })       
-        console.info(baseUrl)
         let targetUrl = await fetch(baseUrl)
         let resultJson = (await targetUrl.json());
         let filteredSearchResult = resultJson['response']['docs']
-        console.info(filteredSearchResult)
        }
       }
   }
