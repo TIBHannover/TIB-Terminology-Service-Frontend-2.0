@@ -1,4 +1,5 @@
 import React, { createElement } from 'react';
+import ReactDOM from 'react-dom'
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import {getChildren, getNodeByIri} from '../../../api/fetchData';
@@ -80,6 +81,7 @@ class DataTree extends React.Component {
   async expandNode(e){
     let targetNodeIri = e.currentTarget.dataset.iri;
     let targetNodeId = e.currentTarget.dataset.id;
+    let Id = e.currentTarget.id;
     let callHeader = {
       'Accept': 'application/json'
     };
@@ -88,7 +90,23 @@ class DataTree extends React.Component {
     let extractName = "terms";
     url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
     let res =  await (await fetch(url, getCallSetting)).json(); 
-    console.info(res);
+    let children = [];
+    let ul = document.createElement("ul");
+    for(let i=0; i < res.length; i++){
+      let newId = res[i].text + "_" +  Math.floor(Math.random() * 10000);
+      let label = document.createTextNode(res[i].text);
+      let listItem = document.createElement("li", {
+          onClick: (e) => {this.expandNode(e)},
+          "data-iri":res[i].iri, 
+          "data-id": res[i].id, 
+          "id": newId}
+          );
+      listItem.appendChild(label);
+      ul.appendChild(listItem);
+      // children.push(listItem);
+    }
+    document.getElementById(Id).appendChild(ul);
+    // console.info(children);    
   }
 
 
@@ -98,7 +116,9 @@ class DataTree extends React.Component {
       let listItem = React.createElement("li", {
           onClick: (e) => {this.expandNode(e)},
           "data-iri":rootNodes[i].iri, 
-          "data-id": i}
+          "data-id": i,
+          "id": rootNodes[i].short_form + "_" +  Math.floor(Math.random() * 10000)
+        }
           , rootNodes[i].label
           );
       childrenList.push(listItem);
