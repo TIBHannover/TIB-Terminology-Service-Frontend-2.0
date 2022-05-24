@@ -163,7 +163,6 @@ async suggestionHandler(selectedTerm){
    async paginationHandler () {
      let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
      let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`)
-     console.info(targetUrl)
      let resultJson = (await targetUrl.json());
      let newResults = resultJson['response']['docs']
      console.info(resultJson)
@@ -234,17 +233,16 @@ async suggestionHandler(selectedTerm){
         filteredSearchResult = currentResults;
       }
       else{
-        let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${this.state.rangeCount}`+ `&ontology=`)
-        let resultJson = (await targetUrl.json());
-        let filteredSearchResult = resultJson['response']['docs']  
+        for(let i=0; i< ontologies.length; i++){
+          let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+          let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`+ `&ontology=${ontologies[i]}`)
+          console.info(targetUrl)
+          let resultJson = (await targetUrl.json());
+          filteredSearchResult.push(resultJson['response']['docs'])
+          console.info(filteredSearchResult)
+        } 
        }
       }
-      
-     this.setState({
-       result: true,
-       isFiltered: true
-     })
-    }
   }
 
   async exactHandler(term){
