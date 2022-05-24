@@ -2,6 +2,7 @@ import React, { createElement } from 'react';
 import ReactDOM from 'react-dom'
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import {getChildren, getNodeByIri} from '../../../api/fetchData';
 
 
@@ -96,8 +97,9 @@ class DataTree extends React.Component {
             let res =  await (await fetch(url, getCallSetting)).json(); 
             let ul = document.createElement("ul");
             ul.setAttribute("id", "children_for_" + Id);
+            ul.classList.add("tree-node-ul");
             for(let i=0; i < res.length; i++){
-              let newId = res[i].text + "_" +  Math.floor(Math.random() * 10000);
+              let newId = res[i].id + "_" +  Math.floor(Math.random() * 10000);
               let label = document.createTextNode(res[i].text);
               let listItem = document.createElement("li");         
               listItem.setAttribute("id", newId);
@@ -105,6 +107,7 @@ class DataTree extends React.Component {
               listItem.setAttribute("data-id", res[i].id);
               listItem.appendChild(label);
               listItem.classList.add("closed");
+              listItem.classList.add("tree-node-li");
               ul.appendChild(listItem);      
             }
             document.getElementById(Id).classList.remove("closed");
@@ -124,17 +127,19 @@ class DataTree extends React.Component {
   buildTree(rootNodes){
     let childrenList = [];
     for(let i=0; i < rootNodes.length; i++){
+      let expandSign = <AddBoxOutlinedIcon className='expand-icons' fontSize='small' />;
+      
       let listItem = React.createElement("li", {         
           "data-iri":rootNodes[i].iri, 
           "data-id": i,
-          "className": "closed",
-          "id": rootNodes[i].short_form + "_" +  Math.floor(Math.random() * 10000)
+          "className": "closed tree-node-li",
+          "id": i + "_" +  Math.floor(Math.random() * 10000)
         }
-          , rootNodes[i].label
+          , expandSign, rootNodes[i].label
           );
       childrenList.push(listItem);
     }
-    let treeList = React.createElement("ul", {}, childrenList);
+    let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);
     return treeList;
   }
 

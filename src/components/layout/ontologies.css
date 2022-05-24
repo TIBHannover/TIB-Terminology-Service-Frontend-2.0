@@ -293,3 +293,18 @@ The Tree view and detail table styles (for both classes and properties)
 
     border-bottom: 1px solid black;
 }
+
+.tree-node-ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.tree-node-li {
+    padding-left: 2em;
+    text-indent: -2em;
+}
+
+.expand-icons{
+    margin-right: 5px;
+}
