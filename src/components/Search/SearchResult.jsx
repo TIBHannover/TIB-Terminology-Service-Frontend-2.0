@@ -221,7 +221,7 @@ async suggestionHandler(selectedTerm){
      }
   }
 
-  handleSelection(ontologies, types){
+  async handleSelection(ontologies, types){
     if(ontologies.length === 0 && types.length === 0){
       this.setState({
         searchResult: this.state.originalSearchResult
@@ -234,27 +234,13 @@ async suggestionHandler(selectedTerm){
         filteredSearchResult = currentResults;
       }
       else{
-        for(let i=0; i<currentResults.length; i++){        
-          if(ontologies.includes(currentResults[i]['ontology_name'].toUpperCase())){
-            filteredSearchResult.push(currentResults[i]);
-          }
-       }
-      }
-      
-      let newFiltered = [];
-      if(types.length === 0){
-        newFiltered = filteredSearchResult;
-      }
-      else{
-        for(let i=0; i<filteredSearchResult.length; i++){        
-          if(types.includes(filteredSearchResult[i]['type'])){
-            newFiltered.push(filteredSearchResult[i]);
-          }
+        let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${this.state.rangeCount}`+ `&ontology=`)
+        let resultJson = (await targetUrl.json());
+        let filteredSearchResult = resultJson['response']['docs']  
        }
       }
       
      this.setState({
-       searchResult: newFiltered,
        result: true,
        isFiltered: true
      })
