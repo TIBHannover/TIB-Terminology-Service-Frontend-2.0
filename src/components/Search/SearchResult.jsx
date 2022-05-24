@@ -161,15 +161,35 @@ async suggestionHandler(selectedTerm){
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
    async paginationHandler () {
-     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-     let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`)
-     let resultJson = (await targetUrl.json());
-     let newResults = resultJson['response']['docs']
-     console.info(resultJson)
-     this.setState({
-       rangeCount: rangeCount,
-       searchResult: newResults
-    })
+    let ontologies = this.state.ontologies
+    let types = this.state.types
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+    if(ontologies > 0 && types > 0){
+      ontologies.forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+      }) 
+      types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+      })
+      console.info(baseUrl)
+      let targetUrl = await fetch(baseUrl)
+      let newResults = (await targetUrl.json())['response']['docs']
+      this.setState({
+        searchResult: newResults
+     })
+     }
+     else{
+      let targetUrl = await fetch(baseUrl)
+      console.info(targetUrl)
+      let resultJson = (await targetUrl.json());
+      let newResults = resultJson['response']['docs']
+      console.info(resultJson)
+      this.setState({
+        searchResult: newResults
+     })
+     }
+     
   }
 
   componentDidMount(){
@@ -232,7 +252,9 @@ async suggestionHandler(selectedTerm){
       let targetUrl = await fetch(baseUrl)
       let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
       this.setState({
-        searchResult: filteredSearchResults
+        searchResult: filteredSearchResults,
+        ontologies: ontologies,
+        types: types 
        })
      }
      
