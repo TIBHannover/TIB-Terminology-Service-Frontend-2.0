@@ -79,31 +79,44 @@ class DataTree extends React.Component {
 
 
   async expandNode(e){
-    console.info(e.target.dataset.iri);
+    console.info(e.target.id);
     if(e.target.tagName === "LI"){
         let targetNodeIri = e.target.dataset.iri;
         let targetNodeId = e.target.dataset.id;
         let Id = e.target.id;
-        let callHeader = {
-          'Accept': 'application/json'
-        };
-        let getCallSetting = {method: 'GET', headers: callHeader};
-        let url = "https://service.tib.eu/ts4tib/api/ontologies/";
-        let extractName = "terms";
-        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-        let res =  await (await fetch(url, getCallSetting)).json(); 
-        let ul = document.createElement("ul");
-        for(let i=0; i < res.length; i++){
-          let newId = res[i].text + "_" +  Math.floor(Math.random() * 10000);
-          let label = document.createTextNode(res[i].text);
-          let listItem = document.createElement("li");         
-          listItem.setAttribute("id", newId);
-          listItem.setAttribute("data-iri", res[i].iri);
-          listItem.setAttribute("data-id", res[i].id);
-          listItem.appendChild(label);
-          ul.appendChild(listItem);      
+        if(document.getElementById(Id).classList.contains("closed")){
+            // expand node
+            let callHeader = {
+              'Accept': 'application/json'
+            };
+            let getCallSetting = {method: 'GET', headers: callHeader};
+            let url = "https://service.tib.eu/ts4tib/api/ontologies/";
+            let extractName = "terms";
+            url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
+            let res =  await (await fetch(url, getCallSetting)).json(); 
+            let ul = document.createElement("ul");
+            ul.setAttribute("id", "children_for_" + Id);
+            for(let i=0; i < res.length; i++){
+              let newId = res[i].text + "_" +  Math.floor(Math.random() * 10000);
+              let label = document.createTextNode(res[i].text);
+              let listItem = document.createElement("li");         
+              listItem.setAttribute("id", newId);
+              listItem.setAttribute("data-iri", res[i].iri);
+              listItem.setAttribute("data-id", res[i].id);
+              listItem.appendChild(label);
+              listItem.classList.add("closed");
+              ul.appendChild(listItem);      
+            }
+            document.getElementById(Id).classList.remove("closed");
+            document.getElementById(Id).classList.add("opened");
+            document.getElementById(Id).appendChild(ul);
         }
-        document.getElementById(Id).appendChild(ul);
+        else{
+            document.getElementById(Id).classList.remove("opened");
+            document.getElementById(Id).classList.add("closed");
+            document.getElementById("children_for_" + Id).remove();
+        }
+        
       }
   }
 
@@ -114,6 +127,7 @@ class DataTree extends React.Component {
       let listItem = React.createElement("li", {         
           "data-iri":rootNodes[i].iri, 
           "data-id": i,
+          "className": "closed",
           "id": rootNodes[i].short_form + "_" +  Math.floor(Math.random() * 10000)
         }
           , rootNodes[i].label
