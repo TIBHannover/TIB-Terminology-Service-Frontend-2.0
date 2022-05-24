@@ -233,14 +233,16 @@ async suggestionHandler(selectedTerm){
         filteredSearchResult = currentResults;
       }
       else{
-        for(let i=0; i< ontologies.length; i++){
-          let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-          let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`+ `&ontology=${ontologies[i]}`)
-          console.info(targetUrl)
-          let resultJson = (await targetUrl.json());
-          filteredSearchResult.push(resultJson['response']['docs'])
-          console.info(filteredSearchResult)
-        } 
+        let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+        let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+        ontologies.forEach(item => {
+            baseUrl = baseUrl + `&ontology=${item}`;
+          })       
+        console.info(baseUrl)
+        let targetUrl = await fetch(baseUrl)
+        let resultJson = (await targetUrl.json());
+        let filteredSearchResult = resultJson['response']['docs']
+        console.info(filteredSearchResult)
        }
       }
   }
