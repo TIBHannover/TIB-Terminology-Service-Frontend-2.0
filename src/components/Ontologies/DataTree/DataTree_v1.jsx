@@ -14,7 +14,7 @@ import {getChildren, getTreeRoutes, getNodeByIri} from '../../../api/fetchData';
 
 
 
-class ClassTree extends React.Component {
+class DataTree extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
@@ -393,5 +393,5 @@ class ClassTree extends React.Component {
     )
   }
 }
-export default ClassTree;
+export default DataTree;
 
