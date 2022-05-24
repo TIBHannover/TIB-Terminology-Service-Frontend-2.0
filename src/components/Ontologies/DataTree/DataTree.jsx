@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
 import {getChildren, getNodeByIri} from '../../../api/fetchData';
 
 
@@ -127,7 +128,13 @@ class DataTree extends React.Component {
   buildTree(rootNodes){
     let childrenList = [];
     for(let i=0; i < rootNodes.length; i++){
-      let expandSign = <AddBoxOutlinedIcon className='expand-icons' fontSize='small' />;
+      let expandSign = ""
+      if(rootNodes[i].has_children){
+        expandSign = <AddBoxOutlinedIcon className='expand-icons expand-icons-has-child-closed' fontSize='small' />;
+      }
+      else{
+        expandSign = <CancelPresentationOutlinedIcon className='expand-icons expand-icons-no-child'  fontSize='small' />
+      }
       
       let listItem = React.createElement("li", {         
           "data-iri":rootNodes[i].iri, 

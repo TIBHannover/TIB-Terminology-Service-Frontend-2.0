@@ -308,3 +308,11 @@ The Tree view and detail table styles (for both classes and properties)
 .expand-icons{
     margin-right: 5px;
 }
+
+.expand-icons-no-child{
+    color: red;
+}
+
+.expand-icons-has-child-closed{
+    color: green;
+}
