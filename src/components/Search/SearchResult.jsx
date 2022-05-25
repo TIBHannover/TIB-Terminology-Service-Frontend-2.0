@@ -41,6 +41,7 @@ class SearchResult extends React.Component{
         this.createResultList = this.createResultList.bind(this);
         this.suggestionChange = this.suggestionChange.bind(this);
         this.suggestionHandler = this.suggestionHandler.bind(this);
+        this.paginationHandler = this.paginationHandler.bind(this);
     }
 
     async searching(){
@@ -166,18 +167,7 @@ async suggestionHandler(selectedTerm){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
     if(ontologies > 0 && types > 0){
-      ontologies.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
-      }) 
-      types.forEach(item => {
-        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
-      })
-      console.info(baseUrl)
-      let targetUrl = await fetch(baseUrl)
-      let newResults = (await targetUrl.json())['response']['docs']
-      this.setState({
-        searchResult: newResults
-     })
+      this.handleSelection()
      }
      else{
       let targetUrl = await fetch(baseUrl)
