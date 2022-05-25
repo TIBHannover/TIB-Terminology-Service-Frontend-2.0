@@ -81,7 +81,7 @@ class DataTree extends React.Component {
 
 
   async expandNode(e){
-    console.info(e.target.id);
+    // console.info(e.target.id);
     if(e.target.tagName === "LI"){
         let targetNodeIri = e.target.dataset.iri;
         let targetNodeId = e.target.dataset.id;
@@ -100,12 +100,25 @@ class DataTree extends React.Component {
             ul.setAttribute("id", "children_for_" + Id);
             ul.classList.add("tree-node-ul");
             for(let i=0; i < res.length; i++){
+              // let expandSign = "";              
+              // if(res[i].children){              
+              //   expandSign = document.createElement("i");
+              //   expandSign.classList.add("fa-light");
+              //   expandSign.classList.add("fa-square-plus");                
+              // }
+              // else{
+              //   expandSign = document.createElement("i");
+              //   expandSign.classList.add("fa-light");
+              //   expandSign.classList.add("fa-square-plus");                
+              // }
+
               let newId = res[i].id + "_" +  Math.floor(Math.random() * 10000);
               let label = document.createTextNode(res[i].text);
               let listItem = document.createElement("li");         
               listItem.setAttribute("id", newId);
               listItem.setAttribute("data-iri", res[i].iri);
               listItem.setAttribute("data-id", res[i].id);
+              // listItem.appendChild(expandSign);
               listItem.appendChild(label);
               listItem.classList.add("closed");
               listItem.classList.add("tree-node-li");
@@ -127,22 +140,14 @@ class DataTree extends React.Component {
 
   buildTree(rootNodes){
     let childrenList = [];
-    for(let i=0; i < rootNodes.length; i++){
-      let expandSign = ""
-      if(rootNodes[i].has_children){
-        expandSign = <AddBoxOutlinedIcon className='expand-icons expand-icons-has-child-closed' fontSize='small' />;
-      }
-      else{
-        expandSign = <CancelPresentationOutlinedIcon className='expand-icons expand-icons-no-child'  fontSize='small' />
-      }
-      
+    for(let i=0; i < rootNodes.length; i++){           
       let listItem = React.createElement("li", {         
           "data-iri":rootNodes[i].iri, 
           "data-id": i,
           "className": "closed tree-node-li",
           "id": i + "_" +  Math.floor(Math.random() * 10000)
         }
-          , expandSign, rootNodes[i].label
+          , rootNodes[i].label
           );
       childrenList.push(listItem);
     }

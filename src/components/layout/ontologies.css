@@ -305,14 +305,12 @@ The Tree view and detail table styles (for both classes and properties)
     text-indent: -2em;
 }
 
-.expand-icons{
-    margin-right: 5px;
+.closed:before {
+    content: "+";
+    margin-right: 4px;
 }
 
-.expand-icons-no-child{
-    color: red;
-}
-
-.expand-icons-has-child-closed{
-    color: green;
+.opened:before {
+    content: "-";
+    margin-right: 4px;
 }
