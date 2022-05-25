@@ -314,3 +314,8 @@ The Tree view and detail table styles (for both classes and properties)
     content: "-";
     margin-right: 4px;
 }
+
+.leaf-node:before{
+    content: "#";
+    margin-right: 4px;
+}
