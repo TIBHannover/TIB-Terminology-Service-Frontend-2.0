@@ -135,53 +135,6 @@ async suggestionHandler(selectedTerm){
       }
   }
 
-  /**
-     * Handle the click on the pagination
-     * @param {*} value
-     */
-   handlePagination (value) {
-    this.setState({
-      pageNumber: value,
-      paginationReset: false
-    }, () => {
-      this.paginationHandler()
-    })
-  }
-
-
-
-  /**
-     * Count the number of pages for the pagination
-     * @returns
-     */
-  pageCount () {
-    return (Math.ceil(this.state.totalResults / this.state.pageSize))
-  }
-
-  /**
-       * Handle the pagination change. This function has to be passed to the Pagination component
-       */
-   async paginationHandler () {
-    let ontologies = this.state.ontologies
-    let types = this.state.types
-    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
-    if(ontologies > 0 && types > 0){
-      this.handleSelection()
-     }
-     else{
-      let targetUrl = await fetch(baseUrl)
-      console.info(targetUrl)
-      let resultJson = (await targetUrl.json());
-      let newResults = resultJson['response']['docs']
-      console.info(resultJson)
-      this.setState({
-        searchResult: newResults
-     })
-     }
-     
-  }
-
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
@@ -247,6 +200,64 @@ async suggestionHandler(selectedTerm){
         types: types 
        })
      }
+  
+  /**
+     * Handle the click on the pagination
+     * @param {*} value
+     */
+   handlePagination (value) {
+    this.setState({
+      pageNumber: value,
+      paginationReset: false
+    }, () => {
+      this.paginationHandler()
+    })
+  }
+
+
+
+  /**
+     * Count the number of pages for the pagination
+     * @returns
+     */
+  pageCount () {
+    return (Math.ceil(this.state.totalResults / this.state.pageSize))
+  }
+
+  /**
+       * Handle the pagination change. This function has to be passed to the Pagination component
+       */
+   async paginationHandler () {
+    let ontologies = this.state.selectedOntologies
+    let types = this.state.selectedTypes
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+    if(ontologies > 0 && types > 0){
+      ontologies.forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+      }) 
+      types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+      })
+      console.info(baseUrl)
+      let targetUrl = await fetch(baseUrl)
+      let newResults = (await targetUrl.json())['response']['docs']
+      this.setState({
+        searchResult: newResults
+     })
+     }
+     else{
+      let targetUrl = await fetch(baseUrl)
+      console.info(targetUrl)
+      let resultJson = (await targetUrl.json());
+      let newResults = resultJson['response']['docs']
+      console.info(resultJson)
+      this.setState({
+        searchResult: newResults
+     })
+     }
+     
+  }
      
 
 
