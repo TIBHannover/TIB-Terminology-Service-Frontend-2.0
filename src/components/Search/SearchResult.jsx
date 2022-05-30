@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
-import PaginationCustom from './Pagination';
+import PaginationCustom from './Pagination/Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
