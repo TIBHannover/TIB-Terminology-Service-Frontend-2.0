@@ -1,4 +1,5 @@
 import React from 'react'
+import queryString from 'query-string';
 
 class Pagination extends React.Component{
     constructor(props){
@@ -11,7 +12,48 @@ class Pagination extends React.Component{
         selectedOntologies: [],
         selectedTypes: []
         })
+        this.handlePagination = this.handlePagination.bind(this);
+        this.pageCount = this.pageCount.bind(this);
+        this.searching = this.searching.bind(this);
+        this.paginationHandler = this.paginationHandler.bind(this);
     }
+    /**
+     * Fetch the json terms
+     */
+    async searching(){
+        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+        let enteredTerm = targetQueryParams.q
+        if (enteredTerm.length > 0){
+          let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
+          let resultJson = (await searchResult.json());
+          searchResult =  resultJson['response']['docs'];
+          let facetFields = resultJson['facet_counts'];
+          let paginationResult = resultJson['response']
+          let totalResults = paginationResult['numFound']
+          this.setState({
+            searchResult: searchResult,
+            originalSearchResult: searchResult,
+            facetFields: facetFields,
+            paginationResult: paginationResult,
+            totalResults: totalResults,
+            result: true,
+            isLoaded: true,
+            enteredTerm: enteredTerm
+          });  
+        }
+        else if (enteredTerm.length == 0){
+            this.setState({
+                result: false,
+                searchResult: [],
+                facetFields: [],
+                originalSearchResult: [],
+                isLoaded: true,
+                enteredTerm: enteredTerm
+            });  
+        }
+    }
+
+
     /**
      * Handle the click on the pagination
      * @param {*} value
