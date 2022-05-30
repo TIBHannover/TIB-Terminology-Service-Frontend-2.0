@@ -36,7 +36,6 @@ class SearchResult extends React.Component{
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
-        //this.transportTerm = this.transportTerm.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
         this.createResultList = this.createResultList.bind(this);
         this.suggestionChange = this.suggestionChange.bind(this);
@@ -146,7 +145,7 @@ async suggestionHandler(selectedTerm){
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={8}>
               <div className="search-card-title">
-                <h4><b><Link to={this.transportTerm(searchResultItem[i])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+                <h4><b><Link to={''} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
@@ -189,8 +188,7 @@ async suggestionHandler(selectedTerm){
      */
    handlePagination (value) {
     this.setState({
-      pageNumber: value,
-      paginationReset: false
+      pageNumber: value
     }, () => {
       this.paginationHandler()
     })
