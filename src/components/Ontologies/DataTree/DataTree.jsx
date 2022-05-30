@@ -39,6 +39,7 @@ class DataTree extends React.Component {
     this.setTreeData = this.setTreeData.bind(this);
     this.buildTree = this.buildTree.bind(this);
     this.expandNode = this.expandNode.bind(this);
+    this.processClick = this.processClick.bind(this);
   }
 
 
@@ -70,100 +71,116 @@ class DataTree extends React.Component {
     }
   }
 
-  componentDidMount(){
-    this.setTreeData();
+
+  /**
+ * Build the first layer of the tree (root nodes).
+ * @param {*} rootNodes 
+ * @returns 
+ */
+  buildTree(rootNodes){
+  let childrenList = [];
+  for(let i=0; i < rootNodes.length; i++){
+    let leafClass = " closed";
+    if (!rootNodes[i].has_children){
+      leafClass = " leaf-node";
+    }
+    let listItem = React.createElement("li", {         
+        "data-iri":rootNodes[i].iri, 
+        "data-id": i,
+        "className": "tree-node-li" + leafClass,
+        "id": i + "_" +  Math.floor(Math.random() * 10000)
+      }
+        , rootNodes[i].label
+        );
+    childrenList.push(listItem);
   }
-
-  componentDidUpdate(){
-    this.setTreeData();
-  }
-
+  let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);
+  return treeList;
+}
 
 
-  async expandNode(e){
-    if(e.target.tagName === "LI"){
-        let targetNodeIri = e.target.dataset.iri;
-        let targetNodeId = e.target.dataset.id;
-        let Id = e.target.id;
-        if(document.getElementById(Id).classList.contains("closed")){
-            // expand node
-            let callHeader = {
-              'Accept': 'application/json'
-            };
-            let getCallSetting = {method: 'GET', headers: callHeader};
-            let url = "https://service.tib.eu/ts4tib/api/ontologies/";
-            let extractName = "terms";
-            url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-            let res =  await (await fetch(url, getCallSetting)).json(); 
-            let ul = document.createElement("ul");
-            ul.setAttribute("id", "children_for_" + Id);
-            ul.classList.add("tree-node-ul");
-            for(let i=0; i < res.length; i++){
-              let newId = res[i].id + "_" +  Math.floor(Math.random() * 10000);
-              let label = document.createTextNode(res[i].text);
-              let listItem = document.createElement("li");         
-              listItem.setAttribute("id", newId);
-              listItem.setAttribute("data-iri", res[i].iri);
-              listItem.setAttribute("data-id", res[i].id);              
-              listItem.appendChild(label);
-              if(res[i].children){
-                listItem.classList.add("closed");
-              }
-              else{
-                listItem.classList.add("leaf-node");
-              }              
-              listItem.classList.add("tree-node-li");
-              ul.appendChild(listItem);      
-            }
-            document.getElementById(Id).classList.remove("closed");
-            document.getElementById(Id).classList.add("opened");
-            document.getElementById(Id).appendChild(ul);
+
+/**
+ * Expand/collapse a node on click
+ */
+async expandNode(e){
+  let targetNodeIri = e.target.dataset.iri;
+  let targetNodeId = e.target.dataset.id;
+  let Id = e.target.id;
+  if(document.getElementById(Id).classList.contains("closed")){
+      // expand node
+      let callHeader = {
+        'Accept': 'application/json'
+      };
+      let getCallSetting = {method: 'GET', headers: callHeader};
+      let url = "https://service.tib.eu/ts4tib/api/ontologies/";
+      let extractName = "terms";
+      url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
+      let res =  await (await fetch(url, getCallSetting)).json(); 
+      let ul = document.createElement("ul");
+      ul.setAttribute("id", "children_for_" + Id);
+      ul.classList.add("tree-node-ul");
+      for(let i=0; i < res.length; i++){
+        let newId = res[i].id + "_" +  Math.floor(Math.random() * 10000);
+        let label = document.createTextNode(res[i].text);
+        let listItem = document.createElement("li");         
+        listItem.setAttribute("id", newId);
+        listItem.setAttribute("data-iri", res[i].iri);
+        listItem.setAttribute("data-id", res[i].id);              
+        listItem.appendChild(label);
+        if(res[i].children){
+          listItem.classList.add("closed");
         }
         else{
-            document.getElementById(Id).classList.remove("opened");
-            document.getElementById(Id).classList.add("closed");
-            document.getElementById("children_for_" + Id).remove();
-        }
-        
+          listItem.classList.add("leaf-node");
+        }              
+        listItem.classList.add("tree-node-li");
+        ul.appendChild(listItem);      
       }
+      document.getElementById(Id).classList.remove("closed");
+      document.getElementById(Id).classList.add("opened");
+      document.getElementById(Id).appendChild(ul);
   }
+  else{
+      document.getElementById(Id).classList.remove("opened");
+      document.getElementById(Id).classList.add("closed");
+      document.getElementById("children_for_" + Id).remove();
+  }
+      
+}
 
 
-  buildTree(rootNodes){
-    let childrenList = [];
-    for(let i=0; i < rootNodes.length; i++){
-      let leafClass = " closed";
-      if (!rootNodes[i].has_children){
-        leafClass = " leaf-node";
-      }
-      let listItem = React.createElement("li", {         
-          "data-iri":rootNodes[i].iri, 
-          "data-id": i,
-          "className": "tree-node-li" + leafClass,
-          "id": i + "_" +  Math.floor(Math.random() * 10000)
-        }
-          , rootNodes[i].label
-          );
-      childrenList.push(listItem);
+
+/**
+ * Process a click on the tree container div. 
+ * @param {*} e 
+ */
+processClick(e){
+  if(e.target.tagName === "LI"){
+      this.expandNode(e);
     }
-    let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);
-    return treeList;
-  }
+}
 
 
-  render(){
-    return(
-      <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.expandNode(e)} >
-          <Grid item xs={5} className="tree-container">
-              {this.buildTree(this.state.rootNodes)}
-          </Grid>
-      </Grid>  
-    )
-  }
+componentDidMount(){
+  this.setTreeData();
+}
+
+componentDidUpdate(){
+  this.setTreeData();
+}
 
 
 
-
+render(){
+  return(
+    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.expandNode(e)} >
+        <Grid item xs={5} className="tree-container">
+            {this.buildTree(this.state.rootNodes)}
+        </Grid>
+    </Grid>  
+  )
+}
 
 }
 
