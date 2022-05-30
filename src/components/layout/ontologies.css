@@ -307,6 +307,12 @@ The Tree view and detail table styles (for both classes and properties)
     background-color: rgb(188, 188, 238);
 }
 
+.clicked{
+    background-color: rgb(110, 175, 175);
+    color: black;
+    font-weight: bold;
+}
+
 
 .fa{
     display: inline !important;

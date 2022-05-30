@@ -42,6 +42,7 @@ class DataTree extends React.Component {
     this.expandNode = this.expandNode.bind(this);
     this.processClick = this.processClick.bind(this);
     this.buildTreeListItem = this.buildTreeListItem.bind(this);
+    this.selectNode = this.selectNode.bind(this);
   }
 
 
@@ -132,13 +133,13 @@ async expandNode(e){
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
       document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
       document.getElementById(Id).classList.remove("closed");
-      document.getElementById(Id).classList.add("opened");
+      document.getElementById(Id).classList.add("opened");      
       document.getElementById(Id).appendChild(ul);
   }
-  else{
+  else if (!document.getElementById(Id).classList.contains("leaf-node")){
     // close an already expanded node
       document.getElementById(Id).classList.remove("opened");
-      document.getElementById(Id).classList.add("closed");
+      document.getElementById(Id).classList.add("closed");      
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
       document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
       document.getElementById("children_for_" + Id).remove();
@@ -180,17 +181,35 @@ async expandNode(e){
   }
 
 
+/**
+ * Select a node in tree
+ * @param {*} e 
+ */
+selectNode(target){
+  let selectedElement = document.getElementsByClassName("clicked");
+  for(let i =0; i < selectedElement.length; i++){
+    selectedElement[i].classList.remove("clicked");
+  }
+
+  if(!target.classList.contains("clicked")){
+    target.classList.add("clicked");
+  }
+  else{
+    target.classList.remove("clicked");
+  }
+}
+
 
 /**
  * Process a click on the tree container div. 
  * @param {*} e 
  */
 processClick(e){
-  if(e.target.tagName === "LI"){
-      this.expandNode(e.target);
-    }
-  else if (e.target.tagName === "SPAN"){
-    // console.info(e.target.parentNode);
+  if (e.target.tagName === "SPAN"){ 
+    this.selectNode(e.target);
+  }
+  else if (e.target.tagName === "I"){   
+    // expand a node by clicking on the expand icon 
     this.expandNode(e.target.parentNode);
   }
 }
