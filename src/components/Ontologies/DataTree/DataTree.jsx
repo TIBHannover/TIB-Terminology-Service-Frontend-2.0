@@ -40,6 +40,7 @@ class DataTree extends React.Component {
     this.buildTree = this.buildTree.bind(this);
     this.expandNode = this.expandNode.bind(this);
     this.processClick = this.processClick.bind(this);
+    this.buildTreeListItem = this.buildTreeListItem.bind(this);
   }
 
 
@@ -81,16 +82,18 @@ class DataTree extends React.Component {
   let childrenList = [];
   for(let i=0; i < rootNodes.length; i++){
     let leafClass = " closed";
+    let symbol = React.createElement("span", {}, "+");
     if (!rootNodes[i].has_children){
       leafClass = " leaf-node";
-    }
+      symbol = React.createElement("span", {}, "\u274C");
+    }    
     let listItem = React.createElement("li", {         
         "data-iri":rootNodes[i].iri, 
         "data-id": i,
         "className": "tree-node-li" + leafClass,
         "id": i + "_" +  Math.floor(Math.random() * 10000)
       }
-        , rootNodes[i].label
+        , symbol, rootNodes[i].label
         );
     childrenList.push(listItem);
   }
@@ -121,33 +124,53 @@ async expandNode(e){
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let newId = res[i].id + "_" +  Math.floor(Math.random() * 10000);
-        let label = document.createTextNode(res[i].text);
-        let listItem = document.createElement("li");         
-        listItem.setAttribute("id", newId);
-        listItem.setAttribute("data-iri", res[i].iri);
-        listItem.setAttribute("data-id", res[i].id);              
-        listItem.appendChild(label);
-        if(res[i].children){
-          listItem.classList.add("closed");
-        }
-        else{
-          listItem.classList.add("leaf-node");
-        }              
-        listItem.classList.add("tree-node-li");
+        let listItem = this.buildTreeListItem(res[i]);
         ul.appendChild(listItem);      
-      }
+      }      
+      document.getElementById(Id).getElementsByTagName("span")[0].textContent = "-";
       document.getElementById(Id).classList.remove("closed");
       document.getElementById(Id).classList.add("opened");
       document.getElementById(Id).appendChild(ul);
   }
   else{
+    // close an already expanded node
       document.getElementById(Id).classList.remove("opened");
       document.getElementById(Id).classList.add("closed");
+      document.getElementById(Id).getElementsByTagName("span")[0].textContent = "+";
       document.getElementById("children_for_" + Id).remove();
   }
       
 }
+
+
+/**
+ * Build a list (li) element for the tree veiw
+ * @param {*} childNode
+ */
+  buildTreeListItem(childNode){
+    let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
+    let label = document.createTextNode(childNode.text);
+    let symbolText = "";
+    let symbol = document.createElement("span");
+    let listItem = document.createElement("li");
+    listItem.setAttribute("id", newId);
+    listItem.setAttribute("data-iri", childNode.iri);
+    listItem.setAttribute("data-id", childNode.id);                  
+    if(childNode.children){
+      listItem.classList.add("closed");
+      symbolText = document.createTextNode("+");
+    }
+    else{
+      listItem.classList.add("leaf-node");
+      symbolText = document.createTextNode("\u274C");
+    }
+    symbol.appendChild(symbolText);
+    listItem.appendChild(symbol);
+    listItem.appendChild(label);
+    listItem.classList.add("tree-node-li");
+
+    return listItem;
+  }
 
 
 
@@ -174,7 +197,7 @@ componentDidUpdate(){
 
 render(){
   return(
-    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.expandNode(e)} >
+    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} >
         <Grid item xs={5} className="tree-container">
             {this.buildTree(this.state.rootNodes)}
         </Grid>

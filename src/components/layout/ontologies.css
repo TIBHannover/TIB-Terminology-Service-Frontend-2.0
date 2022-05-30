@@ -306,7 +306,7 @@ The Tree view and detail table styles (for both classes and properties)
     margin-bottom: 5px;
 }
 
-.closed:before {
+/* .closed:before {
     content: "+";
     margin-right: 4px;
     color: green;
@@ -330,4 +330,4 @@ The Tree view and detail table styles (for both classes and properties)
     margin-right: 4px;
     border: 2px solid;
     color: gray;
-}
+} */
