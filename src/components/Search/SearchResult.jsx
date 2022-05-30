@@ -118,28 +118,10 @@ async suggestionHandler(selectedTerm){
     return resultList
 }
 
-  async transportTerm(searchResultItem){
-      let url = "";
-      if(searchResultItem.type === 'class'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/terms/' + searchResultItem.iri;
-      }
-      else if(searchResultItem.type === 'properties'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/properties/' + searchResultItem.iri;
-      } 
-      
-      else if(searchResultItem.type === 'ontology'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology;
-      }
-      else if(searchResultItem.type === 'individuals'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri;
-      }
-  }
-
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
     } 
-    //this.transportTerm()
   }
 
   // componentDidUpdate(){
@@ -228,8 +210,8 @@ async suggestionHandler(selectedTerm){
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
    async paginationHandler () {
-    let ontologies = this.state.selectedOntologies
-    let types = this.state.selectedTypes
+    let ontologies = this.state.ontologies
+    let types = this.state.types
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
     if(ontologies > 0 && types > 0){
@@ -251,7 +233,6 @@ async suggestionHandler(selectedTerm){
       console.info(targetUrl)
       let resultJson = (await targetUrl.json());
       let newResults = resultJson['response']['docs']
-      console.info(resultJson)
       this.setState({
         searchResult: newResults
      })
