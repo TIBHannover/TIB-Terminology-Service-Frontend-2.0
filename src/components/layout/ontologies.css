@@ -294,40 +294,44 @@ The Tree view and detail table styles (for both classes and properties)
     border-bottom: 1px solid black;
 }
 
-.tree-node-ul {
+.tree-node-li {
+    padding-left: 2em;
+    text-indent: -2em;
+    margin-bottom: 5px;
     list-style: none;
     margin-left: 0;
     padding-left: 0;
 }
 
-.tree-node-li {
-    padding-left: 2em;
-    text-indent: -2em;
-    margin-bottom: 5px;
-}
-
-/* .closed:before {
-    content: "+";
-    margin-right: 4px;
-    color: green;
-    font-weight: bold;   
-    width: 40px; 
-    aspect-ratio: 1;
-    border: 1px solid;    
-}
-
-.opened:before {
-    content: "-";
-    margin-right: 4px;
+.fa{
+    display: inline !important;
     border: 1px solid;
-    color: red;
-    font-weight: bold;
-    width: 40px;
+    margin-right: 5px;
 }
 
-.leaf-node:before{
-    content: "\00d7";
-    margin-right: 4px;
-    border: 2px solid;
-    color: gray;
+
+/* .symbol-div{
+    border: 1px solid;
+    font-weight: bold;
+    margin-right: 5px;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    text-align: right;
+    padding-top: 0;
 } */
+
+
+
+.closed > i{    
+    color: green;
+}
+
+
+.opened > i{   
+    color: red;
+}
+
+.leaf-node > i{   
+    color: gray;
+}

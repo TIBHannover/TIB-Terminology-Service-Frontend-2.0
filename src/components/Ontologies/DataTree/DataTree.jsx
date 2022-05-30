@@ -1,6 +1,7 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom'
 import '../../layout/ontologies.css';
+import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
@@ -82,10 +83,10 @@ class DataTree extends React.Component {
   let childrenList = [];
   for(let i=0; i < rootNodes.length; i++){
     let leafClass = " closed";
-    let symbol = React.createElement("span", {}, "+");
+    let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
     if (!rootNodes[i].has_children){
       leafClass = " leaf-node";
-      symbol = React.createElement("span", {}, "\u274C");
+      symbol = React.createElement("i", {"className": "fa fa-close"}, "");
     }    
     let listItem = React.createElement("li", {         
         "data-iri":rootNodes[i].iri, 
@@ -127,7 +128,8 @@ async expandNode(e){
         let listItem = this.buildTreeListItem(res[i]);
         ul.appendChild(listItem);      
       }      
-      document.getElementById(Id).getElementsByTagName("span")[0].textContent = "-";
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
       document.getElementById(Id).classList.remove("closed");
       document.getElementById(Id).classList.add("opened");
       document.getElementById(Id).appendChild(ul);
@@ -136,7 +138,8 @@ async expandNode(e){
     // close an already expanded node
       document.getElementById(Id).classList.remove("opened");
       document.getElementById(Id).classList.add("closed");
-      document.getElementById(Id).getElementsByTagName("span")[0].textContent = "+";
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
       document.getElementById("children_for_" + Id).remove();
   }
       
@@ -151,20 +154,21 @@ async expandNode(e){
     let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
     let label = document.createTextNode(childNode.text);
     let symbolText = "";
-    let symbol = document.createElement("span");
+    let symbol = document.createElement("i");
     let listItem = document.createElement("li");
     listItem.setAttribute("id", newId);
     listItem.setAttribute("data-iri", childNode.iri);
     listItem.setAttribute("data-id", childNode.id);                  
     if(childNode.children){
       listItem.classList.add("closed");
-      symbolText = document.createTextNode("+");
+      symbol.classList.add('fa');
+      symbol.classList.add('fa-plus');
     }
     else{
       listItem.classList.add("leaf-node");
-      symbolText = document.createTextNode("\u274C");
+      symbol.classList.add('fa');
+      symbol.classList.add('fa-close');
     }
-    symbol.appendChild(symbolText);
     listItem.appendChild(symbol);
     listItem.appendChild(label);
     listItem.classList.add("tree-node-li");
