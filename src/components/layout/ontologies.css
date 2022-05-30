@@ -296,32 +296,23 @@ The Tree view and detail table styles (for both classes and properties)
 
 .tree-node-li {
     padding-left: 2em;
-    text-indent: -2em;
     margin-bottom: 5px;
     list-style: none;
     margin-left: 0;
     padding-left: 0;
+    cursor: pointer;
 }
+
+.li-label-text:hover{
+    background-color: rgb(188, 188, 238);
+}
+
 
 .fa{
     display: inline !important;
     border: 1px solid;
     margin-right: 5px;
 }
-
-
-/* .symbol-div{
-    border: 1px solid;
-    font-weight: bold;
-    margin-right: 5px;
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    text-align: right;
-    padding-top: 0;
-} */
-
-
 
 .closed > i{    
     color: green;

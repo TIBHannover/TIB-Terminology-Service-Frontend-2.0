@@ -84,6 +84,7 @@ class DataTree extends React.Component {
   for(let i=0; i < rootNodes.length; i++){
     let leafClass = " closed";
     let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+    let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes[i].label);
     if (!rootNodes[i].has_children){
       leafClass = " leaf-node";
       symbol = React.createElement("i", {"className": "fa fa-close"}, "");
@@ -94,7 +95,7 @@ class DataTree extends React.Component {
         "className": "tree-node-li" + leafClass,
         "id": i + "_" +  Math.floor(Math.random() * 10000)
       }
-        , symbol, rootNodes[i].label
+        , symbol, textSpan
         );
     childrenList.push(listItem);
   }
@@ -108,9 +109,9 @@ class DataTree extends React.Component {
  * Expand/collapse a node on click
  */
 async expandNode(e){
-  let targetNodeIri = e.target.dataset.iri;
-  let targetNodeId = e.target.dataset.id;
-  let Id = e.target.id;
+  let targetNodeIri = e.dataset.iri;
+  let targetNodeId = e.dataset.id;
+  let Id = e.id;
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
       let callHeader = {
@@ -153,7 +154,9 @@ async expandNode(e){
   buildTreeListItem(childNode){
     let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
     let label = document.createTextNode(childNode.text);
-    let symbolText = "";
+    let labelTextSpan = document.createElement("span");
+    labelTextSpan.classList.add("li-label-text");
+    labelTextSpan.appendChild(label);
     let symbol = document.createElement("i");
     let listItem = document.createElement("li");
     listItem.setAttribute("id", newId);
@@ -170,7 +173,7 @@ async expandNode(e){
       symbol.classList.add('fa-close');
     }
     listItem.appendChild(symbol);
-    listItem.appendChild(label);
+    listItem.appendChild(labelTextSpan);
     listItem.classList.add("tree-node-li");
 
     return listItem;
@@ -184,8 +187,12 @@ async expandNode(e){
  */
 processClick(e){
   if(e.target.tagName === "LI"){
-      this.expandNode(e);
+      this.expandNode(e.target);
     }
+  else if (e.target.tagName === "SPAN"){
+    // console.info(e.target.parentNode);
+    this.expandNode(e.target.parentNode);
+  }
 }
 
 
