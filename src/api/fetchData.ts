@@ -67,7 +67,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return [terms, []];
+    return terms;
     
     
     

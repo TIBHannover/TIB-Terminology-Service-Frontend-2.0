@@ -34,7 +34,6 @@ class OntologyDetail extends React.Component {
       waiting: false,
       targetTermIri: " ",
       targetPropertyIri: " ",
-      alreadyExistedTermsInTree: {},
       alreadyExistedPropsInTree: {}
     })
     this.tabChange = this.tabChange.bind(this);
@@ -130,12 +129,11 @@ class OntologyDetail extends React.Component {
      * Get the ontology root classes 
      */
   async getRootTerms (ontologyId) {
-    let [rootTerms, alreadyExistedTermsInTree] = await getOntologyRootTerms(ontologyId);
+    let rootTerms = await getOntologyRootTerms(ontologyId);
     if (typeof rootTerms != undefined){
       this.setState({
         isRootTermsLoaded: true,
-        rootTerms: rootTerms,
-        alreadyExistedTermsInTree: alreadyExistedTermsInTree
+        rootTerms: rootTerms
       });
     }
     else{
@@ -250,8 +248,7 @@ class OntologyDetail extends React.Component {
                           rootNodes={this.state.rootTerms}
                           componentIdentity={'term'}
                           iri={this.state.targetTermIri}
-                          key={'termTreePage'}
-                          existedNodes={this.state.alreadyExistedTermsInTree}
+                          key={'termTreePage'}                    
                           ontology={this.state.ontologyId}                           
                         />
           }

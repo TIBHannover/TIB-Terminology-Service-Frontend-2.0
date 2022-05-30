@@ -17,9 +17,6 @@ class DataTree extends React.Component {
       expandedNodes: [],
       treeData: [],
       originalTreeData: [],
-      visitedNodes: [],
-      currentExpandedTerm: '',
-      currentClickedTerm: '',
       selectedNodeIri: '',
       showNodeDetailPage: false,
       componentIdentity: "",
@@ -27,11 +24,11 @@ class DataTree extends React.Component {
       propertyTree: false,
       openTreeRoute: [],
       isTreeRouteShown: false,
-      alreadyExistedNodesInTree: {},
       ontologyId: '',
       childrenFieldName:'',
       ancestorsFieldName: '',
-      searchWaiting: true
+      searchWaiting: true,
+      isTreeLoaded: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -53,7 +50,7 @@ class DataTree extends React.Component {
     let rootNodes = this.props.rootNodes;
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
-    if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){
+    if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){        
         if(componentIdentity == 'term'){         
             this.setState({
                 rootNodes: rootNodes,
@@ -62,7 +59,6 @@ class DataTree extends React.Component {
                 componentIdentity: componentIdentity,
                 termTree: true,
                 propertyTree: false,
-                alreadyExistedNodesInTree: this.props.existedNodes,
                 ontologyId: ontologyId,
                 childrenFieldName: "hierarchicalChildren",
                 ancestorsFieldName: "hierarchicalAncestors"
@@ -91,7 +87,7 @@ class DataTree extends React.Component {
         "data-iri":rootNodes[i].iri, 
         "data-id": i,
         "className": "tree-node-li" + leafClass,
-        "id": i + "_" +  Math.floor(Math.random() * 10000)
+        "id": i + "_" 
       }
         , symbol, textSpan
         );
