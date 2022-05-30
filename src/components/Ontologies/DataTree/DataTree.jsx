@@ -1,8 +1,8 @@
-import React, { createElement } from 'react';
-import ReactDOM from 'react-dom'
+import React from 'react';
 import '../../layout/ontologies.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
+import TermPage from '../TermPage/TermPage';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
 import {getChildren, getNodeByIri} from '../../../api/fetchData';
@@ -20,21 +20,18 @@ class DataTree extends React.Component {
       visitedNodes: [],
       currentExpandedTerm: '',
       currentClickedTerm: '',
-      selectedNode: '',
+      selectedNodeIri: '',
       showNodeDetailPage: false,
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      targetNodeIri: "",
       openTreeRoute: [],
       isTreeRouteShown: false,
       alreadyExistedNodesInTree: {},
       ontologyId: '',
       childrenFieldName:'',
       ancestorsFieldName: '',
-      searchWaiting: true,
-      treeDataFlatPointers: {},
-      originalTreeDataFlatPointers: {}
+      searchWaiting: true
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -190,9 +187,13 @@ selectNode(target){
   for(let i =0; i < selectedElement.length; i++){
     selectedElement[i].classList.remove("clicked");
   }
-
+  
   if(!target.classList.contains("clicked")){
     target.classList.add("clicked");
+    this.setState({
+      showNodeDetailPage: true,
+      selectedNodeIri: target.parentNode.dataset.iri
+    });
   }
   else{
     target.classList.remove("clicked");
@@ -231,6 +232,12 @@ render(){
         <Grid item xs={5} className="tree-container">
             {this.buildTree(this.state.rootNodes)}
         </Grid>
+        {this.state.showNodeDetailPage && <Grid item xs={7} className="node-table-container">
+          <TermPage
+            iri={this.state.selectedNodeIri}
+            ontology={this.state.ontologyId}
+          />
+      </Grid>}
     </Grid>  
   )
 }

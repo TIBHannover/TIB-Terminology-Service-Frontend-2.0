@@ -46,7 +46,8 @@ class TermPage extends React.Component {
     let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), "terms");    
     this.setState({
       prevTerm: node.iri,
-      data: node
+      data: node,
+      iriIsCopied: false
     });
   }
 
@@ -62,9 +63,6 @@ class TermPage extends React.Component {
   componentDidUpdate(){
     if(this.state.data && this.state.prevTerm != this.props.iri){
       this.initiateTheTableView();
-      this.setState({
-        iriIsCopied: false,        
-      });
     }
   }
 
