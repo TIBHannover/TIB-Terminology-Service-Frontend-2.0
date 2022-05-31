@@ -296,7 +296,17 @@ The Tree view and detail table styles (for both classes and properties)
     list-style: none;
     margin-left: 0;
     padding-left: 0;
-    cursor: pointer;
+    cursor: pointer;    
+    border-left: 1px dotted !important;
+    border-left-color: gray;
+}
+
+.tree-node-li::before{
+    /* 
+        For thr tree view heirarchy style.
+    */
+
+    content: "...";
 }
 
 
@@ -351,3 +361,4 @@ The Tree view and detail table styles (for both classes and properties)
 
     color: gray;
 }
+

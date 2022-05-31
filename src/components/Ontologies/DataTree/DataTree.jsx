@@ -82,6 +82,8 @@ class DataTree extends React.Component {
               childrenFieldName: "children",
               ancestorsFieldName: "ancestors",
               childExtractName: "properties"
+            }, async () => {
+              await this.processTree();
             });    
         }      
     }
@@ -100,7 +102,6 @@ class DataTree extends React.Component {
         return true;
       }
       target = target.trim();
-      target = encodeURIComponent(target);
       if(target != undefined && this.state.targetNodeIri != target){        
         let callHeader = {
           'Accept': 'application/json'
@@ -108,7 +109,7 @@ class DataTree extends React.Component {
         let getCallSetting = {method: 'GET', headers: callHeader};
         let extractName = this.state.childExtractName;
         let url = this.state.baseUrl;
-        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(target) + "/jstree?viewMode=All&siblings=false";
+        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=false";
         let list =  await (await fetch(url, getCallSetting)).json();        
         let map = {}, node, roots = [], i;
         for (i = 0; i < list.length; i++) {
@@ -140,7 +141,7 @@ class DataTree extends React.Component {
               subList = this.expandTargetNode(roots[i].childrenList, roots[i].id);
               
             }
-            console.info(subList);
+        
             let listItem = React.createElement("li", {         
                 "data-iri":roots[i].iri, 
                 "data-id": i,
@@ -150,14 +151,15 @@ class DataTree extends React.Component {
                 
               );
             
-
             childrenList.push(listItem);
           }
           let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);                 
           this.setState({
               targetNodeIri: target,
               searchWaiting: false,
-              treeDomContent: treeList
+              treeDomContent: treeList,
+              selectedNodeIri: target,
+              showNodeDetailPage: true
           });          
       }
   }
@@ -179,10 +181,18 @@ expandTargetNode(nodeList, parentId){
     }
 
     let newId = nodeList[i].id + "_" +  Math.floor(Math.random() * 10000);
-    let symbol = React.createElement("i", {"className": "opened fa fa-minus"}, "")
-    let label = React.createElement("span", {"className": "li-label-text"}, nodeList[i].text)
+    let nodeStatusClass = "opened";
+    let iconClass = "fa fa-minus";
+    let clickedClass = "";
+    if (nodeList[i].childrenList.length === 0){
+      nodeStatusClass = "leaf-node";
+      iconClass = "fa fa-close";
+      clickedClass = "clicked"
+    }
+    let symbol = React.createElement("i", {"className": iconClass }, "")
+    let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text)
     let childNode = React.createElement("li", {
-        "className": "opened tree-node-li",
+        "className": nodeStatusClass + " tree-node-li",
         "id": newId,
         "data-iri": nodeList[i].iri,
         "data-id": nodeList[i].id
@@ -360,11 +370,11 @@ componentDidUpdate(){
 render(){
   return(
     <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} >
-        <Grid item xs={5} className="tree-container">            
+        <Grid item xs={6} className="tree-container">            
             {this.state.treeDomContent}
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
-          <Grid item xs={7} className="node-table-container">
+          <Grid item xs={6} className="node-table-container">
             <TermPage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
@@ -372,7 +382,7 @@ render(){
         </Grid>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
-          <Grid item xs={7} className="node-table-container">
+          <Grid item xs={6} className="node-table-container">
           <PropertyPage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
