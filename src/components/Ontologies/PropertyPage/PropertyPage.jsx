@@ -20,7 +20,7 @@ class PropertyPage extends React.Component {
   }
 
   formatText (text, isLink = false) {
-    if (text == null || text === '') {
+    if (text === null || text === '') {
       return 'null'
     } else if (isLink) {
       return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
@@ -45,14 +45,14 @@ class PropertyPage extends React.Component {
 
 
 componentDidMount(){
-  if(this.state.data && this.state.prevProperty != this.props.iri){
+  if(this.state.data && this.state.prevProperty !== this.props.iri){
     this.initiateTheTableView();      
   }
 }
 
 
 componentDidUpdate(){
-  if(this.state.data && this.state.prevProperty != this.props.iri){
+  if(this.state.data && this.state.prevProperty !== this.props.iri){
     this.initiateTheTableView();
   }
 }

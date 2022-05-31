@@ -28,7 +28,7 @@ class TermPage extends React.Component {
    * @returns 
    */
   formatText (text, isLink = false) {
-    if (text == null || text === '') {
+    if (text === null || text === '') {
       return 'null'
     } else if (isLink) {
       return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
@@ -54,14 +54,14 @@ class TermPage extends React.Component {
 
 
   componentDidMount(){
-    if(this.state.data && this.state.prevTerm != this.props.iri){
+    if(this.state.data && this.state.prevTerm !== this.props.iri){
       this.initiateTheTableView();      
     }
   }
 
 
   componentDidUpdate(){
-    if(this.state.data && this.state.prevTerm != this.props.iri){
+    if(this.state.data && this.state.prevTerm !== this.props.iri){
       this.initiateTheTableView();
     }
   }

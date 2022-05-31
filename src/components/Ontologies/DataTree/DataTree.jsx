@@ -4,10 +4,6 @@ import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
-import {getChildren, getNodeByIri} from '../../../api/fetchData';
-
 
 
 class DataTree extends React.Component {

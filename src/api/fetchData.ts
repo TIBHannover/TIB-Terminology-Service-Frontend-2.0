@@ -54,8 +54,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
     let ontology = await getOntologyDetail(ontologyId);
     let termsLink = ontology['_links']['terms']['href'];
     let pageCount = await getPageCount(termsLink + '/roots');
-    let terms:Array<any> = [];
-    // pageCount = 1;
+    let terms:Array<any> = [];    
     for(let page=0; page < pageCount; page++){
         let url = termsLink + "/roots?page=" + page + "&size=" + size;      
         let res =  await (await fetch(url, getCallSetting)).json();
@@ -68,11 +67,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
     }
     
     return terms;
-    
-    
-    
-    // return processForTree(null, terms, {}, "term");
-
+  
   }
   catch(e){
     return undefined
@@ -102,7 +97,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
         }      
     }
     
-    return processForTree(null , props, {}, "property");
+    return props;
 
   }
   catch(e){
@@ -122,50 +117,6 @@ async function getPageCount(url: string){
   let answer = await fetch(url, getCallSetting);
   answer = await answer.json();
   return Math.ceil(answer['page']['totalElements'] / size);
-}
-
-
-/**
- * Get the children of a node (term/property) to load in the tree view.
- * @param childrenLink 
- * @param mode
- * @returns 
- */
-export async function getChildren(node:any, nodeId:any, childrenFieldName:string, mode: string){ 
-  try{      
-
-      let extractName = "";
-      if (mode === 'term'){
-          extractName = "terms";
-      }
-      else{
-          extractName = "properties";
-      }
-
-      let url = OntologiesBaseServiceUrl + "/";
-      url += node["ontology_name"] + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(node["iri"])) + "/jstree/children/" + nodeId;
-      let res =  await (await fetch(url, getCallSetting)).json(); 
-      return [res, []];
-
-      // let pageCount = await getPageCount(node['_links'][childrenFieldName]['href']);
-      // let children:Array<any> = [];
-      // for(let page=0; page < pageCount; page++){
-      //     let url = node['_links'][childrenFieldName]['href'] + "?page=" + page + "&size=" + size; 
-      //     let res =  await (await fetch(url, getCallSetting)).json();
-      //     if(page == 0){
-      //       children = res['_embedded'][extractName];
-      //     }
-      //     else{
-      //       children = children.concat(res['_embedded'][extractName]);
-      //     }      
-      // }
-      
-      // return processForTree(node, children, alreadyExistedNodesInTree, mode); 
-
-  }
-  catch(e){
-      return [];
-  }
 }
 
 
@@ -193,7 +144,6 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
     for(let i=0; i < rootNodes.length; i++){  
       rootNodes[i]['children'] = [];
       rootNodes[i]['modified_short_form'] = rootNodes[i]['short_form'];
-      // rootNodes[i]['parentIri'] = "";
       rootNodes[i]['part_of'] = false;
       treeData.push(rootNodes[i]); 
       treeDataPointers[rootNodes[i]['modified_short_form']] =  rootNodes[i];
@@ -204,7 +154,6 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
     allRoutes.push([node[0]['short_form']]);
     node[0]['children'] = [];
     node[0]['modified_short_form'] = node[0]['short_form'];
-    // node[0]['parentIri'] = "";
     node[0]['part_of'] = false;
     treeData.push(node[0]);
     treeDataPointers[node[0]['modified_short_form']] =  node[0];
@@ -250,14 +199,11 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
       if(nodeExistInList(allAncestors, children[j]['iri'])){        
         route.push(children[j]['short_form']);
         children[j]['children'] = [];
-        children[j]['modified_short_form'] = children[j]['short_form'];
-        // children[j]['parentIri'] = node['iri'];
+        children[j]['modified_short_form'] = children[j]['short_form'];        
         if(mode == "terms"){
-          // children[j]['part_of'] = await hasPartOfRelation(children[j], "term");
           children[j]['part_of'] = false;
         }
         else{
-          // children[j]['part_of'] = await hasPartOfRelation(children[j], "property");
           children[j]['part_of'] = false;
         }
         treeData['children'].push(children[j]);
@@ -287,33 +233,6 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string)
     }
     node = await node.json();
     return node['_embedded'][mode][0];
-}
-
-
-/**
- * This function process each node (term/property) obtainded from API call to match with the tree view. 
- * A tree node needs: children, parent, and id (beside existing metadata) 
- * @param listOfNodes 
- */
-async function processForTree(parentNode:any, listOfNodes: Array<any>, alreadyExistedNodesInTree: {[id:string]: number}, mode:string){
-  let processedListOfNodes: Array<any> = [];  
-  for(let i=0; i < listOfNodes.length; i++){
-    // listOfNodes[i]['children'] = [];
-    // listOfNodes[i]['id'] = listOfNodes[i]['iri'];
-    // listOfNodes[i]['part_of'] = await hasPartOfRelation(listOfNodes[i], mode);
-    // listOfNodes[i]['part_of'] = false;
-    if(Object.keys(alreadyExistedNodesInTree).includes(listOfNodes[i]['short_form'])){
-      listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_' + alreadyExistedNodesInTree[listOfNodes[i]['short_form']];
-      alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = alreadyExistedNodesInTree[listOfNodes[i]['short_form']] + 1;
-    }
-    else{
-      listOfNodes[i]['modified_short_form'] = listOfNodes[i]['short_form'] + '_0';
-      alreadyExistedNodesInTree[listOfNodes[i]['short_form']] = 1;
-    }
-    processedListOfNodes.push(listOfNodes[i]);
-    
-  }
-  return [processedListOfNodes, alreadyExistedNodesInTree];
 }
 
 
