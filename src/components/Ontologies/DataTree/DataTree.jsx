@@ -3,6 +3,7 @@ import '../../layout/ontologies.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import TermPage from '../TermPage/TermPage';
+import PropertyPage from '../PropertyPage/PropertyPage';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
 import {getChildren, getNodeByIri} from '../../../api/fetchData';
@@ -14,7 +15,6 @@ class DataTree extends React.Component {
     super(props)
     this.state = ({
       rootNodes: [],
-      expandedNodes: [],
       treeData: [],
       originalTreeData: [],
       selectedNodeIri: '',
@@ -28,7 +28,8 @@ class DataTree extends React.Component {
       childrenFieldName:'',
       ancestorsFieldName: '',
       searchWaiting: true,
-      isTreeLoaded: false
+      baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
+      childExtractName: ""
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -61,9 +62,24 @@ class DataTree extends React.Component {
                 propertyTree: false,
                 ontologyId: ontologyId,
                 childrenFieldName: "hierarchicalChildren",
-                ancestorsFieldName: "hierarchicalAncestors"
+                ancestorsFieldName: "hierarchicalAncestors",
+                childExtractName: "terms"
               });              
-        }       
+        } 
+        else if(componentIdentity == 'property'){
+            this.setState({
+              rootNodes: rootNodes,
+              treeData: rootNodes,
+              originalTreeData: rootNodes,
+              componentIdentity: componentIdentity,
+              termTree: false,
+              propertyTree: true,
+              ontologyId: ontologyId,
+              childrenFieldName: "children",
+              ancestorsFieldName: "ancestors",
+              childExtractName: "properties"
+            });    
+        }      
     }
   }
 
@@ -112,8 +128,8 @@ async expandNode(e){
         'Accept': 'application/json'
       };
       let getCallSetting = {method: 'GET', headers: callHeader};
-      let url = "https://service.tib.eu/ts4tib/api/ontologies/";
-      let extractName = "terms";
+      let url = this.state.baseUrl;
+      let extractName = this.state.childExtractName;
       url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
       let res =  await (await fetch(url, getCallSetting)).json(); 
       let ul = document.createElement("ul");
@@ -228,12 +244,22 @@ render(){
         <Grid item xs={5} className="tree-container">
             {this.buildTree(this.state.rootNodes)}
         </Grid>
-        {this.state.showNodeDetailPage && <Grid item xs={7} className="node-table-container">
-          <TermPage
-            iri={this.state.selectedNodeIri}
-            ontology={this.state.ontologyId}
+        {this.state.termTree && this.state.showNodeDetailPage && 
+          <Grid item xs={7} className="node-table-container">
+            <TermPage
+              iri={this.state.selectedNodeIri}
+              ontology={this.state.ontologyId}
+            />
+        </Grid>
+        }
+        {this.state.propertyTree && this.state.showNodeDetailPage && 
+          <Grid item xs={7} className="node-table-container">
+          <PropertyPage
+              iri={this.state.selectedNodeIri}
+              ontology={this.state.ontologyId}
           />
-      </Grid>}
+        </Grid>
+        }
     </Grid>  
   )
 }
