@@ -122,42 +122,47 @@ async function getPageCount(url: string){
 
 /**
  * Get a route in a tree to reach to an specific node. Used in opening an specific term/propert
- * @param ontologyId
+ * @param ontology
  * @param nodeIri
  * @param mode (terms/properties)
  * @returns 
  */
-export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>, treeData: Array<any>, treeDataPointers:{[id:string]: any}, childFieldName:string, ancestorFieldName:string) {
+export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string, allRoutes: Array<any>,  childFieldName:string, ancestorFieldName:string) {
   let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
   let node =  await (await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting)).json();
   let rootNodes: Array<any> = [];
   node = node['_embedded'][mode];
-  if(typeof node[0]['_links'][ancestorFieldName] !== 'undefined' && node[0]['is_root'] != true){
-    let allAncestors =  await (await fetch(node[0]['_links'][ancestorFieldName]['href'], getCallSetting)).json();
-    allAncestors = allAncestors['_embedded'][mode];
-    for(let i=0; i < allAncestors.length; i++){
-      if(allAncestors[i]['is_root'] &&  !["TopObjectProperty", "Thing"].includes(allAncestors[i]['label'])){
-        rootNodes.push(allAncestors[i]);
-      }
-    }
-    allAncestors.push(node[0]);
-    for(let i=0; i < rootNodes.length; i++){  
-      rootNodes[i]['children'] = [];
-      rootNodes[i]['modified_short_form'] = rootNodes[i]['short_form'];
-      rootNodes[i]['part_of'] = false;
-      treeData.push(rootNodes[i]); 
-      treeDataPointers[rootNodes[i]['modified_short_form']] =  rootNodes[i];
-      await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], treeData[i], treeDataPointers, childFieldName, ancestorFieldName);
+
+
+  let allAncestors =  await (await fetch(node[0]['_links'][ancestorFieldName]['href'], getCallSetting)).json();
+  let result: Array<any> = [];
+  allAncestors = allAncestors['_embedded'][mode];
+  for(let i=0; i < allAncestors.length; i++){
+    if(!["TopObjectProperty", "Thing"].includes(allAncestors[i]['label'])){
+        result.push(allAncestors[i]['short_form']);
     }
   }
-  else if(node[0]['is_root'] == true){
-    allRoutes.push([node[0]['short_form']]);
-    node[0]['children'] = [];
-    node[0]['modified_short_form'] = node[0]['short_form'];
-    node[0]['part_of'] = false;
-    treeData.push(node[0]);
-    treeDataPointers[node[0]['modified_short_form']] =  node[0];
-  }
+  result.push(node[0]['short_form']);
+  return result;
+
+
+  // if(typeof node[0]['_links'][ancestorFieldName] !== 'undefined' && node[0]['is_root'] != true){
+  //   let allAncestors =  await (await fetch(node[0]['_links'][ancestorFieldName]['href'], getCallSetting)).json();
+  //   allAncestors = allAncestors['_embedded'][mode];
+  //   for(let i=0; i < allAncestors.length; i++){
+  //     if(allAncestors[i]['is_root'] &&  !["TopObjectProperty", "Thing"].includes(allAncestors[i]['label'])){
+  //       rootNodes.push(allAncestors[i]);
+  //     }
+  //   }
+  //   allAncestors.push(node[0]);
+  //   for(let i=0; i < rootNodes.length; i++){  
+  //     await findNode(rootNodes[i], node[0], mode, allAncestors, [rootNodes[i]['short_form']], allRoutes, rootNodes[i]['short_form'], childFieldName, ancestorFieldName);
+  //   }
+  // }
+  // else if(node[0]['is_root'] == true){
+  //   // the target is a root node
+  //   allRoutes.push([node[0]['short_form']]);
+  // }
   
 }
 
@@ -171,18 +176,17 @@ export async function getTreeRoutes(ontology:string, nodeIri:string, mode:string
  * @param route 
  * @param allRoutes 
  * @param rootNode 
- * @param treeData 
  * @param childFieldName 
  * @param ancestorFieldName 
  * @returns 
  */
-async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, treeData: Array<any>, treeDataPointers:{[id:string]: any}, childFieldName:string, ancestorFieldName:string) {  
+async function findNode(node:any, target:any, mode:string, allAncestors:Array<any>, route:Array<any>, allRoutes:Array<any>, rootNode:string, childFieldName:string, ancestorFieldName:string) {  
   if(node['short_form'] == target['short_form']){
     allRoutes.push(route);
     return true;
   }
   else if(typeof node['_links'][childFieldName] !== 'undefined'){
-    let pageCount = await getPageCount(node['_links'][childFieldName]['href']);
+    let pageCount = await getPageCount(node['_links'][childFieldName]['href']);    
     let children:Array<any> = [];
     for(let page=0; page < pageCount; page++){
         let url = node['_links'][childFieldName]['href'] + "?page=" + page + "&size=" + size; 
@@ -196,19 +200,9 @@ async function findNode(node:any, target:any, mode:string, allAncestors:Array<an
     }
 
     for(let j=0; j < children.length; j++){
-      if(nodeExistInList(allAncestors, children[j]['iri'])){        
+      if(nodeExistInList(allAncestors, children[j]['iri'])){      
         route.push(children[j]['short_form']);
-        children[j]['children'] = [];
-        children[j]['modified_short_form'] = children[j]['short_form'];        
-        if(mode == "terms"){
-          children[j]['part_of'] = false;
-        }
-        else{
-          children[j]['part_of'] = false;
-        }
-        treeData['children'].push(children[j]);
-        treeDataPointers[children[j]["modified_short_form"]] = children[j];
-        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, treeData['children'][treeData['children'].length - 1], treeDataPointers, childFieldName, ancestorFieldName);
+        let answer = await findNode(children[j], target, mode, allAncestors, route, allRoutes, rootNode, childFieldName, ancestorFieldName);
       }
     }
   }

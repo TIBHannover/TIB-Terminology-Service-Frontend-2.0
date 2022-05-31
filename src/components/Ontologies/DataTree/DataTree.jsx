@@ -4,6 +4,8 @@ import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
+import {getTreeRoutes} from '../../../api/fetchData';
+
 
 
 class DataTree extends React.Component {
@@ -25,7 +27,9 @@ class DataTree extends React.Component {
       ancestorsFieldName: '',
       searchWaiting: true,
       baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
-      childExtractName: ""
+      childExtractName: "",
+      targetNodeIri: "",
+      treeDomContent: ""
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -34,6 +38,8 @@ class DataTree extends React.Component {
     this.processClick = this.processClick.bind(this);
     this.buildTreeListItem = this.buildTreeListItem.bind(this);
     this.selectNode = this.selectNode.bind(this);
+    this.processTree = this.processTree.bind(this);
+    this.expandTargetNode = this.expandTargetNode.bind(this);
   }
 
 
@@ -60,6 +66,8 @@ class DataTree extends React.Component {
                 childrenFieldName: "hierarchicalChildren",
                 ancestorsFieldName: "hierarchicalAncestors",
                 childExtractName: "terms"
+              }, async () => {
+                await this.processTree();
               });              
         } 
         else if(componentIdentity == 'property'){
@@ -78,6 +86,117 @@ class DataTree extends React.Component {
         }      
     }
   }
+
+
+   /**
+   * Process a tree to build it. The tree is either a complete tree or a sub-tree.
+   * The sub-tree exist for jumping to a node directly given by its Iri.   
+   * @returns 
+   */
+    async processTree(){
+      let target = this.props.iri;
+      if (!target){
+        this.buildTree(this.state.rootNodes);
+        return true;
+      }
+      target = target.trim();
+      target = encodeURIComponent(target);
+      if(target != undefined && this.state.targetNodeIri != target){        
+        let callHeader = {
+          'Accept': 'application/json'
+        };
+        let getCallSetting = {method: 'GET', headers: callHeader};
+        let extractName = this.state.childExtractName;
+        let url = this.state.baseUrl;
+        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(target) + "/jstree?viewMode=All&siblings=false";
+        let list =  await (await fetch(url, getCallSetting)).json();        
+        let map = {}, node, roots = [], i;
+        for (i = 0; i < list.length; i++) {
+          map[list[i].id] = i; 
+          list[i].childrenList = []; 
+        }
+        
+        for (i = 0; i < list.length; i++) {
+          node = list[i];
+          if (node.parent !== "#") {
+            list[map[node.parent]].childrenList.push(node);
+          } else {
+            roots.push(node);
+          }
+        }
+        
+        let childrenList = [];
+        for(let i=0; i < roots.length; i++){
+            let leafClass = " opened";
+            let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
+            let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
+            if (roots[i].childrenList.length === 0){
+              leafClass = " leaf-node";
+              symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+            }    
+            
+            let subList = "";
+            if(roots[i].childrenList.length !== 0){
+              subList = this.expandTargetNode(roots[i].childrenList, roots[i].id);
+              
+            }
+            console.info(subList);
+            let listItem = React.createElement("li", {         
+                "data-iri":roots[i].iri, 
+                "data-id": i,
+                "className": "tree-node-li" + leafClass,
+                "id": roots[i].id + "_" 
+              }, symbol, textSpan, subList
+                
+              );
+            
+
+            childrenList.push(listItem);
+          }
+          let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);                 
+          this.setState({
+              targetNodeIri: target,
+              searchWaiting: false,
+              treeDomContent: treeList
+          });          
+      }
+  }
+
+
+/**
+ * Expand a node in the tree in loading. Used for jumping directly to a node given by Iri.
+ * @param {*} nodeList 
+ * @param {*} parentId 
+ * @returns 
+ */
+expandTargetNode(nodeList, parentId){
+  let subNodes = [];
+  for(let i = 0; i < nodeList.length; i++){
+    let childNodeChildren = [];
+    if(nodeList[i].childrenList.length !== 0){
+      let subUl = this.expandTargetNode(nodeList[i].childrenList, nodeList[i].id);
+      childNodeChildren.push(subUl);
+    }
+
+    let newId = nodeList[i].id + "_" +  Math.floor(Math.random() * 10000);
+    let symbol = React.createElement("i", {"className": "opened fa fa-minus"}, "")
+    let label = React.createElement("span", {"className": "li-label-text"}, nodeList[i].text)
+    let childNode = React.createElement("li", {
+        "className": "opened tree-node-li",
+        "id": newId,
+        "data-iri": nodeList[i].iri,
+        "data-id": nodeList[i].id
+      }, symbol, label, childNodeChildren);
+
+    subNodes.push(childNode);
+  }
+  let ul = React.createElement("ul", {"className": "tree-node-ul", "id": "children_for_" + parentId}, subNodes);
+
+
+  return ul;
+  
+
+}
 
 
   /**
@@ -106,7 +225,11 @@ class DataTree extends React.Component {
     childrenList.push(listItem);
   }
   let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);
-  return treeList;
+  this.setState({
+    treeDomContent: treeList,
+    targetNodeIri: false,
+    searchWaiting: false
+  });
 }
 
 
@@ -167,7 +290,7 @@ async expandNode(e){
     let listItem = document.createElement("li");
     listItem.setAttribute("id", newId);
     listItem.setAttribute("data-iri", childNode.iri);
-    listItem.setAttribute("data-id", childNode.id);                  
+    listItem.setAttribute("data-id", childNode.id);                 
     if(childNode.children){
       listItem.classList.add("closed");
       symbol.classList.add('fa');
@@ -237,8 +360,8 @@ componentDidUpdate(){
 render(){
   return(
     <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} >
-        <Grid item xs={5} className="tree-container">
-            {this.buildTree(this.state.rootNodes)}
+        <Grid item xs={5} className="tree-container">            
+            {this.state.treeDomContent}
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
           <Grid item xs={7} className="node-table-container">
