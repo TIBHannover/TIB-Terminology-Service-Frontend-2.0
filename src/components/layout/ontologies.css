@@ -199,15 +199,6 @@ The Tree view and detail table styles (for both classes and properties)
     padding: 20px;
 }
 
-.tree-element > .MuiTreeItem-content > .MuiTypography-root{
-    /* 
-        The style for the elements (nodes) label in the tree.     
-    */
-
-    font-size: 14px;
-    margin-bottom: 5px;   
-}
-
 .tree-container{
     /*
         The styles for the tree view container. 
@@ -293,3 +284,81 @@ The Tree view and detail table styles (for both classes and properties)
 
     border-bottom: 1px solid black;
 }
+
+
+.tree-node-li {
+    /* 
+        The style for a node (class/property) in a tree view
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;    
+    border-left: 1px dotted !important;
+    border-left-color: gray;
+}
+
+.tree-node-li::before{
+    /* 
+        For thr tree view heirarchy style.
+    */
+
+    content: "...";
+}
+
+
+.li-label-text:hover{
+    /* 
+        The style for mouse over a node text on a tree veiw.
+    */
+
+    background-color: rgb(188, 188, 238);
+}
+
+.clicked{
+    /* 
+        The style for a clicked (selected) node in a tree view. 
+    */
+
+    background-color: rgb(110, 175, 175);
+    color: black;
+    font-weight: bold;
+}
+
+.fa{
+    /* 
+        Forntawsome style modification for the tree view. 
+    */
+
+    display: inline !important;
+    border: 1px solid;
+    margin-right: 5px;
+}
+
+.closed > i{
+    /* 
+        The style for a node expand icon when it is closed and has children nodes.
+    */
+
+    color: green;
+}
+
+.opened > i{   
+    /* 
+        The style for a node expand icon when it is expanded and has children nodes.
+    */
+
+    color: red;
+}
+
+.leaf-node > i{  
+     /* 
+        The style for a node expand icon it has not children nodes (leaf node).
+    */
+
+    color: gray;
+}
+
