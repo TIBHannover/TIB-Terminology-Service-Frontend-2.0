@@ -38,7 +38,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
     "react-spring": "^9.4.4",
-    "react-vtree": "^2.0.4",
     "react-window": "^1.8.7",
     "reactstrap": "^9.0.1",
     "styled-components": "^5.3.5",
