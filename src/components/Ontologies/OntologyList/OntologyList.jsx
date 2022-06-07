@@ -250,28 +250,32 @@ class OntologyList extends React.Component {
     const ontologyList = []
     for (let i = 0; i < this.state.ontologies.length; i++) {
       const item = this.state.ontologies[i]
-      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&
-                    // <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
-                      <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
-                        <Grid item xs={8}>
-                          <div className="ontology-card-title">                            
-                            <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
-                            <b>{item.config.title}</b>
-                          </div>
-                          <div className="ontology-card-description">
-                            <p>{item.config.description}</p>
-                          </div>
-                        </Grid>
-                        <Grid item xs={4} className="ontology-card-meta-data">
-                          <div>
-                            <h4>Last Update:</h4>
-                            {item.updated}
-                            <h4>Classes Count:</h4>
-                            {item.numberOfTerms}
-                          </div>
-                        </Grid>
-                      </Grid>
-                    // </Link>
+      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
+            <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
+              <Grid item xs={9}>
+                <div className="ontology-card-title">                            
+                  <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
+                  <b>{item.config.title}</b>
+                </div>
+                <div className="ontology-card-description">
+                  <p>{item.config.description}</p>
+                </div>
+                <div className='ontology-card-collection-name'>
+                  <b>Collections:</b>
+                  {item.config.classifications.collection
+                   ? item.config.classifications.collection.map((collect, i) => {<span className='ontology-collection-name'>{collect}</span>})
+                   : "-"
+                   }
+                </div>
+              </Grid>
+              <Grid item xs={3} className="ontology-card-meta-data">
+                <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
+                <hr/>
+                <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
+                <hr />
+                <span className='ontology-meta-data-field-span'>Last updated <br/> {item.updated.split("T")[0]} </span>          
+              </Grid>
+            </Grid>                    
       )
     }
 

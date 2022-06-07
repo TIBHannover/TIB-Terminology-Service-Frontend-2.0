@@ -44,14 +44,20 @@ The ontology list page styles.
         The styles for each ontology box in the ontology list view. 
     */
 
-    border: 1px black solid;
     background-color: white;
     margin-top: 10px;
     padding: 10px;
-    margin-right: 5px;
     height: auto;
     text-align: justify;
     line-height: 1.5;
+}
+
+.ontology-card-title > b{
+    /* 
+        The styles for the title part for each ontology box in the ontology list view. 
+    */
+
+    font-size: 1.5rem;
 }
 
 
@@ -61,16 +67,18 @@ The ontology list page styles.
     */
 
     margin-top: 30px;
+    font-size: 1.25rem;
 }
 
 .ontology-id-tag{
+    /* 
+        Style for the ontology Id tag button.
+    */
+
     margin-right: 10px;
     background-color: #005C5F;
     color: white;
-
 }
-
-
 
 
 #ontology-filter > div{
@@ -127,6 +135,10 @@ The ontology list page styles.
     padding-bottom: 5px;
 }
 
+.ontology-card-meta-data{
+    padding-left: 40px;
+    color: black !important;
+}
 
 
 /* 
