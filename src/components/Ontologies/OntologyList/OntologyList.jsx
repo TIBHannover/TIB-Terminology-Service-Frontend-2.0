@@ -251,11 +251,12 @@ class OntologyList extends React.Component {
     for (let i = 0; i < this.state.ontologies.length; i++) {
       const item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&
-                    <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
+                    // <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
                       <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
                         <Grid item xs={8}>
-                          <div className="ontology-card-title">
-                            <h4><b>{item.config.title} ({item.ontologyId}) </b></h4>
+                          <div className="ontology-card-title">                            
+                            <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
+                            <b>{item.config.title}</b>
                           </div>
                           <div className="ontology-card-description">
                             <p>{item.config.description}</p>
@@ -270,7 +271,7 @@ class OntologyList extends React.Component {
                           </div>
                         </Grid>
                       </Grid>
-                    </Link>
+                    // </Link>
       )
     }
 
@@ -288,7 +289,7 @@ class OntologyList extends React.Component {
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
             <Grid item xs={4} id="ontology-list-facet-grid">
-              <h4 className='h4-headers'>Filter</h4>
+              <h3 className='h4-headers'>Filter</h3>
               <Grid container>
                 <Grid item xs={12} id="ontologylist-search-grid">
                   <TextField
@@ -304,7 +305,7 @@ class OntologyList extends React.Component {
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container>
                 <Grid item xs={6}>
-                  <h4 className='h4-headers'>Browse Ontologies</h4>
+                  <h3 className='h-headers'>Browse Ontologies</h3>
                 </Grid>
                 <Grid item xs={6}  id="ontologylist-sort-grid">
                   <div>
