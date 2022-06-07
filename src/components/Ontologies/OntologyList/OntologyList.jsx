@@ -286,7 +286,7 @@ class OntologyList extends React.Component {
     } else {
       return (
         <div id="ontologyList-wrapper-div">
-          <Grid container spacing={3}>
+          {/* <Grid container spacing={3}>
             <Grid item xs={3} id="ontologylist-search-grid">
               <TextField
                 label="Search..."
@@ -311,9 +311,46 @@ class OntologyList extends React.Component {
                 <option value={'numberOfProperties'}>Properties Count</option>
               </Select>
             </Grid>
-          </Grid>
+          </Grid> */}
           <Grid container spacing={3}>
-            <Grid item xs={10} id="ontology-list-grid">
+            <Grid item xs={4} id="ontology-list-facet-grid">
+              <h4 className='h4-headers'>Filter</h4>
+              <Grid container>
+                <Grid item xs={12} id="ontologylist-search-grid">
+                  <TextField
+                    label="Filter by keyword"
+                    type="search"
+                    variant="outlined"
+                    onChange={this.filterWordChange}
+                    InputLabelProps={{ style: { fontSize: 15 } }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            
+            <Grid item xs={8} id="ontology-list-grid">
+              <Grid container>
+                <Grid item xs={6}>
+                  <h4 className='h4-headers'>Browse Ontologies</h4>
+                </Grid>
+                <Grid item xs={6}  id="ontologylist-sort-grid">
+                  <div>
+                    <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
+                    <Select
+                      native
+                      value={this.state.sortField}
+                      onChange={this.handleSortChange}
+                      id="ontology-sort-dropdown"
+                    >
+                      <option value={'numberOfTerms'}>Classes Count</option>
+                      <option value={'updated'}>Recently Updated</option>
+                      <option value={'numberOfIndividuals'}>Individuals Count</option>
+                      <option value={'numberOfProperties'}>Properties Count</option>
+                    </Select>
+                  </div>          
+                </Grid>
+              </Grid>
+              
               {this.createOntologyList()}
               <PaginationCustom
                 count={this.pageCount()}

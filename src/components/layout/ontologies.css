@@ -16,12 +16,27 @@ The ontology list page styles.
         The style for the ontology list page.
     */
 
-    margin-top: 30px;
-    padding-top: 5px;
-    margin-left: 50px;
-    margin-bottom: 10px;
+    margin: auto;
+    width: 75%;
     overflow-x: hidden;
     overflow-y: hidden;
+    color: #6C757D !important;
+}
+
+#ontology-list-facet-grid{
+    /* 
+        The style for the ontologies list page facet wrapper div.
+    */
+
+    padding-top: 50px;
+}
+
+.h4-headers{
+    /* 
+        Style for the h4 headers in the ontology list page.
+    */
+
+    margin-bottom: 20px;
 }
 
 .ontology-card{
@@ -108,6 +123,16 @@ The ontology list page styles.
     font-size: 15px;
 }
 
+
+#ontologylist-sort-grid > div{
+    /* 
+        The styles for sort type drop-down menu container in the ontology list view.
+    */
+
+    float: right;
+    
+}
+
 #ontologylist-sort-grid> .MuiInputBase-root{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
@@ -117,7 +142,6 @@ The ontology list page styles.
     font-size: 15px;
     padding-bottom: 5px;
 }
-
 
 
 
