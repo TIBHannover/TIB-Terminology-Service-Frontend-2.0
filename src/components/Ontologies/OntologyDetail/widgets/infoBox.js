@@ -27,10 +27,15 @@ function OntologyInfoBox (props) {
   return (
     <div className="ontology-detail-table-wrapper">
       <h4><b>Detail</b></h4>
+      <p>
+        {ontology.config.description}
+      </p>
+      
+      
       <table className="ontology-detail-table">
         <tbody>
           <tr>
-            <td className="ontology-overview-table-id-column"><b>Ontology IRI</b></td>
+            <td className="ontology-overview-table-id-column"><b>IRI</b></td>
             <td>
               <a href={ontology.config.id} target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
               {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
@@ -54,7 +59,7 @@ function OntologyInfoBox (props) {
               }            
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td className="ontology-overview-table-id-column"><b>Version IRI</b></td>
             <td>
               <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
@@ -78,13 +83,7 @@ function OntologyInfoBox (props) {
                   />
               }      
             </td>
-          </tr>
-          <tr>
-            <td className="ontology-overview-table-id-column"><b>Description</b></td>
-            <td>
-              {ontology.config.description}
-            </td>
-          </tr>
+          </tr> */}
           <tr>
             <td className="ontology-overview-table-id-column"><b>HomePage</b></td>
             <td>
@@ -135,12 +134,12 @@ function OntologyInfoBox (props) {
               }
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td className="ontology-overview-table-id-column"><b>Version</b></td>
             <td>
               {ontology.config.version}
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td className="ontology-overview-table-id-column"><b>License</b></td>
             <td>

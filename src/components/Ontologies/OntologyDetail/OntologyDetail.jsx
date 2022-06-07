@@ -233,10 +233,10 @@ class OntologyDetail extends React.Component {
           </Paper>
           {!this.state.waiting && this.state.overViewTab &&
                         <Grid container key={'ontolofyOverviewPage'}  >
-                          <Grid item xs={8}>
+                          <Grid item xs={9}>
                             <OntologyInfoBox ontology={this.state.ontology} />
                           </Grid>
-                          <Grid item xs={4}>
+                          <Grid item xs={3}>
                             <OntologyStatsBox ontology={this.state.ontology} />
                           </Grid>
                         </Grid>
