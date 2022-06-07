@@ -140,6 +140,22 @@ The ontology list page styles.
     color: black !important;
 }
 
+.ontology-collection-name > a{
+    /* 
+        Style for the collection link inside an ontology card.
+    */
+
+    text-decoration: none !important;
+}
+
+.ontology-collection-name{
+    /* 
+        Style for the collection span inside an ontology card.
+    */
+
+    margin-left: 5px;
+}
+
 
 /* 
 -------------------------------------

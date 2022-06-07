@@ -1,12 +1,12 @@
 import React from 'react';
 import PaginationCustom from '../Pagination/Pagination';
 import '../../layout/ontologies.css';
-import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getAllOntologies } from '../../../api/fetchData';
+import {BuildCollectionForCard} from './helpers';
 
 
 
@@ -258,14 +258,14 @@ class OntologyList extends React.Component {
                   <b>{item.config.title}</b>
                 </div>
                 <div className="ontology-card-description">
-                  <p>{item.config.description}</p>
+                  <p>{item.config.description ? item.config.description : ""}</p>
                 </div>
                 <div className='ontology-card-collection-name'>
-                  <b>Collections:</b>
-                  {item.config.classifications.collection
-                   ? item.config.classifications.collection.map((collect, i) => {<span className='ontology-collection-name'>{collect}</span>})
-                   : "-"
-                   }
+                  <b>Collections:</b>              
+                  {item.config.classifications[0].collection 
+                    ? BuildCollectionForCard(item.config.classifications[0].collection)
+                    : "-"
+                    }
                 </div>
               </Grid>
               <Grid item xs={3} className="ontology-card-meta-data">
