@@ -3,6 +3,22 @@
     This page includes the header, footer, homepage, and Navbar.
 */
 
+
+/* 
+-------------------------------------
+General site styles
+-------------------------------------
+*/
+
+body{
+   /* 
+      The tyle for the site body
+   */
+
+   background-color: #ECF0F0;
+}
+
+
 /* 
 -------------------------------------
 The Header styles 
