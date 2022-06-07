@@ -26,18 +26,21 @@ function OntologyInfoBox (props) {
 
   return (
     <div className="ontology-detail-table-wrapper">
-      <h4><b>Detail</b></h4>
-      <p>
-        {ontology.config.description}
-      </p>
-      
+      <div className='row'>
+        <div className='col-sm-12 ontology-detail-text'>
+          <h4><b>Detail</b></h4>
+          <p>
+            {ontology.config.description}
+          </p>
+        </div>
+      </div>
       
       <table className="ontology-detail-table">
         <tbody>
           <tr>
             <td className="ontology-overview-table-id-column"><b>IRI</b></td>
             <td>
-              <a href={ontology.config.id} target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
+              <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
               {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
                 ? <Button 
                 variant="contained" 
@@ -87,7 +90,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-overview-table-id-column"><b>HomePage</b></td>
             <td>
-              <a href={ontology.config.homepage} target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
+              <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
               {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
                   ? <Button 
                   variant="contained" 
@@ -112,7 +115,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-overview-table-id-column"><b>Issue tracker</b></td>
             <td>
-              <a href={ontology.config.tracker} target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
+              <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
               {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
                 ? <Button 
                   variant="contained" 

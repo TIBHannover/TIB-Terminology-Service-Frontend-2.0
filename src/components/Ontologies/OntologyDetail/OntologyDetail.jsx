@@ -217,7 +217,7 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div>
-          <Paper square>
+          <Paper square className='ontology-detail-navbar'>
             <Tabs
               value={this.state.activeTab}
               indicatorColor="primary"
@@ -232,7 +232,7 @@ class OntologyDetail extends React.Component {
             </Tabs>
           </Paper>
           {!this.state.waiting && this.state.overViewTab &&
-                        <Grid container key={'ontolofyOverviewPage'}  >
+                        <Grid container key={'ontolofyOverviewPage'} className="ontology-detail-page-container"  spacing={4}>
                           <Grid item xs={9}>
                             <OntologyInfoBox ontology={this.state.ontology} />
                           </Grid>

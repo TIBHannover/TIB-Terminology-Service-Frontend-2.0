@@ -210,9 +210,19 @@ The ontology detail page styles. It contains the ontology overview page.
 -------------------------------------
 */
 
-.ontology-detail-table{
+.ontology-detail-page-container{
     /* 
-        The styles for the ontology ovewview tables (Detail and Metrics) 
+        Ontology overview page wrapper
+    */
+
+    margin: auto !important;
+    width: 75% !important;
+}
+
+
+.ontology-detail-table, .ontology-metric-table{
+    /* 
+        The styles for the ontology overview tables (Detail and Metrics) 
     */
 
     font-family: arial, sans-serif;
@@ -222,7 +232,7 @@ The ontology detail page styles. It contains the ontology overview page.
 
 .ontology-detail-table  td, th{
     /* 
-        The styles for the ontology ovewview tables (Detail and Metrics) rows. 
+        The styles for the ontology ovewview tables (Detail) rows. 
     */
 
     border: 1px solid #dad2d2;
@@ -230,12 +240,27 @@ The ontology detail page styles. It contains the ontology overview page.
     padding: 8px;
 }
 
+.ontology-metric-table  td, th{
+    /* 
+        The styles for the ontology ovewview tables (Metrics) rows. 
+    */
+
+    border-bottom: 1px solid #DFE4E5;
+    text-align: left;
+    padding: 8px;
+    color: #212529 !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    font-size: 1rem !important;
+}
+
+
 .ontology-overview-table-id-column{
     /* 
         The style for the Identifiers columns in the ontology tables in the ovewview page.
     */
     
-    background-color: #dddddd;
+    background-color: #ECF0F0;
 }
 
 .ontology-detail-table-wrapper{
@@ -266,6 +291,56 @@ The ontology detail page styles. It contains the ontology overview page.
 
     margin-right: 20px !important;
 }
+
+
+.anchor-in-table{
+    /* 
+        Style for the anchors inside the ontology detail page
+    */
+
+    text-decoration: none !important;
+}
+
+.ontology-detail-text{
+    /* 
+        Style for the ontology detail text (description)
+    */
+
+    color: #6c757d !important;
+}
+
+
+.ontology-detail-navbar{
+    /* 
+        The style for ontology detail page navbar
+    */
+
+    width: 70% !important;
+    margin: auto !important;
+    background-color: #ECF0F0 !important;
+    border-radius: 25px !important;
+}
+
+.MuiTab-root{
+    /* 
+        The style for each tab in the ontolog detail page navbar.
+    */
+
+    color: #1C6F7F !important;
+}
+
+
+.Mui-selected{
+    /* 
+        The style for selected tab in the ontolog detail page navbar.
+    */
+
+    background-color: white !important;
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+    color: black !important;
+}
+
 
 
 
