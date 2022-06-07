@@ -3,6 +3,34 @@
     This page includes the header, footer, homepage, and Navbar.
 */
 
+
+/* 
+-------------------------------------
+General site styles
+-------------------------------------
+*/
+
+body{
+   /* 
+      The tyle for the site body
+   */
+
+   background-color: #ECF0F0;
+   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.header{
+   background-color: #0E6668;
+   color: white;
+   margin-top: 0 !important;
+   margin-bottom: 30px !important;
+}
+
+.fxOSmo{
+   background-color: #2B3C46 !important;
+   color: white !important;
+}
+
 /* 
 -------------------------------------
 The Header styles 

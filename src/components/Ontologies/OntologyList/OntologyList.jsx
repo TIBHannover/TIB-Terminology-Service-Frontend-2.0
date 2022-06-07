@@ -1,12 +1,11 @@
 import React from 'react';
 import PaginationCustom from '../Pagination/Pagination';
 import '../../layout/ontologies.css';
-import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getAllOntologies } from '../../../api/fetchData';
+import {BuildCollectionForCard, CreateFacet} from './helpers';
 
 
 
@@ -27,10 +26,12 @@ class OntologyList extends React.Component {
       sortField: 'numberOfTerms'
     })
     this.getAllOntologies()
-    this.handlePagination = this.handlePagination.bind(this)
-    this.filterFacet = this.filterFacet.bind(this)
-    this.handleSortChange = this.handleSortChange.bind(this)
-    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this)
+    this.handlePagination = this.handlePagination.bind(this);
+    this.filterFacet = this.filterFacet.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
+    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this);
+    this.handleFacetCollection = this.handleFacetCollection.bind(this);
+
   }
 
 
@@ -240,6 +241,15 @@ class OntologyList extends React.Component {
   }
 
 
+  /**
+   * Handle facet filter for collection
+   * @returns 
+   */
+  handleFacetCollection = (e, value) => {
+
+  }
+
+
 
   /**
      * Create the ontology list view
@@ -250,27 +260,32 @@ class OntologyList extends React.Component {
     const ontologyList = []
     for (let i = 0; i < this.state.ontologies.length; i++) {
       const item = this.state.ontologies[i]
-      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&
-                    <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
-                      <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
-                        <Grid item xs={8}>
-                          <div className="ontology-card-title">
-                            <h4><b>{item.config.title} ({item.ontologyId}) </b></h4>
-                          </div>
-                          <div className="ontology-card-description">
-                            <p>{item.config.description}</p>
-                          </div>
-                        </Grid>
-                        <Grid item xs={4} className="ontology-card-meta-data">
-                          <div>
-                            <h4>Last Update:</h4>
-                            {item.updated}
-                            <h4>Classes Count:</h4>
-                            {item.numberOfTerms}
-                          </div>
-                        </Grid>
-                      </Grid>
-                    </Link>
+      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
+            <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
+              <Grid item xs={9}>
+                <div className="ontology-card-title">                            
+                  <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
+                  <b>{item.config.title}</b>
+                </div>
+                <div className="ontology-card-description">
+                  <p>{item.config.description ? item.config.description : ""}</p>
+                </div>
+                <div className='ontology-card-collection-name'>
+                  <b>Collections:</b>              
+                  {item.config.classifications[0].collection 
+                    ? BuildCollectionForCard(item.config.classifications[0].collection)
+                    : "-"
+                    }
+                </div>
+              </Grid>
+              <Grid item xs={3} className="ontology-card-meta-data">
+                <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
+                <hr/>
+                <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
+                <hr />
+                <span className='ontology-meta-data-field-span'>Last updated <br/> {item.updated.split("T")[0]} </span>          
+              </Grid>
+            </Grid>                    
       )
     }
 
@@ -287,33 +302,29 @@ class OntologyList extends React.Component {
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            <Grid item xs={3} id="ontologylist-search-grid">
-              <TextField
-                label="Search..."
-                type="search"
-                variant="outlined"
-                onChange={this.filterWordChange}
-                InputLabelProps={{ style: { fontSize: 15 } }}
-              />
-            </Grid>
-            <Grid item xs={5}></Grid>
-            <Grid item xs={3} id="ontologylist-sort-grid">
-              <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
-              <Select
-                native
-                value={this.state.sortField}
-                onChange={this.handleSortChange}
-                id="ontology-sort-dropdown"
-              >
-                <option value={'numberOfTerms'}>Classes Count</option>
-                <option value={'updated'}>Recently Updated</option>
-                <option value={'numberOfIndividuals'}>Individuals Count</option>
-                <option value={'numberOfProperties'}>Properties Count</option>
-              </Select>
-            </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={10} id="ontology-list-grid">
+            {CreateFacet(this.filterWordChange, this.handleFacetCollection)}
+            <Grid item xs={8} id="ontology-list-grid">
+              <Grid container>
+                <Grid item xs={6}>
+                  <h3 className='h-headers'>Browse Ontologies</h3>
+                </Grid>
+                <Grid item xs={6}  id="ontologylist-sort-grid">
+                  <div>
+                    <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
+                    <Select
+                      native
+                      value={this.state.sortField}
+                      onChange={this.handleSortChange}
+                      id="ontology-sort-dropdown"
+                    >
+                      <option value={'numberOfTerms'}>Classes Count</option>
+                      <option value={'updated'}>Recently Updated</option>
+                      <option value={'numberOfIndividuals'}>Individuals Count</option>
+                      <option value={'numberOfProperties'}>Properties Count</option>
+                    </Select>
+                  </div>          
+                </Grid>
+              </Grid>              
               {this.createOntologyList()}
               <PaginationCustom
                 count={this.pageCount()}

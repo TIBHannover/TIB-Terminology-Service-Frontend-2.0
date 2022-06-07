@@ -8,23 +8,23 @@ function OntologyStatsBox (props) {
 
   return (
     <div id="stats-table-wrapper">
-      <h4><b>Metrics</b></h4>
-      <table className="ontology-detail-table">
+      <h4>Metrics</h4>
+      <table className="ontology-metric-table">
         <tbody>
           <tr>
-            <td className="ontology-overview-table-id-column"><b>Number of Classes</b></td>
+            <td className="ontology-overview-table-id-column">Number of Classes</td>
             <td>
               {ontology.numberOfTerms}
             </td>
           </tr>
           <tr>
-            <td className="ontology-overview-table-id-column"><b>Number of Properties</b></td>
+            <td className="ontology-overview-table-id-column">Number of Properties</td>
             <td>
               {ontology.numberOfProperties}
             </td>
           </tr>
           <tr>
-            <td className="ontology-overview-table-id-column"><b>Number of Individuals</b></td>
+            <td className="ontology-overview-table-id-column">Number of Individuals</td>
             <td>
               {ontology.numberOfIndividuals}
             </td>
