@@ -2,11 +2,10 @@ import React from 'react';
 import PaginationCustom from '../Pagination/Pagination';
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getAllOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard} from './helpers';
+import {BuildCollectionForCard, CreateFacet} from './helpers';
 
 
 
@@ -27,10 +26,12 @@ class OntologyList extends React.Component {
       sortField: 'numberOfTerms'
     })
     this.getAllOntologies()
-    this.handlePagination = this.handlePagination.bind(this)
-    this.filterFacet = this.filterFacet.bind(this)
-    this.handleSortChange = this.handleSortChange.bind(this)
-    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this)
+    this.handlePagination = this.handlePagination.bind(this);
+    this.filterFacet = this.filterFacet.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
+    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this);
+    this.handleFacetCollection = this.handleFacetCollection.bind(this);
+
   }
 
 
@@ -240,6 +241,15 @@ class OntologyList extends React.Component {
   }
 
 
+  /**
+   * Handle facet filter for collection
+   * @returns 
+   */
+  handleFacetCollection = (e, value) => {
+
+  }
+
+
 
   /**
      * Create the ontology list view
@@ -292,20 +302,7 @@ class OntologyList extends React.Component {
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            <Grid item xs={4} id="ontology-list-facet-grid">
-              <h3 className='h4-headers'>Filter</h3>
-              <Grid container>
-                <Grid item xs={12} id="ontologylist-search-grid">
-                  <TextField
-                    label="Filter by keyword"
-                    type="search"
-                    variant="outlined"
-                    onChange={this.filterWordChange}
-                    InputLabelProps={{ style: { fontSize: 15 } }}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>            
+            {CreateFacet(this.filterWordChange, this.handleFacetCollection)}
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container>
                 <Grid item xs={6}>

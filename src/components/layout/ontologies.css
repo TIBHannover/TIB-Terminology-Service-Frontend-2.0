@@ -103,7 +103,7 @@ The ontology list page styles.
        The syle for the search input field in the ontology list page.
     */
 
-    width: 80%;
+    width: 100%;
     background-color: white;
 }
 
@@ -154,6 +154,53 @@ The ontology list page styles.
     */
 
     margin-left: 5px;
+}
+
+.ontology-list-facet-section-box{
+    /* 
+        Style for the facet field boxes in the ontology list facet.
+    */
+
+    margin-top: 30px;
+    width: 100% !important;
+}
+
+.ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
+    /* 
+        Style for the facet field boxes in the ontology list facet.
+    */
+
+    background-color: white;
+    padding-left: 20px;
+    padding-right: 10px;
+    border-radius: 25px;
+}   
+
+
+
+.facet-result-count{
+    /* 
+        The style for facet field counter tag.
+    */
+
+    border-radius: 50px;
+    background-color: #2B3C46;
+    color: white;
+    padding: 5px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
+}
+
+#lastUpdateRange{
+    /* 
+        The style for time range label
+    */
+
+    margin-left: 10px;
 }
 
 
