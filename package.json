@@ -2,6 +2,9 @@
   "name": "nfdi4chem2.0",
   "version": "0.1.0",
   "private": true,
+  "browser": {
+    "[module-name]": false   
+  },
   "dependencies": {
     "@elastic/eui": "^53.0.1",
     "@emotion/react": "^11.8.2",
