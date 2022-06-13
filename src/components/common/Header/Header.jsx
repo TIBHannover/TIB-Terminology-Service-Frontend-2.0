@@ -10,7 +10,8 @@ function Header () {
     <section className="header">
       <section className="header-top">
         <section className="header-top__logo">
-          <img src= {TIB_Logo} alt="tib logo" height={120} width={180} />
+          <img src= {TIB_Logo} alt="tib logo" height={100} width={180} />
+          <a className="main-title" >TERMINOLOGY SERVICE</a>
         </section>
         <section className="header-top__navbar">
           <section className="header-top__navigation">

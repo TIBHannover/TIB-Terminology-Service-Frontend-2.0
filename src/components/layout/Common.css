@@ -66,6 +66,14 @@ The Header styles
     margin-right: 20px;
     margin-left: 30px;
   }
+
+.main-title {
+   /* 
+       The style for the project title
+    */
+   color: #ffffff;
+   font-size: 20px
+}
   
 .header-logo {
     /* 
