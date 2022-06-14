@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG'
+import SearchForm from '../../Search/SearchForm';
 
 import '../../layout/Common.css';
 
@@ -14,6 +15,7 @@ function Header () {
           <a className="main-title" >TERMINOLOGY SERVICE</a>
         </section>
         <section className="header-top__navbar">
+          <SearchForm/>
           <section className="header-top__navigation">
             <Navbar />
           </section>
