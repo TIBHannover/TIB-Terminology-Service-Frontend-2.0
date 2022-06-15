@@ -1,5 +1,7 @@
 import React from 'react';
 import Navbar from '../Navbar/Navbar';
+import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG'
+import SearchForm from '../../Search/SearchForm';
 
 import '../../layout/Common.css';
 
@@ -9,13 +11,16 @@ function Header () {
     <section className="header">
       <section className="header-top">
         <section className="header-top__logo">
-          <img src={"https://www.tib.eu/typo3conf/ext/tib_tmpl_bootstrap/Resources/Public/gfx/logos/tib-full-en.svg"} alt="tib logo" height={200} width={480} />
+          <img src= {TIB_Logo} alt="tib logo" height={80} width={180} />
+          <a className="main-title" >TERMINOLOGY SERVICE</a>
         </section>
+        <div className="position-absolute top-0 end-0">
+          Login
+        </div>
         <section className="header-top__navbar">
           <section className="header-top__navigation">
             <Navbar />
           </section>
-          <hr className="header-top__seperator" />
         </section>
       </section>
     </section>

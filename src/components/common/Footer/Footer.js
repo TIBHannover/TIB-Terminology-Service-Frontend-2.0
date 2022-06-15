@@ -2,12 +2,12 @@ import { Container, Row, Col} from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import TIB_LOGO from '../../../assets/img/TIB_Logo_en.png';
-import DFG_LOGO from '../../../assets/img/dfg_logo.png';
+import TIB_LOGO from '../../../assets/img/TIB_Logo_EN_WM_W.SVG';
+import DFG_LOGO from '../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_en.gif';
 import styled from 'styled-components';
 
 const FooterWrapper = styled.div`
-    background: #e0e2ea;
+    background: #2B3C46;
     margin-top: 75px;
     border-top: 1px #d1d3d9 solid;
 `;
@@ -35,64 +35,58 @@ const PartnerLogoCol = styled(Col)`
     text-align: center;
 `;
 
-const TwitterLink = styled.a`
-    :hover {
-        color: #00acee;
-    }
-`;
-
 const Footer = () => (
     <FooterWrapper>
         <Container>
             <footer className="pt-4 pb-4">
                 <Row>
-                    <FooterCol md={4}>
-                        <h2 className="h5">About</h2>
-                        <hr className="me-5" />
-                        <ul className="p-0" style={{ listStyle: 'none' }}>
-                            <li>
-                                <Link to={""}>About us</Link>
-                            </li>
-                            <li>
-                                <Link to={""}>Helpdesk</Link>
-                            </li>
-                            {/*<li>
-                                <a href="https://projects.tib.eu/orkg/get-involved/" target="_blank" rel="noopener noreferrer">
-                                    Get involved
-                                </a>
-                            </li>*/}
-                            <li>
-                                <Link to={""}>Data protection</Link>
-                            </li>
-                            <li>
-                                <Link to={""}>Terms of use</Link>
-                            </li>
-                            <li>
-                                <Link to={""}>Imprint</Link>
-                            </li>
-                        </ul>
-                    </FooterCol>
-                    <FooterCol md={4}>
-                        <h2 className="h5">Maintainer</h2>
-                        <hr className="me-5" />
-                        <PartnerLogoCol md={4} style={{}}>
-                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '80px' }} />
-                        </a>
-                    </PartnerLogoCol>
-                    </FooterCol>
-                    <FooterCol md={4}>
-                        <h2 className="h5">Funding</h2>
-                        <hr className="me-5" />
+                <FooterCol md={3}>
                         <PartnerLogoCol md={4} style={{ textAlign: 'center' }}>
                         <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
                         <img
                             src={DFG_LOGO}
                             alt=""
-                            style={{ borderWidth: 0, height: '80px' }}
+                            style={{ borderWidth: 0, height: '100px' }}
                         />
                         </a>
                         </PartnerLogoCol>
+                    </FooterCol>
+                    <FooterCol md={3}>
+                        <h2 className="h5" style={{ color: 'white'}}>ABOUT</h2>
+                        <hr className="me-5" />
+                        <ul className="p-0" style={{ listStyle: 'none' }}>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>Privacy Policy</Link>
+                            </li>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>Terms of use</Link>
+                            </li>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>Imprint</Link>
+                            </li>
+                        </ul>
+                    </FooterCol>
+                    <FooterCol md={3}>
+                        <h2 className="h5" style={{ color: 'white'}}>RESOURCES</h2>
+                        <hr className="me-5" />
+                        <ul className="p-0" style={{ listStyle: 'none' }}>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>Documentation</Link>
+                            </li>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>API</Link>
+                            </li>
+                        </ul>
+                        
+                    </FooterCol>
+                    <FooterCol md={3}>
+                        <h2 className="h5" style={{ color: 'white'}}>PROVIDED BY</h2>
+                        <hr className="me-5" />
+                        <PartnerLogoCol md={4} style={{}}>
+                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
+                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '60px' }} />
+                        </a>
+                    </PartnerLogoCol>
                     </FooterCol>
                 </Row>
             </footer>
