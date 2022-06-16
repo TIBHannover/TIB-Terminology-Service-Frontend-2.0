@@ -1,3 +1,11 @@
 .bg-infobox {
     background-color: #005C5F !important;
+    align-items: center;
+}
+.font-weight-bold{
+    justify-content: center;
+    font-weight: bold;
+}
+.row{
+    justify-content: center;
 }
