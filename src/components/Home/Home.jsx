@@ -19,6 +19,16 @@ class Home extends Component{
               It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.</p>
            </Grid>
            </Container>
+          <Container className="bg-infobox pt-3 text-center text-white">
+            <Grid item xs={8}>
+               <div className="col-xl-10 mx-auto text-white">
+                 <h3 class="font-weight-bold h2">Terminology Service Stats</h3>
+                 <div class="justify-content-center row">
+                   
+                 </div>
+               </div>
+            </Grid>
+          </Container>
         </div>
         );
     }
