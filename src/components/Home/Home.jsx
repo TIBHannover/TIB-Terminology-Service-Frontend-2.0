@@ -2,25 +2,86 @@ import { Component } from "react";
 import SearchForm from "../Search/SearchForm";
 import { Grid, Container, Button } from '@material-ui/core'
 import "../layout/Home.css"
+import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png"
+import COYPU from "../../assets/img/logo_CoyPu.png"
+import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png"
+import FIDMOVE from "../../assets/img/fidmove_logo.svg"
+import BAUDIGITAL from "../../assets/img/baudigital_logo.png"
 
 class Home extends Component{
     render(){
         return(
         <div id="mainpageSearchBox">
         <Container maxWidth="lg">
-           <h4 style={{margin: 20}}>Welcome to NFDI4Chem Terminology Service</h4>
+           <h4 className="font-weight-bold" style={{margin: 20}}>Welcome to TIB Terminology Service</h4>
            <Grid item xs = {8}>
              <SearchForm />
            </Grid>
            <Grid item xs = {8}>
-           <h4 style={{margin: 20}}>About NFDI4Chem TS</h4>
-           <p class="about">The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. 
-              You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API.
-              The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. 
-              It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.</p>
+           <h4 className="font-weight-bold" style={{margin: 20}}>About TIB TS</h4>
+           <p class="about">With its new Terminology Service, TIB &ndash; Leibniz Information Centre for Science and Technology and University Library provides a single point of access to terminology from domains such as architecture, chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API to retrieve terminological information and use it in your technical services. Layout template for TIB General.&nbsp;</p>
+           <p>Search Result EXAMPLE, EXAMPLE</p>
            </Grid>
-           </Container>
-          <div >
+          </Container>
+
+          <Container maxwidth="lg" className="bg-main">
+          <div class="container pb-4 pt-5">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 className="font-weight-bold">Collections</h3>
+                        </div>
+                    </div>
+                    <div class="justify-content-center row"> 
+                        <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog" width="700" height="480" src="https://terminology.nfdi4ing.de/ts4ing/img/logo_nfdi4ing_rgb_quer_scaled.png"/></a>
+                                <div class="p-3">
+                                    <div class="font-weight-bold mb-2">NFDI4Ing</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service .</h3></a>
+                                </div>                                 
+                            </div>                             
+                        </div>
+                        <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="" width="700" height="480" src={NFDI4CHEM}/></a>
+                                <div class="p-3">
+                                    <div class="font-weight-bold mb-2">NFDI4Chem</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.</h3></a>
+                                </div>                                 
+                            </div>                             
+                        </div>
+                        <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img src={COYPU} class="img-fluid p-1 w-100" alt="Blog image" width="650" height="400"/></a>
+                                <div class="p-3">
+                                    <div class="font-weight-bold mb-2">CoyPu</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">The CoyPu collection by TIB Terminology Service provides a well-selected set of ontologies for representing the domain for integrating, structuring, networking, analyzing and evaluating heterogeneous data from economic value networks as well as the industry environment and social context.</h3></a>
+                                </div>                                 
+                            </div>                             
+                        </div>                         
+                    </div>
+                    <div class="justify-content-center row"> 
+                        <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog image" width="700" height="480" src={FAIRDS}/></a>
+                                <div class="p-3">
+                                    <div class="font-weight-bold mb-2">FAIR Data Spaces</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.&nbsp;</h3></a>
+                                </div>                                 
+                            </div>                             
+                        </div>
+                        <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog image" width="700" height="480" src={FIDMOVE}/></a>
+                                <div class="p-3">
+                                    <div class="font-weight-bold mb-2">FID Move</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor .</h3></a>
+                                </div>                                 
+                            </div>                             
+                        </div>
+                        <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
+                            <div class="bg-white d-flex flex-column h-100"> 
+                                <div class="p-3">
+                                    <img src={BAUDIGITAL}/>
+                                    <div class="font-weight-bold mb-2">FID Baudigital</div>
+                                    <h3 class="h5 mb-0"><a href="#" class="text-dark text-decoration-none">Lorum Ipsum, Lorum Ipsum&nbsp;</a>Only static HTML - Web sites. You can click on menu item in navbar. Additionally avalaible: Layout search result <a href="file:///C:/Users/koeplero/Meine%20Ablage/Pinegrow%20-%20TS%20TIB%20General/search_results.html">EXAMPLE.</a><span> and Detail page of ontology entry </span><a href="file:///C:/Users/koeplero/Meine%20Ablage/Pinegrow%20-%20TS%20TIB%20General/edam.html">EXAMPLE</a></h3>
+                                </div>                                 
+                            </div>                             
+                        </div>                         
+                    </div>                     
+                </div>                 
+          </Container>
+          
           <Container maxWidth="lg" className="bg-infobox">
             <Grid item xs={8}>
                <div className="col-xl-10 mx-auto text-white">
@@ -78,7 +139,6 @@ class Home extends Component{
                </div>
             </Grid>
           </Container>
-          </div>
         </div>
         );
     }

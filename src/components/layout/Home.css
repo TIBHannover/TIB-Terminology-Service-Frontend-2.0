@@ -9,3 +9,6 @@
 .row{
     justify-content: center;
 }
+.bg-main {
+    background-color: #ecf0f0 !important;
+}
