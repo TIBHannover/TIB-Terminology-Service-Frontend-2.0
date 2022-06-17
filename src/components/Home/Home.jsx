@@ -8,29 +8,19 @@ class Home extends Component{
         return(
         <div id="mainpageSearchBox">
         <Container maxWidth="lg">
-           <h4 style={{margin: 20}}>Welcome to NFDI4Chem Terminology Service</h4>
+           <h4 style={{margin: 20}}>Welcome to TIB Terminology Service</h4>
            <Grid item xs = {8}>
              <SearchForm />
            </Grid>
            <Grid item xs = {8}>
            <h4 style={{margin: 20}}>About NFDI4Chem TS</h4>
-           <p class="about">The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. 
-              You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API.
-              The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. 
-              It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.</p>
+           <p class="about">With its new Terminology Service, TIB &ndash; Leibniz Information Centre for Science and Technology and University Library provides a single point of access to terminology from domains such as architecture, chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API to retrieve terminological information and use it in your technical services. Layout template for TIB General.&nbsp;</p>
+           <p>Search Result EXAMPLE, EXAMPLE</p>
            </Grid>
           </Container>
 
           <Container maxwidth="lg" className="bg-main">
           <div class="container pb-4 pt-5">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>TIB Terminology Service</h3> 
-                            <p>With its new Terminology Service, TIB &ndash; Leibniz Information Centre for Science and Technology and University Library provides a single point of access to terminology from domains such as architecture, chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API to retrieve terminological information and use it in your technical services. Layout template for TIB General.&nbsp;</p>
-                            <p>Search Result <a href="search_results.html">EXAMPLE</a>, Detail Page <a href="edam.html">EXAMPLE</a></p>
-                            <p></p> 
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-8">
                             <h3>Collections</h3>
@@ -38,14 +28,14 @@ class Home extends Component{
                     </div>
                     <div class="justify-content-center row"> 
                         <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
-                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog image" width="700" height="480" src="assets/images/nfdi4ing_logo.svg"/></a>
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog image" width="700" height="480" src="../../assets/img/nfdi4ing_logo.svg"/></a>
                                 <div class="p-3">
                                     <div class="font-weight-bold mb-2">NFDI4Ing</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service .</h3></a>
                                 </div>                                 
                             </div>                             
                         </div>
                         <div class="col-lg-4 col-md-6 pb-3 pt-3"> 
-                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog image" width="700" height="480" src="assets/images/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png"/></a>
+                            <div class="bg-white d-flex flex-column h-100"> <a href="#" class="d-block"><img class="img-fluid w-100" alt="Blog image" width="700" height="480" src="../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png"/></a>
                                 <div class="p-3">
                                     <div class="font-weight-bold mb-2">NFDI4Chem</div><a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.</h3></a>
                                 </div>                                 
