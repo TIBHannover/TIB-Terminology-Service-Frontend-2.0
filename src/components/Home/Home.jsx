@@ -7,7 +7,6 @@ import COYPU from "../../assets/img/logo_CoyPu.png"
 import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png"
 import FIDMOVE from "../../assets/img/fidmove_logo.svg"
 import BAUDIGITAL from "../../assets/img/baudigital_logo.png"
-import { BoltRounded } from "@mui/icons-material";
 
 class Home extends Component{
     render(){
