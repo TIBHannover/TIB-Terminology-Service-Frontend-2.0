@@ -19,8 +19,12 @@ class Home extends Component{
               The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. 
               It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.</p>
            </Grid>
-           </Container>
-          <div >
+          </Container>
+
+          <Container maxwidth="lg" className="bg-main">
+            
+          </Container>
+          
           <Container maxWidth="lg" className="bg-infobox">
             <Grid item xs={8}>
                <div className="col-xl-10 mx-auto text-white">
@@ -78,7 +82,6 @@ class Home extends Component{
                </div>
             </Grid>
           </Container>
-          </div>
         </div>
         );
     }
