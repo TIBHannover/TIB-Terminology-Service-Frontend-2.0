@@ -1,3 +1,6 @@
+import {getNodeByIri} from '../../../api/fetchData';
+
+
 /**
  * Create a hierarchical list form a flat list. 
  * @param {*} flatList 
@@ -29,8 +32,7 @@ export function buildHierarchicalArray(flatList){
  * Build a list (li) element for the tree veiw
  * @param {*} childNode
  */
- export function buildTreeListItem(childNode){
-    // let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
+ export function buildTreeListItem(childNode){    
     let newId = childNode.id;
     let label = document.createTextNode(childNode.text);
     let labelTextSpan = document.createElement("span");
@@ -63,4 +65,21 @@ export function buildHierarchicalArray(flatList){
     listItem.classList.add("tree-node-li");
 
     return listItem;
+  }
+
+
+
+  /**
+   * Check a node has children or not
+   */
+  export async function nodeHasChildren(ontology, nodeIri, mode){
+    let node = "";
+    if(mode === 'term'){
+      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
+    }
+    else{
+      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
+    }
+    return node.has_children;
+    
   }
