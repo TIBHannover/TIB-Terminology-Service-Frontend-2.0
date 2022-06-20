@@ -181,14 +181,26 @@ expandTargetNode(nodeList, parentId){
       iconClass = "fa fa-close";
       clickedClass = "clicked"
     }
-    let symbol = React.createElement("i", {"className": iconClass }, "")
-    let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text)
-    let childNode = React.createElement("li", {
+    let symbol = React.createElement("i", {"className": iconClass }, "");
+    let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
+    let childNode = "";
+    if(nodeList[i]['a_attr']["class"] === "part_of"){
+      let partOfSymbol = React.createElement("span", {"className": "p-icon-style"}, "P");
+      childNode = React.createElement("li", {
+        "className": nodeStatusClass + " tree-node-li",
+        "id": newId,
+        "data-iri": nodeList[i].iri,
+        "data-id": nodeList[i].id
+      }, symbol, partOfSymbol, label, childNodeChildren);
+    }
+    else{
+      childNode = React.createElement("li", {
         "className": nodeStatusClass + " tree-node-li",
         "id": newId,
         "data-iri": nodeList[i].iri,
         "data-id": nodeList[i].id
       }, symbol, label, childNodeChildren);
+    }
 
     subNodes.push(childNode);
   }
