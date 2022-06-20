@@ -4,7 +4,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
-import {getTreeRoutes} from '../../../api/fetchData';
+import { buildHierarchicalArray, buildTreeListItem } from './helpers';
 
 
 
@@ -36,7 +36,6 @@ class DataTree extends React.Component {
     this.buildTree = this.buildTree.bind(this);
     this.expandNode = this.expandNode.bind(this);
     this.processClick = this.processClick.bind(this);
-    this.buildTreeListItem = this.buildTreeListItem.bind(this);
     this.selectNode = this.selectNode.bind(this);
     this.processTree = this.processTree.bind(this);
     this.expandTargetNode = this.expandTargetNode.bind(this);
@@ -111,21 +110,7 @@ class DataTree extends React.Component {
         let url = this.state.baseUrl;
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=false";
         let list =  await (await fetch(url, getCallSetting)).json();        
-        let map = {}, node, roots = [], i;
-        for (i = 0; i < list.length; i++) {
-          map[list[i].id] = i; 
-          list[i].childrenList = []; 
-        }
-        
-        for (i = 0; i < list.length; i++) {
-          node = list[i];
-          if (node.parent !== "#") {
-            list[map[node.parent]].childrenList.push(node);
-          } else {
-            roots.push(node);
-          }
-        }
-        
+        let roots = buildHierarchicalArray(list);        
         let childrenList = [];
         for(let i=0; i < roots.length; i++){
             let leafClass = " opened";
@@ -265,7 +250,7 @@ async expandNode(e){
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let listItem = this.buildTreeListItem(res[i]);
+        let listItem = buildTreeListItem(res[i]);
         ul.appendChild(listItem);      
       }      
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
@@ -284,39 +269,6 @@ async expandNode(e){
   }
       
 }
-
-
-/**
- * Build a list (li) element for the tree veiw
- * @param {*} childNode
- */
-  buildTreeListItem(childNode){
-    let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
-    let label = document.createTextNode(childNode.text);
-    let labelTextSpan = document.createElement("span");
-    labelTextSpan.classList.add("li-label-text");
-    labelTextSpan.appendChild(label);
-    let symbol = document.createElement("i");
-    let listItem = document.createElement("li");
-    listItem.setAttribute("id", newId);
-    listItem.setAttribute("data-iri", childNode.iri);
-    listItem.setAttribute("data-id", childNode.id);                 
-    if(childNode.children){
-      listItem.classList.add("closed");
-      symbol.classList.add('fa');
-      symbol.classList.add('fa-plus');
-    }
-    else{
-      listItem.classList.add("leaf-node");
-      symbol.classList.add('fa');
-      symbol.classList.add('fa-close');
-    }
-    listItem.appendChild(symbol);
-    listItem.appendChild(labelTextSpan);
-    listItem.classList.add("tree-node-li");
-
-    return listItem;
-  }
 
 
 /**
