@@ -4,7 +4,9 @@ import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
-import {getTreeRoutes} from '../../../api/fetchData';
+import Button from '@mui/material/Button';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { buildHierarchicalArray, buildTreeListItem } from './helpers';
 
 
 
@@ -29,17 +31,18 @@ class DataTree extends React.Component {
       baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
       childExtractName: "",
       targetNodeIri: "",
-      treeDomContent: ""
+      treeDomContent: "",
+      resetTreeFlag: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
     this.buildTree = this.buildTree.bind(this);
     this.expandNode = this.expandNode.bind(this);
     this.processClick = this.processClick.bind(this);
-    this.buildTreeListItem = this.buildTreeListItem.bind(this);
     this.selectNode = this.selectNode.bind(this);
     this.processTree = this.processTree.bind(this);
     this.expandTargetNode = this.expandTargetNode.bind(this);
+    this.resetTree = this.resetTree.bind(this);
   }
 
 
@@ -53,7 +56,8 @@ class DataTree extends React.Component {
     let rootNodes = this.props.rootNodes;
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
-    if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){        
+    let resetFlag = this.state.resetTreeFlag;
+    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag){
         if(componentIdentity == 'term'){         
             this.setState({
                 rootNodes: rootNodes,
@@ -65,9 +69,10 @@ class DataTree extends React.Component {
                 ontologyId: ontologyId,
                 childrenFieldName: "hierarchicalChildren",
                 ancestorsFieldName: "hierarchicalAncestors",
-                childExtractName: "terms"
+                childExtractName: "terms",
+                resetTreeFlag: false
               }, async () => {
-                await this.processTree();
+                await this.processTree(resetFlag);
               });              
         } 
         else if(componentIdentity == 'property'){
@@ -81,9 +86,10 @@ class DataTree extends React.Component {
               ontologyId: ontologyId,
               childrenFieldName: "children",
               ancestorsFieldName: "ancestors",
-              childExtractName: "properties"
+              childExtractName: "properties",
+              resetTreeFlag: false
             }, async () => {
-              await this.processTree();
+              await this.processTree(resetFlag);
             });    
         }      
     }
@@ -95,9 +101,9 @@ class DataTree extends React.Component {
    * The sub-tree exist for jumping to a node directly given by its Iri.   
    * @returns 
    */
-    async processTree(){
+    async processTree(resetFlag){
       let target = this.props.iri;
-      if (!target){
+      if (!target || resetFlag){
         this.buildTree(this.state.rootNodes);
         return true;
       }
@@ -111,21 +117,7 @@ class DataTree extends React.Component {
         let url = this.state.baseUrl;
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=false";
         let list =  await (await fetch(url, getCallSetting)).json();        
-        let map = {}, node, roots = [], i;
-        for (i = 0; i < list.length; i++) {
-          map[list[i].id] = i; 
-          list[i].childrenList = []; 
-        }
-        
-        for (i = 0; i < list.length; i++) {
-          node = list[i];
-          if (node.parent !== "#") {
-            list[map[node.parent]].childrenList.push(node);
-          } else {
-            roots.push(node);
-          }
-        }
-        
+        let roots = buildHierarchicalArray(list);        
         let childrenList = [];
         for(let i=0; i < roots.length; i++){
             let leafClass = " opened";
@@ -234,7 +226,7 @@ expandTargetNode(nodeList, parentId){
         );
     childrenList.push(listItem);
   }
-  let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);
+  let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
   this.setState({
     treeDomContent: treeList,
     targetNodeIri: false,
@@ -265,7 +257,7 @@ async expandNode(e){
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let listItem = this.buildTreeListItem(res[i]);
+        let listItem = buildTreeListItem(res[i]);
         ul.appendChild(listItem);      
       }      
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
@@ -284,39 +276,6 @@ async expandNode(e){
   }
       
 }
-
-
-/**
- * Build a list (li) element for the tree veiw
- * @param {*} childNode
- */
-  buildTreeListItem(childNode){
-    let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
-    let label = document.createTextNode(childNode.text);
-    let labelTextSpan = document.createElement("span");
-    labelTextSpan.classList.add("li-label-text");
-    labelTextSpan.appendChild(label);
-    let symbol = document.createElement("i");
-    let listItem = document.createElement("li");
-    listItem.setAttribute("id", newId);
-    listItem.setAttribute("data-iri", childNode.iri);
-    listItem.setAttribute("data-id", childNode.id);                 
-    if(childNode.children){
-      listItem.classList.add("closed");
-      symbol.classList.add('fa');
-      symbol.classList.add('fa-plus');
-    }
-    else{
-      listItem.classList.add("leaf-node");
-      symbol.classList.add('fa');
-      symbol.classList.add('fa-close');
-    }
-    listItem.appendChild(symbol);
-    listItem.appendChild(labelTextSpan);
-    listItem.classList.add("tree-node-li");
-
-    return listItem;
-  }
 
 
 /**
@@ -357,6 +316,19 @@ processClick(e){
 }
 
 
+
+/**
+ * Reset tree view.
+ */
+resetTree(){
+  this.setState({
+    resetTreeFlag: true,
+    treeDomContent: ""
+  });
+}
+
+
+
 componentDidMount(){
   this.setTreeData();
 }
@@ -370,8 +342,22 @@ componentDidUpdate(){
 render(){
   return(
     <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} >
-        <Grid item xs={6} className="tree-container">            
-            {this.state.treeDomContent}
+        <Grid item xs={6} className="tree-container">
+          <Grid container>
+            <Grid item xs={10}>
+              {this.state.treeDomContent}
+            </Grid>
+            <Grid item xs={2}>
+              <Button 
+                    variant="contained" 
+                    className='tree-action-btn' 
+                    startIcon={<RestartAltIcon />}
+                    onClick={this.resetTree}
+                    >
+                    Reset Tree
+              </Button> 
+            </Grid>
+          </Grid>
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
           <Grid item xs={6} className="node-table-container">
