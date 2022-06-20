@@ -69,10 +69,10 @@ The Search results styles
        The style for search result cards of any searched term
     */
     border: 1px black solid;
-    background-color: rgb(245, 250, 253);
+    background-color: white;
     margin-top: 10px;
     padding: 10px;
-    margin-right: 5px;
+    margin-right: 2px;
     height: auto;
     text-align: justify;
 }
