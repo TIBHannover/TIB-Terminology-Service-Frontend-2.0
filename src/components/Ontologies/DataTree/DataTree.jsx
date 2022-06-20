@@ -6,7 +6,7 @@ import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { buildHierarchicalArray, buildTreeListItem } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren } from './helpers';
 
 
 
@@ -108,6 +108,7 @@ class DataTree extends React.Component {
         return true;
       }
       target = target.trim();
+      let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
       if(target != undefined && this.state.targetNodeIri != target){        
         let callHeader = {
           'Accept': 'application/json'
@@ -130,7 +131,7 @@ class DataTree extends React.Component {
             
             let subList = "";
             if(roots[i].childrenList.length !== 0){
-              subList = this.expandTargetNode(roots[i].childrenList, roots[i].id);
+              subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
               
             }
         
@@ -138,7 +139,7 @@ class DataTree extends React.Component {
                 "data-iri":roots[i].iri, 
                 "data-id": i,
                 "className": "tree-node-li" + leafClass,
-                "id": roots[i].id + "_" 
+                "id": roots[i].id
               }, symbol, textSpan, subList
                 
               );
@@ -163,23 +164,29 @@ class DataTree extends React.Component {
  * @param {*} parentId 
  * @returns 
  */
-expandTargetNode(nodeList, parentId){
+expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
   let subNodes = [];
   for(let i = 0; i < nodeList.length; i++){
     let childNodeChildren = [];
-    if(nodeList[i].childrenList.length !== 0){
-      let subUl = this.expandTargetNode(nodeList[i].childrenList, nodeList[i].id);
+    if(nodeList[i].iri !== targetIri){
+      let subUl = this.expandTargetNode(nodeList[i].childrenList, nodeList[i].id, targetIri, targetHasChildren);
       childNodeChildren.push(subUl);
     }
 
-    let newId = nodeList[i].id + "_" +  Math.floor(Math.random() * 10000);
+    let newId = nodeList[i].id;
     let nodeStatusClass = "opened";
     let iconClass = "fa fa-minus";
     let clickedClass = "";
-    if (nodeList[i].childrenList.length === 0){
-      nodeStatusClass = "leaf-node";
-      iconClass = "fa fa-close";
-      clickedClass = "clicked"
+    if (nodeList[i].iri === targetIri){
+      if(targetHasChildren){
+        nodeStatusClass = "closed";
+        iconClass = "fa fa-plus";  
+      }
+      else{
+        nodeStatusClass = "leaf-node";
+        iconClass = "fa fa-close";
+      }
+      clickedClass = "clicked";
     }
     let symbol = React.createElement("i", {"className": iconClass }, "");
     let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
@@ -232,7 +239,7 @@ expandTargetNode(nodeList, parentId){
         "data-iri":rootNodes[i].iri, 
         "data-id": i,
         "className": "tree-node-li" + leafClass,
-        "id": i + "_" 
+        "id": i
       }
         , symbol, textSpan
         );
