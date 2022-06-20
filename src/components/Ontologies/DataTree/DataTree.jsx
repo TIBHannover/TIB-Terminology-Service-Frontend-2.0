@@ -172,7 +172,8 @@ expandTargetNode(nodeList, parentId){
       childNodeChildren.push(subUl);
     }
 
-    let newId = nodeList[i].id + "_" +  Math.floor(Math.random() * 10000);
+    // let newId = nodeList[i].id + "_" +  Math.floor(Math.random() * 10000);
+    let newId = nodeList[i].id;
     let nodeStatusClass = "opened";
     let iconClass = "fa fa-minus";
     let clickedClass = "";

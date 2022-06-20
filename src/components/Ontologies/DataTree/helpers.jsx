@@ -30,7 +30,8 @@ export function buildHierarchicalArray(flatList){
  * @param {*} childNode
  */
  export function buildTreeListItem(childNode){
-    let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
+    // let newId = childNode.id + "_" +  Math.floor(Math.random() * 10000);
+    let newId = childNode.id;
     let label = document.createTextNode(childNode.text);
     let labelTextSpan = document.createElement("span");
     labelTextSpan.classList.add("li-label-text");
