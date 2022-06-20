@@ -4,6 +4,8 @@ import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
+import Button from '@mui/material/Button';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { buildHierarchicalArray, buildTreeListItem } from './helpers';
 
 
@@ -322,11 +324,23 @@ componentDidUpdate(){
 render(){
   return(
     <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} >
+        <Grid item xs={1} className="tree-action-container">
+          <div className='tree-actions-panel'>
+            <b>Tree Actions</b><hr />
+            <Button 
+              variant="contained" 
+              className='tree-action-btn' 
+              startIcon={<RestartAltIcon />}
+              >
+              Reset
+            </Button> 
+          </div>
+        </Grid>
         <Grid item xs={6} className="tree-container">            
             {this.state.treeDomContent}
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
-          <Grid item xs={6} className="node-table-container">
+          <Grid item xs={5} className="node-table-container">
             <TermPage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
@@ -334,7 +348,7 @@ render(){
         </Grid>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
-          <Grid item xs={6} className="node-table-container">
+          <Grid item xs={5} className="node-table-container">
           <PropertyPage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}

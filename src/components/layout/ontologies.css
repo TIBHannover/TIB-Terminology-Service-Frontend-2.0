@@ -520,3 +520,22 @@ The Tree view and detail table styles (for both classes and properties)
     color: gray;
 }
 
+.tree-actions-panel{
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #e7dad8;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+
+
+.tree-action-btn{
+    /* 
+        Styles for the tree-related action buttons like "reset"
+    */
+
+    font-size: 10px !important;
+    /* width: 20px; */
+}
+
