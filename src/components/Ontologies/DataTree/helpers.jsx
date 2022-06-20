@@ -51,6 +51,13 @@ export function buildHierarchicalArray(flatList){
       symbol.classList.add('fa-close');
     }
     listItem.appendChild(symbol);
+    if(childNode["a_attr"]["class"] === "part_of"){
+      let partOfSymbol = document.createElement("span");
+      let pText = document.createTextNode("P");
+      partOfSymbol.appendChild(pText);
+      partOfSymbol.classList.add("p-icon-style"); 
+      listItem.appendChild(partOfSymbol);
+    }
     listItem.appendChild(labelTextSpan);
     listItem.classList.add("tree-node-li");
 
