@@ -31,7 +31,8 @@ class DataTree extends React.Component {
       baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
       childExtractName: "",
       targetNodeIri: "",
-      treeDomContent: ""
+      treeDomContent: "",
+      resetTreeFlag: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -41,6 +42,7 @@ class DataTree extends React.Component {
     this.selectNode = this.selectNode.bind(this);
     this.processTree = this.processTree.bind(this);
     this.expandTargetNode = this.expandTargetNode.bind(this);
+    this.resetTree = this.resetTree.bind(this);
   }
 
 
@@ -54,7 +56,8 @@ class DataTree extends React.Component {
     let rootNodes = this.props.rootNodes;
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
-    if (componentIdentity != this.state.componentIdentity && rootNodes.length != 0 && this.state.rootNodes.length == 0){        
+    let resetFlag = this.state.resetTreeFlag;
+    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag){
         if(componentIdentity == 'term'){         
             this.setState({
                 rootNodes: rootNodes,
@@ -66,9 +69,10 @@ class DataTree extends React.Component {
                 ontologyId: ontologyId,
                 childrenFieldName: "hierarchicalChildren",
                 ancestorsFieldName: "hierarchicalAncestors",
-                childExtractName: "terms"
+                childExtractName: "terms",
+                resetTreeFlag: false
               }, async () => {
-                await this.processTree();
+                await this.processTree(resetFlag);
               });              
         } 
         else if(componentIdentity == 'property'){
@@ -82,9 +86,10 @@ class DataTree extends React.Component {
               ontologyId: ontologyId,
               childrenFieldName: "children",
               ancestorsFieldName: "ancestors",
-              childExtractName: "properties"
+              childExtractName: "properties",
+              resetTreeFlag: false
             }, async () => {
-              await this.processTree();
+              await this.processTree(resetFlag);
             });    
         }      
     }
@@ -96,9 +101,9 @@ class DataTree extends React.Component {
    * The sub-tree exist for jumping to a node directly given by its Iri.   
    * @returns 
    */
-    async processTree(){
+    async processTree(resetFlag){
       let target = this.props.iri;
-      if (!target){
+      if (!target || resetFlag){
         this.buildTree(this.state.rootNodes);
         return true;
       }
@@ -221,7 +226,7 @@ expandTargetNode(nodeList, parentId){
         );
     childrenList.push(listItem);
   }
-  let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);
+  let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
   this.setState({
     treeDomContent: treeList,
     targetNodeIri: false,
@@ -311,6 +316,19 @@ processClick(e){
 }
 
 
+
+/**
+ * Reset tree view.
+ */
+resetTree(){
+  this.setState({
+    resetTreeFlag: true,
+    treeDomContent: ""
+  });
+}
+
+
+
 componentDidMount(){
   this.setTreeData();
 }
@@ -331,6 +349,7 @@ render(){
               variant="contained" 
               className='tree-action-btn' 
               startIcon={<RestartAltIcon />}
+              onClick={this.resetTree}
               >
               Reset
             </Button> 
