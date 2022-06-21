@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import {  TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
+import Button from '@mui/material/Button';
 
 
 class SearchForm extends React.Component{
@@ -92,8 +93,8 @@ class SearchForm extends React.Component{
             <Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
               <div>
                 {this.state.jumpResult[i]['label']}
-                {this.state.jumpResult[i]['ontology_prefix']}
-                {this.state.jumpResult[i]['obo_id']}
+                <Button style={{backgroundColor: "#873593"}}variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>
+                <Button style={{backgroundColor: "#00617c", fontColor: "white"}}variant="contained">{this.state.jumpResult[i]['obo_id']}</Button>
               </div>
             </Link>
           )
@@ -124,8 +125,14 @@ class SearchForm extends React.Component{
                     />
                     
                     {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div> &&
-                <div id="jumpresult-container" className="col-md-12 justify-content-md-center" onClick={this.submitJumpHandler}>{this.createJumpResultList}</div>}
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+                {this.state.result &&
+                <div id = "jumpresult-container" className="col-md-12 justify-content-md-center" onClick={this.submitJumpHandler}>
+                  <div>
+                    <h4 className='font-weight-bold'>Jump To</h4>
+                   {this.createJumpResultList()}
+                  </div>
+                </div>}
               </div>
           )
       }
