@@ -28,8 +28,12 @@ class SearchForm extends React.Component{
             searchResult =  (await searchResult.json())['response']['docs'];
             let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}`)
             jumpResult = (await jumpResult.json())['response']['docs'];
+            let jumpIRI = jumpResult.iri;
+            let jumpOntoName = jumpResult.ontology_name;
          this.setState({
              searchResult: searchResult,
+             jumpIRI: jumpIRI,
+             jumpOntoName: jumpOntoName,
              jumpResult: jumpResult,
              result: true,
              enteredTerm: enteredTerm
@@ -48,6 +52,11 @@ class SearchForm extends React.Component{
     submitHandler(event){  
         let enteredTerm = document.getElementById('search-input').value;
         window.location.replace('/search?q=' + enteredTerm);
+    }
+
+    submitJumpHandler(e){
+      let enteredTerm = document.getElementById('search-input').value;
+      window.location.replace('/ontologies/' + this.state.jumpOntoName + '/terms?iri=' + this.state.jumpIRI);
     }
     
     
