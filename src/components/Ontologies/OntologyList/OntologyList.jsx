@@ -200,24 +200,44 @@ class OntologyList extends React.Component {
     let selectedCollections = this.state.selectedCollections;
     let collection = e.target.value.trim(); 
     if(e.target.checked){
+      // checked
       selectedCollections.push(collection);
-      let ontologies = await getCollectionOntologies(selectedCollections);
-      let hiddenStatus = [];
-      for(let i=0; i < ontologies.length; i++){
-        if (i <= this.state.pageSize){
-          hiddenStatus.push(true);
-        }
-        else{
-          hiddenStatus.push(false);
-        }
-      }
+    }
+    else{
+      // unchecked
+      let index = selectedCollections.indexOf(collection);
+      selectedCollections.splice(index, 1);
+    }
+
+    if (selectedCollections.length === 0){
+      // no collections checked
+      let preOntologies = this.state.unFilteredOntologies;
+      let preHiddenStatus = this.state.unFilteredHiddenStatus;
       this.setState({
         selectedCollections: selectedCollections,
-        ontologies: ontologies,
-        ontologiesHiddenStatus: hiddenStatus,
+        ontologies: preOntologies,
+        ontologiesHiddenStatus: preHiddenStatus,
         pageNumber: 1
       });
+      return true;
     }
+
+    let ontologies = await getCollectionOntologies(selectedCollections);
+    let hiddenStatus = [];
+    for(let i=0; i < ontologies.length; i++){
+      if (i <= this.state.pageSize){
+        hiddenStatus.push(true);
+      }
+      else{
+        hiddenStatus.push(false);
+      }
+    }
+    this.setState({
+      selectedCollections: selectedCollections,
+      ontologies: ontologies,
+      ontologiesHiddenStatus: hiddenStatus,
+      pageNumber: 1
+    });
   }
 
 
