@@ -1,9 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import '../layout/Search.css'
-import { Form, Input, Button, InputGroup } from 'reactstrap';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import {  TextField, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 
