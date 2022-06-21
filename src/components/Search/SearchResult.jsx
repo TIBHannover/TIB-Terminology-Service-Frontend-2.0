@@ -154,7 +154,7 @@ async suggestionHandler(selectedTerm){
                 <p>{searchResultItem[i].description}</p>
               </div>
               <div className="searchresult-ontology">
-                <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
+                <span class="font-weight-bold">Ontology:</span><Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
               </div>
             </Grid>
           </Grid>   
