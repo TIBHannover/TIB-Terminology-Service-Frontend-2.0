@@ -122,7 +122,8 @@ class SearchForm extends React.Component{
                     />
                     
                     {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div> &&
+                <div id="jumpresult-container" className="col-md-12 justify-content-md-center" onClick={this.submitJumpHandler}>{this.createJumpResultList}</div>}
               </div>
           )
       }

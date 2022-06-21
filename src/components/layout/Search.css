@@ -21,6 +21,18 @@ The Search form styles
     padding-left: 10x;
     padding-right: 10px;
 }
+#jumpresult-container{
+    /* 
+       The style for the jump autocomplete field
+    */
+    height: 200px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    z-index: 999;
+    padding-left: 10x;
+    padding-right: 10px;
+}
 #search-box {
     /* 
        The style for search bar
