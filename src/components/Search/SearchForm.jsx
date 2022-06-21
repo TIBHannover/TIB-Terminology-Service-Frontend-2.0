@@ -83,6 +83,22 @@ class SearchForm extends React.Component{
           return resultList
       }
 
+      createJumpResultList(){
+        const jumpResultList = []
+        for(let i=0; i < this.state.jumpResult.length; i++){
+          jumpResultList.push(
+            <Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
+              <div>
+                {this.state.jumpResult[i]['label']}
+                {this.state.jumpResult[i]['ontology_prefix']}
+                {this.state.jumpResult[i]['obo_id']}
+              </div>
+            </Link>
+          )
+        }
+        return jumpResultList
+      }
+
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
           this.submitHandler();
