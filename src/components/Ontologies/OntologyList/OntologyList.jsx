@@ -25,14 +25,15 @@ class OntologyList extends React.Component {
       unFilteredHiddenStatus: [],
       sortField: 'numberOfTerms',
       selectedCollections: [],
-      listOfAllCollectionsCheckBoxes: []
+      listOfAllCollectionsCheckBoxes: [],
+      keywordFilterString: ""
     })
     this.handlePagination = this.handlePagination.bind(this);
     this.filterByKeyword = this.filterByKeyword.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
     this.getAllCollections = this.getAllCollections.bind(this);
-
+    this.runFacet = this.runFacet.bind(this);
   }
 
 
@@ -140,39 +141,13 @@ class OntologyList extends React.Component {
 
 
   /**
-       * Fiters the list of ontologies
-       *
-       * @param {*} value
-       * @returns
-       */
+   * Keyword filter handler function
+   *
+   * @param {*} value
+   * @returns
+   */
   filterByKeyword (value) {
-    if (value === '') {
-      this.setState({
-        ontologies: this.state.unFilteredOntologies,
-        ontologiesHiddenStatus: this.state.unFilteredHiddenStatus,
-        pageNumber: 1
-      })
-      return true
-    }
-
-    let filtered = [];
-    let hiddenStatus = [];
-    for (let i = 0; i < this.state.ontologies.length; i++) {
-      let ontology = this.state.ontologies[i]
-      if (ontology_has_searchKey(ontology, value)) {
-        filtered.push(ontology)
-        if (filtered.length <= this.state.pageSize) {
-          hiddenStatus.push(true)
-        } else {
-          hiddenStatus.push(false)
-        }
-      }
-    }
-    this.setState({
-      ontologies: filtered,
-      ontologiesHiddenStatus: hiddenStatus,
-      pageNumber: 1
-    })
+    this.runFacet(this.state.selectedCollections, value);
   }
 
 
@@ -196,7 +171,7 @@ class OntologyList extends React.Component {
    * Handle facet filter for collection
    * @returns 
    */
-  handleFacetCollection = async (e, value) => {
+  handleFacetCollection = (e, value) => {
     let selectedCollections = this.state.selectedCollections;
     let collection = e.target.value.trim(); 
     if(e.target.checked){
@@ -208,38 +183,74 @@ class OntologyList extends React.Component {
       let index = selectedCollections.indexOf(collection);
       selectedCollections.splice(index, 1);
     }
+    this.runFacet(selectedCollections, this.state.keywordFilterString);
+  }
 
-    if (selectedCollections.length === 0){
-      // no collections checked
-      let preOntologies = this.state.unFilteredOntologies;
-      let preHiddenStatus = this.state.unFilteredHiddenStatus;
-      this.setState({
-        selectedCollections: selectedCollections,
-        ontologies: preOntologies,
-        ontologiesHiddenStatus: preHiddenStatus,
-        pageNumber: 1
-      });
-      return true;
-    }
 
-    let ontologies = await getCollectionOntologies(selectedCollections);
-    ontologies =  sortBasedOnKey(ontologies, this.state.sortField);
-    let hiddenStatus = [];
-    for(let i=0; i < ontologies.length; i++){
-      if (i <= this.state.pageSize){
-        hiddenStatus.push(true);
-      }
-      else{
-        hiddenStatus.push(false);
-      }
-    }
+
+/**
+ * 
+ */
+async runFacet(selectedCollections, enteredKeyword){
+  if (selectedCollections.length === 0 && enteredKeyword === ""){
+    // no filter exist
+    let preOntologies = this.state.unFilteredOntologies;
+    let preHiddenStatus = this.state.unFilteredHiddenStatus;
     this.setState({
       selectedCollections: selectedCollections,
-      ontologies: ontologies,
-      ontologiesHiddenStatus: hiddenStatus,
+      ontologies: preOntologies,
+      ontologiesHiddenStatus: preHiddenStatus,
       pageNumber: 1
     });
+    return true;
   }
+
+  let ontologies = this.state.unFilteredOntologies;
+  let keywordOntologies = [];
+  if(enteredKeyword !== ""){
+    // run keyword filter
+    for (let i = 0; i < ontologies.length; i++) {
+      let ontology = ontologies[i]
+      if (ontology_has_searchKey(ontology, enteredKeyword)) {
+        keywordOntologies.push(ontology)
+      }
+    }
+    ontologies = keywordOntologies;
+  }
+
+  if(selectedCollections.length !== 0){
+    // run collection filter
+    let collectionOntologies = await getCollectionOntologies(selectedCollections);
+    let collectionFilteredOntologies = [];
+    for (let onto of collectionOntologies){
+      if(typeof(ontologies.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
+        collectionFilteredOntologies.push(onto);
+      }
+    }
+    ontologies = collectionFilteredOntologies;
+  }
+
+
+  ontologies =  sortBasedOnKey(ontologies, this.state.sortField);
+  let hiddenStatus = [];
+  for(let i=0; i < ontologies.length; i++){
+    if (i <= this.state.pageSize){
+      hiddenStatus.push(true);
+    }
+    else{
+      hiddenStatus.push(false);
+    }
+  }
+  this.setState({
+    selectedCollections: selectedCollections,
+    keywordFilterString: enteredKeyword,
+    ontologies: ontologies,
+    ontologiesHiddenStatus: hiddenStatus,
+    pageNumber: 1
+  });
+}
+
+
 
 
 
