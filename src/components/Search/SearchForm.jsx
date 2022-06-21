@@ -11,7 +11,8 @@ class SearchForm extends React.Component{
         this.state = ({
           enteredTerm: "",
           result: false,
-          searchResult: []
+          searchResult: [],
+          jumpResult: []
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
@@ -25,8 +26,11 @@ class SearchForm extends React.Component{
         if (enteredTerm.length > 0){
             let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
             searchResult =  (await searchResult.json())['response']['docs'];
+            let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}`)
+            jumpResult = (await jumpResult.json())['response']['docs'];
          this.setState({
              searchResult: searchResult,
+             jumpResult: jumpResult,
              result: true,
              enteredTerm: enteredTerm
          });
