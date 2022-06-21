@@ -223,6 +223,7 @@ class OntologyList extends React.Component {
     }
 
     let ontologies = await getCollectionOntologies(selectedCollections);
+    ontologies =  sortBasedOnKey(ontologies, this.state.sortField);
     let hiddenStatus = [];
     for(let i=0; i < ontologies.length; i++){
       if (i <= this.state.pageSize){
