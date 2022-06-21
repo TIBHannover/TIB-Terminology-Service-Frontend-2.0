@@ -28,12 +28,12 @@ class OntologyList extends React.Component {
       listOfAllCollectionsCheckBoxes: [],
       keywordFilterString: ""
     })
-    this.handlePagination = this.handlePagination.bind(this);
-    this.filterByKeyword = this.filterByKeyword.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
     this.getAllCollections = this.getAllCollections.bind(this);
     this.runFacet = this.runFacet.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
+    this.filterWordChange = this.filterWordChange.bind(this);
   }
 
 
@@ -95,7 +95,15 @@ class OntologyList extends React.Component {
       pageNumber: value,
       paginationReset: false
     }, () => {
-      this.paginationHandler()
+        let down = (this.state.pageNumber - 1) * this.state.pageSize;
+        let up = down + (this.state.pageSize - 1);
+        let hiddenStatus = new Array(this.state.ontologies.length).fill(false);
+        for (let i = down; i <= up; i++) {
+          hiddenStatus[i] = true;
+        }
+        this.setState({
+          ontologiesHiddenStatus: hiddenStatus
+        });
     })
   }
 
@@ -110,44 +118,14 @@ class OntologyList extends React.Component {
   }
 
 
-
   /**
-       * Handle the pagination change. This function has to be passed to the Pagination component
-       */
-  paginationHandler () {
-    let down = (this.state.pageNumber - 1) * this.state.pageSize
-    let up = down + (this.state.pageSize - 1)
-    let hiddenStatus = new Array(this.state.ontologies.length).fill(false)
-    for (let i = down; i <= up; i++) {
-      hiddenStatus[i] = true
-    }
-    this.setState({
-      ontologiesHiddenStatus: hiddenStatus
-    })
-  }
-
-
-  /**
-       * Handle the change in the search box. Calls the filter function
-       * This function gets pass to filter word box.
-       * @param {*} e
-       * @param {*} value
-       */
-  filterWordChange = (e, value) => {
-    this.filterByKeyword(e.target.value)
-  }
-
-
-
-
-  /**
-   * Keyword filter handler function
-   *
+   * Handle the change in the search box. Calls the filter function
+   * This function gets pass to filter word box.
+   * @param {*} e
    * @param {*} value
-   * @returns
    */
-  filterByKeyword (value) {
-    this.runFacet(this.state.selectedCollections, value);
+  filterWordChange = (e, value) => {
+    this.runFacet(this.state.selectedCollections, e.target.value);
   }
 
 
@@ -251,14 +229,11 @@ async runFacet(selectedCollections, enteredKeyword){
 }
 
 
-
-
-
-  /**
-     * Create the ontology list view
-     *
-     * @returns
-     */
+/**
+ * Create the ontology list view
+ *
+ * @returns
+ */
   createOntologyList () {
     let ontologyList = []
     for (let i = 0; i < this.state.ontologies.length; i++) {

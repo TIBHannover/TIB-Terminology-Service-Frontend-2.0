@@ -85,7 +85,7 @@ export function ontology_has_searchKey(ontology, value){
         if (ontology.config.title.includes(value)) {
             return true;
         }
-        if (ontology.config.description.includes(value)) {
+        if (ontology.config.description != null &&  ontology.config.description.includes(value)) {
             return true;
         }
 
