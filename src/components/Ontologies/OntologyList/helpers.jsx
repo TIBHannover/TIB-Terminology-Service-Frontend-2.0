@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
+import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
 /**
@@ -38,7 +38,7 @@ export function BuildCollectionForCard(collections){
  * @param {*} filterCollection 
  * @returns 
  */
-export function CreateFacet(filterWordChange, filterCollection){
+export function CreateFacet(filterWordChange, allCollectionsCheckboxes){
     return (
         <Grid item xs={4} id="ontology-list-facet-grid">
             <h3 className='h-headers'>Filter</h3>            
@@ -56,7 +56,7 @@ export function CreateFacet(filterWordChange, filterCollection){
             <Grid container className='ontology-list-facet-section-box'>
             <h5 className='h-headers'>Collection</h5>
                 <Grid item xs={12} >
-                    {createCollectionsCheckBoxes(filterCollection)}                    
+                    {allCollectionsCheckboxes}                    
                 </Grid>
             </Grid>
             <Grid container className='ontology-list-facet-section-box'>
@@ -116,8 +116,12 @@ export function ontology_has_searchKey(ontology, value){
 
 
 
-function createCollectionsCheckBoxes(filterCollection){
-    let collections = ["NFDI4Chem", "NFDI4Ing", "FAIR Data Spaces"];
+export async function createCollectionsCheckBoxes(filterCollection){
+    let allCollections = await getAllCollectionsIds();
+    let collections = [];
+    for(let col of allCollections){
+        collections.push(col["content"]);
+    }
     let result = [];
     for (let index in collections){
         result.push(

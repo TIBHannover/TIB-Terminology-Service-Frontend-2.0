@@ -184,23 +184,14 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
 
 
 /**
- * check if a node has part of relation with its parent. 
- * @param node 
- * @param parentIri 
+ * Get a list of all existing collections. 
+ * @returns 
  */
-export async function hasPartOfRelation(node:any, mode:string) {    
-    if (typeof(node['_links']['part_of']) === 'undefined' || node['parentIri'] === ""){
-      return false;
-    }
-    let partOfParents = await (await fetch(node['_links']['part_of']['href'], getCallSetting)).json();
-    if(mode === 'term'){
-      partOfParents = partOfParents['_embedded']['terms'];
-    }
-    else{
-      partOfParents = partOfParents['_embedded']['properties'];
-    }
-    
-    return nodeExistInList(partOfParents,  node['parentIri']);
+export async function getAllCollectionsIds() {
+  let url = "https://service.tib.eu/ts4tib/api/ontologies/schemavalues?schema=collection";
+  let cols =  await fetch(url, getCallSetting);
+  cols = await cols.json();
+  return cols['_embedded']["strings"];
 }
 
 

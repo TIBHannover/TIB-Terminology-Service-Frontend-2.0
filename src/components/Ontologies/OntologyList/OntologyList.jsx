@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey} from './helpers';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
 
 
 
@@ -24,13 +24,14 @@ class OntologyList extends React.Component {
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
       sortField: 'numberOfTerms',
-      selectedCollections: []
+      selectedCollections: [],
+      listOfAllCollectionsCheckBoxes: []
     })
-    this.getAllOntologies()
     this.handlePagination = this.handlePagination.bind(this);
     this.filterByKeyword = this.filterByKeyword.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
+    this.getAllCollections = this.getAllCollections.bind(this);
 
   }
 
@@ -68,6 +69,17 @@ class OntologyList extends React.Component {
       });
     }
   
+  }
+
+  /**
+   * Get the list of all Collections view (checkboxes)
+   */
+  getAllCollections(){
+    createCollectionsCheckBoxes(this.handleFacetCollection).then(data => {
+      this.setState({
+        listOfAllCollectionsCheckBoxes: data
+      });
+    });
   }
 
 
@@ -251,6 +263,15 @@ class OntologyList extends React.Component {
     return ontologyList
   }
 
+
+  componentDidMount(){
+    this.getAllOntologies();
+    this.getAllCollections();
+  }
+
+
+
+
   render () {
     const { error, isLoaded } = this.state
     if (error) {
@@ -261,7 +282,7 @@ class OntologyList extends React.Component {
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            {CreateFacet(this.filterWordChange, this.handleFacetCollection)}
+            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes)}
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container>
                 <Grid item xs={6}>
