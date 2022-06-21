@@ -54,7 +54,6 @@ class SearchForm extends React.Component{
     }
 
     submitJumpHandler(e){
-      let enteredTerm = document.getElementById('search-input').value;
       for(let i=0; i < this.state.jumpResult.length; i++){
       window.location.replace('/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
       }
