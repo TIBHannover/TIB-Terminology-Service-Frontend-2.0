@@ -7,6 +7,9 @@ import Checkbox from '@mui/material/Checkbox';
 
 
 export function BuildCollectionForCard(collections){
+    if (collections == null){
+        return "";
+    }
     let result = [];
     for(let i=0; i < collections.length; i++){
         if (i !== collections.length - 1){

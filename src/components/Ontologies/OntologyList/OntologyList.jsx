@@ -246,7 +246,7 @@ class OntologyList extends React.Component {
    * @returns 
    */
   handleFacetCollection = (e, value) => {
-
+    console.info(e.target.value);
   }
 
 
@@ -272,7 +272,7 @@ class OntologyList extends React.Component {
                 </div>
                 <div className='ontology-card-collection-name'>
                   <b>Collections:</b>              
-                  {item.config.classifications[0].collection 
+                  {item.config.classifications[0]
                     ? BuildCollectionForCard(item.config.classifications[0].collection)
                     : "-"
                     }
