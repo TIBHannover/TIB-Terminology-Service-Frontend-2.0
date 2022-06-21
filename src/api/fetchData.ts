@@ -5,8 +5,10 @@ const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
 const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
 
+
+
 /**
- * Get the ontology list for chem
+ * Get the ontology list 
  * @returns A list
  */
  export async function getAllOntologies (){
@@ -23,6 +25,33 @@ const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
       return [];
     })
 }
+
+
+
+/**
+ * Get the ontology list for collection(s)
+ * @returns A list
+ */
+ export async function getCollectionOntologies (collections){
+  let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
+  answer = await answer.json();
+  let ontologiesCount = answer['page']['totalElements'];
+  let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&";
+  let urlPros = "";
+  for(let col of collections){
+    urlPros += ("classification=" + col.toUpperCase() + "&");
+  }
+  targetUrl += urlPros;
+  return fetch(targetUrl, getCallSetting)
+    .then((s) => s.json())
+    .then((s) => {
+      return s['_embedded']['ontologies'];
+    })
+    .catch((s) => {
+      return [];
+    })
+}
+
 
 
 /**
