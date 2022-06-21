@@ -155,8 +155,8 @@ class OntologyList extends React.Component {
       return true
     }
 
-    let filtered = []
-    let hiddenStatus = []
+    let filtered = [];
+    let hiddenStatus = [];
     for (let i = 0; i < this.state.ontologies.length; i++) {
       let ontology = this.state.ontologies[i]
       if (ontology_has_searchKey(ontology, value)) {
