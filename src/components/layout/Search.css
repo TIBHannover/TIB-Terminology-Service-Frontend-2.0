@@ -14,6 +14,7 @@ The Search form styles
        The style for the autocomplete field
     */
     height: 200px;
+    border: 0.5px solid black;
     overflow-y: scroll;
     padding-bottom: 20px;
     padding-top: 10px;
@@ -21,17 +22,30 @@ The Search form styles
     padding-left: 10x;
     padding-right: 10px;
 }
+.autocomplete-item{
+    /* 
+       The style for the autocomplete items
+    */
+    margin-left: 10px;
+}
 #jumpresult-container{
     /* 
        The style for the jump autocomplete field
     */
     height: 200px;
+    border: 0.5px solid black;
     overflow-y: scroll;
     padding-bottom: 20px;
     padding-top: 10px;
     z-index: 999;
     padding-left: 10x;
     padding-right: 10px;
+}
+.jump-autocomplete-item{
+    /* 
+       The style for the jump autocomplete field
+    */
+    margin-left: 10px;
 }
 #search-box {
     /* 
