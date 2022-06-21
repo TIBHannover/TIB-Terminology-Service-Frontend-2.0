@@ -31,12 +31,8 @@ class SearchForm extends React.Component{
             searchResult =  (await searchResult.json())['response']['docs'];
             let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}`)
             jumpResult = (await jumpResult.json())['response']['docs'];
-            let jumpIRI = jumpResult.iri;
-            let jumpOntoName = jumpResult.ontology_name;
          this.setState({
              searchResult: searchResult,
-             jumpIRI: jumpIRI,
-             jumpOntoName: jumpOntoName,
              jumpResult: jumpResult,
              result: true,
              enteredTerm: enteredTerm
@@ -59,7 +55,9 @@ class SearchForm extends React.Component{
 
     submitJumpHandler(e){
       let enteredTerm = document.getElementById('search-input').value;
-      window.location.replace('/ontologies/' + this.state.jumpOntoName + '/terms?iri=' + this.state.jumpIRI);
+      for(let i=0; i < this.state.jumpResult.length; i++){
+      window.location.replace('/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+      }
     }
     
     
@@ -90,7 +88,7 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
+            <Link to={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">
               <div className="jump-autocomplete-item">
                 {this.state.jumpResult[i]['label']}
                 <Button style={{backgroundColor: "#873593", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>
@@ -127,7 +125,7 @@ class SearchForm extends React.Component{
                     {this.state.result &&
                 <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
                 {this.state.result &&
-                <div id = "jumpresult-container" className="col-md-12 justify-content-md-center" onClick={this.submitJumpHandler}>
+                <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4 className='font-weight-bold'>Jump To</h4>
                    {this.createJumpResultList()}
