@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getAllOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet} from './helpers';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey} from './helpers';
 
 
 
@@ -23,40 +23,58 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'numberOfTerms'
+      sortField: 'numberOfTerms',
+      selectedCollections: []
     })
     this.getAllOntologies()
     this.handlePagination = this.handlePagination.bind(this);
-    this.filterFacet = this.filterFacet.bind(this);
+    this.filterByKeyword = this.filterByKeyword.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
-    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
 
   }
 
 
-
   /**
-     * Set the target 
-     * 
-     * @param {*} target
-     * @returns
-     */
-  getTargetEndPoint (target) {
-    if (target === 'general') { // TIB General
-      return '/ontologies'
-    } else if (target === 'chemistry') { // NFDI4CHEM
-      return '/ontologies/chemistry' // /api/ontologies/chem
-    } else if (target === 'engineering') { // NFDI4ING
-      return '/ontologies/engineering'
+   * Get the list of Chem ontologies from TIB ts
+   */
+   async getAllOntologies () {
+    
+    try{
+      let allOntologies = await getAllOntologies();
+      let hiddenStatus = [];
+      for (let i = 0; i < allOntologies.length; i++) {
+          if (i < this.state.pageSize) {
+            hiddenStatus[i] = true
+          } else {
+            hiddenStatus[i] = false
+          }
+      }
+  
+      this.setState({
+        isLoaded: true,
+        ontologies: sortBasedOnKey(allOntologies, this.state.sortField),
+        unFilteredOntologies: sortBasedOnKey(allOntologies, this.state.sortField),
+        ontologiesHiddenStatus: hiddenStatus,
+        unFilteredHiddenStatus: hiddenStatus,
+        ontologyListContent: this.createOntologyList()
+      });
     }
-    return ''
+
+    catch(error){
+      this.setState({
+        isLoaded: true,
+        error
+      });
+    }
+  
   }
 
 
 
   /**
      * Handle the click on the pagination
+     * This function get pass to the pagination component
      * @param {*} value
      */
   handlePagination (value) {
@@ -81,49 +99,12 @@ class OntologyList extends React.Component {
 
 
   /**
-     * Get the list of Chem ontologies from TIB ts
-     */
-  async getAllOntologies () {
-    
-    try{
-      const allOntologies = await getAllOntologies();
-      let hiddenStatus = [];
-      for (let i = 0; i < allOntologies.length; i++) {
-          if (i < this.state.pageSize) {
-            hiddenStatus[i] = true
-          } else {
-            hiddenStatus[i] = false
-          }
-      }
-  
-      this.setState({
-        isLoaded: true,
-        ontologies: this.sortBasedOnKey(allOntologies, this.state.sortField),
-        unFilteredOntologies: this.sortBasedOnKey(allOntologies, this.state.sortField),
-        ontologiesHiddenStatus: hiddenStatus,
-        unFilteredHiddenStatus: hiddenStatus,
-        ontologyListContent: this.createOntologyList()
-      });
-    }
-
-    catch(error){
-      this.setState({
-        isLoaded: true,
-        error
-      });
-    }
-  
-  }
-
-
-
-  /**
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
   paginationHandler () {
-    const down = (this.state.pageNumber - 1) * this.state.pageSize
-    const up = down + (this.state.pageSize - 1)
-    const hiddenStatus = new Array(this.state.ontologies.length).fill(false)
+    let down = (this.state.pageNumber - 1) * this.state.pageSize
+    let up = down + (this.state.pageSize - 1)
+    let hiddenStatus = new Array(this.state.ontologies.length).fill(false)
     for (let i = down; i <= up; i++) {
       hiddenStatus[i] = true
     }
@@ -135,40 +116,14 @@ class OntologyList extends React.Component {
 
   /**
        * Handle the change in the search box. Calls the filter function
-       *
+       * This function gets pass to filter word box.
        * @param {*} e
        * @param {*} value
        */
   filterWordChange = (e, value) => {
-    this.filterFacet(e.target.value)
+    this.filterByKeyword(e.target.value)
   }
 
-
-  /**
-   * Search in an ontology metadata to check if it contains a value
-   * @param {ontology} ontology
-   * @param {string} value 
-   * @returns boolean
-   */
-  ontology_has_searchKey(ontology, value){
-    try{
-      if (ontology.ontologyId.includes(value)) {
-        return true;
-      }
-      if (ontology.config.title.includes(value)) {
-        return true;
-      }
-      if (ontology.config.description.includes(value)) {
-        return true;
-      }
-  
-      return false;
-    }
-    catch (e){
-      console.info(e);
-      return false;
-    }
-  }
 
 
 
@@ -178,7 +133,7 @@ class OntologyList extends React.Component {
        * @param {*} value
        * @returns
        */
-  filterFacet (value) {
+  filterByKeyword (value) {
     if (value === '') {
       this.setState({
         ontologies: this.state.unFilteredOntologies,
@@ -188,11 +143,11 @@ class OntologyList extends React.Component {
       return true
     }
 
-    const filtered = []
-    const hiddenStatus = []
+    let filtered = []
+    let hiddenStatus = []
     for (let i = 0; i < this.state.unFilteredOntologies.length; i++) {
-      const ontology = this.state.unFilteredOntologies[i]
-      if (this.ontology_has_searchKey(ontology, value)) {
+      let ontology = this.state.unFilteredOntologies[i]
+      if (ontology_has_searchKey(ontology, value)) {
         filtered.push(ontology)
         if (filtered.length <= this.state.pageSize) {
           hiddenStatus.push(true)
@@ -211,29 +166,13 @@ class OntologyList extends React.Component {
 
 
   /**
-     * Sort an array of objects based on a key
-     *
-     * @param {*} array
-     * @param {*} key
-     * @returns
-     */
-  sortBasedOnKey (array, key) {
-    return array.sort(function (a, b) {
-      const x = a[key]; const y = b[key]
-      return ((x < y) ? 1 : ((x > y) ? -1 : 0))
-    })
-  }
-
-
-
-  /**
      * Handle the change in the sort dropDown menu
      *
      * @param {*} e
      * @param {*} value
      */
   handleSortChange = (e, value) => {
-    const sortedOntology = this.sortBasedOnKey(this.state.ontologies, e.target.value)
+    let sortedOntology = sortBasedOnKey(this.state.ontologies, e.target.value)
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
@@ -257,9 +196,9 @@ class OntologyList extends React.Component {
      * @returns
      */
   createOntologyList () {
-    const ontologyList = []
+    let ontologyList = []
     for (let i = 0; i < this.state.ontologies.length; i++) {
-      const item = this.state.ontologies[i]
+      let item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
             <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
               <Grid item xs={9}>

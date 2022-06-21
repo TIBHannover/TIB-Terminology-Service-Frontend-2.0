@@ -6,6 +6,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 
+
+/**
+ * Create the collections list for each ontology card in the ontology list
+ * @param {*} collections 
+ * @returns 
+ */
 export function BuildCollectionForCard(collections){
     if (collections == null){
         return "";
@@ -26,6 +32,12 @@ export function BuildCollectionForCard(collections){
 }
 
 
+/**
+ * Create the facet widget for ontology list
+ * @param {*} filterWordChange 
+ * @param {*} filterCollection 
+ * @returns 
+ */
 export function CreateFacet(filterWordChange, filterCollection){
     return (
         <Grid item xs={4} id="ontology-list-facet-grid">
@@ -57,6 +69,50 @@ export function CreateFacet(filterWordChange, filterCollection){
         </Grid> 
     );
 }
+
+
+/**
+ * Search in an ontology metadata to check if it contains a value
+ * @param {ontology} ontology
+ * @param {string} value 
+ * @returns boolean
+ */
+export function ontology_has_searchKey(ontology, value){
+    try{
+        if (ontology.ontologyId.includes(value)) {
+            return true;
+        }
+        if (ontology.config.title.includes(value)) {
+            return true;
+        }
+        if (ontology.config.description.includes(value)) {
+            return true;
+        }
+
+        return false;
+    }
+    catch (e){
+        console.info(e);
+        return false;
+    }
+}
+
+
+
+ /**
+ * Sort an array of objects based on a key
+ *
+ * @param {*} array
+ * @param {*} key
+ * @returns
+ */
+  export function sortBasedOnKey (array, key) {
+    return array.sort(function (a, b) {
+      let x = a[key]; const y = b[key]
+      return ((x < y) ? 1 : ((x > y) ? -1 : 0))
+    })
+  }
+
 
 
 
