@@ -30,7 +30,7 @@ const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
 
 /**
  * Get the ontology list for collection(s)
- * @returns A list
+ * @returns A list of ontologies
  */
  export async function getCollectionOntologies (collections){
   let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
@@ -39,7 +39,7 @@ const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
   let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&";
   let urlPros = "";
   for(let col of collections){
-    urlPros += ("classification=" + col.toUpperCase() + "&");
+    urlPros += ("classification=" + encodeURIComponent(col) + "&");
   }
   targetUrl += urlPros;
   return fetch(targetUrl, getCallSetting)

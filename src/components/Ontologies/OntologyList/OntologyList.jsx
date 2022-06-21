@@ -4,7 +4,7 @@ import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import { getAllOntologies } from '../../../api/fetchData';
+import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey} from './helpers';
 
 
@@ -145,8 +145,8 @@ class OntologyList extends React.Component {
 
     let filtered = []
     let hiddenStatus = []
-    for (let i = 0; i < this.state.unFilteredOntologies.length; i++) {
-      let ontology = this.state.unFilteredOntologies[i]
+    for (let i = 0; i < this.state.ontologies.length; i++) {
+      let ontology = this.state.ontologies[i]
       if (ontology_has_searchKey(ontology, value)) {
         filtered.push(ontology)
         if (filtered.length <= this.state.pageSize) {
@@ -184,8 +184,28 @@ class OntologyList extends React.Component {
    * Handle facet filter for collection
    * @returns 
    */
-  handleFacetCollection = (e, value) => {
-    console.info(e.target.value);
+  handleFacetCollection = async (e, value) => {
+    let selectedCollections = this.state.selectedCollections;
+    let collection = e.target.value.trim(); 
+    if(e.target.checked){
+      selectedCollections.push(collection);
+      let ontologies = await getCollectionOntologies(selectedCollections);
+      let hiddenStatus = [];
+      for(let i=0; i < ontologies.length; i++){
+        if (i <= this.state.pageSize){
+          hiddenStatus.push(true);
+        }
+        else{
+          hiddenStatus.push(false);
+        }
+      }
+      this.setState({
+        selectedCollections: selectedCollections,
+        ontologies: ontologies,
+        ontologiesHiddenStatus: hiddenStatus,
+        pageNumber: 1
+      });
+    }
   }
 
 

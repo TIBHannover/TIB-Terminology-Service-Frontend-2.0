@@ -117,7 +117,7 @@ export function ontology_has_searchKey(ontology, value){
 
 
 function createCollectionsCheckBoxes(filterCollection){
-    let collections = ["NFDI4Chem", "NFDI4Ing", "Fair Data Spaces"];
+    let collections = ["NFDI4Chem", "NFDI4Ing", "FAIR Data Spaces"];
     let result = [];
     for (let index in collections){
         result.push(
