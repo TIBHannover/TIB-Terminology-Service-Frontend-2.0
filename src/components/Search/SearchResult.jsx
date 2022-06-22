@@ -11,6 +11,7 @@ import { SearchOutlined } from '@material-ui/icons';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import ExactResult from './Exact/Exact';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -237,20 +238,6 @@ async suggestionHandler(selectedTerm){
      }
      
   }
-     
-
-
-  async exactHandler(term){
-    if(term > 0){
-      let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${term}&exact=on`)
-      let resultJson =  (await exactResult.json());
-      exactResult = resultJson['response']['docs'];
-    }
-    // this.setState({
-    //   searchResult: exactResult, 
-    //   result: true                  
-    // })
-  }
 
   submitHandler(event){  
     let newEnteredTerm = document.getElementById('search-input').value;
@@ -280,7 +267,7 @@ async suggestionHandler(selectedTerm){
                       }}
                     />
         <FormGroup>
-            <FormControlLabel onClick={this.exactHandler} control={<Checkbox />} label="Exact Match" />
+            <FormControlLabel onClick={ExactResult} control={<Checkbox />} label="Exact Match" />
         </FormGroup>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}

@@ -8,6 +8,7 @@ class ExactResult extends React.Component{
             enteredTerm: "",
             result: false
         })
+        this.Exact = this.Exact.bind(this);
     }
 
     async Exact(){
