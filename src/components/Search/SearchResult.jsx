@@ -145,7 +145,7 @@ async suggestionHandler(selectedTerm){
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={8}>
               <div className="search-card-title">
-                <h4><b><Link to={''} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+                <h4><b><Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}

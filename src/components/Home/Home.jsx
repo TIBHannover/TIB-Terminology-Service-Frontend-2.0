@@ -20,7 +20,7 @@ class Home extends Component{
            <Grid item xs = {8}>
            <h4 className="font-weight-bold" style={{margin: 20}}>About TIB TS</h4>
            <p class="about">With its new Terminology Service, TIB &ndash; Leibniz Information Centre for Science and Technology and University Library provides a single point of access to terminology from domains such as architecture, chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API to retrieve terminological information and use it in your technical services. Layout template for TIB General.&nbsp;</p>
-           <p>Search Result EXAMPLE, EXAMPLE</p>
+           <p className="font-weight-bold">Search Result: <a href='/search?q=oxidation'>Oxidation</a>, <a href='/search?q=IAO_0020000'>IAO_0020000</a></p>
            </Grid>
           </Container>
 
