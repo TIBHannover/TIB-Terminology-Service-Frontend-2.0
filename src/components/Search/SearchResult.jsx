@@ -12,6 +12,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ExactResult from './Exact/Exact';
+import SearchForm from './SearchForm';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -254,18 +255,7 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         <div>
-        <TextField className="col-md-9 input" id="result-input" variant="outlined" style={{marginTop: 3.8}}
-                    onChange={this.suggestionChange}
-                    onKeyDown={this._handleKeyDown}
-                    placeholder="Search NFDI4Chem TS"
-                    InputProps={{
-                        endAdornment: (
-                          <IconButton>
-                            <SearchOutlined onClick={this.submitHandler}/>
-                          </IconButton>
-                        ),
-                      }}
-                    />
+        <SearchForm/>
         <FormGroup>
             <FormControlLabel onClick={ExactResult} control={<Checkbox />} label="Exact Match" />
         </FormGroup>
