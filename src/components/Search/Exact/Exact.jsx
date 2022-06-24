@@ -1,12 +1,14 @@
 import React from 'react'
 import queryString from 'query-string';
+import SearchResult from '../SearchResult';
 
 class ExactResult extends React.Component{
     constructor(props){
         super(props)
         this.state= ({
             enteredTerm: "",
-            result: false
+            result: false,
+            searchResult: []
         })
         this.Exact = this.Exact.bind(this);
     }
