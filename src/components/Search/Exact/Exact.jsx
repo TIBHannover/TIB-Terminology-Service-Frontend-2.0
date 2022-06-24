@@ -7,8 +7,7 @@ class ExactResult extends React.Component{
         super(props)
         this.state= ({
             enteredTerm: "",
-            result: false,
-            searchResult: []
+            result: false
         })
         this.Exact = this.Exact.bind(this);
     }
@@ -24,6 +23,12 @@ class ExactResult extends React.Component{
                 exactSearchResult: exactSearchResult,
                 result: true 
             })
+        }
+    }
+
+    componentDidMount(){
+        if(!this.state.result){
+            this.Exact();
         }
     }
 }
