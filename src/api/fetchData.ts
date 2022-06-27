@@ -195,7 +195,7 @@ export async function getAllCollectionsIds() {
   let collections = cols['_embedded']["strings"];
   let result: Array<any> = [];
   for( let col of collections ){
-    let statsUrl = StatsBaseUrl + "classification=" + col;
+    let statsUrl = StatsBaseUrl + "classification=" + col['content'];
     let statsResult = await fetch(statsUrl, getCallSetting);
     statsResult = await statsResult.json();
     let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};

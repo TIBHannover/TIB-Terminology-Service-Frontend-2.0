@@ -118,26 +118,22 @@ export function ontology_has_searchKey(ontology, value){
 
 export async function createCollectionsCheckBoxes(filterCollection){
     let allCollections = await getAllCollectionsIds();
-    let collections = [];
-    for(let col of allCollections){
-        collections.push(col["content"]);
-    }
     let result = [];
-    for (let index in collections){
+    for (let record of allCollections){
         result.push(
         <div className="row">
             <div className='col-sm-9'>
             <FormGroup>
                 <FormControlLabel 
                     control={<Checkbox  onClick={filterCollection} />}
-                    label={collections[index]}
-                    key={collections[index]}                      
-                    value={collections[index]}
+                    label={record['collection']}
+                    key={record['collection']}                      
+                    value={record['collection']}
                 />
             </FormGroup>
             </div>
             <div className='col-sm-3'>
-                <span class="facet-result-count">125</span>
+                <span class="facet-result-count">{record['ontologiesCount']}</span>
             </div>
         </div>
         );
