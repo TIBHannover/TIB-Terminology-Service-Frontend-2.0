@@ -13,22 +13,14 @@ class ExactResult extends React.Component{
     }
 
     async Exact(){
-        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-        let enteredTerm = targetQueryParams.q
-        if(enteredTerm.length > 0){
-            let exactSearchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}&exact=on`)
+        if(this.state.enteredTerm.length > 0){
+            let exactSearchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}&exact=on`)
             let resultJson = (await exactSearchResult.json());
             exactSearchResult = resultJson['response']['docs'];
             this.setState({
                 exactSearchResult: exactSearchResult,
                 result: true 
             })
-        }
-    }
-
-    componentDidMount(){
-        if(!this.state.result){
-            this.Exact();
         }
     }
 

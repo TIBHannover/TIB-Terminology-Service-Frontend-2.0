@@ -256,9 +256,7 @@ async suggestionHandler(selectedTerm){
       <div id="searchterm-wrapper">
         <div>
         <SearchForm/>
-        <FormGroup>
-            <FormControlLabel onClick={ExactResult} control={<Checkbox />} label="Exact Match" />
-        </FormGroup>
+        <ExactResult/>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
