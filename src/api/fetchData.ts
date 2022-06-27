@@ -4,6 +4,7 @@ const callHeader = {
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
 const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
+const StatsBaseUrl = "http://terminology02.develop.service.tib.eu:8080/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&";
 
 
 
@@ -191,7 +192,16 @@ export async function getAllCollectionsIds() {
   let url = "https://service.tib.eu/ts4tib/api/ontologies/schemavalues?schema=collection";
   let cols =  await fetch(url, getCallSetting);
   cols = await cols.json();
-  return cols['_embedded']["strings"];
+  let collections = cols['_embedded']["strings"];
+  let result: Array<any> = [];
+  for( let col of collections ){
+    let statsUrl = StatsBaseUrl + "classification=" + col;
+    let statsResult = await fetch(statsUrl, getCallSetting);
+    statsResult = await statsResult.json();
+    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
+    result.push(record);
+  }
+  return result;
 }
 
 
