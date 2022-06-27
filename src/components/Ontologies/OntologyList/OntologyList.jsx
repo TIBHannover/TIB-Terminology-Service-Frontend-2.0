@@ -91,6 +91,9 @@ class OntologyList extends React.Component {
     if(!collections){
       collections = [];
     }
+    if(typeof(collections) === "string"){
+      collections = [collections];
+    }
     if(!keywordFilter){
       keywordFilter = "";
     }
@@ -100,6 +103,7 @@ class OntologyList extends React.Component {
     this.setState({
       sortField: sortBy.trim()
     });
+    console.info(collections);
     this.getAllCollections(collections);
     this.runFacet(collections, keywordFilter.trim());
   }
