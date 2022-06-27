@@ -321,7 +321,7 @@ async runFacet(selectedCollections, enteredKeyword){
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes)}
+            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString)}
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container>
                 <Grid item xs={6}>

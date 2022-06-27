@@ -38,7 +38,7 @@ export function BuildCollectionForCard(collections){
  * @param {*} filterCollection 
  * @returns 
  */
-export function CreateFacet(filterWordChange, allCollectionsCheckboxes){
+export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredKeyword){
     return (
         <Grid item xs={4} id="ontology-list-facet-grid">
             <h3 className='h-headers'>Filter</h3>            
@@ -49,6 +49,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes){
                     type="search"
                     variant="outlined"
                     onChange={filterWordChange}
+                    value={enteredKeyword}
                     InputLabelProps={{ style: { fontSize: 15 } }}
                     />
                 </Grid>
