@@ -12,7 +12,7 @@ function Header () {
       <section className="header-top">
         <section className="header-top__logo">
           <img src= {TIB_Logo} alt="tib logo" height={80} width={180} />
-          <a className="main-title" >TERMINOLOGY SERVICE</a>
+          <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
         </section>
         <div className="position-absolute top-0 end-0">
           Login

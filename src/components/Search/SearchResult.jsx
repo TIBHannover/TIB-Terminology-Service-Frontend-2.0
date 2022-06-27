@@ -11,6 +11,7 @@ import { SearchOutlined } from '@material-ui/icons';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import ExactResult from './Exact/Exact';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -145,7 +146,7 @@ async suggestionHandler(selectedTerm){
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={8}>
               <div className="search-card-title">
-                <h4><b><Link to={''} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+                <h4><b><Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
@@ -237,20 +238,6 @@ async suggestionHandler(selectedTerm){
      }
      
   }
-     
-
-
-  async exactHandler(term){
-    if(term > 0){
-      let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${term}&exact=on`)
-      let resultJson =  (await exactResult.json());
-      exactResult = resultJson['response']['docs'];
-    }
-    // this.setState({
-    //   searchResult: exactResult, 
-    //   result: true                  
-    // })
-  }
 
   submitHandler(event){  
     let newEnteredTerm = document.getElementById('search-input').value;
@@ -280,7 +267,7 @@ async suggestionHandler(selectedTerm){
                       }}
                     />
         <FormGroup>
-            <FormControlLabel onClick={this.exactHandler} control={<Checkbox />} label="Exact Match" />
+            <FormControlLabel onClick={ExactResult} control={<Checkbox />} label="Exact Match" />
         </FormGroup>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
