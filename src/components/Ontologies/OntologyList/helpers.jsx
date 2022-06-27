@@ -49,7 +49,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     type="search"
                     variant="outlined"
                     onChange={filterWordChange}
-                    value={enteredKeyword}
+                    value={enteredKeyword !== "" ? enteredKeyword : ""}
                     InputLabelProps={{ style: { fontSize: 15 } }}
                     />
                 </Grid>

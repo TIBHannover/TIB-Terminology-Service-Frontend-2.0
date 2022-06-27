@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import queryString from 'query-string'; 
+import { useHistory } from 'react-router-dom';
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
 
@@ -158,6 +159,14 @@ class OntologyList extends React.Component {
    * @param {*} value
    */
   filterWordChange = (e, value) => {
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    if(e.target.value === ""){
+      this.props.history.push(window.location.pathname);
+    }
+    else{
+      currentUrlParams.set('keyword', e.target.value);
+      this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    }
     this.runFacet(this.state.selectedCollections, e.target.value);
   }
 
@@ -211,7 +220,8 @@ async runFacet(selectedCollections, enteredKeyword){
       selectedCollections: selectedCollections,
       ontologies: preOntologies,
       ontologiesHiddenStatus: preHiddenStatus,
-      pageNumber: 1
+      pageNumber: 1,
+      keywordFilterString: ""
     });
     return true;
   }
