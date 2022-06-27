@@ -4,9 +4,12 @@ const callHeader = {
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
 const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
+const StatsBaseUrl = "http://terminology02.develop.service.tib.eu:8080/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&";
+
+
 
 /**
- * Get the ontology list for chem
+ * Get the ontology list 
  * @returns A list
  */
  export async function getAllOntologies (){
@@ -23,6 +26,33 @@ const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
       return [];
     })
 }
+
+
+
+/**
+ * Get the ontology list for collection(s)
+ * @returns A list of ontologies
+ */
+ export async function getCollectionOntologies (collections){
+  let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
+  answer = await answer.json();
+  let ontologiesCount = answer['page']['totalElements'];
+  let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&";
+  let urlPros = "";
+  for(let col of collections){
+    urlPros += ("classification=" + encodeURIComponent(col) + "&");
+  }
+  targetUrl += urlPros;
+  return fetch(targetUrl, getCallSetting)
+    .then((s) => s.json())
+    .then((s) => {
+      return s['_embedded']['ontologies'];
+    })
+    .catch((s) => {
+      return [];
+    })
+}
+
 
 
 /**
@@ -155,23 +185,23 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
 
 
 /**
- * check if a node has part of relation with its parent. 
- * @param node 
- * @param parentIri 
+ * Get a list of all existing collections. 
+ * @returns 
  */
-export async function hasPartOfRelation(node:any, mode:string) {    
-    if (typeof(node['_links']['part_of']) === 'undefined' || node['parentIri'] === ""){
-      return false;
-    }
-    let partOfParents = await (await fetch(node['_links']['part_of']['href'], getCallSetting)).json();
-    if(mode === 'term'){
-      partOfParents = partOfParents['_embedded']['terms'];
-    }
-    else{
-      partOfParents = partOfParents['_embedded']['properties'];
-    }
-    
-    return nodeExistInList(partOfParents,  node['parentIri']);
+export async function getAllCollectionsIds() {
+  let url = "https://service.tib.eu/ts4tib/api/ontologies/schemavalues?schema=collection";
+  let cols =  await fetch(url, getCallSetting);
+  cols = await cols.json();
+  let collections = cols['_embedded']["strings"];
+  let result: Array<any> = [];
+  for( let col of collections ){
+    let statsUrl = StatsBaseUrl + "classification=" + col['content'];
+    let statsResult = await fetch(statsUrl, getCallSetting);
+    statsResult = await statsResult.json();
+    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
+    result.push(record);
+  }
+  return result;
 }
 
 
