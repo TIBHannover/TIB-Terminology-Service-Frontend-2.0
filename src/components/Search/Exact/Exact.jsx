@@ -1,6 +1,6 @@
 import React from 'react'
 import queryString from 'query-string';
-import SearchResult from '../SearchResult';
+import Button from '@mui/material/Button';
 
 class ExactResult extends React.Component{
     constructor(props){
@@ -30,6 +30,14 @@ class ExactResult extends React.Component{
         if(!this.state.result){
             this.Exact();
         }
+    }
+
+    render(){
+        return(
+            <div className="exact-button">
+               <Button variant="outlined">Exact Match</Button>
+            </div>
+        )
     }
 }
 
