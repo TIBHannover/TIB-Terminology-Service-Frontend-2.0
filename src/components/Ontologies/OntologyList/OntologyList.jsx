@@ -40,32 +40,6 @@ class OntologyList extends React.Component {
 
 
   /**
-   * Process the input parameter in the url.
-   * Inputs are used for setting facet filters
-   */
-  processUrlProps(){
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-    let collections = targetQueryParams.collection;
-    let sortBy = targetQueryParams.sorting;
-    let keywordFilter = targetQueryParams.keyword;
-    if(!keywordFilter){
-      keywordFilter = "";
-    }
-    if(!sortBy){
-      sortBy = "numberOfTerms";
-    }
-    this.setState({
-      sortField: sortBy.trim()
-    });
-    this.runFacet(collections, keywordFilter.trim());
-    // console.info(collections);
-  }
-
-
-
-
-
-  /**
    * Get the list of all ontologies
    */
    async getAllOntologies () {
@@ -102,11 +76,40 @@ class OntologyList extends React.Component {
   
   }
 
+
+  /**
+   * Process the input parameter in the url.
+   * Inputs are used for setting facet filters
+   */
+   processUrlProps(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let collections = targetQueryParams.collection;
+    let sortBy = targetQueryParams.sorting;
+    let keywordFilter = targetQueryParams.keyword;
+    if(!collections){
+      collections = [];
+    }
+    if(!keywordFilter){
+      keywordFilter = "";
+    }
+    if(!sortBy){
+      sortBy = "numberOfTerms";
+    }
+    this.setState({
+      sortField: sortBy.trim()
+    });
+    this.getAllCollections(collections);
+    this.runFacet(collections, keywordFilter.trim());
+  }
+
+
+
+
   /**
    * Get the list of all Collections view (checkboxes)
    */
-  getAllCollections(){
-    createCollectionsCheckBoxes(this.handleFacetCollection).then(data => {
+  getAllCollections(selectedCollections){
+    createCollectionsCheckBoxes(this.handleFacetCollection, selectedCollections).then(data => {
       this.setState({
         listOfAllCollectionsCheckBoxes: data
       });
@@ -303,7 +306,6 @@ async runFacet(selectedCollections, enteredKeyword){
 
   componentDidMount(){
     this.getAllOntologies();
-    this.getAllCollections();   
   }
 
 

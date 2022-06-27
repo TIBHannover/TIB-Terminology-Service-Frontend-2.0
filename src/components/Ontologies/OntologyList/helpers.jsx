@@ -116,7 +116,7 @@ export function ontology_has_searchKey(ontology, value){
 
 
 
-export async function createCollectionsCheckBoxes(filterCollection){
+export async function createCollectionsCheckBoxes(filterCollection, selectedCollections){
     let allCollections = await getAllCollectionsIds();
     let result = [];
     for (let record of allCollections){
@@ -124,12 +124,21 @@ export async function createCollectionsCheckBoxes(filterCollection){
         <div className="row">
             <div className='col-sm-9'>
             <FormGroup>
-                <FormControlLabel 
-                    control={<Checkbox  onClick={filterCollection} />}
-                    label={record['collection']}
-                    key={record['collection']}                      
-                    value={record['collection']}
-                />
+                {selectedCollections.includes(record['collection'])
+                    ? <FormControlLabel 
+                        control={<Checkbox defaultChecked={true}  onClick={filterCollection} />}
+                        label={record['collection']}
+                        key={record['collection']}                      
+                        value={record['collection']}                        
+                        />
+                    :
+                    <FormControlLabel 
+                        control={<Checkbox  onClick={filterCollection} />}
+                        label={record['collection']}
+                        key={record['collection']}                      
+                        value={record['collection']}                    
+                        />
+                }
             </FormGroup>
             </div>
             <div className='col-sm-3'>
