@@ -102,8 +102,7 @@ class OntologyList extends React.Component {
     }
     this.setState({
       sortField: sortBy.trim()
-    });
-    console.info(collections);
+    });    
     this.getAllCollections(collections);
     this.runFacet(collections, keywordFilter.trim());
   }
@@ -165,6 +164,7 @@ class OntologyList extends React.Component {
    */
   filterWordChange = (e, value) => {
     this.runFacet(this.state.selectedCollections, e.target.value);
+    this.updateUrl(this.state.selectedCollections, e.target.value);
   }
 
 
@@ -214,17 +214,18 @@ class OntologyList extends React.Component {
       return true;
     }
 
-    let currentUrlParams = new URLSearchParams(window.location.search);
+    let currentUrlParams = new URLSearchParams();
 
     if(enteredKeyword !== ""){
-      currentUrlParams.set('keyword', enteredKeyword);
+      currentUrlParams.append('keyword', enteredKeyword);
     }
 
     if(selectedCollections.length !== 0){
       for(let col of selectedCollections){
-        currentUrlParams.set('collection', col);
+        currentUrlParams.append('collection', col);
       }
     }
+    
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
   }
 
