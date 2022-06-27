@@ -88,6 +88,8 @@ class OntologyList extends React.Component {
         ontologiesHiddenStatus: hiddenStatus,
         unFilteredHiddenStatus: hiddenStatus,
         ontologyListContent: this.createOntologyList()
+      }, () => {
+        this.processUrlProps(); 
       });
     }
 
@@ -198,7 +200,6 @@ class OntologyList extends React.Component {
  * 
  */
 async runFacet(selectedCollections, enteredKeyword){
-  console.info(selectedCollections);
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
@@ -301,9 +302,8 @@ async runFacet(selectedCollections, enteredKeyword){
 
 
   componentDidMount(){
-    this.processUrlProps();
     this.getAllOntologies();
-    this.getAllCollections();
+    this.getAllCollections();   
   }
 
 
