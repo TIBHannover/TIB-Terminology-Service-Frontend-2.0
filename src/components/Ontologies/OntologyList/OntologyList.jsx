@@ -180,6 +180,8 @@ class OntologyList extends React.Component {
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
+    }, () => {
+      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
     })
   }
 
@@ -224,6 +226,10 @@ class OntologyList extends React.Component {
       for(let col of selectedCollections){
         currentUrlParams.append('collection', col);
       }
+    }
+
+    if(this.state.sortField !== "numberOfTerms"){
+      currentUrlParams.append('sorting', this.state.sortField);
     }
     
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
