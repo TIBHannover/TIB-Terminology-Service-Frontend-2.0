@@ -4,6 +4,7 @@ import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
 
@@ -34,11 +35,38 @@ class OntologyList extends React.Component {
     this.runFacet = this.runFacet.bind(this);
     this.handlePagination = this.handlePagination.bind(this);
     this.filterWordChange = this.filterWordChange.bind(this);
+    this.processUrlProps = this.processUrlProps.bind(this);
   }
 
 
   /**
-   * Get the list of Chem ontologies from TIB ts
+   * Process the input parameter in the url.
+   * Inputs are used for setting facet filters
+   */
+  processUrlProps(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let collections = targetQueryParams.collection;
+    let sortBy = targetQueryParams.sorting;
+    let keywordFilter = targetQueryParams.keyword;
+    if(!keywordFilter){
+      keywordFilter = "";
+    }
+    if(!sortBy){
+      sortBy = "numberOfTerms";
+    }
+    this.setState({
+      sortField: sortBy.trim()
+    });
+    this.runFacet(collections, keywordFilter.trim());
+    // console.info(collections);
+  }
+
+
+
+
+
+  /**
+   * Get the list of all ontologies
    */
    async getAllOntologies () {
     
@@ -170,6 +198,7 @@ class OntologyList extends React.Component {
  * 
  */
 async runFacet(selectedCollections, enteredKeyword){
+  console.info(selectedCollections);
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
@@ -272,6 +301,7 @@ async runFacet(selectedCollections, enteredKeyword){
 
 
   componentDidMount(){
+    this.processUrlProps();
     this.getAllOntologies();
     this.getAllCollections();
   }
