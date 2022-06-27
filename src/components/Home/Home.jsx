@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React from "react";
 import SearchForm from "../Search/SearchForm";
 import { Grid, Container, Button } from '@material-ui/core'
 import "../layout/Home.css"
@@ -8,7 +8,17 @@ import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png"
 import FIDMOVE from "../../assets/img/fidmove_logo.svg"
 import BAUDIGITAL from "../../assets/img/baudigital_logo.png"
 
-class Home extends Component{
+class Home extends React.Component{
+  constructor(props){
+    super(props)
+    this.state=({
+       statsResult: []
+    })
+  }
+
+  async Stats(){
+
+  }
     render(){
         return(
         <div id="mainpageSearchBox">
