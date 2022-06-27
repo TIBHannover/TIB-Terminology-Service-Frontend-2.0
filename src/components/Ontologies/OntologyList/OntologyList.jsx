@@ -37,6 +37,7 @@ class OntologyList extends React.Component {
     this.handlePagination = this.handlePagination.bind(this);
     this.filterWordChange = this.filterWordChange.bind(this);
     this.processUrlProps = this.processUrlProps.bind(this);
+    this.updateUrl= this.updateUrl.bind(this);
   }
 
 
@@ -159,14 +160,6 @@ class OntologyList extends React.Component {
    * @param {*} value
    */
   filterWordChange = (e, value) => {
-    let currentUrlParams = new URLSearchParams(window.location.search);
-    if(e.target.value === ""){
-      this.props.history.push(window.location.pathname);
-    }
-    else{
-      currentUrlParams.set('keyword', e.target.value);
-      this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-    }
     this.runFacet(this.state.selectedCollections, e.target.value);
   }
 
@@ -204,7 +197,33 @@ class OntologyList extends React.Component {
       selectedCollections.splice(index, 1);
     }
     this.runFacet(selectedCollections, this.state.keywordFilterString);
+    this.updateUrl(selectedCollections, this.state.keywordFilterString);
   }
+
+
+/**
+ * Update the url based on facet values
+ */
+  updateUrl(selectedCollections, enteredKeyword){
+    if (selectedCollections.length === 0 && enteredKeyword === ""){
+      this.props.history.push(window.location.pathname);
+      return true;
+    }
+
+    let currentUrlParams = new URLSearchParams(window.location.search);
+
+    if(enteredKeyword !== ""){
+      currentUrlParams.set('keyword', enteredKeyword);
+    }
+
+    if(selectedCollections.length !== 0){
+      for(let col of selectedCollections){
+        currentUrlParams.set('collection', col);
+      }
+    }
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+  }
+
 
 
 
@@ -225,11 +244,11 @@ async runFacet(selectedCollections, enteredKeyword){
     });
     return true;
   }
-
-  let ontologies = this.state.unFilteredOntologies;
+  
+  let ontologies = this.state.unFilteredOntologies; 
   let keywordOntologies = [];
   if(enteredKeyword !== ""){
-    // run keyword filter
+    // run keyword filter    
     for (let i = 0; i < ontologies.length; i++) {
       let ontology = ontologies[i]
       if (ontology_has_searchKey(ontology, enteredKeyword)) {
