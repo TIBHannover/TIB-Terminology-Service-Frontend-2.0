@@ -125,41 +125,69 @@ class DataTree extends React.Component {
         let list =  await (await fetch(url, getCallSetting)).json();        
         let roots = buildHierarchicalArray(list);        
         let childrenList = [];
-        for(let i=0; i < roots.length; i++){
-            let leafClass = " opened";
-            let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
-            let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
-            if (roots[i].childrenList.length === 0){
-              leafClass = " leaf-node";
-              symbol = React.createElement("i", {"className": "fa fa-close"}, "");
-            }    
-            
-            let subList = "";
-            if(roots[i].childrenList.length !== 0){
-              subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
-              
-            }
-        
-            let listItem = React.createElement("li", {         
-                "data-iri":roots[i].iri, 
-                "data-id": i,
-                "className": "tree-node-li" + leafClass,
-                "id": roots[i].id
-              }, symbol, textSpan, subList
-                
-              );
-            
-            childrenList.push(listItem);
+        if(list.length === 1){
+          // the target node is a root node
+          let leafClass = " closed";
+          let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+          let textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, roots[0].text);
+          if (!nodeHasChildren(this.state.ontologyId, roots[0].iri, this.state.componentIdentity)){
+            leafClass = " leaf-node";
+            symbol = React.createElement("i", {"className": "fa fa-close"}, ""); 
           }
-          let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);                 
+          let listItem = React.createElement("li", {         
+            "data-iri":roots[0].iri, 
+            "data-id": 0,
+            "className": "tree-node-li " + leafClass,
+            "id": roots[0].id
+            }, symbol, textSpan, []              
+          );
+          let treeList = React.createElement("ul", {className: "tree-node-ul"}, [listItem]);
           this.setState({
-              targetNodeIri: target,
-              searchWaiting: false,
-              treeDomContent: treeList,
-              selectedNodeIri: target,
-              showNodeDetailPage: true,
-              siblingsButtonShow: true
-          });          
+            targetNodeIri: target,
+            searchWaiting: false,
+            treeDomContent: treeList,
+            selectedNodeIri: target,
+            showNodeDetailPage: true,
+            siblingsButtonShow: true
+          });     
+        }
+        else{
+            for(let i=0; i < roots.length; i++){
+              let leafClass = " opened";
+              let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
+              let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
+              if (roots[i].childrenList.length === 0){
+                leafClass = " leaf-node";
+                symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+              }    
+              
+              let subList = "";
+              if(roots[i].childrenList.length !== 0){
+                subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
+                
+              }
+          
+              let listItem = React.createElement("li", {         
+                  "data-iri":roots[i].iri, 
+                  "data-id": i,
+                  "className": "tree-node-li" + leafClass,
+                  "id": roots[i].id
+                }, symbol, textSpan, subList
+                  
+                );
+              
+              childrenList.push(listItem);
+            }
+            let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);                 
+            this.setState({
+                targetNodeIri: target,
+                searchWaiting: false,
+                treeDomContent: treeList,
+                selectedNodeIri: target,
+                showNodeDetailPage: true,
+                siblingsButtonShow: true
+            });          
+        }
       }
   }
 
