@@ -7,6 +7,7 @@ import PropertyPage from '../PropertyPage/PropertyPage';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
+import { getChildrenJsTree} from '../../../api/fetchData';
 import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren } from './helpers';
 
 
@@ -269,14 +270,7 @@ async expandNode(e){
   let Id = e.id;
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
-      let callHeader = {
-        'Accept': 'application/json'
-      };
-      let getCallSetting = {method: 'GET', headers: callHeader};
-      let url = this.state.baseUrl;
-      let extractName = this.state.childExtractName;
-      url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-      let res =  await (await fetch(url, getCallSetting)).json(); 
+      let res =  await getChildrenJsTree(this.state.ontologyId, targetNodeIri, targetNodeId, this.state.childExtractName); 
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
@@ -365,14 +359,8 @@ async showSiblings(){
         let parentUl = node.parentNode.parentNode;
         let parentId = parentUl.id.split("children_for_")[1];
         let Iri = document.getElementById(parentId);
-        let callHeader = {
-          'Accept': 'application/json'
-        };
-        let getCallSetting = {method: 'GET', headers: callHeader};
         Iri = Iri.dataset.iri;
-        let url = this.state.baseUrl;
-        url += this.state.ontologyId + "/" + this.state.childExtractName + "/" + encodeURIComponent(encodeURIComponent(Iri)) + "/jstree/children/" + parentId;
-        let res =  await (await fetch(url, getCallSetting)).json(); 
+        let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
         for(let i=0; i < res.length; i++){
           if (res[i].iri === node.parentNode.dataset.iri){
             continue;
