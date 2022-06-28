@@ -376,6 +376,14 @@ render(){
                     onClick={this.resetTree}
                     >
                     Reset Tree
+              </Button>               
+              <Button 
+                    variant="contained" 
+                    className='tree-action-btn' 
+                    // startIcon={<RestartAltIcon />}
+                    // onClick={this.resetTree}
+                    >
+                    Show Siblings
               </Button> 
             </Grid>
           </Grid>
