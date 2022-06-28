@@ -33,7 +33,8 @@ class DataTree extends React.Component {
       childExtractName: "",
       targetNodeIri: "",
       treeDomContent: "",
-      resetTreeFlag: false
+      resetTreeFlag: false,
+      siblingsVisible: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -354,28 +355,34 @@ resetTree(){
  * Show an opened node siblings
  */
 async showSiblings(){
-  let targetNodes = document.getElementsByClassName("targetNodeByIri");
-  for (let node of targetNodes){
-    let parentUl = node.parentNode.parentNode;
-    let parentId = parentUl.id.split("children_for_")[1];
-    let Iri = document.getElementById(parentId);
-    let callHeader = {
-      'Accept': 'application/json'
-    };
-    let getCallSetting = {method: 'GET', headers: callHeader};
-    Iri = Iri.dataset.iri;
-    let url = this.state.baseUrl;
-    url += this.state.ontologyId + "/" + this.state.childExtractName + "/" + encodeURIComponent(encodeURIComponent(Iri)) + "/jstree/children/" + parentId;
-    let res =  await (await fetch(url, getCallSetting)).json(); 
-    for(let i=0; i < res.length; i++){
-      let listItem = buildTreeListItem(res[i]);
-      parentUl.appendChild(listItem);      
-    }   
-
-    // console.info(parentId);
-    // // console.info(node)
+  if(!this.state.siblingsVisible){
+      let targetNodes = document.getElementsByClassName("targetNodeByIri");
+      for (let node of targetNodes){
+        let parentUl = node.parentNode.parentNode;
+        let parentId = parentUl.id.split("children_for_")[1];
+        let Iri = document.getElementById(parentId);
+        let callHeader = {
+          'Accept': 'application/json'
+        };
+        let getCallSetting = {method: 'GET', headers: callHeader};
+        Iri = Iri.dataset.iri;
+        let url = this.state.baseUrl;
+        url += this.state.ontologyId + "/" + this.state.childExtractName + "/" + encodeURIComponent(encodeURIComponent(Iri)) + "/jstree/children/" + parentId;
+        let res =  await (await fetch(url, getCallSetting)).json(); 
+        for(let i=0; i < res.length; i++){
+          if (res[i].iri === node.parentNode.dataset.iri){
+            continue;
+          }
+          let listItem = buildTreeListItem(res[i]);
+          parentUl.appendChild(listItem);      
+        }   
+      }
+      this.setState({siblingsVisible: true});
   }
+  else{
 
+  }
+  
 }
 
 
