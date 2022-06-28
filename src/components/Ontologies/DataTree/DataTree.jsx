@@ -6,6 +6,7 @@ import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { withRouter } from 'react-router-dom';
 import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren } from './helpers';
 
 
@@ -340,6 +341,7 @@ processClick(e){
  * Reset tree view.
  */
 resetTree(){
+  this.props.history.push(window.location.pathname);
   this.setState({
     resetTreeFlag: true,
     treeDomContent: ""
@@ -400,7 +402,7 @@ render(){
 
 }
 
-export default DataTree;
+export default withRouter(DataTree);
 
 
 
