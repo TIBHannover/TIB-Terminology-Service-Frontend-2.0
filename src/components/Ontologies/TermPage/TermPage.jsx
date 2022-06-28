@@ -5,6 +5,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
+import { Link } from 'react-router-dom';
 
 
 class TermPage extends React.Component {
@@ -50,7 +51,6 @@ class TermPage extends React.Component {
       iriIsCopied: false
     });
   }
-
 
 
   componentDidMount(){
@@ -172,6 +172,11 @@ class TermPage extends React.Component {
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.state.data.annotation ? this.state.data.annotation.isDefinedBy : "")}
             </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className="node-detail-table-row">
+          <Grid container>
+            <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
           </Grid>
         </Grid>
       </Grid>

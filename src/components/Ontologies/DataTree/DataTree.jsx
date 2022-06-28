@@ -6,7 +6,9 @@ import TermPage from '../TermPage/TermPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren } from './helpers';
+import { withRouter } from 'react-router-dom';
+import { getChildrenJsTree} from '../../../api/fetchData';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot } from './helpers';
 
 
 
@@ -32,7 +34,9 @@ class DataTree extends React.Component {
       childExtractName: "",
       targetNodeIri: "",
       treeDomContent: "",
-      resetTreeFlag: false
+      resetTreeFlag: false,
+      siblingsVisible: false,
+      siblingsButtonShow: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -43,6 +47,7 @@ class DataTree extends React.Component {
     this.processTree = this.processTree.bind(this);
     this.expandTargetNode = this.expandTargetNode.bind(this);
     this.resetTree = this.resetTree.bind(this);
+    this.showSiblings = this.showSiblings.bind(this);
   }
 
 
@@ -120,40 +125,71 @@ class DataTree extends React.Component {
         let list =  await (await fetch(url, getCallSetting)).json();        
         let roots = buildHierarchicalArray(list);        
         let childrenList = [];
-        for(let i=0; i < roots.length; i++){
-            let leafClass = " opened";
-            let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
-            let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
-            if (roots[i].childrenList.length === 0){
-              leafClass = " leaf-node";
-              symbol = React.createElement("i", {"className": "fa fa-close"}, "");
-            }    
-            
-            let subList = "";
-            if(roots[i].childrenList.length !== 0){
-              subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
-              
-            }
-        
-            let listItem = React.createElement("li", {         
-                "data-iri":roots[i].iri, 
-                "data-id": i,
-                "className": "tree-node-li" + leafClass,
-                "id": roots[i].id
-              }, symbol, textSpan, subList
-                
-              );
-            
-            childrenList.push(listItem);
+        if(list.length === 1){
+          // the target node is a root node
+          let leafClass = " closed";
+          let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+          let textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, roots[0].text);
+          if (! await nodeHasChildren(this.state.ontologyId, roots[0].iri, this.state.componentIdentity)){
+            leafClass = " leaf-node";
+            symbol = React.createElement("i", {"className": "fa fa-close"}, ""); 
           }
-          let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);                 
+          let listItem = React.createElement("li", {         
+            "data-iri":roots[0].iri, 
+            "data-id": 0,
+            "className": "tree-node-li " + leafClass,
+            "id": roots[0].id
+            }, symbol, textSpan, []              
+          );
+          let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, [listItem]);
           this.setState({
-              targetNodeIri: target,
-              searchWaiting: false,
-              treeDomContent: treeList,
-              selectedNodeIri: target,
-              showNodeDetailPage: true
-          });          
+            targetNodeIri: target,
+            searchWaiting: false,
+            treeDomContent: treeList,
+            selectedNodeIri: target,
+            showNodeDetailPage: true,
+            siblingsButtonShow: true
+          }); 
+
+          return true;
+
+        }
+
+        for(let i=0; i < roots.length; i++){
+          let leafClass = " opened";
+          let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
+          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
+          if (roots[i].childrenList.length === 0){
+            leafClass = " leaf-node";
+            symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+          }    
+          
+          let subList = "";
+          if(roots[i].childrenList.length !== 0){
+            subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
+            
+          }
+      
+          let listItem = React.createElement("li", {         
+              "data-iri":roots[i].iri, 
+              "data-id": i,
+              "className": "tree-node-li" + leafClass,
+              "id": roots[i].id
+            }, symbol, textSpan, subList
+              
+            );
+          
+          childrenList.push(listItem);
+        }
+        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                 
+        this.setState({
+            targetNodeIri: target,
+            searchWaiting: false,
+            treeDomContent: treeList,
+            selectedNodeIri: target,
+            showNodeDetailPage: true,
+            siblingsButtonShow: true
+        });    
       }
   }
 
@@ -186,7 +222,7 @@ expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
         nodeStatusClass = "leaf-node";
         iconClass = "fa fa-close";
       }
-      clickedClass = "clicked";
+      clickedClass = "clicked targetNodeByIri";
     }
     let symbol = React.createElement("i", {"className": iconClass }, "");
     let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
@@ -264,14 +300,7 @@ async expandNode(e){
   let Id = e.id;
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
-      let callHeader = {
-        'Accept': 'application/json'
-      };
-      let getCallSetting = {method: 'GET', headers: callHeader};
-      let url = this.state.baseUrl;
-      let extractName = this.state.childExtractName;
-      url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-      let res =  await (await fetch(url, getCallSetting)).json(); 
+      let res =  await getChildrenJsTree(this.state.ontologyId, targetNodeIri, targetNodeId, this.state.childExtractName); 
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
@@ -340,10 +369,86 @@ processClick(e){
  * Reset tree view.
  */
 resetTree(){
+  this.props.history.push(window.location.pathname);
   this.setState({
     resetTreeFlag: true,
-    treeDomContent: ""
+    treeDomContent: "",
+    siblingsVisible: false,
+    siblingsButtonShow: false
   });
+}
+
+
+/**
+ * Show an opened node siblings
+ */
+async showSiblings(){
+  let targetNodes = document.getElementsByClassName("targetNodeByIri");
+  if(!this.state.siblingsVisible){
+      if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+        // Target node is a root node
+        let callHeader = {
+          'Accept': 'application/json'
+        };
+        let getCallSetting = {method: 'GET', headers: callHeader};
+        let extractName = this.state.childExtractName;
+        let url = this.state.baseUrl;
+        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
+        let res =  await (await fetch(url, getCallSetting)).json(); 
+        for(let i=0; i < res.length; i++){
+          if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
+            continue;
+          }
+          let listItem = buildTreeListItem(res[i]);
+          document.getElementById("tree-root-ul").appendChild(listItem);
+        }   
+
+      }
+      else{
+        for (let node of targetNodes){
+          let parentUl = node.parentNode.parentNode;
+          let parentId = parentUl.id.split("children_for_")[1];
+          let Iri = document.getElementById(parentId);
+          Iri = Iri.dataset.iri;
+          let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
+          for(let i=0; i < res.length; i++){
+            if (res[i].iri === node.parentNode.dataset.iri){
+              continue;
+            }
+            let listItem = buildTreeListItem(res[i]);
+            parentUl.appendChild(listItem);      
+          }   
+        }
+      }
+      
+      this.setState({siblingsVisible: true});
+  }
+  else{
+    if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+      // Target node is a root node
+      let parentUl = document.getElementById("tree-root-ul");
+      let children = [].slice.call(parentUl.childNodes);
+      for(let i=0; i < children.length; i++){
+        if(children[i].dataset.iri !== targetNodes[0].parentNode.dataset.iri){
+          children[i].remove();
+        }
+      }
+    }
+    else{
+      for (let node of targetNodes){
+        let parentUl = node.parentNode.parentNode;
+        let children = [].slice.call(parentUl.childNodes);
+        for(let i=0; i < children.length; i++){
+          if(children[i].dataset.iri !== node.parentNode.dataset.iri){
+            children[i].remove();
+          }
+        }
+      }
+    }
+    
+    this.setState({siblingsVisible: false});
+  }
+  
 }
 
 
@@ -374,7 +479,19 @@ render(){
                     onClick={this.resetTree}
                     >
                     Reset Tree
-              </Button> 
+              </Button>               
+              {this.state.siblingsButtonShow && 
+                <Button 
+                    variant="contained" 
+                    className='tree-action-btn'                     
+                    onClick={this.showSiblings}
+                    >
+                    {!this.state.siblingsVisible
+                      ? "Show Siblings"
+                      : "Hide Siblings"
+                    }                    
+                </Button>
+              } 
             </Grid>
           </Grid>
         </Grid>
@@ -400,7 +517,7 @@ render(){
 
 }
 
-export default DataTree;
+export default withRouter(DataTree);
 
 
 
