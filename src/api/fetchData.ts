@@ -139,15 +139,15 @@ export async function getOntologyRootTerms(ontologyId:string) {
 
 
 /**
- * get the page field from json result (TS api paginates the results)
- * @param url 
- * @returns 
+ * Get the js tree for a node. It returns the subtree of that node as a flat list.
  */
-async function getPageCount(url: string){
-  let answer = await fetch(url, getCallSetting);
-  answer = await answer.json();
-  return Math.ceil(answer['page']['totalElements'] / size);
+export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string, targetNodeId:string, extractName:string) {
+  let url = OntologiesBaseServiceUrl + "/";
+  url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
+  let res =  await (await fetch(url, getCallSetting)).json(); 
+  return res;
 }
+
 
 
 /**
@@ -157,14 +157,26 @@ async function getPageCount(url: string){
  * @param mode 
  * @returns 
  */
-export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
-    let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
-    let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
-    if (node.status === 404){
-      return false;
-    }
-    node = await node.json();
-    return node['_embedded'][mode][0];
+ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
+  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
+  let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
+  if (node.status === 404){
+    return false;
+  }
+  node = await node.json();
+  return node['_embedded'][mode][0];
+}
+
+
+/**
+ * get the page field from json result (TS api paginates the results)
+ * @param url 
+ * @returns 
+ */
+async function getPageCount(url: string){
+  let answer = await fetch(url, getCallSetting);
+  answer = await answer.json();
+  return Math.ceil(answer['page']['totalElements'] / size);
 }
 
 

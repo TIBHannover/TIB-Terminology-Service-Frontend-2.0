@@ -83,3 +83,19 @@ export function buildHierarchicalArray(flatList){
     return node.has_children;
     
   }
+
+
+  /**
+   * Check a node is root or not
+   */
+   export async function nodeIsRoot(ontology, nodeIri, mode){
+    let node = "";
+    if(mode === 'term'){
+      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
+    }
+    else{
+      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
+    }
+    return node.is_root;
+    
+  }
