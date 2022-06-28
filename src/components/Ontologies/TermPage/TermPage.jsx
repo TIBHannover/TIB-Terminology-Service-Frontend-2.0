@@ -5,6 +5,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
+import { Link } from 'react-router-dom';
 
 
 class TermPage extends React.Component {
@@ -51,6 +52,11 @@ class TermPage extends React.Component {
     });
   }
 
+  /**
+   * Get data in json 
+   */
+    
+
 
 
   componentDidMount(){
@@ -69,6 +75,9 @@ class TermPage extends React.Component {
   render () {
     return (
       <Grid container spacing={2}>
+        <div>
+        <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Get Data as JSON</Button></a>
+        </div>
         <Grid item xs={12} spacing={4} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
