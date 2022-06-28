@@ -76,7 +76,7 @@ class TermPage extends React.Component {
     return (
       <Grid container spacing={2}>
         <div>
-          <Button variant="contained">Get Data as JSON</Button>
+        <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Get Data as JSON</Button></a>
         </div>
         <Grid item xs={12} spacing={4} className="node-detail-table-row">
           <Grid container>
