@@ -55,15 +55,7 @@ class TermPage extends React.Component {
   /**
    * Get data in json 
    */
-  async jsonData(){
-    let iri = this.props.iri
-    let ontology = this.props.ontology;
-    let jsonCall = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/`+ ontology + `/terms?iri=`+ iri)
-    this.setState({
-      jsonCall: jsonCall
-    })
-
-  }
+    
 
 
 
@@ -84,7 +76,7 @@ class TermPage extends React.Component {
     return (
       <Grid container spacing={2}>
         <div>
-          <Link to={this.jsonData()}><Button variant="contained">Get Data as JSON</Button></Link>
+          <Button variant="contained">Get Data as JSON</Button>
         </div>
         <Grid item xs={12} spacing={4} className="node-detail-table-row">
           <Grid container>
