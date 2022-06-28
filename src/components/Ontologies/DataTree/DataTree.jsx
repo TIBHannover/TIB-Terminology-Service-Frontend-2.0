@@ -44,6 +44,7 @@ class DataTree extends React.Component {
     this.processTree = this.processTree.bind(this);
     this.expandTargetNode = this.expandTargetNode.bind(this);
     this.resetTree = this.resetTree.bind(this);
+    this.showSiblings = this.showSiblings.bind(this);
   }
 
 
@@ -187,7 +188,7 @@ expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
         nodeStatusClass = "leaf-node";
         iconClass = "fa fa-close";
       }
-      clickedClass = "clicked";
+      clickedClass = "clicked targetNodeByIri";
     }
     let symbol = React.createElement("i", {"className": iconClass }, "");
     let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
@@ -349,6 +350,35 @@ resetTree(){
 }
 
 
+/**
+ * Show an opened node siblings
+ */
+async showSiblings(){
+  let targetNodes = document.getElementsByClassName("targetNodeByIri");
+  for (let node of targetNodes){
+    let parentUl = node.parentNode.parentNode;
+    let parentId = parentUl.id.split("children_for_")[1];
+    let Iri = document.getElementById(parentId);
+    let callHeader = {
+      'Accept': 'application/json'
+    };
+    let getCallSetting = {method: 'GET', headers: callHeader};
+    Iri = Iri.dataset.iri;
+    let url = this.state.baseUrl;
+    url += this.state.ontologyId + "/" + this.state.childExtractName + "/" + encodeURIComponent(encodeURIComponent(Iri)) + "/jstree/children/" + parentId;
+    let res =  await (await fetch(url, getCallSetting)).json(); 
+    for(let i=0; i < res.length; i++){
+      let listItem = buildTreeListItem(res[i]);
+      parentUl.appendChild(listItem);      
+    }   
+
+    // console.info(parentId);
+    // // console.info(node)
+  }
+
+}
+
+
 
 componentDidMount(){
   this.setTreeData();
@@ -379,9 +409,8 @@ render(){
               </Button>               
               <Button 
                     variant="contained" 
-                    className='tree-action-btn' 
-                    // startIcon={<RestartAltIcon />}
-                    // onClick={this.resetTree}
+                    className='tree-action-btn'                     
+                    onClick={this.showSiblings}
                     >
                     Show Siblings
               </Button> 
