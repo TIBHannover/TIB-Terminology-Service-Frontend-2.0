@@ -52,12 +52,6 @@ class TermPage extends React.Component {
     });
   }
 
-  /**
-   * Get data in json 
-   */
-    
-
-
 
   componentDidMount(){
     if(this.state.data && this.state.prevTerm !== this.props.iri){
@@ -75,9 +69,6 @@ class TermPage extends React.Component {
   render () {
     return (
       <Grid container spacing={2}>
-        <div>
-        <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Get Data as JSON</Button></a>
-        </div>
         <Grid item xs={12} spacing={4} className="node-detail-table-row">
           <Grid container>
             <Grid item xs={this.state.label_xs}>
@@ -181,6 +172,11 @@ class TermPage extends React.Component {
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(this.state.data.annotation ? this.state.data.annotation.isDefinedBy : "")}
             </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className="node-detail-table-row">
+          <Grid container>
+            <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
           </Grid>
         </Grid>
       </Grid>
