@@ -346,7 +346,8 @@ resetTree(){
   this.props.history.push(window.location.pathname);
   this.setState({
     resetTreeFlag: true,
-    treeDomContent: ""
+    treeDomContent: "",
+    siblingsVisible: false
   });
 }
 
@@ -355,8 +356,8 @@ resetTree(){
  * Show an opened node siblings
  */
 async showSiblings(){
+  let targetNodes = document.getElementsByClassName("targetNodeByIri");
   if(!this.state.siblingsVisible){
-      let targetNodes = document.getElementsByClassName("targetNodeByIri");
       for (let node of targetNodes){
         let parentUl = node.parentNode.parentNode;
         let parentId = parentUl.id.split("children_for_")[1];
@@ -380,7 +381,16 @@ async showSiblings(){
       this.setState({siblingsVisible: true});
   }
   else{
-
+    for (let node of targetNodes){
+      let parentUl = node.parentNode.parentNode;
+      let children = [].slice.call(parentUl.childNodes);
+      for(let i=0; i < children.length; i++){
+        if(children[i].dataset.iri !== node.parentNode.dataset.iri){
+          children[i].remove();
+        }
+      }
+    }
+    this.setState({siblingsVisible: false});
   }
   
 }
@@ -419,7 +429,10 @@ render(){
                     className='tree-action-btn'                     
                     onClick={this.showSiblings}
                     >
-                    Show Siblings
+                    {!this.state.siblingsVisible
+                      ? "Show Siblings"
+                      : "Hide Siblings"
+                    }                    
               </Button> 
             </Grid>
           </Grid>
