@@ -34,7 +34,8 @@ class DataTree extends React.Component {
       targetNodeIri: "",
       treeDomContent: "",
       resetTreeFlag: false,
-      siblingsVisible: false
+      siblingsVisible: false,
+      siblingsButtonShow: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -155,7 +156,8 @@ class DataTree extends React.Component {
               searchWaiting: false,
               treeDomContent: treeList,
               selectedNodeIri: target,
-              showNodeDetailPage: true
+              showNodeDetailPage: true,
+              siblingsButtonShow: true
           });          
       }
   }
@@ -347,7 +349,8 @@ resetTree(){
   this.setState({
     resetTreeFlag: true,
     treeDomContent: "",
-    siblingsVisible: false
+    siblingsVisible: false,
+    siblingsButtonShow: false
   });
 }
 
@@ -424,7 +427,8 @@ render(){
                     >
                     Reset Tree
               </Button>               
-              <Button 
+              {this.state.siblingsButtonShow && 
+                <Button 
                     variant="contained" 
                     className='tree-action-btn'                     
                     onClick={this.showSiblings}
@@ -433,7 +437,8 @@ render(){
                       ? "Show Siblings"
                       : "Hide Siblings"
                     }                    
-              </Button> 
+                </Button>
+              } 
             </Grid>
           </Grid>
         </Grid>
