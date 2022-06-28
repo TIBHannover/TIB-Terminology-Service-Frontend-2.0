@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot } from './helpers';
 
 
 
@@ -141,7 +141,7 @@ class DataTree extends React.Component {
             "id": roots[0].id
             }, symbol, textSpan, []              
           );
-          let treeList = React.createElement("ul", {className: "tree-node-ul"}, [listItem]);
+          let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, [listItem]);
           this.setState({
             targetNodeIri: target,
             searchWaiting: false,
@@ -178,7 +178,7 @@ class DataTree extends React.Component {
               
               childrenList.push(listItem);
             }
-            let treeList = React.createElement("ul", {className: "tree-node-ul"}, childrenList);                 
+            let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                 
             this.setState({
                 targetNodeIri: target,
                 searchWaiting: false,
@@ -383,20 +383,42 @@ resetTree(){
 async showSiblings(){
   let targetNodes = document.getElementsByClassName("targetNodeByIri");
   if(!this.state.siblingsVisible){
-      for (let node of targetNodes){
-        let parentUl = node.parentNode.parentNode;
-        let parentId = parentUl.id.split("children_for_")[1];
-        let Iri = document.getElementById(parentId);
-        Iri = Iri.dataset.iri;
-        let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
+      if(nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+        // Target node is a root node
+        let callHeader = {
+          'Accept': 'application/json'
+        };
+        let getCallSetting = {method: 'GET', headers: callHeader};
+        let extractName = this.state.childExtractName;
+        let url = this.state.baseUrl;
+        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
+        let res =  await (await fetch(url, getCallSetting)).json(); 
         for(let i=0; i < res.length; i++){
-          if (res[i].iri === node.parentNode.dataset.iri){
+          if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
             continue;
           }
           let listItem = buildTreeListItem(res[i]);
-          parentUl.appendChild(listItem);      
+          document.getElementById("tree-root-ul").appendChild(listItem);
         }   
+
       }
+      else{
+        for (let node of targetNodes){
+          let parentUl = node.parentNode.parentNode;
+          let parentId = parentUl.id.split("children_for_")[1];
+          let Iri = document.getElementById(parentId);
+          Iri = Iri.dataset.iri;
+          let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
+          for(let i=0; i < res.length; i++){
+            if (res[i].iri === node.parentNode.dataset.iri){
+              continue;
+            }
+            let listItem = buildTreeListItem(res[i]);
+            parentUl.appendChild(listItem);      
+          }   
+        }
+      }
+      
       this.setState({siblingsVisible: true});
   }
   else{
