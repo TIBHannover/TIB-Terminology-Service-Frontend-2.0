@@ -11,7 +11,7 @@ import { SearchOutlined } from '@material-ui/icons';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import ExactResult from './Exact/Exact';
+import SearchForm from './SearchForm';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -22,6 +22,7 @@ class SearchResult extends React.Component{
           result: false,
           suggestResult: false,
           searchResult: [],
+          exactResult: [],
           suggestionResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
@@ -42,6 +43,7 @@ class SearchResult extends React.Component{
         this.suggestionChange = this.suggestionChange.bind(this);
         this.suggestionHandler = this.suggestionHandler.bind(this);
         this.paginationHandler = this.paginationHandler.bind(this);
+        this.handleExact = this.handleExact.bind(this);
     }
 
     async searching(){
@@ -93,6 +95,18 @@ class SearchResult extends React.Component{
           newEnteredTerm: ""
       });
       
+  }
+}
+
+async handleExact(){
+  if(this.state.enteredTerm.length > 0){
+    let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&exact=on`)
+    exactResult = (await exactResult.json())['response']['docs'];
+    this.setState({
+      searchResult: exactResult,
+      result: true,
+      isLoaded: true 
+    })
   }
 }
 
@@ -254,21 +268,8 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         <div>
-        <TextField className="col-md-9 input" id="result-input" variant="outlined" style={{marginTop: 3.8}}
-                    onChange={this.suggestionChange}
-                    onKeyDown={this._handleKeyDown}
-                    placeholder="Search NFDI4Chem TS"
-                    InputProps={{
-                        endAdornment: (
-                          <IconButton>
-                            <SearchOutlined onClick={this.submitHandler}/>
-                          </IconButton>
-                        ),
-                      }}
-                    />
-        <FormGroup>
-            <FormControlLabel onClick={ExactResult} control={<Checkbox />} label="Exact Match" />
-        </FormGroup>
+        <SearchForm/>
+        <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
