@@ -43,6 +43,7 @@ class SearchResult extends React.Component{
         this.suggestionChange = this.suggestionChange.bind(this);
         this.suggestionHandler = this.suggestionHandler.bind(this);
         this.paginationHandler = this.paginationHandler.bind(this);
+        this.handleExact = this.handleExact.bind(this);
     }
 
     async searching(){
@@ -55,15 +56,12 @@ class SearchResult extends React.Component{
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
         let totalResults = paginationResult['numFound']
-        let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}` + `&exact=on`)
-        exactResult = (await exactResult.json())['response']['docs'];
         this.setState({
           searchResult: searchResult,
           originalSearchResult: searchResult,
           facetFields: facetFields,
           paginationResult: paginationResult,
           totalResults: totalResults,
-          exactResult: exactResult,
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm
@@ -106,12 +104,8 @@ async handleExact(){
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
       searchResult: exactResult,
-      result: true 
-    })
-  }
-  else if(this.state.enteredTerm.length == 0){
-    this.setState({
-      result: false  
+      result: true,
+      isLoaded: true 
     })
   }
 }
@@ -275,7 +269,7 @@ async suggestionHandler(selectedTerm){
       <div id="searchterm-wrapper">
         <div>
         <SearchForm/>
-        <Button variant="outline" handleChange={this.handleExact()}>Exact Match</Button>
+        <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
