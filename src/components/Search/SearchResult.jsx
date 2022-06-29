@@ -22,6 +22,7 @@ class SearchResult extends React.Component{
           result: false,
           suggestResult: false,
           searchResult: [],
+          exactResult: [],
           suggestionResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
@@ -96,6 +97,22 @@ class SearchResult extends React.Component{
           newEnteredTerm: ""
       });
       
+  }
+}
+
+async handleExact(){
+  if(this.state.enteredTerm.length > 0){
+    let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&exact=on`)
+    exactResult = (await exactResult.json())['response']['docs'];
+    this.setState({
+      searchResult: exactResult,
+      result: true 
+    })
+  }
+  else if(this.state.enteredTerm.length == 0){
+    this.setState({
+      result: false  
+    })
   }
 }
 
@@ -258,7 +275,7 @@ async suggestionHandler(selectedTerm){
       <div id="searchterm-wrapper">
         <div>
         <SearchForm/>
-        
+        <Button variant="outline" handleChange={this.handleExact()}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
