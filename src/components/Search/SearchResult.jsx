@@ -11,7 +11,6 @@ import { SearchOutlined } from '@material-ui/icons';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import ExactResult from './Exact/Exact';
 import SearchForm from './SearchForm';
 
 class SearchResult extends React.Component{
@@ -55,12 +54,15 @@ class SearchResult extends React.Component{
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
         let totalResults = paginationResult['numFound']
+        let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}` + `&exact=on`)
+        exactResult = (await exactResult.json())['response']['docs'];
         this.setState({
           searchResult: searchResult,
           originalSearchResult: searchResult,
           facetFields: facetFields,
           paginationResult: paginationResult,
           totalResults: totalResults,
+          exactResult: exactResult,
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm
@@ -256,7 +258,7 @@ async suggestionHandler(selectedTerm){
       <div id="searchterm-wrapper">
         <div>
         <SearchForm/>
-        <ExactResult/>
+        
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
