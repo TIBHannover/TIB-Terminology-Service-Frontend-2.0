@@ -528,7 +528,8 @@ The Tree view and detail table styles (for both classes and properties)
         Styles for the tree-related action buttons like "reset"
     */
 
-    font-size: 12px !important;
-    /* width: 20px; */
+    font-size: 11px !important;
+    margin-bottom: 5px !important;
+    width: 100% !important;
 }
 
