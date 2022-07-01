@@ -218,7 +218,11 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div>
-          <Paper square className="onto-title">{this.state.title}</Paper>
+          <Grid container className="onto-title">
+            <Grid item xs={3}>
+              {this.state.title}
+            </Grid>
+          </Grid>
           <Paper square className='ontology-detail-navbar'>
             <Tabs
               value={this.state.activeTab}
