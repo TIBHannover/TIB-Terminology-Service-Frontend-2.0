@@ -33,6 +33,7 @@ class OntologyDetail extends React.Component {
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
+      title: " ",
       targetPropertyIri: " "
     })
     this.tabChange = this.tabChange.bind(this);
@@ -217,6 +218,7 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div>
+          <Paper square className="onto-title">{this.state.title}</Paper>
           <Paper square className='ontology-detail-navbar'>
             <Tabs
               value={this.state.activeTab}
