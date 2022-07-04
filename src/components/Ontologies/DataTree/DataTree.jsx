@@ -83,8 +83,9 @@ class DataTree extends React.Component {
                 ancestorsFieldName: "hierarchicalAncestors",
                 childExtractName: "terms",
                 resetTreeFlag: false,
+                reload: false
               }, async () => {
-                await this.processTree(resetFlag, viewMode);
+                await this.processTree(resetFlag, viewMode, reload);
               });              
         } 
         else if(componentIdentity == 'property'){
@@ -99,9 +100,10 @@ class DataTree extends React.Component {
               childrenFieldName: "children",
               ancestorsFieldName: "ancestors",
               childExtractName: "properties",
-              resetTreeFlag: false,              
+              resetTreeFlag: false,
+              reload: false 
             }, async () => {
-              await this.processTree(resetFlag, viewMode);
+              await this.processTree(resetFlag, viewMode, reload);
             });    
         }      
     }
@@ -113,7 +115,7 @@ class DataTree extends React.Component {
    * The sub-tree exist for jumping to a node directly given by its Iri.   
    * @returns 
    */
-    async processTree(resetFlag, viewMode){
+    async processTree(resetFlag, viewMode, reload){
       let target = this.props.iri;
       if (!target || resetFlag){
         this.buildTree(this.state.rootNodes);
@@ -121,7 +123,7 @@ class DataTree extends React.Component {
       }
       target = target.trim();
       let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
-      if((target != undefined && this.state.targetNodeIri != target) || this.state.reload ){        
+      if((target != undefined && this.state.targetNodeIri != target) || reload ){        
         let callHeader = {
           'Accept': 'application/json'
         };
