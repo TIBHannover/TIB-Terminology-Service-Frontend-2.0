@@ -15,12 +15,12 @@ function OntoHeader(props){
 return(
   <div className='onto-header'>
     <div className='onto-header-title'>
-      <b>{ontology.config.title}</b><Link to={ontology.config.homepage}><HomeIcon fontSize="large" style={{float: 'right'}}></HomeIcon></Link><Link to={ontology.config.tracker}><ArticleIcon fontSize="large" style={{float: 'right'}}></ArticleIcon></Link>
-      <div className='onto-icons'></div>
+      <b>{ontology.config.title}</b><a href={ontology.config.homepage} target='_blank' rel="noreferrer"><HomeIcon fontSize="large" style={{float: 'right'}}></HomeIcon></a><a href={ontology.config.tracker} target='_blank' rel="noreferrer"><ArticleIcon fontSize="large" style={{float: 'right'}}></ArticleIcon></a>
     </div>
-    
-      
-    
+    <br/> 
+    <div className='onto-update'>
+      Last Updated: {ontology.updated}
+    </div>
   </div>
   )
 }
