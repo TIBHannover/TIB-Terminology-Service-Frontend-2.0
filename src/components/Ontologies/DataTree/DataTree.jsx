@@ -165,21 +165,33 @@ class DataTree extends React.Component {
 
         }
 
-        for(let i=0; i < roots.length; i++){
+        for(let i=0; i < roots.length; i++){         
           let leafClass = " opened";
           let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
           let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
-          if (roots[i].childrenList.length === 0){
+          let targetHasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
+          if (roots[i].childrenList.length === 0 && !targetHasChildren){
+            //  root node is a leaf
             leafClass = " leaf-node";
             symbol = React.createElement("i", {"className": "fa fa-close"}, "");
-          }    
+          }
+          
+          else if(roots[i].childrenList.length === 0 && targetHasChildren){
+            // root is not leaf but does not include the target node on its sub-tree
+            leafClass = " closed";
+            symbol = React.createElement("i", {"className": "fa fa-plus"}, "");
+
+          }
+          else{
+            // root is not leaf and include the target node on its sub-tree
+
+          }
           
           let subList = "";
           if(roots[i].childrenList.length !== 0){
             subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
             
-          }
-      
+          }      
           let listItem = React.createElement("li", {         
               "data-iri":roots[i].iri, 
               "data-id": i,
