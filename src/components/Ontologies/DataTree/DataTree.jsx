@@ -157,7 +157,6 @@ class DataTree extends React.Component {
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
-            siblingsButtonShow: true,
             reduceTreeBtnShow: true,
             reload: false
           }); 
@@ -199,7 +198,6 @@ class DataTree extends React.Component {
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
-            siblingsButtonShow: true,
             reduceTreeBtnShow: true,
             reload: false
         });    
@@ -472,9 +470,9 @@ async showSiblings(){
  */
 reduceTree(){
   let reduceBtnActive = this.state.reduceBtnActive;
-  // this.processTree(false, !reduceBtnActive);
   this.setState({
     reduceBtnActive: !reduceBtnActive,
+    siblingsButtonShow: !reduceBtnActive,
     reload: true
   });
 }
