@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
 
 class OntoHeader extends React.Component{
     constructor(props){
@@ -19,6 +20,14 @@ class OntoHeader extends React.Component{
     this.setState({
       getConfig: getConfig 
     })
+  }
+
+  render(){
+    return(
+        <div container className="onto-title">
+            {this.state.getConfig.title}
+        </div>
+    )
   }
 
 }
