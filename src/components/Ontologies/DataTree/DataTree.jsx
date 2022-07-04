@@ -17,18 +17,12 @@ class DataTree extends React.Component {
     super(props)
     this.state = ({
       rootNodes: [],
-      treeData: [],
-      originalTreeData: [],
       selectedNodeIri: '',
       showNodeDetailPage: false,
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      openTreeRoute: [],
-      isTreeRouteShown: false,
       ontologyId: '',
-      childrenFieldName:'',
-      ancestorsFieldName: '',
       searchWaiting: true,
       baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
       childExtractName: "",
@@ -70,15 +64,11 @@ class DataTree extends React.Component {
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity == 'term'){         
             this.setState({
-                rootNodes: rootNodes,
-                treeData: rootNodes,
-                originalTreeData: rootNodes,
+                rootNodes: rootNodes,                                
                 componentIdentity: componentIdentity,
                 termTree: true,
                 propertyTree: false,
                 ontologyId: ontologyId,
-                childrenFieldName: "hierarchicalChildren",
-                ancestorsFieldName: "hierarchicalAncestors",
                 childExtractName: "terms",
                 resetTreeFlag: false,
                 reload: false
@@ -88,15 +78,11 @@ class DataTree extends React.Component {
         } 
         else if(componentIdentity == 'property'){
             this.setState({
-              rootNodes: rootNodes,
-              treeData: rootNodes,
-              originalTreeData: rootNodes,
+              rootNodes: rootNodes,              
               componentIdentity: componentIdentity,
               termTree: false,
               propertyTree: true,
               ontologyId: ontologyId,
-              childrenFieldName: "children",
-              ancestorsFieldName: "ancestors",
               childExtractName: "properties",
               resetTreeFlag: false,
               reload: false 
