@@ -124,17 +124,6 @@ class OntologyDetail extends React.Component {
 
   }
 
-  /**
-   * Get the ontology detail config
-   */
-  async getOntoConfig(ontologyId){
-    let getConfig = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/` + ontologyId)
-    getConfig = (await getConfig.json())['config'];
-    this.setState({
-      getConfig: getConfig 
-    })
-  }
-
 
   /**
      * Get the ontology root classes 
@@ -231,7 +220,7 @@ class OntologyDetail extends React.Component {
         <div>
           <Grid container className="onto-title">
             <Grid item xs={3}>
-              {this.state.getConfig.title}
+              {this.state.title}
             </Grid>
           </Grid>
           <Paper square className='ontology-detail-navbar'>
