@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode } from './helpers';
 
 
 
@@ -45,7 +45,6 @@ class DataTree extends React.Component {
 
     this.setTreeData = this.setTreeData.bind(this);
     this.buildTree = this.buildTree.bind(this);
-    this.expandNode = this.expandNode.bind(this);
     this.processClick = this.processClick.bind(this);
     this.selectNode = this.selectNode.bind(this);
     this.processTree = this.processTree.bind(this);
@@ -254,41 +253,6 @@ class DataTree extends React.Component {
 
 
 /**
- * Expand/collapse a node on click
- */
-async expandNode(e){
-  let targetNodeIri = e.dataset.iri;
-  let targetNodeId = e.dataset.id;
-  let Id = e.id;
-  if(document.getElementById(Id).classList.contains("closed")){
-      // expand node
-      let res =  await getChildrenJsTree(this.state.ontologyId, targetNodeIri, targetNodeId, this.state.childExtractName); 
-      let ul = document.createElement("ul");
-      ul.setAttribute("id", "children_for_" + Id);
-      ul.classList.add("tree-node-ul");
-      for(let i=0; i < res.length; i++){
-        let listItem = buildTreeListItem(res[i]);
-        ul.appendChild(listItem);      
-      }      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
-      document.getElementById(Id).classList.remove("closed");
-      document.getElementById(Id).classList.add("opened");      
-      document.getElementById(Id).appendChild(ul);
-  }
-  else if (!document.getElementById(Id).classList.contains("leaf-node")){
-    // close an already expanded node
-      document.getElementById(Id).classList.remove("opened");
-      document.getElementById(Id).classList.add("closed");      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
-      document.getElementById("children_for_" + Id).remove();
-  }
-      
-}
-
-
-/**
  * Select a node in tree
  * @param {*} e 
  */
@@ -321,7 +285,7 @@ processClick(e){
   }
   else if (e.target.tagName === "I"){   
     // expand a node by clicking on the expand icon 
-    this.expandNode(e.target.parentNode);
+    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName);
   }
 }
 

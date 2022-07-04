@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree} from '../../../api/fetchData';
 
 
 /**
@@ -145,6 +145,43 @@ export function buildHierarchicalArray(flatList){
 
     return ul;
   }
+
+
+
+/**
+ * Expand/collapse a node on click
+ */
+export async function expandNode(e, ontologyId, childExtractName){
+  let targetNodeIri = e.dataset.iri;
+  let targetNodeId = e.dataset.id;
+  let Id = e.id;
+  if(document.getElementById(Id).classList.contains("closed")){
+      // expand node
+      let res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+      let ul = document.createElement("ul");
+      ul.setAttribute("id", "children_for_" + Id);
+      ul.classList.add("tree-node-ul");
+      for(let i=0; i < res.length; i++){
+        let listItem = buildTreeListItem(res[i]);
+        ul.appendChild(listItem);      
+      }      
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
+      document.getElementById(Id).classList.remove("closed");
+      document.getElementById(Id).classList.add("opened");      
+      document.getElementById(Id).appendChild(ul);
+  }
+  else if (!document.getElementById(Id).classList.contains("leaf-node")){
+    // close an already expanded node
+      document.getElementById(Id).classList.remove("opened");
+      document.getElementById(Id).classList.add("closed");      
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
+      document.getElementById("children_for_" + Id).remove();
+  }
+      
+}
+
 
 
   /**
