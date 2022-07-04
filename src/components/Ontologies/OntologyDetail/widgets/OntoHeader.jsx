@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../../../layout/ontologies.css';
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -15,7 +14,13 @@ function OntoHeader(props){
 return(
   <div className='onto-header'>
     <div className='onto-header-title'>
-      <b>{ontology.config.title}</b><a href={ontology.config.homepage} target='_blank' rel="noreferrer"><HomeIcon fontSize="large" style={{float: 'right'}}></HomeIcon></a><a href={ontology.config.tracker} target='_blank' rel="noreferrer"><ArticleIcon fontSize="large" style={{float: 'right'}}></ArticleIcon></a>
+      <b>{ontology.config.title}</b>
+      <a href={ontology.config.homepage} target='_blank' rel="noreferrer">
+        <HomeIcon fontSize="large" style={{float: 'right'}}></HomeIcon>
+      </a>
+      <a href={ontology.config.tracker} target='_blank' rel="noreferrer">
+        <ArticleIcon fontSize="large" style={{float: 'right'}}></ArticleIcon>
+      </a>
     </div>
     <br/> 
     <div className='onto-update'>
