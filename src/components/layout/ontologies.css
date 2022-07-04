@@ -317,7 +317,7 @@ The ontology detail page styles. It contains the ontology overview page.
     background-color: white;
     margin-top: 10px;
     padding: 30px;
-    font-size: 15px;
+    font-size: 17px;
     margin-right: 2px;
     margin-left: 280px;
     margin-bottom: 20px;
@@ -325,6 +325,15 @@ The ontology detail page styles. It contains the ontology overview page.
     text-align: justify;
     width: 70% !important;
     border-radius: 25px !important;
+}
+
+.onto-icons{
+    /* 
+        The style for ontology detail main title icons
+    */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 
