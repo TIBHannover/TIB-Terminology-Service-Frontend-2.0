@@ -38,7 +38,9 @@ class DataTree extends React.Component {
       siblingsVisible: false,
       siblingsButtonShow: false,
       reduceTreeBtnShow: false,
-      reduceBtnActive: false
+      reduceBtnActive: false,
+      viewMode: true,
+      reload: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -50,6 +52,7 @@ class DataTree extends React.Component {
     this.expandTargetNode = this.expandTargetNode.bind(this);
     this.resetTree = this.resetTree.bind(this);
     this.showSiblings = this.showSiblings.bind(this);
+    this.reduceTree = this.reduceTree.bind(this);
   }
 
 
@@ -64,7 +67,9 @@ class DataTree extends React.Component {
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
     let resetFlag = this.state.resetTreeFlag;
-    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag){
+    let viewMode = !this.state.reduceBtnActive;
+    let reload = this.state.reload;    
+    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity == 'term'){         
             this.setState({
                 rootNodes: rootNodes,
@@ -77,9 +82,9 @@ class DataTree extends React.Component {
                 childrenFieldName: "hierarchicalChildren",
                 ancestorsFieldName: "hierarchicalAncestors",
                 childExtractName: "terms",
-                resetTreeFlag: false
+                resetTreeFlag: false,
               }, async () => {
-                await this.processTree(resetFlag);
+                await this.processTree(resetFlag, viewMode);
               });              
         } 
         else if(componentIdentity == 'property'){
@@ -94,9 +99,9 @@ class DataTree extends React.Component {
               childrenFieldName: "children",
               ancestorsFieldName: "ancestors",
               childExtractName: "properties",
-              resetTreeFlag: false
+              resetTreeFlag: false,              
             }, async () => {
-              await this.processTree(resetFlag);
+              await this.processTree(resetFlag, viewMode);
             });    
         }      
     }
@@ -108,7 +113,7 @@ class DataTree extends React.Component {
    * The sub-tree exist for jumping to a node directly given by its Iri.   
    * @returns 
    */
-    async processTree(resetFlag){
+    async processTree(resetFlag, viewMode){
       let target = this.props.iri;
       if (!target || resetFlag){
         this.buildTree(this.state.rootNodes);
@@ -116,14 +121,14 @@ class DataTree extends React.Component {
       }
       target = target.trim();
       let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
-      if(target != undefined && this.state.targetNodeIri != target){        
+      if((target != undefined && this.state.targetNodeIri != target) || this.state.reload ){        
         let callHeader = {
           'Accept': 'application/json'
         };
         let getCallSetting = {method: 'GET', headers: callHeader};
         let extractName = this.state.childExtractName;
         let url = this.state.baseUrl;
-        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=false";
+        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
         let list =  await (await fetch(url, getCallSetting)).json();        
         let roots = buildHierarchicalArray(list);        
         let childrenList = [];
@@ -150,7 +155,9 @@ class DataTree extends React.Component {
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
-            siblingsButtonShow: true
+            siblingsButtonShow: true,
+            reduceTreeBtnShow: true,
+            reload: false
           }); 
 
           return true;
@@ -190,7 +197,9 @@ class DataTree extends React.Component {
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
-            siblingsButtonShow: true
+            siblingsButtonShow: true,
+            reduceTreeBtnShow: true,
+            reload: false
         });    
       }
   }
@@ -287,7 +296,8 @@ expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
   this.setState({
     treeDomContent: treeList,
     targetNodeIri: false,
-    searchWaiting: false
+    searchWaiting: false,
+    reload: false
   });
 }
 
@@ -376,7 +386,8 @@ resetTree(){
     resetTreeFlag: true,
     treeDomContent: "",
     siblingsVisible: false,
-    siblingsButtonShow: false
+    siblingsButtonShow: false,
+    reload: false
   });
 }
 
@@ -454,6 +465,19 @@ async showSiblings(){
 }
 
 
+/**
+ * Reduce tree. show/hide the sub-tree when a node is opened by iri.
+ */
+reduceTree(){
+  let reduceBtnActive = this.state.reduceBtnActive;
+  // this.processTree(false, !reduceBtnActive);
+  this.setState({
+    reduceBtnActive: !reduceBtnActive,
+    reload: true
+  });
+}
+
+
 
 componentDidMount(){
   this.setTreeData();
@@ -486,7 +510,7 @@ render(){
                 <Button 
                     variant="contained" 
                     className='tree-action-btn'                     
-                    onClick={this.showSiblings}
+                    onClick={this.reduceTree}
                     >
                     {!this.state.reduceBtnActive
                       ? "Show Sub Tree"
