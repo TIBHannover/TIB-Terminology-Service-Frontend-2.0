@@ -354,7 +354,7 @@ The Tree view and detail table styles (for both classes and properties)
     /* 
         The tree page containers. It includes both the tree view and the detail table.
     */
-    padding: 20px;
+    padding: 20px !important;
 }
 
 .tree-container{
@@ -365,11 +365,11 @@ The Tree view and detail table styles (for both classes and properties)
 
     height: 1000px;
     overflow-y: scroll;
-    padding-bottom: 500px;
-    padding-top: 50px;
+    padding-bottom: 500px !important;
+    padding-top: 50px !important;
     z-index: 999;
-    padding-left: 10x;
-    padding-right: 10px;
+    padding-left: 10x !important;
+    padding-right: 10px !important;
     background-color: white;
     border-radius: 15px;
 }
