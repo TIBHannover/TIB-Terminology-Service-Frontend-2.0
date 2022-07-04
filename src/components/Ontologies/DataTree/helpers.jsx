@@ -13,8 +13,6 @@ export async function buildHierarchicalArray(flatList, ontologyId, mode){
     for (let i = 0; i < flatList.length; i++) {
         map[flatList[i].id] = i; 
         flatList[i].childrenList = [];
-        let has_children = await nodeHasChildren(ontologyId, flatList[i].iri, mode);
-        flatList[i].children = has_children; 
     }
     
     for (let i = 0; i < flatList.length; i++) {
