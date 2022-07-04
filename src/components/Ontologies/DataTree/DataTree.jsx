@@ -132,7 +132,7 @@ class DataTree extends React.Component {
         let url = this.state.baseUrl;
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
         let list =  await (await fetch(url, getCallSetting)).json();        
-        let roots = await buildHierarchicalArray(list, this.state.ontologyId, this.state.componentIdentity);        
+        let roots = buildHierarchicalArray(list);
         let childrenList = [];
         if(list.length === 1){
           // the target node is a root node
@@ -169,14 +169,14 @@ class DataTree extends React.Component {
           let leafClass = "";
           let symbol = "";
           let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
-          let targetHasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
-          if (roots[i].childrenList.length === 0 && !targetHasChildren){
+          let hasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
+          if (roots[i].childrenList.length === 0 && !hasChildren){
             //  root node is a leaf
             leafClass = " leaf-node";
             symbol = React.createElement("i", {"className": "fa fa-close"}, "");
           }
           
-          else if(roots[i].childrenList.length === 0 && targetHasChildren){
+          else if(roots[i].childrenList.length === 0 && hasChildren){
             // root is not leaf but does not include the target node on its sub-tree
             leafClass = " closed";
             symbol = React.createElement("i", {"className": "fa fa-plus"}, "");

@@ -6,7 +6,7 @@ import {getNodeByIri} from '../../../api/fetchData';
  * @param {*} flatList 
  * @returns 
  */
-export async function buildHierarchicalArray(flatList, ontologyId, mode){
+export function buildHierarchicalArray(flatList){
     let map = {}; 
     let node = "";
     let roots = [];
