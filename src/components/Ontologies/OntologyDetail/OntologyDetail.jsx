@@ -219,7 +219,7 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div>
-          <Grid container className="onto-title">
+          <Grid container className='onto-title'>
             <Grid item xs={3}>
               <OntoHeader ontology={this.state.ontology}/>
             </Grid>

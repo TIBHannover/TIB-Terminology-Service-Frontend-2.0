@@ -10,7 +10,7 @@ function OntoHeader(props){
   }
 
 return(
-  <div container className="onto-title">
+  <div>
     {ontology.config.title}
   </div>
   )
