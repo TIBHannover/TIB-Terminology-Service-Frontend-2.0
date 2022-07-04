@@ -460,6 +460,7 @@ The Tree view and detail table styles (for both classes and properties)
     cursor: pointer;    
     border-left: 1px dotted !important;
     border-left-color: gray;
+    font-size: 13px !important;
 }
 
 .tree-node-li::before{
