@@ -166,8 +166,8 @@ class DataTree extends React.Component {
         }
 
         for(let i=0; i < roots.length; i++){         
-          let leafClass = " opened";
-          let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
+          let leafClass = "";
+          let symbol = "";
           let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
           let targetHasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
           if (roots[i].childrenList.length === 0 && !targetHasChildren){
@@ -184,7 +184,8 @@ class DataTree extends React.Component {
           }
           else{
             // root is not leaf and include the target node on its sub-tree
-
+            leafClass = " opened";
+            symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
           }
           
           let subList = "";
@@ -247,6 +248,16 @@ expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
       }
       clickedClass = "clicked targetNodeByIri";
     }
+    else{
+      if(nodeList[i].children){
+        nodeStatusClass = "closed";
+        iconClass = "fa fa-plus";  
+      }
+      else{
+        nodeStatusClass = "leaf-node";
+        iconClass = "fa fa-close";
+      }
+    }
     let symbol = React.createElement("i", {"className": iconClass }, "");
     let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
     let childNode = "";
@@ -271,7 +282,9 @@ expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
     subNodes.push(childNode);
   }
   let ul = React.createElement("ul", {"className": "tree-node-ul", "id": "children_for_" + parentId}, subNodes);
-
+  if (nodeList.length === 0){
+    ul = "";
+  }
 
   return ul;
   
