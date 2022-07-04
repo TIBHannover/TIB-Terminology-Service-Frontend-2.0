@@ -421,70 +421,75 @@ resetTree(){
  * Show an opened node siblings
  */
 async showSiblings(){
-  let targetNodes = document.getElementsByClassName("targetNodeByIri");
-  if(!this.state.siblingsVisible){
-      if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
-        // Target node is a root node
-        let callHeader = {
-          'Accept': 'application/json'
-        };
-        let getCallSetting = {method: 'GET', headers: callHeader};
-        let extractName = this.state.childExtractName;
-        let url = this.state.baseUrl;
-        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
-        let res =  await (await fetch(url, getCallSetting)).json(); 
-        for(let i=0; i < res.length; i++){
-          if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
-            continue;
-          }
-          let listItem = buildTreeListItem(res[i]);
-          document.getElementById("tree-root-ul").appendChild(listItem);
-        }   
-
-      }
-      else{
-        for (let node of targetNodes){
-          let parentUl = node.parentNode.parentNode;
-          let parentId = parentUl.id.split("children_for_")[1];
-          let Iri = document.getElementById(parentId);
-          Iri = Iri.dataset.iri;
-          let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
+  try{
+    let targetNodes = document.getElementsByClassName("targetNodeByIri");
+    if(!this.state.siblingsVisible){
+        if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+          // Target node is a root node
+          let callHeader = {
+            'Accept': 'application/json'
+          };
+          let getCallSetting = {method: 'GET', headers: callHeader};
+          let extractName = this.state.childExtractName;
+          let url = this.state.baseUrl;
+          url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
+          let res =  await (await fetch(url, getCallSetting)).json(); 
           for(let i=0; i < res.length; i++){
-            if (res[i].iri === node.parentNode.dataset.iri){
+            if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
               continue;
             }
             let listItem = buildTreeListItem(res[i]);
-            parentUl.appendChild(listItem);      
+            document.getElementById("tree-root-ul").appendChild(listItem);
           }   
+
         }
-      }
-      
-      this.setState({siblingsVisible: true});
-  }
-  else{
-    if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
-      // Target node is a root node
-      let parentUl = document.getElementById("tree-root-ul");
-      let children = [].slice.call(parentUl.childNodes);
-      for(let i=0; i < children.length; i++){
-        if(children[i].dataset.iri !== targetNodes[0].parentNode.dataset.iri){
-          children[i].remove();
+        else{
+          for (let node of targetNodes){
+            let parentUl = node.parentNode.parentNode;
+            let parentId = parentUl.id.split("children_for_")[1];
+            let Iri = document.getElementById(parentId);
+            Iri = Iri.dataset.iri;
+            let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
+            for(let i=0; i < res.length; i++){
+              if (res[i].iri === node.parentNode.dataset.iri){
+                continue;
+              }
+              let listItem = buildTreeListItem(res[i]);
+              parentUl.appendChild(listItem);      
+            }   
+          }
         }
-      }
+        
+        this.setState({siblingsVisible: true});
     }
     else{
-      for (let node of targetNodes){
-        let parentUl = node.parentNode.parentNode;
+      if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+        // Target node is a root node
+        let parentUl = document.getElementById("tree-root-ul");
         let children = [].slice.call(parentUl.childNodes);
         for(let i=0; i < children.length; i++){
-          if(children[i].dataset.iri !== node.parentNode.dataset.iri){
+          if(children[i].dataset.iri !== targetNodes[0].parentNode.dataset.iri){
             children[i].remove();
           }
         }
       }
+      else{
+        for (let node of targetNodes){
+          let parentUl = node.parentNode.parentNode;
+          let children = [].slice.call(parentUl.childNodes);
+          for(let i=0; i < children.length; i++){
+            if(children[i].dataset.iri !== node.parentNode.dataset.iri){
+              children[i].remove();
+            }
+          }
+        }
+      }
+      
+      this.setState({siblingsVisible: false});
     }
-    
-    this.setState({siblingsVisible: false});
+  }
+  catch(e){
+
   }
   
 }
