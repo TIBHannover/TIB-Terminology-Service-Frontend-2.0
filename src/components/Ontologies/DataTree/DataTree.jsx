@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode } from './helpers';
 
 
 
@@ -49,7 +49,6 @@ class DataTree extends React.Component {
     this.processClick = this.processClick.bind(this);
     this.selectNode = this.selectNode.bind(this);
     this.processTree = this.processTree.bind(this);
-    this.expandTargetNode = this.expandTargetNode.bind(this);
     this.resetTree = this.resetTree.bind(this);
     this.showSiblings = this.showSiblings.bind(this);
     this.reduceTree = this.reduceTree.bind(this);
@@ -190,7 +189,7 @@ class DataTree extends React.Component {
           
           let subList = "";
           if(roots[i].childrenList.length !== 0){
-            subList = this.expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
+            subList = expandTargetNode(roots[i].childrenList, roots[i].id, target, targetHasChildren);
             
           }      
           let listItem = React.createElement("li", {         
@@ -216,84 +215,6 @@ class DataTree extends React.Component {
         });    
       }
   }
-
-
-/**
- * Expand a node in the tree in loading. Used for jumping directly to a node given by Iri.
- * @param {*} nodeList 
- * @param {*} parentId 
- * @returns 
- */
-expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
-  let subNodes = [];
-  for(let i = 0; i < nodeList.length; i++){
-    let childNodeChildren = [];
-    if(nodeList[i].iri !== targetIri){
-      let subUl = this.expandTargetNode(nodeList[i].childrenList, nodeList[i].id, targetIri, targetHasChildren);
-      childNodeChildren.push(subUl);
-    }
-
-    let newId = nodeList[i].id;
-    let nodeStatusClass = "opened";
-    let iconClass = "fa fa-minus";
-    let clickedClass = "";
-    if (nodeList[i].iri === targetIri){
-      if(targetHasChildren){
-        nodeStatusClass = "closed";
-        iconClass = "fa fa-plus";  
-      }
-      else{
-        nodeStatusClass = "leaf-node";
-        iconClass = "fa fa-close";
-      }
-      clickedClass = "clicked targetNodeByIri";
-    }
-    else{
-      if(nodeList[i].children && nodeList[i].childrenList.length == 0){
-        nodeStatusClass = "closed";
-        iconClass = "fa fa-plus";  
-      }
-      else if(nodeList[i].children && nodeList[i].childrenList.length != 0){
-        nodeStatusClass = "opened";
-        iconClass = "fa fa-minus";
-      }
-      else{
-        nodeStatusClass = "leaf-node";
-        iconClass = "fa fa-close";
-      }
-    }
-    let symbol = React.createElement("i", {"className": iconClass }, "");
-    let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
-    let childNode = "";
-    if(nodeList[i]['a_attr']["class"] === "part_of"){
-      let partOfSymbol = React.createElement("span", {"className": "p-icon-style"}, "P");
-      childNode = React.createElement("li", {
-        "className": nodeStatusClass + " tree-node-li",
-        "id": newId,
-        "data-iri": nodeList[i].iri,
-        "data-id": nodeList[i].id
-      }, symbol, partOfSymbol, label, childNodeChildren);
-    }
-    else{
-      childNode = React.createElement("li", {
-        "className": nodeStatusClass + " tree-node-li",
-        "id": newId,
-        "data-iri": nodeList[i].iri,
-        "data-id": nodeList[i].id
-      }, symbol, label, childNodeChildren);
-    }
-
-    subNodes.push(childNode);
-  }
-  let ul = React.createElement("ul", {"className": "tree-node-ul", "id": "children_for_" + parentId}, subNodes);
-  if (nodeList.length === 0){
-    ul = "";
-  }
-
-  return ul;
-  
-
-}
 
 
   /**
