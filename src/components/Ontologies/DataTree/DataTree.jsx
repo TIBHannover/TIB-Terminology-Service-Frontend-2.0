@@ -132,7 +132,7 @@ class DataTree extends React.Component {
         let url = this.state.baseUrl;
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
         let list =  await (await fetch(url, getCallSetting)).json();        
-        let roots = buildHierarchicalArray(list);        
+        let roots = await buildHierarchicalArray(list, this.state.ontologyId, this.state.componentIdentity);        
         let childrenList = [];
         if(list.length === 1){
           // the target node is a root node
@@ -249,9 +249,13 @@ expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
       clickedClass = "clicked targetNodeByIri";
     }
     else{
-      if(nodeList[i].children){
+      if(nodeList[i].children && nodeList[i].childrenList.length == 0){
         nodeStatusClass = "closed";
         iconClass = "fa fa-plus";  
+      }
+      else if(nodeList[i].children && nodeList[i].childrenList.length != 0){
+        nodeStatusClass = "opened";
+        iconClass = "fa fa-minus";
       }
       else{
         nodeStatusClass = "leaf-node";

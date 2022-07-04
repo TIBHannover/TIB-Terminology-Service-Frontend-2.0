@@ -6,13 +6,15 @@ import {getNodeByIri} from '../../../api/fetchData';
  * @param {*} flatList 
  * @returns 
  */
-export function buildHierarchicalArray(flatList){
+export async function buildHierarchicalArray(flatList, ontologyId, mode){
     let map = {}; 
     let node = "";
     let roots = [];
     for (let i = 0; i < flatList.length; i++) {
         map[flatList[i].id] = i; 
-        flatList[i].childrenList = []; 
+        flatList[i].childrenList = [];
+        let has_children = await nodeHasChildren(ontologyId, flatList[i].iri, mode);
+        flatList[i].children = has_children; 
     }
     
     for (let i = 0; i < flatList.length; i++) {
