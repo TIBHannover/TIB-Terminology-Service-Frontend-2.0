@@ -16,12 +16,27 @@ The ontology list page styles.
         The style for the ontology list page.
     */
 
-    margin-top: 30px;
-    padding-top: 5px;
-    margin-left: 50px;
-    margin-bottom: 10px;
+    margin: auto;
+    width: 75%;
     overflow-x: hidden;
     overflow-y: hidden;
+    color: #6C757D !important;
+}
+
+#ontology-list-facet-grid{
+    /* 
+        The style for the ontologies list page facet wrapper div.
+    */
+
+    padding-top: 50px;
+}
+
+.h-headers{
+    /* 
+        Style for the <h> headers in the ontology list page.
+    */
+
+    margin-bottom: 20px;
 }
 
 .ontology-card{
@@ -29,50 +44,42 @@ The ontology list page styles.
         The styles for each ontology box in the ontology list view. 
     */
 
-    border: 1px black solid;
-    background-color: rgb(245, 250, 253);
+    background-color: white;
     margin-top: 10px;
     padding: 10px;
-    margin-right: 5px;
     height: auto;
     text-align: justify;
+    line-height: 1.5;
 }
 
-.ontology-card:hover{
+.ontology-card-title > b{
     /* 
-        The styles for hover on each ontology box in the ontology list view. 
+        The styles for the title part for each ontology box in the ontology list view. 
     */
 
-    background-color: #aee7f3;
+    font-size: 1.5rem;
 }
 
-.ontology-card-link{
-    /* 
-        The styles for each ontology box as link in the ontology list view. 
-        (The boxes are anchors pointing to the target ontology detail page)
-    */
-
-    text-decoration: none;
-    color: black;
-}
-
-.ontology-card-link:hover{
-     /* 
-        The styles for hover on each ontology box as link in the ontology list view. 
-        (The boxes are anchors pointing to the target ontology detail page)
-    */
-
-    color: black;
-}
 
 .ontology-card-description{
     /* 
         The styles for the description part for each ontology box in the ontology list view. 
     */
 
-    font-size: 14px;
     margin-top: 30px;
+    font-size: 1.25rem;
 }
+
+.ontology-id-tag{
+    /* 
+        Style for the ontology Id tag button.
+    */
+
+    margin-right: 10px;
+    background-color: #005C5F;
+    color: white;
+}
+
 
 #ontology-filter > div{
     /* 
@@ -96,7 +103,7 @@ The ontology list page styles.
        The syle for the search input field in the ontology list page.
     */
 
-    width: 80%;
+    width: 100%;
     background-color: white;
 }
 
@@ -106,6 +113,16 @@ The ontology list page styles.
     */
 
     font-size: 15px;
+}
+
+
+#ontologylist-sort-grid > div{
+    /* 
+        The styles for sort type drop-down menu container in the ontology list view.
+    */
+
+    float: right;
+    
 }
 
 #ontologylist-sort-grid> .MuiInputBase-root{
@@ -118,7 +135,73 @@ The ontology list page styles.
     padding-bottom: 5px;
 }
 
+.ontology-card-meta-data{
+    padding-left: 40px;
+    color: black !important;
+}
 
+.ontology-collection-name > a{
+    /* 
+        Style for the collection link inside an ontology card.
+    */
+
+    text-decoration: none !important;
+}
+
+.ontology-collection-name{
+    /* 
+        Style for the collection span inside an ontology card.
+    */
+
+    margin-left: 5px;
+}
+
+.ontology-list-facet-section-box{
+    /* 
+        Style for the facet field boxes in the ontology list facet.
+    */
+
+    margin-top: 30px;
+    width: 100% !important;
+}
+
+.ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
+    /* 
+        Style for the facet field boxes in the ontology list facet.
+    */
+
+    background-color: white;
+    padding-left: 20px;
+    padding-right: 10px;
+    border-radius: 25px;
+}   
+
+
+
+.facet-result-count{
+    /* 
+        The style for facet field counter tag.
+    */
+
+    border-radius: 50px;
+    background-color: #2B3C46;
+    color: white;
+    padding: 5px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
+}
+
+#lastUpdateRange{
+    /* 
+        The style for time range label
+    */
+
+    margin-left: 10px;
+}
 
 
 /* 
@@ -127,9 +210,19 @@ The ontology detail page styles. It contains the ontology overview page.
 -------------------------------------
 */
 
-.ontology-detail-table{
+.ontology-detail-page-container{
     /* 
-        The styles for the ontology ovewview tables (Detail and Metrics) 
+        Ontology overview page wrapper
+    */
+
+    margin: auto !important;
+    width: 75% !important;
+}
+
+
+.ontology-detail-table, .ontology-metric-table{
+    /* 
+        The styles for the ontology overview tables (Detail and Metrics) 
     */
 
     font-family: arial, sans-serif;
@@ -139,7 +232,7 @@ The ontology detail page styles. It contains the ontology overview page.
 
 .ontology-detail-table  td, th{
     /* 
-        The styles for the ontology ovewview tables (Detail and Metrics) rows. 
+        The styles for the ontology ovewview tables (Detail) rows. 
     */
 
     border: 1px solid #dad2d2;
@@ -147,12 +240,27 @@ The ontology detail page styles. It contains the ontology overview page.
     padding: 8px;
 }
 
+.ontology-metric-table  td, th{
+    /* 
+        The styles for the ontology ovewview tables (Metrics) rows. 
+    */
+
+    border-bottom: 1px solid #DFE4E5;
+    text-align: left;
+    padding: 8px;
+    color: #212529 !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    font-size: 1rem !important;
+}
+
+
 .ontology-overview-table-id-column{
     /* 
         The style for the Identifiers columns in the ontology tables in the ovewview page.
     */
     
-    background-color: #dddddd;
+    background-color: #ECF0F0;
 }
 
 .ontology-detail-table-wrapper{
@@ -185,6 +293,56 @@ The ontology detail page styles. It contains the ontology overview page.
 }
 
 
+.anchor-in-table{
+    /* 
+        Style for the anchors inside the ontology detail page
+    */
+
+    text-decoration: none !important;
+}
+
+.ontology-detail-text{
+    /* 
+        Style for the ontology detail text (description)
+    */
+
+    color: #6c757d !important;
+}
+
+
+.ontology-detail-navbar{
+    /* 
+        The style for ontology detail page navbar
+    */
+
+    width: 70% !important;
+    margin: auto !important;
+    background-color: #ECF0F0 !important;
+    border-radius: 25px !important;
+}
+
+.MuiTab-root{
+    /* 
+        The style for each tab in the ontolog detail page navbar.
+    */
+
+    color: #1C6F7F !important;
+}
+
+
+.Mui-selected{
+    /* 
+        The style for selected tab in the ontolog detail page navbar.
+    */
+
+    background-color: white !important;
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+    color: black !important;
+}
+
+
+
 
 /* 
 -------------------------------------
@@ -196,16 +354,7 @@ The Tree view and detail table styles (for both classes and properties)
     /* 
         The tree page containers. It includes both the tree view and the detail table.
     */
-    padding: 20px;
-}
-
-.tree-element > .MuiTreeItem-content > .MuiTypography-root{
-    /* 
-        The style for the elements (nodes) label in the tree.     
-    */
-
-    font-size: 14px;
-    margin-bottom: 5px;   
+    padding: 20px !important;
 }
 
 .tree-container{
@@ -216,11 +365,13 @@ The Tree view and detail table styles (for both classes and properties)
 
     height: 1000px;
     overflow-y: scroll;
-    padding-bottom: 500px;
-    padding-top: 50px;
+    padding-bottom: 500px !important;
+    padding-top: 50px !important;
     z-index: 999;
-    padding-left: 10x;
-    padding-right: 10px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    background-color: white;
+    border-radius: 15px;
 }
 
 .node-table-container{
@@ -261,6 +412,7 @@ The Tree view and detail table styles (for both classes and properties)
     padding: 5px;
     border-radius: 50px;
     font-size: 10px;
+    margin-right: 5px;
 }
 
 
@@ -293,3 +445,92 @@ The Tree view and detail table styles (for both classes and properties)
 
     border-bottom: 1px solid black;
 }
+
+
+.tree-node-li {
+    /* 
+        The style for a node (class/property) in a tree view
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;    
+    border-left: 1px dotted !important;
+    border-left-color: gray;
+    font-size: 13px !important;
+}
+
+.tree-node-li::before{
+    /* 
+        For thr tree view heirarchy style.
+    */
+
+    content: "...";
+}
+
+
+.li-label-text:hover{
+    /* 
+        The style for mouse over a node text on a tree veiw.
+    */
+
+    background-color: rgb(188, 188, 238);
+}
+
+.clicked{
+    /* 
+        The style for a clicked (selected) node in a tree view. 
+    */
+
+    background-color: rgb(110, 175, 175);
+    color: black;
+    font-weight: bold;
+}
+
+.fa{
+    /* 
+        Forntawsome style modification for the tree view. 
+    */
+
+    display: inline !important;
+    border: 1px solid;
+    margin-right: 5px;
+}
+
+.closed > i{
+    /* 
+        The style for a node expand icon when it is closed and has children nodes.
+    */
+
+    color: green;
+}
+
+.opened > i{   
+    /* 
+        The style for a node expand icon when it is expanded and has children nodes.
+    */
+
+    color: red;
+}
+
+.leaf-node > i{  
+     /* 
+        The style for a node expand icon it has not children nodes (leaf node).
+    */
+
+    color: gray;
+}
+
+.tree-action-btn{
+    /* 
+        Styles for the tree-related action buttons like "reset"
+    */
+
+    font-size: 11px !important;
+    margin-bottom: 5px !important;
+    width: 100% !important;
+}
+

@@ -1,12 +1,12 @@
 import React from 'react';
 import PaginationCustom from '../Pagination/Pagination';
 import '../../layout/ontologies.css';
-import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import { getAllOntologies } from '../../../api/fetchData';
+import queryString from 'query-string'; 
+import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
 
 
 
@@ -24,38 +24,107 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'numberOfTerms'
+      sortField: 'numberOfTerms',
+      selectedCollections: [],
+      listOfAllCollectionsCheckBoxes: [],
+      keywordFilterString: ""
     })
-    this.getAllOntologies()
-    this.handlePagination = this.handlePagination.bind(this)
-    this.filterFacet = this.filterFacet.bind(this)
-    this.handleSortChange = this.handleSortChange.bind(this)
-    this.ontology_has_searchKey = this.ontology_has_searchKey.bind(this)
+    this.handleSortChange = this.handleSortChange.bind(this);
+    this.handleFacetCollection = this.handleFacetCollection.bind(this);
+    this.getAllCollections = this.getAllCollections.bind(this);
+    this.runFacet = this.runFacet.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
+    this.filterWordChange = this.filterWordChange.bind(this);
+    this.processUrlProps = this.processUrlProps.bind(this);
+    this.updateUrl= this.updateUrl.bind(this);
+  }
+
+
+  /**
+   * Get the list of all ontologies
+   */
+   async getAllOntologies () {
+    
+    try{
+      let allOntologies = await getAllOntologies();
+      let hiddenStatus = [];
+      for (let i = 0; i < allOntologies.length; i++) {
+          if (i < this.state.pageSize) {
+            hiddenStatus[i] = true
+          } else {
+            hiddenStatus[i] = false
+          }
+      }
+  
+      this.setState({
+        isLoaded: true,
+        ontologies: sortBasedOnKey(allOntologies, this.state.sortField),
+        unFilteredOntologies: sortBasedOnKey(allOntologies, this.state.sortField),
+        ontologiesHiddenStatus: hiddenStatus,
+        unFilteredHiddenStatus: hiddenStatus,
+        ontologyListContent: this.createOntologyList()
+      }, () => {
+        this.processUrlProps(); 
+      });
+    }
+
+    catch(error){
+      this.setState({
+        isLoaded: true,
+        error
+      });
+    }
+  
+  }
+
+
+  /**
+   * Process the input parameter in the url.
+   * Inputs are used for setting facet filters
+   */
+   processUrlProps(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let collections = targetQueryParams.collection;
+    let sortBy = targetQueryParams.sorting;
+    let keywordFilter = targetQueryParams.keyword;
+    if(!collections){
+      collections = [];
+    }
+    if(typeof(collections) === "string"){
+      collections = [collections];
+    }
+    if(!keywordFilter){
+      keywordFilter = "";
+    }
+    if(!sortBy){
+      sortBy = "numberOfTerms";
+    }
+    this.setState({
+      sortField: sortBy.trim()
+    });    
+    this.getAllCollections(collections);
+    this.runFacet(collections, keywordFilter.trim());
   }
 
 
 
+
   /**
-     * Set the target 
-     * 
-     * @param {*} target
-     * @returns
-     */
-  getTargetEndPoint (target) {
-    if (target === 'general') { // TIB General
-      return '/ontologies'
-    } else if (target === 'chemistry') { // NFDI4CHEM
-      return '/ontologies/chemistry' // /api/ontologies/chem
-    } else if (target === 'engineering') { // NFDI4ING
-      return '/ontologies/engineering'
-    }
-    return ''
+   * Get the list of all Collections view (checkboxes)
+   */
+  getAllCollections(selectedCollections){
+    createCollectionsCheckBoxes(this.handleFacetCollection, selectedCollections).then(data => {
+      this.setState({
+        listOfAllCollectionsCheckBoxes: data
+      });
+    });
   }
 
 
 
   /**
      * Handle the click on the pagination
+     * This function get pass to the pagination component
      * @param {*} value
      */
   handlePagination (value) {
@@ -63,7 +132,15 @@ class OntologyList extends React.Component {
       pageNumber: value,
       paginationReset: false
     }, () => {
-      this.paginationHandler()
+        let down = (this.state.pageNumber - 1) * this.state.pageSize;
+        let up = down + (this.state.pageSize - 1);
+        let hiddenStatus = new Array(this.state.ontologies.length).fill(false);
+        for (let i = down; i <= up; i++) {
+          hiddenStatus[i] = true;
+        }
+        this.setState({
+          ontologiesHiddenStatus: hiddenStatus
+        });
     })
   }
 
@@ -78,149 +155,15 @@ class OntologyList extends React.Component {
   }
 
 
-
   /**
-     * Get the list of Chem ontologies from TIB ts
-     */
-  async getAllOntologies () {
-    
-    try{
-      const allOntologies = await getAllOntologies();
-      let hiddenStatus = [];
-      for (let i = 0; i < allOntologies.length; i++) {
-          if (i < this.state.pageSize) {
-            hiddenStatus[i] = true
-          } else {
-            hiddenStatus[i] = false
-          }
-      }
-  
-      this.setState({
-        isLoaded: true,
-        ontologies: this.sortBasedOnKey(allOntologies, this.state.sortField),
-        unFilteredOntologies: this.sortBasedOnKey(allOntologies, this.state.sortField),
-        ontologiesHiddenStatus: hiddenStatus,
-        unFilteredHiddenStatus: hiddenStatus,
-        ontologyListContent: this.createOntologyList()
-      });
-    }
-
-    catch(error){
-      this.setState({
-        isLoaded: true,
-        error
-      });
-    }
-  
-  }
-
-
-
-  /**
-       * Handle the pagination change. This function has to be passed to the Pagination component
-       */
-  paginationHandler () {
-    const down = (this.state.pageNumber - 1) * this.state.pageSize
-    const up = down + (this.state.pageSize - 1)
-    const hiddenStatus = new Array(this.state.ontologies.length).fill(false)
-    for (let i = down; i <= up; i++) {
-      hiddenStatus[i] = true
-    }
-    this.setState({
-      ontologiesHiddenStatus: hiddenStatus
-    })
-  }
-
-
-  /**
-       * Handle the change in the search box. Calls the filter function
-       *
-       * @param {*} e
-       * @param {*} value
-       */
-  filterWordChange = (e, value) => {
-    this.filterFacet(e.target.value)
-  }
-
-
-  /**
-   * Search in an ontology metadata to check if it contains a value
-   * @param {ontology} ontology
-   * @param {string} value 
-   * @returns boolean
+   * Handle the change in the search box. Calls the filter function
+   * This function gets pass to filter word box.
+   * @param {*} e
+   * @param {*} value
    */
-  ontology_has_searchKey(ontology, value){
-    try{
-      if (ontology.ontologyId.includes(value)) {
-        return true;
-      }
-      if (ontology.config.title.includes(value)) {
-        return true;
-      }
-      if (ontology.config.description.includes(value)) {
-        return true;
-      }
-  
-      return false;
-    }
-    catch (e){
-      console.info(e);
-      return false;
-    }
-  }
-
-
-
-  /**
-       * Fiters the list of ontologies
-       *
-       * @param {*} value
-       * @returns
-       */
-  filterFacet (value) {
-    if (value === '') {
-      this.setState({
-        ontologies: this.state.unFilteredOntologies,
-        ontologiesHiddenStatus: this.state.unFilteredHiddenStatus,
-        pageNumber: 1
-      })
-      return true
-    }
-
-    const filtered = []
-    const hiddenStatus = []
-    for (let i = 0; i < this.state.unFilteredOntologies.length; i++) {
-      const ontology = this.state.unFilteredOntologies[i]
-      if (this.ontology_has_searchKey(ontology, value)) {
-        filtered.push(ontology)
-        if (filtered.length <= this.state.pageSize) {
-          hiddenStatus.push(true)
-        } else {
-          hiddenStatus.push(false)
-        }
-      }
-    }
-    this.setState({
-      ontologies: filtered,
-      ontologiesHiddenStatus: hiddenStatus,
-      pageNumber: 1
-    })
-  }
-
-
-
-  /**
-     * Sort an array of objects based on a key
-     *
-     * @param {*} array
-     * @param {*} key
-     * @returns
-     */
-  sortBasedOnKey (array, key) {
-    return array.sort(function (a, b) {
-      const x = a[key]; const y = b[key]
-      return ((x < y) ? 1 : ((x > y) ? -1 : 0))
-    })
+  filterWordChange = (e, value) => {
+    this.runFacet(this.state.selectedCollections, e.target.value);
+    this.updateUrl(this.state.selectedCollections, e.target.value);
   }
 
 
@@ -232,50 +175,180 @@ class OntologyList extends React.Component {
      * @param {*} value
      */
   handleSortChange = (e, value) => {
-    const sortedOntology = this.sortBasedOnKey(this.state.ontologies, e.target.value)
+    let sortedOntology = sortBasedOnKey(this.state.ontologies, e.target.value)
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
+    }, () => {
+      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
     })
   }
 
 
-
   /**
-     * Create the ontology list view
-     *
-     * @returns
-     */
+   * Handle facet filter for collection
+   * @returns 
+   */
+  handleFacetCollection = (e, value) => {
+    let selectedCollections = this.state.selectedCollections;
+    let collection = e.target.value.trim(); 
+    if(e.target.checked){
+      // checked
+      selectedCollections.push(collection);
+    }
+    else{
+      // unchecked
+      let index = selectedCollections.indexOf(collection);
+      selectedCollections.splice(index, 1);
+    }
+    this.runFacet(selectedCollections, this.state.keywordFilterString);
+    this.updateUrl(selectedCollections, this.state.keywordFilterString);
+  }
+
+
+/**
+ * Update the url based on facet values
+ */
+  updateUrl(selectedCollections, enteredKeyword){
+    if (selectedCollections.length === 0 && enteredKeyword === ""){
+      this.props.history.push(window.location.pathname);
+      return true;
+    }
+
+    let currentUrlParams = new URLSearchParams();
+
+    if(enteredKeyword !== ""){
+      currentUrlParams.append('keyword', enteredKeyword);
+    }
+
+    if(selectedCollections.length !== 0){
+      for(let col of selectedCollections){
+        currentUrlParams.append('collection', col);
+      }
+    }
+
+    if(this.state.sortField !== "numberOfTerms"){
+      currentUrlParams.append('sorting', this.state.sortField);
+    }
+    
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+  }
+
+
+
+
+/**
+ * 
+ */
+async runFacet(selectedCollections, enteredKeyword){
+  if (selectedCollections.length === 0 && enteredKeyword === ""){
+    // no filter exist
+    let preOntologies = this.state.unFilteredOntologies;
+    let preHiddenStatus = this.state.unFilteredHiddenStatus;
+    this.setState({
+      selectedCollections: selectedCollections,
+      ontologies: preOntologies,
+      ontologiesHiddenStatus: preHiddenStatus,
+      pageNumber: 1,
+      keywordFilterString: ""
+    });
+    return true;
+  }
+  
+  let ontologies = this.state.unFilteredOntologies; 
+  let keywordOntologies = [];
+  if(enteredKeyword !== ""){
+    // run keyword filter    
+    for (let i = 0; i < ontologies.length; i++) {
+      let ontology = ontologies[i]
+      if (ontology_has_searchKey(ontology, enteredKeyword)) {
+        keywordOntologies.push(ontology)
+      }
+    }
+    ontologies = keywordOntologies;
+  }
+
+  if(selectedCollections.length !== 0){
+    // run collection filter
+    let collectionOntologies = await getCollectionOntologies(selectedCollections);
+    let collectionFilteredOntologies = [];
+    for (let onto of collectionOntologies){
+      if(typeof(ontologies.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
+        collectionFilteredOntologies.push(onto);
+      }
+    }
+    ontologies = collectionFilteredOntologies;
+  }
+
+
+  ontologies =  sortBasedOnKey(ontologies, this.state.sortField);
+  let hiddenStatus = [];
+  for(let i=0; i < ontologies.length; i++){
+    if (i <= this.state.pageSize){
+      hiddenStatus.push(true);
+    }
+    else{
+      hiddenStatus.push(false);
+    }
+  }
+  this.setState({
+    selectedCollections: selectedCollections,
+    keywordFilterString: enteredKeyword,
+    ontologies: ontologies,
+    ontologiesHiddenStatus: hiddenStatus,
+    pageNumber: 1
+  });
+}
+
+
+/**
+ * Create the ontology list view
+ *
+ * @returns
+ */
   createOntologyList () {
-    const ontologyList = []
+    let ontologyList = []
     for (let i = 0; i < this.state.ontologies.length; i++) {
-      const item = this.state.ontologies[i]
-      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&
-                    <Link to={'/ontologies/' + item.ontologyId} key={i} className="ontology-card-link">
-                      <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
-                        <Grid item xs={8}>
-                          <div className="ontology-card-title">
-                            <h4><b>{item.config.title} ({item.ontologyId}) </b></h4>
-                          </div>
-                          <div className="ontology-card-description">
-                            <p>{item.config.description}</p>
-                          </div>
-                        </Grid>
-                        <Grid item xs={4} className="ontology-card-meta-data">
-                          <div>
-                            <h4>Last Update:</h4>
-                            {item.updated}
-                            <h4>Classes Count:</h4>
-                            {item.numberOfTerms}
-                          </div>
-                        </Grid>
-                      </Grid>
-                    </Link>
+      let item = this.state.ontologies[i]
+      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
+            <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
+              <Grid item xs={9}>
+                <div className="ontology-card-title">                            
+                  <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
+                  <b>{item.config.title}</b>
+                </div>
+                <div className="ontology-card-description">
+                  <p>{item.config.description ? item.config.description : ""}</p>
+                </div>
+                <div className='ontology-card-collection-name'>
+                  <b>Collections:</b>              
+                  {item.config.classifications[0]
+                    ? BuildCollectionForCard(item.config.classifications[0].collection)
+                    : "-"
+                    }
+                </div>
+              </Grid>
+              <Grid item xs={3} className="ontology-card-meta-data">
+                <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
+                <hr/>
+                <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
+                <hr />
+                <span className='ontology-meta-data-field-span'>Last updated <br/> {item.updated.split("T")[0]} </span>          
+              </Grid>
+            </Grid>                    
       )
     }
 
     return ontologyList
   }
+
+
+  componentDidMount(){
+    this.getAllOntologies();
+  }
+
+
+
 
   render () {
     const { error, isLoaded } = this.state
@@ -287,33 +360,29 @@ class OntologyList extends React.Component {
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            <Grid item xs={3} id="ontologylist-search-grid">
-              <TextField
-                label="Search..."
-                type="search"
-                variant="outlined"
-                onChange={this.filterWordChange}
-                InputLabelProps={{ style: { fontSize: 15 } }}
-              />
-            </Grid>
-            <Grid item xs={5}></Grid>
-            <Grid item xs={3} id="ontologylist-sort-grid">
-              <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
-              <Select
-                native
-                value={this.state.sortField}
-                onChange={this.handleSortChange}
-                id="ontology-sort-dropdown"
-              >
-                <option value={'numberOfTerms'}>Classes Count</option>
-                <option value={'updated'}>Recently Updated</option>
-                <option value={'numberOfIndividuals'}>Individuals Count</option>
-                <option value={'numberOfProperties'}>Properties Count</option>
-              </Select>
-            </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={10} id="ontology-list-grid">
+            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString)}
+            <Grid item xs={8} id="ontology-list-grid">
+              <Grid container>
+                <Grid item xs={6}>
+                  <h3 className='h-headers'>Browse Ontologies</h3>
+                </Grid>
+                <Grid item xs={6}  id="ontologylist-sort-grid">
+                  <div>
+                    <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
+                    <Select
+                      native
+                      value={this.state.sortField}
+                      onChange={this.handleSortChange}
+                      id="ontology-sort-dropdown"
+                    >
+                      <option value={'numberOfTerms'}>Classes Count</option>
+                      <option value={'updated'}>Recently Updated</option>
+                      <option value={'numberOfIndividuals'}>Individuals Count</option>
+                      <option value={'numberOfProperties'}>Properties Count</option>
+                    </Select>
+                  </div>          
+                </Grid>
+              </Grid>              
               {this.createOntologyList()}
               <PaginationCustom
                 count={this.pageCount()}

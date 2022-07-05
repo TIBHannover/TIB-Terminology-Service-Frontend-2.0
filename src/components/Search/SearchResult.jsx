@@ -2,18 +2,28 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
-import PaginationCustom from './Pagination';
+import PaginationCustom from './Pagination/Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
+import {  TextField, IconButton } from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import SearchForm from './SearchForm';
 
 class SearchResult extends React.Component{
     constructor(props){
         super(props)
         this.state = ({
           enteredTerm: "",
+          newEnteredTerm: "",
           result: false,
+          suggestResult: false,
           searchResult: [],
+          exactResult: [],
+          suggestionResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
@@ -28,8 +38,12 @@ class SearchResult extends React.Component{
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
-        //this.transportTerm = this.transportTerm.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
+        this.createResultList = this.createResultList.bind(this);
+        this.suggestionChange = this.suggestionChange.bind(this);
+        this.suggestionHandler = this.suggestionHandler.bind(this);
+        this.paginationHandler = this.paginationHandler.bind(this);
+        this.handleExact = this.handleExact.bind(this);
     }
 
     async searching(){
@@ -64,68 +78,64 @@ class SearchResult extends React.Component{
           });  
       }
   }
-
-  async transportTerm(searchResultItem){
-      let url = "";
-      if(searchResultItem.type === 'class'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/terms/' + searchResultItem.iri;
-      }
-      else if(searchResultItem.type === 'properties'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/properties/' + searchResultItem.iri;
-      } 
+  async suggestionChange(newEnteredTerm){
+    newEnteredTerm = newEnteredTerm.target.value;
+  if (newEnteredTerm.length > 0){
+      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${newEnteredTerm}`)
+      suggestionResult =  (await suggestionResult.json())['response']['docs'];
+   this.setState({
+       suggestionResult: suggestionResult,
+       suggestResult: true,
+       newEnteredTerm: newEnteredTerm
+   });
+  }
+  else if (newEnteredTerm.length == 0){
+      this.setState({
+          suggestResult: false,
+          newEnteredTerm: ""
+      });
       
-      else if(searchResultItem.type === 'ontology'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology;
-      }
-      else if(searchResultItem.type === 'individuals'){
-        url = 'https://service.tib.eu/ts4tib/api/ontologies/' + searchResultItem.ontology_name + '/individuals/' + searchResultItem.iri;
-      }
   }
+}
 
-  /**
-     * Handle the click on the pagination
-     * @param {*} value
-     */
-   handlePagination (value) {
+async handleExact(){
+  if(this.state.enteredTerm.length > 0){
+    let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&exact=on`)
+    exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
-      pageNumber: value,
-      paginationReset: false
-    }, () => {
-      this.paginationHandler()
+      searchResult: exactResult,
+      result: true,
+      isLoaded: true 
     })
   }
+}
 
+async suggestionHandler(selectedTerm){
+  let newSearchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+  newSearchResult =  (await newSearchResult.json())['response']['docs'];
+  this.setState({
+      searchResult: newSearchResult,
+      suggestResult: true
+    });
+}
 
-
-  /**
-     * Count the number of pages for the pagination
-     * @returns
-     */
-  pageCount () {
-    return (Math.ceil(this.state.totalResults / this.state.pageSize))
-  }
-
-  /**
-       * Handle the pagination change. This function has to be passed to the Pagination component
-       */
-   async paginationHandler () {
-     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-     let targetUrl = await fetch (`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`)
-     console.info(targetUrl)
-     let resultJson = (await targetUrl.json());
-     let newResults = resultJson['response']['docs']
-     console.info(resultJson)
-     this.setState({
-       rangeCount: rangeCount,
-       searchResult: newResults
-    })
-  }
+  createResultList(){
+    const resultList = []          
+    for(let i=0; i < this.state.suggestionResult.length; i++){
+      resultList.push(
+          <Link to={'/search?q=' + encodeURIComponent(this.state.suggestionResult[i]['autosuggest'])} key={i} className="container">
+              <div>
+                   {this.state.suggestionResult[i]['autosuggest']}
+              </div>
+          </Link>)
+    }
+    return resultList
+}
 
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
     } 
-    //this.transportTerm()
   }
 
   // componentDidUpdate(){
@@ -150,7 +160,7 @@ class SearchResult extends React.Component{
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={8}>
               <div className="search-card-title">
-                <h4><b><Link to={this.transportTerm(searchResultItem[i])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+                <h4><b><Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
@@ -159,7 +169,7 @@ class SearchResult extends React.Component{
                 <p>{searchResultItem[i].description}</p>
               </div>
               <div className="searchresult-ontology">
-                <Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
+                <span class="font-weight-bold">Ontology:</span><Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
               </div>
             </Grid>
           </Grid>   
@@ -169,49 +179,100 @@ class SearchResult extends React.Component{
      }
   }
 
-  handleSelection(ontologies, types){
-    if(ontologies.length === 0 && types.length === 0){
+  async handleSelection(ontologies, types){
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+      ontologies.forEach(item => {
+          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+        }) 
+      types.forEach(item => {
+          baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+        })      
+      let targetUrl = await fetch(baseUrl)
+      let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
       this.setState({
-        searchResult: this.state.originalSearchResult
-      });
-    } 
-    else{
-      let filteredSearchResult = [];
-      let currentResults = this.state.originalSearchResult;
-      if(ontologies.length === 0){
-        filteredSearchResult = currentResults;
-      }
-      else{
-        for(let i=0; i<currentResults.length; i++){        
-          if(ontologies.includes(currentResults[i]['ontology_name'].toUpperCase())){
-            filteredSearchResult.push(currentResults[i]);
-          }
-       }
-      }
-      
-      let newFiltered = [];
-      if(types.length === 0){
-        newFiltered = filteredSearchResult;
-      }
-      else{
-        for(let i=0; i<filteredSearchResult.length; i++){        
-          if(types.includes(filteredSearchResult[i]['type'])){
-            newFiltered.push(filteredSearchResult[i]);
-          }
-       }
-      }
-      
-     this.setState({
-       searchResult: newFiltered,
-       result: true,
-       isFiltered: true
+        searchResult: filteredSearchResults,
+        ontologies: ontologies,
+        types: types 
+       })
+     }
+  
+  /**
+     * Handle the click on the pagination
+     * @param {*} value
+     */
+   handlePagination (value) {
+    this.setState({
+      pageNumber: value
+    }, () => {
+      this.paginationHandler()
+    })
+  }
+
+
+
+  /**
+     * Count the number of pages for the pagination
+     * @returns
+     */
+  pageCount () {
+    return (Math.ceil(this.state.totalResults / this.state.pageSize))
+  }
+
+  /**
+       * Handle the pagination change. This function has to be passed to the Pagination component
+       */
+   async paginationHandler () {
+    let ontologies = this.state.ontologies
+    let types = this.state.types
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+    if(ontologies > 0 && types > 0){
+      ontologies.forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+      }) 
+      types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+      })
+      console.info(baseUrl)
+      let targetUrl = await fetch(baseUrl)
+      let newResults = (await targetUrl.json())['response']['docs']
+      this.setState({
+        searchResult: newResults
      })
+     }
+     else{
+      let targetUrl = await fetch(baseUrl)
+      console.info(targetUrl)
+      let resultJson = (await targetUrl.json());
+      let newResults = resultJson['response']['docs']
+      this.setState({
+        searchResult: newResults
+     })
+     }
+     
+  }
+
+  submitHandler(event){  
+    let newEnteredTerm = document.getElementById('search-input').value;
+    window.location.replace('/search?q=' + newEnteredTerm);
+}
+
+  _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.submitHandler();
     }
   }
 
   render(){
     return(
       <div id="searchterm-wrapper">
+        <div>
+        <SearchForm/>
+        <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
+              {this.state.suggestResult &&
+            <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+        </div>
         <div id="search-title">
         <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
         </div>

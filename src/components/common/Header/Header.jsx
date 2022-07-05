@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../Navbar/Navbar';
-
+import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG'
 import '../../layout/Common.css';
 
 function Header () {
@@ -9,13 +9,16 @@ function Header () {
     <section className="header">
       <section className="header-top">
         <section className="header-top__logo">
-          <img src={"https://www.nfdi4chem.de/wp-content/uploads/2021/11/cropped-NFDI4Chem-Logo-Claim_mehrfarbig_schwarz-e1636478409489.png"} alt="nfdi4chem logo" height={100} width={280} />
+          <img src= {TIB_Logo} alt="tib logo" height={80} width={180} />
+          <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
         </section>
+        <div className="position-absolute top-0 end-0">
+          Login
+        </div>
         <section className="header-top__navbar">
           <section className="header-top__navigation">
             <Navbar />
           </section>
-          <hr className="header-top__seperator" />
         </section>
       </section>
     </section>

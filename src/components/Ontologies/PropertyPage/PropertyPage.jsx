@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
+import {getNodeByIri} from '../../../api/fetchData';
 
 class PropertyPage extends React.Component {
   constructor (props) {
@@ -12,12 +13,14 @@ class PropertyPage extends React.Component {
       label_xs: 2,
       value_xs: 10,
       iriIsCopied: false,
-      prevProperty: this.props.property.label
+      data: true,
+      prevProperty: ""
     })
+    this.initiateTheTableView = this.initiateTheTableView.bind(this);
   }
 
   formatText (text, isLink = false) {
-    if (text == null || text === '') {
+    if (text === null || text === '') {
       return 'null'
     } else if (isLink) {
       return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
@@ -26,16 +29,37 @@ class PropertyPage extends React.Component {
   }
 
 
-  componentDidUpdate(){
-    if(this.state.prevProperty != this.props.property.label){
-      this.setState({
-        iriIsCopied: false,
-        prevProperty: this.props.property.label
-      });
-    }
-  }
+  /**
+   * Get the target property metadata. Initiate the detail table. 
+   */
+ async initiateTheTableView(){
+  let targetIri = this.props.iri;
+  let ontology = this.props.ontology;
+  let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), "properties");    
+  this.setState({
+    prevProperty: node.iri,
+    data: node,
+    iriIsCopied: false
+  });
+}
 
-  render () {
+
+componentDidMount(){
+  if(this.state.data && this.state.prevProperty !== this.props.iri){
+    this.initiateTheTableView();      
+  }
+}
+
+
+componentDidUpdate(){
+  if(this.state.data && this.state.prevProperty !== this.props.iri){
+    this.initiateTheTableView();
+  }
+}
+
+
+
+render () {
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} spacing={4} className="node-detail-table-row">
@@ -44,7 +68,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Label</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property.label)}
+              {this.formatText(this.state.data.label)}
             </Grid>
           </Grid>
         </Grid>
@@ -54,7 +78,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Short Form</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property.short_form)}
+              {this.formatText(this.state.data.short_form)}
             </Grid>
           </Grid>
         </Grid>
@@ -64,7 +88,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Description</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property.description)}
+              {this.formatText(this.state.data.description)}
             </Grid>
           </Grid>
         </Grid>
@@ -74,7 +98,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Definition</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property['annotation']['definition source'])}
+              {this.formatText(this.state.data['annotation'] ? this.state.data['annotation']['definition source'] : "")}
             </Grid>
           </Grid>
         </Grid>
@@ -84,12 +108,12 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Iri</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property.iri, true)}
+              {this.formatText(this.state.data.iri, true)}
               <Button 
                 variant="contained" 
                 className='copy-link-btn'                                
                 onClick={() => {                  
-                  navigator.clipboard.writeText(this.props.property.iri);
+                  navigator.clipboard.writeText(this.state.data.iri);
                   this.setState({
                     iriIsCopied: true
                   });
@@ -109,7 +133,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Ontology</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property.ontology_name)}
+              {this.formatText(this.state.data.ontology_name)}
             </Grid>
           </Grid>
         </Grid>
@@ -119,7 +143,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Curation Status</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property['annotation']['has curation status'])}
+              {this.formatText(this.state.data['annotation'] ? this.state.data['annotation']['has curation status'] : "")}
             </Grid>
           </Grid>
         </Grid>
@@ -129,7 +153,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Editor</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property['annotation']['term editor'])}
+              {this.formatText(this.state.data['annotation'] ? this.state.data['annotation']['term editor'] : "")}
             </Grid>
           </Grid>
         </Grid>
@@ -139,7 +163,7 @@ class PropertyPage extends React.Component {
               <Typography className="node-metadata-label">Is Defined By</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.props.property['annotation']['isDefinedBy'])}
+              {this.formatText(this.state.data['annotation'] ? this.state.data['annotation']['isDefinedBy'] : "")}
             </Grid>
           </Grid>
         </Grid>
