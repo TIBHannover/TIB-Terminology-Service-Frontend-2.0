@@ -2,9 +2,9 @@ import React from 'react';
 import {getNodeByIri, getChildrenJsTree} from '../../../api/fetchData';
 
 
-const CLOSE__CLASSES = "fa-plus";
-const OPEN__CLASSES = "fa-minus";
-const LEAF__CLASSES = "fa-close";
+const CLOSE__CLASSES = " fa-plus";
+const OPEN__CLASSES = " fa-minus";
+const LEAF__CLASSES = " fa-close";
 
 
 
