@@ -435,7 +435,6 @@ The Tree view and detail table styles (for both classes and properties)
 
     padding: 7px;
     font-size: 15px !important;
-    text-align: justify !important;
 }
 
 .node-detail-table-row{
@@ -545,6 +544,8 @@ The Tree view and detail table styles (for both classes and properties)
     text-decoration: none !important;
     width: max-content;
     border-radius: 10px;
+    float: left;
+    margin-right: 10px;
 }
 
 .node-tag-link{

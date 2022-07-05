@@ -17,7 +17,6 @@
       "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
       "Is Defined By": [object.annotation ? object.annotation.isDefinedBy : "", false]
     };
-    console.info(object.description[0]);
     return metadata;
   }
 
