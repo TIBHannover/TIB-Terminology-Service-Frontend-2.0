@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
-import { Link } from 'react-router-dom';
+
 
 
 class TermPage extends React.Component {
