@@ -171,8 +171,8 @@ export async function expandNode(e, ontologyId, childExtractName){
         let listItem = buildTreeListItem(res[i]);
         ul.appendChild(listItem);      
       }      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove(CLOSE__CLASSES);
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add(OPEN__CLASSES);
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
       document.getElementById(Id).classList.remove("closed");
       document.getElementById(Id).classList.add("opened");      
       document.getElementById(Id).appendChild(ul);
@@ -181,8 +181,8 @@ export async function expandNode(e, ontologyId, childExtractName){
     // close an already expanded node
       document.getElementById(Id).classList.remove("opened");
       document.getElementById(Id).classList.add("closed");      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove(OPEN__CLASSES);
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add(CLOSE__CLASSES);
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
       document.getElementById("children_for_" + Id).remove();
   }
       
