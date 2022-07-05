@@ -96,19 +96,20 @@ class TermPage extends React.Component {
 
   /**
    * Set the metadata to render
+   * The boolean in each value indicates that the metadata is a link or not.
    */
   whichMetaData(){
     let metadata = {
-      "Label": this.state.data.label,
-      "Short Form":  this.state.data.short_form,
-      "Description": this.state.data.description,
-      "Definition": this.state.data.annotation ? this.state.data.annotation.definition : "",
-      "Iri": this.state.data.iri,
-      "Ontology": this.state.data.ontology_name,
+      "Label": [this.state.data.label, false],
+      "Short Form":  [this.state.data.short_form, false],
+      "Description": [this.state.data.description, false],
+      "Definition": [this.state.data.annotation ? this.state.data.annotation.definition : "", false],
+      "Iri": [this.state.data.iri, true],
+      "Ontology": [this.state.data.ontology_name, false],
       "SubClass of" : "",
-      "Example Usage": this.state.data.annotation ? this.state.data.annotation.example_usage : "",
-      "Editor Note": this.state.data.annotation ? this.state.data.annotation.editor_note : "",
-      "Is Defined By": this.state.data.annotation ? this.state.data.annotation.isDefinedBy : ""
+      "Example Usage": [this.state.data.annotation ? this.state.data.annotation.example_usage : "", false],
+      "Editor Note": [this.state.data.annotation ? this.state.data.annotation.editor_note : "", false],
+      "Is Defined By": [this.state.data.annotation ? this.state.data.annotation.isDefinedBy : "", false]
     };
 
     return metadata;
@@ -123,7 +124,7 @@ class TermPage extends React.Component {
     let metadataToRender = this.whichMetaData();
     let result = [];
     for(let key of Object.keys(metadataToRender)){
-      let row = this.createRow(key, metadataToRender[key], false);
+      let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
       result.push(row);
     }
     return result;
@@ -143,10 +144,9 @@ class TermPage extends React.Component {
       this.initiateTheTableView();
     }
   }
-  
 
-  render () {
-    
+
+  render () {    
     return (
       <Grid container spacing={2}>
         {this.createTable()}
