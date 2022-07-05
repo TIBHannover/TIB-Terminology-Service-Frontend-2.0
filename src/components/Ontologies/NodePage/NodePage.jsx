@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
-
+import {classMetaData} from './helpers';
 
 
 class NodePage extends React.Component {
@@ -17,10 +17,10 @@ class NodePage extends React.Component {
       value_xs: 10,
       iriIsCopied: false,
       prevTerm: "",
+      componentIdentity: ""
     })
     this.initiateTheTableView = this.initiateTheTableView.bind(this);
     this.createRow = this.createRow.bind(this);
-    this.whichMetaData = this.whichMetaData.bind(this);
     this.createTable = this.createTable.bind(this);
   }
 
@@ -47,11 +47,14 @@ class NodePage extends React.Component {
  async initiateTheTableView(){
     let targetIri = this.props.iri;
     let ontology = this.props.ontology;
-    let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), "terms");    
+    let extractKey = this.props.extractKey;
+    let componentIdentity = this.props.componentIdentity;
+    let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
     this.setState({
       prevTerm: node.iri,
       data: node,
-      iriIsCopied: false
+      iriIsCopied: false,
+      componentIdentity: componentIdentity
     });
   }
 
@@ -95,33 +98,13 @@ class NodePage extends React.Component {
 
 
   /**
-   * Set the metadata to render
-   * The boolean in each value indicates that the metadata is a link or not.
-   */
-  whichMetaData(){
-    let metadata = {
-      "Label": [this.state.data.label, false],
-      "Short Form":  [this.state.data.short_form, false],
-      "Description": [this.state.data.description, false],
-      "Definition": [this.state.data.annotation ? this.state.data.annotation.definition : "", false],
-      "Iri": [this.state.data.iri, true],
-      "Ontology": [this.state.data.ontology_name, false],
-      "SubClass of" : "",
-      "Example Usage": [this.state.data.annotation ? this.state.data.annotation.example_usage : "", false],
-      "Editor Note": [this.state.data.annotation ? this.state.data.annotation.editor_note : "", false],
-      "Is Defined By": [this.state.data.annotation ? this.state.data.annotation.isDefinedBy : "", false]
-    };
-
-    return metadata;
-  }
-
-
-
-  /**
    * Create the view to render 
    */
   createTable(){
-    let metadataToRender = this.whichMetaData();
+    let metadataToRender = "";
+    if(this.state.componentIdentity === "term"){
+      metadataToRender = classMetaData(this.state.data);
+    }
     let result = [];
     for(let key of Object.keys(metadataToRender)){
       let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);

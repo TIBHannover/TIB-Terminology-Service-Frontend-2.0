@@ -442,6 +442,8 @@ render(){
             <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
+              componentIdentity="term"
+              extractKey="terms"
             />
         </Grid>
         }
@@ -450,6 +452,8 @@ render(){
           <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
+              componentIdentity="property"
+              extractKey="properties"
           />
         </Grid>
         }
