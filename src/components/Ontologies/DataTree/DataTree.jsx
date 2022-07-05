@@ -308,7 +308,7 @@ async showSiblings(){
           let extractName = this.state.childExtractName;
           let url = this.state.baseUrl;
           url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
-          let res =  await (await fetch(url, getCallSetting)).json(); 
+          let res =  await (await fetch(url, getCallSetting)).jsn();          
           for(let i=0; i < res.length; i++){
             if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
               continue;
@@ -364,7 +364,7 @@ async showSiblings(){
     }
   }
   catch(e){
-
+    // console.info(e.stack);    
   }
   
 }
