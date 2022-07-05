@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
-import {classMetaData} from './helpers';
+import {classMetaData, propertyMetaData} from './helpers';
 
 
 class NodePage extends React.Component {
@@ -16,7 +16,7 @@ class NodePage extends React.Component {
       label_xs: 2,
       value_xs: 10,
       iriIsCopied: false,
-      prevTerm: "",
+      prevNode: "",
       componentIdentity: "",
       baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/"
     })
@@ -52,7 +52,7 @@ class NodePage extends React.Component {
     let componentIdentity = this.props.componentIdentity;
     let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
     this.setState({
-      prevTerm: node.iri,
+      prevNode: node.iri,
       data: node,
       iriIsCopied: false,
       componentIdentity: componentIdentity
@@ -106,6 +106,9 @@ class NodePage extends React.Component {
     if(this.state.componentIdentity === "term"){
       metadataToRender = classMetaData(this.state.data);
     }
+    else{
+      metadataToRender = propertyMetaData(this.state.data);
+    }
     let result = [];
     for(let key of Object.keys(metadataToRender)){
       let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
@@ -117,14 +120,14 @@ class NodePage extends React.Component {
 
 
   componentDidMount(){
-    if(this.state.data && this.state.prevTerm !== this.props.iri){
+    if(this.state.data && this.state.prevNode !== this.props.iri){
       this.initiateTheTableView();      
     }
   }
 
 
   componentDidUpdate(){
-    if(this.state.data && this.state.prevTerm !== this.props.iri){
+    if(this.state.data && this.state.prevNode !== this.props.iri){
       this.initiateTheTableView();
     }
   }
@@ -136,7 +139,7 @@ class NodePage extends React.Component {
         {this.createTable()}
         <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
-            <a href={this.state.baseUrl + this.state.data.ontology_name + "/" + this.state.extractKey + "?iri=" + this.state.data.iri} 
+            <a href={this.state.baseUrl + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
               target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
           </Grid>
         </Grid>
