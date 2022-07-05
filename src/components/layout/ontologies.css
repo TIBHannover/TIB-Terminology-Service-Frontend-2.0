@@ -309,38 +309,6 @@ The ontology detail page styles. It contains the ontology overview page.
     color: #6c757d !important;
 }
 
-.onto-header{
-    /* 
-        Style for the ontology name banner
-    */
-    border: 1px black solid;
-    background-color: white;
-    margin-top: 10px;
-    padding: 30px;
-    font-size: 17px;
-    margin-right: 2px;
-    margin-left: 280px;
-    margin-bottom: 20px;
-    height: auto;
-    text-align: justify;
-    width: 70% !important;
-    border-radius: 25px !important;
-}
-
-.onto-title{
-    /* 
-        The style for ontology detail main title
-    */
-    margin: auto !important;
-    width: 400% !important;  
-}
-
-.onto-update{
-    /* 
-        The style for ontology detail main title update status
-    */
-    font-size: 15px;
-}
 
 .ontology-detail-navbar{
     /* 
