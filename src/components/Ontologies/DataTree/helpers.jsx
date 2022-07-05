@@ -109,7 +109,7 @@ export function buildHierarchicalArray(flatList){
           nodeStatusClass = "closed";
           iconClass = "fa" + CLOSE__CLASSES;  
         }
-        else if(nodeList[i].children && nodeList[i].childrenList.length != 0){
+        else if(nodeList[i].state.opened && nodeList[i].childrenList.length != 0){
           nodeStatusClass = "opened";
           iconClass = "fa" + OPEN__CLASSES;
         }

@@ -298,7 +298,7 @@ resetTree(){
 async showSiblings(){
   try{
     let targetNodes = document.getElementsByClassName("targetNodeByIri");
-    if(!this.state.siblingsVisible){
+    if(!this.state.siblingsVisible){        
         if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
           // Target node is a root node
           let callHeader = {
