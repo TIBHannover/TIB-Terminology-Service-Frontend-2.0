@@ -40,3 +40,19 @@
 
   return metadata;
 }
+
+
+/**
+   * Format the text. check if a text input is a link to a simple text. 
+   * @param {*} text 
+   * @param {*} isLink 
+   * @returns 
+   */
+ export function formatText (text, isLink = false) {
+  if (text === null || text === '') {
+    return 'null'
+  } else if (isLink) {
+    return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
+  }
+  return text
+}

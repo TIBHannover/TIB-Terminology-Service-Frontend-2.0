@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
-import {classMetaData, propertyMetaData} from './helpers';
+import {classMetaData, propertyMetaData, formatText} from './helpers';
 
 
 class NodePage extends React.Component {
@@ -25,21 +25,6 @@ class NodePage extends React.Component {
     this.createTable = this.createTable.bind(this);
   }
 
-
-  /**
-   * Format the text. check if a text input is a link to a simple text. 
-   * @param {*} text 
-   * @param {*} isLink 
-   * @returns 
-   */
-  formatText (text, isLink = false) {
-    if (text === null || text === '') {
-      return 'null'
-    } else if (isLink) {
-      return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
-    }
-    return text
-  }
 
 
   /**
@@ -71,7 +56,7 @@ class NodePage extends React.Component {
               <Typography className="node-metadata-label">{metadataLabel}</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(metadataValue)}
+              {formatText(metadataValue, copyButton)}
               {copyButton &&
                 <Button 
                   variant="contained" 
