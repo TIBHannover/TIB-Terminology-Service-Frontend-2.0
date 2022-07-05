@@ -534,3 +534,24 @@ The Tree view and detail table styles (for both classes and properties)
     width: 100% !important;
 }
 
+.node-tag{
+    /* 
+        Styles for the "subClass of" tags in the detail table
+    */
+
+    background-color: #97eee7;
+    color: black;
+    padding: 5px;
+    text-decoration: none !important;
+    width: max-content;
+    border-radius: 10px;
+}
+
+.node-tag-link{
+    /* 
+        Styles for the links inside the "subClass of" tags in the detail table
+    */
+
+    color: black;
+    text-decoration: none !important;
+}

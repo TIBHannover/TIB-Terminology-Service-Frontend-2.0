@@ -227,16 +227,16 @@ export async function getAllCollectionsIds() {
  * @returns 
  */
 export async function getParents(node:any, mode:string) {
-  if(typeof(node['_links']['parents']) === "undefined"){
+  if(typeof(node['_links']['hierarchicalParents']) === "undefined"){
     return [];
   }
-  let url = node['_links']['parents']['href'];
+  let url = node['_links']['hierarchicalParents']['href'];
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   let parents = res["_embedded"][mode];
   let result:Array<any> = [];
   for(let p of parents){
-    let temp = {"label":p.label, "iri": p.iri};
+    let temp = {"label":p.label, "iri": p.iri, "ontology": p.ontology_name};
     result.push(temp);
   }
   return result;

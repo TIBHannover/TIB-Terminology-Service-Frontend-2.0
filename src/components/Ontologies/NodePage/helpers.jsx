@@ -1,4 +1,3 @@
-import { getParents} from '../../../api/fetchData';
 
 
 /**
@@ -9,16 +8,16 @@ import { getParents} from '../../../api/fetchData';
     let metadata = {
       "Label": [object.label, false],
       "Short Form":  [object.short_form, false],
-      "Description": [object.description, false],
+      "Description": [object.description.length !== 0 ? object.description[0] : "", false],
       "Definition": [object.annotation ? object.annotation.definition : "", false],
       "Iri": [object.iri, true],
       "Ontology": [object.ontology_name, false],
-      "SubClass of" : [ "", false],
+      "SubClass of" : [ object.parents, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
       "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
       "Is Defined By": [object.annotation ? object.annotation.isDefinedBy : "", false]
     };
-    console.info(metadata["SubClass of"]);
+    console.info(object.description[0]);
     return metadata;
   }
 
@@ -44,17 +43,6 @@ import { getParents} from '../../../api/fetchData';
 }
 
 
-// /**
-//  * Get the parent classes for a given class
-//  */
-// async function getParentClasses(node){
-//   let parents = await getParents(node, "terms");
-
-
-// }
-
-
-
 
 /**
    * Format the text. check if a text input is a link to a simple text. 
@@ -65,8 +53,35 @@ import { getParents} from '../../../api/fetchData';
  export function formatText (text, isLink = false) {
   if (text === null || text === '') {
     return 'null'
-  } else if (isLink) {
+  }
+  else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
+  else if (Array.isArray(text)){
+    return makeTag(text);
+  }
   return text
+}
+
+
+/**
+ * Create tag for term relations
+ */
+function makeTag(objectList){
+  if(objectList.length === 0){
+    return "";
+  }
+  let tags = [];
+  let counter = 0;
+  for(let object of objectList){
+    tags.push(      
+      <div className='node-tag' key={counter}>
+        <a className='node-tag-link' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + object['iri']} target="_blank">
+          {object['label']}
+        </a>
+      </div>
+    );
+    counter ++;
+  }
+  return tags;
 }
