@@ -2,8 +2,7 @@ import React from 'react';
 import '../../layout/ontologies.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
-import TermPage from '../TermPage/TermPage';
-import PropertyPage from '../PropertyPage/PropertyPage';
+import NodePage from '../NodePage/NodePage';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
@@ -440,17 +439,21 @@ render(){
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
           <Grid item xs={6} className="node-table-container">
-            <TermPage
+            <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
+              componentIdentity="term"
+              extractKey="terms"
             />
         </Grid>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
           <Grid item xs={6} className="node-table-container">
-          <PropertyPage
+          <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
+              componentIdentity="property"
+              extractKey="properties"
           />
         </Grid>
         }
