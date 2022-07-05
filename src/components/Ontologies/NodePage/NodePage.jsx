@@ -89,7 +89,7 @@ class NodePage extends React.Component {
   createTable(){
     let metadataToRender = "";
     if(this.state.componentIdentity === "term"){
-      metadataToRender = classMetaData(this.state.data);
+      metadataToRender =  classMetaData(this.state.data);
     }
     else{
       metadataToRender = propertyMetaData(this.state.data);

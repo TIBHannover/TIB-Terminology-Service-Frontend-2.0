@@ -164,7 +164,10 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
     return false;
   }
   node = await node.json();
-  return node['_embedded'][mode][0];
+  node = node['_embedded'][mode][0];
+  let parents = await getParents(node, mode);
+  node['parents'] = parents;
+  return node;
 }
 
 
@@ -212,6 +215,29 @@ export async function getAllCollectionsIds() {
     statsResult = await statsResult.json();
     let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
     result.push(record);
+  }
+  return result;
+}
+
+
+
+/**
+ * Get a node parents
+ * @param node 
+ * @returns 
+ */
+export async function getParents(node:any, mode:string) {
+  if(typeof(node['_links']['parents']) === "undefined"){
+    return [];
+  }
+  let url = node['_links']['parents']['href'];
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  let parents = res["_embedded"][mode];
+  let result:Array<any> = [];
+  for(let p of parents){
+    let temp = {"label":p.label, "iri": p.iri};
+    result.push(temp);
   }
   return result;
 }

@@ -1,3 +1,5 @@
+import { getParents} from '../../../api/fetchData';
+
 
 /**
  * Create the metadata for a class detail table
@@ -11,12 +13,12 @@
       "Definition": [object.annotation ? object.annotation.definition : "", false],
       "Iri": [object.iri, true],
       "Ontology": [object.ontology_name, false],
-      "SubClass of" : "",
+      "SubClass of" : [ "", false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
       "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
       "Is Defined By": [object.annotation ? object.annotation.isDefinedBy : "", false]
     };
-
+    console.info(metadata["SubClass of"]);
     return metadata;
   }
 
@@ -40,6 +42,18 @@
 
   return metadata;
 }
+
+
+// /**
+//  * Get the parent classes for a given class
+//  */
+// async function getParentClasses(node){
+//   let parents = await getParents(node, "terms");
+
+
+// }
+
+
 
 
 /**
