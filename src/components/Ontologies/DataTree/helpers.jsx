@@ -52,11 +52,13 @@ export function buildHierarchicalArray(flatList){
     listItem.setAttribute("data-id", childNode.id);
     if(childNode.children){
       listItem.classList.add("closed");
-      symbol.classList.add("fa", CLOSE__CLASSES);
+      symbol.classList.add("fa");
+      symbol.classList.add("fa-plus");
     }
     else{
       listItem.classList.add("leaf-node");
-      symbol.classList.add("fa", LEAF__CLASSES);
+      symbol.classList.add("fa");
+      symbol.classList.add("fa-close");
     }
     listItem.appendChild(symbol);
     if(childNode["a_attr"]["class"] === "part_of"){
