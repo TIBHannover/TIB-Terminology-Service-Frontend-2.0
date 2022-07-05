@@ -16,9 +16,11 @@ class TermPage extends React.Component {
       label_xs: 2,
       value_xs: 10,
       iriIsCopied: false,
-      prevTerm: ""
+      prevTerm: "",
     })
     this.initiateTheTableView = this.initiateTheTableView.bind(this);
+    this.createRow = this.createRow.bind(this);
+    this.whichMetaData = this.whichMetaData.bind(this);
   }
 
 
@@ -53,6 +55,47 @@ class TermPage extends React.Component {
   }
 
 
+  /**
+   * create a table row 
+   */
+  createRow(metadataLabel, metadataValue){
+    let row = [
+      <Grid item xs={12} spacing={4} className="node-detail-table-row">
+          <Grid container>
+            <Grid item xs={this.state.label_xs}>
+              <Typography className="node-metadata-label">{metadataLabel}</Typography>
+            </Grid>
+            <Grid item xs={this.state.value_xs} className="node-metadata-value">
+              {this.formatText(metadataValue)}
+            </Grid>
+          </Grid>
+        </Grid>
+    ];
+
+    return row;
+  }
+
+
+  /**
+   * Set the metadata to render
+   */
+  whichMetaData(){
+    let metadata = {
+      "Label": this.state.data.label,
+      "Short Form":  this.state.data.short_form,
+      "Description": this.state.data.description,
+      "Definition": this.state.data.annotation ? this.state.data.annotation.definition : "",
+      "Iri": this.state.data.iri,
+      "Ontology": this.state.data.ontology_name,
+      "SubClass of" : "",
+      "Example Usage": this.state.data.annotation ? this.state.data.annotation.example_usage : "",
+      "Editor Note": this.state.data.annotation ? this.state.data.annotation.editor_note : "",
+      "Is Defined By": this.state.data.annotation ? this.state.data.annotation.isDefinedBy : ""
+    };
+  }
+
+
+
   componentDidMount(){
     if(this.state.data && this.state.prevTerm !== this.props.iri){
       this.initiateTheTableView();      
@@ -67,6 +110,12 @@ class TermPage extends React.Component {
   }
 
   render () {
+    const metadataToRender = {};
+
+
+
+
+
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} spacing={4} className="node-detail-table-row">
