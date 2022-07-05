@@ -8,7 +8,7 @@
     let metadata = {
       "Label": [object.label, false],
       "Short Form":  [object.short_form, false],
-      "Description": [object.description.length !== 0 ? object.description[0] : "", false],
+      "Description": [object.description  ? object.description[0] : "", false],
       "Definition": [object.annotation ? object.annotation.definition : "", false],
       "Iri": [object.iri, true],
       "Ontology": [object.ontology_name, false],
