@@ -17,7 +17,8 @@ class NodePage extends React.Component {
       value_xs: 10,
       iriIsCopied: false,
       prevTerm: "",
-      componentIdentity: ""
+      componentIdentity: "",
+      baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/"
     })
     this.initiateTheTableView = this.initiateTheTableView.bind(this);
     this.createRow = this.createRow.bind(this);
@@ -135,7 +136,8 @@ class NodePage extends React.Component {
         {this.createTable()}
         <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
-            <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
+            <a href={this.state.baseUrl + this.state.data.ontology_name + "/" + this.state.extractKey + "?iri=" + this.state.data.iri} 
+              target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
           </Grid>
         </Grid>
       </Grid>
