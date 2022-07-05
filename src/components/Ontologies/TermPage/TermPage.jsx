@@ -21,6 +21,7 @@ class TermPage extends React.Component {
     this.initiateTheTableView = this.initiateTheTableView.bind(this);
     this.createRow = this.createRow.bind(this);
     this.whichMetaData = this.whichMetaData.bind(this);
+    this.createTable = this.createTable.bind(this);
   }
 
 
@@ -58,7 +59,7 @@ class TermPage extends React.Component {
   /**
    * create a table row 
    */
-  createRow(metadataLabel, metadataValue){
+  createRow(metadataLabel, metadataValue, copyButton){
     let row = [
       <Grid item xs={12} spacing={4} className="node-detail-table-row">
           <Grid container>
@@ -67,6 +68,23 @@ class TermPage extends React.Component {
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
               {this.formatText(metadataValue)}
+              {copyButton &&
+                <Button 
+                  variant="contained" 
+                  className='copy-link-btn'                                
+                  onClick={() => {                  
+                    navigator.clipboard.writeText(metadataValue);
+                    this.setState({
+                      iriIsCopied: true
+                    });
+                  }}            
+                >copy</Button>          
+              }
+              {copyButton && this.state.iriIsCopied && 
+                    <CheckIcon 
+                      fontSize="large"                    
+                    />
+              }    
             </Grid>
           </Grid>
         </Grid>
@@ -92,6 +110,23 @@ class TermPage extends React.Component {
       "Editor Note": this.state.data.annotation ? this.state.data.annotation.editor_note : "",
       "Is Defined By": this.state.data.annotation ? this.state.data.annotation.isDefinedBy : ""
     };
+
+    return metadata;
+  }
+
+
+
+  /**
+   * Create the view to render 
+   */
+  createTable(){
+    let metadataToRender = this.whichMetaData();
+    let result = [];
+    for(let key of Object.keys(metadataToRender)){
+      let row = this.createRow(key, metadataToRender[key], false);
+      result.push(row);
+    }
+    return result;
   }
 
 
@@ -108,131 +143,13 @@ class TermPage extends React.Component {
       this.initiateTheTableView();
     }
   }
+  
 
   render () {
-    const metadataToRender = {};
-
-
-
-
-
+    
     return (
       <Grid container spacing={2}>
-        <Grid item xs={12} spacing={4} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Label</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.label)}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Short Form</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.short_form)}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Description</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.description)}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Definition</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.annotation ? this.state.data.annotation.definition : "")}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Iri</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.iri, true)}
-              <Button 
-                variant="contained" 
-                className='copy-link-btn'                                
-                onClick={() => {                  
-                  navigator.clipboard.writeText(this.state.data.iri);
-                  this.setState({
-                    iriIsCopied: true
-                  });
-                }}            
-              >copy</Button>
-              {this.state.iriIsCopied && 
-                  <CheckIcon 
-                    fontSize="large"                    
-                  />
-              }      
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Ontology</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.ontology_name)}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">SubClass of</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-                
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Example Usage</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.annotation ? this.state.data.annotation.example_usage : "")}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Editor Note</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.annotation ? this.state.data.annotation.editor_note : "")}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} className="node-detail-table-row">
-          <Grid container>
-            <Grid item xs={this.state.label_xs}>
-              <Typography className="node-metadata-label">Is Defined By</Typography>
-            </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {this.formatText(this.state.data.annotation ? this.state.data.annotation.isDefinedBy : "")}
-            </Grid>
-          </Grid>
-        </Grid>
+        {this.createTable()}
         <Grid item xs={12} className="node-detail-table-row">
           <Grid container>
             <a href={"https://service.tib.eu/ts4tib/api/ontologies/"+ this.state.data.ontology_name + "/terms?iri=" + this.state.data.iri} target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
