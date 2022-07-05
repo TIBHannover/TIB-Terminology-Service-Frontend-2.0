@@ -8,7 +8,7 @@ import {getNodeByIri} from '../../../api/fetchData';
 
 
 
-class TermPage extends React.Component {
+class NodePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
@@ -160,4 +160,4 @@ class TermPage extends React.Component {
   }
 }
 
-export default TermPage
+export default NodePage;
