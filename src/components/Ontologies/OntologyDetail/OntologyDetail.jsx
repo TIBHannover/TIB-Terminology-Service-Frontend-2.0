@@ -11,7 +11,7 @@ import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/fetchData';
-import OntoHeader from './widgets/OntoHeader';
+
 
 
 
@@ -219,11 +219,6 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div>
-          <Grid container className='onto-title'>
-            <Grid item xs={3}>
-              <OntoHeader ontology={this.state.ontology}/>
-            </Grid>
-          </Grid>
           <Paper square className='ontology-detail-navbar'>
             <Tabs
               value={this.state.activeTab}
