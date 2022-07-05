@@ -309,6 +309,38 @@ The ontology detail page styles. It contains the ontology overview page.
     color: #6c757d !important;
 }
 
+.onto-header{
+    /* 
+        Style for the ontology name banner
+    */
+    border: 1px black solid;
+    background-color: white;
+    margin-top: 10px;
+    padding: 30px;
+    font-size: 17px;
+    margin-right: 2px;
+    margin-left: 280px;
+    margin-bottom: 20px;
+    height: auto;
+    text-align: justify;
+    width: 70% !important;
+    border-radius: 25px !important;
+}
+
+.onto-title{
+    /* 
+        The style for ontology detail main title
+    */
+    margin: auto !important;
+    width: 400% !important;  
+}
+
+.onto-update{
+    /* 
+        The style for ontology detail main title update status
+    */
+    font-size: 15px;
+}
 
 .ontology-detail-navbar{
     /* 
@@ -354,7 +386,7 @@ The Tree view and detail table styles (for both classes and properties)
     /* 
         The tree page containers. It includes both the tree view and the detail table.
     */
-    padding: 20px;
+    padding: 20px !important;
 }
 
 .tree-container{
@@ -365,11 +397,11 @@ The Tree view and detail table styles (for both classes and properties)
 
     height: 1000px;
     overflow-y: scroll;
-    padding-bottom: 500px;
-    padding-top: 50px;
+    padding-bottom: 500px !important;
+    padding-top: 50px !important;
     z-index: 999;
-    padding-left: 10x;
-    padding-right: 10px;
+    padding-left: 10x !important;
+    padding-right: 10px !important;
     background-color: white;
     border-radius: 15px;
 }
@@ -460,6 +492,7 @@ The Tree view and detail table styles (for both classes and properties)
     cursor: pointer;    
     border-left: 1px dotted !important;
     border-left-color: gray;
+    font-size: 13px !important;
 }
 
 .tree-node-li::before{
