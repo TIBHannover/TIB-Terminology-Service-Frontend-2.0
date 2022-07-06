@@ -4,7 +4,7 @@ const callHeader = {
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
 const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
-const StatsBaseUrl = "http://terminology02.develop.service.tib.eu:8080/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&";
+const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&";
 
 
 
