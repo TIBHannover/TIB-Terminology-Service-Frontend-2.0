@@ -52,11 +52,13 @@ export function buildHierarchicalArray(flatList){
     listItem.setAttribute("data-id", childNode.id);
     if(childNode.children){
       listItem.classList.add("closed");
-      symbol.classList.add("fa", CLOSE__CLASSES);
+      symbol.classList.add("fa");
+      symbol.classList.add("fa-plus");
     }
     else{
       listItem.classList.add("leaf-node");
-      symbol.classList.add("fa", LEAF__CLASSES);
+      symbol.classList.add("fa");
+      symbol.classList.add("fa-close");
     }
     listItem.appendChild(symbol);
     if(childNode["a_attr"]["class"] === "part_of"){
@@ -109,7 +111,7 @@ export function buildHierarchicalArray(flatList){
           nodeStatusClass = "closed";
           iconClass = "fa" + CLOSE__CLASSES;  
         }
-        else if(nodeList[i].children && nodeList[i].childrenList.length != 0){
+        else if(nodeList[i].state.opened && nodeList[i].childrenList.length != 0){
           nodeStatusClass = "opened";
           iconClass = "fa" + OPEN__CLASSES;
         }
@@ -169,8 +171,8 @@ export async function expandNode(e, ontologyId, childExtractName){
         let listItem = buildTreeListItem(res[i]);
         ul.appendChild(listItem);      
       }      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove(CLOSE__CLASSES);
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add(OPEN__CLASSES);
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
       document.getElementById(Id).classList.remove("closed");
       document.getElementById(Id).classList.add("opened");      
       document.getElementById(Id).appendChild(ul);
@@ -179,8 +181,8 @@ export async function expandNode(e, ontologyId, childExtractName){
     // close an already expanded node
       document.getElementById(Id).classList.remove("opened");
       document.getElementById(Id).classList.add("closed");      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove(OPEN__CLASSES);
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add(CLOSE__CLASSES);
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
+      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
       document.getElementById("children_for_" + Id).remove();
   }
       

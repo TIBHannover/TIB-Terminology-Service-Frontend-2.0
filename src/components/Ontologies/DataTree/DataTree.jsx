@@ -2,8 +2,7 @@ import React from 'react';
 import '../../layout/ontologies.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
-import TermPage from '../TermPage/TermPage';
-import PropertyPage from '../PropertyPage/PropertyPage';
+import NodePage from '../NodePage/NodePage';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
@@ -153,14 +152,14 @@ class DataTree extends React.Component {
           let leafClass = "";
           let symbol = "";
           let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
-          let hasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
-          if (roots[i].childrenList.length === 0 && !hasChildren){
+          // let hasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
+          if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
             //  root node is a leaf
             leafClass = " leaf-node";
             symbol = React.createElement("i", {"className": "fa fa-close"}, "");
           }
           
-          else if(roots[i].childrenList.length === 0 && hasChildren){
+          else if(roots[i].childrenList.length === 0 && roots[i].children && !roots[i].opened){
             // root is not leaf but does not include the target node on its sub-tree
             leafClass = " closed";
             symbol = React.createElement("i", {"className": "fa fa-plus"}, "");
@@ -308,7 +307,7 @@ async showSiblings(){
           let extractName = this.state.childExtractName;
           let url = this.state.baseUrl;
           url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
-          let res =  await (await fetch(url, getCallSetting)).json(); 
+          let res =  await (await fetch(url, getCallSetting)).jsn();          
           for(let i=0; i < res.length; i++){
             if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
               continue;
@@ -364,7 +363,7 @@ async showSiblings(){
     }
   }
   catch(e){
-
+    // console.info(e.stack);    
   }
   
 }
@@ -440,17 +439,21 @@ render(){
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
           <Grid item xs={6} className="node-table-container">
-            <TermPage
+            <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
+              componentIdentity="term"
+              extractKey="terms"
             />
         </Grid>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
           <Grid item xs={6} className="node-table-container">
-          <PropertyPage
+          <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
+              componentIdentity="property"
+              extractKey="properties"
           />
         </Grid>
         }
