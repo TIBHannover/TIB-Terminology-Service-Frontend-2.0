@@ -18,7 +18,7 @@ class Home extends React.Component{
   }
 
   async Stats(){
-    let statsResult = await fetch(`http://terminology02.develop.service.tib.eu:8080/ts4tib/api/ontologies/getstatistics`)
+    let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatistics`)
     statsResult = await statsResult.json();
     console.info(statsResult)
     this.setState({
