@@ -269,8 +269,6 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
     if(rel['label'] === "is a"){
       continue;
     }
-    let targetRel = rel['label'];
-    let targetRelUrl = OntologiesBaseServiceUrl + '/' + ontologyId + '/properties?iri=' + rel['uri'];
     let targetNode = "";
     let targetNodeUrl = "";
     if(rel['source'] === classNode['iri']){
@@ -286,8 +284,8 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
       }
     }
     result.push({
-      "relation": targetRel,
-      "relationUrl": targetRelUrl,
+      "relation": rel['label'],
+      "relationUrl": rel['uri'],
       "target": targetNode,
       "targetUrl": targetNodeUrl
     });

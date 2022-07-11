@@ -103,12 +103,12 @@ function createRelations(object){
   console.info(object);
   let relsToRender = [];
   for(let rel of Object.keys(object['relations'])){
-    if(typeof(rel) !== "undefined"){
+    if(typeof(rel) !== "undefined" && rel !== "undefined"){
       relsToRender.push(
         <ul>
           <li>
           <a className='node-relation-link' 
-            href={"/ontologies/" + object['ontology_name'] + "/properties?iri=" + object['relations'][rel][0]['relationUrl']} 
+            href={"/ontologies/" + object['ontology_name'] + "/props?iri=" + object['relations'][rel][0]['relationUrl']} 
             target="_blank">
               {rel}
           </a>            
