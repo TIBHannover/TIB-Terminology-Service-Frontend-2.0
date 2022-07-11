@@ -539,9 +539,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     background-color: #97eee7;
-    color: black;
     padding: 5px;
-    text-decoration: none !important;
     width: max-content;
     border-radius: 10px;
     float: left;
@@ -556,3 +554,14 @@ The Tree view and detail table styles (for both classes and properties)
     color: black;
     text-decoration: none !important;
 }
+
+
+.node-relation-link{
+     /* 
+        Styles for the links inside the "Relations" row in the class(term) detail table
+    */
+
+    color: black;
+    text-decoration: none;
+}
+
