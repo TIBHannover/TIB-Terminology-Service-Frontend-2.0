@@ -263,7 +263,7 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
   let relations = res['edges'];
   let result: { relation: string, relationUrl: string, target: string, targetUrl: string }[]  = [];
   for(let rel of relations){
-    if(rel['label'] === "is_a"){
+    if(rel['label'] === "is a"){
       continue;
     }
     let targetRel = rel['label'];
@@ -276,7 +276,7 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
     else{
       targetNodeUrl = rel['source'];
     }
-    for(let n in nodes){
+    for(let n of nodes){
       if(n['iri'] === targetNodeUrl){
         targetNode = n['label'];
         break;
