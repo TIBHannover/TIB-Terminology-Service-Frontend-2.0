@@ -568,10 +568,10 @@ The Tree view and detail table styles (for both classes and properties)
 
 
 .node-relation-link{
-    color: white;
+    /* color: white; */
     text-decoration: none;
 }
 
 .node-relation-link:hover{
-    color: white !important;
+    /* color: white !important; */
 }

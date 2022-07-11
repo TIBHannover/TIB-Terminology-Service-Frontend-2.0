@@ -100,28 +100,29 @@ function createRelations(object){
     return "";
   }
   object['relations'] = _.groupBy(object['relations'], res => res.relation);
-  console.info(object['relations']);
+  console.info(object);
   let relsToRender = [];
   for(let rel of Object.keys(object['relations'])){
     if(typeof(rel) !== "undefined"){
       relsToRender.push(
         <ul>
-          <li>{rel}</li>
+          <li>
+          <a className='node-relation-link' 
+            href={"/ontologies/" + object['ontology_name'] + "/properties?iri=" + object['relations'][rel][0]['relationUrl']} 
+            target="_blank">
+              {rel}
+          </a>            
+            <ul>
+              {object['relations'][rel].map(function(value){
+                return <li>
+                  <a className='node-relation-link' href={"/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
+                      {value["target"]}
+                  </a>
+                </li>
+              })}
+            </ul>
+          </li>
         </ul>
-  
-  
-        // <div className="node-relation-entry">
-        //   <span className='node-relation-span-tag'>
-        //     <a className='node-relation-link' href={"/ontologies/" + object['ontology'] + "/properties?iri=" + rel['relationUrl']} target="_blank">
-        //       {rel['relation']}
-        //     </a>
-        //   </span>
-        //   <span className='node-relation-span-tag'>
-        //     <a className='node-relation-link' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + rel['targetUrl']} target="_blank">
-        //       {rel['target']}
-        //     </a>
-        //   </span>        
-        // </div>
       );
     }
   }
