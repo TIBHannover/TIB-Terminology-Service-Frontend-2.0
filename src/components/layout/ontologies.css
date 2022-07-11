@@ -556,46 +556,12 @@ The Tree view and detail table styles (for both classes and properties)
 }
 
 
-.node-relation-span-tag{
-    margin-right: 10px;
-    background-color: #873593;
-    padding: 5px;
-    width: max-content;
-    border-radius: 10px;
-    float: left;
-    margin-right: 10px;
-}
-
-
 .node-relation-link{
+     /* 
+        Styles for the links inside the "Relations" row in the class(term) detail table
+    */
+
     color: black;
     text-decoration: none;
 }
 
-.node-relation-link:hover{
-    /* color: white !important; */
-}
-
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-  }
-  
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-  
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-  }
-  
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-  }
