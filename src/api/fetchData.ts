@@ -166,6 +166,10 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   node = await node.json();
   node = node['_embedded'][mode][0];
   let parents = await getParents(node, mode);
+  if(mode === "terms"){
+    let rels = await getClassRelations(node, ontology);
+    node['relations'] = rels;
+  }
   node['parents'] = parents;
   return node;
 }
@@ -240,6 +244,55 @@ export async function getParents(node:any, mode:string) {
     result.push(temp);
   }
   return result;
+}
+
+
+/**
+ * Get a class relations
+ * @param classNode
+ * @param ontologyId
+ */
+export async function getClassRelations(classNode:any, ontologyId:string) {
+  if(typeof(classNode['_links']['graph']) === "undefined"){
+    return [];
+  }
+  let url = classNode['_links']['graph']['href'];
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  let nodes = res['nodes'];
+  let relations = res['edges'];
+  let result: { relation: string, relationUrl: string, target: string, targetUrl: string }[]  = [];
+  for(let rel of relations){
+    if(rel['label'] === "is_a"){
+      continue;
+    }
+    let targetRel = rel['label'];
+    let targetRelUrl = OntologiesBaseServiceUrl + '/' + ontologyId + '/properties?iri=' + rel['uri'];
+    let targetNode = "";
+    let targetNodeUrl = "";
+    if(rel['source'] === classNode['iri']){
+      targetNodeUrl = rel['target'];
+    }
+    else{
+      targetNodeUrl = rel['source'];
+    }
+    for(let n in nodes){
+      if(n['iri'] === targetNodeUrl){
+        targetNode = n['label'];
+        break;
+      }
+    }
+    result.push({
+      "relation": targetRel,
+      "relationUrl": targetRelUrl,
+      "target": targetNode,
+      "targetUrl": targetNodeUrl
+    });
+
+  }
+
+  return result;
+
 }
 
 
