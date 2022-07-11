@@ -1,4 +1,4 @@
-
+import _ from "lodash";
 
 /**
  * Create the metadata for a class detail table
@@ -99,18 +99,31 @@ function createRelations(object){
   if(object['relations'].length === 0){
     return "";
   }
+  object['relations'] = _.groupBy(object['relations'], res => res.relation);
+  console.info(object['relations']);
   let relsToRender = [];
-  for(let rel of object['relations']){
-    relsToRender.push(
-      <div className="node-relation-entry">
-        <a className='node-relation-link' href={"/ontologies/" + object['ontology'] + "/properties?iri=" + rel['relationUrl']} target="_blank">
-          {rel['relation']}
-        </a>
-        <a className='node-relation-link' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + rel['targetUrl']} target="_blank">
-          {rel['target']}
-        </a>
-      </div>
-    );
+  for(let rel of Object.keys(object['relations'])){
+    if(typeof(rel) !== "undefined"){
+      relsToRender.push(
+        <ul>
+          <li>{rel}</li>
+        </ul>
+  
+  
+        // <div className="node-relation-entry">
+        //   <span className='node-relation-span-tag'>
+        //     <a className='node-relation-link' href={"/ontologies/" + object['ontology'] + "/properties?iri=" + rel['relationUrl']} target="_blank">
+        //       {rel['relation']}
+        //     </a>
+        //   </span>
+        //   <span className='node-relation-span-tag'>
+        //     <a className='node-relation-link' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + rel['targetUrl']} target="_blank">
+        //       {rel['target']}
+        //     </a>
+        //   </span>        
+        // </div>
+      );
+    }
   }
   return relsToRender;
 }
