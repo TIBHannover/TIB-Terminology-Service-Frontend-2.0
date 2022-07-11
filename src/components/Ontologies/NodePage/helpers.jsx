@@ -99,25 +99,28 @@ function createRelations(object){
   if(object['relations'].length === 0){
     return "";
   }
-  object['relations'] = _.groupBy(object['relations'], res => res.relation);
-  console.info(object);
+  object['relations'] = _.groupBy(object['relations'], res => res.relation);  
   let relsToRender = [];
   for(let rel of Object.keys(object['relations'])){
     if(typeof(rel) !== "undefined" && rel !== "undefined"){
       relsToRender.push(
         <ul>
           <li>
-          <a className='node-relation-link' 
-            href={"/ontologies/" + object['ontology_name'] + "/props?iri=" + object['relations'][rel][0]['relationUrl']} 
-            target="_blank">
-              {rel}
-          </a>            
+            <div title="property">
+              <a className='node-relation-link' 
+                href={"/ontologies/" + object['ontology_name'] + "/props?iri=" + object['relations'][rel][0]['relationUrl']} 
+                target="_blank">
+                {rel}
+              </a>                  
+            </div>        
             <ul>
               {object['relations'][rel].map(function(value){
                 return <li>
-                  <a className='node-relation-link' href={"/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
-                      {value["target"]}
-                  </a>
+                  <div title="term">
+                    <a className='node-relation-link' href={"/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
+                          {value["target"]}                      
+                      </a>
+                  </div>                   
                 </li>
               })}
             </ul>
