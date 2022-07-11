@@ -56,7 +56,7 @@ class NodePage extends React.Component {
               <Typography className="node-metadata-label">{metadataLabel}</Typography>
             </Grid>
             <Grid item xs={this.state.value_xs} className="node-metadata-value">
-              {formatText(metadataValue, copyButton)}
+              {formatText(metadataLabel, metadataValue, copyButton)}
               {copyButton &&
                 <Button 
                   variant="contained" 

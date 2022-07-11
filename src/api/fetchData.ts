@@ -170,6 +170,9 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
     let rels = await getClassRelations(node, ontology);
     node['relations'] = rels;
   }
+  else{
+    node['relations'] = [];
+  }
   node['parents'] = parents;
   return node;
 }
