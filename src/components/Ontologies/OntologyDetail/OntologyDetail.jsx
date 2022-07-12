@@ -34,7 +34,6 @@ class OntologyDetail extends React.Component {
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
-      title: " ",
       targetPropertyIri: " "
     })
     this.tabChange = this.tabChange.bind(this);

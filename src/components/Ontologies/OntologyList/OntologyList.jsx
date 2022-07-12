@@ -364,8 +364,6 @@ async runFacet(selectedCollections, enteredKeyword){
   }
 
 
-
-
   render () {
     const { error, isLoaded } = this.state
     if (error) {

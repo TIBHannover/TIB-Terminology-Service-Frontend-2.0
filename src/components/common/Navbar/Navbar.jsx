@@ -8,7 +8,7 @@ function Navbar () {
   return (
     <section className="navbar">
       <Link to="/" className="navbar-item">Home</Link>
-      <Link to="/ontologies" className="navbar-item">Ontologies</Link>
+      <a href="/ontologies" className="navbar-item">Ontologies</a>
       <Link to="/analytics" className="navbar-item">Analytics</Link>
       <Link to="/help" className="navbar-item">Help</Link>
       <Link to="/documentation" className="navbar-item">Documentation</Link>
