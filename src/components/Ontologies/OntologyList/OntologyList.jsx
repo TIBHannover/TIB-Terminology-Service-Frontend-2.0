@@ -38,6 +38,7 @@ class OntologyList extends React.Component {
     this.filterWordChange = this.filterWordChange.bind(this);
     this.processUrlProps = this.processUrlProps.bind(this);
     this.updateUrl= this.updateUrl.bind(this);
+    this.handleSwitchange = this.handleSwitchange.bind(this);
   }
 
 
@@ -207,6 +208,14 @@ class OntologyList extends React.Component {
   }
 
 
+  /**
+   * Handle the switch change between inersection and union
+   */
+  handleSwitchange(e){
+    console.info(e.target.value);
+  }
+
+
 /**
  * Update the url based on facet values
  */
@@ -361,7 +370,7 @@ async runFacet(selectedCollections, enteredKeyword){
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString)}
+            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container>
                 <Grid item xs={6}>

@@ -39,7 +39,7 @@ export function BuildCollectionForCard(collections){
  * @param {*} filterCollection 
  * @returns 
  */
-export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredKeyword){
+export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredKeyword, onSwitchChange){
     return (
         <Grid item xs={4} id="ontology-list-facet-grid">
             <h3 className='h-headers'>Filter</h3>            
@@ -61,7 +61,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     <div className='facet-switch-holder'>
                         Intersection
                         <Switch                    
-                            // onChange={handleChange}
+                            onChange={onSwitchChange}
                             id="facet-switch"
                             defaultChecked={true}
                             inputProps={{ 'aria-label': 'controlled' }}
