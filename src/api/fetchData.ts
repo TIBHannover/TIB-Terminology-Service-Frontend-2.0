@@ -33,11 +33,11 @@ const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatistics
  * Get the ontology list for collection(s)
  * @returns A list of ontologies
  */
- export async function getCollectionOntologies (collections){
+ export async function getCollectionOntologies (collections, exclusive){
   let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
   answer = await answer.json();
   let ontologiesCount = answer['page']['totalElements'];
-  let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&";
+  let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&exclusive=" + exclusive + "&";
   let urlPros = "";
   for(let col of collections){
     urlPros += ("classification=" + encodeURIComponent(col) + "&");

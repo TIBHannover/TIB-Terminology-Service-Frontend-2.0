@@ -27,7 +27,8 @@ class OntologyList extends React.Component {
       sortField: 'numberOfTerms',
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
-      keywordFilterString: ""
+      keywordFilterString: "",
+      exclusiveCollections: false
     })
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
@@ -37,6 +38,7 @@ class OntologyList extends React.Component {
     this.filterWordChange = this.filterWordChange.bind(this);
     this.processUrlProps = this.processUrlProps.bind(this);
     this.updateUrl= this.updateUrl.bind(this);
+    this.handleSwitchange = this.handleSwitchange.bind(this);
   }
 
 
@@ -206,6 +208,19 @@ class OntologyList extends React.Component {
   }
 
 
+  /**
+   * Handle the switch change between inersection and union
+   */
+  handleSwitchange(e){
+    this.setState({
+      exclusiveCollections: !e.target.checked
+    }, ()=>{
+      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);
+      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+    });
+  }
+
+
 /**
  * Update the url based on facet values
  */
@@ -224,6 +239,7 @@ class OntologyList extends React.Component {
     if(selectedCollections.length !== 0){
       for(let col of selectedCollections){
         currentUrlParams.append('collection', col);
+        currentUrlParams.append('and', this.state.exclusiveCollections);
       }
     }
 
@@ -270,7 +286,7 @@ async runFacet(selectedCollections, enteredKeyword){
 
   if(selectedCollections.length !== 0){
     // run collection filter
-    let collectionOntologies = await getCollectionOntologies(selectedCollections);
+    let collectionOntologies = await getCollectionOntologies(selectedCollections, this.state.exclusiveCollections);
     let collectionFilteredOntologies = [];
     for (let onto of collectionOntologies){
       if(typeof(ontologies.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
@@ -348,8 +364,6 @@ async runFacet(selectedCollections, enteredKeyword){
   }
 
 
-
-
   render () {
     const { error, isLoaded } = this.state
     if (error) {
@@ -360,7 +374,7 @@ async runFacet(selectedCollections, enteredKeyword){
       return (
         <div id="ontologyList-wrapper-div">
           <Grid container spacing={3}>
-            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString)}
+            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container>
                 <Grid item xs={6}>
