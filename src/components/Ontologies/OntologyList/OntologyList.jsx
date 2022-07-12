@@ -27,7 +27,8 @@ class OntologyList extends React.Component {
       sortField: 'numberOfTerms',
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
-      keywordFilterString: ""
+      keywordFilterString: "",
+      unionCollections: false
     })
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
@@ -270,7 +271,7 @@ async runFacet(selectedCollections, enteredKeyword){
 
   if(selectedCollections.length !== 0){
     // run collection filter
-    let collectionOntologies = await getCollectionOntologies(selectedCollections);
+    let collectionOntologies = await getCollectionOntologies(selectedCollections, this.state.unionCollections);
     let collectionFilteredOntologies = [];
     for (let onto of collectionOntologies){
       if(typeof(ontologies.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
