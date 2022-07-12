@@ -28,7 +28,7 @@ class OntologyList extends React.Component {
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
       keywordFilterString: "",
-      unionCollections: false
+      exclusiveCollections: false
     })
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
@@ -213,9 +213,10 @@ class OntologyList extends React.Component {
    */
   handleSwitchange(e){
     this.setState({
-      unionCollections: !e.target.checked
+      exclusiveCollections: !e.target.checked
     }, ()=>{
       this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);
+      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
     });
   }
 
@@ -238,6 +239,7 @@ class OntologyList extends React.Component {
     if(selectedCollections.length !== 0){
       for(let col of selectedCollections){
         currentUrlParams.append('collection', col);
+        currentUrlParams.append('and', this.state.exclusiveCollections);
       }
     }
 
@@ -255,7 +257,6 @@ class OntologyList extends React.Component {
  * 
  */
 async runFacet(selectedCollections, enteredKeyword){
-  console.info(this.state.unionCollections);
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
@@ -285,7 +286,7 @@ async runFacet(selectedCollections, enteredKeyword){
 
   if(selectedCollections.length !== 0){
     // run collection filter
-    let collectionOntologies = await getCollectionOntologies(selectedCollections, this.state.unionCollections);
+    let collectionOntologies = await getCollectionOntologies(selectedCollections, this.state.exclusiveCollections);
     let collectionFilteredOntologies = [];
     for (let onto of collectionOntologies){
       if(typeof(ontologies.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
