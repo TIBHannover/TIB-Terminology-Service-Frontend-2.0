@@ -59,12 +59,14 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             <h5 className='h-headers'>Collection</h5>
                 <Grid item xs={12} >
                     <div className='facet-switch-holder'>
+                        Intersection
                         <Switch                    
                             // onChange={handleChange}
                             id="facet-switch"
                             defaultChecked={true}
                             inputProps={{ 'aria-label': 'controlled' }}
-                        />   
+                        />
+                        Union
                     </div>
                     <div>
                         {allCollectionsCheckboxes}   

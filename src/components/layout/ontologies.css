@@ -204,6 +204,10 @@ The ontology list page styles.
 }
 
 .facet-switch-holder{
+    /* 
+        The style for the facet switch button holder container (first row of the facet box)
+    */
+
     text-align: center;
     margin-bottom: 25px;
     margin-top: 10px;
