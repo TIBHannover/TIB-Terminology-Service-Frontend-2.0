@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Switch from '@mui/material/Switch';
 import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
@@ -57,7 +58,17 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             <Grid container className='ontology-list-facet-section-box'>
             <h5 className='h-headers'>Collection</h5>
                 <Grid item xs={12} >
-                    {allCollectionsCheckboxes}                    
+                    <div className='facet-switch-holder'>
+                        <Switch                    
+                            // onChange={handleChange}
+                            id="facet-switch"
+                            defaultChecked={true}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                        />   
+                    </div>
+                    <div>
+                        {allCollectionsCheckboxes}   
+                    </div>               
                 </Grid>
             </Grid>
             <Grid container className='ontology-list-facet-section-box'>
