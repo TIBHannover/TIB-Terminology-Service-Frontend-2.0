@@ -212,7 +212,11 @@ class OntologyList extends React.Component {
    * Handle the switch change between inersection and union
    */
   handleSwitchange(e){
-    console.info(e.target.value);
+    this.setState({
+      unionCollections: !e.target.checked
+    }, ()=>{
+      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);
+    });
   }
 
 
@@ -251,6 +255,7 @@ class OntologyList extends React.Component {
  * 
  */
 async runFacet(selectedCollections, enteredKeyword){
+  console.info(this.state.unionCollections);
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
