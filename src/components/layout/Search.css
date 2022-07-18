@@ -141,11 +141,11 @@ The Facet fields in Search results styles
        The style for facet container box
     */
     
-    
     margin-top: 40px;
     padding: 20px;
     color: #6C757D !important;
 }
+
 #facet-ontologies-list{
     /* 
        The style for ontologies list in facet box
@@ -166,7 +166,7 @@ The Facet fields in Search results styles
 
 .facet-item-row:hover{
     /* 
-       The style for colour changes for mouse hover in ontology facet box
+       The style for colour changes for mouse hover one the facet items
     */
     background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;
