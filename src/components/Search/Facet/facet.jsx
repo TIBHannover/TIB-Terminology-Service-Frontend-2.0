@@ -74,7 +74,7 @@ class Facet extends React.Component{
         let result = [];
         for(let type in allTypes){
             result.push(
-                <div class="row typeRow"  key={type}>
+                <div class="row typeRow facet-item-row"  key={type}>
                     <div class="col-sm-9">
                         <FormGroup>
                             <FormControlLabel 
@@ -104,7 +104,7 @@ class Facet extends React.Component{
         for(let ontologyId in ontologyFacetData){
             result.push(
                 <div key={ontologyId}>
-                    <div class="row ontoloyRow">
+                    <div class="row ontoloyRow facet-item-row">
                         <div class="col-sm-9">
                             <FormGroup>
                                 <FormControlLabel 

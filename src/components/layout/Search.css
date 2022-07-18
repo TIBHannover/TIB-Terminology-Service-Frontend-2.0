@@ -164,17 +164,9 @@ The Facet fields in Search results styles
     margin-bottom: 20px;
 }
 
-.ontoloyRow:hover{
+.facet-item-row:hover{
     /* 
        The style for colour changes for mouse hover in ontology facet box
-    */
-    background-color: rgba(119, 122, 121, 0.192);
-    border-radius: 15px;
-}
-
-.typeRow:hover{
-    /* 
-       The style for colour changes for mouse hover in type facet box
     */
     background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;
