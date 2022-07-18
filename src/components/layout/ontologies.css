@@ -213,6 +213,15 @@ The ontology list page styles.
     margin-top: 10px;
 }
 
+.facet-item-row:hover{
+    /* 
+       The style for colour changes for mouse hover one the facet items
+    */
+    background-color: rgba(119, 122, 121, 0.192);
+    border-radius: 15px;
+}
+
+
 /* 
 -------------------------------------
 The ontology detail page styles. It contains the ontology overview page.

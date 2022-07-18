@@ -74,7 +74,7 @@ class Facet extends React.Component{
         let result = [];
         for(let type in allTypes){
             result.push(
-                <div class="row typeRow"  key={type}>
+                <div class="row typeRow facet-item-row"  key={type}>
                     <div class="col-sm-9">
                         <FormGroup>
                             <FormControlLabel 
@@ -104,7 +104,7 @@ class Facet extends React.Component{
         for(let ontologyId in ontologyFacetData){
             result.push(
                 <div key={ontologyId}>
-                    <div class="row ontoloyRow">
+                    <div class="row ontoloyRow facet-item-row">
                         <div class="col-sm-9">
                             <FormGroup>
                                 <FormControlLabel 
@@ -118,8 +118,7 @@ class Facet extends React.Component{
                         <div class="col-sm-3">
                             <div class="result-count">{ontologyFacetData[ontologyId]}</div>
                         </div>                    
-                    </div>
-                    <hr/>
+                    </div>                    
                 </div>
                 
             );
@@ -191,13 +190,13 @@ class Facet extends React.Component{
         return(
             <div class="row" id="search-facet-container-box">
                 <div class="col-sm-12">
-                    <h6>{"Result types:"}</h6>
+                    <h3>{"Result types"}</h3>
                      <div class="row" id="facet-types-list">                            
                         <div class="col-sm-12">
                             {this.createTypesCheckboxList()}
                         </div>
                     </div>
-                    <h6>{"Ontologies:"}</h6>
+                    <h3>{"Ontologies"}</h3>
                     <div class="row" id="facet-ontologies-list">                            
                         <div class="col-sm-12">
                             {this.createOntologiesCheckboxList()}

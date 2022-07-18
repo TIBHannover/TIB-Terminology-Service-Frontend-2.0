@@ -140,14 +140,12 @@ The Facet fields in Search results styles
     /* 
        The style for facet container box
     */
-    background-color: rgb(226, 245, 244);
-    height: 800px;
-    overflow-y: scroll;
-    margin-left: 10px;
+    
     margin-top: 40px;
-    border-radius: 15px;
     padding: 20px;
+    color: #6C757D !important;
 }
+
 #facet-ontologies-list{
     /* 
        The style for ontologies list in facet box
@@ -166,19 +164,11 @@ The Facet fields in Search results styles
     margin-bottom: 20px;
 }
 
-.ontoloyRow:hover{
+.facet-item-row:hover{
     /* 
-       The style for colour changes for mouse hover in ontology facet box
+       The style for colour changes for mouse hover one the facet items
     */
-    background-color: rgb(75, 238, 170);
-    border-radius: 15px;
-}
-
-.typeRow:hover{
-    /* 
-       The style for colour changes for mouse hover in type facet box
-    */
-    background-color: rgb(75, 238, 170);
+    background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;
 }
 
@@ -187,10 +177,13 @@ The Facet fields in Search results styles
        The style for counter in facet fields
     */
     border-radius: 50px;
-    background-color: blue;
+    background-color: #2B3C46;
     color: white;
-    padding: auto;
+    padding: 5px;
     margin-top: 10px;
     text-align: center;
-    width: auto;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
 }

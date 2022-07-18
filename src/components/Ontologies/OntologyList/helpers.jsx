@@ -56,7 +56,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                 </Grid>
             </Grid>
             <Grid container className='ontology-list-facet-section-box'>
-            <h5 className='h-headers'>Collection</h5>
+            <h3 className='h-headers'>Collection</h3>
                 <Grid item xs={12} >
                     <div className='facet-switch-holder'>
                         Intersection
@@ -135,7 +135,7 @@ export async function createCollectionsCheckBoxes(filterCollection, selectedColl
     let result = [];
     for (let record of allCollections){
         result.push(
-        <div className="row">
+        <div className="row facet-item-row">
             <div className='col-sm-9'>
             <FormGroup>
                 {selectedCollections.includes(record['collection'])
