@@ -168,7 +168,7 @@ The Facet fields in Search results styles
     /* 
        The style for colour changes for mouse hover in ontology facet box
     */
-    background-color: rgb(75, 238, 170);
+    background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;
 }
 
@@ -176,7 +176,7 @@ The Facet fields in Search results styles
     /* 
        The style for colour changes for mouse hover in type facet box
     */
-    background-color: rgb(75, 238, 170);
+    background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;
 }
 
