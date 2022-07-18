@@ -56,7 +56,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                 </Grid>
             </Grid>
             <Grid container className='ontology-list-facet-section-box'>
-            <h5 className='h-headers'>Collection</h5>
+            <h3 className='h-headers'>Collection</h3>
                 <Grid item xs={12} >
                     <div className='facet-switch-holder'>
                         Intersection
