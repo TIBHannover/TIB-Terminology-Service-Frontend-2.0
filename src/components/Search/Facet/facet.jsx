@@ -118,8 +118,7 @@ class Facet extends React.Component{
                         <div class="col-sm-3">
                             <div class="result-count">{ontologyFacetData[ontologyId]}</div>
                         </div>                    
-                    </div>
-                    <hr/>
+                    </div>                    
                 </div>
                 
             );
