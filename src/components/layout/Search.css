@@ -185,10 +185,13 @@ The Facet fields in Search results styles
        The style for counter in facet fields
     */
     border-radius: 50px;
-    background-color: blue;
+    background-color: #2B3C46;
     color: white;
-    padding: auto;
+    padding: 5px;
     margin-top: 10px;
     text-align: center;
-    width: auto;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
 }
