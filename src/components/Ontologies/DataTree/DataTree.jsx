@@ -398,6 +398,7 @@ render(){
   return(
     <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} > 
         <Grid item xs={6} className="tree-container">
+        {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {!this.state.isLoadingTheComponent && 
           <Grid container>
             <Grid item xs={10}>
