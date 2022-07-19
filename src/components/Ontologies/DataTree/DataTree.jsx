@@ -33,7 +33,8 @@ class DataTree extends React.Component {
       reduceTreeBtnShow: false,
       reduceBtnActive: false,
       viewMode: true,
-      reload: false
+      reload: false,
+      isLoadingTheComponent: true
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -395,8 +396,9 @@ componentDidUpdate(){
 
 render(){
   return(
-    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} >
+    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} > 
         <Grid item xs={6} className="tree-container">
+        {!this.state.isLoadingTheComponent && 
           <Grid container>
             <Grid item xs={10}>
               {this.state.treeDomContent}
@@ -435,7 +437,7 @@ render(){
                 </Button>
               } 
             </Grid>
-          </Grid>
+          </Grid>}
         </Grid>
         {this.state.termTree && this.state.showNodeDetailPage && 
           <Grid item xs={6} className="node-table-container">
