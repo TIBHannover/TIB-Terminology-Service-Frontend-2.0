@@ -142,7 +142,8 @@ class DataTree extends React.Component {
             selectedNodeIri: target,
             showNodeDetailPage: true,
             reduceTreeBtnShow: true,
-            reload: false
+            reload: false,
+            isLoadingTheComponent: false
           }); 
 
           return true;
@@ -196,7 +197,8 @@ class DataTree extends React.Component {
             selectedNodeIri: target,
             showNodeDetailPage: true,
             reduceTreeBtnShow: true,
-            reload: false
+            reload: false,
+            isLoadingTheComponent: false
         });    
       }
   }
@@ -232,7 +234,8 @@ class DataTree extends React.Component {
     treeDomContent: treeList,
     targetNodeIri: false,
     searchWaiting: false,
-    reload: false
+    reload: false,
+    isLoadingTheComponent: false
   });
 }
 
