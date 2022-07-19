@@ -9,7 +9,6 @@ function Navbar () {
     <section className="navbar">
       <Link to="/" className="navbar-item">Home</Link>
       <a href="/ontologies" className="navbar-item">Ontologies</a>
-      <Link to="/analytics" className="navbar-item">Analytics</Link>
       <Link to="/help" className="navbar-item">Help</Link>
       <Link to="/documentation" className="navbar-item">Documentation</Link>
       <Link to="/about" className="navbar-item">About</Link>
