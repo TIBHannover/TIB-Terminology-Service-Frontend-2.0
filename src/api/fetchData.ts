@@ -173,7 +173,7 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   else{
     node['relations'] = [];
   }
-  node['parents'] = parents;
+  node['parents'] = parents;  
   return node;
 }
 

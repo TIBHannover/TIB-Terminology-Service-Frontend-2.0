@@ -50,17 +50,18 @@ class NodePage extends React.Component {
    */
   createRow(metadataLabel, metadataValue, copyButton){
     let row = [
-      <Grid item xs={12} spacing={4} className="node-detail-table-row">
+      <Grid item xs={12}  className="node-detail-table-row" key={metadataLabel}>
           <Grid container>
-            <Grid item xs={this.state.label_xs}>
+            <Grid item xs={this.state.label_xs} key={metadataLabel + "-label"}>
               <Typography className="node-metadata-label">{metadataLabel}</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value">
+            <Grid item xs={this.state.value_xs} className="node-metadata-value" key={metadataLabel + "-value"}>
               {formatText(metadataLabel, metadataValue, copyButton)}
               {copyButton &&
                 <Button 
                   variant="contained" 
-                  className='copy-link-btn'                                
+                  className='copy-link-btn'
+                  key={"copy-btn"}                             
                   onClick={() => {                  
                     navigator.clipboard.writeText(metadataValue);
                     this.setState({
@@ -71,7 +72,8 @@ class NodePage extends React.Component {
               }
               {copyButton && this.state.iriIsCopied && 
                     <CheckIcon 
-                      fontSize="large"                    
+                      fontSize="large"
+                      key={"copy-check-sign"}           
                     />
               }    
             </Grid>
@@ -122,7 +124,7 @@ class NodePage extends React.Component {
     return (
       <Grid container spacing={2}>
         {this.createTable()}
-        <Grid item xs={12} className="node-detail-table-row">
+        <Grid item xs={12} className="node-detail-table-row" key={"json-button-row"}>
           <Grid container>
             <a href={this.state.baseUrl + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
               target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>

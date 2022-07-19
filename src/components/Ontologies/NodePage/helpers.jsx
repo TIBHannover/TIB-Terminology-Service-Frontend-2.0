@@ -99,23 +99,23 @@ function createRelations(object){
   if(object['relations'].length === 0){
     return "";
   }
-  object['relations'] = _.groupBy(object['relations'], res => res.relation);  
+  let groupedRelations = _.groupBy(object['relations'], res => res.relation);  
   let relsToRender = [];
-  for(let rel of Object.keys(object['relations'])){
+  for(let rel of Object.keys(groupedRelations)){
     if(typeof(rel) !== "undefined" && rel !== "undefined"){
       relsToRender.push(
         <ul>
-          <li>
+          <li key={groupedRelations[rel][0]['relation']}>
             <div title="property">
               <a className='node-relation-link' 
-                href={"/ontologies/" + object['ontology_name'] + "/props?iri=" + object['relations'][rel][0]['relationUrl']} 
+                href={"/ontologies/" + object['ontology_name'] + "/props?iri=" + groupedRelations[rel][0]['relationUrl']} 
                 target="_blank">
                 {rel}
               </a>                  
             </div>        
             <ul>
-              {object['relations'][rel].map(function(value){
-                return <li>
+              {groupedRelations[rel].map(function(value){
+                return <li key={value['target']}>
                   <div title="term">
                     <a className='node-relation-link' href={"/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
                           {value["target"]}                      
