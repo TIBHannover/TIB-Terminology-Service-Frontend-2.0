@@ -39,15 +39,28 @@ The Header styles
    max-height: 700px;
 }
 
+.site-header{
+   text-align: center;
+   margin: auto;
+}
+
 .site-header-nav-logo-holder{
-   width: 60%;
+   padding-left: 10%;
+   padding-right: 10%;
+   margin-bottom: 30px;
+}
+
+.site-header-searchbox-holder{
+   padding-left: 10%;
+   padding-right: 10%;
+   margin-bottom: 40px;
 }
 
 
-
 .site-header-top-row{
-   float: right;
+   text-align: right;
    color: white;
+   margin-bottom: 20px;
 }
 
 .site-header-top-row > a{
@@ -90,7 +103,6 @@ The Header styles
        The style for the project title
     */
    color: #ffffff;
-   /* font-size: 25px */
 }
   
 .header-logo {
@@ -167,10 +179,10 @@ The Navbar styles
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 30px;
+    margin-left: 50px;
     color: inherit;
     text-decoration: inherit;
     text-transform: uppercase;
     outline: none;
-    font-size: 20px;
+    color: white;
   }

@@ -6,7 +6,7 @@ import '../../layout/Common.css'
 function Navbar () {
 
   return (
-    <div className='col-sm-9 navbar'>
+    <div className='col-sm-8 navbar'>
       <Link to="/" className="navbar-item">Home</Link>
       <a href="/ontologies" className="navbar-item">Ontologies</a>
       <Link to="/help" className="navbar-item">Help</Link>

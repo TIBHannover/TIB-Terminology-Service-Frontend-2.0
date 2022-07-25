@@ -8,12 +8,12 @@ function Header () {
 
   return (
     <div className='header-warpper'>
-      <div className='container-fluid site-header'>
+      <div className='container site-header'>
         <div className='row site-header-top-row'>
           <a href="#">Login</a>
         </div>
         <div className='row site-header-nav-logo-holder'>
-          <div className='col-sm-3'>
+          <div className='col-sm-4'>
             <img src= {TIB_Logo} alt="tib logo" height={40} width={80} />
             <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
           </div>
