@@ -19,13 +19,6 @@ body{
    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.header{
-   background-color: #0E6668;
-   color: white;
-   margin-top: 0 !important;
-   margin-bottom: 30px !important;
-}
-
 .fxOSmo{
    background-color: #2B3C46 !important;
    color: white !important;
@@ -36,6 +29,31 @@ body{
 The Header styles 
 -------------------------------------
 */
+
+.header-warpper{
+   background-repeat: no-repeat;
+   background-image: url('../../assets/img/background.png');
+   background-position: right center;
+   background-color: #0E6668;
+   padding: 10px;
+   max-height: 700px;
+}
+
+.site-header-nav-logo-holder{
+   width: 60%;
+}
+
+
+
+.site-header-top-row{
+   float: right;
+   color: white;
+}
+
+.site-header-top-row > a{
+   text-decoration: none;
+   color: white;
+}
 
 .header {
     /* 
@@ -72,7 +90,7 @@ The Header styles
        The style for the project title
     */
    color: #ffffff;
-   font-size: 25px
+   /* font-size: 25px */
 }
   
 .header-logo {

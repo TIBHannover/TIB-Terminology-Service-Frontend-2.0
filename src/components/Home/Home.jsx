@@ -36,7 +36,7 @@ class Home extends React.Component{
         <Container maxWidth="lg">
            <h4 className="font-weight-bold" style={{margin: 20}}>Welcome to TIB Terminology Service</h4>
            <Grid item xs = {8}>
-             <SearchForm />
+             {/* <SearchForm /> */}
            </Grid>
            <Grid item xs = {8}>
            <h4 className="font-weight-bold" style={{margin: 20}}>About TIB TS</h4>
