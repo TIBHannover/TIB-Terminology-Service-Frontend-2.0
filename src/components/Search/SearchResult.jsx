@@ -268,7 +268,6 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         <div>
-        <SearchForm/>
         <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
