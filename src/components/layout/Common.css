@@ -100,9 +100,20 @@ The Header styles
 
 .main-title {
    /* 
-       The style for the project title
+       The style for the site title
     */
    color: #ffffff;
+   text-decoration: none;
+   margin-left: 10px;
+   font-size: 18px;
+}
+
+.main-title:hover {
+   /* 
+       The style for the site title hover
+    */
+   color: #ffffff;
+   text-decoration: none;
 }
   
 .header-logo {

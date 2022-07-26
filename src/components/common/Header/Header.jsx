@@ -14,7 +14,7 @@ function Header () {
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-sm-4'>
-              <img src= {TIB_Logo} alt="tib logo" height={40} width={80} />
+              <img src= {TIB_Logo} alt="tib logo" height={60} width={80} />
               <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
             </div>
             <Navbar />
