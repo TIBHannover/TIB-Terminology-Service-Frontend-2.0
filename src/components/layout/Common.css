@@ -31,6 +31,10 @@ The Header styles
 */
 
 .header-warpper{
+   /* 
+      The main box for the site header
+   */
+
    background-repeat: no-repeat;
    background-image: url('../../assets/img/background.png');
    background-position: right center;
@@ -39,18 +43,30 @@ The Header styles
    max-height: 700px;
 }
 
-.site-header{
+.container.site-header{
+   /* 
+      The style for site header bootstarp container class
+   */
+
    text-align: center;
    margin: auto;
 }
 
 .site-header-nav-logo-holder{
+   /* 
+      The warapper box for the site main navbar
+   */
+
    padding-left: 10%;
    padding-right: 10%;
    margin-bottom: 30px;
 }
 
 .site-header-searchbox-holder{
+   /* 
+      The warapper box for the site main search input
+   */
+
    padding-left: 10%;
    padding-right: 10%;
    margin-bottom: 40px;
@@ -58,12 +74,20 @@ The Header styles
 
 
 .site-header-top-row{
+   /* 
+      The warapper box for the site top row containing Login
+   */
+
    text-align: right;
    color: white;
    margin-bottom: 20px;
 }
 
 .site-header-top-row > a{
+   /* 
+      The warapper box for the site top row anchors containing Login
+   */
+
    text-decoration: none;
    color: white;
 }
