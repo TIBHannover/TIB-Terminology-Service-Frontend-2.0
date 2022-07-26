@@ -114,9 +114,7 @@ class SearchForm extends React.Component{
                     placeholder="Search for ontology, term, properties"                    
                     InputProps={{
                         endAdornment: (
-                          <IconButton>
-                            <SearchOutlined onClick={this.submitHandler}/>
-                          </IconButton>
+                          <button className='btn btn-default search-btn' onClick={this.submitHandler}>Search </button>                      
                         ),
                       }}
                     />
