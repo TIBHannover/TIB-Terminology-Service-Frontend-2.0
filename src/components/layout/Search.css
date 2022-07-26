@@ -123,7 +123,7 @@ The Search form styles
     color: white;
 }
 
-.PrivateNotchedOutline-root-1{
+.MuiInputBase-root.MuiOutlinedInput-root > fieldset{
     /* 
         Remove the border added by material Ui around the input field box.
     */
