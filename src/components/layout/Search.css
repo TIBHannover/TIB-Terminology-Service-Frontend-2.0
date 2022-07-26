@@ -66,6 +66,15 @@ The Search form styles
     vertical-align: top;
 }
 
+.MuiFormControl-root.MuiTextField-root.input{
+    /* 
+       The style for search form input in search results page
+    */
+    
+    background-color: white;
+    
+}
+
 /* 
 -------------------------------------
 The Search results styles 
@@ -83,13 +92,7 @@ The Search results styles
     overflow-x: hidden;
     overflow-y: hidden;
 }
-#result-input{
-    /* 
-       The style for search form input in search results page
-    */
-    
 
-}
 .search-result-card{
     /* 
        The style for search result cards of any searched term

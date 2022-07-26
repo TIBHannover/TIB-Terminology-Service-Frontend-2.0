@@ -108,10 +108,10 @@ class SearchForm extends React.Component{
       render(){
           return(
               <div>
-                   <TextField className="col-md-12 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
+                   <TextField className="col-md-12 input" id="search-input" variant="outlined" 
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
-                    placeholder="Search NFDI4Chem TS"
+                    placeholder="Search for ontology, term, properties"                    
                     InputProps={{
                         endAdornment: (
                           <IconButton>

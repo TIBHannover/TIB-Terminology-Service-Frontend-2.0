@@ -9,37 +9,20 @@ function Header () {
   return (
     <div className='header-warpper'>
       <div className='container site-header'>
-        <div className='row site-header-top-row'>
-          <a href="#">Login</a>
-        </div>
-        <div className='row site-header-nav-logo-holder'>
-          <div className='col-sm-4'>
-            <img src= {TIB_Logo} alt="tib logo" height={40} width={80} />
-            <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
+          <div className='row site-header-top-row'>
+            <a href="#">Login</a>
           </div>
-          <Navbar />
-        </div>
-        <div className='row site-header-searchbox-holder'>
-          <SearchForm />
-        </div>
-    </div>
-      
-      {/* <section className="header">
-        <section className="header-top">
-          <section className="header-top__logo">
-            <img src= {TIB_Logo} alt="tib logo" height={80} width={180} />
-            <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
-          </section>
-          <div className="position-absolute top-0 end-0">
-            Login
+          <div className='row site-header-nav-logo-holder'>
+            <div className='col-sm-4'>
+              <img src= {TIB_Logo} alt="tib logo" height={40} width={80} />
+              <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
+            </div>
+            <Navbar />
           </div>
-          <section className="header-top__navbar">
-            <section className="header-top__navigation">
-              <Navbar />
-            </section>
-          </section>
-        </section>
-      </section> */}
+          <div className='row site-header-searchbox-holder'>
+            <SearchForm />
+          </div>
+      </div>
     </div>
   )
 }
