@@ -21,6 +21,9 @@ The Search form styles
     z-index: 999;
     padding-left: 10x;
     padding-right: 10px;
+    background-color: white;
+    width: 865px;
+    margin-left: 85px;
 }
 .autocomplete-item{
     /* 
@@ -40,6 +43,9 @@ The Search form styles
     z-index: 999;
     padding-left: 10x;
     padding-right: 10px;
+    background-color: white;
+    width: 865px;
+    margin-left: 85px;
 }
 .jump-autocomplete-item{
     /* 
