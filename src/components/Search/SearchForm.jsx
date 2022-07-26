@@ -74,11 +74,12 @@ class SearchForm extends React.Component{
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <Link to={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
-                    <div className="autocomplete-item">
-                         {this.state.searchResult[i]['autosuggest']}
-                    </div>
-                </Link>)
+                <div className="autocomplete-item">
+                  <a href={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">                      
+                          {this.state.searchResult[i]['autosuggest']}
+                  </a>
+                </div>
+                )
           }
           return resultList
       }
@@ -87,13 +88,13 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <Link to={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">
+            <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">
               <div className="jump-autocomplete-item">
                 {this.state.jumpResult[i]['label']}
                 <Button style={{backgroundColor: "#873593", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>
                 <Button style={{backgroundColor: "#00617c", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
               </div>
-            </Link>
+            </a>
           )
         }
         return jumpResultList
@@ -108,21 +109,20 @@ class SearchForm extends React.Component{
       render(){
           return(
               <div>
-                   <TextField className="col-md-12 input" id="search-input" variant="outlined" style={{marginTop: 3.8}}
+                   <TextField className="col-md-12 input" id="s-field" variant="outlined" 
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
-                    placeholder="Search NFDI4Chem TS"
+                    placeholder="Search for ontology, term, properties"                    
                     InputProps={{
                         endAdornment: (
-                          <IconButton>
-                            <SearchOutlined onClick={this.submitHandler}/>
-                          </IconButton>
+                          <button className='btn btn-default search-btn' onClick={this.submitHandler}>Search </button>                      
                         ),
-                      }}
+                        autocomplete: 'new-password'                    
+                      }}                
                     />
                     
                     {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
                 {this.state.result &&
                 <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>

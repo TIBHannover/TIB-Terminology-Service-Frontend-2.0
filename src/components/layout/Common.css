@@ -19,13 +19,6 @@ body{
    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.header{
-   background-color: #0E6668;
-   color: white;
-   margin-top: 0 !important;
-   margin-bottom: 30px !important;
-}
-
 .fxOSmo{
    background-color: #2B3C46 !important;
    color: white !important;
@@ -36,6 +29,68 @@ body{
 The Header styles 
 -------------------------------------
 */
+
+.header-warpper{
+   /* 
+      The main box for the site header
+   */
+
+   background-repeat: no-repeat;
+   background-image: url('../../assets/img/background.png');
+   background-position: right center;
+   background-color: #0E6668;
+   padding: 10px;
+   max-height: 700px;
+}
+
+.container.site-header{
+   /* 
+      The style for site header bootstarp container class
+   */
+
+   text-align: center;
+   margin: auto;
+}
+
+.site-header-nav-logo-holder{
+   /* 
+      The warapper box for the site main navbar
+   */
+
+   padding-left: 10%;
+   padding-right: 10%;
+   margin-bottom: 30px;
+}
+
+.site-header-searchbox-holder{
+   /* 
+      The warapper box for the site main search input
+   */
+
+   padding-left: 10%;
+   padding-right: 10%;
+   margin-bottom: 40px;
+}
+
+
+.site-header-top-row{
+   /* 
+      The warapper box for the site top row containing Login
+   */
+
+   text-align: right;
+   color: white;
+   margin-bottom: 20px;
+}
+
+.site-header-top-row > a{
+   /* 
+      The warapper box for the site top row anchors containing Login
+   */
+
+   text-decoration: none;
+   color: white;
+}
 
 .header {
     /* 
@@ -69,10 +124,20 @@ The Header styles
 
 .main-title {
    /* 
-       The style for the project title
+       The style for the site title
     */
    color: #ffffff;
-   font-size: 25px
+   text-decoration: none;
+   margin-left: 10px;
+   font-size: 18px;
+}
+
+.main-title:hover {
+   /* 
+       The style for the site title hover
+    */
+   color: #ffffff;
+   text-decoration: none;
 }
   
 .header-logo {
@@ -149,10 +214,11 @@ The Navbar styles
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 30px;
+    margin-left: 50px;
     color: inherit;
     text-decoration: inherit;
     text-transform: uppercase;
     outline: none;
-    font-size: 20px;
+    color: white;
+    font-weight: bold;
   }
