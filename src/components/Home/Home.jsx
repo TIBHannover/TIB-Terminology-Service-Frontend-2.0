@@ -42,6 +42,40 @@ class Home extends React.Component{
                       chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API
                       to retrieve terminological information and use it in your technical services. Layout template for TIB General. 
                   </p>
+                  <p>
+                    Examples: <a href='/search?q=oxidation'>Oxidation</a>, <a href='/search?q=IAO_0020000'>IAO_0020000</a>
+                  </p>
+                  <p></p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-12">
+                <h3>Collections</h3>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-4">
+              <div class="bg-white d-flex flex-column h-100 collection-holder-box"> 
+                <a href="#" class="d-block">
+                  <img class="img-fluid w-100" alt="Blog" width="700" height="480" src="https://terminology.nfdi4ing.de/ts4ing/img/logo_nfdi4ing_rgb_quer_scaled.png"/>
+                </a>
+                <div class="p-3">
+                    <div class="font-weight-bold mb-2">NFDI4Ing</div>
+                    <a href="#" class="text-dark text-decoration-none">
+                      <h3 class="h5 mb-0">NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to 
+                        provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through
+                        this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the
+                        TIB Central Terminology Service .
+                      </h3>
+                    </a>
+                </div>       
+              </div> 
+              </div>
+              <div className="col-sm-4">
+                <h3>Collections</h3>
+              </div>
+              <div className="col-sm-4">
+                <h3>Collections</h3>
               </div>
             </div>
 

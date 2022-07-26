@@ -28,3 +28,12 @@
     margin-right: auto;
     color: #6c757d !important;
 }
+
+.collection-holder-box{
+    /* 
+        Style for the collection box on the home page.
+    */
+
+    padding: 20px;
+    text-overflow: ellipsis 
+}
