@@ -36,7 +36,7 @@ class Home extends React.Component{
             <div className="row">
               <div className="col-sm-12">
                   <h3>TIB Terminology Service</h3>
-                  <p>
+                  <p className="text-justify">
                       With its new Terminology Service, TIB – Leibniz Information Centre for Science and Technology
                       and University Library provides a single point of access to terminology from domains such as architecture,
                       chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API
