@@ -64,7 +64,7 @@ The Search form styles
     height:50px !important;    
 }
 
-#search-input{
+#s-field{
     /* 
         Style for the search input text field (<input> html tag inside the "MuiFormControl-root MuiTextField-root.input")
     */

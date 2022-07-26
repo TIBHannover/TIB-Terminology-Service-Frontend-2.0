@@ -108,7 +108,7 @@ class SearchForm extends React.Component{
       render(){
           return(
               <div>
-                   <TextField className="col-md-12 input" id="search-input" variant="outlined" 
+                   <TextField className="col-md-12 input" id="s-field" variant="outlined" 
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
                     placeholder="Search for ontology, term, properties"                    
@@ -116,7 +116,8 @@ class SearchForm extends React.Component{
                         endAdornment: (
                           <button className='btn btn-default search-btn' onClick={this.submitHandler}>Search </button>                      
                         ),
-                      }}
+                        autocomplete: 'new-password'                    
+                      }}                
                     />
                     
                     {this.state.result &&
