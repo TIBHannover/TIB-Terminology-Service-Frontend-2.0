@@ -1,5 +1,4 @@
 import React from "react";
-import SearchForm from "../Search/SearchForm";
 import { Grid, Container, Button } from '@material-ui/core'
 import "../layout/Home.css"
 import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png"
@@ -33,11 +32,28 @@ class Home extends React.Component{
     render(){
         return(
         <div id="mainpageSearchBox">
-        <Container maxWidth="lg">
+          <div className="container home-page-content-container">
+            <div className="row">
+              <div className="col-sm-12">
+                  <h3>TIB Terminology Service</h3>
+                  <p>
+                      With its new Terminology Service, TIB – Leibniz Information Centre for Science and Technology
+                      and University Library provides a single point of access to terminology from domains such as architecture,
+                      chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API
+                      to retrieve terminological information and use it in your technical services. Layout template for TIB General. 
+                  </p>
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+
+        {/* <Container maxWidth="lg">
            <h4 className="font-weight-bold" style={{margin: 20}}>Welcome to TIB Terminology Service</h4>
-           <Grid item xs = {8}>
-             {/* <SearchForm /> */}
-           </Grid>
+           
            <Grid item xs = {8}>
            <h4 className="font-weight-bold" style={{margin: 20}}>About TIB TS</h4>
            <p class="about">With its new Terminology Service, TIB &ndash; Leibniz Information Centre for Science and Technology and University Library provides a single point of access to terminology from domains such as architecture, chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API to retrieve terminological information and use it in your technical services. Layout template for TIB General.&nbsp;</p>
@@ -101,7 +117,7 @@ class Home extends React.Component{
                         </div>                         
                     </div>                     
                 </div>                 
-          </Container>
+          </Container> */}
           
           <Container maxWidth="lg" className="bg-infobox">
             <Grid item xs={8}>
