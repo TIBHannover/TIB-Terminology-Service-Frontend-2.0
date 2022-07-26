@@ -74,11 +74,12 @@ class SearchForm extends React.Component{
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <a href={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">
-                    <div className="autocomplete-item">
-                         {this.state.searchResult[i]['autosuggest']}
-                    </div>
-                </a>)
+                <div className="autocomplete-item">
+                  <a href={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">                      
+                          {this.state.searchResult[i]['autosuggest']}
+                  </a>
+                </div>
+                )
           }
           return resultList
       }
@@ -121,7 +122,7 @@ class SearchForm extends React.Component{
                     />
                     
                     {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+                <div id = "autocomplete-container" className="col-md-12" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
                 {this.state.result &&
                 <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>

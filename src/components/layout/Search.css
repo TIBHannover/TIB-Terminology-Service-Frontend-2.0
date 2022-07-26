@@ -24,13 +24,33 @@ The Search form styles
     background-color: white;
     width: 865px;
     margin-left: 85px;
+    text-align: left;
 }
 .autocomplete-item{
     /* 
        The style for the autocomplete items
     */
     margin-left: 10px;
+    text-align: justify;
 }
+
+.autocomplete-item > a{
+    /* 
+       The style for the autocomplete items anchors
+    */
+    text-decoration: none;
+    color: black;
+}
+
+.autocomplete-item > a:hover{
+    /* 
+       The style for the autocomplete items anchors hover
+    */
+    color: rgb(61, 137, 236);
+}
+
+
+
 #jumpresult-container{
     /* 
        The style for the jump autocomplete field
@@ -46,6 +66,8 @@ The Search form styles
     background-color: white;
     width: 865px;
     margin-left: 85px;
+    text-align: left;
+    padding-left: 10px;
 }
 .jump-autocomplete-item{
     /* 
