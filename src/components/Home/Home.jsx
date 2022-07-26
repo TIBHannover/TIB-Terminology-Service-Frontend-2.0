@@ -150,10 +150,10 @@ class Home extends React.Component{
             </div>
 
           </div>
-            
-          <Container maxWidth="lg" className="bg-infobox">
-            <Grid item xs={8}>
-               <div className="col-xl-10 mx-auto text-white">
+
+          <div className="container home-page-stats-container">
+            <Grid item xs={12} className="stats-box">
+               <div className="col-xl-10 mx-auto text-white text-center">
                  <h3 className="font-weight-bold">Terminology Service Statistics</h3>
                  <div className="row">
                    <div className="col-lg-3 col-sm-6 pb-3 pt-3">
@@ -207,7 +207,7 @@ class Home extends React.Component{
                  </div>
                </div>
             </Grid>
-          </Container>
+          </div>
         </div>
         );
     }

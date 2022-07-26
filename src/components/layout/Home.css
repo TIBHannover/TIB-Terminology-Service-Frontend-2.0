@@ -1,14 +1,8 @@
-.bg-infobox {
-    background-color: #005C5F !important;
-    align-items: center;
-}
 .font-weight-bold{
     justify-content: center;
     font-weight: bold;
 }
-.row{
-    justify-content: center;
-}
+
 .bg-main {
     background-color: #ecf0f0 !important;
 }
@@ -35,5 +29,30 @@
     */
 
     padding: 20px;
+}
+
+.home-page-stats-container{
+    /* 
+        The home page stats container
+    */
+
+    max-width: 1140px;
+    padding-top: 3rem !important;
+    padding-bottom: 1.5rem !important;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stats-box{
+    /* 
+        The style for the stats box
+    */
+
+    color: white;
+    background-color: #005C5F;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
