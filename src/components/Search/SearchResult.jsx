@@ -138,13 +138,6 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
-  // componentDidUpdate(){
-  //   // if(!this.state.isLoaded ){
-  //   //   this.searching()
-  //   // } 
-  //   // this.transportTerm()
-  // }
-
 
   /**
      * Create the search results list view

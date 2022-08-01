@@ -141,12 +141,12 @@ The Search results styles
     /* 
        The style for search terms
     */
-    margin-top: 30px;
-    padding-top: 5px;
-    margin-left: 50px;
-    margin-bottom: 10px;
+    margin: auto;
+    width: 75%;
     overflow-x: hidden;
     overflow-y: hidden;
+    color: #6C757D !important;
+    padding-top: 5px;
 }
 
 .search-result-card{
