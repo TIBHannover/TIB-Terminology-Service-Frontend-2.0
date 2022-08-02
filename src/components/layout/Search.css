@@ -181,12 +181,13 @@ The Search results styles
     */
     font-size: 13px
 }
-.search-title{
+
+.search-card-title > h4{
     /* 
-       The style for title of search result card
+       The style for header in the title of a search result card
     */
-    font-size: 25px;
-    text-align: justify;
+     
+    display: inline !important;
 }
 
 .ontology-btn-in-card{
@@ -197,6 +198,16 @@ The Search results styles
     background-color: #E86161 !important;
     color: white !important;
     margin-left: 10px !important;
+}
+
+.result-btn-in-card{
+    /* 
+        Style for the term/property button in each search result card.
+    */
+
+    background-color: #0E6668 !important;
+    color: white;
+    margin-left: 15px !important;
 }
 
 /* 
