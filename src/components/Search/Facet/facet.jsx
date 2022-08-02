@@ -189,14 +189,15 @@ class Facet extends React.Component{
     render(){
         return(
             <div class="row" id="search-facet-container-box">
+                <h2>Filter Results</h2>
                 <div class="col-sm-12">
-                    <h3>{"Result types"}</h3>
+                    <h4>{"Type"}</h4>
                      <div class="row" id="facet-types-list">                            
                         <div class="col-sm-12">
                             {this.createTypesCheckboxList()}
                         </div>
                     </div>
-                    <h3>{"Ontologies"}</h3>
+                    <h4>{"Ontologies"}</h4>
                     <div class="row" id="facet-ontologies-list">                            
                         <div class="col-sm-12">
                             {this.createOntologiesCheckboxList()}

@@ -24,9 +24,9 @@ class SearchResult extends React.Component{
           selectedTypes: [],
           facetFields: [],
           startIndex: 0,
-          endIndex: 9,  
+          endIndex: 4,  
           pageNumber: 1,
-          pageSize: 10,       
+          pageSize: 5,       
           isLoaded: false,
           isFiltered: false
         })
@@ -219,7 +219,7 @@ async suggestionHandler(selectedTerm){
    async paginationHandler () {
     let ontologies = this.state.ontologies
     let types = this.state.types
-    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
     if(ontologies > 0 && types > 0){
       ontologies.forEach(item => {
