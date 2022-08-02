@@ -261,11 +261,11 @@ async suggestionHandler(selectedTerm){
   render(){
     return(
       <div id="searchterm-wrapper">
-        <div>
+        {/* <div>
         <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-        </div>        
+        </div>         */}
         <Grid container spacing={2}>
           <Grid item xs={4}>{this.state.result && 
             <Facet
