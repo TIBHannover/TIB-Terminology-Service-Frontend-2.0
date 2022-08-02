@@ -197,6 +197,7 @@ The Search results styles
     background-color: #E86161 !important;
     color: white !important;
     margin-left: 10px !important;
+    padding: 2px !important;
 }
 
 .result-btn-in-card{
@@ -207,6 +208,7 @@ The Search results styles
     background-color: #0E6668 !important;
     color: white;
     margin-left: 15px !important;
+    padding: 2px !important;
 }
 
 /* 
