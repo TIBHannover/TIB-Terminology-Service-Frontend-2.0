@@ -6,12 +6,7 @@ import PaginationCustom from './Pagination/Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
-import {  TextField, IconButton } from '@material-ui/core';
-import { SearchOutlined } from '@material-ui/icons';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import SearchForm from './SearchForm';
+
 
 class SearchResult extends React.Component{
     constructor(props){
