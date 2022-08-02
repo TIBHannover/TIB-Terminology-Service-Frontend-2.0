@@ -166,9 +166,9 @@ async suggestionHandler(selectedTerm){
               </div>
               <div className="searchresult-ontology">
                 <span><b>Ontology: </b></span>
-                <Button className='ontology-btn-in-card'  variant="contained">
+                <a className='btn btn-default ontology-btn-in-card' href={'/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
                   {searchResultItem[i].ontology_prefix}
-                </Button>
+                </a>
               </div>
             </Grid>
           </Grid>   
