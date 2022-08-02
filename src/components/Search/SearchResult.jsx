@@ -6,12 +6,7 @@ import PaginationCustom from './Pagination/Pagination';
 import queryString from 'query-string';
 import Button from '@mui/material/Button';
 import Facet from './Facet/facet';
-import {  TextField, IconButton } from '@material-ui/core';
-import { SearchOutlined } from '@material-ui/icons';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import SearchForm from './SearchForm';
+
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -29,9 +24,9 @@ class SearchResult extends React.Component{
           selectedTypes: [],
           facetFields: [],
           startIndex: 0,
-          endIndex: 9,  
+          endIndex: 4,  
           pageNumber: 1,
-          pageSize: 10,       
+          pageSize: 5,       
           isLoaded: false,
           isFiltered: false
         })
@@ -138,13 +133,6 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
-  // componentDidUpdate(){
-  //   // if(!this.state.isLoaded ){
-  //   //   this.searching()
-  //   // } 
-  //   // this.transportTerm()
-  // }
-
 
   /**
      * Create the search results list view
@@ -158,9 +146,12 @@ async suggestionHandler(selectedTerm){
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
-            <Grid item xs={8}>
-              <div className="search-card-title">
-                <h4><b><Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
+            <Grid item xs={12}>
+              <div className="search-card-title">                
+                  <h4>{searchResultItem[i].label}</h4> 
+                  <a className="btn btn-default result-btn-in-card" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
+                    {searchResultItem[i].short_form}
+                  </a>                
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
@@ -169,7 +160,10 @@ async suggestionHandler(selectedTerm){
                 <p>{searchResultItem[i].description}</p>
               </div>
               <div className="searchresult-ontology">
-                <span class="font-weight-bold">Ontology:</span><Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
+                <span><b>Ontology: </b></span>
+                <a className='btn btn-default ontology-btn-in-card' href={'/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
+                  {searchResultItem[i].ontology_prefix}
+                </a>
               </div>
             </Grid>
           </Grid>   
@@ -225,7 +219,7 @@ async suggestionHandler(selectedTerm){
    async paginationHandler () {
     let ontologies = this.state.ontologies
     let types = this.state.types
-    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
     if(ontologies > 0 && types > 0){
       ontologies.forEach(item => {
@@ -267,22 +261,21 @@ async suggestionHandler(selectedTerm){
   render(){
     return(
       <div id="searchterm-wrapper">
-        <div>
+        {/* <div>
         <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-        </div>
-        <div id="search-title">
-        <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
-        </div>
-        <Grid container spacing={8}>
-          <Grid item xs={3}>{this.state.result && <Facet
+        </div>         */}
+        <Grid container spacing={2}>
+          <Grid item xs={4}>{this.state.result && 
+            <Facet
                facetData = {this.state.facetFields}
                handleChange = {this.handleSelection}
             />}
             
           </Grid>
-          <Grid item xs={9} id="search-list-grid">
+          <Grid item xs={8} id="search-list-grid">
+              <h3>{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}

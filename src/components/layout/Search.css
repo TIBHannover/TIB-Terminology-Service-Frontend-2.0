@@ -141,23 +141,22 @@ The Search results styles
     /* 
        The style for search terms
     */
-    margin-top: 30px;
-    padding-top: 5px;
-    margin-left: 50px;
-    margin-bottom: 10px;
+    margin: auto;
+    max-width: 1140px;
     overflow-x: hidden;
     overflow-y: hidden;
+    color: #6C757D !important;
+    padding-top: 5px;
 }
 
 .search-result-card{
     /* 
        The style for search result cards of any searched term
     */
-    border: 1px black solid;
+
     background-color: white;
-    margin-top: 10px;
-    padding: 10px;
-    margin-right: 2px;
+    margin-top: 20px;
+    padding: 10px;    
     height: auto;
     text-align: justify;
 }
@@ -179,14 +178,37 @@ The Search results styles
     /* 
        The style for iri element in search result card
     */
-    font-size: 13px
+    font-size: 16px
 }
-.search-title{
+
+.search-card-title > h4{
     /* 
-       The style for title of search result card
+       The style for header in the title of a search result card
     */
-    font-size: 25px;
-    text-align: justify;
+     
+    display: inline !important;
+}
+
+.ontology-btn-in-card{
+    /* 
+        Style for the ontology button in each search result card.
+    */
+
+    background-color: #E86161 !important;
+    color: white !important;
+    margin-left: 10px !important;
+    padding: 2px !important;
+}
+
+.result-btn-in-card{
+    /* 
+        Style for the term/property button in each search result card.
+    */
+
+    background-color: #0E6668 !important;
+    color: white;
+    margin-left: 15px !important;
+    padding: 2px !important;
 }
 
 /* 

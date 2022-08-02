@@ -1,8 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import '../layout/Search.css'
-import {  TextField, IconButton } from '@material-ui/core';
-import { SearchOutlined } from '@material-ui/icons';
+import {  TextField} from '@material-ui/core';
 import Button from '@mui/material/Button';
 
 
