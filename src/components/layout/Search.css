@@ -153,11 +153,10 @@ The Search results styles
     /* 
        The style for search result cards of any searched term
     */
-    border: 1px black solid;
+
     background-color: white;
-    margin-top: 10px;
-    padding: 10px;
-    margin-right: 2px;
+    margin-top: 20px;
+    padding: 10px;    
     height: auto;
     text-align: justify;
 }
@@ -179,7 +178,7 @@ The Search results styles
     /* 
        The style for iri element in search result card
     */
-    font-size: 13px
+    font-size: 16px
 }
 
 .search-card-title > h4{

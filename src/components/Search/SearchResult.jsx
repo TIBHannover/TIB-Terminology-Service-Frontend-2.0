@@ -270,10 +270,7 @@ async suggestionHandler(selectedTerm){
         <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-        </div>
-        <div id="search-title">
-        
-        </div>
+        </div>        
         <Grid container spacing={2}>
           <Grid item xs={4}>{this.state.result && 
             <Facet
@@ -283,7 +280,7 @@ async suggestionHandler(selectedTerm){
             
           </Grid>
           <Grid item xs={8} id="search-list-grid">
-              <h4>{'Search Results for "' + this.state.enteredTerm + '"'   }</h4>
+              <h3>{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
