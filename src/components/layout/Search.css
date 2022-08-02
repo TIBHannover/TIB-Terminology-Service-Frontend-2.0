@@ -142,7 +142,7 @@ The Search results styles
        The style for search terms
     */
     margin: auto;
-    width: 75%;
+    max-width: 1140px;
     overflow-x: hidden;
     overflow-y: hidden;
     color: #6C757D !important;

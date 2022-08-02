@@ -266,16 +266,18 @@ async suggestionHandler(selectedTerm){
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>
         <div id="search-title">
-        <h4>{'Search Results for the term "' + this.state.enteredTerm + '"'   }</h4>
+        
         </div>
-        <Grid container spacing={8}>
-          <Grid item xs={3}>{this.state.result && <Facet
+        <Grid container spacing={2}>
+          <Grid item xs={4}>{this.state.result && 
+            <Facet
                facetData = {this.state.facetFields}
                handleChange = {this.handleSelection}
             />}
             
           </Grid>
-          <Grid item xs={9} id="search-list-grid">
+          <Grid item xs={8} id="search-list-grid">
+              <h4>{'Search Results for "' + this.state.enteredTerm + '"'   }</h4>
               {this.createSearchResultList()}
               <PaginationCustom
                 count={this.pageCount()}
