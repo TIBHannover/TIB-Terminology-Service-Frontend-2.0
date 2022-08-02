@@ -151,7 +151,7 @@ async suggestionHandler(selectedTerm){
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
-            <Grid item xs={8}>
+            <Grid item xs={12}>
               <div className="search-card-title">
                 <h4><b><Link to={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="result-term-link">{searchResultItem[i].label}</Link> <Button style={{backgroundColor: "#873593"}}variant="contained">{searchResultItem[i].short_form}</Button></b></h4>
               </div>
@@ -162,7 +162,10 @@ async suggestionHandler(selectedTerm){
                 <p>{searchResultItem[i].description}</p>
               </div>
               <div className="searchresult-ontology">
-                <span class="font-weight-bold">Ontology:</span><Button style={{backgroundColor: "#00617c", fontColor:"white"}} variant="contained">{searchResultItem[i].ontology_prefix}</Button>
+                <span><b>Ontology: </b></span>
+                <Button className='ontology-btn-in-card'  variant="contained">
+                  {searchResultItem[i].ontology_prefix}
+                </Button>
               </div>
             </Grid>
           </Grid>   

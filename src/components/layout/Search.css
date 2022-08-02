@@ -189,6 +189,16 @@ The Search results styles
     text-align: justify;
 }
 
+.ontology-btn-in-card{
+    /* 
+        Style for the ontology button in each search result card.
+    */
+
+    background-color: #E86161 !important;
+    color: white !important;
+    margin-left: 10px !important;
+}
+
 /* 
 -------------------------------------
 The Facet fields in Search results styles 
