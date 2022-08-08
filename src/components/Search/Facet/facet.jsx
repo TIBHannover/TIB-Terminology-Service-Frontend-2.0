@@ -14,7 +14,9 @@ class Facet extends React.Component{
             resultTypes: [],
             ontologyFacetData: {},
             selectedOntologies: [],
-            selectedTypes: []
+            selectedTypes: [],
+            ontologyListShowAll: false,
+            countOfShownOntologies: 5
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -101,7 +103,11 @@ class Facet extends React.Component{
     createOntologiesCheckboxList(){       
         let ontologyFacetData = this.state.ontologyFacetData;
         let result = [];
+        let counter = 1;
         for(let ontologyId in ontologyFacetData){
+            if (counter > this.state.countOfShownOntologies){
+                break;
+            }
             result.push(
                 <div key={ontologyId}>
                     <div class="row ontoloyRow facet-item-row">
@@ -119,9 +125,9 @@ class Facet extends React.Component{
                             <div class="result-count">{ontologyFacetData[ontologyId]}</div>
                         </div>                    
                     </div>                    
-                </div>
-                
+                </div>                
             );
+            counter += 1;
         }
         return result;
 
