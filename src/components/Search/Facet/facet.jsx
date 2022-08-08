@@ -5,7 +5,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 
-
 class Facet extends React.Component{
     constructor(props){
         super(props);
@@ -14,13 +13,20 @@ class Facet extends React.Component{
             resultTypes: [],
             ontologyFacetData: {},
             selectedOntologies: [],
-            selectedTypes: []
+            selectedTypes: [],
+            ontologyListShowAll: false,
+            countOfShownOntologies: 5,
+            showMoreLessOntologiesText: "+ Show More",
+            selectedCollections: []
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
         this.createTypesCheckboxList = this.createTypesCheckboxList.bind(this);
         this.handleOntologyCheckBoxClick = this.handleOntologyCheckBoxClick.bind(this);
         this.handleTypesCheckBoxClick = this.handleTypesCheckBoxClick.bind(this);
+        this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
+        this.createCollectionsCheckBoxes = this.createCollectionsCheckBoxes.bind(this);
+        this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
     }
 
 
@@ -101,7 +107,11 @@ class Facet extends React.Component{
     createOntologiesCheckboxList(){       
         let ontologyFacetData = this.state.ontologyFacetData;
         let result = [];
+        let counter = 1;
         for(let ontologyId in ontologyFacetData){
+            if (counter > this.state.countOfShownOntologies && !this.state.ontologyListShowAll){
+                break;
+            }
             result.push(
                 <div key={ontologyId}>
                     <div class="row ontoloyRow facet-item-row">
@@ -119,15 +129,42 @@ class Facet extends React.Component{
                             <div class="result-count">{ontologyFacetData[ontologyId]}</div>
                         </div>                    
                     </div>                    
-                </div>
-                
+                </div>                
             );
+            counter += 1;
         }
         return result;
-
     }
 
 
+    /**
+     * Create the collection facet box     
+     * @returns 
+     */
+    createCollectionsCheckBoxes(){
+        let allCollections = this.props.collections;
+        let result = [];
+        for (let record of allCollections){
+            result.push(
+            <div className="row facet-item-row">
+                <div className='col-sm-9'>
+                <FormGroup>
+                    {<FormControlLabel 
+                            control={<Checkbox  onClick={this.handleCollectionsCheckboxClick} />}
+                            label={record['collection']}
+                            key={record['collection']}                      
+                            value={record['collection']}                    
+                        />
+                    }
+                </FormGroup>
+                </div>                
+            </div>
+            );
+        }
+        return result;
+    }
+
+    
     /**
      * Handle click on the ontologies checkboxes
      */
@@ -146,7 +183,7 @@ class Facet extends React.Component{
                 selectedOntologies: selectedOntologies
             });
         }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);                
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);                
     }
 
 
@@ -168,9 +205,50 @@ class Facet extends React.Component{
                 selectedTypes: selectedTypes
             });
         }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);            
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);      
     }
 
+
+    /**
+     * Handle the click on the collection checkbox in the facet
+     */
+    handleCollectionsCheckboxClick(e){       
+        let selectedCollections = this.state.selectedCollections;        
+        if(e.target.checked){
+            selectedCollections.push(e.target.value.trim());
+            this.setState({
+                selectedCollections: selectedCollections
+            });
+        }
+        else{
+            let index = selectedCollections.indexOf(e.target.value.trim());
+            selectedCollections.splice(index, 1);
+            this.setState({
+                selectedCollections: selectedCollections
+            });
+        }
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);
+    }
+
+
+    /**
+     * Handle the show more button in the ontology facet list
+     * @param {*} e 
+     */
+    handleOntologyShowMoreClick(e){
+        if(this.state.ontologyListShowAll){
+            this.setState({
+                showMoreLessOntologiesText: "+ Show More",
+                ontologyListShowAll: false
+            });
+        }
+        else{
+            this.setState({
+                showMoreLessOntologiesText: "- Show Less",
+                ontologyListShowAll: true
+            });
+        }       
+    }
 
 
     componentDidMount(){
@@ -192,15 +270,24 @@ class Facet extends React.Component{
                 <h2>Filter Results</h2>
                 <div class="col-sm-12">
                     <h4>{"Type"}</h4>
-                     <div class="row" id="facet-types-list">                            
+                     <div class="row facet-list-box" id="facet-types-list">                            
                         <div class="col-sm-12">
                             {this.createTypesCheckboxList()}
                         </div>
                     </div>
                     <h4>{"Ontologies"}</h4>
-                    <div class="row" id="facet-ontologies-list">                            
+                    <div class="row facet-list-box" id="facet-ontologies-list">                            
                         <div class="col-sm-12">
                             {this.createOntologiesCheckboxList()}
+                            <div className="text-center">
+                                <a className="btn show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>{"Collections"}</h4>
+                    <div class="row facet-list-box" id="facet-ontologies-list">                            
+                        <div class="col-sm-12">
+                            {this.createCollectionsCheckBoxes()}                            
                         </div>
                     </div>
                 </div>

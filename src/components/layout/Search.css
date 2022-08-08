@@ -211,6 +211,7 @@ The Search results styles
     padding: 2px !important;
 }
 
+
 /* 
 -------------------------------------
 The Facet fields in Search results styles 
@@ -227,22 +228,14 @@ The Facet fields in Search results styles
     color: #6C757D !important;
 }
 
-#facet-ontologies-list{
+.facet-list-box{
     /* 
-       The style for ontologies list in facet box
+       The style for a facet field box
     */
     background-color: white;
     border-radius: 15px;
     padding-top: 15px;
-}
-
-#facet-types-list{
-    /* 
-       The style for types (class, props, individuals and ontologies) in facet type box
-    */
-    background-color: white;
-    border-radius: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 30px !important;
 }
 
 .facet-item-row:hover{
@@ -267,4 +260,13 @@ The Facet fields in Search results styles
     font-size: 75% !important;
     line-height: 1 !important;
     float: right;
+}
+
+.show-more-btn{
+    /* 
+        Style for the show more/less button in a facet field box
+    */
+
+    color: rgb(84, 146, 240) !important;
+    font-weight: bold;
 }
