@@ -229,7 +229,6 @@ class OntologyDetail extends React.Component {
               <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
               <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
               <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
-              <Tab label="Mappings"  to={"/ontologies/" + this.state.ontologyId + "/mapping"}  component={Link} />
             </Tabs>
           </Paper>
           {!this.state.waiting && this.state.overViewTab &&
