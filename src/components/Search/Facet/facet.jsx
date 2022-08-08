@@ -16,7 +16,8 @@ class Facet extends React.Component{
             selectedTypes: [],
             ontologyListShowAll: false,
             countOfShownOntologies: 5,
-            showMoreLessOntologiesText: "+ Show More"
+            showMoreLessOntologiesText: "+ Show More",
+            selectedCollections: []
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -25,7 +26,7 @@ class Facet extends React.Component{
         this.handleTypesCheckBoxClick = this.handleTypesCheckBoxClick.bind(this);
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
         this.createCollectionsCheckBoxes = this.createCollectionsCheckBoxes.bind(this);
-        this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick(this);
+        this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
     }
 
 
@@ -182,7 +183,7 @@ class Facet extends React.Component{
                 selectedOntologies: selectedOntologies
             });
         }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);                
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);                
     }
 
 
@@ -204,15 +205,29 @@ class Facet extends React.Component{
                 selectedTypes: selectedTypes
             });
         }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);            
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);      
     }
 
 
     /**
      * Handle the click on the collection checkbox in the facet
      */
-    handleCollectionsCheckboxClick(){
-
+    handleCollectionsCheckboxClick(e){       
+        let selectedCollections = this.state.selectedCollections;        
+        if(e.target.checked){
+            selectedCollections.push(e.target.value.trim());
+            this.setState({
+                selectedCollections: selectedCollections
+            });
+        }
+        else{
+            let index = selectedCollections.indexOf(e.target.value.trim());
+            selectedCollections.splice(index, 1);
+            this.setState({
+                selectedCollections: selectedCollections
+            });
+        }
+        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);
     }
 
 

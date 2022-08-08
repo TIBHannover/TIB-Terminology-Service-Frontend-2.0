@@ -48,8 +48,7 @@ class SearchResult extends React.Component{
       if (enteredTerm.length > 0){
         let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
         let resultJson = (await searchResult.json());
-        let allCollections = await getAllCollectionsIds();
-        console.info(allCollections);
+        let allCollections = await getAllCollectionsIds();        
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
@@ -180,7 +179,7 @@ async suggestionHandler(selectedTerm){
      }
   }
 
-  async handleSelection(ontologies, types){
+  async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
       ontologies.forEach(item => {
