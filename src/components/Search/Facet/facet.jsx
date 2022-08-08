@@ -5,7 +5,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 
-
 class Facet extends React.Component{
     constructor(props){
         super(props);
@@ -25,6 +24,8 @@ class Facet extends React.Component{
         this.handleOntologyCheckBoxClick = this.handleOntologyCheckBoxClick.bind(this);
         this.handleTypesCheckBoxClick = this.handleTypesCheckBoxClick.bind(this);
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
+        this.createCollectionsCheckBoxes = this.createCollectionsCheckBoxes.bind(this);
+        this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick(this);
     }
 
 
@@ -132,10 +133,37 @@ class Facet extends React.Component{
             counter += 1;
         }
         return result;
-
     }
 
 
+    /**
+     * Create the collection facet box     
+     * @returns 
+     */
+    createCollectionsCheckBoxes(){
+        let allCollections = this.props.collections;
+        let result = [];
+        for (let record of allCollections){
+            result.push(
+            <div className="row facet-item-row">
+                <div className='col-sm-9'>
+                <FormGroup>
+                    {<FormControlLabel 
+                            control={<Checkbox  onClick={this.handleCollectionsCheckboxClick} />}
+                            label={record['collection']}
+                            key={record['collection']}                      
+                            value={record['collection']}                    
+                        />
+                    }
+                </FormGroup>
+                </div>                
+            </div>
+            );
+        }
+        return result;
+    }
+
+    
     /**
      * Handle click on the ontologies checkboxes
      */
@@ -177,6 +205,14 @@ class Facet extends React.Component{
             });
         }
         this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes);            
+    }
+
+
+    /**
+     * Handle the click on the collection checkbox in the facet
+     */
+    handleCollectionsCheckboxClick(){
+
     }
 
 
@@ -231,6 +267,12 @@ class Facet extends React.Component{
                             <div className="text-center">
                                 <a className="btn show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
                             </div>
+                        </div>
+                    </div>
+                    <h4>{"Collections"}</h4>
+                    <div class="row" id="facet-ontologies-list">                            
+                        <div class="col-sm-12">
+                            {this.createCollectionsCheckBoxes()}                            
                         </div>
                     </div>
                 </div>

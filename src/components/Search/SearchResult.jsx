@@ -4,7 +4,7 @@ import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import PaginationCustom from './Pagination/Pagination';
 import queryString from 'query-string';
-import Button from '@mui/material/Button';
+import {getAllCollectionsIds} from '../../api/fetchData';
 import Facet from './Facet/facet';
 
 
@@ -28,7 +28,8 @@ class SearchResult extends React.Component{
           pageNumber: 1,
           pageSize: 5,       
           isLoaded: false,
-          isFiltered: false
+          isFiltered: false,
+          collections: []
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
@@ -47,6 +48,8 @@ class SearchResult extends React.Component{
       if (enteredTerm.length > 0){
         let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
         let resultJson = (await searchResult.json());
+        let allCollections = await getAllCollectionsIds();
+        console.info(allCollections);
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
@@ -59,7 +62,8 @@ class SearchResult extends React.Component{
           totalResults: totalResults,
           result: true,
           isLoaded: true,
-          enteredTerm: enteredTerm
+          enteredTerm: enteredTerm,
+          collections: allCollections
         });  
       }
       else if (enteredTerm.length == 0){
@@ -69,10 +73,13 @@ class SearchResult extends React.Component{
               facetFields: [],
               originalSearchResult: [],
               isLoaded: true,
-              enteredTerm: enteredTerm
+              enteredTerm: enteredTerm,
+              collections: []
           });  
       }
   }
+
+
   async suggestionChange(newEnteredTerm){
     newEnteredTerm = newEnteredTerm.target.value;
   if (newEnteredTerm.length > 0){
@@ -271,6 +278,7 @@ async suggestionHandler(selectedTerm){
             <Facet
                facetData = {this.state.facetFields}
                handleChange = {this.handleSelection}
+               collections = {this.state.collections}
             />}
             
           </Grid>
