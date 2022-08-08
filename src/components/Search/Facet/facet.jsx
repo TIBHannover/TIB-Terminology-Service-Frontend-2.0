@@ -107,7 +107,7 @@ class Facet extends React.Component{
         let result = [];
         let counter = 1;
         for(let ontologyId in ontologyFacetData){
-            if (counter > this.state.countOfShownOntologies){
+            if (counter > this.state.countOfShownOntologies && !this.state.ontologyListShowAll){
                 break;
             }
             result.push(
@@ -198,7 +198,6 @@ class Facet extends React.Component{
             });
         }       
     }
-
 
 
     componentDidMount(){
