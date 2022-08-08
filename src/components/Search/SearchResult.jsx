@@ -179,6 +179,13 @@ async suggestionHandler(selectedTerm){
      }
   }
 
+  
+  /**
+   * Runs the facet when a filter is selected
+   * @param {*} ontologies 
+   * @param {*} types 
+   * @param {*} collections 
+   */
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
