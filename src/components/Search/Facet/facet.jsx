@@ -16,7 +16,8 @@ class Facet extends React.Component{
             selectedOntologies: [],
             selectedTypes: [],
             ontologyListShowAll: false,
-            countOfShownOntologies: 5
+            countOfShownOntologies: 5,
+            showMoreLessOntologiesText: "+ Show More"
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -207,6 +208,7 @@ class Facet extends React.Component{
                     <div class="row" id="facet-ontologies-list">                            
                         <div class="col-sm-12">
                             {this.createOntologiesCheckboxList()}
+                            <div className="text-center"><a className="btn">{this.state.showMoreLessOntologiesText}</a></div>
                         </div>
                     </div>
                 </div>
