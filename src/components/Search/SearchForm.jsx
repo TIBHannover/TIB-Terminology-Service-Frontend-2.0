@@ -47,7 +47,7 @@ class SearchForm extends React.Component{
 
 
     submitHandler(event){  
-        let enteredTerm = document.getElementById('search-input').value;
+        let enteredTerm = document.getElementById('s-field').value;
         window.location.replace('/search?q=' + enteredTerm);
     }
 
