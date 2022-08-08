@@ -24,6 +24,7 @@ class Facet extends React.Component{
         this.createTypesCheckboxList = this.createTypesCheckboxList.bind(this);
         this.handleOntologyCheckBoxClick = this.handleOntologyCheckBoxClick.bind(this);
         this.handleTypesCheckBoxClick = this.handleTypesCheckBoxClick.bind(this);
+        this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
     }
 
 
@@ -179,6 +180,26 @@ class Facet extends React.Component{
     }
 
 
+    /**
+     * Handle the show more button in the ontology facet list
+     * @param {*} e 
+     */
+    handleOntologyShowMoreClick(e){
+        if(this.state.ontologyListShowAll){
+            this.setState({
+                showMoreLessOntologiesText: "+ Show More",
+                ontologyListShowAll: false
+            });
+        }
+        else{
+            this.setState({
+                showMoreLessOntologiesText: "- Show Less",
+                ontologyListShowAll: true
+            });
+        }       
+    }
+
+
 
     componentDidMount(){
         if(!this.state.resultLoaded){
@@ -208,7 +229,9 @@ class Facet extends React.Component{
                     <div class="row" id="facet-ontologies-list">                            
                         <div class="col-sm-12">
                             {this.createOntologiesCheckboxList()}
-                            <div className="text-center"><a className="btn">{this.state.showMoreLessOntologiesText}</a></div>
+                            <div className="text-center">
+                                <a className="btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
