@@ -211,6 +211,7 @@ The Search results styles
     padding: 2px !important;
 }
 
+
 /* 
 -------------------------------------
 The Facet fields in Search results styles 
@@ -267,4 +268,13 @@ The Facet fields in Search results styles
     font-size: 75% !important;
     line-height: 1 !important;
     float: right;
+}
+
+.show-more-btn{
+    /* 
+        Style for the show more/less button in a facet field box
+    */
+
+    color: rgb(84, 146, 240) !important;
+    font-weight: bold;
 }

@@ -229,7 +229,7 @@ class Facet extends React.Component{
                         <div class="col-sm-12">
                             {this.createOntologiesCheckboxList()}
                             <div className="text-center">
-                                <a className="btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                                <a className="btn show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
                             </div>
                         </div>
                     </div>
