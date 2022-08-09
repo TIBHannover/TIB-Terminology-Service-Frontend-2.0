@@ -15,6 +15,10 @@ class Pagination extends React.Component{
         this.checkOutOfRange = this.checkOutOfRange.bind(this);
     }
 
+
+    /**
+     * Click handler for the Previous button
+     */
     previousClickHandler(){
         let pageNumber = parseInt(this.state.pageNumber);
         if (pageNumber > 1){
@@ -26,6 +30,10 @@ class Pagination extends React.Component{
         }
     }
 
+
+    /**
+     * Click handler for the Next button
+     */
     nextClickHandler(){
         let pageNumber = parseInt(this.state.pageNumber);
         if (pageNumber < parseInt(this.props.count)){
@@ -37,6 +45,10 @@ class Pagination extends React.Component{
         }
     }
 
+
+    /**
+     * Click handler for pagination buttons (except previous and next)
+     */
     middleClickHandler(e){        
         let pageNumber = 0;
         if (e.target.nodeName === "LI"){
@@ -52,8 +64,13 @@ class Pagination extends React.Component{
         this.checkOutOfRange(parseInt(pageNumber));
     }
 
+
+    /**
+     * Check the page is out of range or not. If yes, it hides the out of range ones and show the last-two buttons.
+     */
     checkOutOfRange(pageNumber){
         if (pageNumber > parseInt(this.props.count) - 2){
+            // Page Number is out of range
             let toSHowButtons = document.querySelectorAll(".out-of-range-hidden-page-btn");            
             for(let i=0; i<toSHowButtons.length; i++){
                 toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");                 
@@ -65,6 +82,7 @@ class Pagination extends React.Component{
             this.setState({endReached:true});
         }
         else if (this.state.endReached){
+            // Revert back the changes made above
             let toSHowButtons = document.querySelectorAll(".in-range-btn.out-of-range-hidden-page-btn");
             for(let i=0; i<toSHowButtons.length; i++){
                 toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");                

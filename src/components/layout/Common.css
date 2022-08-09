@@ -311,6 +311,11 @@ The Pagination styles
 }
 
 .out-of-range-hidden-page-btn{
+   /* 
+      Hide the out of range buttons. 
+      !!! Do NOT Remove this !!!
+   */
+
    display: none;
 }
 
