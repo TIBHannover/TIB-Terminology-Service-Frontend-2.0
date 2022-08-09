@@ -1,5 +1,4 @@
 import React from 'react';
-// import PaginationCustom from '../Pagination/Pagination';
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
@@ -397,12 +396,7 @@ async runFacet(selectedCollections, enteredKeyword){
                   </div>          
                 </Grid>
               </Grid>              
-              {this.createOntologyList()}
-              {/* <PaginationCustom
-                count={this.pageCount()}
-                clickHandler={this.handlePagination}
-                page={this.state.pageNumber}
-              /> */}
+              {this.createOntologyList()}              
               <Pagination 
                 clickHandler={this.handlePagination} 
                 count={this.pageCount()}               
