@@ -184,6 +184,32 @@ async suggestionHandler(selectedTerm){
      }
   }
 
+  /**
+     * Update the url based on facet values
+     */
+   updateURL(ontologies, types, collections){
+    if(ontologies.length == 0 && types.length == 0){
+      this.props.history.push(window.location.pathname);
+      return true;
+    }
+
+    let currentUrlParams = new URLSearchParams();
+
+    if(types !== 0){
+      currentUrlParams.append('type', types);
+    }
+
+    if(ontologies.length !== 0){
+      for(let col of ontologies){
+        currentUrlParams.append('ontology', col);
+        currentUrlParams.append('and');
+      }
+    }
+
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+
+   }
+
   
   /**
    * Runs the facet when a filter is selected
@@ -207,32 +233,6 @@ async suggestionHandler(selectedTerm){
         ontologies: ontologies,
         types: types 
        })
-     }
-  
-    /**
-     * Update the url based on facet values
-     */
-     updateURL(ontologies, types, collections){
-      if(ontologies.length == 0 && types.length == 0){
-        this.props.history.push(window.location.pathname);
-        return true;
-      }
-
-      let currentUrlParams = new URLSearchParams();
-
-      if(types !== 0){
-        currentUrlParams.append('type', types);
-      }
-
-      if(ontologies.length !== 0){
-        for(let col of ontologies){
-          currentUrlParams.append('ontology', col);
-          currentUrlParams.append('and');
-        }
-      }
-
-      this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-
      }
   
   /**
