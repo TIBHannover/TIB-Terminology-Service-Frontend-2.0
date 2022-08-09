@@ -253,7 +253,6 @@ class OntologyList extends React.Component {
 
 
 
-
 /**
  * 
  */
