@@ -46,7 +46,8 @@ class SearchResult extends React.Component{
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
       let enteredTerm = targetQueryParams.q
       if (enteredTerm.length > 0){
-        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
+        let searchUrl = "https://service.tib.eu/ts4tib/api/search?q=" + enteredTerm + "&rows=" + this.state.pageSize;
+        let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());
         let allCollections = await getAllCollectionsIds();        
         searchResult =  resultJson['response']['docs'];
@@ -101,7 +102,8 @@ class SearchResult extends React.Component{
 
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
-    let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&exact=on`)
+    let searchUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
+    let exactResult = await fetch(searchUrl)
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
       searchResult: exactResult,
@@ -190,7 +192,7 @@ async suggestionHandler(selectedTerm){
    */
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
       ontologies.forEach(item => {
           baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
         }) 
@@ -235,8 +237,8 @@ async suggestionHandler(selectedTerm){
     let ontologies = this.state.ontologies
     let types = this.state.types
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
-    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}`
-    if(ontologies > 0 && types > 0){
+    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize
+    if(ontologies.length > 0 || types.length > 0){
       ontologies.forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
       }) 
@@ -277,7 +279,7 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         {/* <div>
-        <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
+        <a className='btn btn-primary' onClick={this.handleExact}>Exact Match</a>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>         */}
