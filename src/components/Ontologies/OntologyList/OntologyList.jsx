@@ -399,7 +399,8 @@ async runFacet(selectedCollections, enteredKeyword){
               {this.createOntologyList()}              
               <Pagination 
                 clickHandler={this.handlePagination} 
-                count={this.pageCount()}               
+                count={this.pageCount()}
+                initialPageNumber={this.state.pageNumber}               
               />
             </Grid>
           </Grid>

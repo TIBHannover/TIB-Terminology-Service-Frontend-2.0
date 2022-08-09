@@ -13,6 +13,7 @@ class Pagination extends React.Component{
         this.nextClickHandler = this.nextClickHandler.bind(this);
         this.middleClickHandler = this.middleClickHandler.bind(this);
         this.checkOutOfRange = this.checkOutOfRange.bind(this);
+        this.createMiddleButtons = this.createMiddleButtons.bind(this);
     }
 
 
@@ -96,6 +97,51 @@ class Pagination extends React.Component{
     }
 
 
+    /**
+     * Create the middle buttons for pagination based on the page count
+     * @returns 
+     */
+    createMiddleButtons(){        
+        let result = [];
+        result.push(
+            <li className='pagination-btn pagination-middle-btn selected-page' onClick={this.middleClickHandler} value={this.state.pageNumber}>
+                <a className='pagination-link'>{this.state.pageNumber}</a>
+            </li>
+        );
+        if(parseInt(this.props.count) > 2){            
+            result.push(
+                <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
+                    <a className='pagination-link'>{this.state.pageNumber + 1}</a>
+                </li>
+            );
+            result.push(
+                <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 2}>
+                    <a className='pagination-link'>{this.state.pageNumber + 2}</a>
+                </li>
+            );  
+        }
+        else if(parseInt(this.props.count) === 2){            
+            result.push(
+                <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
+                    <a className='pagination-link'>{this.state.pageNumber + 1}</a>
+                </li>
+            );
+        }
+        return result;
+    }
+
+
+    componentDidMount(){
+        this.setState({pageNumber: this.props.initialPageNumber});
+    }
+
+    componentDidUpdate(){
+        if(parseInt(this.props.initialPageNumber) !== this.state.pageNumber){
+            this.setState({pageNumber: this.props.initialPageNumber});
+        }
+    }
+
+
     render(){
         return (
             <ul className='pagination-holder'>
@@ -108,15 +154,7 @@ class Pagination extends React.Component{
                 <li className='pagination-btn pagination-middle-btn out-of-range-hidden-page-btn pag-minus-btn' onClick={this.middleClickHandler} value={this.state.pageNumber - 1}>
                     <a className='pagination-link'>{this.state.pageNumber - 1}</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn selected-page' onClick={this.middleClickHandler} value={this.state.pageNumber}>
-                    <a className='pagination-link'>{this.state.pageNumber}</a>
-                </li>
-                <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
-                    <a className='pagination-link'>{this.state.pageNumber + 1}</a>
-                </li>
-                <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 2}>
-                    <a className='pagination-link'>{this.state.pageNumber + 2}</a>
-                </li>
+                {this.createMiddleButtons()}
                 <li className='pagination-btn pagination-end' onClick={this.nextClickHandler}>
                     <a className='pagination-link'>Next</a>
                 </li>
