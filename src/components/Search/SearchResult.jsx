@@ -42,6 +42,7 @@ class SearchResult extends React.Component{
         this.suggestionHandler = this.suggestionHandler.bind(this);
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
+        this.updateURL = this.updateURL.bind(this);
     }
 
     async searching(){
@@ -185,6 +186,33 @@ async suggestionHandler(selectedTerm){
      }
   }
 
+  /**
+    * Update the url based on facet values
+    */
+   updateURL(ontologies, types, collections){
+    if(ontologies.length == 0 && types.length == 0){
+      this.props.history.push(window.location.pathname);
+      return true;
+    }
+
+    let currentUrlParams = new URLSearchParams();
+
+    if(types !== 0){
+      for(let typ of types){
+        currentUrlParams.append('type', typ);
+      }
+    }
+
+    if(ontologies.length !== 0){
+      for(let ontos of ontologies){
+        currentUrlParams.append('ontology', ontos);
+      }
+    }
+
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+
+   }
+
   
   /**
    * Runs the facet when a filter is selected
@@ -203,6 +231,7 @@ async suggestionHandler(selectedTerm){
         })      
       let targetUrl = await fetch(baseUrl)
       let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
+      this.updateURL(ontologies, types, collections)
       this.setState({
         searchResult: filteredSearchResults,
         ontologies: ontologies,
