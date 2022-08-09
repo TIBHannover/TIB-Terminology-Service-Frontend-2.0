@@ -17,7 +17,7 @@ export function createCollectionCards(){
                       to retrieve terminological information and use it in your technical services. Layout template for TIB General. 
                   </p>
                   <p>
-                    Examples: <a href='/search?q=oxidation'>Oxidation</a>, <a href='/search?q=IAO_0020000'>IAO_0020000</a>
+                    Examples: <a href='/search?q=oxidation' style={{textDecoration: "none"}}>Oxidation</a>, <a href='/search?q=IAO_0020000' style={{textDecoration: "none"}}>IAO_0020000</a>
                   </p>
                   <p></p>
               </div>
