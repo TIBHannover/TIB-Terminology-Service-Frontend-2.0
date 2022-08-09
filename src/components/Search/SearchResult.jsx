@@ -228,6 +228,7 @@ async suggestionHandler(selectedTerm){
         })      
       let targetUrl = await fetch(baseUrl)
       let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
+      this.updateURL(ontologies, types, collections)
       this.setState({
         searchResult: filteredSearchResults,
         ontologies: ontologies,
