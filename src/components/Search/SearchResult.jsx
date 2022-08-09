@@ -200,9 +200,8 @@ async suggestionHandler(selectedTerm){
     }
 
     if(ontologies.length !== 0){
-      for(let col of ontologies){
-        currentUrlParams.append('ontology', col);
-        currentUrlParams.append('and');
+      for(let ontos of ontologies){
+        currentUrlParams.append('ontology', ontos);
       }
     }
 
