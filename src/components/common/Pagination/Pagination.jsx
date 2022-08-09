@@ -21,8 +21,18 @@ class Pagination extends React.Component{
 
     }
 
-    middleClickHandler(){
-
+    middleClickHandler(e){        
+        let pageNumber = 0;
+        if (e.target.nodeName === "LI"){
+            pageNumber = e.target.value;
+        }
+        else{            
+            pageNumber = e.target.parentNode.value;
+        }
+        this.setState({
+            pageNumber: parseInt(pageNumber)
+        });
+        this.props.clickHandler(pageNumber);
     }
 
 
@@ -32,14 +42,14 @@ class Pagination extends React.Component{
                 <li className='pagination-btn pagination-start' onClick={this.previousClickHandler}>
                    <a className='pagination-link'>Previous</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler}>
-                    <a className='pagination-link'>1</a>
+                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler} value={this.state.pageNumber}>
+                    <a className='pagination-link'>{this.state.pageNumber}</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler}>
-                    <a className='pagination-link'>2</a>
+                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
+                    <a className='pagination-link'>{this.state.pageNumber + 1}</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler}>
-                    <a className='pagination-link'>3</a>
+                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 2}>
+                    <a className='pagination-link'>{this.state.pageNumber + 2}</a>
                 </li>
                 <li className='pagination-btn pagination-end' onClick={this.nextClickHandler}>
                     <a className='pagination-link'>Next</a>
