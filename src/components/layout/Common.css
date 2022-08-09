@@ -222,3 +222,44 @@ The Navbar styles
     color: white;
     font-weight: bold;
   }
+
+
+/* 
+-------------------------------------
+The Pagination styles 
+-------------------------------------
+*/
+
+.pagination-holder {
+   display: flex;
+   padding-left: 0;
+   list-style: none;
+   justify-content: flex-end;
+   margin-top: 30px;
+ }
+
+.pagination-btn{
+   position: relative;
+   display: block;
+   padding: 0.5rem 0.75rem;
+   margin-left: -1px;
+   line-height: 1.25;
+   color: #009cbc;
+   background-color: white;
+   border: 1px solid #dee2e6;
+}
+
+.pagination-start{
+   margin-left: 0;
+   border-top-left-radius: 1rem;
+   border-bottom-left-radius: 1rem;
+}
+
+.pagination-end{
+   border-top-right-radius: 1rem;
+   border-bottom-right-radius: 1rem;
+}
+
+.pagination-link{
+   text-decoration: none;
+}

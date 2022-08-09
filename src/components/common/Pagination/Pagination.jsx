@@ -1,4 +1,5 @@
 import React from 'react';
+import "../../layout/Common.css";
 
 
 class Pagination extends React.Component{
@@ -10,23 +11,23 @@ class Pagination extends React.Component{
 
     render(){
         return (
-            <div className='row'>
-                <div className='pagination-start-end'>
-                    Previous
-                </div>
-                <div className='pagination-middle-btn'>
-                    1
-                </div>
-                <div className='pagination-middle-btn'>
-                    2
-                </div>
-                <div className='pagination-middle-btn'>
-                    3
-                </div>
-                <div className='pagination-start-end'>
-                    Next
-                </div>
-            </div>
+            <ul className='pagination-holder'>
+                <li className='pagination-btn pagination-start'>
+                   <a className='pagination-link'>Previous</a>
+                </li>
+                <li className='pagination-btn pagination-middle-btn'>
+                    <a className='pagination-link'>1</a>
+                </li>
+                <li className='pagination-btn pagination-middle-btn'>
+                    <a className='pagination-link'>2</a>
+                </li>
+                <li className='pagination-btn pagination-middle-btn'>
+                    <a className='pagination-link'>3</a>
+                </li>
+                <li className='pagination-btn pagination-end'>
+                    <a className='pagination-link'>Next</a>
+                </li>
+            </ul>
         );
     }
 
