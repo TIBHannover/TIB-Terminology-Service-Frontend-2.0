@@ -6,7 +6,8 @@ class Pagination extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            pageNumber: 1
+            pageNumber: 1,
+            endReached: false
         });
         this.previousClickHandler = this.previousClickHandler.bind(this);
         this.nextClickHandler = this.nextClickHandler.bind(this);
@@ -21,6 +22,7 @@ class Pagination extends React.Component{
                 pageNumber: pageNumber - 1
             });
             this.props.clickHandler(pageNumber - 1);
+            this.checkOutOfRange(parseInt(pageNumber) - 1);
         }
     }
 
@@ -31,6 +33,7 @@ class Pagination extends React.Component{
                 pageNumber: pageNumber + 1
             });
             this.props.clickHandler(pageNumber + 1);
+            this.checkOutOfRange(parseInt(pageNumber) + 1);
         }
     }
 
@@ -53,12 +56,24 @@ class Pagination extends React.Component{
         if (pageNumber > parseInt(this.props.count) - 2){
             let toSHowButtons = document.querySelectorAll(".out-of-range-hidden-page-btn");            
             for(let i=0; i<toSHowButtons.length; i++){
-                toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");                
+                toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");                 
             }
             let toHideButtons = document.querySelectorAll(".in-range-btn");
             for(let i=0; i<toHideButtons.length; i++){                
                 toHideButtons[i].classList.add("out-of-range-hidden-page-btn");
             }
+            this.setState({endReached:true});
+        }
+        else if (this.state.endReached){
+            let toSHowButtons = document.querySelectorAll(".in-range-btn.out-of-range-hidden-page-btn");
+            for(let i=0; i<toSHowButtons.length; i++){
+                toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");                
+            }
+            let toHideButtons = document.querySelectorAll(".pag-minus-btn");
+            for(let i=0; i<toHideButtons.length; i++){                
+                toHideButtons[i].classList.add("out-of-range-hidden-page-btn");
+            }
+            this.setState({endReached:false});
         }
     }
 
@@ -69,10 +84,10 @@ class Pagination extends React.Component{
                 <li className='pagination-btn pagination-start' onClick={this.previousClickHandler}>
                    <a className='pagination-link'>Previous</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn out-of-range-hidden-page-btn' onClick={this.middleClickHandler} value={this.state.pageNumber - 2}>
+                <li className='pagination-btn pagination-middle-btn out-of-range-hidden-page-btn pag-minus-btn' onClick={this.middleClickHandler} value={this.state.pageNumber - 2}>
                     <a className='pagination-link'>{this.state.pageNumber - 2}</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn out-of-range-hidden-page-btn' onClick={this.middleClickHandler} value={this.state.pageNumber - 1}>
+                <li className='pagination-btn pagination-middle-btn out-of-range-hidden-page-btn pag-minus-btn' onClick={this.middleClickHandler} value={this.state.pageNumber - 1}>
                     <a className='pagination-link'>{this.state.pageNumber - 1}</a>
                 </li>
                 <li className='pagination-btn pagination-middle-btn selected-page' onClick={this.middleClickHandler} value={this.state.pageNumber}>
