@@ -102,7 +102,8 @@ class SearchResult extends React.Component{
 
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
-    let exactResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&exact=on`)
+    let searchUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
+    let exactResult = await fetch(searchUrl)
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
       searchResult: exactResult,
@@ -278,7 +279,7 @@ async suggestionHandler(selectedTerm){
     return(
       <div id="searchterm-wrapper">
         {/* <div>
-        <Button variant="contained" onClick={this.handleExact}>Exact Match</Button>
+        <a className='btn btn-primary' onClick={this.handleExact}>Exact Match</a>
               {this.state.suggestResult &&
             <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
         </div>         */}
