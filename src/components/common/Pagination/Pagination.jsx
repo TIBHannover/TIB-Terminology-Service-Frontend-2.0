@@ -24,7 +24,13 @@ class Pagination extends React.Component{
     }
 
     nextClickHandler(){
-
+        let pageNumber = parseInt(this.state.pageNumber);
+        if (pageNumber < parseInt(this.props.count)){
+            this.setState({
+                pageNumber: pageNumber + 1
+            });
+            this.props.clickHandler(pageNumber + 1);
+        }
     }
 
     middleClickHandler(e){        
