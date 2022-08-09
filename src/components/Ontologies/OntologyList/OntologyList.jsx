@@ -404,7 +404,8 @@ async runFacet(selectedCollections, enteredKeyword){
                 page={this.state.pageNumber}
               /> */}
               <Pagination 
-                clickHandler={this.handlePagination}                
+                clickHandler={this.handlePagination} 
+                count={this.pageCount()}               
               />
             </Grid>
           </Grid>
