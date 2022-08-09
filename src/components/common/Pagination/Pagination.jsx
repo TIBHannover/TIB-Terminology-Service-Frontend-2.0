@@ -69,7 +69,7 @@ class Pagination extends React.Component{
      * Check the page is out of range or not. If yes, it hides the out of range ones and show the last-two buttons.
      */
     checkOutOfRange(pageNumber){
-        if (pageNumber > parseInt(this.props.count) - 2){
+        if (pageNumber > parseInt(this.props.count) - 2 && pageNumber > 2){
             // Page Number is out of range
             let toSHowButtons = document.querySelectorAll(".out-of-range-hidden-page-btn");            
             for(let i=0; i<toSHowButtons.length; i++){
