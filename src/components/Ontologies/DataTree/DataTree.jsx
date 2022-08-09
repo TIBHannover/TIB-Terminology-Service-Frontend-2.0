@@ -153,8 +153,7 @@ class DataTree extends React.Component {
         for(let i=0; i < roots.length; i++){         
           let leafClass = "";
           let symbol = "";
-          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
-          // let hasChildren = await nodeHasChildren(this.state.ontologyId, roots[i].iri, this.state.componentIdentity);
+          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);          
           if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
             //  root node is a leaf
             leafClass = " leaf-node";

@@ -222,3 +222,100 @@ The Navbar styles
     color: white;
     font-weight: bold;
   }
+
+
+/* 
+-------------------------------------
+The Pagination styles 
+-------------------------------------
+*/
+
+.pagination-holder {
+   /* 
+      Style for the pagination ul (holder)
+   */
+
+   display: flex;
+   padding-left: 0;
+   list-style: none;
+   justify-content: flex-end;
+   margin-top: 30px;
+ }
+
+.pagination-btn{
+   /* 
+      Style for each pagination button (li)
+   */
+
+   position: relative;
+   display: block;
+   padding: 0.5rem 0.75rem;
+   margin-left: -1px;
+   line-height: 1.25;
+   color: #009cbc;
+   background-color: white;
+   border: 1px solid #dee2e6;
+   cursor: pointer;
+}
+
+.pagination-btn:hover{
+   /* 
+      Style for each pagination button (li) mouse over
+   */
+
+   background-color: #E9ECEF;
+}
+
+.pagination-start{
+   /* 
+      Style for the first pagination button (Previous)
+   */
+
+   margin-left: 0;
+   border-top-left-radius: 1rem;
+   border-bottom-left-radius: 1rem;
+}
+
+.pagination-end{
+   /* 
+      Style for the last pagination button (Next)
+   */
+
+   border-top-right-radius: 1rem;
+   border-bottom-right-radius: 1rem;
+}
+
+.pagination-link{
+   /* 
+      Style for the pagination button anchor
+   */
+
+   text-decoration: none;
+   color: #009cbc;
+}
+
+.pagination-link:hover{
+   /* 
+      Style for the pagination button anchor mouse over
+   */
+
+   color: #0B6376;
+}
+
+.selected-page{
+   /* 
+      Style for the selected page on the pagination
+   */
+
+   background-color: #a9c9e4;
+}
+
+.out-of-range-hidden-page-btn{
+   /* 
+      Hide the out of range buttons. 
+      !!! Do NOT Remove this !!!
+   */
+
+   display: none;
+}
+

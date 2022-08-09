@@ -1,5 +1,4 @@
 import React from 'react';
-import PaginationCustom from '../Pagination/Pagination';
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
@@ -7,6 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
+import Pagination from "../../common/Pagination/Pagination";
 
 
 
@@ -252,7 +252,6 @@ class OntologyList extends React.Component {
 
 
 
-
 /**
  * 
  */
@@ -397,11 +396,11 @@ async runFacet(selectedCollections, enteredKeyword){
                   </div>          
                 </Grid>
               </Grid>              
-              {this.createOntologyList()}
-              <PaginationCustom
+              {this.createOntologyList()}              
+              <Pagination 
+                clickHandler={this.handlePagination} 
                 count={this.pageCount()}
-                clickHandler={this.handlePagination}
-                page={this.state.pageNumber}
+                initialPageNumber={this.state.pageNumber}               
               />
             </Grid>
           </Grid>

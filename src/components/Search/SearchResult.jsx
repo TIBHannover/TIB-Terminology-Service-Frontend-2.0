@@ -2,10 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
-import PaginationCustom from './Pagination/Pagination';
 import queryString from 'query-string';
 import {getAllCollectionsIds} from '../../api/fetchData';
 import Facet from './Facet/facet';
+import Pagination from "../common/Pagination/Pagination";
 
 
 class SearchResult extends React.Component{
@@ -29,7 +29,9 @@ class SearchResult extends React.Component{
           pageSize: 5,       
           isLoaded: false,
           isFiltered: false,
-          collections: []
+          collections: [],
+          ontologies: [],
+          types: []
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
@@ -263,8 +265,8 @@ async suggestionHandler(selectedTerm){
        * Handle the pagination change. This function has to be passed to the Pagination component
        */
    async paginationHandler () {
-    let ontologies = this.state.ontologies
-    let types = this.state.types
+    let ontologies = this.state.ontologies;
+    let types = this.state.types;
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize
     if(ontologies.length > 0 || types.length > 0){
@@ -323,11 +325,11 @@ async suggestionHandler(selectedTerm){
           </Grid>
           <Grid item xs={8} id="search-list-grid">
               <h3>{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
-              {this.createSearchResultList()}
-              <PaginationCustom
+              {this.createSearchResultList()}              
+              <Pagination 
+                clickHandler={this.handlePagination} 
                 count={this.pageCount()}
-                clickHandler={this.handlePagination}
-                page={this.state.pageNumber}
+                initialPageNumber={this.state.pageNumber}          
               />
             </Grid>
           </Grid>
