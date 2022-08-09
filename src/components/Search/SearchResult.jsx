@@ -299,7 +299,8 @@ async suggestionHandler(selectedTerm){
               {this.createSearchResultList()}              
               <Pagination 
                 clickHandler={this.handlePagination} 
-                count={this.pageCount()}               
+                count={this.pageCount()}
+                initialPageNumber={this.state.pageNumber}          
               />
             </Grid>
           </Grid>
