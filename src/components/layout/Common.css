@@ -310,3 +310,7 @@ The Pagination styles
    background-color: #a9c9e4;
 }
 
+.out-of-range-hidden-page-btn{
+   display: none;
+}
+
