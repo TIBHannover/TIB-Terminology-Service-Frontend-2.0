@@ -185,8 +185,8 @@ async suggestionHandler(selectedTerm){
   }
 
   /**
-     * Update the url based on facet values
-     */
+    * Update the url based on facet values
+    */
    updateURL(ontologies, types, collections){
     if(ontologies.length == 0 && types.length == 0){
       this.props.history.push(window.location.pathname);
@@ -196,7 +196,9 @@ async suggestionHandler(selectedTerm){
     let currentUrlParams = new URLSearchParams();
 
     if(types !== 0){
-      currentUrlParams.append('type', types);
+      for(let typ of types){
+        currentUrlParams.append('type', typ);
+      }
     }
 
     if(ontologies.length !== 0){
