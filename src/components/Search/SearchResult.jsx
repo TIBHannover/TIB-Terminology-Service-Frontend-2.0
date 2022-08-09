@@ -238,7 +238,7 @@ async suggestionHandler(selectedTerm){
     let types = this.state.types
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize
-    if(ontologies > 0 && types > 0){
+    if(ontologies.length > 0 || types.length > 0){
       ontologies.forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
       }) 
