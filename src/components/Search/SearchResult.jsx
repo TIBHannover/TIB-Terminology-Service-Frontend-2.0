@@ -40,6 +40,7 @@ class SearchResult extends React.Component{
         this.suggestionHandler = this.suggestionHandler.bind(this);
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
+        this.updateURL = this.updateURL.bind(this);
     }
 
     async searching(){
@@ -120,6 +121,13 @@ async suggestionHandler(selectedTerm){
       searchResult: newSearchResult,
       suggestResult: true
     });
+}
+
+/**
+ * Update the url based on facet values
+ */
+updateURL(){
+
 }
 
   createResultList(){
