@@ -302,4 +302,11 @@ The Pagination styles
    color: #0B6376;
 }
 
+.selected-page{
+   /* 
+      Style for the selected page on the pagination
+   */
+
+   background-color: #a9c9e4;
+}
 

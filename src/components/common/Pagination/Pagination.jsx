@@ -42,7 +42,7 @@ class Pagination extends React.Component{
                 <li className='pagination-btn pagination-start' onClick={this.previousClickHandler}>
                    <a className='pagination-link'>Previous</a>
                 </li>
-                <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler} value={this.state.pageNumber}>
+                <li className='pagination-btn pagination-middle-btn selected-page' onClick={this.middleClickHandler} value={this.state.pageNumber}>
                     <a className='pagination-link'>{this.state.pageNumber}</a>
                 </li>
                 <li className='pagination-btn pagination-middle-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
