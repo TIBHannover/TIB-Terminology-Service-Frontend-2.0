@@ -46,7 +46,8 @@ class SearchResult extends React.Component{
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
       let enteredTerm = targetQueryParams.q
       if (enteredTerm.length > 0){
-        let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${enteredTerm}`)
+        let searchUrl = "https://service.tib.eu/ts4tib/api/search?q=" + enteredTerm + "&rows=" + this.state.pageSize;
+        let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());
         let allCollections = await getAllCollectionsIds();        
         searchResult =  resultJson['response']['docs'];
