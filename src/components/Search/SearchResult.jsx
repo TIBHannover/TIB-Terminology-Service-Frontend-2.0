@@ -43,6 +43,7 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
+        this.paginationURL = this.paginationURL.bind(this);
     }
 
     async searching(){
@@ -262,8 +263,8 @@ async suggestionHandler(selectedTerm){
   }
 
   /**
-       * Handle the pagination change. This function has to be passed to the Pagination component
-       */
+    * Handle the pagination change. This function has to be passed to the Pagination component
+    */
    async paginationHandler () {
     let ontologies = this.state.ontologies;
     let types = this.state.types;
@@ -294,6 +295,18 @@ async suggestionHandler(selectedTerm){
      }
      
   }
+
+  /**
+   * Updates url for pagination
+   * @param {*} 
+   */
+  paginationURL(){
+
+  }
+
+
+
+
 
   submitHandler(event){  
     let newEnteredTerm = document.getElementById('search-input').value;
