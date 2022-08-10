@@ -263,6 +263,28 @@ async suggestionHandler(selectedTerm){
   }
 
   /**
+   * Updates url for pagination
+   * @param {*} 
+   */
+   paginationURL(rangeCount){
+    if(rangeCount.length == 0){
+      this.props.history.push(window.location.pathname);
+      return true;
+    }
+
+    let currentUrlParams = new URLSearchParams();
+
+    if(rangeCount !== 0){
+      for(let cnt of rangeCount){
+        currentUrlParams.append('page', cnt);
+      }
+    }
+
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+
+  }
+
+  /**
     * Handle the pagination change. This function has to be passed to the Pagination component
     */
    async paginationHandler () {
@@ -280,6 +302,7 @@ async suggestionHandler(selectedTerm){
       console.info(baseUrl)
       let targetUrl = await fetch(baseUrl)
       let newResults = (await targetUrl.json())['response']['docs']
+      this.updateURL(rangeCount)
       this.setState({
         searchResult: newResults
      })
@@ -294,14 +317,6 @@ async suggestionHandler(selectedTerm){
      })
      }
      
-  }
-
-  /**
-   * Updates url for pagination
-   * @param {*} 
-   */
-  paginationURL(){
-
   }
 
 
