@@ -60,6 +60,7 @@ The Search form styles
     overflow-y: scroll;
     padding-bottom: 20px;
     padding-top: 10px;
+    position: absolute;
     z-index: 999;
     padding-left: 10x;
     padding-right: 10px;
