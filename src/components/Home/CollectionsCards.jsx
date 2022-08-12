@@ -113,11 +113,7 @@ export function createCollectionCards(){
                         <img src={BAUDIGITAL}/>
                         <div class="font-weight-bold mb-2">FID Baudigital</div>
                         <h3 class="h5 mb-0"><a href="#" class="text-dark text-decoration-none">
-                          Lorum Ipsum, Lorum Ipsum&nbsp;</a>Only static HTML - Web sites. You can click on menu item in navbar. 
-                          Additionally avalaible: Layout search result 
-                          <a href="file:///C:/Users/koeplero/Meine%20Ablage/Pinegrow%20-%20TS%20TIB%20General/search_results.html">EXAMPLE.
-                          </a><span> and Detail page of ontology entry </span>
-                          <a href="file:///C:/Users/koeplero/Meine%20Ablage/Pinegrow%20-%20TS%20TIB%20General/edam.html">EXAMPLE</a></h3>
+                        The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.</a></h3>
                     </div>
                 </div>
               </div>
