@@ -102,7 +102,7 @@ export function createCollectionCards(){
                   <div class="p-3">
                       <div class="font-weight-bold mb-2">FID Move</div>
                       <a href="#" class="text-dark text-decoration-none">
-                        <h3 class="h5 mb-0">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor .</h3>
+                        <h3 class="h5 mb-0">The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.</h3>
                       </a>
                   </div>
               </div> 
