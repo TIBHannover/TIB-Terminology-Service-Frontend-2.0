@@ -10,7 +10,7 @@ function Header () {
     <div className='header-warpper'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
-            <a href="#">Login</a>
+            {/* <a href="#">Login</a> */}
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-sm-4'>
