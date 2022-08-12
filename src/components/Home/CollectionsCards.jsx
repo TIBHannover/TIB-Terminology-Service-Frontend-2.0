@@ -2,7 +2,7 @@ import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Power
 import COYPU from "../../assets/img/logo_CoyPu.png"
 import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png"
 import FIDMOVE from "../../assets/img/fidmove_logo.svg"
-import BAUDIGITAL from "../../assets/img/baudigital_logo.png"
+import BAUDIGITAL from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg"
 
 export function createCollectionCards(){
     let cards = [
@@ -102,7 +102,7 @@ export function createCollectionCards(){
                   <div class="p-3">
                       <div class="font-weight-bold mb-2">FID Move</div>
                       <a href="#" class="text-dark text-decoration-none">
-                        <h3 class="h5 mb-0">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor .</h3>
+                        <h3 class="h5 mb-0">The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.</h3>
                       </a>
                   </div>
               </div> 
@@ -110,14 +110,10 @@ export function createCollectionCards(){
               <div className="col-sm-6">
                 <div class="bg-white d-flex flex-column h-100 collection-holder-box"> 
                     <div class="p-3">
-                        <img src={BAUDIGITAL}/>
+                        <img src={BAUDIGITAL} width="500" height="180"/>
                         <div class="font-weight-bold mb-2">FID Baudigital</div>
                         <h3 class="h5 mb-0"><a href="#" class="text-dark text-decoration-none">
-                          Lorum Ipsum, Lorum Ipsum&nbsp;</a>Only static HTML - Web sites. You can click on menu item in navbar. 
-                          Additionally avalaible: Layout search result 
-                          <a href="file:///C:/Users/koeplero/Meine%20Ablage/Pinegrow%20-%20TS%20TIB%20General/search_results.html">EXAMPLE.
-                          </a><span> and Detail page of ontology entry </span>
-                          <a href="file:///C:/Users/koeplero/Meine%20Ablage/Pinegrow%20-%20TS%20TIB%20General/edam.html">EXAMPLE</a></h3>
+                        The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.</a></h3>
                     </div>
                 </div>
               </div>
