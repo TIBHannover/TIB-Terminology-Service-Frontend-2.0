@@ -2,7 +2,7 @@ import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Power
 import COYPU from "../../assets/img/logo_CoyPu.png"
 import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png"
 import FIDMOVE from "../../assets/img/fidmove_logo.svg"
-import BAUDIGITAL from "../../assets/img/baudigital_logo.png"
+import BAUDIGITAL from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg"
 
 export function createCollectionCards(){
     let cards = [
@@ -110,7 +110,7 @@ export function createCollectionCards(){
               <div className="col-sm-6">
                 <div class="bg-white d-flex flex-column h-100 collection-holder-box"> 
                     <div class="p-3">
-                        <img src={BAUDIGITAL}/>
+                        <img src={BAUDIGITAL} width="500" height="180"/>
                         <div class="font-weight-bold mb-2">FID Baudigital</div>
                         <h3 class="h5 mb-0"><a href="#" class="text-dark text-decoration-none">
                         The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.</a></h3>
