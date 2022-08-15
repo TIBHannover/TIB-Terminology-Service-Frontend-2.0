@@ -10,7 +10,41 @@ class Collections extends React.Component{
     render(){
         return(
             <div className='container collections-info-container'>
-
+                <div className='row'>
+                    <div className='col-sm-3'></div>
+                    <div className='col-sm-9'><h3>Collections</h3></div>  
+                </div>
+                <br></br>
+                <div className='row'>
+                    <div className='col-sm-3'>
+                        <img class="img-fluid w-100" alt="" width="700" height="480" src={NFDI4CHEM}/>
+                    </div>
+                    <div className='col-sm-9'>
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <h4>NFDI4Chem Project</h4>
+                            </div>                          
+                        </div>
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <p>
+                                    The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies 
+                                    providing a single point of access to the latest ontology versions. You can browse or search the ontologies 
+                                    and look into their terms and relations. The Terminology Service can be used either by humans throught 
+                                    the website or by machines via the TS API. The NFDI4Chem Terminology Service is 
+                                    developed and maintained by TIB - Leibniz Information Centre for Science and Technology. 
+                                    It is part of the service portfolio of the NFDI4Chem consortium within the National Research 
+                                    Data Infrastructure.
+                                </p>
+                            </div>                          
+                        </div>
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <b>Ontologies:</b>
+                            </div>                          
+                        </div>                                                
+                    </div>
+                </div>
 
             </div>
         );
