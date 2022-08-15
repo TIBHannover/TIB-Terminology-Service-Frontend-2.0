@@ -86,8 +86,7 @@ export function createCollectionCards(){
                     <div class="p-3">
                         <div class="font-weight-bold mb-2">FAIR Data Spaces</div>
                         <a href="#" class="text-dark text-decoration-none">
-                          <h3 class="h5 mb-0">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                           tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.&nbsp;
+                          <h3 class="h5 mb-0">The collection of ontologies used in FAIR Data Spaces project is developed by the demonstrators from the  biodiversity, engineering sciences, and healthcare domain to enable the implementation of a common cloud-based data space for industry and academia within the Gaia-X European data infrastructure.  The focus of this collection is to ensure interoperability and reusability in Gaia-X, especially for organizations.
                            </h3>
                         </a>
                     </div>     

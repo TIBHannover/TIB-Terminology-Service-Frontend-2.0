@@ -60,6 +60,7 @@ The Header styles
    padding-left: 10%;
    padding-right: 10%;
    margin-bottom: 30px;
+   width: 120%;
 }
 
 .site-header-searchbox-holder{
@@ -205,6 +206,7 @@ The Navbar styles
     */
     display: flex;
     flex-direction: row;
+    justify-content: flex-start !important;
   }
   
 .navbar-item {
@@ -214,7 +216,7 @@ The Navbar styles
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 50px;
+    margin-left: 30px;
     color: inherit;
     text-decoration: inherit;
     text-transform: uppercase;
