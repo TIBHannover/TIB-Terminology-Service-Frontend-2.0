@@ -7,6 +7,10 @@ import Home from "./components/Home/Home";
 import SearchResult from "./components/Search/SearchResult";
 import Documentation from "./components/Documentation/Documentation";
 import Collections from "./components/Collection/Collection";
+import Imprint from '../src/assets/static/imprint' 
+import PrivacyPolicy from '../src/assets/static/PrivacyPolicy';
+import TermsOfUse from '../src/assets/static/TermsOfUse';
+
 
 
 function App() {
@@ -22,6 +26,9 @@ function App() {
           <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
           <Route exact path="/documentation" component={Documentation}/>
           <Route exact path="/search" component={SearchResult} />
+          <Route exact path="/imprint" component={Imprint}/>
+          <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
+          <Route exact path="/TermsOfUse" component={TermsOfUse}/>
         </Switch>
         <Footer />
       </BrowserRouter>
