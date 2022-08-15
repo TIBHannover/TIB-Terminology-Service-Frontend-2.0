@@ -4,6 +4,8 @@ import COYPU from "../../assets/img/logo_CoyPu.png";
 import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png";
 import FIDMOVE from "../../assets/img/fidmove_logo.svg";
 import BAUDIGITAL from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg";
+import '../layout/Collections.css';
+
 
 class Collections extends React.Component{
 
@@ -11,15 +13,15 @@ class Collections extends React.Component{
         return(
             <div className='container collections-info-container'>
                 <div className='row'>
-                    <div className='col-sm-3'></div>
-                    <div className='col-sm-9'><h3>Collections</h3></div>  
+                    <div className='col-sm-2'></div>
+                    <div className='col-sm-10'><h3>Collections</h3></div>  
                 </div>
                 <br></br>
                 <div className='row'>
-                    <div className='col-sm-3'>
-                        <img class="img-fluid w-100" alt="" width="700" height="480" src={NFDI4CHEM}/>
+                    <div className='col-sm-2'>
+                        <img class="img-fluid" alt="" width="200" height="100" src={NFDI4CHEM}/>
                     </div>
-                    <div className='col-sm-9'>
+                    <div className='col-sm-10'>
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <h4>NFDI4Chem Project</h4>
