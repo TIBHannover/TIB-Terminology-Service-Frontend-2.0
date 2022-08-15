@@ -5,7 +5,7 @@ import FAIRDSLogo from "../../assets/img/FAIR_DS_Logo_RGB.png";
 import FIDMOVELogo from "../../assets/img/fidmove_logo.svg";
 import BAUDIGITALLogo from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg";
 import '../layout/Collections.css';
-import {getCollectionOntologies, getAllCollectionsIds} from '../../api/fetchData';
+import {getCollectionOntologies} from '../../api/fetchData';
 
 
 class Collections extends React.Component{
@@ -55,24 +55,24 @@ class Collections extends React.Component{
      */
     createCollectionCard(collectionName, collectionId, Logo, content){
         let card = [
-            <div className='row collection-card-row'>
-                <div className='col-sm-2'>
+            <div className='row collection-card-row' key={collectionId}>
+                <div className='col-sm-2' key={collectionId + "_logo"}>
                     <img class="img-fluid" alt="" width="200" height="100" src={Logo}/>
                 </div>
                 <div className='col-sm-10 collection-content'>
-                    <div className='row'>
+                    <div className='row' key={collectionId + "_name"}>
                         <div className='col-sm-12'>
                             <h4>{collectionName}</h4>
                         </div>                          
                     </div>
-                    <div className='row'>
+                    <div className='row' key={collectionId + "_content"}>
                         <div className='col-sm-12'>
                             <p align="justify">
                                 {content}
                             </p>
                         </div>                          
                     </div>
-                    <div className='row'>
+                    <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
                             <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies[collectionId] : ""}
                         </div>
