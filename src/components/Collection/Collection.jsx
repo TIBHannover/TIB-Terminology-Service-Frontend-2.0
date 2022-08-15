@@ -26,14 +26,17 @@ class Collections extends React.Component{
      * Get the list og ontologies for a collection
      * @param {*} collectionId 
      */
-    async getOntologies(collectionId){
-        let ontologies = await getCollectionOntologies(["NFDI4CHEM"], false);
+    async getOntologies(){
         let collectionOntologies = {};
-        collectionOntologies["NFDI4CHEM"] = []; 
-        for (let onto of ontologies){
-            collectionOntologies["NFDI4CHEM"].push(
-                <a href="#" className='ontologies-link-tag'>{onto["ontologyId"]}</a>
-            );
+        for (let col in this.state.collectionIds){
+            let ontologies = await getCollectionOntologies([col], false);
+            collectionOntologies[col] = [];
+            for (let onto of ontologies){
+                collectionOntologies[col].push(
+                    <a href="#" className='ontologies-link-tag'>{onto["ontologyId"]}</a>
+                );
+            }
+
         }
         
         this.setState({
@@ -101,7 +104,7 @@ class Collections extends React.Component{
 
     
     componentDidMount(){
-        this.getOntologies("");        
+        this.getOntologies();        
     }
 
 
