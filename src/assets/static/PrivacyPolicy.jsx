@@ -5,7 +5,7 @@ class PrivacyPolicy extends React.Component{
       return(
         <section id="main-content-area" role="main">
             <div class="row">
-            <h2 id="_privacy_policy">Privacy Policy</h2>
+            <h2 id="privacy_policy">Privacy Policy</h2>
              <div class="sectionbody">
              <div class="paragraph">
                <p>Data protection is of high priority for the Technische Informationsbibliothek (TIB). As a general rule, the use of TIB’s services does not require the provision of any personal data. However, the processing of personal data may be required where a data subject wants to use special services via the TIB’s web pages. Where the processing of personal data is required and where there is no legal basis for such processing, we shall obtain the data subject’s consent.<br/>
