@@ -3,22 +3,38 @@
 */
 
 .collections-info-container{
+    /* 
+        The style for the collections page container
+    */
+
     padding-top: 50px;
     max-width: 1140px;
     margin: auto;
-}
-
-.collection-content{
-    padding-top: 25px;
     color: #788188;
 }
 
+.collection-content{
+    /* 
+        The style for each collection text content
+    */
+
+    padding-top: 25px;
+}
+
 .collection-ontologies-text{
+    /* 
+        The style for each collection ontologies list div
+    */
+
     color: #6C757D!important;
     word-wrap: break-word;
 }
 
 .ontologies-link-tag{
+    /* 
+        The style for each collection ontologies links
+    */
+
     text-decoration: none;
     color: #009cbc;
     margin-left: 10px;
@@ -26,5 +42,9 @@
 }
 
 .collection-card-row{
+    /* 
+        The style for each collection row container
+    */
+
     margin-bottom: 30px;
 }
