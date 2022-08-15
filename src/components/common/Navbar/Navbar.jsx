@@ -8,6 +8,7 @@ function Navbar () {
   return (
     <div className='col-sm-8 navbar'>
       <Link to="/" className="navbar-item">Home</Link>
+      <a href="/ontologies" className="navbar-item">Collections</a>
       <a href="/ontologies" className="navbar-item">Ontologies</a>
       <Link to="/help" className="navbar-item">Help</Link>
       <Link to="/documentation" className="navbar-item">Documentation</Link>
