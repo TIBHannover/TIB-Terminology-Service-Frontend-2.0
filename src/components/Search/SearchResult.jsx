@@ -266,18 +266,16 @@ async suggestionHandler(selectedTerm){
    * Updates url for pagination
    * @param {*} 
    */
-   paginationURL(rangeCount){
-    if(rangeCount.length == 0){
+   paginationURL(){
+    if(this.state.pageNumber === 0){
       this.props.history.push(window.location.pathname);
       return true;
     }
 
     let currentUrlParams = new URLSearchParams();
 
-    if(rangeCount !== 0){
-      for(let cnt of rangeCount){
-        currentUrlParams.append('page', cnt);
-      }
+    if(this.state.pageNumber !== 0){
+        currentUrlParams.append('page', this.state.pageNumber);
     }
 
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
@@ -299,17 +297,15 @@ async suggestionHandler(selectedTerm){
       types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`
       })
-      console.info(baseUrl)
       let targetUrl = await fetch(baseUrl)
       let newResults = (await targetUrl.json())['response']['docs']
-      this.updateURL(rangeCount)
+      this.paginationURL();
       this.setState({
         searchResult: newResults
      })
      }
      else{
       let targetUrl = await fetch(baseUrl)
-      console.info(targetUrl)
       let resultJson = (await targetUrl.json());
       let newResults = resultJson['response']['docs']
       this.setState({
