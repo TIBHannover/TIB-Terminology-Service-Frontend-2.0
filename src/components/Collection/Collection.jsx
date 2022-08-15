@@ -33,7 +33,7 @@ class Collections extends React.Component{
             collectionOntologies[col] = [];
             for (let onto of ontologies){
                 collectionOntologies[col].push(
-                    <a href="#" className='ontologies-link-tag'>{onto["ontologyId"]}</a>
+                    <a href={'/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
                 );
             }
 
