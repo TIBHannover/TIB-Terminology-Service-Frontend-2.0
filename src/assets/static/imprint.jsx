@@ -1,6 +1,6 @@
 import React from 'react'
 
-class imprint extends React.Component{
+class Imprint extends React.Component{
     render(){
         return(
             <section id="main-content-area" role="main">
@@ -87,4 +87,4 @@ class imprint extends React.Component{
 
 }
 
-export default imprint
+export default Imprint
