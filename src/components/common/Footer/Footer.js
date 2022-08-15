@@ -5,6 +5,9 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import TIB_LOGO from '../../../assets/img/TIB_Logo_EN_WM_W.SVG';
 import DFG_LOGO from '../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_en.gif';
 import styled from 'styled-components';
+import Imprint from '../../../assets/static/imprint' 
+import PrivacyPolicy from '../../../assets/static/PrivacyPolicy';
+import TermsOfUse from '../../../assets/static/TermsOfUse';
 
 const FooterWrapper = styled.div`
     background: #2B3C46;
@@ -57,13 +60,13 @@ const Footer = () => (
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
                             <li>
-                                <Link to={""} style={{ color: 'white'}}>Privacy Policy</Link>
+                                <a href={PrivacyPolicy} style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Privacy Policy</a>
                             </li>
                             <li>
-                                <Link to={""} style={{ color: 'white'}}>Terms of use</Link>
+                                <a href={TermsOfUse} style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Terms of use</a>
                             </li>
                             <li>
-                                <Link to={""} style={{ color: 'white'}}>Imprint</Link>
+                                <a href={Imprint} style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Imprint</a>
                             </li>
                         </ul>
                     </FooterCol>
