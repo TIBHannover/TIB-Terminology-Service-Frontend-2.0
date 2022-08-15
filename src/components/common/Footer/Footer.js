@@ -60,13 +60,13 @@ const Footer = () => (
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
                             <li>
-                                <a href={PrivacyPolicy} style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                                <a href="/PrivacyPolicy" style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Privacy Policy</a>
                             </li>
                             <li>
-                                <a href={TermsOfUse} style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Terms of use</a>
+                                <a href="/TermsOfUse" style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Terms of use</a>
                             </li>
                             <li>
-                                <a href={Imprint} style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Imprint</a>
+                                <a href="/imprint" style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Imprint</a>
                             </li>
                         </ul>
                     </FooterCol>
