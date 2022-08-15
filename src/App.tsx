@@ -6,6 +6,7 @@ import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetai
 import Home from "./components/Home/Home";
 import SearchResult from "./components/Search/SearchResult";
 import Documentation from "./components/Documentation/Documentation";
+import Collections from "./components/Collection/Collection";
 import Imprint from '../src/assets/static/imprint' 
 import PrivacyPolicy from '../src/assets/static/PrivacyPolicy';
 import TermsOfUse from '../src/assets/static/TermsOfUse';
@@ -21,6 +22,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route exact path="/ontologies" component={OntologyList}/>
+          <Route exact path="/collections" component={Collections}/>
           <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
           <Route exact path="/documentation" component={Documentation}/>
           <Route exact path="/search" component={SearchResult} />
