@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../components/layout/static.css'
 
 class TermsOfUse extends React.Component{
     render(){

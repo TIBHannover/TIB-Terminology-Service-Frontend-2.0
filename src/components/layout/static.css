@@ -1,3 +1,13 @@
 /* 
   Styles for static legal content in footer
 */
+
+.row{
+    /* 
+      Styles for rows 
+    */
+    margin-left: 20px;
+}
+.imprint{
+    text-decoration: bold;
+}

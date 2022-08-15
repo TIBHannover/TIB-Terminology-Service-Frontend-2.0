@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../components/layout/static.css'
 
 class Imprint extends React.Component{
     render(){

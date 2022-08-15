@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../components/layout/static.css'
 
 class PrivacyPolicy extends React.Component{
     render(){
