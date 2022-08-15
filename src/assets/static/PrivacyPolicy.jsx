@@ -4,10 +4,10 @@ class PrivacyPolicy extends React.Component{
     render(){
       return(
         <section id="main-content-area" role="main">
-            <div class="row">
-            <h2 id="privacy_policy">Privacy Policy</h2>
-             <div class="sectionbody">
-             <div class="paragraph">
+            <div className="row">
+            <h2 className="privacy_policy">Privacy Policy</h2>
+             <div className="sectionbody">
+             <div className="paragraph">
                <p>Data protection is of high priority for the Technische Informationsbibliothek (TIB). As a general rule, the use of TIB’s services does not require the provision of any personal data. However, the processing of personal data may be required where a data subject wants to use special services via the TIB’s web pages. Where the processing of personal data is required and where there is no legal basis for such processing, we shall obtain the data subject’s consent.<br/>
                   The processing of personal data, such as for example the data subject’s name, address, email address, or telephone number shall always be carried out in accordance with the General Data Protection Regulation (GDPR) and the state and institution-specific data protection rules and regulations applicable to the TIB. This privacy statement serves to inform the public about the nature, scope and purpose of the personal data we collect, use and process, as well as of the rights data subjects are entitled to.<br/>
                   The terms used in this privacy statement are to be understood within the meaning of the <a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX%3A32016R0679">European General Data Protection Regulation (GDPR)</a>.<br/>
