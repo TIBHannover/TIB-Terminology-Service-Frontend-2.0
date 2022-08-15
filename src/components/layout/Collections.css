@@ -16,3 +16,10 @@
 .collection-ontologies-text{
     color: #6C757D!important;
 }
+
+.ontologies-link-tag{
+    text-decoration: none;
+    color: #009cbc;
+    margin-left: 10px;
+    font-size: 18px;
+}

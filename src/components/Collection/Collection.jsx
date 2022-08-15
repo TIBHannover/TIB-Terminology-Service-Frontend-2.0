@@ -5,9 +5,44 @@ import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png";
 import FIDMOVE from "../../assets/img/fidmove_logo.svg";
 import BAUDIGITAL from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg";
 import '../layout/Collections.css';
+import {getCollectionOntologies} from '../../api/fetchData';
 
 
 class Collections extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = ({
+            collectionOntologies: []
+        });
+
+        this.getOntologies = this.getOntologies.bind(this);
+    }
+
+
+    /**
+     * Get the list og ontologies for a collection
+     * @param {*} collectionId 
+     */
+    async getOntologies(collectionId){
+        let ontologies = await getCollectionOntologies(["NFDI4CHEM"], false);
+        let collectionOntologies = {};
+        collectionOntologies["NFDI4CHEM"] = []; 
+        for (let onto of ontologies){
+            collectionOntologies["NFDI4CHEM"].push(
+                <a href="#" className='ontologies-link-tag'>{onto["ontologyId"]}</a>
+            );
+        }
+        
+        this.setState({
+            collectionOntologies: collectionOntologies
+        });
+    }
+
+    
+    componentDidMount(){
+        this.getOntologies("");
+    }
+
 
     render(){
         return(
@@ -42,8 +77,8 @@ class Collections extends React.Component{
                         </div>
                         <div className='row'>
                             <div className='col-sm-12 collection-ontologies-text'>
-                                <b>Ontologies:</b>
-                            </div>                          
+                                <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies["NFDI4CHEM"] : ""}
+                            </div>
                         </div>                                                
                     </div>
                 </div>
