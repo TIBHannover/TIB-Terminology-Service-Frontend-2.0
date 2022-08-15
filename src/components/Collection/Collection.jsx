@@ -12,7 +12,8 @@ class Collections extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            collectionOntologies: []
+            collectionOntologies: [],
+            collectionIds: {"NFDI4CHEM": {}, "NFDI4ING":{}, "CoyPu":{}, "FID move":{}, "FAIR Data Spaces":{}, "FID BAUdigital":{}}
         });
 
         this.getOntologies = this.getOntologies.bind(this);
@@ -83,7 +84,7 @@ class Collections extends React.Component{
 
     createCollectionList(){
         let nfdi4ingLogoUrl = "https://terminology.nfdi4ing.de/ts4ing/img/logo_nfdi4ing_rgb_quer_scaled.png";
-        let collectionIds = {"NFDI4CHEM": {}, "NFDI4ING":{}, "CoyPu":{}, "FID move":{}, "FAIR Data Spaces":{}, "FID BAUdigital":{}};
+        let collectionIds = this.state.collectionIds;
         collectionIds["NFDI4CHEM"] = {"logo": NFDI4CHEMLogo, "name": "NFDI4Chem Project", "content": "The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure."};
         collectionIds["NFDI4ING"] = {"logo": nfdi4ingLogoUrl, "name": "NFDI4Ing Project", "content":"NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service ." };
         collectionIds["CoyPu"] = {"logo": COYPULogo, "name": "CoyPu Project", "content": "The CoyPu collection by TIB Terminology Service provides a well-selected set of ontologies for representing the domain for integrating, structuring, networking, analyzing and evaluating heterogeneous data from economic value networks as well as the industry environment and social context."};
