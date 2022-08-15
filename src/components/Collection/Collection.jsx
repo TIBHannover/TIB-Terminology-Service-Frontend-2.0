@@ -21,7 +21,7 @@ class Collections extends React.Component{
                     <div className='col-sm-2'>
                         <img class="img-fluid" alt="" width="200" height="100" src={NFDI4CHEM}/>
                     </div>
-                    <div className='col-sm-10'>
+                    <div className='col-sm-10 collection-content'>
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <h4>NFDI4Chem Project</h4>
@@ -29,7 +29,7 @@ class Collections extends React.Component{
                         </div>
                         <div className='row'>
                             <div className='col-sm-12'>
-                                <p>
+                                <p align="justify">
                                     The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies 
                                     providing a single point of access to the latest ontology versions. You can browse or search the ontologies 
                                     and look into their terms and relations. The Terminology Service can be used either by humans throught 
@@ -41,7 +41,7 @@ class Collections extends React.Component{
                             </div>                          
                         </div>
                         <div className='row'>
-                            <div className='col-sm-12'>
+                            <div className='col-sm-12 collection-ontologies-text'>
                                 <b>Ontologies:</b>
                             </div>                          
                         </div>                                                

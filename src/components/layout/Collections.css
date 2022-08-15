@@ -4,4 +4,15 @@
 
 .collections-info-container{
     padding-top: 50px;
+    max-width: 1140px;
+    margin: auto;
+}
+
+.collection-content{
+    padding-top: 25px;
+    color: #788188;
+}
+
+.collection-ontologies-text{
+    color: #6C757D!important;
 }
