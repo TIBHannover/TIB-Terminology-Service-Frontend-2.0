@@ -1,5 +1,5 @@
 import React from 'react';
-import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png";
+import NFDI4CHEMLogo  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png";
 import COYPU from "../../assets/img/logo_CoyPu.png";
 import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png";
 import FIDMOVE from "../../assets/img/fidmove_logo.svg";
@@ -16,6 +16,7 @@ class Collections extends React.Component{
         });
 
         this.getOntologies = this.getOntologies.bind(this);
+        this.createCollectionCard = this.createCollectionCard.bind(this);
     }
 
 
@@ -38,6 +39,46 @@ class Collections extends React.Component{
         });
     }
 
+
+    /**
+     * Create the skeleton for rendering a collectin info
+     * @param {*} collectionName 
+     * @param {*} collectionId 
+     * @param {*} Logo 
+     * @param {*} content 
+     * @returns 
+     */
+    createCollectionCard(collectionName, collectionId, Logo, content){
+        let card = [
+            <div className='row'>
+                <div className='col-sm-2'>
+                    <img class="img-fluid" alt="" width="200" height="100" src={Logo}/>
+                </div>
+                <div className='col-sm-10 collection-content'>
+                    <div className='row'>
+                        <div className='col-sm-12'>
+                            <h4>{collectionName}</h4>
+                        </div>                          
+                    </div>
+                    <div className='row'>
+                        <div className='col-sm-12'>
+                            <p align="justify">
+                                {content}
+                            </p>
+                        </div>                          
+                    </div>
+                    <div className='row'>
+                        <div className='col-sm-12 collection-ontologies-text'>
+                            <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies[collectionId] : ""}
+                        </div>
+                    </div>           
+                </div>
+            </div>
+        ];
+
+        return card;
+    }
+
     
     componentDidMount(){
         this.getOntologies("");
@@ -52,37 +93,7 @@ class Collections extends React.Component{
                     <div className='col-sm-10'><h3>Collections</h3></div>  
                 </div>
                 <br></br>
-                <div className='row'>
-                    <div className='col-sm-2'>
-                        <img class="img-fluid" alt="" width="200" height="100" src={NFDI4CHEM}/>
-                    </div>
-                    <div className='col-sm-10 collection-content'>
-                        <div className='row'>
-                            <div className='col-sm-12'>
-                                <h4>NFDI4Chem Project</h4>
-                            </div>                          
-                        </div>
-                        <div className='row'>
-                            <div className='col-sm-12'>
-                                <p align="justify">
-                                    The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies 
-                                    providing a single point of access to the latest ontology versions. You can browse or search the ontologies 
-                                    and look into their terms and relations. The Terminology Service can be used either by humans throught 
-                                    the website or by machines via the TS API. The NFDI4Chem Terminology Service is 
-                                    developed and maintained by TIB - Leibniz Information Centre for Science and Technology. 
-                                    It is part of the service portfolio of the NFDI4Chem consortium within the National Research 
-                                    Data Infrastructure.
-                                </p>
-                            </div>                          
-                        </div>
-                        <div className='row'>
-                            <div className='col-sm-12 collection-ontologies-text'>
-                                <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies["NFDI4CHEM"] : ""}
-                            </div>
-                        </div>                                                
-                    </div>
-                </div>
-
+                
             </div>
         );
     }
