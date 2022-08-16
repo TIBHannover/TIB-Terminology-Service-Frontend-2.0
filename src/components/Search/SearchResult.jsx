@@ -159,7 +159,7 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title">                
+              <div className="search-card-title text-dark">                
                   <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
                     {searchResultItem[i].label}
                   </a></h4> 
@@ -170,7 +170,7 @@ async suggestionHandler(selectedTerm){
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
-              <div className="searchresult-card-description">
+              <div className="searchresult-card-description h5 mb-0 text-dark">
                 <p>{searchResultItem[i].description}</p>
               </div>
               <div className="searchresult-ontology">
@@ -348,7 +348,7 @@ async suggestionHandler(selectedTerm){
             
           </Grid>
           <Grid item xs={8} id="search-list-grid">
-              <h3>{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
+              <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
               {this.createSearchResultList()}              
               <Pagination 
                 clickHandler={this.handlePagination} 

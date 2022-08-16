@@ -57,8 +57,8 @@ export function buildHierarchicalArray(flatList){
     }
     else{
       listItem.classList.add("leaf-node");
-      symbol.classList.add("fa");
-      symbol.classList.add("fa-close");
+      // symbol.classList.add("fa");
+      // symbol.classList.add("fa-close");
     }
     listItem.appendChild(symbol);
     if(childNode["a_attr"]["class"] === "part_of"){
@@ -102,7 +102,8 @@ export function buildHierarchicalArray(flatList){
         }
         else{
           nodeStatusClass = "leaf-node";
-          iconClass = "fa" + LEAF__CLASSES;
+          // iconClass = "fa" + LEAF__CLASSES;
+          iconClass = "";
         }
         clickedClass = "clicked targetNodeByIri";
       }
@@ -117,7 +118,8 @@ export function buildHierarchicalArray(flatList){
         }
         else{
           nodeStatusClass = "leaf-node";
-          iconClass = "fa" + LEAF__CLASSES;
+          // iconClass = "fa" + LEAF__CLASSES; 
+          iconClass = "";         
         }
       }
       let symbol = React.createElement("i", {"className": iconClass }, "");
@@ -219,4 +221,19 @@ export async function expandNode(e, ontologyId, childExtractName){
     }
     return node.is_root;
     
+  }
+
+
+  /**
+   * Check a node is part of the list of a list of nodes or not
+   * @param {*} nodeIri 
+   * @param {*} roots 
+   */
+  export function nodeExistInList(nodeIri, list){
+    for(let item of list){
+      if (item["iri"] === nodeIri){
+        return true
+      }
+    }
+    return false;
   }
