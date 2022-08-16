@@ -125,7 +125,8 @@ class DataTree extends React.Component {
           let textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, roots[0].text);
           if (! await nodeHasChildren(this.state.ontologyId, roots[0].iri, this.state.componentIdentity)){
             leafClass = " leaf-node";
-            symbol = React.createElement("i", {"className": "fa fa-close"}, ""); 
+            // symbol = React.createElement("i", {"className": "fa fa-close"}, ""); 
+            symbol = React.createElement("i", {"className": ""}, ""); 
           }
           let listItem = React.createElement("li", {         
             "data-iri":roots[0].iri, 
@@ -157,7 +158,8 @@ class DataTree extends React.Component {
           if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
             //  root node is a leaf
             leafClass = " leaf-node";
-            symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+            // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+            symbol = React.createElement("i", {"className": ""}, "");
           }
           
           else if(roots[i].childrenList.length === 0 && roots[i].children && !roots[i].opened){
@@ -216,7 +218,8 @@ class DataTree extends React.Component {
     let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes[i].label);
     if (!rootNodes[i].has_children){
       leafClass = " leaf-node";
-      symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+      // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+      symbol = React.createElement("i", {"className": ""}, "");
     }    
     let listItem = React.createElement("li", {         
         "data-iri":rootNodes[i].iri, 
