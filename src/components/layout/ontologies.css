@@ -21,6 +21,7 @@ The ontology list page styles.
     overflow-x: hidden;
     overflow-y: hidden;
     color: #6C757D !important;
+    padding-top: 50px;
 }
 
 #ontology-list-facet-grid{
@@ -37,6 +38,7 @@ The ontology list page styles.
     */
 
     margin-bottom: 20px;
+    color: black;
 }
 
 .ontology-card{
@@ -68,6 +70,7 @@ The ontology list page styles.
 
     margin-top: 30px;
     font-size: 1.25rem;
+    color: black
 }
 
 .ontology-id-tag{
@@ -163,6 +166,7 @@ The ontology list page styles.
 
     margin-top: 30px;
     width: 100% !important;
+    color: black
 }
 
 .ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
@@ -324,7 +328,7 @@ The ontology detail page styles. It contains the ontology overview page.
         Style for the ontology detail text (description)
     */
 
-    color: #6c757d !important;
+    color: black !important;
 }
 
 

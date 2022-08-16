@@ -6,12 +6,13 @@ class Imprint extends React.Component{
         return(
             <section id="main-content-area" role="main">
             <div className="row">
-                <h2 className="imprint">Imprint</h2>
-                <p>
+                <h2 className="text-dark">Imprint</h2>
+                <p class="h5 mb-0">
                     Imprint for this website &#8208; also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)
-                </p>       
-                <h3>Provider:</h3>
-                <p>
+                </p> 
+                <br/>      
+                <h3 className="text-dark">Provider:</h3>
+                <p class="h5 mb-0">
                 
                 Technische Informationsbibliothek (TIB)
                  <br />
@@ -20,28 +21,28 @@ class Imprint extends React.Component{
                 Postfach 6080, 30060 Hannover
                  <br />
                 </p>
+                <br /><br/>
+                <h3 className='text-dark'>Authorised Representative:</h3>
                 
-                <h3>Authorised Representative:</h3>
-                
-                <p>
+                <p class="h5 mb-0">
                 
                 Prof. Dr. S&ouml;ren Auer (Director of TIB)
                  <br />
                 Technische Informationsbibliothek (TIB) is a foundation of public law of the state of Lower Saxony.
                  <br />
                 </p>
-                
+                <br/>
                 <h3>Responsible Supervisory Authority:</h3>
                 
-                <p>
+                <p class="h5 mb-0">
                 
                 Ministry for Science and Culture of Lower Saxony
                 
                 </p>
                 
-                <h3>Contact:</h3>
+                <h3 className='text-dark'>Contact:</h3>
                 
-                <p>
+                <p class="h5 mb-0">
                 
                 Customer service phone: +49 511 762-8989
                  <br />
@@ -54,17 +55,17 @@ class Imprint extends React.Component{
                 
                 </p>
                 
-                <h3>VAT (sales tax) registration number:</h3>
+                <h3 className='text-dark'>VAT (sales tax) registration number:</h3>
                 
-                <p>
+                <p class="h5 mb-0">
                 
                 DE 214931803
                 
                 </p>
                 
-                <h3>Editorial Office:</h3>
+                <h3 className='text-dark'>Editorial Office:</h3>
                 
-                <p>
+                <p class="h5 mb-0">
                 
                 Axel Klinger
                  <br />
@@ -73,9 +74,9 @@ class Imprint extends React.Component{
                 
                 </p>
                 
-                <h3>Copyright Notice:</h3>
+                <h3 className='text-dark'>Copyright Notice:</h3>
                 
-                <p>
+                <p class="h5 mb-0">
                 
                 The layout of the homepage, the graphics used and the other content are protected by copyright.
                  <br />
