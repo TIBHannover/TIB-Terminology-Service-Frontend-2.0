@@ -127,7 +127,7 @@ class DataTree extends React.Component {
             let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
             let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes.text);
             if(rootNodes.iri === target){
-              textSpan = React.createElement("span", {"className": "li-label-text clicked"}, rootNodes.text);
+              textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, rootNodes.text);
             }
             if (!rootNodes.children){
               leafClass = " leaf-node";
@@ -328,7 +328,7 @@ async showSiblings(){
           let extractName = this.state.childExtractName;
           let url = this.state.baseUrl;
           url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
-          let res =  await (await fetch(url, getCallSetting)).jsn();          
+          let res =  await (await fetch(url, getCallSetting)).json();          
           for(let i=0; i < res.length; i++){
             if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
               continue;
