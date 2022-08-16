@@ -225,11 +225,8 @@ class OntologyList extends React.Component {
 /**
  * Update the url based on facet values
  */
-  updateUrl(selectedCollections, enteredKeyword){
-    if (selectedCollections.length === 0 && enteredKeyword === ""){
-      this.props.history.push(window.location.pathname);
-    }
-    
+  updateUrl(selectedCollections, enteredKeyword){    
+    this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
     if(enteredKeyword !== ""){
@@ -238,9 +235,9 @@ class OntologyList extends React.Component {
 
     if(selectedCollections.length !== 0){
       for(let col of selectedCollections){
-        currentUrlParams.append('collection', col);
-        currentUrlParams.append('and', this.state.exclusiveCollections);
+        currentUrlParams.append('collection', col);        
       }
+      currentUrlParams.append('and', this.state.exclusiveCollections);
     }
 
     if(this.state.sortField !== "numberOfTerms"){
