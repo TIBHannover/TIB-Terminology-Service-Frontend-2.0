@@ -161,6 +161,16 @@ async suggestionHandler(selectedTerm){
             {searchResultItem[i].label}
           </a>
         }
+        else if('type' == 'class'){
+          <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+            {searchResultItem[i].label}
+          </a>
+        }
+        else if('type' == 'individuals'){
+          <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+            {searchResultItem[i].label}
+          </a>
+        }
       }
     }
   }
