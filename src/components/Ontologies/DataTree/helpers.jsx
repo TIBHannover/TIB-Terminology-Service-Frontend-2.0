@@ -102,7 +102,8 @@ export function buildHierarchicalArray(flatList){
         }
         else{
           nodeStatusClass = "leaf-node";
-          // iconClass = "fa" + LEAF__CLASSES;    
+          // iconClass = "fa" + LEAF__CLASSES;
+          iconClass = "";
         }
         clickedClass = "clicked targetNodeByIri";
       }
@@ -117,7 +118,8 @@ export function buildHierarchicalArray(flatList){
         }
         else{
           nodeStatusClass = "leaf-node";
-          // iconClass = "fa" + LEAF__CLASSES;          
+          // iconClass = "fa" + LEAF__CLASSES; 
+          iconClass = "";         
         }
       }
       let symbol = React.createElement("i", {"className": iconClass }, "");
