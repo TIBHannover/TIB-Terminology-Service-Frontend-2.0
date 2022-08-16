@@ -259,6 +259,11 @@ selectNode(target){
       showNodeDetailPage: true,
       selectedNodeIri: target.parentNode.dataset.iri
     });
+
+    let currentUrlParams = new URLSearchParams();
+    currentUrlParams.append('iri', target.parentNode.dataset.iri);
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+
   }
   else{
     target.classList.remove("clicked");
