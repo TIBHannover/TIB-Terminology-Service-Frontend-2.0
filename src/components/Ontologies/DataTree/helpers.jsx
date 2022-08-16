@@ -57,8 +57,8 @@ export function buildHierarchicalArray(flatList){
     }
     else{
       listItem.classList.add("leaf-node");
-      symbol.classList.add("fa");
-      symbol.classList.add("fa-close");
+      // symbol.classList.add("fa");
+      // symbol.classList.add("fa-close");
     }
     listItem.appendChild(symbol);
     if(childNode["a_attr"]["class"] === "part_of"){
@@ -102,7 +102,7 @@ export function buildHierarchicalArray(flatList){
         }
         else{
           nodeStatusClass = "leaf-node";
-          iconClass = "fa" + LEAF__CLASSES;
+          // iconClass = "fa" + LEAF__CLASSES;
         }
         clickedClass = "clicked targetNodeByIri";
       }
@@ -117,7 +117,7 @@ export function buildHierarchicalArray(flatList){
         }
         else{
           nodeStatusClass = "leaf-node";
-          iconClass = "fa" + LEAF__CLASSES;
+          // iconClass = "fa" + LEAF__CLASSES;
         }
       }
       let symbol = React.createElement("i", {"className": iconClass }, "");
