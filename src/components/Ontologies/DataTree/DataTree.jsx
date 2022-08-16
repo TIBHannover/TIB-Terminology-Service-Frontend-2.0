@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList } from './helpers';
 
 
 
@@ -117,25 +117,35 @@ class DataTree extends React.Component {
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
         let list =  await (await fetch(url, getCallSetting)).json();        
         let roots = buildHierarchicalArray(list);
-        let childrenList = [];
-        if(list.length === 1){
+        let childrenList = [];        
+        if(nodeExistInList(target, roots)){
           // the target node is a root node
-          let leafClass = " closed";
-          let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
-          let textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, roots[0].text);
-          if (! await nodeHasChildren(this.state.ontologyId, roots[0].iri, this.state.componentIdentity)){
-            leafClass = " leaf-node";
-            // symbol = React.createElement("i", {"className": "fa fa-close"}, ""); 
-            symbol = React.createElement("i", {"className": ""}, ""); 
-          }
-          let listItem = React.createElement("li", {         
-            "data-iri":roots[0].iri, 
-            "data-id": 0,
-            "className": "tree-node-li " + leafClass,
-            "id": roots[0].id
-            }, symbol, textSpan, []              
-          );
-          let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, [listItem]);
+          let childrenList = [];
+          let i = 0;
+          for(let rootNodes of roots){            
+            let leafClass = " closed";
+            let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+            let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes.text);
+            if(rootNodes.iri === target){
+              textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, rootNodes.text);
+            }
+            if (!rootNodes.children){
+              leafClass = " leaf-node";
+              // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+              symbol = React.createElement("i", {"className": ""}, "");
+            }    
+            let listItem = React.createElement("li", {         
+                "data-iri":rootNodes.iri, 
+                "data-id": i,
+                "className": "tree-node-li" + leafClass,
+                "id": i
+              }
+                , symbol, textSpan
+                );
+            childrenList.push(listItem);
+            i += 1;
+          }          
+          let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
           this.setState({
             targetNodeIri: target,
             searchWaiting: false,
@@ -259,6 +269,11 @@ selectNode(target){
       showNodeDetailPage: true,
       selectedNodeIri: target.parentNode.dataset.iri
     });
+
+    let currentUrlParams = new URLSearchParams();
+    currentUrlParams.append('iri', target.parentNode.dataset.iri);
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+
   }
   else{
     target.classList.remove("clicked");
@@ -313,7 +328,7 @@ async showSiblings(){
           let extractName = this.state.childExtractName;
           let url = this.state.baseUrl;
           url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
-          let res =  await (await fetch(url, getCallSetting)).jsn();          
+          let res =  await (await fetch(url, getCallSetting)).json();          
           for(let i=0; i < res.length; i++){
             if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
               continue;
