@@ -9,14 +9,15 @@ export function createCollectionCards(){
         <div className="container home-page-content-container">
             <div className="row">
               <div className="col-sm-12">
-                  <h3>TIB Terminology Service</h3>
-                  <p className="text-justify">
+                  <h3 className="text-dark">TIB Terminology Service</h3>
+                  <p className="text-justify text-dark text-decoration-none h5 mb-0">
                       With its new Terminology Service, TIB – Leibniz Information Centre for Science and Technology
                       and University Library provides a single point of access to terminology from domains such as architecture,
                       chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API
                       to retrieve terminological information and use it in your technical services. Layout template for TIB General. 
                   </p>
-                  <p>
+                  <br/>
+                  <p className="text-justify text-dark text-decoration-none h5 mb-0">
                     Examples: <a href='/search?q=oxidation' style={{textDecoration: "none"}}>Oxidation</a>, <a href='/search?q=IAO_0020000' style={{textDecoration: "none"}}>IAO_0020000</a>
                   </p>
                   <p></p>
@@ -24,7 +25,7 @@ export function createCollectionCards(){
             </div>
             <div className="row">
               <div className="col-sm-12">
-                <h3>Collections</h3>
+                <h3 className="text-dark">Collections</h3>
               </div>
             </div>
             <div className="row">
