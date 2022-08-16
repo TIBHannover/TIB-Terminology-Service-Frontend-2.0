@@ -126,6 +126,9 @@ class DataTree extends React.Component {
             let leafClass = " closed";
             let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
             let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes.text);
+            if(rootNodes.iri === target){
+              textSpan = React.createElement("span", {"className": "li-label-text clicked"}, rootNodes.text);
+            }
             if (!rootNodes.children){
               leafClass = " leaf-node";
               // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
