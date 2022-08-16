@@ -156,7 +156,7 @@ class OntologyList extends React.Component {
      * Count the number of pages for the pagination
      * @returns
      */
-  pageCount () {
+  pageCount () {    
     return (Math.ceil(this.state.ontologies.length / this.state.pageSize))
   }
 
