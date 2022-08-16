@@ -88,6 +88,7 @@ class OntologyList extends React.Component {
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let collections = targetQueryParams.collection;
     let sortBy = targetQueryParams.sorting;
+    let page = targetQueryParams.page;
     let keywordFilter = targetQueryParams.keyword;
     if(!collections){
       collections = [];
@@ -102,10 +103,12 @@ class OntologyList extends React.Component {
       sortBy = "numberOfTerms";
     }
     this.setState({
-      sortField: sortBy.trim()
+      sortField: sortBy.trim(),
+      pageNumber: page
+    }, ()=> {
+      this.getAllCollections(collections);
+      this.runFacet(collections, keywordFilter.trim(), page);
     });    
-    this.getAllCollections(collections);
-    this.runFacet(collections, keywordFilter.trim());
   }
 
 
@@ -253,7 +256,7 @@ class OntologyList extends React.Component {
 /**
  * 
  */
-async runFacet(selectedCollections, enteredKeyword){
+async runFacet(selectedCollections, enteredKeyword, page=1){
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
@@ -262,7 +265,7 @@ async runFacet(selectedCollections, enteredKeyword){
       selectedCollections: selectedCollections,
       ontologies: preOntologies,
       ontologiesHiddenStatus: preHiddenStatus,
-      pageNumber: 1,
+      pageNumber: page,
       keywordFilterString: ""
     }, ()=>{this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);});
     return true;
@@ -309,7 +312,7 @@ async runFacet(selectedCollections, enteredKeyword){
     keywordFilterString: enteredKeyword,
     ontologies: ontologies,
     ontologiesHiddenStatus: hiddenStatus,
-    pageNumber: 1
+    pageNumber: page
   }, ()=>{this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);});
 }
 

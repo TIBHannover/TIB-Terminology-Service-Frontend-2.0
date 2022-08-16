@@ -135,9 +135,9 @@ class Pagination extends React.Component{
         this.setState({pageNumber: this.props.initialPageNumber});
     }
 
-    componentDidUpdate(){
-        if(parseInt(this.props.initialPageNumber) !== this.state.pageNumber){
-            this.setState({pageNumber: this.props.initialPageNumber});
+    componentDidUpdate(){        
+        if(parseInt(this.props.initialPageNumber) !== parseInt(this.state.pageNumber)){
+            this.setState({pageNumber: parseInt(this.props.initialPageNumber)});
             this.checkOutOfRange(this.props.initialPageNumber);
         }
     }
