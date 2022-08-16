@@ -330,7 +330,7 @@ async runFacet(selectedCollections, enteredKeyword){
               <Grid item xs={9}>
                 <div className="ontology-card-title">                            
                   <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
-                  <b>{item.config.title}</b>
+                  <a  href={'/ontologies/' + item.ontologyId} className="ontology-title-design"><b>{item.config.title}</b></a>
                 </div>
                 <div className="ontology-card-description">
                   <p>{item.config.description ? item.config.description : ""}</p>
