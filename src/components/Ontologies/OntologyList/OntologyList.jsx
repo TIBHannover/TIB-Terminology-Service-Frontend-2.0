@@ -267,7 +267,10 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
       ontologiesHiddenStatus: preHiddenStatus,
       pageNumber: page,
       keywordFilterString: ""
-    }, ()=>{this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);});
+    }, ()=>{
+      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+      this.handlePagination(page);
+    });
     return true;
   }
   
@@ -313,7 +316,10 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
     ontologies: ontologies,
     ontologiesHiddenStatus: hiddenStatus,
     pageNumber: page
-  }, ()=>{this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);});
+  }, ()=>{
+    this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+    this.handlePagination(page);
+  });
 }
 
 
