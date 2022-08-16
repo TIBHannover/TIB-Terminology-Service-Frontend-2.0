@@ -165,8 +165,7 @@ class OntologyList extends React.Component {
    * @param {*} value
    */
   filterWordChange = (e, value) => {
-    this.runFacet(this.state.selectedCollections, e.target.value);
-    this.updateUrl(this.state.selectedCollections, e.target.value);
+    this.runFacet(this.state.selectedCollections, e.target.value);    
   }
 
 
@@ -205,7 +204,6 @@ class OntologyList extends React.Component {
       selectedCollections.splice(index, 1);
     }
     this.runFacet(selectedCollections, this.state.keywordFilterString);
-    this.updateUrl(selectedCollections, this.state.keywordFilterString);
   }
 
 
@@ -216,8 +214,7 @@ class OntologyList extends React.Component {
     this.setState({
       exclusiveCollections: !e.target.checked
     }, ()=>{
-      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);
-      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);      
     });
   }
 
@@ -267,7 +264,7 @@ async runFacet(selectedCollections, enteredKeyword){
       ontologiesHiddenStatus: preHiddenStatus,
       pageNumber: 1,
       keywordFilterString: ""
-    });
+    }, ()=>{this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);});
     return true;
   }
   
@@ -313,7 +310,7 @@ async runFacet(selectedCollections, enteredKeyword){
     ontologies: ontologies,
     ontologiesHiddenStatus: hiddenStatus,
     pageNumber: 1
-  });
+  }, ()=>{this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);});
 }
 
 
