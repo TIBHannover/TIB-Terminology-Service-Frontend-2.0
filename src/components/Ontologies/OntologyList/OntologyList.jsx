@@ -143,6 +143,7 @@ class OntologyList extends React.Component {
         this.setState({
           ontologiesHiddenStatus: hiddenStatus
         });
+        this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
     })
   }
 
@@ -227,9 +228,8 @@ class OntologyList extends React.Component {
   updateUrl(selectedCollections, enteredKeyword){
     if (selectedCollections.length === 0 && enteredKeyword === ""){
       this.props.history.push(window.location.pathname);
-      return true;
     }
-
+    
     let currentUrlParams = new URLSearchParams();
 
     if(enteredKeyword !== ""){
@@ -247,6 +247,7 @@ class OntologyList extends React.Component {
       currentUrlParams.append('sorting', this.state.sortField);
     }
     
+    currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
   }
 
