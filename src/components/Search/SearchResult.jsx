@@ -144,6 +144,27 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
+  /**
+   * Redirect to the detail view according to the type of search result item
+   */
+  redirectItem(){
+    if(this.state.result){
+      let searchResultItem = this.state.searchResult
+      for(let i = 0; i < searchResultItem.length; i++){
+        if('type' == 'property'){
+          <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+            {searchResultItem[i].label}
+          </a>
+        }
+        else if('type' == 'ontology'){
+          <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+            {searchResultItem[i].label}
+          </a>
+        }
+      }
+    }
+  }
+
 
   /**
      * Create the search results list view
