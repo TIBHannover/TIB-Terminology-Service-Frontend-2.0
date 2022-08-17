@@ -88,6 +88,7 @@ class OntologyList extends React.Component {
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let collections = targetQueryParams.collection;
     let sortBy = targetQueryParams.sorting;
+    let page = targetQueryParams.page;
     let keywordFilter = targetQueryParams.keyword;
     if(!collections){
       collections = [];
@@ -102,10 +103,12 @@ class OntologyList extends React.Component {
       sortBy = "numberOfTerms";
     }
     this.setState({
-      sortField: sortBy.trim()
+      sortField: sortBy.trim(),
+      pageNumber: page
+    }, ()=> {
+      this.getAllCollections(collections);
+      this.runFacet(collections, keywordFilter.trim(), page);
     });    
-    this.getAllCollections(collections);
-    this.runFacet(collections, keywordFilter.trim());
   }
 
 
@@ -143,6 +146,7 @@ class OntologyList extends React.Component {
         this.setState({
           ontologiesHiddenStatus: hiddenStatus
         });
+        this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
     })
   }
 
@@ -152,7 +156,7 @@ class OntologyList extends React.Component {
      * Count the number of pages for the pagination
      * @returns
      */
-  pageCount () {
+  pageCount () {    
     return (Math.ceil(this.state.ontologies.length / this.state.pageSize))
   }
 
@@ -164,8 +168,7 @@ class OntologyList extends React.Component {
    * @param {*} value
    */
   filterWordChange = (e, value) => {
-    this.runFacet(this.state.selectedCollections, e.target.value);
-    this.updateUrl(this.state.selectedCollections, e.target.value);
+    this.runFacet(this.state.selectedCollections, e.target.value);    
   }
 
 
@@ -204,7 +207,6 @@ class OntologyList extends React.Component {
       selectedCollections.splice(index, 1);
     }
     this.runFacet(selectedCollections, this.state.keywordFilterString);
-    this.updateUrl(selectedCollections, this.state.keywordFilterString);
   }
 
 
@@ -215,8 +217,7 @@ class OntologyList extends React.Component {
     this.setState({
       exclusiveCollections: !e.target.checked
     }, ()=>{
-      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);
-      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);      
     });
   }
 
@@ -224,12 +225,8 @@ class OntologyList extends React.Component {
 /**
  * Update the url based on facet values
  */
-  updateUrl(selectedCollections, enteredKeyword){
-    if (selectedCollections.length === 0 && enteredKeyword === ""){
-      this.props.history.push(window.location.pathname);
-      return true;
-    }
-
+  updateUrl(selectedCollections, enteredKeyword){    
+    this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
     if(enteredKeyword !== ""){
@@ -238,15 +235,16 @@ class OntologyList extends React.Component {
 
     if(selectedCollections.length !== 0){
       for(let col of selectedCollections){
-        currentUrlParams.append('collection', col);
-        currentUrlParams.append('and', this.state.exclusiveCollections);
+        currentUrlParams.append('collection', col);        
       }
+      currentUrlParams.append('and', this.state.exclusiveCollections);
     }
 
     if(this.state.sortField !== "numberOfTerms"){
       currentUrlParams.append('sorting', this.state.sortField);
     }
     
+    currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
   }
 
@@ -255,7 +253,7 @@ class OntologyList extends React.Component {
 /**
  * 
  */
-async runFacet(selectedCollections, enteredKeyword){
+async runFacet(selectedCollections, enteredKeyword, page=1){
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
@@ -264,8 +262,11 @@ async runFacet(selectedCollections, enteredKeyword){
       selectedCollections: selectedCollections,
       ontologies: preOntologies,
       ontologiesHiddenStatus: preHiddenStatus,
-      pageNumber: 1,
+      pageNumber: page,
       keywordFilterString: ""
+    }, ()=>{
+      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+      this.handlePagination(page);
     });
     return true;
   }
@@ -311,7 +312,10 @@ async runFacet(selectedCollections, enteredKeyword){
     keywordFilterString: enteredKeyword,
     ontologies: ontologies,
     ontologiesHiddenStatus: hiddenStatus,
-    pageNumber: 1
+    pageNumber: page
+  }, ()=>{
+    this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
+    this.handlePagination(page);
   });
 }
 
