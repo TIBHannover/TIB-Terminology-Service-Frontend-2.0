@@ -212,7 +212,7 @@ async suggestionHandler(selectedTerm){
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
 
     this.setState({
-      pageNumber: page
+      pageNumber: parseInt(this.state.pageNumber)
     })
 
    }
