@@ -196,24 +196,20 @@ async suggestionHandler(selectedTerm){
     this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
-    if(types !== 0){
+    
       for(let typ of types){
         currentUrlParams.append('type', typ);
       }
-    }
+    
 
-    if(ontologies.length !== 0){
+    
       for(let ontos of ontologies){
         currentUrlParams.append('ontology', ontos);
       }
-    }
+    
 
     currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-
-    this.setState({
-      pageNumber: parseInt(this.state.pageNumber)
-    })
 
    }
 
