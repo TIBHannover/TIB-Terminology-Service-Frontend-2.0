@@ -193,11 +193,7 @@ async suggestionHandler(selectedTerm){
    updateURL(ontologies, types, collections){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let page = targetQueryParams.page;
-    if(ontologies.length == 0 && types.length == 0){
-      this.props.history.push(window.location.pathname);
-      return true;
-    }
-
+    this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
     if(types !== 0){
