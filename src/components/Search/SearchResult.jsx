@@ -43,7 +43,6 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.paginationURL = this.paginationURL.bind(this);
     }
 
     async searching(){
@@ -210,6 +209,7 @@ async suggestionHandler(selectedTerm){
       }
     }
 
+    currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
 
    }
@@ -262,25 +262,6 @@ async suggestionHandler(selectedTerm){
     return (Math.ceil(this.state.totalResults / this.state.pageSize))
   }
 
-  /**
-   * Updates url for pagination
-   * @param {*} 
-   */
-   paginationURL(){
-    if(this.state.pageNumber === 0){
-      this.props.history.push(window.location.pathname);
-      return true;
-    }
-
-    let currentUrlParams = new URLSearchParams();
-
-    if(this.state.pageNumber !== 0){
-        currentUrlParams.append('page', this.state.pageNumber);
-    }
-
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-
-  }
 
   /**
     * Handle the pagination change. This function has to be passed to the Pagination component
@@ -299,7 +280,6 @@ async suggestionHandler(selectedTerm){
       })
       let targetUrl = await fetch(baseUrl)
       let newResults = (await targetUrl.json())['response']['docs']
-      this.paginationURL();
       this.setState({
         searchResult: newResults
      })
