@@ -31,7 +31,8 @@ class SearchResult extends React.Component{
           isFiltered: false,
           collections: [],
           ontologies: [],
-          types: []
+          types: [],
+          totalResults: []
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
@@ -257,7 +258,10 @@ async suggestionHandler(selectedTerm){
      * Count the number of pages for the pagination
      * @returns
      */
-  pageCount () {
+  pageCount () {    
+    if (isNaN(Math.ceil(this.state.totalResults / this.state.pageSize))){
+      return 0;
+    }
     return (Math.ceil(this.state.totalResults / this.state.pageSize))
   }
 
