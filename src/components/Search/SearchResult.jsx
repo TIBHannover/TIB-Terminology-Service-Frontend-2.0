@@ -191,6 +191,8 @@ async suggestionHandler(selectedTerm){
     * Update the url based on facet values
     */
    updateURL(ontologies, types, collections){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let page = targetQueryParams.page;
     if(ontologies.length == 0 && types.length == 0){
       this.props.history.push(window.location.pathname);
       return true;
@@ -212,6 +214,10 @@ async suggestionHandler(selectedTerm){
 
     currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+
+    this.setState({
+      pageNumber: page
+    })
 
    }
 
@@ -284,6 +290,7 @@ async suggestionHandler(selectedTerm){
       })
       let targetUrl = await fetch(baseUrl)
       let newResults = (await targetUrl.json())['response']['docs']
+      this.updateURL(ontologies, types)
       this.setState({
         searchResult: newResults
      })
