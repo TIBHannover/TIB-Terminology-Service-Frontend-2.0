@@ -96,7 +96,7 @@ function makeTag(objectList){
  * @param {*} relations 
  */
 function createRelations(object){
-  if(object['relations'].length === 0){
+  if(typeof(object['relations']) !== "undefined" && object['relations'].length === 0){
     return "";
   }
   let groupedRelations = _.groupBy(object['relations'], res => res.relation);  

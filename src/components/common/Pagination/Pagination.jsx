@@ -7,7 +7,8 @@ class Pagination extends React.Component{
         super(props);
         this.state = ({
             pageNumber: 1,
-            endReached: false
+            endReached: false,
+            pageCount: 0
         });
         this.previousClickHandler = this.previousClickHandler.bind(this);
         this.nextClickHandler = this.nextClickHandler.bind(this);
@@ -69,8 +70,8 @@ class Pagination extends React.Component{
     /**
      * Check the page is out of range or not. If yes, it hides the out of range ones and show the last-two buttons.
      */
-    checkOutOfRange(pageNumber){
-        if (pageNumber > parseInt(this.props.count) - 2 && pageNumber > 2){
+    checkOutOfRange(pageNumber){                       
+        if (!this.state.endReached && parseInt(pageNumber) === parseInt(this.props.count) && parseInt(pageNumber) > 2){
             // Page Number is out of range
             let toSHowButtons = document.querySelectorAll(".out-of-range-hidden-page-btn");            
             for(let i=0; i<toSHowButtons.length; i++){
@@ -86,7 +87,7 @@ class Pagination extends React.Component{
             // Revert back the changes made above
             let toSHowButtons = document.querySelectorAll(".in-range-btn.out-of-range-hidden-page-btn");
             for(let i=0; i<toSHowButtons.length; i++){
-                toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");                
+                toSHowButtons[i].classList.remove("out-of-range-hidden-page-btn");             
             }
             let toHideButtons = document.querySelectorAll(".pag-minus-btn");
             for(let i=0; i<toHideButtons.length; i++){                
@@ -108,7 +109,7 @@ class Pagination extends React.Component{
                 <a className='pagination-link'>{this.state.pageNumber}</a>
             </li>
         );
-        if(parseInt(this.props.count) > 2){            
+        if(parseInt(this.props.count) - this.state.pageNumber > 1){            
             result.push(
                 <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
                     <a className='pagination-link'>{this.state.pageNumber + 1}</a>
@@ -120,7 +121,7 @@ class Pagination extends React.Component{
                 </li>
             );  
         }
-        else if(parseInt(this.props.count) === 2){            
+        else if(parseInt(this.props.count) - this.state.pageNumber == 1){            
             result.push(
                 <li className='pagination-btn pagination-middle-btn in-range-btn' onClick={this.middleClickHandler} value={this.state.pageNumber + 1}>
                     <a className='pagination-link'>{this.state.pageNumber + 1}</a>
@@ -136,8 +137,14 @@ class Pagination extends React.Component{
     }
 
     componentDidUpdate(){
-        if(parseInt(this.props.initialPageNumber) !== this.state.pageNumber){
-            this.setState({pageNumber: this.props.initialPageNumber});
+        // console.info(this.props.initialPageNumber);
+        // console.info(this.state.pageNumber);
+        if(parseInt(this.props.initialPageNumber) !== parseInt(this.state.pageNumber) ||  parseInt(this.props.count) !==  parseInt(this.state.pageCount)){
+            this.setState({
+                pageNumber: parseInt(this.props.initialPageNumber),
+                pageCount: parseInt(this.props.count)
+            });
+            this.checkOutOfRange(this.props.initialPageNumber);
         }
     }
 

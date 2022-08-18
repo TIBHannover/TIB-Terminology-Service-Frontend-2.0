@@ -31,7 +31,8 @@ class SearchResult extends React.Component{
           isFiltered: false,
           collections: [],
           ontologies: [],
-          types: []
+          types: [],
+          totalResults: []
         })
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
@@ -221,25 +222,24 @@ async suggestionHandler(selectedTerm){
     * Update the url based on facet values
     */
    updateURL(ontologies, types, collections){
-    if(ontologies.length == 0 && types.length == 0){
-      this.props.history.push(window.location.pathname);
-      return true;
-    }
-
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let page = targetQueryParams.page;
+    this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
-    if(types !== 0){
+    
       for(let typ of types){
         currentUrlParams.append('type', typ);
       }
-    }
+    
 
-    if(ontologies.length !== 0){
+    
       for(let ontos of ontologies){
         currentUrlParams.append('ontology', ontos);
       }
-    }
+    
 
+    currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
 
    }
@@ -288,13 +288,17 @@ async suggestionHandler(selectedTerm){
      * Count the number of pages for the pagination
      * @returns
      */
-  pageCount () {
+  pageCount () {    
+    if (isNaN(Math.ceil(this.state.totalResults / this.state.pageSize))){
+      return 0;
+    }
     return (Math.ceil(this.state.totalResults / this.state.pageSize))
   }
 
+
   /**
-       * Handle the pagination change. This function has to be passed to the Pagination component
-       */
+    * Handle the pagination change. This function has to be passed to the Pagination component
+    */
    async paginationHandler () {
     let ontologies = this.state.ontologies;
     let types = this.state.types;
@@ -307,16 +311,15 @@ async suggestionHandler(selectedTerm){
       types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`
       })
-      console.info(baseUrl)
       let targetUrl = await fetch(baseUrl)
       let newResults = (await targetUrl.json())['response']['docs']
+      this.updateURL(ontologies, types)
       this.setState({
         searchResult: newResults
      })
      }
      else{
       let targetUrl = await fetch(baseUrl)
-      console.info(targetUrl)
       let resultJson = (await targetUrl.json());
       let newResults = resultJson['response']['docs']
       this.setState({
@@ -325,6 +328,10 @@ async suggestionHandler(selectedTerm){
      }
      
   }
+
+
+
+
 
   submitHandler(event){  
     let newEnteredTerm = document.getElementById('search-input').value;
