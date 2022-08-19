@@ -188,8 +188,12 @@ The ontology list page styles.
 
     background-color: white;
     padding-right: 10px;
-    border-radius: 25px;
+    border-radius: 10px;
 }   
+
+#ontology-sort-dropdown{
+    color: #42484e !important;
+}
 
 
 .facet-result-count{
