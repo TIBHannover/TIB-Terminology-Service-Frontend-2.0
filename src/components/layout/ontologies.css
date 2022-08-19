@@ -38,7 +38,7 @@ The ontology list page styles.
     */
 
     margin-bottom: 20px;
-    color: black;
+    /* color: black; */
 }
 
 .ontology-card{
@@ -63,9 +63,9 @@ The ontology list page styles.
 }
 
 .ontology-title-design{
-    text-decoration: none;
+    text-decoration: none !important;
     font-size: 1.5rem;
-    color: black;
+    color: #42484e !important;
 }
 
 .ontology-card-description{
@@ -75,7 +75,7 @@ The ontology list page styles.
 
     margin-top: 30px;
     font-size: 1.25rem;
-    color: black
+    /* color: black */
 }
 
 .ontology-id-tag{
