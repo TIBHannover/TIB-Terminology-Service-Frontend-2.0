@@ -47,7 +47,7 @@ const Footer = () => (
         <Container>
             <footer className="pt-4 pb-4">
                 <Row>
-                <FooterCol md={4}>
+                <FooterCol md={3}>
                         <PartnerLogoCol md={4} style={{ textAlign: 'center' }}>
                         <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
                         <img
@@ -59,7 +59,7 @@ const Footer = () => (
                         </PartnerLogoCol>
                     </FooterCol>
 
-                    <FooterCol md={4}>
+                    <FooterCol md={3}>
                         <h2 className="h5" style={{ color: 'white'}}>ABOUT</h2>
                         <hr className="me-5" />
                         <ul className="p-0" style={{ listStyle: 'none' }}>
@@ -74,8 +74,23 @@ const Footer = () => (
                             </li>
                         </ul>
                     </FooterCol>
+
+                    <FooterCol md={3}>
+                        <h2 className="h5" style={{ color: 'white'}}>RESOURCES</h2>
+                        <hr className="me-5" />
+                        <ul className="p-0" style={{ listStyle: 'none' }}>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>Documentation</Link>
+                            </li>
+                            <li>
+                                <Link to={""} style={{ color: 'white'}}>API</Link>
+                            </li>
+                        </ul>
+                        
+                    </FooterCol>
+
         
-                    <FooterCol md={4}>
+                    <FooterCol md={3}>
                         <h2 className="h5" style={{ color: 'white'}}>PROVIDED BY</h2>
                         <hr className="me-5" />
                         <PartnerLogoCol md={4} style={{}}>
