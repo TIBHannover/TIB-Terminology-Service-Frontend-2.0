@@ -225,6 +225,12 @@ The Navbar styles
     font-weight: bold;
   }
 
+  .navbar-item:hover{
+      color: white !important;
+      text-decoration: underline !important;
+  }
+
+
 
 /* 
 -------------------------------------
