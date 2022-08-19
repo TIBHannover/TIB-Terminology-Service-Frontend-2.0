@@ -22,7 +22,12 @@ body{
 }
 
 a{
-   color: #009cbc;
+   color: #0E6668 !important;
+}
+
+a:hover{
+   text-decoration: underline !important;
+   color: #0E6668 !important; 
 }
 
 .fxOSmo{
