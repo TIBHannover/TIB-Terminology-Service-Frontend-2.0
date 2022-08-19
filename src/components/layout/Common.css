@@ -97,7 +97,7 @@ The Header styles
     /* 
        The style for overall header dimensions
     */
-    margin-top: 30px;
+    /* margin-top: 30px; */
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -207,6 +207,7 @@ The Navbar styles
     display: flex;
     flex-direction: row;
     justify-content: flex-start !important;
+    margin-top: -5px !important;
   }
   
 .navbar-item {
