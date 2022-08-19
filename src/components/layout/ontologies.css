@@ -87,6 +87,7 @@ The ontology list page styles.
     background-color: #E86161 !important;
     color: white !important;
     margin-left: 10px !important;
+    border-color: #E86161 !important;
 }
 .ontology-id-tag:hover{
     text-decoration: none !important;
