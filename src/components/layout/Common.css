@@ -223,6 +223,7 @@ The Navbar styles
     outline: none;
     color: white;
     font-weight: bold;
+    font-size: 18px;
   }
 
   .navbar-item:hover{
