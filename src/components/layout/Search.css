@@ -222,7 +222,7 @@ The Search results styles
 }
 
 .result-btn-in-card:hover{
-    text-decoration: underline !important;
+    text-decoration: none !important;
     background-color: #1baeb1 !important;
     color: white !important;
 }
