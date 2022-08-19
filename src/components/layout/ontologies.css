@@ -152,7 +152,7 @@ The ontology list page styles.
 
 .ontology-card-meta-data{
     padding-left: 40px;
-    color: black !important;
+    /* color: black !important; */
 }
 
 .ontology-collection-name > a{
@@ -178,7 +178,7 @@ The ontology list page styles.
 
     margin-top: 30px;
     width: 100% !important;
-    color: black
+    /* color: black */
 }
 
 .ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
@@ -191,7 +191,6 @@ The ontology list page styles.
     padding-right: 10px;
     border-radius: 25px;
 }   
-
 
 
 .facet-result-count{
