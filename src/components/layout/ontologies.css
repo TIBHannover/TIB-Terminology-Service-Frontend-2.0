@@ -59,12 +59,12 @@ The ontology list page styles.
         The styles for the title part for each ontology box in the ontology list view. 
     */
 
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
 }
 
 .ontology-title-design{
     text-decoration: none !important;
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
     color: #42484e !important;
 }
 
@@ -74,7 +74,7 @@ The ontology list page styles.
     */
 
     margin-top: 30px;
-    font-size: 1.25rem;
+    /* font-size: 1.25rem; */
     /* color: black */
 }
 
