@@ -223,7 +223,7 @@ The Search results styles
 
 .result-btn-in-card:hover{
     text-decoration: underline !important;
-    background-color: #17a9ac;
+    background-color: #1baeb1 !important;
     color: white !important;
 }
 
