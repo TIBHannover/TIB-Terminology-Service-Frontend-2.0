@@ -21,6 +21,10 @@ body{
    font-size: 16px !important;
 }
 
+a{
+   color: #009cbc;
+}
+
 .fxOSmo{
    background-color: #2B3C46 !important;
    color: white !important;
