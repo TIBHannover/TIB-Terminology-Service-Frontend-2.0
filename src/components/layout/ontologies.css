@@ -21,7 +21,7 @@ The ontology list page styles.
     overflow-x: hidden;
     overflow-y: hidden;
     color: #6C757D !important;
-    padding-top: 50px;
+    /* padding-top: 50px; */
 }
 
 #ontology-list-facet-grid{
