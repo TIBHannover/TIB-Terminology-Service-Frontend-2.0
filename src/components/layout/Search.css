@@ -203,6 +203,13 @@ The Search results styles
     padding: 2px !important;
 }
 
+.ontology-btn-in-card:hover{
+    text-decoration: none !important;
+    background-color: #f1a6a6 !important;
+}
+
+
+
 .result-btn-in-card{
     /* 
         Style for the term/property button in each search result card.
@@ -212,6 +219,13 @@ The Search results styles
     color: white;
     margin-left: 15px !important;
     padding: 2px !important;
+    margin-top: -5px !important;
+}
+
+.result-btn-in-card:hover{
+    text-decoration: none !important;
+    background-color: #1baeb1 !important;
+    color: white !important;
 }
 
 

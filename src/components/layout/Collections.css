@@ -10,7 +10,7 @@
     padding-top: 50px;
     max-width: 1140px;
     margin: auto;
-    color: #788188;
+    color: #42484e;
 }
 
 .collection-content{
@@ -19,7 +19,7 @@
     */
 
     padding-top: 25px;
-    color: black;
+    color: #42484e;
 }
 
 .collection-ontologies-text{
@@ -27,7 +27,7 @@
         The style for each collection ontologies list div
     */
 
-    color: #6C757D!important;
+    color: #42484e!important;
     word-wrap: break-word;
 }
 
@@ -37,7 +37,6 @@
     */
 
     text-decoration: none;
-    color: #009cbc;
     margin-left: 10px;
     font-size: 18px;
 }

@@ -21,7 +21,7 @@ The ontology list page styles.
     overflow-x: hidden;
     overflow-y: hidden;
     color: #6C757D !important;
-    padding-top: 50px;
+    /* padding-top: 50px; */
 }
 
 #ontology-list-facet-grid{
@@ -38,7 +38,7 @@ The ontology list page styles.
     */
 
     margin-bottom: 20px;
-    color: black;
+    /* color: black; */
 }
 
 .ontology-card{
@@ -59,13 +59,13 @@ The ontology list page styles.
         The styles for the title part for each ontology box in the ontology list view. 
     */
 
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
 }
 
 .ontology-title-design{
-    text-decoration: none;
-    font-size: 1.5rem;
-    color: black;
+    text-decoration: none !important;
+    /* font-size: 1.5rem; */
+    color: #42484e !important;
 }
 
 .ontology-card-description{
@@ -74,8 +74,8 @@ The ontology list page styles.
     */
 
     margin-top: 30px;
-    font-size: 1.25rem;
-    color: black
+    /* font-size: 1.25rem; */
+    /* color: black */
 }
 
 .ontology-id-tag{
@@ -84,8 +84,15 @@ The ontology list page styles.
     */
 
     margin-right: 10px;
-    background-color: #005C5F;
-    color: white;
+    background-color: #E86161 !important;
+    color: white !important;
+    margin-left: 10px !important;
+    border-color: #E86161 !important;
+    margin-top: -5px !important;
+}
+.ontology-id-tag:hover{
+    text-decoration: none !important;
+    background-color: #f1a6a6 !important;
 }
 
 
@@ -145,7 +152,7 @@ The ontology list page styles.
 
 .ontology-card-meta-data{
     padding-left: 40px;
-    color: black !important;
+    /* color: black !important; */
 }
 
 .ontology-collection-name > a{
@@ -171,7 +178,7 @@ The ontology list page styles.
 
     margin-top: 30px;
     width: 100% !important;
-    color: black
+    /* color: black */
 }
 
 .ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
@@ -180,11 +187,13 @@ The ontology list page styles.
     */
 
     background-color: white;
-    padding-left: 20px;
     padding-right: 10px;
-    border-radius: 25px;
+    border-radius: 10px;
 }   
 
+#ontology-sort-dropdown{
+    color: #42484e !important;
+}
 
 
 .facet-result-count{
