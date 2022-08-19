@@ -13,10 +13,10 @@ const FooterWrapper = styled.div`
     background: #2B3C46;
     margin-top: 75px;
     border-top: 1px #d1d3d9 solid;
-    position: fixed;
-    left: 0;
-    bottom:0;
-    width: 100%;
+    // position: fixed;
+    // left: 0;
+    // bottom:0;
+    // width: 100%;
 `;
 
 const FooterCol = styled(Col)`
