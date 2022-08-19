@@ -203,6 +203,12 @@ The Search results styles
     padding: 2px !important;
 }
 
+.ontology-btn-in-card:hover{
+    text-decoration: none !important;
+}
+
+
+
 .result-btn-in-card{
     /* 
         Style for the term/property button in each search result card.
