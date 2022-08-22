@@ -86,6 +86,42 @@ body{
     background-color: #f1a6a6 !important;
 }
 
+.facet-box{
+    /* 
+        The style for each facet input box
+    */
+
+    background-color: white;
+    padding-right: 10px;
+    padding-top: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.facet-result-count{
+    /* 
+       The style for counter in facet fields
+    */
+    border-radius: 50px;
+    background-color: #2B3C46;
+    color: white;
+    padding: 5px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
+}
+
+.facet-item-row:hover{
+    /* 
+       The style for colour changes for mouse hover one the facet items
+    */
+    background-color: rgba(119, 122, 121, 0.192);
+    border-radius: 15px;
+}
+
 
 
  

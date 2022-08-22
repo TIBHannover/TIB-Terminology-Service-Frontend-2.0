@@ -57,7 +57,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             </Grid>
             <Grid container className='ontology-list-facet-section-box'>
             <h3 className='h-headers'>Collection</h3>
-                <Grid item xs={12} >
+                <Grid item xs={12} className="facet-box" >
                     <div className='facet-switch-holder'>
                         Intersection
                         <Switch                    
@@ -75,7 +75,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             </Grid>
             <Grid container className='ontology-list-facet-section-box'>
             <h5 className='h-headers'>Last Updated</h5>
-                <Grid item xs={12} >
+                <Grid item xs={12} className="facet-box">
                 <input type="range"  min="1" max="10" />
                 <span id="lastUpdateRange"> 1 year(s) ago</span>
                 </Grid>

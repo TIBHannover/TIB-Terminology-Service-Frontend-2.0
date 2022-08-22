@@ -142,12 +142,9 @@ The Search results styles
     /* 
        The style for search terms
     */
-    margin: auto;
-    max-width: 1140px;
+    
     overflow-x: hidden;
     overflow-y: hidden;
-    color: #6C757D !important;
-    padding-top: 5px;
 }
 
 .search-result-card{
@@ -157,7 +154,7 @@ The Search results styles
 
     background-color: white;
     margin-top: 20px;
-    padding: 10px;    
+    padding: 10px;
     height: auto;
     text-align: justify;
 }
@@ -165,21 +162,8 @@ The Search results styles
     /* 
        The style inside search result card for description
     */
-    font-size: 18px;
-    margin-top: 30px;  
-    text-decoration: none;
-}
-.result-term-link{
-    /* 
-       The style inside search result card for linking clicked search term to its detail page
-    */
-    text-decoration: none;
-}
-.searchresult-iri{
-    /* 
-       The style for iri element in search result card
-    */
-    font-size: 16px
+    
+    margin-top: 30px;
 }
 
 .search-card-title > h4{
@@ -188,8 +172,14 @@ The Search results styles
     */
      
     display: inline !important;
-    text-decoration: none !important;
-    border-bottom: none;
+}
+
+.search-card-title > h4 > a{
+    /* 
+       The style for header anchor in the title of a search result card
+    */
+     
+    color: #42484e !important;
 }
 
 
@@ -209,39 +199,6 @@ The Facet fields in Search results styles
     color: black !important;
 }
 
-.facet-list-box{
-    /* 
-       The style for a facet field box
-    */
-    background-color: white;
-    border-radius: 15px;
-    padding-top: 15px;
-    margin-bottom: 30px !important;
-}
-
-.facet-item-row:hover{
-    /* 
-       The style for colour changes for mouse hover one the facet items
-    */
-    background-color: rgba(119, 122, 121, 0.192);
-    border-radius: 15px;
-}
-
-.result-count{
-    /* 
-       The style for counter in facet fields
-    */
-    border-radius: 50px;
-    background-color: #2B3C46;
-    color: white;
-    padding: 5px;
-    margin-top: 10px;
-    text-align: center;
-    font-weight: 700 !important;
-    font-size: 75% !important;
-    line-height: 1 !important;
-    float: right;
-}
 
 .show-more-btn{
     /* 

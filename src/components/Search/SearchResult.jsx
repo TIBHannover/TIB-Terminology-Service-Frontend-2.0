@@ -159,7 +159,7 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title text-dark">                
+              <div className="search-card-title">                
                   <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
                     {searchResultItem[i].label}
                   </a></h4> 
@@ -170,7 +170,7 @@ async suggestionHandler(selectedTerm){
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
-              <div className="searchresult-card-description h5 mb-0 text-dark">
+              <div className="searchresult-card-description">
                 <p>{searchResultItem[i].description}</p>
               </div>
               <div className="searchresult-ontology">
