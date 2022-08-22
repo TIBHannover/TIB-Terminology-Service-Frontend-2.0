@@ -1,0 +1,35 @@
+/* 
+    This is the css script for the general application style.    
+*/
+
+body{
+    /* 
+       The style for the site body
+    */
+ 
+    background-color: #ECF0F0;   
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+ }
+ 
+ a{
+    /* 
+       The style for the site anchors
+    */
+
+    color: #0E6668;
+ }
+ 
+ a:hover{
+    /* 
+       The style for the site anchors while hovering
+    */
+
+    text-decoration: underline;
+    color: #0E6668; 
+ }
+ 
+ /* .fxOSmo{
+    background-color: #2B3C46 !important;
+    color: white !important;
+ } */
