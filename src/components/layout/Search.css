@@ -13,7 +13,7 @@ The Search form styles
     /* 
        The style for the autocomplete field
     */
-    height: 160px;
+    height: fit-content;
     border: 0.5px solid black;
     padding-bottom: 20px;
     padding-top: 10px;
@@ -54,8 +54,9 @@ The Search form styles
     /* 
        The style for the jump autocomplete field
     */
-    height: 370px;
+    height: fit-content;
     border: 0.5px solid black;
+    display: block;
     padding-bottom: 20px;
     padding-top: 10px;
     position: absolute;
