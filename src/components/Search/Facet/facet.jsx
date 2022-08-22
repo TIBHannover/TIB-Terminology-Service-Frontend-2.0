@@ -270,25 +270,19 @@ class Facet extends React.Component{
                 <h2>Filter Results</h2>
                 <div class="col-sm-12">
                     <h4>{"Type"}</h4>
-                     <div class="row facet-box" id="facet-types-list">                            
-                        <div class="col-sm-12">
-                            {this.createTypesCheckboxList()}
-                        </div>
+                     <div class="facet-box" id="facet-types-list">                            
+                        {this.createTypesCheckboxList()}
                     </div>
                     <h4>{"Ontologies"}</h4>
-                    <div class="row facet-box">                            
-                        <div class="col-sm-12">
-                            {this.createOntologiesCheckboxList()}
-                            <div className="text-center">
-                                <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                            </div>
+                    <div class="facet-box">                            
+                        {this.createOntologiesCheckboxList()}
+                        <div className="text-center">
+                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
                         </div>
                     </div>
                     <h4>{"Collections"}</h4>
-                    <div class="row facet-box" id="facet-collections-list">                            
-                        <div class="col-sm-12">
-                            {this.createCollectionsCheckBoxes()}                            
-                        </div>
+                    <div class="facet-box" id="facet-collections-list">                            
+                        {this.createCollectionsCheckBoxes()}
                     </div>
                 </div>
             </div>
