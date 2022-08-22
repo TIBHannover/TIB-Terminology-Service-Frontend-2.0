@@ -67,25 +67,6 @@ The ontology list page styles.
     margin-top: 30px;
 }
 
-.ontology-id-tag{
-    /* 
-        Style for the ontology Id tag button.
-    */
-
-    margin-right: 10px;
-    background-color: #E86161 !important;
-    color: white !important;
-    margin-left: 10px !important;
-    border-color: #E86161 !important;
-    margin-top: -5px !important;
-}
-
-.ontology-id-tag:hover{
-    text-decoration: none !important;
-    background-color: #f1a6a6 !important;
-}
-
-
 .ontology-list-facet-header{
     /* 
         The syle for the facet content under the "Filter" in the ontology list page. 
