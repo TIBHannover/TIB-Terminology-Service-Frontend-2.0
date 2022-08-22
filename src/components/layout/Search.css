@@ -192,42 +192,6 @@ The Search results styles
     border-bottom: none;
 }
 
-.ontology-btn-in-card{
-    /* 
-        Style for the ontology button in each search result card.
-    */
-
-    background-color: #E86161 !important;
-    color: white !important;
-    margin-left: 10px !important;
-    padding: 2px !important;
-}
-
-.ontology-btn-in-card:hover{
-    text-decoration: none !important;
-    background-color: #f1a6a6 !important;
-}
-
-
-
-.result-btn-in-card{
-    /* 
-        Style for the term/property button in each search result card.
-    */
-
-    background-color: #0E6668 !important;
-    color: white;
-    margin-left: 15px !important;
-    padding: 2px !important;
-    margin-top: -5px !important;
-}
-
-.result-btn-in-card:hover{
-    text-decoration: none !important;
-    background-color: #1baeb1 !important;
-    color: white !important;
-}
-
 
 /* 
 -------------------------------------

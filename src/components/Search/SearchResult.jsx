@@ -160,10 +160,10 @@ async suggestionHandler(selectedTerm){
           <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
               <div className="search-card-title text-dark">                
-                  <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                  <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
                     {searchResultItem[i].label}
                   </a></h4> 
-                  <a className="btn btn-default result-btn-in-card" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
+                  <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
                     {searchResultItem[i].short_form}
                   </a>                
               </div>
@@ -175,7 +175,7 @@ async suggestionHandler(selectedTerm){
               </div>
               <div className="searchresult-ontology">
                 <span><b>Ontology: </b></span>
-                <a className='btn btn-default ontology-btn-in-card' href={'/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
+                <a className='btn btn-default ontology-button' href={'/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
