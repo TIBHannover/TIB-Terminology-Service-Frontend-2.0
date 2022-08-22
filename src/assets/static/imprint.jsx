@@ -7,12 +7,12 @@ class Imprint extends React.Component{
             <section id="main-content-area" role="main">
             <div className="row">
                 <h2 className="text-dark">Imprint</h2>
-                <p class="h5 mb-0">
+                <p>
                     Imprint for this website &#8208; also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)
                 </p> 
                 <br/>      
                 <h3 className="text-dark">Provider:</h3>
-                <p class="h5 mb-0">
+                <p>
                 
                 Technische Informationsbibliothek (TIB)
                  <br />
@@ -24,7 +24,7 @@ class Imprint extends React.Component{
                 <br /><br/>
                 <h3 className='text-dark'>Authorised Representative:</h3>
                 
-                <p class="h5 mb-0">
+                <p>
                 
                 Prof. Dr. S&ouml;ren Auer (Director of TIB)
                  <br />
@@ -34,7 +34,7 @@ class Imprint extends React.Component{
                 <br/>
                 <h3>Responsible Supervisory Authority:</h3>
                 
-                <p class="h5 mb-0">
+                <p>
                 
                 Ministry for Science and Culture of Lower Saxony
                 
@@ -42,7 +42,7 @@ class Imprint extends React.Component{
                 
                 <h3 className='text-dark'>Contact:</h3>
                 
-                <p class="h5 mb-0">
+                <p>
                 
                 Customer service phone: +49 511 762-8989
                  <br />
@@ -57,7 +57,7 @@ class Imprint extends React.Component{
                 
                 <h3 className='text-dark'>VAT (sales tax) registration number:</h3>
                 
-                <p class="h5 mb-0">
+                <p>
                 
                 DE 214931803
                 
@@ -65,7 +65,7 @@ class Imprint extends React.Component{
                 
                 <h3 className='text-dark'>Editorial Office:</h3>
                 
-                <p class="h5 mb-0">
+                <p>
                 
                 Axel Klinger
                  <br />
@@ -76,7 +76,7 @@ class Imprint extends React.Component{
                 
                 <h3 className='text-dark'>Copyright Notice:</h3>
                 
-                <p class="h5 mb-0">
+                <p>
                 
                 The layout of the homepage, the graphics used and the other content are protected by copyright.
                  <br />
