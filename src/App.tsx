@@ -1,3 +1,4 @@
+import './components/layout/general.css';
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
