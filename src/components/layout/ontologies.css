@@ -20,6 +20,24 @@ The ontology list page styles.
     margin-bottom: 10px;   
 }
 
+#ontologylist-sort-grid > div{
+    /* 
+        The styles for sort type drop-down menu container in the ontology list view.
+    */
+
+    float: right;    
+}
+
+#ontologylist-sort-grid> .MuiInputBase-root{
+    /* 
+        The styles for sort type drop-down menu in the ontology list view.
+    */
+
+    width: 60%;
+    font-size: 15px;
+    padding-bottom: 5px;
+}
+
 .ontology-card{
     /* 
         The styles for each ontology box in the ontology list view. 
@@ -30,20 +48,14 @@ The ontology list page styles.
     padding: 10px;
     height: auto;
     text-align: justify;
-    line-height: 1.5;
 }
 
-.ontology-card-title > b{
+.ontology-title-text-in-box{
     /* 
-        The styles for the title part for each ontology box in the ontology list view. 
+        The style for the ontology title text in a card
     */
 
-    /* font-size: 1.5rem; */
-}
-
-.ontology-title-design{
     text-decoration: none !important;
-    /* font-size: 1.5rem; */
     color: #42484e !important;
 }
 
@@ -53,8 +65,6 @@ The ontology list page styles.
     */
 
     margin-top: 30px;
-    /* font-size: 1.25rem; */
-    /* color: black */
 }
 
 .ontology-id-tag{
@@ -69,27 +79,27 @@ The ontology list page styles.
     border-color: #E86161 !important;
     margin-top: -5px !important;
 }
+
 .ontology-id-tag:hover{
     text-decoration: none !important;
     background-color: #f1a6a6 !important;
 }
 
 
-#ontology-filter > div{
+.ontology-list-facet-header{
     /* 
-        The syle for the search input wrapper div in the ontology list page. 
+        The syle for the facet content under the "Filter" in the ontology list page. 
     */
 
-    margin-top: 40px;
+    margin-bottom: 25px;
 }
 
-.ontology-card-meta-data > div{
+.ontology-card-meta-data{
     /* 
         The styles for the stats part (right side) for each ontology box in the ontology list view. 
     */
 
-    margin-right: 0;
-    margin-left: 30%;
+    padding-left: 40px;
 }
 
 #ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root{
@@ -109,39 +119,6 @@ The ontology list page styles.
     font-size: 15px;
 }
 
-
-#ontologylist-sort-grid > div{
-    /* 
-        The styles for sort type drop-down menu container in the ontology list view.
-    */
-
-    float: right;
-    
-}
-
-#ontologylist-sort-grid> .MuiInputBase-root{
-    /* 
-        The styles for sort type drop-down menu in the ontology list view.
-    */
-
-    width: 60%;
-    font-size: 15px;
-    padding-bottom: 5px;
-}
-
-.ontology-card-meta-data{
-    padding-left: 40px;
-    /* color: black !important; */
-}
-
-.ontology-collection-name > a{
-    /* 
-        Style for the collection link inside an ontology card.
-    */
-
-    text-decoration: none !important;
-}
-
 .ontology-collection-name{
     /* 
         Style for the collection span inside an ontology card.
@@ -152,12 +129,11 @@ The ontology list page styles.
 
 .ontology-list-facet-section-box{
     /* 
-        Style for the facet field boxes in the ontology list facet.
+        Style for the facet field holder (box and title) in the ontology list facet.
     */
 
     margin-top: 30px;
     width: 100% !important;
-    /* color: black */
 }
 
 .ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
@@ -169,10 +145,6 @@ The ontology list page styles.
     padding-right: 10px;
     border-radius: 10px;
 }   
-
-#ontology-sort-dropdown{
-    color: #42484e !important;
-}
 
 
 .facet-result-count{

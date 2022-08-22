@@ -1,4 +1,3 @@
-import './components/layout/general.css';
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
@@ -11,6 +10,7 @@ import Collections from "./components/Collection/Collection";
 import Imprint from '../src/assets/static/imprint' 
 import PrivacyPolicy from '../src/assets/static/PrivacyPolicy';
 import TermsOfUse from '../src/assets/static/TermsOfUse';
+import './components/layout/general.css';
 
 
 

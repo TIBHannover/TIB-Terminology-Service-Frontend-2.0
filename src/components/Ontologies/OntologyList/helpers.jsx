@@ -42,7 +42,7 @@ export function BuildCollectionForCard(collections){
 export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredKeyword, onSwitchChange){
     return (
         <Grid item xs={4} id="ontology-list-facet-grid">
-            <h3 className='h-headers'>Filter</h3>            
+            <h3 className='ontology-list-facet-header'>Filter</h3>            
             <Grid container>
                 <Grid item xs={12} id="ontologylist-search-grid">
                     <TextField
