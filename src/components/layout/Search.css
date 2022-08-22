@@ -13,16 +13,15 @@ The Search form styles
     /* 
        The style for the autocomplete field
     */
-    height: 200px;
+    height: fit-content;
     border: 0.5px solid black;
-    overflow-y: scroll;
     padding-bottom: 20px;
     padding-top: 10px;
     z-index: 999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 865px;
+    width: 400px;
     margin-left: 85px;
     text-align: left;
 }
@@ -38,9 +37,9 @@ The Search form styles
     /* 
        The style for the jump autocomplete field
     */
-    height: 200px;
+    height: fit-content;
     border: 0.5px solid black;
-    overflow-y: scroll;
+    display: block;
     padding-bottom: 20px;
     padding-top: 10px;
     position: absolute;
@@ -48,7 +47,7 @@ The Search form styles
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 865px;
+    width: 400px;
     margin-left: 85px;
     text-align: left;
     padding-left: 10px;
@@ -59,6 +58,7 @@ The Search form styles
     */
     margin-left: 10px;
 }
+
 #search-box {
     /* 
        The style for search bar

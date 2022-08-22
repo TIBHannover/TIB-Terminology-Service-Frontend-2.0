@@ -25,9 +25,9 @@ class SearchForm extends React.Component{
       async handleChange(enteredTerm){
           enteredTerm = enteredTerm.target.value;
         if (enteredTerm.length > 0){
-            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
+            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}&rows=5`)
             searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}`)
+            let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}&rows=5`)
             jumpResult = (await jumpResult.json())['response']['docs'];
          this.setState({
              searchResult: searchResult,
@@ -89,8 +89,8 @@ class SearchForm extends React.Component{
             <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">
               <div className="jump-autocomplete-item">
                 {this.state.jumpResult[i]['label']}
-                <Button style={{backgroundColor: "#873593", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>
-                <Button style={{backgroundColor: "#00617c", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
+                <Button style={{backgroundColor: "#0E6668", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
+                <Button style={{backgroundColor: "#E86161", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>      
               </div>
             </a>
           )
