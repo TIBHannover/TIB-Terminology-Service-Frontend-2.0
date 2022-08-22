@@ -12,6 +12,18 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
  }
+
+ .application-content{
+    /* 
+        The style for the application inner content (between the header and footer)
+    */
+
+    margin: auto;
+    width: 70%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    min-height: 500px;
+}
  
  a{
     /* 
@@ -31,15 +43,48 @@ body{
     color: #0E6668; 
  }
 
+ .term-button{
+    /* 
+        The style for a button representing a term (class/propperty)
+    */
 
-.application-content{
-    margin: auto;
-    width: 70%;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    min-height: 500px;
+    background-color: #0E6668;
+    color: white;
+    margin-left: 15px;
+    padding: 2px;
+    margin-top: -5px;
+
+ }
+
+ .term-button:hover{
+    /* 
+        The style for a button representing a term (class/propperty) on hover
+    */
+
+    text-decoration: none;
+    background-color: #1baeb1;
+    color: white;
+ }
+
+.ontology-button{
+    /* 
+        The style for a button representing an ontology
+    */
+
+    background-color: #E86161;
+    color: white;
+    margin-left: 10px;
+    padding: 2px;
 }
 
+.ontology-button:hover{
+    /* 
+        The style for a button representing an ontology on hover
+    */
+
+    text-decoration: none !important;
+    background-color: #f1a6a6 !important;
+}
 
 
 

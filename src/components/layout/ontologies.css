@@ -296,13 +296,6 @@ The Tree view and detail table styles (for both classes and properties)
 -------------------------------------
 */
 
-.tree-view-container{
-    /* 
-        The tree page containers. It includes both the tree view and the detail table.
-    */
-    padding: 20px !important;
-}
-
 .tree-container{
     /*
         The styles for the tree view container. 
@@ -317,7 +310,7 @@ The Tree view and detail table styles (for both classes and properties)
     padding-left: 10px !important;
     padding-right: 10px !important;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 .node-table-container{
@@ -481,35 +474,12 @@ The Tree view and detail table styles (for both classes and properties)
 
 .node-tag{
     /* 
-        Styles for the "subClass of" tags in the detail table
+        Styles for the "subClass of" tags (.term-button) holder div in the detail table
     */
 
-    background-color: #97eee7;
-    padding: 5px;
-    width: max-content;
-    border-radius: 10px;
     float: left;
-    margin-right: 10px;
 }
 
-.node-tag-link{
-    /* 
-        Styles for the links inside the "subClass of" tags in the detail table
-    */
-
-    color: black;
-    text-decoration: none !important;
-}
-
-
-.node-relation-link{
-     /* 
-        Styles for the links inside the "Relations" row in the class(term) detail table
-    */
-
-    color: black;
-    text-decoration: none;
-}
 
 .isLoading {
     /* 
