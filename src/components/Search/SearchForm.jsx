@@ -25,9 +25,9 @@ class SearchForm extends React.Component{
       async handleChange(enteredTerm){
           enteredTerm = enteredTerm.target.value;
         if (enteredTerm.length > 0){
-            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}`)
+            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}&rows=5`)
             searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}`)
+            let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}&rows=5`)
             jumpResult = (await jumpResult.json())['response']['docs'];
          this.setState({
              searchResult: searchResult,
