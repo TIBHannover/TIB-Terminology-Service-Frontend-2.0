@@ -379,7 +379,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
           <Grid container spacing={3}>
             {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
             <Grid item xs={8} id="ontology-list-grid">
-              <Grid container>
+              <Grid container id="ontology-list-top-row">
                 <Grid item xs={6}>
                   <h3 className='h-headers'>Browse Ontologies</h3>
                 </Grid>

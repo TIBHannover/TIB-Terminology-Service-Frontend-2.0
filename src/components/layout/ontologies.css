@@ -12,21 +12,12 @@ The ontology list page styles.
 */
 
 
-#ontology-list-facet-grid{
+#ontology-list-top-row{
     /* 
-        The style for the ontologies list page facet wrapper div.
+        Style for the first row containing the header h3 and sort drop down in the ontology list page.
     */
 
-    padding-top: 50px;
-}
-
-.h-headers{
-    /* 
-        Style for the <h> headers in the ontology list page.
-    */
-
-    margin-bottom: 20px;
-    /* color: black; */
+    margin-bottom: 10px;   
 }
 
 .ontology-card{
@@ -34,7 +25,7 @@ The ontology list page styles.
         The styles for each ontology box in the ontology list view. 
     */
 
-    background-color: white;
+    background-color: white !important;
     margin-top: 10px;
     padding: 10px;
     height: auto;

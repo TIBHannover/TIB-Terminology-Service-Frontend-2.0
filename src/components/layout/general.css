@@ -35,7 +35,9 @@ body{
     width: 70%;
     overflow-x: hidden;
     overflow-y: hidden;
+    min-height: 500px;
 }
+
 
 
 
