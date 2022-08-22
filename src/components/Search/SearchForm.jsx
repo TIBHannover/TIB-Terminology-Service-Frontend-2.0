@@ -89,8 +89,8 @@ class SearchForm extends React.Component{
             <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">
               <div className="jump-autocomplete-item">
                 {this.state.jumpResult[i]['label']}
-                <Button style={{backgroundColor: "#873593", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>
-                <Button style={{backgroundColor: "#00617c", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
+                <Button style={{backgroundColor: "#E86161", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>
+                <Button style={{backgroundColor: "#0E6668", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
               </div>
             </a>
           )
