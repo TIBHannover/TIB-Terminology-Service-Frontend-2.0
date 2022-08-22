@@ -1,26 +1,10 @@
-.font-weight-bold{
-    justify-content: center;
-    font-weight: bold;
-}
-
-.bg-main {
-    background-color: #ecf0f0 !important;
-}
-
-
 .home-page-content-container{
     /* 
         The home page main container
     */
 
-    max-width: 1140px;
     padding-top: 3rem !important;
     padding-bottom: 1.5rem !important;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    color: #6c757d !important;
 }
 
 .collection-holder-box{
@@ -37,13 +21,8 @@
         The home page stats container
     */
 
-    max-width: 1140px;
     padding-top: 3rem !important;
     padding-bottom: 1.5rem !important;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .stats-box{

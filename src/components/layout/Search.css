@@ -196,7 +196,6 @@ The Facet fields in Search results styles
     
     margin-top: 40px;
     padding: 20px;
-    color: black !important;
 }
 
 
@@ -205,6 +204,5 @@ The Facet fields in Search results styles
         Style for the show more/less button in a facet field box
     */
 
-    color: rgb(84, 146, 240) !important;
-    font-weight: bold;
+    cursor: pointer;
 }
