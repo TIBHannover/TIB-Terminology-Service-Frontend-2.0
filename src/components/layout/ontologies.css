@@ -11,18 +11,6 @@ The ontology list page styles.
 -------------------------------------
 */
 
-#ontologyList-wrapper-div{
-    /* 
-        The style for the ontology list page.
-    */
-
-    margin: auto;
-    width: 75%;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    color: #6C757D !important;
-    /* padding-top: 50px; */
-}
 
 #ontology-list-facet-grid{
     /* 

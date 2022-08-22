@@ -28,6 +28,17 @@ body{
     text-decoration: underline;
     color: #0E6668; 
  }
+
+
+.application-content{
+    margin: auto;
+    width: 70%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+
+
  
  /* .fxOSmo{
     background-color: #2B3C46 !important;
