@@ -38,17 +38,6 @@ The ontology list page styles.
     padding-bottom: 5px;
 }
 
-.ontology-card{
-    /* 
-        The styles for each ontology box in the ontology list view. 
-    */
-
-    background-color: white !important;
-    margin-top: 10px;
-    padding: 10px;
-    height: auto;
-    text-align: justify;
-}
 
 .ontology-title-text-in-box{
     /* 

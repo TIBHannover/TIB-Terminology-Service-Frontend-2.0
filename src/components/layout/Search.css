@@ -147,17 +147,7 @@ The Search results styles
     overflow-y: hidden;
 }
 
-.search-result-card{
-    /* 
-       The style for search result cards of any searched term
-    */
 
-    background-color: white;
-    margin-top: 20px;
-    padding: 10px;
-    height: auto;
-    text-align: justify;
-}
 .searchresult-card-description{
     /* 
        The style inside search result card for description

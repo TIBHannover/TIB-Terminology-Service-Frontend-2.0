@@ -330,7 +330,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
     for (let i = 0; i < this.state.ontologies.length; i++) {
       let item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
-            <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
+            <Grid container className="result-card" id={'ontology_' + i} key={item.ontologyId}>
               <Grid item xs={9}>
                 <div className="ontology-card-title-section">                            
                   <a  href={'/ontologies/' + item.ontologyId} className='ontology-button btn btn-primary'>{item.ontologyId}</a>

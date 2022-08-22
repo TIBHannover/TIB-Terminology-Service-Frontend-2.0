@@ -157,7 +157,7 @@ async suggestionHandler(selectedTerm){
       const SearchResultList = [];
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
-          <Grid container className="search-result-card" key={searchResultItem[i]['id']}>
+          <Grid container className="result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
               <div className="search-card-title">                
                   <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
