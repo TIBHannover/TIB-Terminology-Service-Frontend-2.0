@@ -44,6 +44,7 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
+        this.handleRedirect = this.handleRedirect.bind(this);
     }
 
     async searching(){
@@ -145,6 +146,33 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
+  handleRedirect(){
+    let searchResultItem = this.state.searchResult
+      for(let i=0; i < searchResultItem.length; i++){
+        if(searchResultItem[i]["type"] === 'class'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+        }
+        else if(searchResultItem[i]["type"] === 'property'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+          }
+        else if(searchResultItem[i]["type"] === 'ontology'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+          }
+        else if(searchResultItem[i]["type"] === 'individuals'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+          }
+      }
+
+  }
+
 
   /**
      * Create the search results list view
@@ -159,14 +187,42 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title">                
-                  <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
-                    {searchResultItem[i].label}
-                  </a></h4> 
-                  <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
-                    {searchResultItem[i].short_form}
-                  </a>                
+              <div className="search-card-title"> 
+                {(() => {
+                  if(searchResultItem[i]["type"] === 'class'){
+                    return(
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                        <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                      </a>
+                    )     
+                }
+                else if(searchResultItem[i]["type"] === 'property'){
+                  return(
+                    <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                    </a>
+
+                  )         
+                }
+                else if(searchResultItem[i]["type"] === 'ontology'){
+                  return(
+                    <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                    </a>
+
+                  )      
+                }
+                else if(searchResultItem[i]["type"] === 'individuals'){
+                  return(
+                    <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                    </a>
+
+                  )    
+                }
+                })()}                       
               </div>
+  
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
