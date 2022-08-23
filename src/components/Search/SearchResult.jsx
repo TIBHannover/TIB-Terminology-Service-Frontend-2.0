@@ -44,6 +44,7 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
+        this.handleRedirect = this.handleRedirect.bind(this);
     }
 
     async searching(){
@@ -186,13 +187,13 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title" onClick={this.handleRedirect()}>                
+              <div className="search-card-title" onClick={this.handleRedirect}>                
                   <h4>
                     {searchResultItem[i].label}
                   </h4> 
-                  <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
+                  <div className="btn btn-default term-button">
                     {searchResultItem[i].short_form}
-                  </a>                
+                  </div>                
               </div>
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
