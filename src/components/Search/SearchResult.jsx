@@ -187,7 +187,7 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title" onClick={this.handleRedirect}>                
+              <div className="search-card-title">                
                   <h4>
                     {searchResultItem[i].label}
                   </h4> 
