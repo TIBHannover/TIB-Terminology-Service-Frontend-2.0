@@ -29,7 +29,7 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href="#" className="collection-image-anchor">
-                  <img class="img-fluid w-100" alt="NFDI4Ing" width="700" height="480" src={collectionsInfoJson["NFDI4Ing"]["logo"]}  />
+                  <img class="img-fluid collection-logo" alt="NFDI4Ing" src={collectionsInfoJson["NFDI4Ing"]["logo"]}  />
               </a>
               <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
@@ -40,11 +40,12 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href="#" className="collection-image-anchor">
-                  <img class="img-fluid w-100" alt="NFDI4Chem" width="700" height="480" src={"/" + collectionsInfoJson["NFDI4Chem"]["logo"]} />
+                  <img class="img-fluid collection-logo" alt="NFDI4Chem" src={"/" + collectionsInfoJson["NFDI4Chem"]["logo"]} />
               </a>
               <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
               </div>
+              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
         </div>
@@ -53,21 +54,23 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href="#" className="collection-image-anchor">
-                  <img class="img-fluid w-100" alt="CoyPu" width="700" height="480" src={collectionsInfoJson["CoyPu"]["logo"]}  />
+                  <img class="img-fluid collection-logo" alt="CoyPu"  src={collectionsInfoJson["CoyPu"]["logo"]}  />
               </a>
               <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["CoyPu"]["text"]}</p>
               </div>
+              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
           <div className="col-sm-6">
             <div className="collection-card">
               <a href="#" className="collection-image-anchor">
-                  <img class="img-fluid w-100" alt="FAIR Data Spaces" width="700" height="480" src={"/" + collectionsInfoJson["FAIR Data Spaces"]["logo"]} />
+                  <img class="img-fluid collection-logo" alt="FAIR Data Spaces"  src={"/" + collectionsInfoJson["FAIR Data Spaces"]["logo"]} />
               </a>
               <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
               </div>
+              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
         </div>
@@ -76,21 +79,23 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href="#" className="collection-image-anchor">
-                  <img class="img-fluid w-100" alt="FID Move" width="700" height="480" src={collectionsInfoJson["FID Move"]["logo"]}  />
+                  <img class="img-fluid collection-logo" alt="FID Move"  src={collectionsInfoJson["FID Move"]["logo"]}  />
               </a>
               <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["FID Move"]["text"]}</p>
               </div>
+              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
           <div className="col-sm-6">
             <div className="collection-card">
               <a href="#" className="collection-image-anchor">
-                  <img class="img-fluid w-100" alt="FID Baudigital" width="700" height="480" src={"/" + collectionsInfoJson["FID Baudigital"]["logo"]} />
+                  <img class="img-fluid collection-logo" alt="FID Baudigital"  src={"/" + collectionsInfoJson["FID Baudigital"]["logo"]} />
               </a>
               <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["FID Baudigital"]["text"]}</p>
               </div>
+              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
         </div>
