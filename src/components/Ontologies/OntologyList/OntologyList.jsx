@@ -330,11 +330,11 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
     for (let i = 0; i < this.state.ontologies.length; i++) {
       let item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
-            <Grid container className="ontology-card" id={'ontology_' + i} key={item.ontologyId}>
+            <Grid container className="result-card" id={'ontology_' + i} key={item.ontologyId}>
               <Grid item xs={9}>
-                <div className="ontology-card-title">                            
-                  <a  href={'/ontologies/' + item.ontologyId} className='ontology-id-tag btn btn-primary'>{item.ontologyId}</a>
-                  <a  href={'/ontologies/' + item.ontologyId} className="ontology-title-design"><b>{item.config.title}</b></a>
+                <div className="ontology-card-title-section">                            
+                  <a  href={'/ontologies/' + item.ontologyId} className='ontology-button btn btn-primary'>{item.ontologyId}</a>
+                  <a  href={'/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{item.config.title}</b></a>
                 </div>
                 <div className="ontology-card-description">
                   <p>{item.config.description ? item.config.description : ""}</p>
@@ -379,7 +379,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
           <Grid container spacing={3}>
             {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
             <Grid item xs={8} id="ontology-list-grid">
-              <Grid container>
+              <Grid container id="ontology-list-top-row">
                 <Grid item xs={6}>
                   <h3 className='h-headers'>Browse Ontologies</h3>
                 </Grid>

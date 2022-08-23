@@ -13,16 +13,15 @@ The Search form styles
     /* 
        The style for the autocomplete field
     */
-    height: 200px;
+    height: fit-content;
     border: 0.5px solid black;
-    overflow-y: scroll;
     padding-bottom: 20px;
     padding-top: 10px;
     z-index: 999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 865px;
+    width: 400px;
     margin-left: 85px;
     text-align: left;
 }
@@ -34,30 +33,13 @@ The Search form styles
     text-align: justify;
 }
 
-.autocomplete-item > a{
-    /* 
-       The style for the autocomplete items anchors
-    */
-    text-decoration: none;
-    color: black;
-}
-
-.autocomplete-item > a:hover{
-    /* 
-       The style for the autocomplete items anchors hover
-    */
-    color: rgb(61, 137, 236);
-}
-
-
-
 #jumpresult-container{
     /* 
        The style for the jump autocomplete field
     */
-    height: 200px;
+    height: fit-content;
     border: 0.5px solid black;
-    overflow-y: scroll;
+    display: block;
     padding-bottom: 20px;
     padding-top: 10px;
     position: absolute;
@@ -65,7 +47,7 @@ The Search form styles
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 865px;
+    width: 400px;
     margin-left: 85px;
     text-align: left;
     padding-left: 10px;
@@ -76,6 +58,7 @@ The Search form styles
     */
     margin-left: 10px;
 }
+
 #search-box {
     /* 
        The style for search bar
@@ -142,44 +125,19 @@ The Search results styles
     /* 
        The style for search terms
     */
-    margin: auto;
-    max-width: 1140px;
+    
     overflow-x: hidden;
     overflow-y: hidden;
-    color: #6C757D !important;
-    padding-top: 5px;
+    padding-top: 20px;
 }
 
-.search-result-card{
-    /* 
-       The style for search result cards of any searched term
-    */
 
-    background-color: white;
-    margin-top: 20px;
-    padding: 10px;    
-    height: auto;
-    text-align: justify;
-}
 .searchresult-card-description{
     /* 
        The style inside search result card for description
     */
-    font-size: 18px;
-    margin-top: 30px;  
-    text-decoration: none;
-}
-.result-term-link{
-    /* 
-       The style inside search result card for linking clicked search term to its detail page
-    */
-    text-decoration: none;
-}
-.searchresult-iri{
-    /* 
-       The style for iri element in search result card
-    */
-    font-size: 16px
+    
+    margin-top: 30px;
 }
 
 .search-card-title > h4{
@@ -188,30 +146,14 @@ The Search results styles
     */
      
     display: inline !important;
-    text-decoration: none !important;
-    border-bottom: none;
 }
 
-.ontology-btn-in-card{
+.search-card-title > h4 > a{
     /* 
-        Style for the ontology button in each search result card.
+       The style for header anchor in the title of a search result card
     */
-
-    background-color: #E86161 !important;
-    color: white !important;
-    margin-left: 10px !important;
-    padding: 2px !important;
-}
-
-.result-btn-in-card{
-    /* 
-        Style for the term/property button in each search result card.
-    */
-
-    background-color: #0E6668 !important;
-    color: white;
-    margin-left: 15px !important;
-    padding: 2px !important;
+     
+    color: #42484e !important;
 }
 
 
@@ -221,55 +163,11 @@ The Facet fields in Search results styles
 -------------------------------------
 */
 
-#search-facet-container-box{
-    /* 
-       The style for facet container box
-    */
-    
-    margin-top: 40px;
-    padding: 20px;
-    color: black !important;
-}
-
-.facet-list-box{
-    /* 
-       The style for a facet field box
-    */
-    background-color: white;
-    border-radius: 15px;
-    padding-top: 15px;
-    margin-bottom: 30px !important;
-}
-
-.facet-item-row:hover{
-    /* 
-       The style for colour changes for mouse hover one the facet items
-    */
-    background-color: rgba(119, 122, 121, 0.192);
-    border-radius: 15px;
-}
-
-.result-count{
-    /* 
-       The style for counter in facet fields
-    */
-    border-radius: 50px;
-    background-color: #2B3C46;
-    color: white;
-    padding: 5px;
-    margin-top: 10px;
-    text-align: center;
-    font-weight: 700 !important;
-    font-size: 75% !important;
-    line-height: 1 !important;
-    float: right;
-}
 
 .show-more-btn{
     /* 
         Style for the show more/less button in a facet field box
     */
 
-    color: rgb(84, 146, 240) !important;
-    font-weight: bold;
+    cursor: pointer;
 }

@@ -80,7 +80,7 @@ function makeTag(objectList){
   for(let object of objectList){
     tags.push(      
       <div className='node-tag' key={counter}>
-        <a className='node-tag-link' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + object['iri']} target="_blank">
+        <a className='btn term-button' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + object['iri']} target="_blank">
           {object['label']}
         </a>
       </div>

@@ -11,61 +11,41 @@ The ontology list page styles.
 -------------------------------------
 */
 
-#ontologyList-wrapper-div{
+
+#ontology-list-top-row{
     /* 
-        The style for the ontology list page.
+        Style for the first row containing the header h3 and sort drop down in the ontology list page.
     */
 
-    margin: auto;
-    width: 75%;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    color: #6C757D !important;
-    padding-top: 50px;
+    margin-bottom: 10px;   
 }
 
-#ontology-list-facet-grid{
+#ontologylist-sort-grid > div{
     /* 
-        The style for the ontologies list page facet wrapper div.
+        The styles for sort type drop-down menu container in the ontology list view.
     */
 
-    padding-top: 50px;
+    float: right;    
 }
 
-.h-headers{
+#ontologylist-sort-grid> .MuiInputBase-root{
     /* 
-        Style for the <h> headers in the ontology list page.
+        The styles for sort type drop-down menu in the ontology list view.
     */
 
-    margin-bottom: 20px;
-    color: black;
+    width: 60%;
+    font-size: 15px;
+    padding-bottom: 5px;
 }
 
-.ontology-card{
+
+.ontology-title-text-in-box{
     /* 
-        The styles for each ontology box in the ontology list view. 
+        The style for the ontology title text in a card
     */
 
-    background-color: white;
-    margin-top: 10px;
-    padding: 10px;
-    height: auto;
-    text-align: justify;
-    line-height: 1.5;
-}
-
-.ontology-card-title > b{
-    /* 
-        The styles for the title part for each ontology box in the ontology list view. 
-    */
-
-    font-size: 1.5rem;
-}
-
-.ontology-title-design{
-    text-decoration: none;
-    font-size: 1.5rem;
-    color: black;
+    text-decoration: none !important;
+    color: #42484e !important;
 }
 
 .ontology-card-description{
@@ -74,36 +54,22 @@ The ontology list page styles.
     */
 
     margin-top: 30px;
-    font-size: 1.25rem;
-    color: black
 }
 
-.ontology-id-tag{
+.ontology-list-facet-header{
     /* 
-        Style for the ontology Id tag button.
+        The syle for the facet content under the "Filter" in the ontology list page. 
     */
 
-    margin-right: 10px;
-    background-color: #005C5F;
-    color: white;
+    margin-bottom: 25px;
 }
 
-
-#ontology-filter > div{
-    /* 
-        The syle for the search input wrapper div in the ontology list page. 
-    */
-
-    margin-top: 40px;
-}
-
-.ontology-card-meta-data > div{
+.ontology-card-meta-data{
     /* 
         The styles for the stats part (right side) for each ontology box in the ontology list view. 
     */
 
-    margin-right: 0;
-    margin-left: 30%;
+    padding-left: 40px;
 }
 
 #ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root{
@@ -123,39 +89,6 @@ The ontology list page styles.
     font-size: 15px;
 }
 
-
-#ontologylist-sort-grid > div{
-    /* 
-        The styles for sort type drop-down menu container in the ontology list view.
-    */
-
-    float: right;
-    
-}
-
-#ontologylist-sort-grid> .MuiInputBase-root{
-    /* 
-        The styles for sort type drop-down menu in the ontology list view.
-    */
-
-    width: 60%;
-    font-size: 15px;
-    padding-bottom: 5px;
-}
-
-.ontology-card-meta-data{
-    padding-left: 40px;
-    color: black !important;
-}
-
-.ontology-collection-name > a{
-    /* 
-        Style for the collection link inside an ontology card.
-    */
-
-    text-decoration: none !important;
-}
-
 .ontology-collection-name{
     /* 
         Style for the collection span inside an ontology card.
@@ -166,43 +99,13 @@ The ontology list page styles.
 
 .ontology-list-facet-section-box{
     /* 
-        Style for the facet field boxes in the ontology list facet.
+        Style for the facet field holder (box and title) in the ontology list facet.
     */
 
     margin-top: 30px;
     width: 100% !important;
-    color: black
 }
 
-.ontology-list-facet-section-box> .MuiGrid-grid-xs-12{
-    /* 
-        Style for the facet field boxes in the ontology list facet.
-    */
-
-    background-color: white;
-    padding-left: 20px;
-    padding-right: 10px;
-    border-radius: 25px;
-}   
-
-
-
-.facet-result-count{
-    /* 
-        The style for facet field counter tag.
-    */
-
-    border-radius: 50px;
-    background-color: #2B3C46;
-    color: white;
-    padding: 5px;
-    margin-top: 10px;
-    text-align: center;
-    font-weight: 700 !important;
-    font-size: 75% !important;
-    line-height: 1 !important;
-    float: right;
-}
 
 #lastUpdateRange{
     /* 
@@ -222,13 +125,6 @@ The ontology list page styles.
     margin-top: 10px;
 }
 
-.facet-item-row:hover{
-    /* 
-       The style for colour changes for mouse hover one the facet items
-    */
-    background-color: rgba(119, 122, 121, 0.192);
-    border-radius: 15px;
-}
 
 
 /* 
@@ -237,24 +133,22 @@ The ontology detail page styles. It contains the ontology overview page.
 -------------------------------------
 */
 
-.ontology-detail-page-container{
-    /* 
-        Ontology overview page wrapper
-    */
-
-    margin: auto !important;
-    width: 75% !important;
-}
-
 
 .ontology-detail-table, .ontology-metric-table{
     /* 
         The styles for the ontology overview tables (Detail and Metrics) 
     */
 
-    font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 90%;
+}
+
+.ontology-detail-text{
+    /* 
+        The styles for the ontology description holder div
+    */
+
+    margin-left: -30px;
 }
 
 .ontology-detail-table  td, th{
@@ -274,28 +168,6 @@ The ontology detail page styles. It contains the ontology overview page.
 
     border-bottom: 1px solid #DFE4E5;
     text-align: left;
-    padding: 8px;
-    color: #212529 !important;
-    font-weight: 400 !important;
-    line-height: 1.5 !important;
-    font-size: 1rem !important;
-}
-
-
-.ontology-overview-table-id-column{
-    /* 
-        The style for the Identifiers columns in the ontology tables in the ovewview page.
-    */
-    
-    background-color: #ECF0F0;
-}
-
-.ontology-detail-table-wrapper{
-    /* 
-        The wrapper style for the tables in the ontology overview.  
-    */
-
-    padding-left: 30px;
 }
 
 .copy-link-btn{
@@ -320,32 +192,15 @@ The ontology detail page styles. It contains the ontology overview page.
 }
 
 
-.anchor-in-table{
-    /* 
-        Style for the anchors inside the ontology detail page
-    */
-
-    text-decoration: none !important;
-}
-
-.ontology-detail-text{
-    /* 
-        Style for the ontology detail text (description)
-    */
-
-    color: black !important;
-}
-
-
 .ontology-detail-navbar{
     /* 
         The style for ontology detail page navbar
     */
 
-    width: 70% !important;
-    margin: auto !important;
+    
     background-color: #ECF0F0 !important;
     border-radius: 25px !important;
+    margin-bottom: 20px;
 }
 
 .MuiTab-root{
@@ -377,13 +232,6 @@ The Tree view and detail table styles (for both classes and properties)
 -------------------------------------
 */
 
-.tree-view-container{
-    /* 
-        The tree page containers. It includes both the tree view and the detail table.
-    */
-    padding: 20px !important;
-}
-
 .tree-container{
     /*
         The styles for the tree view container. 
@@ -398,7 +246,7 @@ The Tree view and detail table styles (for both classes and properties)
     padding-left: 10px !important;
     padding-right: 10px !important;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 .node-table-container{
@@ -562,35 +410,12 @@ The Tree view and detail table styles (for both classes and properties)
 
 .node-tag{
     /* 
-        Styles for the "subClass of" tags in the detail table
+        Styles for the "subClass of" tags (.term-button) holder div in the detail table
     */
 
-    background-color: #97eee7;
-    padding: 5px;
-    width: max-content;
-    border-radius: 10px;
     float: left;
-    margin-right: 10px;
 }
 
-.node-tag-link{
-    /* 
-        Styles for the links inside the "subClass of" tags in the detail table
-    */
-
-    color: black;
-    text-decoration: none !important;
-}
-
-
-.node-relation-link{
-     /* 
-        Styles for the links inside the "Relations" row in the class(term) detail table
-    */
-
-    color: black;
-    text-decoration: none;
-}
 
 .isLoading {
     /* 

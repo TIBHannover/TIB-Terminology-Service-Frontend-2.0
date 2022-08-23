@@ -10,6 +10,8 @@ import Collections from "./components/Collection/Collection";
 import Imprint from '../src/assets/static/imprint' 
 import PrivacyPolicy from '../src/assets/static/PrivacyPolicy';
 import TermsOfUse from '../src/assets/static/TermsOfUse';
+import './components/layout/general.css';
+import About from "./components/About/About";
 
 
 
@@ -19,17 +21,20 @@ function App() {
      
       <BrowserRouter>
         <Header />
-        <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route exact path="/ontologies" component={OntologyList}/>
-          <Route exact path="/collections" component={Collections}/>
-          <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
-          <Route exact path="/documentation" component={Documentation}/>
-          <Route exact path="/search" component={SearchResult} />
-          <Route exact path="/imprint" component={Imprint}/>
-          <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
-          <Route exact path="/TermsOfUse" component={TermsOfUse}/>
-        </Switch>
+        <div className='application-content'>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route exact path="/ontologies" component={OntologyList}/>
+            <Route exact path="/collections" component={Collections}/>
+            <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
+            <Route exact path="/documentation" component={Documentation}/>
+            <Route exact path="/search" component={SearchResult} />
+            <Route exact path="/imprint" component={Imprint}/>
+            <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
+            <Route exact path="/TermsOfUse" component={TermsOfUse}/>
+            <Route exact path="/about" component={About}/>
+          </Switch>
+        </div>        
         <Footer />
       </BrowserRouter>
     </div>
