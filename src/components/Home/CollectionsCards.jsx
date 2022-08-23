@@ -31,8 +31,8 @@ export function createHomePageContent(readMoreClickHandler){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid collection-logo" alt="NFDI4Ing" src={collectionsInfoJson["NFDI4Ing"]["logo"]}  />
               </a>
-              <div className="collection-card-text trunc">
-                <p>{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
+              <div className="collection-card-text">
+                <p className="trunc">{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
               </div>
               <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
@@ -42,8 +42,8 @@ export function createHomePageContent(readMoreClickHandler){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid collection-logo" alt="NFDI4Chem" src={"/" + collectionsInfoJson["NFDI4Chem"]["logo"]} />
               </a>
-              <div className="collection-card-text trunc">
-                <p>{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
+              <div className="collection-card-text">
+                <p className="trunc">{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
               </div>
               <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
@@ -56,8 +56,8 @@ export function createHomePageContent(readMoreClickHandler){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid collection-logo" alt="CoyPu"  src={collectionsInfoJson["CoyPu"]["logo"]}  />
               </a>
-              <div className="collection-card-text trunc">
-                <p>{collectionsInfoJson["CoyPu"]["text"]}</p>
+              <div className="collection-card-text">
+                <p className="trunc">{collectionsInfoJson["CoyPu"]["text"]}</p>
               </div>
               <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
@@ -67,8 +67,8 @@ export function createHomePageContent(readMoreClickHandler){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid collection-logo" alt="FAIR Data Spaces"  src={"/" + collectionsInfoJson["FAIR Data Spaces"]["logo"]} />
               </a>
-              <div className="collection-card-text trunc">
-                <p>{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
+              <div className="collection-card-text">
+                <p className="trunc">{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
               </div>
               <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
@@ -81,8 +81,8 @@ export function createHomePageContent(readMoreClickHandler){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid collection-logo" alt="FID Move"  src={collectionsInfoJson["FID Move"]["logo"]}  />
               </a>
-              <div className="collection-card-text trunc">
-                <p>{collectionsInfoJson["FID Move"]["text"]}</p>
+              <div className="collection-card-text">
+                <p className="trunc">{collectionsInfoJson["FID Move"]["text"]}</p>
               </div>
               <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
@@ -92,8 +92,8 @@ export function createHomePageContent(readMoreClickHandler){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid collection-logo" alt="FID Baudigital"  src={"/" + collectionsInfoJson["FID Baudigital"]["logo"]} />
               </a>
-              <div className="collection-card-text trunc">
-                <p>{collectionsInfoJson["FID Baudigital"]["text"]}</p>
+              <div className="collection-card-text">
+                <p className="trunc">{collectionsInfoJson["FID Baudigital"]["text"]}</p>
               </div>
               <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>

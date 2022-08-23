@@ -23,10 +23,17 @@
     */
 
     white-space: nowrap;
-    width: 12em;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 400px;
+    /* width: 400px;    */
+}
+
+.collection-card-text{
+    /* 
+        Style for the text part of a collection card
+    */
+
+    margin-top: 20px;
 }
 
 .collection-logo{

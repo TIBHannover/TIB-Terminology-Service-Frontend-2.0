@@ -28,12 +28,12 @@ class Home extends React.Component{
    */
   readMoreClickHandler(e){
     for(let node of e.target.parentNode.children){
-      if(node.nodeName === "DIV" && node.classList.contains("trunc")){
-        node.classList.remove("trunc");
+      if(node.nodeName === "DIV" && node.children[0].classList.contains("trunc")){
+        node.children[0].classList.remove("trunc");
         e.target.innerHTML = "Show Less";
       }
-      else if(node.nodeName === "DIV" && !node.classList.contains("trunc")){
-        node.classList.add("trunc");
+      else if(node.nodeName === "DIV" && !node.children[0].classList.contains("trunc")){
+        node.children[0].classList.add("trunc");
         e.target.innerHTML = "Show More"
       }
     }
