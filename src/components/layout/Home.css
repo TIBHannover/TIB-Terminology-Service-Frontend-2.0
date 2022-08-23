@@ -7,13 +7,15 @@
     padding-bottom: 1.5rem !important;
 }
 
-.collection-holder-box{
+.collection-card{
     /* 
         Style for the collection box on the home page.
     */
 
+    background-color: white;
     padding: 20px;
-    text-align: justify;
+    /* max-height: 400px; */
+
 }
 
 .home-page-stats-container{
