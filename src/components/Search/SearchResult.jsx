@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import {getAllCollectionsIds} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
-import SearchTermDetail from './SearchTermDetail';
 
 
 class SearchResult extends React.Component{
