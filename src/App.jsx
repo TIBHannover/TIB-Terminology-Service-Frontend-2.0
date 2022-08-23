@@ -11,6 +11,7 @@ import Imprint from '../src/assets/static/imprint'
 import PrivacyPolicy from '../src/assets/static/PrivacyPolicy';
 import TermsOfUse from '../src/assets/static/TermsOfUse';
 import './components/layout/general.css';
+import About from "./components/About/About";
 
 
 
@@ -31,6 +32,7 @@ function App() {
             <Route exact path="/imprint" component={Imprint}/>
             <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
             <Route exact path="/TermsOfUse" component={TermsOfUse}/>
+            <Route exact path="/about" component={About}/>
           </Switch>
         </div>        
         <Footer />
