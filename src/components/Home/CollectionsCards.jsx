@@ -5,6 +5,10 @@ import FIDMOVE from "../../assets/img/fidmove_logo.svg"
 import BAUDIGITAL from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg"
 
 export function createCollectionCards(){
+    let 
+
+
+
     let cards = [
         <div className="container home-page-content-container">
             <div className="row">
