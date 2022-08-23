@@ -1,7 +1,7 @@
 import React from "react";
 import "../layout/Home.css"
 import {createStatsBox} from './StatsBox';
-import {createCollectionCards} from './CollectionsCards';
+import {createHomePageContent} from './CollectionsCards';
 
 class Home extends React.Component{
   constructor(props){
@@ -27,8 +27,8 @@ class Home extends React.Component{
   }
     render(){
         return(
-        <div id="mainpageSearchBox">          
-          {createCollectionCards()}
+        <div id="mainpageSearchBox">
+            {createHomePageContent()}
           <div className="container home-page-stats-container">
               {createStatsBox(this.state.statsResult)}
           </div>
