@@ -1,12 +1,13 @@
-import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png"
+// import NFDI4CHEM  from "../../assets/img/NFDI4Chem_Logo_mit_Claim/Web_Word_Powerpoint/png/NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png"
 import COYPU from "../../assets/img/logo_CoyPu.png"
 import FAIRDS from "../../assets/img/FAIR_DS_Logo_RGB.png"
 import FIDMOVE from "../../assets/img/fidmove_logo.svg"
 import BAUDIGITAL from "../../assets/img/bau-digital_logo210420_RZ_Web_RGB_11.svg"
 import collectionsInfoJson from "../../assets/collectionsText.json";
 
+
 export function createHomePageContent(){
-    let numberOfBadgesPerRow = 2;
+    let baseAssetPath = "../../assets/img/";
     let content = [
       <div className="container home-page-content-container">
         <div className="row">
@@ -38,6 +39,16 @@ export function createHomePageContent(){
               </a>
               <div className="collection-card-text">
                 <p>{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="collection-card">
+              <a href="#" className="collection-image-anchor">
+                  <img class="img-fluid w-100" alt="NFDI4Chem" width="700" height="480" src={"/" + collectionsInfoJson["NFDI4Chem"]["logo"]} />
+              </a>
+              <div className="collection-card-text">
+                <p>{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
               </div>
             </div>
           </div>
