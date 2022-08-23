@@ -187,14 +187,42 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title">                
-                  <h4>
-                    {searchResultItem[i].label}
-                  </h4> 
-                  <div className="btn btn-default term-button">
-                    {searchResultItem[i].short_form}
-                  </div>                
+              <div className="search-card-title"> 
+                {(() => {
+                  if(searchResultItem[i]["type"] === 'class'){
+                    return(
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                        <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                      </a>
+                    )     
+                }
+                else if(searchResultItem[i]["type"] === 'property'){
+                  return(
+                    <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                    </a>
+
+                  )         
+                }
+                else if(searchResultItem[i]["type"] === 'ontology'){
+                  return(
+                    <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                    </a>
+
+                  )      
+                }
+                else if(searchResultItem[i]["type"] === 'individuals'){
+                  return(
+                    <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <h4>{searchResultItem[i].label}</h4><div className="btn btn-default term-button">{searchResultItem[i].short_form}</div>
+                    </a>
+
+                  )    
+                }
+                })()}                       
               </div>
+  
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
