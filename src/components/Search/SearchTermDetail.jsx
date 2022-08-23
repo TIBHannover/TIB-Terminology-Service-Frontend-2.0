@@ -25,7 +25,21 @@ class SearchTermDetail extends React.Component{
         let searchResult = await fetch(searchUrl);
         let resultJson = (await searchResult.json());
         searchResult =  resultJson['response']['docs'];
-        let searchResultItem = this.state.searchResult
+        this.setState({
+            searchResult: searchResult,
+            result: true                 
+        })
+    }
+    else if (enteredTerm.length == 0){
+        this.setState({
+            result: false,
+            searchResult: []
+        });  
+    }
+  }
+
+  handleRedirect(){
+    let searchResultItem = this.state.searchResult
       for(let i=0; i < searchResultItem.length; i++){
         if('type' == 'class'){
             <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
@@ -49,7 +63,14 @@ class SearchTermDetail extends React.Component{
           }
       }
 
-    }
+  }
+
+  render(){
+    return(
+        <div>
+
+        </div>
+    )
   }
 }
 

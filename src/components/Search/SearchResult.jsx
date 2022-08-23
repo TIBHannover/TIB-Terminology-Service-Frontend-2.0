@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import {getAllCollectionsIds} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
+import SearchTermDetail from './SearchTermDetail';
 
 
 class SearchResult extends React.Component{
@@ -145,6 +146,33 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
+  handleRedirect(){
+    let searchResultItem = this.state.searchResult
+      for(let i=0; i < searchResultItem.length; i++){
+        if('type' == 'class'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+        }
+        else if('type' == 'property'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+          }
+        else if('type' == 'ontology'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+          }
+        else if('type' == 'individuals'){
+            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+              {searchResultItem[i].label}
+            </a>
+          }
+      }
+
+  }
+
 
   /**
      * Create the search results list view
@@ -159,10 +187,10 @@ async suggestionHandler(selectedTerm){
         SearchResultList.push(
           <Grid container className="result-card" key={searchResultItem[i]['id']}>
             <Grid item xs={12}>
-              <div className="search-card-title">                
-                  <h4><a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
+              <div className="search-card-title" onClick={this.handleRedirect()}>                
+                  <h4>
                     {searchResultItem[i].label}
-                  </a></h4> 
+                  </h4> 
                   <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])}>
                     {searchResultItem[i].short_form}
                   </a>                
