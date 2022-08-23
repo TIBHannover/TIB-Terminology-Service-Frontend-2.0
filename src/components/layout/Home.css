@@ -7,13 +7,42 @@
     padding-bottom: 1.5rem !important;
 }
 
-.collection-holder-box{
+.collection-card{
     /* 
         Style for the collection box on the home page.
     */
 
+    background-color: white;
     padding: 20px;
-    text-align: justify;
+    /* max-height: 400px; */
+}
+
+.trunc{
+    /* 
+        Truncating the collection text in the card
+    */
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* width: 400px;    */
+}
+
+.collection-card-text{
+    /* 
+        Style for the text part of a collection card
+    */
+
+    margin-top: 20px;
+}
+
+.collection-logo{
+    /* 
+        Collection logo image style
+    */
+
+    width: 500px;
+    height: 300px;
 }
 
 .home-page-stats-container{
