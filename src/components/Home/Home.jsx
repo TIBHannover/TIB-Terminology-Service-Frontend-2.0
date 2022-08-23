@@ -1,7 +1,7 @@
 import React from "react";
 import "../layout/Home.css"
 import {createStatsBox} from './StatsBox';
-import {createCollectionCards} from './CollectionsCards';
+import {createHomePageContent} from './CollectionsCards';
 
 class Home extends React.Component{
   constructor(props){
@@ -10,25 +10,44 @@ class Home extends React.Component{
        statsResult: []
     })
     this.Stats = this.Stats.bind(this);
+    this.readMoreClickHandler = this.readMoreClickHandler.bind(this);
   }
 
   async Stats(){
     let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatistics`)
     statsResult = (await statsResult.json());
-    console.info(statsResult)
     this.setState({
       statsResult: statsResult
     })
 
   }
 
+  /**
+   * Show more text for the collections card on the home page
+   * @param {*} e 
+   */
+  readMoreClickHandler(e){
+    for(let node of e.target.parentNode.children){
+      if(node.nodeName === "DIV" && node.children[0].classList.contains("trunc")){
+        node.children[0].classList.remove("trunc");
+        e.target.innerHTML = "Show Less";
+      }
+      else if(node.nodeName === "DIV" && !node.children[0].classList.contains("trunc")){
+        node.children[0].classList.add("trunc");
+        e.target.innerHTML = "Show More"
+      }
+    }
+  }
+
+
+
   componentDidMount(){
     this.Stats();
   }
     render(){
         return(
-        <div id="mainpageSearchBox">          
-          {createCollectionCards()}
+        <div id="mainpageSearchBox">
+            {createHomePageContent(this.readMoreClickHandler)}
           <div className="container home-page-stats-container">
               {createStatsBox(this.state.statsResult)}
           </div>
