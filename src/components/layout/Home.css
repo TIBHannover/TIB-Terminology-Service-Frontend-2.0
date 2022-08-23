@@ -15,7 +15,14 @@
     background-color: white;
     padding: 20px;
     /* max-height: 400px; */
+}
 
+.trunc{
+    white-space: nowrap;
+    width: 12em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 400px;
 }
 
 .home-page-stats-container{

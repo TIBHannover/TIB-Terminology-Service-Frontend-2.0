@@ -1,7 +1,7 @@
 import collectionsInfoJson from "../../assets/collectionsText.json";
 
 
-export function createHomePageContent(){    
+export function createHomePageContent(readMoreClickHandler){    
     let content = [
       <div className="container home-page-content-container">
         <div className="row">
@@ -31,9 +31,10 @@ export function createHomePageContent(){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid w-100" alt="NFDI4Ing" width="700" height="480" src={collectionsInfoJson["NFDI4Ing"]["logo"]}  />
               </a>
-              <div className="collection-card-text">
+              <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
               </div>
+              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
           <div className="col-sm-6">
@@ -41,7 +42,7 @@ export function createHomePageContent(){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid w-100" alt="NFDI4Chem" width="700" height="480" src={"/" + collectionsInfoJson["NFDI4Chem"]["logo"]} />
               </a>
-              <div className="collection-card-text">
+              <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
               </div>
             </div>
@@ -54,7 +55,7 @@ export function createHomePageContent(){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid w-100" alt="CoyPu" width="700" height="480" src={collectionsInfoJson["CoyPu"]["logo"]}  />
               </a>
-              <div className="collection-card-text">
+              <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["CoyPu"]["text"]}</p>
               </div>
             </div>
@@ -64,7 +65,7 @@ export function createHomePageContent(){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid w-100" alt="FAIR Data Spaces" width="700" height="480" src={"/" + collectionsInfoJson["FAIR Data Spaces"]["logo"]} />
               </a>
-              <div className="collection-card-text">
+              <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
               </div>
             </div>
@@ -77,7 +78,7 @@ export function createHomePageContent(){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid w-100" alt="FID Move" width="700" height="480" src={collectionsInfoJson["FID Move"]["logo"]}  />
               </a>
-              <div className="collection-card-text">
+              <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["FID Move"]["text"]}</p>
               </div>
             </div>
@@ -87,7 +88,7 @@ export function createHomePageContent(){
               <a href="#" className="collection-image-anchor">
                   <img class="img-fluid w-100" alt="FID Baudigital" width="700" height="480" src={"/" + collectionsInfoJson["FID Baudigital"]["logo"]} />
               </a>
-              <div className="collection-card-text">
+              <div className="collection-card-text trunc">
                 <p>{collectionsInfoJson["FID Baudigital"]["text"]}</p>
               </div>
             </div>
