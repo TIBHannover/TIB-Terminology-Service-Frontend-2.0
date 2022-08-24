@@ -8,14 +8,11 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-12">
               <h2>TIB Terminology Service</h2>
               <p>
-                  With its new Terminology Service, TIB – Leibniz Information Centre for Science and Technology
-                  and University Library provides a single point of access to terminology from domains such as architecture,
+                  With the Terminology Service, TIB – Leibniz Information Centre for Science and Technology
+                  and University Library provides a single point of access to terminologies from domains such as architecture,
                   chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API
-                  to retrieve terminological information and use it in your technical services. Layout template for TIB General. 
+                  to retrieve terminological information and use it in your technical services. 
               </p>              
-              <p>
-                Examples: <a href='/search?q=oxidation'>Oxidation</a>, <a href='/search?q=IAO_0020000'>IAO_0020000</a>
-              </p>
           </div>
         </div>
         <br></br>
