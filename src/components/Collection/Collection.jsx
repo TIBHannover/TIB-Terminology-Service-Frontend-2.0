@@ -113,7 +113,7 @@ class Collections extends React.Component{
             <div className='container collections-info-container'>
                 <div className='row'>
                     <div className='col-sm-2'></div>
-                    <div className='col-sm-10'><h3 className="text-dark">Collections</h3></div>  
+                    <div className='col-sm-10'><h3>Collections</h3></div>  
                 </div>
                 <br></br>
                 {this.createCollectionList()}

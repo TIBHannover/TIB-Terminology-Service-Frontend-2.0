@@ -381,10 +381,12 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
             <Grid item xs={8} id="ontology-list-grid">
               <Grid container id="ontology-list-top-row">
                 <Grid item xs={6}>
+                  <br/>
                   <h3 className='h-headers'>Browse Ontologies</h3>
                 </Grid>
                 <Grid item xs={6}  id="ontologylist-sort-grid">
                   <div>
+                    <br/>
                     <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
                     <Select
                       native
