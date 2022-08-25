@@ -5,6 +5,7 @@ class Documentation extends React.Component{
     render(){
         return(
             <div className='doc-design'>
+                <br/>
                 <h1>Documentation</h1>
                 <p>This service offers an intuitive search functionality which is based on a SOLR search index on identifiers and terms. TIB Terminology Service can be used both manually and programmatically. Manual access (User Interface) appeals to a larger audience whereas programmatical access (REST Interface) can play a key role in larger contexts. For this reason, they are both essential features of the service. </p>
                 <br/>

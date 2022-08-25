@@ -3,9 +3,10 @@ import collectionsInfoJson from "../../assets/collectionsText.json";
 
 export function createHomePageContent(readMoreClickHandler){    
     let content = [
-      <div className="container home-page-content-container">
+      <div>
+        <br/>
         <div className="row">
-          <div className="col-sm-12">
+          <div>
               <h2>TIB Terminology Service</h2>
               <p>
                   With the Terminology Service, TIB – Leibniz Information Centre for Science and Technology
@@ -17,7 +18,7 @@ export function createHomePageContent(readMoreClickHandler){
         </div>
         <br></br>
         <div className="row">
-          <div className="col-sm-12">
+          <div>
             <h2>Collections</h2>
           </div>
         </div>

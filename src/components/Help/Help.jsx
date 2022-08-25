@@ -4,6 +4,7 @@ class Help extends React.Component{
     render(){
         return(
             <div>
+                <br/>
                 <h1>Help and FAQ</h1>
                 <br/>
                 <h3>Feedback and Suggestion</h3>
