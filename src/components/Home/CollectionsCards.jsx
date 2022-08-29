@@ -31,7 +31,7 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
-                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+                <a  href={"/collections?col=" + collectionsInfoJson["NFDI4Ing"]["html_id"]} className="show-more-text-link">[Read More]</a>
               </div>              
             </div>
           </div>
@@ -42,7 +42,7 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
-                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+                <a  href={"/collections?col=" + collectionsInfoJson["NFDI4Chem"]["html_id"]} className="show-more-text-link">[Read More]</a>
               </div>              
             </div>
           </div>
@@ -56,7 +56,7 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["CoyPu"]["text"]}</p>
-                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+                <a  href={"/collections?col=" + collectionsInfoJson["CoyPu"]["html_id"]} className="show-more-text-link">[Read More]</a>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
-                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+                <a  href={"/collections?col=" + collectionsInfoJson["FAIR Data Spaces"]["html_id"]} className="show-more-text-link">[Read More]</a>
               </div>
             </div>
           </div>
@@ -81,7 +81,7 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FID Move"]["text"]}</p>
-                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+                <a  href={"/collections?col=" + collectionsInfoJson["FID Move"]["html_id"]} className="show-more-text-link">[Read More]</a>
               </div>              
             </div>
           </div>
@@ -92,7 +92,7 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FID Baudigital"]["text"]}</p>
-                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+                <a  href={"/collections?col=" + collectionsInfoJson["FID Baudigital"]["html_id"]} className="show-more-text-link">[Read More]</a>
               </div>              
             </div>
           </div>

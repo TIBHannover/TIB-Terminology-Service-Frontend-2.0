@@ -2,21 +2,6 @@
     This is the css script for styling Collections components.    
 */
 
-.collections-info-container{
-    /* 
-        The style for the collections page container
-    */
-
-    padding-top: 50px;
-}
-
-.collection-content{
-    /* 
-        The style for each collection text content
-    */
-
-    padding-top: 25px;
-}
 
 .collection-ontologies-text{
     /* 
@@ -40,5 +25,5 @@
         The style for each collection row container
     */
 
-    margin-bottom: 30px;
+    margin-bottom: 80px;
 }

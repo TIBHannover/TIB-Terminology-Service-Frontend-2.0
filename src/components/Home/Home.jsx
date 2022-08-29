@@ -32,10 +32,10 @@ class Home extends React.Component{
         node.classList.remove("trunc");
         e.target.innerHTML = "[Show Less]";
       }
-      else if(node.nodeName === "P" && !node.classList.contains("trunc")){
-        node.classList.add("trunc");
-        e.target.innerHTML = "[Show More]"
-      }
+      // else if(node.nodeName === "P" && !node.classList.contains("trunc")){
+      //   node.classList.add("trunc");
+      //   e.target.innerHTML = "[Show More]"
+      // }
     }
   }
 

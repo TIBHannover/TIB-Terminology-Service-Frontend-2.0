@@ -2,6 +2,7 @@ import React from 'react';
 import '../layout/Collections.css';
 import {getCollectionOntologies} from '../../api/fetchData';
 import collectionsInfoJson from "../../assets/collectionsText.json";
+import queryString from 'query-string'; 
 
 
 class Collections extends React.Component{
@@ -31,7 +32,6 @@ class Collections extends React.Component{
                     <a href={'/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
                 );
             }
-
         }
         
         this.setState({
@@ -48,25 +48,39 @@ class Collections extends React.Component{
      * @param {*} content 
      * @returns 
      */
-    createCollectionCard(collectionName, collectionId, Logo, content){
+    createCollectionCard(collectionId, collectionJson){
         let card = [
-            <div className='row collection-card-row' key={collectionId}>
-                <div className='col-sm-2' key={collectionId + "_logo"}>
-                    <img class="img-fluid" alt="" width="200" height="100" src={Logo}/>
+            <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
+                <div className='col-sm-2' key={collectionId + "_logo"}>                    
+                    <a href={collectionJson["ontology_list_url"]} className="collection-image-anchor">
+                        <img class="img-fluid" alt="" width="200" height="100" src={collectionJson["logo"]}/>
+                    </a>
                 </div>
                 <div className='col-sm-10 collection-content'>
                     <div className='row' key={collectionId + "_name"}>
                         <div className='col-sm-12'>
-                            <h4>{collectionName}</h4>
-                        </div>                          
+                            <h4>{collectionJson["name"]}</h4>
+                        </div>
                     </div>
                     <div className='row' key={collectionId + "_content"}>
                         <div className='col-sm-12'>
                             <p align="justify">
-                                {content}
+                                {collectionJson["text"]}
                             </p>
                         </div>                          
                     </div>
+                    <div className='row' key={collectionId + "_projectUrl"}>
+                        <div className='col-sm-12 collection-ontologies-text'>
+                            <b>Project Homepage: </b>
+                            <a href={collectionJson["project_homepage"]} target="_blank">{collectionJson["project_homepage"]}</a>
+                        </div>
+                    </div>
+                    <div className='row' key={collectionId + "_projectUrl"}>
+                        <div className='col-sm-12 collection-ontologies-text'>
+                            <b>Domain-specific terminolgy service: </b>
+                            <a href={collectionJson["domain_ts_link"]} target="_blank">{collectionJson["domain_ts_link"]}</a>
+                        </div>
+                    </div>  
                     <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
                             <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies[collectionId] : ""}
@@ -83,7 +97,7 @@ class Collections extends React.Component{
     createCollectionList(){                
         let result = [];
         for (let col in collectionsInfoJson){
-            result.push(this.createCollectionCard(collectionsInfoJson[col]["name"], col, collectionsInfoJson[col]["logo"], collectionsInfoJson[col]["text"]));
+            result.push(this.createCollectionCard(col, collectionsInfoJson[col]));
         }
 
         return result;
@@ -91,7 +105,12 @@ class Collections extends React.Component{
 
     
     componentDidMount(){
-        this.getOntologies();        
+        this.getOntologies();
+        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+        let targetCollectionId = targetQueryParams.col;
+        if(typeof(targetCollectionId) !== "undefined"){
+            document.getElementById("section_" + targetCollectionId).scrollIntoView();
+        }        
     }
 
 
@@ -100,7 +119,13 @@ class Collections extends React.Component{
             <div className='container collections-info-container'>
                 <div className='row'>
                     <div className='col-sm-2'></div>
-                    <div className='col-sm-10'><h3>Collections</h3></div>  
+                    <div className='col-sm-10'>
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <h2>Collections</h2>
+                            </div>
+                        </div>
+                    </div>  
                 </div>
                 <br></br>
                 {this.createCollectionList()}
