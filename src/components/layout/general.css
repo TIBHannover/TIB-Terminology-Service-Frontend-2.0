@@ -23,6 +23,7 @@ body{
     overflow-x: hidden;
     overflow-y: hidden;
     min-height: 500px;
+    padding-top: 30px;
 }
 
 p{

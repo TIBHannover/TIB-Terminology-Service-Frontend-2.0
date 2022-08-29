@@ -12,14 +12,6 @@ The ontology list page styles.
 */
 
 
-#ontology-list-top-row{
-    /* 
-        Style for the first row containing the header h3 and sort drop down in the ontology list page.
-    */
-
-    margin-bottom: 10px;   
-}
-
 #ontologylist-sort-grid > div{
     /* 
         The styles for sort type drop-down menu container in the ontology list view.
@@ -35,7 +27,7 @@ The ontology list page styles.
 
     width: 60%;
     font-size: 15px;
-    padding-bottom: 5px;
+    /* padding-bottom: 5px; */
 }
 
 
