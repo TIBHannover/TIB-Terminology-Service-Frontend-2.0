@@ -48,25 +48,37 @@ class Collections extends React.Component{
      * @param {*} content 
      * @returns 
      */
-    createCollectionCard(collectionName, collectionId, Logo, content, htmlId){
+    createCollectionCard(collectionId, collectionJson){
         let card = [
-            <div className='row collection-card-row' key={collectionId} id={"section_" + htmlId}>
+            <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
                 <div className='col-sm-2' key={collectionId + "_logo"}>
-                    <img class="img-fluid" alt="" width="200" height="100" src={Logo}/>
+                    <img class="img-fluid" alt="" width="200" height="100" src={collectionJson["logo"]}/>
                 </div>
                 <div className='col-sm-10 collection-content'>
                     <div className='row' key={collectionId + "_name"}>
                         <div className='col-sm-12'>
-                            <h4>{collectionName}</h4>
+                            <h4>{collectionJson["name"]}</h4>
                         </div>
                     </div>
                     <div className='row' key={collectionId + "_content"}>
                         <div className='col-sm-12'>
                             <p align="justify">
-                                {content}
+                                {collectionJson["text"]}
                             </p>
                         </div>                          
                     </div>
+                    <div className='row' key={collectionId + "_projectUrl"}>
+                        <div className='col-sm-12 collection-ontologies-text'>
+                            <b>Project Homepage: </b>
+                            <a href={collectionJson["project_homepage"]} target="_blank">{collectionJson["project_homepage"]}</a>
+                        </div>
+                    </div>
+                    <div className='row' key={collectionId + "_projectUrl"}>
+                        <div className='col-sm-12 collection-ontologies-text'>
+                            <b>Domain-specific terminolgy service: </b>
+                            <a href={collectionJson["domain_ts_link"]} target="_blank">{collectionJson["domain_ts_link"]}</a>
+                        </div>
+                    </div>  
                     <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
                             <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies[collectionId] : ""}
@@ -83,7 +95,7 @@ class Collections extends React.Component{
     createCollectionList(){                
         let result = [];
         for (let col in collectionsInfoJson){
-            result.push(this.createCollectionCard(collectionsInfoJson[col]["name"], col, collectionsInfoJson[col]["logo"], collectionsInfoJson[col]["text"], collectionsInfoJson[col]["html_id"]));
+            result.push(this.createCollectionCard(col, collectionsInfoJson[col]));
         }
 
         return result;
