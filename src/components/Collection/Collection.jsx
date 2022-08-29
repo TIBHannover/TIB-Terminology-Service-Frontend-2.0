@@ -58,7 +58,7 @@ class Collections extends React.Component{
                     <div className='row' key={collectionId + "_name"}>
                         <div className='col-sm-12'>
                             <h4>{collectionName}</h4>
-                        </div>                          
+                        </div>
                     </div>
                     <div className='row' key={collectionId + "_content"}>
                         <div className='col-sm-12'>
@@ -105,7 +105,13 @@ class Collections extends React.Component{
             <div className='container collections-info-container'>
                 <div className='row'>
                     <div className='col-sm-2'></div>
-                    <div className='col-sm-10'><h3>Collections</h3></div>  
+                    <div className='col-sm-10'>
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <h2>Collections</h2>
+                            </div>
+                        </div>
+                    </div>  
                 </div>
                 <br></br>
                 {this.createCollectionList()}
