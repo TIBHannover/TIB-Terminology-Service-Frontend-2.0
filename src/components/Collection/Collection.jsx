@@ -51,8 +51,10 @@ class Collections extends React.Component{
     createCollectionCard(collectionId, collectionJson){
         let card = [
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
-                <div className='col-sm-2' key={collectionId + "_logo"}>
-                    <img class="img-fluid" alt="" width="200" height="100" src={collectionJson["logo"]}/>
+                <div className='col-sm-2' key={collectionId + "_logo"}>                    
+                    <a href={collectionJson["ontology_list_url"]} className="collection-image-anchor">
+                        <img class="img-fluid" alt="" width="200" height="100" src={collectionJson["logo"]}/>
+                    </a>
                 </div>
                 <div className='col-sm-10 collection-content'>
                     <div className='row' key={collectionId + "_name"}>
