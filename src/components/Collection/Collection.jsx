@@ -2,6 +2,7 @@ import React from 'react';
 import '../layout/Collections.css';
 import {getCollectionOntologies} from '../../api/fetchData';
 import collectionsInfoJson from "../../assets/collectionsText.json";
+import queryString from 'query-string'; 
 
 
 class Collections extends React.Component{
@@ -31,7 +32,6 @@ class Collections extends React.Component{
                     <a href={'/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
                 );
             }
-
         }
         
         this.setState({
@@ -48,9 +48,9 @@ class Collections extends React.Component{
      * @param {*} content 
      * @returns 
      */
-    createCollectionCard(collectionName, collectionId, Logo, content){
+    createCollectionCard(collectionName, collectionId, Logo, content, htmlId){
         let card = [
-            <div className='row collection-card-row' key={collectionId}>
+            <div className='row collection-card-row' key={collectionId} id={"section_" + htmlId}>
                 <div className='col-sm-2' key={collectionId + "_logo"}>
                     <img class="img-fluid" alt="" width="200" height="100" src={Logo}/>
                 </div>
@@ -83,7 +83,7 @@ class Collections extends React.Component{
     createCollectionList(){                
         let result = [];
         for (let col in collectionsInfoJson){
-            result.push(this.createCollectionCard(collectionsInfoJson[col]["name"], col, collectionsInfoJson[col]["logo"], collectionsInfoJson[col]["text"]));
+            result.push(this.createCollectionCard(collectionsInfoJson[col]["name"], col, collectionsInfoJson[col]["logo"], collectionsInfoJson[col]["text"], collectionsInfoJson[col]["html_id"]));
         }
 
         return result;
@@ -91,7 +91,12 @@ class Collections extends React.Component{
 
     
     componentDidMount(){
-        this.getOntologies();        
+        this.getOntologies();
+        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+        let targetCollectionId = targetQueryParams.col;
+        if(typeof(targetCollectionId) !== "undefined"){
+            document.getElementById("section_" + targetCollectionId).scrollIntoView();
+        }        
     }
 
 

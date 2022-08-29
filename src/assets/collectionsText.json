@@ -1,6 +1,7 @@
 {
     "NFDI4Ing":{
         "id":"NFDI4ING",
+        "html_id":"NFDI4ING",
         "name":"NFDI4Ing Project",
         "text": "NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service.",
         "logo": "https://terminology.nfdi4ing.de/ts4ing/img/logo_nfdi4ing_rgb_quer_scaled.png",
@@ -8,6 +9,7 @@
     },      
     "NFDI4Chem":{
         "id":"NFDI4CHEM",
+        "html_id":"NFDI4CHEM",
         "name":"NFDI4Chem Project",
         "text":"The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.",
         "logo": "NFDI4Chem-Logo-Claim_mehrfarbig_schwarz.png",
@@ -15,6 +17,7 @@
     },
     "CoyPu":{
         "id":"CoyPu",
+        "html_id":"CoyPu",
         "name":"CoyPu Project",
         "text":"The CoyPu collection by TIB Terminology Service provides a well-selected set of ontologies for representing the domain for integrating, structuring, networking, analyzing and evaluating heterogeneous data from economic value networks as well as the industry environment and social context.",
         "logo":"logo_CoyPu.png",
@@ -22,6 +25,7 @@
     },
     "FAIR Data Spaces":{
         "id":"FAIR Data Spaces",
+        "html_id":"FAIR_Data_Spaces",
         "name":"FAIR Data Spaces Project",
         "text":"The collection of ontologies used in FAIR Data Spaces project is developed by the demonstrators from the  biodiversity, engineering sciences, and healthcare domain to enable the implementation of a common cloud-based data space for industry and academia within the Gaia-X European data infrastructure.  The focus of this collection is to ensure interoperability and reusability in Gaia-X, especially for organizations.",
         "logo":"FAIR_DS_Logo_RGB.png",
@@ -29,6 +33,7 @@
     },    
     "FID Move":{
         "id":"FID move",
+        "html_id":"FID_move",
         "name":"FID Baudigital Project",
         "text":"The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.",
         "logo":"fidmove_logo.svg",
@@ -36,6 +41,7 @@
     },
     "FID Baudigital":{
         "id":"FID BAUdigital",
+        "html_id":"FID_BAUdigital",
         "name":"FID Move Project",
         "text":"The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.",
         "logo":"bau-digital_logo210420_RZ_Web_RGB_11.svg",
