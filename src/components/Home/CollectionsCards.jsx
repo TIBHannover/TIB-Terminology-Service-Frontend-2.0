@@ -31,8 +31,8 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["NFDI4Ing"]["text"]}</p>
-              </div>
-              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
+                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+              </div>              
             </div>
           </div>
           <div className="col-sm-6">
@@ -42,8 +42,8 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
-              </div>
-              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
+                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+              </div>              
             </div>
           </div>
         </div>
@@ -56,8 +56,8 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["CoyPu"]["text"]}</p>
+                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
               </div>
-              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
           <div className="col-sm-6">
@@ -67,8 +67,8 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
+                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
               </div>
-              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
             </div>
           </div>
         </div>
@@ -81,8 +81,8 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FID Move"]["text"]}</p>
-              </div>
-              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
+                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+              </div>              
             </div>
           </div>
           <div className="col-sm-6">
@@ -92,8 +92,8 @@ export function createHomePageContent(readMoreClickHandler){
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FID Baudigital"]["text"]}</p>
-              </div>
-              <a className="btn btn-primary" onClick={readMoreClickHandler}>Read More</a>
+                <a className="show-more-text-link" onClick={readMoreClickHandler}>[Read More]</a>
+              </div>              
             </div>
           </div>
         </div>

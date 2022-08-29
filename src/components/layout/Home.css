@@ -14,7 +14,6 @@
 
     background-color: white;
     padding: 20px;
-    /* max-height: 400px; */
 }
 
 .trunc{
@@ -22,7 +21,6 @@
         Truncating the collection text in the card
     */
 
-    /* white-space: nowrap; */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -65,5 +63,14 @@
     background-color: #005C5F;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.show-more-text-link{
+    /* 
+        Read more text button in the collection badges
+    */
+
+    cursor: pointer;
+    font-size: 13px;
 }
 
