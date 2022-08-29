@@ -22,10 +22,12 @@
         Truncating the collection text in the card
     */
 
-    white-space: nowrap;
+    /* white-space: nowrap; */
     overflow: hidden;
     text-overflow: ellipsis;
-    /* width: 400px;    */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; 
 }
 
 .collection-card-text{
