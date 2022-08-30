@@ -213,12 +213,20 @@ The Navbar styles
   }
 
   .navbar-collapse-btn{
+      /* 
+         Navbar collapse button styles
+      */
+
       background-color: black;
       color: white;
-      float: left;
+      margin-left: auto !important;
   }
 
   .collpase-btn-content{
+      /* 
+         Navbar collapse button content styles
+      */
+
       border: none !important;
    }
 
@@ -325,6 +333,46 @@ The Pagination styles
 */
 
 
-@media only screen and (max-width: 1025px) {
- 
- }
+@media only screen and (max-width: 1025px) and (min-width: 901px){
+   .navbar-item {
+      /* 
+         The style for elements in navbar
+      */
+     float: right !important;
+    }
+
+    .navbar-nav{
+      /* 
+         The navbar ul style 
+      */
+
+      margin-top: 10px;
+      margin-right: 40px;
+    }
+
+    .navbar-collapse-btn{
+      /* 
+         Navbar collapse button styles
+      */
+
+     margin-right: 40px;
+   }  
+}
+
+@media only screen and (max-width: 900px) {
+   .navbar-item {
+      /* 
+         The style for elements in navbar
+      */
+     float: right !important;
+    }
+
+    .navbar-nav{
+      /* 
+         The navbar ul style 
+      */
+
+      margin-top: 10px;
+    }
+
+}
