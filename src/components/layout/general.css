@@ -154,3 +154,21 @@ p{
     */
     text-align: center;
  }
+
+
+/* 
+ ----------------------------------
+ Start of media queries for responsive desing
+ -----------------------------------
+*/
+
+
+ @media only screen and (max-width: 1025px) {
+    .application-content{
+        /* 
+            The style for the application inner content (between the header and footer)
+        */
+            
+        width: 90%;                
+    }
+  }
