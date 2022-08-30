@@ -155,6 +155,30 @@ p{
     text-align: center;
  }
 
+ .site-footer{
+    /* 
+        Site footer style
+    */
+
+    background: #2B3C46;
+    margin-top: 75px;
+    border-top: 1px #d1d3d9 solid;
+    padding-top: 20px;
+    color: white;
+}
+
+.footer-link{
+    /* 
+        Links in the footer
+    */
+
+    color: white;
+}
+
+.footer-link:hover{
+    color: white;
+}
+
 
 /* 
  ----------------------------------
@@ -170,5 +194,9 @@ p{
         */
             
         width: 95%;                
+    }
+
+    .site-footer{
+        font-size: 10px;
     }
   }
