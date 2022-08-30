@@ -1,17 +1,17 @@
 import React from 'react'
-import '../../components/layout/static.css'
+
 
 class TermsOfUse extends React.Component{
     render(){
         return(
          <section id="main-content-area" role="main">
             <div className="row">
-              <h2 className="text-black">Terms of Use</h2>
+              <h2>Terms of Use</h2>
               <div className="paragraph">
                  <p>Adopted by the foundation board of the German National Library for Science and Technology and University Library (TIB) on 21 November 2016, last amended by the foundation board of the German National Library for Science and Technology and University Library (TIB) on 22 May 2018. Public announcement of the amended version on the internet pages of the German National Library for Science and Technology and University Library (TIB) on 31 May 2018.</p>
                  <br/>
-                 <h3 className="text-black">I. General</h3>
-                 <h4 className="text-black">Sec. 1 Scope</h4>
+                 <h3>I. General</h3>
+                 <h4>Sec. 1 Scope</h4>
                  <p><b>(1)</b> These terms shall govern the use of the German National Library for Science and Technology (TIB), public law foundation (hereinafter referred to as "Library"). In principle they shall apply to all sites of and all services provided by the Library. </p>
                  <p><b>(2)</b> The Library may also be used directly, without having recourse to the German and international inter library loan system. Special terms and conditions apply. The use of special services shall be subject to special terms and conditions. </p>
                  <p><b>(3)</b> The use of the TIB/Hannover University Archives shall be subject to these terms of use to the extent that the archive terms of use do not contain any provisions to the contrary. </p>
@@ -22,14 +22,14 @@ class TermsOfUse extends React.Component{
                  <p><b>(3)</b> The Library shall take over the operation of the University library of the Leibniz Universität Hannover (hereinafter referred to as "University"). In this function, the local Library shall primarily serve to supply the University with literature and information. </p>
                  <p><b>(4)</b> The Library shall fulfil its tasks in particular by </p>
                 <ul>
-                 <li class="h5 mb-0">making its collections available for use on its premises,</li>
-                 <li class="h5 mb-0">lending part of its collections for use outside the Library,</li>
-                 <li class="h5 mb-0">enabling online access to electronic publications, databases and research data under existing rights,</li>
-                 <li class="h5 mb-0">reproducing or enabling or arranging for the reproduction of its own works and of works obtained from other libraries.</li>
-                 <li class="h5 mb-0">obtaining works via the inter library loan system and making them available for inter library loan as well as for direct delivery services,</li>
-                 <li class="h5 mb-0">offering information, advice, counselling, guided tours and training on scientific research and the range of services provided,</li>
-                 <li class="h5 mb-0">providing publication services,</li>
-                 <li class="h5 mb-0">keeping up public relations work.</li>
+                 <li>making its collections available for use on its premises,</li>
+                 <li>lending part of its collections for use outside the Library,</li>
+                 <li>enabling online access to electronic publications, databases and research data under existing rights,</li>
+                 <li>reproducing or enabling or arranging for the reproduction of its own works and of works obtained from other libraries.</li>
+                 <li>obtaining works via the inter library loan system and making them available for inter library loan as well as for direct delivery services,</li>
+                 <li>offering information, advice, counselling, guided tours and training on scientific research and the range of services provided,</li>
+                 <li>providing publication services,</li>
+                 <li>keeping up public relations work.</li>
                 </ul>
                  <p><b>(5)</b> The nature and scope of the services provided shall depend on the tasks to be performed by the Library and on the human, material and technical resources available.</p>
                  <br/>
@@ -58,18 +58,18 @@ class TermsOfUse extends React.Component{
                  <p><b>(1)</b> The Library shall collect and process personal data of users (user data), to the extent that this is necessary for the legitimate performance of its tasks. As a rule, the following data shall be collected:</p>
                  <p>a) Personal data:</p>
                 <ul>
-                 <li class="h5 mb-0"> Required data: First name and surname, registered address or registered office, date of birth, and, if applicable, the University matriculation number; for certain services also telephone number and (if applicable, institutional) email address.</li>
-                 <li class="h5 mb-0"> Voluntary information for local use: telephone number and email address, gender, indication of a severe disability, if applicable.</li>
-                 <li class="h5 mb-0"> Amended by staff: Library card number, user type.</li>
-                 <li class="h5 mb-0"> Amended by the system: date of admission, expiration, and modification date of the Library-user relationship; in cases of use under sec. 4b and sec. 4c: TIB customer number and, when providing certain services, IP address at registration.</li>
-                 <li class="h5 mb-0"> At computer workstations within the Library: Library card number, IP address.</li>
-                 <li class="h5 mb-0"> When using the online service via data networks: if applicable, TIB customer number, IP address.</li>
+                 <li> Required data: First name and surname, registered address or registered office, date of birth, and, if applicable, the University matriculation number; for certain services also telephone number and (if applicable, institutional) email address.</li>
+                 <li> Voluntary information for local use: telephone number and email address, gender, indication of a severe disability, if applicable.</li>
+                 <li> Amended by staff: Library card number, user type.</li>
+                 <li> Amended by the system: date of admission, expiration, and modification date of the Library-user relationship; in cases of use under sec. 4b and sec. 4c: TIB customer number and, when providing certain services, IP address at registration.</li>
+                 <li> At computer workstations within the Library: Library card number, IP address.</li>
+                 <li> When using the online service via data networks: if applicable, TIB customer number, IP address.</li>
                 </ul>
                  <p>b) Usage data:</p>
                 <ul>
-                 <li class="h5 mb-0"> Order, reservation, loan, renewal and return data, expiry dates, number of loan period renewals or reminders, accrual dates and amounts of fees, compensation and expenses, entries on suspensions and exclusions.</li>
-                 <li class="h5 mb-0"> At computer workstations within the Library: time and duration of use. </li>
-                 <li class="h5 mb-0"> When using the online service via data networks: time and duration of use.</li>
+                 <li> Order, reservation, loan, renewal and return data, expiry dates, number of loan period renewals or reminders, accrual dates and amounts of fees, compensation and expenses, entries on suspensions and exclusions.</li>
+                 <li> At computer workstations within the Library: time and duration of use. </li>
+                 <li> When using the online service via data networks: time and duration of use.</li>
                 </ul>
                  <p><b>(2)</b> The Library may process any such collected data for providing any service to the user.</p>
                  <p><b>(3)</b> Rectification, erasure and restriction of processing shall be carried out under the conditions set forth under Art. 16-19 GDPR.</p>
@@ -183,9 +183,9 @@ class TermsOfUse extends React.Component{
                  <p><b>(3)</b> Overdue notices for return shall be deemed served upon three days following delivery to the post. Email reminders do not require a signature and are deemed delivered immediately.</p>
                  <p><b>(4)</b> Failure to return the work following the third reminder or any such corresponding letter within the 14-day period, shall entitle the Library to</p>
                <ul>
-                 <li class="h5 mb-0">have the work collected from the user's home,</li>
-                 <li class="h5 mb-0">obtain replacement or demand compensation for value,</li>
-                 <li class="h5 mb-0">take administrative enforcement measures.</li>
+                 <li>have the work collected from the user's home,</li>
+                 <li>obtain replacement or demand compensation for value,</li>
+                 <li>take administrative enforcement measures.</li>
                </ul>
                <br/>
                  <h3>V. Transregional supply of literature – inter library loan system and document delivery</h3>

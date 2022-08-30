@@ -1,17 +1,17 @@
 import React from 'react'
-import '../../components/layout/static.css'
+
 
 class Imprint extends React.Component{
     render(){
         return(
             <section id="main-content-area" role="main">
             <div className="row">
-                <h2 className="text-dark">Imprint</h2>
+                <h2>Imprint</h2>
                 <p>
                     Imprint for this website &#8208; also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)
                 </p> 
                 <br/>      
-                <h3 className="text-dark">Provider:</h3>
+                <h3>Provider:</h3>
                 <p>
                 
                 Technische Informationsbibliothek (TIB)
@@ -22,7 +22,7 @@ class Imprint extends React.Component{
                  <br />
                 </p>
                 <br /><br/>
-                <h3 className='text-dark'>Authorised Representative:</h3>
+                <h3>Authorised Representative:</h3>
                 
                 <p>
                 
@@ -40,7 +40,7 @@ class Imprint extends React.Component{
                 
                 </p>
                 
-                <h3 className='text-dark'>Contact:</h3>
+                <h3>Contact:</h3>
                 
                 <p>
                 
@@ -55,7 +55,7 @@ class Imprint extends React.Component{
                 
                 </p>
                 
-                <h3 className='text-dark'>VAT (sales tax) registration number:</h3>
+                <h3>VAT (sales tax) registration number:</h3>
                 
                 <p>
                 
@@ -63,7 +63,7 @@ class Imprint extends React.Component{
                 
                 </p>
                 
-                <h3 className='text-dark'>Editorial Office:</h3>
+                <h3>Editorial Office:</h3>
                 
                 <p>
                 
@@ -74,7 +74,7 @@ class Imprint extends React.Component{
                 
                 </p>
                 
-                <h3 className='text-dark'>Copyright Notice:</h3>
+                <h3>Copyright Notice:</h3>
                 
                 <p>
                 
