@@ -16,7 +16,7 @@ export function createStatsBox(statsResult){
                           </g>
                         </svg>
                       <h4 className="font-weight-bold h2 mb-1">{statsResult.numberOfOntologies}</h4>
-                      <p className="mb-0">Ontologies</p>
+                      <p className="stats-box-text">Ontologies</p>
                     </div>   
                   </div>
                   <div className="col-lg-3 col-sm-6 pb-3 pt-3">
@@ -28,7 +28,7 @@ export function createStatsBox(statsResult){
                         </g>
                       </svg>
                       <h4 className="font-weight-bold h2 mb-1">{statsResult.numberOfTerms}</h4>
-                      <p class="mb-0">terms</p>
+                      <p class="stats-box-text">Terms</p>
                     </div>                                 
                   </div>
                     <div className="col-lg-3 col-sm-6 pb-3 pt-3">
@@ -40,7 +40,7 @@ export function createStatsBox(statsResult){
                           </g>
                         </svg>
                         <h4 className="font-weight-bold h2 mb-1">{statsResult.numberOfProperties}</h4>
-                        <p className="mb-0">Properties</p>
+                        <p className="stats-box-text">Properties</p>
                       </div>                                 
                     </div>  
                     <div className="col-lg-3 col-sm-6 pb-3 pt-3">
@@ -52,7 +52,7 @@ export function createStatsBox(statsResult){
                           </g>
                         </svg>
                         <h4 className ="font-weight-bold h2 mb-1">{statsResult.numberOfIndividuals}</h4>
-                        <p className ="mb-0">individual</p>
+                        <p className ="stats-box-text">individual</p>
                       </div>                                 
                     </div>   
                  </div>
