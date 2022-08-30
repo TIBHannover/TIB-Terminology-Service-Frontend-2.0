@@ -8,7 +8,7 @@ class About extends React.Component{
         return(
             <div>
                 <br/>
-                <h1>About TIB Terminology Service</h1>
+                <h2>About TIB Terminology Service</h2>
                 <br/>
                 <h3>What is TIB Terminology Service?</h3>
                 <p>TIB Terminology Service is an open source, free of charge web service hosted by <a href="https://www.tib.eu/de/">TIB – Leibniz Information Centre for Science and Technology and University Library.</a></p>
