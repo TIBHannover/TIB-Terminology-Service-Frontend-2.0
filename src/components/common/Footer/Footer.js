@@ -6,20 +6,16 @@ import DFG_LOGO from '../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_e
 
 const Footer = () => (       
         <div className='row site-footer'>
-            <div className="col-sm-3">
+            <div className="col-sm-4 footer-col">
                 <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
-                    <img
-                        src={DFG_LOGO}
-                        alt=""
-                        style={{ borderWidth: 0, height: '100px' }}
-                    />
+                    <img src={DFG_LOGO} alt="" className="footer-logo"/>
                 </a>
             </div>
 
-            <div className="col-sm-3">
-                <h5>ABOUT</h5>
-                <hr className="me-5" />
-                <ul className="p-0" style={{ listStyle: 'none' }}>
+            <div className="col-sm-2">
+                <h6>ABOUT</h6>
+                <hr className="me-5"/>
+                <ul className="footer-list">
                     <li>
                         <a href="/PrivacyPolicy" className='footer-link' target="_blank" rel="noopener noreferrer">Privacy Policy</a>
                     </li>
@@ -32,10 +28,10 @@ const Footer = () => (
                 </ul>
             </div>
 
-            <div className="col-sm-3">
-                <h5>RESOURCES</h5>
+            <div className="col-sm-2">
+                <h6>RESOURCES</h6>
                 <hr className="me-5" />
-                <ul className="p-0" style={{ listStyle: 'none' }}>
+                <ul className="footer-list">
                     <li>
                         <Link to={""} className='footer-link'>Documentation</Link>
                     </li>
@@ -47,11 +43,11 @@ const Footer = () => (
             </div>
 
 
-            <div className="col-sm-3">
-                <h5>PROVIDED BY</h5>
-                <hr className="me-5" />
+            <div className="col-sm-4">
+                <h6>PROVIDED BY</h6>
+                <hr className="me-5"/>
                 <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                    <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '60px' }} />
+                    <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" className="footer-logo" />
                 </a>
             </div>
         </div>            
