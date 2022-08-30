@@ -22,7 +22,6 @@ class DataTree extends React.Component {
       termTree: false,
       propertyTree: false,
       ontologyId: '',
-      searchWaiting: true,
       baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
       childExtractName: "",
       targetNodeIri: "",
@@ -34,7 +33,8 @@ class DataTree extends React.Component {
       reduceBtnActive: false,
       viewMode: true,
       reload: false,
-      isLoadingTheComponent: true
+      isLoadingTheComponent: true,
+      noNodeExist: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -71,7 +71,8 @@ class DataTree extends React.Component {
                 ontologyId: ontologyId,
                 childExtractName: "terms",
                 resetTreeFlag: false,
-                reload: false
+                reload: false,
+                noNodeExist: false
               }, async () => {
                 await this.processTree(resetFlag, viewMode, reload);
               });              
@@ -85,15 +86,17 @@ class DataTree extends React.Component {
               ontologyId: ontologyId,
               childExtractName: "properties",
               resetTreeFlag: false,
-              reload: false 
+              reload: false,
+              noNodeExist: false
             }, async () => {
               await this.processTree(resetFlag, viewMode, reload);
             });    
         }      
     }
-    else{
+    else if(rootNodes.length === 0 && !this.state.noNodeExist){
       this.setState({
-        isLoadingTheComponent: false
+        isLoadingTheComponent: false,
+        noNodeExist: true
       });
     }
   }
@@ -153,7 +156,6 @@ class DataTree extends React.Component {
           let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
           this.setState({
             targetNodeIri: target,
-            searchWaiting: false,
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
@@ -207,8 +209,7 @@ class DataTree extends React.Component {
         }
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                 
         this.setState({
-            targetNodeIri: target,
-            searchWaiting: false,
+            targetNodeIri: target,            
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
@@ -250,7 +251,6 @@ class DataTree extends React.Component {
   this.setState({
     treeDomContent: treeList,
     targetNodeIri: false,
-    searchWaiting: false,
     reload: false,
     isLoadingTheComponent: false
   });
@@ -424,7 +424,8 @@ render(){
     <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} > 
         <Grid item xs={6} className="tree-container">
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
-        {!this.state.isLoadingTheComponent && 
+        {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
+        {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
           <Grid container>
             <Grid item xs={10}>
               {this.state.treeDomContent}
