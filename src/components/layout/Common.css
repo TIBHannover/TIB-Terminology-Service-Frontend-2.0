@@ -180,13 +180,13 @@ The Navbar styles
 -------------------------------------
 */
 
-.navbar {
+.site-navbar {
     /* 
        The style for navabr dimensions
     */
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    justify-content: flex-start !important;
+    justify-content: flex-start !important; */
     margin-top: -5px !important;
   }
   
@@ -212,7 +212,15 @@ The Navbar styles
       text-decoration: underline !important;
   }
 
+  .navbar-collapse-btn{
+      background-color: black;
+      color: white;
+      float: left;
+  }
 
+  .collpase-btn-content{
+      border: none !important;
+   }
 
 /* 
 -------------------------------------
@@ -309,3 +317,14 @@ The Pagination styles
    display: none;
 }
 
+
+/* 
+ ----------------------------------
+ Start of media queries for responsive desing
+ -----------------------------------
+*/
+
+
+@media only screen and (max-width: 1025px) {
+ 
+ }
