@@ -6,7 +6,7 @@ import '../../layout/Common.css'
 function Navbar () {
 
   return (
-    <div className='col-sm-8'>
+    <div className='col-lg-8 col-md-6'>
          <nav class="navbar navbar-expand-xl site-navbar">   
          <button class="navbar-toggler navbar-collapse-btn" type="button" data-toggle="collapse" data-target="#siteMainNavbar">           
             <i class="fa fa-bars collpase-btn-content"></i>
@@ -35,15 +35,6 @@ function Navbar () {
             </div>            
         </nav>
     </div>
-
-    // <div className='col-sm-8 navbar'>
-    //   <Link to="/" className="navbar-item">Home</Link>
-    //   <a href="/collections" className="navbar-item">Collections</a>
-    //   <a href="/ontologies" className="navbar-item">Ontologies</a>
-    //   <Link to="/help" className="navbar-item">Help</Link>
-    //   <Link to="/documentation" className="navbar-item">Documentation</Link>
-    //   <Link to="/about" className="navbar-item">About</Link>
-    // </div>
   )
 
 }

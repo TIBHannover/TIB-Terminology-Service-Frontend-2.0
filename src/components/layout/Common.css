@@ -356,7 +356,9 @@ The Pagination styles
       */
 
      margin-right: 40px;
-   }  
+   }
+   
+   
 }
 
 @media only screen and (max-width: 900px) {
@@ -374,5 +376,16 @@ The Pagination styles
 
       margin-top: 10px;
     }
+
+    .site-header-searchbox-holder{
+      /* 
+         The warapper box for the site main search input
+      */
+   
+      width: 100%;
+      padding-left: 0px;
+      padding-right: 0px;
+      margin-bottom: 40px;
+   }
 
 }

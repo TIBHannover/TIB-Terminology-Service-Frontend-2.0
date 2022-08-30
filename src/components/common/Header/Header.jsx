@@ -13,7 +13,7 @@ function Header () {
             {/* <a href="#">Login</a> */}
           </div>
           <div className='row site-header-nav-logo-holder'>
-            <div className='col-sm-4'>
+            <div className='col-lg-4 col-md-6'>
               <img src= {TIB_Logo} alt="tib logo" height={60} width={80} />
               <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
             </div>
