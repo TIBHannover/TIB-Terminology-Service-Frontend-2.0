@@ -60,7 +60,7 @@ class DataTree extends React.Component {
     let componentIdentity = this.props.componentIdentity;
     let resetFlag = this.state.resetTreeFlag;
     let viewMode = !this.state.reduceBtnActive;
-    let reload = this.state.reload;    
+    let reload = this.state.reload;
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity == 'term'){         
             this.setState({
@@ -90,6 +90,11 @@ class DataTree extends React.Component {
               await this.processTree(resetFlag, viewMode, reload);
             });    
         }      
+    }
+    else{
+      this.setState({
+        isLoadingTheComponent: false
+      });
     }
   }
 
