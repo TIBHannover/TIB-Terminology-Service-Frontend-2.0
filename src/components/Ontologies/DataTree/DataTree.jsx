@@ -94,10 +94,17 @@ class DataTree extends React.Component {
             });    
         }      
     }
-    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.state.tryingCount > 3){
+    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.state.tryingCount >= 10){
       this.setState({
         isLoadingTheComponent: false,
         noNodeExist: true
+      });
+    }
+    else if(this.state.tryingCount < 10){
+      
+      let count = this.state.tryingCount;
+      this.setState({
+        tryingCount: count + 1
       });
     }
     
