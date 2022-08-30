@@ -1,108 +1,56 @@
-import { Container, Row, Col} from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import TIB_LOGO from '../../../assets/img/TIB_Logo_EN_WM_W.SVG';
 import DFG_LOGO from '../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_en.gif';
-import styled from 'styled-components';
-import Imprint from '../../../assets/static/imprint' 
-import PrivacyPolicy from '../../../assets/static/PrivacyPolicy';
-import TermsOfUse from '../../../assets/static/TermsOfUse';
 
-const FooterWrapper = styled.div`
-    background: #2B3C46;
-    margin-top: 75px;
-    border-top: 1px #d1d3d9 solid;
-    // position: fixed;
-    // left: 0;
-    // bottom:0;
-    // width: 100%;
-`;
 
-const FooterCol = styled(Col)`
-    color: ${props => props.theme.secondaryDarker};
-    margin: 10px 0;
-    font-size: 0.95rem;
+const Footer = () => (       
+        <div className='row site-footer'>
+            <div className="col-sm-4 footer-col">
+                <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
+                    <img src={DFG_LOGO} alt="" className="footer-logo"/>
+                </a>
+            </div>
 
-    h5 {
-        font-weight: 500;
-        text-transform: uppercase;
-        color: ${props => props.theme.secondaryDarker};
-        font-size: 1.1rem;
-    }
-    .description {
-        font-size: 0.85rem;
-    }
-    a {
-        color: ${props => props.theme.secondaryDarker};
-    }
-`;
+            <div className="col-sm-2">
+                <h6>ABOUT</h6>
+                <hr className="me-5"/>
+                <ul className="footer-list">
+                    <li>
+                        <a href="/PrivacyPolicy" className='footer-link' target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                    </li>
+                    <li>
+                        <a href="/TermsOfUse" target="_blank" className='footer-link' rel="noopener noreferrer">Terms of use</a>
+                    </li>
+                    <li>
+                        <a href="/imprint" target="_blank" className='footer-link' rel="noopener noreferrer">Imprint</a>
+                    </li>
+                </ul>
+            </div>
 
-const PartnerLogoCol = styled(Col)`
-    text-align: center;
-`;
+            <div className="col-sm-2">
+                <h6>RESOURCES</h6>
+                <hr className="me-5" />
+                <ul className="footer-list">
+                    <li>
+                        <Link to={""} className='footer-link'>Documentation</Link>
+                    </li>
+                    <li>
+                        <Link to={""} className='footer-link'>API</Link>
+                    </li>
+                </ul>
+                
+            </div>
 
-const Footer = () => (
-    <FooterWrapper>
-        <Container>
-            <footer className="pt-4 pb-4">
-                <Row>
-                <FooterCol md={3}>
-                        <PartnerLogoCol md={4} style={{ textAlign: 'center' }}>
-                        <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
-                        <img
-                            src={DFG_LOGO}
-                            alt=""
-                            style={{ borderWidth: 0, height: '100px' }}
-                        />
-                        </a>
-                        </PartnerLogoCol>
-                    </FooterCol>
 
-                    <FooterCol md={3}>
-                        <h2 className="h5" style={{ color: 'white'}}>ABOUT</h2>
-                        <hr className="me-5" />
-                        <ul className="p-0" style={{ listStyle: 'none' }}>
-                            <li>
-                                <a href="/PrivacyPolicy" style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-                            </li>
-                            <li>
-                                <a href="/TermsOfUse" style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Terms of use</a>
-                            </li>
-                            <li>
-                                <a href="/imprint" style={{ color: 'white'}} target="_blank" rel="noopener noreferrer">Imprint</a>
-                            </li>
-                        </ul>
-                    </FooterCol>
-
-                    <FooterCol md={3}>
-                        <h2 className="h5" style={{ color: 'white'}}>RESOURCES</h2>
-                        <hr className="me-5" />
-                        <ul className="p-0" style={{ listStyle: 'none' }}>
-                            <li>
-                                <Link to={""} style={{ color: 'white'}}>Documentation</Link>
-                            </li>
-                            <li>
-                                <Link to={""} style={{ color: 'white'}}>API</Link>
-                            </li>
-                        </ul>
-                        
-                    </FooterCol>
-
-        
-                    <FooterCol md={3}>
-                        <h2 className="h5" style={{ color: 'white'}}>PROVIDED BY</h2>
-                        <hr className="me-5" />
-                        <PartnerLogoCol md={4} style={{}}>
-                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" style={{ borderWidth: 0, height: '60px' }} />
-                        </a>
-                    </PartnerLogoCol>
-                    </FooterCol>
-                </Row>
-            </footer>
-        </Container>
-    </FooterWrapper>
+            <div className="col-sm-4">
+                <h6>PROVIDED BY</h6>
+                <hr className="me-5"/>
+                <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
+                    <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" className="footer-logo" />
+                </a>
+            </div>
+        </div>            
 );
 
 export default Footer;

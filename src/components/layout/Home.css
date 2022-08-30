@@ -75,3 +75,20 @@
     font-size: 13px;
 }
 
+/* 
+ ----------------------------------
+ Start of media queries for responsive desing
+ -----------------------------------
+*/
+
+
+@media only screen and (max-width: 1025px) {
+    .collection-card{
+        /* 
+            Style for the collection box on the home page.
+        */
+            
+        padding: 10px;
+        
+    }
+  }

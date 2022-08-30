@@ -154,3 +154,83 @@ p{
     */
     text-align: center;
  }
+
+ .site-footer{
+    /* 
+        Site footer style
+    */
+
+    background: #2B3C46;
+    margin-top: 75px;
+    border-top: 1px #d1d3d9 solid;
+    padding-top: 20px;
+    color: white;
+}
+
+.footer-link{
+    /* 
+        Links in the footer
+    */
+
+    color: white;
+}
+
+.footer-link:hover{
+    color: white;
+}
+
+.footer-list{
+    /* 
+        Styles for the lists in footer
+    */
+
+    list-style: none;
+    margin-left: -30px !important;
+}
+
+.footer-logo{
+    /* 
+        Logos on the site footer
+    */
+
+    width: 300px;
+    height: 100px;
+}
+
+.footer-col{
+    /* 
+        Style for the first column (DFG logo) in the footer
+    */
+
+    text-align: center;
+}
+
+/* 
+ ----------------------------------
+ Start of media queries for responsive desing
+ -----------------------------------
+*/
+
+
+ @media only screen and (max-width: 1025px) {
+    .application-content{
+        /* 
+            The style for the application inner content (between the header and footer)
+        */
+            
+        width: 95%;                
+    }
+
+    .site-footer{
+        font-size: 10px;
+    }
+
+    .footer-logo{
+        /* 
+            Logos on the site footer
+        */
+    
+        width: 200px;
+        height: 50px;
+    }
+  }

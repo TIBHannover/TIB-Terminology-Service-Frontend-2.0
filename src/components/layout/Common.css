@@ -180,13 +180,13 @@ The Navbar styles
 -------------------------------------
 */
 
-.navbar {
+.site-navbar {
     /* 
        The style for navabr dimensions
     */
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    justify-content: flex-start !important;
+    justify-content: flex-start !important; */
     margin-top: -5px !important;
   }
   
@@ -212,7 +212,23 @@ The Navbar styles
       text-decoration: underline !important;
   }
 
+  .navbar-collapse-btn{
+      /* 
+         Navbar collapse button styles
+      */
 
+      background-color: black;
+      color: white;
+      margin-left: auto !important;
+  }
+
+  .collpase-btn-content{
+      /* 
+         Navbar collapse button content styles
+      */
+
+      border: none !important;
+   }
 
 /* 
 -------------------------------------
@@ -309,3 +325,66 @@ The Pagination styles
    display: none;
 }
 
+
+/* 
+ ----------------------------------
+ Start of media queries for responsive desing
+ -----------------------------------
+*/
+
+
+@media only screen and (max-width: 1025px) and (min-width: 901px){
+   .navbar-item {
+      /* 
+         The style for elements in navbar
+      */
+     float: right !important;
+    }
+
+    .navbar-nav{
+      /* 
+         The navbar ul style 
+      */
+
+      margin-top: 10px;
+      margin-right: 40px;
+    }
+
+    .navbar-collapse-btn{
+      /* 
+         Navbar collapse button styles
+      */
+
+     margin-right: 40px;
+   }
+   
+   
+}
+
+@media only screen and (max-width: 900px) {
+   .navbar-item {
+      /* 
+         The style for elements in navbar
+      */
+     float: right !important;
+    }
+
+    .navbar-nav{
+      /* 
+         The navbar ul style 
+      */
+
+      margin-top: 10px;
+    }
+
+    .site-header-searchbox-holder{
+      /* 
+         The warapper box for the site main search input
+      */
+   
+      padding-left: 0px;
+      padding-right: 0px;
+      margin-bottom: 40px;
+   }
+
+}
