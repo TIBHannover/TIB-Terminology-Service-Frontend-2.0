@@ -5,7 +5,7 @@ class Help extends React.Component{
         return(
             <div>
                 <br/>
-                <h1>Help and FAQ</h1>
+                <h2>Help and FAQ</h2>
                 <br/>
                 <h3>Feedback and Suggestion</h3>
                 <p>For feedback, enquiries or suggestion about TIB Terminology Service or to request a new terminology please visit <a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a> (requires sign-in)</p>
