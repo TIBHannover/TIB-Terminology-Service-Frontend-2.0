@@ -13,8 +13,8 @@ class NodePage extends React.Component {
     super(props)
     this.state = ({
       data: true,
-      label_xs: 2,
-      value_xs: 10,
+      label_xs: 4,
+      value_xs: 8,
       iriIsCopied: false,
       prevNode: "",
       componentIdentity: "",
@@ -52,10 +52,10 @@ class NodePage extends React.Component {
     let row = [
       <Grid item xs={12}  className="node-detail-table-row" key={metadataLabel}>
           <Grid container>
-            <Grid item xs={this.state.label_xs} key={metadataLabel + "-label"}>
+            <Grid item sm={this.state.label_xs} md={this.state.label_xs - 1}  key={metadataLabel + "-label"}>
               <Typography className="node-metadata-label">{metadataLabel}</Typography>
             </Grid>
-            <Grid item xs={this.state.value_xs} className="node-metadata-value" key={metadataLabel + "-value"}>
+            <Grid item sm={this.state.value_xs} md={this.state.value_xs + 1} className="node-metadata-value" key={metadataLabel + "-value"}>
               {formatText(metadataLabel, metadataValue, copyButton)}
               {copyButton &&
                 <Button 
