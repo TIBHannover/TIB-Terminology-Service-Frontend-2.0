@@ -34,8 +34,7 @@ class DataTree extends React.Component {
       viewMode: true,
       reload: false,
       isLoadingTheComponent: true,
-      noNodeExist: false,
-      tryingCount: 0
+      noNodeExist: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -94,17 +93,10 @@ class DataTree extends React.Component {
             });    
         }      
     }
-    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.state.tryingCount >= 10){
+    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist){
       this.setState({
         isLoadingTheComponent: false,
         noNodeExist: true
-      });
-    }
-    else if(this.state.tryingCount < 10){
-      
-      let count = this.state.tryingCount;
-      this.setState({
-        tryingCount: count + 1
       });
     }
     
