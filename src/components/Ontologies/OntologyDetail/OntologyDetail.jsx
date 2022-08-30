@@ -34,7 +34,8 @@ class OntologyDetail extends React.Component {
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
-      targetPropertyIri: " "
+      targetPropertyIri: " ",
+      rootNodeNotExist: false
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -131,15 +132,26 @@ class OntologyDetail extends React.Component {
   async getRootTerms (ontologyId) {
     let rootTerms = await getOntologyRootTerms(ontologyId);
     if (typeof rootTerms != undefined){
-      this.setState({
-        isRootTermsLoaded: true,
-        rootTerms: rootTerms
-      });
+      if (rootTerms.length !== 0){
+        this.setState({
+          isRootTermsLoaded: true,
+          rootTerms: rootTerms,
+          rootNodeNotExist: false
+        });
+      }
+      else{
+        this.setState({
+          isRootTermsLoaded: true,
+          rootTerms: rootTerms,
+          rootNodeNotExist: true
+        });
+      }      
     }
     else{
       this.setState({
         isRootTermsLoaded: true,
-        errorRootTerms: 'Can not get this ontology root terms'
+        errorRootTerms: 'Can not get this ontology root terms',
+        rootNodeNotExist: true
       });
     }
   }
@@ -152,9 +164,18 @@ class OntologyDetail extends React.Component {
   async getRootProps (ontologyId) {
     let rootProps = await getOntologyRootProperties(ontologyId);
     if (typeof rootProps != undefined){
-      this.setState({
-        rootProps: rootProps
-      });
+      if(rootProps.length !== 0){
+        this.setState({
+          rootProps: rootProps,
+          rootNodeNotExist: false
+        });
+      }
+      else{
+        this.setState({
+          rootProps: rootProps,
+          rootNodeNotExist: true
+        });
+      }
     }
    
   }
@@ -247,7 +268,8 @@ class OntologyDetail extends React.Component {
                           componentIdentity={'term'}
                           iri={this.state.targetTermIri}
                           key={'termTreePage'}                    
-                          ontology={this.state.ontologyId}                           
+                          ontology={this.state.ontologyId}
+                          rootNodeNotExist={this.state.rootNodeNotExist}
                         />
           }
 
@@ -257,7 +279,8 @@ class OntologyDetail extends React.Component {
                           componentIdentity={'property'}
                           iri={this.state.targetPropertyIri}
                           key={'propertyTreePage'}
-                          ontology={this.state.ontologyId}                          
+                          ontology={this.state.ontologyId}
+                          rootNodeNotExist={this.state.rootNodeNotExist}
                         />
           }
           {this.state.waiting && <CircularProgress />}

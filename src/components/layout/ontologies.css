@@ -135,13 +135,6 @@ The ontology detail page styles. It contains the ontology overview page.
     width: 90%;
 }
 
-.ontology-detail-text{
-    /* 
-        The styles for the ontology description holder div
-    */
-
-    margin-left: -30px;
-}
 
 .ontology-detail-table  td, th{
     /* 
