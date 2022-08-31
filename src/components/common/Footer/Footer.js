@@ -17,13 +17,13 @@ const Footer = () => (
                 <hr className="me-5"/>
                 <ul className="footer-list">
                     <li>
-                        <a href="/PrivacyPolicy" className='footer-link' target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                        <a href="/PrivacyPolicy" className='footer-link'>Privacy Policy</a>
                     </li>
                     <li>
-                        <a href="/TermsOfUse" target="_blank" className='footer-link' rel="noopener noreferrer">Terms of use</a>
+                        <a href="/TermsOfUse" className='footer-link'>Terms of use</a>
                     </li>
                     <li>
-                        <a href="/imprint" target="_blank" className='footer-link' rel="noopener noreferrer">Imprint</a>
+                        <a href="/imprint" className='footer-link'>Imprint</a>
                     </li>
                 </ul>
             </div>
