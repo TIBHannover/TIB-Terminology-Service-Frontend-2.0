@@ -255,6 +255,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
+    preOntologies = sortBasedOnKey(preOntologies, this.state.sortField);
     let preHiddenStatus = this.state.unFilteredHiddenStatus;
     this.setState({
       selectedCollections: selectedCollections,
