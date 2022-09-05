@@ -191,7 +191,7 @@ async suggestionHandler(selectedTerm){
                   if(searchResultItem[i]["type"] === 'class'){
                     return(
                       <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
                       <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
@@ -203,7 +203,7 @@ async suggestionHandler(selectedTerm){
                 else if(searchResultItem[i]["type"] === 'property'){
                   return(
                     <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
                       <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
@@ -216,7 +216,7 @@ async suggestionHandler(selectedTerm){
                 else if(searchResultItem[i]["type"] === 'ontology'){
                   return(
                     <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
                       <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
@@ -229,7 +229,7 @@ async suggestionHandler(selectedTerm){
                 else if(searchResultItem[i]["type"] === 'individuals'){
                   return(
                     <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
                       <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
@@ -372,9 +372,6 @@ async suggestionHandler(selectedTerm){
      }
      
   }
-
-
-
 
 
   submitHandler(event){  
