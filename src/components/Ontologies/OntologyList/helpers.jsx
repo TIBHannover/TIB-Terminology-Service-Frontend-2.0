@@ -74,13 +74,13 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     </div>               
                 </Grid>
             </Grid>
-            <Grid container className='ontology-list-facet-section-box'>
+            {/* <Grid container className='ontology-list-facet-section-box'>
             <h5 className='h-headers'>Last Updated</h5>
                 <Grid item xs={12} className="facet-box">
                 <input type="range"  min="1" max="10" />
                 <span id="lastUpdateRange"> 1 year(s) ago</span>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </Grid> 
     );
 }
