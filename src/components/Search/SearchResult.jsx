@@ -206,7 +206,7 @@ async suggestionHandler(selectedTerm){
                       <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
+                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
                       {searchResultItem[i].short_form}
                       </a>
                       </div>
@@ -219,14 +219,14 @@ async suggestionHandler(selectedTerm){
                       <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
+                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} >
                       {searchResultItem[i].short_form}
                       </a>
                       </div>
 
                   )      
                 }
-                else if(searchResultItem[i]["type"] === 'individuals'){
+                else if(searchResultItem[i]["type"] === 'individual'){
                   return(
                     <div className="search-card-title"> 
                       <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
