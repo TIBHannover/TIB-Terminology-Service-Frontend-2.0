@@ -20,14 +20,14 @@ The ontology list page styles.
     float: right;    
 }
 
-#ontologylist-sort-grid> .MuiInputBase-root{
+#ontology-list-sorting{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
     */
 
-    width: 60%;
-    font-size: 15px;
-    /* padding-bottom: 5px; */
+    margin-left: 5px;
+    background-color: white;
+    border-color: white;
 }
 
 
