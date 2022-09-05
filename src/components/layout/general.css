@@ -81,7 +81,7 @@ p{
     margin-left: 10px;
     padding: 2px;
     margin-right: 10px;
-    border-color: #E86161;
+    border-color: #E86161 !important;
 }
 
 .ontology-button:hover{
