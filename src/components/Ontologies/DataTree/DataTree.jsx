@@ -30,7 +30,7 @@ class DataTree extends React.Component {
       siblingsVisible: false,
       siblingsButtonShow: false,
       reduceTreeBtnShow: false,
-      reduceBtnActive: false,
+      reduceBtnActive: true,
       viewMode: true,
       reload: false,
       isLoadingTheComponent: true,
