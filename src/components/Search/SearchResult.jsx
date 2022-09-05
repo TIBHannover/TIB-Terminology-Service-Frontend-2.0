@@ -226,7 +226,7 @@ async suggestionHandler(selectedTerm){
 
                   )      
                 }
-                else if(searchResultItem[i]["type"] === 'individuals'){
+                else if(searchResultItem[i]["type"] === 'individual'){
                   return(
                     <div className="search-card-title"> 
                       <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
