@@ -352,7 +352,6 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                 <hr/>
                 <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
                 <hr />
-                
               </Grid>
             </Grid>                    
       )
