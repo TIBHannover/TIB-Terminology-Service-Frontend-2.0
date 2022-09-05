@@ -386,7 +386,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                   <div>
                     <br/>
                     <label for="ontology-list-sorting">sorted by</label>
-                    <select id="ontology-list-sorting">
+                    <select id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
                       <option value={'numberOfTerms'}>Classes Count</option>
                       <option value={'numberOfProperties'}>Properties Count</option>
                       <option value={'numberOfIndividuals'}>Individuals Count</option>
