@@ -284,7 +284,7 @@ async suggestionHandler(selectedTerm){
     
 
     currentUrlParams.append('page', this.state.pageNumber);
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
 
