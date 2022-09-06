@@ -44,7 +44,6 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.handleRedirect = this.handleRedirect.bind(this);
     }
 
     async searching(){
