@@ -146,33 +146,6 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
-  handleRedirect(){
-    let searchResultItem = this.state.searchResult
-      for(let i=0; i < searchResultItem.length; i++){
-        if(searchResultItem[i]["type"] === 'class'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-        }
-        else if(searchResultItem[i]["type"] === 'property'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-        else if(searchResultItem[i]["type"] === 'ontology'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-        else if(searchResultItem[i]["type"] === 'individuals'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-      }
-
-  }
-
 
   /**
      * Create the search results list view
@@ -239,9 +212,7 @@ async suggestionHandler(selectedTerm){
 
                   )    
                 }
-                })()}                       
-              
-  
+                })()}                        
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
