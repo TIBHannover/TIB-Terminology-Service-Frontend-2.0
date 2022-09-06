@@ -44,7 +44,6 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.handleRedirect = this.handleRedirect.bind(this);
     }
 
     async searching(){
@@ -146,33 +145,6 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
-  handleRedirect(){
-    let searchResultItem = this.state.searchResult
-      for(let i=0; i < searchResultItem.length; i++){
-        if(searchResultItem[i]["type"] === 'class'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-        }
-        else if(searchResultItem[i]["type"] === 'property'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-        else if(searchResultItem[i]["type"] === 'ontology'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-        else if(searchResultItem[i]["type"] === 'individuals'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-      }
-
-  }
-
 
   /**
      * Create the search results list view
@@ -239,9 +211,7 @@ async suggestionHandler(selectedTerm){
 
                   )    
                 }
-                })()}                       
-              
-  
+                })()}                        
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
@@ -284,7 +254,7 @@ async suggestionHandler(selectedTerm){
     
 
     currentUrlParams.append('page', this.state.pageNumber);
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
 

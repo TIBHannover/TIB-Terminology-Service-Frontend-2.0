@@ -166,7 +166,7 @@ class SearchForm extends React.Component{
                 {this.state.result &&
                 <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
-                    <h4 className='font-weight-bold'>Jump To</h4>
+                    <h4>Jump To</h4>
                    {this.createJumpResultList()}
                   </div>
                 </div>}
