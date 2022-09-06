@@ -86,13 +86,22 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">
-              <div className="jump-autocomplete-item">
-                {this.state.jumpResult[i]['label']}
-                <Button style={{backgroundColor: "#0E6668", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
-                <Button style={{backgroundColor: "#E86161", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>      
-              </div>
-            </a>
+            <div className="jump-autocomplete-item">
+            {(() => {
+              if(this.state.jumpResult[i]["type"] === 'class'){
+                return(
+                  <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">            
+                     {this.state.jumpResult[i]['label']}
+                     <Button style={{backgroundColor: "#0E6668", fontColor: "white", marginLeft:"20px"}}variant="contained">{this.state.jumpResult[i]['short_form']}</Button>
+                     <Button style={{backgroundColor: "#E86161", marginLeft:"20px"}} variant="contained">{this.state.jumpResult[i]['ontology_prefix']}</Button>      
+            
+                  </a>
+
+                )
+              }
+
+            })()} 
+            </div>          
           )
         }
         return jumpResultList
