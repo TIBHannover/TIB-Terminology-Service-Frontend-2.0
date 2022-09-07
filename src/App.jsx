@@ -26,6 +26,7 @@ function App() {
         <div className='application-content'>
           <Switch>
             <Route exact path="/" component={Home}/>
+            <Route exact path="/ts" component={Home}/>
             <Route exact path="/ontologies" component={OntologyList}/>
             <Route exact path="/collections" component={Collections}/>
             <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
