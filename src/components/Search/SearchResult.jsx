@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
-import {getAllCollectionsIds} from '../../api/fetchData';
+import {getAllCollectionsIds, getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 
@@ -268,7 +268,11 @@ async suggestionHandler(selectedTerm){
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-      ontologies.forEach(item => {
+    let collectionOntologies = await getCollectionOntologies(collections, false);;
+    for(let onto of collectionOntologies){
+      ontologies.push(onto["ontologyId"]);
+    }
+    ontologies.forEach(item => {
           baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
         }) 
       types.forEach(item => {
