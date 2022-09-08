@@ -240,19 +240,18 @@ async suggestionHandler(selectedTerm){
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
+    for(let typ of types){
+      currentUrlParams.append('type', typ);
+    }
+  
+    for(let ontos of ontologies){
+      currentUrlParams.append('ontology', ontos);
+    }
 
+    for(let col of collections){
+      currentUrlParams.append('collection', col);
+    }
     
-      for(let typ of types){
-        currentUrlParams.append('type', typ);
-      }
-    
-
-    
-      for(let ontos of ontologies){
-        currentUrlParams.append('ontology', ontos);
-      }
-    
-
     currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
@@ -268,24 +267,24 @@ async suggestionHandler(selectedTerm){
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let collectionOntologies = await getCollectionOntologies(collections, false);;
-    for(let onto of collectionOntologies){
-      ontologies.push(onto["ontologyId"]);
-    }
+    let collectionOntologies = await getCollectionOntologies(collections, false);
     ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
-        }) 
-      types.forEach(item => {
-          baseUrl = baseUrl + `&type=${item.toLowerCase()}`
-        })      
-      let targetUrl = await fetch(baseUrl)
-      let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
-      this.updateURL(ontologies, types, collections)
-      this.setState({
-        searchResult: filteredSearchResults,
-        ontologies: ontologies,
-        types: types 
-       })
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+    });
+    collectionOntologies.forEach(onto => {
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+    });
+    types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+    });
+    let targetUrl = await fetch(baseUrl);
+    let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
+    this.updateURL(ontologies, types, collections);
+    this.setState({
+      searchResult: filteredSearchResults,
+      ontologies: ontologies,
+      types: types 
+      })
      }
   
   /**
