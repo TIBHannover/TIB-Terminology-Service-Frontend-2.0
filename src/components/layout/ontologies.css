@@ -345,7 +345,7 @@ The Tree view and detail table styles (for both classes and properties)
         The style for a clicked (selected) node in a tree view. 
     */
 
-    background-color: rgb(110, 175, 175);
+    background-color: rgb(199, 199, 199);
     color: black;
     font-weight: bold;
 }
