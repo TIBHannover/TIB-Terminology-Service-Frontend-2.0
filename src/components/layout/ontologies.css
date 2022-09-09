@@ -228,7 +228,7 @@ The Tree view and detail table styles (for both classes and properties)
     height: 1000px;
     overflow-y: scroll;
     padding-bottom: 500px !important;
-    padding-top: 50px !important;
+    padding-top: 30px !important;
     z-index: 999;
     padding-left: 10px !important;
     padding-right: 10px !important;
@@ -243,7 +243,7 @@ The Tree view and detail table styles (for both classes and properties)
 
     padding-left: 50px;
     padding-right: 50px;
-    /* padding-top: 20px; */
+    padding-top: 20px;
 }
 
 .reset-tree-btn{
