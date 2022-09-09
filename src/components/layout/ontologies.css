@@ -285,9 +285,9 @@ The Tree view and detail table styles (for both classes and properties)
 
     font-weight: bold !important;
     font-size: 15px !important;
-    background-color: rgb(202, 219, 245);
+    /* background-color: rgb(202, 219, 245); */
     padding: 5px;
-    text-align: center;
+    text-align: left;
 }
 
 .node-metadata-value{
