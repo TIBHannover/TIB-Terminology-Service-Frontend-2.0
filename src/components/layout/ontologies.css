@@ -337,7 +337,7 @@ The Tree view and detail table styles (for both classes and properties)
         The style for mouse over a node text on a tree veiw.
     */
 
-    background-color: rgb(188, 188, 238);
+    background-color: rgb(218, 218, 218);
 }
 
 .clicked{
