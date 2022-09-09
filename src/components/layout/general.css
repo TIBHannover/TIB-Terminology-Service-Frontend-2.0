@@ -81,12 +81,12 @@ p{
         The style for a button representing an ontology
     */
 
-    background-color: #E86161;
+    background-color: #bbae9e;
     color: white;
     margin-left: 10px;
     padding: 2px;
     margin-right: 10px;
-    border-color: #E86161 !important;
+    border-color: #bbae9e !important;
 }
 
 .ontology-button:hover{
