@@ -128,6 +128,12 @@ The ontology detail page styles. It contains the ontology overview page.
 */
 
 
+.ontology-detail-page-container{
+    background-color: white;
+    padding: 10px;
+}
+
+
 .ontology-detail-table, .ontology-metric-table{
     /* 
         The styles for the ontology overview tables (Detail and Metrics) 
