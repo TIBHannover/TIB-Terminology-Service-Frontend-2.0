@@ -48,6 +48,10 @@ p{
     color: #0E6668; 
  }
 
+ button{
+    background-color: #23272B !important;
+ }
+
  .term-button{
     /* 
         The style for a button representing a term (class/propperty)
