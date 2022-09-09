@@ -309,7 +309,7 @@ The Tree view and detail table styles (for both classes and properties)
         The table row style for nodes (class/property)  in the detail table. 
     */
 
-    border-bottom: 1px solid black;
+    /* border-bottom: 1px solid black; */
 }
 
 

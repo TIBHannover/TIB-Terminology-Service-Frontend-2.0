@@ -97,7 +97,7 @@ function makeTag(objectList){
  */
 function createRelations(object){
   if(typeof(object['relations']) !== "undefined" && object['relations'].length === 0){
-    return "";
+    return "N/A";
   }
   let groupedRelations = _.groupBy(object['relations'], res => res.relation);  
   let relsToRender = [];
