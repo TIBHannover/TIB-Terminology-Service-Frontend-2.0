@@ -435,10 +435,10 @@ render(){
               <Button 
                     variant="contained" 
                     className='tree-action-btn' 
-                    startIcon={<RestartAltIcon />}
+                    // startIcon={<RestartAltIcon />}
                     onClick={this.resetTree}
                     >
-                    Reset Tree
+                    Reset
               </Button>
               {this.state.reduceTreeBtnShow && 
                 <Button 
@@ -447,8 +447,8 @@ render(){
                     onClick={this.reduceTree}
                     >
                     {!this.state.reduceBtnActive
-                      ? "Show Sub Tree"
-                      : "Show Full Tree"
+                      ? "Sub Tree"
+                      : "Full Tree"
                     }                    
                 </Button>
               }                
