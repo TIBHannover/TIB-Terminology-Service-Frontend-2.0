@@ -366,7 +366,7 @@ The Tree view and detail table styles (for both classes and properties)
         The style for a node expand icon when it is closed and has children nodes.
     */
 
-    color: green;
+    color: gray;
 }
 
 .opened > i{   
@@ -374,7 +374,7 @@ The Tree view and detail table styles (for both classes and properties)
         The style for a node expand icon when it is expanded and has children nodes.
     */
 
-    color: red;
+    color: gray;
 }
 
 .leaf-node > i{  
