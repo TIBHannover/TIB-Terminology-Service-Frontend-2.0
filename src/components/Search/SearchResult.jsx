@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
-import {getAllCollectionsIds, getCollectionOntologies} from '../../api/fetchData';
+import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 
@@ -22,9 +22,8 @@ class SearchResult extends React.Component{
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
-          facetFields: [],
-          startIndex: 0,
-          endIndex: 4,  
+          selectedCollections: [],
+          facetFields: [],            
           pageNumber: 1,
           pageSize: 5,       
           isLoaded: false,
@@ -44,6 +43,7 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
+        this.processUrlProps = this.processUrlProps.bind(this);
     }
 
     async searching(){
@@ -52,8 +52,7 @@ class SearchResult extends React.Component{
       if (enteredTerm.length > 0){
         let searchUrl = "https://service.tib.eu/ts4tib/api/search?q=" + enteredTerm + "&rows=" + this.state.pageSize;
         let searchResult = await fetch(searchUrl)
-        let resultJson = (await searchResult.json());
-        let allCollections = await getAllCollectionsIds();        
+        let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
@@ -67,8 +66,7 @@ class SearchResult extends React.Component{
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm,
-          collections: allCollections
-        });  
+        }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length == 0){
           this.setState({
@@ -81,6 +79,46 @@ class SearchResult extends React.Component{
               collections: []
           });  
       }
+  }
+
+
+  /**
+   * Process the url to check the facet field given in it.
+   */
+  processUrlProps(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let ontologies = targetQueryParams.ontology;
+    let page = targetQueryParams.page;
+    let types = targetQueryParams.type;
+    let collections = targetQueryParams.collection;
+    if(typeof(ontologies) === "string"){
+      ontologies = [ontologies];
+    }
+    else if(typeof(ontologies) === "undefined"){
+      ontologies = [];
+    }
+
+    if(typeof(types) === "string"){
+      types = [types];
+    }
+    else if(typeof(types) === "undefined"){
+      types = [];
+    }
+
+    if(typeof(collections) === "string"){
+      collections = [collections];
+    }
+    else if(typeof(collections) === "undefined"){
+      collections = [];
+    }
+    this.setState({
+      selectedCollections: collections,
+      selectedOntologies: ontologies,
+      selectedTypes: types
+    });
+    this.handleSelection(ontologies, types, collections);
+
+    
   }
 
 
@@ -267,7 +305,10 @@ async suggestionHandler(selectedTerm){
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let collectionOntologies = await getCollectionOntologies(collections, false);
+    let collectionOntologies = [];
+    if(collections.length !== 0){
+      collectionOntologies = await getCollectionOntologies(collections, false);
+    }
     ontologies.forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
     });
@@ -283,7 +324,8 @@ async suggestionHandler(selectedTerm){
     this.setState({
       searchResult: filteredSearchResults,
       ontologies: ontologies,
-      types: types 
+      types: types,
+      selectedCollections: collections
       })
      }
   
@@ -370,8 +412,10 @@ async suggestionHandler(selectedTerm){
           <Grid item xs={4}>{this.state.result && 
             <Facet
                facetData = {this.state.facetFields}
-               handleChange = {this.handleSelection}
-               collections = {this.state.collections}
+               handleChange = {this.handleSelection}              
+               selectedCollections = {this.state.selectedCollections}
+               selectedOntologies = {this.state.selectedOntologies}
+               selectedTypes = {this.state.selectedTypes}
             />}
             
           </Grid>
