@@ -22,9 +22,7 @@ class SearchResult extends React.Component{
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
-          facetFields: [],
-          startIndex: 0,
-          endIndex: 4,  
+          facetFields: [],            
           pageNumber: 1,
           pageSize: 5,       
           isLoaded: false,
@@ -44,6 +42,7 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
+        this.processUrlProps = this.processUrlProps.bind(this);
     }
 
     async searching(){
@@ -68,7 +67,7 @@ class SearchResult extends React.Component{
           isLoaded: true,
           enteredTerm: enteredTerm,
           collections: allCollections
-        });  
+        }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length == 0){
           this.setState({
@@ -81,6 +80,30 @@ class SearchResult extends React.Component{
               collections: []
           });  
       }
+  }
+
+
+  /**
+   * Process the url to check the facet field given in it.
+   */
+  processUrlProps(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let ontologies = targetQueryParams.ontology;
+    let page = targetQueryParams.page;
+    let types = targetQueryParams.type;
+    let collections = targetQueryParams.collection;
+    if(typeof(ontologies) === "string"){
+      ontologies = [ontologies];
+    }
+    if(typeof(types) === "string"){
+      types = [types];
+    }
+    if(typeof(collections) === "string"){
+      collections = [collections];
+    }
+    this.handleSelection(ontologies, types, collections);
+
+    
   }
 
 
@@ -267,7 +290,10 @@ async suggestionHandler(selectedTerm){
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let collectionOntologies = await getCollectionOntologies(collections, false);
+    let collectionOntologies = [];
+    if(collections.length !== 0){
+      collectionOntologies = await getCollectionOntologies(collections, false);
+    }
     ontologies.forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
     });
