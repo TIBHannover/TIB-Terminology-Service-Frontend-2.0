@@ -128,16 +128,15 @@ The ontology detail page styles. It contains the ontology overview page.
 */
 
 
-.ontology-detail-page-container{
+.ontology-detail-page-container, .tree-view-container{
     /* 
-        Style for the ontology detail info container.
+        Style for the ontology detail info containers (all pages under each navbar in the ontology detail view).
     */
 
     background-color: white;
     padding: 10px;
     margin-top: 0px !important;
 }
-
 
 .ontology-detail-table, .ontology-metric-table{
     /* 
@@ -245,7 +244,7 @@ The Tree view and detail table styles (for both classes and properties)
     padding-left: 10px !important;
     padding-right: 10px !important;
     background-color: white;
-    border-radius: 10px;
+    border-right: 1px solid black;
 }
 
 .node-table-container{
