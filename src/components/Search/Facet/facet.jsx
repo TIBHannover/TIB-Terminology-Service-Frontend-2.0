@@ -77,18 +77,19 @@ class Facet extends React.Component{
      */
     createTypesCheckboxList(){
         let allTypes = this.state.resultTypes;
+        let selectedTypes = this.props.selectedTypes;
         let result = [];
         for(let type in allTypes){
             result.push(
                 <div class="row typeRow facet-item-row"  key={type}>
                     <div class="col-sm-9">
-                        <FormGroup>
+                        <FormGroup>                            
                             <FormControlLabel 
-                                control={<Checkbox  onClick={this.handleTypesCheckBoxClick} />}
+                                control={<Checkbox defaultChecked={selectedTypes.includes(type)}  onClick={this.handleTypesCheckBoxClick} />}
                                 label={type}
                                 key={type}                                
                                 value={type}
-                            />
+                            />                 
                         </FormGroup>
                     </div>
                     <div class="col-sm-3">
@@ -106,6 +107,7 @@ class Facet extends React.Component{
      */
     createOntologiesCheckboxList(){       
         let ontologyFacetData = this.state.ontologyFacetData;
+        let selectedOntologies = this.props.selectedOntologies;
         let result = [];
         let counter = 1;
         for(let ontologyId in ontologyFacetData){
@@ -118,7 +120,7 @@ class Facet extends React.Component{
                         <div class="col-sm-9">
                             <FormGroup>
                                 <FormControlLabel 
-                                    control={<Checkbox onClick={this.handleOntologyCheckBoxClick} />}
+                                    control={<Checkbox defaultChecked={selectedOntologies.includes(ontologyId)} onClick={this.handleOntologyCheckBoxClick} />}
                                     label={ontologyId}
                                     key={ontologyId}
                                     value={ontologyId}
@@ -143,19 +145,19 @@ class Facet extends React.Component{
      */
     createCollectionsCheckBoxes(){
         let allCollections = this.props.collections;
+        let selectedCollections = this.props.selectedCollections;
         let result = [];
-        for (let record of allCollections){
+        for (let record of allCollections){                        
             result.push(
             <div className="row facet-item-row">
                 <div className='col-sm-9'>
                 <FormGroup>
-                    {<FormControlLabel 
-                            control={<Checkbox  onClick={this.handleCollectionsCheckboxClick} />}
-                            label={record['collection']}
-                            key={record['collection']}                      
-                            value={record['collection']}                    
-                        />
-                    }
+                    <FormControlLabel 
+                        control={<Checkbox defaultChecked={selectedCollections.includes(record['collection'])}  onClick={this.handleCollectionsCheckboxClick} />}
+                        label={record['collection']}
+                        key={record['collection']}                      
+                        value={record['collection']}                    
+                    />              
                 </FormGroup>
                 </div>                
             </div>

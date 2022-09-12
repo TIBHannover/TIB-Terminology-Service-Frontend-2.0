@@ -22,6 +22,7 @@ class SearchResult extends React.Component{
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
+          selectedCollections: [],
           facetFields: [],            
           pageNumber: 1,
           pageSize: 5,       
@@ -112,6 +113,11 @@ class SearchResult extends React.Component{
     else if(typeof(collections) === "undefined"){
       collections = [];
     }
+    this.setState({
+      selectedCollections: collections,
+      selectedOntologies: ontologies,
+      selectedTypes: types
+    });
     this.handleSelection(ontologies, types, collections);
 
     
@@ -409,6 +415,9 @@ async suggestionHandler(selectedTerm){
                facetData = {this.state.facetFields}
                handleChange = {this.handleSelection}
                collections = {this.state.collections}
+               selectedCollections = {this.state.selectedCollections}
+               selectedOntologies = {this.state.selectedOntologies}
+               selectedTypes = {this.state.selectedTypes}
             />}
             
           </Grid>
