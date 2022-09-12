@@ -3,7 +3,6 @@ import '../../layout/ontologies.css';
 import OntologyInfoBox from './widgets/infoBox'
 import OntologyStatsBox from './widgets/stats';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -238,20 +237,18 @@ class OntologyDetail extends React.Component {
       return <div>Loading...</div>
     } else {
       return (
-        <div>
-          <Paper square className='ontology-detail-navbar'>
-            <Tabs
-              value={this.state.activeTab}
-              indicatorColor="primary"
-              textColor="primary"
-              onChange={this.tabChange}
-              aria-label="disabled tabs example"
-            >
-              <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
-              <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
-              <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
-            </Tabs>
-          </Paper>
+        <div>          
+          <Tabs
+            value={this.state.activeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={this.tabChange}
+            aria-label="disabled tabs example"
+          >
+            <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
+            <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
+            <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
+          </Tabs>          
           {!this.state.waiting && this.state.overViewTab &&
                         <Grid container key={'ontolofyOverviewPage'} className="ontology-detail-page-container"  spacing={4}>
                           <Grid item xs={9}>
