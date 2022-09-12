@@ -129,8 +129,13 @@ The ontology detail page styles. It contains the ontology overview page.
 
 
 .ontology-detail-page-container{
+    /* 
+        Style for the ontology detail info container.
+    */
+
     background-color: white;
     padding: 10px;
+    margin-top: 0px !important;
 }
 
 
@@ -292,7 +297,6 @@ The Tree view and detail table styles (for both classes and properties)
 
     font-weight: bold !important;
     font-size: 15px !important;
-    /* padding: 5px; */
     text-align: left;
 }
 
@@ -301,7 +305,6 @@ The Tree view and detail table styles (for both classes and properties)
         The metadata value style for nodes (class/property)  in the detail table. 
     */
 
-    /* padding: 7px; */
     font-size: 15px !important;
 }
 
