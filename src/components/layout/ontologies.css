@@ -219,8 +219,16 @@ The ontology detail page styles. It contains the ontology overview page.
     border-top-left-radius: 25px !important;
     border-top-right-radius: 25px !important;
     color: black !important;
+    border-bottom: none !important;
 }
 
+.MuiTabs-indicator{
+    /* 
+        Remove the border-bottom from the selected tab (Material UI adds this class)
+    */
+
+    background-color: white !important;
+}
 
 
 
