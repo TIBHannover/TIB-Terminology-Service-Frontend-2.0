@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
-import {getAllCollectionsIds, getCollectionOntologies} from '../../api/fetchData';
+import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 
@@ -52,8 +52,7 @@ class SearchResult extends React.Component{
       if (enteredTerm.length > 0){
         let searchUrl = "https://service.tib.eu/ts4tib/api/search?q=" + enteredTerm + "&rows=" + this.state.pageSize;
         let searchResult = await fetch(searchUrl)
-        let resultJson = (await searchResult.json());
-        let allCollections = await getAllCollectionsIds();        
+        let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
@@ -67,7 +66,6 @@ class SearchResult extends React.Component{
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm,
-          collections: allCollections
         }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length == 0){
@@ -326,7 +324,8 @@ async suggestionHandler(selectedTerm){
     this.setState({
       searchResult: filteredSearchResults,
       ontologies: ontologies,
-      types: types 
+      types: types,
+      selectedCollections: collections
       })
      }
   
@@ -413,8 +412,7 @@ async suggestionHandler(selectedTerm){
           <Grid item xs={4}>{this.state.result && 
             <Facet
                facetData = {this.state.facetFields}
-               handleChange = {this.handleSelection}
-               collections = {this.state.collections}
+               handleChange = {this.handleSelection}              
                selectedCollections = {this.state.selectedCollections}
                selectedOntologies = {this.state.selectedOntologies}
                selectedTypes = {this.state.selectedTypes}

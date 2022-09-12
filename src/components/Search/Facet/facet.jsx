@@ -3,6 +3,7 @@ import '../../layout/Search.css';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
 class Facet extends React.Component{
@@ -12,6 +13,7 @@ class Facet extends React.Component{
             resultLoaded: false,
             resultTypes: [],
             ontologyFacetData: {},
+            collections: [],
             selectedOntologies: [],
             selectedTypes: [],
             ontologyListShowAll: false,
@@ -33,7 +35,7 @@ class Facet extends React.Component{
     /**
      * process the search result array to get the existing ontologies and their result count
      */
-    processFacetData(){        
+    async processFacetData(){        
         let facetData = this.props.facetData;
         if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
             this.setState({
@@ -62,10 +64,12 @@ class Facet extends React.Component{
                     }                    
                 }
             }
+            let allCollections = await getAllCollectionsIds();  
             this.setState({
                 resultLoaded: true,
                 resultTypes: types,
-                ontologyFacetData: ontologyFacetData
+                ontologyFacetData: ontologyFacetData,
+                collections: allCollections
             });
         }                    
     }
@@ -144,10 +148,10 @@ class Facet extends React.Component{
      * @returns 
      */
     createCollectionsCheckBoxes(){
-        let allCollections = this.props.collections;
+        let allCollections = this.state.collections;
         let selectedCollections = this.props.selectedCollections;
         let result = [];
-        for (let record of allCollections){                        
+        for (let record of allCollections){            
             result.push(
             <div className="row facet-item-row">
                 <div className='col-sm-9'>
@@ -155,9 +159,9 @@ class Facet extends React.Component{
                     <FormControlLabel 
                         control={<Checkbox defaultChecked={selectedCollections.includes(record['collection'])}  onClick={this.handleCollectionsCheckboxClick} />}
                         label={record['collection']}
-                        key={record['collection']}                      
-                        value={record['collection']}                    
-                    />              
+                        key={record['collection']}                    
+                        value={record['collection']}
+                    />
                 </FormGroup>
                 </div>                
             </div>
@@ -259,11 +263,11 @@ class Facet extends React.Component{
         }        
     }
 
-    componentDidUpdate(){
-        if(!this.state.resultLoaded){
-            this.processFacetData();
-        }
-    }
+    // componentDidUpdate(){
+    //     if(!this.state.resultLoaded){
+    //         this.processFacetData();
+    //     }
+    // }
 
 
     render(){

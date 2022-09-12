@@ -139,21 +139,12 @@ export async function createCollectionsCheckBoxes(filterCollection, selectedColl
         <div className="row facet-item-row">
             <div className='col-sm-9'>
             <FormGroup>
-                {selectedCollections.includes(record['collection'])
-                    ? <FormControlLabel 
-                        control={<Checkbox defaultChecked={true}  onClick={filterCollection} />}
-                        label={record['collection']}
-                        key={record['collection']}                      
-                        value={record['collection']}                        
-                        />
-                    :
-                    <FormControlLabel 
-                        control={<Checkbox  onClick={filterCollection} />}
-                        label={record['collection']}
-                        key={record['collection']}                      
-                        value={record['collection']}                    
-                        />
-                }
+                <FormControlLabel 
+                    control={<Checkbox defaultChecked={selectedCollections.includes(record['collection'])}  onClick={filterCollection} />}
+                    label={record['collection']}
+                    key={record['collection']}
+                    value={record['collection']}
+                />
             </FormGroup>
             </div>
             <div className='col-sm-3'>
