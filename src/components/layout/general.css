@@ -148,12 +148,6 @@ p{
     text-align: justify;
 }
 
- 
- /* .fxOSmo{
-    background-color: #2B3C46 !important;
-    color: white !important;
- } */
-
  .stats-box-text{
     /* 
         The style for text item in statistics box present in homepage
@@ -209,6 +203,15 @@ p{
     */
 
     text-align: center;
+}
+
+.site-dropdown-menu{
+    /* 
+        General style for the dropdown (select/option) menus in the site.
+    */
+
+    border: none;
+    padding: 5px;
 }
 
 /* 
