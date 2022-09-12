@@ -95,11 +95,22 @@ class SearchResult extends React.Component{
     if(typeof(ontologies) === "string"){
       ontologies = [ontologies];
     }
+    else if(typeof(ontologies) === "undefined"){
+      ontologies = [];
+    }
+
     if(typeof(types) === "string"){
       types = [types];
     }
+    else if(typeof(types) === "undefined"){
+      types = [];
+    }
+
     if(typeof(collections) === "string"){
       collections = [collections];
+    }
+    else if(typeof(collections) === "undefined"){
+      collections = [];
     }
     this.handleSelection(ontologies, types, collections);
 
