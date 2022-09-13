@@ -46,7 +46,7 @@ class Home extends React.Component{
   }
     render(){
         return(
-        <div id="mainpageSearchBox">
+        <div>
             {createHomePageContent(this.readMoreClickHandler)}
           <div className="container home-page-stats-container">
               {createStatsBox(this.state.statsResult)}

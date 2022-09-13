@@ -53,7 +53,7 @@ class Collections extends React.Component{
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
                 <div className='col-sm-3' key={collectionId + "_logo"}>                    
                     <a href={collectionJson["ontology_list_url"]} className="collection-image-anchor">
-                        <img class="img-fluid" className='collection-logo-in-list' alt="logo"  src={collectionJson["logo"]}/>
+                        <img class="img-fluid" className='collection-logo-in-list ' alt="logo"  src={collectionJson["logo"]}/>
                     </a>
                 </div>
                 <div className='col-sm-9 collection-content'>
