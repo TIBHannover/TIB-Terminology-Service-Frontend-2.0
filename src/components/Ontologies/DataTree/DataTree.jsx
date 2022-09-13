@@ -313,7 +313,8 @@ resetTree(){
     treeDomContent: "",
     siblingsVisible: false,
     siblingsButtonShow: false,
-    reload: false
+    reload: false,
+    showNodeDetailPage: false,
   });
 }
 
