@@ -378,7 +378,8 @@ The Tree view and detail table styles (for both classes and properties)
 
     display: inline !important;
     border: 1px solid;
-    margin-right: 5px;
+    margin-right: 5px;    
+    font-size: 10px !important;
 }
 
 .closed > i{
@@ -387,7 +388,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     color: gray;
-    margin-right: 7px;
+    margin-right: 8px;
 }
 
 .opened > i{   
