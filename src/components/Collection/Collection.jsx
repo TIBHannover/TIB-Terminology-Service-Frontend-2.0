@@ -117,7 +117,7 @@ class Collections extends React.Component{
     render(){
         return(
             <div className='container collections-info-container'>
-                <div className='row'>
+                {/* <div className='row'>
                     <div className='col-sm-3'></div>
                     <div className='col-sm-9'>
                         <div className='row'>
@@ -127,7 +127,7 @@ class Collections extends React.Component{
                         </div>
                     </div>  
                 </div>
-                <br></br>
+                <br></br> */}
                 {this.createCollectionList()}
             </div>
         );
