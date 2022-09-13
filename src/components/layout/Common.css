@@ -258,7 +258,7 @@ The Pagination styles
    padding: 0.5rem 0.75rem;
    margin-left: -1px;
    line-height: 1.25;
-   color: #009cbc;
+   color: #0E6668;
    background-color: white;
    border: 1px solid #dee2e6;
    cursor: pointer;
@@ -270,6 +270,7 @@ The Pagination styles
    */
 
    background-color: #E9ECEF;
+   color: #0E6668;
 }
 
 .pagination-start{
