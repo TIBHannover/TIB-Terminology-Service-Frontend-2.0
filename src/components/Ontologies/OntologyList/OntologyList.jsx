@@ -367,6 +367,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
 
 
   render () {
+    // console.info(typeof(process.env.REACT_APP_COLLECTION_FACET_SHOWN));
     const { error, isLoaded } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
