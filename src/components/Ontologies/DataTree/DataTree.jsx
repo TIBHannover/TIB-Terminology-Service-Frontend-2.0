@@ -28,7 +28,7 @@ class DataTree extends React.Component {
       treeDomContent: "",
       resetTreeFlag: false,
       siblingsVisible: false,
-      siblingsButtonShow: false,
+      siblingsButtonShow: true,
       reduceTreeBtnShow: false,
       reduceBtnActive: true,
       viewMode: true,
@@ -315,6 +315,7 @@ resetTree(){
     siblingsButtonShow: false,
     reload: false,
     showNodeDetailPage: false,
+    reduceTreeBtnShow: false
   });
 }
 
