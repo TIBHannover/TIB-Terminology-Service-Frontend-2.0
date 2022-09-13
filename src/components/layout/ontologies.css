@@ -348,6 +348,10 @@ The Tree view and detail table styles (for both classes and properties)
     content: "...";
 }
 
+.leaf-node::before{
+    content: "........";
+}
+
 
 .li-label-text:hover{
     /* 
@@ -383,6 +387,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     color: gray;
+    margin-right: 7px;
 }
 
 .opened > i{   
@@ -391,6 +396,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     color: gray;
+    margin-right: 7px;
 }
 
 .leaf-node > i{  
