@@ -69,11 +69,11 @@ import _ from "lodash";
 
 
 /**
- * Create tag for term relations
+ * Create tag for the subClass relation
  */
 function makeTag(objectList){
   if(objectList.length === 0){
-    return "";
+    return "N/A";
   }
   let tags = [];
   let counter = 0;

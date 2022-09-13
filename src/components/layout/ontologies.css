@@ -397,7 +397,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     color: gray;
-    margin-right: 7px;
+    margin-right: 8px;
 }
 
 .leaf-node > i{  
@@ -424,6 +424,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     float: left;
+    margin-bottom: 10px;
 }
 
 
