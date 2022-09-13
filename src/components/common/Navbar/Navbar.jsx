@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import '../../layout/Common.css';
 
-import '../../layout/Common.css'
+
 
 function Navbar () {
-
+  let urlPath = window.location.pathname;
   return (
     <div className='col-lg-8 col-md-6'>
          <nav class="navbar navbar-expand-xl site-navbar">   
@@ -14,22 +14,40 @@ function Navbar () {
             <div class="collapse navbar-collapse" id="siteMainNavbar">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link navbar-item" href="/">Home</a>
+                {urlPath === "/" || urlPath === "/ts" 
+                  ? <a class="nav-link navbar-item nav-clicked" href="/">Home</a>
+                  : <a class="nav-link navbar-item" href="/">Home</a>
+                }                  
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link navbar-item" href="/collections">Collections</a>
+                 {urlPath.includes("/collections") 
+                    ? <a class="nav-link navbar-item nav-clicked" href="/collections">Collections</a>
+                    : <a class="nav-link navbar-item" href="/collections">Collections</a>
+                  }
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link navbar-item" href="/ontologies">Ontologies</a>
+                {urlPath.includes("/ontologies") 
+                  ? <a class="nav-link navbar-item nav-clicked" href="/ontologies">Ontologies</a>
+                  : <a class="nav-link navbar-item" href="/ontologies">Ontologies</a>
+                }                  
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link navbar-item" href="/help">Help</a>
+                {urlPath.includes("/help") 
+                  ? <a class="nav-link navbar-item nav-clicked" href="/help">Help</a>
+                  : <a class="nav-link navbar-item" href="/help">Help</a>
+                }                  
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link navbar-item" href="/documentation">Documentation</a>
+                {urlPath.includes("/documentation") 
+                  ? <a class="nav-link navbar-item nav-clicked" href="/documentation">Documentation</a>
+                  : <a class="nav-link navbar-item" href="/documentation">Documentation</a>
+                }                  
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link navbar-item" href="/about">About</a>
+                {urlPath.includes("/about") 
+                  ? <a class="nav-link navbar-item nav-clicked" href="/about">About</a>
+                  : <a class="nav-link navbar-item" href="/about">About</a>
+                }                  
                 </li>
               </ul>
             </div>            

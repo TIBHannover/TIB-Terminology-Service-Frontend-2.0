@@ -75,7 +75,7 @@ class Collections extends React.Component{
                             <a href={collectionJson["project_homepage"]} target="_blank">{collectionJson["project_homepage"]}</a>
                         </div>
                     </div>
-                    <div className='row' key={collectionId + "_projectUrl"}>
+                    <div className='row' key={collectionId + "_domainLink"}>
                         <div className='col-sm-12 collection-ontologies-text'>
                             <b>Domain-specific terminolgy service: </b>
                             <a href={collectionJson["domain_ts_link"]} target="_blank">{collectionJson["domain_ts_link"]}</a>
