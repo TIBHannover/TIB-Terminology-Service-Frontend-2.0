@@ -41,9 +41,14 @@
         Collection logo image style
     */
 
-    width: 500px;
-    height: 300px;
-    padding: 40px;
+    width: 400px;
+    height: 200px;
+    padding: 20px;
+    margin-left: 80px;
+}
+
+.coypu-logo{
+    padding: 50px;
 }
 
 .home-page-stats-container{
@@ -82,7 +87,7 @@
 */
 
 
-@media only screen and (max-width: 1025px) {
+@media only screen and (max-width: 1500px) and (min-width: 1026px) {
     .collection-card{
         /* 
             Style for the collection box on the home page.
@@ -90,5 +95,55 @@
             
         padding: 10px;
         
+    }
+
+    .collection-logo{
+        /* 
+            Collection logo image style
+        */
+    
+              
+        margin-left: 20px;
+    }
+  }
+
+
+@media only screen and (max-width: 1025px) and (min-width: 901px) {
+    .collection-card{
+        /* 
+            Style for the collection box on the home page.
+        */
+            
+        padding: 10px;
+        
+    }
+
+    .collection-logo{
+        /* 
+            Collection logo image style
+        */
+    
+              
+        margin-left: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 900px){
+    .collection-card{
+        /* 
+            Style for the collection box on the home page.
+        */
+            
+        padding: 10px;
+        
+    }
+
+    .collection-logo{
+        /* 
+            Collection logo image style
+        */
+    
+              
+        margin-left: 0px;
     }
   }
