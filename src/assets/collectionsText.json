@@ -42,7 +42,7 @@
     "FID Move":{
         "id":"FID move",
         "html_id":"FID_move",
-        "name":"FID Baudigital Project",
+        "name":"FID Move Project",
         "text":"The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.",
         "logo":"fidmove_logo.svg",
         "ontology_list_url": "/ontologies?collection=FID+move&and=false&page=1",
@@ -52,7 +52,7 @@
     "FID Baudigital":{
         "id":"FID BAUdigital",
         "html_id":"FID_BAUdigital",
-        "name":"FID Move Project",
+        "name":"FID Baudigital Project",
         "text":"The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.",
         "logo":"bau-digital_logo210420_RZ_Web_RGB_11.svg",
         "ontology_list_url": "/ontologies?collection=FID+BAUdigital&and=false&page=1",

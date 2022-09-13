@@ -184,9 +184,7 @@ The Navbar styles
     /* 
        The style for navabr dimensions
     */
-    /* display: flex;
-    flex-direction: row;
-    justify-content: flex-start !important; */
+  
     margin-top: -5px !important;
   }
   
@@ -229,6 +227,12 @@ The Navbar styles
 
       border: none !important;
    }
+
+.nav-clicked{
+   text-decoration: underline;
+   font-weight: bold;
+   
+}
 
 /* 
 -------------------------------------
