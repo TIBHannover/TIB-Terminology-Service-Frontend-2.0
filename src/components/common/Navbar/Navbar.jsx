@@ -19,7 +19,7 @@ function Navbar () {
                   : <a class="nav-link navbar-item" href="/">Home</a>
                 }                  
                 </li>
-                {process.env.REACT_APP_COLLECTION_TAB_SHOWN === "true" &&
+                {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <li class="nav-item">
                  {urlPath.includes("/collections") 
                     ? <a class="nav-link navbar-item nav-clicked" href="/collections">Collections</a>
