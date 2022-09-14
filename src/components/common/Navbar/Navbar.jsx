@@ -19,12 +19,14 @@ function Navbar () {
                   : <a class="nav-link navbar-item" href="/">Home</a>
                 }                  
                 </li>
+                {process.env.REACT_APP_COLLECTION_TAB_SHOWN === "true" &&
                 <li class="nav-item">
                  {urlPath.includes("/collections") 
                     ? <a class="nav-link navbar-item nav-clicked" href="/collections">Collections</a>
                     : <a class="nav-link navbar-item" href="/collections">Collections</a>
                   }
                 </li>
+                }
                 <li class="nav-item">
                 {urlPath.includes("/ontologies") 
                   ? <a class="nav-link navbar-item nav-clicked" href="/ontologies">Ontologies</a>

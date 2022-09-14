@@ -28,7 +28,8 @@ function App() {
             <Route exact path="/" component={Home}/>
             <Route exact path="/ts" component={Home}/>
             <Route exact path="/ontologies" component={OntologyList}/>
-            <Route exact path="/collections" component={Collections}/>
+            {process.env.REACT_APP_COLLECTION_TAB_SHOWN === "true" &&
+            <Route exact path="/collections" component={Collections}/>}
             <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
             <Route exact path="/documentation" component={Documentation}/>
             <Route exact path="/search" component={SearchResult} />
