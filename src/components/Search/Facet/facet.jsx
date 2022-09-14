@@ -286,10 +286,10 @@ class Facet extends React.Component{
                             <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
                         </div>
                     </div>
-                    <h4>{"Collections"}</h4>
-                    <div class="facet-box" id="facet-collections-list">                            
-                        {this.createCollectionsCheckBoxes()}
-                    </div>
+                    {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
+                    <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
+                            {this.createCollectionsCheckBoxes()}
+                        </div></>}
                 </div>
             </div>
         );
