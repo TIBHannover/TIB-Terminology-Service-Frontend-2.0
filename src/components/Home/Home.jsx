@@ -14,11 +14,21 @@ class Home extends React.Component{
   }
 
   async Stats(){
-    let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatistics`)
+    if(process.env.REACT_APP_REMOVE_TIB_STATS === "true"){
+      let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatistics`)
     statsResult = (await statsResult.json());
     this.setState({
       statsResult: statsResult
     })
+    }
+    else{
+      let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&classification=NFDI4CHEM`)
+      statsResult = (await statsResult.json());
+      this.setState({
+       statsResult: statsResult
+      })
+    }
+    
 
   }
 
