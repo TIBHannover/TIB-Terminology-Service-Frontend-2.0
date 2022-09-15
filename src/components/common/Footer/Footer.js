@@ -10,7 +10,7 @@ const Footer = () => (
                 <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
                     <img src={DFG_LOGO} alt="" className="footer-logo"/>
                 </a>
-                {process.env.REACT_APP_DFG_PROJECT_SHOW === "true" &&
+                {process.env.REACT_APP_DFG_PROJECT_SHOW === "false" &&
                 <ul className="footer-list">
                   <li>NFDI4Chem is funded by DFG</li>
                   <li>Project Number 441958208</li>
@@ -37,6 +37,7 @@ const Footer = () => (
             <div className="col-sm-2">
                 <h6>RESOURCES</h6>
                 <hr className="me-5" />
+                {process.env.REACT_APP_REMOVE_FOOTER_RESOURCES === "true" &&
                 <ul className="footer-list">
                     <li>
                         <Link to="/Documentation" className='footer-link'>Documentation</Link>
@@ -45,7 +46,7 @@ const Footer = () => (
                         <Link to="/AboutApi" className='footer-link'>API</Link>
                     </li>
                 </ul>
-                
+                }
             </div>
 
 
