@@ -37,6 +37,15 @@ const Footer = () => (
             <div className="col-sm-2">
                 <h6>RESOURCES</h6>
                 <hr className="me-5" />
+                {process.env.REACT_APP_NFDI4CHEM_FOOTER_RESOURCES === "false" &&
+                <ul className="footer-list">
+                  <li><a href="https://www.nfdi4chem.de/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Website</a></li>
+                  <li><a href="https://www.nfdi4chem.de/index.php/frequently-asked-questions/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem FAQ</a></li>
+                  <li><a href="https://www.nfdi4chem.de/index.php/helpdesk/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Helpdesk</a></li>
+                  <li><a href="https://knowledgebase.nfdi4chem.de/knowledge_base/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Knowledge Base</a></li>
+                  <li><a href="https://github.com/NFDI4Chem" target="_blank" rel="noopener noreferrer" className='footer-link'>GitHub repository</a></li>
+                </ul>
+                }
                 {process.env.REACT_APP_REMOVE_FOOTER_RESOURCES === "true" &&
                 <ul className="footer-list">
                     <li>
