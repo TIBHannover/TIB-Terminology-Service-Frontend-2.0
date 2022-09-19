@@ -1,5 +1,4 @@
 import React from 'react';
-import '../layout/Collections.css';
 import {getCollectionOntologies} from '../../api/fetchData';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import queryString from 'query-string'; 

@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../layout/ontologies.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import NodePage from '../NodePage/NodePage';

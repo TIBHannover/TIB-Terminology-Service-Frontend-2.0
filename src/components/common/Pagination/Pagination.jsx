@@ -1,6 +1,4 @@
 import React from 'react';
-import "../../layout/Common.css";
-
 
 class Pagination extends React.Component{
     constructor(props){

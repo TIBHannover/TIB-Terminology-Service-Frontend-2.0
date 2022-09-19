@@ -1,7 +1,4 @@
 import React from 'react';
-import '../../layout/Common.css';
-
-
 
 function Navbar () {
   let urlPath = window.location.pathname;

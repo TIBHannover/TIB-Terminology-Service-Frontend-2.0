@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
 import {getCollectionOntologies} from '../../api/fetchData';

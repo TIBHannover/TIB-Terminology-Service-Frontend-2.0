@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';

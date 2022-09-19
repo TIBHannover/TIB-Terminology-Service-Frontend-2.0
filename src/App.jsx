@@ -11,10 +11,12 @@ import Imprint from '../src/assets/static/imprint'
 import PrivacyPolicy from '../src/assets/static/PrivacyPolicy';
 import TermsOfUse from '../src/assets/static/TermsOfUse';
 import AboutApi from '../src/assets/static/AboutApi';
-import './components/layout/general.css';
 import About from "./components/About/About";
 import Help from "./components/Help/Help";
 
+// import css file based on the target project
+process.env.REACT_APP_PROJECT_ID === "general" && import ('./components/layout/General_TIB.css');
+process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && import ('./components/layout/Nfdi4chem.css');
 
 
 function App() {

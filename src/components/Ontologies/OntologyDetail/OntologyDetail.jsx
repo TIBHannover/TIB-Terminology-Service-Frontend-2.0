@@ -1,5 +1,4 @@
 import React from 'react'
-import '../../layout/ontologies.css';
 import OntologyInfoBox from './widgets/infoBox'
 import OntologyStatsBox from './widgets/stats';
 import Grid from '@material-ui/core/Grid';

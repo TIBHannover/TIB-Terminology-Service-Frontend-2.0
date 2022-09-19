@@ -1,5 +1,4 @@
 import React from "react";
-import "../layout/Home.css"
 import {createStatsBox} from './StatsBox';
 import {createHomePageContent} from './CollectionsCards';
 

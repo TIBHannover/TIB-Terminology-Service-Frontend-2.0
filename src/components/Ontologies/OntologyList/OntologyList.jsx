@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
