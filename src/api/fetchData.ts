@@ -3,8 +3,6 @@ const callHeader = {
 };
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
-const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&";
-
 
 
 /**
@@ -161,7 +159,8 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
  * @returns 
  */
  export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
-  let baseUrl = "https://service.tib.eu/ts4tib/api/ontologies/" + ontology + "/" + mode;
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
   let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
   if (node.status === 404){
     return false;
@@ -215,6 +214,7 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
  */
 export async function getAllCollectionsIds() {
   let url = "https://service.tib.eu/ts4tib/api/ontologies/schemavalues?schema=collection";
+  let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_BASE_URL;
   let cols =  await fetch(url, getCallSetting);
   cols = await cols.json();
   let collections = cols['_embedded']["strings"];
