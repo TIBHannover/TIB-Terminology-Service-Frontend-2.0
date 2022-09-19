@@ -4,7 +4,6 @@ import 'font-awesome/css/font-awesome.min.css';
 import Grid from '@material-ui/core/Grid';
 import NodePage from '../NodePage/NodePage';
 import Button from '@mui/material/Button';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
 import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList } from './helpers';
@@ -21,8 +20,7 @@ class DataTree extends React.Component {
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      ontologyId: '',
-      baseUrl: "https://service.tib.eu/ts4tib/api/ontologies/",
+      ontologyId: '',      
       childExtractName: "",
       targetNodeIri: "",
       treeDomContent: "",
@@ -122,7 +120,7 @@ class DataTree extends React.Component {
         };
         let getCallSetting = {method: 'GET', headers: callHeader};
         let extractName = this.state.childExtractName;
-        let url = this.state.baseUrl;
+        let url = process.env.REACT_APP_API_BASE_URL + "/";
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
         let list =  await (await fetch(url, getCallSetting)).json();        
         let roots = buildHierarchicalArray(list);
@@ -334,7 +332,7 @@ async showSiblings(){
           };
           let getCallSetting = {method: 'GET', headers: callHeader};
           let extractName = this.state.childExtractName;
-          let url = this.state.baseUrl;
+          let url = process.env.REACT_APP_API_BASE_URL + "/";
           url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
           let res =  await (await fetch(url, getCallSetting)).json();          
           for(let i=0; i < res.length; i++){

@@ -159,7 +159,7 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
  * @returns 
  */
  export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
   let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
   let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
   if (node.status === 404){
@@ -213,7 +213,7 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
  * @returns 
  */
 export async function getAllCollectionsIds() {
-  let url = "https://service.tib.eu/ts4tib/api/ontologies/schemavalues?schema=collection";
+  let url = <any> process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
   let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_BASE_URL;
   let cols =  await fetch(url, getCallSetting);
   cols = await cols.json();
