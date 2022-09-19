@@ -3,7 +3,6 @@ const callHeader = {
 };
 const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
-const OntologiesBaseServiceUrl = "https://service.tib.eu/ts4tib/api/ontologies";
 const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&";
 
 
@@ -13,6 +12,7 @@ const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatistics
  * @returns A list
  */
  export async function getAllOntologies (){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
   answer = await answer.json();
   let ontologiesCount = answer['page']['totalElements'];
@@ -34,6 +34,7 @@ const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatistics
  * @returns A list of ontologies
  */
  export async function getCollectionOntologies (collections, exclusive){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
   answer = await answer.json();
   let ontologiesCount = answer['page']['totalElements'];
@@ -61,6 +62,7 @@ const StatsBaseUrl = "https://service.tib.eu/ts4tib/api/ontologies/getstatistics
  * @returns 
  */
 export async function getOntologyDetail (ontologyid: string) {
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   return fetch(
     OntologiesBaseServiceUrl + '/' + encodeURIComponent(ontologyid),
     getCallSetting
@@ -142,6 +144,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
  * Get the js tree for a node. It returns the subtree of that node as a flat list.
  */
 export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string, targetNodeId:string, extractName:string) {
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/";
   url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
   let res =  await (await fetch(url, getCallSetting)).json(); 
