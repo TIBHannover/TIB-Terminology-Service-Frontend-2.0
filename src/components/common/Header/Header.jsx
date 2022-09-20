@@ -16,7 +16,7 @@ function Header () {
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>
               {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && 
-                <img src={collectionsInfoJson["NFDI4Chem"]["logo"]} alt="nfdi4chem_logo" height={250} width={350}/>
+                <img src={collectionsInfoJson["NFDI4Chem"]["logo"]} alt="nfdi4chem_logo" className='site-logo-image'/>
               }
               {process.env.REACT_APP_PROJECT_ID === "general" && 
                 <span>

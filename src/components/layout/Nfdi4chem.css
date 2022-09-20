@@ -320,7 +320,7 @@ p{
      /* 
         The style for overall header dimensions
      */
-     /* margin-top: 30px; */
+     
      display: flex;
      flex: 1;
      flex-direction: column;
@@ -366,13 +366,25 @@ p{
    
  .header-logo {
      /* 
-        The style for the project logo
+        The style for the project logo text
      */
+
      color: inherit;
      text-decoration: inherit;
      font-family: RobotoThin;
      font-size: 100px;
    }
+
+.site-logo-image{
+    /* 
+        The style for the site logo image 
+    */
+
+    height: 250px;
+    width: 350px;
+    margin-top: -60px;
+
+}
    
  .header-top__navbar {
      /* 
