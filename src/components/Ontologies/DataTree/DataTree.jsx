@@ -28,9 +28,9 @@ class DataTree extends React.Component {
       treeDomContent: "",
       resetTreeFlag: false,
       siblingsVisible: false,
-      siblingsButtonShow: false,
+      siblingsButtonShow: true,
       reduceTreeBtnShow: false,
-      reduceBtnActive: false,
+      reduceBtnActive: true,
       viewMode: true,
       reload: false,
       isLoadingTheComponent: true,
@@ -313,7 +313,9 @@ resetTree(){
     treeDomContent: "",
     siblingsVisible: false,
     siblingsButtonShow: false,
-    reload: false
+    reload: false,
+    showNodeDetailPage: false,
+    reduceTreeBtnShow: false
   });
 }
 
@@ -435,10 +437,10 @@ render(){
               <Button 
                     variant="contained" 
                     className='tree-action-btn' 
-                    startIcon={<RestartAltIcon />}
+                    // startIcon={<RestartAltIcon />}
                     onClick={this.resetTree}
                     >
-                    Reset Tree
+                    Reset
               </Button>
               {this.state.reduceTreeBtnShow && 
                 <Button 
@@ -447,8 +449,8 @@ render(){
                     onClick={this.reduceTree}
                     >
                     {!this.state.reduceBtnActive
-                      ? "Show Sub Tree"
-                      : "Show Full Tree"
+                      ? "Sub Tree"
+                      : "Full Tree"
                     }                    
                 </Button>
               }                

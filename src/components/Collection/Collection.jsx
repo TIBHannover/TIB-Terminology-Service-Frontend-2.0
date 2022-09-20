@@ -51,12 +51,12 @@ class Collections extends React.Component{
     createCollectionCard(collectionId, collectionJson){
         let card = [
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
-                <div className='col-sm-2' key={collectionId + "_logo"}>                    
+                <div className='col-sm-3' key={collectionId + "_logo"}>                    
                     <a href={collectionJson["ontology_list_url"]} className="collection-image-anchor">
-                        <img class="img-fluid" alt="" width="200" height="100" src={collectionJson["logo"]}/>
+                        <img class="img-fluid" className='collection-logo-in-list ' alt="logo"  src={collectionJson["logo"]}/>
                     </a>
                 </div>
-                <div className='col-sm-10 collection-content'>
+                <div className='col-sm-9 collection-content'>
                     <div className='row' key={collectionId + "_name"}>
                         <div className='col-sm-12'>
                             <h4>{collectionJson["name"]}</h4>
@@ -75,7 +75,7 @@ class Collections extends React.Component{
                             <a href={collectionJson["project_homepage"]} target="_blank">{collectionJson["project_homepage"]}</a>
                         </div>
                     </div>
-                    <div className='row' key={collectionId + "_projectUrl"}>
+                    <div className='row' key={collectionId + "_domainLink"}>
                         <div className='col-sm-12 collection-ontologies-text'>
                             <b>Domain-specific terminolgy service: </b>
                             <a href={collectionJson["domain_ts_link"]} target="_blank">{collectionJson["domain_ts_link"]}</a>
@@ -117,9 +117,9 @@ class Collections extends React.Component{
     render(){
         return(
             <div className='container collections-info-container'>
-                <div className='row'>
-                    <div className='col-sm-2'></div>
-                    <div className='col-sm-10'>
+                {/* <div className='row'>
+                    <div className='col-sm-3'></div>
+                    <div className='col-sm-9'>
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <h2>Collections</h2>
@@ -127,7 +127,7 @@ class Collections extends React.Component{
                         </div>
                     </div>  
                 </div>
-                <br></br>
+                <br></br> */}
                 {this.createCollectionList()}
             </div>
         );

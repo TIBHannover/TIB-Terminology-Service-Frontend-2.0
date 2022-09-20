@@ -1,8 +1,6 @@
 import React from 'react';
 import '../../layout/ontologies.css';
 import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
@@ -257,6 +255,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
+    preOntologies = sortBasedOnKey(preOntologies, this.state.sortField);
     let preHiddenStatus = this.state.unFilteredHiddenStatus;
     this.setState({
       selectedCollections: selectedCollections,
@@ -352,7 +351,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                 <hr/>
                 <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
                 <hr />
-                <span className='ontology-meta-data-field-span'>Last updated <br/> {item.updated.split("T")[0]} </span>          
+                <span className='ontology-meta-data-field-span'>Loaded: {item.loaded.split("T")[0]}</span>
               </Grid>
             </Grid>                    
       )
@@ -368,6 +367,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
 
 
   render () {
+    // console.info(typeof(process.env.REACT_APP_COLLECTION_FACET_SHOWN));
     const { error, isLoaded } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
@@ -387,18 +387,12 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                 <Grid item xs={6}  id="ontologylist-sort-grid">
                   <div>
                     <br/>
-                    <InputLabel htmlFor="ontology-sort-dropdown">sorted by</InputLabel>
-                    <Select
-                      native
-                      value={this.state.sortField}
-                      onChange={this.handleSortChange}
-                      id="ontology-sort-dropdown"
-                    >
-                      <option value={'numberOfTerms'}>Classes Count</option>
-                      <option value={'updated'}>Recently Updated</option>
-                      <option value={'numberOfIndividuals'}>Individuals Count</option>
-                      <option value={'numberOfProperties'}>Properties Count</option>
-                    </Select>
+                    <label for="ontology-list-sorting">sorted by</label>
+                    <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
+                      <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
+                      <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
+                      <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
+                    </select>                  
                   </div>          
                 </Grid>
               </Grid>              

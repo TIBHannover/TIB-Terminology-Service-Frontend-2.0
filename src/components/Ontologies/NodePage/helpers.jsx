@@ -53,7 +53,7 @@ import _ from "lodash";
    */
  export function formatText (label, text, isLink = false) {
   if (text === null || text === '' || typeof(text) === "undefined") {
-    return 'null'
+    return 'N/A'
   }
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
@@ -69,11 +69,11 @@ import _ from "lodash";
 
 
 /**
- * Create tag for term relations
+ * Create tag for the subClass relation
  */
 function makeTag(objectList){
   if(objectList.length === 0){
-    return "";
+    return "N/A";
   }
   let tags = [];
   let counter = 0;
@@ -97,7 +97,7 @@ function makeTag(objectList){
  */
 function createRelations(object){
   if(typeof(object['relations']) !== "undefined" && object['relations'].length === 0){
-    return "";
+    return "N/A";
   }
   let groupedRelations = _.groupBy(object['relations'], res => res.relation);  
   let relsToRender = [];

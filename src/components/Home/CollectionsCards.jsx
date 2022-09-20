@@ -52,7 +52,7 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href={collectionsInfoJson["CoyPu"]["ontology_list_url"]} className="collection-image-anchor">
-                  <img class="img-fluid collection-logo" alt="CoyPu"  src={collectionsInfoJson["CoyPu"]["logo"]}  />
+                  <img class="img-fluid collection-logo coypu-logo" alt="CoyPu"  src={collectionsInfoJson["CoyPu"]["logo"]}  />
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["CoyPu"]["text"]}</p>

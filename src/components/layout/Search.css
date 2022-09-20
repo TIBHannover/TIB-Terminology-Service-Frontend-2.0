@@ -140,20 +140,30 @@ The Search results styles
     margin-top: 30px;
 }
 
-.search-card-title > h4{
-    /* 
-       The style for header in the title of a search result card
-    */
-     
-    display: inline !important;
-}
-
-.search-card-title > h4 > a{
+.search-result-title{
     /* 
        The style for header anchor in the title of a search result card
     */
-     
-    color: #42484e !important;
+    
+    color: #5F6469;
+    display: inline !important;
+}
+
+.search-result-title:hover{
+    /* 
+       The style for header anchor in the title of a search result card (hover)
+    */
+    
+    color: #5F6469;
+    text-decoration: none;
+}
+
+.search-result-title > h4{
+    /* 
+       The style for header h4 in the title of a search result card
+    */
+    
+    display: inline !important;
 }
 
 

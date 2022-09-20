@@ -159,7 +159,7 @@ function OntologyInfoBox (props) {
             <td className="ontology-overview-table-id-column"><b>Download</b></td>
             <td>
               <Button 
-                  variant="contained" 
+                  variant="contained"               
                   className='download-ontology-btn'
                   startIcon={<DownloadIcon />}
                   href={ontology.config.id}                                                  

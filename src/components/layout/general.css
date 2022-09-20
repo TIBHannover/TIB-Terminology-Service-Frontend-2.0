@@ -48,6 +48,11 @@ p{
     color: #0E6668; 
  }
 
+ button{
+    background-color: #404040 !important;
+    font-size: 14px;
+ }
+
  .term-button{
     /* 
         The style for a button representing a term (class/propperty)
@@ -76,12 +81,12 @@ p{
         The style for a button representing an ontology
     */
 
-    background-color: #E86161;
+    background-color: #bbae9e;
     color: white;
     margin-left: 10px;
     padding: 2px;
     margin-right: 10px;
-    border-color: #E86161;
+    border-color: #bbae9e !important;
 }
 
 .ontology-button:hover{
@@ -90,7 +95,8 @@ p{
     */
 
     text-decoration: none !important;
-    background-color: #f1a6a6 !important;
+    background-color: #bbae9e !important;
+    color: white;
 }
 
 .facet-box{
@@ -141,12 +147,6 @@ p{
     height: auto;
     text-align: justify;
 }
-
- 
- /* .fxOSmo{
-    background-color: #2B3C46 !important;
-    color: white !important;
- } */
 
  .stats-box-text{
     /* 
@@ -203,6 +203,15 @@ p{
     */
 
     text-align: center;
+}
+
+.site-dropdown-menu{
+    /* 
+        General style for the dropdown (select/option) menus in the site.
+    */
+
+    border: none;
+    padding: 5px;
 }
 
 /* 

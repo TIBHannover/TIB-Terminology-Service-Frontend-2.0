@@ -20,14 +20,16 @@ The ontology list page styles.
     float: right;    
 }
 
-#ontologylist-sort-grid> .MuiInputBase-root{
+#ontology-list-sorting{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
     */
 
-    width: 60%;
-    font-size: 15px;
-    /* padding-bottom: 5px; */
+    margin-left: 5px;
+    background-color: white;
+    border-color: white;
+    color: #42484e;
+    margin-top: 5px;
 }
 
 
@@ -126,6 +128,16 @@ The ontology detail page styles. It contains the ontology overview page.
 */
 
 
+.ontology-detail-page-container, .tree-view-container{
+    /* 
+        Style for the ontology detail info containers (all pages under each navbar in the ontology detail view).
+    */
+
+    background-color: white;
+    padding: 10px;
+    margin-top: 0px !important;
+}
+
 .ontology-detail-table, .ontology-metric-table{
     /* 
         The styles for the ontology overview tables (Detail and Metrics) 
@@ -163,7 +175,6 @@ The ontology detail page styles. It contains the ontology overview page.
     margin-left: 20px !important;
     font-size: 10px !important;
     padding: 5px !important;
-    background-color: rgb(32, 128, 73) !important;
     height: 20px;
     width: 20px;
 }
@@ -174,6 +185,8 @@ The ontology detail page styles. It contains the ontology overview page.
     */
 
     margin-right: 20px !important;
+    background-color: #404040 !important;
+    font-size: 14px;
 }
 
 
@@ -206,8 +219,16 @@ The ontology detail page styles. It contains the ontology overview page.
     border-top-left-radius: 25px !important;
     border-top-right-radius: 25px !important;
     color: black !important;
+    border-bottom: none !important;
 }
 
+.MuiTabs-indicator{
+    /* 
+        Remove the border-bottom from the selected tab (Material UI adds this class)
+    */
+
+    background-color: white !important;
+}
 
 
 
@@ -226,12 +247,12 @@ The Tree view and detail table styles (for both classes and properties)
     height: 1000px;
     overflow-y: scroll;
     padding-bottom: 500px !important;
-    padding-top: 50px !important;
+    padding-top: 30px !important;
     z-index: 999;
     padding-left: 10px !important;
     padding-right: 10px !important;
     background-color: white;
-    border-radius: 10px;
+    border-right: 1px solid black;
 }
 
 .node-table-container{
@@ -241,7 +262,7 @@ The Tree view and detail table styles (for both classes and properties)
 
     padding-left: 50px;
     padding-right: 50px;
-    padding-top: 20px;
+    padding-top: 30px;
 }
 
 .reset-tree-btn{
@@ -283,9 +304,7 @@ The Tree view and detail table styles (for both classes and properties)
 
     font-weight: bold !important;
     font-size: 15px !important;
-    background-color: rgb(202, 219, 245);
-    padding: 5px;
-    text-align: center;
+    text-align: left;
 }
 
 .node-metadata-value{
@@ -293,7 +312,6 @@ The Tree view and detail table styles (for both classes and properties)
         The metadata value style for nodes (class/property)  in the detail table. 
     */
 
-    padding: 7px;
     font-size: 15px !important;
 }
 
@@ -330,13 +348,17 @@ The Tree view and detail table styles (for both classes and properties)
     content: "...";
 }
 
+.leaf-node::before{
+    content: "........";
+}
+
 
 .li-label-text:hover{
     /* 
         The style for mouse over a node text on a tree veiw.
     */
 
-    background-color: rgb(188, 188, 238);
+    background-color: rgb(218, 218, 218);
 }
 
 .clicked{
@@ -344,7 +366,7 @@ The Tree view and detail table styles (for both classes and properties)
         The style for a clicked (selected) node in a tree view. 
     */
 
-    background-color: rgb(110, 175, 175);
+    background-color: rgb(199, 199, 199);
     color: black;
     font-weight: bold;
 }
@@ -356,7 +378,8 @@ The Tree view and detail table styles (for both classes and properties)
 
     display: inline !important;
     border: 1px solid;
-    margin-right: 5px;
+    margin-right: 5px;    
+    font-size: 10px !important;
 }
 
 .closed > i{
@@ -364,7 +387,8 @@ The Tree view and detail table styles (for both classes and properties)
         The style for a node expand icon when it is closed and has children nodes.
     */
 
-    color: green;
+    color: gray;
+    margin-right: 8px;
 }
 
 .opened > i{   
@@ -372,7 +396,8 @@ The Tree view and detail table styles (for both classes and properties)
         The style for a node expand icon when it is expanded and has children nodes.
     */
 
-    color: red;
+    color: gray;
+    margin-right: 8px;
 }
 
 .leaf-node > i{  
@@ -399,6 +424,7 @@ The Tree view and detail table styles (for both classes and properties)
     */
 
     float: left;
+    margin-bottom: 10px;
 }
 
 

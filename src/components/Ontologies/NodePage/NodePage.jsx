@@ -124,7 +124,7 @@ class NodePage extends React.Component {
     return (
       <Grid container spacing={2}>
         {this.createTable()}
-        <Grid item xs={12} className="node-detail-table-row" key={"json-button-row"}>
+        <Grid item xs={12}  key={"json-button-row"}>
           <Grid container>
             <a href={this.state.baseUrl + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
               target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>

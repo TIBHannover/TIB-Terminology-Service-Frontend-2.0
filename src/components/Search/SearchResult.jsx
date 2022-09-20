@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../layout/Search.css'
 import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
-import {getAllCollectionsIds} from '../../api/fetchData';
+import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 
@@ -22,9 +22,8 @@ class SearchResult extends React.Component{
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
-          facetFields: [],
-          startIndex: 0,
-          endIndex: 4,  
+          selectedCollections: [],
+          facetFields: [],            
           pageNumber: 1,
           pageSize: 5,       
           isLoaded: false,
@@ -44,7 +43,7 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.handleRedirect = this.handleRedirect.bind(this);
+        this.processUrlProps = this.processUrlProps.bind(this);
     }
 
     async searching(){
@@ -53,8 +52,7 @@ class SearchResult extends React.Component{
       if (enteredTerm.length > 0){
         let searchUrl = "https://service.tib.eu/ts4tib/api/search?q=" + enteredTerm + "&rows=" + this.state.pageSize;
         let searchResult = await fetch(searchUrl)
-        let resultJson = (await searchResult.json());
-        let allCollections = await getAllCollectionsIds();        
+        let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
         let facetFields = resultJson['facet_counts'];
         let paginationResult = resultJson['response']
@@ -68,8 +66,7 @@ class SearchResult extends React.Component{
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm,
-          collections: allCollections
-        });  
+        }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length == 0){
           this.setState({
@@ -82,6 +79,46 @@ class SearchResult extends React.Component{
               collections: []
           });  
       }
+  }
+
+
+  /**
+   * Process the url to check the facet field given in it.
+   */
+  processUrlProps(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let ontologies = targetQueryParams.ontology;
+    let page = targetQueryParams.page;
+    let types = targetQueryParams.type;
+    let collections = targetQueryParams.collection;
+    if(typeof(ontologies) === "string"){
+      ontologies = [ontologies];
+    }
+    else if(typeof(ontologies) === "undefined"){
+      ontologies = [];
+    }
+
+    if(typeof(types) === "string"){
+      types = [types];
+    }
+    else if(typeof(types) === "undefined"){
+      types = [];
+    }
+
+    if(typeof(collections) === "string"){
+      collections = [collections];
+    }
+    else if(typeof(collections) === "undefined"){
+      collections = [];
+    }
+    this.setState({
+      selectedCollections: collections,
+      selectedOntologies: ontologies,
+      selectedTypes: types
+    });
+    this.handleSelection(ontologies, types, collections);
+
+    
   }
 
 
@@ -146,33 +183,6 @@ async suggestionHandler(selectedTerm){
     } 
   }
 
-  handleRedirect(){
-    let searchResultItem = this.state.searchResult
-      for(let i=0; i < searchResultItem.length; i++){
-        if(searchResultItem[i]["type"] === 'class'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-        }
-        else if(searchResultItem[i]["type"] === 'property'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-        else if(searchResultItem[i]["type"] === 'ontology'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-        else if(searchResultItem[i]["type"] === 'individuals'){
-            <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
-              {searchResultItem[i].label}
-            </a>
-          }
-      }
-
-  }
-
 
   /**
      * Create the search results list view
@@ -191,7 +201,7 @@ async suggestionHandler(selectedTerm){
                   if(searchResultItem[i]["type"] === 'class'){
                     return(
                       <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
                       <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
@@ -203,10 +213,10 @@ async suggestionHandler(selectedTerm){
                 else if(searchResultItem[i]["type"] === 'property'){
                   return(
                     <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
+                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
                       {searchResultItem[i].short_form}
                       </a>
                       </div>
@@ -216,20 +226,20 @@ async suggestionHandler(selectedTerm){
                 else if(searchResultItem[i]["type"] === 'ontology'){
                   return(
                     <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
+                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} >
                       {searchResultItem[i].short_form}
                       </a>
                       </div>
 
                   )      
                 }
-                else if(searchResultItem[i]["type"] === 'individuals'){
+                else if(searchResultItem[i]["type"] === 'individual'){
                   return(
                     <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} style={{textDecoration: "none", color: "inherit"}}>
+                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
                         <h4>{searchResultItem[i].label}</h4>
                       </a>
                       <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
@@ -239,9 +249,7 @@ async suggestionHandler(selectedTerm){
 
                   )    
                 }
-                })()}                       
-              
-  
+                })()}                        
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
@@ -270,21 +278,20 @@ async suggestionHandler(selectedTerm){
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
+    for(let typ of types){
+      currentUrlParams.append('type', typ);
+    }
+  
+    for(let ontos of ontologies){
+      currentUrlParams.append('ontology', ontos);
+    }
 
+    for(let col of collections){
+      currentUrlParams.append('collection', col);
+    }
     
-      for(let typ of types){
-        currentUrlParams.append('type', typ);
-      }
-    
-
-    
-      for(let ontos of ontologies){
-        currentUrlParams.append('ontology', ontos);
-      }
-    
-
     currentUrlParams.append('page', this.state.pageNumber);
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
 
@@ -298,20 +305,28 @@ async suggestionHandler(selectedTerm){
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-      ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
-        }) 
-      types.forEach(item => {
-          baseUrl = baseUrl + `&type=${item.toLowerCase()}`
-        })      
-      let targetUrl = await fetch(baseUrl)
-      let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
-      this.updateURL(ontologies, types, collections)
-      this.setState({
-        searchResult: filteredSearchResults,
-        ontologies: ontologies,
-        types: types 
-       })
+    let collectionOntologies = [];
+    if(collections.length !== 0){
+      collectionOntologies = await getCollectionOntologies(collections, false);
+    }
+    ontologies.forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+    });
+    collectionOntologies.forEach(onto => {
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+    });
+    types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+    });
+    let targetUrl = await fetch(baseUrl);
+    let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
+    this.updateURL(ontologies, types, collections);
+    this.setState({
+      searchResult: filteredSearchResults,
+      ontologies: ontologies,
+      types: types,
+      selectedCollections: collections
+      })
      }
   
   /**
@@ -374,9 +389,6 @@ async suggestionHandler(selectedTerm){
   }
 
 
-
-
-
   submitHandler(event){  
     let newEnteredTerm = document.getElementById('search-input').value;
     window.location.replace('/search?q=' + newEnteredTerm);
@@ -400,8 +412,10 @@ async suggestionHandler(selectedTerm){
           <Grid item xs={4}>{this.state.result && 
             <Facet
                facetData = {this.state.facetFields}
-               handleChange = {this.handleSelection}
-               collections = {this.state.collections}
+               handleChange = {this.handleSelection}              
+               selectedCollections = {this.state.selectedCollections}
+               selectedOntologies = {this.state.selectedOntologies}
+               selectedTypes = {this.state.selectedTypes}
             />}
             
           </Grid>

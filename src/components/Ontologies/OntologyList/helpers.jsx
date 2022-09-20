@@ -56,31 +56,33 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     />
                 </Grid>
             </Grid>
-            <Grid container className='ontology-list-facet-section-box'>
-            <h3 className='h-headers'>Collection</h3>
-                <Grid item xs={12} className="facet-box" >
-                    <div className='facet-switch-holder'>
-                        Intersection
-                        <Switch                    
-                            onChange={onSwitchChange}
-                            id="facet-switch"
-                            defaultChecked={true}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                        />
-                        Union
-                    </div>
-                    <div>
-                        {allCollectionsCheckboxes}   
-                    </div>               
+            {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
+                <Grid container className='ontology-list-facet-section-box'>
+                    <h3 className='h-headers'>Collection</h3>
+                    <Grid item xs={12} className="facet-box" >
+                        <div className='facet-switch-holder'>
+                            Intersection
+                            <Switch                    
+                                onChange={onSwitchChange}
+                                id="facet-switch"
+                                defaultChecked={true}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                            Union
+                        </div>
+                        <div>
+                            {allCollectionsCheckboxes}   
+                        </div>               
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container className='ontology-list-facet-section-box'>
+            }
+            {/* <Grid container className='ontology-list-facet-section-box'>
             <h5 className='h-headers'>Last Updated</h5>
                 <Grid item xs={12} className="facet-box">
                 <input type="range"  min="1" max="10" />
                 <span id="lastUpdateRange"> 1 year(s) ago</span>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </Grid> 
     );
 }
@@ -139,21 +141,12 @@ export async function createCollectionsCheckBoxes(filterCollection, selectedColl
         <div className="row facet-item-row">
             <div className='col-sm-9'>
             <FormGroup>
-                {selectedCollections.includes(record['collection'])
-                    ? <FormControlLabel 
-                        control={<Checkbox defaultChecked={true}  onClick={filterCollection} />}
-                        label={record['collection']}
-                        key={record['collection']}                      
-                        value={record['collection']}                        
-                        />
-                    :
-                    <FormControlLabel 
-                        control={<Checkbox  onClick={filterCollection} />}
-                        label={record['collection']}
-                        key={record['collection']}                      
-                        value={record['collection']}                    
-                        />
-                }
+                <FormControlLabel 
+                    control={<Checkbox defaultChecked={selectedCollections.includes(record['collection'])}  onClick={filterCollection} />}
+                    label={record['collection']}
+                    key={record['collection']}
+                    value={record['collection']}
+                />
             </FormGroup>
             </div>
             <div className='col-sm-3'>
