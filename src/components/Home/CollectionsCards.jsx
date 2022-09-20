@@ -1,7 +1,7 @@
 import collectionsInfoJson from "../../assets/collectionsText.json";
 
 
-export function createHomePageContent(readMoreClickHandler){    
+export function createHomePageContent(){    
     let content = [
       <div>
         <br/>

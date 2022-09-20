@@ -8,55 +8,25 @@ class Home extends React.Component{
     this.state=({
        statsResult: []
     })
-    this.Stats = this.Stats.bind(this);
-    this.readMoreClickHandler = this.readMoreClickHandler.bind(this);
+    this.Stats = this.Stats.bind(this);    
   }
 
   async Stats(){
-    if(process.env.REACT_APP_REMOVE_TIB_STATS === "true"){
-      let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatistics`)
+    let statsResult = await fetch(process.env.REACT_APP_STATS_API_URL)
     statsResult = (await statsResult.json());
     this.setState({
       statsResult: statsResult
     })
-    }
-    else{
-      let statsResult = await fetch(`https://service.tib.eu/ts4tib/api/ontologies/getstatisticsbyclassification?schema=collection&classification=NFDI4CHEM`)
-      statsResult = (await statsResult.json());
-      this.setState({
-       statsResult: statsResult
-      })
-    }
-    
-
   }
 
-  /**
-   * Show more text for the collections card on the home page
-   * @param {*} e 
-   */
-  readMoreClickHandler(e){
-    for(let node of e.target.parentNode.children){
-      if(node.nodeName === "P" && node.classList.contains("trunc")){
-        node.classList.remove("trunc");
-        e.target.innerHTML = "[Show Less]";
-      }
-      // else if(node.nodeName === "P" && !node.classList.contains("trunc")){
-      //   node.classList.add("trunc");
-      //   e.target.innerHTML = "[Show More]"
-      // }
-    }
-  }
-
-
-
+ 
   componentDidMount(){
     this.Stats();
   }
     render(){
         return(
         <div>
-            {createHomePageContent(this.readMoreClickHandler)}
+          {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
           <div className="container home-page-stats-container">
               {createStatsBox(this.state.statsResult)}
           </div>
