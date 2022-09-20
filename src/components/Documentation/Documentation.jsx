@@ -1,33 +1,14 @@
-import React from 'react'
+import React from 'react';
+import {tibDoc} from './TIB_doc';
+import {nfdi4chemDoc} from './Nfdi4chem_doc';
 
 
 class Documentation extends React.Component{
     render(){
         return(
             <div className='doc-design'>
-                <br/>
-                {process.env.REACT_APP_SHOW_NFDI4CHEM_DOC === "false" &&
-                <div>
-                <h3>How to use the NFDI4Chem Terminology Service</h3>
-                <p>There are two main ways of browsing the Terminology Service. You can either browse the ontology list available via the ontology menu. You enter the ontology on top level and browse through the tree view to lower levels or you search by a specific term. For this you can use the search box to enter the term that you are looking for. The provided results show all ontologies where the term was found. By using the advanced search, you can further restrict the results to one or multiple ontologies or to a specific 'type'. These types can be class, property or individual. Futhermore, you can restrict searches to one or more ontology. No matter what way of browsing an ontology you choose, your search leads you to the view of a term.</p>
-                <h3>How to use the NFDI4Chem Terminology Service API</h3>
-                <p>Publicly available API commands can also be analyzed and executed from the <strong><a href="http://service.tib.eu/ts4tib/swagger-ui.html">Swagger Documentation</a></strong>. The underlying models can further be viewed through this documentation for a deeper understanding of the API commands. </p>
-                </div>
-                }
-                {process.env.REACT_APP_REMOVE_TIB_DOC === "true" &&
-                <div>
-                <p>This service offers an intuitive search functionality which is based on a SOLR search index on identifiers and terms. TIB Terminology Service can be used both manually and programmatically. Manual access (User Interface) appeals to a larger audience whereas programmatical access (REST Interface) can play a key role in larger contexts. For this reason, they are both essential features of the service. </p>
-                <br/>
-                <h3>User Interface Specification of TIB Terminology Service</h3>
-                <p>There are two main ways of browsing the Terminology Service . You can either browse the available ontologies via the Ontologies tab or you can make search on all available ontologies by using the search box in the main page. If you browse the available ontologies, you should pick an ontology from the list and then you can browse through its tree view to lower levels or you can make a search for a specific term in that particular ontology through its search box. Alternatively, if you make a search from the search box provided in the home page, the results will be displayed based on all ontologies that include the searched term. By using advanced search options, results can be filtered by entity type or ontology. The entity types used for filtering are class, property, individual or ontology respectively. As a result, your search leads you to the graph based view of a term regardless of your browsing methodology. RDF serializations of the latest ontology version are offered as downloads through the service. </p>
-                <br/>
-                <h3>REST Interface for TIB Terminology Service</h3>
-                <p>The service also offers an API that allows to retrieve information on terms and their relations as json data for use in other webservices, e.g. in services of the research data management infrastructure of various research communities. In applications like research data management systems, ontological terms and their unique identifiers can, for example, be used as metadata on research data artifacts - thereby making research (meta)data more findable and interoperable. The REST API interface of the TIB Central Terminology Service starts with http://service.tib.eu/ts4tib/api. This API enables to query all the terminologies of various research communities maintained by TIB. The methodology on how to use this interface is explained in the <a href="https://service.tib.eu/ts4tib/swagger-ui.html">Swagger Documentation</a> in detail. The underlying models can also be viewed through this documentation for a deeper understanding of the API commands. Besides, it is possible to execute the publicly available API commands from the <a href="https://service.tib.eu/ts4tib/swagger-ui.html">Swagger Documentation</a></p>
-                <br/>
-                <h3>Report an Issue</h3>
-                <p>For feedback, enquiries or suggestion about TIB TS or to request a new ontology please use our GitLab issue tracker. For more information, you can contact TIB.</p>
-                 </div>
-                }
+                {process.env.REACT_APP_PROJECT_ID === "general" && tibDoc()}
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && nfdi4chemDoc()}
             </div>
         )
     }
