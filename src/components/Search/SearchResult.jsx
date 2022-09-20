@@ -49,7 +49,7 @@ class SearchResult extends React.Component{
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
       let enteredTerm = targetQueryParams.q
       if (enteredTerm.length > 0){
-        let searchUrl = "https://service.tib.eu/ts4tib/api/search?q=" + enteredTerm + "&rows=" + this.state.pageSize;
+        let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
@@ -143,7 +143,7 @@ class SearchResult extends React.Component{
 
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
-    let searchUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
+    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
     let exactResult = await fetch(searchUrl)
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
@@ -155,7 +155,7 @@ async handleExact(){
 }
 
 async suggestionHandler(selectedTerm){
-  let newSearchResult = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+  let newSearchResult = await fetch(process.env.REACT_APP_SEARCH_URL + `?q=${selectedTerm}`)
   newSearchResult =  (await newSearchResult.json())['response']['docs'];
   this.setState({
       searchResult: newSearchResult,
@@ -303,7 +303,7 @@ async suggestionHandler(selectedTerm){
    */
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
     let collectionOntologies = [];
     if(collections.length !== 0){
       collectionOntologies = await getCollectionOntologies(collections, false);
@@ -361,7 +361,7 @@ async suggestionHandler(selectedTerm){
     let ontologies = this.state.ontologies;
     let types = this.state.types;
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
-    let baseUrl = `https://service.tib.eu/ts4tib/api/search?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize
     if(ontologies.length > 0 || types.length > 0){
       ontologies.forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
