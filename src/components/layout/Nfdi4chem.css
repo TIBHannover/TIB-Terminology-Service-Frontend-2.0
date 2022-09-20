@@ -261,10 +261,8 @@ p{
        The main box for the site header
     */
  
-    background-repeat: no-repeat;
-    background-image: url('../../assets/img/background.png');
     background-position: right center;
-    background-color: #0E6668;
+    background-color: #dbdbdb;
     padding: 10px;
     max-height: 700px;
  }
@@ -431,6 +429,8 @@ p{
      */
    
      margin-top: -5px !important;
+     background-color: #18A5C2;
+     width: 90%;
    }
    
  .navbar-item {
@@ -644,52 +644,7 @@ p{
         The home page main container
     */
 
-    /* padding-top: 3rem !important; */
     padding-bottom: 1.5rem !important;
-}
-
-.collection-card{
-    /* 
-        Style for the collection box on the home page.
-    */
-
-    background-color: white;
-    padding: 20px;
-}
-
-.trunc{
-    /* 
-        Truncating the collection text in the card
-    */
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; 
-}
-
-.collection-card-text{
-    /* 
-        Style for the text part of a collection card
-    */
-
-    margin-top: 20px;
-}
-
-.collection-logo{
-    /* 
-        Collection logo image style
-    */
-
-    width: 400px;
-    height: 200px;
-    padding: 20px;
-    margin-left: 80px;
-}
-
-.coypu-logo{
-    padding: 50px;
 }
 
 .home-page-stats-container{
@@ -707,7 +662,7 @@ p{
     */
 
     color: white;
-    background-color: #005C5F;
+    background-color: #18A5C2;
     padding-top: 10px;
     padding-bottom: 10px;
 }
