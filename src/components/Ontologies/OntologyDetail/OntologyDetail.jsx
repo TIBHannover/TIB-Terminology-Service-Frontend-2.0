@@ -129,7 +129,7 @@ class OntologyDetail extends React.Component {
      */
   async getRootTerms (ontologyId) {
     let rootTerms = await getOntologyRootTerms(ontologyId);
-    if (typeof rootTerms != undefined){
+    if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
         this.setState({
           isRootTermsLoaded: true,
