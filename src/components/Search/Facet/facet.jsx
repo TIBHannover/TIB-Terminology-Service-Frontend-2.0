@@ -36,7 +36,7 @@ class Facet extends React.Component{
      */
     async processFacetData(){        
         let facetData = this.props.facetData;
-        if (facetData.length == 0 || typeof facetData["facet_fields"] == "undefined"){
+        if (facetData.length === 0 || typeof facetData["facet_fields"] === "undefined"){
             this.setState({
                 resultLoaded: true,
                 resultTypes: {},
@@ -63,7 +63,10 @@ class Facet extends React.Component{
                     }                    
                 }
             }
-            let allCollections = await getAllCollectionsIds();  
+            let allCollections = [];
+            if(process.env.REACT_APP_PROJECT_ID === "general"){
+                allCollections = await getAllCollectionsIds();  
+            }            
             this.setState({
                 resultLoaded: true,
                 resultTypes: types,
