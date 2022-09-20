@@ -38,7 +38,7 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href={collectionsInfoJson["NFDI4Chem"]["ontology_list_url"]} className="collection-image-anchor">
-                  <img class="img-fluid collection-logo" alt="NFDI4Chem" src={"/" + collectionsInfoJson["NFDI4Chem"]["logo"]} />
+                  <img class="img-fluid collection-logo" alt="NFDI4Chem" src={collectionsInfoJson["NFDI4Chem"]["logo"]} />
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["NFDI4Chem"]["text"]}</p>
@@ -63,7 +63,7 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href={collectionsInfoJson["FAIR Data Spaces"]["ontology_list_url"]} className="collection-image-anchor">
-                  <img class="img-fluid collection-logo" alt="FAIR Data Spaces"  src={"/" + collectionsInfoJson["FAIR Data Spaces"]["logo"]} />
+                  <img class="img-fluid collection-logo" alt="FAIR Data Spaces"  src={collectionsInfoJson["FAIR Data Spaces"]["logo"]} />
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FAIR Data Spaces"]["text"]}</p>
@@ -88,7 +88,7 @@ export function createHomePageContent(readMoreClickHandler){
           <div className="col-sm-6">
             <div className="collection-card">
               <a href={collectionsInfoJson["FID Baudigital"]["ontology_list_url"]} className="collection-image-anchor">
-                  <img class="img-fluid collection-logo" alt="FID Baudigital"  src={"/" + collectionsInfoJson["FID Baudigital"]["logo"]} />
+                  <img class="img-fluid collection-logo" alt="FID Baudigital"  src={collectionsInfoJson["FID Baudigital"]["logo"]} />
               </a>
               <div className="collection-card-text">
                 <p className="trunc">{collectionsInfoJson["FID Baudigital"]["text"]}</p>
