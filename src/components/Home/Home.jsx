@@ -23,15 +23,16 @@ class Home extends React.Component{
   componentDidMount(){
     this.Stats();
   }
-    render(){
-        return(
-        <div>
-          {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
-          <div className="container home-page-stats-container">
-              {createStatsBox(this.state.statsResult)}
-          </div>
+
+  render(){
+      return(
+      <div>
+        {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
+        <div className="container home-page-stats-container">
+            {createStatsBox(this.state.statsResult)}
         </div>
-        );
-    }
+      </div>
+      );
+  }
 }
 export default Home;
