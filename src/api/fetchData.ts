@@ -10,11 +10,11 @@ const size = 10000;
  * @returns A list
  */
  export async function getAllOntologies (){
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_ONTOLOGY_LIST;
   let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
   answer = await answer.json();
   let ontologiesCount = answer['page']['totalElements'];
-  let targetUrl = OntologiesBaseServiceUrl + '?page=0&size=' + ontologiesCount;
+  let targetUrl = OntologiesBaseServiceUrl + 'page=0&size=' + ontologiesCount;
   return fetch(targetUrl, getCallSetting)
     .then((s) => s.json())
     .then((s) => {
