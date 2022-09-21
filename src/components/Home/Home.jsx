@@ -26,11 +26,13 @@ class Home extends React.Component{
 
   render(){
       return(
-      <div>
-        {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
-        <div className="container home-page-stats-container">
-            {createStatsBox(this.state.statsResult)}
-        </div>
+      <div className="row">
+        <div className="col-sm-12">
+          {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
+          <div className="row justify-content-center home-page-stats-container">
+              {createStatsBox(this.state.statsResult)}
+          </div>
+        </div>        
       </div>
       );
   }

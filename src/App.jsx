@@ -25,7 +25,7 @@ function App() {
      
       <BrowserRouter>
         <Header />
-        <div className='application-content'>
+        <div className='container-fluid application-content'>
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/ts" component={Home}/>

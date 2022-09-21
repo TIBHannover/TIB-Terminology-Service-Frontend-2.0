@@ -19,7 +19,6 @@ body{
        The style for the site body
     */
  
-    background-color: #ECF0F0;   
     color: #42484e;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -29,9 +28,7 @@ body{
     /* 
         The style for the application inner content (between the header and footer)
     */
-
-    margin: auto;
-    width: 70%;
+   
     overflow-x: hidden;
     overflow-y: hidden;
     min-height: 500px;
@@ -173,7 +170,7 @@ p{
     */
 
     background: #2B3C46;
-    margin-top: 75px;
+    /* margin-top: 75px; */
     border-top: 1px #d1d3d9 solid;
     padding-top: 20px;
     color: white;
@@ -650,21 +647,16 @@ p{
 ------------------------
 */
 
-.home-page-content-container{
-    /* 
-        The home page main container
-    */
-
-    padding-bottom: 1.5rem !important;
-}
 
 .home-page-stats-container{
     /* 
         The home page stats container
     */
+    
+    padding: 5%;
+    padding-bottom: 8%;
+    background-color: #CCCCCC;
 
-    padding-top: 3rem !important;
-    padding-bottom: 1.5rem !important;
 }
 
 .stats-box{
@@ -673,9 +665,10 @@ p{
     */
 
     color: white;
-    background-color: #18A5C2;
+    background-color: #00617C;
     padding-top: 10px;
     padding-bottom: 10px;
+    text-align: center;
 }
 
 .show-more-text-link{
