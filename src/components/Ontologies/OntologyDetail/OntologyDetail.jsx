@@ -236,50 +236,52 @@ class OntologyDetail extends React.Component {
       return <div>Loading...</div>
     } else {
       return (
-        <div>          
-          <Tabs
-            value={this.state.activeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            onChange={this.tabChange}
-            aria-label="disabled tabs example"
-          >
-            <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
-            <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
-            <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
-          </Tabs>          
-          {!this.state.waiting && this.state.overViewTab &&
-                        <Grid container key={'ontolofyOverviewPage'} className="ontology-detail-page-container"  spacing={4}>
-                          <Grid item xs={9}>
-                            <OntologyInfoBox ontology={this.state.ontology} />
-                          </Grid>
-                          <Grid item xs={3}>
-                            <OntologyStatsBox ontology={this.state.ontology} />
-                          </Grid>
-                        </Grid>
-          }
-          {!this.state.waiting && this.state.termsTab &&
-                        <DataTree
-                          rootNodes={this.state.rootTerms}
-                          componentIdentity={'term'}
-                          iri={this.state.targetTermIri}
-                          key={'termTreePage'}                    
-                          ontology={this.state.ontologyId}
-                          rootNodeNotExist={this.state.rootNodeNotExist}
-                        />
-          }
+        <div className='row justify-content-center'>
+          <div className='col-sm-8'>
+              <Tabs
+                value={this.state.activeTab}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={this.tabChange}
+                aria-label="disabled tabs example"
+              >
+                <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
+                <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
+                <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
+              </Tabs>          
+              {!this.state.waiting && this.state.overViewTab &&
+                            <Grid container key={'ontolofyOverviewPage'} className="ontology-detail-page-container"  spacing={4}>
+                              <Grid item xs={9}>
+                                <OntologyInfoBox ontology={this.state.ontology} />
+                              </Grid>
+                              <Grid item xs={3}>
+                                <OntologyStatsBox ontology={this.state.ontology} />
+                              </Grid>
+                            </Grid>
+              }
+              {!this.state.waiting && this.state.termsTab &&
+                            <DataTree
+                              rootNodes={this.state.rootTerms}
+                              componentIdentity={'term'}
+                              iri={this.state.targetTermIri}
+                              key={'termTreePage'}                    
+                              ontology={this.state.ontologyId}
+                              rootNodeNotExist={this.state.rootNodeNotExist}
+                            />
+              }
 
-          {!this.state.waiting && this.state.propTab &&
-                        <DataTree
-                          rootNodes={this.state.rootProps}
-                          componentIdentity={'property'}
-                          iri={this.state.targetPropertyIri}
-                          key={'propertyTreePage'}
-                          ontology={this.state.ontologyId}
-                          rootNodeNotExist={this.state.rootNodeNotExist}
-                        />
-          }
-          {this.state.waiting && <CircularProgress />}
+              {!this.state.waiting && this.state.propTab &&
+                            <DataTree
+                              rootNodes={this.state.rootProps}
+                              componentIdentity={'property'}
+                              iri={this.state.targetPropertyIri}
+                              key={'propertyTreePage'}
+                              ontology={this.state.ontologyId}
+                              rootNodeNotExist={this.state.rootNodeNotExist}
+                            />
+              }
+              {this.state.waiting && <CircularProgress />}
+          </div>                    
         </div>
 
       )

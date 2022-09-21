@@ -1029,9 +1029,10 @@ p{
         Style for the ontology detail info containers (all pages under each navbar in the ontology detail view).
     */
 
-    background-color: white;
+    background-color: #f1f1f1;
     padding: 10px;
     margin-top: 0px !important;
+    margin-bottom: 30px !important;
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1094,7 +1095,6 @@ p{
     
     background-color: #ECF0F0 !important;
     border-radius: 25px !important;
-    margin-bottom: 20px;
 }
 
 .MuiTab-root{
@@ -1111,7 +1111,7 @@ p{
         The style for selected tab in the ontolog detail page navbar.
     */
 
-    background-color: white !important;
+    background-color: #f1f1f1 !important;
     border-top-left-radius: 25px !important;
     border-top-right-radius: 25px !important;
     color: black !important;
@@ -1123,7 +1123,7 @@ p{
         Remove the border-bottom from the selected tab (Material UI adds this class)
     */
 
-    background-color: white !important;
+    background-color: #f1f1f1 !important;
 }
 
 
