@@ -262,7 +262,7 @@ p{
     */
  
     background-position: right center;
-    background-color: #dbdbdb;
+    background-color: white;
     padding: 10px;
     max-height: 700px;
  }
@@ -441,7 +441,7 @@ p{
      */
    
      margin-top: -5px !important;
-     background-color: #18A5C2;
+     background-color: white;
      width: 90%;
    }
    
@@ -449,21 +449,17 @@ p{
      /* 
         The style for elements in navbar
      */
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     margin-left: 30px;
-     color: inherit;
-     text-decoration: inherit;
+     
+     margin-left: 10px;
      text-transform: uppercase;
      outline: none;
-     color: white;
+     color: #00617C;
      font-weight: bold;
-     font-size: 18px;
+     font-size: 16px;
    }
  
    .navbar-item:hover{
-       color: white !important;
+       color: #00617C !important;
        text-decoration: underline !important;
    }
  
@@ -486,9 +482,12 @@ p{
     }
  
  .nav-clicked{
+    /* 
+        A clicked nabvar item style
+    */
+
     text-decoration: underline;
-    font-weight: bold;
-    
+    font-weight: bold;    
  }
  
 

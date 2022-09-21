@@ -9,7 +9,7 @@ function Navbar () {
             <i class="fa fa-bars collpase-btn-content"></i>
           </button>  
             <div class="collapse navbar-collapse" id="siteMainNavbar">
-              <ul class="navbar-nav">
+              <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                 {urlPath === "/" || urlPath === "/ts" 
                   ? <a class="nav-link navbar-item nav-clicked" href="/">Home</a>
