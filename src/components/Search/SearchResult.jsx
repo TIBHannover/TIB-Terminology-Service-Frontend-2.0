@@ -450,34 +450,35 @@ async suggestionHandler(selectedTerm){
 
   render(){
     return(
-      <div id="searchterm-wrapper">
-        {/* <div>
-        <a className='btn btn-primary' onClick={this.handleExact}>Exact Match</a>
-              {this.state.suggestResult &&
-            <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-        </div>         */}
-        <Grid container spacing={2}>
-          <Grid item xs={4}>{this.state.result && 
-            <Facet
-               facetData = {this.state.facetFields}
-               handleChange = {this.handleSelection}              
-               selectedCollections = {this.state.selectedCollections}
-               selectedOntologies = {this.state.selectedOntologies}
-               selectedTypes = {this.state.selectedTypes}
-            />}
-            
-          </Grid>
-          <Grid item xs={8} id="search-list-grid">
-              <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
-              {this.createSearchResultList()}              
-              <Pagination 
-                clickHandler={this.handlePagination} 
-                count={this.pageCount()}
-                initialPageNumber={this.state.pageNumber}          
-              />
+      <div className='row justify-content-center' id="searchterm-wrapper">
+        <div className='col-sm-8'>
+            {/* <div>
+          <a className='btn btn-primary' onClick={this.handleExact}>Exact Match</a>
+                {this.state.suggestResult &&
+              <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
+          </div>         */}
+          <Grid container spacing={2}>
+            <Grid item xs={4}>{this.state.result && 
+              <Facet
+                facetData = {this.state.facetFields}
+                handleChange = {this.handleSelection}              
+                selectedCollections = {this.state.selectedCollections}
+                selectedOntologies = {this.state.selectedOntologies}
+                selectedTypes = {this.state.selectedTypes}
+              />}
+              
             </Grid>
-          </Grid>
-        
+            <Grid item xs={8} id="search-list-grid">
+                <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
+                {this.createSearchResultList()}              
+                <Pagination 
+                  clickHandler={this.handlePagination} 
+                  count={this.pageCount()}
+                  initialPageNumber={this.state.pageNumber}          
+                />
+              </Grid>
+            </Grid>
+        </div>                
       </div>
     )
   }
