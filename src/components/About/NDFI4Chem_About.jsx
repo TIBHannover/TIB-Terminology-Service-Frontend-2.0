@@ -16,7 +16,7 @@ export function nfdi4chmeAbout(){
                 </p>
                 <h3>Description of NFDI4Chem consortium</h3>
                 <br/>
-                <img src={collectionsInfoJson["NFDI4Chem"]["logo"]} alt="nfdi4chemservice"/>
+                <img src={collectionsInfoJson["NFDI4Chem"]["logo"]} alt="nfdi4chemservice" height={250} width={350} />
                 <br/><br/>
                 <p>
                     As part of the outstanding National Research Data Infrastructure (NFDI) initiative for Germany as a center of science, 
