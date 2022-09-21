@@ -1,6 +1,4 @@
 import React from 'react'
-import {  TextField} from '@material-ui/core';
-
 
 
 class SearchForm extends React.Component{
@@ -147,20 +145,23 @@ class SearchForm extends React.Component{
 
       render(){
           return(
-              <div>
-                   <TextField className="col-md-12 input" id="s-field" variant="outlined" 
+              <div className='col-sm-10'>
+                <div class="input-group input-group-lg">
+                  <input 
+                    type="text" 
+                    class="form-control search-input" 
+                    placeholder="Search for ontology, term, properties" 
+                    aria-describedby="basic-addon2"
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
-                    placeholder="Search for ontology, term, properties"                    
-                    InputProps={{
-                        endAdornment: (
-                          <button className='btn btn-default search-btn' onClick={this.submitHandler}>Search </button>                      
-                        ),
-                        autocomplete: 'new-password'                    
-                      }}                
-                    />
-                    
-                    {this.state.result &&
+                    id="s-field"
+                    ></input>
+                  <div class="input-group-append">
+                    <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
+                  </div>
+                </div>
+                                      
+                {this.state.result &&
                 <div id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
                 <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">

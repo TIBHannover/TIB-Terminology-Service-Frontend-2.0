@@ -27,7 +27,7 @@ function Header () {
             </div>
             <Navbar />
           </div>
-          <div className='row site-header-searchbox-holder'>
+          <div className='row justify-content-center site-header-searchbox-holder'>
             <SearchForm />
           </div>
       </div>
