@@ -908,14 +908,6 @@ p{
 */
 
 
-#ontologylist-sort-grid > div{
-    /* 
-        The styles for sort type drop-down menu container in the ontology list view.
-    */
-
-    float: right;    
-}
-
 #ontology-list-sorting{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
@@ -926,6 +918,10 @@ p{
     border-color: white;
     color: #42484e;
     margin-top: 5px;
+}
+
+#ontologylist-sort-grid > div{
+    /* display: inline; */
 }
 
 

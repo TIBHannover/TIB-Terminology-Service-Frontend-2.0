@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -41,11 +40,10 @@ export function BuildCollectionForCard(collections){
  */
 export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredKeyword, onSwitchChange){
     return (
-        <Grid item xs={4} id="ontology-list-facet-grid">
-            <br/>
+        <div className='col-sm-4' id="ontology-list-facet-grid">            
             <h3 className='ontology-list-facet-header'>Filter</h3>            
-            <Grid container>
-                <Grid item xs={12} id="ontologylist-search-grid">
+            <div className='row'>
+                <div className='col-sm-12' id="ontologylist-search-grid">
                     <TextField
                     label="By keyword"
                     type="search"
@@ -54,12 +52,12 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     value={enteredKeyword !== "" ? enteredKeyword : ""}
                     InputLabelProps={{ style: { fontSize: 15 } }}
                     />
-                </Grid>
-            </Grid>
+                </div>
+            </div>
             {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
-                <Grid container className='ontology-list-facet-section-box'>
+                <div className='row ontology-list-facet-section-box'>
                     <h3 className='h-headers'>Collection</h3>
-                    <Grid item xs={12} className="facet-box" >
+                    <div  className="col-sm-12 facet-box" >
                         <div className='facet-switch-holder'>
                             Intersection
                             <Switch                    
@@ -73,17 +71,10 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                         <div>
                             {allCollectionsCheckboxes}   
                         </div>               
-                    </Grid>
-                </Grid>
-            }
-            {/* <Grid container className='ontology-list-facet-section-box'>
-            <h5 className='h-headers'>Last Updated</h5>
-                <Grid item xs={12} className="facet-box">
-                <input type="range"  min="1" max="10" />
-                <span id="lastUpdateRange"> 1 year(s) ago</span>
-                </Grid>
-            </Grid> */}
-        </Grid> 
+                    </div>
+                </div>
+            }            
+        </div> 
     );
 }
 

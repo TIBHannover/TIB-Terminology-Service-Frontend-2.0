@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
@@ -328,8 +327,8 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
     for (let i = 0; i < this.state.ontologies.length; i++) {
       let item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
-            <Grid container className="result-card" id={'ontology_' + i} key={item.ontologyId}>
-              <Grid item xs={9}>
+            <div className="row result-card" id={'ontology_' + i} key={item.ontologyId}>
+              <div className='col-sm-9'>
                 <div className="ontology-card-title-section">                            
                   <a  href={'/ontologies/' + item.ontologyId} className='ontology-button btn btn-primary'>{item.ontologyId}</a>
                   <a  href={'/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{item.config.title}</b></a>
@@ -344,15 +343,15 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                     : "-"
                     }
                 </div>
-              </Grid>
-              <Grid item xs={3} className="ontology-card-meta-data">
+              </div>
+              <div className="col-sm-3 ontology-card-meta-data">
                 <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
                 <hr/>
                 <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
                 <hr />
                 <span className='ontology-meta-data-field-span'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
-              </Grid>
-            </Grid>                    
+              </div>
+            </div>                    
       )
     }
 
@@ -376,34 +375,32 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
       return (
         <div className='row justify-content-center' id="ontologyList-wrapper-div">
           <div className='col-sm-8'>
-            <Grid container spacing={3}>
+            <div className='row'>
               {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
-              <Grid item xs={8} id="ontology-list-grid">
-                <Grid container id="ontology-list-top-row">
-                  <Grid item xs={6}>
-                    <br/>
+              <div className='col-sm-8' id="ontology-list-grid">
+                <div className='row' id="ontology-list-top-row">
+                  <div className='col-sm-8'>                    
                     <h3 className='h-headers'>Browse Ontologies</h3>
-                  </Grid>
-                  <Grid item xs={6}  id="ontologylist-sort-grid">
-                    <div>
-                      <br/>
-                      <label for="ontology-list-sorting">sorted by</label>
+                  </div>
+                  <div className='col-sm-4 form-inline'  id="ontologylist-sort-grid">
+                    <div class="form-group">
+                      <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
                         <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
                         <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
                         <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
-                      </select>                  
-                    </div>          
-                  </Grid>
-                </Grid>              
+                      </select>  
+                    </div>                                                                                
+                  </div>
+                </div>              
                 {this.createOntologyList()}              
                 <Pagination 
                   clickHandler={this.handlePagination} 
                   count={this.pageCount()}
                   initialPageNumber={this.state.pageNumber}               
                 />
-              </Grid>
-            </Grid>
+              </div>
+            </div>
           </div>          
         </div>
 
