@@ -349,9 +349,8 @@ p{
     /* 
         The style for the site title
      */
-    color: #ffffff;
+    color: #009CBC;
     text-decoration: none;
-    margin-left: 10px;
     font-size: 18px;
  }
  
@@ -359,7 +358,7 @@ p{
     /* 
         The style for the site title hover
      */
-    color: #ffffff;
+    color: #005D70;
     text-decoration: none;
  }
    
@@ -379,9 +378,9 @@ p{
         The style for the site logo image 
     */
 
-    height: 250px;
-    width: 350px;
-    margin-top: -60px;
+    height: 100px;
+    width: 150px;
+    margin-top: -20px;
 
 }
    

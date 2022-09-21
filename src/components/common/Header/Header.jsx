@@ -15,8 +15,11 @@ function Header () {
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>
-              {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && 
-                <img src={collectionsInfoJson["NFDI4Chem"]["logo"]} alt="nfdi4chem_logo" className='site-logo-image'/>
+              {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
+                <span>
+                  <img src="/chem_small_logo.PNG" alt="nfdi4chem_logo" className='site-logo-image'/>
+                  <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
+                </span>                 
               }
               {process.env.REACT_APP_PROJECT_ID === "general" && 
                 <span>
