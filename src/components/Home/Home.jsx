@@ -1,6 +1,7 @@
 import React from "react";
 import {createStatsBox} from './StatsBox';
 import {createHomePageContent} from './CollectionsCards';
+import {nfdi4chemHomePage} from './Nfdi4chem_home';
 
 class Home extends React.Component{
   constructor(props){
@@ -29,6 +30,7 @@ class Home extends React.Component{
       <div className="row">
         <div className="col-sm-12">
           {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
+          {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && nfdi4chemHomePage()}
           <div className="row justify-content-center home-page-stats-container">
               {createStatsBox(this.state.statsResult)}
           </div>
