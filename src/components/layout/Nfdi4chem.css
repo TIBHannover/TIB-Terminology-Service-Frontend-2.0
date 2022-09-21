@@ -221,7 +221,7 @@ p{
         General style for the dropdown (select/option) menus in the site.
     */
 
-    border: none;
+    border: 1px solid #00617C !important;
     padding: 5px;
 }
 

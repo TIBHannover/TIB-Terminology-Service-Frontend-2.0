@@ -374,35 +374,37 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
       return <div>Loading...</div>
     } else {
       return (
-        <div id="ontologyList-wrapper-div">
-          <Grid container spacing={3}>
-            {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
-            <Grid item xs={8} id="ontology-list-grid">
-              <Grid container id="ontology-list-top-row">
-                <Grid item xs={6}>
-                  <br/>
-                  <h3 className='h-headers'>Browse Ontologies</h3>
-                </Grid>
-                <Grid item xs={6}  id="ontologylist-sort-grid">
-                  <div>
+        <div className='row justify-content-center' id="ontologyList-wrapper-div">
+          <div className='col-sm-8'>
+            <Grid container spacing={3}>
+              {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
+              <Grid item xs={8} id="ontology-list-grid">
+                <Grid container id="ontology-list-top-row">
+                  <Grid item xs={6}>
                     <br/>
-                    <label for="ontology-list-sorting">sorted by</label>
-                    <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
-                      <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
-                      <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
-                      <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
-                    </select>                  
-                  </div>          
-                </Grid>
-              </Grid>              
-              {this.createOntologyList()}              
-              <Pagination 
-                clickHandler={this.handlePagination} 
-                count={this.pageCount()}
-                initialPageNumber={this.state.pageNumber}               
-              />
+                    <h3 className='h-headers'>Browse Ontologies</h3>
+                  </Grid>
+                  <Grid item xs={6}  id="ontologylist-sort-grid">
+                    <div>
+                      <br/>
+                      <label for="ontology-list-sorting">sorted by</label>
+                      <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
+                        <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
+                        <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
+                        <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
+                      </select>                  
+                    </div>          
+                  </Grid>
+                </Grid>              
+                {this.createOntologyList()}              
+                <Pagination 
+                  clickHandler={this.handlePagination} 
+                  count={this.pageCount()}
+                  initialPageNumber={this.state.pageNumber}               
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          </div>          
         </div>
 
       )
