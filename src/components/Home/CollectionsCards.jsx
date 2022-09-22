@@ -3,7 +3,7 @@ import collectionsInfoJson from "../../assets/collectionsText.json";
 
 export function createHomePageContent(){    
     let content = [
-      <div>
+      <div className="general-home-page-content">
         <br/>
         <div className="row">
           <div>

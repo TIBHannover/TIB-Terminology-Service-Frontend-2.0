@@ -23,6 +23,7 @@ body{
     color: #42484e;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
+    overflow-x: hidden;
  }
 
  .application-content{
@@ -30,8 +31,6 @@ body{
         The style for the application inner content (between the header and footer)
     */
 
-    margin: auto;
-    width: 70%;
     overflow-x: hidden;
     overflow-y: hidden;
     min-height: 500px;
@@ -431,18 +430,15 @@ p{
      */
    
      margin-top: -5px !important;
+     width: 90%;
    }
    
  .navbar-item {
      /* 
         The style for elements in navbar
      */
-     display: flex;
-     justify-content: center;
-     align-items: center;
+    
      margin-left: 30px;
-     color: inherit;
-     text-decoration: inherit;
      text-transform: uppercase;
      outline: none;
      color: white;
@@ -474,6 +470,10 @@ p{
     }
  
  .nav-clicked{
+    /* 
+        A clicked nabvar item style
+    */
+
     text-decoration: underline;
     font-weight: bold;
     
@@ -639,13 +639,13 @@ p{
 ------------------------
 */
 
-.home-page-content-container{
+.general-home-page-content{
     /* 
-        The home page main container
+        Style for the home page content above the stats box
     */
 
-    /* padding-top: 3rem !important; */
-    padding-bottom: 1.5rem !important;
+    padding-left: 15%;
+    padding-right: 15%;    
 }
 
 .collection-card{
@@ -697,8 +697,8 @@ p{
         The home page stats container
     */
 
-    padding-top: 3rem !important;
-    padding-bottom: 1.5rem !important;
+    padding-top: 60px;
+    padding-bottom: 8%;    
 }
 
 .stats-box{
@@ -710,6 +710,7 @@ p{
     background-color: #005C5F;
     padding-top: 10px;
     padding-bottom: 10px;
+    text-align: center;
 }
 
 .show-more-text-link{
@@ -721,7 +722,7 @@ p{
     font-size: 13px;
 }
 
-@media only screen and (max-width: 1500px) and (min-width: 1026px) {
+@media only screen and (max-width: 1500px) and (min-width: 1026px) {        
     .collection-card{
         /* 
             Style for the collection box on the home page.
@@ -743,6 +744,15 @@ p{
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
+    .general-home-page-content{
+        /* 
+            Style for the home page content above the stats box
+        */
+    
+        padding-left: 5%;
+        padding-right: 5%;    
+    }
+    
     .collection-card{
         /* 
             Style for the collection box on the home page.
@@ -763,6 +773,15 @@ p{
   }
 
   @media only screen and (max-width: 900px){
+    .general-home-page-content{
+        /* 
+            Style for the home page content above the stats box
+        */
+    
+        padding-left: 5%;
+        padding-right: 5%;    
+    }
+
     .collection-card{
         /* 
             Style for the collection box on the home page.
@@ -802,7 +821,6 @@ p{
     padding-right: 10px;
     background-color: white;
     width: 400px;
-    margin-left: 85px;
     text-align: left;
 }
 .autocomplete-item{
@@ -828,7 +846,6 @@ p{
     padding-right: 10px;
     background-color: white;
     width: 400px;
-    margin-left: 85px;
     text-align: left;
     padding-left: 10px;
 }
@@ -846,36 +863,13 @@ p{
         border-right: 0;
 }
 
-.MuiFormControl-root.MuiTextField-root.input{
-    /* 
-       The style for search form input in search results page
-    */
-    
-    background-color: white;
-    max-width: 83.33333%;
-    height:50px !important;    
-}
-
-#s-field{
-    /* 
-        Style for the search input text field (<input> html tag inside the "MuiFormControl-root MuiTextField-root.input")
-    */
-
-    font-size: 1.25rem !important;
-    padding-top: 15px;
-}
-
 .search-btn{
     /* 
         Style for the search button
     */
 
     background-color: #23272B;
-    color: white;
-    margin-right: -14px;
-    height: 50px !important;
-    border-radius: 0;
-    margin-top:  -7px;
+    color: white;   
 }
 
 .search-btn:hover{
@@ -885,14 +879,6 @@ p{
 
     background-color: #23272B;
     color: white;
-}
-
-.MuiInputBase-root.MuiOutlinedInput-root > fieldset{
-    /* 
-        Remove the border added by material Ui around the input field box.
-    */
-
-    border-style: none !important;
 }
 
 
@@ -970,15 +956,6 @@ p{
 -------------------------------------
 */
 
-
-#ontologylist-sort-grid > div{
-    /* 
-        The styles for sort type drop-down menu container in the ontology list view.
-    */
-
-    float: right;    
-}
-
 #ontology-list-sorting{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
@@ -1015,6 +992,7 @@ p{
     */
 
     margin-bottom: 25px;
+    margin-left: -7px;
 }
 
 .ontology-card-meta-data{
@@ -1023,6 +1001,10 @@ p{
     */
 
     padding-left: 40px;
+}
+
+#ontologylist-search-grid{
+    padding-left: 0px;
 }
 
 #ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root{

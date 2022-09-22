@@ -56,7 +56,7 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             </div>
             {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
                 <div className='row ontology-list-facet-section-box'>
-                    <h3 className='h-headers'>Collection</h3>
+                    <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
                     <div  className="col-sm-12 facet-box" >
                         <div className='facet-switch-holder'>
                             Intersection

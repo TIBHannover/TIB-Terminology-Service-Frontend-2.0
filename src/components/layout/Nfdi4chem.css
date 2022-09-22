@@ -846,9 +846,7 @@ p{
     overflow-x: hidden;
     overflow-y: hidden;
     padding-top: 20px;
-
 }
-
 
 .searchresult-card-description{
     /* 
@@ -918,10 +916,6 @@ p{
     border-color: white;
     color: #42484e;
     margin-top: 5px;
-}
-
-#ontologylist-sort-grid > div{
-    /* display: inline; */
 }
 
 
