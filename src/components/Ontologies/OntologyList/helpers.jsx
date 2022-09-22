@@ -125,7 +125,7 @@ export function ontology_has_searchKey(ontology, value){
 
 
 export async function createCollectionsCheckBoxes(filterCollection, selectedCollections){
-    let allCollections = await getAllCollectionsIds();
+    let allCollections = await getAllCollectionsIds();    
     let result = [];
     for (let record of allCollections){
         result.push(

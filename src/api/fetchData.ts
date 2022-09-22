@@ -210,13 +210,13 @@ function nodeExistInList(nodesList: Array<any>, nodeIri:string){
  */
 export async function getAllCollectionsIds() {
   let url = <any> process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
-  let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_BASE_URL;
+  let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_URL;
   let cols =  await fetch(url, getCallSetting);
   cols = await cols.json();
   let collections = cols['_embedded']["strings"];
   let result: Array<any> = [];
   for( let col of collections ){
-    let statsUrl = StatsBaseUrl + "classification=" + col['content'];
+    let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
     let statsResult = await fetch(statsUrl, getCallSetting);
     statsResult = await statsResult.json();
     let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
