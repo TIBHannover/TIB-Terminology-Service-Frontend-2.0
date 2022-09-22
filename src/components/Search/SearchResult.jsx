@@ -332,10 +332,10 @@ async suggestionHandler(selectedTerm){
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let collectionOntologies = [];
-    if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){          
+    let collectionOntologies = [];   
+    if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && ontologies.length === 0){          
       /**
-       * search only in the target project ontologies
+       * No collection selectedsearch only in the target project ontologies
        */
       collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);
       collectionOntologies.forEach(onto => {
