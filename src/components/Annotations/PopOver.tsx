@@ -24,7 +24,9 @@ export default (props: React.PropsWithChildren<{ trigger: ReactNode }>) => {
         {React.Children.map(props.children, (child) => {
           // checking isValidElement is the safe way and avoids a typescript error too
           if (React.isValidElement(child)) {
-            return React.cloneElement(child, { isPopoverOpen: isPopoverOpen })
+            
+            // --> this line creates error on build <---
+            // return React.cloneElement(child, { isPopoverOpen: isPopoverOpen })
           } else {
             return child
           }
