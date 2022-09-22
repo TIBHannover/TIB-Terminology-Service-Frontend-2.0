@@ -1,6 +1,5 @@
 import React from 'react';
 import 'font-awesome/css/font-awesome.min.css';
-import Grid from '@material-ui/core/Grid';
 import NodePage from '../NodePage/NodePage';
 import Button from '@mui/material/Button';
 import { withRouter } from 'react-router-dom';
@@ -421,20 +420,19 @@ componentDidUpdate(){
 
 render(){
   return(
-    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} > 
-        <Grid item xs={6} className="tree-container">
+    <div className="row tree-view-container" onClick={(e) => this.processClick(e)} > 
+        <div className="col-sm-6 tree-container">
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
-          <Grid container>
-            <Grid item xs={10}>
+          <div className='row'>
+            <div className='col-sm-10'>
               {this.state.treeDomContent}
-            </Grid>
-            <Grid item xs={2}>
+            </div>
+            <div className='col-sm-2'>
               <Button 
                     variant="contained" 
-                    className='tree-action-btn' 
-                    // startIcon={<RestartAltIcon />}
+                    className='tree-action-btn'                     
                     onClick={this.resetTree}
                     >
                     Reset
@@ -463,30 +461,30 @@ render(){
                     }                    
                 </Button>
               } 
-            </Grid>
-          </Grid>}
-        </Grid>
+            </div>
+          </div>}
+        </div>
         {this.state.termTree && this.state.showNodeDetailPage && 
-          <Grid item xs={6} className="node-table-container">
+          <div className="col-sm-6 node-table-container">
             <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
               componentIdentity="term"
               extractKey="terms"
             />
-        </Grid>
+        </div>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
-          <Grid item xs={6} className="node-table-container">
+          <div className="col-sm-6 node-table-container">
           <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
               componentIdentity="property"
               extractKey="properties"
           />
-        </Grid>
+        </div>
         }
-    </Grid>  
+    </div>  
   )
 }
 

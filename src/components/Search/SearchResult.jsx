@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
 import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
@@ -222,8 +221,8 @@ async suggestionHandler(selectedTerm){
       const SearchResultList = [];
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
-          <Grid container className="result-card" key={searchResultItem[i]['id']}>
-            <Grid item xs={12}>
+          <div className="row result-card" key={searchResultItem[i]['id']}>
+            <div className='col-sm-12'>
                 {(() => {
                   if(searchResultItem[i]["type"] === 'class'){
                     return(
@@ -289,8 +288,8 @@ async suggestionHandler(selectedTerm){
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
-            </Grid>
-          </Grid>   
+            </div>
+          </div>   
         )
       }       
         return SearchResultList
@@ -457,8 +456,8 @@ async suggestionHandler(selectedTerm){
                 {this.state.suggestResult &&
               <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
           </div>         */}
-          <Grid container spacing={2}>
-            <Grid item xs={4}>{this.state.result && 
+          <div className='row'>
+            <div className='col-sm-4'>{this.state.result && 
               <Facet
                 facetData = {this.state.facetFields}
                 handleChange = {this.handleSelection}              
@@ -467,8 +466,8 @@ async suggestionHandler(selectedTerm){
                 selectedTypes = {this.state.selectedTypes}
               />}
               
-            </Grid>
-            <Grid item xs={8} id="search-list-grid">
+            </div>
+            <div className='col-sm-8' id="search-list-grid">
                 <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
                 {this.createSearchResultList()}              
                 <Pagination 
@@ -476,8 +475,8 @@ async suggestionHandler(selectedTerm){
                   count={this.pageCount()}
                   initialPageNumber={this.state.pageNumber}          
                 />
-              </Grid>
-            </Grid>
+              </div>
+            </div>
         </div>                
       </div>
     )

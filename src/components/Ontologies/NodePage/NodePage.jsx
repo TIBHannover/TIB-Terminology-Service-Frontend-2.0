@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
@@ -12,8 +11,6 @@ class NodePage extends React.Component {
     super(props)
     this.state = ({
       data: true,
-      label_xs: 4,
-      value_xs: 8,
       iriIsCopied: false,
       prevNode: "",
       componentIdentity: ""
@@ -48,12 +45,12 @@ class NodePage extends React.Component {
    */
   createRow(metadataLabel, metadataValue, copyButton){
     let row = [
-      <Grid item xs={12}  className="node-detail-table-row" key={metadataLabel}>
-          <Grid container>
-            <Grid item sm={this.state.label_xs} md={this.state.label_xs - 1}  key={metadataLabel + "-label"}>
+      <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
+          <div className='row'>
+            <div className="col-sm-4 col-md-3 node-metadata-value" key={metadataLabel + "-label"}>
               <Typography className="node-metadata-label">{metadataLabel}</Typography>
-            </Grid>
-            <Grid item sm={this.state.value_xs} md={this.state.value_xs + 1} className="node-metadata-value" key={metadataLabel + "-value"}>
+            </div>
+            <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
               {formatText(metadataLabel, metadataValue, copyButton)}
               {copyButton &&
                 <Button 
@@ -74,9 +71,9 @@ class NodePage extends React.Component {
                       key={"copy-check-sign"}           
                     />
               }    
-            </Grid>
-          </Grid>
-        </Grid>
+            </div>
+          </div>
+        </div>
     ];
 
     return row;
@@ -120,15 +117,17 @@ class NodePage extends React.Component {
 
   render () {    
     return (
-      <Grid container spacing={2}>
+      <div className='row'>
         {this.createTable()}
-        <Grid item xs={12}  key={"json-button-row"}>
-          <Grid container>
-            <a href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
-              target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
-          </Grid>
-        </Grid>
-      </Grid>
+        <div className='col-sm-12'  key={"json-button-row"}>
+          <div className='row'>
+            <div className='col-sm-12 node-metadata-value'>
+              <a href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
+                target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
+            </div>            
+          </div>
+        </div>
+      </div>
     )
   }
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import OntologyInfoBox from './widgets/infoBox'
 import OntologyStatsBox from './widgets/stats';
-import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -250,14 +249,14 @@ class OntologyDetail extends React.Component {
                 <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
               </Tabs>          
               {!this.state.waiting && this.state.overViewTab &&
-                            <Grid container key={'ontolofyOverviewPage'} className="ontology-detail-page-container"  spacing={4}>
-                              <Grid item xs={9}>
+                            <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
+                              <div className='col-sm-9'>
                                 <OntologyInfoBox ontology={this.state.ontology} />
-                              </Grid>
-                              <Grid item xs={3}>
+                              </div>
+                              <div className='col-sm-3'>
                                 <OntologyStatsBox ontology={this.state.ontology} />
-                              </Grid>
-                            </Grid>
+                              </div>
+                            </div>
               }
               {!this.state.waiting && this.state.termsTab &&
                             <DataTree

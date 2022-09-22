@@ -1254,6 +1254,8 @@ p{
     */
 
     font-size: 15px !important;
+    padding-bottom: 10px;
+    padding-top: 5px;
 }
 
 .node-detail-table-row{
@@ -1366,6 +1368,7 @@ p{
 
     float: left;
     margin-bottom: 10px;
+    margin-top: 2px;
 }
 
 
