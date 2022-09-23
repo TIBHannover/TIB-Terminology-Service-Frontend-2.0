@@ -127,14 +127,20 @@ export async function createCollectionsCheckBoxes(filterCollection, selectedColl
         result.push(
         <div className="row facet-item-row">
             <div className='col-sm-9'>
-            <FormGroup>
-                <FormControlLabel 
-                    control={<Checkbox defaultChecked={selectedCollections.includes(record['collection'])}  onClick={filterCollection} />}
-                    label={record['collection']}
-                    key={record['collection']}
-                    value={record['collection']}
-                />
-            </FormGroup>
+                <div class="form-check">
+                    <input 
+                        class="form-check-input collection-checkbox"
+                        type="checkbox" 
+                        value={record['collection']}
+                        id={"col-checkbox-" + record['collection']} 
+                        key={record['collection']}
+                        onClick={filterCollection}
+                        data-isChecked={selectedCollections.includes(record['collection'])}
+                    />                    
+                    <label class="form-check-label" for={"col-checkbox-" + record['collection']} >
+                       {record['collection']}
+                    </label>
+                </div>
             </div>
             <div className='col-sm-3'>
                 <span class="facet-result-count">{record['ontologiesCount']}</span>
