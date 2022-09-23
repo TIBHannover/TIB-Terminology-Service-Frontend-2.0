@@ -50,11 +50,10 @@ function OntologyInfoBox (props) {
                       setOntologyTrackerCopied(false);
                     }}
                     >
-                      copy
+                      copy {ontologyIriCopied && <i class="fa fa-check" aria-hidden="true"></i>}
                     </button>          
               : ""
-              }
-              {ontologyIriCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+              }              
             </td>
           </tr>         
           <tr>
@@ -73,11 +72,10 @@ function OntologyInfoBox (props) {
                       setOntologyTrackerCopied(false);
                     }}
                     >
-                      copy
+                      copy {ontologyHomepageCopied && <i class="fa fa-check" aria-hidden="true"></i>}
                     </button>  
                 : ""
-              }
-              {ontologyHomepageCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+              }              
             </td>
           </tr>
           <tr>
@@ -96,11 +94,10 @@ function OntologyInfoBox (props) {
                       setOntologyTrackerCopied(true);
                     }}
                     >
-                      copy
+                      copy {ontologyTrackerCopied && <i class="fa fa-check" aria-hidden="true"></i>}
                     </button>  
                 : ""
-                }
-              {ontologyTrackerCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                }              
             </td>
           </tr>         
           <tr>

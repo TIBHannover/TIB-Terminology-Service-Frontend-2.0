@@ -250,9 +250,8 @@ p{
         Checked icon style (copy url checked)
     */
 
-    border: none !important;
-    font-size: 20px !important;
-    margin-left: 20px;
+    border: none !important;    
+    margin-left: 1px;
 }
 
 @media only screen and (max-width: 1025px) {
