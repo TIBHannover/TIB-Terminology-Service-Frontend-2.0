@@ -66,7 +66,7 @@ function OntologyInfoBox (props) {
                     type="button" 
                     class="btn btn-secondary btn-sm copy-link-btn"
                     onClick={() => {                  
-                      navigator.clipboard.writeText(ontology.config.id);
+                      navigator.clipboard.writeText(ontology.config.homepage);
                       setOntologyIriCopied(false);
                       setOntologyVersionCopied(false);
                       setOntologyHomepageCopied(true);
@@ -89,7 +89,7 @@ function OntologyInfoBox (props) {
                     type="button" 
                     class="btn btn-secondary btn-sm copy-link-btn"
                     onClick={() => {                  
-                      navigator.clipboard.writeText(ontology.config.id);
+                      navigator.clipboard.writeText(ontology.config.tracker);
                       setOntologyIriCopied(false);
                       setOntologyVersionCopied(false);
                       setOntologyHomepageCopied(false);
@@ -117,8 +117,7 @@ function OntologyInfoBox (props) {
           </tr>
           <tr>
             <td className="ontology-overview-table-id-column"><b>Download</b></td>
-            <td>
-              {console.info(ontology.config.id)}
+            <td>              
               <a
                 href={ontology.config.id}             
                 className='btn btn-primary btn-dark download-ontology-btn'
