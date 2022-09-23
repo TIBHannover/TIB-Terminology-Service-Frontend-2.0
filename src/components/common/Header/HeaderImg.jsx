@@ -1,5 +1,4 @@
 import headerImg from '../../assets/img/background.png';
-import React from 'react';
 
 export const HeaderImg = () => {
     return (

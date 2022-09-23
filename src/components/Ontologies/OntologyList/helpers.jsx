@@ -1,4 +1,3 @@
-import TextField from '@material-ui/core/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -43,14 +42,17 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             <h3 className='ontology-list-facet-header'>Filter</h3>            
             <div className='row'>
                 <div className='col-sm-12' id="ontologylist-search-grid">
-                    <TextField
-                    label="By keyword"
-                    type="search"
-                    variant="outlined"
-                    onChange={filterWordChange}
-                    value={enteredKeyword !== "" ? enteredKeyword : ""}
-                    InputLabelProps={{ style: { fontSize: 15 } }}
-                    />
+                    <div class="input-group mb-3">                        
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            aria-label="By keyword" 
+                            aria-describedby="By keyword" 
+                            placeholder='By keyword'
+                            value={enteredKeyword !== "" ? enteredKeyword : ""}
+                            onChange={filterWordChange}
+                            />
+                    </div>                    
                 </div>
             </div>
             {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
