@@ -211,7 +211,7 @@ class OntologyList extends React.Component {
    */
   handleSwitchange(e){
     this.setState({
-      exclusiveCollections: !e.target.checked
+      exclusiveCollections: e.target.checked
     }, ()=>{
       this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);      
     });

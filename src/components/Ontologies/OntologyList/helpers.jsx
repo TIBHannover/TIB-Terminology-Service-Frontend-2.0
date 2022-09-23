@@ -1,7 +1,6 @@
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Switch from '@mui/material/Switch';
 import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
@@ -60,14 +59,10 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
                     <div  className="col-sm-12 facet-box" >
                         <div className='facet-switch-holder'>
-                            Intersection
-                            <Switch                    
-                                onChange={onSwitchChange}
-                                id="facet-switch"
-                                defaultChecked={true}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            Union
+                            <div class="custom-control custom-switch">                                
+                                <input type="checkbox" class="custom-control-input" id="facet-switch" onChange={onSwitchChange} />
+                                <label class="custom-control-label" for="facet-switch">Intersection</label>
+                            </div>                           
                         </div>
                         <div>
                             {allCollectionsCheckboxes}   
