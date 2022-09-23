@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import Button from '@mui/material/Button';
-import CheckIcon from '@mui/icons-material/Check';
-import DownloadIcon from '@mui/icons-material/Download';
 
 
 function formatCreators (creators) {
@@ -42,74 +39,45 @@ function OntologyInfoBox (props) {
             <td>
               <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
               {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
-                ? <Button 
-                variant="contained" 
-                className='copy-link-btn'                                
-                onClick={() => {                  
-                  navigator.clipboard.writeText(ontology.config.id);
-                  setOntologyIriCopied(true);
-                  setOntologyVersionCopied(false);
-                  setOntologyHomepageCopied(false);
-                  setOntologyTrackerCopied(false);
-                }}
-              >copy</Button>
+                ? <button 
+                    type="button" 
+                    class="btn btn-secondary btn-sm copy-link-btn"
+                    onClick={() => {                  
+                      navigator.clipboard.writeText(ontology.config.id);
+                      setOntologyIriCopied(true);
+                      setOntologyVersionCopied(false);
+                      setOntologyHomepageCopied(false);
+                      setOntologyTrackerCopied(false);
+                    }}
+                    >
+                      copy
+                    </button>          
               : ""
               }
-              {ontologyIriCopied && 
-                  <CheckIcon 
-                    fontSize="large"                    
-                  />
-              }            
+              {ontologyIriCopied && <i class="fa fa-check" aria-hidden="true"></i>}
             </td>
-          </tr>
-          {/* <tr>
-            <td className="ontology-overview-table-id-column"><b>Version IRI</b></td>
-            <td>
-              <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
-              {typeof(ontology.config.versionIri) !== 'undefined' && ontology.config.versionIri !== null
-                  ? <Button 
-                  variant="contained" 
-                  className='copy-link-btn'                                
-                  onClick={() => {                  
-                    navigator.clipboard.writeText(ontology.config.versionIri);
-                    setOntologyVersionCopied(true);
-                    setOntologyIriCopied(false);                  
-                    setOntologyHomepageCopied(false);
-                    setOntologyTrackerCopied(false);
-                  }}            
-                >copy</Button>
-                : ""
-              }
-              {ontologyVersionCopied && 
-                  <CheckIcon 
-                    fontSize="large"                    
-                  />
-              }      
-            </td>
-          </tr> */}
+          </tr>         
           <tr>
             <td className="ontology-overview-table-id-column"><b>HomePage</b></td>
             <td>
               <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
               {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
-                  ? <Button 
-                  variant="contained" 
-                  className='copy-link-btn'                                 
-                  onClick={() => {                  
-                    navigator.clipboard.writeText(ontology.config.homepage);
-                    setOntologyHomepageCopied(true);
-                    setOntologyIriCopied(false);
-                    setOntologyVersionCopied(false);                  
-                    setOntologyTrackerCopied(false);
-                  }}            
-                >copy</Button>
+                  ? <button 
+                    type="button" 
+                    class="btn btn-secondary btn-sm copy-link-btn"
+                    onClick={() => {                  
+                      navigator.clipboard.writeText(ontology.config.id);
+                      setOntologyIriCopied(false);
+                      setOntologyVersionCopied(false);
+                      setOntologyHomepageCopied(true);
+                      setOntologyTrackerCopied(false);
+                    }}
+                    >
+                      copy
+                    </button>  
                 : ""
               }
-              {ontologyHomepageCopied && 
-                  <CheckIcon 
-                    fontSize="large"                    
-                  />
-              }
+              {ontologyHomepageCopied && <i class="fa fa-check" aria-hidden="true"></i>}
             </td>
           </tr>
           <tr>
@@ -117,32 +85,24 @@ function OntologyInfoBox (props) {
             <td>
               <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
               {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
-                ? <Button 
-                  variant="contained" 
-                  className='copy-link-btn'                                
-                  onClick={() => {                  
-                    navigator.clipboard.writeText(ontology.config.tracker);
-                    setOntologyTrackerCopied(true);
-                    setOntologyIriCopied(false);
-                    setOntologyVersionCopied(false);
-                    setOntologyHomepageCopied(false);                
-                  }}            
-                >copy</Button>
+                ? <button 
+                    type="button" 
+                    class="btn btn-secondary btn-sm copy-link-btn"
+                    onClick={() => {                  
+                      navigator.clipboard.writeText(ontology.config.id);
+                      setOntologyIriCopied(false);
+                      setOntologyVersionCopied(false);
+                      setOntologyHomepageCopied(false);
+                      setOntologyTrackerCopied(true);
+                    }}
+                    >
+                      copy
+                    </button>  
                 : ""
                 }
-              {ontologyTrackerCopied && 
-                  <CheckIcon 
-                    fontSize="large"       
-                  />
-              }
+              {ontologyTrackerCopied && <i class="fa fa-check" aria-hidden="true"></i>}
             </td>
-          </tr>
-          {/* <tr>
-            <td className="ontology-overview-table-id-column"><b>Version</b></td>
-            <td>
-              {ontology.config.version}
-            </td>
-          </tr> */}
+          </tr>         
           <tr>
             <td className="ontology-overview-table-id-column"><b>License</b></td>
             <td>
@@ -158,16 +118,17 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-overview-table-id-column"><b>Download</b></td>
             <td>
-              <Button 
-                  variant="contained"               
-                  className='download-ontology-btn'
-                  startIcon={<DownloadIcon />}
-                  href={ontology.config.id}                                                  
-                >owl</Button>
-              <Button 
-                  variant="contained" 
-                  className='download-ontology-btn'
-                  startIcon={<DownloadIcon />}
+              {console.info(ontology.config.id)}
+              <a
+                href={ontology.config.id}             
+                className='btn btn-primary btn-dark download-ontology-btn'
+                target="_blank"
+                download
+                >
+                <i class="fa fa-download"></i>OWL
+              </a>
+              <a 
+                className='btn btn-primary btn-dark download-ontology-btn'                                
                   onClick={async () => {                    
                     const jsonFile = JSON.stringify(ontologyObject);
                     const blob = new Blob([jsonFile],{type:'application/json'});
@@ -179,7 +140,8 @@ function OntologyInfoBox (props) {
                     link.click();
                     document.body.removeChild(link);
                   }}
-                >Ontology metadata as JSON</Button>
+                >
+                <i class="fa fa-download"></i>Ontology metadata as JSON</a>
             </td>
           </tr>
         </tbody>
