@@ -4,10 +4,9 @@ import React from 'react'
 class TermsOfUse extends React.Component{
     render(){
         return(
-         <section id="main-content-area" role="main">
-            <div className="row">
-              <h2>Terms of Use</h2>
-              <div className="paragraph">
+            <div className='row justify-content-center'>
+              <div className='col-sm-8'>
+              <h2>Terms of Use</h2>              
                  <p>Adopted by the foundation board of the German National Library for Science and Technology and University Library (TIB) on 21 November 2016, last amended by the foundation board of the German National Library for Science and Technology and University Library (TIB) on 22 May 2018. Public announcement of the amended version on the internet pages of the German National Library for Science and Technology and University Library (TIB) on 31 May 2018.</p>
                  <br/>
                  <h3>I. General</h3>
@@ -206,7 +205,7 @@ class TermsOfUse extends React.Component{
                  <p>These terms of use shall come into force on the day following their public announcement. The terms of use of 13 May 2003 shall expire at the same time.</p>
               </div>
             </div>
-         </section>
+         
         )
     }
 }

@@ -4,7 +4,8 @@ import React from 'react'
 class Imprint extends React.Component{
     render(){
         return(
-            <div className="row doc-design">
+            <div className='row justify-content-center doc-design'>
+                <div className='col-sm-8'>
                 <h2>Imprint</h2>
                 <p>
                     Imprint for this website &#8208; also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)
@@ -80,7 +81,7 @@ class Imprint extends React.Component{
                 The layout of the homepage, the graphics used and the other content are protected by copyright.
                  <br />
                 </p>
-                
+                </div> 
             </div>
         )
     }
