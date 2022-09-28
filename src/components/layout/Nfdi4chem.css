@@ -237,6 +237,7 @@ p{
 
     .site-footer{
         font-size: 10px;
+        position: fixed;
     }
 
     .footer-logo{
