@@ -1469,7 +1469,8 @@ p{
     /* 
        The style for overall documentation page
     */
-    margin-left: 20px;
+    display: flex;
+    min-height: 100vh;
    
 }
 
