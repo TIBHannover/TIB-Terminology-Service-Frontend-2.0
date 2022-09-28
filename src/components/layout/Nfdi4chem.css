@@ -847,6 +847,8 @@ p{
     overflow-x: hidden;
     overflow-y: hidden;
     padding-top: 20px;
+    display: flex;
+    min-height: 100vh;
 }
 
 .searchresult-card-description{
@@ -1414,7 +1416,7 @@ p{
     /* 
        The style for overall documentation page
     */
-    margin-left: 20px;
-   
+    display: flex;
+    min-height: 100vh;  
 }
 
