@@ -1,7 +1,4 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
-import Button from '@mui/material/Button';
-import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
 
@@ -48,29 +45,25 @@ class NodePage extends React.Component {
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
           <div className='row'>
             <div className="col-sm-4 col-md-3 node-metadata-value" key={metadataLabel + "-label"}>
-              <Typography className="node-metadata-label">{metadataLabel}</Typography>
+              <div className="node-metadata-label">{metadataLabel}</div>
             </div>
             <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
               {formatText(metadataLabel, metadataValue, copyButton)}
               {copyButton &&
-                <Button 
-                  variant="contained" 
-                  className='copy-link-btn'
-                  key={"copy-btn"}                             
+                <button 
+                  type="button" 
+                  class="btn btn-secondary btn-sm copy-link-btn"
+                  key={"copy-btn"} 
                   onClick={() => {                  
                     navigator.clipboard.writeText(metadataValue);
                     this.setState({
                       iriIsCopied: true
                     });
-                  }}            
-                >copy</Button>          
+                  }}
+                  >
+                  copy {this.state.iriIsCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                </button>
               }
-              {copyButton && this.state.iriIsCopied && 
-                    <CheckIcon 
-                      fontSize="large"
-                      key={"copy-check-sign"}           
-                    />
-              }    
             </div>
           </div>
         </div>
@@ -122,8 +115,14 @@ class NodePage extends React.Component {
         <div className='col-sm-12'  key={"json-button-row"}>
           <div className='row'>
             <div className='col-sm-12 node-metadata-value'>
-              <a href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
-                target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
+              <a 
+                href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
+                target='_blank' 
+                rel="noreferrer"
+                className='btn btn-primary btn-dark download-ontology-btn'
+                >
+                  Show Data as JSON
+              </a>
             </div>            
           </div>
         </div>
