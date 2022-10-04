@@ -33,7 +33,7 @@ export function nfdi4chemHomePage(){
                             <div class="font-weight-bold mb-2">
                              <a href="#">NOT A HUMAN ?</a>
                             </div>
-                            <a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">The Terminology Service is available in particular for use by other services. Data repositories or electronic lab notebooks can use the comprehensive API of the Terminology Service to retrieve and provide ontology terms in their user interfaces enabling semantic data annotation. Please visit the comprehensive <a href="/documentation">API documentation</a> to find out more about the API and how to use it for your services.  </h3></a>
+                            <a href="#" class="text-dark text-decoration-none"><h3 class="h5 mb-0">The Terminology Service is available in particular for use by other services. Data repositories or electronic lab notebooks can use the comprehensive API of the Terminology Service to retrieve and provide ontology terms in their user interfaces enabling semantic data annotation. Please visit the comprehensive <a href="/api">API documentation</a> to find out more about the API and how to use it for your services.  </h3></a>
                         </div>   
                     </div>
                 </div>               

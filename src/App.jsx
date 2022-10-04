@@ -33,7 +33,7 @@ function App() {
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
             <Route exact path="/collections" component={Collections}/>}
             <Route exact path="/ontologies/:ontologyId/:tab?" component={OntologyDetail}/>
-            <Route exact path="/documentation" component={Documentation}/>
+            <Route exact path="/api" component={Documentation}/>
             <Route exact path="/search" component={SearchResult} />
             <Route exact path="/imprint" component={Imprint}/>
             <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
