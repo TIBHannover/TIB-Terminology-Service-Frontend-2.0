@@ -236,13 +236,13 @@ class OntologyDetail extends React.Component {
         <div className='row justify-content-center'>
           <div className='col-sm-8'>
               <ul className="nav nav-tabs">
-                <li className="nav-item" key={"overview-tab"}>
+                <li className="nav-item ontology-detail-nav-item" key={"overview-tab"}>
                   <Link onClick={this.tabChange} data-value="0" className={this.state.overViewTab ? "nav-link active" : "nav-link"} to={"/ontologies/" + this.state.ontologyId}>Overview</Link>
                 </li>
-                <li class="nav-item" key={"class-tab"}>
+                <li class="nav-item ontology-detail-nav-item" key={"class-tab"}>
                   <Link onClick={this.tabChange} data-value='1' className={this.state.termsTab ? "nav-link active" : "nav-link"} to={"/ontologies/" + this.state.ontologyId + "/terms"}>Classes</Link>
                 </li>
-                <li class="nav-item" key={"prop-tab"}>
+                <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
                   <Link onClick={this.tabChange} data-value="2" className={this.state.propTab ? "nav-link active" : "nav-link"} to={"/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
                 </li>            
               </ul>             

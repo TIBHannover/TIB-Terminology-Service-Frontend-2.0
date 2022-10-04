@@ -1172,35 +1172,14 @@ p{
     margin-bottom: 20px;
 }
 
-.MuiTab-root{
-    /* 
-        The style for each tab in the ontolog detail page navbar.
+
+.ontology-detail-nav-item > .nav-link{
+     /* 
+        Style for the tab menu items in the ontology detail page.
     */
-
-    color: #1C6F7F !important;
+    
+    color: #0E6668;
 }
-
-
-.Mui-selected{
-    /* 
-        The style for selected tab in the ontolog detail page navbar.
-    */
-
-    background-color: white !important;
-    border-top-left-radius: 25px !important;
-    border-top-right-radius: 25px !important;
-    color: black !important;
-    border-bottom: none !important;
-}
-
-.MuiTabs-indicator{
-    /* 
-        Remove the border-bottom from the selected tab (Material UI adds this class)
-    */
-
-    background-color: white !important;
-}
-
 
 
 /* 
