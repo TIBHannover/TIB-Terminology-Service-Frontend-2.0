@@ -72,8 +72,9 @@ p{
     background-color: #0E6668;
     color: white;
     margin-left: 15px;
-    padding: 2px;
+    padding: 3px;
     margin-top: -5px;
+    font-size: 12px;
     border-color:  #0E6668;
  }
 
@@ -95,8 +96,9 @@ p{
     background-color: #bbae9e;
     color: white;
     margin-left: 10px;
-    padding: 2px;
+    padding: 3px;
     margin-right: 10px;
+    font-size: 12px;
     border-color: #bbae9e !important;
 }
 

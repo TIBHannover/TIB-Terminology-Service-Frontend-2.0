@@ -114,12 +114,11 @@ function OntologyInfoBox (props) {
           </tr>
           <tr>
             <td className="ontology-overview-table-id-column"><b>Download</b></td>
-            <td>              
-              <a
-                href={ontology.config.id}             
+            <td>                     
+              <a                
+                href={"https://service.tib.eu/ts4tib/ontologies/" + ontology.ontologyId + "/download"}
                 className='btn btn-primary btn-dark download-ontology-btn'
-                target="_blank"
-                download
+                target="_blank"                               
                 >
                 <i class="fa fa-download"></i>OWL
               </a>
