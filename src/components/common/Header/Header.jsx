@@ -1,8 +1,6 @@
-import React from 'react';
 import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG';
 import SearchForm from "../../Search/SearchForm";
-import collectionsInfoJson from "../../../assets/collectionsText.json";
 
 
 function Header () {

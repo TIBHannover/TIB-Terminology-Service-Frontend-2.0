@@ -194,13 +194,16 @@ class OntologyList extends React.Component {
     let selectedCollections = this.state.selectedCollections;
     let collection = e.target.value.trim(); 
     if(e.target.checked){
-      // checked
+      // do check
       selectedCollections.push(collection);
+      document.getElementById(e.target.id).checked = true;
     }
     else{
-      // unchecked
+      // do uncheck
       let index = selectedCollections.indexOf(collection);
-      selectedCollections.splice(index, 1);
+      selectedCollections.splice(index, 1);  
+      console.info(e.target.checked);
+      document.getElementById(e.target.id).checked = false;    
     }
     this.runFacet(selectedCollections, this.state.keywordFilterString);
   }
@@ -211,7 +214,7 @@ class OntologyList extends React.Component {
    */
   handleSwitchange(e){
     this.setState({
-      exclusiveCollections: !e.target.checked
+      exclusiveCollections: e.target.checked
     }, ()=>{
       this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);      
     });
@@ -291,6 +294,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
       }
     }
     ontologies = collectionFilteredOntologies;
+
   }
 
 
@@ -358,7 +362,16 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
     return ontologyList
   }
 
-
+  componentDidUpdate(){
+    let allCollections = document.getElementsByClassName('collection-checkbox');
+    for(let checkbox of allCollections){
+      if(checkbox.dataset.ischecked === "true"){
+        document.getElementById(checkbox.id).checked = true;
+      }
+      delete checkbox.dataset.ischecked;
+    }
+  }
+  
   componentDidMount(){
     this.getAllOntologies();
   }

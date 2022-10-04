@@ -1,8 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
-import Button from '@mui/material/Button';
-import CheckIcon from '@mui/icons-material/Check';
 import {getNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
 
@@ -12,8 +8,6 @@ class NodePage extends React.Component {
     super(props)
     this.state = ({
       data: true,
-      label_xs: 4,
-      value_xs: 8,
       iriIsCopied: false,
       prevNode: "",
       componentIdentity: ""
@@ -48,35 +42,31 @@ class NodePage extends React.Component {
    */
   createRow(metadataLabel, metadataValue, copyButton){
     let row = [
-      <Grid item xs={12}  className="node-detail-table-row" key={metadataLabel}>
-          <Grid container>
-            <Grid item sm={this.state.label_xs} md={this.state.label_xs - 1}  key={metadataLabel + "-label"}>
-              <Typography className="node-metadata-label">{metadataLabel}</Typography>
-            </Grid>
-            <Grid item sm={this.state.value_xs} md={this.state.value_xs + 1} className="node-metadata-value" key={metadataLabel + "-value"}>
+      <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
+          <div className='row'>
+            <div className="col-sm-4 col-md-3 node-metadata-value" key={metadataLabel + "-label"}>
+              <div className="node-metadata-label">{metadataLabel}</div>
+            </div>
+            <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
               {formatText(metadataLabel, metadataValue, copyButton)}
               {copyButton &&
-                <Button 
-                  variant="contained" 
-                  className='copy-link-btn'
-                  key={"copy-btn"}                             
+                <button 
+                  type="button" 
+                  class="btn btn-secondary btn-sm copy-link-btn"
+                  key={"copy-btn"} 
                   onClick={() => {                  
                     navigator.clipboard.writeText(metadataValue);
                     this.setState({
                       iriIsCopied: true
                     });
-                  }}            
-                >copy</Button>          
+                  }}
+                  >
+                  copy {this.state.iriIsCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                </button>
               }
-              {copyButton && this.state.iriIsCopied && 
-                    <CheckIcon 
-                      fontSize="large"
-                      key={"copy-check-sign"}           
-                    />
-              }    
-            </Grid>
-          </Grid>
-        </Grid>
+            </div>
+          </div>
+        </div>
     ];
 
     return row;
@@ -120,15 +110,23 @@ class NodePage extends React.Component {
 
   render () {    
     return (
-      <Grid container spacing={2}>
+      <div className='row'>
         {this.createTable()}
-        <Grid item xs={12}  key={"json-button-row"}>
-          <Grid container>
-            <a href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
-              target='_blank' rel="noreferrer"><Button variant="contained">Show Data as JSON</Button></a>
-          </Grid>
-        </Grid>
-      </Grid>
+        <div className='col-sm-12'  key={"json-button-row"}>
+          <div className='row'>
+            <div className='col-sm-12 node-metadata-value'>
+              <a 
+                href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
+                target='_blank' 
+                rel="noreferrer"
+                className='btn btn-primary btn-dark download-ontology-btn'
+                >
+                  Show Data as JSON
+              </a>
+            </div>            
+          </div>
+        </div>
+      </div>
     )
   }
 }
