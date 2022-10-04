@@ -1040,22 +1040,6 @@ p{
     padding-left: 0px;
 }
 
-#ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root{
-    /* 
-       The syle for the search input field in the ontology list page.
-    */
-
-    width: 100%;
-    background-color: white;
-}
-
-#ontologylist-search-grid > .MuiFormControl-root.MuiTextField-root > .MuiOutlinedInput-root > .MuiInputBase-input{
-    /* 
-       The syle for the search input field font in the ontology list page.
-    */
-
-    font-size: 15px;
-}
 
 .ontology-collection-name{
     /* 
