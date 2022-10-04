@@ -38,8 +38,8 @@ function Navbar () {
                 </li>
                 <li class="nav-item">
                 {urlPath.includes("/documentation") 
-                  ? <a class="nav-link navbar-item nav-clicked" href="/documentation">Documentation</a>
-                  : <a class="nav-link navbar-item" href="/documentation">Documentation</a>
+                  ? <a class="nav-link navbar-item nav-clicked" href="/api">API</a>
+                  : <a class="nav-link navbar-item" href="/api">API</a>
                 }                  
                 </li>
                 <li class="nav-item">
