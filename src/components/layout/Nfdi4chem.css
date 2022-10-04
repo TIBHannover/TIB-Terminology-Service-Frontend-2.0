@@ -410,7 +410,7 @@ p{
         The style for the site logo image 
     */
 
-    height: 50px;
+    height: 100px;
     width: 100px;
     margin-top: -10px;
 
@@ -470,7 +470,7 @@ p{
         The style for navabr dimensions
      */
    
-     margin-top: -5px !important;
+     margin-top: 15px !important;
      background-color: white;
      width: 90%;
    }

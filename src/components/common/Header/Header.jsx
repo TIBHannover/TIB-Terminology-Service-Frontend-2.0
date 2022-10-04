@@ -15,7 +15,7 @@ function Header () {
             <div className='col-lg-4 col-md-6'>
               {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
                 <span>
-                  <img src="/chem_small_logo.PNG" alt="nfdi4chem_logo" className='site-logo-image'/>
+                  <img src="/chem_small_logo.png" alt="nfdi4chem_logo" className='site-logo-image'/>
                   <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
                 </span>                 
               }
