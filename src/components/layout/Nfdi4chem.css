@@ -686,7 +686,7 @@ p{
     
     padding: 5%;
     padding-bottom: 8%;
-    background-color: #CCCCCC;
+    background-color: #fafafa;
 
 }
 
@@ -1129,7 +1129,7 @@ p{
         The style for selected tab in the ontolog detail page navbar.
     */
 
-    background-color: #f1f1f1 !important;
+    background-color: #fafafa !important;
     border-top-left-radius: 25px !important;
     border-top-right-radius: 25px !important;
     color: black !important;
@@ -1141,7 +1141,7 @@ p{
         Remove the border-bottom from the selected tab (Material UI adds this class)
     */
 
-    background-color: #f1f1f1 !important;
+    background-color: #fafafa !important;
 }
 
 
