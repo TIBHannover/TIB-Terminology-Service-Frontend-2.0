@@ -226,6 +226,34 @@ p{
     padding: 5px;
 }
 
+.fa{
+    /* 
+        Forntawsome style modification for the tree view. 
+    */
+
+    display: inline !important;
+    border: 1px solid;
+    margin-right: 5px;    
+    font-size: 10px;
+}
+
+.fa-download{
+    /* 
+        The font awsome download icon style
+    */
+    
+    border: none !important;
+}
+
+.fa-check{
+    /* 
+        Checked icon style (copy url checked)
+    */
+
+    border: none !important;    
+    margin-left: 1px;
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 
@@ -1063,10 +1091,7 @@ p{
     */
 
     margin-left: 20px !important;
-    font-size: 10px !important;
-    padding: 5px !important;
-    height: 20px;
-    width: 20px;
+    font-size: 10px !important;   
 }
 
 .download-ontology-btn{
@@ -1260,17 +1285,6 @@ p{
     font-weight: bold;
 }
 
-.fa{
-    /* 
-        Forntawsome style modification for the tree view. 
-    */
-
-    display: inline !important;
-    border: 1px solid;
-    margin-right: 5px;    
-    font-size: 10px !important;
-}
-
 .closed > i{
     /* 
         The style for a node expand icon when it is closed and has children nodes.
@@ -1314,6 +1328,7 @@ p{
 
     float: left;
     margin-bottom: 10px;
+    margin-top: 2px;
 }
 
 

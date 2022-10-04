@@ -1,8 +1,6 @@
 import React from 'react';
 import 'font-awesome/css/font-awesome.min.css';
-import Grid from '@material-ui/core/Grid';
 import NodePage from '../NodePage/NodePage';
-import Button from '@mui/material/Button';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
 import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList } from './helpers';
@@ -421,72 +419,57 @@ componentDidUpdate(){
 
 render(){
   return(
-    <Grid container spacing={0} className="tree-view-container" onClick={(e) => this.processClick(e)} > 
-        <Grid item xs={6} className="tree-container">
+    <div className="row tree-view-container" onClick={(e) => this.processClick(e)} > 
+        <div className="col-sm-6 tree-container">
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
-          <Grid container>
-            <Grid item xs={10}>
+          <div className='row'>
+            <div className='col-sm-10'>
               {this.state.treeDomContent}
-            </Grid>
-            <Grid item xs={2}>
-              <Button 
-                    variant="contained" 
-                    className='tree-action-btn' 
-                    // startIcon={<RestartAltIcon />}
-                    onClick={this.resetTree}
-                    >
-                    Reset
-              </Button>
+            </div>
+            <div className='col-sm-2'>
+              <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
               {this.state.reduceTreeBtnShow && 
-                <Button 
-                    variant="contained" 
-                    className='tree-action-btn'                     
-                    onClick={this.reduceTree}
-                    >
-                    {!this.state.reduceBtnActive
-                      ? "Sub Tree"
-                      : "Full Tree"
-                    }                    
-                </Button>
+                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
+                  {!this.state.reduceBtnActive
+                        ? "Sub Tree"
+                        : "Full Tree"
+                  }
+                </button>                
               }                
               {this.state.siblingsButtonShow && 
-                <Button 
-                    variant="contained" 
-                    className='tree-action-btn'                     
-                    onClick={this.showSiblings}
-                    >
-                    {!this.state.siblingsVisible
+                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
+                  {!this.state.siblingsVisible
                       ? "Show Siblings"
                       : "Hide Siblings"
-                    }                    
-                </Button>
+                    }    
+                </button>                
               } 
-            </Grid>
-          </Grid>}
-        </Grid>
+            </div>
+          </div>}
+        </div>
         {this.state.termTree && this.state.showNodeDetailPage && 
-          <Grid item xs={6} className="node-table-container">
+          <div className="col-sm-6 node-table-container">
             <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
               componentIdentity="term"
               extractKey="terms"
             />
-        </Grid>
+        </div>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
-          <Grid item xs={6} className="node-table-container">
+          <div className="col-sm-6 node-table-container">
           <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
               componentIdentity="property"
               extractKey="properties"
           />
-        </Grid>
+        </div>
         }
-    </Grid>  
+    </div>  
   )
 }
 

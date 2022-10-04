@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Navbar () {
   let urlPath = window.location.pathname;
   return (

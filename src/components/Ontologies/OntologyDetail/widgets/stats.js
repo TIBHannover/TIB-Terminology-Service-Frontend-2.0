@@ -1,5 +1,3 @@
-import React from 'react'
-
 function OntologyStatsBox (props) {
   const ontology = props.ontology
   if (!ontology || ontology === null) {
