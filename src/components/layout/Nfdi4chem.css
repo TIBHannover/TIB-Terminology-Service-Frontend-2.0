@@ -68,7 +68,7 @@ p{
         The style for a button representing a term (class/propperty)
     */
 
-    background-color: #0E6668;
+    background-color: #873593;
     color: white;
     margin-left: 15px;
     padding: 2px;
@@ -91,7 +91,7 @@ p{
         The style for a button representing an ontology
     */
 
-    background-color: #bbae9e;
+    background-color: #00617C;
     color: white;
     margin-left: 10px;
     padding: 2px;
@@ -265,6 +265,7 @@ p{
 
     .site-footer{
         font-size: 10px;
+        position: fixed;
     }
 
     .footer-logo{
@@ -874,6 +875,8 @@ p{
     overflow-x: hidden;
     overflow-y: hidden;
     padding-top: 20px;
+    display: flex;
+    min-height: 100vh;
 }
 
 .searchresult-card-description{
@@ -1428,7 +1431,7 @@ p{
     /* 
        The style for overall documentation page
     */
-    margin-left: 20px;
-   
+    display: flex;
+    min-height: 100vh;  
 }
 

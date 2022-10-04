@@ -264,6 +264,7 @@ p{
 
     .site-footer{
         font-size: 10px;
+        position: fixed;
     }
 
     .footer-logo{
@@ -924,6 +925,8 @@ p{
     overflow-x: hidden;
     overflow-y: hidden;
     padding-top: 20px;
+    display: flex;
+    min-height: 100vh;
 }
 
 
@@ -1485,7 +1488,8 @@ p{
     /* 
        The style for overall documentation page
     */
-    margin-left: 20px;
+    display: flex;
+    min-height: 100vh;
    
 }
 

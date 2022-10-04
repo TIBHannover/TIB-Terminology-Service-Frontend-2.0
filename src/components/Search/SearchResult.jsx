@@ -299,7 +299,8 @@ async suggestionHandler(selectedTerm){
   /**
     * Update the url based on facet values
     */
-   updateURL(ontologies, types, collections){
+   updateURL(ontologies, types){
+    let collections = this.state.selectedCollections;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
@@ -356,6 +357,9 @@ async suggestionHandler(selectedTerm){
     types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`
     });
+    collections.forEach(item => {
+      baseUrl = baseUrl + `&collection=${item.toLowerCase()}`
+    });
     let targetUrl = await fetch(baseUrl);
     let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
     this.updateURL(ontologies, types, collections);
@@ -373,8 +377,10 @@ async suggestionHandler(selectedTerm){
      */
    handlePagination (value) {
     this.setState({
-      pageNumber: value
+      pageNumber: value,
+      paginationReset: false
     }, () => {
+      this.updateURL(this.state.ontologies,this.state.types,this.state.selectedCollections)
       this.paginationHandler()
     })
   }
