@@ -1,7 +1,6 @@
 import React from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
-import Button from '@mui/material/Button';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
 import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList } from './helpers';
@@ -430,36 +429,22 @@ render(){
               {this.state.treeDomContent}
             </div>
             <div className='col-sm-2'>
-              <Button 
-                    variant="contained" 
-                    className='tree-action-btn'                     
-                    onClick={this.resetTree}
-                    >
-                    Reset
-              </Button>
+              <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
               {this.state.reduceTreeBtnShow && 
-                <Button 
-                    variant="contained" 
-                    className='tree-action-btn'                     
-                    onClick={this.reduceTree}
-                    >
-                    {!this.state.reduceBtnActive
-                      ? "Sub Tree"
-                      : "Full Tree"
-                    }                    
-                </Button>
+                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
+                  {!this.state.reduceBtnActive
+                        ? "Sub Tree"
+                        : "Full Tree"
+                  }
+                </button>                
               }                
               {this.state.siblingsButtonShow && 
-                <Button 
-                    variant="contained" 
-                    className='tree-action-btn'                     
-                    onClick={this.showSiblings}
-                    >
-                    {!this.state.siblingsVisible
+                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
+                  {!this.state.siblingsVisible
                       ? "Show Siblings"
                       : "Hide Siblings"
-                    }                    
-                </Button>
+                    }    
+                </button>                
               } 
             </div>
           </div>}
