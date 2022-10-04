@@ -1,9 +1,6 @@
 import React from 'react'
 import OntologyInfoBox from './widgets/infoBox'
 import OntologyStatsBox from './widgets/stats';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import CircularProgress from '@mui/material/CircularProgress';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
@@ -184,11 +181,12 @@ class OntologyDetail extends React.Component {
      * @param {*} e
      * @param {*} value
      */
-  tabChange = (e, value) => {
+  tabChange = (e, v) => {    
+    let value = e.target.dataset.value;
     this.setState({
       waiting: true
     });
-    if (value === 0) { // overview
+    if (value === "0") { // overview
       this.setState({
         overViewTab: true,
         termsTab: false,
@@ -196,7 +194,7 @@ class OntologyDetail extends React.Component {
         activeTab: 0,
         waiting: false
       })
-    } else if (value === 1) { // terms (classes)
+    } else if (value === "1") { // terms (classes)
       this.setState({
         overViewTab: false,
         termsTab: true,
@@ -237,26 +235,26 @@ class OntologyDetail extends React.Component {
       return (
         <div className='row justify-content-center'>
           <div className='col-sm-8'>
-              <Tabs
-                value={this.state.activeTab}
-                indicatorColor="primary"
-                textColor="primary"
-                onChange={this.tabChange}
-                aria-label="disabled tabs example"
-              >
-                <Tab label="Overview"  to={"/ontologies/" + this.state.ontologyId}  component={Link} />
-                <Tab label="Classes" to={"/ontologies/" + this.state.ontologyId + "/terms"} component={Link} />
-                <Tab label="Properties"  to={"/ontologies/" + this.state.ontologyId + "/props"} component={Link} />
-              </Tabs>          
+              <ul className="nav nav-tabs">
+                <li className="nav-item" key={"overview-tab"}>
+                  <Link onClick={this.tabChange} data-value="0" className={this.state.overViewTab ? "nav-link active" : "nav-link"} to={"/ontologies/" + this.state.ontologyId}>Overview</Link>
+                </li>
+                <li class="nav-item" key={"class-tab"}>
+                  <Link onClick={this.tabChange} data-value='1' className={this.state.termsTab ? "nav-link active" : "nav-link"} to={"/ontologies/" + this.state.ontologyId + "/terms"}>Classes</Link>
+                </li>
+                <li class="nav-item" key={"prop-tab"}>
+                  <Link onClick={this.tabChange} data-value="2" className={this.state.propTab ? "nav-link active" : "nav-link"} to={"/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
+                </li>            
+              </ul>             
               {!this.state.waiting && this.state.overViewTab &&
-                            <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
-                              <div className='col-sm-9'>
-                                <OntologyInfoBox ontology={this.state.ontology} />
-                              </div>
-                              <div className='col-sm-3'>
-                                <OntologyStatsBox ontology={this.state.ontology} />
-                              </div>
+                          <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
+                            <div className='col-sm-9'>
+                              <OntologyInfoBox ontology={this.state.ontology} />
                             </div>
+                            <div className='col-sm-3'>
+                              <OntologyStatsBox ontology={this.state.ontology} />
+                            </div>
+                          </div>
               }
               {!this.state.waiting && this.state.termsTab &&
                             <DataTree
@@ -279,7 +277,7 @@ class OntologyDetail extends React.Component {
                               rootNodeNotExist={this.state.rootNodeNotExist}
                             />
               }
-              {this.state.waiting && <CircularProgress />}
+              {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
           </div>                    
         </div>
 
