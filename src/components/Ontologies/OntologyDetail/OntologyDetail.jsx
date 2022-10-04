@@ -182,7 +182,7 @@ class OntologyDetail extends React.Component {
      * @param {*} value
      */
   tabChange = (e, v) => {    
-    let value = e.target.dataset.value;
+    let value = e.target.dataset.value;    
     this.setState({
       waiting: true
     });

@@ -1109,6 +1109,11 @@ p{
     color: #0E6668;
 }
 
+.nav-tabs .ontology-detail-nav-item .nav-link.active {
+    background-color: #FAFAFA;
+  }
+
+
 
 
 /* 
