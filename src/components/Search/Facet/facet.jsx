@@ -1,7 +1,4 @@
 import React from "react";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
@@ -89,14 +86,20 @@ class Facet extends React.Component{
             result.push(
                 <div class="row typeRow facet-item-row"  key={type}>
                     <div class="col-sm-9">
-                        <FormGroup>                            
-                            <FormControlLabel 
-                                control={<Checkbox defaultChecked={selectedTypes.includes(type)}  onClick={this.handleTypesCheckBoxClick} />}
-                                label={type}
-                                key={type}                                
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input"
+                                type="checkbox" 
                                 value={type}
-                            />                 
-                        </FormGroup>
+                                id={"search-checkbox-" + type} 
+                                key={type}
+                                onClick={this.handleTypesCheckBoxClick}
+                                data-isChecked={selectedTypes.includes(type)}
+                            />                    
+                            <label class="form-check-label" for={"search-checkbox-" + type} >
+                            {type}
+                            </label>
+                        </div>         
                     </div>
                     <div class="col-sm-3">
                         <div class="facet-result-count">{allTypes[type]}</div>
@@ -124,14 +127,20 @@ class Facet extends React.Component{
                 <div key={ontologyId}>
                     <div class="row ontoloyRow facet-item-row">
                         <div class="col-sm-9">
-                            <FormGroup>
-                                <FormControlLabel 
-                                    control={<Checkbox defaultChecked={selectedOntologies.includes(ontologyId)} onClick={this.handleOntologyCheckBoxClick} />}
-                                    label={ontologyId}
-                                    key={ontologyId}
+                            <div class="form-check">
+                                <input 
+                                    class="form-check-input"
+                                    type="checkbox" 
                                     value={ontologyId}
-                                />
-                            </FormGroup>
+                                    id={"search-checkbox-" + ontologyId} 
+                                    key={ontologyId}
+                                    onClick={this.handleOntologyCheckBoxClick}
+                                    data-isChecked={selectedOntologies.includes(ontologyId)}
+                                />                    
+                                <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
+                                {ontologyId}
+                                </label>
+                            </div>                                
                         </div>
                         <div class="col-sm-3">
                             <div class="facet-result-count">{ontologyFacetData[ontologyId]}</div>
@@ -157,14 +166,20 @@ class Facet extends React.Component{
             result.push(
             <div className="row facet-item-row">
                 <div className='col-sm-9'>
-                <FormGroup>
-                    <FormControlLabel 
-                        control={<Checkbox defaultChecked={selectedCollections.includes(record['collection'])}  onClick={this.handleCollectionsCheckboxClick} />}
-                        label={record['collection']}
-                        key={record['collection']}                    
-                        value={record['collection']}
-                    />
-                </FormGroup>
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input"
+                            type="checkbox" 
+                            value={record['collection']}
+                            id={"search-checkbox-" + record['collection']} 
+                            key={record['collection']}
+                            onClick={this.handleCollectionsCheckboxClick}
+                            data-isChecked={selectedCollections.includes(record['collection'])}
+                        />                    
+                        <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
+                        {record['collection']}
+                        </label>
+                    </div>                      
                 </div>                
             </div>
             );
