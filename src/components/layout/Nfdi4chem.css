@@ -71,7 +71,8 @@ p{
     background-color: #873593;
     color: white;
     margin-left: 15px;
-    padding: 2px;
+    padding: 3px;
+    font-size: 12px;
     margin-top: -5px;
     border-color:  #873593;
  }
@@ -94,7 +95,8 @@ p{
     background-color: #00617C;
     color: white;
     margin-left: 10px;
-    padding: 2px;
+    padding: 3px;
+    font-size: 12px;
     margin-right: 10px;
     border-color: #00617C !important;
 }
