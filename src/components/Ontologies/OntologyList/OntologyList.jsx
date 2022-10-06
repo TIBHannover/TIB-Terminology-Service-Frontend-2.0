@@ -340,13 +340,14 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                 <div className="ontology-card-description">
                   <p>{item.config.description ? item.config.description : ""}</p>
                 </div>
+                {process.env.REACT_APP_PROJECT_ID === "general" &&
                 <div className='ontology-card-collection-name'>
                   <b>Collections:</b>              
                   {item.config.classifications[0]
                     ? BuildCollectionForCard(item.config.classifications[0].collection)
                     : "-"
                     }
-                </div>
+                </div>}
               </div>
               <div className="col-sm-3 ontology-card-meta-data">
                 <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
