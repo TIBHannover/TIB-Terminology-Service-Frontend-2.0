@@ -20,6 +20,20 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && import ('./components/layout
 
 
 function App() {
+
+  // This part is for changing the faveicon based on the target project.
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(link);
+  }
+  else if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){
+    link.href = '/chem_small_logo.png';
+    document.title = "NFDI4Chem Terminology Service"
+  }
+
+
   return (
     <div className="App">
      
