@@ -17,6 +17,7 @@ import Help from "./components/Help/Help";
 // import css file based on the target project
 process.env.REACT_APP_PROJECT_ID === "general" && import ('./components/layout/General_TIB.css');
 process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && import ('./components/layout/Nfdi4chem.css');
+process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/Nfdi4chem.css');
 
 
 function App() {
@@ -31,6 +32,11 @@ function App() {
   else if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){
     link.href = '/chem_small_logo.png';
     document.title = "NFDI4Chem Terminology Service"
+  }
+  
+  else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
+    link.href = '/nfdi4ing_logo.png';
+    document.title = "NFDI4Ing Terminology Service"
   }
 
 
