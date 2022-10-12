@@ -133,7 +133,6 @@ p{
     background-color: #2B3C46;
     color: white;
     padding: 5px;
-    margin-top: 10px;
     text-align: center;
     font-weight: 700 !important;
     font-size: 75% !important;
@@ -141,12 +140,20 @@ p{
     float: right;
 }
 
+.facet-item-row{
+    /* 
+        The style for each checkbox row in the facet
+    */
+
+    margin-bottom: 10px;
+}
+
 .facet-item-row:hover{
     /* 
        The style for colour changes for mouse hover one the facet items
     */
     background-color: rgba(119, 122, 121, 0.192);
-    border-radius: 15px;
+    border-radius: 15px;    
 }
 
 .result-card{
@@ -1076,7 +1083,6 @@ p{
     margin-bottom: 25px;
     margin-top: 10px;
 }
-
 
 
 /* 
