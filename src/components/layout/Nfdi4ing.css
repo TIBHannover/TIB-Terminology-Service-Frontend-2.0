@@ -387,9 +387,11 @@ p{
     /* 
         The style for the site title
      */
-    color: #00617c;
+    color: white;
     text-decoration: none;
     font-size: 18px;
+    margin-left: 10px;
+
  }
  
  .main-title:hover {
@@ -417,9 +419,8 @@ p{
     */
 
     height: 100px;
-    width: 100px;
-    margin-top: -10px;
-
+    width: 200px;
+    margin-top: -20px;
 }
    
  .header-top__navbar {
