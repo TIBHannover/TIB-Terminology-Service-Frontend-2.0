@@ -17,7 +17,7 @@ import Help from "./components/Help/Help";
 // import css file based on the target project
 process.env.REACT_APP_PROJECT_ID === "general" && import ('./components/layout/General_TIB.css');
 process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && import ('./components/layout/Nfdi4chem.css');
-process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/Nfdi4chem.css');
+process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/Nfdi4ing.css');
 
 
 function App() {

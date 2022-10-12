@@ -720,6 +720,15 @@ p{
     font-size: 13px;
 }
 
+.home-image{
+    /* 
+        Homepage images size
+    */
+
+    height: 200px;
+    width: 400px;
+}
+
 @media only screen and (max-width: 1500px) and (min-width: 1026px) {
     .collection-card{
         /* 
