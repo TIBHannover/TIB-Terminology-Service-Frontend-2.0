@@ -181,11 +181,10 @@ p{
         Site footer style
     */
 
-    background: #00617C;
-    /* margin-top: 75px; */
+    background: #FFFFFF;   
     border-top: 1px #d1d3d9 solid;
     padding-top: 20px;
-    color: white;
+    color: black;
 }
 
 .footer-link{
@@ -193,11 +192,11 @@ p{
         Links in the footer
     */
 
-    color: white;
+    color: black;
 }
 
 .footer-link:hover{
-    color: white;
+    color: black;
 }
 
 .footer-list{
@@ -300,7 +299,7 @@ p{
     */
  
     background-position: right center;
-    background-color: white;
+    background-color: #2E9198;
     padding: 10px;
     max-height: 700px;
  }
@@ -478,7 +477,7 @@ p{
      */
    
      margin-top: 15px !important;
-     background-color: white;
+     background-color: #2E9198;
      width: 90%;
    }
    
@@ -490,7 +489,7 @@ p{
      margin-left: 10px;
      text-transform: uppercase;
      outline: none;
-     color: #00617C;
+     color: white;
      font-weight: bold;
      font-size: 16px;
    }
@@ -705,7 +704,7 @@ p{
     */
 
     color: white;
-    background-color: #00617C;
+    background-color: #2E9198;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
