@@ -132,13 +132,20 @@ p{
     border-radius: 50px;
     background-color: #2B3C46;
     color: white;
-    padding: 5px;
-    margin-top: 10px;
+    padding: 5px;    
     text-align: center;
     font-weight: 700 !important;
     font-size: 75% !important;
     line-height: 1 !important;
     float: right;
+}
+
+.facet-item-row{
+    /* 
+        The style for each checkbox row in the facet
+    */
+
+    margin-bottom: 10px;
 }
 
 .facet-item-row:hover{
