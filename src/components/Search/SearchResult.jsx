@@ -474,8 +474,18 @@ async suggestionHandler(selectedTerm){
               
             </div>
             <div className='col-sm-8' id="search-list-grid">
-                <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
-                {this.createSearchResultList()}              
+              {(() => {
+                 if(this.state.searchResult.length === 0){
+                  return(
+                    <h3 className="text-dark">{'No search results for "' + this.state.enteredTerm + '"'   }</h3>
+                  )
+                 }
+                 else{
+                  <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
+                  {this.createSearchResultList()} 
+                 }
+              })()}
+                             
                 <Pagination 
                   clickHandler={this.handlePagination} 
                   count={this.pageCount()}
