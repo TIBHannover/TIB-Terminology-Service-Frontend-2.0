@@ -463,14 +463,15 @@ async suggestionHandler(selectedTerm){
               <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
           </div>         */}
           <div className='row'>
-            <div className='col-sm-4'>{this.state.result && 
-              <Facet
-                facetData = {this.state.facetFields}
-                handleChange = {this.handleSelection}              
-                selectedCollections = {this.state.selectedCollections}
-                selectedOntologies = {this.state.selectedOntologies}
-                selectedTypes = {this.state.selectedTypes}
-              />}
+            <div className='col-sm-4'>
+              {this.state.searchResult.length > 0 && 
+                    <Facet
+                      facetData = {this.state.facetFields}
+                      handleChange = {this.handleSelection}              
+                      selectedCollections = {this.state.selectedCollections}
+                      selectedOntologies = {this.state.selectedOntologies}
+                      selectedTypes = {this.state.selectedTypes}
+                    />}
               
             </div>
             <div className='col-sm-8' id="search-list-grid">
