@@ -481,11 +481,10 @@ async suggestionHandler(selectedTerm){
                   )
                  }
                  else{
-                  <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>
-                  {this.createSearchResultList()} 
+                  <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>                  
                  }
-              })()}
-                             
+              })()} 
+              {this.createSearchResultList()}                           
                 <Pagination 
                   clickHandler={this.handlePagination} 
                   count={this.pageCount()}
