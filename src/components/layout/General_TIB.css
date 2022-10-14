@@ -712,22 +712,23 @@ p{
         Style for the text part of a collection card
     */
 
-    margin-top: 20px;
 }
 
 .collection-logo{
     /* 
         Collection logo image style
     */
-
+   
     width: 400px;
     height: 200px;
     padding: 20px;
-    margin-left: 80px;
+    margin-left: 100px;
+
 }
 
 .coypu-logo{
-    padding: 50px;
+    
+
 }
 
 .home-page-stats-container{
@@ -776,7 +777,7 @@ p{
         */
     
               
-        margin-left: 20px;
+        margin-left: 0px;
     }
   }
 
@@ -806,7 +807,7 @@ p{
         */
     
               
-        margin-left: 20px;
+        margin-left: 0px;
     }
   }
 
