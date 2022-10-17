@@ -23,7 +23,7 @@ class DataTree extends React.Component {
       treeDomContent: "",
       resetTreeFlag: false,
       siblingsVisible: false,
-      siblingsButtonShow: true,
+      siblingsButtonShow: false,
       reduceTreeBtnShow: false,
       reduceBtnActive: true,
       viewMode: true,
@@ -104,11 +104,11 @@ class DataTree extends React.Component {
    * @returns 
    */
     async processTree(resetFlag, viewMode, reload){
-      let target = this.props.iri;
-      if (!target || resetFlag){
-        this.buildTree(this.state.rootNodes);
+      let target = this.props.iri;      
+      if (!target || resetFlag){        
+        this.buildTree(this.state.rootNodes);       
         return true;
-      }
+      }      
       target = target.trim();
       let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
       if((target != undefined && this.state.targetNodeIri != target) || reload ){        
@@ -150,6 +150,7 @@ class DataTree extends React.Component {
             i += 1;
           }          
           let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+          let fullTreeMode = this.state.reduceBtnActive;
           this.setState({
             targetNodeIri: target,
             treeDomContent: treeList,
@@ -157,7 +158,9 @@ class DataTree extends React.Component {
             showNodeDetailPage: true,
             reduceTreeBtnShow: true,
             reload: false,
-            isLoadingTheComponent: false
+            isLoadingTheComponent: false,
+            siblingsButtonShow: fullTreeMode,
+            siblingsVisible: !fullTreeMode
           }); 
 
           return true;
@@ -203,7 +206,8 @@ class DataTree extends React.Component {
           
           childrenList.push(listItem);
         }
-        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                 
+        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);   
+        let fullTreeMode = this.state.reduceBtnActive;              
         this.setState({
             targetNodeIri: target,            
             treeDomContent: treeList,
@@ -211,7 +215,9 @@ class DataTree extends React.Component {
             showNodeDetailPage: true,
             reduceTreeBtnShow: true,
             reload: false,
-            isLoadingTheComponent: false
+            isLoadingTheComponent: false,
+            siblingsButtonShow: fullTreeMode,
+            siblingsVisible: !fullTreeMode
         });    
       }
   }
@@ -268,12 +274,16 @@ selectNode(target){
     target.classList.add("clicked");
     this.setState({
       showNodeDetailPage: true,
-      selectedNodeIri: target.parentNode.dataset.iri
+      selectedNodeIri: target.parentNode.dataset.iri,
+      siblingsButtonShow: false,
+      reduceTreeBtnShow: true,
+      reduceBtnActive: false    
     });
 
     let currentUrlParams = new URLSearchParams();
     currentUrlParams.append('iri', target.parentNode.dataset.iri);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    this.props.iriChangerFunction(target.parentNode.dataset.iri);
 
   }
   else{
@@ -398,10 +408,13 @@ async showSiblings(){
  */
 reduceTree(){
   let reduceBtnActive = this.state.reduceBtnActive;
+  let showSiblings = !reduceBtnActive;
   this.setState({
     reduceBtnActive: !reduceBtnActive,
-    siblingsButtonShow: !reduceBtnActive,
-    reload: true
+    siblingsButtonShow: showSiblings,
+    reload: true, 
+    treeDomContent: "",
+    isLoadingTheComponent: true
   });
 }
 

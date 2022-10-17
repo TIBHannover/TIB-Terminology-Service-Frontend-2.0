@@ -34,6 +34,7 @@ class OntologyDetail extends React.Component {
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
+    this.changeInputIri = this.changeInputIri.bind(this);
   }
 
 
@@ -213,6 +214,16 @@ class OntologyDetail extends React.Component {
     }
   }
 
+/**
+ * Change the selected iri in the dataTree component.
+ * Need to pass it to the DataTree component
+ */
+  changeInputIri(iri){
+    this.setState({
+      targetTermIri: iri
+    });
+  }
+
 
   componentDidMount () {
     this.setOntologyData();
@@ -264,6 +275,7 @@ class OntologyDetail extends React.Component {
                               key={'termTreePage'}                    
                               ontology={this.state.ontologyId}
                               rootNodeNotExist={this.state.rootNodeNotExist}
+                              iriChangerFunction={this.changeInputIri}
                             />
               }
 
@@ -275,6 +287,7 @@ class OntologyDetail extends React.Component {
                               key={'propertyTreePage'}
                               ontology={this.state.ontologyId}
                               rootNodeNotExist={this.state.rootNodeNotExist}
+                              iriChangerFunction={this.changeInputIri}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
