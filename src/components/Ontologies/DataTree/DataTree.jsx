@@ -105,10 +105,11 @@ class DataTree extends React.Component {
    */
     async processTree(resetFlag, viewMode, reload){
       let target = this.props.iri;
+      console.info(target);
       if (!target || resetFlag){
-        this.buildTree(this.state.rootNodes);
+        this.buildTree(this.state.rootNodes);       
         return true;
-      }
+      }      
       target = target.trim();
       let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
       if((target != undefined && this.state.targetNodeIri != target) || reload ){        
@@ -159,7 +160,8 @@ class DataTree extends React.Component {
             reduceTreeBtnShow: true,
             reload: false,
             isLoadingTheComponent: false,
-            siblingsButtonShow: fullTreeMode
+            siblingsButtonShow: fullTreeMode,
+            siblingsVisible: !fullTreeMode
           }); 
 
           return true;
@@ -215,7 +217,8 @@ class DataTree extends React.Component {
             reduceTreeBtnShow: true,
             reload: false,
             isLoadingTheComponent: false,
-            siblingsButtonShow: fullTreeMode
+            siblingsButtonShow: fullTreeMode,
+            siblingsVisible: !fullTreeMode
         });    
       }
   }
@@ -273,12 +276,15 @@ selectNode(target){
     this.setState({
       showNodeDetailPage: true,
       selectedNodeIri: target.parentNode.dataset.iri,
-      siblingsButtonShow: false
+      siblingsButtonShow: false,
+      reduceTreeBtnShow: true,
+      reduceBtnActive: false    
     });
 
     let currentUrlParams = new URLSearchParams();
     currentUrlParams.append('iri', target.parentNode.dataset.iri);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    this.props.iriChangerFunction(target.parentNode.dataset.iri);
 
   }
   else{
@@ -403,7 +409,7 @@ async showSiblings(){
  */
 reduceTree(){
   let reduceBtnActive = this.state.reduceBtnActive;
-  let showSiblings = !reduceBtnActive;  
+  let showSiblings = !reduceBtnActive;
   this.setState({
     reduceBtnActive: !reduceBtnActive,
     siblingsButtonShow: showSiblings,
