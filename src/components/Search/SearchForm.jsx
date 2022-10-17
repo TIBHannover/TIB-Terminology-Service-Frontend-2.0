@@ -7,6 +7,7 @@ class SearchForm extends React.Component{
         this.state = ({
           enteredTerm: "",
           result: false,
+          clickInfo: false,
           searchResult: [],
           jumpResult: []
         })
@@ -15,16 +16,11 @@ class SearchForm extends React.Component{
         this.createJumpResultList = this.createJumpResultList.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
         this.submitJumpHandler = this.submitJumpHandler.bind(this);  
-        this.suggestionHandler = this.suggestionHandler.bind(this);  
-        this.ref = React.createRef();
+        this.suggestionHandler = this.suggestionHandler.bind(this); 
+        this.autoRef = React.createRef(); 
+        this.jumpRef = React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
       }
-
-      handleClickOutside(event) {
-        if (this.ref.current && !this.ref.current.contains(event.target)) {
-          this.props.onClickOutside && this.props.onClickOutside();
-        }
-      };
       
 
       async handleChange(enteredTerm){
@@ -86,7 +82,7 @@ class SearchForm extends React.Component{
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <div ref={this.ref} className="autocomplete-item">
+                <div className="autocomplete-item">
                   <a href={'/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">                      
                           {this.state.searchResult[i]['autosuggest']}
                   </a>
@@ -154,6 +150,22 @@ class SearchForm extends React.Component{
         return jumpResultList
       }
 
+      handleClickOutside(){
+        document.addEventListener("mousedown", (event) =>{
+          if(!this.autoRef.current.contains(event.target))
+          this.setState({
+            clickInfo: true
+          })
+        })
+        document.addEventListener("mousedown", (event) =>{
+          if(!this.jumpRef.current.contains(event.target))
+          this.setState({
+            clickInfo: true
+          })
+        })
+        
+      }
+
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
           this.submitHandler();
@@ -179,9 +191,9 @@ class SearchForm extends React.Component{
                 </div>
                                       
                 {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
+                <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
-                <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">
+                <div ref={this.jumpRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4>Jump To</h4>
                    {this.createJumpResultList()}
