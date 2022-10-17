@@ -855,7 +855,7 @@ p{
     border: 0.5px solid black;
     padding-bottom: 20px;
     padding-top: 10px;
-    z-index: 999;
+    z-index: 2147483647;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
@@ -1189,7 +1189,7 @@ p{
     overflow-y: scroll;
     padding-bottom: 500px !important;
     padding-top: 30px !important;
-    z-index: 999;
+    z-index: 900;
     padding-left: 10px !important;
     padding-right: 10px !important;
     background-color: white;
