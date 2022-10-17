@@ -151,16 +151,16 @@ class SearchForm extends React.Component{
       }
 
       handleClickOutside(){
-        document.addEventListener("mousedown", (event) =>{
+        document.addEventListener("click", (event) =>{
           if(!this.autoRef.current.contains(event.target))
           this.setState({
-            clickInfo: true
+            result: false
           })
         })
-        document.addEventListener("mousedown", (event) =>{
+        document.addEventListener("click", (event) =>{
           if(!this.jumpRef.current.contains(event.target))
           this.setState({
-            clickInfo: true
+            result: false 
           })
         })
         
