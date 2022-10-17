@@ -58,6 +58,15 @@ class SearchResult extends React.Component{
             searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
           });
         }
+        else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){          
+          /**
+           * search only in the target project ontologies
+           */
+          let collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);          
+          collectionOntologies.forEach(onto => {
+            searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+          });
+        }
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
@@ -178,6 +187,15 @@ async suggestionHandler(selectedTerm){
      * search only in the target project ontologies
      */
     let collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);    
+    collectionOntologies.forEach(onto => {
+      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+    });
+  }
+  else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){          
+    /**
+     * search only in the target project ontologies
+     */
+    let collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);    
     collectionOntologies.forEach(onto => {
       searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
     });
@@ -342,6 +360,15 @@ async suggestionHandler(selectedTerm){
         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
       });
     }
+    else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
+      /**
+       * No collection selectedsearch only in the target project ontologies
+       */
+       collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);
+       collectionOntologies.forEach(onto => {
+         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+       });
+    }
     else if(process.env.REACT_APP_PROJECT_ID === "general"){
       if(collections.length !== 0){
         collectionOntologies = await getCollectionOntologies(collections, false);
@@ -412,6 +439,15 @@ async suggestionHandler(selectedTerm){
        * search only in the target project ontologies
        */
       let collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);
+      collectionOntologies.forEach(onto => {
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+      });
+    }
+    else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){          
+      /**
+       * search only in the target project ontologies
+       */
+      let collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);
       collectionOntologies.forEach(onto => {
         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
       });
