@@ -7,6 +7,7 @@ class SearchForm extends React.Component{
         this.state = ({
           enteredTerm: "",
           result: false,
+          clickInfo: false,
           searchResult: [],
           jumpResult: []
         })
@@ -15,7 +16,10 @@ class SearchForm extends React.Component{
         this.createJumpResultList = this.createJumpResultList.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
         this.submitJumpHandler = this.submitJumpHandler.bind(this);  
-        this.suggestionHandler = this.suggestionHandler.bind(this);  
+        this.suggestionHandler = this.suggestionHandler.bind(this); 
+        this.autoRef = React.createRef(); 
+        this.jumpRef = React.createRef();
+        this.handleClickOutside = this.handleClickOutside.bind(this);
       }
       
 
@@ -65,7 +69,14 @@ class SearchForm extends React.Component{
             result: true
           });
       }
-      
+    
+    componentDidMount() {
+        document.addEventListener('click', this.handleClickOutside, true);
+      }
+    
+    componentWillUnmount() {
+        document.removeEventListener('click', this.handleClickOutside, true);
+      };
 
       createResultList(){
           const resultList = []          
@@ -90,7 +101,7 @@ class SearchForm extends React.Component{
               if(this.state.jumpResult[i]["type"] === 'class'){
                 return(
                   <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">   
-                    <div className="jump-autocomplete-item">         
+                    <div ref={this.ref} className="jump-autocomplete-item">         
                      {this.state.jumpResult[i]['label']}
                      <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
                      <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a>  
@@ -101,7 +112,7 @@ class SearchForm extends React.Component{
               if(this.state.jumpResult[i]["type"] === 'property'){
                 return(
                   <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">  
-                  <div className="jump-autocomplete-item">          
+                  <div ref={this.ref} className="jump-autocomplete-item">          
                      {this.state.jumpResult[i]['label']}
                      <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
                      <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a> 
@@ -112,7 +123,7 @@ class SearchForm extends React.Component{
               if(this.state.jumpResult[i]["type"] === 'individual'){
                 return(
                   <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">   
-                  <div className="jump-autocomplete-item">        
+                  <div ref={this.ref} className="jump-autocomplete-item">        
                      {this.state.jumpResult[i]['label']}
                      <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
                      <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a>
@@ -123,7 +134,7 @@ class SearchForm extends React.Component{
               if(this.state.jumpResult[i]["type"] === 'ontology'){
                 return(
                   <a href={'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name'])} key={i} className="container"> 
-                  <div className="jump-autocomplete-item">          
+                  <div ref={this.ref} className="jump-autocomplete-item">          
                      {this.state.jumpResult[i]['label']}
                      <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
                      <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a> 
@@ -137,6 +148,22 @@ class SearchForm extends React.Component{
           )
         }
         return jumpResultList
+      }
+
+      handleClickOutside(){
+        document.addEventListener("click", (event) =>{
+          if(!this.autoRef.current.contains(event.target))
+          this.setState({
+            result: false
+          })
+        })
+        document.addEventListener("click", (event) =>{
+          if(!this.jumpRef.current.contains(event.target))
+          this.setState({
+            result: false 
+          })
+        })
+        
       }
 
       _handleKeyDown = (e) => {
@@ -164,9 +191,9 @@ class SearchForm extends React.Component{
                 </div>
                                       
                 {this.state.result &&
-                <div id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
+                <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
-                <div id = "jumpresult-container" className="col-md-12 justify-content-md-center">
+                <div ref={this.jumpRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4>Jump To</h4>
                    {this.createJumpResultList()}
