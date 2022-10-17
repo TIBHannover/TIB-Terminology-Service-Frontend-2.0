@@ -7,14 +7,26 @@ import DFG_LOGO from '../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_e
 const Footer = () => (       
         <div className='row site-footer'>
             <div className="col-sm-4 footer-col">
-                <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
-                    <img src={DFG_LOGO} alt="" className="footer-logo"/>
-                </a>
+                {process.env.REACT_APP_PROJECT_ID === "general" &&
+                    <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
+                        <img src={DFG_LOGO} alt="" className="footer-logo"/>
+                    </a>
+                }       
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                    <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
+                        <img src="/dfg_logo.png" alt="" className="footer-logo"/>
+                    </a>
+                }
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
-                    <ul className="footer-list">
-                        <li>NFDI4Chem is funded by DFG</li>
-                        <li>Project Number 441958208</li>
-                    </ul>
+                    <span>
+                        <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
+                            <img src={DFG_LOGO} alt="" className="footer-logo"/>
+                        </a>
+                        <ul className="footer-list">
+                            <li>NFDI4Chem is funded by DFG</li>
+                            <li>Project Number 441958208</li>
+                        </ul>
+                    </span>                    
                 }
             </div>
 
@@ -62,9 +74,21 @@ const Footer = () => (
             <div className="col-sm-4">
                 <h6>PROVIDED BY</h6>
                 <hr className="me-5"/>
-                <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
-                    <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" className="footer-logo" />
-                </a>
+                    {process.env.REACT_APP_PROJECT_ID === "general" &&
+                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
+                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" className="footer-logo" />
+                        </a>
+                    }       
+                    {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
+                            <img src="/TIB_Logo_EN_WM_B.SVG" alt="Logo Technische Informationsbibliothek (TIB)" className="footer-logo" />
+                        </a>
+                    }
+                    {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
+                        <a href="https://www.tib.eu/en/" target="_blank" rel="noopener noreferrer">
+                            <img src={TIB_LOGO} alt="Logo Technische Informationsbibliothek (TIB)" className="footer-logo" />
+                        </a>                  
+                    }               
             </div>
         </div>            
 );
