@@ -1,6 +1,7 @@
 export function nfdi4chemHelp(){
     let content = [
         <div>
+            <h4>HELP</h4>
             <p>For feedback, enquiries or suggestion about NFDI4Chem Terminology Service or to request a new ontology please contact our NFDI4Chem helpdesk. Either send an email to <a href="mailto:helpdesk@nfdi4chem.de">helpdesk@nfdi4chem.de</a> or use the Helpdesk <a href="https://nfdi4chem.de/index.php/helpdesk/">contact form</a></p>
             
             <p>For general information about chemistry ontologies visit the chapter on ontologies in our <a href="https://knowledgebase.nfdi4chem.de/knowledge_base/docs/topics/ontology/">Knowledge Base</a></p>
