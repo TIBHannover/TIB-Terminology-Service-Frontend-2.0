@@ -23,7 +23,7 @@ class DataTree extends React.Component {
       treeDomContent: "",
       resetTreeFlag: false,
       siblingsVisible: false,
-      siblingsButtonShow: true,
+      siblingsButtonShow: false,
       reduceTreeBtnShow: false,
       reduceBtnActive: true,
       viewMode: true,
@@ -157,7 +157,8 @@ class DataTree extends React.Component {
             showNodeDetailPage: true,
             reduceTreeBtnShow: true,
             reload: false,
-            isLoadingTheComponent: false
+            isLoadingTheComponent: false,
+            siblingsButtonShow: true
           }); 
 
           return true;
@@ -211,7 +212,8 @@ class DataTree extends React.Component {
             showNodeDetailPage: true,
             reduceTreeBtnShow: true,
             reload: false,
-            isLoadingTheComponent: false
+            isLoadingTheComponent: false,
+            siblingsButtonShow: true
         });    
       }
   }
