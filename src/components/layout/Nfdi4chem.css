@@ -48,6 +48,13 @@ p{
     color: #0E6668;
     text-decoration: none;
  }
+
+ .ahome{
+    /* 
+       The style for the site anchors
+    */
+    font-weight: bold;
+ }
  
  a:hover{
     /* 
