@@ -104,9 +104,8 @@ class DataTree extends React.Component {
    * @returns 
    */
     async processTree(resetFlag, viewMode, reload){
-      let target = this.props.iri;
-      console.info(target);
-      if (!target || resetFlag){
+      let target = this.props.iri;      
+      if (!target || resetFlag){        
         this.buildTree(this.state.rootNodes);       
         return true;
       }      
@@ -413,7 +412,8 @@ reduceTree(){
   this.setState({
     reduceBtnActive: !reduceBtnActive,
     siblingsButtonShow: showSiblings,
-    reload: true,    
+    reload: true, 
+    treeDomContent: ""   
   });
 }
 
