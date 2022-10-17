@@ -150,6 +150,7 @@ class DataTree extends React.Component {
             i += 1;
           }          
           let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+          let fullTreeMode = this.state.reduceBtnActive;
           this.setState({
             targetNodeIri: target,
             treeDomContent: treeList,
@@ -158,7 +159,7 @@ class DataTree extends React.Component {
             reduceTreeBtnShow: true,
             reload: false,
             isLoadingTheComponent: false,
-            siblingsButtonShow: true
+            siblingsButtonShow: fullTreeMode
           }); 
 
           return true;
@@ -204,7 +205,8 @@ class DataTree extends React.Component {
           
           childrenList.push(listItem);
         }
-        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                 
+        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);   
+        let fullTreeMode = this.state.reduceBtnActive;              
         this.setState({
             targetNodeIri: target,            
             treeDomContent: treeList,
@@ -213,7 +215,7 @@ class DataTree extends React.Component {
             reduceTreeBtnShow: true,
             reload: false,
             isLoadingTheComponent: false,
-            siblingsButtonShow: true
+            siblingsButtonShow: fullTreeMode
         });    
       }
   }
@@ -270,7 +272,8 @@ selectNode(target){
     target.classList.add("clicked");
     this.setState({
       showNodeDetailPage: true,
-      selectedNodeIri: target.parentNode.dataset.iri
+      selectedNodeIri: target.parentNode.dataset.iri,
+      siblingsButtonShow: false
     });
 
     let currentUrlParams = new URLSearchParams();
@@ -400,10 +403,11 @@ async showSiblings(){
  */
 reduceTree(){
   let reduceBtnActive = this.state.reduceBtnActive;
+  let showSiblings = !reduceBtnActive;  
   this.setState({
     reduceBtnActive: !reduceBtnActive,
-    siblingsButtonShow: !reduceBtnActive,
-    reload: true
+    siblingsButtonShow: showSiblings,
+    reload: true,    
   });
 }
 
