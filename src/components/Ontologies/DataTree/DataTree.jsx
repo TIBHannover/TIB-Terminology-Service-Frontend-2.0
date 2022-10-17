@@ -413,7 +413,8 @@ reduceTree(){
     reduceBtnActive: !reduceBtnActive,
     siblingsButtonShow: showSiblings,
     reload: true, 
-    treeDomContent: ""   
+    treeDomContent: "",
+    isLoadingTheComponent: true
   });
 }
 
