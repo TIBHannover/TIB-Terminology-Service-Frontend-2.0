@@ -22,11 +22,6 @@ export function generalAbout(){
                 <li>tools for the collaborative creation of terminologies (e.g. versioning system, online editor)</li>
                 <li>a help-desk to assist the user community in the curation of terminologies.</li>
             </ul>
-            <h3>Community Terminology Services</h3>
-            <p>Visit our community services with specific collections for engineering, chemistry or economics:</p>
-            <img src={collectionsInfoJson["NFDI4Ing"]["logo"]} alt="nfdi4ing" />
-            <img src={collectionsInfoJson["NFDI4Chem"]["logo"]} alt="nfdi4chem" style={{ borderWidth: 0, height: '300px' }}/>
-            <img src={collectionsInfoJson["CoyPu"]["logo"]} alt="coypu" style={{ borderWidth: 0, height: '100px' }}/>
             </div>                
         </div>
     ];
