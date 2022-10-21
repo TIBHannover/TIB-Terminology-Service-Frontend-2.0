@@ -14,7 +14,7 @@
         "html_id":"NFDI4CHEM",
         "name":"NFDI4Chem Project",
         "text":"The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.",
-        "logo": "/NFDI4Chem_Logo-Claim_mehrfarbig_schwarz.svg",
+        "logo": "/NFDI4CHEM_LOGO.svg",
         "ontology_list_url": "/ontologies?collection=NFDI4CHEM&and=false&page=1",
         "project_homepage":"https://www.nfdi4chem.de/",
         "domain_ts_link": ""
