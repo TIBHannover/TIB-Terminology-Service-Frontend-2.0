@@ -35,7 +35,9 @@ const size = 10000;
   let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&exclusive=" + exclusive + "&";
   let urlPros = "";
   for(let col of collections){
-    urlPros += ("classification=" + encodeURIComponent(col) + "&");
+    if (col !== ""){
+      urlPros += ("classification=" + encodeURIComponent(col) + "&");
+    }
   }
   targetUrl += urlPros;
   return fetch(targetUrl, getCallSetting)

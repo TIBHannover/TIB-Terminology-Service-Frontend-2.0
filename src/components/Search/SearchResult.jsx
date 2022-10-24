@@ -49,24 +49,11 @@ class SearchResult extends React.Component{
       let enteredTerm = targetQueryParams.q
       if (enteredTerm.length > 0){
         let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
-        if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){          
-          /**
-           * search only in the target project ontologies
-           */
-          let collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);          
-          collectionOntologies.forEach(onto => {
-            searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-          });
-        }
-        else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){          
-          /**
-           * search only in the target project ontologies
-           */
-          let collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);          
-          collectionOntologies.forEach(onto => {
-            searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-          });
-        }
+        let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
+        collectionOntologies.forEach(onto => {
+          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+        });
+        
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
@@ -161,15 +148,11 @@ class SearchResult extends React.Component{
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
     let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
-    if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){          
-      /**
-       * search only in the target project ontologies
-       */
-      let collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);      
-      collectionOntologies.forEach(onto => {
-        searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-      });
-    }
+    let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);      
+    collectionOntologies.forEach(onto => {
+      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+    });
+    
     let exactResult = await fetch(searchUrl)
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
@@ -182,24 +165,11 @@ async handleExact(){
 
 async suggestionHandler(selectedTerm){
   let searchUrl  = process.env.REACT_APP_SEARCH_URL + `?q=${selectedTerm}`;
-  if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){          
-    /**
-     * search only in the target project ontologies
-     */
-    let collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);    
-    collectionOntologies.forEach(onto => {
-      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-    });
-  }
-  else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){          
-    /**
-     * search only in the target project ontologies
-     */
-    let collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);    
-    collectionOntologies.forEach(onto => {
-      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-    });
-  }
+  let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);    
+  collectionOntologies.forEach(onto => {
+    searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+  });
+
   let newSearchResult = await fetch(searchUrl)
   newSearchResult =  (await newSearchResult.json())['response']['docs'];
   this.setState({
@@ -351,25 +321,17 @@ async suggestionHandler(selectedTerm){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
     let collectionOntologies = [];   
-    if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && ontologies.length === 0){          
+    
+    if(process.env.REACT_APP_PROJECT_ID !== "general" && ontologies.length === 0){          
       /**
-       * No collection selectedsearch only in the target project ontologies
+       * No ontologies selected. search only in the target project ontologies
        */
-      collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);
-      collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-      });
-    }
-    else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
-      /**
-       * No collection selectedsearch only in the target project ontologies
-       */
-       collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);
+       collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
        collectionOntologies.forEach(onto => {
          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
        });
-    }
-    else if(process.env.REACT_APP_PROJECT_ID === "general"){
+    }   
+    else{
       if(collections.length !== 0){
         collectionOntologies = await getCollectionOntologies(collections, false);
       }
@@ -432,48 +394,37 @@ async suggestionHandler(selectedTerm){
    async paginationHandler () {
     let ontologies = this.state.ontologies;
     let types = this.state.types;
+    let collections = this.state.selectedCollections;
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){          
-      /**
-       * search only in the target project ontologies
-       */
-      let collectionOntologies = await getCollectionOntologies(["NFDI4CHEM"], false);
-      collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-      });
-    }
-    else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){          
-      /**
-       * search only in the target project ontologies
-       */
-      let collectionOntologies = await getCollectionOntologies(["NFDI4ING"], false);
-      collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-      });
-    }
-    if(ontologies.length > 0 || types.length > 0){
-      ontologies.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
-      }) 
-      types.forEach(item => {
-        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
-      })
-      let targetUrl = await fetch(baseUrl)
-      let newResults = (await targetUrl.json())['response']['docs']
-      this.updateURL(ontologies, types)
-      this.setState({
-        searchResult: newResults
-     })
+    if(ontologies.length > 0 || types.length > 0 || collections.length > 0){
+      // Add other selected filters 
+        ontologies.forEach(item => {
+          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+        }) 
+        types.forEach(item => {
+          baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+        })
+       let collectionOntologies = await getCollectionOntologies(collections, false);
+        collectionOntologies.forEach(onto => {
+          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+        });
+        this.updateURL(ontologies, types)        
      }
      else{
-      let targetUrl = await fetch(baseUrl)
-      let resultJson = (await targetUrl.json());
-      let newResults = resultJson['response']['docs']
-      this.setState({
-        searchResult: newResults
-     })
+      // No extra filter. Get the target project ontologies
+      let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
+      collectionOntologies.forEach(onto => {
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+      });
      }
+
+    let targetUrl = await fetch(baseUrl)
+    let resultJson = (await targetUrl.json());
+    let newResults = resultJson['response']['docs']
+    this.setState({
+      searchResult: newResults
+    })
      
   }
 
