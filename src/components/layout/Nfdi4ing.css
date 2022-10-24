@@ -267,17 +267,19 @@ p{
         The heading part style for the collapse button (bootstrap). Example: in the Usage page.
      */
 
-    background-color: #2E9198 !important;
+    background-color: #d2e2e2 !important;
 }
 .collpase-text-btn{
     /* 
         The style for the collapse button (bootstrap). Example: in the Usage page.
      */
 
-    background-color: #2E9198 !important;
-    color: white;
+    background-color: #d2e2e2 !important;
+    color: black;
     text-decoration: none;
     width: 100%;
+    text-align: left;
+    border-color: #d2e2e2;
 }
 .collpase-text-btn:hover{
     /* 
@@ -285,8 +287,19 @@ p{
      */
 
     text-decoration: none;
-    color: white;
+    color: black;
 }
+
+.collpase-text-btn:focus{
+    /* 
+        Style for the collapse button when it is clicked (Example: in Usage page and Help page)
+    */
+
+    box-shadow: none;
+    text-decoration: none;
+    color: black;
+}
+
 
 @media only screen and (max-width: 1025px) {
     .application-content{
