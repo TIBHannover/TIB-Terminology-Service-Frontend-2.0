@@ -4,7 +4,7 @@ export function nfdi4chemHomePage(){
             <div className="col-sm-8">
                 <div className="row">
                     <div className="col-sm-4">
-                            <img class="img-fluid" alt="Blog image" src="/chem_sample1.jpg"/>
+                            <img className=" img-fluid icon1home" alt="Blog image" src="/Icon1-1.png"/>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
                                 <h5>WHAT IS THIS ?</h5>
@@ -13,7 +13,7 @@ export function nfdi4chemHomePage(){
                         </div>   
                     </div>
                     <div className="col-sm-4">
-                            <img class="img-fluid" alt="Blog image" src="/chem_sample2.jpg"/>
+                            <img className=" img-fluid iconhome" alt="Blog image" src="/Icon2-1.png"/>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
                                <h5>HOW TO SEARCH ?</h5>
@@ -22,7 +22,7 @@ export function nfdi4chemHomePage(){
                         </div>   
                     </div>
                     <div className="col-sm-4">
-                            <img class="img-fluid" alt="Blog image" src="/chem_sample3.jpg"/>
+                            <img className="img-fluid iconhome" alt="Blog image" src="Icon3-1.png"/>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
                              <h5>NOT A HUMAN ?</h5>
