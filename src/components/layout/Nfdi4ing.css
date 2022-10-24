@@ -415,16 +415,14 @@ p{
      */
     color: white;
     text-decoration: none;
-    font-size: 18px;
-    margin-left: 10px;
-
+    font-size: 16px;    
  }
  
  .main-title:hover {
     /* 
         The style for the site title hover
      */
-    color: #005D70;
+    color: white;
     text-decoration: none;
  }
    
@@ -445,7 +443,7 @@ p{
     */
 
     height: 100px;
-    width: 200px;
+    width: 250px;
     margin-top: -20px;
 }
    
