@@ -262,6 +262,32 @@ p{
     margin-left: 1px;
 }
 
+.card-header{
+    /* 
+        The heading part style for the collapse button (bootstrap). Example: in the Usage page.
+     */
+
+    background-color: #2E9198 !important;
+}
+.collpase-text-btn{
+    /* 
+        The style for the collapse button (bootstrap). Example: in the Usage page.
+     */
+
+    background-color: #2E9198 !important;
+    color: white;
+    text-decoration: none;
+    width: 100%;
+}
+.collpase-text-btn:hover{
+    /* 
+        The style for the collapse button hover (bootstrap). Example: in the Usage page.
+     */
+
+    text-decoration: none;
+    color: white;
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 

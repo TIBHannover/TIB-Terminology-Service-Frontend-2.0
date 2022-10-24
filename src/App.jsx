@@ -13,6 +13,7 @@ import TermsOfUse from '../src/assets/static/TermsOfUse';
 import AboutApi from '../src/assets/static/AboutApi';
 import About from "./components/About/About";
 import Help from "./components/Help/Help";
+import UsagePage from './components/Usage/Usage';
 
 // import css file based on the target project
 process.env.REACT_APP_PROJECT_ID === "general" && import ('./components/layout/General_TIB.css');
@@ -61,6 +62,7 @@ function App() {
             <Route exact path="/AboutApi" component={AboutApi}/>
             <Route exact path="/about" component={About}/>
             <Route exact path="/help" component={Help}/>
+            {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && <Route exact path="/usage" component={UsagePage}/>}
           </Switch>
         </div>        
         <Footer />
