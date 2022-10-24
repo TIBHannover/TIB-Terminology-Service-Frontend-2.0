@@ -35,11 +35,19 @@ function Navbar () {
                 }                  
                 </li>
                 <li class="nav-item">
-                {urlPath.includes("/documentation") 
+                {urlPath.includes("/api") 
                   ? <a class="nav-link navbar-item nav-clicked" href="/api">API</a>
                   : <a class="nav-link navbar-item" href="/api">API</a>
                 }                  
                 </li>
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                <li class="nav-item">
+                 {urlPath.includes("/usage") 
+                    ? <a class="nav-link navbar-item nav-clicked" href="/usage">Usage</a>
+                    : <a class="nav-link navbar-item" href="/usage">Usage</a>
+                  }
+                </li>
+                }
                 <li class="nav-item">
                 {urlPath.includes("/about") 
                   ? <a class="nav-link navbar-item nav-clicked" href="/about">About</a>

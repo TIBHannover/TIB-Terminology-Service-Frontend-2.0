@@ -1,0 +1,1462 @@
+/* 
+    This the CSS style for the NFDI4Chem frontend (all in one place)
+*/
+
+
+/* 
+------------------------
+    Site general layout
+------------------------
+*/
+
+
+/* 
+    This is the css script for the general application style.    
+*/
+
+body{
+    /* 
+       The style for the site body
+    */
+ 
+    color: #42484e;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+ }
+
+ .application-content{
+    /* 
+        The style for the application inner content (between the header and footer)
+    */
+   
+    overflow-x: hidden;
+    overflow-y: hidden;
+    min-height: 500px;
+    padding-top: 30px;
+}
+
+p{
+    text-align: justify;
+}
+ 
+ a{
+    /* 
+       The style for the site anchors
+    */
+
+    color: #0E6668;
+    text-decoration: none;
+ }
+ 
+ a:hover{
+    /* 
+       The style for the site anchors while hovering
+    */
+
+    text-decoration: underline;
+    color: #0E6668; 
+ }
+
+ button{
+    background-color: #404040 !important;
+    font-size: 14px;
+ }
+
+ .term-button{
+    /* 
+        The style for a button representing a term (class/propperty)
+    */
+
+    background-color: #873593;
+    color: white;
+    margin-left: 15px;
+    padding: 3px;
+    font-size: 12px;
+    margin-top: -5px;
+    border-color:  #873593;
+ }
+
+ .term-button:hover{
+    /* 
+        The style for a button representing a term (class/propperty) on hover
+    */
+
+    text-decoration: none;
+    background-color: rgba(149, 86, 158, 0.7);
+    color: white;
+ }
+
+.ontology-button{
+    /* 
+        The style for a button representing an ontology
+    */
+
+    background-color: #00617C;
+    color: white;
+    margin-left: 10px;
+    padding: 3px;
+    font-size: 12px;
+    margin-right: 10px;
+    border-color: #00617C !important;
+}
+
+.ontology-button:hover{
+    /* 
+        The style for a button representing an ontology on hover
+    */
+
+    text-decoration: none !important;
+    background-color: rgba(0,97,124,0.7) !important;
+    color: white;
+}
+
+.facet-box{
+    /* 
+        The style for each facet input box
+    */
+
+    background-color: white;
+    padding-right: 10px;
+    padding-top: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    border: 1px solid #639EAF;
+}
+
+.facet-result-count{
+    /* 
+       The style for counter in facet fields
+    */
+    border-radius: 50px;
+    background-color: #2B3C46;
+    color: white;
+    padding: 5px;    
+    text-align: center;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
+}
+
+.facet-item-row{
+    /* 
+        The style for each checkbox row in the facet
+    */
+
+    margin-bottom: 10px;
+}
+
+.facet-item-row:hover{
+    /* 
+       The style for colour changes for mouse hover one the facet items
+    */
+    background-color: rgba(119, 122, 121, 0.192);
+    border-radius: 15px;
+}
+
+.result-card{
+    /* 
+        The style for each search result item. Used in the search result and ontology list.
+    */
+    
+    background-color: white !important;
+    margin-top: 10px;
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #639EAF;
+}
+
+ .stats-box-text{
+    /* 
+        The style for text item in statistics box present in homepage
+    */
+    text-align: center;
+ }
+
+ .site-footer{
+    /* 
+        Site footer style
+    */
+
+    background: #FFFFFF;   
+    border-top: 1px #d1d3d9 solid;
+    padding-top: 20px;
+    color: black;
+}
+
+.footer-link{
+    /* 
+        Links in the footer
+    */
+
+    color: black;
+}
+
+.footer-link:hover{
+    color: black;
+}
+
+.footer-list{
+    /* 
+        Styles for the lists in footer
+    */
+
+    list-style: none;
+    margin-left: -30px !important;
+}
+
+.footer-logo{
+    /* 
+        Logos on the site footer
+    */
+
+    width: 300px;
+    height: 100px;
+}
+
+.footer-col{
+    /* 
+        Style for the first column (DFG logo) in the footer
+    */
+
+    text-align: center;
+}
+
+.site-dropdown-menu{
+    /* 
+        General style for the dropdown (select/option) menus in the site.
+    */
+
+    border: 1px solid #00617C !important;
+    padding: 5px;
+}
+
+.fa{
+    /* 
+        Forntawsome style modification for the tree view. 
+    */
+
+    display: inline !important;
+    border: 1px solid;
+    margin-right: 5px;    
+    font-size: 10px;
+}
+
+.fa-download{
+    /* 
+        The font awsome download icon style
+    */
+    
+    border: none !important;
+}
+
+.fa-check{
+    /* 
+        Checked icon style (copy url checked)
+    */
+
+    border: none !important;    
+    margin-left: 1px;
+}
+
+.card-header{
+    /* 
+        The heading part style for the collapse button (bootstrap). Example: in the Usage page.
+     */
+
+    background-color: #d2e2e2 !important;
+}
+.collpase-text-btn{
+    /* 
+        The style for the collapse button (bootstrap). Example: in the Usage page.
+     */
+
+    background-color: #d2e2e2 !important;
+    color: black;
+    text-decoration: none;
+    width: 100%;
+    text-align: left;
+    border-color: #d2e2e2;
+}
+.collpase-text-btn:hover{
+    /* 
+        The style for the collapse button hover (bootstrap). Example: in the Usage page.
+     */
+
+    text-decoration: none;
+    color: black;
+}
+
+.collpase-text-btn:focus{
+    /* 
+        Style for the collapse button when it is clicked (Example: in Usage page and Help page)
+    */
+
+    box-shadow: none;
+    text-decoration: none;
+    color: black;
+}
+
+
+@media only screen and (max-width: 1025px) {
+    .application-content{
+        /* 
+            The style for the application inner content (between the header and footer)
+        */
+            
+        width: 95%;                
+    }
+
+    .site-footer{
+        font-size: 10px;
+        position: fixed;
+    }
+
+    .footer-logo{
+        /* 
+            Logos on the site footer
+        */
+
+        width: 200px;
+        height: 50px;
+    }
+}
+
+
+/* 
+-------------------------------------
+    The Header styles 
+-------------------------------------
+*/
+
+.header-warpper{
+    /* 
+       The main box for the site header
+    */
+ 
+    background-position: right center;
+    background-color: #2E9198;
+    padding: 10px;
+    max-height: 700px;
+ }
+ 
+ .container.site-header{
+    /* 
+       The style for site header bootstarp container class
+    */
+ 
+    text-align: center;
+    margin: auto;
+ }
+ 
+ .site-header-nav-logo-holder{
+    /* 
+       The warapper box for the site main navbar
+    */
+     
+    padding-right: 10%;
+    margin-bottom: 30px;
+    width: 120%;
+ }
+ 
+ .site-header-searchbox-holder{
+    /* 
+       The warapper box for the site main search input
+    */
+ 
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-bottom: 40px;
+ }
+ 
+ 
+ .site-header-top-row{
+    /* 
+       The warapper box for the site top row containing Login
+    */
+ 
+    text-align: right;
+    color: white;
+    margin-bottom: 20px;
+ }
+ 
+ .site-header-top-row > a{
+    /* 
+       The warapper box for the site top row anchors containing Login
+    */
+ 
+    text-decoration: none;
+    color: white;
+ }
+ 
+ .header {
+     /* 
+        The style for overall header dimensions
+     */
+     
+     display: flex;
+     flex: 1;
+     flex-direction: column;
+   }
+   
+ .header-top {
+     /* 
+        The style for the autocomplete field
+     */
+     display: flex;
+     width: 100%;
+     height: 250px;
+   }
+   
+ .header-top__logo {
+     /* 
+        The style for the project logo dimensions in header
+     */
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-right: 20px;
+     margin-left: 30px;
+   }
+ 
+ .main-title {
+    /* 
+        The style for the site title
+     */
+    color: white;
+    text-decoration: none;
+    font-size: 16px;    
+ }
+ 
+ .main-title:hover {
+    /* 
+        The style for the site title hover
+     */
+    color: white;
+    text-decoration: none;
+ }
+   
+ .header-logo {
+     /* 
+        The style for the project logo text
+     */
+
+     color: inherit;
+     text-decoration: inherit;
+     font-family: RobotoThin;
+     font-size: 100px;
+   }
+
+.site-logo-image{
+    /* 
+        The style for the site logo image 
+    */
+
+    height: 100px;
+    width: 250px;
+    margin-top: -20px;
+}
+   
+ .header-top__navbar {
+     /* 
+        The style for adjusting header dimensions with navbar
+     */
+     display: flex;
+     flex: 1;
+     flex-direction: column;
+   }
+   
+ .header-top__seperator {
+     /* 
+        The style for header top
+     */
+     width: 100%;
+     border: none;
+     height: 2px;
+     margin-top: 2px;
+     background-color: black;
+   }
+   
+ .header-top__navigation {
+     /* 
+        The style for header navigation
+     */
+     display: flex;
+     flex: 1;
+     flex-direction: row;
+     justify-content: flex-end;
+     margin-right: 55px;
+   }
+   
+ .header-bottom {
+     /* 
+        The style for header and bottom elements
+     */
+     display: flex;
+     flex: 1;
+     justify-content: flex-end;
+     align-items: center;
+     margin-top: 6px;
+   }
+ 
+   
+ /* 
+ -------------------------------------
+    The Navbar styles 
+ -------------------------------------
+ */
+ 
+ .site-navbar {
+     /* 
+        The style for navabr dimensions
+     */
+   
+     margin-top: 15px !important;
+     background-color: #2E9198;
+     width: 90%;
+   }
+   
+ .navbar-item {
+     /* 
+        The style for elements in navbar
+     */
+     
+     margin-left: 10px;
+     text-transform: uppercase;
+     outline: none;
+     color: white;
+     font-weight: bold;
+     font-size: 16px;
+   }
+ 
+   .navbar-item:hover{
+       color: white !important;
+       text-decoration: underline !important;
+   }
+ 
+   .navbar-collapse-btn{
+       /* 
+          Navbar collapse button styles
+       */
+ 
+       background-color: black;
+       color: white;
+       margin-left: auto !important;
+   }
+ 
+   .collpase-btn-content{
+       /* 
+          Navbar collapse button content styles
+       */
+ 
+       border: none !important;
+    }
+ 
+ .nav-clicked{
+    /* 
+        A clicked nabvar item style
+    */
+
+    text-decoration: underline;
+    font-weight: bold;    
+ }
+ 
+
+ /* 
+ -------------------------------------
+    The Pagination styles 
+ -------------------------------------
+ */
+ 
+ .pagination-holder {
+    /* 
+       Style for the pagination ul (holder)
+    */
+ 
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+ 
+ .pagination-btn{
+    /* 
+       Style for each pagination button (li)
+    */
+ 
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #0E6668;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+ }
+ 
+ .pagination-btn:hover{
+    /* 
+       Style for each pagination button (li) mouse over
+    */
+ 
+    background-color: #E9ECEF;
+    color: #0E6668;
+ }
+ 
+ .pagination-start{
+    /* 
+       Style for the first pagination button (Previous)
+    */
+ 
+    margin-left: 0;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+ }
+ 
+ .pagination-end{
+    /* 
+       Style for the last pagination button (Next)
+    */
+ 
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+ }
+ 
+ .pagination-link{
+    /* 
+       Style for the pagination button anchor
+    */
+ 
+    text-decoration: none;
+    color: #009cbc;
+ }
+ 
+ .pagination-link:hover{
+    /* 
+       Style for the pagination button anchor mouse over
+    */
+ 
+    color: #0B6376;
+ }
+ 
+ .selected-page{
+    /* 
+       Style for the selected page on the pagination
+    */
+ 
+    background-color: #a9c9e4;
+ }
+ 
+ .out-of-range-hidden-page-btn{
+    /* 
+       Hide the out of range buttons. 
+       !!! Do NOT Remove this !!!
+    */
+ 
+    display: none;
+ }
+ 
+ 
+ @media only screen and (max-width: 1025px) and (min-width: 901px){
+    .navbar-item {
+       /* 
+          The style for elements in navbar
+       */
+      float: right !important;
+     }
+ 
+     .navbar-nav{
+       /* 
+          The navbar ul style 
+       */
+ 
+       margin-top: 10px;
+       margin-right: 40px;
+     }
+ 
+     .navbar-collapse-btn{
+       /* 
+          Navbar collapse button styles
+       */
+ 
+      margin-right: 40px;
+    }
+    
+    
+ }
+ 
+ @media only screen and (max-width: 900px) {
+    .navbar-item {
+       /* 
+          The style for elements in navbar
+       */
+      float: right !important;
+     }
+ 
+     .navbar-nav{
+       /* 
+          The navbar ul style 
+       */
+ 
+       margin-top: 10px;
+     }
+ 
+     .site-header-searchbox-holder{
+       /* 
+          The warapper box for the site main search input
+       */
+    
+       padding-left: 0px;
+       padding-right: 0px;
+       margin-bottom: 40px;
+    }
+ 
+ }
+
+/* 
+------------------------
+   Homepage CSS layout
+------------------------
+*/
+
+
+.home-page-stats-container{
+    /* 
+        The home page stats container
+    */
+    
+    padding: 5%;
+    padding-bottom: 8%;
+    background-color: #fafafa;
+
+}
+
+.stats-box{
+    /* 
+        The style for the stats box
+    */
+
+    color: white;
+    background-color: #2E9198;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.show-more-text-link{
+    /* 
+        Read more text button in the collection badges
+    */
+
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.home-image{
+    /* 
+        Homepage images size
+    */
+
+    height: 200px;
+    width: 400px;
+}
+
+@media only screen and (max-width: 1500px) and (min-width: 1026px) {
+    .collection-card{
+        /* 
+            Style for the collection box on the home page.
+        */
+            
+        padding: 10px;
+        
+    }
+
+    .collection-logo{
+        /* 
+            Collection logo image style
+        */
+    
+              
+        margin-left: 20px;
+    }
+  }
+
+
+@media only screen and (max-width: 1025px) and (min-width: 901px) {
+    .collection-card{
+        /* 
+            Style for the collection box on the home page.
+        */
+            
+        padding: 10px;
+        
+    }
+
+    .collection-logo{
+        /* 
+            Collection logo image style
+        */
+    
+              
+        margin-left: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 900px){
+    .collection-card{
+        /* 
+            Style for the collection box on the home page.
+        */
+            
+        padding: 10px;
+        
+    }
+
+    .collection-logo{
+        /* 
+            Collection logo image style
+        */
+    
+              
+        margin-left: 0px;
+    }
+  }
+
+
+/* 
+-------------------------------------
+    The Search form (input + autocomplete) styles 
+-------------------------------------
+*/
+
+#autocomplete-container{
+    /* 
+       The style for the autocomplete field
+    */
+    height: fit-content;
+    border: 0.5px solid black;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    z-index: 999;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 400px;
+    text-align: left;
+}
+.autocomplete-item{
+    /* 
+       The style for the autocomplete items
+    */
+    margin-left: 10px;
+    text-align: justify;
+}
+
+#jumpresult-container{
+    /* 
+       The style for the jump autocomplete field
+    */
+    height: fit-content;
+    border: 0.5px solid black;
+    display: block;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    position: absolute;
+    z-index: 999;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 400px;
+    text-align: left;
+    padding-left: 10px;
+}
+.jump-autocomplete-item{
+    /* 
+       The style for the jump autocomplete field
+    */
+    margin-left: 10px;
+}
+
+#search-box {
+    /* 
+       The style for search bar
+    */
+        border-right: 0;
+}
+
+.search-input{
+    /* 
+        Style for the search input element
+    */
+
+    border: 1px solid #404040;
+}
+
+.search-btn{
+    /* 
+        Style for the search button
+    */
+
+    background-color: #404040 !important;
+    color: white;    
+}
+
+.search-btn:hover{
+    /* 
+        Style for the search button on hover
+    */
+
+    background-color: #23272B !important;
+    color: white !important;
+}
+
+
+/* 
+-------------------------------------
+    The Search results styles 
+-------------------------------------
+*/
+
+#searchterm-wrapper{
+    /* 
+       The style for search terms
+    */
+    
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-top: 20px;
+    display: flex;
+    min-height: 100vh;
+}
+
+.searchresult-card-description{
+    /* 
+       The style inside search result card for description
+    */
+    
+    margin-top: 30px;    
+}
+
+.search-result-title{
+    /* 
+       The style for header anchor in the title of a search result card
+    */
+    
+    color: #5F6469;
+    display: inline !important;
+}
+
+.search-result-title:hover{
+    /* 
+       The style for header anchor in the title of a search result card (hover)
+    */
+    
+    color: #5F6469;
+    text-decoration: none;
+}
+
+.search-result-title > h4{
+    /* 
+       The style for header h4 in the title of a search result card
+    */
+    
+    display: inline !important;
+}
+
+
+/* 
+-------------------------------------
+    The Facet fields in Search results styles 
+-------------------------------------
+*/
+
+
+.show-more-btn{
+    /* 
+        Style for the show more/less button in a facet field box
+    */
+
+    cursor: pointer;
+}
+
+
+/* 
+-------------------------------------
+    The ontology list page styles. 
+-------------------------------------
+*/
+
+
+#ontology-list-sorting{
+    /* 
+        The styles for sort type drop-down menu in the ontology list view.
+    */
+
+    margin-left: 5px;
+    background-color: white;
+    border-color: white;
+    color: #42484e;
+    margin-top: 5px;
+}
+
+
+.ontology-title-text-in-box{
+    /* 
+        The style for the ontology title text in a card
+    */
+
+    text-decoration: none !important;
+    color: #42484e !important;
+}
+
+.ontology-card-description{
+    /* 
+        The styles for the description part for each ontology box in the ontology list view. 
+    */
+
+    margin-top: 30px;
+}
+
+.ontology-list-facet-header{
+    /* 
+        The syle for the facet content under the "Filter" in the ontology list page. 
+    */
+
+    margin-bottom: 25px;
+}
+
+.ontology-card-meta-data{
+    /* 
+        The styles for the stats part (right side) for each ontology box in the ontology list view. 
+    */
+
+    padding-left: 40px;
+}
+
+
+.ontology-collection-name{
+    /* 
+        Style for the collection span inside an ontology card.
+    */
+
+    margin-left: 5px;
+}
+
+.ontology-list-facet-section-box{
+    /* 
+        Style for the facet field holder (box and title) in the ontology list facet.
+    */
+
+    margin-top: 30px;
+    width: 100% !important;
+}
+
+
+#lastUpdateRange{
+    /* 
+        The style for time range label
+    */
+
+    margin-left: 10px;
+}
+
+.facet-switch-holder{
+    /* 
+        The style for the facet switch button holder container (first row of the facet box)
+    */
+
+    text-align: center;
+    margin-bottom: 25px;
+    margin-top: 10px;
+}
+
+
+
+/* 
+-------------------------------------
+    The ontology detail page styles. It contains the ontology overview page.
+-------------------------------------
+*/
+
+
+.ontology-detail-page-container, .tree-view-container{
+    /* 
+        Style for the ontology detail info containers (all pages under each navbar in the ontology detail view).
+    */
+
+    background-color: #fafafa;
+    padding: 10px;
+    margin-top: 0px !important;
+    margin-bottom: 30px !important;
+}
+
+.ontology-detail-table, .ontology-metric-table{
+    /* 
+        The styles for the ontology overview tables (Detail and Metrics) 
+    */
+
+    border-collapse: collapse;
+    width: 90%;
+}
+
+
+.ontology-detail-table  td, th{
+    /* 
+        The styles for the ontology ovewview tables (Detail) rows. 
+    */
+
+    border: 1px solid #dad2d2;
+    text-align: left;
+    padding: 8px;
+}
+
+.ontology-metric-table  td, th{
+    /* 
+        The styles for the ontology ovewview tables (Metrics) rows. 
+    */
+
+    border-bottom: 1px solid #DFE4E5;
+    text-align: left;
+}
+
+.copy-link-btn{
+    /* 
+        The styles for the copy link (url) buttons. 
+    */
+
+    margin-left: 20px !important;
+    font-size: 10px !important;   
+}
+
+.download-ontology-btn{
+    /* 
+        The styles for the download buttons for an ontology. 
+    */
+
+    margin-right: 20px !important;
+    background-color: #404040 !important;
+    font-size: 14px;
+}
+
+
+.ontology-detail-navbar{
+    /* 
+        The style for ontology detail page navbar
+    */
+
+    
+    background-color: #ECF0F0 !important;
+    border-radius: 25px !important;
+}
+
+.ontology-detail-nav-item > .nav-link{
+    /* 
+        Style for the tab menu items in the ontology detail page.
+    */
+
+    color: #0E6668;
+}
+
+.nav-tabs .ontology-detail-nav-item .nav-link.active {
+    background-color: #FAFAFA;
+  }
+
+
+
+
+/* 
+-------------------------------------
+    The Tree view and detail table styles (for both classes and properties)
+-------------------------------------
+*/
+
+.tree-container{
+    /*
+        The styles for the tree view container. 
+        It is responsible for the left part of the tree page that keeps the tree inside. 
+     */
+
+    height: 1000px;
+    overflow-y: scroll;
+    padding-bottom: 500px !important;
+    padding-top: 30px !important;
+    z-index: 999;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    background-color: #fafafa;
+    border-right: 1px solid black;
+}
+
+.node-table-container{
+    /* 
+        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
+    */
+
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px;
+}
+
+.reset-tree-btn{
+    /* 
+        The styles for the Reset Tree button.
+    */
+
+    margin-bottom: 10px !important;
+}
+
+.loading-sign-div{
+    /* 
+        The styles for the loading sign while loading a tree view.
+    */
+
+    margin-left: 100px;
+    margin-top: 100px;    
+}
+
+.p-icon-style{
+    /* 
+        The styles for the P symbol. 
+        The symbol shows the "part_of" relation between a node and its parent in the tree.
+    */
+    
+    background-color: blue;
+    color: white;
+    padding: 5px;
+    border-radius: 50px;
+    font-size: 10px;
+    margin-right: 5px;
+}
+
+
+.node-metadata-label{
+    /* 
+        The metadata label style for nodes (class/property)  in the detail table. 
+    */
+
+    font-weight: bold !important;
+    font-size: 15px !important;
+    text-align: left;
+}
+
+.node-metadata-value{
+    /* 
+        The metadata value style for nodes (class/property)  in the detail table. 
+    */
+
+    font-size: 15px !important;
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+
+.node-detail-table-row{
+    /* 
+        The table row style for nodes (class/property)  in the detail table. 
+    */
+
+    border-bottom: 1px solid black;
+}
+
+
+.tree-node-li {
+    /* 
+        The style for a node (class/property) in a tree view
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;    
+    border-left: 1px dotted !important;
+    border-left-color: gray;
+    font-size: 13px !important;
+}
+
+.tree-node-li::before{
+    /* 
+        For thr tree view heirarchy style.
+    */
+
+    content: "...";
+}
+
+.leaf-node::before{
+    content: "........";
+}
+
+
+.li-label-text:hover{
+    /* 
+        The style for mouse over a node text on a tree veiw.
+    */
+
+    background-color: rgb(218, 218, 218);
+}
+
+.clicked{
+    /* 
+        The style for a clicked (selected) node in a tree view. 
+    */
+
+    background-color: rgb(199, 199, 199);
+    color: black;
+    font-weight: bold;
+}
+
+.closed > i{
+    /* 
+        The style for a node expand icon when it is closed and has children nodes.
+    */
+
+    color: gray;
+    margin-right: 8px;
+}
+
+.opened > i{   
+    /* 
+        The style for a node expand icon when it is expanded and has children nodes.
+    */
+
+    color: gray;
+    margin-right: 8px;
+}
+
+.leaf-node > i{  
+     /* 
+        The style for a node expand icon it has not children nodes (leaf node).
+    */
+
+    color: gray;
+}
+
+.tree-action-btn{
+    /* 
+        Styles for the tree-related action buttons like "reset"
+    */
+
+    font-size: 11px !important;
+    margin-bottom: 5px !important;
+    width: 100% !important;
+}
+
+.node-tag{
+    /* 
+        Styles for the "subClass of" tags (.term-button) holder div in the detail table
+    */
+
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 2px;
+}
+
+
+.isLoading {
+    /* 
+        Style for the loading animation
+        source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader
+    */
+
+    margin-left: 40%;
+    border: 16px solid #ffffff;
+    border-radius: 50%;
+    border-top: 15px solid #1565C0;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 1s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+/* 
+------------------------------------------------------------
+    This is the css script for the Collections components (page).
+------------------------------------------------------------    
+*/
+
+
+.collection-ontologies-text{
+    /* 
+        The style for each collection ontologies list div
+    */
+
+    word-wrap: break-word;
+}
+
+.ontologies-link-tag{
+    /* 
+        The style for each collection ontologies links
+    */
+
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.collection-card-row{
+    /* 
+        The style for each collection row container
+    */
+
+    margin-bottom: 80px;
+}
+
+.collections-info-container{
+    /* 
+        Style for the collection page wraper
+    */
+
+    padding-top: 25px;
+}
+
+.collection-logo-in-list{
+    /* 
+        Style for the collection logos images
+    */
+
+    width: 300px;
+    height: 200px;
+    padding: 30px;
+}
+
+@media only screen and (max-width: 1025px) {
+    .collection-logo-in-list{
+        /* 
+            Style for the collection logos images
+        */
+    
+        width: 200px;
+        height: 150px;
+    }
+  }
+
+
+/* 
+--------------------------------------
+  Documentation page style
+--------------------------------------
+*/
+
+.doc-design{
+    /* 
+       The style for overall documentation page
+    */
+    display: flex;
+    min-height: 100vh;  
+}
+

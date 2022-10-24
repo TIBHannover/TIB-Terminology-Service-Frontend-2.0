@@ -1,5 +1,3 @@
-import collectionsInfoJson from "../../assets/collectionsText.json";
-
 export function nfdi4chemAbout(){
     let content = [
         <div>

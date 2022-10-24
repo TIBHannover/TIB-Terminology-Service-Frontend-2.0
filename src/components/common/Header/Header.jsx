@@ -19,6 +19,12 @@ function Header () {
                   <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
                 </span>                 
               }
+              {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                <span>
+                  <img src="/nfdi4ing_logo.png" alt="nfdi4chem_logo" className='site-logo-image'/>
+                  <a className="main-title" href='/'>TERMINOLOGY SERVICE</a>
+                </span>                 
+              }
               {process.env.REACT_APP_PROJECT_ID === "general" && 
                 <span>
                   <img src= {TIB_Logo} alt="tib logo" height={60} width={80} /> 
