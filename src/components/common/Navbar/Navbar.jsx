@@ -35,7 +35,7 @@ function Navbar () {
                 }                  
                 </li>
                 <li class="nav-item">
-                {urlPath.includes("/documentation") 
+                {urlPath.includes("/api") 
                   ? <a class="nav-link navbar-item nav-clicked" href="/api">API</a>
                   : <a class="nav-link navbar-item" href="/api">API</a>
                 }                  
