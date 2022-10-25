@@ -69,7 +69,7 @@ class SearchResult extends React.Component{
           enteredTerm: enteredTerm,
         }, ()=>{this.processUrlProps()});  
       }
-      else if (enteredTerm.length == 0){
+      else if (enteredTerm.length === 0){
           this.setState({
               result: false,
               searchResult: [],
@@ -112,10 +112,16 @@ class SearchResult extends React.Component{
     else if(typeof(collections) === "undefined"){
       collections = [];
     }
+
+    if(typeof(page) === "undefined"){
+      page = 1;
+    }
+    
     this.setState({
       selectedCollections: collections,
       selectedOntologies: ontologies,
-      selectedTypes: types
+      selectedTypes: types,
+      pageNumber: parseInt(page)
     });
     this.handleSelection(ontologies, types, collections);
 
