@@ -35,8 +35,7 @@ class SearchResult extends React.Component{
         this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
-        this.createResultList = this.createResultList.bind(this);
-        this.suggestionChange = this.suggestionChange.bind(this);
+        this.createResultList = this.createResultList.bind(this);       
         this.suggestionHandler = this.suggestionHandler.bind(this);
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
@@ -116,7 +115,7 @@ class SearchResult extends React.Component{
     if(typeof(page) === "undefined"){
       page = 1;
     }
-    
+
     this.setState({
       selectedCollections: collections,
       selectedOntologies: ontologies,
@@ -128,26 +127,6 @@ class SearchResult extends React.Component{
     
   }
 
-
-  async suggestionChange(newEnteredTerm){
-    newEnteredTerm = newEnteredTerm.target.value;
-  if (newEnteredTerm.length > 0){
-      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${newEnteredTerm}`)
-      suggestionResult =  (await suggestionResult.json())['response']['docs'];
-   this.setState({
-       suggestionResult: suggestionResult,
-       suggestResult: true,
-       newEnteredTerm: newEnteredTerm
-   });
-  }
-  else if (newEnteredTerm.length == 0){
-      this.setState({
-          suggestResult: false,
-          newEnteredTerm: ""
-      });
-      
-  }
-}
 
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
