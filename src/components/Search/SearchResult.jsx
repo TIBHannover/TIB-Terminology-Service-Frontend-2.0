@@ -35,14 +35,16 @@ class SearchResult extends React.Component{
         this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
         this.handleSelection = this.handleSelection.bind(this);
-        this.createResultList = this.createResultList.bind(this);       
-        this.suggestionHandler = this.suggestionHandler.bind(this);
+        this.createResultList = this.createResultList.bind(this);               
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.processUrlProps = this.processUrlProps.bind(this);
     }
 
+    /**
+     * Run the search based on entered term in the search url.
+     */
     async searching(){
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
       let enteredTerm = targetQueryParams.q;
@@ -127,7 +129,9 @@ class SearchResult extends React.Component{
     
   }
 
-
+/**
+ * Handle the exact search when chosen by the user (Exact match)
+ */
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
     let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
@@ -146,20 +150,6 @@ async handleExact(){
   }
 }
 
-async suggestionHandler(selectedTerm){
-  let searchUrl  = process.env.REACT_APP_SEARCH_URL + `?q=${selectedTerm}`;
-  let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);    
-  collectionOntologies.forEach(onto => {
-    searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-  });
-
-  let newSearchResult = await fetch(searchUrl)
-  newSearchResult =  (await newSearchResult.json())['response']['docs'];
-  this.setState({
-      searchResult: newSearchResult,
-      suggestResult: true
-    });
-}
 
   createResultList(){
     const resultList = []          
@@ -426,12 +416,7 @@ async suggestionHandler(selectedTerm){
   render(){
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
-        <div className='col-sm-8'>
-            {/* <div>
-          <a className='btn btn-primary' onClick={this.handleExact}>Exact Match</a>
-                {this.state.suggestResult &&
-              <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-          </div>         */}
+        <div className='col-sm-8'>            
           <div className='row'>
             <div className='col-sm-4'>
               {this.state.searchResult.length > 0 && 
