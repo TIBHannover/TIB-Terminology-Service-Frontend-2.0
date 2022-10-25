@@ -11,8 +11,7 @@ class SearchResult extends React.Component{
         super(props)
         this.state = ({
           enteredTerm: "",
-          newEnteredTerm: "",
-          result: false,
+          newEnteredTerm: "",          
           searchResult: [],
           exactResult: [],
           originalSearchResult: [],
@@ -24,7 +23,8 @@ class SearchResult extends React.Component{
           pageSize: 5, 
           isLoaded: false,
           isFiltered: false,          
-          totalResults: []
+          totalResults: [],
+          facetIsSelected: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
         this.handlePagination = this.handlePagination.bind(this);
@@ -58,15 +58,13 @@ class SearchResult extends React.Component{
           searchResult: searchResult,
           originalSearchResult: searchResult,
           facetFields: facetFields,          
-          totalResults: totalResults,
-          result: true,
+          totalResults: totalResults,          
           isLoaded: true,
           enteredTerm: enteredTerm,
         }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length === 0){
-          this.setState({
-              result: false,
+          this.setState({              
               searchResult: [],
               facetFields: [],
               originalSearchResult: [],
@@ -87,8 +85,10 @@ class SearchResult extends React.Component{
     let page = targetQueryParams.page;
     let types = targetQueryParams.type;
     let collections = targetQueryParams.collection;
+    let facetSelected = false;
     if(typeof(ontologies) === "string"){
       ontologies = [ontologies];
+      facetSelected= true;
     }
     else if(typeof(ontologies) === "undefined"){
       ontologies = [];
@@ -96,6 +96,7 @@ class SearchResult extends React.Component{
 
     if(typeof(types) === "string"){
       types = [types];
+      facetSelected= true;
     }
     else if(typeof(types) === "undefined"){
       types = [];
@@ -103,6 +104,7 @@ class SearchResult extends React.Component{
 
     if(typeof(collections) === "string"){
       collections = [collections];
+      facetSelected= true;
     }
     else if(typeof(collections) === "undefined"){
       collections = [];
@@ -116,7 +118,8 @@ class SearchResult extends React.Component{
       selectedCollections: collections,
       selectedOntologies: ontologies,
       selectedTypes: types,
-      pageNumber: parseInt(page)
+      pageNumber: parseInt(page),
+      facetIsSelected: facetSelected
     });
     this.handleSelection(ontologies, types, collections);
 
@@ -138,7 +141,6 @@ async handleExact(){
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
       searchResult: exactResult,
-      result: true,
       isLoaded: true 
     })
   }
@@ -150,7 +152,6 @@ async handleExact(){
    * @returns
 */
 createSearchResultList () {   
-     if(this.state.result){
       let searchResultItem = this.state.searchResult;
       const SearchResultList = [];
       for (let i = 0; i < searchResultItem.length; i++) {
@@ -174,8 +175,7 @@ createSearchResultList () {
           </div>   
         )
       }       
-        return SearchResultList
-     }
+      return SearchResultList
   }
 
   /**
@@ -213,7 +213,8 @@ createSearchResultList () {
   async handleSelection(ontologies, types, collections){
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let collectionOntologies = [];   
+    let collectionOntologies = [];
+    let facetSelected = true;
     
     if(process.env.REACT_APP_PROJECT_ID !== "general" && ontologies.length === 0){          
       /**
@@ -226,7 +227,7 @@ createSearchResultList () {
     }   
     else{
       if(collections.length !== 0){
-        collectionOntologies = await getCollectionOntologies(collections, false);
+        collectionOntologies = await getCollectionOntologies(collections, false);        
       }
       collectionOntologies.forEach(onto => {
         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
@@ -239,6 +240,11 @@ createSearchResultList () {
     types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`
     });
+
+    if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
+      // no facet field selected
+      facetSelected = false;
+    }
     
     let targetUrl = await fetch(baseUrl);
     let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
@@ -247,7 +253,8 @@ createSearchResultList () {
       searchResult: filteredSearchResults,
       selectedOntologies: ontologies,
       selectedTypes: types,
-      selectedCollections: collections
+      selectedCollections: collections,
+      facetIsSelected: facetSelected
       })
      }
   
@@ -331,34 +338,29 @@ createSearchResultList () {
       <div className='row justify-content-center' id="searchterm-wrapper">
         <div className='col-sm-8'>            
           <div className='row'>
-            <div className='col-sm-4'>
-              {this.state.searchResult.length > 0 && 
-                    <Facet
-                      facetData = {this.state.facetFields}
-                      handleChange = {this.handleSelection}              
-                      selectedCollections = {this.state.selectedCollections}
-                      selectedOntologies = {this.state.selectedOntologies}
-                      selectedTypes = {this.state.selectedTypes}
-                    />}
-              
+            <div className='col-sm-4'>          
+              {(this.state.searchResult.length > 0 || (this.state.searchResult.length === 0 && this.state.facetIsSelected)) &&
+                <Facet
+                  facetData = {this.state.facetFields}
+                  handleChange = {this.handleSelection}              
+                  selectedCollections = {this.state.selectedCollections}
+                  selectedOntologies = {this.state.selectedOntologies}
+                  selectedTypes = {this.state.selectedTypes}
+                />
+              }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {(() => {
-                 if(this.state.searchResult.length === 0){
-                  return(
-                    <h3 className="text-dark">{'No search results for "' + this.state.enteredTerm + '"'   }</h3>
-                  )
-                 }
-                 else{
-                  <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>                  
-                 }
-              })()} 
-              {this.createSearchResultList()}                           
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>}
+              {this.state.searchResult.length > 0 && this.createSearchResultList()} 
+              {this.state.searchResult.length > 0 && 
                 <Pagination 
                   clickHandler={this.handlePagination} 
                   count={this.pageCount()}
                   initialPageNumber={this.state.pageNumber}          
                 />
+              } 
+
+              {this.state.searchResult.length === 0 && <h3 className="text-dark">{'No search results for "' + this.state.enteredTerm + '"'   }</h3>} 
               </div>
             </div>
         </div>                
