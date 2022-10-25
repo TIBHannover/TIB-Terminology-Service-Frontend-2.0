@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
+import {setResultTitleAndLabel} from './SearchHelpers';
 
 
 class SearchResult extends React.Component{
@@ -13,65 +13,58 @@ class SearchResult extends React.Component{
           enteredTerm: "",
           newEnteredTerm: "",
           result: false,
-          suggestResult: false,
           searchResult: [],
           exactResult: [],
-          suggestionResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
           selectedCollections: [],
-          facetFields: [],            
+          facetFields: [],
           pageNumber: 1,
-          pageSize: 5,       
+          pageSize: 5, 
           isLoaded: false,
-          isFiltered: false,
-          collections: [],
-          ontologies: [],
-          types: [],
+          isFiltered: false,          
           totalResults: []
         })
-        this.createSearchResultList = this.createSearchResultList.bind(this)
-        this.handlePagination = this.handlePagination.bind(this)
-        this.searching = this.searching.bind(this)
-        this.handleSelection = this.handleSelection.bind(this);
-        this.createResultList = this.createResultList.bind(this);
-        this.suggestionChange = this.suggestionChange.bind(this);
-        this.suggestionHandler = this.suggestionHandler.bind(this);
+        this.createSearchResultList = this.createSearchResultList.bind(this);
+        this.handlePagination = this.handlePagination.bind(this);
+        this.searching = this.searching.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);                      
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.processUrlProps = this.processUrlProps.bind(this);
     }
 
+    /**
+     * Run the search based on entered term in the search url.
+     */
     async searching(){
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-      let enteredTerm = targetQueryParams.q
+      let enteredTerm = targetQueryParams.q;
       if (enteredTerm.length > 0){
         let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
         let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
         collectionOntologies.forEach(onto => {
-          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
         });
         
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
-        let facetFields = resultJson['facet_counts'];
-        let paginationResult = resultJson['response']
-        let totalResults = paginationResult['numFound']
+        let facetFields = resultJson['facet_counts'];        
+        let totalResults = resultJson['response']['numFound'];        
         this.setState({
           searchResult: searchResult,
           originalSearchResult: searchResult,
-          facetFields: facetFields,
-          paginationResult: paginationResult,
+          facetFields: facetFields,          
           totalResults: totalResults,
           result: true,
           isLoaded: true,
           enteredTerm: enteredTerm,
         }, ()=>{this.processUrlProps()});  
       }
-      else if (enteredTerm.length == 0){
+      else if (enteredTerm.length === 0){
           this.setState({
               result: false,
               searchResult: [],
@@ -114,37 +107,25 @@ class SearchResult extends React.Component{
     else if(typeof(collections) === "undefined"){
       collections = [];
     }
+
+    if(typeof(page) === "undefined"){
+      page = 1;
+    }
+
     this.setState({
       selectedCollections: collections,
       selectedOntologies: ontologies,
-      selectedTypes: types
+      selectedTypes: types,
+      pageNumber: parseInt(page)
     });
     this.handleSelection(ontologies, types, collections);
 
     
   }
 
-
-  async suggestionChange(newEnteredTerm){
-    newEnteredTerm = newEnteredTerm.target.value;
-  if (newEnteredTerm.length > 0){
-      let suggestionResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${newEnteredTerm}`)
-      suggestionResult =  (await suggestionResult.json())['response']['docs'];
-   this.setState({
-       suggestionResult: suggestionResult,
-       suggestResult: true,
-       newEnteredTerm: newEnteredTerm
-   });
-  }
-  else if (newEnteredTerm.length == 0){
-      this.setState({
-          suggestResult: false,
-          newEnteredTerm: ""
-      });
-      
-  }
-}
-
+/**
+ * Handle the exact search when chosen by the user (Exact match)
+ */
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
     let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
@@ -163,107 +144,20 @@ async handleExact(){
   }
 }
 
-async suggestionHandler(selectedTerm){
-  let searchUrl  = process.env.REACT_APP_SEARCH_URL + `?q=${selectedTerm}`;
-  let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);    
-  collectionOntologies.forEach(onto => {
-    searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-  });
-
-  let newSearchResult = await fetch(searchUrl)
-  newSearchResult =  (await newSearchResult.json())['response']['docs'];
-  this.setState({
-      searchResult: newSearchResult,
-      suggestResult: true
-    });
-}
-
-  createResultList(){
-    const resultList = []          
-    for(let i=0; i < this.state.suggestionResult.length; i++){
-      resultList.push(
-          <Link to={'/search?q=' + encodeURIComponent(this.state.suggestionResult[i]['autosuggest'])} key={i} className="container">
-              <div>
-                   {this.state.suggestionResult[i]['autosuggest']}
-              </div>
-          </Link>)
-    }
-    return resultList
-}
-
-  componentDidMount(){
-    if(!this.state.isLoaded && !this.state.isFiltered){
-      this.searching();
-    } 
-  }
-
-
-  /**
-     * Create the search results list view
-     *
-     * @returns
-     */
-   createSearchResultList () {   
+/**
+   * Create the search results list view
+   *
+   * @returns
+*/
+createSearchResultList () {   
      if(this.state.result){
-      let searchResultItem = this.state.searchResult
+      let searchResultItem = this.state.searchResult;
       const SearchResultList = [];
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
           <div className="row result-card" key={searchResultItem[i]['id']}>
             <div className='col-sm-12'>
-                {(() => {
-                  if(searchResultItem[i]["type"] === 'class'){
-                    return(
-                      <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-                    )     
-                }
-                else if(searchResultItem[i]["type"] === 'property'){
-                  return(
-                    <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-
-                  )         
-                }
-                else if(searchResultItem[i]["type"] === 'ontology'){
-                  return(
-                    <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-
-                  )      
-                }
-                else if(searchResultItem[i]["type"] === 'individual'){
-                  return(
-                    <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-
-                  )    
-                }
-                })()}                        
+              {setResultTitleAndLabel(searchResultItem[i])}                
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
@@ -287,8 +181,7 @@ async suggestionHandler(selectedTerm){
   /**
     * Update the url based on facet values
     */
-   updateURL(ontologies, types){
-    let collections = this.state.selectedCollections;
+   updateURL(ontologies, types, collections){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
@@ -346,16 +239,14 @@ async suggestionHandler(selectedTerm){
     types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`
     });
-    collections.forEach(item => {
-      baseUrl = baseUrl + `&collection=${item.toLowerCase()}`
-    });
+    
     let targetUrl = await fetch(baseUrl);
     let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
     this.updateURL(ontologies, types, collections);
     this.setState({
       searchResult: filteredSearchResults,
-      ontologies: ontologies,
-      types: types,
+      selectedOntologies: ontologies,
+      selectedTypes: types,
       selectedCollections: collections
       })
      }
@@ -369,7 +260,7 @@ async suggestionHandler(selectedTerm){
       pageNumber: value,
       paginationReset: false
     }, () => {
-      this.updateURL(this.state.ontologies,this.state.types,this.state.selectedCollections)
+      this.updateURL(this.state.selectedOntologies,this.state.selectedTypes,this.state.selectedCollections)
       this.paginationHandler()
     })
   }
@@ -392,8 +283,8 @@ async suggestionHandler(selectedTerm){
     * Handle the pagination change. This function has to be passed to the Pagination component
     */
    async paginationHandler () {
-    let ontologies = this.state.ontologies;
-    let types = this.state.types;
+    let ontologies = this.state.selectedOntologies;
+    let types = this.state.selectedTypes;
     let collections = this.state.selectedCollections;
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
@@ -409,7 +300,7 @@ async suggestionHandler(selectedTerm){
         collectionOntologies.forEach(onto => {
           baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
         });
-        this.updateURL(ontologies, types)        
+        this.updateURL(ontologies, types, collections)        
      }
      else{
       // No extra filter. Get the target project ontologies
@@ -428,27 +319,17 @@ async suggestionHandler(selectedTerm){
      
   }
 
-
-  submitHandler(event){  
-    let newEnteredTerm = document.getElementById('search-input').value;
-    window.location.replace('/search?q=' + newEnteredTerm);
-}
-
-  _handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      this.submitHandler();
-    }
+  
+  componentDidMount(){
+    if(!this.state.isLoaded && !this.state.isFiltered){
+      this.searching();
+    } 
   }
 
   render(){
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
-        <div className='col-sm-8'>
-            {/* <div>
-          <a className='btn btn-primary' onClick={this.handleExact}>Exact Match</a>
-                {this.state.suggestResult &&
-              <div id = "autocomplete-container" className="col-md-9 justify-content-md-center" onClick={this.suggestionHandler}>{this.createResultList()}</div>}
-          </div>         */}
+        <div className='col-sm-8'>            
           <div className='row'>
             <div className='col-sm-4'>
               {this.state.searchResult.length > 0 && 
