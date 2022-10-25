@@ -46,25 +46,23 @@ class SearchResult extends React.Component{
 
     async searching(){
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-      let enteredTerm = targetQueryParams.q
+      let enteredTerm = targetQueryParams.q;
       if (enteredTerm.length > 0){
         let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
         let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
         collectionOntologies.forEach(onto => {
-          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
         });
         
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
-        let facetFields = resultJson['facet_counts'];
-        let paginationResult = resultJson['response']
-        let totalResults = paginationResult['numFound']
+        let facetFields = resultJson['facet_counts'];        
+        let totalResults = resultJson['response']['numFound'];        
         this.setState({
           searchResult: searchResult,
           originalSearchResult: searchResult,
-          facetFields: facetFields,
-          paginationResult: paginationResult,
+          facetFields: facetFields,          
           totalResults: totalResults,
           result: true,
           isLoaded: true,
