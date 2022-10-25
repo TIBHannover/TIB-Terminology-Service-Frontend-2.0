@@ -419,7 +419,7 @@ p{
      */
     color: #00617c;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 24px;
  }
  
  .main-title:hover {
@@ -521,7 +521,7 @@ p{
      outline: none;
      color: #00617C;
      font-weight: bold;
-     font-size: 16px;
+     font-size: 20px;
    }
  
    .navbar-item:hover{
