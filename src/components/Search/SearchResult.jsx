@@ -11,8 +11,7 @@ class SearchResult extends React.Component{
         super(props)
         this.state = ({
           enteredTerm: "",
-          newEnteredTerm: "",
-          result: false,
+          newEnteredTerm: "",          
           searchResult: [],
           exactResult: [],
           originalSearchResult: [],
@@ -59,15 +58,13 @@ class SearchResult extends React.Component{
           searchResult: searchResult,
           originalSearchResult: searchResult,
           facetFields: facetFields,          
-          totalResults: totalResults,
-          result: true,
+          totalResults: totalResults,          
           isLoaded: true,
           enteredTerm: enteredTerm,
         }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length === 0){
-          this.setState({
-              result: false,
+          this.setState({              
               searchResult: [],
               facetFields: [],
               originalSearchResult: [],
@@ -144,7 +141,6 @@ async handleExact(){
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
       searchResult: exactResult,
-      result: true,
       isLoaded: true 
     })
   }
