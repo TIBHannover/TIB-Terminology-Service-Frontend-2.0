@@ -12,11 +12,9 @@ class SearchResult extends React.Component{
         this.state = ({
           enteredTerm: "",
           newEnteredTerm: "",
-          result: false,
-          suggestResult: false,
+          result: false,          
           searchResult: [],
-          exactResult: [],
-          suggestionResult: [],
+          exactResult: [],          
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
@@ -34,8 +32,7 @@ class SearchResult extends React.Component{
         this.createSearchResultList = this.createSearchResultList.bind(this)
         this.handlePagination = this.handlePagination.bind(this)
         this.searching = this.searching.bind(this)
-        this.handleSelection = this.handleSelection.bind(this);
-        this.createResultList = this.createResultList.bind(this);               
+        this.handleSelection = this.handleSelection.bind(this);                      
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
@@ -151,20 +148,7 @@ async handleExact(){
 }
 
 
-  createResultList(){
-    const resultList = []          
-    for(let i=0; i < this.state.suggestionResult.length; i++){
-      resultList.push(
-          <Link to={'/search?q=' + encodeURIComponent(this.state.suggestionResult[i]['autosuggest'])} key={i} className="container">
-              <div>
-                   {this.state.suggestionResult[i]['autosuggest']}
-              </div>
-          </Link>)
-    }
-    return resultList
-}
-
-  componentDidMount(){
+componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
     } 
