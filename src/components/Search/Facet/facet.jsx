@@ -280,13 +280,6 @@ class Facet extends React.Component{
         }        
     }
 
-    // componentDidUpdate(){
-    //     if(!this.state.resultLoaded){
-    //         this.processFacetData();
-    //     }
-    // }
-
-
     render(){
         return(
             <div class="row" id="search-facet-container-box">

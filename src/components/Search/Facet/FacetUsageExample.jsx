@@ -1,4 +1,3 @@
-import { on } from "events";
 import React from "react";
 import Facet from './facet'
 
