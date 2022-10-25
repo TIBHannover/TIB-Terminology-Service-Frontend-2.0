@@ -18,7 +18,6 @@ class SearchForm extends React.Component{
         this.submitJumpHandler = this.submitJumpHandler.bind(this);  
         this.suggestionHandler = this.suggestionHandler.bind(this); 
         this.autoRef = React.createRef(); 
-        this.jumpRef = React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
       }
       
@@ -76,14 +75,7 @@ class SearchForm extends React.Component{
           this.setState({
             result: false
           })
-        })
-        document.addEventListener("click", (event) =>{
-          if(!this.jumpRef.current.contains(event.target))
-          this.setState({
-            result: false 
-          })
-        })
-        
+        })       
       }
     
     componentDidMount() {
@@ -194,7 +186,7 @@ class SearchForm extends React.Component{
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
-                <div ref={this.jumpRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
+                <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4>Jump To</h4>
                    {this.createJumpResultList()}
