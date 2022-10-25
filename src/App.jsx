@@ -14,6 +14,7 @@ import AboutApi from '../src/assets/static/AboutApi';
 import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
+// import { createBrowserHistory } from 'history';
 
 // import css file based on the target project
 process.env.REACT_APP_PROJECT_ID === "general" && import ('./components/layout/General_TIB.css');
@@ -40,6 +41,8 @@ function App() {
     document.title = "NFDI4Ing Terminology Service"
   }
 
+  // const history = createBrowserHistory({basename: "/ts"});
+
 
   return (
     <div className="App">
@@ -49,7 +52,7 @@ function App() {
         <div className='container-fluid application-content'>
           <Switch>
             <Route exact path="/" component={Home}/>
-            <Route exact path="/ts" component={Home}/>
+            {/* <Route exact path="/ts" component={Home}/> */}
             <Route exact path="/ontologies" component={OntologyList}/>
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
             <Route exact path="/collections" component={Collections}/>}
