@@ -55,28 +55,6 @@ p{
     */
     font-weight: bold;
  }
-
- .icon1home{
-    /* 
-       The style for the homepage icons
-    */
-    height: 120px;
-    width: 190px;
-    margin-left: 70px;
-    margin-bottom: 50px;
-
- }
-
- .iconhome{
-    /* 
-       The style for the homepage icons
-    */
-    height: 150px;
-    width: 150px;
-    margin-left: 70px;
-    margin-bottom: 50px;
-
- }
  
  a:hover{
     /* 
