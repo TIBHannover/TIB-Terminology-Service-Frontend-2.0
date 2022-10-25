@@ -12,26 +12,23 @@ class SearchResult extends React.Component{
         this.state = ({
           enteredTerm: "",
           newEnteredTerm: "",
-          result: false,          
+          result: false,
           searchResult: [],
-          exactResult: [],          
+          exactResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
           selectedCollections: [],
-          facetFields: [],            
+          facetFields: [],
           pageNumber: 1,
-          pageSize: 5,       
+          pageSize: 5, 
           isLoaded: false,
-          isFiltered: false,
-          collections: [],
-          ontologies: [],
-          types: [],
+          isFiltered: false,          
           totalResults: []
         })
-        this.createSearchResultList = this.createSearchResultList.bind(this)
-        this.handlePagination = this.handlePagination.bind(this)
-        this.searching = this.searching.bind(this)
+        this.createSearchResultList = this.createSearchResultList.bind(this);
+        this.handlePagination = this.handlePagination.bind(this);
+        this.searching = this.searching.bind(this);
         this.handleSelection = this.handleSelection.bind(this);                      
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
@@ -184,8 +181,7 @@ createSearchResultList () {
   /**
     * Update the url based on facet values
     */
-   updateURL(ontologies, types){
-    let collections = this.state.selectedCollections;
+   updateURL(ontologies, types, collections){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
@@ -243,16 +239,14 @@ createSearchResultList () {
     types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`
     });
-    collections.forEach(item => {
-      baseUrl = baseUrl + `&collection=${item.toLowerCase()}`
-    });
+    
     let targetUrl = await fetch(baseUrl);
     let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
     this.updateURL(ontologies, types, collections);
     this.setState({
       searchResult: filteredSearchResults,
-      ontologies: ontologies,
-      types: types,
+      selectedOntologies: ontologies,
+      selectedTypes: types,
       selectedCollections: collections
       })
      }
@@ -266,7 +260,7 @@ createSearchResultList () {
       pageNumber: value,
       paginationReset: false
     }, () => {
-      this.updateURL(this.state.ontologies,this.state.types,this.state.selectedCollections)
+      this.updateURL(this.state.selectedOntologies,this.state.selectedTypes,this.state.selectedCollections)
       this.paginationHandler()
     })
   }
@@ -289,8 +283,8 @@ createSearchResultList () {
     * Handle the pagination change. This function has to be passed to the Pagination component
     */
    async paginationHandler () {
-    let ontologies = this.state.ontologies;
-    let types = this.state.types;
+    let ontologies = this.state.selectedOntologies;
+    let types = this.state.selectedTypes;
     let collections = this.state.selectedCollections;
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
@@ -306,7 +300,7 @@ createSearchResultList () {
         collectionOntologies.forEach(onto => {
           baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
         });
-        this.updateURL(ontologies, types)        
+        this.updateURL(ontologies, types, collections)        
      }
      else{
       // No extra filter. Get the target project ontologies
@@ -323,18 +317,6 @@ createSearchResultList () {
       searchResult: newResults
     })
      
-  }
-
-
-  submitHandler(event){  
-    let newEnteredTerm = document.getElementById('search-input').value;
-    window.location.replace('/search?q=' + newEnteredTerm);
-}
-
-  _handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      this.submitHandler();
-    }
   }
 
   
