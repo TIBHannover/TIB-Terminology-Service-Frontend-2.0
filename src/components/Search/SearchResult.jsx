@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
+import {setResultTitleAndLabel} from './SearchHelpers';
 
 
 class SearchResult extends React.Component{
@@ -147,80 +147,20 @@ async handleExact(){
   }
 }
 
-
-componentDidMount(){
-    if(!this.state.isLoaded && !this.state.isFiltered){
-      this.searching();
-    } 
-  }
-
-
-  /**
-     * Create the search results list view
-     *
-     * @returns
-     */
-   createSearchResultList () {   
+/**
+   * Create the search results list view
+   *
+   * @returns
+*/
+createSearchResultList () {   
      if(this.state.result){
-      let searchResultItem = this.state.searchResult
+      let searchResultItem = this.state.searchResult;
       const SearchResultList = [];
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
           <div className="row result-card" key={searchResultItem[i]['id']}>
             <div className='col-sm-12'>
-                {(() => {
-                  if(searchResultItem[i]["type"] === 'class'){
-                    return(
-                      <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-                    )     
-                }
-                else if(searchResultItem[i]["type"] === 'property'){
-                  return(
-                    <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-
-                  )         
-                }
-                else if(searchResultItem[i]["type"] === 'ontology'){
-                  return(
-                    <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-
-                  )      
-                }
-                else if(searchResultItem[i]["type"] === 'individual'){
-                  return(
-                    <div className="search-card-title"> 
-                      <a href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} className="search-result-title">
-                        <h4>{searchResultItem[i].label}</h4>
-                      </a>
-                      <a className="btn btn-default term-button" href={'/ontologies/' + encodeURIComponent(this.state.searchResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.searchResult[i]['iri'])} >
-                      {searchResultItem[i].short_form}
-                      </a>
-                      </div>
-
-                  )    
-                }
-                })()}                        
+              {setResultTitleAndLabel(searchResultItem[i])}                
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
               </div>
@@ -395,6 +335,13 @@ componentDidMount(){
     if (e.key === 'Enter') {
       this.submitHandler();
     }
+  }
+
+  
+  componentDidMount(){
+    if(!this.state.isLoaded && !this.state.isFiltered){
+      this.searching();
+    } 
   }
 
   render(){
