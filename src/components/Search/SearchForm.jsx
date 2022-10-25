@@ -70,6 +70,22 @@ class SearchForm extends React.Component{
           });
       }
     
+      handleClickOutside(){
+        document.addEventListener("click", (event) =>{
+          if(!this.autoRef.current.contains(event.target))
+          this.setState({
+            result: false
+          })
+        })
+        document.addEventListener("click", (event) =>{
+          if(!this.jumpRef.current.contains(event.target))
+          this.setState({
+            result: false 
+          })
+        })
+        
+      }
+    
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
       }
@@ -150,21 +166,6 @@ class SearchForm extends React.Component{
         return jumpResultList
       }
 
-      handleClickOutside(){
-        document.addEventListener("click", (event) =>{
-          if(!this.autoRef.current.contains(event.target))
-          this.setState({
-            result: false
-          })
-        })
-        document.addEventListener("click", (event) =>{
-          if(!this.jumpRef.current.contains(event.target))
-          this.setState({
-            result: false 
-          })
-        })
-        
-      }
 
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
