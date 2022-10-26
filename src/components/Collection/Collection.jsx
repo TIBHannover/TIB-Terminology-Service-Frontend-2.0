@@ -28,7 +28,7 @@ class Collections extends React.Component{
             collectionOntologies[col] = [];
             for (let onto of ontologies){
                 collectionOntologies[col].push(
-                    <a href={'/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
+                    <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
                 );
             }
         }
@@ -51,7 +51,7 @@ class Collections extends React.Component{
         let card = [
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
                 <div className='col-sm-3' key={collectionId + "_logo"}>                    
-                    <a href={collectionJson["ontology_list_url"]} className="collection-image-anchor">
+                    <a href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]} className="collection-image-anchor">
                         <img class="img-fluid" className='collection-logo-in-list ' alt="logo"  src={collectionJson["logo"]}/>
                     </a>
                 </div>
@@ -115,18 +115,7 @@ class Collections extends React.Component{
 
     render(){
         return(
-            <div className='container collections-info-container'>
-                {/* <div className='row'>
-                    <div className='col-sm-3'></div>
-                    <div className='col-sm-9'>
-                        <div className='row'>
-                            <div className='col-sm-12'>
-                                <h2>Collections</h2>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-                <br></br> */}
+            <div className='container collections-info-container'>               
                 {this.createCollectionList()}
             </div>
         );

@@ -1,6 +1,3 @@
-import collectionsInfoJson from "../../assets/collectionsText.json";
-
-
 export function generalAbout(){
     let content = [
         <div>                          
