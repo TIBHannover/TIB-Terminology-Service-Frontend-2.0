@@ -22,7 +22,7 @@ export function nfdi4chemHomePage(){
                         </div>   
                     </div>
                     <div className="col-sm-4">
-                            <img className="img-fluid" alt="Blog image" src="Icon3-4.png"/>
+                            <img className="img-fluid" alt="Blog image" src="/Icon3-4.png"/>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
                              <h5>NOT A HUMAN ?</h5>
