@@ -282,7 +282,7 @@ selectNode(target){
 
     let currentUrlParams = new URLSearchParams();
     currentUrlParams.append('iri', target.parentNode.dataset.iri);
-    this.props.history.push(window.location.pathname + process.env.REACT_APP_PROJECT_SUB_PATH +  + "?" + currentUrlParams.toString());
+    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
     this.props.iriChangerFunction(target.parentNode.dataset.iri);
 
   }

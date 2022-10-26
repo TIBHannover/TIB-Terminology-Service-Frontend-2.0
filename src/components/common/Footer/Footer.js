@@ -61,7 +61,7 @@ const Footer = () => (
                 {process.env.REACT_APP_PROJECT_ID === "general" &&
                 <ul className="footer-list">
                     <li>
-                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/Documentation"} className='footer-link'>Documentation</Link>
+                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} className='footer-link'>Documentation</Link>
                     </li>
                     <li>
                         <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} className='footer-link'>API</Link>
