@@ -2,16 +2,16 @@ export function setResultTitleAndLabel(resultItem){
     let content = [];
     let targetHref = "";
     if(resultItem["type"] === 'class'){
-        targetHref = '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
     }
     else if(resultItem["type"] === 'property'){
-        targetHref = '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/props?iri=' + encodeURIComponent(resultItem['iri']);        
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/props?iri=' + encodeURIComponent(resultItem['iri']);        
     }
     else if(resultItem["type"] === 'ontology'){
-        targetHref = '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);       
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);       
     }
     else if(resultItem["type"] === 'individual'){
-        targetHref = '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/terms?iri=' + encodeURIComponent(resultItem['iri']);
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/terms?iri=' + encodeURIComponent(resultItem['iri']);
     }
     
     content.push(

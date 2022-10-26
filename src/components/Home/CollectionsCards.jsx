@@ -28,7 +28,7 @@ export function createHomePageContent() {
         <div className="col-sm-6">
           <div className="collection-card">
             <a
-              href={collectionsInfoJson['NFDI4Ing']['ontology_list_url']}
+              href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['NFDI4Ing']['ontology_list_url']}
               className="collection-image-anchor"
             >
               <img
@@ -41,7 +41,7 @@ export function createHomePageContent() {
               <p className="trunc">{collectionsInfoJson['NFDI4Ing']['text']}</p>
               <a
                 href={
-                  '/collections?col=' +
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
                   collectionsInfoJson['NFDI4Ing']['html_id']
                 }
                 className="show-more-text-link"
@@ -54,7 +54,7 @@ export function createHomePageContent() {
         <div className="col-sm-6">
           <div className="collection-card">
             <a
-              href={collectionsInfoJson['NFDI4Chem']['ontology_list_url']}
+              href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['NFDI4Chem']['ontology_list_url']}
               className="collection-image-anchor"
             >
               <img
@@ -69,7 +69,7 @@ export function createHomePageContent() {
               </p>
               <a
                 href={
-                  '/collections?col=' +
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
                   collectionsInfoJson['NFDI4Chem']['html_id']
                 }
                 className="show-more-text-link"
@@ -85,7 +85,7 @@ export function createHomePageContent() {
         <div className="col-sm-6">
           <div className="collection-card">
             <a
-              href={collectionsInfoJson['CoyPu']['ontology_list_url']}
+              href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['CoyPu']['ontology_list_url']}
               className="collection-image-anchor"
             >
               <img
@@ -98,7 +98,7 @@ export function createHomePageContent() {
               <p className="trunc">{collectionsInfoJson['CoyPu']['text']}</p>
               <a
                 href={
-                  '/collections?col=' + collectionsInfoJson['CoyPu']['html_id']
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collectionsInfoJson['CoyPu']['html_id']
                 }
                 className="show-more-text-link"
               >
@@ -111,7 +111,7 @@ export function createHomePageContent() {
           <div className="collection-card">
             <a
               href={
-                collectionsInfoJson['FAIR Data Spaces']['ontology_list_url']
+                process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['FAIR Data Spaces']['ontology_list_url']
               }
               className="collection-image-anchor"
             >
@@ -127,7 +127,7 @@ export function createHomePageContent() {
               </p>
               <a
                 href={
-                  '/collections?col=' +
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
                   collectionsInfoJson['FAIR Data Spaces']['html_id']
                 }
                 className="show-more-text-link"
@@ -143,7 +143,7 @@ export function createHomePageContent() {
         <div className="col-sm-6">
           <div className="collection-card">
             <a
-              href={collectionsInfoJson['FID Move']['ontology_list_url']}
+              href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['FID Move']['ontology_list_url']}
               className="collection-image-anchor"
             >
               <img
@@ -156,7 +156,7 @@ export function createHomePageContent() {
               <p className="trunc">{collectionsInfoJson['FID Move']['text']}</p>
               <a
                 href={
-                  '/collections?col=' +
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
                   collectionsInfoJson['FID Move']['html_id']
                 }
                 className="show-more-text-link"
@@ -169,7 +169,7 @@ export function createHomePageContent() {
         <div className="col-sm-6">
           <div className="collection-card">
             <a
-              href={collectionsInfoJson['FID Baudigital']['ontology_list_url']}
+              href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['FID Baudigital']['ontology_list_url']}
               className="collection-image-anchor"
             >
               <img
@@ -184,7 +184,7 @@ export function createHomePageContent() {
               </p>
               <a
                 href={
-                  '/collections?col=' +
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
                   collectionsInfoJson['FID Baudigital']['html_id']
                 }
                 className="show-more-text-link"
