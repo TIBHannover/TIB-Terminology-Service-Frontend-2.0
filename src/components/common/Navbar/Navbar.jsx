@@ -10,48 +10,48 @@ function Navbar () {
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                 {urlPath === "/" || urlPath === "/ts" 
-                  ? <a class="nav-link navbar-item nav-clicked" href="/">Home</a>
-                  : <a class="nav-link navbar-item" href="/">Home</a>
+                  ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</a>
+                  : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</a>
                 }                  
                 </li>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <li class="nav-item">
                  {urlPath.includes("/collections") 
-                    ? <a class="nav-link navbar-item nav-clicked" href="/collections">Collections</a>
-                    : <a class="nav-link navbar-item" href="/collections">Collections</a>
+                    ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</a>
+                    : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</a>
                   }
                 </li>
                 }
                 <li class="nav-item">
                 {urlPath.includes("/ontologies") 
-                  ? <a class="nav-link navbar-item nav-clicked" href="/ontologies">Ontologies</a>
-                  : <a class="nav-link navbar-item" href="/ontologies">Ontologies</a>
+                  ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</a>
+                  : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</a>
                 }                  
                 </li>
                 <li class="nav-item">
                 {urlPath.includes("/help") 
-                  ? <a class="nav-link navbar-item nav-clicked" href="/help">Help</a>
-                  : <a class="nav-link navbar-item" href="/help">Help</a>
+                  ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
+                  : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
                 }                  
                 </li>
                 <li class="nav-item">
                 {urlPath.includes("/api") 
-                  ? <a class="nav-link navbar-item nav-clicked" href="/api">API</a>
-                  : <a class="nav-link navbar-item" href="/api">API</a>
+                  ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
+                  : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
                 }                  
                 </li>
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <li class="nav-item">
                  {urlPath.includes("/usage") 
-                    ? <a class="nav-link navbar-item nav-clicked" href="/usage">Usage</a>
-                    : <a class="nav-link navbar-item" href="/usage">Usage</a>
+                    ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</a>
+                    : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</a>
                   }
                 </li>
                 }
                 <li class="nav-item">
                 {urlPath.includes("/about") 
-                  ? <a class="nav-link navbar-item nav-clicked" href="/about">About</a>
-                  : <a class="nav-link navbar-item" href="/about">About</a>
+                  ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</a>
+                  : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</a>
                 }                  
                 </li>
               </ul>

@@ -80,7 +80,7 @@ function makeTag(objectList){
   for(let object of objectList){
     tags.push(      
       <div className='node-tag' key={counter}>
-        <a className='btn term-button' href={"/ontologies/" + object['ontology'] + "/terms?iri=" + object['iri']} target="_blank">
+        <a className='btn term-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + object['ontology'] + "/terms?iri=" + object['iri']} target="_blank">
           {object['label']}
         </a>
       </div>
@@ -108,7 +108,7 @@ function createRelations(object){
           <li key={groupedRelations[rel][0]['relation']}>
             <div title="property">
               <a className='node-relation-link' 
-                href={"/ontologies/" + object['ontology_name'] + "/props?iri=" + groupedRelations[rel][0]['relationUrl']} 
+                href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + object['ontology_name'] + "/props?iri=" + groupedRelations[rel][0]['relationUrl']} 
                 target="_blank">
                 {rel}
               </a>                  
@@ -117,7 +117,7 @@ function createRelations(object){
               {groupedRelations[rel].map(function(value){
                 return <li key={value['target']}>
                   <div title="term">
-                    <a className='node-relation-link' href={"/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
+                    <a className='node-relation-link' href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
                           {value["target"]}                      
                       </a>
                   </div>                   

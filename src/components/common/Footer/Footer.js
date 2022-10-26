@@ -35,13 +35,13 @@ const Footer = () => (
                 <hr className="me-5"/>
                 <ul className="footer-list">
                     <li>
-                        <Link to="/PrivacyPolicy" className='footer-link'>Privacy Policy</Link>
+                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} className='footer-link'>Privacy Policy</Link>
                     </li>
                     <li>
-                        <Link to="/TermsOfUse" className='footer-link'>Terms of use</Link>
+                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} className='footer-link'>Terms of use</Link>
                     </li>
                     <li>
-                        <Link to="/imprint"  className='footer-link'>Imprint</Link>
+                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"}  className='footer-link'>Imprint</Link>
                     </li>
                 </ul>
             </div>
@@ -61,10 +61,10 @@ const Footer = () => (
                 {process.env.REACT_APP_PROJECT_ID === "general" &&
                 <ul className="footer-list">
                     <li>
-                        <Link to="/Documentation" className='footer-link'>Documentation</Link>
+                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} className='footer-link'>Documentation</Link>
                     </li>
                     <li>
-                        <Link to="/AboutApi" className='footer-link'>API</Link>
+                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} className='footer-link'>API</Link>
                     </li>
                 </ul>
                 }

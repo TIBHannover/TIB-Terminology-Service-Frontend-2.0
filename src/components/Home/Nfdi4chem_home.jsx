@@ -9,7 +9,7 @@ export function nfdi4chemHomePage(){
                             <div class="font-weight-bold mb-2">
                                 <h5>WHAT IS THIS ?</h5>
                             </div>
-                            <p>The Terminology Service is a repository for chemistry ontologies. It is a central point of access to the latest versions of these ontologies providing comprehensive information about their scope, application and curators. The ontologies have been selected by a set of <a className = "ahome" href="/about">quality criteria</a> defining their feasibility to describe chemistry research activities and research data in an open and FAIR manner.</p>
+                            <p>The Terminology Service is a repository for chemistry ontologies. It is a central point of access to the latest versions of these ontologies providing comprehensive information about their scope, application and curators. The ontologies have been selected by a set of <a className = "ahome" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>quality criteria</a> defining their feasibility to describe chemistry research activities and research data in an open and FAIR manner.</p>
                         </div>   
                     </div>
                     <div className="col-sm-4">
@@ -22,12 +22,12 @@ export function nfdi4chemHomePage(){
                         </div>   
                     </div>
                     <div className="col-sm-4">
-                            <img className="img-fluid" alt="Blog image" src="Icon3-4.png"/>
+                            <img className="img-fluid" alt="Blog image" src="/Icon3-4.png"/>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
                              <h5>NOT A HUMAN ?</h5>
                             </div>
-                            <p>The Terminology Service is available in particular for use by other services. Data repositories or electronic lab notebooks can use the comprehensive API of the Terminology Service to retrieve and provide ontology terms in their user interfaces enabling semantic data annotation. Please visit the comprehensive <a className="ahome" href="/api">API documentation</a> to find out more about the API and how to use it for your services.</p>
+                            <p>The Terminology Service is available in particular for use by other services. Data repositories or electronic lab notebooks can use the comprehensive API of the Terminology Service to retrieve and provide ontology terms in their user interfaces enabling semantic data annotation. Please visit the comprehensive <a className="ahome" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API documentation</a> to find out more about the API and how to use it for your services.</p>
                         </div>   
                     </div>
                 </div>               

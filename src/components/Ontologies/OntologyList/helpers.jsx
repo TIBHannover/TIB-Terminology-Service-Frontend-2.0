@@ -13,11 +13,11 @@ export function BuildCollectionForCard(collections){
     let result = [];
     for(let i=0; i < collections.length; i++){
         if (i !== collections.length - 1){
-            result.push(<span className='ontology-collection-name'><a href={'/ontologies?collection=' + collections[i]}>{collections[i]}</a></span>)
+            result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + collections[i]}>{collections[i]}</a></span>)
             result.push(",")
         }
         else{
-            result.push(<span className='ontology-collection-name'><a href={'/ontologies?collection=' + collections[i]}>{collections[i]}</a></span>)
+            result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + collections[i]}>{collections[i]}</a></span>)
         }
         
     }

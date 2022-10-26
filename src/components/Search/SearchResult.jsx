@@ -167,7 +167,7 @@ createSearchResultList () {
               </div>
               <div className="searchresult-ontology">
                 <span><b>Ontology: </b></span>
-                <a className='btn btn-default ontology-button' href={'/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
+                <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
