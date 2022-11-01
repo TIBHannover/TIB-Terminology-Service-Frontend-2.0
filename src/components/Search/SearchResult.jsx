@@ -246,15 +246,16 @@ createSearchResultList () {
     }
     
     let targetUrl = await fetch(baseUrl);
-    let filteredSearchResults = (await targetUrl.json())['response']['docs']; 
-    this.updateURL(ontologies, types, collections);
+    let filteredSearchResults = (await targetUrl.json())['response']['docs'];    
     this.setState({
       searchResult: filteredSearchResults,
       selectedOntologies: ontologies,
       selectedTypes: types,
       selectedCollections: collections,
-      facetIsSelected: facetSelected
-      })
+      facetIsSelected: facetSelected,      
+      }, () => {
+        this.updateURL(ontologies, types, collections);
+      });
      }
   
   /**
