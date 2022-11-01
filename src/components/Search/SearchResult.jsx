@@ -120,10 +120,9 @@ class SearchResult extends React.Component{
       selectedTypes: types,
       pageNumber: parseInt(page),
       facetIsSelected: facetSelected
+    }, () => {
+      this.handleSelection(ontologies, types, collections);
     });
-    this.handleSelection(ontologies, types, collections);
-
-    
   }
 
 /**
