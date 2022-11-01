@@ -40,6 +40,10 @@ function App() {
     link.href = '/nfdi4ing_logo.png';
     document.title = "NFDI4Ing Terminology Service"
   }
+  else{
+    // General 
+    document.title = "TIB Terminology Service"
+  }
 
 
   return (
