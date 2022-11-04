@@ -55,6 +55,7 @@ const Footer = () => (
                     <li><a href="https://www.nfdi4chem.de/index.php/frequently-asked-questions/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem FAQ</a></li>
                     <li><a href="https://www.nfdi4chem.de/index.php/helpdesk/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Helpdesk</a></li>
                     <li><a href="https://knowledgebase.nfdi4chem.de/knowledge_base/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Knowledge Base</a></li>
+                    <li><a href="https://search.nfdi4chem.de/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Search Service</a></li>
                     <li><a href="https://github.com/NFDI4Chem" target="_blank" rel="noopener noreferrer" className='footer-link'>GitHub repository</a></li>
                     </ul>
                 }
