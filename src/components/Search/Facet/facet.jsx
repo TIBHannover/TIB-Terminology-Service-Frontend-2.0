@@ -9,13 +9,10 @@ class Facet extends React.Component{
             resultLoaded: false,
             resultTypes: [],
             ontologyFacetData: {},
-            collections: [],
-            selectedOntologies: [],
-            selectedTypes: [],
+            collections: [],           
             ontologyListShowAll: false,
             countOfShownOntologies: 5,
-            showMoreLessOntologiesText: "+ Show More",
-            selectedCollections: []
+            showMoreLessOntologiesText: "+ Show More"            
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
