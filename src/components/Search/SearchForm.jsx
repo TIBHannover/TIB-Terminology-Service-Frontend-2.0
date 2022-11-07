@@ -1,5 +1,5 @@
 import React from 'react'
-
+import queryString from 'query-string';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -23,18 +23,18 @@ class SearchForm extends React.Component{
       
 
       async handleChange(enteredTerm){
-          enteredTerm = enteredTerm.target.value;
+        enteredTerm = enteredTerm.target.value;        
         if (enteredTerm.length > 0){
-            let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}&rows=5`)
-            searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}&rows=5`)
-            jumpResult = (await jumpResult.json())['response']['docs'];
-         this.setState({
-             searchResult: searchResult,
-             jumpResult: jumpResult,
-             result: true,
-             enteredTerm: enteredTerm
-         });
+          let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}&rows=5`)
+          searchResult =  (await searchResult.json())['response']['docs'];
+          let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}&rows=5`)
+          jumpResult = (await jumpResult.json())['response']['docs'];
+          this.setState({
+              searchResult: searchResult,
+              jumpResult: jumpResult,
+              result: true,
+              enteredTerm: enteredTerm
+          });
         }
         else if (enteredTerm.length == 0){
             this.setState({
@@ -80,6 +80,12 @@ class SearchForm extends React.Component{
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
+        let cUrl = window.location.href;
+        cUrl = cUrl.split("q=")[1];
+        cUrl = cUrl.split("&")[0];        
+        this.setState({
+          enteredTerm: cUrl
+        });
       }
     
     componentWillUnmount() {
@@ -177,6 +183,7 @@ class SearchForm extends React.Component{
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
                     id="s-field"
+                    value={this.state.enteredTerm}
                     ></input>
                   <div class="input-group-append">
                     <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
