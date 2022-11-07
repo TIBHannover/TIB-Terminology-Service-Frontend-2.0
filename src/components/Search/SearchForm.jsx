@@ -80,12 +80,14 @@ class SearchForm extends React.Component{
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
-        let cUrl = window.location.href;
-        cUrl = cUrl.split("q=")[1];
-        cUrl = cUrl.split("&")[0];        
-        this.setState({
-          enteredTerm: cUrl
-        });
+        let cUrl = window.location.href;        
+        if(cUrl.includes("q=")){
+          cUrl = cUrl.split("q=")[1];
+          cUrl = cUrl.split("&")[0];        
+          this.setState({
+            enteredTerm: cUrl
+          });
+        }        
       }
     
     componentWillUnmount() {
