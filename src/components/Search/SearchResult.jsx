@@ -209,7 +209,7 @@ createSearchResultList () {
    * @param {*} types 
    * @param {*} collections 
    */
-  async handleSelection(ontologies, types, collections){
+  async handleSelection(ontologies, types, collections){    
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
     let collectionOntologies = [];

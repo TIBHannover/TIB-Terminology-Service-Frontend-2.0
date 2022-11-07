@@ -31,8 +31,9 @@ class Facet extends React.Component{
     /**
      * process the search result array to get the existing ontologies and their result count
      */
-    async processFacetData(){        
-        let facetData = this.props.facetData;
+   async processFacetData(){        
+        let facetData = this.props.facetData;        
+      
         if (facetData.length === 0 || typeof facetData["facet_fields"] === "undefined"){
             this.setState({
                 resultLoaded: true,
@@ -192,21 +193,15 @@ class Facet extends React.Component{
      * Handle click on the ontologies checkboxes
      */
     handleOntologyCheckBoxClick(e){
-        let selectedOntologies = this.state.selectedOntologies;
+        let selectedOntologies = this.props.selectedOntologies;
         if(e.target.checked){
-            selectedOntologies.push(e.target.value.toUpperCase());
-            this.setState({
-                selectedOntologies: selectedOntologies
-            });
+            selectedOntologies.push(e.target.value.toUpperCase());            
         }
         else{
             let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
-            selectedOntologies.splice(index, 1);
-            this.setState({
-                selectedOntologies: selectedOntologies
-            });
-        }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);                
+            selectedOntologies.splice(index, 1);            
+        }        
+        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections);                
     }
 
 
@@ -214,21 +209,15 @@ class Facet extends React.Component{
      * Handle click on the type checkboxes
      */
      handleTypesCheckBoxClick(e){
-        let selectedTypes = this.state.selectedTypes;
+        let selectedTypes = this.props.selectedTypes;
         if(e.target.checked){
-            selectedTypes.push(e.target.value);
-            this.setState({
-                selectedTypes: selectedTypes
-            });
+            selectedTypes.push(e.target.value);            
         }
         else{
             let index = selectedTypes.indexOf(e.target.value);
-            selectedTypes.splice(index, 1);
-            this.setState({
-                selectedTypes: selectedTypes
-            });
+            selectedTypes.splice(index, 1);            
         }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);      
+        this.props.handleChange(this.props.selectedOntologies, selectedTypes, this.props.selectedCollections);      
     }
 
 
@@ -236,21 +225,15 @@ class Facet extends React.Component{
      * Handle the click on the collection checkbox in the facet
      */
     handleCollectionsCheckboxClick(e){       
-        let selectedCollections = this.state.selectedCollections;        
+        let selectedCollections = this.props.selectedCollections;        
         if(e.target.checked){
-            selectedCollections.push(e.target.value.trim());
-            this.setState({
-                selectedCollections: selectedCollections
-            });
+            selectedCollections.push(e.target.value.trim());           
         }
         else{
             let index = selectedCollections.indexOf(e.target.value.trim());
-            selectedCollections.splice(index, 1);
-            this.setState({
-                selectedCollections: selectedCollections
-            });
+            selectedCollections.splice(index, 1);            
         }
-        this.props.handleChange(this.state.selectedOntologies, this.state.selectedTypes, this.state.selectedCollections);
+        this.props.handleChange(this.props.selectedOntologies, this.props.selectedTypes, selectedCollections);
     }
 
 
@@ -277,19 +260,20 @@ class Facet extends React.Component{
     componentDidMount(){
         if(!this.state.resultLoaded){
             this.processFacetData();
-        }        
+        }
+        
     }
 
     componentDidUpdate(){
         // pre-select the facet fields if entered via url
-        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');        
-        console.info(allFacetCheckBoxes)
+        
+        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
         for(let checkbox of allFacetCheckBoxes){            
             if(checkbox.dataset.ischecked === "true"){
                 document.getElementById(checkbox.id).checked = true;
             }
             delete checkbox.dataset.ischecked;
-        }         
+        }
     }
 
     render(){
