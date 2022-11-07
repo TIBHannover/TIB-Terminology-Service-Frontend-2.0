@@ -330,7 +330,7 @@ createSearchResultList () {
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
-    } 
+    }     
   }
 
   render(){

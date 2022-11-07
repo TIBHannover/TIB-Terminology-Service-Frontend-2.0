@@ -88,7 +88,7 @@ class Facet extends React.Component{
                     <div class="col-sm-9">
                         <div class="form-check">
                             <input 
-                                class="form-check-input"
+                                class="form-check-input search-facet-checkbox"
                                 type="checkbox" 
                                 value={type}
                                 id={"search-checkbox-" + type} 
@@ -129,7 +129,7 @@ class Facet extends React.Component{
                         <div class="col-sm-9">
                             <div class="form-check">
                                 <input 
-                                    class="form-check-input"
+                                    class="form-check-input search-facet-checkbox"
                                     type="checkbox" 
                                     value={ontologyId}
                                     id={"search-checkbox-" + ontologyId} 
@@ -168,7 +168,7 @@ class Facet extends React.Component{
                 <div className='col-sm-9'>
                     <div class="form-check">
                         <input 
-                            class="form-check-input"
+                            class="form-check-input search-facet-checkbox"
                             type="checkbox" 
                             value={record['collection']}
                             id={"search-checkbox-" + record['collection']} 
@@ -278,6 +278,18 @@ class Facet extends React.Component{
         if(!this.state.resultLoaded){
             this.processFacetData();
         }        
+    }
+
+    componentDidUpdate(){
+        // pre-select the facet fields if entered via url
+        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');        
+        console.info(allFacetCheckBoxes)
+        for(let checkbox of allFacetCheckBoxes){            
+            if(checkbox.dataset.ischecked === "true"){
+                document.getElementById(checkbox.id).checked = true;
+            }
+            delete checkbox.dataset.ischecked;
+        }         
     }
 
     render(){
