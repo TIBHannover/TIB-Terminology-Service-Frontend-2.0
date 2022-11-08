@@ -77,6 +77,20 @@ p{
     border-color:  #873593;
  }
 
+ .synonyms-button{
+    /* 
+        The style for a button representing a synonym
+    */
+
+    background-color: #c2ba1c;
+    color: white;
+    margin-left: 15px;
+    margin-top: 2px;
+    padding: 3px;
+    font-size: 12px;
+    border-color:  #0E6668;
+ }
+
  .term-button:hover{
     /* 
         The style for a button representing a term (class/propperty) on hover
@@ -1357,6 +1371,16 @@ p{
 .node-tag{
     /* 
         Styles for the "subClass of" tags (.term-button) holder div in the detail table
+    */
+
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 2px;
+}
+
+.synonyms-tag{
+    /* 
+        Styles for the "synonyms" tags holder div in the detail table
     */
 
     float: left;
