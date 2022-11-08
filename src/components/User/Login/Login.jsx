@@ -3,6 +3,9 @@ import React from "react";
 class Login extends React.Component{
     constructor(props){
         super(props);
+        this.state = ({
+            accessToken: ""
+        });
 
         this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);
     }
@@ -12,6 +15,38 @@ class Login extends React.Component{
         loginUrl += "&client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID;
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
         return loginUrl;       
+    }
+
+    componentDidMount(){
+        let cUrl = window.location.href;
+        if(cUrl.includes("code=")){
+            let code = cUrl.split("code=")[1];
+            let data = new FormData();
+            data.append("client_id", process.env.REACT_APP_GITHUB_CLIENT_ID);
+            data.append("client_secret", process.env.REACT_APP_GITHUB_SECRET);
+            data.append("code", code);
+            data.append("redirect_uri", process.env.REACT_APP_LOGIN_REDIRECT_URL);
+            
+            // first fetch the user access token
+            fetch(`https://github.com/login/oauth/access_token`, {method: "POST", body: data})
+                .then((resp) => resp.text())
+                .then((resp) => {
+                    let params = new URLSearchParams(resp);
+                    this.setState({
+                        accessToken: params.get("access_token")
+                    }, ()=>{
+                        // after this, fetch the user data
+                        fetch(`https://api.github.com/user`, {headers: {Authorization: `token ${this.state.accessToken}`}})
+                            .then((res) => res.json())
+                            .then((res) => {
+                                console.info(res);
+                            })
+                            .catch((error) => {
+                                console.info("error")
+                            });
+                    });
+                })
+        }
     }
 
 
