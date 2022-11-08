@@ -300,6 +300,14 @@ p{
     color: black;
 }
 
+.backend-is-down-message{
+    /* 
+        The message regarding the backend issue. 
+    */
+
+    display: none;
+}
+
 
 @media only screen and (max-width: 1025px) {
     .application-content{
