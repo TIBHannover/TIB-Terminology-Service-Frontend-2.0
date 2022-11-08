@@ -8,7 +8,8 @@ class SearchForm extends React.Component{
           result: false,
           clickInfo: false,
           searchResult: [],
-          jumpResult: []
+          jumpResult: [],
+          api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
@@ -24,9 +25,9 @@ class SearchForm extends React.Component{
       async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value;        
         if (enteredTerm.length > 0){
-          let searchResult = await fetch(`https://service.tib.eu/ts4tib/api/suggest?q=${enteredTerm}&rows=5`)
+          let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
           searchResult =  (await searchResult.json())['response']['docs'];
-          let jumpResult = await fetch(`https://service.tib.eu/ts4tib/api/select?q=${enteredTerm}&rows=5`)
+          let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
           jumpResult = (await jumpResult.json())['response']['docs'];
           this.setState({
               searchResult: searchResult,
@@ -60,7 +61,7 @@ class SearchForm extends React.Component{
     
     
     async suggestionHandler(selectedTerm){
-        let selection = await fetch(`https://service.tib.eu/ts4tib/api/search?q=${selectedTerm}`)
+        let selection = await fetch(`${this.state.api_base_url}/search?q=${selectedTerm}`)
         selection =  (await selection.json())['response']['docs'];
         this.setState({
             selection: selection,
