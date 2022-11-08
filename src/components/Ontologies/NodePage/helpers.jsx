@@ -79,15 +79,17 @@ function synonymsTag(objectList){
   if(objectList.length === 0){
     return "N/A";
   }
-  let tags = [];
+  let synTags = [];
   let counter = 0;
   for(let object of objectList){
-    tags.push(
-      <div className='synonym-tag' key={counter}>
+    synTags.push(
+      <div className="synonyms-tag" key={counter}>
         {object['synonyms']}
       </div>
-    )
+    );
+    counter ++;
   }
+  return synTags;
 }
 
 
