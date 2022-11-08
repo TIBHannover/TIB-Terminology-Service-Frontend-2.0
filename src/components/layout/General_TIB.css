@@ -281,6 +281,22 @@ p{
     border: 1px solid black;
 }
 
+.loginModal {
+    /* 
+        Style for the login modal.
+    */
+
+    margin-top: 10%;
+}
+
+.modal-title{
+    /* 
+        A modal title style.    
+    */
+
+    color: black;
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 

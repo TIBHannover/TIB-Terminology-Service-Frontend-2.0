@@ -308,6 +308,32 @@ p{
     display: none;
 }
 
+.github-login-btn, .github-login-btn:hover, .github-login-btn:focus{
+    /* 
+        GitHub sign in button.
+    */
+
+    background-color: black;
+    color: white;
+    width: 300px;
+    border: 1px solid black;
+}
+
+.loginModal {
+    /* 
+        Style for the login modal.
+    */
+
+    margin-top: 10%;
+}
+
+.modal-title{
+    /* 
+        A modal title style.    
+    */
+
+    color: black;
+}
 
 @media only screen and (max-width: 1025px) {
     .application-content{
