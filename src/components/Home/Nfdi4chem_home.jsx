@@ -1,7 +1,7 @@
 export function nfdi4chemHomePage(){
     let content = [
         <div className="row justify-content-center">
-            <div className="col-sm-8">
+            <div className="col-sm-8">                
                 <div className="row">
                     <div className="col-sm-4">
                             <img className="img-fluid" alt="Blog image" src="/Icon1-4.png"/>

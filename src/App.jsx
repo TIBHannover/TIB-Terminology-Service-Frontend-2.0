@@ -45,6 +45,8 @@ function App() {
     document.title = "TIB Terminology Service"
   }
 
+  // check backend is reachable
+
 
   return (
     <div className="App">
@@ -52,6 +54,14 @@ function App() {
       <BrowserRouter>
         <Header />
         <div className='container-fluid application-content'>
+          <div className='row backend-is-down-message'>
+              <div className='col-sm-12 text-center'>
+              <div class="alert alert-danger">
+              <strong>Attention: </strong> 
+                  We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.
+              </div>
+              </div>
+          </div>
           <Switch>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
