@@ -12,6 +12,7 @@ import _ from "lodash";
       // "Definition": [object.annotation ? object.annotation.definition : "", false],
       "Iri": [object.iri, true],
       "Ontology": [object.ontology_name, false],
+      "Synonyms": [object.synonyms, false],
       "SubClass of" : [ object.parents, false],
       "Relations" : [ object, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
@@ -34,6 +35,7 @@ import _ from "lodash";
     "Definition": [object['annotation'] ? object['annotation']['definition source'] : "", false],
     "Iri": [object.iri, true],
     "Ontology": [object.ontology_name, false],
+    "Synonyms": [object.synonyms, false],
     "Curation Status" : [object['annotation'] ? object['annotation']['has curation status'] : "", false],
     "Editor": [object['annotation'] ? object['annotation']['term editor'] : "", false],
     "Is Defined By": [object['annotation'] ? object['annotation']['isDefinedBy'] : "", false]
