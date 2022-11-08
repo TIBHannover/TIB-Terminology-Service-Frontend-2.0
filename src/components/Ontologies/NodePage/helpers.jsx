@@ -83,8 +83,10 @@ function synonymsTag(objectList){
   let counter = 0;
   for(let object of objectList){
     synTags.push(
-      <div className="synonyms-tag" key={counter}>
-        {object['synonyms']}
+      <div className='synonyms-tag' key={counter}>
+        <a className="synonyms-button" >
+          {object['synonyms']}
+        </a>
       </div>
     );
     counter ++;

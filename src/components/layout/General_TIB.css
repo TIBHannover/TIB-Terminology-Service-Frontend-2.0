@@ -78,6 +78,20 @@ p{
     border-color:  #0E6668;
  }
 
+ .synonyms-button{
+    /* 
+        The style for a button representing a synonym
+    */
+
+    background-color: #c2ba1c;
+    color: white;
+    margin-left: 15px;
+    padding: 3px;
+    margin-top: -5px;
+    font-size: 12px;
+    border-color:  #0E6668;
+ }
+
  .term-button:hover{
     /* 
         The style for a button representing a term (class/propperty) on hover
