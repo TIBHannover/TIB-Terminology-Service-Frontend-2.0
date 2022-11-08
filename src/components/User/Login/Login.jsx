@@ -4,14 +4,14 @@ class Login extends React.Component{
     constructor(props){
         super(props);
 
-        this.onClickGitHub = this.onClickGitHub.bind(this);
+        this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);
     }
 
-    onClickGitHub(){
+    gitHubLoginUrl(){
         let loginUrl = "https://github.com/login/oauth/authorize?scope=user";
         loginUrl += "&client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID;
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
-       
+        return loginUrl;       
     }
 
 
@@ -29,7 +29,7 @@ class Login extends React.Component{
                                 <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
                             </div>
                             <div class="modal-body text-center">
-                                <a className="btn btn-primary github-login-btn" onClick={this.onClickGitHub}>
+                                <a href={this.gitHubLoginUrl()} className="btn btn-primary github-login-btn">
                                     <i className="fa fa-github"></i> Sign in with GitHub
                                 </a>
                             </div>                            
