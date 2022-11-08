@@ -1339,6 +1339,16 @@ p{
     margin-top: 2px;
 }
 
+.synonyms-tag{
+    /* 
+        Styles for the "synonyms" tags holder div in the detail table
+    */
+
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 2px;
+}
+
 
 .isLoading {
     /* 
