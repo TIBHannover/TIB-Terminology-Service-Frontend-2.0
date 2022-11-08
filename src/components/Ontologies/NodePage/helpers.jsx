@@ -60,6 +60,9 @@ import _ from "lodash";
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
+  else if (label === "Synonyms"){
+    return synonymsTag(text);
+  }
   else if (label === "SubClass of"){
     return makeTag(text);
   }
@@ -67,6 +70,24 @@ import _ from "lodash";
     return createRelations(text);
   }
   return text
+}
+
+/**
+ * Create tag for the synonyms relation
+ */
+function synonymsTag(objectList){
+  if(objectList.length === 0){
+    return "N/A";
+  }
+  let tags = [];
+  let counter = 0;
+  for(let object of objectList){
+    tags.push(
+      <div className='synonym-tag' key={counter}>
+        {object['synonyms']}
+      </div>
+    )
+  }
 }
 
 
