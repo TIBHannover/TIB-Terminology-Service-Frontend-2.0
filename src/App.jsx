@@ -46,6 +46,19 @@ function App() {
   }
 
   // check backend is reachable
+  let getCallSetting = {method: 'GET', headers: {'Accept': 'text/plain;charset=UTF-8 '}};
+  let url = "https://service.tib.eu/ts4tib/api/accessibility";
+  fetch(url, getCallSetting).then((res) => res.text()).then((res) => {
+    if(res !== "API is Accessible!"){
+      document.getElementById("backend-is-down-message").style.display = "block";
+    }
+    else{
+      document.getElementById("backend-is-down-message").style.display = "none";
+    }
+  }).catch((e)=> {
+      document.getElementById("backend-is-down-message").style.display = "block";
+  });
+
 
 
   return (
@@ -54,7 +67,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <div className='container-fluid application-content'>
-          <div className='row backend-is-down-message'>
+          <div className='row backend-is-down-message' id="backend-is-down-message">
               <div className='col-sm-12 text-center'>
               <div class="alert alert-danger">
               <strong>Attention: </strong> 
