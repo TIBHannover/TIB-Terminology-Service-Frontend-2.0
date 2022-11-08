@@ -297,6 +297,15 @@ p{
     color: black;
 }
 
+.fa-github{
+    /* 
+        Gothub fontawsome style.
+    */
+
+    border: none;
+    font-size: 30px;
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 

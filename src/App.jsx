@@ -14,6 +14,7 @@ import AboutApi from '../src/assets/static/AboutApi';
 import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
+import Login from './components/User/Login/Login';
 
 
 // import css file based on the target project
@@ -76,7 +77,8 @@ function App() {
               </div>
           </div>
           <Switch>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
+            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/> 
+            <Route path="/login" component={Login}/>           
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
