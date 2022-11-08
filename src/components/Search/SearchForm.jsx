@@ -1,5 +1,4 @@
-import React from 'react'
-import queryString from 'query-string';
+import React from 'react';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -83,9 +82,10 @@ class SearchForm extends React.Component{
         let cUrl = window.location.href;        
         if(cUrl.includes("q=")){
           cUrl = cUrl.split("q=")[1];
-          cUrl = cUrl.split("&")[0];        
+          cUrl = cUrl.split("&")[0];
+
           this.setState({
-            enteredTerm: cUrl
+            enteredTerm: decodeURIComponent(cUrl)
           });
         }        
       }
