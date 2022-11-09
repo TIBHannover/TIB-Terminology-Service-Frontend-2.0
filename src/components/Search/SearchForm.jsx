@@ -79,16 +79,7 @@ class SearchForm extends React.Component{
       }
     
     componentDidMount() {
-        document.addEventListener('click', this.handleClickOutside, true);
-        let cUrl = window.location.href;        
-        if(cUrl.includes("q=")){
-          cUrl = cUrl.split("q=")[1];
-          cUrl = cUrl.split("&")[0];
-
-          this.setState({
-            enteredTerm: decodeURIComponent(cUrl)
-          });
-        }        
+        document.addEventListener('click', this.handleClickOutside, true);         
       }
     
     componentWillUnmount() {
@@ -185,8 +176,7 @@ class SearchForm extends React.Component{
                     aria-describedby="basic-addon2"
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
-                    id="s-field"
-                    value={this.state.enteredTerm}
+                    id="s-field"                    
                     ></input>
                   <div class="input-group-append">
                     <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
