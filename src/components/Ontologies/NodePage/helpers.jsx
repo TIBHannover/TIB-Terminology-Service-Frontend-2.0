@@ -12,6 +12,7 @@ import _ from "lodash";
       // "Definition": [object.annotation ? object.annotation.definition : "", false],
       "Iri": [object.iri, true],
       "Ontology": [object.ontology_name, false],
+      "Synonyms": [object.synonyms, false],
       "SubClass of" : [ object.parents, false],
       "Relations" : [ object, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
@@ -34,6 +35,7 @@ import _ from "lodash";
     "Definition": [object['annotation'] ? object['annotation']['definition source'] : "", false],
     "Iri": [object.iri, true],
     "Ontology": [object.ontology_name, false],
+    "Synonyms": [object.synonyms, false],
     "Curation Status" : [object['annotation'] ? object['annotation']['has curation status'] : "", false],
     "Editor": [object['annotation'] ? object['annotation']['term editor'] : "", false],
     "Is Defined By": [object['annotation'] ? object['annotation']['isDefinedBy'] : "", false]
@@ -58,6 +60,9 @@ import _ from "lodash";
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
+  else if (label === "Synonyms"){
+    return synonymsTag(text);
+  }
   else if (label === "SubClass of"){
     return makeTag(text);
   }
@@ -65,6 +70,28 @@ import _ from "lodash";
     return createRelations(text);
   }
   return text
+}
+
+/**
+ * Create tag for the synonyms relation
+ */
+function synonymsTag(objectList){
+  if(objectList.length === 0){
+    return "N/A";
+  }
+  let synTags = [];
+  let counter = 0;
+  for(let object of objectList){
+    synTags.push(
+      <div className='synonyms-tag' key={counter}>
+        <div className="synonyms-button" >
+          {object}
+        </div>
+      </div>
+    );
+    counter ++;
+  }
+  return synTags;
 }
 
 
