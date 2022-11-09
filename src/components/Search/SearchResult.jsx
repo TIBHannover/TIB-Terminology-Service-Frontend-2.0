@@ -330,6 +330,12 @@ createSearchResultList () {
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){
       this.searching();
+      let cUrl = window.location.href;        
+      if(cUrl.includes("q=")){
+        cUrl = cUrl.split("q=")[1];
+        cUrl = cUrl.split("&")[0];
+        document.getElementById("s-field").value = decodeURIComponent(cUrl)
+      }       
     }     
   }
 
