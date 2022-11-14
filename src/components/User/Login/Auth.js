@@ -28,10 +28,21 @@ export function auth(){
 
 
 
-export function isLogin(){
+export const isLogin = () => {    
     if(localStorage.getItem("token")){
-        // --> here the app need to check with the backend about the token validiy
-        return true;
+        let data = new FormData();
+        data.append("token", localStorage.getItem("token"));
+        return fetch(`http://localhost:5000/validate_login`, {method: "POST", body: data})
+            .then((resp) => resp.json())
+            .then((resp) => {                
+                if(resp["valid"] === true){                    
+                    return true;  
+                }
+                return false;
+            })
+            .catch((e) => {
+                return false;
+            });         
     }
     return false;
 }

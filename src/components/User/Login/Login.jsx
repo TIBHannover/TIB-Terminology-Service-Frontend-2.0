@@ -22,7 +22,7 @@ class Login extends React.Component{
 
     render(){
         return [
-            <span>
+            <span>           
                 {!isLogin() && this.props.isModal &&
                     // render the modal. Used in the site header 
                     <span>
