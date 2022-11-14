@@ -1489,3 +1489,12 @@ p{
     min-height: 100vh;  
 }
 
+/* 
+--------------------------------------
+  User-related components such as Login and profile
+--------------------------------------
+*/
+
+.user-profile-dropdown{
+    font-size: 12px;
+}
