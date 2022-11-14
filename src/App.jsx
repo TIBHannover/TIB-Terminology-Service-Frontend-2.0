@@ -16,6 +16,7 @@ import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import Login from './components/User/Login/Login';
 import UserProfile from './components/User/Profile/Profile';
+import RequireLoginRoute from './components/User/Login/RequireLogin';
 
 
 // import css file based on the target project
@@ -80,7 +81,7 @@ function App() {
           <Switch>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/> 
             <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
-            <Route  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>           
+            <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>           
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
