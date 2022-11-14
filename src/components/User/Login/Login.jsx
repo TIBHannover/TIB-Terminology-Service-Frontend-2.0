@@ -1,12 +1,10 @@
 import React from "react";
-import isLogin from "./Auth";
+import {auth, isLogin} from "./Auth";
 
 class Login extends React.Component{
     constructor(props){
         super(props);
-        this.state = ({
-            isLogin: false
-        });
+        
 
         this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);
     }
@@ -19,32 +17,7 @@ class Login extends React.Component{
     }
 
     componentDidMount(){
-        let cUrl = window.location.href;
-        if(cUrl.includes("code=")){
-            let code = cUrl.split("code=")[1];
-            let data = new FormData();
-            data.append("code", code);            
-            
-            // first fetch the user access token
-            fetch(`http://localhost:5000/login`, {method: "POST", body: data})
-                .then((resp) => resp.json())
-                .then((resp) => {
-                    if(resp["data"]){
-                        localStorage.setItem("name", resp["data"]["name"]);
-                        localStorage.setItem("company", resp["data"]["company"]);
-                        localStorage.setItem("github_home", resp["data"]["github_home"]);
-                        localStorage.setItem("token", resp["data"]["token"]);
-                        this.setState({
-                            isLogin: true
-                        });                        
-                    }
-                    
-                })
-                .catch((e) => {
-                    console.info(e);
-                })
-                
-        }
+        auth();
     }
 
 
