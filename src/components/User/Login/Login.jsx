@@ -1,5 +1,5 @@
 import React from "react";
-import {auth, isLogin} from "./Auth";
+import {auth, isLogin, Logout} from "./Auth";
 
 class Login extends React.Component{
     constructor(props){
@@ -46,8 +46,16 @@ class Login extends React.Component{
                     </div>
                     </span>                    
                 }
-                {isLogin() && 
-                    <a href="#" className="btn btn-primary">{localStorage.getItem('name')}</a>
+                {isLogin() &&                     
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle user-profile-dropdown" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           {localStorage.getItem("name")}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
+                            <a class="dropdown-item" href="#">My Profile</a>
+                            <a class="dropdown-item" href="#" onClick={() => {Logout();}}>Logout</a>                            
+                        </div>
+                    </div>
                 }
             </span>            
         ];

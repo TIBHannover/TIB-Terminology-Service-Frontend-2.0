@@ -1,3 +1,5 @@
+import {withRouter} from 'react-router-dom';
+
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
@@ -12,6 +14,7 @@ export function auth(){
                     localStorage.setItem("company", resp["data"]["company"]);
                     localStorage.setItem("github_home", resp["data"]["github_home"]);
                     localStorage.setItem("token", resp["data"]["token"]);
+                    window.location.replace("/ts");
                     return true;                              
                 }
                 return false;
@@ -38,6 +41,6 @@ export function Logout(){
         localStorage.removeItem("name");
         localStorage.removeItem("company");
         localStorage.removeItem("github_home");    
-    }
-    return true;
+        window.location.replace("/ts");
+    }    
 }
