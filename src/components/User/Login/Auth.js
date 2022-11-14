@@ -13,6 +13,7 @@ export function auth(){
                     localStorage.setItem("name", resp["data"]["name"]);
                     localStorage.setItem("company", resp["data"]["company"]);
                     localStorage.setItem("github_home", resp["data"]["github_home"]);
+                    localStorage.setItem("avatar", resp["data"]["avatar"]);
                     localStorage.setItem("token", resp["data"]["token"]);
                     window.location.replace("/ts");
                     return true;                              
@@ -40,7 +41,8 @@ export function Logout(){
         localStorage.removeItem("token");
         localStorage.removeItem("name");
         localStorage.removeItem("company");
-        localStorage.removeItem("github_home");    
+        localStorage.removeItem("github_home");  
+        localStorage.removeItem("avatar");  
         window.location.replace("/ts");
     }    
 }

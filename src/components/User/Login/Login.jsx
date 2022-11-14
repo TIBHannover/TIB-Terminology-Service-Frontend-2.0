@@ -52,7 +52,7 @@ class Login extends React.Component{
                            {localStorage.getItem("name")}
                         </button>
                         <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-                            <a class="dropdown-item" href="#">My Profile</a>
+                            <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
                             <a class="dropdown-item" href="#" onClick={() => {Logout();}}>Logout</a>                            
                         </div>
                     </div>
