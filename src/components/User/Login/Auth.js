@@ -1,8 +1,8 @@
-import {withRouter} from 'react-router-dom';
-
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
+        document.getElementsByClassName("application-page")[0].style.filter = "blur(10px)";
+        document.getElementById("login-loading").style.display = "block";
         let code = cUrl.split("code=")[1];
         let data = new FormData();
         data.append("code", code);
@@ -30,6 +30,7 @@ export function auth(){
 
 export function isLogin(){
     if(localStorage.getItem("token")){
+        // --> here the app need to check with the backend about the token validiy
         return true;
     }
     return false;
@@ -43,6 +44,7 @@ export function Logout(){
         localStorage.removeItem("company");
         localStorage.removeItem("github_home");  
         localStorage.removeItem("avatar");  
+        // --> send a logout request to backend to destroy the token
         window.location.replace("/ts");
     }    
 }

@@ -66,39 +66,53 @@ function App() {
 
   return (
     <div className="App">
+      <div class="overlay" id="login-loading">
+        <div class="d-flex flex-column align-items-center justify-content-center">  
+          <div className="row">
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Login ...</span>
+            </div>
+          </div>
+          <div className="row login-load-text">
+            <h2><strong>Login ...</strong></h2>
+        </div>                                
+        </div>            
+      </div>
      
       <BrowserRouter>
-        <Header />
-        <div className='container-fluid application-content'>
-          <div className='row backend-is-down-message' id="backend-is-down-message">
-              <div className='col-sm-12 text-center'>
-              <div class="alert alert-danger">
-              <strong>Attention: </strong> 
-                  We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.
-              </div>
-              </div>
-          </div>
-          <Switch>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/> 
-            <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
-            <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>           
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
-            {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyDetail}/>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi}/>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
-            {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
-            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
-          </Switch>
-        </div>        
-        <Footer />
+        <div className="application-page">
+          <Header />
+          <div className='container-fluid application-content'>
+            <div className='row backend-is-down-message' id="backend-is-down-message">
+                <div className='col-sm-12 text-center'>
+                <div class="alert alert-danger">
+                <strong>Attention: </strong> 
+                    We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.
+                </div>
+                </div>
+            </div>
+            <Switch>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/> 
+              <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
+              <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>           
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
+              {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyDetail}/>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi}/>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
+              {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
+              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
+            </Switch>
+          </div>        
+          <Footer />
+        </div>
       </BrowserRouter>
     </div>
   );
