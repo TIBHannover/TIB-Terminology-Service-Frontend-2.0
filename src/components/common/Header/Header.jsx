@@ -10,7 +10,7 @@ function Header () {
     <div className='header-warpper'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
-            <Login></Login>
+            <Login isModal={true}></Login>
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>

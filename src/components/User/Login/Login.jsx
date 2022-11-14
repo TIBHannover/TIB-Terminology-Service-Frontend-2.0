@@ -5,7 +5,6 @@ class Login extends React.Component{
     constructor(props){
         super(props);
         
-
         this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);
     }
 
@@ -21,11 +20,11 @@ class Login extends React.Component{
     }
 
 
-    
     render(){
         return [
             <span>
-                {!isLogin() && 
+                {!isLogin() && this.props.isModal &&
+                    // render the modal. Used in the site header 
                     <span>
                     <a type="button" data-toggle="modal" data-target="#loginModal">Login</a>
 
@@ -45,6 +44,18 @@ class Login extends React.Component{
                         </div>
                     </div>
                     </span>                    
+                }
+                {!isLogin() && !this.props.isModal &&
+                    // render the normal login form. Used when a user need to login before accessing a section
+                    <div className="row">
+                        <div className="col-sm-12 text-center">
+                            <h5>You need to login for accessing this section.</h5>
+                            <br></br>
+                            <a href={this.gitHubLoginUrl()} className="btn btn-primary github-login-btn">
+                                <i className="fa fa-github"></i> Sign in with GitHub
+                            </a>
+                        </div>
+                    </div>                   
                 }
                 {isLogin() &&                     
                     <div class="dropdown">
