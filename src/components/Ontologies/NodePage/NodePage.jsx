@@ -116,7 +116,7 @@ class NodePage extends React.Component {
           <div className='row'>
             <div className='col-sm-12 node-metadata-value'>
               <a 
-                href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + this.state.data.iri} 
+                href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + encodeURIComponent(this.state.data.iri)} 
                 target='_blank' 
                 rel="noreferrer"
                 className='btn btn-primary btn-dark download-ontology-btn'
