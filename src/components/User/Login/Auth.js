@@ -6,7 +6,7 @@ export function auth(){
         let code = cUrl.split("code=")[1];
         let data = new FormData();
         data.append("code", code);
-        fetch(`http://localhost:5000/login`, {method: "POST", body: data})
+        fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/login', {method: "POST", body: data})
             .then((resp) => resp.json())
             .then((resp) => {
                 if(resp["data"]){
@@ -32,7 +32,7 @@ export const isLogin = () => {
     if(localStorage.getItem("token")){
         let data = new FormData();
         data.append("token", localStorage.getItem("token"));
-        return fetch(`http://localhost:5000/validate_login`, {method: "POST", body: data})
+        return fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/validate_login', {method: "POST", body: data})
             .then((resp) => resp.json())
             .then((resp) => {                
                 if(resp["valid"] === true){                    
