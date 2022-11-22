@@ -113,7 +113,7 @@ class DataTree extends React.Component {
           let currentUrlParams = new URLSearchParams();
           currentUrlParams.append('iri', stateObj.selectedNodeIri);
           this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-          this.props.iriChangerFunction(stateObj.selectedNodeIri);
+          this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
         }        
         return true;
       }
@@ -122,7 +122,7 @@ class DataTree extends React.Component {
       if (!target || resetFlag){        
         this.buildTree(this.state.rootNodes);       
         return true;
-      }      
+      }
       target = target.trim();
       let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
       if((target != undefined && this.state.targetNodeIri != target) || reload ){        
@@ -302,7 +302,7 @@ selectNode(target){
     let currentUrlParams = new URLSearchParams();
     currentUrlParams.append('iri', target.parentNode.dataset.iri);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-    this.props.iriChangerFunction(target.parentNode.dataset.iri);
+    this.props.iriChangerFunction(target.parentNode.dataset.iri, this.state.componentIdentity);
 
   }
   else{

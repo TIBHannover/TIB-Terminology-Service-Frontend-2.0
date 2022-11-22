@@ -221,10 +221,18 @@ class OntologyDetail extends React.Component {
  * Change the selected iri in the dataTree component.
  * Need to pass it to the DataTree component
  */
-  changeInputIri(iri){
-    this.setState({
-      targetTermIri: iri
-    });
+  changeInputIri(iri, componentId){
+    if(componentId === "term"){
+      this.setState({
+        targetTermIri: iri
+      });
+    }
+    else{
+      this.setState({
+        targetPropertyIri: iri
+      });
+    }
+    
   }
 
 
