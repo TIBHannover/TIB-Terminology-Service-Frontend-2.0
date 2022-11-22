@@ -7,10 +7,10 @@ import _ from "lodash";
  export function classMetaData(object){
     let metadata = {
       "Label": [object.label, false],
-      "Short Form":  [object.short_form, false],
+      "abbreviatedIRI":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       // "Definition": [object.annotation ? object.annotation.definition : "", false],
-      "Iri": [object.iri, true],
+      "fullIRI": [object.iri, true],
       "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
       "SubClass of" : [ object.parents, false],
@@ -30,10 +30,10 @@ import _ from "lodash";
  export function propertyMetaData(object){
   let metadata = {
     "Label": [object.label, false],
-    "Short Form":  [object.short_form, false],
+    "abbreviatedIRI":  [object.short_form, false],
     "Description": [object.description, false],
     "Definition": [object['annotation'] ? object['annotation']['definition source'] : "", false],
-    "Iri": [object.iri, true],
+    "fullIRI": [object.iri, true],
     "Ontology": [object.ontology_name, false],
     "Synonyms": [object.synonyms, false],
     "Curation Status" : [object['annotation'] ? object['annotation']['has curation status'] : "", false],
