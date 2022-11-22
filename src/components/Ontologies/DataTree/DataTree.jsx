@@ -106,12 +106,15 @@ class DataTree extends React.Component {
     async processTree(resetFlag, viewMode, reload){
       if(this.props.lastState && this.props.lastState.treeDomContent !== ""){
         // return the last tree state. Used when a user switch tabs on the ontology page
-        this.setState({
-          treeDomContent: this.props.lastState.treeDomContent,
-          targetNodeIri: false,
-          reload: false,
-          isLoadingTheComponent: false
-        });
+        let stateObj = this.props.lastState;
+        stateObj.isLoadingTheComponent = false;
+        this.setState({...stateObj});        
+        if(stateObj.selectedNodeIri !== ""){
+          let currentUrlParams = new URLSearchParams();
+          currentUrlParams.append('iri', stateObj.selectedNodeIri);
+          this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+          this.props.iriChangerFunction(stateObj.selectedNodeIri);
+        }        
         return true;
       }
 
@@ -292,6 +295,8 @@ selectNode(target){
       siblingsButtonShow: false,
       reduceTreeBtnShow: true,
       reduceBtnActive: false    
+    }, () =>{
+      this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
     });
 
     let currentUrlParams = new URLSearchParams();
@@ -302,7 +307,9 @@ selectNode(target){
   }
   else{
     target.classList.remove("clicked");
+    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
   }
+
 }
 
 
