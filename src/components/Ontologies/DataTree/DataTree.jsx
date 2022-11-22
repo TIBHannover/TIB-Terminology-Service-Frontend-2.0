@@ -104,6 +104,17 @@ class DataTree extends React.Component {
    * @returns 
    */
     async processTree(resetFlag, viewMode, reload){
+      if(this.props.treeDomContent !== ""){
+        // return the last tree state. Used when a user switch tabs on the ontology page
+        this.setState({
+          treeDomContent: this.props.treeDomContent,
+          targetNodeIri: false,
+          reload: false,
+          isLoadingTheComponent: false
+        });
+        return true;
+      }
+
       let target = this.props.iri;      
       if (!target || resetFlag){        
         this.buildTree(this.state.rootNodes);       

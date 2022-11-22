@@ -29,7 +29,9 @@ class OntologyDetail extends React.Component {
       waiting: false,
       targetTermIri: " ",
       targetPropertyIri: " ",
-      rootNodeNotExist: false
+      rootNodeNotExist: false,
+      classTreeDomLastState: "",
+      propertyTreeDomLastState: ""
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -276,6 +278,7 @@ class OntologyDetail extends React.Component {
                               ontology={this.state.ontologyId}
                               rootNodeNotExist={this.state.rootNodeNotExist}
                               iriChangerFunction={this.changeInputIri}
+                              treeDomContent={this.state.classTreeDomLastState}
                             />
               }
 
@@ -288,6 +291,7 @@ class OntologyDetail extends React.Component {
                               ontology={this.state.ontologyId}
                               rootNodeNotExist={this.state.rootNodeNotExist}
                               iriChangerFunction={this.changeInputIri}
+                              treeDomContent={this.state.propertyTreeDomLastState}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
