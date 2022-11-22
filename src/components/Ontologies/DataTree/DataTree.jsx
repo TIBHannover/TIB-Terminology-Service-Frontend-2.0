@@ -392,7 +392,9 @@ async showSiblings(){
           }
         }
         
-        this.setState({siblingsVisible: true});
+        this.setState({siblingsVisible: true}, ()=>{ 
+          this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+        });
     }
     else{
       if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
@@ -417,7 +419,9 @@ async showSiblings(){
         }
       }
       
-      this.setState({siblingsVisible: false});
+      this.setState({siblingsVisible: false}, ()=>{
+        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+      });
     }
   }
   catch(e){
