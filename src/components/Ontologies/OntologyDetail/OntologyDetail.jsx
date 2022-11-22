@@ -37,6 +37,7 @@ class OntologyDetail extends React.Component {
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
+    this.changeTreeContent = this.changeTreeContent.bind(this);
   }
 
 
@@ -227,6 +228,23 @@ class OntologyDetail extends React.Component {
   }
 
 
+  /**
+   * Change the data tree last state when the tree changes
+   * It keep the tree last state and keep it open on tab switch
+   * @param {*} domContent 
+   * @param {*} treeId: It is class or property tree (term/property)
+   */
+  changeTreeContent(domContent, stateObject, treeId){
+    typeof(domContent) !== "undefined" ? stateObject.treeDomContent = domContent : stateObject.treeDomContent = ""; 
+    if(treeId === "term"){      
+      this.setState({classTreeDomLastState: stateObject});
+    }
+    else{
+      this.setState({propertyTreeDomLastState: stateObject});
+    }
+  }
+
+
   componentDidMount () {
     this.setOntologyData();
     this.setTabOnLoad();
@@ -278,7 +296,8 @@ class OntologyDetail extends React.Component {
                               ontology={this.state.ontologyId}
                               rootNodeNotExist={this.state.rootNodeNotExist}
                               iriChangerFunction={this.changeInputIri}
-                              treeDomContent={this.state.classTreeDomLastState}
+                              lastState={this.state.classTreeDomLastState}
+                              domStateKeeper={this.changeTreeContent}
                             />
               }
 
@@ -291,7 +310,8 @@ class OntologyDetail extends React.Component {
                               ontology={this.state.ontologyId}
                               rootNodeNotExist={this.state.rootNodeNotExist}
                               iriChangerFunction={this.changeInputIri}
-                              treeDomContent={this.state.propertyTreeDomLastState}
+                              lastState={this.state.propertyTreeDomLastState}
+                              domStateKeeper={this.changeTreeContent}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}

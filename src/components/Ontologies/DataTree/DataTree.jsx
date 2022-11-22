@@ -104,10 +104,10 @@ class DataTree extends React.Component {
    * @returns 
    */
     async processTree(resetFlag, viewMode, reload){
-      if(this.props.treeDomContent !== ""){
+      if(this.props.lastState && this.props.lastState.treeDomContent !== ""){
         // return the last tree state. Used when a user switch tabs on the ontology page
         this.setState({
-          treeDomContent: this.props.treeDomContent,
+          treeDomContent: this.props.lastState.treeDomContent,
           targetNodeIri: false,
           reload: false,
           isLoadingTheComponent: false
@@ -161,6 +161,7 @@ class DataTree extends React.Component {
             i += 1;
           }          
           let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+          this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
           let fullTreeMode = this.state.reduceBtnActive;
           this.setState({
             targetNodeIri: target,
@@ -217,7 +218,8 @@ class DataTree extends React.Component {
           
           childrenList.push(listItem);
         }
-        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);   
+        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+        this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
         let fullTreeMode = this.state.reduceBtnActive;              
         this.setState({
             targetNodeIri: target,            
@@ -261,6 +263,7 @@ class DataTree extends React.Component {
     childrenList.push(listItem);
   }
   let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+  this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
   this.setState({
     treeDomContent: treeList,
     targetNodeIri: false,
@@ -313,7 +316,9 @@ processClick(e){
   }
   else if (e.target.tagName === "I"){   
     // expand a node by clicking on the expand icon 
-    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName);
+    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+      this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+    });       
   }
 }
 
@@ -324,6 +329,7 @@ processClick(e){
  */
 resetTree(){
   this.props.history.push(window.location.pathname);
+  this.props.domStateKeeper("", this.state, this.props.componentIdentity);
   this.setState({
     resetTreeFlag: true,
     treeDomContent: "",
@@ -420,6 +426,7 @@ async showSiblings(){
 reduceTree(){
   let reduceBtnActive = this.state.reduceBtnActive;
   let showSiblings = !reduceBtnActive;
+  this.props.domStateKeeper("", this.state, this.props.componentIdentity);
   this.setState({
     reduceBtnActive: !reduceBtnActive,
     siblingsButtonShow: showSiblings,
@@ -448,10 +455,12 @@ render(){
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
-          <div className='row'>
-            <div className='col-sm-10'>
-              {this.state.treeDomContent}
-            </div>
+          <div className='row'>          
+            {!this.state.treeDomContent.__html 
+              ? <div className='col-sm-10'>{this.state.treeDomContent}</div> 
+              : <div className='col-sm-10' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+            }
+                          
             <div className='col-sm-2'>
               <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
               {this.state.reduceTreeBtnShow && 
