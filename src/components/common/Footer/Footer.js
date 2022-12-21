@@ -47,8 +47,21 @@ const Footer = () => (
             </div>
 
             <div className="col-sm-2">
-                <h6>RESOURCES</h6>
+                {process.env.REACT_APP_PROJECT_ID !== "nfdi4ing" &&
+                  <h6>RESOURCES</h6>
+                }
+
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                  <h6>FUNDING</h6>
+                }
+
+                
                 <hr className="me-5" />
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                   <a href="https://nfdi4ing.de/" target="_blank" rel="noopener noreferrer">
+                        <img src="/nfdi4ing_logo.png" alt="Logo NFDI4ING" className="footer-funding-logo" />
+                    </a>
+                }
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
                     <ul className="footer-list">
                     <li><a href="https://www.nfdi4chem.de/" target="_blank" rel="noopener noreferrer" className='footer-link'>NFDI4Chem Website</a></li>

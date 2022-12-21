@@ -21,8 +21,7 @@ function Header () {
               }
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <span>
-                  <img src="/nfdi4ing_logo.png" alt="nfdi4chem_logo" className='site-logo-image'/>
-                  <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>TERMINOLOGY SERVICE</a>
+                  <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}><img src="/zeichnung.png" alt="nfdi4ing_logo" className='site-logo-image'/></a>
                 </span>                 
               }
               {process.env.REACT_APP_PROJECT_ID === "general" && 

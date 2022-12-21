@@ -45,7 +45,7 @@ p{
        The style for the site anchors
     */
 
-    color: #0E6668;
+    color: #7C98B3;
     text-decoration: none;
  }
  
@@ -68,13 +68,13 @@ p{
         The style for a button representing a term (class/propperty)
     */
 
-    background-color: #873593;
+    background-color: #536B78;
     color: white;
     margin-left: 15px;
     padding: 3px;
     font-size: 12px;
     margin-top: -5px;
-    border-color:  #873593;
+    border-color:  #536B78;
  }
 
  .synonyms-button{
@@ -82,7 +82,7 @@ p{
         The style for a button representing a synonym
     */
 
-    background-color: #c2ba1c;
+    background-color: #6B9080;
     color: white;
     margin-left: 15px;
     margin-top: 2px;
@@ -106,13 +106,13 @@ p{
         The style for a button representing an ontology
     */
 
-    background-color: #00617C;
-    color: white;
+    background-color: #ACCBE1;
+    color: #637081;
     margin-left: 10px;
     padding: 3px;
     font-size: 12px;
     margin-right: 10px;
-    border-color: #00617C !important;
+    border-color: #ACCBE1 !important;
 }
 
 .ontology-button:hover{
@@ -183,7 +183,7 @@ p{
     border: 1px solid #639EAF;
 }
 
- .stats-box-text{
+.stats-box-text{
     /* 
         The style for text item in statistics box present in homepage
     */
@@ -195,10 +195,10 @@ p{
         Site footer style
     */
 
-    background: #FFFFFF;   
+    background: #CEE5F2;   
     border-top: 1px #d1d3d9 solid;
     padding-top: 20px;
-    color: black;
+    color: #637081;
 }
 
 .footer-link{
@@ -206,7 +206,7 @@ p{
         Links in the footer
     */
 
-    color: black;
+    color: #637081;
 }
 
 .footer-link:hover{
@@ -229,6 +229,15 @@ p{
 
     width: 300px;
     height: 100px;
+}
+
+.footer-funding-logo{
+    /* 
+        Logos on the site footer
+    */
+
+    width: 210px;
+    height: 83px;
 }
 
 .footer-col{
@@ -360,9 +369,9 @@ p{
     */
  
     background-position: right center;
-    background-color: #2E9198;
+    background-color: #CEE5F2;
     padding: 10px;
-    max-height: 700px;
+    max-height: 220px;
  }
  
  .container.site-header{
@@ -448,16 +457,17 @@ p{
     /* 
         The style for the site title
      */
-    color: white;
+    color: #637081;
     text-decoration: none;
-    font-size: 16px;    
+    font-size: 16px;  
+    font-weight: bold;  
  }
  
  .main-title:hover {
     /* 
         The style for the site title hover
      */
-    color: white;
+    color: black;
     text-decoration: none;
  }
    
@@ -478,8 +488,9 @@ p{
     */
 
     height: 100px;
-    width: 250px;
-    margin-top: -20px;
+    width: 275px;
+    margin-top: -30px;
+    margin-right: -260px;
 }
    
  .header-top__navbar {
@@ -537,7 +548,7 @@ p{
      */
    
      margin-top: 15px !important;
-     background-color: #2E9198;
+     background-color: #CEE5F2;
      width: 90%;
    }
    
@@ -549,13 +560,13 @@ p{
      margin-left: 10px;
      text-transform: uppercase;
      outline: none;
-     color: white;
+     color: #637081;
      font-weight: bold;
      font-size: 16px;
    }
  
    .navbar-item:hover{
-       color: white !important;
+       color: black !important;
        text-decoration: underline !important;
    }
  
@@ -754,7 +765,7 @@ p{
     
     padding: 5%;
     padding-bottom: 8%;
-    background-color: #fafafa;
+    background-color: white;
 
 }
 
@@ -763,8 +774,8 @@ p{
         The style for the stats box
     */
 
-    color: white;
-    background-color: #2E9198;
+    color: #637081;
+    background-color: #CEE5F2;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
@@ -924,7 +935,7 @@ p{
         Style for the search button
     */
 
-    background-color: #404040 !important;
+    background-color: #637081 !important;
     color: white;    
 }
 

@@ -37,7 +37,7 @@ function App() {
   }
   
   else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
-    link.href = '/nfdi4ing_logo.png';
+    link.href = 'https://nfdi4ing.de/wp-content/uploads/2020/01/cropped-signet-192x192.png';
     document.title = "NFDI4Ing Terminology Service"
   }
   else{

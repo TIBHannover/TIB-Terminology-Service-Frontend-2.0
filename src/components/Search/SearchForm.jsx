@@ -181,6 +181,10 @@ class SearchForm extends React.Component{
                   <div class="input-group-append">
                     <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
                   </div>
+
+
+
+
                 </div>
                                       
                 {this.state.result &&
@@ -192,6 +196,12 @@ class SearchForm extends React.Component{
                    {this.createJumpResultList()}
                   </div>
                 </div>}
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                <p>
+                 <span class="examples">Examples: <a class="nounderline ontology-link" href="search?q=electric+vehicle">electric vehicle</a>,
+                 <a class="nounderline ontology-link" href="search?q=agent">agent</a></span>
+               </p>
+                }
               </div>
           )
       }
