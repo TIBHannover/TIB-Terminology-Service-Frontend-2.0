@@ -45,7 +45,7 @@ p{
        The style for the site anchors
     */
 
-    color: #7C98B3;
+    color: #4f6d7a;
     text-decoration: none;
  }
  
@@ -68,13 +68,13 @@ p{
         The style for a button representing a term (class/propperty)
     */
 
-    background-color: #536B78;
-    color: white;
+    background-color: #c0d6df;
+    color: #4f6d7a;
     margin-left: 15px;
     padding: 3px;
     font-size: 12px;
     margin-top: -5px;
-    border-color:  #536B78;
+    border-color:  #c0d6df;
  }
 
  .synonyms-button{
@@ -82,8 +82,8 @@ p{
         The style for a button representing a synonym
     */
 
-    background-color: #6B9080;
-    color: white;
+    background-color: #e8dab2;
+    color: #4f6d7a;
     margin-left: 15px;
     margin-top: 2px;
     padding: 3px;
@@ -106,13 +106,13 @@ p{
         The style for a button representing an ontology
     */
 
-    background-color: #ACCBE1;
-    color: #637081;
+    background-color: #dd6e42;
+    color: #eaeaea;
     margin-left: 10px;
     padding: 3px;
     font-size: 12px;
     margin-right: 10px;
-    border-color: #ACCBE1 !important;
+    border-color: #84a98c !important;
 }
 
 .ontology-button:hover{
@@ -195,10 +195,12 @@ p{
         Site footer style
     */
 
-    background: #CEE5F2;   
+    background: white;   
     border-top: 1px #d1d3d9 solid;
+    background-image: url('../../assets/img/polygon_background.svg');
+    background-position: right center;
     padding-top: 20px;
-    color: #637081;
+    color: #4f6d7a;
 }
 
 .footer-link{
@@ -206,7 +208,7 @@ p{
         Links in the footer
     */
 
-    color: #637081;
+    color: #4f6d7a;
 }
 
 .footer-link:hover{
@@ -290,15 +292,15 @@ p{
         The heading part style for the collapse button (bootstrap). Example: in the Usage page.
      */
 
-    background-color: #d2e2e2 !important;
+    background-color: #c0d6df !important;
 }
 .collpase-text-btn{
     /* 
         The style for the collapse button (bootstrap). Example: in the Usage page.
      */
 
-    background-color: #d2e2e2 !important;
-    color: black;
+    background-color: #c0d6df !important;
+    color: #4f6d7a;
     text-decoration: none;
     width: 100%;
     text-align: left;
@@ -331,6 +333,13 @@ p{
     display: none;
 }
 
+.examples{
+    color:#eaeaea;
+}
+
+.example-link{
+    color:#e8dab2;
+}
 
 @media only screen and (max-width: 1025px) {
     .application-content{
@@ -369,7 +378,8 @@ p{
     */
  
     background-position: right center;
-    background-color: #CEE5F2;
+    background-image: url('../../assets/img/polygon_background.svg');
+    background-color: #4f6d7a;
     padding: 10px;
     max-height: 220px;
  }
@@ -457,7 +467,7 @@ p{
     /* 
         The style for the site title
      */
-    color: #637081;
+    color: #2f3e46;
     text-decoration: none;
     font-size: 16px;  
     font-weight: bold;  
@@ -487,10 +497,10 @@ p{
         The style for the site logo image 
     */
 
-    height: 100px;
-    width: 275px;
-    margin-top: -30px;
-    margin-right: -260px;
+    height: 70px;
+    width: 200px;
+    margin-top: 0px;
+    margin-right: -160px;
 }
    
  .header-top__navbar {
@@ -548,7 +558,7 @@ p{
      */
    
      margin-top: 15px !important;
-     background-color: #CEE5F2;
+     background-color: #ffffff00;
      width: 90%;
    }
    
@@ -560,7 +570,7 @@ p{
      margin-left: 10px;
      text-transform: uppercase;
      outline: none;
-     color: #637081;
+     color: #eaeaea;
      font-weight: bold;
      font-size: 16px;
    }
@@ -666,7 +676,7 @@ p{
     */
  
     text-decoration: none;
-    color: #009cbc;
+    color: #4f6d7a;
  }
  
  .pagination-link:hover{
@@ -774,8 +784,9 @@ p{
         The style for the stats box
     */
 
-    color: #637081;
-    background-color: #CEE5F2;
+    color: #4f6d7a;
+    font-size: 10px;
+    background-color: white;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
@@ -935,8 +946,8 @@ p{
         Style for the search button
     */
 
-    background-color: #637081 !important;
-    color: white;    
+    background-color: #c0d6df !important;
+    color: #4f6d7a;    
 }
 
 .search-btn:hover{

@@ -5,7 +5,7 @@ export function nfdi4ingHomePage(){
                 <div className="row">
                     <div className="col-sm-4">
                         <a href="#" class="d-block">
-                            <img class="img-fluid home-image" alt="Blog image" src="/engineering.svg"/>
+                            <img class="img-fluid home-image" alt="Blog image" src="/about.svg"/>
                         </a>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
@@ -21,7 +21,7 @@ export function nfdi4ingHomePage(){
                     </div>
                     <div className="col-sm-4">
                         <a href="#" class="d-block">
-                            <img class="img-fluid home-image" alt="Blog image" src="/about.svg"/>
+                            <img class="img-fluid home-image" alt="Blog image" src="/brainstorm.svg"/>
                         </a>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">

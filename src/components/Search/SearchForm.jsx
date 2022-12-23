@@ -198,8 +198,8 @@ class SearchForm extends React.Component{
                 </div>}
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
-                 <span class="examples">Examples: <a class="nounderline ontology-link" href="search?q=electric+vehicle">electric vehicle</a>,
-                 <a class="nounderline ontology-link" href="search?q=agent">agent</a></span>
+                 <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
+                 <a class="example-link" href="search?q=agent">agent</a></span>
                </p>
                 }
               </div>
