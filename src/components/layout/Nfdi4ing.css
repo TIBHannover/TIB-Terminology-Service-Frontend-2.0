@@ -47,6 +47,7 @@ p{
 
     color: #4f6d7a;
     text-decoration: none;
+    font-weight: bold; 
  }
  
  a:hover{
@@ -56,6 +57,7 @@ p{
 
     text-decoration: underline;
     color: #0E6668; 
+    font-weight: bold; 
  }
 
  button{
@@ -97,8 +99,8 @@ p{
     */
 
     text-decoration: none;
-    background-color: rgba(149, 86, 158, 0.7);
-    color: white;
+    background-color: #4f6d7a;
+    color: #eaeaea;
  }
 
 .ontology-button{
@@ -121,8 +123,8 @@ p{
     */
 
     text-decoration: none !important;
-    background-color: rgba(0,97,124,0.7) !important;
-    color: white;
+    background-color: #e8dab2 !important;
+    color: #4f6d7a;
 }
 
 .facet-box{
@@ -339,6 +341,10 @@ p{
 
 .example-link{
     color:#e8dab2;
+}
+
+.example-link:hover{
+    color:#dd6e42;
 }
 
 @media only screen and (max-width: 1025px) {
@@ -576,7 +582,7 @@ p{
    }
  
    .navbar-item:hover{
-       color: black !important;
+       color: #dd6e42 !important;
        text-decoration: underline !important;
    }
  
@@ -955,8 +961,8 @@ p{
         Style for the search button on hover
     */
 
-    background-color: #23272B !important;
-    color: white !important;
+    background-color: #4f6d7a !important;
+    color: #eaeaea !important;
 }
 
 
