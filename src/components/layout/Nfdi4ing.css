@@ -56,7 +56,7 @@ p{
     */
 
     text-decoration: underline;
-    color: #0E6668; 
+    color: #c0d6df; 
     font-weight: bold; 
  }
 
@@ -114,7 +114,7 @@ p{
     padding: 3px;
     font-size: 12px;
     margin-right: 10px;
-    border-color: #84a98c !important;
+    border-color: #dd6e42 !important;
 }
 
 .ontology-button:hover{
@@ -125,6 +125,7 @@ p{
     text-decoration: none !important;
     background-color: #e8dab2 !important;
     color: #4f6d7a;
+    border-color: #e8dab2 !important;
 }
 
 .facet-box{
@@ -214,7 +215,7 @@ p{
 }
 
 .footer-link:hover{
-    color: black;
+    color: #c0d6df;
 }
 
 .footer-list{
@@ -576,7 +577,7 @@ p{
      margin-left: 10px;
      text-transform: uppercase;
      outline: none;
-     color: #eaeaea;
+     color: #e8dab2;
      font-weight: bold;
      font-size: 16px;
    }
@@ -1180,7 +1181,15 @@ p{
     */
 
     margin-left: 20px !important;
-    font-size: 10px !important;   
+    font-size: 10px !important;  
+    background-color: #c0d6df !important;
+    border-color: #c0d6df;
+    color: #4f6d7a; 
+}
+
+.copy-link-btn:hover{
+    background-color: #4f6d7a !important;
+    color: #eaeaea;
 }
 
 .download-ontology-btn{
@@ -1189,8 +1198,15 @@ p{
     */
 
     margin-right: 20px !important;
-    background-color: #404040 !important;
+    background-color: #c0d6df !important;
+    border-color: #c0d6df;
+    color: #4f6d7a;
     font-size: 14px;
+}
+
+.download-ontology-btn:hover{
+    background-color: #4f6d7a !important;
+    color: #eaeaea;
 }
 
 
