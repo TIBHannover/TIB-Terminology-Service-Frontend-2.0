@@ -170,6 +170,7 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
     let rels = await getClassRelations(node, ontology);
     node['relations'] = rels;
     node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
+    node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
   }
   else{
     node['relations'] = [];
@@ -177,6 +178,32 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   node['parents'] = parents;  
   return node;
 }
+
+/**
+ * Get subClass Of values for selected node
+ * @param ontology 
+ * @param nodeIri 
+ * @param mode 
+ * @returns 
+ */
+export async function getSubClassOf(nodeIri:string, ontologyId:string){
+  let url = <string> "";
+  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  res = res["_embedded"];
+  if (typeof(res) !== "undefined"){
+    let result: Array<any> = [];
+    for(let i=0; i < res["strings"].length; i++){
+      let values = '<li>'+ res["strings"][i]["content"] +'</li>';
+      result.push(values);     
+    }
+    return result;
+  }
+  return "N/A"
+
+}
+
 
 
 /**

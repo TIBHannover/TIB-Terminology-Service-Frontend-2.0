@@ -14,7 +14,7 @@ import _ from "lodash";
       "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
       "Equivalent to": [object.eqAxiom, false],
-      "SubClass of" : [ object.parents, false],
+      "SubClass Of" : [ object.subClassOf, false],
       "Relations" : [ object, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
       "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
@@ -64,15 +64,16 @@ import _ from "lodash";
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "SubClass of"){
-    return makeTag(text);
-  }
   else if (label === "Relations"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
+  else if (label === "SubClass Of"){
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
+  }
+
   return text
 }
 
