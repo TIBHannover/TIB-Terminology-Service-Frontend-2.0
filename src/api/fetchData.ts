@@ -177,6 +177,22 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   return node;
 }
 
+/**
+ * Get subClass Of values for selected node
+ * @param ontology 
+ * @param nodeIri 
+ * @param mode 
+ * @returns 
+ */
+export async function getSubClassOf(ontology:string, nodeIri:string, mode:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
+  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
+  let node =  await fetch(baseUrl + "?iri=" + nodeIri + "/superclassdescription", getCallSetting);
+  if (node.status === 404){
+    return false;
+  }
+}
+
 
 /**
  * get the page field from json result (TS api paginates the results)
