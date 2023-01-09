@@ -13,7 +13,7 @@ import _ from "lodash";
       "fullIRI": [object.iri, true],
       "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
-      "SubClass of" : [ object.subClassOf, false],
+      "SubClass Of" : [ object.subClassOf, false],
       "Relations" : [ object, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
       "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
