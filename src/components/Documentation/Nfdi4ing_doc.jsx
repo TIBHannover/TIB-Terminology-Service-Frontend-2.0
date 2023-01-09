@@ -3,7 +3,7 @@ export function nfdi4IngDoc(){
         <div>
             <div className="row">
                 <div className="col-sm-12">
-                    NFDI4Ing Terminology Service can be used both manually and programmatically to access/provide semantically annotated terms. Manual access (User Interface) appeals to a larger audience whereas programmatical access (REST Interface) can play a key role in larger contexts. For this reason, they are both essential features of the service. 
+                    NFDI4Ing Terminology Service can be used both manually and programmatically to access/provide terms along with their properties, classes, instances and semantical annotations. Manual access (User Interface) appeals to a larger audience whereas programmatical access (REST Interface) can play a key role in larger contexts. For this reason, they are both essential features of the service. 
                 </div>
             </div>
             <br></br>
