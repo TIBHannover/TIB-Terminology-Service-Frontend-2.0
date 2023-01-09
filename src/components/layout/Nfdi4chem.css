@@ -284,13 +284,6 @@ p{
     margin-left: 1px;
 }
 
-.backend-is-down-message{
-    /* 
-        The message regarding the backend issue. 
-    */
-
-    display: none;
-}
 
 .github-login-btn, .github-login-btn:hover, .github-login-btn:focus{
     /* 

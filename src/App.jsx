@@ -52,14 +52,24 @@ function App() {
   let getCallSetting = {method: 'GET', headers: {'Accept': 'text/plain;charset=UTF-8 '}};
   let url = "https://service.tib.eu/ts4tib/api/accessibility";
   fetch(url, getCallSetting).then((res) => res.text()).then((res) => {
-    if(res !== "API is Accessible!"){
-      document.getElementById("backend-is-down-message").style.display = "block";
-    }
-    else{
-      document.getElementById("backend-is-down-message").style.display = "none";
-    }
+    if(res !== "API is Accessible!" && !document.getElementById('backend-is-down-message')){      
+      let rowDiv = document.createElement('div');
+      rowDiv.classList.add('row');
+      rowDiv.setAttribute('id', 'backend-is-down-message')
+      let colDiv = document.createElement('div');
+      colDiv.classList.add('col-sm-12');
+      colDiv.classList.add('text-center');
+      let alertDiv = document.createElement('div');
+      alertDiv.classList.add('alert');
+      alertDiv.classList.add('alert-danger');
+      let text = document.createTextNode("We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.");
+      alertDiv.appendChild(text);
+      colDiv.appendChild(alertDiv);
+      rowDiv.appendChild(colDiv);
+      document.getElementById('backend-is-down-message-span').appendChild(rowDiv);
+    }    
   }).catch((e)=> {
-      document.getElementById("backend-is-down-message").style.display = "block";
+      // document.getElementById("backend-is-down-message").style.display = "block";
   });
 
 
@@ -83,36 +93,29 @@ function App() {
         <div className="application-page">
           <Header />
           <div className='container-fluid application-content'>
-            <div className='row backend-is-down-message' id="backend-is-down-message">
-                <div className='col-sm-12 text-center'>
-                <div class="alert alert-danger">
-                <strong>Attention: </strong> 
-                    We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.
-                </div>
-                </div>
-            </div>
+            <span id="backend-is-down-message-span"></span>
             <Switch>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/> 
-              <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
-              <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>           
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
-              {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyDetail}/>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi}/>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
-              {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
-              <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
-            </Switch>
-          </div>        
-          <Footer />
-        </div>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/> 
+                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
+                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>           
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
+                {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyDetail}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
+              </Switch>
+            </div>
+            <Footer /> 
+        </div>                         
       </BrowserRouter>
     </div>
   );
