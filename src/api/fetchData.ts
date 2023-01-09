@@ -338,7 +338,15 @@ async function getEqAxiom(nodeIri:string, ontologyId:string){
   res = await res.json();  
   res = res["_embedded"];
   if (typeof(res) !== "undefined"){
-    return res["strings"][0]["content"];
+    let resultHtml = <string> "";
+    resultHtml += "<ul>";
+    for(let item of res["strings"]){
+      resultHtml += "<li>";
+      resultHtml += item["content"];
+      resultHtml += "</li>";
+    }
+    resultHtml += "<ul>";
+    return resultHtml;
   }
   return "N/A"
 
