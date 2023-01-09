@@ -13,6 +13,7 @@ import _ from "lodash";
       "fullIRI": [object.iri, true],
       "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
+      "Equivalent to": [object.eqAxiom, false],
       "SubClass of" : [ object.parents, false],
       "Relations" : [ object, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
