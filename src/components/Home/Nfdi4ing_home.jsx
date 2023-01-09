@@ -9,7 +9,7 @@ export function nfdi4ingHomePage(){
                         </a>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
-                                <h4><b><center>About NFDI4Ing Terminology Service</center></b></h4>
+                                <h4><b><center>NFDI4Ing Terminology Service</center></b></h4>
                             </div>
                             <p>
                                 NFDI4Ing Terminology Service is a repository for engineering ontologies that aims 
@@ -25,7 +25,7 @@ export function nfdi4ingHomePage(){
                         </a>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
-                               <h4><b><center>Community Vision of NFDI4Ing</center></b><br /></h4>
+                               <h4><b><center>Community Vision of NFDI4Ing</center></b></h4>
                             </div>
                             <p>
                                 NFDI4Ing Terminology Service is a community driven offer, that intends to reflect the interests 
@@ -41,10 +41,10 @@ export function nfdi4ingHomePage(){
                         </a>
                         <div class="p-3">
                             <div class="font-weight-bold mb-2">
-                             <h4><b><center>Specifications</center></b><br /></h4>
+                             <h4><b><center>Specifications</center></b></h4>
                             </div>
-                            <p>
-                            The Terminology Service is available in particular for use by other services. Data repositories or electronic lab notebooks can use the comprehensive API of the Terminology Service to retrieve and provide ontology terms in their user interfaces enabling semantic data annotation. Please visit the comprehensive <a className="ahome" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API documentation</a> to find out more about the API and how to use it for your services.
+                            <p> 
+                            This service can be used to search for terminologies both manually and programmatically. Users can access the extensive and interactive metadata of each term from the user interface. On the other hand, data repositories or electronic lab notebooks can use the comprehensive API to retrieve ontology terms. More information can be found on <a className="ahome" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a> about the usage.
                             </p>
                         </div>   
                     </div>

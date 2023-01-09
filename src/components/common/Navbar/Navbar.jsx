@@ -34,12 +34,22 @@ function Navbar () {
                   : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
                 }                  
                 </li>
+                {process.env.REACT_APP_PROJECT_ID !== "nfdi4ing" &&
                 <li class="nav-item">
                 {urlPath.includes("/api") 
                   ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
                   : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
                 }                  
                 </li>
+                }
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                <li class="nav-item">
+                {urlPath.includes("/docs") 
+                  ? <a class="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a>
+                  : <a class="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a>
+                }                  
+                </li>
+                }
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <li class="nav-item">
                  {urlPath.includes("/usage") 

@@ -82,7 +82,7 @@ export function nfdi4IngHelp(){
                                 for your research data documentation and annotation and thus persistently 
                                 refer to a reliable description of a concept related to your work. 
                                 You can also integrate terminological items into your own applications via the 
-                                <a href="/api" target={"_blank"}> Terminology Service’s API</a>. 
+                                <a href="/docs" target={"_blank"}> Terminology Service’s API</a>. 
                                 Learn more about the API here or at its 
                                 <a href="http://service.tib.eu/ts4tib/swagger-ui.html" target={"_blank"}><b> Swagger Documentation</b></a>. 
                                 In the future, the terminology from the Terminology Service will also be integrated 
