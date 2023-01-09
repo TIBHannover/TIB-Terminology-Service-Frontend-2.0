@@ -46,11 +46,8 @@ export function nfdi4IngDoc(){
                                         The main REST API of TIB Central Terminology Service enables to search all the terminologies 
                                         maintained by TIB in addition to engineering terminologies. Publicly available API commands generate results in mostly JSON format and rarely in plain text format. The API can be analyzed and executed from the 
                                         <a href="http://service.tib.eu/ts4tib/swagger-ui.html" target={"_blank"}><b> Swagger Documentation</b></a>.
-                                        The underlying models can further be viewed through this documentation for a deeper understanding of the API commands. Once you get familiar with the commands you can call them with external tools such as <a href="https://curl.se/"> curl</a>. q
-                                    </p>
-                                    
-                                        
-                                                          
+                                        The underlying models can further be viewed through this documentation for a deeper understanding of the API commands. Once you get familiar with the commands you can call them with external tools such as <a href="https://curl.se/"> curl</a>.
+                                    </p>                                          
                                 </div>
                             </div>
                         </div>
