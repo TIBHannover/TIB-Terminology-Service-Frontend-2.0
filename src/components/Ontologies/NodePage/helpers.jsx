@@ -67,6 +67,13 @@ import _ from "lodash";
   else if (label === "Relations"){
     return createRelations(text);
   }
+  else if (label === "Equivalent to"){
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
+  }
+  else if (label === "SubClass Of"){
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
+  }
+
   return text
 }
 
