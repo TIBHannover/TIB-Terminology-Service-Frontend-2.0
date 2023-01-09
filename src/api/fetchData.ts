@@ -169,6 +169,7 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
     node['relations'] = rels;
+    node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
   }
   else{
     node['relations'] = [];
@@ -184,16 +185,19 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
  * @param mode 
  * @returns 
  */
-export async function getSubClassOf(ontology:string, nodeIri:string, mode:string){
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
-  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
-  let node =  await fetch(baseUrl + "?iri=" + nodeIri + "/superclassdescription", getCallSetting);
-  if (node.status === 404){
-    return false;
+export async function getSubClassOf(nodeIri:string, ontologyId:string){
+  let url = <string> "";
+  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  res = res["_embedded"];
+  if (typeof(res["strings"]) !== "undefined"){
+    return res["strings"][0]["content"];
   }
-  let subClassOfvalues = (await node.json())['embedded']['strings'];
-  return subClassOfvalues;
+  return "N/A"
+
 }
+
 
 
 /**
