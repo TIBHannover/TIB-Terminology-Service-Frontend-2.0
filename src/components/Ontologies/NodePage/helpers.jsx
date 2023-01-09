@@ -70,6 +70,9 @@ import _ from "lodash";
   else if (label === "Relations"){
     return createRelations(text);
   }
+  else if (label === "Equivalent to"){
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
+  }
   return text
 }
 
