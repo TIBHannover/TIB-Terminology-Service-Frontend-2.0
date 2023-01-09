@@ -309,9 +309,9 @@ async function getEqAxiom(nodeIri:string, ontologyId:string){
   let url = <string> "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
   let res = await fetch(url, getCallSetting);
-  res = await res.json();
+  res = await res.json();  
   res = res["_embedded"];
-  if (typeof(res["strings"]) !== "undefined"){
+  if (typeof(res) !== "undefined"){
     return res["strings"][0]["content"];
   }
   return "N/A"
