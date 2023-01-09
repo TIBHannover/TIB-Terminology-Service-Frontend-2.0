@@ -191,7 +191,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
-  if (typeof(res["strings"]) !== "undefined"){
+  if (typeof(res) !== "undefined"){
     return res["strings"][0]["content"];
   }
   return "N/A"
