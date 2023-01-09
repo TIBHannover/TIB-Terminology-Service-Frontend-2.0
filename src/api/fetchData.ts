@@ -193,10 +193,9 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   res = await res.json();
   res = res["_embedded"];
   if (typeof(res) !== "undefined"){
-    let result: Array<any> = [];
+    let result= "";
     for(let i=0; i < res["strings"].length; i++){
-      let values = '<li>'+ res["strings"][i]["content"] +'</li>';
-      result.push(values);     
+      result += '<li>'+ res["strings"][i]["content"] +'</li>';     
     }
     return result;
   }
