@@ -13,6 +13,7 @@ import _ from "lodash";
       "fullIRI": [object.iri, true],
       "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
+      "Equivalent to": [object.eqAxiom, false],
       "SubClass Of" : [ object.subClassOf, false],
       "Relations" : [ object, false],
       "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
@@ -66,10 +67,6 @@ import _ from "lodash";
   else if (label === "Relations"){
     return createRelations(text);
   }
-  else if (label === "SubClass Of"){
-    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
-  }
-
   return text
 }
 
