@@ -191,6 +191,8 @@ export async function getSubClassOf(ontology:string, nodeIri:string, mode:string
   if (node.status === 404){
     return false;
   }
+  let subClassOfvalues = (await node.json())['embedded']['strings'];
+  return subClassOfvalues;
 }
 
 
