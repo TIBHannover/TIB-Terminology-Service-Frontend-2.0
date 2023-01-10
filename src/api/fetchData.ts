@@ -180,6 +180,33 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
 }
 
 /**
+ * Get a class to Equivalent Axioms
+ * @param classid 
+ * @returns 
+ */
+
+async function getEqAxiom(nodeIri:string, ontologyId:string){
+  let url = <string> "";
+  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();  
+  res = res["_embedded"];
+  if (typeof(res) !== "undefined"){
+    let resultHtml = <string> "";
+    resultHtml += "<ul>";
+    for(let item of res["strings"]){
+      resultHtml += "<li>";
+      resultHtml += item["content"];
+      resultHtml += "</li>";
+    }
+    resultHtml += "<ul>";
+    return resultHtml;
+  }
+  return "N/A"
+
+}
+
+/**
  * Get subClass Of values for selected node
  * @param ontology 
  * @param nodeIri 
@@ -345,34 +372,6 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
   }
 
   return result;
-
-}
-
-
-/**
- * Get a class to Equivalent Axioms
- * @param classid 
- * @returns 
- */
-
-async function getEqAxiom(nodeIri:string, ontologyId:string){
-  let url = <string> "";
-  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();  
-  res = res["_embedded"];
-  if (typeof(res) !== "undefined"){
-    let resultHtml = <string> "";
-    resultHtml += "<ul>";
-    for(let item of res["strings"]){
-      resultHtml += "<li>";
-      resultHtml += item["content"];
-      resultHtml += "</li>";
-    }
-    resultHtml += "<ul>";
-    return resultHtml;
-  }
-  return "N/A"
 
 }
 
