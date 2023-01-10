@@ -243,7 +243,16 @@ export async function getRelations(nodeIri:string, ontologyId:string){
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   if (typeof(res) !== "undefined"){
-    
+    let result:Array<any> = [];
+    result.push(res);
+    for(let item of result){
+      let subResult:Array<any> = [];
+      for(let i=0; i < item[i].length; i++){
+        subResult.push('<li>' + item[i]["label"] + "</li>")
+      }
+      return subResult;
+    }
+    return result;
   }
   return "N/A"
 
