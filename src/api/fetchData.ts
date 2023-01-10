@@ -221,9 +221,11 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   res = res["_embedded"];
   if (typeof(res) !== "undefined"){
     let result= "";
-    for(let i=0; i < res["strings"].length; i++){
+    result += "<ul>"
+    for(let i=0; i < res["strings"].length; i++){ 
       result += '<li>'+ res["strings"][i]["content"] +'</li>';     
     }
+    result += "<ul>"
     return result;
   }
   return "N/A"
@@ -350,6 +352,9 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
   let result: { relation: string, relationUrl: string, target: string, targetUrl: string }[]  = [];
   for(let rel of relations){
     if(rel['label'] === "is a"){
+      continue;
+    }
+    if(rel['label'] === "has proper occurrent part"){
       continue;
     }
     let targetNode = "";
