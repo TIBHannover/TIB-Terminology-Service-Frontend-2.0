@@ -281,12 +281,12 @@ class DataTree extends React.Component {
  * Select a node in tree
  * @param {*} e 
  */
-selectNode(target){
-  let selectedElement = document.getElementsByClassName("clicked");
-  for(let i =0; i < selectedElement.length; i++){
+selectNode(target){    
+  let selectedElement = document.querySelectorAll(".clicked");;
+  console.info(selectedElement)
+  for(let i=0; i < selectedElement.length; i++){
     selectedElement[i].classList.remove("clicked");
-  }
-  
+  }  
   if(!target.classList.contains("clicked")){
     target.classList.add("clicked");
     this.setState({
