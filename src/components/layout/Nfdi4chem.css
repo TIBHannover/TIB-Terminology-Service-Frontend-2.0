@@ -1291,6 +1291,18 @@ p{
     content: "........";
 }
 
+.li-label-text{
+    /* 
+        Style for the a node span title text in the tree
+    */
+
+    display: inline-block;
+    width: 360px;
+    vertical-align: top;
+    padding-left: 3px;
+    word-break: break-all;
+}
+
 
 .li-label-text:hover{
     /* 

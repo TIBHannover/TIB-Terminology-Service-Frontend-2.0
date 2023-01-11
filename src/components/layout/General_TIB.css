@@ -1232,7 +1232,7 @@ p{
     padding-left: 10px !important;
     padding-right: 10px !important;
     background-color: white;
-    border-right: 1px solid black;
+    border-right: 1px solid black;    
 }
 
 .node-table-container{
@@ -1319,7 +1319,7 @@ p{
     cursor: pointer;    
     border-left: 1px dotted !important;
     border-left-color: gray;
-    font-size: 13px !important;
+    font-size: 13px !important;    
 }
 
 .tree-node-li::before{
@@ -1327,13 +1327,25 @@ p{
         For thr tree view heirarchy style.
     */
 
-    content: "...";
+    content: "...";    
 }
 
 .leaf-node::before{
     content: "........";
 }
 
+
+.li-label-text{
+    /* 
+        Style for the a node span title text in the tree
+    */
+    
+    display: inline-block;
+    width: 360px;
+    vertical-align: top;
+    padding-left: 3px;
+    word-break: break-all;
+}
 
 .li-label-text:hover{
     /* 
