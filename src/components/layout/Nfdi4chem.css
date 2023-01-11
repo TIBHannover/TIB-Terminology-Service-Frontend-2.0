@@ -1185,6 +1185,7 @@ p{
     padding-right: 10px !important;
     background-color: #fafafa;
     border-right: 1px solid black;
+    overflow-x: scroll;
 }
 
 .node-table-container{
@@ -1293,7 +1294,7 @@ p{
     */
 
     display: inline-block;
-    width: 360px;
+    width: 300px;
     vertical-align: top;
     padding-left: 3px;
     word-break: break-all;
@@ -1401,6 +1402,36 @@ p{
     100% { transform: rotate(360deg); }
   }
 
+  @media only screen and (max-width: 1500px) and (min-width: 1026px) {
+    .li-label-text{
+        /* 
+            Style for the a node span title text in the tree
+        */
+            
+        width: 140px;     
+    }
+  }
+
+
+@media only screen and (max-width: 1025px) and (min-width: 901px) {
+    .li-label-text{
+        /* 
+            Style for the a node span title text in the tree
+        */
+            
+        width: 100px;     
+    }
+  }
+
+  @media only screen and (max-width: 900px){
+    .li-label-text{
+        /* 
+            Style for the a node span title text in the tree
+        */
+            
+        width: 100px;     
+    }
+  }
 
 /* 
 ------------------------------------------------------------
