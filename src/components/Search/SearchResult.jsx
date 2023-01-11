@@ -156,7 +156,7 @@ createSearchResultList () {
       for (let i = 0; i < searchResultItem.length; i++) {
         SearchResultList.push(
           <div className="row result-card" key={searchResultItem[i]['id']}>
-            <div className='col-sm-12'>
+            <div className='col-sm-10'>
               {setResultTitleAndLabel(searchResultItem[i])}                
               <div className="searchresult-iri">
                 {searchResultItem[i].iri}
@@ -170,6 +170,9 @@ createSearchResultList () {
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
+            </div>
+            <div className='col-sm-2'>
+                <div className='search-result-type-tag'>{searchResultItem[i]["type"]}</div>
             </div>
           </div>   
         )
