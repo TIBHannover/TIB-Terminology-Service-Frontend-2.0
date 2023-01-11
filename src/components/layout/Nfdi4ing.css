@@ -894,6 +894,7 @@ p{
        The style for the jump autocomplete field
     */
     margin-left: 10px;
+    margin-bottom: -20px;
 }
 
 #search-box {
