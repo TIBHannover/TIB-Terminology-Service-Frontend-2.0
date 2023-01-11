@@ -34,6 +34,7 @@ body{
     overflow-y: hidden;
     min-height: 500px;
     padding-top: 30px;
+    background-color: #f5f5f5;
 }
 
 p{
@@ -718,7 +719,7 @@ p{
     
     padding: 5%;
     padding-bottom: 8%;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
 
 }
 
@@ -1183,7 +1184,7 @@ p{
     z-index: 900;
     padding-left: 10px !important;
     padding-right: 10px !important;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
     border-right: 1px solid black;
     overflow-x: scroll;
 }
