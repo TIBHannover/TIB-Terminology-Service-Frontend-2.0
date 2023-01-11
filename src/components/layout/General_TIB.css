@@ -1295,6 +1295,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;
+    word-break: break-all;
 }
 
 .node-detail-table-row{
@@ -1339,7 +1340,7 @@ p{
     /* 
         Style for the a node span title text in the tree
     */
-    
+
     display: inline-block;
     width: 360px;
     vertical-align: top;
