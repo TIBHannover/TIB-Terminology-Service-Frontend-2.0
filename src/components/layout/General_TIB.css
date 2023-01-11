@@ -1118,19 +1118,7 @@ p{
 -------------------------------------
 */
 
-
-.ontology-detail-page-container{
-     /* 
-        Style for the ontology detail info containers.
-    */
-
-    background-color: white;
-    padding: 10px;
-    margin-top: 0px !important;
-    margin-left: 2px;   
-}
-
-.tree-view-container{
+.ontology-detail-page-container, .tree-view-container{
     /* 
         Style for the tree view detail info containers (class/property).
     */
