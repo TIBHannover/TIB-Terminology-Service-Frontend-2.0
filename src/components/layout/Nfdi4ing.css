@@ -1107,16 +1107,27 @@ p{
 -------------------------------------
 */
 
-
-.ontology-detail-page-container, .tree-view-container{
+.ontology-detail-page-container{
     /* 
-        Style for the ontology detail info containers (all pages under each navbar in the ontology detail view).
-    */
+       Style for the ontology detail info containers.
+   */
 
-    background-color: #fafafa;
-    padding: 10px;
-    margin-top: 0px !important;
-    margin-bottom: 30px !important;
+   background-color: white;
+   padding: 10px;
+   margin-top: 0px !important;
+   margin-left: 2px;   
+}
+
+.tree-view-container{
+   /* 
+       Style for the tree view detail info containers (class/property).
+   */
+
+   background-color: white;
+   padding: 10px;
+   margin-top: 0px !important;
+   width: 140%;
+   margin-left: -250px;
 }
 
 .ontology-detail-table, .ontology-metric-table{
