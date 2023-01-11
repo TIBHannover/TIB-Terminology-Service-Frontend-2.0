@@ -24,7 +24,7 @@ function OntologyInfoBox (props) {
   return (
     <div className="ontology-detail-table-wrapper">
       <div className='row'>
-        <div className='col-sm-12 ontology-detail-text'>
+        <div className='col-sm-11 ontology-detail-text'>
           <h4><b>{ontology.config.title}</b></h4>
           <p>
             {ontology.config.description}
