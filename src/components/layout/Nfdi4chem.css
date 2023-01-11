@@ -1154,7 +1154,14 @@ p{
     background-color: #FAFAFA;
   }
 
+.nav-tabs{
+    /* 
+        The style for the ontology detail page navbar
+    */
 
+    width: 145%;
+    margin-left: -23%;
+}
 
 
 /* 

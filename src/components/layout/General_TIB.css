@@ -1179,6 +1179,16 @@ p{
 }
 
 
+.nav-tabs{
+    /* 
+        The style for the ontology detail page navbar
+    */
+    
+    width: 145%;
+    margin-left: -23%;
+}
+
+
 .ontology-detail-navbar{
     /* 
         The style for ontology detail page navbar
