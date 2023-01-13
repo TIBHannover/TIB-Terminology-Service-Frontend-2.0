@@ -61,7 +61,7 @@ p{
  }
 
  button{
-    background-color: #404040 !important;
+    background-color: #4f6d7a !important;
     font-size: 14px;
  }
 
@@ -90,7 +90,7 @@ p{
     margin-top: 2px;
     padding: 3px;
     font-size: 12px;
-    border-color:  #0E6668;
+    border-color:  #4f6d7a;
  }
 
  .term-button:hover{
@@ -139,7 +139,7 @@ p{
     border-radius: 10px;
     margin-bottom: 20px;
     padding-left: 10px;
-    border: 1px solid #639EAF;
+    border: 1px solid #c0d6df;
 }
 
 .facet-result-count{
@@ -147,7 +147,7 @@ p{
        The style for counter in facet fields
     */
     border-radius: 50px;
-    background-color: #2B3C46;
+    background-color: #4f6d7a ;
     color: white;
     padding: 5px;    
     text-align: center;
@@ -183,7 +183,7 @@ p{
     padding: 10px;
     height: auto;
     text-align: justify;
-    border: 1px solid #639EAF;
+    border: 1px solid #c0d6df;
 }
 
 .stats-box-text{
@@ -338,6 +338,8 @@ p{
 
 .examples{
     color:#eaeaea;
+    text-shadow: 0 0 1px #c0d6df;
+
 }
 
 .example-link{
@@ -643,7 +645,7 @@ p{
     padding: 0.5rem 0.75rem;
     margin-left: -1px;
     line-height: 1.25;
-    color: #0E6668;
+    color: #4f6d7a ;
     background-color: white;
     border: 1px solid #dee2e6;
     cursor: pointer;
@@ -655,7 +657,7 @@ p{
     */
  
     background-color: #E9ECEF;
-    color: #0E6668;
+    color: #4f6d7a ;
  }
  
  .pagination-start{
@@ -1225,7 +1227,7 @@ p{
         Style for the tab menu items in the ontology detail page.
     */
 
-    color: #0E6668;
+    color: #4f6d7a ;
 }
 
 .nav-tabs .ontology-detail-nav-item .nav-link.active {
@@ -1406,7 +1408,6 @@ p{
     /* 
         Styles for the tree-related action buttons like "reset"
     */
-
     font-size: 11px !important;
     margin-bottom: 5px !important;
     width: 100% !important;
