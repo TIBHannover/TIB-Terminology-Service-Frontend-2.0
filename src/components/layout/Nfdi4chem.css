@@ -34,6 +34,7 @@ body{
     overflow-y: hidden;
     min-height: 500px;
     padding-top: 30px;
+    background-color: #f5f5f5;
 }
 
 p{
@@ -115,6 +116,7 @@ p{
 
     background-color: #00617C;
     color: white;
+    margin-top: -5px;
     margin-left: 10px;
     padding: 3px;
     font-size: 12px;
@@ -284,13 +286,6 @@ p{
     margin-left: 1px;
 }
 
-.backend-is-down-message{
-    /* 
-        The message regarding the backend issue. 
-    */
-
-    display: none;
-}
 
 @media only screen and (max-width: 1025px) {
     .application-content{
@@ -724,7 +719,7 @@ p{
     
     padding: 5%;
     padding-bottom: 8%;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
 
 }
 
@@ -863,6 +858,7 @@ p{
        The style for the jump autocomplete field
     */
     margin-left: 10px;
+    margin-bottom: -20px;
 }
 
 #search-box {
@@ -951,6 +947,17 @@ p{
     display: inline !important;
 }
 
+.search-result-type-tag{
+    /* 
+        The style for search result type tag.
+    */
+
+    width: 60px;
+    background-color: rgb(156, 14, 14);
+    color: white;
+    text-align: center;
+    font-size: 13px;
+}
 
 /* 
 -------------------------------------
@@ -1066,16 +1073,16 @@ p{
 -------------------------------------
 */
 
-
 .ontology-detail-page-container, .tree-view-container{
-    /* 
-        Style for the ontology detail info containers (all pages under each navbar in the ontology detail view).
-    */
+   /* 
+       Style for the tree view detail info containers (class/property).
+   */
 
-    background-color: #fafafa;
-    padding: 10px;
-    margin-top: 0px !important;
-    margin-bottom: 30px !important;
+   background-color: white;
+   padding: 10px;
+   margin-top: 0px !important;
+   width: 145%;
+   margin-left: -23%;
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1084,7 +1091,7 @@ p{
     */
 
     border-collapse: collapse;
-    width: 90%;
+    width: 92%;
 }
 
 
@@ -1149,7 +1156,14 @@ p{
     background-color: #FAFAFA;
   }
 
+.nav-tabs{
+    /* 
+        The style for the ontology detail page navbar
+    */
 
+    width: 145%;
+    margin-left: -23%;
+}
 
 
 /* 
@@ -1171,8 +1185,9 @@ p{
     z-index: 900;
     padding-left: 10px !important;
     padding-right: 10px !important;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
     border-right: 1px solid black;
+    overflow-x: scroll;
 }
 
 .node-table-container{
@@ -1235,6 +1250,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;
+    word-break: break-all;
 }
 
 .node-detail-table-row{
@@ -1272,6 +1288,18 @@ p{
 
 .leaf-node::before{
     content: "........";
+}
+
+.li-label-text{
+    /* 
+        Style for the a node span title text in the tree
+    */
+
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+    padding-left: 3px;
+    word-break: break-all;
 }
 
 
@@ -1376,6 +1404,36 @@ p{
     100% { transform: rotate(360deg); }
   }
 
+  @media only screen and (max-width: 1500px) and (min-width: 1026px) {
+    .li-label-text{
+        /* 
+            Style for the a node span title text in the tree
+        */
+            
+        width: 140px;     
+    }
+  }
+
+
+@media only screen and (max-width: 1025px) and (min-width: 901px) {
+    .li-label-text{
+        /* 
+            Style for the a node span title text in the tree
+        */
+            
+        width: 100px;     
+    }
+  }
+
+  @media only screen and (max-width: 900px){
+    .li-label-text{
+        /* 
+            Style for the a node span title text in the tree
+        */
+            
+        width: 100px;     
+    }
+  }
 
 /* 
 ------------------------------------------------------------

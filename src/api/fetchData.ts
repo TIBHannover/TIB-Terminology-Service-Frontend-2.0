@@ -169,6 +169,8 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
     node['relations'] = rels;
+    node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
+    node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
   }
   else{
     node['relations'] = [];
@@ -176,6 +178,88 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   node['parents'] = parents;  
   return node;
 }
+
+/**
+ * Get a class to Equivalent Axioms
+ * @param classid 
+ * @returns 
+ */
+
+async function getEqAxiom(nodeIri:string, ontologyId:string){
+  let url = <string> "";
+  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();  
+  res = res["_embedded"];
+  if (typeof(res) !== "undefined"){
+    let resultHtml = <string> "";
+    resultHtml += "<ul>";
+    for(let item of res["strings"]){
+      resultHtml += "<li>";
+      resultHtml += item["content"];
+      resultHtml += "</li>";
+    }
+    resultHtml += "<ul>";
+    return resultHtml;
+  }
+  return "N/A"
+
+}
+
+/**
+ * Get subClass Of values for selected node
+ * @param ontology 
+ * @param nodeIri 
+ * @param mode 
+ * @returns 
+ */
+export async function getSubClassOf(nodeIri:string, ontologyId:string){
+  let url = <string> "";
+  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  res = res["_embedded"];
+  if (typeof(res) !== "undefined"){
+    let result= "";
+    result += "<ul>"
+    for(let i=0; i < res["strings"].length; i++){ 
+      result += '<li>'+ res["strings"][i]["content"] +'</li>';     
+    }
+    result += "<ul>"
+    return result;
+  }
+  return "N/A"
+
+}
+
+/**
+ * Get subClass Of values for selected node
+ * @param ontology 
+ * @param nodeIri 
+ * @param mode 
+ * @returns 
+ */
+export async function getRelations(nodeIri:string, ontologyId:string){
+  let url = <string> "";
+  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/relatedfroms';
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  if (typeof(res) !== "undefined"){
+    let result:Array<any> = [];
+    result.push(res);
+    for(let item of result){
+      let subResult:Array<any> = [];
+      for(let i=0; i < item[i].length; i++){
+        subResult.push('<li>' + item[i]["label"] + "</li>")
+      }
+      return subResult;
+    }
+    return result;
+  }
+  return "N/A"
+
+}
+
 
 
 /**
@@ -268,6 +352,9 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
   let result: { relation: string, relationUrl: string, target: string, targetUrl: string }[]  = [];
   for(let rel of relations){
     if(rel['label'] === "is a"){
+      continue;
+    }
+    if(rel['label'] === "has proper occurrent part"){
       continue;
     }
     let targetNode = "";

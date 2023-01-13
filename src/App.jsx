@@ -49,14 +49,24 @@ function App() {
   let getCallSetting = {method: 'GET', headers: {'Accept': 'text/plain;charset=UTF-8 '}};
   let url = "https://service.tib.eu/ts4tib/api/accessibility";
   fetch(url, getCallSetting).then((res) => res.text()).then((res) => {
-    if(res !== "API is Accessible!"){
-      document.getElementById("backend-is-down-message").style.display = "block";
-    }
-    else{
-      document.getElementById("backend-is-down-message").style.display = "none";
-    }
+    if(res !== "API is Accessible!" && !document.getElementById('backend-is-down-message')){      
+      let rowDiv = document.createElement('div');
+      rowDiv.classList.add('row');
+      rowDiv.setAttribute('id', 'backend-is-down-message')
+      let colDiv = document.createElement('div');
+      colDiv.classList.add('col-sm-12');
+      colDiv.classList.add('text-center');
+      let alertDiv = document.createElement('div');
+      alertDiv.classList.add('alert');
+      alertDiv.classList.add('alert-danger');
+      let text = document.createTextNode("We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.");
+      alertDiv.appendChild(text);
+      colDiv.appendChild(alertDiv);
+      rowDiv.appendChild(colDiv);
+      document.getElementById('backend-is-down-message-span').appendChild(rowDiv);
+    }    
   }).catch((e)=> {
-      document.getElementById("backend-is-down-message").style.display = "block";
+      // document.getElementById("backend-is-down-message").style.display = "block";
   });
 
 
@@ -67,14 +77,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <div className='container-fluid application-content'>
-          <div className='row backend-is-down-message' id="backend-is-down-message">
-              <div className='col-sm-12 text-center'>
-              <div class="alert alert-danger">
-              <strong>Attention: </strong> 
-                  We are facing some issues with our services. Therefore, some of the functionalities may not work at the moment.
-              </div>
-              </div>
-          </div>
+          <span id="backend-is-down-message-span"></span>
           <Switch>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
