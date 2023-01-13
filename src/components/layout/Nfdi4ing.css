@@ -75,7 +75,6 @@ p{
     margin-left: 15px;
     padding: 3px;
     font-size: 12px;
-    margin-top: -5px;
     border-color:  #c0d6df;
  }
 
@@ -899,7 +898,7 @@ p{
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 400px;
+    width: 100%;
     text-align: left;
 }
 .autocomplete-item{
@@ -919,20 +918,28 @@ p{
     display: block;
     padding-bottom: 20px;
     padding-top: 10px;
-    position: absolute;
+    position: relative;
     z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 400px;
+    width: 100%;
     text-align: left;
     padding-left: 10px;
+}
+
+.jump-autocomplete-container{
+    line-height: initial !important;
+    height: 50px;
 }
 .jump-autocomplete-item{
     /* 
        The style for the jump autocomplete field
     */
+
     margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
 
 #search-box {

@@ -104,7 +104,7 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <div>
+            <div className="jump-autocomplete-container">
             {(() => {
               if(this.state.jumpResult[i]["type"] === 'class'){
                 return(
