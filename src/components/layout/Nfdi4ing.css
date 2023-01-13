@@ -893,7 +893,7 @@ p{
     border: 0.5px solid black;
     padding-bottom: 20px;
     padding-top: 10px;
-    z-index: 999;
+    z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
@@ -918,7 +918,7 @@ p{
     padding-bottom: 20px;
     padding-top: 10px;
     position: absolute;
-    z-index: 999;
+    z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
