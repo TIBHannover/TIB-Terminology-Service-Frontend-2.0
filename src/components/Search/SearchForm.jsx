@@ -104,7 +104,7 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <div>
+            <div className="jump-autocomplete-container">
             {(() => {
               if(this.state.jumpResult[i]["type"] === 'class'){
                 return(
@@ -181,6 +181,10 @@ class SearchForm extends React.Component{
                   <div class="input-group-append">
                     <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
                   </div>
+
+
+
+
                 </div>
                                       
                 {this.state.result &&
@@ -192,6 +196,12 @@ class SearchForm extends React.Component{
                    {this.createJumpResultList()}
                   </div>
                 </div>}
+                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                <p>
+                 <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
+                 <a class="example-link" href="search?q=agent">agent</a></span>
+               </p>
+                }
               </div>
           )
       }

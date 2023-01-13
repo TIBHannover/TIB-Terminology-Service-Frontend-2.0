@@ -45,8 +45,9 @@ p{
        The style for the site anchors
     */
 
-    color: #0E6668;
+    color: #4f6d7a;
     text-decoration: none;
+    font-weight: bold; 
  }
  
  a:hover{
@@ -55,11 +56,12 @@ p{
     */
 
     text-decoration: underline;
-    color: #0E6668; 
+    color: #c0d6df; 
+    font-weight: bold; 
  }
 
  button{
-    background-color: #404040 !important;
+    background-color: #4f6d7a !important;
     font-size: 14px;
  }
 
@@ -68,13 +70,12 @@ p{
         The style for a button representing a term (class/propperty)
     */
 
-    background-color: #873593;
-    color: white;
+    background-color: #c0d6df;
+    color: #4f6d7a;
     margin-left: 15px;
     padding: 3px;
     font-size: 12px;
-    margin-top: -5px;
-    border-color:  #873593;
+    border-color:  #c0d6df;
  }
 
  .synonyms-button{
@@ -82,13 +83,13 @@ p{
         The style for a button representing a synonym
     */
 
-    background-color: #c2ba1c;
-    color: white;
+    background-color: #e8dab2;
+    color: #4f6d7a;
     margin-left: 15px;
     margin-top: 2px;
     padding: 3px;
     font-size: 12px;
-    border-color:  #0E6668;
+    border-color:  #4f6d7a;
  }
 
  .term-button:hover{
@@ -97,8 +98,8 @@ p{
     */
 
     text-decoration: none;
-    background-color: rgba(149, 86, 158, 0.7);
-    color: white;
+    background-color: #4f6d7a;
+    color: #eaeaea;
  }
 
 .ontology-button{
@@ -106,14 +107,13 @@ p{
         The style for a button representing an ontology
     */
 
-    background-color: #00617C;
-    color: white;
-    margin-top: -5px;
+    background-color: #dd6e42;
+    color: #eaeaea;
     margin-left: 10px;
     padding: 3px;
     font-size: 12px;
     margin-right: 10px;
-    border-color: #00617C !important;
+    border-color: #dd6e42 !important;
 }
 
 .ontology-button:hover{
@@ -122,8 +122,9 @@ p{
     */
 
     text-decoration: none !important;
-    background-color: rgba(0,97,124,0.7) !important;
-    color: white;
+    background-color: #e8dab2 !important;
+    color: #4f6d7a;
+    border-color: #e8dab2 !important;
 }
 
 .facet-box{
@@ -137,7 +138,7 @@ p{
     border-radius: 10px;
     margin-bottom: 20px;
     padding-left: 10px;
-    border: 1px solid #639EAF;
+    border: 1px solid #c0d6df;
 }
 
 .facet-result-count{
@@ -145,7 +146,7 @@ p{
        The style for counter in facet fields
     */
     border-radius: 50px;
-    background-color: #2B3C46;
+    background-color: #4f6d7a ;
     color: white;
     padding: 5px;    
     text-align: center;
@@ -181,10 +182,10 @@ p{
     padding: 10px;
     height: auto;
     text-align: justify;
-    border: 1px solid #639EAF;
+    border: 1px solid #c0d6df;
 }
 
- .stats-box-text{
+.stats-box-text{
     /* 
         The style for text item in statistics box present in homepage
     */
@@ -196,10 +197,12 @@ p{
         Site footer style
     */
 
-    background: #FFFFFF;   
+    background: white;   
     border-top: 1px #d1d3d9 solid;
+    background-image: url('../../assets/img/polygon_background.svg');
+    background-position: right center;
     padding-top: 20px;
-    color: black;
+    color: #4f6d7a;
 }
 
 .footer-link{
@@ -207,11 +210,11 @@ p{
         Links in the footer
     */
 
-    color: black;
+    color: #4f6d7a;
 }
 
 .footer-link:hover{
-    color: black;
+    color: #c0d6df;
 }
 
 .footer-list{
@@ -230,6 +233,15 @@ p{
 
     width: 300px;
     height: 100px;
+}
+
+.footer-funding-logo{
+    /* 
+        Logos on the site footer
+    */
+
+    width: 210px;
+    height: 83px;
 }
 
 .footer-col{
@@ -282,15 +294,15 @@ p{
         The heading part style for the collapse button (bootstrap). Example: in the Usage page.
      */
 
-    background-color: #d2e2e2 !important;
+    background-color: #c0d6df !important;
 }
 .collpase-text-btn{
     /* 
         The style for the collapse button (bootstrap). Example: in the Usage page.
      */
 
-    background-color: #d2e2e2 !important;
-    color: black;
+    background-color: #c0d6df !important;
+    color: #4f6d7a;
     text-decoration: none;
     width: 100%;
     text-align: left;
@@ -313,6 +325,28 @@ p{
     box-shadow: none;
     text-decoration: none;
     color: black;
+}
+
+.backend-is-down-message{
+    /* 
+        The message regarding the backend issue. 
+    */
+
+    display: none;
+}
+
+.examples{
+    color:#eaeaea;
+    text-shadow: 0 0 1px #c0d6df;
+
+}
+
+.example-link{
+    color:#e8dab2;
+}
+
+.example-link:hover{
+    color:#dd6e42;
 }
 
 @media only screen and (max-width: 1025px) {
@@ -352,9 +386,10 @@ p{
     */
  
     background-position: right center;
-    background-color: #2E9198;
+    background-image: url('../../assets/img/polygon_background.svg');
+    background-color: #4f6d7a;
     padding: 10px;
-    max-height: 700px;
+    max-height: 220px;
  }
  
  .container.site-header{
@@ -440,16 +475,17 @@ p{
     /* 
         The style for the site title
      */
-    color: white;
+    color: #2f3e46;
     text-decoration: none;
-    font-size: 16px;    
+    font-size: 16px;  
+    font-weight: bold;  
  }
  
  .main-title:hover {
     /* 
         The style for the site title hover
      */
-    color: white;
+    color: black;
     text-decoration: none;
  }
    
@@ -469,9 +505,10 @@ p{
         The style for the site logo image 
     */
 
-    height: 100px;
-    width: 250px;
-    margin-top: -20px;
+    height: 80px;
+    width: 200px;
+    margin-top: 0px;
+    margin-right: -190px;
 }
    
  .header-top__navbar {
@@ -529,7 +566,7 @@ p{
      */
    
      margin-top: 15px !important;
-     background-color: #2E9198;
+     background-color: #ffffff00;
      width: 90%;
    }
    
@@ -541,13 +578,13 @@ p{
      margin-left: 10px;
      text-transform: uppercase;
      outline: none;
-     color: white;
+     color: #e8dab2;
      font-weight: bold;
      font-size: 16px;
    }
  
    .navbar-item:hover{
-       color: white !important;
+       color: #dd6e42 !important;
        text-decoration: underline !important;
    }
  
@@ -607,7 +644,7 @@ p{
     padding: 0.5rem 0.75rem;
     margin-left: -1px;
     line-height: 1.25;
-    color: #0E6668;
+    color: #4f6d7a ;
     background-color: white;
     border: 1px solid #dee2e6;
     cursor: pointer;
@@ -619,7 +656,7 @@ p{
     */
  
     background-color: #E9ECEF;
-    color: #0E6668;
+    color: #4f6d7a ;
  }
  
  .pagination-start{
@@ -647,7 +684,7 @@ p{
     */
  
     text-decoration: none;
-    color: #009cbc;
+    color: #4f6d7a;
  }
  
  .pagination-link:hover{
@@ -746,7 +783,7 @@ p{
     
     padding: 5%;
     padding-bottom: 8%;
-    background-color: #fafafa;
+    background-color: white;
 
 }
 
@@ -755,8 +792,9 @@ p{
         The style for the stats box
     */
 
-    color: white;
-    background-color: #2E9198;
+    color: #4f6d7a;
+    font-size: 10px;
+    background-color: white;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
@@ -856,11 +894,11 @@ p{
     border: 0.5px solid black;
     padding-bottom: 20px;
     padding-top: 10px;
-    z-index: 999;
+    z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 400px;
+    width: 100%;
     text-align: left;
 }
 .autocomplete-item{
@@ -880,21 +918,28 @@ p{
     display: block;
     padding-bottom: 20px;
     padding-top: 10px;
-    position: absolute;
-    z-index: 999;
+    position: relative;
+    z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 400px;
+    width: 100%;
     text-align: left;
     padding-left: 10px;
+}
+
+.jump-autocomplete-container{
+    line-height: initial !important;
+    height: 50px;
 }
 .jump-autocomplete-item{
     /* 
        The style for the jump autocomplete field
     */
+
     margin-left: 10px;
-    margin-bottom: -20px;
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
 
 #search-box {
@@ -917,8 +962,8 @@ p{
         Style for the search button
     */
 
-    background-color: #404040 !important;
-    color: white;    
+    background-color: #c0d6df !important;
+    color: #4f6d7a;    
 }
 
 .search-btn:hover{
@@ -926,8 +971,8 @@ p{
         Style for the search button on hover
     */
 
-    background-color: #23272B !important;
-    color: white !important;
+    background-color: #4f6d7a !important;
+    color: #eaeaea !important;
 }
 
 
@@ -1156,7 +1201,15 @@ p{
     */
 
     margin-left: 20px !important;
-    font-size: 10px !important;   
+    font-size: 10px !important;  
+    background-color: #c0d6df !important;
+    border-color: #c0d6df;
+    color: #4f6d7a; 
+}
+
+.copy-link-btn:hover{
+    background-color: #4f6d7a !important;
+    color: #eaeaea;
 }
 
 .download-ontology-btn{
@@ -1165,8 +1218,15 @@ p{
     */
 
     margin-right: 20px !important;
-    background-color: #404040 !important;
+    background-color: #c0d6df !important;
+    border-color: #c0d6df;
+    color: #4f6d7a;
     font-size: 14px;
+}
+
+.download-ontology-btn:hover{
+    background-color: #4f6d7a !important;
+    color: #eaeaea;
 }
 
 
@@ -1185,7 +1245,7 @@ p{
         Style for the tab menu items in the ontology detail page.
     */
 
-    color: #0E6668;
+    color: #4f6d7a ;
 }
 
 .nav-tabs .ontology-detail-nav-item .nav-link.active {
@@ -1385,7 +1445,6 @@ p{
     /* 
         Styles for the tree-related action buttons like "reset"
     */
-
     font-size: 11px !important;
     margin-bottom: 5px !important;
     width: 100% !important;

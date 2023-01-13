@@ -3,7 +3,7 @@ export function nfdi4IngDoc(){
         <div>
             <div className="row">
                 <div className="col-sm-12">
-                    NFDI4Ing Terminology Service can be used both manually and programmatically. Manual access (User Interface) appeals to a larger audience whereas programmatical access (REST Interface) can play a key role in larger contexts. For this reason, they are both essential features of the service. 
+                    NFDI4Ing Terminology Service can be used both manually and programmatically to access/provide terms along with their properties, classes, instances and semantical annotations. Manual access (User Interface) appeals to a larger audience whereas programmatical access (REST Interface) can play a key role in larger contexts. For this reason, they are both essential features of the service. 
                 </div>
             </div>
             <br></br>
@@ -43,20 +43,11 @@ export function nfdi4IngDoc(){
                             <div id="usage-collapse-2" class="collapse" aria-labelledby="usage-heading-2" data-parent="#usage-accordion-2">
                                 <div class="card-body">
                                     <p className='justify'>
-                                        The main REST API interface of the
-                                        <a href="with http://service.tib.eu/ts4tib/api" target={"_blank"}> TIB Central Terminology Service</a>  starts 
-                                        . This API enables to search all the terminologies 
-                                        maintained by TIB in addition to engineering terminologies. In addition to this interface, 
-                                        NFDI4IngTS provides another REST API that enables to search a subset of these terminologies 
-                                        that are only related to NFDI4Ing. This interface can be queried from
-                                        <a href="http://service.tib.eu/ts4ing/api" target={"_blank"}> http://service.tib.eu/ts4ing/api</a>. 
-                                        The methodology on how to use these interfaces is explained in the API documentation in detail.
-                                    </p>
-                                    <p className='justify'>
-                                        Publicly available API commands can also be analyzed and executed from the 
-                                        <a href="http://service.tib.eu/ts4tib/swagger-ui.html" target={"_blank"}><b> Swagger Documentation</b></a>. 
-                                        The underlying models can further be viewed through this documentation for a deeper understanding of the API commands. 
-                                    </p>                       
+                                        The main REST API of TIB Central Terminology Service enables to search all the terminologies 
+                                        maintained by TIB in addition to engineering terminologies. Publicly available API commands generate results in mostly JSON format and rarely in plain text format. The API can be analyzed and executed from the 
+                                        <a href="http://service.tib.eu/ts4tib/swagger-ui.html" target={"_blank"}><b> Swagger Documentation</b></a>.
+                                        The underlying models can further be viewed through this documentation for a deeper understanding of the API commands. Once you get familiar with the commands you can call them with external tools such as <a href="https://curl.se/"> curl</a>.
+                                    </p>                                          
                                 </div>
                             </div>
                         </div>

@@ -37,7 +37,7 @@ function App() {
   }
   
   else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
-    link.href = '/nfdi4ing_logo.png';
+    link.href = 'https://nfdi4ing.de/wp-content/uploads/2020/01/cropped-signet-192x192.png';
     document.title = "NFDI4Ing Terminology Service"
   }
   else{
@@ -85,6 +85,7 @@ function App() {
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyDetail}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
+            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
