@@ -7,7 +7,7 @@ import _ from "lodash";
  export function classMetaData(object){
     let metadata = {
       "Label": [object.label, false],
-      "abbreviatedIRI":  [object.short_form, false],
+      "CURIE":  [object.obo_id, false],
       "Description": [object.description  ? object.description[0] : "", false],
       // "Definition": [object.annotation ? object.annotation.definition : "", false],
       "fullIRI": [object.iri, true],
