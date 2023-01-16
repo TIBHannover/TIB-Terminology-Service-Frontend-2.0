@@ -1137,6 +1137,8 @@ p{
         Style for the ontology header title
     */
     color: black;
+    font-weight: bold;
+    font-size: 30px;
 }
 
 .ontology-detail-page-container, .tree-view-container{
