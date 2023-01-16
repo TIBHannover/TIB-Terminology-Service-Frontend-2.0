@@ -1119,6 +1119,14 @@ p{
 -------------------------------------
 */
 
+.ont-info-bar{
+    background-color: white;
+    padding: 10px;
+    width: 94.9%;
+    margin-bottom: 10px;
+   
+}
+
 .ontology-detail-page-container, .tree-view-container{
     /* 
         Style for the tree view detail info containers (class/property).
