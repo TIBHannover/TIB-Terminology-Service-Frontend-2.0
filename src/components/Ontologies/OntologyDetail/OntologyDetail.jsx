@@ -273,6 +273,14 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
+          <div className= "ont-info-bar">
+            <div>
+              <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>{this.state.ontology.config.title}</Link></h4>
+            </div>
+            <div>
+              <a href={this.state.ontology.config.id}>{this.state.ontology.config.id}</a>
+            </div>
+          </div>
           <div className='col-sm-8'>
               <ul className="nav nav-tabs">
                 <li className="nav-item ontology-detail-nav-item" key={"overview-tab"}>
