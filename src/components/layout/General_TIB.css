@@ -1125,8 +1125,10 @@ p{
     */
     background-color: white;
     padding: 10px;
-    width: 94.9%;
+    width: 94.8%;
     margin-bottom: 10px;
+    border-radius: 5px !important;
+    margin-right: 10px;
    
 }
 
