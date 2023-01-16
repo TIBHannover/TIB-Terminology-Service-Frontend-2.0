@@ -1120,11 +1120,21 @@ p{
 */
 
 .ont-info-bar{
+    /* 
+        Style for the ontology header above onto tabs
+    */
     background-color: white;
     padding: 10px;
     width: 94.9%;
     margin-bottom: 10px;
    
+}
+
+.ont-info-bar-title{
+    /* 
+        Style for the ontology header title
+    */
+    color: black;
 }
 
 .ontology-detail-page-container, .tree-view-container{
