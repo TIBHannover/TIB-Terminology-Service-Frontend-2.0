@@ -90,11 +90,12 @@ class SearchForm extends React.Component{
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <div className="autocomplete-item">
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">                      
+                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
+                    <div className="autocomplete-item">                  
                           {this.state.searchResult[i]['autosuggest']}
+                    </div>
                   </a>
-                </div>
+                
                 )
           }
           return resultList
@@ -111,8 +112,8 @@ class SearchForm extends React.Component{
                   <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">   
                     <div className="jump-autocomplete-item">         
                      {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a>  
+                     <div className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</div>
+                     <div className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</div>  
                      </div>                
                   </a>
                 )
@@ -122,8 +123,8 @@ class SearchForm extends React.Component{
                   <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">  
                   <div className="jump-autocomplete-item">          
                      {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a> 
+                     <div className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</div>
+                     <div className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</div> 
                   </div>                
                   </a>
                 )
@@ -133,8 +134,8 @@ class SearchForm extends React.Component{
                   <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">   
                   <div className="jump-autocomplete-item">        
                      {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a>
+                     <div className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</div>
+                     <div className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</div>
                   </div>                   
                   </a>
                 )
@@ -144,8 +145,8 @@ class SearchForm extends React.Component{
                   <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name'])} key={i} className="container"> 
                   <div className="jump-autocomplete-item">          
                      {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a> 
+                     <div className="btn btn-default jmp-term-button">{this.state.jumpResult[i]['short_form']}</div>
+                     <div className="btn btn-default jmp-ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</div> 
                   </div>                  
                   </a>
                 )

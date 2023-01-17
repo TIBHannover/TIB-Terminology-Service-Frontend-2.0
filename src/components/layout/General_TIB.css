@@ -869,8 +869,7 @@ p{
     */
     height: fit-content;
     border: 0.5px solid black;
-    padding-bottom: 20px;
-    padding-top: 10px;
+    padding-bottom: 10px;
     z-index: 2147483647;
     padding-left: 10x;
     padding-right: 10px;
@@ -883,6 +882,16 @@ p{
        The style for the autocomplete items
     */
     text-align: justify;
+    margin-bottom: -20px;
+}
+
+.autocomplete-item:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    vertical-align: top;
+    background-color: #f5f5f5;
+    width: 100%;
 }
 
 #jumpresult-container{
@@ -907,16 +916,18 @@ p{
     /* 
        The style for the jump autocomplete field
     */
+    position:relative;
     margin-left: 10px;
-    margin-bottom: -20px;
+    margin-bottom: -30px;
 }
 
 .jump-autocomplete-item:hover{
     /* 
        The style for the mouse hover in Jump To
     */
-    display:block;
+    vertical-align: top;
     background-color: #f5f5f5;
+    padding-top: 8px;
 }
 
 .jmp-term-button{
