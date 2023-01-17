@@ -1245,7 +1245,7 @@ p{
         The symbol shows the "part_of" relation between a node and its parent in the tree.
     */
     
-    background-color: blue;
+    background-color: #00617C;
     color: white;
     padding: 5px;
     border-radius: 50px;
