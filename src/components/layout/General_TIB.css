@@ -76,7 +76,6 @@ p{
     margin-top: -5px;
     font-size: 12px;
     border-color:  #0E6668;
-    float: right;
  }
 
  .synonyms-button{
@@ -116,7 +115,6 @@ p{
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e !important;
-    float: right;
 }
 
 .ontology-button:hover{
@@ -912,6 +910,45 @@ p{
     margin-left: 10px;
     margin-bottom: -20px;
 }
+
+.jump-autocomplete-item:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    background-color: #f5f5f5;
+}
+
+.jmp-term-button{
+    /* 
+        The style for a button representing a term (class/propperty) in jump to
+    */
+
+    background-color: #0E6668;
+    color: white;
+    margin-left: 15px;
+    padding: 3px;
+    margin-top: -5px;
+    font-size: 12px;
+    border-color:  #0E6668;
+    float: right;
+ }
+
+.jmp-ontology-button{
+    /* 
+        The style for a button representing an ontology in jump to
+    */
+
+    background-color: #bbae9e;
+    color: white;
+    margin-top: -5px;
+    margin-left: 10px;
+    padding: 3px;
+    margin-right: 10px;
+    font-size: 12px;
+    border-color: #bbae9e !important;
+    float: right;
+}
+
 
 #search-box {
     /* 
