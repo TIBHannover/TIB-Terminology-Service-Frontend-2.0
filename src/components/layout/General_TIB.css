@@ -318,7 +318,8 @@ p{
     background-position: right center;
     background-color: #0E6668;
     padding: 10px;
-    max-height: 700px;
+    margin-bottom: 10px;
+    max-height: 200px;
  }
  
  .container.site-header{
