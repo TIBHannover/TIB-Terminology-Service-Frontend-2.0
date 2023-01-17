@@ -18,8 +18,9 @@ export function setJumpResultButtons(resultItem){
         <a href={targetHref} className="container">
         <div className="jump-autocomplete-item">         
             {resultItem['label']}
-            <a className="btn btn-default jmp-term-button">{resultItem['short_form']}</a>
-            <a className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</a>  
+            <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
+            <div className="btn btn-default jmp-term-button">{resultItem['short_form']}</div>
+              
         </div>
         </a>
     ); 
