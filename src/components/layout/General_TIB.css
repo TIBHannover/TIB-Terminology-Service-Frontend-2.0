@@ -76,6 +76,7 @@ p{
     margin-top: -5px;
     font-size: 12px;
     border-color:  #0E6668;
+    float: right;
  }
 
  .synonyms-button{
@@ -115,6 +116,7 @@ p{
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e !important;
+    float: right;
 }
 
 .ontology-button:hover{
@@ -875,14 +877,13 @@ p{
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 400px;
+    width: 700px;
     text-align: left;
 }
 .autocomplete-item{
     /* 
        The style for the autocomplete items
     */
-    margin-left: 10px;
     text-align: justify;
 }
 
@@ -900,7 +901,7 @@ p{
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 400px;
+    width: 700px;
     text-align: left;
     padding-left: 10px;
 }
