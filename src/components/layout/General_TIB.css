@@ -921,6 +921,9 @@ p{
     margin-bottom: -30px;
     padding: 8px;
 }
+.container a{
+    text-decoration: none;
+}
 
 .jump-autocomplete-item:hover{
     /* 
