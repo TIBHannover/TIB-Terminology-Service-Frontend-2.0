@@ -137,10 +137,6 @@ class SearchForm extends React.Component{
                   <div class="input-group-append">
                     <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
                   </div>
-
-
-
-
                 </div>
                                       
                 {this.state.result &&

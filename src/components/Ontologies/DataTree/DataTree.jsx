@@ -469,6 +469,7 @@ render(){
                   Jump to:
                </span>
              </div>
+             <input class="form-control rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" ></input>
          </div>
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
