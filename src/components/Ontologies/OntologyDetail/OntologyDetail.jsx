@@ -4,7 +4,8 @@ import OntologyStatsBox from './widgets/stats';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/fetchData';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts} from '../../../api/fetchData';
+import { shapeSkosConcepts } from './helpers';
 
 
 
@@ -128,7 +129,15 @@ class OntologyDetail extends React.Component {
      * Get the ontology root classes 
      */
   async getRootTerms (ontologyId) {
-    let rootTerms = await getOntologyRootTerms(ontologyId);
+    let skosOntologiesIds = ["uat"];
+    let rootTerms = [];
+    if(skosOntologiesIds.includes(ontologyId)){
+      rootTerms = await getSkosOntologyRootConcepts(ontologyId);
+      rootTerms = shapeSkosConcepts(rootTerms);
+    }
+    else{
+      rootTerms = await getOntologyRootTerms(ontologyId);
+    }    
     if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
         this.setState({
