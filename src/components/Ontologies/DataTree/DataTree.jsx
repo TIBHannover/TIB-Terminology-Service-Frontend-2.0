@@ -463,6 +463,13 @@ render(){
   return(
     <div className="row tree-view-container" onClick={(e) => this.processClick(e)} > 
         <div className="col-sm-6 tree-container">
+          <div className="jmp-in-tree">
+             <div className="jmp-in-tree-prepend">
+               <span className="input-text">
+                  Jump to:
+               </span>
+             </div>
+         </div>
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
