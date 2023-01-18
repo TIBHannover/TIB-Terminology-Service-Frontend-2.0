@@ -463,9 +463,9 @@ render(){
   return(
     <div className="row tree-view-container" onClick={(e) => this.processClick(e)} > 
         <div className="col-sm-6 tree-container">
-          <div className="jmp-in-tree">
-             <div className="jmp-in-tree-prepend">
-               <span className="input-text">
+          <div class="input-group">
+             <div class="input-group-prepend">
+               <span class="input-group-text">
                   Jump to:
                </span>
              </div>

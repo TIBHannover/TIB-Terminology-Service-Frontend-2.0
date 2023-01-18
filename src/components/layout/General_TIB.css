@@ -1313,23 +1313,6 @@ p{
 -------------------------------------
 */
 
-.jmp-in-tree{
-    /*
-        The styles for the jump to feature in tree view container. 
-     */
-     position: relative;
-     display: flex;
-     flex-wrap: wrap;
-     align-items: stretch;
-     width: 100%;
-     padding-bottom: 0.5rem !important;
-
-}
-
-.jmp-in-tree-prepend{
-    margin-right: -1px;
-}
-
 .tree-container{
     /*
         The styles for the tree view container. 
