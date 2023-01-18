@@ -462,16 +462,15 @@ componentDidUpdate(){
 render(){
   return(
      <div className="row tree-view-container"> 
-     <div class="input-group">
+        <div className="col-sm-6 tree-container" onClick={(e) => this.processClick(e)}>
+          <div class="input-group form-fixer">
              <div class="input-group-prepend">
                <span class="input-group-text">
                   Jump to:
                </span>
              </div>
-             <input class="form-control col-sm-4 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" ></input>
-         </div>
-        <div className="col-sm-6 tree-container" onClick={(e) => this.processClick(e)}>
-          
+             <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" ></input>
+          </div>         
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
