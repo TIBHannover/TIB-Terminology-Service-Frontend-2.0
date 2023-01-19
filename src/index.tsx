@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 
 
 // const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -13,11 +14,20 @@ import reportWebVitals from './reportWebVitals'
 //   </React.StrictMode>
 // );
 
+// Adding Matomo
+const instance = createInstance({
+  urlBase: 'https://terminology.nfdi4chem.de/ts/',
+  siteId: 3,
+  }
+)
+
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <MatomoProvider value={instance}>
+       <App />
+    </MatomoProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
