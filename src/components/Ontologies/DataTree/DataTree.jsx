@@ -461,8 +461,8 @@ componentDidUpdate(){
 
 render(){
   return(
-     <div className="row tree-view-container"> 
-        <div className="col-sm-6 tree-container" onClick={(e) => this.processClick(e)}>
+     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
+        <div className="col-sm-6 tree-container">
           <div class="input-group form-fixer">
              <div class="input-group-prepend">
                <span class="input-group-text">
