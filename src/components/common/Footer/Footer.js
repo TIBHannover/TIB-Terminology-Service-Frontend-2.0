@@ -43,6 +43,9 @@ const Footer = () => (
                     <li>
                         <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"}  className='footer-link'>Imprint</Link>
                     </li>
+                    {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                        <li><small>Free SVG Background by <a target="_blank" href="https://bgjar.com">BGJar</a></small></li>
+                    }
                 </ul>
             </div>
 
