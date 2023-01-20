@@ -29,7 +29,8 @@ class DataTree extends React.Component {
       viewMode: true,
       reload: false,
       isLoadingTheComponent: true,
-      noNodeExist: false
+      noNodeExist: false,
+      enteredTerm: ""
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -445,6 +446,29 @@ reduceTree(){
     treeDomContent: "",
     isLoadingTheComponent: true
   });
+}
+
+/**
+ * 'Jump to' feature in the class tree
+ */
+async handleChange(enteredTerm){
+  enteredTerm = enteredTerm.target.value;        
+        if (enteredTerm.length > 0){
+          let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.state.ontologyId}&type=class&rows=10`)
+          jumpResult = (await jumpResult.json())['response']['docs'];
+          this.setState({
+              jumpResult: jumpResult,
+              result: true,
+              enteredTerm: enteredTerm
+          });
+        }
+        else if (enteredTerm.length == 0){
+            this.setState({
+                result: false,
+                enteredTerm: ""
+            });
+            
+        }
 }
 
 
