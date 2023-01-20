@@ -31,7 +31,9 @@ class DataTree extends React.Component {
       isLoadingTheComponent: true,
       noNodeExist: false,
       enteredTerm: "",
-      api_base_url: "https://service.tib.eu/ts4tib/api"
+      result: false,
+      api_base_url: "https://service.tib.eu/ts4tib/api",
+      jumpResult: []
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -42,6 +44,8 @@ class DataTree extends React.Component {
     this.resetTree = this.resetTree.bind(this);
     this.showSiblings = this.showSiblings.bind(this);
     this.reduceTree = this.reduceTree.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submitJumpHandler = this.submitJumpHandler.bind(this);
   }
 
 
@@ -470,6 +474,12 @@ async handleChange(enteredTerm){
             });
             
         }
+}
+
+submitJumpHandler(){
+  for(let i=0; i < this.state.jumpResult.length; i++){
+  window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+  }
 }
 
 
