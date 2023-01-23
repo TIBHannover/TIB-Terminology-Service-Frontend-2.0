@@ -6,8 +6,8 @@ export function shapeSkosConcepts(skosConcepts){
     let concepts = [];
     for(let cons of skosConcepts){
         let res = {};
-        res["label"] = cons["data"]["label"];
-        res["has_children"] = !cons["leaf"];
+        res["label"] = cons["data"]["label"];        
+        res["has_children"] = (cons["children"].length !== 0);
         res["iri"] = cons["data"]["iri"];
         concepts.push(res);
     }
