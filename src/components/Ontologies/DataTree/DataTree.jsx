@@ -517,7 +517,7 @@ render(){
                   Jump to:
                </div>
              </div>
-             <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" ></input>
+             <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
           </div> 
         {this.state.result && 
            <div id = "jmp-tree-container" className="col-md-12 justify-content-md-center">

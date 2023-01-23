@@ -1337,8 +1337,40 @@ p{
 }
 
 .form-fixer{
+    /*
+        styles for fixing/modifying search box in tree view 
+     */
     margin-bottom: 12px;
     margin-left: 30px;
+}
+
+#jmp-tree-container{
+    /*
+        styles for the 'jump to' container on top of tree view 
+     */
+    top: auto !important; 
+    height: fit-content;
+    border: 0.1px solid black;
+    display: block;
+    padding-bottom: 10px;
+    position: absolute;
+    z-index: 99999;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 400px;
+    text-align: left;
+    padding-left: 10px;
+    margin-left: 114px;
+    margin-top: -12px;
+}
+
+.jump-tree-container{
+    /* 
+       The style for the jump autocomplete item's div 
+    */
+    margin-top: -15px;
+    text-align: left;
 }
 
 .tree-container{
