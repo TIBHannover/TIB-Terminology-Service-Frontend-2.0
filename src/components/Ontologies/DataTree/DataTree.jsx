@@ -3,7 +3,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList, jumpToButton } from './helpers';
 
 
 
@@ -29,7 +29,11 @@ class DataTree extends React.Component {
       viewMode: true,
       reload: false,
       isLoadingTheComponent: true,
-      noNodeExist: false
+      noNodeExist: false,
+      enteredTerm: "",
+      result: false,
+      api_base_url: "https://service.tib.eu/ts4tib/api",
+      jumpResult: []
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -40,6 +44,11 @@ class DataTree extends React.Component {
     this.resetTree = this.resetTree.bind(this);
     this.showSiblings = this.showSiblings.bind(this);
     this.reduceTree = this.reduceTree.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submitJumpHandler = this.submitJumpHandler.bind(this);
+    this.createJumpResultList = this.createJumpResultList.bind(this);
+    this.autoRef = React.createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
 
@@ -447,11 +456,66 @@ reduceTree(){
   });
 }
 
+/**
+ * 'Jump to' feature in the class tree
+ */
+async handleChange(enteredTerm){
+  enteredTerm = enteredTerm.target.value;        
+        if (enteredTerm.length > 0){
+          let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.state.ontologyId}&type=class&rows=10`)
+          jumpResult = (await jumpResult.json())['response']['docs'];
+          this.setState({
+              jumpResult: jumpResult,
+              result: true,
+              enteredTerm: enteredTerm
+          });
+        }
+        else if (enteredTerm.length == 0){
+            this.setState({
+                result: false,
+                enteredTerm: ""
+            });
+            
+        }
+}
+
+handleClickOutside(){
+  document.addEventListener("click", (event) =>{
+    if(!this.autoRef.current.contains(event.target))
+    this.setState({
+      result: false
+    })
+  })       
+}
+
+submitJumpHandler(){
+  for(let i=0; i < this.state.jumpResult.length; i++){
+  window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+  }
+}
+
+createJumpResultList(){
+  const jumpResultList = []
+  for(let i=0; i < this.state.jumpResult.length; i++){
+    jumpResultList.push(
+      <div className="jump-tree-container">
+         {jumpToButton(this.state.jumpResult[i])}
+      </div>          
+    )
+  }
+  return jumpResultList
+}
+
 
 
 componentDidMount(){
   this.setTreeData();
+  document.addEventListener('click', this.handleClickOutside, true);
 }
+
+componentWillUnmount() {
+  document.removeEventListener('click', this.handleClickOutside, true);
+};
 
 componentDidUpdate(){
   this.setTreeData();
@@ -461,8 +525,20 @@ componentDidUpdate(){
 
 render(){
   return(
-    <div className="row tree-view-container" onClick={(e) => this.processClick(e)} > 
+     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
         <div className="col-sm-6 tree-container">
+          <div class="input-group form-fixer">
+             <div class="input-group-prepend">
+               <div class="input-group-text">
+                  Jump to:
+               </div>
+             </div>
+             <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
+          </div> 
+        {this.state.result && 
+           <div ref={this.autoRef} id = "jmp-tree-container" className="col-md-12 justify-content-md-center">
+             {this.createJumpResultList()}       
+           </div>}        
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
