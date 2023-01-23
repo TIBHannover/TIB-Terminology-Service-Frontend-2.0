@@ -500,9 +500,9 @@ render(){
         <div className="col-sm-6 tree-container">
           <div class="input-group form-fixer">
              <div class="input-group-prepend">
-               <span class="input-group-text">
+               <div class="input-group-text">
                   Jump to:
-               </span>
+               </div>
              </div>
              <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" ></input>
           </div>         
