@@ -518,7 +518,11 @@ render(){
                </div>
              </div>
              <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" ></input>
-          </div>         
+          </div> 
+        {this.state.result && 
+           <div id = "jmp-tree-container" className="col-md-12 justify-content-md-center">
+             {this.createJumpResultList()}       
+           </div>}        
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
         {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
