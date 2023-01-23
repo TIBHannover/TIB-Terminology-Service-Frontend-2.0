@@ -126,24 +126,26 @@ export function buildHierarchicalArray(flatList){
         }
       }
       let symbol = React.createElement("i", {"className": iconClass }, "");
-      let label = React.createElement("span", {"className": "li-label-text " + clickedClass}, nodeList[i].text);
+      let label = React.createElement("span", {"className": "li-label-text "}, nodeList[i].text);      
       let childNode = "";
       if(nodeList[i]['a_attr']["class"] === "part_of"){
         let partOfSymbol = React.createElement("span", {"className": "p-icon-style"}, "P");
+        let containerSpan = React.createElement("span", {"className": "tree-text-container " + clickedClass}, partOfSymbol, label);
         childNode = React.createElement("li", {
           "className": nodeStatusClass + " tree-node-li",
           "id": newId,
           "data-iri": nodeList[i].iri,
           "data-id": nodeList[i].id
-        }, symbol, partOfSymbol, label, childNodeChildren);
+        }, symbol, containerSpan, childNodeChildren);
       }
       else{
+        let containerSpan = React.createElement("span", {"className": "tree-text-container " + clickedClass}, label);
         childNode = React.createElement("li", {
           "className": nodeStatusClass + " tree-node-li",
           "id": newId,
           "data-iri": nodeList[i].iri,
           "data-id": nodeList[i].id
-        }, symbol, label, childNodeChildren);
+        }, symbol, containerSpan, childNodeChildren);
       }
 
       subNodes.push(childNode);

@@ -153,8 +153,10 @@ class DataTree extends React.Component {
             let leafClass = " closed";
             let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
             let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes.text);
+            let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);
             if(rootNodes.iri === target){
-              textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, rootNodes.text);
+              // textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, rootNodes.text);
+              containerSpan = React.createElement("span", {"className": "tree-text-container clicked targetNodeByIri"}, textSpan);
             }
             if (!rootNodes.children){
               leafClass = " leaf-node";
@@ -167,7 +169,7 @@ class DataTree extends React.Component {
                 "className": "tree-node-li" + leafClass,
                 "id": i
               }
-                , symbol, textSpan
+                , symbol, containerSpan
                 );
             childrenList.push(listItem);
             i += 1;
@@ -194,7 +196,8 @@ class DataTree extends React.Component {
         for(let i=0; i < roots.length; i++){         
           let leafClass = "";
           let symbol = "";
-          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);          
+          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
+          let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);          
           if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
             //  root node is a leaf
             leafClass = " leaf-node";
@@ -224,7 +227,7 @@ class DataTree extends React.Component {
               "data-id": i,
               "className": "tree-node-li" + leafClass,
               "id": roots[i].id
-            }, symbol, textSpan, subList
+            }, symbol, containerSpan, subList
               
             );
           
