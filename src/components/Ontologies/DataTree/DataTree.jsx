@@ -46,6 +46,7 @@ class DataTree extends React.Component {
     this.reduceTree = this.reduceTree.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitJumpHandler = this.submitJumpHandler.bind(this);
+    this.createJumpResultList = this.createJumpResultList.bind(this);
   }
 
 
@@ -480,6 +481,18 @@ submitJumpHandler(){
   for(let i=0; i < this.state.jumpResult.length; i++){
   window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
   }
+}
+
+createJumpResultList(){
+  const jumpResultList = []
+  for(let i=0; i < this.state.jumpResult.length; i++){
+    jumpResultList.push(
+      <div className="jump-tree-container">
+         {this.state.jumpResult[i]}
+      </div>          
+    )
+  }
+  return jumpResultList
 }
 
 
