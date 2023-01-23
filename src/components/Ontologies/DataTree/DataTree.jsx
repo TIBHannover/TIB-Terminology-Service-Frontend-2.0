@@ -291,19 +291,18 @@ class DataTree extends React.Component {
  * @param {*} e 
  */
 selectNode(target){    
-  let selectedElement = document.querySelectorAll(".clicked");;
-  console.info(selectedElement)
+  let selectedElement = document.querySelectorAll(".clicked");
   for(let i=0; i < selectedElement.length; i++){
     selectedElement[i].classList.remove("clicked");
-  }  
-  if(!target.classList.contains("clicked")){
+  }
+  if(!target.classList.contains("clicked") && !target.classList.contains("p-icon-style")){
     target.classList.add("clicked");
     this.setState({
       showNodeDetailPage: true,
       selectedNodeIri: target.parentNode.dataset.iri,
       siblingsButtonShow: false,
       reduceTreeBtnShow: true,
-      reduceBtnActive: false    
+      reduceBtnActive: false
     }, () =>{
       this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
     });

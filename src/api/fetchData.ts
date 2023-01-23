@@ -202,7 +202,7 @@ async function getEqAxiom(nodeIri:string, ontologyId:string){
     resultHtml += "<ul>";
     return resultHtml;
   }
-  return "N/A"
+  return "N/A";
 
 }
 
