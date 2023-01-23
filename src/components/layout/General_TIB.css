@@ -912,6 +912,14 @@ p{
     text-align: left;
     padding-left: 10px;
 }
+
+.jump-autocomplete-container{
+    /* 
+       The style for the jump autocomplete item's div 
+    */
+    margin-top: -15px;
+
+}
 .jump-autocomplete-item{
     /* 
        The style for the jump autocomplete field
@@ -919,7 +927,7 @@ p{
     position:relative;
     margin-left: 10px;
     margin-bottom: -30px;
-    padding: 8px;
+    padding: 7px;
 }
 .container a{
     text-decoration: none;
@@ -941,7 +949,7 @@ p{
     background-color: #0E6668;
     color: white;
     margin-left: 15px;
-    padding: 3px;
+    padding: 6px;
     margin-top: -5px;
     font-size: 12px;
     border-color:  #0E6668;
@@ -957,7 +965,7 @@ p{
     color: white;
     margin-top: -5px;
     margin-left: 10px;
-    padding: 3px;
+    padding: 6px;
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e !important;
