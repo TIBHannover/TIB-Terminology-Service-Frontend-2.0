@@ -29,7 +29,8 @@ class DataTree extends React.Component {
       viewMode: true,
       reload: false,
       isLoadingTheComponent: true,
-      noNodeExist: false
+      noNodeExist: false,
+      isSkos: false
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -56,6 +57,7 @@ class DataTree extends React.Component {
     let resetFlag = this.state.resetTreeFlag;
     let viewMode = !this.state.reduceBtnActive;
     let reload = this.state.reload;
+    let isSkos = this.props.isSkos;
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity == 'term'){         
             this.setState({
@@ -67,7 +69,8 @@ class DataTree extends React.Component {
                 childExtractName: "terms",
                 resetTreeFlag: false,
                 reload: false,
-                noNodeExist: false
+                noNodeExist: false,
+                isSkos: isSkos
               }, async () => {
                 await this.processTree(resetFlag, viewMode, reload);
               });              
@@ -151,7 +154,7 @@ class DataTree extends React.Component {
               leafClass = " leaf-node";
               // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
               symbol = React.createElement("i", {"className": ""}, "");
-            }    
+            }
             let listItem = React.createElement("li", {         
                 "data-iri":rootNodes.iri, 
                 "data-id": i,
@@ -225,7 +228,7 @@ class DataTree extends React.Component {
         this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
         let fullTreeMode = this.state.reduceBtnActive;              
         this.setState({
-            targetNodeIri: target,            
+            targetNodeIri: target,       
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
@@ -234,7 +237,7 @@ class DataTree extends React.Component {
             isLoadingTheComponent: false,
             siblingsButtonShow: fullTreeMode,
             siblingsVisible: !fullTreeMode
-        });    
+        });  
       }
   }
 
@@ -322,13 +325,12 @@ processClick(e){
     this.selectNode(e.target);
   }
   else if (e.target.tagName === "I"){   
-    // expand a node by clicking on the expand icon 
-    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+    // expand a node by clicking on the expand icon
+    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
       this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
     });       
   }
 }
-
 
 
 /**

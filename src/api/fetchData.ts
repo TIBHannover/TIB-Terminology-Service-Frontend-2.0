@@ -156,8 +156,25 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/";
   url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-  let res =  await (await fetch(url, getCallSetting)).json(); 
+  let res =  await (await fetch(url, getCallSetting)).json();
   return res;
+}
+
+
+/**
+ * Get the children for skos ontology terms
+ */
+export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let res =  await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];
+  if(typeof(res['individuals']) !== "undefined"){
+    return res['individuals'];
+  }
+  else{
+    return [];
+  }
 }
 
 

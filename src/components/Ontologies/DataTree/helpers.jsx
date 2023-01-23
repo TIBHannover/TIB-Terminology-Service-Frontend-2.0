@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree} from '../../../api/fetchData';
 
 
 const CLOSE__CLASSES = " fa-plus";
@@ -159,18 +159,25 @@ export function buildHierarchicalArray(flatList){
 /**
  * Expand/collapse a node on click
  */
-export async function expandNode(e, ontologyId, childExtractName){
+export async function expandNode(e, ontologyId, childExtractName, isSkos){
   let targetNodeIri = e.dataset.iri;
   let targetNodeId = e.dataset.id;
   let Id = e.id;
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
-      let res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+      let res = [];
+      if(isSkos){
+        res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
+      }
+      else{
+        res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+      }
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let listItem = buildTreeListItem(res[i]);
+        let node = shapeSkosMetadata(res[i], i);        
+        let listItem = buildTreeListItem(node);
         ul.appendChild(listItem);      
       }      
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
@@ -190,6 +197,20 @@ export async function expandNode(e, ontologyId, childExtractName){
       
 }
 
+
+
+/**
+ * shape the skos metadata to match the format that expand tree node needs
+ */
+function shapeSkosMetadata(skosNode, Id){
+  let result = {};
+  result["id"] = Id;
+  result["text"] = skosNode.label;
+  result["iri"] = skosNode.iri;
+  result["children"] = true;
+  result["a_attr"] = {"class" : ""};
+  return result;
+}
 
 
   /**

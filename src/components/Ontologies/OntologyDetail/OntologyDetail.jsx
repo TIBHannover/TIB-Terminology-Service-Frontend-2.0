@@ -32,7 +32,8 @@ class OntologyDetail extends React.Component {
       targetPropertyIri: " ",
       rootNodeNotExist: false,
       classTreeDomLastState: "",
-      propertyTreeDomLastState: ""
+      propertyTreeDomLastState: "",
+      skosOntologiesIds: ["uat"]
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -65,7 +66,7 @@ class OntologyDetail extends React.Component {
   setTabOnLoad(){
     let requestedTab = this.props.match.params.tab;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-    let lastRequestedTab = this.state.lastRequestedTab;
+    let lastRequestedTab = this.state.lastRequestedTab;    
     if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
       this.setState({
         overViewTab: false,
@@ -128,10 +129,9 @@ class OntologyDetail extends React.Component {
   /**
      * Get the ontology root classes 
      */
-  async getRootTerms (ontologyId) {
-    let skosOntologiesIds = ["uat"];
+  async getRootTerms (ontologyId) {    
     let rootTerms = [];
-    if(skosOntologiesIds.includes(ontologyId)){
+    if(this.state.skosOntologiesIds.includes(ontologyId)){
       rootTerms = await getSkosOntologyRootConcepts(ontologyId);
       rootTerms = shapeSkosConcepts(rootTerms);
     }
@@ -323,6 +323,7 @@ class OntologyDetail extends React.Component {
                               iriChangerFunction={this.changeInputIri}
                               lastState={this.state.classTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
+                              isSkos={this.state.skosOntologiesIds.includes(this.state.ontologyId)}
                             />
               }
 
