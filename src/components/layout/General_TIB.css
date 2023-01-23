@@ -1367,10 +1367,31 @@ p{
 
 .jump-tree-container{
     /* 
-       The style for the jump autocomplete item's div 
+       The style for the jump result list div 
     */
     margin-top: -15px;
     text-align: left;
+}
+
+.jump-tree-item{
+    /* 
+       The style for the jump results [i] result
+    */
+    position:relative;
+    margin-left: 10px;
+    margin-bottom: -30px;
+    padding: 7px;
+}
+.container a{
+    text-decoration: none;
+}
+
+.jump-tree-item:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    vertical-align: top;
+    background-color: #f5f5f5;
 }
 
 .tree-container{

@@ -47,6 +47,8 @@ class DataTree extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.submitJumpHandler = this.submitJumpHandler.bind(this);
     this.createJumpResultList = this.createJumpResultList.bind(this);
+    this.autoRef = React.createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
 
@@ -477,6 +479,15 @@ async handleChange(enteredTerm){
         }
 }
 
+handleClickOutside(){
+  document.addEventListener("click", (event) =>{
+    if(!this.autoRef.current.contains(event.target))
+    this.setState({
+      result: false
+    })
+  })       
+}
+
 submitJumpHandler(){
   for(let i=0; i < this.state.jumpResult.length; i++){
   window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
@@ -499,7 +510,12 @@ createJumpResultList(){
 
 componentDidMount(){
   this.setTreeData();
+  document.addEventListener('click', this.handleClickOutside, true);
 }
+
+componentWillUnmount() {
+  document.removeEventListener('click', this.handleClickOutside, true);
+};
 
 componentDidUpdate(){
   this.setTreeData();
@@ -520,7 +536,7 @@ render(){
              <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
           </div> 
         {this.state.result && 
-           <div id = "jmp-tree-container" className="col-md-12 justify-content-md-center">
+           <div ref={this.autoRef} id = "jmp-tree-container" className="col-md-12 justify-content-md-center">
              {this.createJumpResultList()}       
            </div>}        
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}

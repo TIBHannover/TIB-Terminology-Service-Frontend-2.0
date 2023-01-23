@@ -249,7 +249,7 @@ export async function expandNode(e, ontologyId, childExtractName){
     }    
     content.push(
         <a href={targetHref} className="container">
-        <div className="jump-autocomplete-item">         
+        <div className="jump-tree-item">         
             {resultItem['label']}
         </div>
         </a>
