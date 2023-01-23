@@ -61,18 +61,15 @@ export function buildHierarchicalArray(flatList){
       // symbol.classList.add("fa-close");
     }
     let containerSpan = document.createElement("span");
-    containerSpan.classList.add("tree-li-container");
-
+    containerSpan.classList.add("tree-text-container");
     listItem.appendChild(symbol);
     if(childNode["a_attr"]["class"] === "part_of"){
       let partOfSymbol = document.createElement("span");
       let pText = document.createTextNode("P");
       partOfSymbol.appendChild(pText);
-      partOfSymbol.classList.add("p-icon-style"); 
-      // listItem.appendChild(partOfSymbol);
+      partOfSymbol.classList.add("p-icon-style");      
       containerSpan.appendChild(partOfSymbol);
-    }
-    // listItem.appendChild(labelTextSpan);
+    }    
     containerSpan.appendChild(labelTextSpan);
     listItem.appendChild(containerSpan);
     listItem.classList.add("tree-node-li");
