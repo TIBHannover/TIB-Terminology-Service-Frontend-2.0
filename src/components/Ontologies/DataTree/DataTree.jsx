@@ -153,8 +153,10 @@ class DataTree extends React.Component {
             let leafClass = " closed";
             let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
             let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes.text);
+            let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);
             if(rootNodes.iri === target){
-              textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, rootNodes.text);
+              // textSpan = React.createElement("span", {"className": "li-label-text clicked targetNodeByIri"}, rootNodes.text);
+              containerSpan = React.createElement("span", {"className": "tree-text-container clicked targetNodeByIri"}, textSpan);
             }
             if (!rootNodes.children){
               leafClass = " leaf-node";
@@ -167,7 +169,7 @@ class DataTree extends React.Component {
                 "className": "tree-node-li" + leafClass,
                 "id": i
               }
-                , symbol, textSpan
+                , symbol, containerSpan
                 );
             childrenList.push(listItem);
             i += 1;
@@ -194,7 +196,8 @@ class DataTree extends React.Component {
         for(let i=0; i < roots.length; i++){         
           let leafClass = "";
           let symbol = "";
-          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);          
+          let textSpan = React.createElement("span", {"className": "li-label-text"}, roots[i].text);
+          let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);          
           if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
             //  root node is a leaf
             leafClass = " leaf-node";
@@ -224,7 +227,7 @@ class DataTree extends React.Component {
               "data-id": i,
               "className": "tree-node-li" + leafClass,
               "id": roots[i].id
-            }, symbol, textSpan, subList
+            }, symbol, containerSpan, subList
               
             );
           
@@ -259,6 +262,7 @@ class DataTree extends React.Component {
     let leafClass = " closed";
     let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
     let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes[i].label);
+    let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);
     if (!rootNodes[i].has_children){
       leafClass = " leaf-node";
       // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
@@ -270,7 +274,7 @@ class DataTree extends React.Component {
         "className": "tree-node-li" + leafClass,
         "id": i
       }
-        , symbol, textSpan
+        , symbol, containerSpan
         );
     childrenList.push(listItem);
   }
@@ -291,27 +295,26 @@ class DataTree extends React.Component {
  * @param {*} e 
  */
 selectNode(target){    
-  let selectedElement = document.querySelectorAll(".clicked");;
-  console.info(selectedElement)
+  let selectedElement = document.querySelectorAll(".clicked");
   for(let i=0; i < selectedElement.length; i++){
     selectedElement[i].classList.remove("clicked");
-  }  
-  if(!target.classList.contains("clicked")){
-    target.classList.add("clicked");
+  }
+  if(!target.parentNode.classList.contains("clicked")  && target.parentNode.tagName === "SPAN"){
+    target.parentNode.classList.add("clicked");
     this.setState({
       showNodeDetailPage: true,
-      selectedNodeIri: target.parentNode.dataset.iri,
+      selectedNodeIri: target.parentNode.parentNode.dataset.iri,
       siblingsButtonShow: false,
       reduceTreeBtnShow: true,
-      reduceBtnActive: false    
+      reduceBtnActive: false
     }, () =>{
       this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
     });
 
     let currentUrlParams = new URLSearchParams();
-    currentUrlParams.append('iri', target.parentNode.dataset.iri);
+    currentUrlParams.append('iri', target.parentNode.parentNode.dataset.iri);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-    this.props.iriChangerFunction(target.parentNode.dataset.iri, this.state.componentIdentity);
+    this.props.iriChangerFunction(target.parentNode.parentNode.dataset.iri, this.state.componentIdentity);
 
   }
   else{
