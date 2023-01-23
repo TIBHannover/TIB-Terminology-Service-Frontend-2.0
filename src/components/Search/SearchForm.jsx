@@ -1,4 +1,5 @@
 import React from 'react';
+import {setJumpResultButtons} from './SearchFormHelpers';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -90,11 +91,12 @@ class SearchForm extends React.Component{
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                <div className="autocomplete-item">
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">                      
+                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
+                    <div className="autocomplete-item">                  
                           {this.state.searchResult[i]['autosuggest']}
+                    </div>
                   </a>
-                </div>
+                
                 )
           }
           return resultList
@@ -105,53 +107,7 @@ class SearchForm extends React.Component{
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
             <div className="jump-autocomplete-container">
-            {(() => {
-              if(this.state.jumpResult[i]["type"] === 'class'){
-                return(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">   
-                    <div className="jump-autocomplete-item">         
-                     {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a>  
-                     </div>                
-                  </a>
-                )
-              }
-              if(this.state.jumpResult[i]["type"] === 'property'){
-                return(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/props?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">  
-                  <div className="jump-autocomplete-item">          
-                     {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a> 
-                  </div>                
-                  </a>
-                )
-              }
-              if(this.state.jumpResult[i]["type"] === 'individual'){
-                return(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name']) +'/terms?iri=' + encodeURIComponent(this.state.jumpResult[i]['iri'])} key={i} className="container">   
-                  <div className="jump-autocomplete-item">        
-                     {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a>
-                  </div>                   
-                  </a>
-                )
-              }
-              if(this.state.jumpResult[i]["type"] === 'ontology'){
-                return(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH +'/ontologies/' + encodeURIComponent(this.state.jumpResult[i]['ontology_name'])} key={i} className="container"> 
-                  <div className="jump-autocomplete-item">          
-                     {this.state.jumpResult[i]['label']}
-                     <a className="btn btn-default term-button">{this.state.jumpResult[i]['short_form']}</a>
-                     <a className="btn btn-default ontology-button">{this.state.jumpResult[i]['ontology_prefix']}</a> 
-                  </div>                  
-                  </a>
-                )
-              }
-
-            })()} 
+               {setJumpResultButtons(this.state.jumpResult[i])}
             </div>          
           )
         }
