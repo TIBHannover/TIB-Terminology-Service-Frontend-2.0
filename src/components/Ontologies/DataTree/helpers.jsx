@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren} from '../../../api/fetchData';
 
 
 const CLOSE__CLASSES = " fa-plus";
@@ -39,7 +39,7 @@ export function buildHierarchicalArray(flatList){
  * Build a list (li) element for the tree veiw
  * @param {*} childNode
  */
- export function buildTreeListItem(childNode){
+ export function buildTreeListItem(childNode){    
     let newId = childNode.id;
     let label = document.createTextNode(childNode.text);
     let labelTextSpan = document.createElement("span");
@@ -49,7 +49,7 @@ export function buildHierarchicalArray(flatList){
     let listItem = document.createElement("li");
     listItem.setAttribute("id", newId);
     listItem.setAttribute("data-iri", childNode.iri);
-    listItem.setAttribute("data-id", childNode.id);
+    listItem.setAttribute("data-id", childNode.id);    
     if(childNode.children){
       listItem.classList.add("closed");
       symbol.classList.add("fa");
@@ -176,7 +176,7 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let node = shapeSkosMetadata(res[i], i);        
+        let node = await shapeSkosMetadata(res[i]);        
         let listItem = buildTreeListItem(node);
         ul.appendChild(listItem);      
       }      
@@ -202,12 +202,12 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
 /**
  * shape the skos metadata to match the format that expand tree node needs
  */
-function shapeSkosMetadata(skosNode, Id){
+async function shapeSkosMetadata(skosNode){
   let result = {};
-  result["id"] = Id;
+  result["id"] = skosNode.iri;
   result["text"] = skosNode.label;
   result["iri"] = skosNode.iri;
-  result["children"] = true;
+  result["children"] = await skosNodeHasChildren(skosNode.ontology_name, skosNode.iri);
   result["a_attr"] = {"class" : ""};
   return result;
 }
