@@ -912,6 +912,14 @@ p{
     text-align: left;
     padding-left: 10px;
 }
+
+.jump-autocomplete-container{
+    /* 
+       The style for the jump autocomplete item's div 
+    */
+    margin-top: -15px;
+
+}
 .jump-autocomplete-item{
     /* 
        The style for the jump autocomplete field
@@ -919,7 +927,7 @@ p{
     position:relative;
     margin-left: 10px;
     margin-bottom: -30px;
-    padding: 8px;
+    padding: 7px;
 }
 .container a{
     text-decoration: none;
@@ -941,7 +949,7 @@ p{
     background-color: #0E6668;
     color: white;
     margin-left: 15px;
-    padding: 3px;
+    padding: 6px;
     margin-top: -5px;
     font-size: 12px;
     border-color:  #0E6668;
@@ -957,7 +965,7 @@ p{
     color: white;
     margin-top: -5px;
     margin-left: 10px;
-    padding: 3px;
+    padding: 6px;
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e !important;
@@ -1312,6 +1320,79 @@ p{
     The Tree view and detail table styles (for both classes and properties)
 -------------------------------------
 */
+
+.form-control{
+    /*
+        The styles for the jump to search box in tree view container.  
+     */
+    display: block;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+}
+
+.form-fixer{
+    /*
+        styles for fixing/modifying search box in tree view 
+     */
+    margin-bottom: 12px;
+    margin-left: 30px;
+}
+
+#jmp-tree-container{
+    /*
+        styles for the 'jump to' container on top of tree view 
+     */
+    top: auto !important; 
+    height: fit-content;
+    border: 0.1px solid black;
+    display: block;
+    padding-bottom: 10px;
+    position: absolute;
+    z-index: 99999;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 400px;
+    text-align: left;
+    padding-left: 10px;
+    margin-left: 114px;
+    margin-top: -12px;
+}
+
+.jump-tree-container{
+    /* 
+       The style for the jump result list div 
+    */
+    margin-top: -15px;
+    text-align: left;
+}
+
+.jump-tree-item{
+    /* 
+       The style for the jump results [i] result
+    */
+    position:relative;
+    margin-left: 10px;
+    margin-bottom: -30px;
+    padding: 7px;
+}
+.container a{
+    text-decoration: none;
+}
+
+.jump-tree-item:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    vertical-align: top;
+    background-color: #f5f5f5;
+}
 
 .tree-container{
     /*
