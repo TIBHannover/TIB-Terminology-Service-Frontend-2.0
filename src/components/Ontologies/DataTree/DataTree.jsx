@@ -3,7 +3,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList, jumpToButton } from './helpers';
 
 
 
@@ -488,7 +488,7 @@ createJumpResultList(){
   for(let i=0; i < this.state.jumpResult.length; i++){
     jumpResultList.push(
       <div className="jump-tree-container">
-         {this.state.jumpResult[i]}
+         {jumpToButton(this.state.jumpResult[i])}
       </div>          
     )
   }
