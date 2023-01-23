@@ -30,7 +30,7 @@ class DataTree extends React.Component {
       reload: false,
       isLoadingTheComponent: true,
       noNodeExist: false,
-      isSkos: false
+      isSkos: false,
       enteredTerm: "",
       result: false,
       api_base_url: "https://service.tib.eu/ts4tib/api",
