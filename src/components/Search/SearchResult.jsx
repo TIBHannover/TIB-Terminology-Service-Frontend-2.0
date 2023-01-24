@@ -4,7 +4,7 @@ import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 import {setResultTitleAndLabel} from './SearchHelpers';
-
+import { Helmet } from 'react-helmet';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -345,6 +345,11 @@ createSearchResultList () {
   render(){
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
+        <div>
+      <Helmet>
+        <title>{this.state.enteredTerm}</title>
+      </Helmet>
+        </div>
         <div className='col-sm-8'>            
           <div className='row'>
             <div className='col-sm-4'>          
