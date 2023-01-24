@@ -2,6 +2,7 @@ import React from 'react';
 import {getCollectionOntologies} from '../../api/fetchData';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import queryString from 'query-string'; 
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 class Collections extends React.Component{
@@ -115,7 +116,14 @@ class Collections extends React.Component{
 
     render(){
         return(
-            <div className='container collections-info-container'>               
+            <div className='container collections-info-container'> 
+              <HelmetProvider>
+                <div>
+                  <Helmet>
+                    <title>Collection</title>
+                  </Helmet>
+                </div>
+               </HelmetProvider>              
                 {this.createCollectionList()}
             </div>
         );

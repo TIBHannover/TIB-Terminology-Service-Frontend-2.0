@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
 import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
 import Pagination from "../../common/Pagination/Pagination";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 
@@ -388,6 +389,13 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
     } else {
       return (
         <div className='row justify-content-center' id="ontologyList-wrapper-div">
+          <HelmetProvider>
+            <div>
+              <Helmet>
+                 <title>Ontologies</title>
+              </Helmet>
+            </div>
+          </HelmetProvider>
           <div className='col-sm-8'>
             <div className='row'>
               {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
