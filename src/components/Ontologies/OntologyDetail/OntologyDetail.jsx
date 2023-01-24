@@ -277,7 +277,7 @@ class OntologyDetail extends React.Component {
           <HelmetProvider>
           <div>
             <Helmet>
-              <title>{this.state.ontologyId}</title>
+              <title>{this.state.ontology.config.preferredPrefix}</title>
             </Helmet>
           </div>
           </HelmetProvider>
