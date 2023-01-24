@@ -490,7 +490,7 @@ handleClickOutside(){
       if(!this.autoRef.current.contains(event.target))
       this.setState({
         result: false
-      })
+      });
     }    
   })       
 }

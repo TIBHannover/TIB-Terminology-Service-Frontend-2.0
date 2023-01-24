@@ -72,10 +72,12 @@ class SearchForm extends React.Component{
     
       handleClickOutside(){
         document.addEventListener("click", (event) =>{
-          if(!this.autoRef.current.contains(event.target))
-          this.setState({
-            result: false
-          })
+          if(this.autoRef.current){
+            if(!this.autoRef.current.contains(event.target))
+            this.setState({
+              result: false
+            });
+          }          
         })       
       }
     
