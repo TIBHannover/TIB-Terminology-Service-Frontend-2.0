@@ -120,7 +120,7 @@ class Collections extends React.Component{
               <HelmetProvider>
                 <div>
                   <Helmet>
-                    <title>Collection</title>
+                    <title>Collections</title>
                   </Helmet>
                 </div>
                </HelmetProvider>              
