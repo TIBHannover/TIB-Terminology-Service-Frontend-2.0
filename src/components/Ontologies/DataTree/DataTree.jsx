@@ -33,7 +33,8 @@ class DataTree extends React.Component {
       enteredTerm: "",
       result: false,
       api_base_url: "https://service.tib.eu/ts4tib/api",
-      jumpResult: []
+      jumpResult: [],
+      lastKeySelectedItem: null
     })
 
     this.setTreeData = this.setTreeData.bind(this);
@@ -296,7 +297,7 @@ class DataTree extends React.Component {
  * Select a node in tree
  * @param {*} e 
  */
-selectNode(target){    
+selectNode(target){ 
   let selectedElement = document.querySelectorAll(".clicked");
   for(let i=0; i < selectedElement.length; i++){
     selectedElement[i].classList.remove("clicked");
@@ -342,6 +343,22 @@ processClick(e){
     });       
   }
 }
+
+
+/**
+ * Process the keyboard navigation
+ * @param {*} event 
+ */
+processKeyNavigation(event){    
+  if(!this.state.lastKeySelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
+    // nothing is selected. Tree div is not in focus: Select the first element
+    let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+    this.selectNode(node);
+    node.parentNode.classList.add('clicked');
+    this.setState({lastKeySelectedItem: "0"});    
+  }
+}
+
 
 
 
@@ -518,6 +535,7 @@ createJumpResultList(){
 componentDidMount(){
   this.setTreeData();
   document.addEventListener('click', this.handleClickOutside, true);
+  document.addEventListener("keydown", this.processKeyNavigation, false);
 }
 
 componentWillUnmount() {
@@ -528,21 +546,11 @@ componentDidUpdate(){
   this.setTreeData();
 }
 
-/**
- * Process the keyboard navigation
- * @param {*} event 
- */
-processKeyNavigation(event){
-  console.info(event)
-}
-
-
-
 
 
 render(){
   return(
-     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}  onKeyDown={(e) => this.processKeyNavigation(e)}> 
+     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
         <div className="col-sm-6 tree-container">
           <div class="input-group form-fixer">
              <div class="input-group-prepend">
