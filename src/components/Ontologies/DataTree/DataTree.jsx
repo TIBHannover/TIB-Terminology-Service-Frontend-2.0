@@ -349,13 +349,28 @@ processClick(e){
  * Process the keyboard navigation
  * @param {*} event 
  */
-processKeyNavigation(event){    
-  if(!this.state.lastKeySelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
+processKeyNavigation(event){
+  let lastSelectedItem = this.state.lastKeySelectedItem;
+  if(!lastSelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
     // nothing is selected. Tree div is not in focus: Select the first element
     let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
     this.setState({lastKeySelectedItem: "0"});    
+  }
+  else if(lastSelectedItem && event.key === "ArrowDown" && document.getElementById(lastSelectedItem).nextSibling){
+    // select the next siblings 
+    let node = document.getElementById(lastSelectedItem).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+    this.selectNode(node);
+    node.parentNode.classList.add('clicked');
+    this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).nextSibling.id}); 
+  }
+  else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
+    // select the previous siblings 
+    let node = document.getElementById(lastSelectedItem).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+    this.selectNode(node);
+    node.parentNode.classList.add('clicked');
+    this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).previousSibling.id}); 
   }
 }
 
