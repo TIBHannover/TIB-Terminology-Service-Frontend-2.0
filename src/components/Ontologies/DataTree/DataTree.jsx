@@ -350,6 +350,9 @@ processClick(e){
  * @param {*} event 
  */
 processKeyNavigation(event){
+  if(event.code === "ArrowDown"){
+    event.preventDefault();
+  }
   let lastSelectedItem = this.state.lastKeySelectedItem;
   if(!lastSelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
     // nothing is selected. Tree div is not in focus: Select the first element
@@ -363,17 +366,18 @@ processKeyNavigation(event){
     let node = document.getElementById(lastSelectedItem).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
-    this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).nextSibling.id}); 
+    document.getElementById(lastSelectedItem).nextSibling.scrollIntoView({block:"end", behavior:"smooth"});
+    this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).nextSibling.id});    
   }
   else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
     // select the previous siblings 
     let node = document.getElementById(lastSelectedItem).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
+    document.getElementById(lastSelectedItem).previousSibling.scrollIntoView({block:"end"});
     this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).previousSibling.id}); 
   }
 }
-
 
 
 
@@ -565,8 +569,8 @@ componentDidUpdate(){
 
 render(){
   return(
-     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
-        <div className="col-sm-6 tree-container">
+     <div className="row tree-view-container" id="tree-view-container" onClick={(e) => this.processClick(e)}> 
+        <div className="col-sm-6 tree-container" id="tree-container">
           <div class="input-group form-fixer">
              <div class="input-group-prepend">
                <div class="input-group-text">
