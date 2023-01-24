@@ -581,6 +581,7 @@ render(){
               ontology={this.state.ontologyId}
               componentIdentity="term"
               extractKey="terms"
+              isSkos={this.state.isSkos}
             />
         </div>
         }

@@ -232,6 +232,42 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
   return node;
 }
 
+
+/**
+ * Get Skos node by Iri
+ */
+export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontology +  "/conceptrelations/" + encodeURIComponent(nodeIri) + "?relation_type=narrower&page=0&size=1000";
+  let res =  await (await fetch(url, getCallSetting)).json();
+  res =  res['_embedded'];
+  let node = <any>{};
+  if(!res){
+    return [];
+  }
+  else if(typeof(res['individuals']) === "undefined"){
+    return [];
+  }
+  else if(res['individuals']!.length === 0){
+    return [];
+  }  
+  else{    
+    node['label'] = res['label'];
+    node['iri'] = res['iri'];
+    node ['description'] = res['description'];
+    node['definition'] = res['annotation']['definition'];
+    node['ontology_name'] = res['ontology_name'];
+    node['synonyms'] = res['synonyms'];
+    node['eqAxiom'] = [];
+    node['subClassOf'] = res['subClassOf'];
+    return node;
+  }
+
+}
+
+
+
+
 /**
  * Get a class to Equivalent Axioms
  * @param classid 
