@@ -366,14 +366,16 @@ processKeyNavigation(event){
     let node = document.getElementById(lastSelectedItem).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
-    document.getElementById(lastSelectedItem).nextSibling.scrollIntoView({block:"end", behavior:"smooth"});
+    let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+    document.getElementById('tree-container').scrollTop = nodePostion;    
   }
   else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
     // select the previous siblings 
     let node = document.getElementById(lastSelectedItem).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
-    document.getElementById(lastSelectedItem).previousSibling.scrollIntoView({block:"end"});
+    let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+    document.getElementById('tree-container').scrollTop = nodePostion;
   }
 }
 
