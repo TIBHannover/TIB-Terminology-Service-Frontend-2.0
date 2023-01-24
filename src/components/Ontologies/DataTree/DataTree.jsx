@@ -309,7 +309,8 @@ selectNode(target){
       selectedNodeIri: target.parentNode.parentNode.dataset.iri,
       siblingsButtonShow: false,
       reduceTreeBtnShow: true,
-      reduceBtnActive: false
+      reduceBtnActive: false,
+      lastKeySelectedItem: target.parentNode.parentNode.id
     }, () =>{
       this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
     });
@@ -359,7 +360,6 @@ processKeyNavigation(event){
     let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
-    this.setState({lastKeySelectedItem: "0"});    
   }
   else if(lastSelectedItem && event.key === "ArrowDown" && document.getElementById(lastSelectedItem).nextSibling){
     // select the next siblings 
@@ -367,7 +367,6 @@ processKeyNavigation(event){
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
     document.getElementById(lastSelectedItem).nextSibling.scrollIntoView({block:"end", behavior:"smooth"});
-    this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).nextSibling.id});    
   }
   else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
     // select the previous siblings 
@@ -375,7 +374,6 @@ processKeyNavigation(event){
     this.selectNode(node);
     node.parentNode.classList.add('clicked');
     document.getElementById(lastSelectedItem).previousSibling.scrollIntoView({block:"end"});
-    this.setState({lastKeySelectedItem: document.getElementById(lastSelectedItem).previousSibling.id}); 
   }
 }
 
