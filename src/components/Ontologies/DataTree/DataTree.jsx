@@ -377,6 +377,13 @@ processKeyNavigation(event){
     let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
     document.getElementById('tree-container').scrollTop = nodePostion;
   }
+  else if(lastSelectedItem && event.key === "ArrowRight"){
+    // Expand the node if it has children
+    let node = document.getElementById(lastSelectedItem);
+    expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+      this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+    });   
+  }
 }
 
 
