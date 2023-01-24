@@ -49,6 +49,7 @@ class DataTree extends React.Component {
     this.createJumpResultList = this.createJumpResultList.bind(this);
     this.autoRef = React.createRef();
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.processKeyNavigation = this.processKeyNavigation.bind(this);
   }
 
 
@@ -128,7 +129,8 @@ class DataTree extends React.Component {
       }
 
       let target = this.props.iri;      
-      if (!target || resetFlag){        
+      if (!target || resetFlag){
+        // There is no Iri. Load the root terms 
         this.buildTree(this.state.rootNodes);       
         return true;
       }
@@ -484,10 +486,12 @@ async handleChange(enteredTerm){
 
 handleClickOutside(){
   document.addEventListener("click", (event) =>{
-    if(!this.autoRef.current.contains(event.target))
-    this.setState({
-      result: false
-    })
+    if(this.autoRef.current){
+      if(!this.autoRef.current.contains(event.target))
+      this.setState({
+        result: false
+      })
+    }    
   })       
 }
 
@@ -524,11 +528,21 @@ componentDidUpdate(){
   this.setTreeData();
 }
 
+/**
+ * Process the keyboard navigation
+ * @param {*} event 
+ */
+processKeyNavigation(event){
+  console.info(event)
+}
+
+
+
 
 
 render(){
   return(
-     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
+     <div className="row tree-view-container" onClick={(e) => this.processClick(e)}  onKeyDown={(e) => this.processKeyNavigation(e)}> 
         <div className="col-sm-6 tree-container">
           <div class="input-group form-fixer">
              <div class="input-group-prepend">
