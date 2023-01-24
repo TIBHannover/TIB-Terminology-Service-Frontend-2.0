@@ -16,7 +16,7 @@ import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 
 // Adding Matomo
 const instance = createInstance({
-  urlBase: 'https://terminology.nfdi4chem.de/ts/',
+  urlBase: 'https://support.tib.eu/piwik/',
   siteId: 3,
   }
 )

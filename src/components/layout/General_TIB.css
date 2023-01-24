@@ -1524,13 +1524,23 @@ p{
     word-break: break-all;
 }
 
-.li-label-text:hover{
+
+.tree-text-container{
     /* 
-        The style for mouse over a node text on a tree veiw.
+        The style for a node container in the tree view
+    */
+
+    padding-left: 5px;
+}
+
+.tree-text-container:hover{
+     /* 
+        The style for mouse over a node on a tree veiw.
     */
 
     background-color: rgb(218, 218, 218);
 }
+
 
 .clicked{
     /* 
