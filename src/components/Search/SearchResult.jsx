@@ -346,9 +346,9 @@ createSearchResultList () {
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
         <div>
-      <Helmet>
-        <title>{this.state.enteredTerm}</title>
-      </Helmet>
+          <Helmet>
+            <title>{this.state.enteredTerm}</title>
+          </Helmet>
         </div>
         <div className='col-sm-8'>            
           <div className='row'>
