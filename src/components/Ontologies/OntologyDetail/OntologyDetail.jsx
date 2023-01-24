@@ -5,6 +5,7 @@ import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties} from '../../../api/fetchData';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 
@@ -273,6 +274,13 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
+          <HelmetProvider>
+          <div>
+            <Helmet>
+              <title>{this.state.ontologyId}</title>
+            </Helmet>
+          </div>
+          </HelmetProvider>
           <div className= "ont-info-bar">
             <div>
               <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>{this.state.ontology.config.title}</Link></h4>

@@ -17,7 +17,7 @@
         "logo": "/NFDI4CHEM_LOGO.svg",
         "ontology_list_url": "/ontologies?collection=NFDI4CHEM&and=false&page=1",
         "project_homepage":"https://www.nfdi4chem.de/",
-        "domain_ts_link": ""
+        "domain_ts_link": "https://terminology.nfdi4chem.de/ts/"
     },
     "CoyPu":{
         "id":"CoyPu",

@@ -1,6 +1,7 @@
 import React from 'react';
 import {getNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 class NodePage extends React.Component {
@@ -111,6 +112,13 @@ class NodePage extends React.Component {
   render () {    
     return (
       <div className='row'>
+        <HelmetProvider>
+        <div>
+          <Helmet>
+            <title>{this.state.data.short_form}</title>
+          </Helmet>
+        </div>
+        </HelmetProvider>
         {this.createTable()}
         <div className='col-sm-12'  key={"json-button-row"}>
           <div className='row'>
