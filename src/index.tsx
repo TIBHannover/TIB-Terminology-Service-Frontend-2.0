@@ -17,7 +17,7 @@ import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 // Adding Matomo
 const instance = createInstance({
   urlBase: 'https://support.tib.eu/piwik/',
-  siteId: 3,
+  siteId: 36,
   }
 )
 
