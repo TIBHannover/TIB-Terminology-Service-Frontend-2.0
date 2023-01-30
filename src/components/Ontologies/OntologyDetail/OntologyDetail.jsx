@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts} from '../../../api/fetchData';
 import { shapeSkosConcepts } from './helpers';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 
@@ -282,6 +283,13 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
+          <HelmetProvider>
+          <div>
+            <Helmet>
+              <title>{this.state.ontology.config.preferredPrefix}</title>
+            </Helmet>
+          </div>
+          </HelmetProvider>
           <div className= "ont-info-bar">
             <div>
               <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>{this.state.ontology.config.title}</Link></h4>
