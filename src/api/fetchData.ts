@@ -238,28 +238,27 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
  */
 export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontology +  "/conceptrelations/" + encodeURIComponent(nodeIri) + "?relation_type=narrower&page=0&size=1000";
+  let url = OntologiesBaseServiceUrl + "/" + ontology +  "/individuals/" + encodeURIComponent(nodeIri);
   let res =  await (await fetch(url, getCallSetting)).json();
-  res =  res['_embedded'];
   let node = <any>{};
   if(!res){
     return [];
   }
-  else if(typeof(res['individuals']) === "undefined"){
-    return [];
-  }
-  else if(res['individuals']!.length === 0){
+  else if(typeof(res['iri']) === "undefined"){
     return [];
   }  
   else{    
     node['label'] = res['label'];
     node['iri'] = res['iri'];
     node ['description'] = res['description'];
-    node['definition'] = res['annotation']['definition'];
     node['ontology_name'] = res['ontology_name'];
     node['synonyms'] = res['synonyms'];
     node['eqAxiom'] = [];
-    node['subClassOf'] = res['subClassOf'];
+    node['subClassOf'] = res['subClassOf'] ? res['subClassOf'] : [];
+    for(let key in res['annotation']){
+      node[key] = res['annotation'][key];
+    }
+
     return node;
   }
 
