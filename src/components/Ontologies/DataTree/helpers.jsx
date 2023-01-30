@@ -181,7 +181,7 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let node = await shapeSkosMetadata(res[i]);        
+        let node = isSkos ? await shapeSkosMetadata(res[i]) : res[i];        
         let listItem = buildTreeListItem(node);
         ul.appendChild(listItem);      
       }      
