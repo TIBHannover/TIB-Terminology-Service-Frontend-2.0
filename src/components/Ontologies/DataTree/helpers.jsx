@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent} from '../../../api/fetchData';
 
 
 const CLOSE__CLASSES = " fa-plus";
@@ -222,23 +222,16 @@ async function shapeSkosMetadata(skosNode){
  * Build the skos ontology subtree. Used when the concept iri is given
  */
 export async function buildSkosSubtree(ontologyId, iri){
-  let baseUrl = process.env.REACT_APP_API_BASE_URL;  
-  let callHeader = {
-    'Accept': 'application/json'
-  };
-  let getCallSetting = {method: 'GET', headers: callHeader};
   let treeNodes = [];
   let targetNode = await getSkosNodeByIri(ontologyId, encodeURIComponent(iri));
   treeNodes.push(targetNode);  
   while(true){
-    let url = baseUrl +  "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
-    let res = await (await fetch(url, getCallSetting)).json();
-    res = res['_embedded'];    
-    if(!res || !res['individuals']){
+    let res = await getSkosNodeParent(ontologyId, iri);    
+    if(!res){
       break;
     }
-    treeNodes.push(res['individuals'][0]);
-    iri = res['individuals'][0]['iri'];
+    treeNodes.push(res);
+    iri = res['iri'];
   }
   
   let nodeInTree = "";
@@ -277,6 +270,43 @@ export async function buildSkosSubtree(ontologyId, iri){
 }
 
 
+/**
+ * Show/hide siblings for the SKOS ontology tree
+ */
+export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
+  if(showFlag){
+    // Show the siblings
+    let parent = await getSkosNodeParent(ontologyId, iri);    
+    if(!parent){
+      // Node is a root
+      return "";
+    }
+    else{      
+      let siblings = await getChildrenSkosTree(ontologyId, parent.iri);      
+      let ul = document.getElementById("children_for_" + parent.iri);
+      for(let i=0; i < siblings.length; i++){
+        let node = await shapeSkosMetadata(siblings[i]);
+        if(node.iri !== iri){
+          let listItem = buildTreeListItem(node);
+          ul.appendChild(listItem);      
+        }
+        
+        
+      }  
+
+    } 
+
+  }
+  else{
+    // Hide the siblings
+    return "";
+  }
+
+
+
+}
+
+
   /**
    * Check a node has children or not
    */
@@ -309,6 +339,7 @@ export async function buildSkosSubtree(ontologyId, iri){
   }
 
 
+  
   /**
    * Check a node is part of the list of a list of nodes or not
    * @param {*} nodeIri 

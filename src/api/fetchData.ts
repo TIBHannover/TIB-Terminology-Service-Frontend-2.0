@@ -242,10 +242,10 @@ export async function getSkosNodeByIri(ontology:string, nodeIri:string) {
   let res =  await (await fetch(url, getCallSetting)).json();
   let node = <any>{};
   if(!res){
-    return [];
+    return false;
   }
   else if(typeof(res['iri']) === "undefined"){
-    return [];
+    return false;
   }  
   else{    
     node['label'] = res['label'];
@@ -261,7 +261,21 @@ export async function getSkosNodeByIri(ontology:string, nodeIri:string) {
 
     return node;
   }
+}
 
+
+/**
+ * Get an Skos node parent concept
+ */
+export async function getSkosNodeParent(ontology, iri) {
+  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let url = baseUrl +  "/" + ontology +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
+  let res = await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];    
+  if(!res || !res['individuals']){
+    return false;
+  }
+  return res['individuals'][0];
 }
 
 

@@ -3,7 +3,16 @@ import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList, jumpToButton, buildSkosSubtree } from './helpers';
+import { buildHierarchicalArray,
+    buildTreeListItem,
+    nodeHasChildren,
+    nodeIsRoot, 
+    expandTargetNode, 
+    expandNode, 
+    nodeExistInList, 
+    jumpToButton, 
+    buildSkosSubtree, 
+    showHidesiblingsForSkos } from './helpers';
 
 
 
@@ -386,10 +395,13 @@ resetTree(){
  * Show an opened node siblings
  */
 async showSiblings(){
-  try{
+  try{    
     let targetNodes = document.getElementsByClassName("targetNodeByIri");
     if(!this.state.siblingsVisible){
-        if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+        if(this.state.isSkos){
+          showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
+        }
+        else if(!this.state.isSkos && await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
           // Target node is a root node
           let callHeader = {
             'Accept': 'application/json'
@@ -458,7 +470,7 @@ async showSiblings(){
     }
   }
   catch(e){
-    // console.info(e.stack);    
+    // console.info(e.stack);
   }
   
 }
