@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
 
 
 const CLOSE__CLASSES = " fa-plus";
@@ -276,22 +276,28 @@ export async function buildSkosSubtree(ontologyId, iri){
 export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   if(showFlag){
     // Show the siblings
-    let parent = await getSkosNodeParent(ontologyId, iri);    
+    let parent = await getSkosNodeParent(ontologyId, iri);
     if(!parent){
       // Node is a root
-      return "";
+      let rootNodes = await getSkosOntologyRootConcepts(ontologyId);      
+      let ul = document.getElementById("tree-root-ul");
+      for(let i=0; i < rootNodes.length; i++){
+        let node = await shapeSkosMetadata(rootNodes[i].data);
+        if(node.iri !== iri){
+          let listItem = buildTreeListItem(node);
+          ul.appendChild(listItem);
+        }
+      }
     }
-    else{      
-      let siblings = await getChildrenSkosTree(ontologyId, parent.iri);      
+    else{
+      let siblings = await getChildrenSkosTree(ontologyId, parent.iri);
       let ul = document.getElementById("children_for_" + parent.iri);
       for(let i=0; i < siblings.length; i++){
         let node = await shapeSkosMetadata(siblings[i]);
         if(node.iri !== iri){
           let listItem = buildTreeListItem(node);
-          ul.appendChild(listItem);      
-        }
-        
-        
+          ul.appendChild(listItem);
+        }                
       }  
 
     } 
