@@ -3,7 +3,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList, jumpToButton } from './helpers';
+import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList, jumpToButton, buildSkosSubtree } from './helpers';
 
 
 
@@ -131,13 +131,32 @@ class DataTree extends React.Component {
       }
 
       let target = this.props.iri;      
-      if (!target || resetFlag){        
+      if (!target || resetFlag){
+        // When the iri is not set. Render the root nodes 
         this.buildTree(this.state.rootNodes);       
         return true;
       }
-      target = target.trim();
-      let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
-      if((target != undefined && this.state.targetNodeIri != target) || reload ){        
+      target = target.trim();      
+      if((target != undefined && this.state.targetNodeIri != target) || reload ){
+        if(this.state.isSkos){
+          // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
+          let tree = await buildSkosSubtree(this.state.ontologyId, target);
+          this.props.domStateKeeper(tree, this.state, this.props.componentIdentity);
+          let fullTreeMode = this.state.reduceBtnActive;
+          this.setState({
+            targetNodeIri: target,
+            treeDomContent: tree,
+            selectedNodeIri: target,
+            showNodeDetailPage: true,
+            reduceTreeBtnShow: true,
+            reload: false,
+            isLoadingTheComponent: false,
+            siblingsButtonShow: fullTreeMode,
+            siblingsVisible: !fullTreeMode
+          }); 
+          return true;
+        }
+        let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
         let callHeader = {
           'Accept': 'application/json'
         };
@@ -145,10 +164,10 @@ class DataTree extends React.Component {
         let extractName = this.state.childExtractName;
         let url = process.env.REACT_APP_API_BASE_URL + "/";
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
-        let list =  await (await fetch(url, getCallSetting)).json();        
+        let list =  await (await fetch(url, getCallSetting)).json();
         let roots = buildHierarchicalArray(list);
-        let childrenList = [];        
-        if(nodeExistInList(target, roots)){
+        let childrenList = [];           
+        if(nodeExistInList(target, roots)){          
           // the target node is a root node
           let childrenList = [];
           let i = 0;

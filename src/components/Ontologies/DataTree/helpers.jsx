@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri} from '../../../api/fetchData';
 
 
 const CLOSE__CLASSES = " fa-plus";
@@ -215,6 +215,61 @@ async function shapeSkosMetadata(skosNode){
   result["children"] = await skosNodeHasChildren(skosNode.ontology_name, skosNode.iri);
   result["a_attr"] = {"class" : ""};
   return result;
+}
+
+
+/**
+ * Build the skos ontology subtree. Used when the concept iri is given
+ */
+export async function buildSkosSubtree(ontologyId, iri){
+  let baseUrl = process.env.REACT_APP_API_BASE_URL;  
+  let callHeader = {
+    'Accept': 'application/json'
+  };
+  let getCallSetting = {method: 'GET', headers: callHeader};
+  let treeNodes = [];
+  let targetNode = await getSkosNodeByIri(ontologyId, encodeURIComponent(iri));
+  treeNodes.push(targetNode);  
+  while(true){
+    let url = baseUrl +  "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
+    let res = await (await fetch(url, getCallSetting)).json();
+    res = res['_embedded'];    
+    if(!res || !res['individuals']){
+      break;
+    }
+    treeNodes.push(res['individuals'][0]);
+    iri = res['individuals'][0]['iri'];
+  }
+  
+  let nodeInTree = "";
+  let childNode = "";
+  let ul = "";
+  for(let i=0; i < treeNodes.length; i++){
+    let node = treeNodes[i];    
+    let leafClass = " closed";
+    let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+    let textSpan = React.createElement("span", {"className": "li-label-text"}, node.label);
+    let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);
+    let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);
+    if (!hasChildren){
+      leafClass = " leaf-node";
+      // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+      symbol = React.createElement("i", {"className": ""}, "");
+    }    
+    nodeInTree = React.createElement("li", {         
+        "data-iri":node.iri, 
+        "data-id": node.iri,
+        "className": "tree-node-li" + leafClass,
+        "id": node.iri
+      }
+        , symbol, containerSpan, childNode
+        );
+    
+    let parentId = i+1 < treeNodes.length ? ("children_for_" + treeNodes[i + 1].iri) : "tree-root-ul";    
+    ul = React.createElement("ul", {className: "tree-node-ul", id: parentId}, nodeInTree);
+    childNode = ul;
+  }
+  return ul;
 }
 
 
