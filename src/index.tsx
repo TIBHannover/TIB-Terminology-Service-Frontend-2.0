@@ -18,8 +18,8 @@ import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react';
 const instance = createInstance({
   urlBase: 'https://terminology.nfdi4chem.de',
   siteId: 36,
-  trackerUrl: process.env.REACT_APP_MATOMO_TRACKER_URL + "matomo.php",
-  srcUrl: process.env.REACT_APP_MATOMO_TRACKER_URL + "matomo.js",
+  trackerUrl: "https://support.tib.eu/piwik/matomo.php",
+  srcUrl: "https://support.tib.eu/piwik/matomo.js",
   disabled: false,
   linkTracking: true,
   configurations: {
