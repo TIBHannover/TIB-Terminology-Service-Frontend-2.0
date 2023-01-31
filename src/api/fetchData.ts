@@ -239,8 +239,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
 export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontology +  "/individuals/" + encodeURIComponent(nodeIri);
-  let res =  await (await fetch(url, getCallSetting)).json();
-  let node = <any>{};
+  let res =  await (await fetch(url, getCallSetting)).json();  
   if(!res){
     return false;
   }
@@ -248,18 +247,7 @@ export async function getSkosNodeByIri(ontology:string, nodeIri:string) {
     return false;
   }  
   else{    
-    node['label'] = res['label'];
-    node['iri'] = res['iri'];
-    node ['description'] = res['description'];
-    node['ontology_name'] = res['ontology_name'];
-    node['synonyms'] = res['synonyms'];
-    node['eqAxiom'] = [];
-    node['subClassOf'] = res['subClassOf'] ? res['subClassOf'] : [];
-    for(let key in res['annotation']){
-      node[key] = res['annotation'][key];
-    }
-
-    return node;
+    return res;
   }
 }
 

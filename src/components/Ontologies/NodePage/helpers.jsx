@@ -16,6 +16,7 @@ import _ from "lodash";
       "Relations" : [ object, false]
     }
 
+    console.info(object)
     if(object.annotation){
       for(let key in object.annotation){
         metadata[key] = [];
