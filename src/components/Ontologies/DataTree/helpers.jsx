@@ -274,9 +274,9 @@ export async function buildSkosSubtree(ontologyId, iri){
  * Show/hide siblings for the SKOS ontology tree
  */
 export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
+  let parent = await getSkosNodeParent(ontologyId, iri);
   if(showFlag){
-    // Show the siblings
-    let parent = await getSkosNodeParent(ontologyId, iri);
+    // Show the siblings    
     if(!parent){
       // Node is a root
       let rootNodes = await getSkosOntologyRootConcepts(ontologyId);      
@@ -297,7 +297,7 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
         if(node.iri !== iri){
           let listItem = buildTreeListItem(node);
           ul.appendChild(listItem);
-        }                
+        } 
       }  
 
     } 
@@ -305,7 +305,25 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   }
   else{
     // Hide the siblings
-    return "";
+    if(!parent){
+      // root node
+      let ul = document.getElementById("tree-root-ul");      
+      let children = [].slice.call(ul.childNodes);
+      for(let i=0; i < children.length; i++){
+        if(children[i].dataset.iri !== iri){
+          children[i].remove();
+        }
+      }
+    }
+    else{      
+      let ul = document.getElementById("children_for_" + parent.iri);      
+      let children = [].slice.call(ul.childNodes);
+      for(let i=0; i < children.length; i++){
+        if(children[i].dataset.iri !== iri){
+          children[i].remove();
+        }
+      }
+    }
   }
 
 

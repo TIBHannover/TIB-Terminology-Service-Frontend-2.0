@@ -442,7 +442,11 @@ async showSiblings(){
         });
     }
     else{
-      if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+      if(this.state.isSkos){
+        showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
+      } 
+
+      if(!this.state.isSkos && await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
         // Target node is a root node
         let parentUl = document.getElementById("tree-root-ul");
         let children = [].slice.call(parentUl.childNodes);
