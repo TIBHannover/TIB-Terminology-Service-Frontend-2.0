@@ -4,7 +4,7 @@ import OntologyStatsBox from './widgets/stats';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts} from '../../../api/fetchData';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import { shapeSkosConcepts } from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -34,7 +34,7 @@ class OntologyDetail extends React.Component {
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      skosOntologiesIds: ["uat"]
+      isSkosOntology: false
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -132,7 +132,8 @@ class OntologyDetail extends React.Component {
      */
   async getRootTerms (ontologyId) {    
     let rootTerms = [];
-    if(this.state.skosOntologiesIds.includes(ontologyId)){
+    let isSkos = await isSkosOntology(ontologyId);    
+    if(isSkos){
       rootTerms = await getSkosOntologyRootConcepts(ontologyId);
       rootTerms = shapeSkosConcepts(rootTerms);
     }
@@ -144,14 +145,16 @@ class OntologyDetail extends React.Component {
         this.setState({
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
-          rootNodeNotExist: false
+          rootNodeNotExist: false,
+          isSkosOntology: isSkos
         });
       }
       else{
         this.setState({
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
-          rootNodeNotExist: true
+          rootNodeNotExist: true,
+          isSkosOntology: isSkos
         });
       }      
     }
@@ -159,7 +162,8 @@ class OntologyDetail extends React.Component {
       this.setState({
         isRootTermsLoaded: true,
         errorRootTerms: 'Can not get this ontology root terms',
-        rootNodeNotExist: true
+        rootNodeNotExist: true,
+        isSkosOntology: isSkos
       });
     }
   }
@@ -331,7 +335,7 @@ class OntologyDetail extends React.Component {
                               iriChangerFunction={this.changeInputIri}
                               lastState={this.state.classTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
-                              isSkos={this.state.skosOntologiesIds.includes(this.state.ontologyId)}
+                              isSkos={this.state.isSkosOntology}
                             />
               }
 

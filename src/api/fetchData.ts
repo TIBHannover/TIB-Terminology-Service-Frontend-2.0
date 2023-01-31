@@ -267,6 +267,21 @@ export async function getSkosNodeParent(ontology, iri) {
 }
 
 
+/**
+ * Check of ontology is SKOS 
+ */
+export async function isSkosOntology(ontologyId) {
+  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let url = baseUrl + "/" + ontologyId;
+  let res = await (await fetch(url, getCallSetting)).json();
+  res = res["config"];
+  if(!res || res['skos'] === "undefined"){
+    return false
+  }
+  return res["skos"];
+}
+
+
 
 
 /**
