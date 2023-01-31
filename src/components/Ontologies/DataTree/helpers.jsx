@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree} from '../../../api/fetchData';
+import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
 
 
 const CLOSE__CLASSES = " fa-plus";
@@ -39,7 +39,7 @@ export function buildHierarchicalArray(flatList){
  * Build a list (li) element for the tree veiw
  * @param {*} childNode
  */
- export function buildTreeListItem(childNode){
+ export function buildTreeListItem(childNode){    
     let newId = childNode.id;
     let label = document.createTextNode(childNode.text);
     let labelTextSpan = document.createElement("span");
@@ -49,7 +49,7 @@ export function buildHierarchicalArray(flatList){
     let listItem = document.createElement("li");
     listItem.setAttribute("id", newId);
     listItem.setAttribute("data-iri", childNode.iri);
-    listItem.setAttribute("data-id", childNode.id);
+    listItem.setAttribute("data-id", childNode.id);    
     if(childNode.children){
       listItem.classList.add("closed");
       symbol.classList.add("fa");
@@ -164,18 +164,25 @@ export function buildHierarchicalArray(flatList){
 /**
  * Expand/collapse a node on click
  */
-export async function expandNode(e, ontologyId, childExtractName){
+export async function expandNode(e, ontologyId, childExtractName, isSkos){
   let targetNodeIri = e.dataset.iri;
   let targetNodeId = e.dataset.id;
   let Id = e.id;
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
-      let res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+      let res = [];
+      if(isSkos){
+        res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
+      }
+      else{
+        res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+      }
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
-        let listItem = buildTreeListItem(res[i]);
+        let node = isSkos ? await shapeSkosMetadata(res[i]) : res[i];        
+        let listItem = buildTreeListItem(node);
         ul.appendChild(listItem);      
       }      
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
@@ -195,6 +202,164 @@ export async function expandNode(e, ontologyId, childExtractName){
       
 }
 
+
+
+/**
+ * shape the skos metadata to match the format that expand tree node needs
+ */
+async function shapeSkosMetadata(skosNode, isRootNode=false){
+  if(isRootNode){
+    skosNode = skosNode.data;
+  }
+  let result = {};
+  result["id"] = skosNode.iri;
+  result["text"] = skosNode.label;
+  result["iri"] = skosNode.iri;
+  result["children"] = await skosNodeHasChildren(skosNode.ontology_name, skosNode.iri);
+  result["a_attr"] = {"class" : ""};
+  return result;
+}
+
+
+/**
+ * Build the skos ontology subtree. Used when the concept iri is given
+ */
+export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
+  let treeNodes = [];
+  let targetNode = await getSkosNodeByIri(ontologyId, encodeURIComponent(iri));
+  treeNodes.push(targetNode);  
+  while(true){
+    let res = await getSkosNodeParent(ontologyId, iri);    
+    if(!res){
+      break;
+    }
+    treeNodes.push(res);
+    iri = res['iri'];
+  }
+  
+  let nodeInTree = "";
+  let childNode = "";
+  let ul = "";
+  for(let i=0; i < treeNodes.length; i++){
+    let node = treeNodes[i];    
+    let leafClass = i !==0 ? " opened" : " closed";
+    let clickedClass = i === 0 ? " clicked" : "";    
+    let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
+    let textSpan = React.createElement("span", {"className": "li-label-text"}, node.label);
+    let containerSpan = React.createElement("span", {"className": "tree-text-container" + clickedClass}, textSpan);
+    let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);
+    if (!hasChildren){
+      leafClass = " leaf-node";
+      // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+      symbol = React.createElement("i", {"className": ""}, "");
+    }
+    else if(hasChildren && i === 0){
+      symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+    }    
+    nodeInTree = React.createElement("li", {         
+        "data-iri":node.iri, 
+        "data-id": node.iri,
+        "className": "tree-node-li" + leafClass,
+        "id": node.iri
+      }
+        , symbol, containerSpan, childNode
+        );
+    
+    let parentId = i+1 < treeNodes.length ? ("children_for_" + treeNodes[i + 1].iri) : false;
+    if(!parentId){
+      break;
+    }
+    ul = React.createElement("ul", {className: "tree-node-ul", id: parentId}, nodeInTree);
+    childNode = ul;
+  }
+  if(fullTree){
+    // show the full tree
+    let listOfNodes = [];
+    let rootNodes = await getSkosOntologyRootConcepts(ontologyId);
+    for(let i=0; i < rootNodes.length; i++){
+      let node = await shapeSkosMetadata(rootNodes[i], true);      
+      if(node.iri !== treeNodes[treeNodes.length - 1].iri){
+        let leafClass = " closed";        
+        let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+        let textSpan = React.createElement("span", {"className": "li-label-text"}, node.text);
+        let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);        
+        if (!node.children){
+          leafClass = " leaf-node";
+          // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+          symbol = React.createElement("i", {"className": ""}, "");
+        }          
+        let element = React.createElement("li", {         
+            "data-iri":node.iri, 
+            "data-id": node.iri,
+            "className": "tree-node-li" + leafClass,
+            "id": node.iri
+          }
+            , symbol, containerSpan
+            );
+        listOfNodes.push(element);
+      }
+      else{
+        listOfNodes.push(nodeInTree);
+      } 
+    }
+    ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, listOfNodes);   
+
+  }
+  else{
+    ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, nodeInTree);   
+  }
+
+  return ul;
+}
+
+
+/**
+ * Show/hide siblings for the SKOS ontology tree
+ */
+export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
+  let parent = await getSkosNodeParent(ontologyId, iri);
+  let siblingsNodes = "";
+  let targetUl = "";
+  let children = "";
+  if(showFlag){
+    // Show the siblings    
+    if(!parent){
+      // Node is a root
+      siblingsNodes = await getSkosOntologyRootConcepts(ontologyId);      
+      targetUl = document.getElementById("tree-root-ul");      
+    }
+    else{
+      siblingsNodes = await getChildrenSkosTree(ontologyId, parent.iri);
+      targetUl = document.getElementById("children_for_" + parent.iri);      
+    }
+    for(let i=0; i < siblingsNodes.length; i++){
+      let node = await shapeSkosMetadata(siblingsNodes[i], (!parent ? true : false));
+      if(node.iri !== iri){
+        let listItem = buildTreeListItem(node);
+        targetUl.appendChild(listItem);
+      } 
+    }   
+
+  }
+  else{
+    // Hide the siblings
+    if(!parent){
+      // root node
+      targetUl = document.getElementById("tree-root-ul");      
+      children = [].slice.call(targetUl.childNodes);      
+    }
+    else{      
+      targetUl = document.getElementById("children_for_" + parent.iri);      
+      children = [].slice.call(targetUl.childNodes);      
+    }
+    for(let i=0; i < children.length; i++){
+      if(children[i].dataset.iri !== iri){
+        children[i].remove();
+      }
+    }
+  }
+
+}
 
 
   /**
@@ -229,6 +394,7 @@ export async function expandNode(e, ontologyId, childExtractName){
   }
 
 
+  
   /**
    * Check a node is part of the list of a list of nodes or not
    * @param {*} nodeIri 
