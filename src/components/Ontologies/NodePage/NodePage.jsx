@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri} from '../../../api/fetchData';
+import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -11,7 +11,8 @@ class NodePage extends React.Component {
       data: true,
       iriIsCopied: false,
       prevNode: "",
-      componentIdentity: ""
+      componentIdentity: "",
+      isSkos: false
     })
     this.initiateTheTableView = this.initiateTheTableView.bind(this);
     this.createRow = this.createRow.bind(this);
@@ -28,12 +29,21 @@ class NodePage extends React.Component {
     let ontology = this.props.ontology;
     let extractKey = this.props.extractKey;
     let componentIdentity = this.props.componentIdentity;
-    let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
+    let isSkos = this.props.isSkos;
+    let node = {};
+    if(isSkos){
+      node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));    
+    }
+    else{      
+      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
+    }
+    
     this.setState({
       prevNode: node.iri,
       data: node,
       iriIsCopied: false,
-      componentIdentity: componentIdentity
+      componentIdentity: componentIdentity,
+      isSkos: isSkos
     });
   }
 

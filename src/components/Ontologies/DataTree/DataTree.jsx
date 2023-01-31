@@ -3,7 +3,16 @@ import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
-import { buildHierarchicalArray, buildTreeListItem, nodeHasChildren, nodeIsRoot, expandTargetNode, expandNode, nodeExistInList, jumpToButton } from './helpers';
+import { buildHierarchicalArray,
+    buildTreeListItem,
+    nodeHasChildren,
+    nodeIsRoot, 
+    expandTargetNode, 
+    expandNode, 
+    nodeExistInList, 
+    jumpToButton, 
+    buildSkosSubtree, 
+    showHidesiblingsForSkos } from './helpers';
 
 
 
@@ -30,6 +39,7 @@ class DataTree extends React.Component {
       reload: false,
       isLoadingTheComponent: true,
       noNodeExist: false,
+      isSkos: false,
       enteredTerm: "",
       result: false,
       api_base_url: "https://service.tib.eu/ts4tib/api",
@@ -65,6 +75,7 @@ class DataTree extends React.Component {
     let resetFlag = this.state.resetTreeFlag;
     let viewMode = !this.state.reduceBtnActive;
     let reload = this.state.reload;
+    let isSkos = this.props.isSkos;
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity == 'term'){         
             this.setState({
@@ -76,7 +87,8 @@ class DataTree extends React.Component {
                 childExtractName: "terms",
                 resetTreeFlag: false,
                 reload: false,
-                noNodeExist: false
+                noNodeExist: false,
+                isSkos: isSkos
               }, async () => {
                 await this.processTree(resetFlag, viewMode, reload);
               });              
@@ -128,13 +140,32 @@ class DataTree extends React.Component {
       }
 
       let target = this.props.iri;      
-      if (!target || resetFlag){        
+      if (!target || resetFlag){
+        // When the iri is not set. Render the root nodes 
         this.buildTree(this.state.rootNodes);       
         return true;
       }
-      target = target.trim();
-      let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
-      if((target != undefined && this.state.targetNodeIri != target) || reload ){        
+      target = target.trim();      
+      if((target != undefined && this.state.targetNodeIri != target) || reload ){
+        if(this.state.isSkos){
+          // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
+          let tree = await buildSkosSubtree(this.state.ontologyId, target, viewMode);
+          this.props.domStateKeeper(tree, this.state, this.props.componentIdentity);
+          let fullTreeMode = this.state.reduceBtnActive;
+          this.setState({
+            targetNodeIri: target,
+            treeDomContent: tree,
+            selectedNodeIri: target,
+            showNodeDetailPage: true,
+            reduceTreeBtnShow: true,
+            reload: false,
+            isLoadingTheComponent: false,
+            siblingsButtonShow: fullTreeMode,
+            siblingsVisible: !fullTreeMode
+          }); 
+          return true;
+        }
+        let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
         let callHeader = {
           'Accept': 'application/json'
         };
@@ -142,10 +173,10 @@ class DataTree extends React.Component {
         let extractName = this.state.childExtractName;
         let url = process.env.REACT_APP_API_BASE_URL + "/";
         url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
-        let list =  await (await fetch(url, getCallSetting)).json();        
+        let list =  await (await fetch(url, getCallSetting)).json();
         let roots = buildHierarchicalArray(list);
-        let childrenList = [];        
-        if(nodeExistInList(target, roots)){
+        let childrenList = [];           
+        if(nodeExistInList(target, roots)){          
           // the target node is a root node
           let childrenList = [];
           let i = 0;
@@ -162,7 +193,7 @@ class DataTree extends React.Component {
               leafClass = " leaf-node";
               // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
               symbol = React.createElement("i", {"className": ""}, "");
-            }    
+            }
             let listItem = React.createElement("li", {         
                 "data-iri":rootNodes.iri, 
                 "data-id": i,
@@ -237,7 +268,7 @@ class DataTree extends React.Component {
         this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
         let fullTreeMode = this.state.reduceBtnActive;              
         this.setState({
-            targetNodeIri: target,            
+            targetNodeIri: target,       
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: true,
@@ -246,7 +277,7 @@ class DataTree extends React.Component {
             isLoadingTheComponent: false,
             siblingsButtonShow: fullTreeMode,
             siblingsVisible: !fullTreeMode
-        });    
+        });  
       }
   }
 
@@ -334,13 +365,12 @@ processClick(e){
     this.selectNode(e.target);
   }
   else if (e.target.tagName === "I"){   
-    // expand a node by clicking on the expand icon 
-    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+    // expand a node by clicking on the expand icon
+    expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
       this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
     });       
   }
 }
-
 
 
 /**
@@ -365,10 +395,13 @@ resetTree(){
  * Show an opened node siblings
  */
 async showSiblings(){
-  try{
+  try{    
     let targetNodes = document.getElementsByClassName("targetNodeByIri");
     if(!this.state.siblingsVisible){
-        if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+        if(this.state.isSkos){
+          showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
+        }
+        else if(!this.state.isSkos && await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
           // Target node is a root node
           let callHeader = {
             'Accept': 'application/json'
@@ -409,7 +442,11 @@ async showSiblings(){
         });
     }
     else{
-      if(await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+      if(this.state.isSkos){
+        showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
+      } 
+
+      if(!this.state.isSkos && await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
         // Target node is a root node
         let parentUl = document.getElementById("tree-root-ul");
         let children = [].slice.call(parentUl.childNodes);
@@ -437,7 +474,7 @@ async showSiblings(){
     }
   }
   catch(e){
-    // console.info(e.stack);    
+    // console.info(e.stack);
   }
   
 }
@@ -447,7 +484,7 @@ async showSiblings(){
  * Reduce tree. show/hide the sub-tree when a node is opened by iri.
  */
 reduceTree(){
-  let reduceBtnActive = this.state.reduceBtnActive;
+  let reduceBtnActive = this.state.reduceBtnActive;  
   let showSiblings = !reduceBtnActive;
   this.props.domStateKeeper("", this.state, this.props.componentIdentity);
   this.setState({
@@ -555,7 +592,7 @@ render(){
                           
             <div className='col-sm-2'>
               <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
-              {this.state.reduceTreeBtnShow && 
+              {this.state.reduceTreeBtnShow &&  
                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                   {!this.state.reduceBtnActive
                         ? "Sub Tree"
@@ -581,6 +618,7 @@ render(){
               ontology={this.state.ontologyId}
               componentIdentity="term"
               extractKey="terms"
+              isSkos={this.state.isSkos}
             />
         </div>
         }
