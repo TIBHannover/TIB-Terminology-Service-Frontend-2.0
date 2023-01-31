@@ -3,12 +3,8 @@ import {tibHelp} from './TIB_help';
 import {nfdi4chemHelp} from './Nfdi4chem_help';
 import {nfdi4IngHelp} from './Nfdi4ing_help';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import withMatomo from '../Matomo/withMatomo';
 
 class Help extends React.Component{
-  componentDidMount() {
-    this.props.trackEvent();
-  }
 
     render(){
         return(  
@@ -30,4 +26,4 @@ class Help extends React.Component{
     }
 }
 
-export default withMatomo(Help);
+export default Help;

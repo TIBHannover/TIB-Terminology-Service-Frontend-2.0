@@ -3,7 +3,6 @@ import {createStatsBox} from './StatsBox';
 import {createHomePageContent} from './CollectionsCards';
 import {nfdi4chemHomePage} from './Nfdi4chem_home';
 import {nfdi4ingHomePage} from './Nfdi4ing_home';
-import withMatomo from '../Matomo/withMatomo';
 
 class Home extends React.Component{
   constructor(props){
@@ -42,4 +41,4 @@ class Home extends React.Component{
       );
   }
 }
-export default withMatomo(Home);
+export default Home;

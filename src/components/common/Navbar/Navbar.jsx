@@ -1,4 +1,19 @@
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
+import { useHistory } from "react-router";
+import { useEffect } from "react";
+
 function Navbar () {
+  const history1 = useHistory();
+  const { trackPageView } = useMatomo();
+  useEffect(() => {
+    history1.listen(() => {
+      setTimeout(() => {
+        // Track page view
+        trackPageView({action: 'Help'});
+    }, 1000);
+    });
+  });
+
   let urlPath = window.location.pathname;
   return (
     <div className='col-lg-8 col-md-6'>
