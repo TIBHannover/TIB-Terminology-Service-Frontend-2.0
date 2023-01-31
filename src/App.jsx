@@ -1,3 +1,4 @@
+import React from 'react';
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
@@ -14,6 +15,7 @@ import AboutApi from '../src/assets/static/AboutApi';
 import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
 
 // import css file based on the target project
@@ -23,6 +25,11 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 
 
 function App() {
+  const { trackPageView, trackEvent } = useMatomo()
+  // Track page view
+  React.useEffect(() => {
+    trackPageView()
+  }, [trackPageView])
 
   // This part is for changing the faveicon based on the target project.
   let link = document.querySelector("link[rel~='icon']");
