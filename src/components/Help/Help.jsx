@@ -4,8 +4,7 @@ import {nfdi4chemHelp} from './Nfdi4chem_help';
 import {nfdi4IngHelp} from './Nfdi4ing_help';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-class Help extends React.Component{
-    render(){
+function Help() {
         return(  
           <HelmetProvider>
               <div>
@@ -22,7 +21,6 @@ class Help extends React.Component{
             </div>  
           </HelmetProvider>      
         )
-    }
-}
+ };
 
-export default Help
+export default Help;
