@@ -6,6 +6,10 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import withMatomo from '../Matomo/withMatomo';
 
 class Help extends React.Component{
+  componentDidMount() {
+    this.props.trackEvent();
+  }
+
     render(){
         return(  
           <HelmetProvider>
