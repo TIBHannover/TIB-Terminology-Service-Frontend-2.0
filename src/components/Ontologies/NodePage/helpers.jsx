@@ -9,17 +9,23 @@ import _ from "lodash";
       "Label": [object.label, false],
       "CURIE":  [object.obo_id, false],
       "Description": [object.description  ? object.description[0] : "", false],
-      // "Definition": [object.annotation ? object.annotation.definition : "", false],
       "fullIRI": [object.iri, true],
-      "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
       "Equivalent to": [object.eqAxiom, false],
       "SubClass Of" : [ object.subClassOf, false],
-      "Relations" : [ object, false],
-      "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
-      "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
-      "Is Defined By": [object.annotation ? object.annotation.isDefinedBy : "", false]
-    };
+      "Relations" : [ object, false]
+    }
+    
+    if(object.annotation){
+      for(let key in object.annotation){
+        metadata[key] = [];
+        let value = [];
+        for(let annot of object.annotation[key]){
+          value.push(annot);
+        }
+        metadata[key] = [value, false];
+      }
+    }
     return metadata;
   }
 
@@ -32,15 +38,22 @@ import _ from "lodash";
   let metadata = {
     "Label": [object.label, false],
     "abbreviatedIRI":  [object.short_form, false],
-    "Description": [object.description, false],
-    "Definition": [object['annotation'] ? object['annotation']['definition source'] : "", false],
+    "Description": [object.description, false],    
     "fullIRI": [object.iri, true],
     "Ontology": [object.ontology_name, false],
-    "Synonyms": [object.synonyms, false],
-    "Curation Status" : [object['annotation'] ? object['annotation']['has curation status'] : "", false],
-    "Editor": [object['annotation'] ? object['annotation']['term editor'] : "", false],
-    "Is Defined By": [object['annotation'] ? object['annotation']['isDefinedBy'] : "", false]
+    "Synonyms": [object.synonyms, false]
   };
+
+  if(object.annotation){
+    for(let key in object.annotation){
+      metadata[key] = [];
+      let value = [];
+      for(let annot of object.annotation[key]){
+        value.push(annot);
+      }
+      metadata[key] = [value, false];
+    }
+  }
 
   return metadata;
 }
