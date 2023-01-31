@@ -3,10 +3,17 @@ import {tibHelp} from './TIB_help';
 import {nfdi4chemHelp} from './Nfdi4chem_help';
 import {nfdi4IngHelp} from './Nfdi4ing_help';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useMatomo } from '@jonkoops/matomo-tracker-react'
 
-class Help extends React.Component{
+function Help() {
+  const { trackPageView, trackEvent } = useMatomo()
 
-    render(){
+  // Track page view
+  React.useEffect(() => {
+    trackPageView()
+  }, [])
+  
+
         return(  
           <HelmetProvider>
               <div>
@@ -23,7 +30,6 @@ class Help extends React.Component{
             </div>  
           </HelmetProvider>      
         )
-    }
-}
+ };
 
 export default Help;
