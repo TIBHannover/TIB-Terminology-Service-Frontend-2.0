@@ -105,6 +105,19 @@ export async function getOntologyRootTerms(ontologyId:string) {
 
 
 /**
+ * Get the SKOS ontologies root concepts
+ * @param params 
+ */
+export async function getSkosOntologyRootConcepts(ontologyId:string) {
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
+  let results =  await (await fetch(url, getCallSetting)).json();
+  return results;
+}
+
+
+
+/**
  * fetch  the root properties for an ontology
  * @param ontologyId 
  */
@@ -143,8 +156,48 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/";
   url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-  let res =  await (await fetch(url, getCallSetting)).json(); 
+  let res =  await (await fetch(url, getCallSetting)).json();
   return res;
+}
+
+
+/**
+ * Get the children for skos ontology terms
+ */
+export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let res =  await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];
+  if(typeof(res['individuals']) !== "undefined"){
+    return res['individuals'];
+  }
+  else{
+    return [];
+  }
+}
+
+
+/**
+ * Check an skos ontology node has children
+*/
+export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:string) {
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let res =  await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];
+  if(!res){
+    return false;
+  }
+  else if(typeof(res['individuals']) === "undefined"){
+    return false;
+  }
+  else if(res['individuals']!.length === 0){
+    return false;
+  }  
+  else{
+    return true;
+  }
 }
 
 
@@ -178,6 +231,55 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   node['parents'] = parents;  
   return node;
 }
+
+
+/**
+ * Get Skos node by Iri
+ */
+export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontology +  "/individuals/" + encodeURIComponent(nodeIri);
+  let res =  await (await fetch(url, getCallSetting)).json();
+  let node = <any>{};
+  if(!res){
+    return false;
+  }
+  else if(typeof(res['iri']) === "undefined"){
+    return false;
+  }  
+  else{    
+    node['label'] = res['label'];
+    node['iri'] = res['iri'];
+    node ['description'] = res['description'];
+    node['ontology_name'] = res['ontology_name'];
+    node['synonyms'] = res['synonyms'];
+    node['eqAxiom'] = [];
+    node['subClassOf'] = res['subClassOf'] ? res['subClassOf'] : [];
+    for(let key in res['annotation']){
+      node[key] = res['annotation'][key];
+    }
+
+    return node;
+  }
+}
+
+
+/**
+ * Get an Skos node parent concept
+ */
+export async function getSkosNodeParent(ontology, iri) {
+  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let url = baseUrl +  "/" + ontology +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
+  let res = await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];    
+  if(!res || !res['individuals']){
+    return false;
+  }
+  return res['individuals'][0];
+}
+
+
+
 
 /**
  * Get a class to Equivalent Axioms

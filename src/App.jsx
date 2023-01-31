@@ -68,13 +68,11 @@ function App() {
   }).catch((e)=> {
       // document.getElementById("backend-is-down-message").style.display = "block";
   });
-
-
+  
 
   return (
-    <div className="App">
-     
-      <BrowserRouter>
+    <div className="App">   
+     <BrowserRouter>
         <Header />
         <div className='container-fluid application-content'>
           <span id="backend-is-down-message-span"></span>

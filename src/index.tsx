@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
+import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react';
 
 
 // const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -16,8 +16,16 @@ import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 
 // Adding Matomo
 const instance = createInstance({
-  urlBase: 'https://support.tib.eu/piwik/',
-  siteId: 3,
+  urlBase: 'https://terminology.nfdi4chem.de',
+  siteId: 36,
+  trackerUrl: "https://support.tib.eu/piwik/matomo.php",
+  srcUrl: "https://support.tib.eu/piwik/matomo.js",
+  disabled: false,
+  linkTracking: true,
+  configurations: {
+      disableCookies: true,
+      },
+
   }
 )
 
