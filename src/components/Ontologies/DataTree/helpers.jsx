@@ -224,7 +224,7 @@ async function shapeSkosMetadata(skosNode, isRootNode=false){
 /**
  * Build the skos ontology subtree. Used when the concept iri is given
  */
-export async function buildSkosSubtree(ontologyId, iri){
+export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
   let treeNodes = [];
   let targetNode = await getSkosNodeByIri(ontologyId, encodeURIComponent(iri));
   treeNodes.push(targetNode);  
@@ -265,10 +265,50 @@ export async function buildSkosSubtree(ontologyId, iri){
         , symbol, containerSpan, childNode
         );
     
-    let parentId = i+1 < treeNodes.length ? ("children_for_" + treeNodes[i + 1].iri) : "tree-root-ul";    
+    let parentId = i+1 < treeNodes.length ? ("children_for_" + treeNodes[i + 1].iri) : false;
+    if(!parentId){
+      break;
+    }
     ul = React.createElement("ul", {className: "tree-node-ul", id: parentId}, nodeInTree);
     childNode = ul;
   }
+  if(fullTree){
+    // show the full tree
+    let listOfNodes = [];
+    let rootNodes = await getSkosOntologyRootConcepts(ontologyId);
+    for(let i=0; i < rootNodes.length; i++){
+      let node = await shapeSkosMetadata(rootNodes[i], true);      
+      if(node.iri !== treeNodes[treeNodes.length - 1].iri){
+        let leafClass = " closed";        
+        let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+        let textSpan = React.createElement("span", {"className": "li-label-text"}, node.text);
+        let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);        
+        if (!node.children){
+          leafClass = " leaf-node";
+          // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+          symbol = React.createElement("i", {"className": ""}, "");
+        }          
+        let element = React.createElement("li", {         
+            "data-iri":node.iri, 
+            "data-id": node.iri,
+            "className": "tree-node-li" + leafClass,
+            "id": node.iri
+          }
+            , symbol, containerSpan
+            );
+        listOfNodes.push(element);
+      }
+      else{
+        listOfNodes.push(nodeInTree);
+      } 
+    }
+    ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, listOfNodes);   
+
+  }
+  else{
+    ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, nodeInTree);   
+  }
+
   return ul;
 }
 

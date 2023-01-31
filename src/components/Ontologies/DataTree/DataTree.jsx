@@ -149,7 +149,7 @@ class DataTree extends React.Component {
       if((target != undefined && this.state.targetNodeIri != target) || reload ){
         if(this.state.isSkos){
           // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
-          let tree = await buildSkosSubtree(this.state.ontologyId, target);
+          let tree = await buildSkosSubtree(this.state.ontologyId, target, viewMode);
           this.props.domStateKeeper(tree, this.state, this.props.componentIdentity);
           let fullTreeMode = this.state.reduceBtnActive;
           this.setState({
@@ -484,7 +484,7 @@ async showSiblings(){
  * Reduce tree. show/hide the sub-tree when a node is opened by iri.
  */
 reduceTree(){
-  let reduceBtnActive = this.state.reduceBtnActive;
+  let reduceBtnActive = this.state.reduceBtnActive;  
   let showSiblings = !reduceBtnActive;
   this.props.domStateKeeper("", this.state, this.props.componentIdentity);
   this.setState({
@@ -592,7 +592,7 @@ render(){
                           
             <div className='col-sm-2'>
               <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
-              {this.state.reduceTreeBtnShow && 
+              {this.state.reduceTreeBtnShow &&  
                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                   {!this.state.reduceBtnActive
                         ? "Sub Tree"
