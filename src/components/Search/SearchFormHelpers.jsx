@@ -17,10 +17,26 @@ export function setJumpResultButtons(resultItem){
     content.push(
         <a href={targetHref} className="container">
         <div className="jump-autocomplete-item">         
-            {resultItem['label']}
-            <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
-            <div className="btn btn-default jmp-term-button">{resultItem['short_form']}</div>
-              
+        {(() => { 
+            if(resultItem["type"] === 'ontology'){
+                return (
+                    <div>
+                        {resultItem['label']}
+                     <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
+                    </div>
+                )
+            }
+            else{
+                return(
+                    <div>
+                        {resultItem['label']}
+                      <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
+                      <div className="btn btn-default jmp-term-button">{resultItem['short_form']}</div>
+                    </div>
+                )
+            }       
+            
+        })()}                
         </div>
         </a>
     ); 
