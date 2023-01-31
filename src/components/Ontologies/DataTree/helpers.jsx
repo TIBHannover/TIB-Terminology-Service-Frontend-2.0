@@ -207,7 +207,10 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
 /**
  * shape the skos metadata to match the format that expand tree node needs
  */
-async function shapeSkosMetadata(skosNode){
+async function shapeSkosMetadata(skosNode, isRootNode=false){
+  if(isRootNode){
+    skosNode = skosNode.data;
+  }
   let result = {};
   result["id"] = skosNode.iri;
   result["text"] = skosNode.label;
@@ -275,58 +278,46 @@ export async function buildSkosSubtree(ontologyId, iri){
  */
 export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   let parent = await getSkosNodeParent(ontologyId, iri);
+  let siblingsNodes = "";
+  let targetUl = "";
+  let children = "";
   if(showFlag){
     // Show the siblings    
     if(!parent){
       // Node is a root
-      let rootNodes = await getSkosOntologyRootConcepts(ontologyId);      
-      let ul = document.getElementById("tree-root-ul");
-      for(let i=0; i < rootNodes.length; i++){
-        let node = await shapeSkosMetadata(rootNodes[i].data);
-        if(node.iri !== iri){
-          let listItem = buildTreeListItem(node);
-          ul.appendChild(listItem);
-        }
-      }
+      siblingsNodes = await getSkosOntologyRootConcepts(ontologyId);      
+      targetUl = document.getElementById("tree-root-ul");      
     }
     else{
-      let siblings = await getChildrenSkosTree(ontologyId, parent.iri);
-      let ul = document.getElementById("children_for_" + parent.iri);
-      for(let i=0; i < siblings.length; i++){
-        let node = await shapeSkosMetadata(siblings[i]);
-        if(node.iri !== iri){
-          let listItem = buildTreeListItem(node);
-          ul.appendChild(listItem);
-        } 
-      }  
-
-    } 
+      siblingsNodes = await getChildrenSkosTree(ontologyId, parent.iri);
+      targetUl = document.getElementById("children_for_" + parent.iri);      
+    }
+    for(let i=0; i < siblingsNodes.length; i++){
+      let node = await shapeSkosMetadata(siblingsNodes[i], (!parent ? true : false));
+      if(node.iri !== iri){
+        let listItem = buildTreeListItem(node);
+        targetUl.appendChild(listItem);
+      } 
+    }   
 
   }
   else{
     // Hide the siblings
     if(!parent){
       // root node
-      let ul = document.getElementById("tree-root-ul");      
-      let children = [].slice.call(ul.childNodes);
-      for(let i=0; i < children.length; i++){
-        if(children[i].dataset.iri !== iri){
-          children[i].remove();
-        }
-      }
+      targetUl = document.getElementById("tree-root-ul");      
+      children = [].slice.call(targetUl.childNodes);      
     }
     else{      
-      let ul = document.getElementById("children_for_" + parent.iri);      
-      let children = [].slice.call(ul.childNodes);
-      for(let i=0; i < children.length; i++){
-        if(children[i].dataset.iri !== iri){
-          children[i].remove();
-        }
+      targetUl = document.getElementById("children_for_" + parent.iri);      
+      children = [].slice.call(targetUl.childNodes);      
+    }
+    for(let i=0; i < children.length; i++){
+      if(children[i].dataset.iri !== iri){
+        children[i].remove();
       }
     }
   }
-
-
 
 }
 
