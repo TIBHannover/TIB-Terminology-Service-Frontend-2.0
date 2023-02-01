@@ -1,24 +1,8 @@
 import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG';
 import SearchForm from "../../Search/SearchForm";
-import { useMatomo } from '@jonkoops/matomo-tracker-react';
-import { useHistory } from "react-router";
-import { useEffect } from "react";
-
 
 function Header () {
-  const history1 = useHistory();
-  const { trackPageView } = useMatomo();
-  useEffect(() => {
-    history1.listen(() => {
-      setTimeout(() => {
-        // Track page view
-        trackPageView();
-    }, 1000);
-    });
-  });
-
-
   return (
     <div className='header-warpper'>
       <div className='container site-header'>
