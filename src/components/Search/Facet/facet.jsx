@@ -277,6 +277,12 @@ class Facet extends React.Component{
         return(
             <div class="row" id="search-facet-container-box">
                 <h2>Filter Results</h2>
+                <div className="row">
+                    <div className="col-sm-12 clear-filter-link-box">
+                        <a>Clear All Filters</a>
+                        <br></br>
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <h4>{"Type"}</h4>
                      <div class="facet-box" id="facet-types-list">                            
