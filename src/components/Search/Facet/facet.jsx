@@ -22,6 +22,7 @@ class Facet extends React.Component{
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
         this.createCollectionsCheckBoxes = this.createCollectionsCheckBoxes.bind(this);
         this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
+        this.clearFacet = this.clearFacet.bind(this);
     }
 
 
@@ -254,6 +255,21 @@ class Facet extends React.Component{
     }
 
 
+    /**
+     * Reset facet
+     */
+    clearFacet(){        
+        this.props.handleChange([], [], []);
+        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
+        for(let checkbox of allFacetCheckBoxes){            
+            if(checkbox.dataset.ischecked !== "true"){
+                document.getElementById(checkbox.id).checked = false;
+            }
+            delete checkbox.dataset.ischecked;
+        }            
+    }
+
+
     componentDidMount(){
         if(!this.state.resultLoaded){
             this.processFacetData();
@@ -273,13 +289,15 @@ class Facet extends React.Component{
         }
     }
 
+
+
     render(){
         return(
             <div class="row" id="search-facet-container-box">
                 <h2>Filter Results</h2>
                 <div className="row">
                     <div className="col-sm-12 clear-filter-link-box">
-                        <a>Clear All Filters</a>
+                        <a onClick={this.clearFacet}>Clear All Filters</a>
                         <br></br>
                     </div>
                 </div>
