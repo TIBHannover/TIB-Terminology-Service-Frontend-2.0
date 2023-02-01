@@ -179,6 +179,23 @@ p{
     border-radius: 15px;
 }
 
+.clear-filter-link-box{
+    /* 
+        Clear facet filters link box style
+    */
+
+    margin-bottom: 40px;
+}
+
+.clear-filter-link-box > a{
+    /* 
+        Clear facet filters link style
+    */
+
+    text-decoration: underline !important;   
+    cursor: pointer;  
+}
+
 .result-card{
     /* 
         The style for each search result item. Used in the search result and ontology list.
