@@ -185,7 +185,8 @@ p{
         Clear facet filters link style
     */
 
-    text-decoration: underline !important;    
+    text-decoration: underline !important;   
+    cursor: pointer;  
 }
 
 .result-card{
