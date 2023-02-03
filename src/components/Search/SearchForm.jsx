@@ -47,12 +47,13 @@ class SearchForm extends React.Component{
       }
 
 
-    submitHandler(event){  
+    submitHandler(event){          
         let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
-          let url = new URL(window.location);
-          url.searchParams.delete('q');
+          let url = new URL(window.location);          
+          url.searchParams.delete('q');          
           url.searchParams.append('q', enteredTerm);
+          url.pathname = "/ts/search";
           window.location.replace(url);
         }        
     }
