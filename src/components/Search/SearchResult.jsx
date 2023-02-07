@@ -170,10 +170,7 @@ createSearchResultList () {
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
-            </div>
-            <div className='col-sm-2'>
-                <div className='search-result-type-tag'>{searchResultItem[i]["type"]}</div>
-            </div>
+            </div>            
           </div>   
         )
       }       

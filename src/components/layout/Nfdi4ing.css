@@ -1045,18 +1045,6 @@ p{
     display: inline !important;
 }
 
-.search-result-type-tag{
-    /* 
-        The style for search result type tag.
-    */
-
-    width: 60px;
-    background-color: rgb(156, 14, 14);
-    color: white;
-    text-align: center;
-    font-size: 13px;
-}
-
 /* 
 -------------------------------------
     The Facet fields in Search results styles 
