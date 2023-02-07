@@ -44,7 +44,7 @@ p{
     /* 
        The style for the site anchors
     */
-
+    padding-top: -30;
     color: #4f6d7a;
     text-decoration: none;
     font-weight: bold; 
@@ -909,8 +909,6 @@ p{
     */
     height: fit-content;
     border: 0.5px solid black;
-    padding-bottom: 20px;
-    padding-top: 10px;
     z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
@@ -924,6 +922,7 @@ p{
     */
     margin-left: 10px;
     text-align: justify;
+    margin-bottom: -20px;
 }
 
 #jumpresult-container{
@@ -933,8 +932,7 @@ p{
     height: fit-content;
     border: 0.5px solid black;
     display: block;
-    padding-bottom: 20px;
-    padding-top: 10px;
+    padding-bottom: 10px;
     position: relative;
     z-index: 9999;
     padding-left: 10x;
@@ -943,6 +941,7 @@ p{
     width: 100%;
     text-align: left;
     padding-left: 10px;
+    margin-bottom: -30px;
 }
 
 .jump-autocomplete-container{
