@@ -145,11 +145,10 @@ class SearchForm extends React.Component{
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
                 <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
-                <div>
-                  <h4>Jump To</h4>
-                  {this.createJumpResultList()}
-                </div>
-
+                  <div>
+                    <h4>Jump To</h4>
+                    {this.createJumpResultList()}
+                  </div>
                 </div>}
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
