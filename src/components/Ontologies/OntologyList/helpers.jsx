@@ -108,13 +108,31 @@ export function ontology_has_searchKey(ontology, value){
  * @returns
  */
   export function sortBasedOnKey (array, key) {
+    if (key === 'alphabetic'){
+        return array;
+    }
     return array.sort(function (a, b) {
-      let x = a[key]; const y = b[key]
-      return ((x < y) ? 1 : ((x > y) ? -1 : 0))
+        let x = a[key];
+        const y = b[key];
+        return ((x < y) ? 1 : ((x > y) ? -1 : 0))
     })
   }
 
 
+/**
+ * Sort an array of ontologies based on the title
+ *
+ * @param {*} array
+ * @param {*} key
+ * @returns
+ */
+export function sortOntologyBasedOnTitle (ontologies) {
+    return ontologies.sort(function (a, b) {
+      let x = a["ontologyId"]; 
+      let y = b["ontologyId"];      
+      return (x<y ? -1 : 1 )
+    })
+  }
 
 
 export async function createCollectionsCheckBoxes(filterCollection, selectedCollections){
