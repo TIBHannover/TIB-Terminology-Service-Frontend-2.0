@@ -1,6 +1,5 @@
 import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
-import {setJumpResultButtons4Mobile} from './SearchFormHelpers4Mobile';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -117,18 +116,6 @@ class SearchForm extends React.Component{
         return jumpResultList
       }
 
-      createJumpResultList4Mobile(){
-        const jumpResultList = []
-        for(let i=0; i < this.state.jumpResult.length; i++){
-          jumpResultList.push(
-            <div className="jump-autocomplete-container">
-               {setJumpResultButtons4Mobile(this.state.jumpResult[i])}
-            </div>          
-          )
-        }
-        return jumpResultList
-      }
-
 
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -158,24 +145,11 @@ class SearchForm extends React.Component{
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
                 <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
-                  {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                  <div>
-                    <h4>Jump To</h4>
-                   {this.createJumpResultList4Mobile()}
-                  </div>
-                  }
-                  {process.env.REACT_APP_PROJECT_ID === "general" &&
-                  <div>
-                    <h4>Jump To</h4>
-                   {this.createJumpResultList()}
-                  </div>
-                  }
-                  {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
-                  <div>
-                    <h4>Jump To</h4>
-                   {this.createJumpResultList()}
-                  </div>
-                  }
+                <div>
+                  <h4>Jump To</h4>
+                  {this.createJumpResultList()}
+                </div>
+
                 </div>}
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
