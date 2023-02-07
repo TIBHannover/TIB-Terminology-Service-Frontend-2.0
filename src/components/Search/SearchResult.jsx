@@ -215,6 +215,7 @@ createSearchResultList () {
   async handleSelection(ontologies, types, collections){    
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
+    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
     let collectionOntologies = [];
     let facetSelected = true;
     
@@ -224,7 +225,8 @@ createSearchResultList () {
        */
        collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
        collectionOntologies.forEach(onto => {
-         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+         totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
        });
     }   
     else{
@@ -232,15 +234,18 @@ createSearchResultList () {
         collectionOntologies = await getCollectionOntologies(collections, false);        
       }
       collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+        totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
       });
     }
     
     ontologies.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
     });
     types.forEach(item => {
-        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
     });
 
     if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
@@ -249,13 +254,17 @@ createSearchResultList () {
     }
     
     let targetUrl = await fetch(baseUrl);
-    let filteredSearchResults = (await targetUrl.json())['response']['docs'];    
+    let filteredSearchResults = (await targetUrl.json())['response']['docs'];
+    let totalSearch = await fetch(totalResultBaseUrl);
+    let totalSaerchResults = (await totalSearch.json())['response'];
+    // let facetFields = resultJson['facet_counts'];
     this.setState({
       searchResult: filteredSearchResults,
       selectedOntologies: ontologies,
       selectedTypes: types,
       selectedCollections: collections,
-      facetIsSelected: facetSelected,      
+      facetIsSelected: facetSelected,
+      totalResults: totalSaerchResults['numFound'] 
       }, () => {
         this.updateURL(ontologies, types, collections);
       });
