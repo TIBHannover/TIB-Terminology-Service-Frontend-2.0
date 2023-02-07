@@ -59,7 +59,7 @@ Master branch: The deployment branch for production.
 
 ### How to develop a new feature/bug?
 
-We first create a new branch from "master" branch. After finishing, we merge the branch first to the Test branch for testing. It the test is accepted, then we merge the branch to the master and remove it. 
+We first create a new branch from "master" branch. After finishing, we merge the branch first to the Test branch for testing. If the test is accepted, then we merge the branch to the master and remove it. 
 
 
 **Important** Please always create the new branch from the "master" branch

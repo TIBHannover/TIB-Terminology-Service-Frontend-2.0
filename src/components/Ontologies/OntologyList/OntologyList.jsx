@@ -1,7 +1,7 @@
 import React from 'react';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes} from './helpers';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes, sortOntologyBasedOnTitle} from './helpers';
 import Pagination from "../../common/Pagination/Pagination";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -21,7 +21,7 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'numberOfTerms',
+      sortField: 'alphabetic',
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
       keywordFilterString: "",
@@ -46,6 +46,7 @@ class OntologyList extends React.Component {
     
     try{
       let allOntologies = await getAllOntologies();
+      allOntologies = sortOntologyBasedOnTitle(allOntologies);
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -97,7 +98,7 @@ class OntologyList extends React.Component {
       keywordFilter = "";
     }
     if(!sortBy){
-      sortBy = "numberOfTerms";
+      sortBy = "alphabetic";
     }
     this.setState({
       sortField: sortBy.trim(),
@@ -177,7 +178,8 @@ class OntologyList extends React.Component {
      * @param {*} value
      */
   handleSortChange = (e, value) => {
-    let sortedOntology = sortBasedOnKey(this.state.ontologies, e.target.value)
+    let ontologies = this.state.ontologies;
+    let sortedOntology = e.target.value !== "alphabetic"  ? sortBasedOnKey(ontologies, e.target.value) : sortOntologyBasedOnTitle(ontologies);
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
@@ -202,8 +204,7 @@ class OntologyList extends React.Component {
     else{
       // do uncheck
       let index = selectedCollections.indexOf(collection);
-      selectedCollections.splice(index, 1);  
-      console.info(e.target.checked);
+      selectedCollections.splice(index, 1);        
       document.getElementById(e.target.id).checked = false;    
     }
     this.runFacet(selectedCollections, this.state.keywordFilterString);
@@ -257,7 +258,6 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
-    preOntologies = sortBasedOnKey(preOntologies, this.state.sortField);
     let preHiddenStatus = this.state.unFilteredHiddenStatus;
     this.setState({
       selectedCollections: selectedCollections,
@@ -299,7 +299,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   }
 
 
-  ontologies =  sortBasedOnKey(ontologies, this.state.sortField);
+  ontologies = this.state.sortField !== "alphabetic" ? sortBasedOnKey(ontologies, this.state.sortField) : sortOntologyBasedOnTitle(ontologies) ;
   let hiddenStatus = [];
   for(let i=0; i < ontologies.length; i++){
     if (i <= this.state.pageSize){
@@ -408,6 +408,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
+                        <option value={'alphabetic'} key="alphabetic">Alphabetically</option>
                         <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
                         <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
                         <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
