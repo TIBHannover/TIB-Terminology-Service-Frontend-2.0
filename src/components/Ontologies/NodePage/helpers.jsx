@@ -23,7 +23,7 @@ import _ from "lodash";
         for(let annot of object.annotation[key]){
           value.push(annot);
         }
-        metadata[key] = [value, false];
+        metadata[key] = [value.join(',\n'), false];
       }
     }
     return metadata;
@@ -51,7 +51,7 @@ import _ from "lodash";
       for(let annot of object.annotation[key]){
         value.push(annot);
       }
-      metadata[key] = [value, false];
+      metadata[key] = [value.join(',\n'), false];
     }
   }
 
