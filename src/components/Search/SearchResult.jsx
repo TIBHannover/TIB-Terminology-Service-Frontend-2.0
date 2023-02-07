@@ -52,7 +52,7 @@ class SearchResult extends React.Component{
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
-        let facetFields = resultJson['facet_counts'];        
+        let facetFields = resultJson['facet_counts'];      
         let totalResults = resultJson['response']['numFound'];        
         this.setState({
           searchResult: searchResult,
@@ -366,7 +366,7 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>}
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResults + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}              
               {this.state.searchResult.length > 0 && this.createSearchResultList()} 
               {this.state.searchResult.length > 0 && 
                 <Pagination 
