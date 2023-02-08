@@ -406,8 +406,13 @@ p{
     background-image: url('../../assets/img/polygon_background.svg');
     background-color: #4f6d7a;
     padding: 10px;
-    max-height: 220px;
  }
+
+ @media only screen and (min-width: 1200px) {
+    .header-warpper{
+        max-height: 220px;
+     }
+  }
  
  .container.site-header{
     /* 
