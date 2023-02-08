@@ -22,7 +22,7 @@ export function setJumpResultButtons(resultItem){
                     return (
                         <div>
                             {resultItem['label']}
-                         <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
+                         <div className="btn btn-default ontology-button">{resultItem['ontology_prefix']}</div>
                         </div>
                     )
                 }
