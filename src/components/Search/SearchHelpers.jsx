@@ -17,7 +17,7 @@ export function setResultTitleAndLabel(resultItem){
     content.push(
         <div className="search-card-title"> 
             <a href={targetHref} className="search-result-title">
-                <h4>{resultItem.label}</h4>
+                [{resultItem.type}] <h4>{resultItem.label}</h4>
             </a>
             <a className="btn btn-default term-button" href={targetHref} >
                 {resultItem.short_form}

@@ -52,7 +52,7 @@ class SearchResult extends React.Component{
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
-        let facetFields = resultJson['facet_counts'];        
+        let facetFields = resultJson['facet_counts'];      
         let totalResults = resultJson['response']['numFound'];        
         this.setState({
           searchResult: searchResult,
@@ -170,10 +170,7 @@ createSearchResultList () {
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
-            </div>
-            <div className='col-sm-2'>
-                <div className='search-result-type-tag'>{searchResultItem[i]["type"]}</div>
-            </div>
+            </div>            
           </div>   
         )
       }       
@@ -215,6 +212,7 @@ createSearchResultList () {
   async handleSelection(ontologies, types, collections){    
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
+    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
     let collectionOntologies = [];
     let facetSelected = true;
     
@@ -224,7 +222,8 @@ createSearchResultList () {
        */
        collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
        collectionOntologies.forEach(onto => {
-         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+         totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
        });
     }   
     else{
@@ -232,15 +231,18 @@ createSearchResultList () {
         collectionOntologies = await getCollectionOntologies(collections, false);        
       }
       collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+        totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
       });
     }
     
     ontologies.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
     });
     types.forEach(item => {
-        baseUrl = baseUrl + `&type=${item.toLowerCase()}`
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
     });
 
     if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
@@ -249,13 +251,17 @@ createSearchResultList () {
     }
     
     let targetUrl = await fetch(baseUrl);
-    let filteredSearchResults = (await targetUrl.json())['response']['docs'];    
+    let filteredSearchResults = (await targetUrl.json())['response']['docs'];
+    let totalSearch = await fetch(totalResultBaseUrl);
+    let totalSaerchResults = (await totalSearch.json())['response'];
+    // let facetFields = resultJson['facet_counts'];
     this.setState({
       searchResult: filteredSearchResults,
       selectedOntologies: ontologies,
       selectedTypes: types,
       selectedCollections: collections,
-      facetIsSelected: facetSelected,      
+      facetIsSelected: facetSelected,
+      totalResults: totalSaerchResults['numFound'] 
       }, () => {
         this.updateURL(ontologies, types, collections);
       });
@@ -366,7 +372,7 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{'Search Results for "' + this.state.enteredTerm + '"'   }</h3>}
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResults + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}              
               {this.state.searchResult.length > 0 && this.createSearchResultList()} 
               {this.state.searchResult.length > 0 && 
                 <Pagination 
