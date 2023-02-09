@@ -1,4 +1,4 @@
-# TIB Terminology Service
+# TIB Terminology Service Frontend
 
 This project was created with React 17.0
 
@@ -33,7 +33,7 @@ Open the browser and enter the URL of the application: http://localhost:3000/.
 The default value in the [.env](https://git.tib.eu/terminology/tib-terminology-service-2.0/-/blob/master/.env) file is "general" to display TIB Terminology service. However, users can see other projects in the TIB environment collection by changing the project ID to their desired project ( eg. NFDI4Chem, NFDI4Ing). In order to fully transition to a new project view, users can also change the API endpoints, see selected project stats and project-filtered ontologies in the .env file.
 
 
-## Convention on Issue Reporting
+## Conventions on Issue Reporting
 We use labels to indicate the status of an issue in the development process
 
 Ready for testing
@@ -46,10 +46,17 @@ Labels for assigning issues to an overall topic
 Predefined labels (all with capital letters) you can assign an issue to
 
 SEARCH
+Issues related to all aspects of the search, including the result page, filter, advanced search, autosuggest or search in a single ontology
 
 TREEVIEW
+Issues related to the treeview of an ontology, ontology classes, properties or individuals
 
 METADATA
+Issues related to metadata content shown on various occasions on the pages
+
+## Conventions on Moving Issues through the Development Workflow
+Issues with the label Ready-for-testing are tested by 1-n members of the team, preferebly the reporter of the issue. Once tested successfully the issue will be labelled as Ready-to-Deploy 
+
 
 ## Deployment and branches
 
