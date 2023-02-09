@@ -619,7 +619,7 @@ p{
     */
  
     text-decoration: none;
-    color: #009cbc;
+    color: #0E6668;
  }
  
  .pagination-link:hover{
@@ -627,7 +627,7 @@ p{
        Style for the pagination button anchor mouse over
     */
  
-    color: #0B6376;
+    color: #0E6668;
  }
  
  .selected-page{
