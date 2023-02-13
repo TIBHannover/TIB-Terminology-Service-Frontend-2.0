@@ -75,6 +75,7 @@ class OntologyDetail extends React.Component {
         overViewTab: false,
         termsTab: true,
         propTab: false,
+        indvTab: false,
         activeTab: 1,
         waiting: false,
         lastRequestedTab: requestedTab,
@@ -86,7 +87,21 @@ class OntologyDetail extends React.Component {
         overViewTab: false,
         termsTab: false,
         propTab: true,
+        indvTab: false,
         activeTab: 2,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        targetPropertyIri: targetQueryParams.iri
+
+      });      
+    }
+    else if (requestedTab != lastRequestedTab && requestedTab == 'individuals'){
+      this.setState({
+        overViewTab: false,
+        termsTab: false,
+        propTab: false,
+        indvTab: true,
+        activeTab: 3,
         waiting: false,
         lastRequestedTab: requestedTab,
         targetPropertyIri: targetQueryParams.iri
@@ -211,23 +226,38 @@ class OntologyDetail extends React.Component {
         overViewTab: true,
         termsTab: false,
         propTab: false,
+        indvTab: false,
         activeTab: 0,
         waiting: false
       })
-    } else if (value === "1") { // terms (classes)
+    } 
+    else if (value === "1") { // terms (classes)
       this.setState({
         overViewTab: false,
         termsTab: true,
         propTab: false,
+        indvTab: false,
         activeTab: 1,
         waiting: false
       })
-    } else { // properties
+    } 
+    else if (value === "2") { // properties
       this.setState({
         overViewTab: false,
         termsTab: false,
         propTab: true,
+        indvTab: false,
         activeTab: 2,
+        waiting: false
+      })
+    }
+    else{ // individuals
+      this.setState({
+        overViewTab: false,
+        termsTab: false,
+        propTab: false,
+        indvTab: true,
+        activeTab: 3,
         waiting: false
       })
     }
