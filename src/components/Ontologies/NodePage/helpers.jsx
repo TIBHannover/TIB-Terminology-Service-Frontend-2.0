@@ -183,7 +183,7 @@ function createRelations(object){
  * Check if the tetx contains link to render is as anchor
  */
 function transformToLink(text){  
-  let splitedText = text.split("https://");
+  let splitedText = text.split("http");
   if (splitedText.length === 1){
     // no https inside text
     return text;
