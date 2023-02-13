@@ -33,6 +33,7 @@ class OntologyDetail extends React.Component {
       waiting: false,
       targetTermIri: " ",
       targetPropertyIri: " ",
+      targetIndividualIri: " ",
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
@@ -273,9 +274,14 @@ class OntologyDetail extends React.Component {
         targetTermIri: iri
       });
     }
-    else{
+    else if (componentId === "property"){
       this.setState({
         targetPropertyIri: iri
+      });
+    }
+    else{
+      this.setState({
+        targetIndividualIri: iri
       });
     }
     
@@ -390,9 +396,9 @@ class OntologyDetail extends React.Component {
               {!this.state.waiting && this.state.indvTab &&
                             <IndividualsList                                                            
                               iri={this.state.targetPropertyIri}
+                              componentIdentity={'individual'}
                               key={'propertyTreePage'}
-                              ontology={this.state.ontologyId}
-                              rootNodeNotExist={this.state.rootNodeNotExist}
+                              ontology={this.state.ontologyId}                              
                               iriChangerFunction={this.changeInputIri}
                               lastState={this.state.propertyTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}

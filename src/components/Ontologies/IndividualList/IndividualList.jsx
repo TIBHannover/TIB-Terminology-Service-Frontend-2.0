@@ -1,6 +1,7 @@
 import React from "react";
 import {getIndividualsList} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
+import NodePage from '../NodePage/NodePage';
 
 
 class IndividualsList extends React.Component {
@@ -113,6 +114,17 @@ class IndividualsList extends React.Component {
                         {this.createIndividualList()}
                     </ul>
                 </div>
+                {this.state.showNodeDetailPage && 
+                    <div className="col-sm-6 node-table-container">
+                        <NodePage
+                        iri={this.state.selectedNodeIri}
+                        ontology={this.state.ontology}
+                        componentIdentity="individuals"
+                        extractKey="individuals"
+                        isSkos={this.state.isSkos}
+                        />
+                    </div>
+                }
             </div>
         );        
     }
