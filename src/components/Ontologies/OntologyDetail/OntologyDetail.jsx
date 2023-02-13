@@ -25,6 +25,7 @@ class OntologyDetail extends React.Component {
       overViewTab: true,
       termsTab: false,
       propTab: false,
+      indvTab: false,
       activeTab: 0,
       rootTerms: [],
       rootProps: [],
@@ -312,6 +313,9 @@ class OntologyDetail extends React.Component {
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
                   <Link onClick={this.tabChange} data-value="2" className={this.state.propTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
+                </li>
+                <li class="nav-item ontology-detail-nav-item" key={"indv-tab"}>
+                  <Link onClick={this.tabChange} data-value="3" className={this.state.indvTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individuals</Link>
                 </li>            
               </ul>             
               {!this.state.waiting && this.state.overViewTab &&
