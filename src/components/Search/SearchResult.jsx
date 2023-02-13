@@ -343,7 +343,9 @@ createSearchResultList () {
       if(cUrl.includes("q=")){
         cUrl = cUrl.split("q=")[1];
         cUrl = cUrl.split("&")[0];
-        document.getElementById("s-field").value = decodeURIComponent(cUrl)
+        cUrl = decodeURIComponent(cUrl);
+        cUrl = cUrl.replaceAll("+", " ");
+        document.getElementById("s-field").value = cUrl;
       }       
     }     
   }
