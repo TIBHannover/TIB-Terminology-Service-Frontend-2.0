@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import { shapeSkosConcepts } from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import IndividualsList from '../IndividualList/IndividualList';
 
 
 
@@ -347,6 +348,17 @@ class OntologyDetail extends React.Component {
                             <DataTree
                               rootNodes={this.state.rootProps}
                               componentIdentity={'property'}
+                              iri={this.state.targetPropertyIri}
+                              key={'propertyTreePage'}
+                              ontology={this.state.ontologyId}
+                              rootNodeNotExist={this.state.rootNodeNotExist}
+                              iriChangerFunction={this.changeInputIri}
+                              lastState={this.state.propertyTreeDomLastState}
+                              domStateKeeper={this.changeTreeContent}
+                            />
+              }
+              {!this.state.waiting && this.state.indvTab &&
+                            <IndividualsList                                                            
                               iri={this.state.targetPropertyIri}
                               key={'propertyTreePage'}
                               ontology={this.state.ontologyId}
