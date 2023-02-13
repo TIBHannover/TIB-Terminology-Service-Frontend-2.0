@@ -43,7 +43,11 @@ class IndividualsList extends React.Component {
         let individuals = this.state.individuals;
         for (let indv of individuals){
             result.push(
-                <li>{indv["label"]}</li>
+                <li className="list-node-li">
+                    <span className="tree-text-container">
+                        {indv["label"]}
+                    </span>
+                </li>
             );
         }
         return result;

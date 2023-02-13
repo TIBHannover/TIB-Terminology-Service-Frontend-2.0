@@ -1479,6 +1479,19 @@ p{
     margin-top: 2px;
 }
 
+.list-node-li{
+    /* 
+        The style for the nodes in the individual list
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;    
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;        
+    font-size: 13px !important;    
+}
+
 
 .isLoading {
     /* 
