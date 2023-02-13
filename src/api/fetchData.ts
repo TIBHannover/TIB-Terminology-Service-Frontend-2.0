@@ -103,6 +103,23 @@ export async function getOntologyRootTerms(ontologyId:string) {
   
 }
 
+/**
+ * Get the list of individuals for an ontology
+ */
+export async function getIndividualsList(ontologyId:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals";
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  res = res["_embedded"];
+  if (!res || res["individuals"] === "undefined"){
+    return [];
+  }
+  else{
+    return res["individuals"];
+  }
+}
+
 
 /**
  * Get the SKOS ontologies root concepts
