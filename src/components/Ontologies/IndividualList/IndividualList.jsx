@@ -1,5 +1,6 @@
 import React from "react";
 import {getIndividualsList} from '../../../api/fetchData';
+import { withRouter } from 'react-router-dom';
 
 
 class IndividualsList extends React.Component {
@@ -8,10 +9,14 @@ class IndividualsList extends React.Component {
         this.state = ({
             individuals: [],
             isLoaded: false,
-            ontology: ""
+            ontology: "",
+            showNodeDetailPage: false,
+            selectedNodeIri: ""
         });
         this.loadList = this.loadList.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
+        this.selectNode = this.selectNode.bind(this);
+        this.processClick = this.processClick.bind(this);
     }
 
 
@@ -38,13 +43,52 @@ class IndividualsList extends React.Component {
     }
 
 
+    /**
+     * Select a node in list
+     * @param {*} e 
+     */
+    selectNode(target){    
+        let selectedElement = document.querySelectorAll(".clicked");
+        for(let i=0; i < selectedElement.length; i++){
+            selectedElement[i].classList.remove("clicked");
+        }
+        if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){
+            target.classList.add("clicked");
+            this.setState({
+                showNodeDetailPage: true,
+                selectedNodeIri: target.dataset.iri,          
+            });
+        
+            let currentUrlParams = new URLSearchParams();
+            currentUrlParams.append('iri', target.dataset.iri);
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+            this.props.iriChangerFunction(target.dataset.iri, this.state.componentIdentity);
+    
+        }
+        else{
+            target.classList.remove("clicked");            
+        }    
+    }
+
+
+    /**
+     * Process a click on the list container div. 
+     * @param {*} e 
+     */
+    processClick(e){
+        if (e.target.tagName === "SPAN"){ 
+            this.selectNode(e.target);
+        }       
+    }
+
+
     createIndividualList(){
         let result = [];
         let individuals = this.state.individuals;
         for (let indv of individuals){
             result.push(
                 <li className="list-node-li">
-                    <span className="tree-text-container">
+                    <span className="tree-text-container" data-iri={indv["iri"]}>
                         {indv["label"]}
                     </span>
                 </li>
@@ -74,4 +118,4 @@ class IndividualsList extends React.Component {
     }
 }
 
-export default IndividualsList;
+export default withRouter(IndividualsList);
