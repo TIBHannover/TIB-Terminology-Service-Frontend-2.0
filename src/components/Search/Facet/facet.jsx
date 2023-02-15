@@ -12,7 +12,8 @@ class Facet extends React.Component{
             collections: [],           
             ontologyListShowAll: false,
             countOfShownOntologies: 5,
-            showMoreLessOntologiesText: "+ Show More"            
+            showMoreLessOntologiesText: "+ Show More",
+            currentUrl: ""         
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -31,12 +32,13 @@ class Facet extends React.Component{
      */
    async processFacetData(){        
         let facetData = this.props.facetData;        
-      
+        let currentUrl = window.location.href;
         if (facetData.length === 0 || typeof facetData["facet_fields"] === "undefined"){
             this.setState({
                 resultLoaded: true,
                 resultTypes: {},
-                ontologyFacetData: {}
+                ontologyFacetData: {},
+                currentUrl: currentUrl
             });
         }
         else{
@@ -48,16 +50,12 @@ class Facet extends React.Component{
             console.info(allTypes)
             for(let i=0; i < allOntologies.length; i++){
                 if(i % 2 == 0){
-                    if(allOntologies[i + 1] !== 0){
-                        ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
-                    }                    
+                    ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
                 }
             }
             for(let i=0; i < allTypes.length; i++){
-                if(i % 2 == 0){
-                    if(allTypes[i + 1] !== 0){
-                        types[allTypes[i]] = allTypes[i + 1];
-                    }                    
+                if(i % 2 == 0){                    
+                    types[allTypes[i]] = allTypes[i + 1];                    
                 }
             }
             let allCollections = [];
@@ -68,7 +66,8 @@ class Facet extends React.Component{
                 resultLoaded: true,
                 resultTypes: types,
                 ontologyFacetData: ontologyFacetData,
-                collections: allCollections
+                collections: allCollections,
+                currentUrl: currentUrl
             });
         }                    
     }
@@ -288,6 +287,10 @@ class Facet extends React.Component{
             }
             delete checkbox.dataset.ischecked;
         }
+        let currentUrl = this.state.currentUrl;
+        if(currentUrl !== window.location.href){
+            this.processFacetData();
+        }       
     }
 
 
