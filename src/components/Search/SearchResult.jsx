@@ -28,7 +28,7 @@ class SearchResult extends React.Component{
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
         this.handlePagination = this.handlePagination.bind(this);
-        this.searching = this.searching.bind(this);
+        // this.searching = this.searching.bind(this);
         this.handleSelection = this.handleSelection.bind(this);                      
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
@@ -39,48 +39,49 @@ class SearchResult extends React.Component{
     /**
      * Run the search based on entered term in the search url.
      */
-    async searching(){
-      let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-      let enteredTerm = targetQueryParams.q;
-      if (enteredTerm.length > 0){
-        let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
-        let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
-        collectionOntologies.forEach(onto => {
-          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-        });
+  //   async searching(){
+  //     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+  //     let enteredTerm = targetQueryParams.q;
+  //     if (enteredTerm.length > 0){
+  //       let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
+  //       let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
+  //       collectionOntologies.forEach(onto => {
+  //         searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+  //       });
         
-        let searchResult = await fetch(searchUrl)
-        let resultJson = (await searchResult.json());              
-        searchResult =  resultJson['response']['docs'];
-        let facetFields = resultJson['facet_counts'];      
-        let totalResults = resultJson['response']['numFound'];        
-        this.setState({
-          searchResult: searchResult,
-          originalSearchResult: searchResult,
-          facetFields: facetFields,          
-          totalResults: totalResults,          
-          isLoaded: true,
-          enteredTerm: enteredTerm,
-        }, ()=>{this.processUrlProps()});  
-      }
-      else if (enteredTerm.length === 0){
-          this.setState({              
-              searchResult: [],
-              facetFields: [],
-              originalSearchResult: [],
-              isLoaded: true,
-              enteredTerm: enteredTerm,
-              collections: []
-          });  
-      }
-  }
+  //       let searchResult = await fetch(searchUrl)
+  //       let resultJson = (await searchResult.json());              
+  //       searchResult =  resultJson['response']['docs'];
+  //       let facetFields = resultJson['facet_counts'];      
+  //       let totalResults = resultJson['response']['numFound'];        
+  //       this.setState({
+  //         searchResult: searchResult,
+  //         originalSearchResult: searchResult,
+  //         facetFields: facetFields,          
+  //         totalResults: totalResults,          
+  //         isLoaded: true,
+  //         enteredTerm: enteredTerm,
+  //       }, ()=>{this.processUrlProps()});  
+  //     }
+  //     else if (enteredTerm.length === 0){
+  //         this.setState({              
+  //             searchResult: [],
+  //             facetFields: [],
+  //             originalSearchResult: [],
+  //             isLoaded: true,
+  //             enteredTerm: enteredTerm,
+  //             collections: []
+  //         });  
+  //     }
+  // }
 
 
   /**
    * Process the url to check the facet field given in it.
    */
   processUrlProps(){
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
+    let enteredTerm = targetQueryParams.q;  
     let ontologies = targetQueryParams.ontology;
     let page = targetQueryParams.page;
     let types = targetQueryParams.type;
@@ -119,7 +120,9 @@ class SearchResult extends React.Component{
       selectedOntologies: ontologies,
       selectedTypes: types,
       pageNumber: parseInt(page),
-      facetIsSelected: facetSelected
+      facetIsSelected: facetSelected,
+      isLoaded: true,
+      enteredTerm: enteredTerm
     }, () => {
       this.handleSelection(ontologies, types, collections);
     });
@@ -212,7 +215,7 @@ createSearchResultList () {
   async handleSelection(ontologies, types, collections){    
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&inclusive=true";
+    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
     let collectionOntologies = [];
     let facetSelected = true;    
     if(process.env.REACT_APP_PROJECT_ID !== "general"){          
@@ -263,14 +266,15 @@ createSearchResultList () {
         if(ontologiesForFilter.length === 0){
           // The result set has to be empty
           let allOntologies = await getAllOntologies();          
-          let facetData = createEmptyFacetCounts(allOntologies);          
+          let facetData = createEmptyFacetCounts(allOntologies);                              
           this.setState({
             searchResult: [],
             selectedOntologies: ontologies,
             selectedTypes: types,
             selectedCollections: collections,
             facetIsSelected: facetSelected,
-            totalResults: facetData
+            totalResults: 0,
+            facetFields: facetData
             }, () => {
               this.updateURL(ontologies, types, collections);
             });
@@ -382,8 +386,8 @@ createSearchResultList () {
 
   
   componentDidMount(){
-    if(!this.state.isLoaded && !this.state.isFiltered){
-      this.searching();
+    if(!this.state.isLoaded && !this.state.isFiltered){      
+      this.processUrlProps();
       let cUrl = window.location.href;        
       if(cUrl.includes("q=")){
         cUrl = cUrl.split("q=")[1];
