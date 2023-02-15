@@ -1,9 +1,9 @@
 import React from 'react'
 import queryString from 'query-string';
-import {getCollectionOntologies} from '../../api/fetchData';
+import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
-import {setResultTitleAndLabel} from './SearchHelpers';
+import {setResultTitleAndLabel, ontologyIsPartOfSelectedCollections, createEmptyFacetCounts} from './SearchHelpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 class SearchResult extends React.Component{
@@ -214,32 +214,76 @@ createSearchResultList () {
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
     let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&inclusive=true";
     let collectionOntologies = [];
-    let facetSelected = true;
-    
-    if(process.env.REACT_APP_PROJECT_ID !== "general" && ontologies.length === 0){          
+    let facetSelected = true;    
+    if(process.env.REACT_APP_PROJECT_ID !== "general"){          
       /**
-       * No ontologies selected. search only in the target project ontologies
+       * Search only in the target project ontologies (not general)
        */
-       collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
-       collectionOntologies.forEach(onto => {
-         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-         totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
+      collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
+      if(ontologies.length === 0){
+        // no ontology selected
+          collectionOntologies.forEach(onto => {
+            baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+            totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
        });
+      }
+      else{
+        ontologies.forEach(item => {
+            baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+            totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+        });
+      }
+            
     }   
     else{
-      if(collections.length !== 0){
-        collectionOntologies = await getCollectionOntologies(collections, false);        
+      // General Tib service
+      if(collections.length === 0){
+        ontologies.forEach(item => {
+            baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+            totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+        });
       }
-      collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-        totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
-      });
+      else if(ontologies.length === 0){
+        // No ontology selected. Only the collection
+        collectionOntologies = await getCollectionOntologies(collections, false);
+        collectionOntologies.forEach(onto => {
+          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+          totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
+        });
+      }
+      else{
+        // collection is selected. AND with the selected ontologies
+        let ontologiesForFilter = [];
+        collectionOntologies = await getCollectionOntologies(collections, false);
+        for(let onto of ontologies){          
+          if(ontologyIsPartOfSelectedCollections(collectionOntologies, onto)){
+            ontologiesForFilter.push(onto);
+          }
+        }
+        if(ontologiesForFilter.length === 0){
+          // The result set has to be empty
+          let allOntologies = await getAllOntologies();          
+          let facetData = createEmptyFacetCounts(allOntologies);          
+          this.setState({
+            searchResult: [],
+            selectedOntologies: ontologies,
+            selectedTypes: types,
+            selectedCollections: collections,
+            facetIsSelected: facetSelected,
+            totalResults: facetData
+            }, () => {
+              this.updateURL(ontologies, types, collections);
+            });
+            return true;
+        }
+        ontologiesForFilter.forEach(item => {
+          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+        });
+      }
     }
     
-    ontologies.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-    });
+    
     types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
         totalResultBaseUrl += `&type=${item.toLowerCase()}`;

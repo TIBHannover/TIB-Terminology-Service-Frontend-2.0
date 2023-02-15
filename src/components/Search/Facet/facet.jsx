@@ -47,6 +47,7 @@ class Facet extends React.Component{
             let allOntologies = facetData["ontology_prefix"];
             let ontologyFacetData = {};
             let types = {};
+            console.info(allTypes)
             for(let i=0; i < allOntologies.length; i++){
                 if(i % 2 == 0){
                     ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
