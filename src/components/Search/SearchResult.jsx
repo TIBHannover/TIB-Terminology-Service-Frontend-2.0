@@ -91,7 +91,7 @@ class SearchResult extends React.Component{
 
 
  /**
-   * Runs the Search and facet filtering
+   * Runs the Search and facet filtering (combination of the old searching() and handleSelection() functions)
    * @param {*} ontologies 
    * @param {*} types 
    * @param {*} collections 
