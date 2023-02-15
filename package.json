@@ -6,6 +6,7 @@
     "[module-name]": false
   },
   "dependencies": {
+    "@datapunt/matomo-tracker-react": "^0.5.1",
     "@elastic/eui": "^53.0.1",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
