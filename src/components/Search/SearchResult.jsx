@@ -212,7 +212,7 @@ createSearchResultList () {
   async handleSelection(ontologies, types, collections){    
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
+    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&inclusive=true";
     let collectionOntologies = [];
     let facetSelected = true;
     
@@ -249,19 +249,20 @@ createSearchResultList () {
       // no facet field selected
       facetSelected = false;
     }
-    
-    let targetUrl = await fetch(baseUrl);
-    let filteredSearchResults = (await targetUrl.json())['response']['docs'];
-    let totalSearch = await fetch(totalResultBaseUrl);
-    let totalSaerchResults = (await totalSearch.json())['response'];
-    // let facetFields = resultJson['facet_counts'];
+        
+    let filteredSearch = await (await fetch(baseUrl)).json();
+    let filteredSearchResults = filteredSearch['response']['docs'];    
+    let totalSearch = await (await fetch(totalResultBaseUrl)).json();
+    let totalSaerchResultsCount = totalSearch['response']['numFound'];
+    let filteredFacetFields = totalSearch['facet_counts'];    
     this.setState({
       searchResult: filteredSearchResults,
       selectedOntologies: ontologies,
       selectedTypes: types,
       selectedCollections: collections,
       facetIsSelected: facetSelected,
-      totalResults: totalSaerchResults['numFound'] 
+      totalResults: totalSaerchResultsCount,
+      facetFields: filteredFacetFields
       }, () => {
         this.updateURL(ontologies, types, collections);
       });
