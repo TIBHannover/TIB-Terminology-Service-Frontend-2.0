@@ -117,7 +117,7 @@ class Facet extends React.Component{
         let selectedOntologies = this.props.selectedOntologies;
         let result = [];
         let counter = 1;
-        for(let ontologyId in ontologyFacetData){
+        for(let ontologyId in ontologyFacetData){             
             if (counter > this.state.countOfShownOntologies && !this.state.ontologyListShowAll){
                 break;
             }
@@ -133,7 +133,7 @@ class Facet extends React.Component{
                                     id={"search-checkbox-" + ontologyId} 
                                     key={ontologyId}
                                     onClick={this.handleOntologyCheckBoxClick}
-                                    data-isChecked={selectedOntologies.includes(ontologyId)}
+                                    data-isChecked={selectedOntologies.includes(ontologyId.toUpperCase())}
                                 />                    
                                 <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
                                 {ontologyId}
@@ -147,7 +147,7 @@ class Facet extends React.Component{
                 </div>                
             );
             counter += 1;
-        }
+        }        
         return result;
     }
 
@@ -280,8 +280,8 @@ class Facet extends React.Component{
         // pre-select the facet fields if entered via url
         
         let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
-        for(let checkbox of allFacetCheckBoxes){            
-            if(checkbox.dataset.ischecked === "true"){
+        for(let checkbox of allFacetCheckBoxes){                  
+            if(checkbox.dataset.ischecked === "true"){                
                 document.getElementById(checkbox.id).checked = true;
             }
             delete checkbox.dataset.ischecked;
