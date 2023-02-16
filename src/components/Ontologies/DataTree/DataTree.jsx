@@ -13,7 +13,6 @@ import { buildHierarchicalArray,
     jumpToButton, 
     buildSkosSubtree, 
     showHidesiblingsForSkos } from './helpers';
-import { MatomoOnClick } from '../../Matomo/MatomoWrapper';
 
 
 
@@ -569,7 +568,7 @@ componentDidUpdate(){
 render(){
   return(
      <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
-        <div className="col-sm-6 tree-container" onClick={this.MatomoOnClick}>
+        <div className="col-sm-6 tree-container">
           <div class="input-group form-fixer">
              <div class="input-group-prepend">
                <div class="input-group-text">
