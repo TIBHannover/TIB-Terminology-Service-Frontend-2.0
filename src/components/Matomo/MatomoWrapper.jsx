@@ -10,10 +10,27 @@ export function MatomoWrapper(props){
         setTimeout(() => {
             // Track page view
             trackPageView();
-            console.log("test")
         }, 1000)
      }, [location.pathname]);
     return (
         props.children
     )
+}
+
+export function MatomoOnClick(props){
+    const location = useLocation();
+    const { trackPageView, trackEvent } = useMatomo();
+    trackEvent({ category: 'tree-node', action: 'click-event' })
+    console.log("test")
+    React.useEffect(() => {
+        setTimeout(() => {
+            // Track page view
+            trackPageView();
+        }, 1000)
+     }, [location.pathname]);
+    return (
+        props.children
+    )
+    
+
 }
