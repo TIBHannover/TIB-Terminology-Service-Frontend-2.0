@@ -70,11 +70,26 @@ class PrivacyPolicy extends React.Component{
             <h3>Use of Web analysis tools</h3>
 	            <p>For the creation of the web statistics we use the open source software Matomo (formerly PIWIK) in anonymized form. This means that no personal data is processed. The use of cookies in the web analysis software Matomo is deactivated.</p>
               <p>When saving the user IP address, the last two octets are not processed. The collection of the user ID is deactivated. For the analysis, the following data is collected in addition to the access to the site and the anonymized IP address: Date and time of the request, page title of the requested page, URL of the previously requested page (referrer URL), screen resolution of the client system, local time zone, URL of clicked and downloaded files, URL of clicked external domains, geolocation of the client (country, region, city), main language of the used browser, user agent of the used browser.</p>
+              <p>In this case, an opt-out cookie is placed in the browser of the data subject, which prevents Matomo from storing usage data. When the cookies are deleted, the Matomo opt-out cookie is also deleted. Such objection (opt-out) must be redeclared when visiting the TIB website again</p>
               <p><b>Matomo-Opt-out</b></p>
               <iframe
                     style={{border: 0, height: 200, width: 600}}
-                    src={"https://support.tib.eu/piwik/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=sans-serif"}>
-              </iframe>
+                    src={"https://support.tib.eu/piwik/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=sans-serif"}/>
+              
+            <h3>Collection of general data and information (logfiles)</h3>
+            <p>Whenever a data subject calls the TIB web pages, these pages automatically collect information in so-called server log files, which your browser automatically transmits to the TIB. This is:</p>
+            <ul>
+              <li>Browser type and browser version</li>
+              <li>Operating system used</li>
+              <li>Referrer URL</li>
+              <li>Hostname of the accessing computer</li>
+              <li>IP address</li>
+              <li>Internet service provider of the accessing system</li>
+              <li>Time of the server request</li>
+            </ul>
+            <p>As a general rule, this data is not attributable to a particular person. This data will not be merged with other data sources.</p>
+            <h3>Routine deletion and blocking of personal data</h3>
+            <p>The TIB processes and stores the data subject’s personal data only for the period necessary to achieve the purpose of such storage and in accordance with the General Data Protection Regulation and the country and institution-specific data protection regulations applicable to the TIB. Thereafter, the personal data will routinely be blocked or deleted in accordance with the statutory provisions.</p>
 
             </div>
           </div>
