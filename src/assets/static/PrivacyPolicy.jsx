@@ -67,8 +67,15 @@ class PrivacyPolicy extends React.Component{
             <h3>Cookies</h3>
 	            <p>The TIB websites use cookies. Cookies are text files that are placed and stored on a computer system via an Internet browser and serve to render the offer of the TIB more user-friendly, effective and secure.<br/><br/>Most of the cookies used are so-called "session cookies", which are automatically deleted at the end of the visit. Other cookies remain stored on the userʼs terminal device until they delete them. These cookies enable the TIB to recognise the userʼs browser on their next visit.<br/><br/>Users can prevent and permanently object to the setting of cookies by TIB websites at any time by choosing the corresponding settings of the Internet browser used. Furthermore, cookies already set can be deleted at any time with the Internet browser or by other software programs. This is possible in all common Internet browsers. If the data subject deactivates the setting of cookies in the Internet browser used, the TIB web pages may not function properly.</p>
               <br/>
-            <h3>Web Analytics</h3>
-	            <p>The information generated with Matomo about the use of this website is processed and stored exclusively by TIB.</p>
+            <h3>Use of Web analysis tools</h3>
+	            <p>For the creation of the web statistics we use the open source software Matomo (formerly PIWIK) in anonymized form. This means that no personal data is processed. The use of cookies in the web analysis software Matomo is deactivated.</p>
+              <p>When saving the user IP address, the last two octets are not processed. The collection of the user ID is deactivated. For the analysis, the following data is collected in addition to the access to the site and the anonymized IP address: Date and time of the request, page title of the requested page, URL of the previously requested page (referrer URL), screen resolution of the client system, local time zone, URL of clicked and downloaded files, URL of clicked external domains, geolocation of the client (country, region, city), main language of the used browser, user agent of the used browser.</p>
+              <p><b>Matomo-Opt-out</b></p>
+              <iframe
+                    style={{border: 0, height: 200, width: 600}}
+                    src={"https://support.tib.eu/piwik/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=sans-serif"}>
+              </iframe>
+
             </div>
           </div>
             
