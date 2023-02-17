@@ -365,6 +365,26 @@ p{
     border-top: 1px solid #888;
   }
 
+  .cc_container .cc_btn {
+    padding: 8px 10px;
+    background-color: #c8c8c8;
+    cursor: pointer;
+    -webkit-transition: font-size 200ms;
+    transition: font-size 200ms;
+    text-align: center;
+    font-size: 0.6em;
+    display: block;
+    width: 33%;
+    margin-left: 10px;
+    float: right;
+    max-width: 120px;
+  }
+
+  .cc_more_info{
+    color: white;
+    text-decoration: underline;
+  }
+
 
 /* 
 -------------------------------------
