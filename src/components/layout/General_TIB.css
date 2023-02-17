@@ -318,6 +318,53 @@ p{
     }
 }
 
+/* 
+------------------------
+    Cookies banner layout
+------------------------
+*/
+.cc_banner-wrapper{
+    z-index: 9001;
+    position: absolute;
+}
+
+.cc_container {
+    background: #444 !important;
+    font-family: inherit !important;
+  }
+
+.cc_container, .cc_message, .cc_btn {
+    animation-duration: 0.8s;
+    -webkit-animation-duration: 0.8s;
+    -moz-animation-duration: 0.8s;
+    -o-animation-duration: 0.8s;
+    -webkit-animation-name: slideUp;
+    animation-name: slideUp;
+  }
+
+.cc_container {
+    background: #222;
+    color: #fff;
+    font-size: 17px;
+    font-family: "Helvetica Neue Light","HelveticaNeue-Light","Helvetica Neue",Calibri,Helvetica,Arial;
+    box-sizing: border-box;
+  }
+
+  .cc_container {
+    padding: 10px 50px 10px;
+  }
+
+  .cc_container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+    border-top: 1px solid #888;
+  }
+
 
 /* 
 -------------------------------------
