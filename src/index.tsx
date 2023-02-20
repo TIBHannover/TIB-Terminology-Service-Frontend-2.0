@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react';
+import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
 
 
 // const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -29,12 +29,28 @@ const instance = createInstance({
   }
 )
 
+const instance1 = createInstance({
+  urlBase: 'https://terminology.nfdi4ing.de',
+  siteId: 34,
+  trackerUrl: "https://support.tib.eu/piwik/matomo.php",
+  srcUrl: "https://support.tib.eu/piwik/matomo.js",
+  disabled: false,
+  linkTracking: true,
+  configurations: {
+      disableCookies: true,
+      },
+
+  }
+)
+
 
 
 ReactDOM.render(
   <React.StrictMode>
     <MatomoProvider value={instance}>
+    <MatomoProvider value={instance1}>
        <App />
+    </MatomoProvider>
     </MatomoProvider>
   </React.StrictMode>,
   document.getElementById('root')

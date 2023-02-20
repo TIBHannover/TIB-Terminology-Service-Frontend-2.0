@@ -15,7 +15,7 @@ import AboutApi from '../src/assets/static/AboutApi';
 import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
-import { useMatomo } from '@jonkoops/matomo-tracker-react'
+import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 
 
 // import css file based on the target project
@@ -25,11 +25,6 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 
 
 function App() {
-  const { trackPageView, trackEvent } = useMatomo()
-  // Track page view
-  React.useEffect(() => {
-    trackPageView()
-  }, [trackPageView])
 
   // This part is for changing the faveicon based on the target project.
   let link = document.querySelector("link[rel~='icon']");
@@ -80,6 +75,7 @@ function App() {
   return (
     <div className="App">   
      <BrowserRouter>
+        <MatomoWrapper>
         <Header />
         <div className='container-fluid application-content'>
           <span id="backend-is-down-message-span"></span>
@@ -103,6 +99,7 @@ function App() {
           </Switch>
         </div>        
         <Footer />
+        </MatomoWrapper>
       </BrowserRouter>
     </div>
   );
