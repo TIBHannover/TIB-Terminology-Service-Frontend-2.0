@@ -16,6 +16,7 @@ import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
+import { CookieBanner } from './components/common/CookieBanner/CookieBanner';
 
 
 // import css file based on the target project
@@ -79,15 +80,7 @@ function App() {
         <Header />
         <div className='container-fluid application-content'>
           <span id="backend-is-down-message-span"></span>
-          <div className="cc_banner-wrapper">
-           <div className="cc_banner cc_container cc-container--open">
-             <a className="cc_btn cc_btn_accept_all" href="" data-cc-event="click:dismiss" rel="nofollow">Got it</a>
-             <p className="cc_message">
-               This website only uses technically necessary cookies.&ensp;
-               <a className="cc_more_info" data-cc-if="options.link" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"}>More info.</a>
-             </p>
-           </div>
-        </div>
+           <CookieBanner/>
           <Switch>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
