@@ -29,12 +29,28 @@ const instance = createInstance({
   }
 )
 
+const instance1 = createInstance({
+  urlBase: 'https://terminology.nfdi4ing.de',
+  siteId: 34,
+  trackerUrl: "https://support.tib.eu/piwik/matomo.php",
+  srcUrl: "https://support.tib.eu/piwik/matomo.js",
+  disabled: false,
+  linkTracking: true,
+  configurations: {
+      disableCookies: true,
+      },
+
+  }
+)
+
 
 
 ReactDOM.render(
   <React.StrictMode>
     <MatomoProvider value={instance}>
+    <MatomoProvider value={instance1}>
        <App />
+    </MatomoProvider>
     </MatomoProvider>
   </React.StrictMode>,
   document.getElementById('root')
