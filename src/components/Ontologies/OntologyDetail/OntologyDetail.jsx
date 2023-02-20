@@ -396,7 +396,8 @@ class OntologyDetail extends React.Component {
                             />
               }
               {!this.state.waiting && this.state.indvTab &&
-                            <IndividualsList                                                            
+                            <IndividualsList
+                              rootNodes={this.state.rootTerms}                                                    
                               iri={this.state.targetPropertyIri}
                               componentIdentity={'individual'}
                               key={'propertyTreePage'}
@@ -404,6 +405,7 @@ class OntologyDetail extends React.Component {
                               iriChangerFunction={this.changeInputIri}
                               lastState={this.state.propertyTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
+                              isSkos={this.state.isSkosOntology}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}

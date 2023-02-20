@@ -3,7 +3,7 @@ import {getIndividualsList} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
 import {sortIndividuals} from './helpers';
-import DataTree from "../DataTree/DataTree";
+import Tree from "../DataTree/Tree";
 
 
 class IndividualsList extends React.Component {
@@ -21,6 +21,7 @@ class IndividualsList extends React.Component {
         this.createIndividualList = this.createIndividualList.bind(this);
         this.selectNode = this.selectNode.bind(this);
         this.processClick = this.processClick.bind(this);
+        this.createIndividualTree = this.createIndividualTree.bind(this);
     }
 
 
@@ -34,14 +35,16 @@ class IndividualsList extends React.Component {
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
-                ontology: ontology
+                ontology: ontology,
+                selectedNodeIri: this.props.iri
             });
         }
         catch(error){
             this.setState({
                 isLoaded: true,
                 individuals: [],
-                ontology: ontology
+                ontology: ontology,
+                selectedNodeIri: this.props.iri
             });
         }
     }
@@ -102,12 +105,32 @@ class IndividualsList extends React.Component {
     }
 
 
+    handleNodeSelection(x, y){
+
+    }
+
+
 
     /**
      * Show an individuals in the tree view
      */
     createIndividualTree(){
-        
+        let result = [
+            <Tree 
+                rootNodes={this.props.rootNodes}
+                componentIdentity={this.props.componentIdentity}
+                iri={this.props.iri}
+                key={this.props.key}
+                ontology={this.props.ontology}
+                rootNodeNotExist={false}
+                iriChangerFunction={this.props.iriChangerFunction}
+                lastState={this.props.lastState}
+                domStateKeeper={this.props.domStateKeeper}
+                isSkos={this.props.isSkos}
+                nodeSelectionHandler={this.handleNodeSelection}
+            />
+        ];
+        return result;
     }
 
 
@@ -123,11 +146,12 @@ class IndividualsList extends React.Component {
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6 tree-container">
                     {!this.state.isLoaded && <div className="isLoading"></div>}
-                    {this.state.listView && 
+                    {/* {this.state.listView && 
                         <ul>
                             {this.createIndividualList()}
                         </ul>
-                    }
+                    } */}
+                    {this.createIndividualTree()}
                 </div>
                 {this.state.showNodeDetailPage && 
                     <div className="col-sm-6 node-table-container">

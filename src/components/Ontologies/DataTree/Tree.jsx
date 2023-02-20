@@ -64,7 +64,7 @@ class Tree extends React.Component {
     let reload = this.state.reload;
     let isSkos = this.props.isSkos;
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
-        if(componentIdentity == 'term'){         
+        if(componentIdentity === 'term'){         
             this.setState({
                 rootNodes: rootNodes,                                
                 componentIdentity: componentIdentity,
@@ -80,7 +80,7 @@ class Tree extends React.Component {
                 await this.processTree(resetFlag, viewMode, reload);
               });              
         } 
-        else if(componentIdentity == 'property'){
+        else if(componentIdentity === 'property'){
             this.setState({
               rootNodes: rootNodes,              
               componentIdentity: componentIdentity,
@@ -94,7 +94,23 @@ class Tree extends React.Component {
             }, async () => {
               await this.processTree(resetFlag, viewMode, reload);
             });    
-        }      
+        }
+        else if(componentIdentity === 'individual'){
+            this.setState({
+              rootNodes: rootNodes,              
+              componentIdentity: componentIdentity,
+              termTree: false,
+              propertyTree: false,
+              ontologyId: ontologyId,
+              childExtractName: "individuals",
+              resetTreeFlag: false,
+              reload: false,
+              noNodeExist: false
+            }, async () => {
+              await this.processTree(resetFlag, viewMode, reload);
+            });    
+        }
+
     }
     else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist){
       this.setState({
@@ -127,7 +143,7 @@ class Tree extends React.Component {
         return true;
         }
 
-        let target = this.props.iri;      
+        let target = this.props.iri;
         if (!target || resetFlag){
         // When the iri is not set. Render the root nodes 
         this.buildTree(this.state.rootNodes);       
