@@ -78,6 +78,7 @@ render(){
                 domStateKeeper={this.props.domStateKeeper}
                 isSkos={this.props.isSkos}
                 nodeSelectionHandler={this.handleTreeNodeSelection}
+                individualViewChanger={""}
               />
         </div>                 
         

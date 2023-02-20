@@ -546,6 +546,11 @@ class Tree extends React.Component {
                             : "Hide Siblings"
                             }    
                         </button>                
+                    }
+                    {this.props.isIndividual &&
+                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.props.individualViewChanger}>
+                            Show In List
+                        </button>
                     } 
                     </div>
                 </div>}

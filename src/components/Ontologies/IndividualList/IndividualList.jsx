@@ -141,6 +141,7 @@ class IndividualsList extends React.Component {
                 isSkos={this.props.isSkos}
                 nodeSelectionHandler={this.handleNodeSelection}
                 isIndividual={true}
+                individualViewChanger={this.switchView}
             />
         ];
         return result;
@@ -158,9 +159,9 @@ class IndividualsList extends React.Component {
         return(
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6">
-                    <div className="row">
+                    <div className="row  tree-container">
                         {this.state.listView && 
-                            <div className="col-sm-12 tree-container">
+                            <div className="col-sm-12">
                                 {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
                                 <div className="row">
                                     <div className="col-sm-10">
@@ -170,15 +171,15 @@ class IndividualsList extends React.Component {
                                     </div>
                                     <div className="col-sm-2">
                                         <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
-                                            Show In Tree
+                                            {this.state.listView ? "Show In Tree" : ""}
                                         </button>
-                                    </div>
+                                    </div>                                    
                                 </div>
                             </div>
-                        }
+                        }                        
                         {!this.state.listView &&
                             this.createIndividualTree()
-                        }     
+                        }                        
                     </div>                    
                 </div>                                    
                 {this.state.showNodeDetailPage && 
