@@ -25,7 +25,8 @@ class JumpTo extends React.Component{
     async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value;        
             if (enteredTerm.length > 0){
-                let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=class&rows=10`)
+                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${this.props.type}&rows=10`;
+                let jumpResult = await fetch(url)
                 jumpResult = (await jumpResult.json())['response']['docs'];
                 this.setState({
                     jumpResult: jumpResult,

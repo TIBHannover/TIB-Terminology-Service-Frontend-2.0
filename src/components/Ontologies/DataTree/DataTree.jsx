@@ -60,9 +60,11 @@ render(){
   return(    
      <div className="row tree-view-container"> 
         <div className="col-sm-6 tree-container-left-part">
-        <JumpTo
+        {this.props.componentIdentity === "term" &&
+          <JumpTo
           ontologyId={this.props.ontology}
-        />
+          type={"class"}
+        />}
         <div className='row'>
               <Tree
                 rootNodes={this.props.rootNodes}
