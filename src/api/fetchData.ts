@@ -323,7 +323,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let parentUrl = <string> "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
   parentUrl = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/parents';
-  let parentRes = await fetch(url, getCallSetting);
+  let parentRes = await fetch(parentUrl, getCallSetting);
   parentRes = await parentRes.json();
   parentRes = parentRes["_embedded"];
   let res = await fetch(url, getCallSetting);
@@ -332,8 +332,10 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   if (typeof(res) !== "undefined" && typeof(parentRes) !== "undefined"){
     let result= "";
     result += "<ul>"
-    for(let i=0; i < res["strings"].length; i++){
-      result += '<li>' + parentRes["terms"][i]["label"] + '</li>'; 
+    for(let i=0; i < parentRes["terms"].length; i++){
+      result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';     
+    }    
+    for(let i=0; i < res["strings"].length; i++){      
       result += '<li>'+ res["strings"][i]["content"] +'</li>';     
     }
     result += "<ul>"
