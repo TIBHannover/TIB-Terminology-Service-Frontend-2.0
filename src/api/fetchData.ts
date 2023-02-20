@@ -226,7 +226,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
  * @param mode 
  * @returns 
  */
- export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
+ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
   let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
   let node = <any> "";
@@ -241,6 +241,9 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
     return false;
   }
   node = await node.json();
+  if(isIndividual){
+    return node;
+  }
   node = node['_embedded'][mode][0];
   let parents = await getParents(node, mode);
   if(mode === "terms"){

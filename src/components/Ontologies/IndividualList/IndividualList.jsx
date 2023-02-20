@@ -22,6 +22,7 @@ class IndividualsList extends React.Component {
         this.selectNode = this.selectNode.bind(this);
         this.processClick = this.processClick.bind(this);
         this.createIndividualTree = this.createIndividualTree.bind(this);
+        this.switchView = this.switchView.bind(this);
     }
 
 
@@ -110,6 +111,17 @@ class IndividualsList extends React.Component {
     }
 
 
+    /**
+     * Switch the view from tree to list and vice versa
+     */
+    switchView(){
+        let listview = this.state.listView;        
+        this.setState({
+            listView: !listview
+        });
+    }
+
+
 
     /**
      * Show an individuals in the tree view
@@ -128,6 +140,7 @@ class IndividualsList extends React.Component {
                 domStateKeeper={this.props.domStateKeeper}
                 isSkos={this.props.isSkos}
                 nodeSelectionHandler={this.handleNodeSelection}
+                isIndividual={true}
             />
         ];
         return result;
@@ -144,15 +157,30 @@ class IndividualsList extends React.Component {
     render(){
         return(
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
-                <div className="col-sm-6 tree-container">
-                    {!this.state.isLoaded && <div className="isLoading"></div>}
-                    {/* {this.state.listView && 
-                        <ul>
-                            {this.createIndividualList()}
-                        </ul>
-                    } */}
-                    {this.createIndividualTree()}
-                </div>
+                <div className="col-sm-6">
+                    <div className="row">
+                        {this.state.listView && 
+                            <div className="col-sm-12 tree-container">
+                                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
+                                <div className="row">
+                                    <div className="col-sm-10">
+                                        <ul>
+                                            {this.createIndividualList()}
+                                        </ul>
+                                    </div>
+                                    <div className="col-sm-2">
+                                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
+                                            Show In Tree
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        {!this.state.listView &&
+                            this.createIndividualTree()
+                        }     
+                    </div>                    
+                </div>                                    
                 {this.state.showNodeDetailPage && 
                     <div className="col-sm-6 node-table-container">
                         <NodePage
@@ -161,6 +189,7 @@ class IndividualsList extends React.Component {
                         componentIdentity="individuals"
                         extractKey="individuals"
                         isSkos={this.state.isSkos}
+                        isIndividual={true}
                         />
                     </div>
                 }

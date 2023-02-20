@@ -91,6 +91,7 @@ render(){
               componentIdentity="term"
               extractKey="terms"
               isSkos={this.state.isSkos}
+              isIndividual={false}
             />
             </MatomoWrapper>
         </div>
@@ -103,6 +104,7 @@ render(){
               ontology={this.state.ontologyId}
               componentIdentity="property"
               extractKey="properties"
+              isIndividual={false}
           />
           </MatomoWrapper>
         </div>

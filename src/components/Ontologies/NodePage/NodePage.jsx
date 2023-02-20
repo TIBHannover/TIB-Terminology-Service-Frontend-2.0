@@ -35,7 +35,7 @@ class NodePage extends React.Component {
       node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));    
     }
     else{      
-      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
+      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);    
     }
     
     this.setState({

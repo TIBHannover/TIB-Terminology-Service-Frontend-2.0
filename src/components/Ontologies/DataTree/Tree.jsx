@@ -528,8 +528,10 @@ class Tree extends React.Component {
                     }
                                 
                     <div className='col-sm-2'>
-                    <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
-                    {this.state.reduceTreeBtnShow &&  
+                    {!this.props.isIndividual && 
+                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
+                    }
+                    {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                         {!this.state.reduceBtnActive
                                 ? "Sub Tree"
@@ -537,7 +539,7 @@ class Tree extends React.Component {
                         }
                         </button>                
                     }                
-                    {this.state.siblingsButtonShow && 
+                    {this.state.siblingsButtonShow && !this.props.isIndividual &&
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
                         {!this.state.siblingsVisible
                             ? "Show Siblings"
