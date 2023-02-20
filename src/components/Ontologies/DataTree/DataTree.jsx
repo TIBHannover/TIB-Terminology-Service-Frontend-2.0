@@ -21,11 +21,38 @@ class DataTree extends React.Component {
       isSkos: false      
     })
 
+    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
+
   }
 
 
+/**
+ * The function indicates what should happen when a tree node is selected 
+ * Or when an Iri is given in the url
+ */
+handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
+  this.setState({
+    selectedNodeIri: selectedNodeIri,
+    showNodeDetailPage: ShowDetailTable
+  });
+}
+
+
 componentDidMount(){
-  // document.addEventListener('click', this.handleClickOutside, true);
+  let termTree = "";
+  if (this.props.componentIdentity === "term"){
+    termTree = true;
+  }
+  else{
+    termTree = false
+  }
+  this.setState({
+    ontologyId: this.props.ontology,
+    componentIdentity: this.props.componentIdentity,
+    selectedNodeIri: this.props.iri,
+    termTree: termTree,
+    propertyTree: !termTree
+  });
 }
 
 
@@ -48,6 +75,7 @@ render(){
                 lastState={this.props.lastState}
                 domStateKeeper={this.props.domStateKeeper}
                 isSkos={this.props.isSkos}
+                nodeSelectionHandler={this.handleTreeNodeSelection}
               />
         </div>                 
         

@@ -140,6 +140,7 @@ class Tree extends React.Component {
             let tree = await buildSkosSubtree(this.state.ontologyId, target, viewMode);
             this.props.domStateKeeper(tree, this.state, this.props.componentIdentity);
             let fullTreeMode = this.state.reduceBtnActive;
+            this.props.nodeSelectionHandler(target, true);
             this.setState({
             targetNodeIri: target,
             treeDomContent: tree,
@@ -196,6 +197,7 @@ class Tree extends React.Component {
             let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
             this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
             let fullTreeMode = this.state.reduceBtnActive;
+            this.props.nodeSelectionHandler(target, true);
             this.setState({
             targetNodeIri: target,
             treeDomContent: treeList,
@@ -254,7 +256,8 @@ class Tree extends React.Component {
         }
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
         this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        let fullTreeMode = this.state.reduceBtnActive;              
+        let fullTreeMode = this.state.reduceBtnActive;
+        this.props.nodeSelectionHandler(target, true);             
         this.setState({
             targetNodeIri: target,       
             treeDomContent: treeList,
@@ -300,6 +303,7 @@ class Tree extends React.Component {
         }
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
         this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
+        this.props.nodeSelectionHandler("", false);
         this.setState({
         treeDomContent: treeList,
         targetNodeIri: false,
@@ -319,6 +323,7 @@ class Tree extends React.Component {
         }
         if(!target.parentNode.classList.contains("clicked")  && target.parentNode.tagName === "SPAN"){
         target.parentNode.classList.add("clicked");
+        this.props.nodeSelectionHandler(target.parentNode.parentNode.dataset.iri, true);
         this.setState({
             showNodeDetailPage: true,
             selectedNodeIri: target.parentNode.parentNode.dataset.iri,
@@ -366,6 +371,7 @@ class Tree extends React.Component {
   resetTree(){
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
+    this.props.nodeSelectionHandler("", false);
     this.setState({
       resetTreeFlag: true,
       treeDomContent: "",
