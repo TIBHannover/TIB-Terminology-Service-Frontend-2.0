@@ -3,6 +3,7 @@ import {getIndividualsList} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
 import {sortIndividuals} from './helpers';
+import DataTree from "../DataTree/DataTree";
 
 
 class IndividualsList extends React.Component {
@@ -13,7 +14,8 @@ class IndividualsList extends React.Component {
             isLoaded: false,
             ontology: "",
             showNodeDetailPage: false,
-            selectedNodeIri: ""
+            selectedNodeIri: "",
+            listView: true
         });
         this.loadList = this.loadList.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
@@ -101,6 +103,15 @@ class IndividualsList extends React.Component {
 
 
 
+    /**
+     * Show an individuals in the tree view
+     */
+    createIndividualTree(){
+        
+    }
+
+
+
     componentDidMount(){
         this.loadList();
     }
@@ -112,9 +123,11 @@ class IndividualsList extends React.Component {
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6 tree-container">
                     {!this.state.isLoaded && <div className="isLoading"></div>}
-                    <ul>
-                        {this.createIndividualList()}
-                    </ul>
+                    {this.state.listView && 
+                        <ul>
+                            {this.createIndividualList()}
+                        </ul>
+                    }
                 </div>
                 {this.state.showNodeDetailPage && 
                     <div className="col-sm-6 node-table-container">

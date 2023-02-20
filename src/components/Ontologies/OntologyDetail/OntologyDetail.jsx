@@ -377,6 +377,7 @@ class OntologyDetail extends React.Component {
                               lastState={this.state.classTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
                               isSkos={this.state.isSkosOntology}
+                              isIndividuals={false}
                             />
               }
 
@@ -391,6 +392,7 @@ class OntologyDetail extends React.Component {
                               iriChangerFunction={this.changeInputIri}
                               lastState={this.state.propertyTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
+                              isIndividuals={false}
                             />
               }
               {!this.state.waiting && this.state.indvTab &&

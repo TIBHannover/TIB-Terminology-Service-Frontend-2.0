@@ -580,7 +580,7 @@ render(){
           </div> 
         {this.state.result && 
            <div ref={this.autoRef} id = "jmp-tree-container" className="col-md-12 justify-content-md-center">
-             {this.createJumpResultList()}       
+             {this.createJumpResultList()}
            </div>}        
         {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
         {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
