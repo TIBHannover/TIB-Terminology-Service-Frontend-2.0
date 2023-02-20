@@ -3,6 +3,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
+import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import { buildHierarchicalArray,
     buildTreeListItem,
     nodeHasChildren,
@@ -613,6 +614,7 @@ render(){
         </div>
         {this.state.termTree && this.state.showNodeDetailPage && 
           <div className="col-sm-6 node-table-container">
+            <MatomoWrapper>
             <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
@@ -620,16 +622,19 @@ render(){
               extractKey="terms"
               isSkos={this.state.isSkos}
             />
+            </MatomoWrapper>
         </div>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
           <div className="col-sm-6 node-table-container">
+          <MatomoWrapper>
           <NodePage
               iri={this.state.selectedNodeIri}
               ontology={this.state.ontologyId}
               componentIdentity="property"
               extractKey="properties"
           />
+          </MatomoWrapper>
         </div>
         }
     </div>  
