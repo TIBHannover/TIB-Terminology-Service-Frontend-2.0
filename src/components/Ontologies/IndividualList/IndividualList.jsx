@@ -111,6 +111,7 @@ class IndividualsList extends React.Component {
         return(
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6 tree-container">
+                    {!this.state.isLoaded && <div className="isLoading"></div>}
                     <ul>
                         {this.createIndividualList()}
                     </ul>
