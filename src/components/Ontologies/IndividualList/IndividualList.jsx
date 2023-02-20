@@ -36,16 +36,14 @@ class IndividualsList extends React.Component {
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
-                ontology: ontology,
-                selectedNodeIri: this.props.iri
+                ontology: ontology
             });
         }
         catch(error){
             this.setState({
                 isLoaded: true,
                 individuals: [],
-                ontology: ontology,
-                selectedNodeIri: this.props.iri
+                ontology: ontology                
             });
         }
     }
@@ -64,14 +62,12 @@ class IndividualsList extends React.Component {
             target.classList.add("clicked");
             this.setState({
                 showNodeDetailPage: true,
-                selectedNodeIri: target.dataset.iri,          
+                selectedNodeIri: target.dataset.iri,
             });
-        
             let currentUrlParams = new URLSearchParams();
             currentUrlParams.append('iri', target.dataset.iri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(target.dataset.iri, this.state.componentIdentity);
-    
+            this.props.iriChangerFunction(target.dataset.iri, this.state.componentIdentity);    
         }
         else{
             target.classList.remove("clicked");            
@@ -131,7 +127,7 @@ class IndividualsList extends React.Component {
             <Tree 
                 rootNodes={this.props.rootNodes}
                 componentIdentity={this.props.componentIdentity}
-                iri={this.props.iri}
+                iri={this.state.selectedNodeIri}
                 key={this.props.key}
                 ontology={this.props.ontology}
                 rootNodeNotExist={false}
@@ -159,9 +155,9 @@ class IndividualsList extends React.Component {
         return(
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6">
-                    <div className="row  tree-container">
+                    <div className="row">
                         {this.state.listView && 
-                            <div className="col-sm-12">
+                            <div className="col-sm-12 tree-container">
                                 {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
                                 <div className="row">
                                     <div className="col-sm-10">

@@ -398,12 +398,12 @@ class OntologyDetail extends React.Component {
               {!this.state.waiting && this.state.indvTab &&
                             <IndividualsList
                               rootNodes={this.state.rootTerms}                                                    
-                              iri={this.state.targetPropertyIri}
+                              iri={this.state.targetIndividualIri}
                               componentIdentity={'individual'}
-                              key={'propertyTreePage'}
+                              key={'individualsTreePage'}
                               ontology={this.state.ontologyId}                              
                               iriChangerFunction={this.changeInputIri}
-                              lastState={this.state.propertyTreeDomLastState}
+                              lastState={""}
                               domStateKeeper={this.changeTreeContent}
                               isSkos={this.state.isSkosOntology}
                             />

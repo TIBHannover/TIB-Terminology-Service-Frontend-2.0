@@ -143,7 +143,7 @@ class Tree extends React.Component {
         return true;
         }
 
-        let target = this.props.iri;
+        let target = this.props.iri;        
         if (!target || resetFlag){
         // When the iri is not set. Render the root nodes 
         this.buildTree(this.state.rootNodes);       
