@@ -320,14 +320,20 @@ async function getEqAxiom(nodeIri:string, ontologyId:string){
  */
 export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let url = <string> "";
+  let parentUrl = <string> "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
+  parentUrl = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/parents';
+  let parentRes = await fetch(url, getCallSetting);
+  parentRes = await parentRes.json();
+  parentRes = parentRes["_embedded"];
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
-  if (typeof(res) !== "undefined"){
+  if (typeof(res) !== "undefined" && typeof(parentRes) !== "undefined"){
     let result= "";
     result += "<ul>"
-    for(let i=0; i < res["strings"].length; i++){ 
+    for(let i=0; i < res["strings"].length; i++){
+      result += '<li>' + parentRes["terms"][i]["label"] + '</li>'; 
       result += '<li>'+ res["strings"][i]["content"] +'</li>';     
     }
     result += "<ul>"
