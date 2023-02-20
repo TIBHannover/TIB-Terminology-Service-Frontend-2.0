@@ -2,6 +2,7 @@ import React from "react";
 import {getIndividualsList} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
+import {sortIndividuals} from './helpers';
 
 
 class IndividualsList extends React.Component {
@@ -30,7 +31,7 @@ class IndividualsList extends React.Component {
             let indvList = await getIndividualsList(ontology)
             this.setState({
                 isLoaded: true,
-                individuals: indvList,
+                individuals: sortIndividuals(indvList),
                 ontology: ontology
             });
         }
