@@ -108,7 +108,7 @@ export async function getOntologyRootTerms(ontologyId:string) {
  */
 export async function getIndividualsList(ontologyId:string){
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals";
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=100000";
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
