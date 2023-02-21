@@ -1,5 +1,4 @@
 import _ from "lodash";
-import React from "react";
 
 /**
  * Create the metadata for a class detail table
@@ -14,7 +13,7 @@ import React from "react";
       "Synonyms": [object.synonyms, false],
       "Equivalent to": [object.eqAxiom, false],
       "SubClass Of" : [ object.subClassOf, false],
-      "Used in axiom" : [ object, false]
+      "Relations" : [ object, false]
     }
     
     if(object.annotation){
@@ -78,7 +77,7 @@ import React from "react";
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "Used in axiom"){
+  else if (label === "Relations"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
@@ -88,7 +87,7 @@ import React from "react";
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
 
-  return transformToLink(text);
+  return text
 }
 
 /**
@@ -176,28 +175,4 @@ function createRelations(object){
     }
   }
   return relsToRender;
-}
-
-
-/**
- * Check if the tetx contains link to render is as anchor
- */
-function transformToLink(text){  
-  let splitedText = text.split("http");
-  if (splitedText.length === 1){
-    // no https inside text
-    return text;
-  }
-  else{
-    let result = [];
-    text = text.split(",");
-    for(let link of text){
-      // let label = document.createTextNode(link);
-      let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
-      result.push(anchor);
-      result.push(",  ");
-    }
-    return result;
-  }
-
 }
