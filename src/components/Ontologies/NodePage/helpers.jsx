@@ -13,7 +13,7 @@ import _ from "lodash";
       "Synonyms": [object.synonyms, false],
       "Equivalent to": [object.eqAxiom, false],
       "SubClass Of" : [ object.subClassOf, false],
-      "Relations" : [ object, false]
+      "Used in axiom" : [ object, false]
     }
     
     if(object.annotation){
@@ -77,7 +77,7 @@ import _ from "lodash";
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "Relations"){
+  else if (label === "Used in axiom"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
