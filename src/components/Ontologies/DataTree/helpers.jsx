@@ -411,3 +411,23 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
     }
     return false;
   }
+
+  /**
+   * function for generating jump to results
+   */
+  export function jumpToButton(resultItem){
+    let content = [];
+    let targetHref = "";
+    if(resultItem["type"] === 'class'){
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
+    }    
+    content.push(
+        <a href={targetHref} className="container">
+        <div className="jump-tree-item">         
+            {resultItem['label']}
+        </div>
+        </a>
+    ); 
+    
+    return content; 
+  }
