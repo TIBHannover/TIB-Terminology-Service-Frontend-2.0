@@ -15,7 +15,8 @@ class IndividualsList extends React.Component {
             ontology: "",
             showNodeDetailPage: false,
             selectedNodeIri: "",
-            listView: true
+            listView: true,
+            isRendered: false
         });
         this.loadList = this.loadList.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
@@ -23,6 +24,7 @@ class IndividualsList extends React.Component {
         this.processClick = this.processClick.bind(this);
         this.createIndividualTree = this.createIndividualTree.bind(this);
         this.switchView = this.switchView.bind(this);
+        this.selectNodeOnLoad = this.selectNodeOnLoad.bind(this);
     }
 
 
@@ -76,6 +78,22 @@ class IndividualsList extends React.Component {
 
 
     /**
+     * Select the node that is given by iri in url
+     */
+    selectNodeOnLoad(){        
+        let node = document.getElementById(this.props.iri);
+        if(node){
+            node.classList.add('clicked');
+            document.getElementById(this.props.iri).scrollIntoView();
+            this.setState({
+                isRendered: true
+            });
+        }             
+    }
+
+
+
+    /**
      * Process a click on the list container div. 
      * @param {*} e 
      */
@@ -86,13 +104,17 @@ class IndividualsList extends React.Component {
     }
 
 
+    /**
+     * Create the List view
+     * @returns 
+     */
     createIndividualList(){
         let result = [];
         let individuals = this.state.individuals;
         for (let indv of individuals){
             result.push(
                 <li className="list-node-li">
-                    <span className="tree-text-container" data-iri={indv["iri"]}>
+                    <span className="tree-text-container" data-iri={indv["iri"]} id={indv["iri"]}>
                         {indv["label"]}
                     </span>
                 </li>
@@ -113,7 +135,8 @@ class IndividualsList extends React.Component {
     switchView(){
         let listview = this.state.listView;        
         this.setState({
-            listView: !listview
+            listView: !listview,
+            isRendered: false
         });
     }
 
@@ -146,7 +169,7 @@ class IndividualsList extends React.Component {
 
 
     componentDidMount(){
-        this.loadList();
+        this.loadList();        
     }
 
     componentDidUpdate(){
@@ -157,6 +180,9 @@ class IndividualsList extends React.Component {
                 selectedNodeIri: this.props.iri
             });
         }
+        if(!this.state.isRendered){
+            this.selectNodeOnLoad();
+        }        
     }
 
 
