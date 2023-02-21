@@ -333,6 +333,9 @@ class Tree extends React.Component {
      * @param {*} e 
      */
     selectNode(target){    
+        if(this.props.isIndividual){
+            return true;
+        }
         let selectedElement = document.querySelectorAll(".clicked");
         for(let i=0; i < selectedElement.length; i++){
         selectedElement[i].classList.remove("clicked");
@@ -369,6 +372,10 @@ class Tree extends React.Component {
      * @param {*} e 
      */
     processClick(e){
+        if(this.props.isIndividual){
+            return true;
+        }
+        
         if (e.target.tagName === "SPAN"){ 
         this.selectNode(e.target);
         }

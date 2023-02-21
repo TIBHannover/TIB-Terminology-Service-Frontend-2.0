@@ -98,7 +98,17 @@ class IndividualsList extends React.Component {
      * @param {*} e 
      */
     processClick(e){
-        if (e.target.tagName === "SPAN"){ 
+        if(!this.state.listView){            
+            // select a class on the individual tree. Load the tree view for the class
+            if(e.target.parentNode.parentNode.classList.contains("opened")){                
+                let path = window.location.pathname;
+                let targetIri = encodeURIComponent(e.target.parentNode.parentNode.dataset.iri)
+                path = path.split("individuals")[0];
+                window.location.replace(path + "terms?iri=" + targetIri)
+            }
+            
+        }        
+        else if (e.target.tagName === "SPAN"){ 
             this.selectNode(e.target);
         }       
     }
