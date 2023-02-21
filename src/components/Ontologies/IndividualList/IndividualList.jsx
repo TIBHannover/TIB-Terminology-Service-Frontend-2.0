@@ -221,7 +221,7 @@ class IndividualsList extends React.Component {
                     <div className="col-sm-6 node-table-container">
                         <NodePage
                         iri={this.state.selectedNodeIri}
-                        ontology={this.state.ontology}
+                        ontology={this.props.ontology}
                         componentIdentity="individual"
                         extractKey="individuals"
                         isSkos={this.state.isSkos}

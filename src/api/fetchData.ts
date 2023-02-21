@@ -229,6 +229,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
  export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
   let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
+  console.info(baseUrl)
   let node = <any> "";
   if(mode === "individuals"){
     node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri), getCallSetting);
