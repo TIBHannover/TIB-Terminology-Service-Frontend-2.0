@@ -35,16 +35,18 @@ class NodePage extends React.Component {
       node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));    
     }
     else{      
-      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
+      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);    
     }
-    
-    this.setState({
-      prevNode: node.iri,
-      data: node,
-      iriIsCopied: false,
-      componentIdentity: componentIdentity,
-      isSkos: isSkos
-    });
+    if(node.iri){
+      this.setState({
+        prevNode: node.iri,
+        data: node,
+        iriIsCopied: false,
+        componentIdentity: componentIdentity,
+        isSkos: isSkos
+      });
+    }
+   
   }
 
 
@@ -112,8 +114,8 @@ class NodePage extends React.Component {
   }
 
 
-  componentDidUpdate(){
-    if(this.state.data && this.state.prevNode !== this.props.iri){
+  componentDidUpdate(){    
+    if(this.state.prevNode !== this.props.iri){
       this.initiateTheTableView();
     }
   }

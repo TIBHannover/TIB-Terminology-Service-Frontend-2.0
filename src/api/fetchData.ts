@@ -103,6 +103,23 @@ export async function getOntologyRootTerms(ontologyId:string) {
   
 }
 
+/**
+ * Get the list of individuals for an ontology
+ */
+export async function getIndividualsList(ontologyId:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=100000";
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  res = res["_embedded"];
+  if (!res || res["individuals"] === "undefined"){
+    return [];
+  }
+  else{
+    return res["individuals"];
+  }
+}
+
 
 /**
  * Get the SKOS ontologies root concepts
@@ -209,15 +226,29 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
  * @param mode 
  * @returns 
  */
- export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
+ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
+  if(nodeIri === "%20"){
+    // empty iri
+    return false;
+  }  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
-  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
-  let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
+  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;  
+  let node = <any> "";
+  if(mode === "individuals"){
+    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri), getCallSetting);
+  }
+  else{
+    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
+  }
+
   if (node.status === 404){
     return false;
   }
   node = await node.json();
-  node = node['_embedded'][mode][0];
+  if(isIndividual){
+    return node;
+  }
+  // node = node['_embedded'][mode][0];
   let parents = await getParents(node, mode);
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
@@ -431,6 +462,9 @@ export async function getAllCollectionsIds() {
  * @returns 
  */
 export async function getParents(node:any, mode:string) {
+  if(mode === "individuals"){
+    return [];
+  }
   if(typeof(node['_links']['hierarchicalParents']) === "undefined"){
     return [];
   }

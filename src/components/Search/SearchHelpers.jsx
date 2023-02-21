@@ -11,7 +11,7 @@ export function setResultTitleAndLabel(resultItem){
         targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);       
     }
     else if(resultItem["type"] === 'individual'){
-        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/terms?iri=' + encodeURIComponent(resultItem['iri']);
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/individuals?iri=' + encodeURIComponent(resultItem['iri']);
     }
     
     content.push(
