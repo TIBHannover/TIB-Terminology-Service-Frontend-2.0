@@ -30,13 +30,13 @@ class IndividualsList extends React.Component {
      * Loads the list of individuals
      */
     async loadList(){
-        let ontology = this.props.ontology;
+        let ontology = this.props.ontology;        
         try{            
-            let indvList = await getIndividualsList(ontology)
+            let indvList = await getIndividualsList(ontology);            
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
-                ontology: ontology
+                ontology: ontology                
             });
         }
         catch(error){
@@ -147,6 +147,16 @@ class IndividualsList extends React.Component {
 
     componentDidMount(){
         this.loadList();
+    }
+
+    componentDidUpdate(){
+        let showDetailTable = this.props.iri !== "" ? true : false;
+        if(this.props.iri !== this.state.selectedNodeIri){
+            this.setState({                
+                showNodeDetailPage: showDetailTable,
+                selectedNodeIri: this.props.iri
+            });
+        }
     }
 
 

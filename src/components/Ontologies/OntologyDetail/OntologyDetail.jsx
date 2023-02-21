@@ -71,7 +71,7 @@ class OntologyDetail extends React.Component {
     let requestedTab = this.props.match.params.tab;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
-    if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
+    if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
       this.setState({
         overViewTab: false,
         termsTab: true,
@@ -83,7 +83,7 @@ class OntologyDetail extends React.Component {
         targetTermIri: targetQueryParams.iri
       });
     }
-    else if (requestedTab != lastRequestedTab && requestedTab == 'props'){
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'props'){
       this.setState({
         overViewTab: false,
         termsTab: false,
@@ -96,7 +96,7 @@ class OntologyDetail extends React.Component {
 
       });      
     }
-    else if (requestedTab != lastRequestedTab && requestedTab == 'individuals'){
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'individuals'){
       this.setState({
         overViewTab: false,
         termsTab: false,
@@ -105,11 +105,11 @@ class OntologyDetail extends React.Component {
         activeTab: 3,
         waiting: false,
         lastRequestedTab: requestedTab,
-        targetPropertyIri: targetQueryParams.iri
+        targetIndividualIri: targetQueryParams.iri
 
       });
     }
-    else if (requestedTab != lastRequestedTab){
+    else if (requestedTab !== lastRequestedTab){
       this.setState({
         overViewTab: true,
         termsTab: false,
