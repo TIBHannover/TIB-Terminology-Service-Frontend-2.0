@@ -1,9 +1,9 @@
 import React from 'react'
 import queryString from 'query-string';
-import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
+import {getCollectionOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
-import {setResultTitleAndLabel, ontologyIsPartOfSelectedCollections, createEmptyFacetCounts} from './SearchHelpers';
+import {setResultTitleAndLabel} from './SearchHelpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 class SearchResult extends React.Component{
@@ -27,21 +27,60 @@ class SearchResult extends React.Component{
           facetIsSelected: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
-        this.handlePagination = this.handlePagination.bind(this);        
-        this.runSearch = this.runSearch.bind(this);                      
+        this.handlePagination = this.handlePagination.bind(this);
+        this.searching = this.searching.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);                      
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.processUrlProps = this.processUrlProps.bind(this);
     }
 
+    /**
+     * Run the search based on entered term in the search url.
+     */
+    async searching(){
+      let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+      let enteredTerm = targetQueryParams.q;
+      if (enteredTerm.length > 0){
+        let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
+        let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
+        collectionOntologies.forEach(onto => {
+          searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+        });
+        
+        let searchResult = await fetch(searchUrl)
+        let resultJson = (await searchResult.json());              
+        searchResult =  resultJson['response']['docs'];
+        let facetFields = resultJson['facet_counts'];      
+        let totalResults = resultJson['response']['numFound'];        
+        this.setState({
+          searchResult: searchResult,
+          originalSearchResult: searchResult,
+          facetFields: facetFields,          
+          totalResults: totalResults,          
+          isLoaded: true,
+          enteredTerm: enteredTerm,
+        }, ()=>{this.processUrlProps()});  
+      }
+      else if (enteredTerm.length === 0){
+          this.setState({              
+              searchResult: [],
+              facetFields: [],
+              originalSearchResult: [],
+              isLoaded: true,
+              enteredTerm: enteredTerm,
+              collections: []
+          });  
+      }
+  }
+
 
   /**
    * Process the url to check the facet field given in it.
    */
   processUrlProps(){
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
-    let enteredTerm = targetQueryParams.q;  
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let ontologies = targetQueryParams.ontology;
     let page = targetQueryParams.page;
     let types = targetQueryParams.type;
@@ -80,126 +119,11 @@ class SearchResult extends React.Component{
       selectedOntologies: ontologies,
       selectedTypes: types,
       pageNumber: parseInt(page),
-      facetIsSelected: facetSelected,
-      isLoaded: true,
-      enteredTerm: enteredTerm
+      facetIsSelected: facetSelected
     }, () => {
-      this.runSearch(ontologies, types, collections);
+      this.handleSelection(ontologies, types, collections);
     });
   }
-
-
-
- /**
-   * Runs the Search and facet filtering (combination of the old searching() and handleSelection() functions)
-   * @param {*} ontologies 
-   * @param {*} types 
-   * @param {*} collections 
-   */
- async runSearch(ontologies, types, collections){    
-  let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-  let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
-  let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
-  let collectionOntologies = [];
-  let facetSelected = true;    
-  if(process.env.REACT_APP_PROJECT_ID !== "general"){          
-    /**
-     * Search only in the target project ontologies (not general)
-     */
-    collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
-    if(ontologies.length === 0){
-      // no ontology selected
-        collectionOntologies.forEach(onto => {
-          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-          totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
-     });
-    }
-    else{
-      ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-          
-  }   
-  else{
-    // General Tib service
-    if(collections.length === 0){
-      ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-    else if(ontologies.length === 0){
-      // No ontology selected. Only the collection
-      collectionOntologies = await getCollectionOntologies(collections, false);
-      collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-        totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
-      });
-    }
-    else{
-      // collection is selected. AND with the selected ontologies
-      let ontologiesForFilter = [];
-      collectionOntologies = await getCollectionOntologies(collections, false);
-      for(let onto of ontologies){          
-        if(ontologyIsPartOfSelectedCollections(collectionOntologies, onto)){
-          ontologiesForFilter.push(onto);
-        }
-      }
-      if(ontologiesForFilter.length === 0){
-        // The result set has to be empty
-        let allOntologies = await getAllOntologies();          
-        let facetData = createEmptyFacetCounts(allOntologies);                              
-        this.setState({
-          searchResult: [],
-          selectedOntologies: ontologies,
-          selectedTypes: types,
-          selectedCollections: collections,
-          facetIsSelected: facetSelected,
-          totalResults: 0,
-          facetFields: facetData
-          }, () => {
-            this.updateURL(ontologies, types, collections);
-          });
-          return true;
-      }
-      ontologiesForFilter.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-  }
-  
-  
-  types.forEach(item => {
-      baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
-      totalResultBaseUrl += `&type=${item.toLowerCase()}`;
-  });
-
-  if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
-    // no facet field selected
-    facetSelected = false;
-  }
-      
-  let filteredSearch = await (await fetch(baseUrl)).json();
-  let filteredSearchResults = filteredSearch['response']['docs'];    
-  let totalSearch = await (await fetch(totalResultBaseUrl)).json();
-  let totalSaerchResultsCount = totalSearch['response']['numFound'];
-  let filteredFacetFields = totalSearch['facet_counts'];    
-  this.setState({
-    searchResult: filteredSearchResults,
-    selectedOntologies: ontologies,
-    selectedTypes: types,
-    selectedCollections: collections,
-    facetIsSelected: facetSelected,
-    totalResults: totalSaerchResultsCount,
-    facetFields: filteredFacetFields
-    }, () => {
-      this.updateURL(ontologies, types, collections);
-    });
-}
-
 
 /**
  * Handle the exact search when chosen by the user (Exact match)
@@ -278,7 +202,71 @@ createSearchResultList () {
 
    }
 
+  
+  /**
+   * Runs the facet when a filter is selected
+   * @param {*} ontologies 
+   * @param {*} types 
+   * @param {*} collections 
+   */
+  async handleSelection(ontologies, types, collections){    
+    let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
+    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
+    let collectionOntologies = [];
+    let facetSelected = true;
+    
+    if(process.env.REACT_APP_PROJECT_ID !== "general" && ontologies.length === 0){          
+      /**
+       * No ontologies selected. search only in the target project ontologies
+       */
+       collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
+       collectionOntologies.forEach(onto => {
+         baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+         totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
+       });
+    }   
+    else{
+      if(collections.length !== 0){
+        collectionOntologies = await getCollectionOntologies(collections, false);        
+      }
+      collectionOntologies.forEach(onto => {
+        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+        totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
+      });
+    }
+    
+    ontologies.forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+    });
+    types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
+    });
 
+    if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
+      // no facet field selected
+      facetSelected = false;
+    }
+    
+    let targetUrl = await fetch(baseUrl);
+    let filteredSearchResults = (await targetUrl.json())['response']['docs'];
+    let totalSearch = await fetch(totalResultBaseUrl);
+    let totalSaerchResults = (await totalSearch.json())['response'];
+    // let facetFields = resultJson['facet_counts'];
+    this.setState({
+      searchResult: filteredSearchResults,
+      selectedOntologies: ontologies,
+      selectedTypes: types,
+      selectedCollections: collections,
+      facetIsSelected: facetSelected,
+      totalResults: totalSaerchResults['numFound'] 
+      }, () => {
+        this.updateURL(ontologies, types, collections);
+      });
+     }
+  
   /**
      * Handle the click on the pagination
      * @param {*} value
@@ -349,8 +337,8 @@ createSearchResultList () {
 
   
   componentDidMount(){
-    if(!this.state.isLoaded && !this.state.isFiltered){      
-      this.processUrlProps();
+    if(!this.state.isLoaded && !this.state.isFiltered){
+      this.searching();
       let cUrl = window.location.href;        
       if(cUrl.includes("q=")){
         cUrl = cUrl.split("q=")[1];
@@ -378,7 +366,7 @@ createSearchResultList () {
               {(this.state.searchResult.length > 0 || (this.state.searchResult.length === 0 && this.state.facetIsSelected)) &&
                 <Facet
                   facetData = {this.state.facetFields}
-                  handleChange = {this.runSearch}              
+                  handleChange = {this.handleSelection}              
                   selectedCollections = {this.state.selectedCollections}
                   selectedOntologies = {this.state.selectedOntologies}
                   selectedTypes = {this.state.selectedTypes}
