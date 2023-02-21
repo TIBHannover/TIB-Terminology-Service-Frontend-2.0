@@ -129,18 +129,18 @@ class Tree extends React.Component {
    * @returns 
    */
    async processTree(resetFlag, viewMode, reload){
-        if(this.props.lastState && this.props.lastState.treeDomContent !== ""){
-        // return the last tree state. Used when a user switch tabs on the ontology page
-        let stateObj = this.props.lastState;
-        stateObj.isLoadingTheComponent = false;
-        this.setState({...stateObj});        
-        if(stateObj.selectedNodeIri !== ""){
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', stateObj.selectedNodeIri);
-            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-        }        
-        return true;
+        if(this.props.lastState && this.props.lastState.treeDomContent !== "" && !this.props.isIndividual){            
+            // return the last tree state. Used when a user switch tabs on the ontology page
+            let stateObj = this.props.lastState;
+            stateObj.isLoadingTheComponent = false;
+            this.setState({...stateObj});        
+            if(stateObj.selectedNodeIri !== ""){
+                let currentUrlParams = new URLSearchParams();
+                currentUrlParams.append('iri', stateObj.selectedNodeIri);
+                this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+                this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
+            }        
+            return true;
         }
 
         let target = this.props.iri;        

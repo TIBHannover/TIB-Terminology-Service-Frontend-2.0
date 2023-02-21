@@ -37,7 +37,7 @@ class OntologyDetail extends React.Component {
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      isSkosOntology: false
+      isSkosOntology: false      
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -96,7 +96,8 @@ class OntologyDetail extends React.Component {
 
       });      
     }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'individuals'){
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'individuals'){    
+      let lastIri = this.state.targetIndividualIri;
       this.setState({
         overViewTab: false,
         termsTab: false,
@@ -105,7 +106,7 @@ class OntologyDetail extends React.Component {
         activeTab: 3,
         waiting: false,
         lastRequestedTab: requestedTab,
-        targetIndividualIri: targetQueryParams.iri
+        targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
 
       });
     }
@@ -229,7 +230,7 @@ class OntologyDetail extends React.Component {
         propTab: false,
         indvTab: false,
         activeTab: 0,
-        waiting: false
+        waiting: false      
       })
     } 
     else if (value === "1") { // terms (classes)
@@ -252,7 +253,7 @@ class OntologyDetail extends React.Component {
         waiting: false
       })
     }
-    else{ // individuals
+    else{ // individuals      
       this.setState({
         overViewTab: false,
         termsTab: false,
@@ -279,7 +280,7 @@ class OntologyDetail extends React.Component {
         targetPropertyIri: iri
       });
     }
-    else{
+    else{            
       this.setState({
         targetIndividualIri: iri
       });
@@ -406,6 +407,7 @@ class OntologyDetail extends React.Component {
                               lastState={""}
                               domStateKeeper={this.changeTreeContent}
                               isSkos={this.state.isSkosOntology}
+                              individualTabChanged={this.state.individualTabChanged}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}

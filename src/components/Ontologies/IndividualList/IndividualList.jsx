@@ -16,7 +16,7 @@ class IndividualsList extends React.Component {
             showNodeDetailPage: false,
             selectedNodeIri: "",
             listView: true,
-            isRendered: false
+            isRendered: false     
         });
         this.loadList = this.loadList.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
@@ -170,19 +170,26 @@ class IndividualsList extends React.Component {
 
     componentDidMount(){
         this.loadList();        
+        if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
+            let currentUrlParams = new URLSearchParams();
+            currentUrlParams.append('iri', this.props.iri);
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+            this.props.iriChangerFunction(this.props.iri, this.state.componentIdentity);              
+        }
+        
     }
 
     componentDidUpdate(){
-        let showDetailTable = typeof(this.props.iri) !== "undefined"  ? true : false;
+        let showDetailTable = typeof(this.props.iri) !== "undefined" ? true : false;   
         if(this.props.iri !== this.state.selectedNodeIri){
-            this.setState({                
+            this.setState({
                 showNodeDetailPage: showDetailTable,
-                selectedNodeIri: this.props.iri
+                selectedNodeIri: this.props.iri              
             });
         }
         if(!this.state.isRendered){
             this.selectNodeOnLoad();
-        }        
+        }
     }
 
 
