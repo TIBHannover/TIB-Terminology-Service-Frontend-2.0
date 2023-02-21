@@ -14,9 +14,9 @@ class IndividualsList extends React.Component {
             isLoaded: false,
             ontology: "",
             showNodeDetailPage: false,
-            selectedNodeIri: "",
+            selectedNodeIri: " ",
             listView: true,
-            isRendered: false     
+            isRendered: false
         });
         this.loadList = this.loadList.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
@@ -130,6 +130,13 @@ class IndividualsList extends React.Component {
                 </li>
             );
         }
+        if (result.length === 0 && this.state.isLoaded){
+            result.push(
+                <div class="alert alert-success">
+                    This ontology has no individual.
+                </div>
+            );
+        }
         return result;
     }
 
@@ -218,7 +225,7 @@ class IndividualsList extends React.Component {
                                             {this.createIndividualList()}
                                         </ul>
                                     </div>
-                                    {typeof(this.props.iri) !== "undefined" &&
+                                    {typeof(this.props.iri) !== "undefined" && this.state.individuals.length !== 0 &&
                                     <div className="col-sm-2">
                                         <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
                                             {this.state.listView ? "Show In Tree" : ""}

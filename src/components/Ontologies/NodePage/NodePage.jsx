@@ -37,14 +37,16 @@ class NodePage extends React.Component {
     else{      
       node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);    
     }
-    
-    this.setState({
-      prevNode: node.iri,
-      data: node,
-      iriIsCopied: false,
-      componentIdentity: componentIdentity,
-      isSkos: isSkos
-    });
+    if(node.iri){
+      this.setState({
+        prevNode: node.iri,
+        data: node,
+        iriIsCopied: false,
+        componentIdentity: componentIdentity,
+        isSkos: isSkos
+      });
+    }
+   
   }
 
 
