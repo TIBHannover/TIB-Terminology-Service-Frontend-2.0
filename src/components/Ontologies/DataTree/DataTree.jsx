@@ -17,8 +17,7 @@ class DataTree extends React.Component {
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      ontologyId: '',  
-      isSkos: false      
+      ontologyId: '' 
     })
 
     this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
@@ -91,7 +90,7 @@ render(){
               ontology={this.state.ontologyId}
               componentIdentity="term"
               extractKey="terms"
-              isSkos={this.state.isSkos}
+              isSkos={this.props.isSkos}
               isIndividual={false}
             />
             </MatomoWrapper>

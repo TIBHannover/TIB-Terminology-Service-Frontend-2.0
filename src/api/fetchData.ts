@@ -238,7 +238,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
     node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri), getCallSetting);
   }
   else{
-    node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
+    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
   }
 
   if (node.status === 404){
@@ -248,7 +248,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
   if(isIndividual){
     return node;
   }
-  node = node['_embedded'][mode][0];
+  // node = node['_embedded'][mode][0];
   let parents = await getParents(node, mode);
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
