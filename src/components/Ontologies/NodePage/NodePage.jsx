@@ -112,8 +112,8 @@ class NodePage extends React.Component {
   }
 
 
-  componentDidUpdate(){
-    if(this.state.data && this.state.prevNode !== this.props.iri){
+  componentDidUpdate(){    
+    if(this.state.prevNode !== this.props.iri){
       this.initiateTheTableView();
     }
   }

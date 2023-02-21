@@ -299,7 +299,7 @@ class OntologyDetail extends React.Component {
     if(treeId === "term"){      
       this.setState({classTreeDomLastState: stateObject});
     }
-    else{
+    else if (treeId === "property"){
       this.setState({propertyTreeDomLastState: stateObject});
     }
   }

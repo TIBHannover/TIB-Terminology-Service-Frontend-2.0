@@ -173,7 +173,7 @@ class IndividualsList extends React.Component {
     }
 
     componentDidUpdate(){
-        let showDetailTable = this.props.iri !== "" ? true : false;
+        let showDetailTable = typeof(this.props.iri) !== "undefined"  ? true : false;
         if(this.props.iri !== this.state.selectedNodeIri){
             this.setState({                
                 showNodeDetailPage: showDetailTable,
@@ -222,7 +222,7 @@ class IndividualsList extends React.Component {
                         <NodePage
                         iri={this.state.selectedNodeIri}
                         ontology={this.state.ontology}
-                        componentIdentity="individuals"
+                        componentIdentity="individual"
                         extractKey="individuals"
                         isSkos={this.state.isSkos}
                         isIndividual={true}
