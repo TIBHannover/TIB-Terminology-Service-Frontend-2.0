@@ -8,6 +8,7 @@ import _ from "lodash";
     let metadata = {
       "Label": [object.label, false],
       "CURIE":  [object.obo_id, false],
+      "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       "fullIRI": [object.iri, true],
       "Synonyms": [object.synonyms, false],
@@ -37,7 +38,8 @@ import _ from "lodash";
  export function propertyMetaData(object){
   let metadata = {
     "Label": [object.label, false],
-    "abbreviatedIRI":  [object.short_form, false],
+    "CURIE":  [object.obo_id, false],
+    "Term ID":  [object.short_form, false],
     "Description": [object.description, false],    
     "fullIRI": [object.iri, true],
     "Ontology": [object.ontology_name, false],
