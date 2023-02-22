@@ -64,7 +64,7 @@ class Tree extends React.Component {
     let reload = this.state.reload;
     let isSkos = this.props.isSkos;
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
-        if(componentIdentity == 'term'){         
+        if(componentIdentity === 'term'){         
             this.setState({
                 rootNodes: rootNodes,                                
                 componentIdentity: componentIdentity,
@@ -80,7 +80,7 @@ class Tree extends React.Component {
                 await this.processTree(resetFlag, viewMode, reload);
               });              
         } 
-        else if(componentIdentity == 'property'){
+        else if(componentIdentity === 'property'){
             this.setState({
               rootNodes: rootNodes,              
               componentIdentity: componentIdentity,
@@ -94,7 +94,23 @@ class Tree extends React.Component {
             }, async () => {
               await this.processTree(resetFlag, viewMode, reload);
             });    
-        }      
+        }
+        else if(componentIdentity === 'individual'){
+            this.setState({
+              rootNodes: rootNodes,              
+              componentIdentity: componentIdentity,
+              termTree: false,
+              propertyTree: false,
+              ontologyId: ontologyId,
+              childExtractName: "individuals",
+              resetTreeFlag: false,
+              reload: false,
+              noNodeExist: false
+            }, async () => {
+              await this.processTree(resetFlag, viewMode, reload);
+            });    
+        }
+
     }
     else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist){
       this.setState({
@@ -113,21 +129,21 @@ class Tree extends React.Component {
    * @returns 
    */
    async processTree(resetFlag, viewMode, reload){
-        if(this.props.lastState && this.props.lastState.treeDomContent !== ""){
-        // return the last tree state. Used when a user switch tabs on the ontology page
-        let stateObj = this.props.lastState;
-        stateObj.isLoadingTheComponent = false;
-        this.setState({...stateObj});        
-        if(stateObj.selectedNodeIri !== ""){
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', stateObj.selectedNodeIri);
-            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-        }        
-        return true;
+        if(this.props.lastState && this.props.lastState.treeDomContent !== "" && !this.props.isIndividual){            
+            // return the last tree state. Used when a user switch tabs on the ontology page
+            let stateObj = this.props.lastState;
+            stateObj.isLoadingTheComponent = false;
+            this.setState({...stateObj});        
+            if(stateObj.selectedNodeIri !== ""){
+                let currentUrlParams = new URLSearchParams();
+                currentUrlParams.append('iri', stateObj.selectedNodeIri);
+                this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+                this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
+            }        
+            return true;
         }
 
-        let target = this.props.iri;      
+        let target = this.props.iri;        
         if (!target || resetFlag){
         // When the iri is not set. Render the root nodes 
         this.buildTree(this.state.rootNodes);       
@@ -317,6 +333,9 @@ class Tree extends React.Component {
      * @param {*} e 
      */
     selectNode(target){    
+        if(this.props.isIndividual){
+            return true;
+        }
         let selectedElement = document.querySelectorAll(".clicked");
         for(let i=0; i < selectedElement.length; i++){
         selectedElement[i].classList.remove("clicked");
@@ -353,6 +372,10 @@ class Tree extends React.Component {
      * @param {*} e 
      */
     processClick(e){
+        if(this.props.isIndividual){
+            return true;
+        }
+        
         if (e.target.tagName === "SPAN"){ 
         this.selectNode(e.target);
         }
@@ -512,8 +535,10 @@ class Tree extends React.Component {
                     }
                                 
                     <div className='col-sm-2'>
-                    <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
-                    {this.state.reduceTreeBtnShow &&  
+                    {!this.props.isIndividual && 
+                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
+                    }
+                    {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                         {!this.state.reduceBtnActive
                                 ? "Sub Tree"
@@ -521,13 +546,18 @@ class Tree extends React.Component {
                         }
                         </button>                
                     }                
-                    {this.state.siblingsButtonShow && 
+                    {this.state.siblingsButtonShow && !this.props.isIndividual &&
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
                         {!this.state.siblingsVisible
                             ? "Show Siblings"
                             : "Hide Siblings"
                             }    
                         </button>                
+                    }
+                    {this.props.isIndividual &&
+                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.props.individualViewChanger}>
+                            Show In List
+                        </button>
                     } 
                     </div>
                 </div>}
