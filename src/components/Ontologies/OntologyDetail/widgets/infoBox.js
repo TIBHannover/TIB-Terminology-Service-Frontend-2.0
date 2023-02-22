@@ -2,10 +2,12 @@ import { useState } from 'react';
 
 
 function formatCreators (creators) {
-  let answer = ''
+  let answer = []
+  let value = []
   for (let i = 0; i < creators.length; i++) {
-    answer += (creators[i] + ', ')
+    value.push(creators[i])
   }
+  answer = value.join(',\n')
   return answer
 }
 
