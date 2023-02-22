@@ -125,7 +125,7 @@ class IndividualsList extends React.Component {
             result.push(
                 <li className="list-node-li">
                     <span className="tree-text-container" data-iri={indv["iri"]} id={indv["iri"]}>
-                        {indv["label"]}
+                        {indv["label"] !== "" ? indv["label"] : "N/A"}
                     </span>
                 </li>
             );
