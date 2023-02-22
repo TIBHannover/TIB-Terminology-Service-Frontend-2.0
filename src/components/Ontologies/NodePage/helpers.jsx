@@ -18,7 +18,7 @@ export function classMetaData(object){
   }
   
   if(object.annotation){
-    for(let key in object.annotation){
+    for(let key in object.annotation){      
       metadata[key] = [];
       let value = [];
       for(let annot of object.annotation[key]){
@@ -36,7 +36,7 @@ export function classMetaData(object){
  * Create the metadata for a Property detail table
  * The boolean in each value indicates that the metadata is a link or not.
  */
-export function propertyMetaData(object){
+export function propertyMetaData(object){  
   let metadata = {
     "Label": [object.label, false],
     "abbreviatedIRI":  [object.short_form, false],
@@ -80,7 +80,7 @@ export function propertyMetaData(object){
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "Used in axiom"){
+  else if (label === "Relations"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
@@ -184,6 +184,9 @@ function createRelations(object){
  * Check if the tetx contains link to render is as anchor
  */
 function transformToLink(text){  
+  if(typeof(text) !== "string"){
+    return text;
+  }
   let splitedText = text.split("http");
   if (splitedText.length === 1){
     // no https inside text

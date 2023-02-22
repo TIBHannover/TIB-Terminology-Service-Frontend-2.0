@@ -89,16 +89,17 @@ class NodePage extends React.Component {
   /**
    * Create the view to render 
    */
-  createTable(){
+  createTable(){    
     let metadataToRender = "";
-    if(this.state.componentIdentity === "term"){
+    if(this.state.componentIdentity === "term" || this.state.componentIdentity === "individual"){
       metadataToRender =  classMetaData(this.state.data);
     }
     else{
       metadataToRender = propertyMetaData(this.state.data);
     }
     let result = [];
-    for(let key of Object.keys(metadataToRender)){
+    
+    for(let key of Object.keys(metadataToRender)){    
       let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
       result.push(row);
     }
