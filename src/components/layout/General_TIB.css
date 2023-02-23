@@ -372,6 +372,7 @@ p{
     -webkit-transition: font-size 200ms;
     transition: font-size 200ms;
     text-align: center;
+    color: black;
     font-size: 1em;
     display: block;
     width: 33%;
