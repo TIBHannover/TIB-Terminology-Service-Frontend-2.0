@@ -16,7 +16,7 @@ import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
-import { CookieBanner } from './components/common/CookieBanner/CookieBanner';
+import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 
 
 // import css file based on the target project
