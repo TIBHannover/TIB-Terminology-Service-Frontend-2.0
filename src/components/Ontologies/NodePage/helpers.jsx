@@ -82,7 +82,7 @@ export function propertyMetaData(object){
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "Relations"){
+  else if (label === "Used in axiom"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
