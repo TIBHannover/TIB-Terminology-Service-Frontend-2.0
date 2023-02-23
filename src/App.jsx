@@ -16,6 +16,7 @@ import About from "./components/About/About";
 import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
+import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 
 
 // import css file based on the target project
@@ -79,6 +80,7 @@ function App() {
         <Header />
         <div className='container-fluid application-content'>
           <span id="backend-is-down-message-span"></span>
+           <CookieBanner/>
           <Switch>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>

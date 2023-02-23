@@ -43,13 +43,29 @@ const instance1 = createInstance({
   }
 )
 
+const instance2 = createInstance({
+  urlBase: 'https://terminology.tib.eu',
+  siteId: 46,
+  trackerUrl: "https://support.tib.eu/piwik/matomo.php",
+  srcUrl: "https://support.tib.eu/piwik/matomo.js",
+  disabled: false,
+  linkTracking: true,
+  configurations: {
+      disableCookies: true,
+      },
+
+  }
+)
+
 
 
 ReactDOM.render(
   <React.StrictMode>
     <MatomoProvider value={instance}>
     <MatomoProvider value={instance1}>
+    <MatomoProvider value={instance2}>
        <App />
+    </MatomoProvider>
     </MatomoProvider>
     </MatomoProvider>
   </React.StrictMode>,
