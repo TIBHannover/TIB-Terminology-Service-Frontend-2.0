@@ -3,12 +3,17 @@ import React from "react"
 class CookieBanner extends React.Component{
   constructor(props){
     super(props)
-    this.state = {
+    this.state = JSON.parse(window.localStorage.getItem('state')) || {
       cookieShow: true
     }
     this.handleClick = this.handleClick.bind(this)
     this.showCookiePopup = this.showCookiePopup.bind(this)
     this.removeCookiePopup = this.removeCookiePopup.bind(this)
+  }
+
+  setState(state) {
+    window.localStorage.setItem('state', JSON.stringify(state));
+    super.setState(state);
   }
 
   handleClick() {
