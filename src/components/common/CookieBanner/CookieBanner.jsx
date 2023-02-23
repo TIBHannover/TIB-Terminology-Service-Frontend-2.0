@@ -12,9 +12,9 @@ class CookieBanner extends React.Component{
   }
 
   handleClick() {
-    this.setState(state => ({
+    this.setState({
       cookieShow: false
-    }));
+    });
   }
 
   showCookiePopup(){
