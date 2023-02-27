@@ -26,10 +26,8 @@ import React from "react";
           value.push(annot);
         }
         metadata[key] = [value.join(',\n'), false];
-      }
-      metadata[key] = [value.join(',\n'), false];
-    }
-  }
+      }    
+    }  
   return metadata;
 }
 
