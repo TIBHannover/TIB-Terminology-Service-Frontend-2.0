@@ -20,7 +20,7 @@ class SearchResult extends React.Component{
           selectedCollections: [],
           facetFields: [],
           pageNumber: 1,
-          pageSize: 5, 
+          pageSize: 10, 
           isLoaded: false,
           isFiltered: false,          
           totalResults: [],
@@ -35,6 +35,7 @@ class SearchResult extends React.Component{
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.processUrlProps = this.processUrlProps.bind(this);
+        this.alsoInResult = this.alsoInResult.bind(this);
     }
 
     /**
@@ -146,6 +147,14 @@ async handleExact(){
       isLoaded: true 
     })
   }
+}
+
+/**
+ * Displaying 'Also in' in search result items
+ */
+
+alsoInResult(){
+
 }
 
 /**
