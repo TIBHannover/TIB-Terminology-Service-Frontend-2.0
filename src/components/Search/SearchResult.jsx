@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
-import {setResultTitleAndLabel, ontologyIsPartOfSelectedCollections, createEmptyFacetCounts, setOntologyForFilter} from './SearchHelpers';
+import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 class SearchResult extends React.Component{
@@ -104,6 +104,7 @@ class SearchResult extends React.Component{
   let collectionOntologies = [];
   let facetSelected = true;
   let facetData = this.state.facetFields;
+  let ontologiesForFilter = await setOntologyForFilter(ontologies, collections);    
   if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
     // no facet field selected
     facetSelected = false;
@@ -114,26 +115,7 @@ class SearchResult extends React.Component{
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
         totalResultBaseUrl += `&type=${item.toLowerCase()}`;
     });
-
-    let ontologiesForFilter = await setOntologyForFilter(ontologies, collections);    
-    if(ontologiesForFilter.length === 0 && facetSelected){
-      // The result set has to be empty
-      let allOntologies = await getAllOntologies();          
-      let facetData = createEmptyFacetCounts(allOntologies);                              
-      this.setState({
-        searchResult: [],
-        selectedOntologies: ontologies,
-        selectedTypes: types,
-        selectedCollections: collections,
-        facetIsSelected: facetSelected,
-        totalResultsCount: 0,
-        facetFields: facetData
-        }, () => {
-          this.updateURL(ontologies, types, collections);
-        });
-        return true;
-    }
-    
+     
     ontologiesForFilter.forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
         totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
@@ -167,70 +149,24 @@ class SearchResult extends React.Component{
   let totalSearch = await (await fetch(totalResultBaseUrl)).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
   let filteredFacetFields = totalSearch['facet_counts'];
-  
-  if(triggerField === "type"){    
-    let url = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
-    if(ontologies.length === 0){
-      collectionOntologies = await getCollectionOntologies(collections, false);  
-      collectionOntologies.forEach(item => {
-          url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
+  filteredFacetFields = await setFacetCounts(triggerField, this.state.enteredTerm, filteredFacetFields, facetData, collections, types, ontologiesForFilter);  
+  if(ontologiesForFilter.length === 0 && totalSaerchResultsCount === 0){
+    // The result set has to be empty
+    let allOntologies = await getAllOntologies();          
+    let facetData = createEmptyFacetCounts(allOntologies);                              
+    this.setState({
+      searchResult: [],
+      selectedOntologies: ontologies,
+      selectedTypes: types,
+      selectedCollections: collections,
+      facetIsSelected: facetSelected,
+      totalResultsCount: 0,
+      facetFields: facetData
+      }, () => {
+        this.updateURL(ontologies, types, collections);
       });
-    }
-    else{
-      let ontologiesForFilter = [];
-      collectionOntologies = await getCollectionOntologies(collections, false);
-      for(let onto of ontologies){          
-        if(ontologyIsPartOfSelectedCollections(collectionOntologies, onto)){
-          ontologiesForFilter.push(onto);
-        }
-      }
-      // let allOntologies = await getAllOntologies();
-      ontologiesForFilter.forEach(item => {
-          url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
-      });
-    }
-    
-    types.forEach(item => {
-        url = url + `&type=${item.toLowerCase()}`;      
-    });
-    let res = await (await fetch(url)).json();
-    res = res['facet_counts'];
-    filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
-    filteredFacetFields["facet_fields"]["type"] = facetData["facet_fields"]["type"];
-
+      return true;
   }
-  if(triggerField === "ontology"){    
-    let url = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
-    ["class", "property", "individual", "ontology"].forEach(item => {
-        url = url + `&type=${item.toLowerCase()}`;      
-    });
-    ontologies.forEach(item => {
-        url = url + `&ontology=${item.toLowerCase()}`;
-    });
-    let res = await (await fetch(url)).json();
-    res = res['facet_counts'];
-    filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
-    filteredFacetFields["facet_fields"]["ontology_prefix"] = facetData["facet_fields"]["ontology_prefix"];
-
-  }
-  if(triggerField === "collection"){
-    let url = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
-    ["class", "property", "individual", "ontology"].forEach(item => {
-        url = url + `&type=${item.toLowerCase()}`;      
-    });    
-    collectionOntologies = await getCollectionOntologies(collections, false);
-    console.info(collectionOntologies)
-    collectionOntologies.forEach(item => {
-        url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
-    });
-    let res = await (await fetch(url)).json();
-    res = res['facet_counts'];
-    filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
-    filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
-  } 
-
-
-
   this.setState({
     searchResult: filteredSearchResults,
     selectedOntologies: ontologies,

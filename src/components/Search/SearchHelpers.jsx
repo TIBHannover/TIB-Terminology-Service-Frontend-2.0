@@ -1,4 +1,4 @@
-import {getCollectionOntologies} from '../../api/fetchData';
+import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
 
 
 export function setResultTitleAndLabel(resultItem){
@@ -63,6 +63,92 @@ export async function setOntologyForFilter(selectedOntologies, selectedCollectio
     }        
 }
 
+
+
+/**
+ * Set the counter for the fields in facet
+ * @param {*} triggerField: which facet field is triggered
+ * @param {*} enteredTerm : search term
+ * @param {*} filteredFacetFields : the facet fields json
+ * @param {*} lastFacetState : last facet field json
+ * @param {*} collections : selected collections
+ * @param {*} types : selected types
+ * @param {*} ontologiesForFilter : selected ontologies
+ * @returns 
+ */
+export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFields, lastFacetState, collections, types, ontologiesForFilter){
+    if(triggerField === "type"){    
+        let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
+        let allOntologies = [];
+        if(process.env.REACT_APP_PROJECT_ID === "general"){
+          if(collections.length === 0){
+            let all = await getAllOntologies();
+            for(let onto of all){
+                allOntologies.push(onto['ontologyId'])
+            }
+          }
+          else{
+            let collectionOntologies = await getCollectionOntologies(collections, false);            
+            for(let onto of collectionOntologies){
+              allOntologies.push(onto['ontologyId']);
+            }
+          }
+        }        
+        allOntologies.forEach(item => {
+            url = url + `&ontology=${item.toLowerCase()}`;
+        });       
+        types.forEach(item => {
+            url = url + `&type=${item.toLowerCase()}`;      
+        });
+        let res = await (await fetch(url)).json();
+        res = res['facet_counts'];
+        filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
+        filteredFacetFields["facet_fields"]["type"] = lastFacetState["facet_fields"]["type"];
+        return filteredFacetFields;
+    
+      }
+      else if(triggerField === "ontology"){    
+        let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
+        ["class", "property", "individual", "ontology"].forEach(item => {
+            url = url + `&type=${item.toLowerCase()}`;
+        });
+        ontologiesForFilter.forEach(item => {
+            url = url + `&ontology=${item.toLowerCase()}`;
+        });
+        let res = await (await fetch(url)).json();
+        res = res['facet_counts'];
+        filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
+        filteredFacetFields["facet_fields"]["ontology_prefix"] = lastFacetState["facet_fields"]["ontology_prefix"];
+        return filteredFacetFields;
+    
+      }
+      else if(triggerField === "collection"){
+        let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
+        ["class", "property", "individual", "ontology"].forEach(item => {
+            url = url + `&type=${item.toLowerCase()}`;      
+        });
+        ontologiesForFilter.forEach(item => {
+            url = url + `&ontology=${item.toLowerCase()}`;
+        });
+        let res = await (await fetch(url)).json();
+        res = res['facet_counts'];
+        filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
+
+
+        url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
+        types.forEach(item => {
+            url = url + `&type=${item.toLowerCase()}`;      
+        });
+        ontologiesForFilter.forEach(item => {
+            url = url + `&ontology=${item.toLowerCase()}`;
+        });
+        res = await (await fetch(url)).json();
+        res = res['facet_counts'];
+        filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
+        return filteredFacetFields;
+      }
+      return filteredFacetFields;      
+}
 
 
 
