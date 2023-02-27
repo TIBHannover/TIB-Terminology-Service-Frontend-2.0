@@ -24,6 +24,7 @@ class SearchResult extends React.Component{
           isLoaded: false,
           isFiltered: false,          
           totalResults: [],
+          expandedResults: [],
           facetIsSelected: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
@@ -43,7 +44,7 @@ class SearchResult extends React.Component{
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
       let enteredTerm = targetQueryParams.q;
       if (enteredTerm.length > 0){
-        let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&rows=" + this.state.pageSize;
+        let searchUrl = process.env.REACT_APP_SEARCH_URL + "?q=" + enteredTerm + "&groupField=iri" + "&rows=" + this.state.pageSize;
         let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);          
         collectionOntologies.forEach(onto => {
           searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
@@ -52,6 +53,7 @@ class SearchResult extends React.Component{
         let searchResult = await fetch(searchUrl)
         let resultJson = (await searchResult.json());              
         searchResult =  resultJson['response']['docs'];
+        let expandedResults = resultJson['expanded'];
         let facetFields = resultJson['facet_counts'];      
         let totalResults = resultJson['response']['numFound'];        
         this.setState({
@@ -61,6 +63,7 @@ class SearchResult extends React.Component{
           totalResults: totalResults,          
           isLoaded: true,
           enteredTerm: enteredTerm,
+          expandedResults: expandedResults
         }, ()=>{this.processUrlProps()});  
       }
       else if (enteredTerm.length === 0){
