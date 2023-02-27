@@ -23,7 +23,7 @@ class SearchResult extends React.Component{
           pageSize: 5, 
           isLoaded: false,
           isFiltered: false,          
-          totalResults: [],
+          totalResultsCount: [],
           facetIsSelected: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
@@ -95,35 +95,22 @@ class SearchResult extends React.Component{
    * @param {*} ontologies 
    * @param {*} types 
    * @param {*} collections 
+   * @param {*} triggerField : which facet fields triggers the function. Values: type, ontology, collection
    */
- async runSearch(ontologies, types, collections){    
+ async runSearch(ontologies, types, collections, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
   let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
   let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
   let collectionOntologies = [];
-  let facetSelected = true;    
-  if(process.env.REACT_APP_PROJECT_ID !== "general"){          
-    /**
-     * Search only in the target project ontologies (not general)
-     */
-    collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
-    if(ontologies.length === 0){
-      // no ontology selected
-        collectionOntologies.forEach(onto => {
-          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-          totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
-     });
-    }
-    else{
-      ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-          
-  }   
-  else{
-    // General Tib service
+  let facetSelected = true;
+  let facetData = this.state.facetFields;
+  if(process.env.REACT_APP_PROJECT_ID === "general"){
+    // TIB general
+    types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
+    });
+     
     if(collections.length === 0){
       ontologies.forEach(item => {
           baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
@@ -157,7 +144,7 @@ class SearchResult extends React.Component{
           selectedTypes: types,
           selectedCollections: collections,
           facetIsSelected: facetSelected,
-          totalResults: 0,
+          totalResultsCount: 0,
           facetFields: facetData
           }, () => {
             this.updateURL(ontologies, types, collections);
@@ -169,13 +156,32 @@ class SearchResult extends React.Component{
         totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
       });
     }
+
+
+  }
+  else{    
+    /**
+     * NFDIs
+     * Search only in the target project ontologies (not general)
+     */
+    collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
+    if(ontologies.length === 0){
+      // no ontology selected
+        collectionOntologies.forEach(onto => {
+          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
+          totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
+     });
+    }
+    else{
+      ontologies.forEach(item => {
+          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+      });
+    }
+
   }
   
-  
-  types.forEach(item => {
-      baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
-      totalResultBaseUrl += `&type=${item.toLowerCase()}`;
-  });
+
 
   if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
     // no facet field selected
@@ -186,14 +192,50 @@ class SearchResult extends React.Component{
   let filteredSearchResults = filteredSearch['response']['docs'];    
   let totalSearch = await (await fetch(totalResultBaseUrl)).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
-  let filteredFacetFields = totalSearch['facet_counts'];    
+  let filteredFacetFields = totalSearch['facet_counts'];
+  
+  if(triggerField === "type"){    
+    let url = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
+    let allOntologies = await getAllOntologies();    
+    allOntologies.forEach(item => {
+        url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
+    });
+    types.forEach(item => {
+        url = url + `&type=${item.toLowerCase()}`;      
+    });
+    let res = await (await fetch(url)).json();
+    res = res['facet_counts'];
+    filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
+    filteredFacetFields["facet_fields"]["type"] = facetData["facet_fields"]["type"];
+
+  }
+  if(triggerField === "ontology"){    
+    let url = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
+    ["class", "property", "individual", "ontology"].forEach(item => {
+        url = url + `&type=${item.toLowerCase()}`;      
+    });
+    ontologies.forEach(item => {
+        url = url + `&ontology=${item.toLowerCase()}`;
+    });
+    let res = await (await fetch(url)).json();
+    res = res['facet_counts'];
+    filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
+    filteredFacetFields["facet_fields"]["ontology_prefix"] = facetData["facet_fields"]["ontology_prefix"];
+
+  }
+  // if(triggerField === "collection"){
+  //   filteredFacetFields["facet_fields"]["type"] = facetData["facet_fields"]["type"];
+  // } 
+
+
+
   this.setState({
     searchResult: filteredSearchResults,
     selectedOntologies: ontologies,
     selectedTypes: types,
     selectedCollections: collections,
     facetIsSelected: facetSelected,
-    totalResults: totalSaerchResultsCount,
+    totalResultsCount: totalSaerchResultsCount,
     facetFields: filteredFacetFields
     }, () => {
       this.updateURL(ontologies, types, collections);
@@ -300,10 +342,10 @@ createSearchResultList () {
      * @returns
      */
   pageCount () {    
-    if (isNaN(Math.ceil(this.state.totalResults / this.state.pageSize))){
+    if (isNaN(Math.ceil(this.state.totalResultsCount / this.state.pageSize))){
       return 0;
     }
-    return (Math.ceil(this.state.totalResults / this.state.pageSize))
+    return (Math.ceil(this.state.totalResultsCount / this.state.pageSize))
   }
 
 
@@ -386,7 +428,7 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResults + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}              
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}              
               {this.state.searchResult.length > 0 && this.createSearchResultList()} 
               {this.state.searchResult.length > 0 && 
                 <Pagination 

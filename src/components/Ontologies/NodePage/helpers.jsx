@@ -15,7 +15,7 @@ import React from "react";
       "Synonyms": [object.synonyms, false],
       "Equivalent to": [object.eqAxiom, false],
       "SubClass Of" : [ object.subClassOf, false],
-      "Relations" : [ object, false]
+      "Used in axiom" : [ object, false]
     }
     
     if(object.annotation){
@@ -80,7 +80,7 @@ import React from "react";
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "Relations"){
+  else if (label === "Used in axiom"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
@@ -185,6 +185,10 @@ function createRelations(object){
  * Check if the tetx contains link to render is as anchor
  */
 function transformToLink(text){  
+  if(typeof(text) !== "string"){
+    return text;
+  }
+
   let splitedText = text.split("http");
   if (splitedText.length === 1){
     // no https inside text

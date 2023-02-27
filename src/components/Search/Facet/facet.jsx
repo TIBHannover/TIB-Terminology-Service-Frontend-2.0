@@ -81,29 +81,31 @@ class Facet extends React.Component{
         let selectedTypes = this.props.selectedTypes;
         let result = [];
         for(let type in allTypes){
-            result.push(
-                <div class="row typeRow facet-item-row"  key={type}>
-                    <div class="col-sm-9">
-                        <div class="form-check">
-                            <input 
-                                class="form-check-input search-facet-checkbox"
-                                type="checkbox" 
-                                value={type}
-                                id={"search-checkbox-" + type} 
-                                key={type}
-                                onClick={this.handleTypesCheckBoxClick}
-                                data-isChecked={selectedTypes.includes(type)}
-                            />                    
-                            <label class="form-check-label" for={"search-checkbox-" + type} >
-                            {type}
-                            </label>
-                        </div>         
+            if(allTypes[type] !== 0){
+                result.push(
+                    <div class="row typeRow facet-item-row"  key={type}>
+                        <div class="col-sm-9">
+                            <div class="form-check">
+                                <input 
+                                    class="form-check-input search-facet-checkbox"
+                                    type="checkbox" 
+                                    value={type}
+                                    id={"search-checkbox-" + type} 
+                                    key={type}
+                                    onClick={this.handleTypesCheckBoxClick}
+                                    data-isChecked={selectedTypes.includes(type)}
+                                />                    
+                                <label class="form-check-label" for={"search-checkbox-" + type} >
+                                {type}
+                                </label>
+                            </div>         
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="facet-result-count">{allTypes[type]}</div>
+                        </div>                    
                     </div>
-                    <div class="col-sm-3">
-                        <div class="facet-result-count">{allTypes[type]}</div>
-                    </div>                    
-                </div>
-            );
+                );
+            }            
         }
         return result;
     }
@@ -121,31 +123,33 @@ class Facet extends React.Component{
             if (counter > this.state.countOfShownOntologies && !this.state.ontologyListShowAll){
                 break;
             }
-            result.push(
-                <div key={ontologyId}>
-                    <div class="row ontoloyRow facet-item-row">
-                        <div class="col-sm-9">
-                            <div class="form-check">
-                                <input 
-                                    class="form-check-input search-facet-checkbox"
-                                    type="checkbox" 
-                                    value={ontologyId}
-                                    id={"search-checkbox-" + ontologyId} 
-                                    key={ontologyId}
-                                    onClick={this.handleOntologyCheckBoxClick}
-                                    data-isChecked={selectedOntologies.includes(ontologyId.toUpperCase())}
-                                />                    
-                                <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
-                                {ontologyId}
-                                </label>
-                            </div>                                
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="facet-result-count">{ontologyFacetData[ontologyId]}</div>
+            if(ontologyFacetData[ontologyId] !== 0){
+                result.push(
+                    <div key={ontologyId}>
+                        <div class="row ontoloyRow facet-item-row">
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input 
+                                        class="form-check-input search-facet-checkbox"
+                                        type="checkbox" 
+                                        value={ontologyId}
+                                        id={"search-checkbox-" + ontologyId} 
+                                        key={ontologyId}
+                                        onClick={this.handleOntologyCheckBoxClick}
+                                        data-isChecked={selectedOntologies.includes(ontologyId.toUpperCase())}
+                                    />                    
+                                    <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
+                                    {ontologyId}
+                                    </label>
+                                </div>                                
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="facet-result-count">{ontologyFacetData[ontologyId]}</div>
+                            </div>                    
                         </div>                    
-                    </div>                    
-                </div>                
-            );
+                    </div>                
+                );
+            }            
             counter += 1;
         }        
         return result;
@@ -198,7 +202,7 @@ class Facet extends React.Component{
             let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
             selectedOntologies.splice(index, 1);            
         }        
-        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections);                
+        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections, "ontology");                
     }
 
 
@@ -214,7 +218,7 @@ class Facet extends React.Component{
             let index = selectedTypes.indexOf(e.target.value);
             selectedTypes.splice(index, 1);            
         }
-        this.props.handleChange(this.props.selectedOntologies, selectedTypes, this.props.selectedCollections);      
+        this.props.handleChange(this.props.selectedOntologies, selectedTypes, this.props.selectedCollections, "type");      
     }
 
 
@@ -230,7 +234,7 @@ class Facet extends React.Component{
             let index = selectedCollections.indexOf(e.target.value.trim());
             selectedCollections.splice(index, 1);            
         }
-        this.props.handleChange(this.props.selectedOntologies, this.props.selectedTypes, selectedCollections);
+        this.props.handleChange(this.props.selectedOntologies, this.props.selectedTypes, selectedCollections, "collection");
     }
 
 
