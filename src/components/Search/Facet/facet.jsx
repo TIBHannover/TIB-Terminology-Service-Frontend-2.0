@@ -242,7 +242,7 @@ class Facet extends React.Component{
      * Handle the show more button in the ontology facet list
      * @param {*} e 
      */
-    handleOntologyShowMoreClick(e){
+    handleOntologyShowMoreClick(e){                        
         if(this.state.ontologyListShowAll){
             this.setState({
                 showMoreLessOntologiesText: "+ Show More",
@@ -254,7 +254,8 @@ class Facet extends React.Component{
                 showMoreLessOntologiesText: "- Show Less",
                 ontologyListShowAll: true
             });
-        }       
+        }
+
     }
 
 
@@ -316,9 +317,11 @@ class Facet extends React.Component{
                     <h4>{"Ontologies"}</h4>
                     <div class="facet-box">                            
                         {this.createOntologiesCheckboxList()}
-                        <div className="text-center">
-                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                        </div>
+                        {true && 
+                            <div className="text-center">
+                                    <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                            </div>
+                        }
                     </div>
                     {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
                     <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">

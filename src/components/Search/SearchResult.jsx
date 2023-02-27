@@ -84,7 +84,7 @@ class SearchResult extends React.Component{
       isLoaded: true,
       enteredTerm: enteredTerm
     }, () => {
-      this.runSearch(ontologies, types, collections);
+      this.runSearch(ontologies, types, collections, "");
     });
   }
 
