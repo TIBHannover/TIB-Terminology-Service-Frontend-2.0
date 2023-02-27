@@ -366,6 +366,16 @@ p{
     color:#dd6e42;
 }
 
+.skeleton-loading-box{
+    /* 
+        Style for the skeleton loading boxes
+    */
+
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;    
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 

@@ -28,7 +28,12 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 
 
 function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
-  return [<span style={{ marginRight: '0.5rem' }}>{children}</span>];
+  return [
+    <div className='row'>
+      <div className='col-sm-6 skeleton-loading-box'>{children}</div>
+      <div className='col-sm-6 skeleton-loading-box'>{children}</div>
+    </div>    
+  ];
 }
 
 
@@ -94,11 +99,13 @@ function App() {
           <Header />               
           {loading ? (
             <Skeleton
-                count={10}
+                count={2}
                 wrapper={InlineWrapperWithMargin}
                 inline
-                width={90}
+                width={600}
+                height={200}
                 marginLeft={20}
+                baseColor={'#f4f2f2'}
             />
           ):(
             <span>
