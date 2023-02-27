@@ -5,24 +5,27 @@ import React from "react";
  * Create the metadata for a class detail table
  * The boolean in each value indicates that the metadata is a link or not.
  */
-export function classMetaData(object){
-  let metadata = {
-    "Label": [object.label, false],
-    "CURIE":  [object.obo_id, false],
-    "Description": [object.description  ? object.description[0] : "", false],
-    "fullIRI": [object.iri, true],
-    "Synonyms": [object.synonyms, false],
-    "Equivalent to": [object.eqAxiom, false],
-    "SubClass Of" : [ object.subClassOf, false],
-    "Relations" : [ object, false]
-  }
-  
-  if(object.annotation){
-    for(let key in object.annotation){      
-      metadata[key] = [];
-      let value = [];
-      for(let annot of object.annotation[key]){
-        value.push(annot);
+ export function classMetaData(object){
+    let metadata = {
+      "Label": [object.label, false],
+      "CURIE":  [object.obo_id, false],
+      "Term ID":  [object.short_form, false],
+      "Description": [object.description  ? object.description[0] : "", false],
+      "fullIRI": [object.iri, true],
+      "Synonyms": [object.synonyms, false],
+      "Equivalent to": [object.eqAxiom, false],
+      "SubClass Of" : [ object.subClassOf, false],
+      "Used in axiom" : [ object, false]
+    }
+    
+    if(object.annotation){
+      for(let key in object.annotation){
+        metadata[key] = [];
+        let value = [];
+        for(let annot of object.annotation[key]){
+          value.push(annot);
+        }
+        metadata[key] = [value.join(',\n'), false];
       }
       metadata[key] = [value.join(',\n'), false];
     }
@@ -39,7 +42,8 @@ export function classMetaData(object){
 export function propertyMetaData(object){  
   let metadata = {
     "Label": [object.label, false],
-    "abbreviatedIRI":  [object.short_form, false],
+    "CURIE":  [object.obo_id, false],
+    "Term ID":  [object.short_form, false],
     "Description": [object.description, false],    
     "fullIRI": [object.iri, true],
     "Ontology": [object.ontology_name, false],
