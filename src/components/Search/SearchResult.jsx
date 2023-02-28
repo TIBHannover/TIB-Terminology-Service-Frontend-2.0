@@ -153,26 +153,19 @@ async handleExact(){
  * Displaying 'Also in' in search result items
  */
 
-alsoInResult(object){
+alsoInResult(){
+  let searchResultItem = this.state.searchResult;
   let expanded = this.state.expandedResults
+  let resultList = [];
+  let otherOntologies = [];
   if(expanded !== undefined){
-    if(expanded[object.iri] !== undefined){
-       <div>
-        <b>Also in:</b>
-       </div>
-       let otherOntologies = [];
-       for(let i=0; i < expanded[object.iri]['docs'].length; i++){
-          otherOntologies.push(
-            <div>
-              <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
-                {expanded[object.iri]['docs'][i].ontology_prefix}
-              </a>
-            </div>
-          )
+    for(let i = 0; i < searchResultItem.length; i++){
+       if(resultList.includes(Object.keys(expanded))){
+        
        }
-       return otherOntologies;
     }
   }
+  return otherOntologies;
 
 }
 
