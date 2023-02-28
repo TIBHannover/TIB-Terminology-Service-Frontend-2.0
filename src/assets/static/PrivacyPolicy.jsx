@@ -64,7 +64,7 @@ class PrivacyPolicy extends React.Component{
                 </p><br/>
                 <p>Any data subject may contact our data protection officer directly regarding any and all questions and suggestions regarding data protection at any time.<br /></p>
                 <br/>
-            <h3>Cookies</h3>
+            <h3 id="cookies">Cookies</h3>
 	            <p>The TIB websites use cookies. Cookies are text files that are placed and stored on a computer system via an Internet browser and serve to render the offer of the TIB more user-friendly, effective and secure.<br/><br/>Most of the cookies used are so-called "session cookies", which are automatically deleted at the end of the visit. Other cookies remain stored on the userʼs terminal device until they delete them. These cookies enable the TIB to recognise the userʼs browser on their next visit.<br/><br/>Users can prevent and permanently object to the setting of cookies by TIB websites at any time by choosing the corresponding settings of the Internet browser used. Furthermore, cookies already set can be deleted at any time with the Internet browser or by other software programs. This is possible in all common Internet browsers. If the data subject deactivates the setting of cookies in the Internet browser used, the TIB web pages may not function properly.</p>
               <br/>
             <h3>Use of Web analysis tools</h3>
