@@ -80,20 +80,18 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
     if(triggerField === "type" || triggerField === ""){    
         let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
         let allOntologies = [];
-        if(process.env.REACT_APP_PROJECT_ID === "general"){
-          if(collections.length === 0){
+        if(collections.length === 0){
             let all = await getAllOntologies();
             for(let onto of all){
                 allOntologies.push(onto['ontologyId'])
             }
-          }
-          else{
+        }
+        else{
             let collectionOntologies = await getCollectionOntologies(collections, false);            
             for(let onto of collectionOntologies){
-              allOntologies.push(onto['ontologyId']);
+                allOntologies.push(onto['ontologyId']);
             }
-          }
-        }        
+        }      
         allOntologies.forEach(item => {
             url = url + `&ontology=${item.toLowerCase()}`;
         });       
@@ -142,7 +140,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         return filteredFacetFields;
     
       }
-      if(triggerField === "collection" || triggerField === ""){        
+      if((triggerField === "collection" || triggerField === "") && process.env.REACT_APP_PROJECT_ID === "general"){        
         let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
         ["class", "property", "individual", "ontology"].forEach(item => {
             url = url + `&type=${item.toLowerCase()}`;      
