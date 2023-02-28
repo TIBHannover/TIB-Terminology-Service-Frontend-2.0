@@ -104,30 +104,31 @@ class SearchResult extends React.Component{
   let collectionOntologies = [];
   let facetSelected = true;
   let facetData = this.state.facetFields;
-  let ontologiesForFilter = await setOntologyForFilter(ontologies, collections);
-  if(ontologiesForFilter[0].length === 0 && ontologiesForFilter[1] !== "all"){
-    // The result set has to be empty
-    let allOntologies = await getAllOntologies();          
-    let facetData = createEmptyFacetCounts(allOntologies);                              
-    this.setState({
-      searchResult: [],
-      selectedOntologies: ontologies,
-      selectedTypes: types,
-      selectedCollections: collections,
-      facetIsSelected: facetSelected,
-      totalResultsCount: 0,
-      facetFields: facetData
-      }, () => {
-        this.updateURL(ontologies, types, collections);
-      });
-      return true;
-  }
+  let ontologiesForFilter = [];
   if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
     // no facet field selected
     facetSelected = false;
   }
   if(process.env.REACT_APP_PROJECT_ID === "general"){
-    // TIB general
+     // TIB general
+    ontologiesForFilter = await setOntologyForFilter(ontologies, collections);
+    if(ontologiesForFilter[0].length === 0 && ontologiesForFilter[1] !== "all"){
+      // The result set has to be empty
+      let allOntologies = await getAllOntologies();          
+      let facetData = createEmptyFacetCounts(allOntologies);                              
+      this.setState({
+        searchResult: [],
+        selectedOntologies: ontologies,
+        selectedTypes: types,
+        selectedCollections: collections,
+        facetIsSelected: facetSelected,
+        totalResultsCount: 0,
+        facetFields: facetData
+        }, () => {
+          this.updateURL(ontologies, types, collections);
+        });
+        return true;
+    }   
     types.forEach(item => {
         baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
         totalResultBaseUrl += `&type=${item.toLowerCase()}`;
@@ -143,22 +144,18 @@ class SearchResult extends React.Component{
     /**
      * NFDIs
      * Search only in the target project ontologies (not general)
-     */
-    collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
-    if(ontologies.length === 0){
-      // no ontology selected
-        collectionOntologies.forEach(onto => {
-          baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-          totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
-     });
-    }
-    else{
-      ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-
+     */    
+    ontologiesForFilter = await setOntologyForFilter(ontologies, [process.env.REACT_APP_PROJECT_NAME]);    
+    collections = [process.env.REACT_APP_PROJECT_NAME];
+    types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
+    });
+    
+    ontologiesForFilter[0].forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+    });
   }
       
   let filteredSearch = await (await fetch(baseUrl)).json();
