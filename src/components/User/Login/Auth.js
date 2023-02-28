@@ -9,6 +9,7 @@ export function auth(){
         fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/login', {method: "POST", body: data})
             .then((resp) => resp.json())
             .then((resp) => {
+                console.info(resp["data"])
                 if(resp["data"]){
                     localStorage.setItem("name", resp["data"]["name"]);
                     localStorage.setItem("company", resp["data"]["company"]);
