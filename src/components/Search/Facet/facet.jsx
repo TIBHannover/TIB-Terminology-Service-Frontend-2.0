@@ -130,7 +130,7 @@ class Facet extends React.Component{
                             <div class="col-sm-9">
                                 <div class="form-check">
                                     <input 
-                                        class="form-check-input search-facet-checkbox"
+                                        class="form-check-input search-facet-checkbox ontology-facet-checkbox"
                                         type="checkbox" 
                                         value={ontologyId}
                                         id={"search-checkbox-" + ontologyId} 
@@ -294,7 +294,23 @@ class Facet extends React.Component{
         let currentUrl = this.state.currentUrl;
         if(currentUrl !== window.location.href){
             this.processFacetData();
-        }       
+        }
+        
+        // check show more button for ontologies is needed or not
+        let counter = 0;
+        let facetOntologies = this.state.ontologyFacetData;
+        for(let key in facetOntologies){
+            if(facetOntologies[key] !== 0){
+                counter ++;
+            }            
+        }
+        console.info(counter)
+        if(counter <= this.state.countOfShownOntologies){
+            document.getElementById('search-facet-show-more-ontology-btn').style.display = 'none';
+        }
+        else{
+            document.getElementById('search-facet-show-more-ontology-btn').style.display = '';
+        }
     }
 
 
@@ -316,12 +332,10 @@ class Facet extends React.Component{
                     </div>
                     <h4>{"Ontologies"}</h4>
                     <div class="facet-box">                            
-                        {this.createOntologiesCheckboxList()}
-                        {true && 
-                            <div className="text-center">
-                                    <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                            </div>
-                        }
+                        {this.createOntologiesCheckboxList()}                                                
+                        <div className="text-center" id="search-facet-show-more-ontology-btn">
+                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                        </div>                        
                     </div>
                     {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
                     <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
