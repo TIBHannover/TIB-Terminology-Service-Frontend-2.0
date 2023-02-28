@@ -155,15 +155,27 @@ async handleExact(){
 
 alsoInResult(){
   let searchResultItem = this.state.searchResult;
-  let expanded = this.state.expandedResults
-  let resultList = [];
+  let expanded = this.state.expandedResults;
   let otherOntologies = [];
   if(expanded !== undefined){
     for(let i = 0; i < searchResultItem.length; i++){
-       if(resultList.includes(Object.keys(expanded))){
-        
-       }
+       if(searchResultItem[i]['iri'].includes(Object.keys(expanded))){
+        for(let key of Object.keys(expanded)){
+          let allTags = expanded[key]['docs']
+          for(let j=0; j < allTags.length; j++){
+            otherOntologies.push(
+              <div>
+                <span><b>Also in: </b></span>
+                  <a className='btn btn-default ontology-button also-in-ontologies' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + allTags[j]['ontology_name'] + '/terms?iri=' + encodeURIComponent(allTags[j]['iri'])} target="_blank">
+                   {allTags[j]['ontology_prefix']}
+                  </a>
+              </div>
+            )
+          }         
+        }       
+      }         
     }
+    
   }
   return otherOntologies;
 
@@ -194,6 +206,8 @@ createSearchResultList () {
                   {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
+              <br/>
+               {this.alsoInResult()}
             </div>            
           </div>   
         )
