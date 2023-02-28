@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
-import {setResultTitleAndLabel, ontologyIsPartOfSelectedCollections, createEmptyFacetCounts} from './SearchHelpers';
+import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 class SearchResult extends React.Component{
@@ -23,7 +23,7 @@ class SearchResult extends React.Component{
           pageSize: 5, 
           isLoaded: false,
           isFiltered: false,          
-          totalResults: [],
+          totalResultsCount: [],
           facetIsSelected: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
@@ -84,7 +84,7 @@ class SearchResult extends React.Component{
       isLoaded: true,
       enteredTerm: enteredTerm
     }, () => {
-      this.runSearch(ontologies, types, collections);
+      this.runSearch(ontologies, types, collections, "");
     });
   }
 
@@ -95,15 +95,53 @@ class SearchResult extends React.Component{
    * @param {*} ontologies 
    * @param {*} types 
    * @param {*} collections 
+   * @param {*} triggerField : which facet fields triggers the function. Values: type, ontology, collection
    */
- async runSearch(ontologies, types, collections){    
+ async runSearch(ontologies, types, collections, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
   let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
   let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
   let collectionOntologies = [];
-  let facetSelected = true;    
-  if(process.env.REACT_APP_PROJECT_ID !== "general"){          
+  let facetSelected = true;
+  let facetData = this.state.facetFields;
+  let ontologiesForFilter = await setOntologyForFilter(ontologies, collections);
+  if(ontologiesForFilter[0].length === 0 && ontologiesForFilter[1] !== "all"){
+    // The result set has to be empty
+    let allOntologies = await getAllOntologies();          
+    let facetData = createEmptyFacetCounts(allOntologies);                              
+    this.setState({
+      searchResult: [],
+      selectedOntologies: ontologies,
+      selectedTypes: types,
+      selectedCollections: collections,
+      facetIsSelected: facetSelected,
+      totalResultsCount: 0,
+      facetFields: facetData
+      }, () => {
+        this.updateURL(ontologies, types, collections);
+      });
+      return true;
+  }
+  if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
+    // no facet field selected
+    facetSelected = false;
+  }
+  if(process.env.REACT_APP_PROJECT_ID === "general"){
+    // TIB general
+    types.forEach(item => {
+        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
+    });
+     
+    ontologiesForFilter[0].forEach(item => {
+        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
+        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
+    });
+
+  }
+  else{    
     /**
+     * NFDIs
      * Search only in the target project ontologies (not general)
      */
     collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);
@@ -120,80 +158,22 @@ class SearchResult extends React.Component{
           totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
       });
     }
-          
-  }   
-  else{
-    // General Tib service
-    if(collections.length === 0){
-      ontologies.forEach(item => {
-          baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-          totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-    else if(ontologies.length === 0){
-      // No ontology selected. Only the collection
-      collectionOntologies = await getCollectionOntologies(collections, false);
-      collectionOntologies.forEach(onto => {
-        baseUrl = baseUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`;
-        totalResultBaseUrl +=  `&ontology=${onto["ontologyId"].toLowerCase()}`;
-      });
-    }
-    else{
-      // collection is selected. AND with the selected ontologies
-      let ontologiesForFilter = [];
-      collectionOntologies = await getCollectionOntologies(collections, false);
-      for(let onto of ontologies){          
-        if(ontologyIsPartOfSelectedCollections(collectionOntologies, onto)){
-          ontologiesForFilter.push(onto);
-        }
-      }
-      if(ontologiesForFilter.length === 0){
-        // The result set has to be empty
-        let allOntologies = await getAllOntologies();          
-        let facetData = createEmptyFacetCounts(allOntologies);                              
-        this.setState({
-          searchResult: [],
-          selectedOntologies: ontologies,
-          selectedTypes: types,
-          selectedCollections: collections,
-          facetIsSelected: facetSelected,
-          totalResults: 0,
-          facetFields: facetData
-          }, () => {
-            this.updateURL(ontologies, types, collections);
-          });
-          return true;
-      }
-      ontologiesForFilter.forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-      });
-    }
-  }
-  
-  
-  types.forEach(item => {
-      baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
-      totalResultBaseUrl += `&type=${item.toLowerCase()}`;
-  });
 
-  if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
-    // no facet field selected
-    facetSelected = false;
   }
       
   let filteredSearch = await (await fetch(baseUrl)).json();
   let filteredSearchResults = filteredSearch['response']['docs'];    
   let totalSearch = await (await fetch(totalResultBaseUrl)).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
-  let filteredFacetFields = totalSearch['facet_counts'];    
+  let filteredFacetFields = totalSearch['facet_counts'];
+  filteredFacetFields = await setFacetCounts(triggerField, this.state.enteredTerm, filteredFacetFields, facetData, collections, types, ontologiesForFilter[0]);    
   this.setState({
     searchResult: filteredSearchResults,
     selectedOntologies: ontologies,
     selectedTypes: types,
     selectedCollections: collections,
     facetIsSelected: facetSelected,
-    totalResults: totalSaerchResultsCount,
+    totalResultsCount: totalSaerchResultsCount,
     facetFields: filteredFacetFields
     }, () => {
       this.updateURL(ontologies, types, collections);
@@ -300,10 +280,10 @@ createSearchResultList () {
      * @returns
      */
   pageCount () {    
-    if (isNaN(Math.ceil(this.state.totalResults / this.state.pageSize))){
+    if (isNaN(Math.ceil(this.state.totalResultsCount / this.state.pageSize))){
       return 0;
     }
-    return (Math.ceil(this.state.totalResults / this.state.pageSize))
+    return (Math.ceil(this.state.totalResultsCount / this.state.pageSize))
   }
 
 
@@ -386,7 +366,7 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResults + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}              
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}              
               {this.state.searchResult.length > 0 && this.createSearchResultList()} 
               {this.state.searchResult.length > 0 && 
                 <Pagination 
