@@ -40,17 +40,17 @@ export function setResultTitleAndLabel(resultItem){
 export async function setOntologyForFilter(selectedOntologies, selectedCollections){
     let result = [];    
     if(selectedOntologies.length === 0 && selectedCollections.length === 0){
-        return [];
+        return [[], "all"];
     }
     else if(selectedCollections.length === 0){
-        return selectedOntologies;
+        return [selectedOntologies, ""];
     }
     else if(selectedOntologies.length === 0){
         let collectionOntologies = await getCollectionOntologies(selectedCollections, false);
         for(let onto of collectionOntologies){
             result.push(onto['ontologyId']);
         }
-        return result;
+        return [result, ""];
     }
     else{
         let collectionOntologies = await getCollectionOntologies(selectedCollections, false);
@@ -59,7 +59,7 @@ export async function setOntologyForFilter(selectedOntologies, selectedCollectio
                 result.push(onto);
             }
         }
-        return result;
+        return [result, ""];
     }        
 }
 
@@ -77,7 +77,7 @@ export async function setOntologyForFilter(selectedOntologies, selectedCollectio
  * @returns 
  */
 export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFields, lastFacetState, collections, types, ontologiesForFilter){
-    if(triggerField === "type"){    
+    if(triggerField === "type" || triggerField === ""){    
         let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
         let allOntologies = [];
         if(process.env.REACT_APP_PROJECT_ID === "general"){
@@ -103,11 +103,19 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         let res = await (await fetch(url)).json();
         res = res['facet_counts'];
         filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
-        filteredFacetFields["facet_fields"]["type"] = lastFacetState["facet_fields"]["type"];
+
+
+        url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
+        ontologiesForFilter.forEach(item => {
+            url = url + `&ontology=${item.toLowerCase()}`;
+        });  
+        res = await (await fetch(url)).json();
+        res = res['facet_counts'];
+        filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
         return filteredFacetFields;
     
       }
-      else if(triggerField === "ontology"){    
+      if(triggerField === "ontology" || triggerField === ""){    
         let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
         ["class", "property", "individual", "ontology"].forEach(item => {
             url = url + `&type=${item.toLowerCase()}`;
@@ -117,12 +125,24 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         });
         let res = await (await fetch(url)).json();
         res = res['facet_counts'];
-        filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
-        filteredFacetFields["facet_fields"]["ontology_prefix"] = lastFacetState["facet_fields"]["ontology_prefix"];
+        filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];        
+                        
+        url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
+        types.forEach(item => {
+            url = url + `&type=${item.toLowerCase()}`;
+        });
+        
+        let collectionOntologies = await getCollectionOntologies(collections, false);
+        collectionOntologies.forEach(item => {
+            url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
+        });
+        res = await (await fetch(url)).json();
+        res = res['facet_counts'];    
+        filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
         return filteredFacetFields;
     
       }
-      else if(triggerField === "collection"){
+      if(triggerField === "collection" || triggerField === ""){        
         let url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
         ["class", "property", "individual", "ontology"].forEach(item => {
             url = url + `&type=${item.toLowerCase()}`;      
@@ -139,8 +159,10 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         types.forEach(item => {
             url = url + `&type=${item.toLowerCase()}`;      
         });
-        ontologiesForFilter.forEach(item => {
-            url = url + `&ontology=${item.toLowerCase()}`;
+        
+        let collectionOntologies = await getCollectionOntologies(collections, false);
+        collectionOntologies.forEach(item => {
+            url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
         });
         res = await (await fetch(url)).json();
         res = res['facet_counts'];

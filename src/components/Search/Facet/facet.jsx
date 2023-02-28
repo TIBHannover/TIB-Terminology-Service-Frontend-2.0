@@ -303,8 +303,7 @@ class Facet extends React.Component{
             if(facetOntologies[key] !== 0){
                 counter ++;
             }            
-        }
-        console.info(counter)
+        }        
         if(counter <= this.state.countOfShownOntologies){
             document.getElementById('search-facet-show-more-ontology-btn').style.display = 'none';
         }

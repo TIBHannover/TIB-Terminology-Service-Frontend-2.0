@@ -104,7 +104,24 @@ class SearchResult extends React.Component{
   let collectionOntologies = [];
   let facetSelected = true;
   let facetData = this.state.facetFields;
-  let ontologiesForFilter = await setOntologyForFilter(ontologies, collections);    
+  let ontologiesForFilter = await setOntologyForFilter(ontologies, collections);
+  if(ontologiesForFilter[0].length === 0 && ontologiesForFilter[1] !== "all"){
+    // The result set has to be empty
+    let allOntologies = await getAllOntologies();          
+    let facetData = createEmptyFacetCounts(allOntologies);                              
+    this.setState({
+      searchResult: [],
+      selectedOntologies: ontologies,
+      selectedTypes: types,
+      selectedCollections: collections,
+      facetIsSelected: facetSelected,
+      totalResultsCount: 0,
+      facetFields: facetData
+      }, () => {
+        this.updateURL(ontologies, types, collections);
+      });
+      return true;
+  }
   if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
     // no facet field selected
     facetSelected = false;
@@ -116,7 +133,7 @@ class SearchResult extends React.Component{
         totalResultBaseUrl += `&type=${item.toLowerCase()}`;
     });
      
-    ontologiesForFilter.forEach(item => {
+    ontologiesForFilter[0].forEach(item => {
         baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
         totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
     });
@@ -149,24 +166,7 @@ class SearchResult extends React.Component{
   let totalSearch = await (await fetch(totalResultBaseUrl)).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
   let filteredFacetFields = totalSearch['facet_counts'];
-  filteredFacetFields = await setFacetCounts(triggerField, this.state.enteredTerm, filteredFacetFields, facetData, collections, types, ontologiesForFilter);  
-  if(ontologiesForFilter.length === 0 && totalSaerchResultsCount === 0){
-    // The result set has to be empty
-    let allOntologies = await getAllOntologies();          
-    let facetData = createEmptyFacetCounts(allOntologies);                              
-    this.setState({
-      searchResult: [],
-      selectedOntologies: ontologies,
-      selectedTypes: types,
-      selectedCollections: collections,
-      facetIsSelected: facetSelected,
-      totalResultsCount: 0,
-      facetFields: facetData
-      }, () => {
-        this.updateURL(ontologies, types, collections);
-      });
-      return true;
-  }
+  filteredFacetFields = await setFacetCounts(triggerField, this.state.enteredTerm, filteredFacetFields, facetData, collections, types, ontologiesForFilter[0]);    
   this.setState({
     searchResult: filteredSearchResults,
     selectedOntologies: ontologies,
