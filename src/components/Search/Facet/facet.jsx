@@ -59,7 +59,7 @@ class Facet extends React.Component{
             }
             let allCollections = [];
             if(process.env.REACT_APP_PROJECT_ID === "general"){
-                allCollections = await getAllCollectionsIds();  
+                allCollections = await getAllCollectionsIds();
             }            
             this.setState({
                 resultLoaded: true,
@@ -161,30 +161,38 @@ class Facet extends React.Component{
      * @returns 
      */
     createCollectionsCheckBoxes(){
-        let allCollections = this.state.collections;
+        let allCollections = this.state.collections;        
         let selectedCollections = this.props.selectedCollections;
+        let selectedOntologies = this.props.selectedOntologies;
         let result = [];
-        for (let record of allCollections){            
-            result.push(
-            <div className="row facet-item-row">
-                <div className='col-sm-9'>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input search-facet-checkbox"
-                            type="checkbox" 
-                            value={record['collection']}
-                            id={"search-checkbox-" + record['collection']} 
-                            key={record['collection']}
-                            onClick={this.handleCollectionsCheckboxClick}
-                            data-isChecked={selectedCollections.includes(record['collection'])}
-                        />                    
-                        <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
-                        {record['collection']}
-                        </label>
-                    </div>                      
-                </div>                
-            </div>
-            );
+        for (let record of allCollections){
+            for(let ontoId of record['ontolgies']){
+                if(selectedOntologies.includes(ontoId) || selectedOntologies.length === 0){
+                    result.push(
+                        <div className="row facet-item-row">
+                            <div className='col-sm-9'>
+                                <div class="form-check">
+                                    <input 
+                                        class="form-check-input search-facet-checkbox"
+                                        type="checkbox" 
+                                        value={record['collection']}
+                                        id={"search-checkbox-" + record['collection']} 
+                                        key={record['collection']}
+                                        onClick={this.handleCollectionsCheckboxClick}
+                                        data-isChecked={selectedCollections.includes(record['collection'])}
+                                    />                    
+                                    <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
+                                    {record['collection']}
+                                    </label>
+                                </div>                      
+                            </div>                
+                        </div>
+                    );
+                    break;
+                }
+            }
+            
+            
         }
         return result;
     }

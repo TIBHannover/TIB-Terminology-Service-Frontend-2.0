@@ -410,7 +410,12 @@ export async function getAllCollectionsIds() {
     let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
     let statsResult = await fetch(statsUrl, getCallSetting);
     statsResult = await statsResult.json();
-    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
+    let collectionOntologies = await getCollectionOntologies([col['content']], false);
+    let collectionOntologiesIds: Array<any> = [];
+    for(let onto of collectionOntologies){
+      collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
+    }
+    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"], "ontolgies": collectionOntologiesIds};
     result.push(record);
   }
   return result;
