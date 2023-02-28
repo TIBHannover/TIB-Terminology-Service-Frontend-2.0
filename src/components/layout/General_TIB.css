@@ -1157,6 +1157,21 @@ p{
     display: inline !important;
 }
 
+.also-in-design{
+    /* 
+       The style for also in field in search results
+    */
+    display: inline;
+}
+
+.also-in-ontologies{
+    /* 
+       The style for also in field in search results
+    */
+    display: inline;
+    padding-bottom: 10px;
+}
+
 /* 
 -------------------------------------
     The Facet fields in Search results styles 

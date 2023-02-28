@@ -164,18 +164,18 @@ alsoInResult(){
           let allTags = expanded[key]['docs']
           for(let j=0; j < allTags.length; j++){
             otherOntologies.push(
-              <div>
-                <span><b>Also in: </b></span>
-                  <a className='btn btn-default ontology-button also-in-ontologies' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + allTags[j]['ontology_name'] + '/terms?iri=' + encodeURIComponent(allTags[j]['iri'])} target="_blank">
+              <div>               
+                <div className='also-in-ontologies'>
+                  <a className="btn btn-default ontology-button " href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + allTags[j]['ontology_name'] + '/terms?iri=' + encodeURIComponent(allTags[j]['iri'])} target="_blank">
                    {allTags[j]['ontology_prefix']}
                   </a>
-              </div>
+                </div>
+                </div>              
             )
           }         
         }       
       }         
-    }
-    
+    }    
   }
   return otherOntologies;
 
@@ -207,6 +207,9 @@ createSearchResultList () {
                 </a>
               </div>
               <br/>
+              <div className = "also-in-design">
+                  <span><b>Also in: </b></span>
+                </div>
                {this.alsoInResult()}
             </div>            
           </div>   
