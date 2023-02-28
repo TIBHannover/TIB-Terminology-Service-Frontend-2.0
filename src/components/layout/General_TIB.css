@@ -1161,15 +1161,15 @@ p{
     /* 
        The style for also in field in search results
     */
-    display: inline;
+    display: inline-block;
 }
 
 .also-in-ontologies{
     /* 
        The style for also in field in search results
     */
-    display: inline;
-    padding-bottom: 10px;
+    display: inline-block;
+    padding-bottom: 7px;
 }
 
 /* 
