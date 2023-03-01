@@ -220,7 +220,7 @@ createSearchResultList () {
               <div className="searchresult-ontology">
                 <span><b>Ontology: </b></span>
                 <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
-                  {searchResultItem[i].ontology_prefix}
+                  {searchResultItem[i].ontology_name}
                 </a>
               </div>
             </div>            
