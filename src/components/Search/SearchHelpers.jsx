@@ -100,7 +100,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         });
         let res = await (await fetch(url)).json();
         res = res['facet_counts'];
-        filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
+        filteredFacetFields["facet_fields"]["ontology_name"] = res["facet_fields"]["ontology_name"];
 
 
         url = process.env.REACT_APP_SEARCH_URL + `?q=${enteredTerm}`;
@@ -136,7 +136,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         });
         res = await (await fetch(url)).json();
         res = res['facet_counts'];    
-        filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
+        filteredFacetFields["facet_fields"]["ontology_name"] = res["facet_fields"]["ontology_name"];
         return filteredFacetFields;
     
       }
@@ -164,7 +164,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         });
         res = await (await fetch(url)).json();
         res = res['facet_counts'];
-        filteredFacetFields["facet_fields"]["ontology_prefix"] = res["facet_fields"]["ontology_prefix"];
+        filteredFacetFields["facet_fields"]["ontology_name"] = res["facet_fields"]["ontology_name"];
         return filteredFacetFields;
       }
       return filteredFacetFields;      
@@ -195,10 +195,10 @@ export function createEmptyFacetCounts(allOntologies){
     let facetData = {};
     facetData["facet_fields"] = {};    
     facetData["facet_fields"]["type"] = ["class", 0, "property", 0, "individual", 0, "ontology", 0];
-    facetData["facet_fields"]["ontology_prefix"] = [];
+    facetData["facet_fields"]["ontology_name"] = [];
     for(let onto of allOntologies){
-        facetData["facet_fields"]["ontology_prefix"].push(onto["ontologyId"].toUpperCase());
-        facetData["facet_fields"]["ontology_prefix"].push(0);
+        facetData["facet_fields"]["ontology_name"].push(onto["ontologyId"].toUpperCase());
+        facetData["facet_fields"]["ontology_name"].push(0);
     }    
     return facetData;
 }

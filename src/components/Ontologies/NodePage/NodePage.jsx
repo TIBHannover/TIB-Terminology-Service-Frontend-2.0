@@ -125,7 +125,7 @@ class NodePage extends React.Component {
         <HelmetProvider>
         <div>
           <Helmet>
-            <title>{`${this.state.data.ontology_prefix} - ${this.state.data.short_form}`}</title>
+            <title>{`${this.state.data.ontology_name} - ${this.state.data.short_form}`}</title>
           </Helmet>
         </div>
         </HelmetProvider>

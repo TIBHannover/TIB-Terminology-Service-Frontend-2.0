@@ -47,12 +47,12 @@ class Facet extends React.Component{
         else{            
             facetData = facetData["facet_fields"];
             let allTypes = facetData["type"];
-            let allOntologies = facetData["ontology_prefix"];
+            let allOntologies = facetData["ontology_name"];
             let ontologyFacetData = {};
             let types = {};                        
             for(let i=0; i < allOntologies.length; i++){
                 if(i % 2 == 0){
-                    ontologyFacetData[allOntologies[i]] = allOntologies[i + 1];
+                    ontologyFacetData[allOntologies[i].toUpperCase()] = allOntologies[i + 1];
                 }
             }
             for(let i=0; i < allTypes.length; i++){
