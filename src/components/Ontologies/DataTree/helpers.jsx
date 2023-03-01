@@ -370,8 +370,11 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
     if(mode === 'term'){
       node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
     }
-    else{
+    else if(mode === "property"){
       node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
+    }
+    else{
+      return false;
     }
     return node.has_children;
     

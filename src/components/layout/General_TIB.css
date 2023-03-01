@@ -294,6 +294,16 @@ p{
     margin-left: 1px;
 }
 
+.skeleton-loading-box{
+    /* 
+        Style for the skeleton loading boxes
+    */
+
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;    
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 
@@ -1679,6 +1689,19 @@ p{
     float: left;
     margin-bottom: 10px;
     margin-top: 2px;
+}
+
+.list-node-li{
+    /* 
+        The style for the nodes in the individual list
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;    
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;        
+    font-size: 13px !important;    
 }
 
 
