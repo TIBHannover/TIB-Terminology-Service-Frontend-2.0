@@ -13,7 +13,8 @@ class Facet extends React.Component{
             ontologyListShowAll: false,
             countOfShownOntologies: 5,
             showMoreLessOntologiesText: "+ Show More",
-            currentUrl: ""
+            currentUrl: "",
+            isLoading: true
         });
         this.processFacetData = this.processFacetData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
@@ -32,13 +33,15 @@ class Facet extends React.Component{
      */
    async processFacetData(){        
         let facetData = this.props.facetData;        
-        let currentUrl = window.location.href;        
+        let currentUrl = window.location.href;    
+
         if (facetData.length === 0 || typeof facetData["facet_fields"] === "undefined"){
             this.setState({
                 resultLoaded: true,
                 resultTypes: {},
                 ontologyFacetData: {},
-                currentUrl: currentUrl         
+                currentUrl: currentUrl,
+                isLoading: false          
             });
         }
         else{            
@@ -66,7 +69,8 @@ class Facet extends React.Component{
                 resultTypes: types,
                 ontologyFacetData: ontologyFacetData,
                 collections: allCollections,
-                currentUrl: currentUrl
+                currentUrl: currentUrl,
+                isLoading: false   
             });
         }                    
     }
@@ -117,10 +121,22 @@ class Facet extends React.Component{
     createOntologiesCheckboxList(){       
         let ontologyFacetData = this.state.ontologyFacetData;
         let selectedOntologies = this.props.selectedOntologies;
-        let result = [];
+        let lastIndex = 0;
         let counter = 1;
+        for(let ontoId in ontologyFacetData){
+            if(selectedOntologies.includes(ontoId.toUpperCase())){
+                lastIndex = counter;
+            }
+            counter += 1;
+        }
+        if(lastIndex < this.state.countOfShownOntologies){
+            lastIndex = this.state.countOfShownOntologies;
+        }
+
+        let result = [];
+        counter = 1;
         for(let ontologyId in ontologyFacetData){             
-            if (counter > this.state.countOfShownOntologies && !this.state.ontologyListShowAll){
+            if (counter > lastIndex && !this.state.ontologyListShowAll){
                 break;
             }
             if(ontologyFacetData[ontologyId] !== 0){
@@ -210,7 +226,8 @@ class Facet extends React.Component{
             let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
             selectedOntologies.splice(index, 1);            
         }        
-        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections, "ontology");                
+        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections, "ontology"); 
+        this.setState({isLoading: true});               
     }
 
 
@@ -225,8 +242,9 @@ class Facet extends React.Component{
         else{
             let index = selectedTypes.indexOf(e.target.value);
             selectedTypes.splice(index, 1);            
-        }
-        this.props.handleChange(this.props.selectedOntologies, selectedTypes, this.props.selectedCollections, "type");      
+        }        
+        this.props.handleChange(this.props.selectedOntologies, selectedTypes, this.props.selectedCollections, "type");
+        this.setState({isLoading: true});
     }
 
 
@@ -243,6 +261,7 @@ class Facet extends React.Component{
             selectedCollections.splice(index, 1);            
         }
         this.props.handleChange(this.props.selectedOntologies, this.props.selectedTypes, selectedCollections, "collection");
+        this.setState({isLoading: true});
     }
 
 
@@ -283,12 +302,10 @@ class Facet extends React.Component{
 
 
     componentDidMount(){
-        if(!this.state.resultLoaded){
-            // this.processFacetData();
-        }
-        
+        // this.setState({isLoading: false});
     }
 
+    
     componentDidUpdate(){
         // pre-select the facet fields if entered via url
         
@@ -299,11 +316,6 @@ class Facet extends React.Component{
             }
             delete checkbox.dataset.ischecked;
         }
-        let currentUrl = this.state.currentUrl;
-        if(currentUrl !== window.location.href){
-            this.processFacetData();
-        }
-        
         // check show more button for ontologies is needed or not
         let counter = 0;
         let facetOntologies = this.state.ontologyFacetData;
@@ -311,13 +323,22 @@ class Facet extends React.Component{
             if(facetOntologies[key] !== 0){
                 counter ++;
             }            
-        }        
-        if(counter <= this.state.countOfShownOntologies){
-            document.getElementById('search-facet-show-more-ontology-btn').style.display = 'none';
         }
-        else{
-            document.getElementById('search-facet-show-more-ontology-btn').style.display = '';
+        let showMoreIsNeeded = "";
+        let showMoreDiv = document.getElementById('search-facet-show-more-ontology-btn');
+        if(counter <= this.state.countOfShownOntologies && showMoreDiv){
+            showMoreDiv.style.display = 'none';
+            showMoreIsNeeded = false;
         }
+        else if(showMoreDiv){
+            showMoreDiv.style.display = '';
+            showMoreIsNeeded = true;
+        }
+                
+        let currentUrl = this.state.currentUrl;
+        if(currentUrl !== window.location.href){
+            this.processFacetData();            
+        }     
     }
 
 
@@ -331,10 +352,17 @@ class Facet extends React.Component{
                         <a onClick={this.clearFacet}>Clear All Filters</a>
                         <br></br>
                     </div>
-                </div>
+                </div>        
+                {this.state.isLoading && 
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-grow text-info facet-loading-effect" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>}                
+                {!this.state.isLoading &&
                 <div class="col-sm-12">
                     <h4>{"Type"}</h4>
-                     <div class="facet-box" id="facet-types-list">                            
+                     <div class="facet-box" id="facet-types-list">                                              
                         {this.createTypesCheckboxList()}
                     </div>
                     <h4>{"Ontologies"}</h4>
@@ -348,7 +376,7 @@ class Facet extends React.Component{
                     <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
                             {this.createCollectionsCheckBoxes()}
                         </div></>}
-                </div>
+                </div>}
             </div>
         );
     }
