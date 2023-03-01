@@ -320,27 +320,20 @@ async function getEqAxiom(nodeIri:string, ontologyId:string){
  */
 export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let url = <string> "";
-  let parentUrl = <string> "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
-  parentUrl = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/parents';
-  let parentRes = await fetch(parentUrl, getCallSetting);
-  parentRes = await parentRes.json();
-  parentRes = parentRes["_embedded"];
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
+  if (typeof(res) !== "undefined"){
     let result= "";
     result += "<ul>"
-    for(let i=0; i < parentRes["terms"].length; i++){
-      result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';     
+    for(let i=0; i < res["strings"].length; i++){ 
+      result += '<li>'+ res["strings"][i]["content"] +'</li>';     
     }
-    if(typeof(res) !== "undefined"){
-      for(let i=0; i < res["strings"].length; i++){      
-        result += '<li>'+ res["strings"][i]["content"] +'</li>';     
-      }
-    }     
     result += "<ul>"
-  return result;
+    return result;
+  }
+  return "N/A"
 
 }
 
@@ -417,7 +410,12 @@ export async function getAllCollectionsIds() {
     let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
     let statsResult = await fetch(statsUrl, getCallSetting);
     statsResult = await statsResult.json();
-    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
+    let collectionOntologies = await getCollectionOntologies([col['content']], false);
+    let collectionOntologiesIds: Array<any> = [];
+    for(let onto of collectionOntologies){
+      collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
+    }
+    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"], "ontolgies": collectionOntologiesIds};
     result.push(record);
   }
   return result;
