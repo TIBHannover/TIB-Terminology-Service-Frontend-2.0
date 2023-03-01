@@ -121,7 +121,7 @@ class Facet extends React.Component{
         let lastIndex = 0;
         let counter = 1;
         for(let ontoId in ontologyFacetData){
-            if(selectedOntologies.includes(ontoId)){
+            if(selectedOntologies.includes(ontoId.toUpperCase())){
                 lastIndex = counter;
             }
             counter += 1;
