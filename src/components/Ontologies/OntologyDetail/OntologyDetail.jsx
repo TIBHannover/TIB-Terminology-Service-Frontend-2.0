@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import { shapeSkosConcepts } from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import IndividualsList from '../IndividualList/IndividualList';
 
 
 
@@ -25,16 +26,18 @@ class OntologyDetail extends React.Component {
       overViewTab: true,
       termsTab: false,
       propTab: false,
+      indvTab: false,
       activeTab: 0,
       rootTerms: [],
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
       targetPropertyIri: " ",
+      targetIndividualIri: " ",
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      isSkosOntology: false
+      isSkosOntology: false      
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -68,30 +71,46 @@ class OntologyDetail extends React.Component {
     let requestedTab = this.props.match.params.tab;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
-    if (requestedTab != lastRequestedTab && requestedTab == 'terms'){
+    if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
       this.setState({
         overViewTab: false,
         termsTab: true,
         propTab: false,
+        indvTab: false,
         activeTab: 1,
         waiting: false,
         lastRequestedTab: requestedTab,
         targetTermIri: targetQueryParams.iri
       });
     }
-    else if (requestedTab != lastRequestedTab && requestedTab == 'props'){
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'props'){
       this.setState({
         overViewTab: false,
         termsTab: false,
         propTab: true,
+        indvTab: false,
         activeTab: 2,
         waiting: false,
         lastRequestedTab: requestedTab,
         targetPropertyIri: targetQueryParams.iri
 
+      });      
+    }
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'individuals'){    
+      let lastIri = this.state.targetIndividualIri;
+      this.setState({
+        overViewTab: false,
+        termsTab: false,
+        propTab: false,
+        indvTab: true,
+        activeTab: 3,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
+
       });
     }
-    else if (requestedTab != lastRequestedTab){
+    else if (requestedTab !== lastRequestedTab){
       this.setState({
         overViewTab: true,
         termsTab: false,
@@ -209,23 +228,38 @@ class OntologyDetail extends React.Component {
         overViewTab: true,
         termsTab: false,
         propTab: false,
+        indvTab: false,
         activeTab: 0,
-        waiting: false
+        waiting: false      
       })
-    } else if (value === "1") { // terms (classes)
+    } 
+    else if (value === "1") { // terms (classes)
       this.setState({
         overViewTab: false,
         termsTab: true,
         propTab: false,
+        indvTab: false,
         activeTab: 1,
         waiting: false
       })
-    } else { // properties
+    } 
+    else if (value === "2") { // properties
       this.setState({
         overViewTab: false,
         termsTab: false,
         propTab: true,
+        indvTab: false,
         activeTab: 2,
+        waiting: false
+      })
+    }
+    else{ // individuals      
+      this.setState({
+        overViewTab: false,
+        termsTab: false,
+        propTab: false,
+        indvTab: true,
+        activeTab: 3,
         waiting: false
       })
     }
@@ -241,9 +275,14 @@ class OntologyDetail extends React.Component {
         targetTermIri: iri
       });
     }
-    else{
+    else if (componentId === "property"){
       this.setState({
         targetPropertyIri: iri
+      });
+    }
+    else{            
+      this.setState({
+        targetIndividualIri: iri
       });
     }
     
@@ -261,7 +300,7 @@ class OntologyDetail extends React.Component {
     if(treeId === "term"){      
       this.setState({classTreeDomLastState: stateObject});
     }
-    else{
+    else if (treeId === "property"){
       this.setState({propertyTreeDomLastState: stateObject});
     }
   }
@@ -312,6 +351,9 @@ class OntologyDetail extends React.Component {
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
                   <Link onClick={this.tabChange} data-value="2" className={this.state.propTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
+                </li>
+                <li class="nav-item ontology-detail-nav-item" key={"indv-tab"}>
+                  <Link onClick={this.tabChange} data-value="3" className={this.state.indvTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individuals</Link>
                 </li>            
               </ul>             
               {!this.state.waiting && this.state.overViewTab &&
@@ -336,6 +378,7 @@ class OntologyDetail extends React.Component {
                               lastState={this.state.classTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
                               isSkos={this.state.isSkosOntology}
+                              isIndividuals={false}
                             />
               }
 
@@ -350,6 +393,21 @@ class OntologyDetail extends React.Component {
                               iriChangerFunction={this.changeInputIri}
                               lastState={this.state.propertyTreeDomLastState}
                               domStateKeeper={this.changeTreeContent}
+                              isIndividuals={false}
+                            />
+              }
+              {!this.state.waiting && this.state.indvTab &&
+                            <IndividualsList
+                              rootNodes={this.state.rootTerms}                                                    
+                              iri={this.state.targetIndividualIri}
+                              componentIdentity={'individual'}
+                              key={'individualsTreePage'}
+                              ontology={this.state.ontologyId}                              
+                              iriChangerFunction={this.changeInputIri}
+                              lastState={""}
+                              domStateKeeper={this.changeTreeContent}
+                              isSkos={this.state.isSkosOntology}
+                              individualTabChanged={this.state.individualTabChanged}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}

@@ -1,4 +1,5 @@
 import _ from "lodash";
+import React from "react";
 
 /**
  * Create the metadata for a class detail table
@@ -25,17 +26,18 @@ import _ from "lodash";
           value.push(annot);
         }
         metadata[key] = [value.join(',\n'), false];
-      }
-    }
-    return metadata;
-  }
+      }    
+    }  
+  return metadata;
+}
+
 
 
 /**
  * Create the metadata for a Property detail table
  * The boolean in each value indicates that the metadata is a link or not.
  */
- export function propertyMetaData(object){
+export function propertyMetaData(object){  
   let metadata = {
     "Label": [object.label, false],
     "CURIE":  [object.obo_id, false],
@@ -59,6 +61,7 @@ import _ from "lodash";
 
   return metadata;
 }
+
 
 
 
@@ -89,7 +92,7 @@ import _ from "lodash";
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
 
-  return text
+  return transformToLink(text)
 }
 
 /**
@@ -177,4 +180,30 @@ function createRelations(object){
     }
   }
   return relsToRender;
+}
+
+/**
+ * Check if the tetx contains link to render is as anchor
+ */
+function transformToLink(text){  
+  if(typeof(text) !== "string"){
+    return text;
+  }
+  let splitedText = text.split("http");
+  if (splitedText.length === 1){
+    // no https inside text
+    return text;
+  }
+  else{
+    let result = [];
+    text = text.split(",");
+    for(let link of text){
+      // let label = document.createTextNode(link);
+      let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
+      result.push(anchor);
+      result.push(",  ");
+    }
+    return result;
+  }
+
 }
