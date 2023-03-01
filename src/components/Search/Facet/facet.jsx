@@ -32,13 +32,14 @@ class Facet extends React.Component{
      */
    async processFacetData(){        
         let facetData = this.props.facetData;        
-        let currentUrl = window.location.href;        
+        let currentUrl = window.location.href;    
+
         if (facetData.length === 0 || typeof facetData["facet_fields"] === "undefined"){
             this.setState({
                 resultLoaded: true,
                 resultTypes: {},
                 ontologyFacetData: {},
-                currentUrl: currentUrl         
+                currentUrl: currentUrl                   
             });
         }
         else{            
@@ -66,7 +67,7 @@ class Facet extends React.Component{
                 resultTypes: types,
                 ontologyFacetData: ontologyFacetData,
                 collections: allCollections,
-                currentUrl: currentUrl
+                currentUrl: currentUrl               
             });
         }                    
     }
@@ -117,10 +118,22 @@ class Facet extends React.Component{
     createOntologiesCheckboxList(){       
         let ontologyFacetData = this.state.ontologyFacetData;
         let selectedOntologies = this.props.selectedOntologies;
-        let result = [];
+        let lastIndex = 0;
         let counter = 1;
+        for(let ontoId in ontologyFacetData){
+            if(selectedOntologies.includes(ontoId)){
+                lastIndex = counter;
+            }
+            counter += 1;
+        }
+        if(lastIndex < this.state.countOfShownOntologies){
+            lastIndex = this.state.countOfShownOntologies;
+        }
+
+        let result = [];
+        counter = 1;
         for(let ontologyId in ontologyFacetData){             
-            if (counter > this.state.countOfShownOntologies && !this.state.ontologyListShowAll){
+            if (counter > lastIndex && !this.state.ontologyListShowAll){
                 break;
             }
             if(ontologyFacetData[ontologyId] !== 0){
@@ -282,13 +295,7 @@ class Facet extends React.Component{
     }
 
 
-    componentDidMount(){
-        if(!this.state.resultLoaded){
-            // this.processFacetData();
-        }
-        
-    }
-
+    
     componentDidUpdate(){
         // pre-select the facet fields if entered via url
         
@@ -299,11 +306,6 @@ class Facet extends React.Component{
             }
             delete checkbox.dataset.ischecked;
         }
-        let currentUrl = this.state.currentUrl;
-        if(currentUrl !== window.location.href){
-            this.processFacetData();
-        }
-        
         // check show more button for ontologies is needed or not
         let counter = 0;
         let facetOntologies = this.state.ontologyFacetData;
@@ -311,13 +313,21 @@ class Facet extends React.Component{
             if(facetOntologies[key] !== 0){
                 counter ++;
             }            
-        }        
+        }
+        let showMoreIsNeeded = "";
         if(counter <= this.state.countOfShownOntologies){
             document.getElementById('search-facet-show-more-ontology-btn').style.display = 'none';
+            showMoreIsNeeded = false;
         }
         else{
             document.getElementById('search-facet-show-more-ontology-btn').style.display = '';
+            showMoreIsNeeded = true;
         }
+                
+        let currentUrl = this.state.currentUrl;
+        if(currentUrl !== window.location.href){
+            this.processFacetData();            
+        }     
     }
 
 
