@@ -172,6 +172,15 @@ p{
     border-radius: 15px;
 }
 
+.facet-loading-effect{
+    /* 
+        Loading effect for the search facet
+    */
+
+    width: 50px;
+    height: 50px;
+}
+
 .clear-filter-link-box{
     /* 
         Clear facet filters link box style
@@ -364,6 +373,16 @@ p{
 
 .example-link:hover{
     color:#dd6e42;
+}
+
+.skeleton-loading-box{
+    /* 
+        Style for the skeleton loading boxes
+    */
+
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;    
 }
 
 @media only screen and (max-width: 1025px) {
@@ -1544,6 +1563,19 @@ p{
     float: left;
     margin-bottom: 10px;
     margin-top: 2px;
+}
+
+.list-node-li{
+    /* 
+        The style for the nodes in the individual list
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;    
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;        
+    font-size: 13px !important;    
 }
 
 
