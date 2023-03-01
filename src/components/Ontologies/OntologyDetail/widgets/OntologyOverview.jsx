@@ -16,7 +16,31 @@ class OntologyOverview extends React.Component{
    */
    createRow(metadataLabel, metadataValue, copyButton){
     let row = [
-
+        <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
+          <div className='row'>
+            <div className="col-sm-4 col-md-3 node-metadata-value" key={metadataLabel + "-label"}>
+              <div className="node-metadata-label">{metadataLabel}</div>
+            </div>
+            <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
+              {formatText(metadataLabel, metadataValue, copyButton)}
+              {copyButton &&
+                <button 
+                  type="button" 
+                  class="btn btn-secondary btn-sm copy-link-btn"
+                  key={"copy-btn"} 
+                  onClick={() => {                  
+                    navigator.clipboard.writeText(metadataValue);
+                    this.setState({
+                      iriIsCopied: true
+                    });
+                  }}
+                  >
+                  copy {this.state.iriIsCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
     ];
     return row;    
    }
