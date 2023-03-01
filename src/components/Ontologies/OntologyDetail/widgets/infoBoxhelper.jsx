@@ -1,6 +1,19 @@
 import _ from "lodash";
 
 /**
+ * recursion for multiple creators
+ */
+function formatCreators(creators){
+    let answer = []
+  let value = []
+  for (let i = 0; i < creators.length; i++) {
+    value.push(creators[i])
+  }
+  answer = value.join(',\n')
+  return answer
+}
+
+/**
  * Create the metadata for ontology overview table
  * The boolean in each value indicates that the metadata is a link or not.
  */
@@ -10,7 +23,7 @@ export function ontologyMetadata(object){
       "Homepage":  [object.config.homepage, true],
       "Issue Tracker":  [object.config.tracker, true],
       "License": [object.config.license.label, true],
-      "Creator": [object.config.creators, false],
+      "Creator": [formatCreators(object.config.creators), false],
    }
 
    if(object.config.annotation){
