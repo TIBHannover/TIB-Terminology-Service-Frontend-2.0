@@ -23,17 +23,6 @@ function OntologyInfoBox (props) {
     return false
   }
 
-  if(ontology.config.annotation){
-    for(let key in ontology.config.annotation){
-      metadata[key] = [];
-      let value = [];
-      for(let annot of ontology.config.annotation[key]){
-        value.push(annot);
-      }
-      metadata[key] = [value.join(',\n'), false];
-    }
-  }
-
   return (
     <div className="ontology-detail-table-wrapper">
       <div className='row'>
