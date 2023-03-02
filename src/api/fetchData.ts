@@ -246,6 +246,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
   }
   node = await node.json();
   if(isIndividual){
+    node['isIndividual'] = true;
     return node;
   }
   // node = node['_embedded'][mode][0];

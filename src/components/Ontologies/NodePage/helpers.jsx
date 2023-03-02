@@ -27,7 +27,22 @@ import React from "react";
         }
         metadata[key] = [value.join(',\n'), false];
       }    
-    }  
+    }
+    
+    if(object.type && object.isIndividual){
+      metadata['Type'] = [];
+      for(let type of object.type){
+        metadata['Type'].push(
+          <span>
+            <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + type['ontology_name'] + '/terms?iri=' + type['iri']} target={"_blank"}>
+              {type['label']}
+            </a>
+            <br></br>
+          </span>        
+        );
+      }
+    }
+    
   return metadata;
 }
 
