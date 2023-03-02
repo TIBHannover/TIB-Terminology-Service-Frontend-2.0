@@ -1,5 +1,6 @@
 import React from 'react'
 import OntologyInfoBox from './widgets/infoBox'
+import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
@@ -360,6 +361,9 @@ class OntologyDetail extends React.Component {
                           <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
                             <div className='col-sm-9'>
                               <OntologyInfoBox ontology={this.state.ontology} />
+                            </div>
+                            <div className='col-sm-9'>
+                              <InfoAnnotations ontology={this.state.ontology} />
                             </div>
                             <div className='col-sm-3'>
                               <OntologyStatsBox ontology={this.state.ontology} />
