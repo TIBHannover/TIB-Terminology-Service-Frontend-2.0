@@ -13,9 +13,16 @@ class InfoAnnotations extends React.Component{
         let ontology = this.props.ontology;
         let entries = Object.entries(ontology.config.annotations);
         let listItems = entries.map(([key, value]) => (
-              <li>
-                {key}: {value}
-              </li>
+          <div className="ontology-detail-table-wrapper">
+            <table className="ontology-detail-table">
+                <tbody>
+                    <tr>
+                      <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+                      <td>{value}</td>
+                    </tr>
+                </tbody>
+            </table>
+           </div>             
         ));
         return <ul>{listItems}</ul>;
       };
@@ -32,10 +39,7 @@ class InfoAnnotations extends React.Component{
     render(){
         return(
             <div>
-                <ul>
-                    <li>{this.createTable()}</li>
-                </ul>
-
+              {this.createTable()}
             </div>
         )
     }
