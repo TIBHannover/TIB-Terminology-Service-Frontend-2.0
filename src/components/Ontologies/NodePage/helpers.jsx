@@ -31,8 +31,9 @@ import React from "react";
     
     if(object.type && object.isIndividual){
       metadata['Type'] = [];
+      let typeMtadataValue = [];
       for(let type of object.type){
-        metadata['Type'].push(
+        typeMtadataValue.push(
           <span>
             <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + type['ontology_name'] + '/terms?iri=' + type['iri']} target={"_blank"}>
               {type['label']}
@@ -40,6 +41,16 @@ import React from "react";
             <br></br>
           </span>        
         );
+      }
+      metadata['Type'] = [typeMtadataValue, false];
+    }
+
+    if(object.isIndividual && object.description){
+      // individual description structure is different
+      metadata['Description'][0] = [];
+      console.info(object.description)
+      for(let desc of object.description){
+        metadata['Description'][0].push(<p>{desc}</p>);
       }
     }
     
