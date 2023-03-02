@@ -49,17 +49,25 @@ class OntologyOverview extends React.Component{
    /**
    * Create the view to render 
    */
-createTable(){    
-  let metadataToRender = "";
-    metadataToRender =  this.ontologyMetaData(this.state.data);
-  let result = [];
+   createTable(){    
+      let metadataToRender = "";
+        metadataToRender =  ontologyMetadata(this.state.data);
+        let result = [];
   
-  for(let key of Object.keys(metadataToRender)){    
-    let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
-    result.push(row);
-  }
-  return result;
-}
+      for(let key of Object.keys(metadataToRender)){    
+        let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
+        result.push(row);
+      }
+    return result;
+   }
+
+  render(){
+    return(
+      <div>
+        {this.createTable()}
+      </div>
+      )
+   }
 
 
 }
