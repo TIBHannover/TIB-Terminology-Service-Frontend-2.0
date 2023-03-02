@@ -7,7 +7,7 @@ class JumpTo extends React.Component{
         this.state = ({
             enteredTerm: "",
             result: false,
-            api_base_url: "https://service.tib.eu/ts4tib/api",
+            apiBaseUrl: process.env.REACT_APP_SEARCH_URL,
             jumpResult: []
         });
 
@@ -23,24 +23,27 @@ class JumpTo extends React.Component{
      * 'Jump to' feature in the class tree
      */
     async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value;        
-            if (enteredTerm.length > 0){
-                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${this.props.type}&rows=10`;
-                let jumpResult = await fetch(url)
-                jumpResult = (await jumpResult.json())['response']['docs'];
-                this.setState({
-                    jumpResult: jumpResult,
-                    result: true,
-                    enteredTerm: enteredTerm
-                });
-            }
-            else if (enteredTerm.length == 0){
-                this.setState({
-                    result: false,
-                    enteredTerm: ""
-                });
-                
-            }
+        enteredTerm = enteredTerm.target.value;
+        let apiBaseUrl = this.state.apiBaseUrl;
+        apiBaseUrl = apiBaseUrl.split('search')[0] + "select";
+        let type = this.props.isSkos ? "individual" : "class";
+        if (enteredTerm.length > 0){
+            let url = `${apiBaseUrl}?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
+            let jumpResult = await fetch(url)
+            jumpResult = (await jumpResult.json())['response']['docs'];
+            this.setState({
+                jumpResult: jumpResult,
+                result: true,
+                enteredTerm: enteredTerm
+            });
+        }
+        else if (enteredTerm.length == 0){
+            this.setState({
+                result: false,
+                enteredTerm: ""
+            });
+            
+        }
     }
     
     handleClickOutside(){
@@ -93,7 +96,7 @@ class JumpTo extends React.Component{
     }
 
     componentDidMount(){
-        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener('click', this.handleClickOutside, true);        
     }
       
     componentWillUnmount() {
