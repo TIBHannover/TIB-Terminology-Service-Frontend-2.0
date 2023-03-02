@@ -1,17 +1,18 @@
 import React from 'react';
-import { ontologyMetadata } from './infoBoxhelper';
+import { ontologyMetadata, formatText } from './infoBoxhelper';
 
 class OntologyOverview extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            iriIsCopied: false,
+          data: true,
+          iriIsCopied: false,
         }
         this.createRow = this.createRow.bind(this);
         this.createTable = this.createTable.bind(this);
     }
 
-    /**
+  /**
    * create a table row 
    */
    createRow(metadataLabel, metadataValue, copyButton){
@@ -44,6 +45,24 @@ class OntologyOverview extends React.Component{
     ];
     return row;    
    }
+
+   /**
+   * Create the view to render 
+   */
+createTable(){    
+  let metadataToRender = "";
+    metadataToRender =  this.ontologyMetaData(this.state.data);
+  let result = [];
+  
+  for(let key of Object.keys(metadataToRender)){    
+    let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
+    result.push(row);
+  }
+  return result;
 }
+
+
+}
+
 
 export default OntologyOverview
