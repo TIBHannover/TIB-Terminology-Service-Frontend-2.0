@@ -11,11 +11,23 @@ import React from "react";
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
-      "fullIRI": [object.iri, true],
-      "Synonyms": [object.synonyms, false],
-      "Equivalent to": [object.eqAxiom, false],
-      "SubClass Of" : [ object.subClassOf, false],
-      "Used in axiom" : [ object, false]
+      "fullIRI": [object.iri, true]      
+    }
+    
+    if(formatText("Synonyms", object.synonyms, false) !== "N/A"){
+      metadata['Synonyms'] = [object.synonyms, false];
+    }
+    
+    if(object.eqAxiom !== "N/A"){
+      metadata['Equivalent to'] = [object.eqAxiom, false];
+    }
+
+    if(object.subClassOf !== "N/A"){
+      metadata['SubClass Of'] = [object.subClassOf, false];
+    }
+    
+    if(formatText("Used in axiom", object, false) !== "N/A" && formatText("Used in axiom", object, false).length !== 0){
+      metadata['Used in axiom'] = [object, false];
     }
     
     if(object.annotation){
@@ -47,8 +59,7 @@ import React from "react";
 
     if(object.isIndividual && object.description){
       // individual description structure is different
-      metadata['Description'][0] = [];
-      console.info(object.description)
+      metadata['Description'][0] = [];      
       for(let desc of object.description){
         metadata['Description'][0].push(<p>{desc}</p>);
       }
@@ -172,7 +183,10 @@ function makeTag(objectList){
  * @param {*} relations 
  */
 function createRelations(object){
-  if(typeof(object['relations']) !== "undefined" && object['relations'].length === 0){
+  if(typeof(object['relations']) === "undefined"){
+    return "N/A";
+  }
+  if(object['relations'].length === 0){
     return "N/A";
   }
   let groupedRelations = _.groupBy(object['relations'], res => res.relation);  
