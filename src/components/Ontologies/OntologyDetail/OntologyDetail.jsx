@@ -362,11 +362,12 @@ class OntologyDetail extends React.Component {
                             <div className='col-sm-9'>
                               <OntologyInfoBox ontology={this.state.ontology} />
                             </div>
-                            <div className='col-sm-9'>
-                              <InfoAnnotations ontology={this.state.ontology} />
-                            </div>
+                            
                             <div className='col-sm-3'>
                               <OntologyStatsBox ontology={this.state.ontology} />
+                            </div>
+                            <div className='col-sm-9'>
+                              <InfoAnnotations ontology={this.state.ontology} />
                             </div>
                           </div>
               }
