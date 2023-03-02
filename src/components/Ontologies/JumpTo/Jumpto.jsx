@@ -59,16 +59,16 @@ class JumpTo extends React.Component{
     
     submitJumpHandler(){
         for(let i=0; i < this.state.jumpResult.length; i++){
-        window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+            window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
         }
     }
     
     createJumpResultList(){
-        const jumpResultList = []
+        let jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
         jumpResultList.push(
             <div className="jump-tree-container">
-            {this.jumpToButton(this.state.jumpResult[i])}
+                {this.jumpToButton(this.state.jumpResult[i])}
             </div>          
         )
         }
@@ -80,10 +80,7 @@ class JumpTo extends React.Component{
      */
     jumpToButton(resultItem){
         let content = [];
-        let targetHref = "";
-        if(resultItem["type"] === 'class'){
-            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
-        }    
+        let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);        
         content.push(
             <a href={targetHref} className="container">
             <div className="jump-tree-item">         
