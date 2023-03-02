@@ -7,6 +7,7 @@ class InfoAnnotations extends React.Component{
 
         })
         this.createTable = this.createTable.bind(this);
+        this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
     }
 
     createTable(){
@@ -26,6 +27,26 @@ class InfoAnnotations extends React.Component{
         ));
         return <ul>{listItems}</ul>;
       };
+
+    /**
+     * Handle the show more button in the ontology facet list
+     * @param {*} e 
+     */
+    handleOntologyShowMoreClick(e){                        
+        if(this.state.ontologyShowAll){
+            this.setState({
+                showMoreLessOntologiesText: "+ Show More",
+                ontologyShowAll: false
+            });
+        }
+        else{
+            this.setState({
+                showMoreLessOntologiesText: "- Show Less",
+                ontologyShowAll: true
+            });
+        }
+
+    }
 
     componentDidMount(){
         this.createTable();
