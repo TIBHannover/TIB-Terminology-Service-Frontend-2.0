@@ -4,6 +4,7 @@ class InfoAnnotations extends React.Component{
     constructor(props){
         super(props);
         this.setState = ({
+            ontologyShowAll: false,
 
         })
         this.createTable = this.createTable.bind(this);
