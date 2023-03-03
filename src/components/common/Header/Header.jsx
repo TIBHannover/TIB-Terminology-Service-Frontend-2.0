@@ -2,9 +2,7 @@ import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG';
 import SearchForm from "../../Search/SearchForm";
 
-
 function Header () {
-
   return (
     <div className='header-warpper'>
       <div className='container site-header'>

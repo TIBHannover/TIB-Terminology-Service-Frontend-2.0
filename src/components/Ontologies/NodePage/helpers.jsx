@@ -1,4 +1,5 @@
 import _ from "lodash";
+import React from "react";
 
 /**
  * Create the metadata for a class detail table
@@ -8,42 +9,59 @@ import _ from "lodash";
     let metadata = {
       "Label": [object.label, false],
       "CURIE":  [object.obo_id, false],
+      "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
-      // "Definition": [object.annotation ? object.annotation.definition : "", false],
       "fullIRI": [object.iri, true],
-      "Ontology": [object.ontology_name, false],
       "Synonyms": [object.synonyms, false],
       "Equivalent to": [object.eqAxiom, false],
       "SubClass Of" : [ object.subClassOf, false],
-      "Relations" : [ object, false],
-      "Example Usage": [object.annotation ? object.annotation.example_usage : "", false],
-      "Editor Note": [object.annotation ? object.annotation.editor_note : "", false],
-      "Is Defined By": [object.annotation ? object.annotation.isDefinedBy : "", false]
-    };
-    return metadata;
-  }
+      "Used in axiom" : [ object, false]
+    }
+    
+    if(object.annotation){
+      for(let key in object.annotation){
+        metadata[key] = [];
+        let value = [];
+        for(let annot of object.annotation[key]){
+          value.push(annot);
+        }
+        metadata[key] = [value.join(',\n'), false];
+      }    
+    }  
+  return metadata;
+}
+
 
 
 /**
  * Create the metadata for a Property detail table
  * The boolean in each value indicates that the metadata is a link or not.
  */
- export function propertyMetaData(object){
+export function propertyMetaData(object){  
   let metadata = {
     "Label": [object.label, false],
-    "abbreviatedIRI":  [object.short_form, false],
-    "Description": [object.description, false],
-    "Definition": [object['annotation'] ? object['annotation']['definition source'] : "", false],
+    "CURIE":  [object.obo_id, false],
+    "Term ID":  [object.short_form, false],
+    "Description": [object.description, false],    
     "fullIRI": [object.iri, true],
     "Ontology": [object.ontology_name, false],
-    "Synonyms": [object.synonyms, false],
-    "Curation Status" : [object['annotation'] ? object['annotation']['has curation status'] : "", false],
-    "Editor": [object['annotation'] ? object['annotation']['term editor'] : "", false],
-    "Is Defined By": [object['annotation'] ? object['annotation']['isDefinedBy'] : "", false]
+    "Synonyms": [object.synonyms, false]
   };
+
+  if(object.annotation){
+    for(let key in object.annotation){
+      metadata[key] = [];
+      let value = [];
+      for(let annot of object.annotation[key]){
+        value.push(annot);
+      }
+      metadata[key] = [value.join(',\n'), false];
+    }
+  }
 
   return metadata;
 }
+
 
 
 
@@ -64,7 +82,7 @@ import _ from "lodash";
   else if (label === "Synonyms"){
     return synonymsTag(text);
   }
-  else if (label === "Relations"){
+  else if (label === "Used in axiom"){
     return createRelations(text);
   }
   else if (label === "Equivalent to"){
@@ -74,7 +92,7 @@ import _ from "lodash";
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
 
-  return text
+  return transformToLink(text)
 }
 
 /**
@@ -162,4 +180,30 @@ function createRelations(object){
     }
   }
   return relsToRender;
+}
+
+/**
+ * Check if the tetx contains link to render is as anchor
+ */
+function transformToLink(text){  
+  if(typeof(text) !== "string"){
+    return text;
+  }
+  let splitedText = text.split("http");
+  if (splitedText.length === 1){
+    // no https inside text
+    return text;
+  }
+  else{
+    let result = [];
+    text = text.split(",");
+    for(let link of text){
+      // let label = document.createTextNode(link);
+      let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
+      result.push(anchor);
+      result.push(",  ");
+    }
+    return result;
+  }
+
 }

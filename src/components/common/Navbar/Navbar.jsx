@@ -1,4 +1,5 @@
 function Navbar () {
+
   let urlPath = window.location.pathname;
   return (
     <div className='col-lg-8 col-md-6'>

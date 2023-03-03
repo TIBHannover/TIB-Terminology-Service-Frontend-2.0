@@ -44,7 +44,7 @@ p{
     /* 
        The style for the site anchors
     */
-
+    padding-top: -30;
     color: #4f6d7a;
     text-decoration: none;
     font-weight: bold; 
@@ -170,6 +170,32 @@ p{
     */
     background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;
+}
+
+.facet-loading-effect{
+    /* 
+        Loading effect for the search facet
+    */
+
+    width: 50px;
+    height: 50px;
+}
+
+.clear-filter-link-box{
+    /* 
+        Clear facet filters link box style
+    */
+
+    margin-bottom: 40px;
+}
+
+.clear-filter-link-box > a{
+    /* 
+        Clear facet filters link style
+    */
+
+    text-decoration: underline !important;   
+    cursor: pointer;  
 }
 
 .result-card{
@@ -349,6 +375,16 @@ p{
     color:#dd6e42;
 }
 
+.skeleton-loading-box{
+    /* 
+        Style for the skeleton loading boxes
+    */
+
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;    
+}
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 
@@ -373,6 +409,73 @@ p{
     }
 }
 
+/* 
+------------------------
+    Cookies banner layout
+------------------------
+*/
+.cc_banner-wrapper{
+    z-index: 9001;
+    position: absolute;
+}
+
+.cc_container {
+    background: #444 !important;
+    font-family: inherit !important;
+  }
+
+.cc_container, .cc_message, .cc_btn {
+    animation-duration: 4s;
+    -webkit-animation-duration: 4s;
+    -moz-animation-duration: 4s;
+    -o-animation-duration: 4s;
+    -webkit-animation-name: slideUp;
+    animation-name: slideUp;
+  }
+
+.cc_container {
+    background: #222;
+    color: #fff;
+    font-size: 20px;
+    font-family: "Helvetica Neue Light","HelveticaNeue-Light","Helvetica Neue",Calibri,Helvetica,Arial;
+    box-sizing: border-box;
+  }
+
+  .cc_container {
+    padding: 10px 50px 10px;
+  }
+
+  .cc_container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+    border-top: 1px solid #888;
+  }
+
+  .cc_container .cc_btn {
+    padding: 8px 10px;
+    background-color: #c8c8c8;
+    cursor: pointer;
+    -webkit-transition: font-size 200ms;
+    transition: font-size 200ms;
+    text-align: center;
+    color: black;
+    font-size: 1em;
+    display: block;
+    width: 33%;
+    margin-left: 10px;
+    float: right;
+    max-width: 120px;
+  }
+
+  .cc_more_info{
+    color: white;
+    text-decoration: underline;
+  }
 
 /* 
 -------------------------------------
@@ -389,8 +492,13 @@ p{
     background-image: url('../../assets/img/polygon_background.svg');
     background-color: #4f6d7a;
     padding: 10px;
-    max-height: 220px;
  }
+
+ @media only screen and (min-width: 1200px) {
+    .header-warpper{
+        max-height: 220px;
+     }
+  }
  
  .container.site-header{
     /* 
@@ -892,8 +1000,6 @@ p{
     */
     height: fit-content;
     border: 0.5px solid black;
-    padding-bottom: 20px;
-    padding-top: 10px;
     z-index: 9999;
     padding-left: 10x;
     padding-right: 10px;
@@ -907,6 +1013,7 @@ p{
     */
     margin-left: 10px;
     text-align: justify;
+    margin-bottom: -20px;
 }
 
 #jumpresult-container{
@@ -916,8 +1023,7 @@ p{
     height: fit-content;
     border: 0.5px solid black;
     display: block;
-    padding-bottom: 20px;
-    padding-top: 10px;
+    padding-bottom: 10px;
     position: relative;
     z-index: 9999;
     padding-left: 10x;
@@ -926,6 +1032,7 @@ p{
     width: 100%;
     text-align: left;
     padding-left: 10px;
+    margin-bottom: -30px;
 }
 
 .jump-autocomplete-container{
@@ -1026,18 +1133,6 @@ p{
     */
     
     display: inline !important;
-}
-
-.search-result-type-tag{
-    /* 
-        The style for search result type tag.
-    */
-
-    width: 60px;
-    background-color: rgb(156, 14, 14);
-    color: white;
-    text-align: center;
-    font-size: 13px;
 }
 
 /* 
@@ -1468,6 +1563,19 @@ p{
     float: left;
     margin-bottom: 10px;
     margin-top: 2px;
+}
+
+.list-node-li{
+    /* 
+        The style for the nodes in the individual list
+    */
+
+    padding-left: 2em;
+    margin-bottom: 5px;    
+    margin-left: 0;
+    padding-left: 0;
+    cursor: pointer;        
+    font-size: 13px !important;    
 }
 
 

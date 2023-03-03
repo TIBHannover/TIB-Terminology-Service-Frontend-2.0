@@ -2,10 +2,12 @@ import { useState } from 'react';
 
 
 function formatCreators (creators) {
-  let answer = ''
+  let answer = []
+  let value = []
   for (let i = 0; i < creators.length; i++) {
-    answer += (creators[i] + ', ')
+    value.push(creators[i])
   }
+  answer = value.join(',\n')
   return answer
 }
 
@@ -103,7 +105,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-overview-table-id-column"><b>License</b></td>
             <td>
-              <a href={ontology.config.annotations.license} target="_blank" rel="noopener noreferrer">{ontology.config.annotations.license}</a>
+              <a href={ontology.config.license.url} target="_blank" rel="noopener noreferrer">{ontology.config.license.label}</a>
             </td>
           </tr>
           <tr>

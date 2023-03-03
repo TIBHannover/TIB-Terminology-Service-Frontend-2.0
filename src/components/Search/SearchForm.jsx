@@ -47,10 +47,14 @@ class SearchForm extends React.Component{
       }
 
 
-    submitHandler(event){  
-        let enteredTerm = document.getElementById('s-field').value;
+    submitHandler(event){          
+        let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
-          window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + enteredTerm);
+          let url = new URL(window.location);          
+          url.searchParams.delete('q');          
+          url.searchParams.append('q', enteredTerm);
+          url.pathname = "/ts/search";
+          window.location.replace(url);
         }        
     }
 
@@ -147,7 +151,7 @@ class SearchForm extends React.Component{
                 <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4>Jump To</h4>
-                   {this.createJumpResultList()}
+                    {this.createJumpResultList()}
                   </div>
                 </div>}
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&

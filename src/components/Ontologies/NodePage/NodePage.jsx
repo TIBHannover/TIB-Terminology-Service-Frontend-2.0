@@ -1,5 +1,5 @@
 import React from 'react';
-import {getNodeByIri} from '../../../api/fetchData';
+import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -11,7 +11,8 @@ class NodePage extends React.Component {
       data: true,
       iriIsCopied: false,
       prevNode: "",
-      componentIdentity: ""
+      componentIdentity: "",
+      isSkos: false
     })
     this.initiateTheTableView = this.initiateTheTableView.bind(this);
     this.createRow = this.createRow.bind(this);
@@ -28,13 +29,24 @@ class NodePage extends React.Component {
     let ontology = this.props.ontology;
     let extractKey = this.props.extractKey;
     let componentIdentity = this.props.componentIdentity;
-    let node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey);    
-    this.setState({
-      prevNode: node.iri,
-      data: node,
-      iriIsCopied: false,
-      componentIdentity: componentIdentity
-    });
+    let isSkos = this.props.isSkos;
+    let node = {};
+    if(isSkos){
+      node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));    
+    }
+    else{      
+      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);    
+    }
+    if(node.iri){
+      this.setState({
+        prevNode: node.iri,
+        data: node,
+        iriIsCopied: false,
+        componentIdentity: componentIdentity,
+        isSkos: isSkos
+      });
+    }
+   
   }
 
 
@@ -77,16 +89,17 @@ class NodePage extends React.Component {
   /**
    * Create the view to render 
    */
-  createTable(){
+  createTable(){    
     let metadataToRender = "";
-    if(this.state.componentIdentity === "term"){
+    if(this.state.componentIdentity === "term" || this.state.componentIdentity === "individual"){
       metadataToRender =  classMetaData(this.state.data);
     }
     else{
       metadataToRender = propertyMetaData(this.state.data);
     }
     let result = [];
-    for(let key of Object.keys(metadataToRender)){
+    
+    for(let key of Object.keys(metadataToRender)){    
       let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
       result.push(row);
     }
@@ -102,8 +115,8 @@ class NodePage extends React.Component {
   }
 
 
-  componentDidUpdate(){
-    if(this.state.data && this.state.prevNode !== this.props.iri){
+  componentDidUpdate(){    
+    if(this.state.prevNode !== this.props.iri){
       this.initiateTheTableView();
     }
   }
@@ -115,7 +128,7 @@ class NodePage extends React.Component {
         <HelmetProvider>
         <div>
           <Helmet>
-            <title>{this.state.data.short_form}</title>
+            <title>{`${this.state.data.ontology_name} - ${this.state.data.short_form}`}</title>
           </Helmet>
         </div>
         </HelmetProvider>

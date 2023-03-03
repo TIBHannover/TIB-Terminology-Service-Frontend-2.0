@@ -103,6 +103,36 @@ export async function getOntologyRootTerms(ontologyId:string) {
   
 }
 
+/**
+ * Get the list of individuals for an ontology
+ */
+export async function getIndividualsList(ontologyId:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=100000";
+  let res = await fetch(url, getCallSetting);
+  res = await res.json();
+  res = res["_embedded"];
+  if (!res || res["individuals"] === "undefined"){
+    return [];
+  }
+  else{
+    return res["individuals"];
+  }
+}
+
+
+/**
+ * Get the SKOS ontologies root concepts
+ * @param params 
+ */
+export async function getSkosOntologyRootConcepts(ontologyId:string) {
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
+  let results =  await (await fetch(url, getCallSetting)).json();
+  return results;
+}
+
+
 
 /**
  * fetch  the root properties for an ontology
@@ -143,8 +173,48 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/";
   url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-  let res =  await (await fetch(url, getCallSetting)).json(); 
+  let res =  await (await fetch(url, getCallSetting)).json();
   return res;
+}
+
+
+/**
+ * Get the children for skos ontology terms
+ */
+export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:string){
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let res =  await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];
+  if(typeof(res['individuals']) !== "undefined"){
+    return res['individuals'];
+  }
+  else{
+    return [];
+  }
+}
+
+
+/**
+ * Check an skos ontology node has children
+*/
+export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:string) {
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let res =  await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];
+  if(!res){
+    return false;
+  }
+  else if(typeof(res['individuals']) === "undefined"){
+    return false;
+  }
+  else if(res['individuals']!.length === 0){
+    return false;
+  }  
+  else{
+    return true;
+  }
 }
 
 
@@ -156,15 +226,29 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
  * @param mode 
  * @returns 
  */
- export async function getNodeByIri(ontology:string, nodeIri:string, mode:string) {
+ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
+  if(nodeIri === "%20"){
+    // empty iri
+    return false;
+  }  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
-  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;
-  let node =  await fetch(baseUrl + "?iri=" + nodeIri, getCallSetting);
+  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;  
+  let node = <any> "";
+  if(mode === "individuals"){
+    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri), getCallSetting);
+  }
+  else{
+    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
+  }
+
   if (node.status === 404){
     return false;
   }
   node = await node.json();
-  node = node['_embedded'][mode][0];
+  if(isIndividual){
+    return node;
+  }
+  // node = node['_embedded'][mode][0];
   let parents = await getParents(node, mode);
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
@@ -178,6 +262,58 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
   node['parents'] = parents;  
   return node;
 }
+
+
+/**
+ * Get Skos node by Iri
+ */
+export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+  let url = OntologiesBaseServiceUrl + "/" + ontology +  "/individuals/" + encodeURIComponent(nodeIri);
+  let res =  await (await fetch(url, getCallSetting)).json();  
+  if(!res){
+    return false;
+  }
+  else if(typeof(res['iri']) === "undefined"){
+    return false;
+  }  
+  else{    
+    return res;
+  }
+}
+
+
+/**
+ * Get an Skos node parent concept
+ */
+export async function getSkosNodeParent(ontology, iri) {
+  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let url = baseUrl +  "/" + ontology +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
+  let res = await (await fetch(url, getCallSetting)).json();
+  res = res['_embedded'];    
+  if(!res || !res['individuals']){
+    return false;
+  }
+  return res['individuals'][0];
+}
+
+
+/**
+ * Check of ontology is SKOS 
+ */
+export async function isSkosOntology(ontologyId) {
+  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let url = baseUrl + "/" + ontologyId;
+  let res = await (await fetch(url, getCallSetting)).json();
+  res = res["config"];
+  if(!res || res['skos'] === "undefined"){
+    return false
+  }
+  return res["skos"];
+}
+
+
+
 
 /**
  * Get a class to Equivalent Axioms
@@ -305,7 +441,12 @@ export async function getAllCollectionsIds() {
     let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
     let statsResult = await fetch(statsUrl, getCallSetting);
     statsResult = await statsResult.json();
-    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"]};
+    let collectionOntologies = await getCollectionOntologies([col['content']], false);
+    let collectionOntologiesIds: Array<any> = [];
+    for(let onto of collectionOntologies){
+      collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
+    }
+    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"], "ontolgies": collectionOntologiesIds};
     result.push(record);
   }
   return result;
@@ -319,6 +460,9 @@ export async function getAllCollectionsIds() {
  * @returns 
  */
 export async function getParents(node:any, mode:string) {
+  if(mode === "individuals"){
+    return [];
+  }
   if(typeof(node['_links']['hierarchicalParents']) === "undefined"){
     return [];
   }
