@@ -384,6 +384,9 @@ class OntologyDetail extends React.Component {
                             <div className='col-sm-9'>
                               <OntologyInfoBox ontology={this.state.ontology} />
                             </div>
+                            <div className="text-center" id="search-facet-show-more-ontology-btn">
+                               <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                            </div>
                             
                             <div className='col-sm-3'>
                               <OntologyStatsBox ontology={this.state.ontology} />
