@@ -36,7 +36,8 @@ class Tree extends React.Component {
           reload: false,
           isLoadingTheComponent: true,
           noNodeExist: false,
-          isSkos: false        
+          isSkos: false,
+          lastKeySelectedItem: null 
         })
     
         this.setTreeData = this.setTreeData.bind(this);
@@ -46,7 +47,8 @@ class Tree extends React.Component {
         this.processTree = this.processTree.bind(this);
         this.resetTree = this.resetTree.bind(this);
         this.showSiblings = this.showSiblings.bind(this);
-        this.reduceTree = this.reduceTree.bind(this);        
+        this.reduceTree = this.reduceTree.bind(this);   
+        this.processKeyNavigation = this.processKeyNavigation.bind(this);     
     }
 
 
@@ -348,7 +350,8 @@ class Tree extends React.Component {
             selectedNodeIri: target.parentNode.parentNode.dataset.iri,
             siblingsButtonShow: false,
             reduceTreeBtnShow: true,
-            reduceBtnActive: false
+            reduceBtnActive: false,
+            lastKeySelectedItem: target.parentNode.parentNode.id
         }, () =>{
             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
         });
@@ -385,6 +388,53 @@ class Tree extends React.Component {
             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
         });       
         }
+    }
+
+    
+
+    /**
+     * Process the keyboard navigation
+     * @param {*} event 
+     */
+    processKeyNavigation(event){
+        if(event.code === "ArrowDown"){
+            event.preventDefault();
+        }
+        try{
+            let lastSelectedItem = this.state.lastKeySelectedItem;
+            if(!lastSelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
+                // nothing is selected. Tree div is not in focus: Select the first element
+                let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                this.selectNode(node);
+                node.parentNode.classList.add('clicked');
+            }
+            else if(lastSelectedItem && event.key === "ArrowDown" && document.getElementById(lastSelectedItem).nextSibling){
+                // select the next siblings 
+                let node = document.getElementById(lastSelectedItem).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                this.selectNode(node);
+                node.parentNode.classList.add('clicked');
+                let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                document.getElementById('tree-container').scrollTop = nodePostion;    
+            }
+            else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
+                // select the previous siblings 
+                let node = document.getElementById(lastSelectedItem).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                this.selectNode(node);
+                node.parentNode.classList.add('clicked');
+                let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                document.getElementById('tree-container').scrollTop = nodePostion;
+            }
+            else if(lastSelectedItem && event.key === "ArrowRight"){
+                // Expand the node if it has children
+                let node = document.getElementById(lastSelectedItem);
+                expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+                this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                });   
+            }
+        }
+        catch(e){
+
+        }        
     }
   
   
@@ -514,7 +564,8 @@ class Tree extends React.Component {
 
 
     componentDidMount(){
-        this.setTreeData();        
+        this.setTreeData();
+        document.addEventListener("keydown", this.processKeyNavigation, false);     
     }
     
     componentDidUpdate(){

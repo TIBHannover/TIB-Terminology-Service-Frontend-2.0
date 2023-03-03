@@ -24,47 +24,6 @@ class DataTree extends React.Component {
 
   }
 
-/**
- * Process the keyboard navigation
- * @param {*} event 
- */
-// processKeyNavigation(event){
-//   if(event.code === "ArrowDown"){
-//     event.preventDefault();
-//   }
-//   let lastSelectedItem = this.state.lastKeySelectedItem;
-//   if(!lastSelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
-//     // nothing is selected. Tree div is not in focus: Select the first element
-//     let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-//     this.selectNode(node);
-//     node.parentNode.classList.add('clicked');
-//   }
-//   else if(lastSelectedItem && event.key === "ArrowDown" && document.getElementById(lastSelectedItem).nextSibling){
-//     // select the next siblings 
-//     let node = document.getElementById(lastSelectedItem).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-//     this.selectNode(node);
-//     node.parentNode.classList.add('clicked');
-//     let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
-//     document.getElementById('tree-container').scrollTop = nodePostion;    
-//   }
-//   else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
-//     // select the previous siblings 
-//     let node = document.getElementById(lastSelectedItem).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-//     this.selectNode(node);
-//     node.parentNode.classList.add('clicked');
-//     let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
-//     document.getElementById('tree-container').scrollTop = nodePostion;
-//   }
-//   else if(lastSelectedItem && event.key === "ArrowRight"){
-//     // Expand the node if it has children
-//     let node = document.getElementById(lastSelectedItem);
-//     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
-//       this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-//     });   
-//   }
-// }
-
-
 
 /**
  * The function indicates what should happen when a tree node is selected 
