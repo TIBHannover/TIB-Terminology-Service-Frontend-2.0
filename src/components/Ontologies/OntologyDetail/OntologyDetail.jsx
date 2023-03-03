@@ -383,11 +383,12 @@ class OntologyDetail extends React.Component {
               {!this.state.waiting && this.state.overViewTab &&
                           <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
                             <div className='col-sm-9'>
-                              <OntologyInfoBox ontology={this.state.ontology} />
+                              <OntologyInfoBox ontology={this.state.ontology} />                              
                                <div className="text-center" id="search-facet-show-more-ontology-btn">
                                  <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
                                </div>
-                               <InfoAnnotations ontology={this.state.ontology} />
+                               {this.state.ontologyShowAll &&
+                               <InfoAnnotations ontology={this.state.ontology} />}
                             </div>                           
                             <div className='col-sm-3'>
                               <OntologyStatsBox ontology={this.state.ontology} />
