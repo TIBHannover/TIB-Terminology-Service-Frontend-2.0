@@ -407,9 +407,9 @@ class Tree extends React.Component {
   }
 
 
-  /**
-     * Show an opened node siblings
-     */
+    /**
+    * Show an opened node siblings
+    */
     async showSiblings(){
         try{    
         let targetNodes = document.getElementsByClassName("targetNodeByIri");
