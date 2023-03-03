@@ -397,7 +397,7 @@ class Tree extends React.Component {
      * @param {*} event 
      */
     processKeyNavigation(event){
-        if(event.code === "ArrowDown"){
+        if(event.code === "ArrowDown" || event.code === "ArrowUp"){
             event.preventDefault();
         }
         try{
@@ -425,11 +425,21 @@ class Tree extends React.Component {
                 document.getElementById('tree-container').scrollTop = nodePostion;
             }
             else if(lastSelectedItem && event.key === "ArrowRight"){
-                // Expand the node if it has children
-                let node = document.getElementById(lastSelectedItem);
-                expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
-                this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                });   
+                // Expand the node if it has children. if it is already expanded, move the select into children
+                let node = document.getElementById(lastSelectedItem);                
+                if(node.classList.contains("closed")){
+                    expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+                        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    });  
+                }
+                else if(!node.classList.contains("leaf-node")){
+                    let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                    this.selectNode(childNode);
+                    childNode.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion; 
+                }
+                 
             }
         }
         catch(e){
