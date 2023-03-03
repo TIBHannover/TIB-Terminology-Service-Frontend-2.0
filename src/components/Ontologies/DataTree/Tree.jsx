@@ -481,7 +481,7 @@ class Tree extends React.Component {
       reload: false,
       showNodeDetailPage: false,
       reduceTreeBtnShow: false,
-      lastSelectedItem: false
+      lastKeySelectedItem: false
     });
   }
 
