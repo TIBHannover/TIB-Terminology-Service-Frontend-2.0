@@ -20,7 +20,7 @@ class InfoAnnotations extends React.Component{
             <table className="ontology-detail-table">
                 <tbody>
                     <tr>
-                      <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+                      <td style={{width: "150px"}}><b>{key}</b></td>
                       <td>{(value).join(',\n')}</td>
                     </tr>
                 </tbody>
