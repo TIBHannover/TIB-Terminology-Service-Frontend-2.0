@@ -61,16 +61,14 @@ class InfoAnnotations extends React.Component{
 
     render(){
         return(
-            <div>
                 <div className='row'>
                   <div className='col-sm-11 ontology-detail-text'>
                      <h4><b>Annotations</b></h4>
                   </div>
+                  {this.createTable()}
                 </div>
-              {this.createTable()}
-            </div>
-        )
-    }
+              )
+        }
 
 }
 
