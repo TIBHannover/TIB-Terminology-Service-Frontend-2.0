@@ -22,7 +22,7 @@ export function setJumpResultButtons(resultItem){
                     return (
                         <div>
                             {resultItem['label']}
-                         <div className="btn btn-default ontology-button">{resultItem['ontology_prefix']}</div>
+                         <div className="btn btn-default ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }
@@ -31,7 +31,7 @@ export function setJumpResultButtons(resultItem){
                         <div className="jump-autocomplete-item">  
                             {resultItem['label']}
                           <div className="btn btn-default term-button">{resultItem['short_form']}</div>
-                          <div className="btn btn-default ontology-button">{resultItem['ontology_prefix']}</div>
+                          <div className="btn btn-default ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }       
@@ -48,7 +48,7 @@ export function setJumpResultButtons(resultItem){
                     return (
                         <div>
                             {resultItem['label']}
-                         <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
+                         <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }
@@ -56,7 +56,7 @@ export function setJumpResultButtons(resultItem){
                     return(
                         <div>
                             {resultItem['label']}
-                          <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_prefix']}</div>
+                          <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_name']}</div>
                           <div className="btn btn-default jmp-term-button">{resultItem['short_form']}</div>
                         </div>
                     )

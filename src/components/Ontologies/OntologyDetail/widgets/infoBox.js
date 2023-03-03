@@ -11,6 +11,20 @@ function formatCreators (creators) {
   return answer
 }
 
+function annotationElements(props){
+  const ontology = props.ontology
+  if(ontology.config.annotations !== undefined){
+    const entries = Object.entries(ontology.config.annotations);
+    const listItems = entries.map(([key,value]) => (
+      <li>
+        {key}: {value}
+      </li>
+    ));
+    return <ul>{listItems}</ul>
+  }
+}
+
+
 
 function OntologyInfoBox (props) {
   const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
@@ -22,6 +36,8 @@ function OntologyInfoBox (props) {
   if (!ontology || ontology === null) {
     return false
   }
+
+  
 
   return (
     <div className="ontology-detail-table-wrapper">
