@@ -45,6 +45,7 @@ class OntologyDetail extends React.Component {
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
+    this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
   }
 
 
@@ -305,6 +306,26 @@ class OntologyDetail extends React.Component {
       this.setState({propertyTreeDomLastState: stateObject});
     }
   }
+
+  /**
+     * Handle the show more button in the ontology facet list
+     * @param {*} e 
+     */
+  handleOntologyShowMoreClick(e){                        
+    if(this.state.ontologyShowAll){
+        this.setState({
+            showMoreLessOntologiesText: "+ Show More",
+            ontologyShowAll: false
+        });
+    }
+    else{
+        this.setState({
+            showMoreLessOntologiesText: "- Show Less",
+            ontologyShowAll: true
+        });
+    }
+
+}
 
 
   componentDidMount () {
