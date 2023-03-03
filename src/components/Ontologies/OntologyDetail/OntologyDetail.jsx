@@ -38,7 +38,8 @@ class OntologyDetail extends React.Component {
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      isSkosOntology: false      
+      isSkosOntology: false,
+      showMoreLessOntologiesText: "+ Show More"      
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);

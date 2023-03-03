@@ -5,6 +5,7 @@ class InfoAnnotations extends React.Component{
         super(props);
         this.setState = ({
             ontologyShowAll: false,
+            showMoreLessOntologiesText: "+ Show More",
 
         })
         this.createTable = this.createTable.bind(this);
