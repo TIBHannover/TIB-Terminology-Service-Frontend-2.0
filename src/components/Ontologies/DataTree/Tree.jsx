@@ -441,6 +441,24 @@ class Tree extends React.Component {
                 }
                  
             }
+            else if(lastSelectedItem && event.key === "ArrowLeft"){
+                // Move the selection to the parent. If it is already moved, close the parent.
+                let node = document.getElementById(lastSelectedItem); 
+                let parentNode = node.parentNode.parentNode;                
+                if(node.classList.contains("opened")){  
+                    expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+                        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    }); 
+                }
+                else if(parentNode.tagName === "LI"){                    
+                    parentNode = parentNode.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
+                    this.selectNode(parentNode);
+                    parentNode.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion;   
+                }
+                 
+            }
         }
         catch(e){
 
@@ -462,7 +480,8 @@ class Tree extends React.Component {
       siblingsButtonShow: false,
       reload: false,
       showNodeDetailPage: false,
-      reduceTreeBtnShow: false
+      reduceTreeBtnShow: false,
+      lastSelectedItem: false
     });
   }
 
