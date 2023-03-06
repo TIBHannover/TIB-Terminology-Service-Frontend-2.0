@@ -30,12 +30,16 @@ function OntologyInfoBox (props) {
   }
 
   let entries = Object.entries(ontology.config.annotations);
-        let listItems = entries.map(([key, value]) => (           
-            <tr>
-              <td className="ontology-overview-table-id-column"><b>{key}</b></td>
-              <td>{(value).join(',\n')}</td>
-            </tr>                           
-        ));
+  let annotations = [];
+  for(let [key,value] of entries){
+    annotations.push(
+      <tr>
+      <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+      <td>{(value).join(',\n')}</td>
+    </tr>
+    )
+  }
+        
         
 
   
@@ -167,7 +171,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
           </tr>       
-          {alphabeticSort(listItems)}                     
+          {alphabeticSort(annotations)}                     
         </tbody>
       </table>
     </div>
