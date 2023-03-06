@@ -64,7 +64,7 @@ class Tree extends React.Component {
     let resetFlag = this.state.resetTreeFlag;
     let viewMode = !this.state.reduceBtnActive;
     let reload = this.state.reload;
-    let isSkos = this.props.isSkos;
+    let isSkos = this.props.isSkos;    
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity === 'term'){         
             this.setState({
@@ -145,6 +145,7 @@ class Tree extends React.Component {
         let listOfNodes =  [];
         let rootNodesWithChildren = [];
         let childrenList = [];  
+        let lastSelectedItemId = "";
 
         if(this.props.lastState && this.props.lastState.treeDomContent !== "" && !this.props.isIndividual){            
             // return the last tree state. Used when a user switch tabs on the ontology page
@@ -172,7 +173,7 @@ class Tree extends React.Component {
                 // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
                 treeList = await buildSkosSubtree(this.state.ontologyId, target, viewMode);                                                       
             }
-            else{
+            else{                
                 targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
                 listOfNodes =  await (await fetch(url, getCallSetting)).json();
                 rootNodesWithChildren = buildHierarchicalArray(listOfNodes);                           
@@ -182,14 +183,17 @@ class Tree extends React.Component {
                     let i = 0;
                     for(let rootNodes of rootNodesWithChildren){ 
                         let treeNode = new TreeNode();
-                        let nodeIsClicked = (rootNodes.iri === target)
+                        let nodeIsClicked = (rootNodes.iri === target)  
+                        if(nodeIsClicked){
+                            lastSelectedItemId =  i;
+                        }                      
                         let node = treeNode.buildNodeWithReact(rootNodes, i, nodeIsClicked);        
                         childrenList.push(node);
                         i += 1;
                     }          
-                    treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                              
+                    treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                                              
                 }
-                else{
+                else{                    
                     for(let i=0; i < rootNodesWithChildren.length; i++){      
                         let treeNode = new TreeNode();           
                         let isExpanded = "";      
@@ -233,7 +237,8 @@ class Tree extends React.Component {
             reload: false,
             isLoadingTheComponent: false,
             siblingsButtonShow: fullTreeMode,
-            siblingsVisible: !fullTreeMode
+            siblingsVisible: !fullTreeMode,
+            lastSelectedItemId: lastSelectedItemId
         });  
     }
 
@@ -414,14 +419,7 @@ class Tree extends React.Component {
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });  
-                }
-                else if(!node.classList.contains("leaf-node")){
-                    let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                    this.selectNode(childNode);
-                    childNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(lastSelectedItemId).offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion; 
-                }
+                }                
                  
             }
             else if(lastSelectedItemId && event.key === "ArrowLeft"){
