@@ -1375,6 +1375,10 @@ p{
     font-size: 14px;
 }
 
+.ontology-overview-table-id-column{
+    width: 280px;
+}
+
 
 .nav-tabs{
     /* 

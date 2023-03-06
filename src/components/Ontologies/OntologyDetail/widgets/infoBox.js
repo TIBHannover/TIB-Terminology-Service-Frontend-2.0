@@ -25,17 +25,11 @@ function OntologyInfoBox (props) {
   }
 
   let entries = Object.entries(ontology.config.annotations);
-        let listItems = entries.map(([key, value]) => (
-          <div className="ontology-detail-table-wrapper">
-            <table className="ontology-detail-table">
-                <tbody>
-                    <tr>
-                      <td style={{width: "150px"}}><b>{key}</b></td>
-                      <td>{(value).join(',\n')}</td>
-                    </tr>
-                </tbody>
-            </table>
-           </div>             
+        let listItems = entries.map(([key, value]) => (           
+            <tr>
+              <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+              <td>{(value).join(',\n')}</td>
+            </tr>                           
         ));
 
   
@@ -163,8 +157,8 @@ function OntologyInfoBox (props) {
                 >
                 <i class="fa fa-download"></i>Ontology metadata as JSON</a>
             </td>
-          </tr>
-          {listItems}
+          </tr>       
+          {listItems}                     
         </tbody>
       </table>
     </div>
