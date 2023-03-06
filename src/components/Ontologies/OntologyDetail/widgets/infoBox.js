@@ -12,13 +12,14 @@ function formatCreators (creators) {
 }
 
 
-
 function OntologyInfoBox (props) {
   const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
   const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
   const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
   const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
   const [ontologyObject, setOntologyObject]  = useState(props.ontology);
+  const [ontologyShowAll, setOntologyShowAll] = useState(false);
+  const [showMoreLessOntologiesText, setshowMoreLessOntologiesText] = useState("+ Show additional information")
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
