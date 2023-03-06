@@ -13,11 +13,12 @@ class InfoAnnotations extends React.Component{
             ontologyObject: this.props.ontology
 
         })
-        this.createAnnotations = this.createAnnotation.bind(this);
+        this.createAnnotations = this.createAnnotations.bind(this);
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
         this.formatCreators = this.formatCreators.bind(this);
         this.alphabeticSort = this.alphabeticSort.bind(this);
         this.skosValue = this.skosValue.bind(this);
+        this.createOverview = this.createOverview.bind(this);
     }
 
     /**

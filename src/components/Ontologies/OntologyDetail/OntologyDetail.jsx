@@ -383,7 +383,7 @@ class OntologyDetail extends React.Component {
               {!this.state.waiting && this.state.overViewTab &&
                           <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">                           
                             <div className='col-sm-9'>
-                              <OntologyInfoBox ontology={this.state.ontology} />                               
+                              <InfoAnnotations ontology={this.state.ontology} />                               
                             </div>                           
                             <div className='col-sm-3'>
                               <OntologyStatsBox ontology={this.state.ontology} />
