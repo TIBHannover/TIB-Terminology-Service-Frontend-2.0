@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
 import TreeNode from "./TreeNode";
 import { buildHierarchicalArray,
-    buildTreeListItem,
     nodeHasChildren,
     nodeIsRoot, 
     expandTargetNode, 
@@ -467,7 +466,8 @@ class Tree extends React.Component {
      */
     async showSiblings(){
         try{    
-        let targetNodes = document.getElementsByClassName("targetNodeByIri");        
+        let targetNodes = document.getElementsByClassName("targetNodeByIri");
+        let treeNode = new TreeNode()   
         if(!this.state.siblingsVisible){
             if(this.state.isSkos){
                 showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
@@ -483,11 +483,11 @@ class Tree extends React.Component {
                 url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
                 let res =  await (await fetch(url, getCallSetting)).json();          
                 for(let i=0; i < res.length; i++){
-                if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
-                    continue;
-                }
-                let listItem = buildTreeListItem(res[i]);
-                document.getElementById("tree-root-ul").appendChild(listItem);
+                    if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
+                        continue;
+                    }                
+                    let node = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
+                    document.getElementById("tree-root-ul").appendChild(node);
                 }   
     
             }
@@ -501,9 +501,9 @@ class Tree extends React.Component {
                     for(let i=0; i < res.length; i++){
                         if (res[i].iri === node.parentNode.dataset.iri){
                             continue;
-                        }
-                        let listItem = buildTreeListItem(res[i]);
-                        parentUl.appendChild(listItem);      
+                        }                        
+                        let item = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
+                        parentUl.appendChild(item);      
                     }   
                 }
             }
