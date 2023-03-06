@@ -15,6 +15,20 @@ function alphabeticSort(item){
    return item.sort();
 }
 
+function skosValue(skos){
+  return JSON.parse(skos);
+}
+
+function HandleShowMoreLess(){
+  const [ontologyShowAll, setOntologyShowAll] = useState(false);
+  const [showMoreLessOntologiesText, setshowMoreLessOntologiesText] = useState("+ Show additional information")
+  return (
+    <div className="text-center" id="search-facet-show-more-ontology-btn">
+            <a className="show-more-btn" onClick={() => setOntologyShowAll(true)}>{setshowMoreLessOntologiesText}</a>
+  </div>
+  )  
+}
+
 
 function OntologyInfoBox (props) {
   const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
@@ -22,13 +36,11 @@ function OntologyInfoBox (props) {
   const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
   const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
   const [ontologyObject, setOntologyObject]  = useState(props.ontology);
-  const [ontologyShowAll, setOntologyShowAll] = useState(false);
-  const [showMoreLessOntologiesText, setshowMoreLessOntologiesText] = useState("+ Show additional information")
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
   }
-
+  
   let entries = Object.entries(ontology.config.annotations);
   let annotations = [];
   for(let [key,value] of entries){
@@ -138,7 +150,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
             <td>
-              {ontology.config.skos}
+              {skosValue(ontology.config.skos)}
             </td>
           </tr>
           <tr>
