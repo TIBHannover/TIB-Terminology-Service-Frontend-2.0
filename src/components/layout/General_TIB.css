@@ -1382,6 +1382,10 @@ p{
     width: 280px;
 }
 
+#annotation-heading{
+    border-top: solid 6px #DFE4E5 ;
+}
+
 
 .nav-tabs{
     /* 

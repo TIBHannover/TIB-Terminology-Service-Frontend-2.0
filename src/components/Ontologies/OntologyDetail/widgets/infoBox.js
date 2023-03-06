@@ -46,7 +46,7 @@ function OntologyInfoBox (props) {
         </div>
       </div>
       
-      <table className="ontology-detail-table">
+      <table className="ontology-detail-table" striped="columns">
         <tbody>
           <tr>
             <td className="ontology-overview-table-id-column"><b>IRI</b></td>
@@ -158,6 +158,9 @@ function OntologyInfoBox (props) {
                 >
                 <i class="fa fa-download"></i>Ontology metadata as JSON</a>
             </td>
+          </tr>
+          <tr>
+            <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
           </tr>       
           {listItems}                     
         </tbody>
