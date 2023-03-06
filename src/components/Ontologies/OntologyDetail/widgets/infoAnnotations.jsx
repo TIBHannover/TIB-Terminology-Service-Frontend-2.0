@@ -160,6 +160,37 @@ class InfoAnnotations extends React.Component{
                               {this.skosValue(ontology.config.skos)}
                            </td>
                         </tr>
+                        <tr>
+                           <td className="ontology-overview-table-id-column"><b>Download</b></td>
+                           <td>                     
+                             <a                
+                               href={"https://service.tib.eu/ts4tib/ontologies/" + ontology.ontologyId + "/download"}
+                               className='btn btn-primary btn-dark download-ontology-btn'
+                               target="_blank"                               
+                              >
+                              <i class="fa fa-download"></i>OWL
+                             </a>
+                             <a 
+                               className='btn btn-primary btn-dark download-ontology-btn'                                
+                               onClick={async () => {                    
+                                 const jsonFile = JSON.stringify(this.state.ontologyObject);
+                                 const blob = new Blob([jsonFile],{type:'application/json'});
+                                 const href = await URL.createObjectURL(blob);
+                                 const link = document.createElement('a');
+                                 link.href = href;
+                                 link.download = this.state.ontologyObject.ontologyId + "_metadata.json";
+                                 document.body.appendChild(link);
+                                 link.click();
+                                 document.body.removeChild(link);
+                               }}
+                              >
+                              <i class="fa fa-download"></i>Ontology metadata as JSON</a>
+                            </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
+                        </tr> 
+                        {this.createAnnotations()}
                     </tbody>
                    </table>
                 </div> 
@@ -188,27 +219,21 @@ class InfoAnnotations extends React.Component{
     }
 
     componentDidMount(){
-        this.createTable();
+        this.createOverview();
+        this.createAnnotations();
     }
 
     componentDidUpdate(){
-        this.createTable();
+        this.createOverview();
+        this.createAnnotations();
     }
 
 
     render(){
         return(
-            <div className="ontology-detail-table-wrapper">
-                <div className='row'>
-                  <div className='col-sm-11 ontology-detail-text'>
-                    <h4><b>{}</b></h4>
-                    <p>
-                     {}
-                    </p>
-                  </div>
-                </div>
-
-            </div>              
+            <div>
+                {this.createOverview()}
+            </div>          
             )
         }
 
