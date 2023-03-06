@@ -37,7 +37,7 @@ class Tree extends React.Component {
           isLoadingTheComponent: true,
           noNodeExist: false,
           isSkos: false,
-          lastKeySelectedItem: null 
+          lastSelectedItemId: null 
         })
     
         this.setTreeData = this.setTreeData.bind(this);
@@ -351,7 +351,7 @@ class Tree extends React.Component {
             siblingsButtonShow: false,
             reduceTreeBtnShow: true,
             reduceBtnActive: false,
-            lastKeySelectedItem: target.parentNode.parentNode.id
+            lastSelectedItemId: target.parentNode.parentNode.id
         }, () =>{
             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
         });
@@ -401,32 +401,32 @@ class Tree extends React.Component {
             event.preventDefault();
         }
         try{
-            let lastSelectedItem = this.state.lastKeySelectedItem;
-            if(!lastSelectedItem && ["ArrowDown", "ArrowUp"].includes(event.key)){
+            let lastSelectedItemId = this.state.lastSelectedItemId;
+            if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){
                 // nothing is selected. Tree div is not in focus: Select the first element
                 let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
                 this.selectNode(node);
                 node.parentNode.classList.add('clicked');
             }
-            else if(lastSelectedItem && event.key === "ArrowDown" && document.getElementById(lastSelectedItem).nextSibling){
+            else if(lastSelectedItemId && event.key === "ArrowDown" && document.getElementById(lastSelectedItemId).nextSibling){
                 // select the next siblings 
-                let node = document.getElementById(lastSelectedItem).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                let node = document.getElementById(lastSelectedItemId).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
                 this.selectNode(node);
                 node.parentNode.classList.add('clicked');
-                let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                let nodePostion = document.getElementById(lastSelectedItemId).nextSibling.offsetTop;
                 document.getElementById('tree-container').scrollTop = nodePostion;    
             }
-            else if(lastSelectedItem && event.key === "ArrowUp" && document.getElementById(lastSelectedItem).previousSibling){
+            else if(lastSelectedItemId && event.key === "ArrowUp" && document.getElementById(lastSelectedItemId).previousSibling){
                 // select the previous siblings 
-                let node = document.getElementById(lastSelectedItem).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                let node = document.getElementById(lastSelectedItemId).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
                 this.selectNode(node);
                 node.parentNode.classList.add('clicked');
-                let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                let nodePostion = document.getElementById(lastSelectedItemId).previousSibling.offsetTop;
                 document.getElementById('tree-container').scrollTop = nodePostion;
             }
-            else if(lastSelectedItem && event.key === "ArrowRight"){
+            else if(lastSelectedItemId && event.key === "ArrowRight"){
                 // Expand the node if it has children. if it is already expanded, move the select into children
-                let node = document.getElementById(lastSelectedItem);                
+                let node = document.getElementById(lastSelectedItemId);                
                 if(node.classList.contains("closed")){
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
@@ -436,14 +436,14 @@ class Tree extends React.Component {
                     let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
                     this.selectNode(childNode);
                     childNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                    let nodePostion = document.getElementById(lastSelectedItemId).offsetTop;
                     document.getElementById('tree-container').scrollTop = nodePostion; 
                 }
                  
             }
-            else if(lastSelectedItem && event.key === "ArrowLeft"){
+            else if(lastSelectedItemId && event.key === "ArrowLeft"){
                 // Move the selection to the parent. If it is already moved, close the parent.
-                let node = document.getElementById(lastSelectedItem); 
+                let node = document.getElementById(lastSelectedItemId); 
                 let parentNode = node.parentNode.parentNode;                
                 if(node.classList.contains("opened")){  
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
@@ -454,14 +454,14 @@ class Tree extends React.Component {
                     parentNode = parentNode.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
                     this.selectNode(parentNode);
                     parentNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(lastSelectedItem).nextSibling.offsetTop;
+                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).offsetTop;
                     document.getElementById('tree-container').scrollTop = nodePostion;   
                 }
                  
             }
         }
         catch(e){
-
+            // console.info(e)
         }        
     }
   
@@ -481,7 +481,7 @@ class Tree extends React.Component {
       reload: false,
       showNodeDetailPage: false,
       reduceTreeBtnShow: false,
-      lastKeySelectedItem: false
+      lastSelectedItemId: false
     });
   }
 
@@ -604,7 +604,7 @@ class Tree extends React.Component {
 
     render(){
         return (
-            <div className="col-sm-12 tree-container"  onClick={(e) => this.processClick(e)}>
+            <div className="col-sm-12 tree-container" id="tree-container"  onClick={(e) => this.processClick(e)}>
                 {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
                 {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
