@@ -20,6 +20,9 @@ class InfoAnnotations extends React.Component{
         this.skosValue = this.skosValue.bind(this);
     }
 
+    /**
+     * Handle the creators array 
+     */
       formatCreators (creators) {
         let answer = []
         let value = []
@@ -29,15 +32,25 @@ class InfoAnnotations extends React.Component{
         answer = value.join(',\n')
         return answer
       }
-      
+
+    /**
+     * sort item alphabetically 
+     */
       alphabeticSort(item){
          return item.sort();
       }
-      
+
+    /**
+     * Handle the skos boolean value 
+     */     
       skosValue(skos){
         return JSON.parse(skos);
       }
 
+
+    /**
+     * fetching and arranging annotation values
+     */
     createAnnotations(){
         let ontology = this.props.ontology;
         let entries = Object.entries(ontology.config.annotations);
@@ -52,6 +65,107 @@ class InfoAnnotations extends React.Component{
         }
         return annotations;
       };
+
+    /**
+     * Ontology Overview 
+     */
+    createOverview(){
+        let ontology = this.props.ontology;
+        if (!ontology || ontology === null) {
+            return false
+        }
+        else{
+            return(
+                <div className="ontology-detail-table-wrapper">
+                  <div className='row'>
+                    <div className='col-sm-11 ontology-detail-text'>
+                       <h4><b>{ontology.config.title}</b></h4>
+                       <p>
+                         {ontology.config.description}
+                       </p>
+                    </div>
+                   </div>
+
+                   <table className="ontology-detail-table" striped="columns">
+                    <tbody>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>IRI</b></td>
+                          <td>
+                            <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
+                            {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
+                             ? <button 
+                                 type="button" 
+                                 class="btn btn-secondary btn-sm copy-link-btn"
+                                 onClick={() => {                  
+                                 navigator.clipboard.writeText(ontology.config.id);
+                                  }}
+                                >
+                                copy {this.state.ontologyIriCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                               </button>          
+                            : ""
+                            } 
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>HomePage</b></td>
+                          <td>
+                            <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
+                            {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
+                               ? <button 
+                                   type="button" 
+                                   class="btn btn-secondary btn-sm copy-link-btn"
+                                   onClick={() => {                  
+                                     navigator.clipboard.writeText(ontology.config.homepage);
+                                      }}
+                                  >
+                                    copy {this.state.ontologyHomepageCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                                 </button>  
+                                : ""
+                             }              
+                           </td>
+                        </tr>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>Issue tracker</b></td>
+                          <td>
+                            <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
+                             {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
+                              ? <button 
+                                   type="button" 
+                                   class="btn btn-secondary btn-sm copy-link-btn"
+                                   onClick={() => {                  
+                                   navigator.clipboard.writeText(ontology.config.tracker);                     
+                                      }}
+                                 >
+                                copy {this.state.ontologyTrackerCopied && <i class="fa fa-check" aria-hidden="true"></i>}
+                               </button>  
+                               : ""
+                              }              
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>License</b></td>
+                          <td>
+                            <a href={ontology.config.license.url} target="_blank" rel="noopener noreferrer">{ontology.config.license.label}</a>
+                          </td>
+                        </tr>
+                        <tr>
+                           <td className="ontology-overview-table-id-column"><b>Creator</b></td>
+                           <td>
+                             {this.formatCreators(ontology.config.creators)}
+                           </td>
+                        </tr>
+                        <tr>
+                           <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
+                           <td>
+                              {this.skosValue(ontology.config.skos)}
+                           </td>
+                        </tr>
+                    </tbody>
+                   </table>
+                </div> 
+            )
+        }
+    }
 
     /**
      * Handle the show more button in the ontology facet list
