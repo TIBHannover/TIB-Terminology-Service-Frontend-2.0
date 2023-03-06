@@ -10,22 +10,32 @@ class TreeNode{
         this.nodeRootElementName = "li";
         this.nodeIri = "";
         this.nodeId = "";
-        this.children = [];
-        // this.buildNodeWithReact = this.buildNodeWithReact.bind(this);        
+        this.children = [];        
     }
 
 
-    buildNodeWithReact(nodeObject, nodeId){
-        this.textSpan = React.createElement("span", {"className": "li-label-text"}, nodeObject.label);
-        this.textSpanContainer = React.createElement("span", {"className": "tree-text-container"}, this.textSpan);
+    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
+        let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
+        let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
+        this.textSpan = React.createElement("span", {"className": "li-label-text"}, nodeLabel);
+        if(nodeIsClicked){
+            this.textSpanContainer = React.createElement("span", {"className": "tree-text-container clicked targetNodeByIri"}, this.textSpan);
+        }
+        else{
+            this.textSpanContainer = React.createElement("span", {"className": "tree-text-container"}, this.textSpan);
+        }        
         this.nodeIri = nodeObject.iri;
-        if (!nodeObject.has_children){
+        if (!nodeHasChildren){
             this.classes += " leaf-node";            
             this.iconInTree = React.createElement("i", {"className": ""}, "");
         } 
-        else{
+        else if(nodeHasChildren && !isExpanded){
             this.classes += " closed";            
             this.iconInTree = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+        }
+        else{
+            this.classes += " opened";            
+            this.iconInTree = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
         }
         let node = React.createElement(this.nodeRootElementName, {         
             "data-iri":this.nodeIri, 
@@ -33,7 +43,7 @@ class TreeNode{
             "className": this.classes,
             "id": nodeId
             }
-            , this.iconInTree, this.textSpanContainer
+            , this.iconInTree, this.textSpanContainer, this.children
             );
         
         return node;
