@@ -210,9 +210,9 @@ class InfoAnnotations extends React.Component{
                         </tr>
                         <tr>
                           <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
-                          <div className="text-center" id="search-facet-show-more-ontology-btn">
+                          {/* <div className="text-center" id="search-facet-show-more-ontology-btn">
                             <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                          </div>
+                          </div> */}
                         </tr>
                         {this.createAnnotations()}
                     </tbody>
