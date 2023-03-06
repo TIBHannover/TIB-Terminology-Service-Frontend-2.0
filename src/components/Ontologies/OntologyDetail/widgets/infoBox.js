@@ -11,6 +11,10 @@ function formatCreators (creators) {
   return answer
 }
 
+function alphabeticSort(item){
+   return item.sort();
+}
+
 
 function OntologyInfoBox (props) {
   const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
@@ -32,6 +36,7 @@ function OntologyInfoBox (props) {
               <td>{(value).join(',\n')}</td>
             </tr>                           
         ));
+        
 
   
 
@@ -162,7 +167,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
           </tr>       
-          {listItems}                     
+          {alphabeticSort(listItems)}                     
         </tbody>
       </table>
     </div>
