@@ -5,7 +5,7 @@ class InfoAnnotations extends React.Component{
         super(props);
         this.setState = ({
             ontologyShowAll: false,
-            showMoreLessOntologiesText: "+ Show additional information",
+            showMoreLessOntologiesText: "+ Show more information",
             ontologyIriCopied: false,
             ontologyVersionCopied: false,
             ontologyHomepageCopied: false,
@@ -13,8 +13,11 @@ class InfoAnnotations extends React.Component{
             ontologyObject: this.props.ontology
 
         })
-        this.createTable = this.createTable.bind(this);
+        this.createAnnotations = this.createAnnotation.bind(this);
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
+        this.formatCreators = this.formatCreators.bind(this);
+        this.alphabeticSort = this.alphabeticSort.bind(this);
+        this.skosValue = this.skosValue.bind(this);
     }
 
       formatCreators (creators) {
@@ -35,22 +38,19 @@ class InfoAnnotations extends React.Component{
         return JSON.parse(skos);
       }
 
-    createTable(){
+    createAnnotations(){
         let ontology = this.props.ontology;
         let entries = Object.entries(ontology.config.annotations);
-        let listItems = entries.map(([key, value]) => (
-          <div className="ontology-detail-table-wrapper">
-            <table className="ontology-detail-table">
-                <tbody>
-                    <tr>
-                      <td style={{width: "150px"}}><b>{key}</b></td>
-                      <td>{(value).join(',\n')}</td>
-                    </tr>
-                </tbody>
-            </table>
-           </div>             
-        ));
-        return <ul>{listItems}</ul>;
+        let annotations = [];
+        for(let [key,value] of entries){
+          annotations.push(
+            <tr>
+              <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+              <td>{(value).join(',\n')}</td>
+            </tr>
+            )
+        }
+        return annotations;
       };
 
     /**
@@ -60,13 +60,13 @@ class InfoAnnotations extends React.Component{
     handleOntologyShowMoreClick(e){                        
         if(this.state.ontologyShowAll){
             this.setState({
-                showMoreLessOntologiesText: "+ Show More",
+                showMoreLessOntologiesText: "+ Show more information",
                 ontologyShowAll: false
             });
         }
         else{
             this.setState({
-                showMoreLessOntologiesText: "- Show Less",
+                showMoreLessOntologiesText: "- Show less",
                 ontologyShowAll: true
             });
         }
@@ -84,13 +84,18 @@ class InfoAnnotations extends React.Component{
 
     render(){
         return(
+            <div className="ontology-detail-table-wrapper">
                 <div className='row'>
                   <div className='col-sm-11 ontology-detail-text'>
-                     <h4><b>Annotations</b></h4>
+                    <h4><b>{}</b></h4>
+                    <p>
+                     {}
+                    </p>
                   </div>
-                  {this.createTable()}
                 </div>
-              )
+
+            </div>              
+            )
         }
 
 }
