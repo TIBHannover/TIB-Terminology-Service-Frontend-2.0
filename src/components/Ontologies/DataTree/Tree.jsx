@@ -408,13 +408,35 @@ class Tree extends React.Component {
                 this.selectNode(node);
                 node.parentNode.classList.add('clicked');
             }
-            else if(lastSelectedItemId && event.key === "ArrowDown" && document.getElementById(lastSelectedItemId).nextSibling){
-                // select the next siblings 
-                let node = document.getElementById(lastSelectedItemId).nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                this.selectNode(node);
-                node.parentNode.classList.add('clicked');
-                let nodePostion = document.getElementById(lastSelectedItemId).nextSibling.offsetTop;
-                document.getElementById('tree-container').scrollTop = nodePostion;    
+            else if(lastSelectedItemId && event.key === "ArrowDown"){
+                // select the next node. It is either the next siblings or the node first child
+                let node = document.getElementById(lastSelectedItemId);                
+                if(node.classList.contains("opened")){
+                    let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                    this.selectNode(childNode);
+                    childNode.parentNode.classList.add('clicked');
+                    let childNodePostion = document.getElementById(lastSelectedItemId).offsetTop;
+                    document.getElementById('tree-container').scrollTop = childNodePostion; 
+                }
+                else if(document.getElementById(lastSelectedItemId).nextSibling){                    
+                    let nextNode = node.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                    this.selectNode(nextNode);
+                    nextNode.parentNode.classList.add('clicked');
+                    let nextNodePostion = document.getElementById(lastSelectedItemId).nextSibling.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nextNodePostion;
+                }
+                else{                    
+                    let parentNodeLi = node.parentNode.parentNode;                    
+                    while(!parentNodeLi.nextSibling){
+                        parentNodeLi = parentNodeLi.parentNode.parentNode;
+                    }                    
+                    let parentNodeNextSiblings = parentNodeLi.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
+                    this.selectNode(parentNodeNextSiblings);
+                    parentNodeNextSiblings.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion;   
+                }                                                
+                    
             }
             else if(lastSelectedItemId && event.key === "ArrowUp" && document.getElementById(lastSelectedItemId).previousSibling){
                 // select the previous siblings 
