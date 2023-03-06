@@ -2,6 +2,7 @@ import React from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
 import { getChildrenJsTree} from '../../../api/fetchData';
+import TreeNode from "./TreeNode";
 import { buildHierarchicalArray,
     buildTreeListItem,
     nodeHasChildren,
@@ -300,33 +301,18 @@ class Tree extends React.Component {
     buildTree(rootNodes){
         let childrenList = [];
         for(let i=0; i < rootNodes.length; i++){
-        let leafClass = " closed";
-        let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
-        let textSpan = React.createElement("span", {"className": "li-label-text"}, rootNodes[i].label);
-        let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);
-        if (!rootNodes[i].has_children){
-            leafClass = " leaf-node";
-            // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
-            symbol = React.createElement("i", {"className": ""}, "");
-        }    
-        let listItem = React.createElement("li", {         
-            "data-iri":rootNodes[i].iri, 
-            "data-id": i,
-            "className": "tree-node-li" + leafClass,
-            "id": i
-            }
-            , symbol, containerSpan
-            );
-        childrenList.push(listItem);
+            let treeNode = new TreeNode();
+            let node = treeNode.buildNodeWithReact(rootNodes[i], i);            
+            childrenList.push(node);
         }
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
         this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
         this.props.nodeSelectionHandler("", false);
         this.setState({
-        treeDomContent: treeList,
-        targetNodeIri: false,
-        reload: false,
-        isLoadingTheComponent: false
+            treeDomContent: treeList,
+            targetNodeIri: false,
+            reload: false,
+            isLoadingTheComponent: false
         });
     }
 
