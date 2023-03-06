@@ -438,13 +438,42 @@ class Tree extends React.Component {
                 }                                                
                     
             }
-            else if(lastSelectedItemId && event.key === "ArrowUp" && document.getElementById(lastSelectedItemId).previousSibling){
-                // select the previous siblings 
-                let node = document.getElementById(lastSelectedItemId).previousSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                this.selectNode(node);
-                node.parentNode.classList.add('clicked');
-                let nodePostion = document.getElementById(lastSelectedItemId).previousSibling.offsetTop;
-                document.getElementById('tree-container').scrollTop = nodePostion;
+            else if(lastSelectedItemId && event.key === "ArrowUp"){
+                // select the previous node. It is either the previous siblings or last opened node.
+                let node = document.getElementById(lastSelectedItemId);
+                let previousSiblingNodeLi = node.previousSibling;                
+                if(!previousSiblingNodeLi){
+                    let parentNodeLi = node.parentNode.parentNode;                    
+                    let parentNodeNextSiblings = parentNodeLi.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
+                    this.selectNode(parentNodeNextSiblings);
+                    parentNodeNextSiblings.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion;  
+                }
+                else if(previousSiblingNodeLi.classList.contains("closed") || previousSiblingNodeLi.classList.contains("leaf-node")){
+                    let previousSiblingNode = previousSiblingNodeLi.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                    this.selectNode(previousSiblingNode);
+                    previousSiblingNode.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(lastSelectedItemId).previousSibling.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion;
+                }
+                else{                    
+                    let previousSiblingNodeChildren =  document.getElementById("children_for_" + previousSiblingNodeLi.id).getElementsByClassName('tree-node-li');
+                    let lastChild = previousSiblingNodeChildren[previousSiblingNodeChildren.length - 1];
+                    while(true){
+                        if(lastChild.classList.contains("closed") || lastChild.classList.contains("leaf-node")){
+                            break;
+                        }
+                        previousSiblingNodeChildren =  document.getElementById("children_for_" + lastChild.id).getElementsByClassName('tree-node-li');
+                        lastChild = previousSiblingNodeChildren[previousSiblingNodeChildren.length - 1];
+                    }
+                    let lastChildNode = lastChild.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                    this.selectNode(lastChildNode);
+                    lastChildNode.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(lastSelectedItemId).previousSibling.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion;
+                }
+                                       
             }
             else if(lastSelectedItemId && event.key === "ArrowRight"){
                 // Expand the node if it has children. if it is already expanded, move the select into children
@@ -470,20 +499,12 @@ class Tree extends React.Component {
                 if(node.classList.contains("opened")){  
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                    }); 
-                }
-                else if(parentNode.tagName === "LI"){                    
-                    parentNode = parentNode.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
-                    this.selectNode(parentNode);
-                    parentNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion;   
-                }
-                 
+                    });
+                }                 
             }
         }
         catch(e){
-            // console.info(e)
+            console.info(e)
         }        
     }
   
