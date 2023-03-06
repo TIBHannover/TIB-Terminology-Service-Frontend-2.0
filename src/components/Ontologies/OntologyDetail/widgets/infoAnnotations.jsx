@@ -10,7 +10,7 @@ class InfoAnnotations extends React.Component{
             ontologyVersionCopied: false,
             ontologyHomepageCopied: false,
             ontologyTrackerCopied: false,
-            ontologyObject: this.props.ontology
+            //ontologyObject: this.props.ontology
 
         })
         this.createAnnotations = this.createAnnotations.bind(this);
