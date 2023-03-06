@@ -5,12 +5,35 @@ class InfoAnnotations extends React.Component{
         super(props);
         this.setState = ({
             ontologyShowAll: false,
-            showMoreLessOntologiesText: "+ Show More",
+            showMoreLessOntologiesText: "+ Show additional information",
+            ontologyIriCopied: false,
+            ontologyVersionCopied: false,
+            ontologyHomepageCopied: false,
+            ontologyTrackerCopied: false,
+            ontologyObject: this.props.ontology
 
         })
         this.createTable = this.createTable.bind(this);
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
     }
+
+      formatCreators (creators) {
+        let answer = []
+        let value = []
+        for (let i = 0; i < creators.length; i++) {
+          value.push(creators[i])
+        }
+        answer = value.join(',\n')
+        return answer
+      }
+      
+      alphabeticSort(item){
+         return item.sort();
+      }
+      
+      skosValue(skos){
+        return JSON.parse(skos);
+      }
 
     createTable(){
         let ontology = this.props.ontology;

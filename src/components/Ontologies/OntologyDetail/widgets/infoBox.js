@@ -46,15 +46,12 @@ function OntologyInfoBox (props) {
   for(let [key,value] of entries){
     annotations.push(
       <tr>
-      <td className="ontology-overview-table-id-column"><b>{key}</b></td>
-      <td>{(value).join(',\n')}</td>
-    </tr>
+        <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+        <td>{(value).join(',\n')}</td>
+      </tr>
     )
   }
         
-        
-
-  
 
   return (
     <div className="ontology-detail-table-wrapper">
