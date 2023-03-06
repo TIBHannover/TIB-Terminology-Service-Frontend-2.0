@@ -148,103 +148,82 @@ class Tree extends React.Component {
 
         let target = this.props.iri;        
         if (!target || resetFlag){
-        // When the iri is not set. Render the root nodes 
-        this.buildTree(this.state.rootNodes);       
-        return true;
+            // When the iri is not set. Render the root nodes 
+            this.buildTree(this.state.rootNodes);       
+            return true;
         }
-        target = target.trim();      
+        target = target.trim(); 
+        let fullTreeMode = this.state.reduceBtnActive;
+        let treeList = "";     
         if((target != undefined && this.state.targetNodeIri != target) || reload ){
-        if(this.state.isSkos){
-            // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
-            let tree = await buildSkosSubtree(this.state.ontologyId, target, viewMode);
-            this.props.domStateKeeper(tree, this.state, this.props.componentIdentity);
-            let fullTreeMode = this.state.reduceBtnActive;
-            this.props.nodeSelectionHandler(target, true);
-            this.setState({
-                targetNodeIri: target,
-                treeDomContent: tree,
-                selectedNodeIri: target,
-                showNodeDetailPage: true,
-                reduceTreeBtnShow: true,
-                reload: false,
-                isLoadingTheComponent: false,
-                siblingsButtonShow: fullTreeMode,
-                siblingsVisible: !fullTreeMode
-            }); 
-            return true;
-        }
-        let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
-        let callHeader = {
-            'Accept': 'application/json'
-        };
-        let getCallSetting = {method: 'GET', headers: callHeader};
-        let extractName = this.state.childExtractName;
-        let url = process.env.REACT_APP_API_BASE_URL + "/";
-        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
-        let list =  await (await fetch(url, getCallSetting)).json();
-        let roots = buildHierarchicalArray(list);
-        let childrenList = [];           
-        if(nodeExistInList(target, roots)){          
-            // the target node is a root node
-            let childrenList = [];
-            let i = 0;
-            for(let rootNodes of roots){ 
-                let treeNode = new TreeNode();
-                let nodeIsClicked = (rootNodes.iri === target)
-                let node = treeNode.buildNodeWithReact(rootNodes, i, nodeIsClicked);        
-                childrenList.push(node);
-                i += 1;
-            }          
-            let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
-            this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-            let fullTreeMode = this.state.reduceBtnActive;
-            this.props.nodeSelectionHandler(target, true);
-            this.setState({
-                targetNodeIri: target,
-                treeDomContent: treeList,
-                selectedNodeIri: target,
-                showNodeDetailPage: true,
-                reduceTreeBtnShow: true,
-                reload: false,
-                isLoadingTheComponent: false,
-                siblingsButtonShow: fullTreeMode,
-                siblingsVisible: !fullTreeMode
-            }); 
-
-            return true;
-
-        }
-
-        for(let i=0; i < roots.length; i++){      
-            let treeNode = new TreeNode();           
-            let isExpanded = "";      
-            if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
-                //  root node is a leaf
-                roots[i]['has_children'] = false;
-                isExpanded = false;
-            }            
-            else if(roots[i].childrenList.length === 0 && roots[i].children && !roots[i].opened){
-                // root is not leaf but does not include the target node on its sub-tree
-                roots[i]['has_children'] = true;
-                isExpanded = false;
+            if(this.state.isSkos){
+                // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
+                treeList = await buildSkosSubtree(this.state.ontologyId, target, viewMode);
+                this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);                
+                this.props.nodeSelectionHandler(target, true);                         
             }
             else{
-                // root is not leaf and include the target node on its sub-tree
-                roots[i]['has_children'] = true;
-                isExpanded = true;
+                let targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);
+                let callHeader = {
+                    'Accept': 'application/json'
+                };
+                let getCallSetting = {method: 'GET', headers: callHeader};
+                let extractName = this.state.childExtractName;
+                let url = process.env.REACT_APP_API_BASE_URL + "/";
+                url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
+                let list =  await (await fetch(url, getCallSetting)).json();
+                let roots = buildHierarchicalArray(list);
+                let childrenList = [];           
+                if(nodeExistInList(target, roots)){          
+                    // the target node is a root node
+                    let childrenList = [];
+                    let i = 0;
+                    for(let rootNodes of roots){ 
+                        let treeNode = new TreeNode();
+                        let nodeIsClicked = (rootNodes.iri === target)
+                        let node = treeNode.buildNodeWithReact(rootNodes, i, nodeIsClicked);        
+                        childrenList.push(node);
+                        i += 1;
+                    }          
+                    treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+                    this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);                    
+                    this.props.nodeSelectionHandler(target, true);          
+                }
+                else{
+                    for(let i=0; i < roots.length; i++){      
+                        let treeNode = new TreeNode();           
+                        let isExpanded = "";      
+                        if (roots[i].childrenList.length === 0 && !roots[i].children && !roots[i].opened){
+                            //  root node is a leaf
+                            roots[i]['has_children'] = false;
+                            isExpanded = false;
+                        }            
+                        else if(roots[i].childrenList.length === 0 && roots[i].children && !roots[i].opened){
+                            // root is not leaf but does not include the target node on its sub-tree
+                            roots[i]['has_children'] = true;
+                            isExpanded = false;
+                        }
+                        else{
+                            // root is not leaf and include the target node on its sub-tree
+                            roots[i]['has_children'] = true;
+                            isExpanded = true;
+                        }
+                                    
+                        if(roots[i].childrenList.length !== 0){
+                            treeNode.children = expandTargetNode(roots[i].childrenList, i, target, targetHasChildren);            
+                        }
+                        let isClicked = false;        
+                        let node = treeNode.buildNodeWithReact(roots[i], i, isClicked, isExpanded);
+                        childrenList.push(node);
+                    }
+                    treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+                    this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);                
+                    this.props.nodeSelectionHandler(target, true);   
+                }                
             }
-                        
-            if(roots[i].childrenList.length !== 0){
-                treeNode.children = expandTargetNode(roots[i].childrenList, i, target, targetHasChildren);            
-            }
-            let isClicked = false;        
-            let node = treeNode.buildNodeWithReact(roots[i], i, isClicked, isExpanded);
-            childrenList.push(node);
+                     
         }
-        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
-        this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        let fullTreeMode = this.state.reduceBtnActive;
-        this.props.nodeSelectionHandler(target, true);             
+
         this.setState({
             targetNodeIri: target,       
             treeDomContent: treeList,
@@ -256,7 +235,6 @@ class Tree extends React.Component {
             siblingsButtonShow: fullTreeMode,
             siblingsVisible: !fullTreeMode
         });  
-        }
     }
 
 
