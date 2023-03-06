@@ -131,6 +131,12 @@ function OntologyInfoBox (props) {
             </td>
           </tr>
           <tr>
+            <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
+            <td>
+              {ontology.config.skos}
+            </td>
+          </tr>
+          <tr>
             <td className="ontology-overview-table-id-column"><b>Download</b></td>
             <td>                     
               <a                
