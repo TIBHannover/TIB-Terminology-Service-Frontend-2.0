@@ -104,10 +104,10 @@ class TermList extends React.Component{
         return(
             <div className="tree-view-container">
                 <div className="row">
-                    <div className="col-sm-5">
+                    <div className="col-sm-4">
                         {/* jump to */}
                     </div>
-                    <div className="col-sm-3">
+                    <div className="col-sm-2">
                         <div className='form-inline result-per-page-dropdown-container'>
                             <div class="form-group">
                             <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
@@ -120,7 +120,10 @@ class TermList extends React.Component{
                             </div>                                                                                
                         </div>
                     </div>
-                    <div className="col-sm-4">
+                    <div className="col-sm-3 text-right">
+                        {"Showing " + "20" + " of " + this.state.totalNumberOfTerms + " Classes"}
+                    </div>
+                    <div className="col-sm-3">
                         <Pagination 
                             clickHandler={this.handlePagination} 
                             count={this.pageCount()}
