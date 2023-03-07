@@ -42,6 +42,24 @@ class JumpTo extends React.Component{
             });
             
         }
+        enteredTerm = enteredTerm.target.value;        
+            if (enteredTerm.length > 0){
+                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&rows=10`;
+                let jumpResult = await fetch(url)
+                jumpResult = (await jumpResult.json())['response']['docs'];
+                this.setState({
+                    jumpResult: jumpResult,
+                    result: true,
+                    enteredTerm: enteredTerm
+                });
+            }
+            else if (enteredTerm.length == 0){
+                this.setState({
+                    result: false,
+                    enteredTerm: ""
+                });
+                
+            }
     }
     
     handleClickOutside(){
@@ -78,7 +96,16 @@ class JumpTo extends React.Component{
      */
     jumpToButton(resultItem){
         let content = [];
-        let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);        
+        let targetHref = "";
+        if(resultItem["type"] === 'class'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
+        }
+        else if(resultItem["type"] === 'property'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/props?iri=' + encodeURIComponent(resultItem['iri']);       
+        }
+        else if(resultItem["type"] === 'individual'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/individuals?iri=' + encodeURIComponent(resultItem['iri']);       
+        }    
         content.push(
             <a href={targetHref} className="container">
             <div className="jump-tree-item">         

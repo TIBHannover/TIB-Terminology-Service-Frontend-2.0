@@ -420,7 +420,13 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
     let targetHref = "";
     if(resultItem["type"] === 'class'){
         targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
-    }    
+    }
+    else if(resultItem["type"] === 'property'){
+      targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/props?iri=' + encodeURIComponent(resultItem['iri']);       
+     } 
+    else if(resultItem["type"] === 'individual'){
+    targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/individuals?iri=' + encodeURIComponent(resultItem['iri']);       
+     }    
     content.push(
         <a href={targetHref} className="container">
         <div className="jump-tree-item">         
