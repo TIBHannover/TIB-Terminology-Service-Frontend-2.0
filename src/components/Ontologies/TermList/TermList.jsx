@@ -18,7 +18,7 @@ class TermList extends React.Component{
 
 
     async loadComponent(){
-        let ontologyId = this.props.ontologyId;
+        let ontologyId = this.props.ontology;
         let listOfTerms = await getListOfTerms(ontologyId, this.state.pageNumber, this.state.pageSize);
         this.setState({
             ontologyId: ontologyId,
@@ -28,7 +28,22 @@ class TermList extends React.Component{
 
 
     createList(){
-        
+        let result = [];
+        let listOfterms = this.state.listOfTerms;
+        for (let term of listOfterms){
+            result.push(
+                <tr>
+                    <td>{term['label']}</td>
+                    <td>{term['short_form']}</td>
+                    <td>{term['description'] ? term['description'] : ""}</td>
+                </tr>
+            );
+        }
+        return result;
+    }
+
+    componentDidMount(){
+        this.loadComponent();
     }
 
 
@@ -36,7 +51,18 @@ class TermList extends React.Component{
     render(){
         return(
             <div>
-                term list
+                <table class="table table-striped">
+                    <thead>
+                        <tr>                
+                            <th scope="col">Label</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.createList()}               
+                    </tbody>
+                </table>
             </div>
         );
     }
