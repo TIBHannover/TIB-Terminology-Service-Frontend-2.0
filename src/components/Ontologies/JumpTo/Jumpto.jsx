@@ -24,7 +24,7 @@ class JumpTo extends React.Component{
      */
     async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value;            
-        let type = this.props.isSkos ? "individual" : "class";
+        let type = this.props.type;
         if (enteredTerm.length > 0){
             let url = `${this.state.apiBaseUrl}?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
             let jumpResult = await fetch(url)

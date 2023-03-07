@@ -62,7 +62,7 @@ render(){
           <JumpTo
             ontologyId={this.props.ontology}          
              isSkos={this.props.isSkos}
-             type={this.props.type}
+             type={this.props.type ? "class" : "property"}
           />
         <div className='row'>
               <Tree
