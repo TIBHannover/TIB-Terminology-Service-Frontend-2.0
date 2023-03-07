@@ -102,7 +102,7 @@ class SearchResult extends React.Component{
    */
  async runSearch(ontologies, types, collections, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-  let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `groupField=iri` + "&rows=" + this.state.pageSize;
+  let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
   let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
   let collectionOntologies = [];
   let facetSelected = true;
@@ -209,10 +209,11 @@ alsoInResult(){
   let searchResultItem = this.state.searchResult;
   let expanded = this.state.expandedResults;
   let otherOntologies = [];
-  if(expanded !== undefined){
+  let entries = Object.entries(expanded)
+  if(typeof(expanded) !== "undefined"){
     for(let i = 0; i < searchResultItem.length; i++){
-       if(searchResultItem[i]['iri'].includes(Object.keys(expanded))){
-        for(let key of Object.keys(expanded)){
+       if(searchResultItem[i]['iri'] === entries[i]){
+        for(let key of entries){
           let allTags = expanded[key]['docs']
           for(let j=0; j < allTags.length; j++){
             otherOntologies.push(              
