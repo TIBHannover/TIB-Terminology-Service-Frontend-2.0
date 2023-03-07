@@ -108,7 +108,8 @@ export async function getListOfTerms(ontologyId:string, page:any, size:any) {
   try{
     let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
     let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/terms?page=" + page + "&size=" + size;
-    let result = await (await fetch(url, getCallSetting)).json();
+    let result = await (await fetch(url, getCallSetting)).json();    
+    let totalTermsCount = result['page']['totalElements'];
     result = result['_embedded'];
     if(!result){
       return [];
@@ -116,7 +117,7 @@ export async function getListOfTerms(ontologyId:string, page:any, size:any) {
     if(typeof(result['terms']) === "undefined"){
       return [];
     }
-    return result['terms'];
+    return {"results": result['terms'], "totalTermsCount":totalTermsCount };
 
     
   }
