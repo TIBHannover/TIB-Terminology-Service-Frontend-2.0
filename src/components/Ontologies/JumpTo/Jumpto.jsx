@@ -80,6 +80,12 @@ class JumpTo extends React.Component{
         let targetHref = "";
         if(resultItem["type"] === 'class'){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
+        }
+        else if(resultItem["type"] === 'properties'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/props?iri=' + encodeURIComponent(resultItem['iri']);       
+        }
+        else if(resultItem["type"] === 'individuals'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/individuals?iri=' + encodeURIComponent(resultItem['iri']);       
         }    
         content.push(
             <a href={targetHref} className="container">
