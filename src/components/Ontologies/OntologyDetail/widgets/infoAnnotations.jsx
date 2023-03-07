@@ -17,7 +17,6 @@ class InfoAnnotations extends React.Component{
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
         this.formatCreators = this.formatCreators.bind(this);
         this.alphabeticSort = this.alphabeticSort.bind(this);
-        this.skosValue = this.skosValue.bind(this);
         this.createOverview = this.createOverview.bind(this);
     }
 
@@ -39,13 +38,6 @@ class InfoAnnotations extends React.Component{
      */
       alphabeticSort(item){
          return item.sort();
-      }
-
-    /**
-     * Handle the skos boolean value 
-     */     
-      skosValue(skos){
-        return JSON.parse(skos);
       }
     
     /**
@@ -178,7 +170,7 @@ class InfoAnnotations extends React.Component{
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                            <td>
-                              {this.skosValue(ontology.config.skos)}
+                              {String(ontology.config.skos)}
                            </td>
                         </tr>
                         <tr>
