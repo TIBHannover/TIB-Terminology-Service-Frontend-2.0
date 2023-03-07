@@ -162,7 +162,9 @@ class SearchResult extends React.Component{
   }
       
   let filteredSearch = await (await fetch(baseUrl)).json();
-  let filteredSearchResults = filteredSearch['response']['docs'];    
+  let filteredSearchResults = filteredSearch['response']['docs'];
+  let expandedResults = await (await fetch(baseUrl)).json();
+  expandedResults = expandedResults['expanded'];    
   let totalSearch = await (await fetch(totalResultBaseUrl)).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
   let filteredFacetFields = totalSearch['facet_counts'];
@@ -174,7 +176,8 @@ class SearchResult extends React.Component{
     selectedCollections: collections,
     facetIsSelected: facetSelected,
     totalResultsCount: totalSaerchResultsCount,
-    facetFields: filteredFacetFields
+    facetFields: filteredFacetFields,
+    expandedResults: expandedResults
     }, () => {
       this.updateURL(ontologies, types, collections);
     });
@@ -212,7 +215,8 @@ alsoInResult(){
   let entries = Object.entries(expanded)
   if(typeof(expanded) !== "undefined"){
     for(let i = 0; i < searchResultItem.length; i++){
-       if(searchResultItem[i]['iri'] === entries[i]){
+       if(searchResultItem[i].iri === entries[i]){
+        console.info(searchResultItem[i].iri)
         for(let key of entries){
           let allTags = expanded[key]['docs']
           for(let j=0; j < allTags.length; j++){
