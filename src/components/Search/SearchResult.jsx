@@ -217,20 +217,24 @@ alsoInResult(){
     for(let i = 0; i < searchResultItem.length; i++){
       let newSearchResultItem = [];
       newSearchResultItem.push(searchResultItem[i].iri)
-       if(newSearchResultItem[i] === entries[i]){
-        for(let key of entries){
-          let allTags = expanded[key]['docs']
-          for(let j=0; j < allTags.length; j++){
-            otherOntologies.push(              
-                <div className='also-in-ontologies'>
-                  <a className="btn btn-default ontology-button " href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + allTags[j]['ontology_name'] + '/terms?iri=' + encodeURIComponent(allTags[j]['iri'])} target="_blank">
-                   {allTags[j]['ontology_prefix']}
-                  </a>
-                </div>             
-            )
-          }         
-        }       
-      }         
+      for(let k=0; k < newSearchResultItem.length; k++){
+        if(newSearchResultItem[k] === entries[k]){
+          for(let key of entries){
+            let allTags = expanded[key]['docs']
+            for(let j=0; j < allTags.length; j++){
+              otherOntologies.push(              
+                  <div className='also-in-ontologies'>
+                    <a className="btn btn-default ontology-button " href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + allTags[j]['ontology_name'] + '/terms?iri=' + encodeURIComponent(allTags[j]['iri'])} target="_blank">
+                     {allTags[j]['ontology_prefix']}
+                    </a>
+                  </div>             
+              )
+            }         
+          }       
+        } 
+
+      }
+               
     }    
   }
   return otherOntologies;
