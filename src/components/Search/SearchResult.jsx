@@ -212,11 +212,12 @@ alsoInResult(){
   let searchResultItem = this.state.searchResult;
   let expanded = this.state.expandedResults;
   let otherOntologies = [];
-  let entries = Object.entries(expanded)
+  let entries = Object.keys(expanded)
   if(typeof(expanded) !== "undefined"){
     for(let i = 0; i < searchResultItem.length; i++){
-       if(searchResultItem[i].iri === entries[i]){
-        console.info(searchResultItem[i].iri)
+      let newSearchResultItem = [];
+      newSearchResultItem.push(searchResultItem[i].iri)
+       if(newSearchResultItem[i] === entries[i]){
         for(let key of entries){
           let allTags = expanded[key]['docs']
           for(let j=0; j < allTags.length; j++){
