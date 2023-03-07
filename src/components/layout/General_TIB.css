@@ -1872,3 +1872,23 @@ p{
     color: black;
     text-decoration: underline;
 }
+
+.result-per-page-dropdown-container{
+    /* 
+        The result per page dropdown container
+    */
+
+    margin-left: 50px;
+    background-color: white;
+    border-color: white;
+    color: #42484e;
+    margin-top: 30px;
+}
+
+.list-result-per-page-dropdown-menu{
+    /* 
+        The result per page dropdown (select element)
+    */
+
+    margin-left: 10px;
+}

@@ -105,10 +105,20 @@ class TermList extends React.Component{
             <div className="tree-view-container">
                 <div className="row">
                     <div className="col-sm-5">
-
+                        {/* jump to */}
                     </div>
                     <div className="col-sm-3">
-
+                        <div className='form-inline result-per-page-dropdown-container'>
+                            <div class="form-group">
+                            <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
+                            <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize}>
+                                <option value={20} key="20">20</option>
+                                <option value={30} key="30">30</option>
+                                <option value={40} key="40">40</option>
+                                <option value={50} key="50">50</option>
+                            </select>  
+                            </div>                                                                                
+                        </div>
                     </div>
                     <div className="col-sm-4">
                         <Pagination 
