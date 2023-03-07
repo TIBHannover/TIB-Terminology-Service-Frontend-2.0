@@ -11,19 +11,23 @@ function formatCreators (creators) {
   return answer
 }
 
-function annotationElements(props){
-  const ontology = props.ontology
-  if(ontology.config.annotations !== undefined){
-    const entries = Object.entries(ontology.config.annotations);
-    const listItems = entries.map(([key,value]) => (
-      <li>
-        {key}: {value}
-      </li>
-    ));
-    return <ul>{listItems}</ul>
-  }
+function alphabeticSort(item){
+   return item.sort();
 }
 
+function skosValue(skos){
+  return JSON.parse(skos);
+}
+
+function HandleShowMoreLess(){
+  const [ontologyShowAll, setOntologyShowAll] = useState(false);
+  const [showMoreLessOntologiesText, setshowMoreLessOntologiesText] = useState("+ Show additional information")
+  return (
+    <div className="text-center" id="search-facet-show-more-ontology-btn">
+            <a className="show-more-btn" onClick={() => setOntologyShowAll(true)}>{setshowMoreLessOntologiesText}</a>
+  </div>
+  )  
+}
 
 
 function OntologyInfoBox (props) {
@@ -36,8 +40,18 @@ function OntologyInfoBox (props) {
   if (!ontology || ontology === null) {
     return false
   }
-
   
+  let entries = Object.entries(ontology.config.annotations);
+  let annotations = [];
+  for(let [key,value] of entries){
+    annotations.push(
+      <tr>
+        <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+        <td>{(value).join(',\n')}</td>
+      </tr>
+    )
+  }
+        
 
   return (
     <div className="ontology-detail-table-wrapper">
@@ -50,7 +64,7 @@ function OntologyInfoBox (props) {
         </div>
       </div>
       
-      <table className="ontology-detail-table">
+      <table className="ontology-detail-table" striped="columns">
         <tbody>
           <tr>
             <td className="ontology-overview-table-id-column"><b>IRI</b></td>
@@ -131,6 +145,12 @@ function OntologyInfoBox (props) {
             </td>
           </tr>
           <tr>
+            <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
+            <td>
+              {skosValue(ontology.config.skos)}
+            </td>
+          </tr>
+          <tr>
             <td className="ontology-overview-table-id-column"><b>Download</b></td>
             <td>                     
               <a                
@@ -157,6 +177,10 @@ function OntologyInfoBox (props) {
                 <i class="fa fa-download"></i>Ontology metadata as JSON</a>
             </td>
           </tr>
+          <tr>
+            <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
+          </tr>       
+          {alphabeticSort(annotations)}                     
         </tbody>
       </table>
     </div>
