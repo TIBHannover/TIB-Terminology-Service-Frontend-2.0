@@ -325,13 +325,13 @@ class OntologyDetail extends React.Component {
                   <Link onClick={this.tabChange} data-value="0" className={(this.state.activeTab === OVERVIEW_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>Overview</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"class-tab"}>
-                  <Link onClick={this.tabChange} data-value='1' className={(this.state.activeTab === TERM_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/terms"}>Classes</Link>
+                  <Link onClick={this.tabChange} data-value='1' className={(this.state.activeTab === TERM_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/terms"}>Class Tree</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
-                  <Link onClick={this.tabChange} data-value="2" className={(this.state.activeTab === PROPERTY_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
+                  <Link onClick={this.tabChange} data-value="2" className={(this.state.activeTab === PROPERTY_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Property Tree</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"indv-tab"}>
-                  <Link onClick={this.tabChange} data-value="3" className={(this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individuals</Link>
+                  <Link onClick={this.tabChange} data-value="3" className={(this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individual List</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"termList-tab"}>
                   <Link onClick={this.tabChange} data-value="4" className={(this.state.activeTab === TERM_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/termList"}>Class List</Link>

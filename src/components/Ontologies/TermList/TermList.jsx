@@ -1,5 +1,6 @@
 import React from "react";
 import {getListOfTerms} from '../../../api/fetchData';
+import Pagination from "../../common/Pagination/Pagination";
 
 
 class TermList extends React.Component{
@@ -57,6 +58,11 @@ class TermList extends React.Component{
     render(){
         return(
             <div className="tree-view-container">
+                <Pagination 
+                    // clickHandler={this.handlePagination} 
+                    count={12}
+                    initialPageNumber={this.state.pageNumber + 1}
+                />
                 <table class="table table-striped term-list-table">
                     <thead>
                         <tr>                
