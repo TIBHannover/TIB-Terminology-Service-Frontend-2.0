@@ -8,7 +8,14 @@ import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getS
 import { shapeSkosConcepts } from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import IndividualsList from '../IndividualList/IndividualList';
+import TermList from '../TermList/TermList';
 
+
+const OVERVIEW_TAB_ID = 0;
+const TERM_TREE_TAB_ID = 1;
+const PROPERTY_TREE_TAB_ID = 2;
+const INDIVIDUAL_LIST_TAB_ID = 3;
+const TERM_LIST_TAB_ID = 4;
 
 
 
@@ -22,18 +29,15 @@ class OntologyDetail extends React.Component {
       error: null,
       isLoaded: false,
       isRootTermsLoaded: false,
-      errorRootTerms: null,
-      overViewTab: true,
-      termsTab: false,
-      propTab: false,
-      indvTab: false,
-      activeTab: 0,
+      errorRootTerms: null,      
+      activeTab: OVERVIEW_TAB_ID,
       rootTerms: [],
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
       targetPropertyIri: " ",
       targetIndividualIri: " ",
+      targetTermListIri: " ",
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
@@ -44,6 +48,7 @@ class OntologyDetail extends React.Component {
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
+
   }
 
 
@@ -72,24 +77,16 @@ class OntologyDetail extends React.Component {
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
     if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
-      this.setState({
-        overViewTab: false,
-        termsTab: true,
-        propTab: false,
-        indvTab: false,
-        activeTab: 1,
+      this.setState({        
+        activeTab: TERM_TREE_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab,
         targetTermIri: targetQueryParams.iri
       });
     }
     else if (requestedTab !== lastRequestedTab && requestedTab === 'props'){
-      this.setState({
-        overViewTab: false,
-        termsTab: false,
-        propTab: true,
-        indvTab: false,
-        activeTab: 2,
+      this.setState({       
+        activeTab: PROPERTY_TREE_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab,
         targetPropertyIri: targetQueryParams.iri
@@ -98,12 +95,18 @@ class OntologyDetail extends React.Component {
     }
     else if (requestedTab !== lastRequestedTab && requestedTab === 'individuals'){    
       let lastIri = this.state.targetIndividualIri;
-      this.setState({
-        overViewTab: false,
-        termsTab: false,
-        propTab: false,
-        indvTab: true,
-        activeTab: 3,
+      this.setState({        
+        activeTab: INDIVIDUAL_LIST_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
+
+      });
+    }
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'termList'){    
+      let lastIri = this.state.targetTermListIri;
+      this.setState({       
+        activeTab: TERM_LIST_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab,
         targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
@@ -111,11 +114,8 @@ class OntologyDetail extends React.Component {
       });
     }
     else if (requestedTab !== lastRequestedTab){
-      this.setState({
-        overViewTab: true,
-        termsTab: false,
-        propTab: false,
-        activeTab: 0,
+      this.setState({        
+        activeTab: OVERVIEW_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab
 
@@ -218,51 +218,24 @@ class OntologyDetail extends React.Component {
      * @param {*} e
      * @param {*} value
      */
-  tabChange = (e, v) => {    
-    let value = e.target.dataset.value;    
-    this.setState({
-      waiting: true
-    });
-    if (value === "0") { // overview
+  tabChange = (e, v) => {
+    try{
+      let selectedTabId = e.target.dataset.value;    
       this.setState({
-        overViewTab: true,
-        termsTab: false,
-        propTab: false,
-        indvTab: false,
-        activeTab: 0,
-        waiting: false      
-      })
+        waiting: true
+      });
+  
+      this.setState({
+        activeTab: parseInt(selectedTabId),
+        waiting: false
+      });
     } 
-    else if (value === "1") { // terms (classes)
+    catch(e){
       this.setState({
-        overViewTab: false,
-        termsTab: true,
-        propTab: false,
-        indvTab: false,
-        activeTab: 1,
+        activeTab: OVERVIEW_TAB_ID,
         waiting: false
-      })
-    } 
-    else if (value === "2") { // properties
-      this.setState({
-        overViewTab: false,
-        termsTab: false,
-        propTab: true,
-        indvTab: false,
-        activeTab: 2,
-        waiting: false
-      })
-    }
-    else{ // individuals      
-      this.setState({
-        overViewTab: false,
-        termsTab: false,
-        propTab: false,
-        indvTab: true,
-        activeTab: 3,
-        waiting: false
-      })
-    }
+      });
+    }      
   }
 
 /**
@@ -280,9 +253,14 @@ class OntologyDetail extends React.Component {
         targetPropertyIri: iri
       });
     }
-    else{            
+    else if (componentId === "individual"){            
       this.setState({
         targetIndividualIri: iri
+      });
+    }
+    else if (componentId === "termList"){            
+      this.setState({
+        targetTermListIri: iri
       });
     }
     
@@ -344,19 +322,22 @@ class OntologyDetail extends React.Component {
           <div className='col-sm-8'>
               <ul className="nav nav-tabs">
                 <li className="nav-item ontology-detail-nav-item" key={"overview-tab"}>
-                  <Link onClick={this.tabChange} data-value="0" className={this.state.overViewTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>Overview</Link>
+                  <Link onClick={this.tabChange} data-value="0" className={(this.state.activeTab === OVERVIEW_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>Overview</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"class-tab"}>
-                  <Link onClick={this.tabChange} data-value='1' className={this.state.termsTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/terms"}>Classes</Link>
+                  <Link onClick={this.tabChange} data-value='1' className={(this.state.activeTab === TERM_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/terms"}>Classes</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
-                  <Link onClick={this.tabChange} data-value="2" className={this.state.propTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
+                  <Link onClick={this.tabChange} data-value="2" className={(this.state.activeTab === PROPERTY_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Properties</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"indv-tab"}>
-                  <Link onClick={this.tabChange} data-value="3" className={this.state.indvTab ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individuals</Link>
+                  <Link onClick={this.tabChange} data-value="3" className={(this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individuals</Link>
+                </li>
+                <li class="nav-item ontology-detail-nav-item" key={"termList-tab"}>
+                  <Link onClick={this.tabChange} data-value="4" className={(this.state.activeTab === TERM_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/termList"}>Class List</Link>
                 </li>            
               </ul>             
-              {!this.state.waiting && this.state.overViewTab &&
+              {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
                           <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
                             <div className='col-sm-9'>
                               <OntologyInfoBox ontology={this.state.ontology} />
@@ -366,7 +347,7 @@ class OntologyDetail extends React.Component {
                             </div>
                           </div>
               }
-              {!this.state.waiting && this.state.termsTab &&
+              {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                             <DataTree
                               rootNodes={this.state.rootTerms}
                               componentIdentity={'term'}
@@ -382,7 +363,7 @@ class OntologyDetail extends React.Component {
                             />
               }
 
-              {!this.state.waiting && this.state.propTab &&
+              {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                             <DataTree
                               rootNodes={this.state.rootProps}
                               componentIdentity={'property'}
@@ -396,7 +377,7 @@ class OntologyDetail extends React.Component {
                               isIndividuals={false}
                             />
               }
-              {!this.state.waiting && this.state.indvTab &&
+              {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                             <IndividualsList
                               rootNodes={this.state.rootTerms}                                                    
                               iri={this.state.targetIndividualIri}
@@ -408,6 +389,16 @@ class OntologyDetail extends React.Component {
                               domStateKeeper={this.changeTreeContent}
                               isSkos={this.state.isSkosOntology}
                               individualTabChanged={this.state.individualTabChanged}
+                            />
+              }
+              {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
+                            <TermList                              
+                              iri={this.state.targetIndividualIri}
+                              componentIdentity={'termList'}
+                              key={'termListPage'}
+                              ontology={this.state.ontologyId}                              
+                              iriChangerFunction={this.changeInputIri}                              
+                              isSkos={this.state.isSkosOntology}                              
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
