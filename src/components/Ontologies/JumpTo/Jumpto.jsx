@@ -23,9 +23,10 @@ class JumpTo extends React.Component{
      * 'Jump to' feature in the class tree
      */
     async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value;        
+        enteredTerm = enteredTerm.target.value; 
+        let type = this.props.type;       
             if (enteredTerm.length > 0){
-                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&rows=10`;
+                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
                 let jumpResult = await fetch(url)
                 jumpResult = (await jumpResult.json())['response']['docs'];
                 this.setState({

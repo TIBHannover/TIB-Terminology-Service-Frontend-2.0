@@ -217,7 +217,8 @@ class IndividualsList extends React.Component {
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6">
                   <JumpTo
-                    ontologyId={this.props.ontology}          
+                    ontologyId={this.props.ontology}
+                    type={"individual"}          
                    />
                     <div className="row">
                         {this.state.listView && 
