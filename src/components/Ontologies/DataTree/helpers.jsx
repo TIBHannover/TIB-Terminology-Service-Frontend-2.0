@@ -235,8 +235,7 @@ export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
     }
     treeNodes.push(res);
     iri = res['iri'];
-  }
-  
+  }  
   let nodeInTree = "";
   let childNode = "";
   let ul = "";
@@ -247,7 +246,7 @@ export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
     let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
     let textSpan = React.createElement("span", {"className": "li-label-text"}, node.label);
     let containerSpan = React.createElement("span", {"className": "tree-text-container" + clickedClass}, textSpan);
-    let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);
+    let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);    
     if (!hasChildren){
       leafClass = " leaf-node";
       // symbol = React.createElement("i", {"className": "fa fa-close"}, "");

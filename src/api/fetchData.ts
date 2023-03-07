@@ -202,7 +202,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
   let res =  await (await fetch(url, getCallSetting)).json();
-  res = res['_embedded'];
+  res = res['_embedded'];  
   if(!res){
     return false;
   }

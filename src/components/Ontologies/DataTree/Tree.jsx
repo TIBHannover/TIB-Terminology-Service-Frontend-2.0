@@ -151,7 +151,7 @@ class Tree extends React.Component {
         }
         target = target.trim();      
         if((target != undefined && this.state.targetNodeIri != target) || reload ){
-        if(this.state.isSkos){
+        if(this.state.isSkos){            
             // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
             let tree = await buildSkosSubtree(this.state.ontologyId, target, viewMode);
             this.props.domStateKeeper(tree, this.state, this.props.componentIdentity);

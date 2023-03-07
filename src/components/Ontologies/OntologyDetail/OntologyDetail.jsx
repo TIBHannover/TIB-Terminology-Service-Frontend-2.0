@@ -154,7 +154,7 @@ class OntologyDetail extends React.Component {
     let isSkos = await isSkosOntology(ontologyId);    
     if(isSkos){
       rootTerms = await getSkosOntologyRootConcepts(ontologyId);
-      rootTerms = shapeSkosConcepts(rootTerms);
+      rootTerms = await shapeSkosConcepts(rootTerms);
     }
     else{
       rootTerms = await getOntologyRootTerms(ontologyId);
