@@ -1848,3 +1848,27 @@ p{
    
 }
 
+
+/* 
+--------------------------------------
+  Term List
+--------------------------------------
+*/
+
+.term-list-table{
+    /* 
+        Style for the list of terms table
+    */
+
+    margin-top: 100px;
+    width: 100%;
+}
+
+.table-list-label-anchor{
+    /* 
+        The term label links (anchors) in the list
+    */
+
+    color: black;
+    text-decoration: underline;
+}
