@@ -62,14 +62,24 @@ class InfoAnnotations extends React.Component{
         let ontology = this.props.ontology;
         let entries = Object.entries(ontology.config.annotations);
         let annotations = [];
-        for(let [key,value] of entries){
+        if(entries.length !== 0){
+          for(let [key,value] of entries){
+            annotations.push(
+              <tr>
+                <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+                <td>{(value).join(',\n')}</td>
+              </tr>
+              )
+          }
+        }
+        else{
           annotations.push(
             <tr>
-              <td className="ontology-overview-table-id-column"><b>{key}</b></td>
-              <td>{(value).join(',\n')}</td>
+              <td colSpan={3}>No additional information available</td>
             </tr>
             )
         }
+        
         return annotations;
       };
 
