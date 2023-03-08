@@ -218,7 +218,8 @@ class IndividualsList extends React.Component {
                 <div className="col-sm-6">
                   <JumpTo
                     ontologyId={this.props.ontology}
-                    type={"individual"}          
+                    isSkos={this.props.isSkos}
+                    componentIdentity={this.props.componentIdentity}          
                    />
                     <div className="row">
                         {this.state.listView && 

@@ -24,7 +24,7 @@ class JumpTo extends React.Component{
      */
     async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value; 
-        let type = this.props.type;
+        let type = this.props.componentIdentity;
         if(type !== "property" && type !== "individual"){
             type = this.props.isSkos ? "individual" : "class"; 
         }       
