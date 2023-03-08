@@ -1,5 +1,4 @@
-import React from 'react'
-import OntologyInfoBox from './widgets/infoBox'
+import React from 'react';
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
 import DataTree from '../DataTree/DataTree';
