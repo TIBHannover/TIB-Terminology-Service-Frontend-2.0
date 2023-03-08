@@ -1893,7 +1893,6 @@ p{
     background-color: white;
     border-color: white;
     color: #42484e;
-    margin-top: 40px;
 }
 
 .list-result-per-page-dropdown-menu{
@@ -1904,10 +1903,10 @@ p{
     margin-left: 10px;
 }
 
-.text-in-div-center-align{
+.list-header-element{
     /* 
-        Put the a text in a div vertically align with siblings elements
+        Style for the element on top of the list table
     */
 
-    padding-top: 40px;
+    margin-top: 40px;
 }

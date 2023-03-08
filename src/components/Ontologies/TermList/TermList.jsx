@@ -24,6 +24,7 @@ class TermList extends React.Component{
         this.handlePagination = this.handlePagination.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
+        this.resetList = this.resetList.bind(this);
     }
 
 
@@ -31,13 +32,15 @@ class TermList extends React.Component{
         let url = new URL(window.location);
         let pageNumberInUrl = url.searchParams.get('page');
         let sizeInUrl = url.searchParams.get('size');
-        let iriInUrl = url.searchParams.get('iri');
+        let iriInUrl = url.searchParams.get('iri');        
         pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
         sizeInUrl = !sizeInUrl ? this.state.pageSize : parseInt(sizeInUrl);
         let ontologyId = this.props.ontology;
         let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };
         if(!iriInUrl){
             listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
+            iriInUrl = null;
+            sizeInUrl = (sizeInUrl === 1) ? 20 : sizeInUrl;
         }
         else{
             listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iriInUrl), this.state.mode)];
@@ -88,13 +91,26 @@ class TermList extends React.Component{
     }
 
 
+    resetList(){
+        this.setState({
+            iri: null,
+            pageNumber: 0,
+            pageSize: 20
+        }, () => {
+            this.updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
+        });
+    }
+
+
     updateURL(pageNumber, pageSize, iri=null){
         let currentUrlParams = new URLSearchParams();
         if(iri){
             currentUrlParams.append('iri', iri);
-        }        
-        currentUrlParams.append('page', pageNumber);
-        currentUrlParams.append('size', pageSize);
+        }
+        else{
+            currentUrlParams.append('page', pageNumber);
+            currentUrlParams.append('size', pageSize);
+        }               
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
     }
 
@@ -142,7 +158,7 @@ class TermList extends React.Component{
                     </div>
                     <div className="col-sm-2">
                         {!this.state.iri && 
-                            <div className='form-inline result-per-page-dropdown-container'>
+                            <div className='form-inline list-header-element result-per-page-dropdown-container'>
                                 <div class="form-group">
                                 <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
                                 <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
@@ -154,8 +170,11 @@ class TermList extends React.Component{
                                 </div>                                                                                
                             </div>
                         }
+                        {this.state.iri &&                            
+                            <button className='btn btn-secondary btn-sm tree-action-btn list-header-element' onClick={this.resetList}>Show All Classes</button> 
+                        }
                     </div>
-                    <div className="col-sm-3 text-right text-in-div-center-align">
+                    <div className="col-sm-3 text-right list-header-element">
                         <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>
                     </div>
                     <div className="col-sm-3">
