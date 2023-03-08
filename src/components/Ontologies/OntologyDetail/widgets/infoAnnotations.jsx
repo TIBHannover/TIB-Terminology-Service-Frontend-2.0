@@ -210,7 +210,7 @@ class InfoAnnotations extends React.Component{
                             <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
                           </div> */}
                         </tr>
-                        {this.createAnnotations()}
+                        
                     </tbody>
                    </table>
                 </div> 
@@ -233,9 +233,15 @@ class InfoAnnotations extends React.Component{
         return(
             <div>
                 {this.createOverview()}
+                {this.state.ontologyShowAll &&
+                  <table className="ontology-detail-table">
+                    <tbody>                
+                      {this.createAnnotations()}                
+                    </tbody>
+                  </table>}
                 <div className="text-center" id="search-facet-show-more-ontology-btn">
                             <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                          </div>
+                </div>
             </div>          
             )
         }
