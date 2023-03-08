@@ -4,7 +4,7 @@ import React from 'react';
 
 
 export function MatomoWrapper(props){
-    const location = useLocation();
+    const location = useLocation();   
     const { trackPageView, trackEvent } = useMatomo()
     React.useEffect(() => {
         setTimeout(() => {

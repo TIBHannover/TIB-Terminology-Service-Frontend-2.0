@@ -157,8 +157,9 @@ class TermList extends React.Component{
                     <div className="col-sm-4">
                         <div className="list-header-element">
                             <JumpTo                        
-                                ontologyId={this.props.ontologyId}
-                                type={"classList"}
+                                ontologyId={this.state.ontologyId}                                
+                                isSkos={this.props.isSkos}
+                                componentIdentity={this.props.componentIdentity}
                             />
                         </div>                    
                     </div>
