@@ -1,5 +1,6 @@
 import React from 'react'
 import OntologyInfoBox from './widgets/infoBox'
+import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
 import DataTree from '../DataTree/DataTree';
 import { Link } from 'react-router-dom';
@@ -41,14 +42,16 @@ class OntologyDetail extends React.Component {
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      isSkosOntology: false      
+      isSkosOntology: false,
+      ontologyShowAll: false,
+      showMoreLessOntologiesText: "+ Show More"      
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
-
+    this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
   }
 
 
@@ -283,6 +286,26 @@ class OntologyDetail extends React.Component {
     }
   }
 
+  /**
+     * Handle the show more button in the ontology facet list
+     * @param {*} e 
+     */
+  handleOntologyShowMoreClick(e){                        
+    if(this.state.ontologyShowAll){
+        this.setState({
+            showMoreLessOntologiesText: "+ Show additional information",
+            ontologyShowAll: false
+        });
+    }
+    else{
+        this.setState({
+            showMoreLessOntologiesText: "- Show less information",
+            ontologyShowAll: true
+        });
+    }
+
+}
+
 
   componentDidMount () {
     this.setOntologyData();
@@ -338,14 +361,14 @@ class OntologyDetail extends React.Component {
                 </li>            
               </ul>             
               {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
-                          <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
-                            <div className='col-sm-9'>
-                              <OntologyInfoBox ontology={this.state.ontology} />
-                            </div>
-                            <div className='col-sm-3'>
-                              <OntologyStatsBox ontology={this.state.ontology} />
-                            </div>
-                          </div>
+                      <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">        
+                        <div className='col-sm-9'>
+                          <InfoAnnotations ontology={this.state.ontology} />
+                        </div>
+                        <div className='col-sm-3'>
+                          <OntologyStatsBox ontology={this.state.ontology} />
+                        </div>
+                      </div>
               }
               {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                             <DataTree
