@@ -419,6 +419,13 @@ class Tree extends React.Component {
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });  
+                }
+                else if(!node.classList.contains("leaf-node")){
+                    let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+                    this.selectNode(childNode);
+                    childNode.parentNode.classList.add('clicked');
+                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).nextSibling.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion; 
                 }                
                  
             }
@@ -430,7 +437,15 @@ class Tree extends React.Component {
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });
-                }                 
+                }
+                else if(parentNode.tagName === "LI"){                    
+                    parentNode = parentNode.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
+                    this.selectNode(parentNode);
+                    parentNode.parentNode.classList.add('clicked');
+                    let nodePostion = parentNode.offsetTop;
+                    document.getElementById('tree-container').scrollTop = nodePostion;   
+                }
+                 
             }
         }
         catch(e){
