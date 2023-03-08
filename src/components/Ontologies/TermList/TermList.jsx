@@ -1,5 +1,5 @@
 import React from "react";
-import {getListOfTerms} from '../../../api/fetchData';
+import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 
@@ -13,7 +13,9 @@ class TermList extends React.Component{
             pageSize: 20,
             listOfTerms: [],
             totalNumberOfTerms: 0,
-            lastLoadedUrl: ""
+            lastLoadedUrl: "",
+            mode: "terms",
+            iri: null
         });
 
         this.loadComponent = this.loadComponent.bind(this);
@@ -29,19 +31,31 @@ class TermList extends React.Component{
         let url = new URL(window.location);
         let pageNumberInUrl = url.searchParams.get('page');
         let sizeInUrl = url.searchParams.get('size');
+        let iriInUrl = url.searchParams.get('iri');
         pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
         sizeInUrl = !sizeInUrl ? this.state.pageSize : parseInt(sizeInUrl);
         let ontologyId = this.props.ontology;
-        let listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
+        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };
+        if(!iriInUrl){
+            listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
+        }
+        else{
+            listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iriInUrl), this.state.mode)];
+            listOfTermsAndStats["totalTermsCount"] = 1;
+            pageNumberInUrl = 1;
+            sizeInUrl = 1;
+        }
+        
         this.setState({
             ontologyId: ontologyId,
             listOfTerms: listOfTermsAndStats['results'],
             totalNumberOfTerms: listOfTermsAndStats['totalTermsCount'],
             pageNumber: pageNumberInUrl - 1,
             pageSize: sizeInUrl,
-            lastLoadedUrl: window.location.href
+            lastLoadedUrl: window.location.href,
+            iri: iriInUrl
         }, ()=> {
-            this.updateURL(pageNumberInUrl, sizeInUrl);
+            this.updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);
         });
     }
 
@@ -74,8 +88,11 @@ class TermList extends React.Component{
     }
 
 
-    updateURL(pageNumber, pageSize){
+    updateURL(pageNumber, pageSize, iri=null){
         let currentUrlParams = new URLSearchParams();
+        if(iri){
+            currentUrlParams.append('iri', iri);
+        }        
         currentUrlParams.append('page', pageNumber);
         currentUrlParams.append('size', pageSize);
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
@@ -124,17 +141,19 @@ class TermList extends React.Component{
                         {/* jump to */}
                     </div>
                     <div className="col-sm-2">
-                        <div className='form-inline result-per-page-dropdown-container'>
-                            <div class="form-group">
-                            <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
-                            <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
-                                <option value={20} key="20">20</option>
-                                <option value={30} key="30">30</option>
-                                <option value={40} key="40">40</option>
-                                <option value={50} key="50">50</option>
-                            </select>  
-                            </div>                                                                                
-                        </div>
+                        {!this.state.iri && 
+                            <div className='form-inline result-per-page-dropdown-container'>
+                                <div class="form-group">
+                                <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
+                                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
+                                    <option value={20} key="20">20</option>
+                                    <option value={30} key="30">30</option>
+                                    <option value={40} key="40">40</option>
+                                    <option value={50} key="50">50</option>
+                                </select>  
+                                </div>                                                                                
+                            </div>
+                        }
                     </div>
                     <div className="col-sm-3 text-right text-in-div-center-align">
                         <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>

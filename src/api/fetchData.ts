@@ -124,13 +124,8 @@ export async function getListOfTerms(ontologyId:string, page:any, size:any) {
   catch(e){
     return [];
   }
-  
-
-
-
 
 }
-
 
 
 /**
