@@ -7,7 +7,7 @@ class JumpTo extends React.Component{
         this.state = ({
             enteredTerm: "",
             result: false,
-            api_base_url: "https://service.tib.eu/ts4tib/api",
+            api_base_url: process.env.REACT_APP_SEARCH_URL.split('search')[0] + "select",
             jumpResult: []
         });
 
@@ -24,9 +24,12 @@ class JumpTo extends React.Component{
      */
     async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value; 
-        let type = this.props.type;       
+        let type = this.props.type;
+        if(type !== "property" && type !== "individual"){
+            type = this.props.isSkos ? "individual" : "class"; 
+        }       
             if (enteredTerm.length > 0){
-                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
+                let url = `${this.state.api_base_url}?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
                 let jumpResult = await fetch(url)
                 jumpResult = (await jumpResult.json())['response']['docs'];
                 this.setState({

@@ -61,7 +61,7 @@ render(){
         <div className="col-sm-6 tree-container-left-part">       
           <JumpTo
             ontologyId={this.props.ontology}
-            type={this.props.type ? "class" : "property"}          
+            isSkos={this.props.isSkos}          
            />
         <div className='row'>
               <Tree
