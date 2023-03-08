@@ -2,6 +2,7 @@ import React from "react";
 import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
+import JumpTo from "../JumpTo/Jumpto";
 
 
 class TermList extends React.Component{
@@ -154,7 +155,12 @@ class TermList extends React.Component{
             <div className="tree-view-container">
                 <div className="row">
                     <div className="col-sm-4">
-                        {/* jump to */}
+                        <div className="list-header-element">
+                            <JumpTo                        
+                                ontologyId={this.props.ontologyId}
+                                type={"classList"}
+                            />
+                        </div>                    
                     </div>
                     <div className="col-sm-2">
                         {!this.state.iri && 
