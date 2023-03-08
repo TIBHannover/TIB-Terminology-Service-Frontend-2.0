@@ -1375,6 +1375,17 @@ p{
     font-size: 14px;
 }
 
+.ontology-overview-table-id-column{
+    /* 
+        The styles for the columns of a table. 
+    */
+    width: 280px;
+}
+
+#annotation-heading{
+    border-top: solid 6px #DFE4E5 ;
+}
+
 
 .nav-tabs{
     /* 
