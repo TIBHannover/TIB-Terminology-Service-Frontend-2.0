@@ -3,7 +3,7 @@ import React from 'react'
 class InfoAnnotations extends React.Component{
     constructor(props){
         super(props);
-        this.setState = ({
+        this.state = ({
             ontologyShowAll: false,
             showMoreLessOntologiesText: "+ Show more information"          
         })
@@ -233,6 +233,9 @@ class InfoAnnotations extends React.Component{
         return(
             <div>
                 {this.createOverview()}
+                <div className="text-center" id="search-facet-show-more-ontology-btn">
+                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                          </div>
             </div>          
             )
         }
