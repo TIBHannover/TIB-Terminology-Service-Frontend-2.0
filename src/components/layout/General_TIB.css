@@ -1859,3 +1859,54 @@ p{
    
 }
 
+
+/* 
+--------------------------------------
+  Term List
+--------------------------------------
+*/
+
+.term-list-table{
+    /* 
+        Style for the list of terms table
+    */
+
+    margin-top: 30px;
+    width: 100%;
+}
+
+.table-list-label-anchor{
+    /* 
+        The term label links (anchors) in the list
+    */
+
+    color: black;
+    text-decoration: underline;
+}
+
+.result-per-page-dropdown-container{
+    /* 
+        The result per page dropdown container
+    */
+
+    margin-left: 50px;
+    background-color: white;
+    border-color: white;
+    color: #42484e;
+}
+
+.list-result-per-page-dropdown-menu{
+    /* 
+        The result per page dropdown (select element)
+    */
+
+    margin-left: 10px;
+}
+
+.list-header-element{
+    /* 
+        Style for the element on top of the list table
+    */
+
+    margin-top: 40px;
+}
