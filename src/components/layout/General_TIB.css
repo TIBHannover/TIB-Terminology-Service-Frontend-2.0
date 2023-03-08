@@ -1893,7 +1893,7 @@ p{
     background-color: white;
     border-color: white;
     color: #42484e;
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 .list-result-per-page-dropdown-menu{
@@ -1902,4 +1902,12 @@ p{
     */
 
     margin-left: 10px;
+}
+
+.text-in-div-center-align{
+    /* 
+        Put the a text in a div vertically align with siblings elements
+    */
+
+    padding-top: 40px;
 }

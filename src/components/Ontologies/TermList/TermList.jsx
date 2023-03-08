@@ -136,8 +136,8 @@ class TermList extends React.Component{
                             </div>                                                                                
                         </div>
                     </div>
-                    <div className="col-sm-3 text-right">
-                        {"Showing " + "20" + " of " + this.state.totalNumberOfTerms + " Classes"}
+                    <div className="col-sm-3 text-right text-in-div-center-align">
+                        <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>
                     </div>
                     <div className="col-sm-3">
                         <Pagination 
