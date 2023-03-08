@@ -60,10 +60,10 @@ render(){
      <div className="row tree-view-container"> 
         <div className="col-sm-6 tree-container-left-part">             
           <JumpTo
-            ontologyId={this.props.ontology}          
-             isSkos={this.props.isSkos}
-             type={this.props.type ? "class" : "property"}
-          />
+            ontologyId={this.props.ontology}
+            isSkos={this.props.isSkos} 
+            componentIdentity={this.props.componentIdentity}         
+           />
         <div className='row'>
               <Tree
                 rootNodes={this.props.rootNodes}
