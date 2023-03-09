@@ -58,13 +58,12 @@ componentDidMount(){
 render(){
   return(    
      <div className="row tree-view-container"> 
-        <div className="col-sm-6 tree-container-left-part">
-        {this.props.componentIdentity === "term" &&
+        <div className="col-sm-6 tree-container-left-part">       
           <JumpTo
-          ontologyId={this.props.ontology}
-          type={"class"}
-          isSkos={this.props.isSkos}
-        />}
+            ontologyId={this.props.ontology}
+            isSkos={this.props.isSkos} 
+            componentIdentity={this.props.componentIdentity}         
+           />
         <div className='row'>
               <Tree
                 rootNodes={this.props.rootNodes}
