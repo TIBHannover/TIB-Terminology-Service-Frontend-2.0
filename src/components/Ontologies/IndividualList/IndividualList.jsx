@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
 import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
+import JumpTo from "../JumpTo/Jumpto";
 
 
 class IndividualsList extends React.Component {
@@ -215,6 +216,11 @@ class IndividualsList extends React.Component {
         return(
             <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
                 <div className="col-sm-6">
+                  <JumpTo
+                    ontologyId={this.props.ontology}
+                    isSkos={this.props.isSkos}
+                    componentIdentity={this.props.componentIdentity}          
+                   />
                     <div className="row">
                         {this.state.listView && 
                             <div className="col-sm-12 tree-container">
