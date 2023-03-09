@@ -7,7 +7,7 @@ class JumpTo extends React.Component{
         this.state = ({
             enteredTerm: "",
             result: false,
-            api_base_url: "https://service.tib.eu/ts4tib/api",
+            api_base_url: process.env.REACT_APP_SEARCH_URL.split('search')[0] + "select",
             jumpResult: []
         });
 
@@ -23,9 +23,13 @@ class JumpTo extends React.Component{
      * 'Jump to' feature in the class tree
      */
     async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value;        
+        enteredTerm = enteredTerm.target.value; 
+        let type = this.props.componentIdentity;
+        if(type !== "property" && type !== "individual"){
+            type = this.props.isSkos ? "individual" : "class"; 
+        }       
             if (enteredTerm.length > 0){
-                let url = `${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${this.props.type}&rows=10`;
+                let url = `${this.state.api_base_url}?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
                 let jumpResult = await fetch(url)
                 jumpResult = (await jumpResult.json())['response']['docs'];
                 this.setState({
@@ -56,16 +60,16 @@ class JumpTo extends React.Component{
     
     submitJumpHandler(){
         for(let i=0; i < this.state.jumpResult.length; i++){
-        window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+            window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
         }
     }
     
     createJumpResultList(){
-        const jumpResultList = []
+        let jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
         jumpResultList.push(
             <div className="jump-tree-container">
-            {this.jumpToButton(this.state.jumpResult[i])}
+                {this.jumpToButton(this.state.jumpResult[i])}
             </div>          
         )
         }
@@ -80,6 +84,12 @@ class JumpTo extends React.Component{
         let targetHref = "";
         if(resultItem["type"] === 'class'){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
+        }
+        else if(resultItem["type"] === 'property'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/props?iri=' + encodeURIComponent(resultItem['iri']);       
+        }
+        else if(resultItem["type"] === 'individual'){
+            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/individuals?iri=' + encodeURIComponent(resultItem['iri']);       
         }    
         content.push(
             <a href={targetHref} className="container">
@@ -93,7 +103,7 @@ class JumpTo extends React.Component{
     }
 
     componentDidMount(){
-        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener('click', this.handleClickOutside, true);        
     }
       
     componentWillUnmount() {

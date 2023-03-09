@@ -1324,6 +1324,17 @@ p{
     color: #eaeaea;
 }
 
+.ontology-overview-table-id-column{
+    /* 
+        The styles for the columns of a table. 
+    */
+    width: 280px;
+}
+
+#annotation-heading{
+    border-top: solid 6px #DFE4E5 ;
+}
+
 
 .ontology-detail-navbar{
     /* 
@@ -1428,7 +1439,7 @@ p{
     */
 
     font-weight: bold !important;
-    font-size: 15px !important;
+    font-size: 13.5px !important;
     text-align: left;
 }
 
