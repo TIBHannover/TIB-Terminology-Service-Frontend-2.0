@@ -16,8 +16,8 @@ import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
  
 // Adding Matomo
 const instance = createInstance({
-  urlBase: process.env.REACT_APP_TIB_PUBLIC_URL as string,
-  siteId: process.env.REACT_APP_SITE_ID_TIB_TS as any, 
+  urlBase: process.env.REACT_APP_TS_PUBLIC_URL as string,
+  siteId: process.env.REACT_APP_TS_SITE_ID as any, 
   trackerUrl: "https://support.tib.eu/piwik/matomo.php",
   srcUrl: "https://support.tib.eu/piwik/matomo.js",
   disabled: false,
