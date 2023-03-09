@@ -98,7 +98,7 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
   let treeNode = new TreeNode();
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
-      let res = [];
+      let res = [];      
       if(isSkos){
         res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
       }

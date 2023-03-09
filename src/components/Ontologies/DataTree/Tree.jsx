@@ -416,7 +416,7 @@ class Tree extends React.Component {
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
                 if(node.classList.contains("closed")){
-                    expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+                    expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });  
                 }
