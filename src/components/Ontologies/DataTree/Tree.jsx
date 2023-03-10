@@ -41,7 +41,7 @@ class Tree extends React.Component {
         })
     
         this.setComponentData = this.setComponentData.bind(this);
-        this.buildTree = this.buildTree.bind(this);
+        this.buildTheTreeFirstLayer = this.buildTheTreeFirstLayer.bind(this);
         this.processClick = this.processClick.bind(this);
         this.selectNode = this.selectNode.bind(this);
         this.buildTheTree = this.buildTheTree.bind(this);
@@ -141,7 +141,7 @@ class Tree extends React.Component {
         
         if (!target || resetFlag){
             // When the iri is not set. Render the root nodes 
-            this.buildTree(this.state.rootNodes);       
+            this.buildTheTreeFirstLayer(this.state.rootNodes);       
             return true;
         }
         target = target.trim(); 
@@ -221,13 +221,7 @@ class Tree extends React.Component {
     }
 
 
-
-    /**
-     * Build the first layer of the tree (root nodes).
-     * @param {*} rootNodes 
-     * @returns 
-     */
-    buildTree(rootNodes){
+    buildTheTreeFirstLayer(rootNodes){
         let childrenList = [];
         for(let i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNode();
