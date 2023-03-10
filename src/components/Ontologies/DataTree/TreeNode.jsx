@@ -115,6 +115,21 @@ class TreeNode{
         }
     }
 
+    scrollToNode(id){
+        let position = document.getElementById(id).offsetTop;
+        document.getElementById('tree-container').scrollTop = position;
+    }
+
+    scrollToNextNode(id){
+        let position = document.getElementById(id).nextSibling.offsetTop;
+        document.getElementById('tree-container').scrollTop = position;
+    }
+
+    scrollToPreviousNode(id){
+        let position = document.getElementById(id).previousSibling.offsetTop;
+        document.getElementById('tree-container').scrollTop = position;
+    }
+
     getClickedNodeSpan(node){
         if(node.parentNode.tagName === "SPAN"){
             return node.parentNode;    
@@ -128,6 +143,40 @@ class TreeNode{
 
     getClickedNodeId(node){
         return node.parentNode.parentNode.id;
+    }
+
+    getNodeLabelTextById(id){
+        return document.getElementById(id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+    }
+
+    getFirstChildLabelText(id){
+        return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+    }
+
+    getNodeNextSiblings(id){
+        let node = document.getElementById(id);
+        return node.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+    }
+
+    getParentNode(id){
+        let node = document.getElementById(id);
+        return node.parentNode.parentNode;
+    }
+
+    getNodeChildren(id){
+        return document.getElementById("children_for_" + id).getElementsByClassName('tree-node-li');
+    }
+
+    isNodeExpanded(node){
+        return node.classList.contains("opened");
+    }
+
+    isNodeClosed(node){
+        return node.classList.contains("closed")
+    }
+
+    isNodeLeaf(node){
+        return node.classList.contains("leaf-node");
     }
     
 
