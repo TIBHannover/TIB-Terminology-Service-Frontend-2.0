@@ -40,7 +40,7 @@ class Tree extends React.Component {
           lastSelectedItemId: null 
         })
     
-        this.setTreeData = this.setTreeData.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
         this.buildTree = this.buildTree.bind(this);
         this.processClick = this.processClick.bind(this);
         this.selectNode = this.selectNode.bind(this);
@@ -52,12 +52,8 @@ class Tree extends React.Component {
     }
 
 
-    /**
-   * set data from input props
-   * @param {*} nodes 
-   * @returns 
-   */
-   async setTreeData(){
+   
+   async setComponentData(){
     let rootNodes = this.props.rootNodes;
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
@@ -582,12 +578,12 @@ class Tree extends React.Component {
 
 
     componentDidMount(){
-        this.setTreeData();
+        this.setComponentData();
         document.addEventListener("keydown", this.processKeyNavigation, false);     
     }
     
     componentDidUpdate(){
-        this.setTreeData();
+        this.setComponentData();
     }
 
 

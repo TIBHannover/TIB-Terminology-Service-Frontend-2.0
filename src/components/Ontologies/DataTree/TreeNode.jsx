@@ -93,7 +93,7 @@ class TreeNode{
         }
 
         node.appendChild(this.iconInTree);
-        if(nodeObject["a_attr"]["class"] === "part_of"){
+        if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject["a_attr"]["class"] === "part_of"){
             let partOfSymbol = document.createElement("span");
             let pText = document.createTextNode("P");
             partOfSymbol.appendChild(pText);

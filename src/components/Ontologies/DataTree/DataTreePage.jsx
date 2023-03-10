@@ -19,9 +19,26 @@ class DataTreePage extends React.Component {
       propertyTree: false,
       ontologyId: '' 
     })
-
+    this.setComponentData = this.setComponentData.bind(this);
     this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
+  }
 
+
+  setComponentData(){
+    let termTree = "";
+    if (this.props.componentIdentity === "term"){
+      termTree = true;
+    }
+    else{
+      termTree = false
+    }
+    this.setState({
+      ontologyId: this.props.ontology,
+      componentIdentity: this.props.componentIdentity,
+      selectedNodeIri: this.props.iri,
+      termTree: termTree,
+      propertyTree: !termTree
+    });
   }
 
 
@@ -38,20 +55,7 @@ handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
 
 
 componentDidMount(){
-  let termTree = "";
-  if (this.props.componentIdentity === "term"){
-    termTree = true;
-  }
-  else{
-    termTree = false
-  }
-  this.setState({
-    ontologyId: this.props.ontology,
-    componentIdentity: this.props.componentIdentity,
-    selectedNodeIri: this.props.iri,
-    termTree: termTree,
-    propertyTree: !termTree
-  });
+  this.setComponentData();
 }
 
 
