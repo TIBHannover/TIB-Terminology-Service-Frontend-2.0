@@ -13,6 +13,8 @@ import { buildHierarchicalArray,
     showHidesiblingsForSkos,
     setIsExpandedAndHasChildren } from './helpers';
 
+import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
+
 
 class Tree extends React.Component {
     constructor (props) {
@@ -210,10 +212,7 @@ class Tree extends React.Component {
         return {"treeDomContent": treeList,  "lastSelectedItemId": lastSelectedItemId};
     }
 
-    /**
-     * Select a node in tree
-     * @param {*} e 
-     */
+    
     selectNode(target){    
         if(this.props.isIndividual){
             return true;
@@ -288,56 +287,14 @@ class Tree extends React.Component {
             }
             else if(lastSelectedItemId && event.key === "ArrowDown"){
                 // select the next node. It is either the next siblings or the node first child
-                let node = document.getElementById(lastSelectedItemId);            
-                if(treeNode.isNodeExpanded(node)){
-                    let firstChildNode = treeNode.getFirstChildLabelText(node.id);
-                    this.selectNode(firstChildNode);
-                    treeNode.scrollToNode(lastSelectedItemId);
-                }
-                else if(node.nextSibling){                    
-                    let nextNode = treeNode.getNodeNextSiblings(node.id);
-                    this.selectNode(nextNode);
-                    treeNode.scrollToNextNode(lastSelectedItemId);
-                }
-                else{                    
-                    let parentNode = treeNode.getParentNode(node.id);
-                    while(!parentNode.nextSibling){
-                        parentNode = treeNode.getParentNode(parentNode.id);
-                    }                    
-                    let parentNodeNextSiblings = treeNode.getNodeNextSiblings(parentNode.id);
-                    this.selectNode(parentNodeNextSiblings);                    
-                    treeNode.scrollToNode(this.state.lastSelectedItemId);
-                }                                                
+                let node = document.getElementById(lastSelectedItemId);
+                performArrowDown(node, this.selectNode, this.state.lastSelectedItemId);                                     
                     
             }
             else if(lastSelectedItemId && event.key === "ArrowUp"){
                 // select the previous node. It is either the previous siblings or last opened node.
                 let node = document.getElementById(lastSelectedItemId);                
-                if(!node.previousSibling){
-                    let parentNode = treeNode.getParentNode(node.id);
-                    let parentNodeLabelText = treeNode.getNodeLabelTextById(parentNode.id);
-                    this.selectNode(parentNodeLabelText);                    
-                    treeNode.scrollToNode(this.state.lastSelectedItemId);
-                }
-                else if(treeNode.isNodeClosed(node.previousSibling) || treeNode.isNodeLeaf(node.previousSibling)){
-                    let previousSiblingNode = treeNode.getNodeLabelTextById(node.previousSibling.id);
-                    this.selectNode(previousSiblingNode);                    
-                    treeNode.scrollToPreviousNode(lastSelectedItemId);
-                }
-                else{                    
-                    let previousSiblingNodeChildren =  treeNode.getNodeChildren(node.previousSibling.id);
-                    let lastChild = previousSiblingNodeChildren[previousSiblingNodeChildren.length - 1];
-                    while(true){
-                        if(treeNode.isNodeClosed(lastChild) || treeNode.isNodeLeaf(lastChild)){
-                            break;
-                        }
-                        previousSiblingNodeChildren =  treeNode.getNodeChildren(lastChild.id);
-                        lastChild = previousSiblingNodeChildren[previousSiblingNodeChildren.length - 1];
-                    }
-                    let lastChildNode = treeNode.getNodeLabelTextById(lastChild.id);
-                    this.selectNode(lastChildNode);                    
-                    treeNode.scrollToPreviousNode(lastSelectedItemId);
-                }
+                performArrowUp(node, this.selectNode, lastSelectedItemId);
                                        
             }
             else if(lastSelectedItemId && event.key === "ArrowRight"){
@@ -377,9 +334,6 @@ class Tree extends React.Component {
     }
   
   
-  /**
-   * Reset tree view.
-   */
   resetTree(){
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
@@ -397,10 +351,7 @@ class Tree extends React.Component {
   }
 
 
-    /**
-    * Show an opened node siblings
-    */
-    async showSiblings(){
+async showSiblings(){
         try{    
         let targetNodes = document.getElementsByClassName("targetNodeByIri");
         let treeNode = new TreeNodeController()   
