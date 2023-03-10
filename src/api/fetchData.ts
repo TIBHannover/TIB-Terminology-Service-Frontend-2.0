@@ -190,6 +190,26 @@ export async function getSkosOntologyRootConcepts(ontologyId:string) {
   
 }
 
+/**
+ * Get the JS tree for a target node given by iri
+ * @param ontologyId 
+ * @param targetNodeType 
+ * @param targetNodeIri 
+ * @param viewMode 
+ */
+export async function getNodeJsTree(ontologyId:string, targetNodeType:string, targetNodeIri:string, viewMode:any){
+  try{
+    let url = process.env.REACT_APP_API_BASE_URL + "/";
+    url += ontologyId + "/" + targetNodeType + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree?viewMode=All&siblings=" + viewMode;
+    let listOfNodes =  await (await fetch(url, getCallSetting)).json();
+    return listOfNodes;
+  }
+  catch(e){
+    return [];
+  }
+}
+
+
 
 /**
  * Get the js tree for a node. It returns the subtree of that node as a flat list.

@@ -1,7 +1,7 @@
 import React from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
-import { getChildrenJsTree} from '../../../api/fetchData';
+import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
 import TreeNode from "./TreeNode";
 import { buildHierarchicalArray,
     nodeHasChildren,
@@ -10,7 +10,8 @@ import { buildHierarchicalArray,
     expandNode, 
     nodeExistInList,     
     buildSkosSubtree, 
-    showHidesiblingsForSkos } from './helpers';
+    showHidesiblingsForSkos,
+    setIsExpandedAndHasChildren } from './helpers';
 
 
 class Tree extends React.Component {
@@ -40,78 +41,63 @@ class Tree extends React.Component {
           lastSelectedItemId: null 
         })
     
-        this.setTreeData = this.setTreeData.bind(this);
-        this.buildTree = this.buildTree.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
+        this.buildTheTreeFirstLayer = this.buildTheTreeFirstLayer.bind(this);
         this.processClick = this.processClick.bind(this);
         this.selectNode = this.selectNode.bind(this);
-        this.processTree = this.processTree.bind(this);
+        this.buildTheTree = this.buildTheTree.bind(this);
         this.resetTree = this.resetTree.bind(this);
         this.showSiblings = this.showSiblings.bind(this);
         this.reduceTree = this.reduceTree.bind(this);   
-        this.processKeyNavigation = this.processKeyNavigation.bind(this);     
+        this.processKeyNavigation = this.processKeyNavigation.bind(this);
+        this.loadTheTreeLastState = this.loadTheTreeLastState.bind(this);    
     }
 
 
-    /**
-   * set data from input props
-   * @param {*} nodes 
-   * @returns 
-   */
-   async setTreeData(){
+   
+   async setComponentData(){
     let rootNodes = this.props.rootNodes;
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
     let resetFlag = this.state.resetTreeFlag;
     let viewMode = !this.state.reduceBtnActive;
     let reload = this.state.reload;
-    let isSkos = this.props.isSkos;    
+    let isSkos = this.props.isSkos;
+    let termTree = false;
+    let propertyTree = false;    
+    let childExtractName = "";
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity === 'term'){         
-            this.setState({
-                rootNodes: rootNodes,                                
-                componentIdentity: componentIdentity,
-                termTree: true,
-                propertyTree: false,
-                ontologyId: ontologyId,
-                childExtractName: "terms",
-                resetTreeFlag: false,
-                reload: false,
-                noNodeExist: false,
-                isSkos: isSkos
-              }, async () => {
-                await this.processTree(resetFlag, viewMode, reload);
-              });              
+            termTree = true
+            propertyTree = false;
+            childExtractName = "terms";
+                         
         } 
         else if(componentIdentity === 'property'){
-            this.setState({
-              rootNodes: rootNodes,              
-              componentIdentity: componentIdentity,
-              termTree: false,
-              propertyTree: true,
-              ontologyId: ontologyId,
-              childExtractName: "properties",
-              resetTreeFlag: false,
-              reload: false,
-              noNodeExist: false
-            }, async () => {
-              await this.processTree(resetFlag, viewMode, reload);
-            });    
+            termTree = false;
+            propertyTree = true;
+            childExtractName = "properties";              
         }
         else if(componentIdentity === 'individual'){
-            this.setState({
-              rootNodes: rootNodes,              
-              componentIdentity: componentIdentity,
-              termTree: false,
-              propertyTree: false,
-              ontologyId: ontologyId,
-              childExtractName: "individuals",
-              resetTreeFlag: false,
-              reload: false,
-              noNodeExist: false
-            }, async () => {
-              await this.processTree(resetFlag, viewMode, reload);
-            });    
+            termTree = false;
+            propertyTree = false;
+            childExtractName = "individuals";   
         }
+
+        this.setState({                                              
+            rootNodes: rootNodes,
+            componentIdentity: componentIdentity, 
+            termTree: termTree,
+            propertyTree: propertyTree,
+            ontologyId: ontologyId,
+            childExtractName: childExtractName,
+            resetTreeFlag: false,
+            reload: false,
+            noNodeExist: false,
+            isSkos: isSkos
+          }, async () => {
+            await this.buildTheTree(resetFlag, viewMode, reload);
+          }); 
 
     }
     else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist){
@@ -124,95 +110,47 @@ class Tree extends React.Component {
   }
 
 
-
-   /**
-   * Process a tree to build it. The tree is either a complete tree or a sub-tree.
-   * The sub-tree exist for jumping to a node directly given by its Iri.   
-   * @returns 
-   */
-   async processTree(resetFlag, viewMode, reload){
+   async buildTheTree(resetFlag, viewMode, reload){
         let target = this.props.iri;
+        target =  target ? target.trim() : null;
         let fullTreeMode = this.state.reduceBtnActive;
         let treeList = "";
-        let targetHasChildren = ""
-        let callHeader = {
-            'Accept': 'application/json'
-        };
-        let getCallSetting = {method: 'GET', headers: callHeader};
-        let extractName = this.state.childExtractName;
-        let url = process.env.REACT_APP_API_BASE_URL + "/";
-        url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(target)) + "/jstree?viewMode=All&siblings=" + viewMode;
+        let targetHasChildren = ""                        
         let listOfNodes =  [];
         let rootNodesWithChildren = [];
         let childrenList = [];  
         let lastSelectedItemId = "";
+        let showNodeDetailPage = false;
 
         if(this.props.lastState && this.props.lastState.treeDomContent !== "" && !this.props.isIndividual){            
-            // return the last tree state. Used when a user switch tabs on the ontology page
-            let stateObj = this.props.lastState;
-            stateObj.isLoadingTheComponent = false;
-            this.setState({...stateObj});        
-            if(stateObj.selectedNodeIri !== ""){
-                let currentUrlParams = new URLSearchParams();
-                currentUrlParams.append('iri', stateObj.selectedNodeIri);
-                this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-                this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-            }        
+            this.loadTheTreeLastState();
             return true;
-        }
-        
-        if (!target || resetFlag){
-            // When the iri is not set. Render the root nodes 
-            this.buildTree(this.state.rootNodes);       
-            return true;
-        }
-        target = target.trim(); 
-            
-        if((target != undefined && this.state.targetNodeIri != target) || reload ){
-            if(this.state.isSkos){
-                // The target iri is an individual from an SKOS ontology. The logic is different from a non-skos term tree
+        }        
+        else if (!target || resetFlag){                        
+            let result = this.buildTheTreeFirstLayer(this.state.rootNodes);
+            treeList = result.treeDomContent;                
+        }                    
+        else if((target != undefined && this.state.targetNodeIri != target) || reload ){
+            showNodeDetailPage = true;
+            if(this.state.isSkos){                
                 treeList = await buildSkosSubtree(this.state.ontologyId, target, viewMode);                                                       
             }
             else{                
                 targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
-                listOfNodes =  await (await fetch(url, getCallSetting)).json();
+                listOfNodes =  await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, target, viewMode);
                 rootNodesWithChildren = buildHierarchicalArray(listOfNodes);                           
-                if(nodeExistInList(target, rootNodesWithChildren)){          
+                if(nodeExistInList(target, rootNodesWithChildren)){                    
                     // the target node is a root node
-                    let childrenList = [];
-                    let i = 0;
-                    for(let rootNodes of rootNodesWithChildren){ 
-                        let treeNode = new TreeNode();
-                        let nodeIsClicked = (rootNodes.iri === target)  
-                        if(nodeIsClicked){
-                            lastSelectedItemId =  i;
-                        }                      
-                        let node = treeNode.buildNodeWithReact(rootNodes, i, nodeIsClicked);        
-                        childrenList.push(node);
-                        i += 1;
-                    }          
-                    treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                                              
+                    let result = this.buildTheTreeFirstLayer(rootNodesWithChildren, target);
+                    treeList = result.treeDomContent;
+                    lastSelectedItemId = result.lastSelectedItemId;
                 }
                 else{                    
                     for(let i=0; i < rootNodesWithChildren.length; i++){      
-                        let treeNode = new TreeNode();           
-                        let isExpanded = "";      
-                        if (rootNodesWithChildren[i].childrenList.length === 0 && !rootNodesWithChildren[i].children && !rootNodesWithChildren[i].opened){
-                            //  root node is a leaf
-                            rootNodesWithChildren[i]['has_children'] = false;
-                            isExpanded = false;
-                        }            
-                        else if(rootNodesWithChildren[i].childrenList.length === 0 && rootNodesWithChildren[i].children && !rootNodesWithChildren[i].opened){
-                            // root is not leaf but does not include the target node on its sub-tree
-                            rootNodesWithChildren[i]['has_children'] = true;
-                            isExpanded = false;
-                        }
-                        else{
-                            // root is not leaf and include the target node on its sub-tree
-                            rootNodesWithChildren[i]['has_children'] = true;
-                            isExpanded = true;
-                        }
-                                    
+                        let treeNode = new TreeNode();
+                        let result = setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
+                        let isExpanded = result.isExpanded;
+                        rootNodesWithChildren[i]['has_children'] = result.hasChildren;      
                         if(rootNodesWithChildren[i].childrenList.length !== 0){
                             treeNode.children = expandTargetNode(rootNodesWithChildren[i].childrenList, i, target, targetHasChildren);            
                         }
@@ -227,12 +165,12 @@ class Tree extends React.Component {
         }
 
         this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        this.props.nodeSelectionHandler(target, true);  
+        this.props.nodeSelectionHandler(target, showNodeDetailPage);  
         this.setState({
             targetNodeIri: target,       
             treeDomContent: treeList,
             selectedNodeIri: target,
-            showNodeDetailPage: true,
+            showNodeDetailPage: showNodeDetailPage,
             reduceTreeBtnShow: true,
             reload: false,
             isLoadingTheComponent: false,
@@ -243,28 +181,33 @@ class Tree extends React.Component {
     }
 
 
+    loadTheTreeLastState(){
+        let stateObj = this.props.lastState;
+        stateObj.isLoadingTheComponent = false;
+        this.setState({...stateObj});        
+        if(stateObj.selectedNodeIri !== ""){
+            let currentUrlParams = new URLSearchParams();
+            currentUrlParams.append('iri', stateObj.selectedNodeIri);
+            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+            this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
+        }      
+    }
 
-    /**
-     * Build the first layer of the tree (root nodes).
-     * @param {*} rootNodes 
-     * @returns 
-     */
-    buildTree(rootNodes){
+
+    buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
+        let lastSelectedItemId = 0;          
         for(let i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNode();
-            let node = treeNode.buildNodeWithReact(rootNodes[i], i);            
+            let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
+            if(nodeIsClicked){
+                lastSelectedItemId =  i;
+            }  
+            let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
             childrenList.push(node);
-        }
-        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
-        this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        this.props.nodeSelectionHandler("", false);
-        this.setState({
-            treeDomContent: treeList,
-            targetNodeIri: false,
-            reload: false,
-            isLoadingTheComponent: false
-        });
+        }        
+        let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);      
+        return {"treeDomContent": treeList,  "lastSelectedItemId": lastSelectedItemId};
     }
 
     /**
@@ -582,12 +525,12 @@ class Tree extends React.Component {
 
 
     componentDidMount(){
-        this.setTreeData();
+        this.setComponentData();
         document.addEventListener("keydown", this.processKeyNavigation, false);     
     }
     
     componentDidUpdate(){
-        this.setTreeData();
+        this.setComponentData();
     }
 
 

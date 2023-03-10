@@ -16,7 +16,7 @@ class Facet extends React.Component{
             currentUrl: "",
             isLoading: true
         });
-        this.processFacetData = this.processFacetData.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
         this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
         this.createTypesCheckboxList = this.createTypesCheckboxList.bind(this);
         this.handleOntologyCheckBoxClick = this.handleOntologyCheckBoxClick.bind(this);
@@ -27,11 +27,8 @@ class Facet extends React.Component{
         this.clearFacet = this.clearFacet.bind(this);
     }
 
-
-    /**
-     * process the search result array to get the existing ontologies and their result count
-     */
-   async processFacetData(){        
+    
+   async setComponentData(){        
         let facetData = this.props.facetData;        
         let currentUrl = window.location.href;    
 
@@ -337,7 +334,7 @@ class Facet extends React.Component{
                 
         let currentUrl = this.state.currentUrl;
         if(currentUrl !== window.location.href){
-            this.processFacetData();            
+            this.setComponentData();            
         }     
     }
 

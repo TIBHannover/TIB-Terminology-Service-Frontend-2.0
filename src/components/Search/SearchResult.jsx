@@ -32,14 +32,12 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.processUrlProps = this.processUrlProps.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
     }
 
 
-  /**
-   * Process the url to check the facet field given in it.
-   */
-  processUrlProps(){
+  
+  setComponentData(){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
     let enteredTerm = targetQueryParams.q;  
     let ontologies = targetQueryParams.ontology;
@@ -327,7 +325,7 @@ createSearchResultList () {
   
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){      
-      this.processUrlProps();
+      this.setComponentData();
       let cUrl = window.location.href;        
       if(cUrl.includes("q=")){
         cUrl = cUrl.split("q=")[1];

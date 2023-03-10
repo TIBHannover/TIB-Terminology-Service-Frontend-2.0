@@ -3,7 +3,7 @@ import {getIndividualsList} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
 import {sortIndividuals} from './helpers';
-import Tree from "../DataTree/Tree";
+import Tree from "../DataTreePage/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 
 
@@ -19,7 +19,7 @@ class IndividualsList extends React.Component {
             listView: true,
             isRendered: false
         });
-        this.loadList = this.loadList.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
         this.selectNode = this.selectNode.bind(this);
         this.processClick = this.processClick.bind(this);
@@ -29,10 +29,7 @@ class IndividualsList extends React.Component {
     }
 
 
-    /**
-     * Loads the list of individuals
-     */
-    async loadList(){
+    async setComponentData(){
         let ontology = this.props.ontology;        
         try{            
             let indvList = await getIndividualsList(ontology);            
@@ -187,7 +184,7 @@ class IndividualsList extends React.Component {
 
 
     componentDidMount(){
-        this.loadList();        
+        this.setComponentData();        
         if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
             let currentUrlParams = new URLSearchParams();
             currentUrlParams.append('iri', this.props.iri);
