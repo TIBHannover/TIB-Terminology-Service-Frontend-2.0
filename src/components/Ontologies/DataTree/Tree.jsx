@@ -44,7 +44,7 @@ class Tree extends React.Component {
         this.buildTree = this.buildTree.bind(this);
         this.processClick = this.processClick.bind(this);
         this.selectNode = this.selectNode.bind(this);
-        this.processTree = this.processTree.bind(this);
+        this.buildTheTree = this.buildTheTree.bind(this);
         this.resetTree = this.resetTree.bind(this);
         this.showSiblings = this.showSiblings.bind(this);
         this.reduceTree = this.reduceTree.bind(this);   
@@ -94,7 +94,7 @@ class Tree extends React.Component {
             noNodeExist: false,
             isSkos: isSkos
           }, async () => {
-            await this.processTree(resetFlag, viewMode, reload);
+            await this.buildTheTree(resetFlag, viewMode, reload);
           }); 
 
     }
@@ -108,13 +108,7 @@ class Tree extends React.Component {
   }
 
 
-
-   /**
-   * Process a tree to build it. The tree is either a complete tree or a sub-tree.
-   * The sub-tree exist for jumping to a node directly given by its Iri.   
-   * @returns 
-   */
-   async processTree(resetFlag, viewMode, reload){
+   async buildTheTree(resetFlag, viewMode, reload){
         let target = this.props.iri;
         let fullTreeMode = this.state.reduceBtnActive;
         let treeList = "";
