@@ -106,6 +106,34 @@ class TreeNode{
                
         return node;
     }
+
+
+    unClickAllNodes(){
+        let selectedElement = document.querySelectorAll(".clicked");
+        for(let i=0; i < selectedElement.length; i++){
+            selectedElement[i].classList.remove("clicked");
+        }
+    }
+
+    getClickedNodeSpan(node){
+        if(node.parentNode.tagName === "SPAN"){
+            return node.parentNode;    
+        }
+        return null;
+    }
+
+    getClickedNodeIri(node){
+        return node.parentNode.parentNode.dataset.iri;
+    }
+
+    getClickedNodeId(node){
+        return node.parentNode.parentNode.id;
+    }
+    
+
+
+
+
 }
 
 export default TreeNode;

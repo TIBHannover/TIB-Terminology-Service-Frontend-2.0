@@ -218,35 +218,34 @@ class Tree extends React.Component {
         if(this.props.isIndividual){
             return true;
         }
-        let selectedElement = document.querySelectorAll(".clicked");
-        for(let i=0; i < selectedElement.length; i++){
-            selectedElement[i].classList.remove("clicked");
-        }
-        if(!target.parentNode.classList.contains("clicked")  && target.parentNode.tagName === "SPAN"){
-            target.parentNode.classList.add("clicked");
-            this.props.nodeSelectionHandler(target.parentNode.parentNode.dataset.iri, true);
+        let treeNode = new TreeNode();
+        treeNode.unClickAllNodes();
+        let targetNodeSpan = treeNode.getClickedNodeSpan(target);
+        let clickedNodeIri = "";
+        let clickedNodeId = "";
+        let showNodeDetailPage = false;
+        if(targetNodeSpan){
+            targetNodeSpan.classList.add("clicked");
+            clickedNodeIri = treeNode.getClickedNodeIri(target);
+            clickedNodeId = treeNode.getClickedNodeId(target);
+            showNodeDetailPage = true;
+            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage);
             this.setState({
-                showNodeDetailPage: true,
-                selectedNodeIri: target.parentNode.parentNode.dataset.iri,
+                showNodeDetailPage: showNodeDetailPage,
+                selectedNodeIri: clickedNodeIri,
                 siblingsButtonShow: false,
                 reduceTreeBtnShow: true,
                 reduceBtnActive: false,
-                lastSelectedItemId: target.parentNode.parentNode.id
+                lastSelectedItemId: clickedNodeId
             }, () =>{
                 this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
             });
         
             let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', target.parentNode.parentNode.dataset.iri);
+            currentUrlParams.append('iri', clickedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(target.parentNode.parentNode.dataset.iri, this.state.componentIdentity);
-    
-        }
-        else{
-            target.classList.remove("clicked");
-            this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-        }
-    
+            this.props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);    
+        }    
     }
 
 
