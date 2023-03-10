@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
 import DataTreePage from '../DataTree/DataTreePage';
