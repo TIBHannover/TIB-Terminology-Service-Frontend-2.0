@@ -1,7 +1,7 @@
 import React from "react";
 
 
-class TreeNode{
+class TreeNodeController{
     constructor(){
         this.classes = "tree-node-li";
         this.iconInTree = "";
@@ -185,4 +185,4 @@ class TreeNode{
 
 }
 
-export default TreeNode;
+export default TreeNodeController;

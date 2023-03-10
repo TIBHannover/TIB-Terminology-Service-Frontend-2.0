@@ -2,7 +2,7 @@ import React from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
 import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
-import TreeNode from "./TreeNode";
+import TreeNodeController from "./TreeNode";
 import { buildHierarchicalArray,
     nodeHasChildren,
     nodeIsRoot, 
@@ -147,7 +147,7 @@ class Tree extends React.Component {
                 }
                 else{                    
                     for(let i=0; i < rootNodesWithChildren.length; i++){      
-                        let treeNode = new TreeNode();
+                        let treeNode = new TreeNodeController();
                         let result = setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
                         rootNodesWithChildren[i]['has_children'] = result.hasChildren;      
@@ -198,7 +198,7 @@ class Tree extends React.Component {
         let childrenList = [];
         let lastSelectedItemId = 0;          
         for(let i=0; i < rootNodes.length; i++){
-            let treeNode = new TreeNode();
+            let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
                 lastSelectedItemId =  i;
@@ -218,7 +218,7 @@ class Tree extends React.Component {
         if(this.props.isIndividual){
             return true;
         }
-        let treeNode = new TreeNode();
+        let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
         let targetNodeSpan = treeNode.getClickedNodeSpan(target);
         let clickedNodeIri = "";
@@ -281,7 +281,7 @@ class Tree extends React.Component {
         }
         try{
             let lastSelectedItemId = this.state.lastSelectedItemId;
-            let treeNode = new TreeNode();
+            let treeNode = new TreeNodeController();
             if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){                
                 let node = treeNode.getNodeLabelTextById("0");
                 this.selectNode(node);
@@ -403,7 +403,7 @@ class Tree extends React.Component {
     async showSiblings(){
         try{    
         let targetNodes = document.getElementsByClassName("targetNodeByIri");
-        let treeNode = new TreeNode()   
+        let treeNode = new TreeNodeController()   
         if(!this.state.siblingsVisible){
             if(this.state.isSkos){
                 showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
