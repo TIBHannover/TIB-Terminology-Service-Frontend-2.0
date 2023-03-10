@@ -169,7 +169,7 @@ class SearchResult extends React.Component{
     selectedCollections: collections,
     facetIsSelected: facetSelected,
     totalResultsCount: totalSaerchResultsCount,
-    facetFields: filteredFacetFields
+    facetFields: filteredFacetFields    
     }, () => {
       this.updateURL(ontologies, types, collections);
     });
