@@ -19,7 +19,7 @@ class TermList extends React.Component{
             iri: null
         });
 
-        this.loadComponent = this.loadComponent.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
         this.createList = this.createList.bind(this);
         this.pageCount = this.pageCount.bind(this);
         this.handlePagination = this.handlePagination.bind(this);
@@ -29,13 +29,19 @@ class TermList extends React.Component{
     }
 
 
-    async loadComponent(){        
+    async setComponentData(){        
         let url = new URL(window.location);
         let pageNumberInUrl = url.searchParams.get('page');
         let sizeInUrl = url.searchParams.get('size');
         let iriInUrl = url.searchParams.get('iri');        
         pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
-        sizeInUrl = !sizeInUrl ? this.state.pageSize : parseInt(sizeInUrl);
+        let localPageSize = localStorage.getItem('termListPageSize');
+        if (localPageSize){
+            sizeInUrl = parseInt(localPageSize);
+        }
+        else{
+            sizeInUrl = !sizeInUrl ? this.state.pageSize : parseInt(sizeInUrl);
+        }        
         let ontologyId = this.props.ontology;
         let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };
         if(!iriInUrl){
@@ -83,6 +89,7 @@ class TermList extends React.Component{
 
     handlePageSizeDropDownChange(e){
         let size = parseInt(e.target.value);
+        localStorage.setItem('termListPageSize', size);
         let pageNumber = this.state.pageNumber + 1;
         this.setState({
             pageSize: size
@@ -138,13 +145,13 @@ class TermList extends React.Component{
     }
 
     componentDidMount(){
-        this.loadComponent();
+        this.setComponentData();
     }
 
     componentDidUpdate(){
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
-            this.loadComponent();
+            this.setComponentData();
         }
     }
 
