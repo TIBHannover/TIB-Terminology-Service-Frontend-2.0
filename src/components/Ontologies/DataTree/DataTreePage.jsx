@@ -8,7 +8,7 @@ import JumpTo from '../JumpTo/Jumpto';
 
 
 
-class DataTree extends React.Component {
+class DataTreePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
@@ -115,7 +115,7 @@ render(){
 
 }
 
-export default withRouter(DataTree);
+export default withRouter(DataTreePage);
 
 
 
