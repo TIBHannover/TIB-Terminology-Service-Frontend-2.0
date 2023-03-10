@@ -3,7 +3,7 @@ import {getIndividualsList} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
 import {sortIndividuals} from './helpers';
-import Tree from "../DataTreePage/Tree";
+import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 
 

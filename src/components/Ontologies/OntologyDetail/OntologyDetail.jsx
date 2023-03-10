@@ -1,7 +1,7 @@
 import React from 'react'
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
-import DataTreePage from '../DataTreePage/DataTreePage';
+import DataTreePage from '../DataTree/DataTreePage';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
@@ -369,7 +369,7 @@ class OntologyDetail extends React.Component {
                         </div>
                       </div>
               }
-              {!this.state.waiting && this.state.termsTab &&
+              {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                             <DataTreePage
                               rootNodes={this.state.rootTerms}
                               componentIdentity={'term'}
@@ -385,7 +385,7 @@ class OntologyDetail extends React.Component {
                             />
               }
 
-              {!this.state.waiting && this.state.propTab &&
+              {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                             <DataTreePage
                               rootNodes={this.state.rootProps}
                               componentIdentity={'property'}
