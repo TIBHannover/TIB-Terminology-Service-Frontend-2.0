@@ -60,54 +60,42 @@ class Tree extends React.Component {
     let resetFlag = this.state.resetTreeFlag;
     let viewMode = !this.state.reduceBtnActive;
     let reload = this.state.reload;
-    let isSkos = this.props.isSkos;    
+    let isSkos = this.props.isSkos;
+    let termTree = false;
+    let propertyTree = false;
+    let childExtractName = "";
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
         if(componentIdentity === 'term'){         
-            this.setState({
-                rootNodes: rootNodes,                                
-                componentIdentity: componentIdentity,
-                termTree: true,
-                propertyTree: false,
-                ontologyId: ontologyId,
-                childExtractName: "terms",
-                resetTreeFlag: false,
-                reload: false,
-                noNodeExist: false,
-                isSkos: isSkos
-              }, async () => {
-                await this.processTree(resetFlag, viewMode, reload);
-              });              
+            termTree = true
+            propertyTree = false;
+            childExtractName = "terms";
+                         
         } 
         else if(componentIdentity === 'property'){
-            this.setState({
-              rootNodes: rootNodes,              
-              componentIdentity: componentIdentity,
-              termTree: false,
-              propertyTree: true,
-              ontologyId: ontologyId,
-              childExtractName: "properties",
-              resetTreeFlag: false,
-              reload: false,
-              noNodeExist: false
-            }, async () => {
-              await this.processTree(resetFlag, viewMode, reload);
-            });    
+            termTree = false;
+            propertyTree = true;
+            childExtractName = "properties";              
         }
         else if(componentIdentity === 'individual'){
-            this.setState({
-              rootNodes: rootNodes,              
-              componentIdentity: componentIdentity,
-              termTree: false,
-              propertyTree: false,
-              ontologyId: ontologyId,
-              childExtractName: "individuals",
-              resetTreeFlag: false,
-              reload: false,
-              noNodeExist: false
-            }, async () => {
-              await this.processTree(resetFlag, viewMode, reload);
-            });    
+            termTree = false;
+            propertyTree = false;
+            childExtractName = "individuals";   
         }
+
+        this.setState({                                              
+            rootNodes: rootNodes,
+            componentIdentity: componentIdentity, 
+            termTree: termTree,
+            propertyTree: propertyTree,
+            ontologyId: ontologyId,
+            childExtractName: childExtractName,
+            resetTreeFlag: false,
+            reload: false,
+            noNodeExist: false,
+            isSkos: isSkos
+          }, async () => {
+            await this.processTree(resetFlag, viewMode, reload);
+          }); 
 
     }
     else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist){
