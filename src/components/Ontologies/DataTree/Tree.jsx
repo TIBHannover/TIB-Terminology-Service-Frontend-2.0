@@ -324,7 +324,7 @@ class Tree extends React.Component {
                 else if(parentNode.tagName === "LI"){
                     parentNode = treeNode.getNodeLabelTextById(parentNode.id);
                     this.selectNode(parentNode);                    
-                    treeNode.scrollToNode(parentNode.id);
+                    treeNode.scrollToNode(this.state.lastSelectedItemId);
                 }                 
             }
         }
