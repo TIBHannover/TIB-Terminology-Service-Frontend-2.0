@@ -82,10 +82,7 @@ class JumpTo extends React.Component{
     jumpToButton(resultItem){
         let content = [];
         let targetHref = "";
-        if(this.props.componentIdentity === "termList"){
-            targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/termList?iri=' + encodeURIComponent(resultItem['iri']);
-        } 
-        else if(resultItem["type"] === 'class'){
+        if(resultItem["type"] === 'class' || this.props.componentIdentity === "term"){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
         }
         else if(resultItem["type"] === 'property'){
