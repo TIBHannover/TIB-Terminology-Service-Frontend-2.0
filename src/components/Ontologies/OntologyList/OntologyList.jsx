@@ -40,8 +40,7 @@ class OntologyList extends React.Component {
   }
 
 
-   async setComponentData () {
-    
+   async setComponentData (){    
     try{
       let allOntologies = await getAllOntologies();
       allOntologies = sortOntologyBasedOnTitle(allOntologies);
@@ -370,12 +369,11 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   }
   
   componentDidMount(){
-    this.getAllOntologies();
+    this.setComponentData();
   }
 
 
-  render () {
-    // console.info(typeof(process.env.REACT_APP_COLLECTION_FACET_SHOWN));
+  render () {    
     const { error, isLoaded } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
