@@ -1553,6 +1553,7 @@ p{
     border-radius: 50px;
     font-size: 8px;
     margin-right: 5px;
+    display: inline-block;
 }
 
 
@@ -1619,7 +1620,7 @@ p{
         Style for the a node span title text in the tree
     */
 
-    /* vertical-align: top; */
+    display: inline-block;
     padding-left: 3px;
 }
 

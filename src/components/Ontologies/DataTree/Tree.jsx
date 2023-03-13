@@ -219,12 +219,12 @@ class Tree extends React.Component {
         }
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
-        let targetNodeSpan = treeNode.getClickedNodeSpan(target);
+        let targetNodeDiv = treeNode.getClickedNodeDiv(target);
         let clickedNodeIri = "";
         let clickedNodeId = "";
         let showNodeDetailPage = false;
-        if(targetNodeSpan){
-            targetNodeSpan.classList.add("clicked");
+        if(targetNodeDiv){
+            targetNodeDiv.classList.add("clicked");
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);
             showNodeDetailPage = true;
