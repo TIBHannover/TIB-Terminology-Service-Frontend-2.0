@@ -36,6 +36,7 @@ class SearchResult extends React.Component{
         this.updateURL = this.updateURL.bind(this);
         this.alsoInResult = this.alsoInResult.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
+        this.handleAlsoResult = this.handleAlsoResult.bind(this);
     }
 
 
@@ -211,7 +212,6 @@ alsoInResult(iri){
   let otherOntologies = [];
   if(typeof(expanded) !== "undefined"){
     for(let key in expanded){
-      console.info(iri)
       if(key === iri){
         let allTags = expanded[key]['docs']
              for(let j=0; j < allTags.length; j++){              
@@ -222,19 +222,27 @@ alsoInResult(iri){
                      </a>
                    </div>             
                )
-             } 
+             }            
       }
-    }    
-  }
+    }     
+  } 
   return otherOntologies;
+}
 
+handleAlsoResult(iri){
+  if((this.alsoInResult(iri)).length !== 0){
+    return true;
+  }
+  else{
+    return false
+  }
 }
 
 /**
-   * Create the search results list view
-   *
-   * @returns
-*/
+  * Create the search results list view
+  *
+  * @returns
+  */
 createSearchResultList () {   
       let searchResultItem = this.state.searchResult;
       const SearchResultList = [];
@@ -256,9 +264,10 @@ createSearchResultList () {
                 </a>
               </div>
               <br/>
+              {this.handleAlsoResult(searchResultItem[i].iri) &&
               <div className = "also-in-design">
                   <b>Also in:</b>
-                </div>
+                </div>}
                {this.alsoInResult(searchResultItem[i].iri)}
             </div>            
           </div>   
@@ -373,8 +382,10 @@ createSearchResultList () {
         cUrl = cUrl.replaceAll("+", " ");
         document.getElementById("s-field").value = cUrl;
       }       
-    }     
+    }    
   }
+
+
 
   render(){
     return(
