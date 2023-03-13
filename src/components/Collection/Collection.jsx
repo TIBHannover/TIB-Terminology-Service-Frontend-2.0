@@ -12,17 +12,13 @@ class Collections extends React.Component{
             collectionOntologies: [],
         });
 
-        this.getOntologies = this.getOntologies.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
         this.createCollectionCard = this.createCollectionCard.bind(this);
         this.createCollectionList = this.createCollectionList.bind(this);
     }
 
-
-    /**
-     * Get the list og ontologies for a collection
-     * @param {*} collectionId 
-     */
-    async getOntologies(){
+    
+    async setComponentData(){
         let collectionOntologies = {};
         for (let col in collectionsInfoJson){            
             let ontologies = await getCollectionOntologies([collectionsInfoJson[col]["id"]], false);            
@@ -105,7 +101,7 @@ class Collections extends React.Component{
 
     
     componentDidMount(){
-        this.getOntologies();
+        this.setComponentData();
         let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
         let targetCollectionId = targetQueryParams.col;
         if(typeof(targetCollectionId) !== "undefined"){

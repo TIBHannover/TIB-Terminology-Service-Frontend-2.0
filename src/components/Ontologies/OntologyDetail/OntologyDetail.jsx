@@ -1,7 +1,7 @@
 import React from 'react';
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
-import DataTree from '../DataTree/DataTree';
+import DataTree from '../DataTree/DataTreePage';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';

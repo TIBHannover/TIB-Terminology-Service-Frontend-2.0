@@ -15,17 +15,13 @@ class NodePage extends React.Component {
       isSkos: false,
       showDataAsJsonBtnHref: ""
     })
-    this.initiateTheTableView = this.initiateTheTableView.bind(this);
+    this.setComponentData = this.setComponentData.bind(this);
     this.createRow = this.createRow.bind(this);
     this.createTable = this.createTable.bind(this);
   }
 
 
-
-  /**
-   * Get the target term metadata. Initiate the detail table. 
-   */
- async initiateTheTableView(){
+ async setComponentData(){
     let targetIri = this.props.iri;
     let ontology = this.props.ontology;
     let extractKey = this.props.extractKey;
@@ -115,14 +111,14 @@ class NodePage extends React.Component {
 
   componentDidMount(){
     if(this.state.data && this.state.prevNode !== this.props.iri){
-      this.initiateTheTableView();      
+      this.setComponentData();      
     }
   }
 
 
   componentDidUpdate(){    
     if(this.state.prevNode !== this.props.iri){
-      this.initiateTheTableView();
+      this.setComponentData();
     }
   }
 
