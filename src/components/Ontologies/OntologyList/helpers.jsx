@@ -99,13 +99,20 @@ export function ontology_has_searchKey(ontology, value){
 }
 
 
-export function sortArrayOfObjectBasedOnKey (objectsArray, key) {
+export function sortArrayOfObjectBasedOnKey(objectsArray, key) {
     if(key === "title"){
         return objectsArray.sort(function (a, b) {
             let x = a['config'][key]; 
             let y = b['config'][key];
             return (x<y ? -1 : 1 )
           });
+    }
+    else if(key === 'ontologyId'){
+        return objectsArray.sort(function (a, b) {
+            let x = a[key]; 
+            let y = b[key];
+            return (x<y ? -1 : 1 )
+          });    
     }
     return objectsArray.sort(function (a, b) {
       let x = a[key]; 
