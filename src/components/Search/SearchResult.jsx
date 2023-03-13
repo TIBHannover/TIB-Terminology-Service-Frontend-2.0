@@ -34,7 +34,6 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.processUrlProps = this.processUrlProps.bind(this);
         this.alsoInResult = this.alsoInResult.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
     }
