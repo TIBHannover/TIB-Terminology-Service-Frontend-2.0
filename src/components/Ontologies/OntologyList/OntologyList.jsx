@@ -7,6 +7,14 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 
 
+const TITLE_SORT_KEY = "title";
+const CLASS_SORT_KEY = "numberOfTerms";
+const PROPERT_SORT_KEY = "numberOfProperties";
+const INDIVIDUAL_SORT_KEY = "numberOfIndividuals";
+// const TIME_SORT_KEY = "";
+
+
+
 class OntologyList extends React.Component {
   constructor (props) {
     super(props)
@@ -21,7 +29,7 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'title',
+      sortField: TITLE_SORT_KEY,
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
       keywordFilterString: "",
@@ -95,7 +103,7 @@ class OntologyList extends React.Component {
       keywordFilter = "";
     }
     if(!sortBy){
-      sortBy = "title";
+      sortBy = TITLE_SORT_KEY;
     }
     this.setState({
       sortField: sortBy.trim(),
@@ -238,7 +246,7 @@ class OntologyList extends React.Component {
       currentUrlParams.append('and', this.state.exclusiveCollections);
     }
 
-    if(this.state.sortField !== "title"){
+    if(this.state.sortField !== TITLE_SORT_KEY){
       currentUrlParams.append('sorting', this.state.sortField);
     }
     
@@ -249,7 +257,7 @@ class OntologyList extends React.Component {
 
 
 async runFacet(selectedCollections, enteredKeyword, page=1){
-  if (selectedCollections.length === 0 && enteredKeyword === "" && this.state.sortField === "title"){
+  if (selectedCollections.length === 0 && enteredKeyword === "" && this.state.sortField === TITLE_SORT_KEY){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
     let preHiddenStatus = this.state.unFilteredHiddenStatus;
@@ -400,10 +408,10 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
-                        <option value={'title'} key="alphabetic">Alphabetically</option>
-                        <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
-                        <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
-                        <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
+                        <option value={TITLE_SORT_KEY} key={TITLE_SORT_KEY}>Alphabetically</option>
+                        <option value={CLASS_SORT_KEY} key={CLASS_SORT_KEY}>Classes Count</option>
+                        <option value={PROPERT_SORT_KEY} key={PROPERT_SORT_KEY}>Properties Count</option>
+                        <option value={INDIVIDUAL_SORT_KEY} key={INDIVIDUAL_SORT_KEY}>Individuals Count</option>
                       </select>  
                     </div>                                                                                
                   </div>
