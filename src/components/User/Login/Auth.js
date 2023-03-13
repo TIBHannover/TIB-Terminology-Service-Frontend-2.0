@@ -1,15 +1,14 @@
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
-        document.getElementsByClassName("application-page")[0].style.filter = "blur(10px)";
+        document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
         document.getElementById("login-loading").style.display = "block";
         let code = cUrl.split("code=")[1];
         let data = new FormData();
         data.append("code", code);
         fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/login', {method: "POST", body: data})
             .then((resp) => resp.json())
-            .then((resp) => {
-                console.info(resp["data"])
+            .then((resp) => {                
                 if(resp["data"]){
                     localStorage.setItem("name", resp["data"]["name"]);
                     localStorage.setItem("company", resp["data"]["company"]);
@@ -29,23 +28,20 @@ export function auth(){
 
 
 
-export const isLogin = () => {    
+export async function isLogin(){    
     if(localStorage.getItem("token")){
         let data = new FormData();
         data.append("token", localStorage.getItem("token"));
-        return fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/validate_login', {method: "POST", body: data})
-            .then((resp) => resp.json())
-            .then((resp) => {                
-                if(resp["valid"] === true){                    
-                    return true;  
-                }
-                return false;
-            })
-            .catch((e) => {
-                return false;
-            });         
+        let result = await fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/validate_login', {method: "POST", body: data});
+        result = await result.json();
+        if(result && result["valid"] === true){
+            return true
+        }
+        return false;
     }
-    return false;
+    else{
+        return false;
+    }
 }
 
 
