@@ -1,7 +1,7 @@
 import React from 'react';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes, sortOntologyBasedOnTitle} from './helpers';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, createCollectionsCheckBoxes, sortArrayOfObjectBasedOnKey} from './helpers';
 import Pagination from "../../common/Pagination/Pagination";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -21,7 +21,7 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'alphabetic',
+      sortField: 'title',
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
       keywordFilterString: "",
@@ -43,7 +43,7 @@ class OntologyList extends React.Component {
    async setComponentData (){    
     try{
       let allOntologies = await getAllOntologies();
-      allOntologies = sortOntologyBasedOnTitle(allOntologies);
+      allOntologies = sortArrayOfObjectBasedOnKey(allOntologies, this.state.sortField);
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -55,8 +55,8 @@ class OntologyList extends React.Component {
   
       this.setState({
         isLoaded: true,
-        ontologies: sortBasedOnKey(allOntologies, this.state.sortField),
-        unFilteredOntologies: sortBasedOnKey(allOntologies, this.state.sortField),
+        ontologies: allOntologies,
+        unFilteredOntologies: allOntologies,
         ontologiesHiddenStatus: hiddenStatus,
         unFilteredHiddenStatus: hiddenStatus,
         ontologyListContent: this.createOntologyList()
@@ -95,7 +95,7 @@ class OntologyList extends React.Component {
       keywordFilter = "";
     }
     if(!sortBy){
-      sortBy = "alphabetic";
+      sortBy = "title";
     }
     this.setState({
       sortField: sortBy.trim(),
@@ -176,7 +176,7 @@ class OntologyList extends React.Component {
      */
   handleSortChange = (e, value) => {
     let ontologies = this.state.ontologies;
-    let sortedOntology = e.target.value !== "alphabetic"  ? sortBasedOnKey(ontologies, e.target.value) : sortOntologyBasedOnTitle(ontologies);
+    let sortedOntology = sortArrayOfObjectBasedOnKey(ontologies, e.target.value);
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
@@ -238,7 +238,7 @@ class OntologyList extends React.Component {
       currentUrlParams.append('and', this.state.exclusiveCollections);
     }
 
-    if(this.state.sortField !== "numberOfTerms"){
+    if(this.state.sortField !== "title"){
       currentUrlParams.append('sorting', this.state.sortField);
     }
     
@@ -249,7 +249,7 @@ class OntologyList extends React.Component {
 
 
 async runFacet(selectedCollections, enteredKeyword, page=1){
-  if (selectedCollections.length === 0 && enteredKeyword === ""){
+  if (selectedCollections.length === 0 && enteredKeyword === "" && this.state.sortField === "title"){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
     let preHiddenStatus = this.state.unFilteredHiddenStatus;
@@ -292,8 +292,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
 
   }
 
-
-  ontologies = this.state.sortField !== "alphabetic" ? sortBasedOnKey(ontologies, this.state.sortField) : sortOntologyBasedOnTitle(ontologies) ;
+  ontologies = sortArrayOfObjectBasedOnKey(ontologies, this.state.sortField);
   let hiddenStatus = [];
   for(let i=0; i < ontologies.length; i++){
     if (i <= this.state.pageSize){
@@ -401,7 +400,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
-                        <option value={'alphabetic'} key="alphabetic">Alphabetically</option>
+                        <option value={'title'} key="alphabetic">Alphabetically</option>
                         <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
                         <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
                         <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
