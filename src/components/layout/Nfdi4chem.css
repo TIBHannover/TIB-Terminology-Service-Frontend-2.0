@@ -323,6 +323,75 @@ p{
 }
 
 
+.github-login-btn, .github-login-btn:hover, .github-login-btn:focus{
+    /* 
+        GitHub sign in button.
+    */
+
+    background-color: black;
+    color: white;
+    width: 300px;
+    border: 1px solid black;
+}
+
+.loginModal {
+    /* 
+        Style for the login modal.
+    */
+
+    margin-top: 10%;
+}
+
+.modal-title{
+    /* 
+        A modal title style.    
+    */
+
+    color: black;
+}
+
+.fa-github{
+    /* 
+        Gothub fontawsome style.
+    */
+
+    border: none;
+    font-size: 30px;
+}
+
+.overlay {
+    /* 
+        Login loading spinner container
+    */
+
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    top: 40%;
+    left: 0px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    display: none;
+ }
+
+ .spinner-grow{
+    /* 
+        Login loading spinner
+    */
+
+    width: 300px;
+    height: 300px;
+ }
+
+ .login-load-text{
+    /* 
+        Login loading text
+    */
+
+    color: black;
+ }
+
 @media only screen and (max-width: 1025px) {
     .application-content{
         /* 
@@ -470,7 +539,8 @@ p{
     */
  
     text-align: right;
-    color: white;
+    color: #09617B;
+    font-weight: bold;
     margin-bottom: 20px;
  }
  
@@ -1863,4 +1933,12 @@ p{
     */
 
     margin-top: 40px;
+/* 
+--------------------------------------
+  User-related components such as Login and profile
+--------------------------------------
+*/
+
+.user-profile-dropdown{
+    font-size: 12px;
 }

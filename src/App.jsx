@@ -19,6 +19,9 @@ import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import Login from './components/User/Login/Login';
+import UserProfile from './components/User/Profile/Profile';
+import RequireLoginRoute from './components/User/Login/RequireLogin';
 
 
 // import css file based on the target project
