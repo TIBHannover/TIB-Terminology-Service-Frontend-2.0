@@ -97,7 +97,19 @@ function App() {
   }, []);
 
   return (
-    <div className="App">   
+    <div className="App">
+    <div class="overlay" id="login-loading">
+        <div class="d-flex flex-column align-items-center justify-content-center">  
+          <div className="row">
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Login ...</span>
+            </div>
+          </div>
+          <div className="row login-load-text">
+            <h2><strong>Login ...</strong></h2>
+        </div>                                
+        </div>
+      </div>   
      <BrowserRouter>
         <MatomoWrapper> 
           <Header />               
@@ -117,7 +129,9 @@ function App() {
               <span id="backend-is-down-message-span"></span>
               <CookieBanner />
               <Switch>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
+                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
+                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>             
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
