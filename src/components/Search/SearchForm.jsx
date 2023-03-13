@@ -1,5 +1,6 @@
 import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
+import SearchInOntology from './widgets/SearchInOntology';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -131,6 +132,12 @@ class SearchForm extends React.Component{
           return(
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      {SearchInOntology}
+                    </div>
+                  </div>
+                  
                   <input 
                     type="text" 
                     class="form-control search-input" 
