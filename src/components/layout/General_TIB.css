@@ -1551,7 +1551,7 @@ p{
     color: white;
     padding: 5px;
     border-radius: 50px;
-    font-size: 10px;
+    font-size: 8px;
     margin-right: 5px;
 }
 
@@ -1598,7 +1598,7 @@ p{
     cursor: pointer;    
     border-left: 1px dotted !important;
     border-left-color: gray;
-    font-size: 13px !important;    
+    font-size: 13px !important;        
 }
 
 .tree-node-li::before{
@@ -1619,11 +1619,8 @@ p{
         Style for the a node span title text in the tree
     */
 
-    display: inline-block;
-    width: 300px;
-    vertical-align: top;
+    /* vertical-align: top; */
     padding-left: 3px;
-    word-break: break-all;
 }
 
 
@@ -1633,6 +1630,10 @@ p{
     */
 
     padding-left: 5px;
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+    margin-bottom: 5px; 
 }
 
 .tree-text-container:hover{
@@ -1750,36 +1751,30 @@ p{
     100% { transform: rotate(360deg); }
   }
 
-  @media only screen and (max-width: 1500px) and (min-width: 1026px) {
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
-        width: 140px;     
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {
+    .tree-node-li {
+        font-size: 11px !important;
     }
-  }
+}
+
+@media only screen and (max-width: 1299px) and (min-width: 1026px) {
+    .tree-node-li {
+        font-size: 9px !important;
+    }
+}
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
-        width: 100px;     
+    .tree-node-li {
+        font-size: 9px;
     }
-  }
+}
 
-  @media only screen and (max-width: 900px){
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
-        width: 100px;     
+@media only screen and (max-width: 900px){
+    .tree-node-li {
+        font-size: 8px;
     }
-  }
+}
 
 /* 
 ------------------------------------------------------------

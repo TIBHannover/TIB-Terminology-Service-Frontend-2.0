@@ -1494,17 +1494,27 @@ p{
     /* 
         Style for the a node span title text in the tree
     */
-    
+
+    /* vertical-align: top; */
+    padding-left: 3px;
+}
+
+
+.tree-text-container{
+    /* 
+        The style for a node container in the tree view
+    */
+
+    padding-left: 5px;
     display: inline-block;
     width: 300px;
     vertical-align: top;
-    padding-left: 3px;
-    word-break: break-all;
+    margin-bottom: 5px; 
 }
 
-.li-label-text:hover{
-    /* 
-        The style for mouse over a node text on a tree veiw.
+.tree-text-container:hover{
+     /* 
+        The style for mouse over a node on a tree veiw.
     */
 
     background-color: rgb(218, 218, 218);
@@ -1615,36 +1625,30 @@ p{
     100% { transform: rotate(360deg); }
   }
 
-  @media only screen and (max-width: 1500px) and (min-width: 1026px) {
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
-        width: 140px;     
+  @media only screen and (max-width: 1500px) and (min-width: 1300px) {
+    .tree-node-li {
+        font-size: 11px !important;
     }
-  }
+}
+
+@media only screen and (max-width: 1299px) and (min-width: 1026px) {
+    .tree-node-li {
+        font-size: 9px !important;
+    }
+}
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
-        width: 100px;     
+    .tree-node-li {
+        font-size: 9px;
     }
-  }
+}
 
-  @media only screen and (max-width: 900px){
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
-        width: 100px;     
+@media only screen and (max-width: 900px){
+    .tree-node-li {
+        font-size: 8px;
     }
-  }
+}
 
 /* 
 ------------------------------------------------------------

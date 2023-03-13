@@ -18,17 +18,17 @@ class TreeNodeController{
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
         let partOfSymbol = "";
-        this.textSpan = React.createElement("span", {"className": "li-label-text"}, nodeLabel);
+        this.textSpan = React.createElement("div", {"className": "li-label-text"}, nodeLabel);
 
         if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject['a_attr']["class"] === "part_of"){
             partOfSymbol = React.createElement("span", {"className": "p-icon-style"}, "P");            
         }
 
         if(nodeIsClicked){
-            this.textSpanContainer = React.createElement("span", {"className": "tree-text-container clicked targetNodeByIri"}, partOfSymbol, this.textSpan);
+            this.textSpanContainer = React.createElement("div", {"className": "tree-text-container clicked targetNodeByIri"}, partOfSymbol, this.textSpan);
         }
         else{
-            this.textSpanContainer = React.createElement("span", {"className": "tree-text-container"}, partOfSymbol, this.textSpan);
+            this.textSpanContainer = React.createElement("div", {"className": "tree-text-container"}, partOfSymbol, this.textSpan);
         }        
         this.nodeIri = nodeObject.iri;
         if (!nodeHasChildren){
@@ -61,12 +61,12 @@ class TreeNodeController{
     buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
-        this.textSpan = document.createElement("span");
+        this.textSpan = document.createElement("div");
         let label = document.createTextNode(nodeLabel);
         this.textSpan.classList.add("li-label-text");
         this.textSpan.appendChild(label);
         this.iconInTree = document.createElement("i");
-        this.textSpanContainer = document.createElement("span");
+        this.textSpanContainer = document.createElement("div");
         this.textSpanContainer.classList.add("tree-text-container");
         let node = document.createElement(this.nodeRootElementName);
         node.setAttribute("id", nodeId);
@@ -131,7 +131,7 @@ class TreeNodeController{
     }
 
     getClickedNodeSpan(node){
-        if(node.parentNode.tagName === "SPAN"){
+        if(node.parentNode.tagName === "DIV"){
             return node.parentNode;    
         }
         return null;

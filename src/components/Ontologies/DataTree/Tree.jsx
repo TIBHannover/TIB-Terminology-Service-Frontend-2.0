@@ -257,7 +257,7 @@ class Tree extends React.Component {
             return true;
         }
         
-        if (e.target.tagName === "SPAN"){ 
+        if (e.target.tagName === "DIV"){ 
             this.selectNode(e.target);
         }
         else if (e.target.tagName === "I"){   
