@@ -1,6 +1,6 @@
 import React from 'react';
 import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
-import TreeNode from './TreeNode';
+import TreeNodeController from './TreeNode';
 
 
 
@@ -38,7 +38,7 @@ export function buildHierarchicalArray(flatList){
    */
   export function expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
     let subNodes = [];
-    let treeNode = new TreeNode();
+    let treeNode = new TreeNodeController();
     for(let i = 0; i < nodeList.length; i++){
       let childNodeChildren = [];
       if(nodeList[i].iri !== targetIri){
@@ -95,7 +95,7 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
   let targetNodeIri = e.dataset.iri;
   let targetNodeId = e.dataset.id;
   let Id = e.id;
-  let treeNode = new TreeNode();
+  let treeNode = new TreeNodeController();
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
       let res = [];      
@@ -248,7 +248,7 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   let siblingsNodes = "";
   let targetUl = "";
   let children = "";
-  let treeNode = new TreeNode();
+  let treeNode = new TreeNodeController();
   if(showFlag){
     // Show the siblings    
     if(!parent){
