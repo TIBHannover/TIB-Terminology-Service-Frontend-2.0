@@ -27,6 +27,7 @@ class OntologyList extends React.Component {
       keywordFilterString: "",
       exclusiveCollections: false
     })
+    this.setComponentData = this.setComponentData.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleFacetCollection = this.handleFacetCollection.bind(this);
     this.getAllCollections = this.getAllCollections.bind(this);
@@ -39,11 +40,7 @@ class OntologyList extends React.Component {
   }
 
 
-  /**
-   * Get the list of all ontologies
-   */
-   async getAllOntologies () {
-    
+   async setComponentData (){    
     try{
       let allOntologies = await getAllOntologies();
       allOntologies = sortOntologyBasedOnTitle(allOntologies);
@@ -251,9 +248,6 @@ class OntologyList extends React.Component {
 
 
 
-/**
- * 
- */
 async runFacet(selectedCollections, enteredKeyword, page=1){
   if (selectedCollections.length === 0 && enteredKeyword === ""){
     // no filter exist
@@ -375,12 +369,11 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   }
   
   componentDidMount(){
-    this.getAllOntologies();
+    this.setComponentData();
   }
 
 
-  render () {
-    // console.info(typeof(process.env.REACT_APP_COLLECTION_FACET_SHOWN));
+  render () {    
     const { error, isLoaded } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
