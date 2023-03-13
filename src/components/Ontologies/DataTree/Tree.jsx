@@ -257,7 +257,7 @@ class Tree extends React.Component {
             return true;
         }
         
-        if (e.target.tagName === "DIV"){ 
+        if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
             this.selectNode(e.target);
         }
         else if (e.target.tagName === "I"){   
@@ -473,7 +473,7 @@ async showSiblings(){
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
                 <div className='row'>          
                     {!this.state.treeDomContent.__html 
-                    ? <div className='col-sm-10'>{this.state.treeDomContent}</div> 
+                    ? <div className='col-sm-10 tree'>{this.state.treeDomContent}</div> 
                     : <div className='col-sm-10' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
                     }
                                 
