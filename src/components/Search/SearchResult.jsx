@@ -5,6 +5,7 @@ import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { AlsoInHelpers } from "./AlsoInHelpers"
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -215,12 +216,10 @@ alsoInResult(iri){
       if(key === iri){
         let allTags = expanded[key]['docs']
              for(let j=0; j < allTags.length; j++){              
-               otherOntologies.push(              
-                   <div className='also-in-ontologies'>
-                     <a className="btn btn-default ontology-button " href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + allTags[j]['ontology_name'] + '/terms?iri=' + encodeURIComponent(allTags[j]['iri'])} target="_blank">
-                      {allTags[j]['ontology_prefix']}
-                     </a>
-                   </div>             
+               otherOntologies.push(
+                <div className='also-in-ontologies'>
+                  {AlsoInHelpers(allTags[j])} 
+                </div>                                             
                )
              }            
       }
