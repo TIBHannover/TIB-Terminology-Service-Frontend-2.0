@@ -12,6 +12,7 @@ const CLASS_SORT_KEY = "numberOfTerms";
 const PROPERT_SORT_KEY = "numberOfProperties";
 const INDIVIDUAL_SORT_KEY = "numberOfIndividuals";
 const PREFIX_SORT_KEY = "ontologyId";
+const TIME_SORT_KEY = "loaded";
 
 
 
@@ -413,6 +414,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                         <option value={CLASS_SORT_KEY} key={CLASS_SORT_KEY}>Classes Count</option>
                         <option value={PROPERT_SORT_KEY} key={PROPERT_SORT_KEY}>Properties Count</option>
                         <option value={INDIVIDUAL_SORT_KEY} key={INDIVIDUAL_SORT_KEY}>Individuals Count</option>
+                        <option value={TIME_SORT_KEY} key={TIME_SORT_KEY}>Data Loaded</option>
                       </select>  
                     </div>                                                                                
                   </div>
