@@ -1187,7 +1187,7 @@ p{
     /* 
        The style for also in field in search results
     */
-    display: inline-block;
+    display: inline-block !important;
     padding-bottom: 7px;
 }
 
