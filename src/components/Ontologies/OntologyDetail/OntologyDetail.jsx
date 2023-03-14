@@ -370,7 +370,7 @@ class OntologyDetail extends React.Component {
                   <Link onClick={this.tabChange} data-value="4" className={(this.state.activeTab === TERM_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/termList"}>Class List</Link>
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"gitIssueList-tab"}>
-                  <Link onClick={this.tabChange} data-value="5" className={(this.state.activeTab === GIT_ISSUE_LIST_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/gitIssues"}>Git Issues</Link>
+                  <Link onClick={this.tabChange} data-value="5" className={(this.state.activeTab === GIT_ISSUE_LIST_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/gitIssues"}>My Github Issues</Link>
                 </li>            
               </ul>             
               {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&

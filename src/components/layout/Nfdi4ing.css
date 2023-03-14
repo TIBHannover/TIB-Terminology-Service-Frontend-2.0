@@ -1895,3 +1895,29 @@ p{
     color: black;
     font-weight: bold;
 }
+
+.git-issue-tag-link{
+    /* 
+        Style for the label url in an issue
+    */
+
+    color: black;    
+}
+
+.git-issue-tag-link:hover{
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.git-issue-label-tag{
+    /* 
+        Style for the label tags for an issue
+    */
+
+    display: inline;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 12px;
+    margin-left: 10px;
+}
