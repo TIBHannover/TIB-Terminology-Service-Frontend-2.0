@@ -9,6 +9,7 @@ import { shapeSkosConcepts } from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
+import IssueList from '../IssueList/IssueList';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -16,6 +17,7 @@ const TERM_TREE_TAB_ID = 1;
 const PROPERTY_TREE_TAB_ID = 2;
 const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
+const GIT_ISSUE_LIST = 5;
 
 
 
@@ -112,6 +114,14 @@ class OntologyDetail extends React.Component {
         waiting: false,
         lastRequestedTab: requestedTab,
         targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
+
+      });
+    }
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'gitIssues'){          
+      this.setState({       
+        activeTab: GIT_ISSUE_LIST,
+        waiting: false,
+        lastRequestedTab: requestedTab
 
       });
     }
@@ -357,6 +367,9 @@ class OntologyDetail extends React.Component {
                 </li>
                 <li class="nav-item ontology-detail-nav-item" key={"termList-tab"}>
                   <Link onClick={this.tabChange} data-value="4" className={(this.state.activeTab === TERM_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/termList"}>Class List</Link>
+                </li>
+                <li class="nav-item ontology-detail-nav-item" key={"gitIssueList-tab"}>
+                  <Link onClick={this.tabChange} data-value="5" className={(this.state.activeTab === GIT_ISSUE_LIST) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/gitIssues"}>Git Issues</Link>
                 </li>            
               </ul>             
               {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
@@ -421,6 +434,14 @@ class OntologyDetail extends React.Component {
                               ontology={this.state.ontologyId}                              
                               iriChangerFunction={this.changeInputIri}                              
                               isSkos={this.state.isSkosOntology}                              
+                            />
+              }
+              {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST) &&
+                            <IssueList                                                           
+                              componentIdentity={'gitIssues'}
+                              key={'gitIssueList'}
+                              ontology={this.state.ontologyId}                              
+                              isSkos={this.state.isSkosOntology}
                             />
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
