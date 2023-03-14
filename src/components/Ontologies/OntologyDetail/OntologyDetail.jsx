@@ -438,14 +438,12 @@ class OntologyDetail extends React.Component {
                             />
               }
               {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
-                  <RequireLoginRoute  component={
-                    <IssueList                                                           
-                      componentIdentity={'gitIssues'}
-                      key={'gitIssueList'}
-                      ontology={this.state.ontologyId}                              
-                      isSkos={this.state.isSkosOntology}
-                    />      
-                  }/>
+                            <IssueList                                                           
+                                  componentIdentity={'gitIssues'}
+                                  key={'gitIssueList'}
+                                  ontology={this.state.ontologyId}                              
+                                  isSkos={this.state.isSkosOntology}
+                            />
               } 
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
           </div>                    
