@@ -441,7 +441,7 @@ class OntologyDetail extends React.Component {
                             <IssueList                                                           
                                   componentIdentity={'gitIssues'}
                                   key={'gitIssueList'}
-                                  ontology={this.state.ontologyId}                              
+                                  ontology={this.state.ontology}                              
                                   isSkos={this.state.isSkosOntology}
                             />
               } 

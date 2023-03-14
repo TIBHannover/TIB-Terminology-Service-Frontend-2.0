@@ -13,8 +13,8 @@ class GithubController{
 
     async getOntologyIssueListForUser(ontologyIssueTrackerUrl, username){
         try{
-            let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];
-            let url = this.githubApiBaseUrl + urlPath + "?creator=" + username;
+            let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];            
+            let url = this.githubApiBaseUrl + "repos/" + urlPath + "?creator=" + username;            
             let issuesList = await fetch(url, getCallSetting);
             issuesList = await issuesList.json();
             return issuesList;
@@ -24,3 +24,5 @@ class GithubController{
         }        
     }   
 }
+
+export default GithubController;

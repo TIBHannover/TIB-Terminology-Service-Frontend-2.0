@@ -1,6 +1,7 @@
 import React from "react";
 import { userIsLoginByLocalStorage } from "../../User/Login/Auth";
 import Login from "../../User/Login/Login";
+import GithubController from '../../GithubController/GithubController';
 
 
 class IssueList extends React.Component{
@@ -9,11 +10,27 @@ class IssueList extends React.Component{
         this.state = ({
             listOfIssues: []
         });
+        this.setComponentData = this.setComponentData.bind(this);
+        this.gitHubController = new GithubController();
     }
 
 
-    setComponentData(){
-        
+    async setComponentData(){
+        let username = "StroemPhi";
+        let ontology = this.props.ontology;
+        let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
+        let listOfIssues = [];
+        if(issueTrackerUrl){
+            listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username);
+        }
+        this.setState({
+            listOfIssues: listOfIssues
+        });        
+    }
+
+
+    componentDidMount(){
+        this.setComponentData();
     }
 
 
