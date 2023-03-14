@@ -33,7 +33,7 @@ class IssueList extends React.Component{
     createIssuesList(){
         let listOfIssues = this.state.listOfIssues;
         let result = [];
-        for(let issue of listOfIssues){
+        for(let issue of listOfIssues){            
             result.push(
                 <div className="row">
                     <div className="col-sm-12 git-issue-card">
