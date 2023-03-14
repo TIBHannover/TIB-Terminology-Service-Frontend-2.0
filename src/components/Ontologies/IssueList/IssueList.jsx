@@ -11,6 +11,7 @@ class IssueList extends React.Component{
             listOfIssues: []
         });
         this.setComponentData = this.setComponentData.bind(this);
+        this.createIssuesList = this.createIssuesList.bind(this);
         this.gitHubController = new GithubController();
     }
 
@@ -29,6 +30,28 @@ class IssueList extends React.Component{
     }
 
 
+    createIssuesList(){
+        let listOfIssues = this.state.listOfIssues;
+        let result = [];
+        for(let issue of listOfIssues){
+            result.push(
+                <div className="row">
+                    <div className="col-sm-12 git-issue-card">
+                        <a href={issue['html_url']} className="git-issue-title" target={"_blank"}>{issue['title']}</a>
+                        <br/>
+                        <div>
+                            <small>
+                            {"#" + issue['number'] + " opened on " + issue['created_at'] + " by " + issue['user']['login']}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        return result;
+    }
+
+
     componentDidMount(){
         this.setComponentData();
     }
@@ -44,7 +67,9 @@ class IssueList extends React.Component{
                     }
                     {userIsLoginByLocalStorage() &&
                         <div className="row">
-                            Issues
+                            <div className="col-sm-8">
+                                {this.createIssuesList()}
+                            </div>                            
                         </div>
                     }
                 </div>

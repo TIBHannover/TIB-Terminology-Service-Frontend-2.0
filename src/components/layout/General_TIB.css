@@ -2012,3 +2012,31 @@ p{
 .user-profile-dropdown{
     font-size: 12px;
 }
+
+
+/* 
+--------------------------------------
+  Github issue list
+--------------------------------------
+*/
+
+.git-issue-card{
+    /* 
+        Style for each issue card in the issue list
+    */
+
+    background-color: white !important;    
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #7AABAC;    
+}
+
+.git-issue-title{
+    /* 
+        The title url for each issue
+    */
+
+    color: black;
+    font-weight: bold;
+}
