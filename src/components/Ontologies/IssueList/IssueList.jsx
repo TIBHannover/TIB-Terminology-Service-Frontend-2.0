@@ -4,6 +4,17 @@ import Login from "../../User/Login/Login";
 
 
 class IssueList extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = ({
+            listOfIssues: []
+        });
+    }
+
+
+    setComponentData(){
+        
+    }
 
 
 
