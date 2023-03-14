@@ -21,7 +21,6 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Login from './components/User/Login/Login';
 import UserProfile from './components/User/Profile/Profile';
-import RequireLoginRoute from './components/User/Login/RequireLogin';
 import { isLogin } from './components/User/Login/Auth';
 
 
@@ -66,7 +65,7 @@ function App() {
   }
 
 
-  // check login status
+  // set login status
   isLogin().then((resp) => {
     localStorage.setItem('isLogin', resp);
   });
@@ -139,7 +138,7 @@ function App() {
               <Switch>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
                 <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
-                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>                
+                <Route  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>                
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}

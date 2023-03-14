@@ -1,14 +1,10 @@
 import React from "react";
-import {auth, isLogin, Logout} from "./Auth";
+import {auth, userIsLoginByLocalStorage, Logout} from "./Auth";
 
 class Login extends React.Component{
     constructor(props){
-        super(props);
-        this.state = ({
-            loginStatus: null
-        });
-        this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);
-        this.checkLogin = this.checkLogin.bind(this);
+        super(props);       
+        this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);        
     }
 
     gitHubLoginUrl(){
@@ -18,22 +14,14 @@ class Login extends React.Component{
         return loginUrl;       
     }
 
-    
-    async checkLogin(){
-        let loginStatus = await isLogin();
-        this.setState({loginStatus: loginStatus})
-    }
-
-
     componentDidMount(){
-        auth();
-        this.checkLogin()
+        auth();        
     }
 
     render(){
         return [
             <span>                
-                {!this.state.loginStatus && this.props.isModal &&
+                {!userIsLoginByLocalStorage() && this.props.isModal &&
                     // render the modal. Used in the site header 
                     <span>
                     <a type="button" data-toggle="modal" data-target="#loginModal">Login</a>
@@ -54,7 +42,7 @@ class Login extends React.Component{
                     </div>
                     </span>                    
                 }
-                {!this.state.loginStatus && !this.props.isModal &&
+                {!userIsLoginByLocalStorage() && !this.props.isModal &&
                     // render the normal login form. Used when a user need to login before accessing a section
                     <div className="row">
                         <div className="col-sm-12 text-center">
@@ -66,7 +54,7 @@ class Login extends React.Component{
                         </div>
                     </div>                   
                 }
-                {this.state.loginStatus &&                     
+                {userIsLoginByLocalStorage() &&                     
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle user-profile-dropdown" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                            {localStorage.getItem("name")}

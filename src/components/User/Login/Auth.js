@@ -45,6 +45,14 @@ export async function isLogin(){
 }
 
 
+export function userIsLoginByLocalStorage(){
+    if(localStorage.getItem('isLogin') && localStorage.getItem('isLogin') === "true"){
+        return true;
+    }
+    return false;
+}
+
+
 export function Logout(){
     if(localStorage.getItem("token")){
         localStorage.removeItem("token");
