@@ -7,7 +7,9 @@ class IssueList extends React.Component{
 
     render(){
         return (
-            <div>Issues</div>
+            <div className="tree-view-container">
+                Issues
+            </div>
         );
     }
 

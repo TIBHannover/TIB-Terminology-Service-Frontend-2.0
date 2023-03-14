@@ -13,7 +13,9 @@ function RequireLoginRoute({component: Component, ...rest}){
     });
 
     
-    if (!loginStatus) {        
+    if (!loginStatus) {
+        document.getElementsByClassName("App")[0].style.filter = "";
+        document.getElementById("login-loading").style.display = "";       
         return <Login isModal={false}></Login>;
     }
 

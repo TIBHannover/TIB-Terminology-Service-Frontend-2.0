@@ -16,7 +16,7 @@ export function auth(){
                     localStorage.setItem("avatar", resp["data"]["avatar"]);
                     localStorage.setItem("token", resp["data"]["token"]);
                     window.location.replace("/ts");
-                    return true;                              
+                    return true;               
                 }
                 return false;
             })
