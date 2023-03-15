@@ -224,21 +224,20 @@ class IssueList extends React.Component{
                         <Login isModal={false} />
                     }
                     {this.state.waiting && <div className="isLoading"></div>}
-                    {userIsLoginByLocalStorage() && !this.state.waiting &&
+                    {userIsLoginByLocalStorage() && !this.state.waiting &&                        
                         <div className="row">
+                            <div className="row">
+                                {this.createIssueStateDropDown()}
+                            </div>                            
                             <div className="col-sm-8">
                                 {!this.state.noMoreIssuesExist && this.state.contentForRender}
+                                {this.createPagination()}
                                 {this.state.noMoreIssuesExist && 
                                     <div class="alert alert-info">
                                         No Result. 
                                     </div>
                                 }
-                            </div>
-                            <div className="col-sm-4">
-                                {this.createIssueStateDropDown()}
-                                <br></br>
-                                {this.createPagination()}
-                            </div>                      
+                            </div>                            
                         </div>
                     }
                 </div>
