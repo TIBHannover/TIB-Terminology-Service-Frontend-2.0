@@ -134,10 +134,11 @@ class SearchForm extends React.Component{
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
-                      {SearchInOntology}
-                    </div>
-                  </div>
-                  
+                      Search
+                      OntologyID                     
+                      All
+                    </div>                    
+                  </div>                  
                   <input 
                     type="text" 
                     class="form-control search-input" 
