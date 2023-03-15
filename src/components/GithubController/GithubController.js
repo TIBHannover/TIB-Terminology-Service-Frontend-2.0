@@ -12,10 +12,10 @@ class GithubController{
     }
     
 
-    async getOntologyIssueListForUser(ontologyIssueTrackerUrl, username, issueState){
+    async getOntologyIssueListForUser(ontologyIssueTrackerUrl, username, issueState, pageCount=10, pageNumber=1){
         try{
             let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];            
-            let url = this.githubApiBaseUrl + "repos/" + urlPath + "?creator=" + username + "&state=" + issueState;            
+            let url = this.githubApiBaseUrl + "repos/" + urlPath + "?creator=" + username + "&state=" + issueState + "&per_page=" + pageCount + "&page=" + pageNumber;            
             let issuesList = await fetch(url, getCallSetting);
             issuesList = await issuesList.json();            
             for(let issue of issuesList){
