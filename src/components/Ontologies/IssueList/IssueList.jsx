@@ -231,12 +231,12 @@ class IssueList extends React.Component{
                             </div>                            
                             <div className="col-sm-8">
                                 {!this.state.noMoreIssuesExist && this.state.contentForRender}
-                                {this.createPagination()}
                                 {this.state.noMoreIssuesExist && 
                                     <div class="alert alert-info">
                                         No Result. 
                                     </div>
                                 }
+                                {this.createPagination()}                                
                             </div>                            
                         </div>
                     }
