@@ -7,13 +7,18 @@ import {createLabelTags,
     createIssueTitle} from './helper';
 
 
+const CLOSE_ISSUE_STATE = "closed";
+const OPEN_ISSUE_STATE = "open"
+const ALL_ISSUE_STATE = "all"
+
+
 class IssueList extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
             listOfIssues: [],
             waiting: true,
-            contentForRender: ""
+            contentForRender: "",            
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIssuesList = this.createIssuesList.bind(this);
@@ -34,14 +39,14 @@ class IssueList extends React.Component{
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];        
         if(issueTrackerUrl){
-            listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username);
+            listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, OPEN_ISSUE_STATE);
         }
         this.setState({
             listOfIssues: listOfIssues,
             waiting: false
         }, () => {
-            this.createIssuesList();            
-        });        
+            this.createIssuesList();
+        });
     }
 
     
