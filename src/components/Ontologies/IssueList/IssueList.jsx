@@ -58,7 +58,7 @@ class IssueList extends React.Component{
                         <br/>
                         <div>
                             <small>
-                            {"#" + issue['number'] + " opened on " + issue['created_at'] + " by " + issue['user']['login']}
+                            {"#" + issue['number'] + " opened on " + issue['created_at'].split("T")[0] + " by " + issue['user']['login']}
                             </small>
                         </div>
                     </div>
