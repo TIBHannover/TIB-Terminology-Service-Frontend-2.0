@@ -26,7 +26,8 @@ class IssueList extends React.Component{
             listOfAllIssues: [],
             waiting: true,
             contentForRender: "",
-            selectedTypeId: OPEN_ISSUE_ID    
+            selectedTypeId: localStorage.getItem("selectedIssueStateId") ? localStorage.getItem("selectedIssueStateId") : OPEN_ISSUE_ID,
+            username: "StroemPhi"
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIssuesList = this.createIssuesList.bind(this);
@@ -37,21 +38,17 @@ class IssueList extends React.Component{
 
 
     async setComponentData(){
-        if(this.props.listOfIssues.length !== 0){
-            this.setState({
-                waiting: false,
-                contentForRender: this.props.issueListForRender
-            });
+        if(this.props.lastState){
+            this.setState({...this.props.lastState});
             return true;
-        }
-        let username = "StroemPhi";
+        }        
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfAllIssues = [];
         let listOfOpenIssues = [];
         let listOfClosedIssues = [];
         if(issueTrackerUrl){
-            listOfAllIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, ALL_ISSUE_STATE);
+            listOfAllIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, this.state.username, ALL_ISSUE_STATE);
             listOfOpenIssues = getIssuesBasedOnState(listOfAllIssues, OPEN_ISSUE_STATE);
             listOfClosedIssues = getIssuesBasedOnState(listOfAllIssues, CLOSE_ISSUE_STATE);
         }
@@ -86,6 +83,7 @@ class IssueList extends React.Component{
         }, ()=>{
             this.createIssuesList();
         });
+        localStorage.setItem("selectedIssueStateId", selectedIssueStateId);
 
     }
 
@@ -122,8 +120,9 @@ class IssueList extends React.Component{
                 </div>
             );
         }
-        this.setState({contentForRender: result});
-        this.props.storeListOfGitIssuesContent(listOfIssues, result);
+        this.setState({contentForRender: result}, () => {
+            this.props.storeListOfGitIssuesState(this.state);
+        });        
     }
 
 

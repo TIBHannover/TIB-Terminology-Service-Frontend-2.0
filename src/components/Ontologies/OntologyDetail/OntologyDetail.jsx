@@ -47,8 +47,7 @@ class OntologyDetail extends React.Component {
       isSkosOntology: false,
       ontologyShowAll: false,
       showMoreLessOntologiesText: "+ Show More",
-      listOfIssues: [],
-      issueListForRender: ""
+      issueListComponentState: null
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -56,7 +55,7 @@ class OntologyDetail extends React.Component {
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
     this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
-    this.storeListOfGitIssuesContent = this.storeListOfGitIssuesContent.bind(this);
+    this.storeListOfGitIssuesState = this.storeListOfGitIssuesState.bind(this);
   }
 
 
@@ -317,10 +316,9 @@ class OntologyDetail extends React.Component {
   }
 
 
-  storeListOfGitIssuesContent(listOfIssues, issueListForRender){
+  storeListOfGitIssuesState(stateObject){
     this.setState({
-      listOfIssues: listOfIssues,
-      issueListForRender: issueListForRender
+      issueListComponentState: stateObject
     });
   }
 
@@ -453,9 +451,8 @@ class OntologyDetail extends React.Component {
                                   key={'gitIssueList'}
                                   ontology={this.state.ontology}                              
                                   isSkos={this.state.isSkosOntology}
-                                  listOfIssues={this.state.listOfIssues}
-                                  issueListForRender={this.state.issueListForRender}
-                                  storeListOfGitIssuesContent={this.storeListOfGitIssuesContent}
+                                  lastState={this.state.issueListComponentState}                                  
+                                  storeListOfGitIssuesState={this.storeListOfGitIssuesState}
                             />
               } 
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
