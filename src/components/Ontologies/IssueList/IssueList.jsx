@@ -11,7 +11,8 @@ class IssueList extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            listOfIssues: []
+            listOfIssues: [],
+            waiting: true
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIssuesList = this.createIssuesList.bind(this);
@@ -28,7 +29,8 @@ class IssueList extends React.Component{
             listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username);
         }
         this.setState({
-            listOfIssues: listOfIssues
+            listOfIssues: listOfIssues,
+            waiting: false
         });        
     }
 
@@ -69,6 +71,7 @@ class IssueList extends React.Component{
                     {!userIsLoginByLocalStorage() && 
                         <Login isModal={false} />
                     }
+                    {this.state.waiting && <div className="isLoading"></div>}
                     {userIsLoginByLocalStorage() &&
                         <div className="row">
                             <div className="col-sm-8">
