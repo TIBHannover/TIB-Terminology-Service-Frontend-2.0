@@ -12,7 +12,7 @@ export function createLabelTags(labelsList){
     for(let label of labelsList){
         result.push(                
             <span className="git-issue-label-tag" style={{backgroundColor: "#" + label['color']}}>
-                <a href={label['url']} className="git-issue-tag-link" target={"_blank"}>
+                <a href={formatLabelUrl(label['url'])} className="git-issue-tag-link" target={"_blank"}>
                     {label['name']}
                 </a>
             </span>                        
@@ -30,4 +30,11 @@ export function createIssueDescription(issue){
             </small>
         </div>
     ];
+}
+
+
+function formatLabelUrl(labelApiUrl){
+    let gitHubBaseUrl = "https://github.com/";
+    let urlPath = labelApiUrl.split("/repos/")[1];
+    return gitHubBaseUrl + urlPath
 }

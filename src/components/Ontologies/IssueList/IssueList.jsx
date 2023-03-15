@@ -34,9 +34,6 @@ class IssueList extends React.Component{
         });        
     }
 
-
-    
-    
     
     
     createIssuesList(){
