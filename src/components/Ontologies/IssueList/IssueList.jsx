@@ -4,7 +4,8 @@ import Login from "../../User/Login/Login";
 import GithubController from '../../GithubController/GithubController';
 import {createLabelTags, 
     createIssueDescription, 
-    createIssueTitle} from './helper';
+    createIssueTitle, 
+    getIssuesBasedOnState} from './helper';
 
 
 const CLOSE_ISSUE_STATE = "closed";
@@ -22,7 +23,7 @@ class IssueList extends React.Component{
             listOfIssuesToRender: [],
             listOfOpenIssues: [],
             listOfClosedIssues: [],
-            listOfAllIsses: [],
+            listOfAllIssues: [],
             waiting: true,
             contentForRender: "",
             selectedTypeId: OPEN_ISSUE_ID    
@@ -46,13 +47,19 @@ class IssueList extends React.Component{
         let username = "StroemPhi";
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
-        let listOfIssuesToRender = [];        
+        let listOfAllIssues = [];
+        let listOfOpenIssues = [];
+        let listOfClosedIssues = [];
         if(issueTrackerUrl){
-            listOfIssuesToRender = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, OPEN_ISSUE_STATE);
+            listOfAllIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, ALL_ISSUE_STATE);
+            listOfOpenIssues = getIssuesBasedOnState(listOfAllIssues, OPEN_ISSUE_STATE);
+            listOfClosedIssues = getIssuesBasedOnState(listOfAllIssues, CLOSE_ISSUE_STATE);
         }
         this.setState({
-            listOfIssuesToRender: listOfIssuesToRender,
-            listOfOpenIssues: listOfIssuesToRender,
+            listOfAllIssues: listOfAllIssues,
+            listOfOpenIssues: listOfOpenIssues,
+            listOfClosedIssues: listOfClosedIssues,
+            listOfIssuesToRender: listOfOpenIssues,            
             waiting: false
         }, () => {
             this.createIssuesList();
@@ -61,6 +68,24 @@ class IssueList extends React.Component{
 
 
     handleIssueStateChange(e){
+        let selectedIssueStateId = parseInt(e.target.value);
+        let targetIssueList = [];
+        if(selectedIssueStateId === OPEN_ISSUE_ID){
+            targetIssueList = this.state.listOfOpenIssues;
+        }
+        else if(selectedIssueStateId === CLOSE_ISSUE_ID){
+            targetIssueList = this.state.listOfClosedIssues;
+        }
+        else{
+            targetIssueList = this.state.listOfAllIssues;
+        }
+
+        this.setState({
+            selectedTypeId: selectedIssueStateId,
+            listOfIssuesToRender: targetIssueList
+        }, ()=>{
+            this.createIssuesList();
+        });
 
     }
 
@@ -70,7 +95,7 @@ class IssueList extends React.Component{
             <div className='col-sm-4 form-inline'>
                 <div class="form-group">
                     <label for="issue-state-types" className='col-form-label'>State</label>
-                    <select className='site-dropdown-menu' id="issue-state-types" value={this.state.selectedTypeId} onChange={this.handleIssueStateChange}>
+                    <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-state-types" value={this.state.selectedTypeId} onChange={this.handleIssueStateChange}>
                     <option value={OPEN_ISSUE_ID} key={OPEN_ISSUE_ID}>Open</option>
                     <option value={CLOSE_ISSUE_ID} key={CLOSE_ISSUE_ID}>Closed</option>
                     <option value={ALL_ISSUE_ID} key={ALL_ISSUE_ID}>All</option>                    

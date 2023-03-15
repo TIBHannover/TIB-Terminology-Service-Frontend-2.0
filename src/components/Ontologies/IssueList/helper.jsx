@@ -33,6 +33,17 @@ export function createIssueDescription(issue){
 }
 
 
+export function getIssuesBasedOnState(listOfAllIssues, state){
+    let listOfIssues = [];
+    for(let issue of listOfAllIssues){
+        if(issue['state'] === state){
+            listOfIssues.push(issue);
+        }
+    }
+    return listOfIssues;
+}
+
+
 function formatLabelUrl(labelApiUrl){
     let gitHubBaseUrl = "https://github.com/";
     let urlPath = labelApiUrl.split("/repos/")[1];
