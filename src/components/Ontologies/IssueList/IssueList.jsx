@@ -12,7 +12,8 @@ class IssueList extends React.Component{
         super(props);
         this.state = ({
             listOfIssues: [],
-            waiting: true
+            waiting: true,
+            contentForRender: ""
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIssuesList = this.createIssuesList.bind(this);
@@ -21,6 +22,13 @@ class IssueList extends React.Component{
 
 
     async setComponentData(){
+        if(this.props.listOfIssues.length !== 0){
+            this.setState({
+                waiting: false,
+                contentForRender: this.props.issueListForRender
+            });
+            return true;
+        }
         let username = "StroemPhi";
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
@@ -31,6 +39,8 @@ class IssueList extends React.Component{
         this.setState({
             listOfIssues: listOfIssues,
             waiting: false
+        }, () => {
+            this.createIssuesList();            
         });        
     }
 
@@ -51,7 +61,8 @@ class IssueList extends React.Component{
                 </div>
             );
         }
-        return result;
+        this.setState({contentForRender: result});
+        this.props.storeListOfGitIssuesContent(listOfIssues, result);
     }
 
 
@@ -72,7 +83,7 @@ class IssueList extends React.Component{
                     {userIsLoginByLocalStorage() &&
                         <div className="row">
                             <div className="col-sm-8">
-                                {this.createIssuesList()}
+                                {this.state.contentForRender}
                             </div>                            
                         </div>
                     }

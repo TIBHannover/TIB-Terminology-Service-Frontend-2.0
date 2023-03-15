@@ -46,7 +46,9 @@ class OntologyDetail extends React.Component {
       propertyTreeDomLastState: "",
       isSkosOntology: false,
       ontologyShowAll: false,
-      showMoreLessOntologiesText: "+ Show More"      
+      showMoreLessOntologiesText: "+ Show More",
+      listOfIssues: [],
+      issueListForRender: ""
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
@@ -54,6 +56,7 @@ class OntologyDetail extends React.Component {
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
     this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
+    this.storeListOfGitIssuesContent = this.storeListOfGitIssuesContent.bind(this);
   }
 
 
@@ -296,10 +299,7 @@ class OntologyDetail extends React.Component {
     }
   }
 
-  /**
-     * Handle the show more button in the ontology facet list
-     * @param {*} e 
-     */
+
   handleOntologyShowMoreClick(e){                        
     if(this.state.ontologyShowAll){
         this.setState({
@@ -314,7 +314,17 @@ class OntologyDetail extends React.Component {
         });
     }
 
-}
+  }
+
+
+  storeListOfGitIssuesContent(listOfIssues, issueListForRender){
+    this.setState({
+      listOfIssues: listOfIssues,
+      issueListForRender: issueListForRender
+    });
+  }
+
+
 
 
   componentDidMount () {
@@ -443,6 +453,9 @@ class OntologyDetail extends React.Component {
                                   key={'gitIssueList'}
                                   ontology={this.state.ontology}                              
                                   isSkos={this.state.isSkosOntology}
+                                  listOfIssues={this.state.listOfIssues}
+                                  issueListForRender={this.state.issueListForRender}
+                                  storeListOfGitIssuesContent={this.storeListOfGitIssuesContent}
                             />
               } 
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
