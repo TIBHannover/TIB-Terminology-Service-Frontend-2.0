@@ -2,12 +2,10 @@ import React from "react";
 import { userIsLoginByLocalStorage } from "../../User/Login/Auth";
 import Login from "../../User/Login/Login";
 import GithubController from '../../GithubController/GithubController';
-import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
-    createIssueTitle, 
-    getIssuesBasedOnState} from './helper';
+    createIssueTitle} from './helper';
 
 
 const OPEN_ISSUE_ID = 1;
@@ -48,6 +46,7 @@ class IssueList extends React.Component{
     async setComponentData(forceReload=false){
         if(this.props.lastState && !forceReload){
             this.setState({...this.props.lastState});
+            this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedTypeId);
             return true;
         }        
         let ontology = this.props.ontology;
@@ -69,8 +68,7 @@ class IssueList extends React.Component{
             this.updateURL(pageNumber, stateIdInUrl);
             return true;
         }
-        this.setState({            
-            // listOfOpenIssues: listOfOpenIssues,            
+        this.setState({                       
             listOfIssuesToRender: listOfIssues,            
             waiting: false,
             issueTrackerUrl: issueTrackerUrl,           
@@ -88,10 +86,17 @@ class IssueList extends React.Component{
         this.setState({waiting:true});
         let selectedIssueStateId = parseInt(e.target.value);
         let targetIssueList = [];
+        let listOfopenIssues = this.state.listOfOpenIssues;
         let listOfAllIssues = this.state.listOfAllIssues;
         let listOfClosedIssues = this.state.listOfClosedIssues;
         if(selectedIssueStateId === OPEN_ISSUE_ID){
-            targetIssueList = this.state.listOfOpenIssues;            
+            if(listOfopenIssues.length === 0){
+                targetIssueList = await this.gitHubController.getOntologyIssueListForUser(this.state.issueTrackerUrl, this.state.username, ISSUE_STATES_VALUES[OPEN_ISSUE_ID]);
+                listOfopenIssues = targetIssueList;
+            }
+            else{
+                targetIssueList = listOfopenIssues;
+            }        
         }
         else if(selectedIssueStateId === CLOSE_ISSUE_ID){            
             if(listOfClosedIssues.length === 0){
