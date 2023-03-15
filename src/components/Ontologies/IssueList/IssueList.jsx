@@ -2,6 +2,9 @@ import React from "react";
 import { userIsLoginByLocalStorage } from "../../User/Login/Auth";
 import Login from "../../User/Login/Login";
 import GithubController from '../../GithubController/GithubController';
+import {createLabelTags, 
+    createIssueDescription, 
+    createIssueTitle} from './helper';
 
 
 class IssueList extends React.Component{
@@ -31,19 +34,7 @@ class IssueList extends React.Component{
 
 
     
-    createLabelTags(labelsList){
-        let result = [];
-        for(let label of labelsList){
-            result.push(                
-                <span className="git-issue-label-tag" style={{backgroundColor: "#" + label['color']}}>
-                    <a href={label['url']} className="git-issue-tag-link" target={"_blank"}>
-                        {label['name']}
-                    </a>
-                </span>                        
-            );
-        }
-        return result;
-    }
+    
     
     
     createIssuesList(){
@@ -53,14 +44,10 @@ class IssueList extends React.Component{
             result.push(
                 <div className="row">
                     <div className="col-sm-12 git-issue-card">
-                        <a href={issue['html_url']} className="git-issue-title" target={"_blank"}>{issue['title']}</a>                        
-                        {this.createLabelTags(issue['labels'])}
+                        {createIssueTitle(issue)}
+                        {createLabelTags(issue['labels'])}
                         <br/>
-                        <div>
-                            <small>
-                            {"#" + issue['number'] + " opened on " + issue['created_at'].split("T")[0] + " by " + issue['user']['login']}
-                            </small>
-                        </div>
+                        {createIssueDescription(issue)}
                     </div>
                 </div>
             );
