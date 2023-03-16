@@ -5,7 +5,7 @@ import GithubController from '../../GithubController/GithubController';
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
-    createIssueTitle} from './helper';
+    createIssueTitle, setUrlParameter} from './helper';
 
 
 const OPEN_ISSUE_ID = 1;
@@ -29,7 +29,7 @@ class IssueList extends React.Component{
             username: "StroemPhi",
             issueTrackerUrl: null,
             pageNumber: 1,
-            pageCount: 10,
+            resultCountPerPage: 10,
             noMoreIssuesExist: false     
         });
         this.setComponentData = this.setComponentData.bind(this);
@@ -39,32 +39,26 @@ class IssueList extends React.Component{
         this.handlePagination = this.handlePagination.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.createPagination = this.createPagination.bind(this);
+        this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);
         this.gitHubController = new GithubController();
     }
 
 
-    async setComponentData(forceReload=false){
-        if(this.props.lastState && !forceReload){
-            this.setState({...this.props.lastState});
-            this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedTypeId);
+    async setComponentData(reload=false){
+        if(this.props.lastState && !reload){
+            this.loadTheComponentPreviousState();
             return true;
         }
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];
-        let username = this.state.username;        
-        let pageNumber = this.state.pageNumber;               
-        let selectedTypeId = this.state.selectedTypeId;
-        if(!forceReload){
-            let url = new URL(window.location);
-            pageNumber = url.searchParams.get('page');
-            selectedTypeId = url.searchParams.get('stateId');
-            selectedTypeId = !selectedTypeId ? OPEN_ISSUE_ID : parseInt(selectedTypeId);
-            pageNumber = !pageNumber ? 1 : parseInt(pageNumber);
-        }           
-        if(issueTrackerUrl){
-            listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, ISSUE_STATES_VALUES[selectedTypeId], this.state.pageCount, pageNumber);
-        }
+        let username = this.state.username;                
+        let urlParameter = setUrlParameter(reload, this.state.pageNumber, this.state.selectedTypeId);
+        let pageNumber = urlParameter['pageNumber'];
+        let selectedTypeId = urlParameter['selectedTypeId'];
+        let issueStateValue =  ISSUE_STATES_VALUES[selectedTypeId];
+        let resultCountPerPage = this.state.resultCountPerPage;
+        listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, issueStateValue, resultCountPerPage, pageNumber);
         if(listOfIssues.length === 0){
             this.setState({
                 waiting: false,
@@ -86,11 +80,14 @@ class IssueList extends React.Component{
         });
     }
 
-
     
+    loadTheComponentPreviousState(){
+        this.setState({...this.props.lastState});
+        this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedTypeId);
+    }
+        
     
-    
-    async handleIssueStateChange(e){
+    handleIssueStateChange(e){
         this.setState({waiting:true});
         let selectedIssueStateId = parseInt(e.target.value);
         this.setState({

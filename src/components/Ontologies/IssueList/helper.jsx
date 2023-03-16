@@ -1,4 +1,6 @@
 
+const OPEN_ISSUE_ID = 1;
+
 
 export function createIssueTitle(issue){
     return [
@@ -41,6 +43,19 @@ export function getIssuesBasedOnState(listOfAllIssues, state){
         }
     }
     return listOfIssues;
+}
+
+export function setUrlParameter(reload, pageNumberInState, selectedTypeIdInState){
+    let result = {"pageNumber": pageNumberInState, "selectedTypeId": selectedTypeIdInState};
+    if(!reload){
+        let url = new URL(window.location);
+        let pageNumber = url.searchParams.get('page');
+        let selectedTypeId = url.searchParams.get('stateId');
+        result['selectedTypeId'] = !selectedTypeId ? OPEN_ISSUE_ID : parseInt(selectedTypeId);
+        result['pageNumber'] = !pageNumber ? 1 : parseInt(pageNumber);
+        return result;
+    }
+    return result;
 }
 
 
