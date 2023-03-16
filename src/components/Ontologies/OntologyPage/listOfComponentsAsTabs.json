@@ -42,5 +42,13 @@
         "tabId": 4,
         "tabTitle": "Class Tree",
         "urlEndPoint": "/termList"
+    },
+    "IssueList":{
+        "id":"gitIssues",
+        "keyForRenderAsComponent": "gitIssueList",
+        "keyForRenderAsTabItem": "gitIssueList-tab",
+        "tabId": 5,
+        "tabTitle": "My Github Issues",
+        "urlEndPoint": "/gitIssues"
     }
 }

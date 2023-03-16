@@ -1,6 +1,5 @@
 import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
-import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -9,6 +8,9 @@ import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
 import Toolkit from '../../common/Toolkit';
+import IssueList from '../IssueList/IssueList';
+import RequireLoginRoute from '../../User/Login/RequireLogin';
+
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -53,6 +55,7 @@ class OntologyPage extends React.Component {
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
+    this.storeListOfGitIssuesState = this.storeListOfGitIssuesState.bind(this);
   }
 
 
@@ -297,6 +300,13 @@ class OntologyPage extends React.Component {
     }
   }
 
+    storeListOfGitIssuesState(stateObject){
+        this.setState({
+        issueListComponentState: stateObject
+        });
+    }
+
+
   
   componentDidMount () {
     this.setOntologyData();
@@ -383,6 +393,17 @@ class OntologyPage extends React.Component {
                                 isSkos={this.state.isSkosOntology}                              
                                 />
                 }
+                {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
+                            <IssueList                                                           
+                                  componentIdentity={'gitIssues'}
+                                  key={'gitIssueList'}
+                                  ontology={this.state.ontology}                              
+                                  isSkos={this.state.isSkosOntology}
+                                  lastState={this.state.issueListComponentState}                                  
+                                  storeListOfGitIssuesState={this.storeListOfGitIssuesState}
+                            />
+                } 
+
                 {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
             </div>                    
         </div>
