@@ -2,7 +2,7 @@ import React from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
 import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
-import TreeNode from "./TreeNode";
+import TreeNodeController from "./TreeNode";
 import { buildHierarchicalArray,
     nodeHasChildren,
     nodeIsRoot, 
@@ -12,6 +12,8 @@ import { buildHierarchicalArray,
     buildSkosSubtree, 
     showHidesiblingsForSkos,
     setIsExpandedAndHasChildren } from './helpers';
+
+import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 
 
 class Tree extends React.Component {
@@ -147,7 +149,7 @@ class Tree extends React.Component {
                 }
                 else{                    
                     for(let i=0; i < rootNodesWithChildren.length; i++){      
-                        let treeNode = new TreeNode();
+                        let treeNode = new TreeNodeController();
                         let result = setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
                         rootNodesWithChildren[i]['has_children'] = result.hasChildren;      
@@ -198,7 +200,7 @@ class Tree extends React.Component {
         let childrenList = [];
         let lastSelectedItemId = 0;          
         for(let i=0; i < rootNodes.length; i++){
-            let treeNode = new TreeNode();
+            let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
                 lastSelectedItemId =  i;
@@ -210,43 +212,39 @@ class Tree extends React.Component {
         return {"treeDomContent": treeList,  "lastSelectedItemId": lastSelectedItemId};
     }
 
-    /**
-     * Select a node in tree
-     * @param {*} e 
-     */
+    
     selectNode(target){    
         if(this.props.isIndividual){
             return true;
         }
-        let selectedElement = document.querySelectorAll(".clicked");
-        for(let i=0; i < selectedElement.length; i++){
-            selectedElement[i].classList.remove("clicked");
-        }
-        if(!target.parentNode.classList.contains("clicked")  && target.parentNode.tagName === "SPAN"){
-            target.parentNode.classList.add("clicked");
-            this.props.nodeSelectionHandler(target.parentNode.parentNode.dataset.iri, true);
+        let treeNode = new TreeNodeController();
+        treeNode.unClickAllNodes();
+        let targetNodeSpan = treeNode.getClickedNodeSpan(target);
+        let clickedNodeIri = "";
+        let clickedNodeId = "";
+        let showNodeDetailPage = false;
+        if(targetNodeSpan){
+            targetNodeSpan.classList.add("clicked");
+            clickedNodeIri = treeNode.getClickedNodeIri(target);
+            clickedNodeId = treeNode.getClickedNodeId(target);
+            showNodeDetailPage = true;
+            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage);
             this.setState({
-                showNodeDetailPage: true,
-                selectedNodeIri: target.parentNode.parentNode.dataset.iri,
+                showNodeDetailPage: showNodeDetailPage,
+                selectedNodeIri: clickedNodeIri,
                 siblingsButtonShow: false,
                 reduceTreeBtnShow: true,
                 reduceBtnActive: false,
-                lastSelectedItemId: target.parentNode.parentNode.id
+                lastSelectedItemId: clickedNodeId
             }, () =>{
                 this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
             });
         
             let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', target.parentNode.parentNode.dataset.iri);
+            currentUrlParams.append('iri', clickedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(target.parentNode.parentNode.dataset.iri, this.state.componentIdentity);
-    
-        }
-        else{
-            target.classList.remove("clicked");
-            this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-        }
-    
+            this.props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);    
+        }    
     }
 
 
@@ -276,119 +274,59 @@ class Tree extends React.Component {
      * Process the keyboard navigation
      * @param {*} event 
      */
-    processKeyNavigation(event){
-        if(event.code === "ArrowDown" || event.code === "ArrowUp"){
+    processKeyNavigation(event){        
+        if(event.code === "ArrowDown" || event.code === "ArrowUp" || event.code === "ArrowRight" || event.code === "ArrowLeft"){            
             event.preventDefault();
         }
         try{
             let lastSelectedItemId = this.state.lastSelectedItemId;
-            if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){
-                // nothing is selected. Tree div is not in focus: Select the first element
-                let node = document.getElementById("0").getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+            let treeNode = new TreeNodeController();
+            if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){                
+                let node = treeNode.getNodeLabelTextById("0");
                 this.selectNode(node);
-                node.parentNode.classList.add('clicked');
             }
             else if(lastSelectedItemId && event.key === "ArrowDown"){
                 // select the next node. It is either the next siblings or the node first child
-                let node = document.getElementById(lastSelectedItemId);                
-                if(node.classList.contains("opened")){
-                    let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                    this.selectNode(childNode);
-                    childNode.parentNode.classList.add('clicked');
-                    let childNodePostion = document.getElementById(lastSelectedItemId).offsetTop;
-                    document.getElementById('tree-container').scrollTop = childNodePostion; 
-                }
-                else if(document.getElementById(lastSelectedItemId).nextSibling){                    
-                    let nextNode = node.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                    this.selectNode(nextNode);
-                    nextNode.parentNode.classList.add('clicked');
-                    let nextNodePostion = document.getElementById(lastSelectedItemId).nextSibling.offsetTop;
-                    document.getElementById('tree-container').scrollTop = nextNodePostion;
-                }
-                else{                    
-                    let parentNodeLi = node.parentNode.parentNode;                    
-                    while(!parentNodeLi.nextSibling){
-                        parentNodeLi = parentNodeLi.parentNode.parentNode;
-                    }                    
-                    let parentNodeNextSiblings = parentNodeLi.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
-                    this.selectNode(parentNodeNextSiblings);
-                    parentNodeNextSiblings.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion;   
-                }                                                
+                let node = document.getElementById(lastSelectedItemId);
+                performArrowDown(node, this.selectNode, this.state.lastSelectedItemId);                                     
                     
             }
             else if(lastSelectedItemId && event.key === "ArrowUp"){
                 // select the previous node. It is either the previous siblings or last opened node.
-                let node = document.getElementById(lastSelectedItemId);
-                let previousSiblingNodeLi = node.previousSibling;                
-                if(!previousSiblingNodeLi){
-                    let parentNodeLi = node.parentNode.parentNode;                    
-                    let parentNodeNextSiblings = parentNodeLi.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
-                    this.selectNode(parentNodeNextSiblings);
-                    parentNodeNextSiblings.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion;  
-                }
-                else if(previousSiblingNodeLi.classList.contains("closed") || previousSiblingNodeLi.classList.contains("leaf-node")){
-                    let previousSiblingNode = previousSiblingNodeLi.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                    this.selectNode(previousSiblingNode);
-                    previousSiblingNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(lastSelectedItemId).previousSibling.offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion;
-                }
-                else{                    
-                    let previousSiblingNodeChildren =  document.getElementById("children_for_" + previousSiblingNodeLi.id).getElementsByClassName('tree-node-li');
-                    let lastChild = previousSiblingNodeChildren[previousSiblingNodeChildren.length - 1];
-                    while(true){
-                        if(lastChild.classList.contains("closed") || lastChild.classList.contains("leaf-node")){
-                            break;
-                        }
-                        previousSiblingNodeChildren =  document.getElementById("children_for_" + lastChild.id).getElementsByClassName('tree-node-li');
-                        lastChild = previousSiblingNodeChildren[previousSiblingNodeChildren.length - 1];
-                    }
-                    let lastChildNode = lastChild.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                    this.selectNode(lastChildNode);
-                    lastChildNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(lastSelectedItemId).previousSibling.offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion;
-                }
+                let node = document.getElementById(lastSelectedItemId);                
+                performArrowUp(node, this.selectNode, lastSelectedItemId);
                                        
             }
             else if(lastSelectedItemId && event.key === "ArrowRight"){
+                console.info(333)
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
-                if(node.classList.contains("closed")){
+                if(treeNode.isNodeClosed(node)){
                     expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });  
                 }
-                else if(!node.classList.contains("leaf-node")){
-                    let childNode = document.getElementById("children_for_" + node.id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
-                    this.selectNode(childNode);
-                    childNode.parentNode.classList.add('clicked');
-                    let nodePostion = document.getElementById(this.state.lastSelectedItemId).nextSibling.offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion; 
+                else if(!treeNode.isNodeLeaf(node)){
+                    let childNode = treeNode.getFirstChildLabelText(node.id);
+                    this.selectNode(childNode);                    
+                    treeNode.scrollToNode(this.state.lastSelectedItemId);
                 }                
                  
             }
             else if(lastSelectedItemId && event.key === "ArrowLeft"){
                 // Move the selection to the parent. If it is already moved, close the parent.
                 let node = document.getElementById(lastSelectedItemId); 
-                let parentNode = node.parentNode.parentNode;                
-                if(node.classList.contains("opened")){  
+                let parentNode = treeNode.getParentNode(node.id);
+                if(treeNode.isNodeExpanded(node)){  
                     expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });
                 }
-                else if(parentNode.tagName === "LI"){                    
-                    parentNode = parentNode.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0]
-                    this.selectNode(parentNode);
-                    parentNode.parentNode.classList.add('clicked');
-                    let nodePostion = parentNode.offsetTop;
-                    document.getElementById('tree-container').scrollTop = nodePostion;   
-                }
-                 
+                else if(parentNode.tagName === "LI"){
+                    parentNode = treeNode.getNodeLabelTextById(parentNode.id);
+                    this.selectNode(parentNode);                    
+                    treeNode.scrollToNode(this.state.lastSelectedItemId);
+                }                 
             }
         }
         catch(e){
@@ -397,9 +335,6 @@ class Tree extends React.Component {
     }
   
   
-  /**
-   * Reset tree view.
-   */
   resetTree(){
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
@@ -417,13 +352,10 @@ class Tree extends React.Component {
   }
 
 
-    /**
-    * Show an opened node siblings
-    */
-    async showSiblings(){
+async showSiblings(){
         try{    
         let targetNodes = document.getElementsByClassName("targetNodeByIri");
-        let treeNode = new TreeNode()   
+        let treeNode = new TreeNodeController()   
         if(!this.state.siblingsVisible){
             if(this.state.isSkos){
                 showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
@@ -526,11 +458,15 @@ class Tree extends React.Component {
 
     componentDidMount(){
         this.setComponentData();
-        document.addEventListener("keydown", this.processKeyNavigation, false);     
+        document.addEventListener("keydown", this.processKeyNavigation, false);
     }
     
     componentDidUpdate(){
-        this.setComponentData();
+        this.setComponentData();        
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", this.processKeyNavigation, false);
     }
 
 
