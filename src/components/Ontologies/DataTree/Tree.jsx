@@ -274,8 +274,8 @@ class Tree extends React.Component {
      * Process the keyboard navigation
      * @param {*} event 
      */
-    processKeyNavigation(event){
-        if(event.code === "ArrowDown" || event.code === "ArrowUp" || event.code === "ArrowRight" || event.code === "ArrowLeft"){
+    processKeyNavigation(event){        
+        if(event.code === "ArrowDown" || event.code === "ArrowUp" || event.code === "ArrowRight" || event.code === "ArrowLeft"){            
             event.preventDefault();
         }
         try{
@@ -298,6 +298,7 @@ class Tree extends React.Component {
                                        
             }
             else if(lastSelectedItemId && event.key === "ArrowRight"){
+                console.info(333)
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
@@ -329,7 +330,7 @@ class Tree extends React.Component {
             }
         }
         catch(e){
-            // console.info(e)
+            console.info(e)
         }        
     }
   
@@ -457,11 +458,15 @@ async showSiblings(){
 
     componentDidMount(){
         this.setComponentData();
-        document.addEventListener("keydown", this.processKeyNavigation, false);     
+        document.addEventListener("keydown", this.processKeyNavigation, false);
     }
     
     componentDidUpdate(){
-        this.setComponentData();
+        this.setComponentData();        
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", this.processKeyNavigation, false);
     }
 
 
