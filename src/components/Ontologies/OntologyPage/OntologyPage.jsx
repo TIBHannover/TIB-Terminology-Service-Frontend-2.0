@@ -1,6 +1,4 @@
 import React from 'react';
-import InfoAnnotations from '../OntologyDetail/widgets/infoAnnotations';
-import OntologyStatsBox from '../OntologyDetail/widgets/stats';
 import DataTreePage from '../DataTree/DataTreePage';
 import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
@@ -9,6 +7,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
+import OntologyOverview from '../OntologyOverview/OntologyOverview';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -362,14 +361,9 @@ class OntologyPage extends React.Component {
                 </li>            
               </ul>             
               {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
-                      <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">        
-                        <div className='col-sm-9'>
-                          <InfoAnnotations ontology={this.state.ontology} />
-                        </div>
-                        <div className='col-sm-3'>
-                          <OntologyStatsBox ontology={this.state.ontology} />
-                        </div>
-                      </div>
+                            <OntologyOverview 
+                                ontology={this.state.ontology}
+                            />
               }
               {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                             <DataTreePage
