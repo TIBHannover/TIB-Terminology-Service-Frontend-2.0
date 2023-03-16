@@ -19,7 +19,7 @@ const TERM_LIST_TAB_ID = 4;
 
 
 
-class OntologyDetail extends React.Component {
+class OntologyOverview extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
@@ -433,4 +433,4 @@ class OntologyDetail extends React.Component {
 }
 
 
-export default OntologyDetail
+export default OntologyOverview;
