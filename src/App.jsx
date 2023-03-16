@@ -3,7 +3,7 @@ import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
-import OntologyDetail from "./components/Ontologies/OntologyDetail/OntologyDetail";
+import OntologyPage from './components/Ontologies/OntologyPage/OntologyPage';
 import Home from "./components/Home/Home";
 import SearchResult from "./components/Search/SearchResult";
 import Documentation from "./components/Documentation/Documentation";
@@ -118,7 +118,7 @@ function App() {
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyDetail}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyPage}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
