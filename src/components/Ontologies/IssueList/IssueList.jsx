@@ -52,32 +52,37 @@ class IssueList extends React.Component{
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];
-        let username = this.state.username;
-        let url = new URL(window.location);
+        let username = this.state.username;        
         let pageNumber = this.state.pageNumber;               
-        let stateIdInUrl = this.state.selectedTypeId;
-        stateIdInUrl = !stateIdInUrl ? OPEN_ISSUE_ID : parseInt(stateIdInUrl);
+        let selectedTypeId = this.state.selectedTypeId;
+        if(!forceReload){
+            let url = new URL(window.location);
+            pageNumber = url.searchParams.get('page');
+            selectedTypeId = url.searchParams.get('stateId');
+            selectedTypeId = !selectedTypeId ? OPEN_ISSUE_ID : parseInt(selectedTypeId);
+            pageNumber = !pageNumber ? 1 : parseInt(pageNumber);
+        }           
         if(issueTrackerUrl){
-            listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, ISSUE_STATES_VALUES[stateIdInUrl], this.state.pageCount, pageNumber);
+            listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, ISSUE_STATES_VALUES[selectedTypeId], this.state.pageCount, pageNumber);
         }
         if(listOfIssues.length === 0){
             this.setState({
                 waiting: false,
                 noMoreIssuesExist: true
             });
-            this.updateURL(pageNumber, stateIdInUrl);
+            this.updateURL(pageNumber, selectedTypeId);
             return true;
         }
         this.setState({
             listOfIssuesToRender: listOfIssues,
             waiting: false,
             issueTrackerUrl: issueTrackerUrl,
-            selectedTypeId: stateIdInUrl,
+            selectedTypeId: selectedTypeId,
             pageNumber: pageNumber,
             noMoreIssuesExist: false
         }, () => {
             this.createIssuesList();
-            this.updateURL(pageNumber, stateIdInUrl);
+            this.updateURL(pageNumber, selectedTypeId);
         });
     }
 
