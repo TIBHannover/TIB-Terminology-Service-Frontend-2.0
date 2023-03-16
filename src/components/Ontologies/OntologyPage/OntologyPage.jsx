@@ -7,7 +7,7 @@ import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
-import { shapeSkosConcepts, renderOntologyPageTabs } from './helpers';
+import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
 import Toolkit from '../../common/Toolkit';
 
 
@@ -305,81 +305,73 @@ class OntologyPage extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
-          {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
+            {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
+            {createOntologyPageHeadSection(this.state.ontology)}          
+            <div className='col-sm-8'>
+                <ul className="nav nav-tabs">
+                    {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
+                </ul>
+                {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
+                                <OntologyOverview 
+                                    ontology={this.state.ontology}
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
+                                <DataTreePage
+                                rootNodes={this.state.rootTerms}
+                                componentIdentity={'term'}
+                                iri={this.state.targetTermIri}
+                                key={'termTreePage'}                    
+                                ontology={this.state.ontologyId}
+                                rootNodeNotExist={this.state.rootNodeNotExist}
+                                iriChangerFunction={this.changeInputIri}
+                                lastState={this.state.classTreeDomLastState}
+                                domStateKeeper={this.changeTreeContent}
+                                isSkos={this.state.isSkosOntology}
+                                isIndividuals={false}
+                                />
+                }
 
-          <div className= "ont-info-bar">
-            <div>
-              <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>{this.state.ontology.config.title}</Link></h4>
-            </div>
-            <div>
-              <a href={this.state.ontology.config.id}>{this.state.ontology.config.id}</a>
-            </div>
-          </div>
-          <div className='col-sm-8'>
-            <ul className="nav nav-tabs">
-                {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
-            </ul>
-              {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
-                            <OntologyOverview 
-                                ontology={this.state.ontology}
-                            />
-              }
-              {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
-                            <DataTreePage
-                              rootNodes={this.state.rootTerms}
-                              componentIdentity={'term'}
-                              iri={this.state.targetTermIri}
-                              key={'termTreePage'}                    
-                              ontology={this.state.ontologyId}
-                              rootNodeNotExist={this.state.rootNodeNotExist}
-                              iriChangerFunction={this.changeInputIri}
-                              lastState={this.state.classTreeDomLastState}
-                              domStateKeeper={this.changeTreeContent}
-                              isSkos={this.state.isSkosOntology}
-                              isIndividuals={false}
-                            />
-              }
-
-              {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
-                            <DataTreePage
-                              rootNodes={this.state.rootProps}
-                              componentIdentity={'property'}
-                              iri={this.state.targetPropertyIri}
-                              key={'propertyTreePage'}
-                              ontology={this.state.ontologyId}
-                              rootNodeNotExist={this.state.rootNodeNotExist}
-                              iriChangerFunction={this.changeInputIri}
-                              lastState={this.state.propertyTreeDomLastState}
-                              domStateKeeper={this.changeTreeContent}
-                              isIndividuals={false}
-                            />
-              }
-              {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
-                            <IndividualsList
-                              rootNodes={this.state.rootTerms}                                                    
-                              iri={this.state.targetIndividualIri}
-                              componentIdentity={'individual'}
-                              key={'individualsTreePage'}
-                              ontology={this.state.ontologyId}                              
-                              iriChangerFunction={this.changeInputIri}
-                              lastState={""}
-                              domStateKeeper={this.changeTreeContent}
-                              isSkos={this.state.isSkosOntology}
-                              individualTabChanged={this.state.individualTabChanged}
-                            />
-              }
-              {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
-                            <TermList                              
-                              iri={this.state.targetIndividualIri}
-                              componentIdentity={'termList'}
-                              key={'termListPage'}
-                              ontology={this.state.ontologyId}                              
-                              iriChangerFunction={this.changeInputIri}                              
-                              isSkos={this.state.isSkosOntology}                              
-                            />
-              }
-              {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
-          </div>                    
+                {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
+                                <DataTreePage
+                                rootNodes={this.state.rootProps}
+                                componentIdentity={'property'}
+                                iri={this.state.targetPropertyIri}
+                                key={'propertyTreePage'}
+                                ontology={this.state.ontologyId}
+                                rootNodeNotExist={this.state.rootNodeNotExist}
+                                iriChangerFunction={this.changeInputIri}
+                                lastState={this.state.propertyTreeDomLastState}
+                                domStateKeeper={this.changeTreeContent}
+                                isIndividuals={false}
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
+                                <IndividualsList
+                                rootNodes={this.state.rootTerms}                                                    
+                                iri={this.state.targetIndividualIri}
+                                componentIdentity={'individual'}
+                                key={'individualsTreePage'}
+                                ontology={this.state.ontologyId}                              
+                                iriChangerFunction={this.changeInputIri}
+                                lastState={""}
+                                domStateKeeper={this.changeTreeContent}
+                                isSkos={this.state.isSkosOntology}
+                                individualTabChanged={this.state.individualTabChanged}
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
+                                <TermList                              
+                                iri={this.state.targetIndividualIri}
+                                componentIdentity={'termList'}
+                                key={'termListPage'}
+                                ontology={this.state.ontologyId}                              
+                                iriChangerFunction={this.changeInputIri}                              
+                                isSkos={this.state.isSkosOntology}                              
+                                />
+                }
+                {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
+            </div>                    
         </div>
 
       )

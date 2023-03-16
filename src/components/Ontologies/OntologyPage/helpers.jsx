@@ -41,3 +41,17 @@ export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontolo
 
     return result;
 }
+
+
+export function createOntologyPageHeadSection(ontology){
+    return [
+        <div className= "ont-info-bar">
+            <div>
+              <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h4>
+            </div>
+            <div>
+              <a href={ontology.config.id}>{ontology.config.id}</a>
+            </div>
+        </div>
+    ];
+}
