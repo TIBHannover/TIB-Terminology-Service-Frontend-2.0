@@ -2,12 +2,13 @@ import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
 import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
-import { shapeSkosConcepts } from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
+import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
+import { shapeSkosConcepts, renderOntologyPageTabs } from './helpers';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -40,16 +41,13 @@ class OntologyPage extends React.Component {
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      isSkosOntology: false,
-      ontologyShowAll: false,
-      showMoreLessOntologiesText: "+ Show More"      
+      isSkosOntology: false
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
-    this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
   }
 
 
@@ -286,27 +284,7 @@ class OntologyPage extends React.Component {
     }
   }
 
-  /**
-     * Handle the show more button in the ontology facet list
-     * @param {*} e 
-     */
-  handleOntologyShowMoreClick(e){                        
-    if(this.state.ontologyShowAll){
-        this.setState({
-            showMoreLessOntologiesText: "+ Show additional information",
-            ontologyShowAll: false
-        });
-    }
-    else{
-        this.setState({
-            showMoreLessOntologiesText: "- Show less information",
-            ontologyShowAll: true
-        });
-    }
-
-}
-
-
+  
   componentDidMount () {
     this.setOntologyData();
     this.setTabOnLoad();
@@ -343,23 +321,9 @@ class OntologyPage extends React.Component {
             </div>
           </div>
           <div className='col-sm-8'>
-              <ul className="nav nav-tabs">
-                <li className="nav-item ontology-detail-nav-item" key={"overview-tab"}>
-                  <Link onClick={this.tabChange} data-value="0" className={(this.state.activeTab === OVERVIEW_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>Overview</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"class-tab"}>
-                  <Link onClick={this.tabChange} data-value='1' className={(this.state.activeTab === TERM_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/terms"}>Class Tree</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
-                  <Link onClick={this.tabChange} data-value="2" className={(this.state.activeTab === PROPERTY_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Property Tree</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"indv-tab"}>
-                  <Link onClick={this.tabChange} data-value="3" className={(this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individual List</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"termList-tab"}>
-                  <Link onClick={this.tabChange} data-value="4" className={(this.state.activeTab === TERM_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/termList"}>Class List</Link>
-                </li>            
-              </ul>             
+            <ul className="nav nav-tabs">
+                {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
+            </ul>
               {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
                             <OntologyOverview 
                                 ontology={this.state.ontology}
