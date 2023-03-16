@@ -48,15 +48,15 @@ class IssueList extends React.Component{
             this.setState({...this.props.lastState});
             this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedTypeId);
             return true;
-        }        
+        }
         let ontology = this.props.ontology;
-        let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;        
-        let listOfIssues = [];        
+        let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
+        let listOfIssues = [];
         let username = this.state.username;
         let url = new URL(window.location);
-        let pageNumber = this.state.pageNumber;
-        let stateIdInUrl = url.searchParams.get('stateId');       
-        stateIdInUrl = !stateIdInUrl ? OPEN_ISSUE_ID : parseInt(stateIdInUrl);        
+        let pageNumber = this.state.pageNumber;               
+        let stateIdInUrl = this.state.selectedTypeId;
+        stateIdInUrl = !stateIdInUrl ? OPEN_ISSUE_ID : parseInt(stateIdInUrl);
         if(issueTrackerUrl){
             listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, ISSUE_STATES_VALUES[stateIdInUrl], this.state.pageCount, pageNumber);
         }
@@ -68,10 +68,10 @@ class IssueList extends React.Component{
             this.updateURL(pageNumber, stateIdInUrl);
             return true;
         }
-        this.setState({                       
-            listOfIssuesToRender: listOfIssues,            
+        this.setState({
+            listOfIssuesToRender: listOfIssues,
             waiting: false,
-            issueTrackerUrl: issueTrackerUrl,           
+            issueTrackerUrl: issueTrackerUrl,
             selectedTypeId: stateIdInUrl,
             pageNumber: pageNumber,
             noMoreIssuesExist: false
@@ -82,54 +82,19 @@ class IssueList extends React.Component{
     }
 
 
+    
+    
+    
     async handleIssueStateChange(e){
         this.setState({waiting:true});
         let selectedIssueStateId = parseInt(e.target.value);
-        let targetIssueList = [];
-        let listOfopenIssues = this.state.listOfOpenIssues;
-        let listOfAllIssues = this.state.listOfAllIssues;
-        let listOfClosedIssues = this.state.listOfClosedIssues;
-        if(selectedIssueStateId === OPEN_ISSUE_ID){
-            if(listOfopenIssues.length === 0){
-                targetIssueList = await this.gitHubController.getOntologyIssueListForUser(this.state.issueTrackerUrl, this.state.username, ISSUE_STATES_VALUES[OPEN_ISSUE_ID]);
-                listOfopenIssues = targetIssueList;
-            }
-            else{
-                targetIssueList = listOfopenIssues;
-            }        
-        }
-        else if(selectedIssueStateId === CLOSE_ISSUE_ID){            
-            if(listOfClosedIssues.length === 0){
-                targetIssueList = await this.gitHubController.getOntologyIssueListForUser(this.state.issueTrackerUrl, this.state.username, ISSUE_STATES_VALUES[CLOSE_ISSUE_ID]);
-                listOfClosedIssues = targetIssueList;
-            }
-            else{
-                targetIssueList = listOfClosedIssues;
-            }
-        }
-        else{            
-            if(listOfAllIssues.length === 0){
-                targetIssueList = await this.gitHubController.getOntologyIssueListForUser(this.state.issueTrackerUrl, this.state.username, ISSUE_STATES_VALUES[ALL_ISSUE_ID]);
-                listOfAllIssues = targetIssueList;
-            }
-            else{
-                targetIssueList = listOfAllIssues;
-            }
-        }
-
         this.setState({
             selectedTypeId: selectedIssueStateId,
-            listOfIssuesToRender: targetIssueList,
-            listOfClosedIssues: listOfClosedIssues,
-            listOfAllIssues: listOfAllIssues,
-            waiting: false,
             pageNumber: 1
         }, ()=>{
-            this.createIssuesList();
-            this.updateURL(1, selectedIssueStateId);
-        });
+            this.setComponentData(true);
+        });        
         localStorage.setItem("selectedIssueStateId", selectedIssueStateId);
-
     }
 
     
