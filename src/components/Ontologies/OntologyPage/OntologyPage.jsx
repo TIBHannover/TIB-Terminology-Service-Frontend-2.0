@@ -2,13 +2,13 @@ import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
 import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs } from './helpers';
+import Toolkit from '../../common/Toolkit';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -305,13 +305,8 @@ class OntologyPage extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
-          <HelmetProvider>
-          <div>
-            <Helmet>
-              <title>{this.state.ontology.config.preferredPrefix}</title>
-            </Helmet>
-          </div>
-          </HelmetProvider>
+          {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
+
           <div className= "ont-info-bar">
             <div>
               <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>{this.state.ontology.config.title}</Link></h4>
