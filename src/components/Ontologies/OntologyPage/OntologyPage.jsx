@@ -1,14 +1,20 @@
 import React from 'react';
+<<<<<<< HEAD:src/components/Ontologies/OntologyDetail/OntologyDetail.jsx
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
 import DataTree from '../DataTree/DataTreePage';
+=======
+import DataTreePage from '../DataTree/DataTreePage';
+>>>>>>> nfdi4culture-block:src/components/Ontologies/OntologyPage/OntologyPage.jsx
 import { Link } from 'react-router-dom';
-import queryString from 'query-string'; 
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
-import { shapeSkosConcepts } from './helpers';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
+import queryString from 'query-string'; 
+import OntologyOverview from '../OntologyOverview/OntologyOverview';
+import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
+import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
+import Toolkit from '../../common/Toolkit';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -19,7 +25,7 @@ const TERM_LIST_TAB_ID = 4;
 
 
 
-class OntologyDetail extends React.Component {
+class OntologyPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
@@ -41,16 +47,36 @@ class OntologyDetail extends React.Component {
       rootNodeNotExist: false,
       classTreeDomLastState: "",
       propertyTreeDomLastState: "",
-      isSkosOntology: false,
-      ontologyShowAll: false,
-      showMoreLessOntologiesText: "+ Show More"      
+      isSkosOntology: false
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
     this.changeTreeContent = this.changeTreeContent.bind(this);
-    this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
+  }
+
+
+
+
+  /**
+   * Get the ontology detail from the backend
+   */
+  async getOntology (ontologyId) {
+    let theOntology = await getOntologyDetail(ontologyId);
+    if (typeof theOntology != undefined){
+      this.setState({
+        isLoaded: true,
+        ontology: theOntology
+      });
+    }
+    else{
+      this.setState({
+        isLoaded: true,
+        error: 'Can not get this ontology'
+      });
+    }
+
   }
 
 
@@ -125,27 +151,6 @@ class OntologyDetail extends React.Component {
     }
   }
 
-
-
-  /**
-   * Get the ontology detail from the backend
-   */
-  async getOntology (ontologyId) {
-    let theOntology = await getOntologyDetail(ontologyId);
-    if (typeof theOntology != undefined){
-      this.setState({
-        isLoaded: true,
-        ontology: theOntology
-      });
-    }
-    else{
-      this.setState({
-        isLoaded: true,
-        error: 'Can not get this ontology'
-      });
-    }
-
-  }
 
 
   /**
@@ -285,27 +290,7 @@ class OntologyDetail extends React.Component {
     }
   }
 
-  /**
-     * Handle the show more button in the ontology facet list
-     * @param {*} e 
-     */
-  handleOntologyShowMoreClick(e){                        
-    if(this.state.ontologyShowAll){
-        this.setState({
-            showMoreLessOntologiesText: "+ Show additional information",
-            ontologyShowAll: false
-        });
-    }
-    else{
-        this.setState({
-            showMoreLessOntologiesText: "- Show less information",
-            ontologyShowAll: true
-        });
-    }
-
-}
-
-
+  
   componentDidMount () {
     this.setOntologyData();
     this.setTabOnLoad();
@@ -326,6 +311,7 @@ class OntologyDetail extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
+<<<<<<< HEAD:src/components/Ontologies/OntologyDetail/OntologyDetail.jsx
           <HelmetProvider>
           <div>
             <Helmet>
@@ -425,6 +411,75 @@ class OntologyDetail extends React.Component {
               }
               {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
           </div>                    
+=======
+            {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
+            {createOntologyPageHeadSection(this.state.ontology)}          
+            <div className='col-sm-8'>
+                <ul className="nav nav-tabs">
+                    {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
+                </ul>
+                {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
+                                <OntologyOverview 
+                                    ontology={this.state.ontology}
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
+                                <DataTreePage
+                                rootNodes={this.state.rootTerms}
+                                componentIdentity={'term'}
+                                iri={this.state.targetTermIri}
+                                key={'termTreePage'}                    
+                                ontology={this.state.ontologyId}
+                                rootNodeNotExist={this.state.rootNodeNotExist}
+                                iriChangerFunction={this.changeInputIri}
+                                lastState={this.state.classTreeDomLastState}
+                                domStateKeeper={this.changeTreeContent}
+                                isSkos={this.state.isSkosOntology}
+                                isIndividuals={false}
+                                />
+                }
+
+                {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
+                                <DataTreePage
+                                rootNodes={this.state.rootProps}
+                                componentIdentity={'property'}
+                                iri={this.state.targetPropertyIri}
+                                key={'propertyTreePage'}
+                                ontology={this.state.ontologyId}
+                                rootNodeNotExist={this.state.rootNodeNotExist}
+                                iriChangerFunction={this.changeInputIri}
+                                lastState={this.state.propertyTreeDomLastState}
+                                domStateKeeper={this.changeTreeContent}
+                                isIndividuals={false}
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
+                                <IndividualsList
+                                rootNodes={this.state.rootTerms}                                                    
+                                iri={this.state.targetIndividualIri}
+                                componentIdentity={'individual'}
+                                key={'individualsTreePage'}
+                                ontology={this.state.ontologyId}                              
+                                iriChangerFunction={this.changeInputIri}
+                                lastState={""}
+                                domStateKeeper={this.changeTreeContent}
+                                isSkos={this.state.isSkosOntology}
+                                individualTabChanged={this.state.individualTabChanged}
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
+                                <TermList                              
+                                iri={this.state.targetIndividualIri}
+                                componentIdentity={'termList'}
+                                key={'termListPage'}
+                                ontology={this.state.ontologyId}                              
+                                iriChangerFunction={this.changeInputIri}                              
+                                isSkos={this.state.isSkosOntology}                              
+                                />
+                }
+                {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
+            </div>                    
+>>>>>>> nfdi4culture-block:src/components/Ontologies/OntologyPage/OntologyPage.jsx
         </div>
 
       )
@@ -433,4 +488,4 @@ class OntologyDetail extends React.Component {
 }
 
 
-export default OntologyDetail
+export default OntologyPage;

@@ -102,7 +102,7 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
       if(isSkos){
         res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
       }
-      else{
+      else{        
         res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
       }
       let ul = document.createElement("ul");
