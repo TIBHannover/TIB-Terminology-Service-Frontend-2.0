@@ -1,11 +1,5 @@
 import React from 'react';
-<<<<<<< HEAD:src/components/Ontologies/OntologyDetail/OntologyDetail.jsx
-import InfoAnnotations from './widgets/infoAnnotations';
-import OntologyStatsBox from './widgets/stats';
-import DataTree from '../DataTree/DataTreePage';
-=======
 import DataTreePage from '../DataTree/DataTreePage';
->>>>>>> nfdi4culture-block:src/components/Ontologies/OntologyPage/OntologyPage.jsx
 import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
@@ -311,107 +305,6 @@ class OntologyPage extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
-<<<<<<< HEAD:src/components/Ontologies/OntologyDetail/OntologyDetail.jsx
-          <HelmetProvider>
-          <div>
-            <Helmet>
-              <title>{this.state.ontology.config.preferredPrefix}</title>
-            </Helmet>
-          </div>
-          </HelmetProvider>
-          <div className= "ont-info-bar">
-            <div>
-              <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>{this.state.ontology.config.title}</Link></h4>
-            </div>
-            <div>
-              <a href={this.state.ontology.config.id}>{this.state.ontology.config.id}</a>
-            </div>
-          </div>
-          <div className='col-sm-8'>
-              <ul className="nav nav-tabs">
-                <li className="nav-item ontology-detail-nav-item" key={"overview-tab"}>
-                  <Link onClick={this.tabChange} data-value="0" className={(this.state.activeTab === OVERVIEW_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId}>Overview</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"class-tab"}>
-                  <Link onClick={this.tabChange} data-value='1' className={(this.state.activeTab === TERM_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/terms"}>Class Tree</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"prop-tab"}>
-                  <Link onClick={this.tabChange} data-value="2" className={(this.state.activeTab === PROPERTY_TREE_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/props"}>Property Tree</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"indv-tab"}>
-                  <Link onClick={this.tabChange} data-value="3" className={(this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/individuals"}>individual List</Link>
-                </li>
-                <li class="nav-item ontology-detail-nav-item" key={"termList-tab"}>
-                  <Link onClick={this.tabChange} data-value="4" className={(this.state.activeTab === TERM_LIST_TAB_ID) ? "nav-link active" : "nav-link"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + this.state.ontologyId + "/termList"}>Class List</Link>
-                </li>            
-              </ul>             
-              {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
-                      <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">        
-                        <div className='col-sm-9'>
-                          <InfoAnnotations ontology={this.state.ontology} />
-                        </div>
-                        <div className='col-sm-3'>
-                          <OntologyStatsBox ontology={this.state.ontology} />
-                        </div>
-                      </div>
-              }
-              {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
-                            <DataTree
-                              rootNodes={this.state.rootTerms}
-                              componentIdentity={'term'}
-                              iri={this.state.targetTermIri}
-                              key={'termTreePage'}                    
-                              ontology={this.state.ontologyId}
-                              rootNodeNotExist={this.state.rootNodeNotExist}
-                              iriChangerFunction={this.changeInputIri}
-                              lastState={this.state.classTreeDomLastState}
-                              domStateKeeper={this.changeTreeContent}
-                              isSkos={this.state.isSkosOntology}
-                              isIndividuals={false}
-                            />
-              }
-
-              {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
-                            <DataTree
-                              rootNodes={this.state.rootProps}
-                              componentIdentity={'property'}
-                              iri={this.state.targetPropertyIri}
-                              key={'propertyTreePage'}
-                              ontology={this.state.ontologyId}
-                              rootNodeNotExist={this.state.rootNodeNotExist}
-                              iriChangerFunction={this.changeInputIri}
-                              lastState={this.state.propertyTreeDomLastState}
-                              domStateKeeper={this.changeTreeContent}
-                              isIndividuals={false}
-                            />
-              }
-              {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
-                            <IndividualsList
-                              rootNodes={this.state.rootTerms}                                                    
-                              iri={this.state.targetIndividualIri}
-                              componentIdentity={'individual'}
-                              key={'individualsTreePage'}
-                              ontology={this.state.ontologyId}                              
-                              iriChangerFunction={this.changeInputIri}
-                              lastState={""}
-                              domStateKeeper={this.changeTreeContent}
-                              isSkos={this.state.isSkosOntology}
-                              individualTabChanged={this.state.individualTabChanged}
-                            />
-              }
-              {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
-                            <TermList                              
-                              iri={this.state.targetIndividualIri}
-                              componentIdentity={'termList'}
-                              key={'termListPage'}
-                              ontology={this.state.ontologyId}                              
-                              iriChangerFunction={this.changeInputIri}                              
-                              isSkos={this.state.isSkosOntology}                              
-                            />
-              }
-              {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
-          </div>                    
-=======
             {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
             {createOntologyPageHeadSection(this.state.ontology)}          
             <div className='col-sm-8'>
@@ -479,7 +372,6 @@ class OntologyPage extends React.Component {
                 }
                 {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
             </div>                    
->>>>>>> nfdi4culture-block:src/components/Ontologies/OntologyPage/OntologyPage.jsx
         </div>
 
       )
