@@ -3,7 +3,9 @@ import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
 import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
 import TreeNodeController from "./TreeNode";
-import { buildHierarchicalArray,
+import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
+import Toolkit from "../../common/Toolkit";
+import {
     nodeHasChildren,
     nodeIsRoot, 
     expandTargetNode, 
@@ -13,7 +15,6 @@ import { buildHierarchicalArray,
     showHidesiblingsForSkos,
     setIsExpandedAndHasChildren } from './helpers';
 
-import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 
 
 class Tree extends React.Component {
@@ -140,7 +141,7 @@ class Tree extends React.Component {
             else{                
                 targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
                 listOfNodes =  await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, target, viewMode);
-                rootNodesWithChildren = buildHierarchicalArray(listOfNodes);                           
+                rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
                 if(nodeExistInList(target, rootNodesWithChildren)){                    
                     // the target node is a root node
                     let result = this.buildTheTreeFirstLayer(rootNodesWithChildren, target);

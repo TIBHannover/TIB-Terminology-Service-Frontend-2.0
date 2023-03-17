@@ -4,32 +4,6 @@ import TreeNodeController from './TreeNode';
 
 
 
-/**
- * Create a hierarchical list form a flat list. 
- * @param {*} flatList 
- * @returns 
- */
-export function buildHierarchicalArray(flatList){
-    let map = {}; 
-    let node = "";
-    let roots = [];
-    for (let i = 0; i < flatList.length; i++) {
-        map[flatList[i].id] = i; 
-        flatList[i].childrenList = [];
-    }
-    
-    for (let i = 0; i < flatList.length; i++) {
-        node = flatList[i];
-        if (node.parent !== "#") {
-        flatList[map[node.parent]].childrenList.push(node);
-        } else {
-        roots.push(node);
-        }
-    }
-    return roots;
-}
-
-
   /**
    * Expand a node in the tree in loading. Used for jumping directly to a node given by Iri.
    * @param {*} nodeList 

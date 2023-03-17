@@ -55,6 +55,26 @@ class Toolkit{
             return result;
         }    
     }
+
+    static buildHierarchicalArrayFromFlat(flatList, idKeyName, parentKeyName){
+        let map = {}; 
+        let node = "";
+        let roots = [];
+        for (let i = 0; i < flatList.length; i++) {
+            map[flatList[i][idKeyName]] = i; 
+            flatList[i].childrenList = [];
+        }        
+        for (let i = 0; i < flatList.length; i++) {
+            node = flatList[i];
+            if (node[parentKeyName] !== "#") {
+                flatList[map[node[parentKeyName]]].childrenList.push(node);
+            }
+            else {
+                roots.push(node);
+            }
+        }
+        return roots;
+    }
 }
 
 export default Toolkit;
