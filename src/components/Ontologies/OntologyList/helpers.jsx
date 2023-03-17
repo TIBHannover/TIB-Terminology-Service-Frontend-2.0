@@ -1,4 +1,5 @@
 import {getAllCollectionsIds} from '../../../api/fetchData';
+import Toolkit from '../../common/Toolkit';
 
 
 /**
@@ -99,26 +100,14 @@ export function ontology_has_searchKey(ontology, value){
 }
 
 
-export function sortArrayOfObjectBasedOnKey(objectsArray, key) {
+export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
     if(key === "title"){
-        return objectsArray.sort(function (a, b) {
-            let x = a['config'][key]; 
-            let y = b['config'][key];
-            return (x<y ? -1 : 1 )
-          });
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
     }
     else if(key === 'ontologyId'){
-        return objectsArray.sort(function (a, b) {
-            let x = a[key]; 
-            let y = b[key];
-            return (x<y ? -1 : 1 )
-          });    
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
     }
-    return objectsArray.sort(function (a, b) {
-      let x = a[key]; 
-      let y = b[key];
-      return (x<y ? 1 : -1 )
-    });
+    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
   }
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, createCollectionsCheckBoxes, sortArrayOfObjectBasedOnKey} from './helpers';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, createCollectionsCheckBoxes, sortArrayOfOntologiesBasedOnKey} from './helpers';
 import Pagination from "../../common/Pagination/Pagination";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
@@ -52,7 +52,7 @@ class OntologyList extends React.Component {
    async setComponentData (){    
     try{
       let allOntologies = await getAllOntologies();
-      allOntologies = sortArrayOfObjectBasedOnKey(allOntologies, this.state.sortField);
+      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -185,7 +185,7 @@ class OntologyList extends React.Component {
      */
   handleSortChange = (e, value) => {
     let ontologies = this.state.ontologies;
-    let sortedOntology = sortArrayOfObjectBasedOnKey(ontologies, e.target.value);
+    let sortedOntology = sortArrayOfOntologiesBasedOnKey(ontologies, e.target.value);
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
@@ -280,7 +280,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   if(enteredKeyword !== ""){
     // run keyword filter    
     for (let i = 0; i < ontologies.length; i++) {
-      let ontology = ontologies[i]
+      let ontology = ontologies[i];
       if (ontology_has_searchKey(ontology, enteredKeyword)) {
         keywordOntologies.push(ontology)
       }
@@ -301,7 +301,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
 
   }
 
-  ontologies = sortArrayOfObjectBasedOnKey(ontologies, this.state.sortField);
+  ontologies = sortArrayOfOntologiesBasedOnKey(ontologies, this.state.sortField);
   let hiddenStatus = [];
   for(let i=0; i < ontologies.length; i++){
     if (i <= this.state.pageSize){
