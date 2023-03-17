@@ -14,6 +14,11 @@ class Toolkit{
             </HelmetProvider>
         ];
     }
+
+
+    static sortListOfObjectsByKey(objectList, key){
+        
+    }
 }
 
 export default Toolkit;
