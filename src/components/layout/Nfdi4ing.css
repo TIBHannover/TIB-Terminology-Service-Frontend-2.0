@@ -1793,3 +1793,19 @@ p{
 
     margin-top: 40px;
 }
+
+.list-header-element > .pagination-holder{
+    margin-top: 0;
+}
+
+@media only screen and (max-width: 1500px) {
+    .list-header-element{           
+        margin-top: 40px;
+        padding-top: 0;
+        font-size: 9px;
+        size: 8px;
+    }
+    .list-header-element > .pagination-holder{
+        margin-top: 0;
+    }
+  }
