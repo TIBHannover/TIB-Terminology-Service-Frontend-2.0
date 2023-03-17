@@ -80,20 +80,20 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
  */
 export function ontology_has_searchKey(ontology, value){
     try{
+        value = value.toLowerCase();
         if (ontology.ontologyId.includes(value)) {
             return true;
         }
-        if (ontology.config.title.includes(value)) {
+        if (ontology.config.title.toLowerCase().includes(value)) {
             return true;
         }
-        if (ontology.config.description != null &&  ontology.config.description.includes(value)) {
+        if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
             return true;
         }
 
         return false;
     }
-    catch (e){
-        console.info(e);
+    catch (e){        
         return false;
     }
 }
