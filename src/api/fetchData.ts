@@ -459,20 +459,6 @@ async function getPageCount(url: string){
 }
 
 
-/**
- * check if a node exist in a list of nodes obtain from API
- * @param nodesList
- * @param nodeIri
- * @returns 
- */
-function nodeExistInList(nodesList: Array<any>, nodeIri:string){
-  for(let i=0; i < nodesList.length; i++){
-    if (nodesList[i]['iri'] === nodeIri){
-      return true;
-    }
-  }
-  return false;
-}
 
 
 /**
