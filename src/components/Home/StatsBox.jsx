@@ -48,7 +48,7 @@ export function createStatsBox(statsResult){
                     </g>
                   </svg>
                   <h4 className ="font-weight-bold h2 mb-1">{statsResult.numberOfIndividuals}</h4>
-                  <p className ="stats-box-text">individual</p>
+                  <p className ="stats-box-text">Individuals</p>
                 </div>                                 
               </div>   
             </div>               
