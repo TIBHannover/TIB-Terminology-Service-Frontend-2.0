@@ -1,4 +1,5 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import React from "react";
 
 
 class Toolkit{
@@ -32,6 +33,27 @@ class Toolkit{
                 return (x<y ? sortNumber : (-1 * sortNumber) )
               });
         }        
+    }
+
+    
+    static transformStringOfLinksToAnchors(text){  
+        if(typeof(text) !== "string"){
+            return text;
+        }
+        let splitedText = text.split("http");
+        if (splitedText.length === 1){        
+            return text;
+        }
+        else{
+            let result = [];
+            text = text.split(",");
+            for(let link of text){                
+                let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
+                result.push(anchor);
+                result.push(",  ");
+            }
+            return result;
+        }    
     }
 }
 

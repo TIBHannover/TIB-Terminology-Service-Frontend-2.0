@@ -1,5 +1,6 @@
-import _ from "lodash";
-import React from "react";
+import _ from 'lodash';
+import Toolkit from "../../common/Toolkit";
+
 
 /**
  * Create the metadata for a class detail table
@@ -129,7 +130,7 @@ export function propertyMetaData(object){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
 
-  return transformToLink(text)
+  return Toolkit.transformStringOfLinksToAnchors(text)
 }
 
 /**
@@ -222,28 +223,4 @@ function createRelations(object){
   return relsToRender;
 }
 
-/**
- * Check if the tetx contains link to render is as anchor
- */
-function transformToLink(text){  
-  if(typeof(text) !== "string"){
-    return text;
-  }
-  let splitedText = text.split("http");
-  if (splitedText.length === 1){
-    // no https inside text
-    return text;
-  }
-  else{
-    let result = [];
-    text = text.split(",");
-    for(let link of text){
-      // let label = document.createTextNode(link);
-      let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
-      result.push(anchor);
-      result.push(",  ");
-    }
-    return result;
-  }
 
-}

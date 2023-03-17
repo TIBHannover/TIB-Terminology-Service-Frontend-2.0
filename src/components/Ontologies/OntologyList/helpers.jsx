@@ -108,7 +108,7 @@ export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
         return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
     }
     return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
-  }
+}
 
 
 export async function createCollectionsCheckBoxes(filterCollection, selectedCollections){
