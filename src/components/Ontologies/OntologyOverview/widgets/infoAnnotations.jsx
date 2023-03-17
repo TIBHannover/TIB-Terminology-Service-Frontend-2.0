@@ -3,7 +3,7 @@ import React from 'react'
 class InfoAnnotations extends React.Component{
     constructor(props){
         super(props);
-        this.setState = ({
+        this.state = ({
             ontologyShowAll: false,
             showMoreLessOntologiesText: "+ Show more information"          
         })
@@ -203,14 +203,7 @@ class InfoAnnotations extends React.Component{
                               >
                               <i class="fa fa-download"></i>Ontology metadata as JSON</a>
                             </td>
-                        </tr>
-                        <tr>
-                          <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
-                          {/* <div className="text-center" id="search-facet-show-more-ontology-btn">
-                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                          </div> */}
-                        </tr>
-                        {this.createAnnotations()}
+                        </tr>                                         
                     </tbody>
                    </table>
                 </div> 
@@ -233,6 +226,18 @@ class InfoAnnotations extends React.Component{
         return(
             <div>
                 {this.createOverview()}
+                {this.state.ontologyShowAll &&
+                  <table className="ontology-detail-table">
+                    <tbody>
+                        <tr>
+                          <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
+                        </tr>                
+                      {this.createAnnotations()}                
+                    </tbody>
+                  </table>}
+                <div className="text-center" id="search-facet-show-more-ontology-btn">
+                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                </div>
             </div>          
             )
         }

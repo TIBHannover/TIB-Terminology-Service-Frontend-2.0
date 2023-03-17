@@ -1,81 +1,6 @@
 import React from 'react';
 import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
-
-
-const CLOSE__CLASSES = " fa-plus";
-const OPEN__CLASSES = " fa-minus";
-const LEAF__CLASSES = " fa-close";
-
-
-
-/**
- * Create a hierarchical list form a flat list. 
- * @param {*} flatList 
- * @returns 
- */
-export function buildHierarchicalArray(flatList){
-    let map = {}; 
-    let node = "";
-    let roots = [];
-    for (let i = 0; i < flatList.length; i++) {
-        map[flatList[i].id] = i; 
-        flatList[i].childrenList = [];
-    }
-    
-    for (let i = 0; i < flatList.length; i++) {
-        node = flatList[i];
-        if (node.parent !== "#") {
-        flatList[map[node.parent]].childrenList.push(node);
-        } else {
-        roots.push(node);
-        }
-    }
-    return roots;
-}
-
-
-
-/**
- * Build a list (li) element for the tree veiw
- * @param {*} childNode
- */
- export function buildTreeListItem(childNode){    
-    let newId = childNode.id;
-    let label = document.createTextNode(childNode.text);
-    let labelTextSpan = document.createElement("span");
-    labelTextSpan.classList.add("li-label-text");
-    labelTextSpan.appendChild(label);
-    let symbol = document.createElement("i");
-    let listItem = document.createElement("li");
-    listItem.setAttribute("id", newId);
-    listItem.setAttribute("data-iri", childNode.iri);
-    listItem.setAttribute("data-id", childNode.id);    
-    if(childNode.children){
-      listItem.classList.add("closed");
-      symbol.classList.add("fa");
-      symbol.classList.add("fa-plus");
-    }
-    else{
-      listItem.classList.add("leaf-node");
-      // symbol.classList.add("fa");
-      // symbol.classList.add("fa-close");
-    }
-    let containerSpan = document.createElement("span");
-    containerSpan.classList.add("tree-text-container");
-    listItem.appendChild(symbol);
-    if(childNode["a_attr"]["class"] === "part_of"){
-      let partOfSymbol = document.createElement("span");
-      let pText = document.createTextNode("P");
-      partOfSymbol.appendChild(pText);
-      partOfSymbol.classList.add("p-icon-style");      
-      containerSpan.appendChild(partOfSymbol);
-    }    
-    containerSpan.appendChild(labelTextSpan);
-    listItem.appendChild(containerSpan);
-    listItem.classList.add("tree-node-li");
-
-    return listItem;
-  }
+import TreeNodeController from './TreeNode';
 
 
 
@@ -87,67 +12,43 @@ export function buildHierarchicalArray(flatList){
    */
   export function expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
     let subNodes = [];
+    let treeNode = new TreeNodeController();
     for(let i = 0; i < nodeList.length; i++){
       let childNodeChildren = [];
       if(nodeList[i].iri !== targetIri){
         let subUl = expandTargetNode(nodeList[i].childrenList, nodeList[i].id, targetIri, targetHasChildren);
         childNodeChildren.push(subUl);
-      }
-
-      let newId = nodeList[i].id;
-      let nodeStatusClass = "opened";
-      let iconClass = "fa" + OPEN__CLASSES;
-      let clickedClass = "";
+      }           
+      let isClicked = false;
+      let isExpanded = true;      
+      
       if (nodeList[i].iri === targetIri){
         if(targetHasChildren){
-          nodeStatusClass = "closed";
-          iconClass = "fa" + CLOSE__CLASSES;  
+          nodeList[i]['has_children'] = true;
+          isExpanded = false;     
         }
         else{
-          nodeStatusClass = "leaf-node";
-          // iconClass = "fa" + LEAF__CLASSES;
-          iconClass = "";
+          isExpanded = false;
+          nodeList[i]['has_children'] = false;
         }
-        clickedClass = "clicked targetNodeByIri";
+        isClicked = true;
       }
       else{
         if(nodeList[i].children && nodeList[i].childrenList.length == 0){
-          nodeStatusClass = "closed";
-          iconClass = "fa" + CLOSE__CLASSES;  
+          nodeList[i]['has_children'] = true;
+          isExpanded = false;
         }
         else if(nodeList[i].state.opened && nodeList[i].childrenList.length != 0){
-          nodeStatusClass = "opened";
-          iconClass = "fa" + OPEN__CLASSES;
+          isExpanded = true;
+          nodeList[i]['has_children'] = true;
         }
         else{
-          nodeStatusClass = "leaf-node";
-          // iconClass = "fa" + LEAF__CLASSES; 
-          iconClass = "";         
+          nodeList[i]['has_children'] = false;
         }
       }
-      let symbol = React.createElement("i", {"className": iconClass }, "");
-      let label = React.createElement("span", {"className": "li-label-text "}, nodeList[i].text);      
-      let childNode = "";
-      if(nodeList[i]['a_attr']["class"] === "part_of"){
-        let partOfSymbol = React.createElement("span", {"className": "p-icon-style"}, "P");
-        let containerSpan = React.createElement("span", {"className": "tree-text-container " + clickedClass}, partOfSymbol, label);
-        childNode = React.createElement("li", {
-          "className": nodeStatusClass + " tree-node-li",
-          "id": newId,
-          "data-iri": nodeList[i].iri,
-          "data-id": nodeList[i].id
-        }, symbol, containerSpan, childNodeChildren);
-      }
-      else{
-        let containerSpan = React.createElement("span", {"className": "tree-text-container " + clickedClass}, label);
-        childNode = React.createElement("li", {
-          "className": nodeStatusClass + " tree-node-li",
-          "id": newId,
-          "data-iri": nodeList[i].iri,
-          "data-id": nodeList[i].id
-        }, symbol, containerSpan, childNodeChildren);
-      }
-
+      
+      treeNode.children = childNodeChildren;
+      let childNode = treeNode.buildNodeWithReact(nodeList[i], nodeList[i].id, isClicked, isExpanded);
       subNodes.push(childNode);
     }
 
@@ -168,13 +69,14 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
   let targetNodeIri = e.dataset.iri;
   let targetNodeId = e.dataset.id;
   let Id = e.id;
+  let treeNode = new TreeNodeController();
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
-      let res = [];
+      let res = [];      
       if(isSkos){
         res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
       }
-      else{
+      else{        
         res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
       }
       let ul = document.createElement("ul");
@@ -182,7 +84,7 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
       ul.classList.add("tree-node-ul");
       for(let i=0; i < res.length; i++){
         let node = isSkos ? await shapeSkosMetadata(res[i]) : res[i];        
-        let listItem = buildTreeListItem(node);
+        let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
         ul.appendChild(listItem);      
       }      
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
@@ -235,8 +137,7 @@ export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
     }
     treeNodes.push(res);
     iri = res['iri'];
-  }
-  
+  }  
   let nodeInTree = "";
   let childNode = "";
   let ul = "";
@@ -247,7 +148,7 @@ export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
     let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
     let textSpan = React.createElement("span", {"className": "li-label-text"}, node.label);
     let containerSpan = React.createElement("span", {"className": "tree-text-container" + clickedClass}, textSpan);
-    let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);
+    let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);    
     if (!hasChildren){
       leafClass = " leaf-node";
       // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
@@ -321,6 +222,7 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   let siblingsNodes = "";
   let targetUl = "";
   let children = "";
+  let treeNode = new TreeNodeController();
   if(showFlag){
     // Show the siblings    
     if(!parent){
@@ -334,8 +236,8 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
     }
     for(let i=0; i < siblingsNodes.length; i++){
       let node = await shapeSkosMetadata(siblingsNodes[i], (!parent ? true : false));
-      if(node.iri !== iri){
-        let listItem = buildTreeListItem(node);
+      if(node.iri !== iri){        
+        let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
         targetUl.appendChild(listItem);
       } 
     }   
@@ -397,43 +299,30 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   }
 
 
-  
-  /**
-   * Check a node is part of the list of a list of nodes or not
-   * @param {*} nodeIri 
-   * @param {*} roots 
-   */
-  export function nodeExistInList(nodeIri, list){
-    for(let item of list){
-      if (item["iri"] === nodeIri){
-        return true
-      }
-    }
-    return false;
-  }
 
-  /**
-   * function for generating jump to results
-   */
-  export function jumpToButton(resultItem){
-    let content = [];
-    let targetHref = "";
-    if(resultItem["type"] === 'class'){
-        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
-    }
-    else if(resultItem["type"] === 'property'){
-      targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/props?iri=' + encodeURIComponent(resultItem['iri']);       
-     } 
-    else if(resultItem["type"] === 'individual'){
-    targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/individuals?iri=' + encodeURIComponent(resultItem['iri']);       
-     }    
-    content.push(
-        <a href={targetHref} className="container">
-        <div className="jump-tree-item">         
-            {resultItem['label']}
-        </div>
-        </a>
-    ); 
-    
-    return content; 
+/**
+ * Set the isExpanded and has_children for a node in tree.
+ * Used on loading a sub-tree when iri is given.
+ * @param {*} nodeObject 
+ */
+export function setIsExpandedAndHasChildren(nodeObject){
+  let hasChildren = false;
+  let isExpanded = false;
+  if (nodeObject.childrenList.length === 0 && !nodeObject.children && !nodeObject.opened){
+    //  root node is a leaf
+    hasChildren = false;
+    isExpanded = false;
+  }            
+  else if(nodeObject.childrenList.length === 0 && nodeObject.children && !nodeObject.opened){
+      // root is not leaf but does not include the target node on its sub-tree
+      hasChildren = true;
+      isExpanded = false;
   }
+  else{
+      // root is not leaf and include the target node on its sub-tree
+      hasChildren = true;
+      isExpanded = true;
+  }
+  return {"hasChildren": hasChildren, "isExpanded": isExpanded}
+}
+

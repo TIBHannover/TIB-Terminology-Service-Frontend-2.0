@@ -1,5 +1,6 @@
-import _ from "lodash";
-import React from "react";
+import _ from 'lodash';
+import Toolkit from "../../common/Toolkit";
+
 
 /**
  * Create the metadata for a class detail table
@@ -11,11 +12,23 @@ import React from "react";
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
-      "fullIRI": [object.iri, true],
-      "Synonyms": [object.synonyms, false],
-      "Equivalent to": [object.eqAxiom, false],
-      "SubClass Of" : [ object.subClassOf, false],
-      "Used in axiom" : [ object, false]
+      "fullIRI": [object.iri, true]      
+    }
+    
+    if(formatText("Synonyms", object.synonyms, false) !== "N/A"){
+      metadata['Synonyms'] = [object.synonyms, false];
+    }
+    
+    if(object.eqAxiom !== "N/A"){
+      metadata['Equivalent to'] = [object.eqAxiom, false];
+    }
+
+    if(object.subClassOf !== "N/A"){
+      metadata['SubClass Of'] = [object.subClassOf, false];
+    }
+    
+    if(formatText("Used in axiom", object, false) !== "N/A" && formatText("Used in axiom", object, false).length !== 0){
+      metadata['Used in axiom'] = [object, false];
     }
     
     if(object.annotation){
@@ -27,7 +40,32 @@ import React from "react";
         }
         metadata[key] = [value.join(',\n'), false];
       }    
-    }  
+    }
+    
+    if(object.type && object.isIndividual){
+      metadata['Type'] = [];
+      let typeMtadataValue = [];
+      for(let type of object.type){
+        typeMtadataValue.push(
+          <span>
+            <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + type['ontology_name'] + '/terms?iri=' + type['iri']} target={"_blank"}>
+              {type['label']}
+            </a>
+            <br></br>
+          </span>        
+        );
+      }
+      metadata['Type'] = [typeMtadataValue, false];
+    }
+
+    if(object.isIndividual && object.description){
+      // individual description structure is different
+      metadata['Description'][0] = [];      
+      for(let desc of object.description){
+        metadata['Description'][0].push(<p>{desc}</p>);
+      }
+    }
+    
   return metadata;
 }
 
@@ -92,7 +130,7 @@ export function propertyMetaData(object){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
 
-  return transformToLink(text)
+  return Toolkit.transformStringOfLinksToAnchors(text)
 }
 
 /**
@@ -146,7 +184,10 @@ function makeTag(objectList){
  * @param {*} relations 
  */
 function createRelations(object){
-  if(typeof(object['relations']) !== "undefined" && object['relations'].length === 0){
+  if(typeof(object['relations']) === "undefined"){
+    return "N/A";
+  }
+  if(object['relations'].length === 0){
     return "N/A";
   }
   let groupedRelations = _.groupBy(object['relations'], res => res.relation);  
@@ -182,28 +223,4 @@ function createRelations(object){
   return relsToRender;
 }
 
-/**
- * Check if the tetx contains link to render is as anchor
- */
-function transformToLink(text){  
-  if(typeof(text) !== "string"){
-    return text;
-  }
-  let splitedText = text.split("http");
-  if (splitedText.length === 1){
-    // no https inside text
-    return text;
-  }
-  else{
-    let result = [];
-    text = text.split(",");
-    for(let link of text){
-      // let label = document.createTextNode(link);
-      let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
-      result.push(anchor);
-      result.push(",  ");
-    }
-    return result;
-  }
 
-}

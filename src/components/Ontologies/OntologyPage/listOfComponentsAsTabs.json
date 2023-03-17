@@ -1,0 +1,46 @@
+{
+    "OntologyOverview":{
+        "id":"overview",
+        "keyForRenderAsComponent": "ontologyOverviewPage",
+        "keyForRenderAsTabItem": "overview-tab",
+        "tabId": 0,
+        "tabTitle": "Overview",
+        "urlEndPoint": ""
+    },
+
+    "ClassTree":{
+        "id":"term",
+        "keyForRenderAsComponent": "termTreePage",
+        "keyForRenderAsTabItem": "class-tab",
+        "tabId": 1,
+        "tabTitle": "Class Tree",
+        "urlEndPoint": "/terms"
+    },
+
+    "PropertyTree":{
+        "id":"property",
+        "keyForRenderAsComponent": "propertyTreePage",
+        "keyForRenderAsTabItem": "prop-tab",
+        "tabId": 2,
+        "tabTitle": "Property Tree",
+        "urlEndPoint": "/props"
+    },
+
+    "IndividualsList":{
+        "id":"individual",
+        "keyForRenderAsComponent": "individualsTreePage",
+        "keyForRenderAsTabItem": "indv-tab",
+        "tabId": 3,
+        "tabTitle": "individual Tree",
+        "urlEndPoint": "/individuals"
+    },
+
+    "TermList":{
+        "id":"termList",
+        "keyForRenderAsComponent": "termListPage",
+        "keyForRenderAsTabItem": "termList-tab",
+        "tabId": 4,
+        "tabTitle": "Class Tree",
+        "urlEndPoint": "/termList"
+    }
+}

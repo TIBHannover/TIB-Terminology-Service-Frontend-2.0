@@ -4,7 +4,8 @@ import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Toolkit from '../common/Toolkit';
+import { AlsoInHelpers } from "./AlsoInHelpers"
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -20,9 +21,11 @@ class SearchResult extends React.Component{
           selectedCollections: [],
           facetFields: [],
           pageNumber: 1,
-          pageSize: 5, 
+          pageSize: 10, 
           isLoaded: false,
           isFiltered: false,          
+          totalResults: [],
+          expandedResults: [],
           totalResultsCount: [],
           facetIsSelected: false
         })
@@ -32,14 +35,14 @@ class SearchResult extends React.Component{
         this.paginationHandler = this.paginationHandler.bind(this);
         this.handleExact = this.handleExact.bind(this);
         this.updateURL = this.updateURL.bind(this);
-        this.processUrlProps = this.processUrlProps.bind(this);
+        this.alsoInResult = this.alsoInResult.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
+        this.handleAlsoResult = this.handleAlsoResult.bind(this);
     }
 
 
-  /**
-   * Process the url to check the facet field given in it.
-   */
-  processUrlProps(){
+  
+  setComponentData(){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
     let enteredTerm = targetQueryParams.q;  
     let ontologies = targetQueryParams.ontology;
@@ -99,7 +102,7 @@ class SearchResult extends React.Component{
    */
  async runSearch(ontologies, types, collections, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-  let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
+  let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
   let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
   let collectionOntologies = [];
   let facetSelected = true;
@@ -159,7 +162,9 @@ class SearchResult extends React.Component{
   }
       
   let filteredSearch = await (await fetch(baseUrl)).json();
-  let filteredSearchResults = filteredSearch['response']['docs'];    
+  let filteredSearchResults = filteredSearch['response']['docs'];
+  let expandedResults = await (await fetch(baseUrl)).json();
+  expandedResults = expandedResults['expanded'];    
   let totalSearch = await (await fetch(totalResultBaseUrl)).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
   let filteredFacetFields = totalSearch['facet_counts'];
@@ -171,7 +176,8 @@ class SearchResult extends React.Component{
     selectedCollections: collections,
     facetIsSelected: facetSelected,
     totalResultsCount: totalSaerchResultsCount,
-    facetFields: filteredFacetFields    
+    facetFields: filteredFacetFields,
+    expandedResults: expandedResults
     }, () => {
       this.updateURL(ontologies, types, collections);
     });
@@ -199,10 +205,43 @@ async handleExact(){
 }
 
 /**
-   * Create the search results list view
-   *
-   * @returns
-*/
+ * Displaying 'Also in' in search result items
+ */
+
+alsoInResult(iri){
+  let expanded = this.state.expandedResults;
+  let otherOntologies = [];
+  if(typeof(expanded) !== "undefined"){
+    for(let key in expanded){
+      if(key === iri){
+        let allTags = expanded[key]['docs']
+             for(let j=0; j < allTags.length; j++){              
+               otherOntologies.push(
+                <div className='also-in-ontologies'>
+                  {AlsoInHelpers(allTags[j])} 
+                </div>                                             
+               )
+             }            
+      }
+    }     
+  } 
+  return otherOntologies;
+}
+
+handleAlsoResult(iri){
+  if((this.alsoInResult(iri)).length !== 0){
+    return true;
+  }
+  else{
+    return false
+  }
+}
+
+/**
+  * Create the search results list view
+  *
+  * @returns
+  */
 createSearchResultList () {   
       let searchResultItem = this.state.searchResult;
       const SearchResultList = [];
@@ -220,9 +259,15 @@ createSearchResultList () {
               <div className="searchresult-ontology">
                 <span><b>Ontology: </b></span>
                 <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.searchResult[i]['ontology_name']} target="_blank">
-                  {searchResultItem[i].ontology_name}
+                  {searchResultItem[i].ontology_prefix}
                 </a>
               </div>
+              <br/>
+              {this.handleAlsoResult(searchResultItem[i].iri) &&
+              <div className = "also-in-design">
+                  <b>Also in:</b>
+                </div>}
+               {this.alsoInResult(searchResultItem[i].iri)}
             </div>            
           </div>   
         )
@@ -327,7 +372,7 @@ createSearchResultList () {
   
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){      
-      this.processUrlProps();
+      this.setComponentData();
       let cUrl = window.location.href;        
       if(cUrl.includes("q=")){
         cUrl = cUrl.split("q=")[1];
@@ -336,19 +381,15 @@ createSearchResultList () {
         cUrl = cUrl.replaceAll("+", " ");
         document.getElementById("s-field").value = cUrl;
       }       
-    }     
+    }    
   }
+
+
 
   render(){
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
-        <HelmetProvider>
-        <div>
-          <Helmet>
-            <title>{this.state.enteredTerm}</title>
-          </Helmet>
-        </div>
-        </HelmetProvider>
+        {Toolkit.createHelmet(this.state.enteredTerm)}        
         <div className='col-sm-8'>            
           <div className='row'>
             <div className='col-sm-4'>          

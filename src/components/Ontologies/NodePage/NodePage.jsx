@@ -12,30 +12,30 @@ class NodePage extends React.Component {
       iriIsCopied: false,
       prevNode: "",
       componentIdentity: "",
-      isSkos: false
+      isSkos: false,
+      showDataAsJsonBtnHref: ""
     })
-    this.initiateTheTableView = this.initiateTheTableView.bind(this);
+    this.setComponentData = this.setComponentData.bind(this);
     this.createRow = this.createRow.bind(this);
     this.createTable = this.createTable.bind(this);
   }
 
 
-
-  /**
-   * Get the target term metadata. Initiate the detail table. 
-   */
- async initiateTheTableView(){
+ async setComponentData(){
     let targetIri = this.props.iri;
     let ontology = this.props.ontology;
     let extractKey = this.props.extractKey;
     let componentIdentity = this.props.componentIdentity;
     let isSkos = this.props.isSkos;
     let node = {};
+    let showDataAsJsonBtnHref = "";
     if(isSkos){
-      node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));    
+      node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));
+      showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
     }
     else{      
-      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);    
+      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);
+      showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/" + extractKey + "?iri=" + encodeURIComponent(node.iri);
     }
     if(node.iri){
       this.setState({
@@ -43,7 +43,8 @@ class NodePage extends React.Component {
         data: node,
         iriIsCopied: false,
         componentIdentity: componentIdentity,
-        isSkos: isSkos
+        isSkos: isSkos,
+        showDataAsJsonBtnHref:showDataAsJsonBtnHref
       });
     }
    
@@ -110,14 +111,14 @@ class NodePage extends React.Component {
 
   componentDidMount(){
     if(this.state.data && this.state.prevNode !== this.props.iri){
-      this.initiateTheTableView();      
+      this.setComponentData();      
     }
   }
 
 
   componentDidUpdate(){    
     if(this.state.prevNode !== this.props.iri){
-      this.initiateTheTableView();
+      this.setComponentData();
     }
   }
 
@@ -137,7 +138,7 @@ class NodePage extends React.Component {
           <div className='row'>
             <div className='col-sm-12 node-metadata-value'>
               <a 
-                href={process.env.REACT_APP_API_BASE_URL + "/" + this.state.data.ontology_name + "/" + this.props.extractKey + "?iri=" + encodeURIComponent(this.state.data.iri)} 
+                href={this.state.showDataAsJsonBtnHref} 
                 target='_blank' 
                 rel="noreferrer"
                 className='btn btn-primary btn-dark download-ontology-btn'

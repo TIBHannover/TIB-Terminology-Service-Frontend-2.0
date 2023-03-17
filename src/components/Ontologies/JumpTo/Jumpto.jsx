@@ -11,8 +11,7 @@ class JumpTo extends React.Component{
             jumpResult: []
         });
 
-        this.handleChange = this.handleChange.bind(this);
-        // this.submitJumpHandler = this.submitJumpHandler.bind(this);
+        this.handleChange = this.handleChange.bind(this);        
         this.createJumpResultList = this.createJumpResultList.bind(this);
         this.autoRef = React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -58,18 +57,13 @@ class JumpTo extends React.Component{
         })       
     }
     
-    // submitJumpHandler(){
-    //     for(let i=0; i < this.state.jumpResult.length; i++){
-    //     window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
-    //     }
-    // }
     
     createJumpResultList(){
-        const jumpResultList = []
+        let jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
         jumpResultList.push(
             <div className="jump-tree-container">
-            {this.jumpToButton(this.state.jumpResult[i])}
+                {this.jumpToButton(this.state.jumpResult[i])}
             </div>          
         )
         }
@@ -81,11 +75,11 @@ class JumpTo extends React.Component{
      */
     jumpToButton(resultItem){
         let content = [];
-        let targetHref = "";
+        let targetHref = "";        
         if(this.props.componentIdentity === "termList"){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/termList?iri=' + encodeURIComponent(resultItem['iri']);
         } 
-        else if(resultItem["type"] === 'class'){
+        else if(resultItem["type"] === 'class' || this.props.componentIdentity === "term"){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
         }
         else if(resultItem["type"] === 'property'){
@@ -106,7 +100,7 @@ class JumpTo extends React.Component{
     }
 
     componentDidMount(){
-        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener('click', this.handleClickOutside, true);        
     }
       
     componentWillUnmount() {
