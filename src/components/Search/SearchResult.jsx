@@ -4,7 +4,7 @@ import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
 import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Toolkit from '../common/Toolkit';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -340,13 +340,7 @@ createSearchResultList () {
   render(){
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
-        <HelmetProvider>
-        <div>
-          <Helmet>
-            <title>{this.state.enteredTerm}</title>
-          </Helmet>
-        </div>
-        </HelmetProvider>
+        {Toolkit.createHelmet(this.state.enteredTerm)}        
         <div className='col-sm-8'>            
           <div className='row'>
             <div className='col-sm-4'>          
