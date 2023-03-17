@@ -24,7 +24,7 @@
         "html_id":"NFDI4CULTURE",
         "name":"NFDI4Culture Project",
         "text":"The NFDI4Culture collection by TIB Terminology Service provides a selection of ontologies for representing research data on tangible and intangible cultural assets. The NFDI4Culture collection is developed and maintained by the Open Science Lab at TIB. It serves as one of the key sources for terminology search and entity recognition within Antelope, the annotation and terminology service tool developed by the Open Science Lab as part of the service portfolio of the NFDI4Culture consortium within the National Research Data Infrastructure.",
-        "logo": "/NFDI4CHEM_LOGO.svg",
+        "logo": "/NFDI4C_Logo_DyptichText.svg",
         "ontology_list_url": "/ontologies?collection=NFDI4CULTURE&and=false&page=1",
         "project_homepage":"https://www.nfdi4culture.de/",
         "domain_ts_link": "https://service.tib.eu/annotation/"
