@@ -9,8 +9,7 @@ import {
     nodeHasChildren,
     nodeIsRoot, 
     expandTargetNode, 
-    expandNode, 
-    nodeExistInList,     
+    expandNode,
     buildSkosSubtree, 
     showHidesiblingsForSkos,
     setIsExpandedAndHasChildren } from './helpers';
@@ -142,7 +141,7 @@ class Tree extends React.Component {
                 targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
                 listOfNodes =  await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, target, viewMode);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
-                if(nodeExistInList(target, rootNodesWithChildren)){                    
+                if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
                     // the target node is a root node
                     let result = this.buildTheTreeFirstLayer(rootNodesWithChildren, target);
                     treeList = result.treeDomContent;

@@ -299,21 +299,6 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   }
 
 
-  
-  /**
-   * Check a node is part of the list of a list of nodes or not
-   * @param {*} nodeIri 
-   * @param {*} roots 
-   */
-  export function nodeExistInList(nodeIri, list){
-    for(let item of list){
-      if (item["iri"] === nodeIri){
-        return true
-      }
-    }
-    return false;
-  }
-
 
 /**
  * Set the isExpanded and has_children for a node in tree.

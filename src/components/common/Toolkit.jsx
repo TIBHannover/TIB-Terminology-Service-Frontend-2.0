@@ -75,6 +75,16 @@ class Toolkit{
         }
         return roots;
     }
+
+ 
+    static objectExistInList(list, searchKey, searchValue){
+        for(let item of list){
+            if (item[searchKey] === searchValue){
+                return true
+            }
+        }
+        return false;
+    }
 }
 
 export default Toolkit;
