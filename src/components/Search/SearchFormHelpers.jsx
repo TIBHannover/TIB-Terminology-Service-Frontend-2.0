@@ -16,13 +16,13 @@ export function setJumpResultButtons(resultItem){
 
     if (process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
         content.push(
-            <a href={targetHref} className="container">       
+            <a href={targetHref} className="jumto-result-link container">      
             {(() => { 
                 if(resultItem["type"] === 'ontology'){
                     return (
-                        <div>
+                        <div className="jumpto-result-text">
                             {resultItem['label']}
-                         <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
+                            <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }
@@ -41,8 +41,7 @@ export function setJumpResultButtons(resultItem){
         ); 
     } else {
         content.push(
-            <a href={targetHref} className="container">
-            <div className="jump-autocomplete-item">         
+            <a href={targetHref} className="jumto-result-link container">            
             {(() => { 
                 if(resultItem["type"] === 'ontology'){
                     return (
@@ -62,8 +61,7 @@ export function setJumpResultButtons(resultItem){
                     )
                 }       
                 
-            })()}                
-            </div>
+            })()}            
             </a>
         ); 
     }

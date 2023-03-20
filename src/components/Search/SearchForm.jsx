@@ -1,5 +1,7 @@
 import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
+import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
+
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -88,22 +90,28 @@ class SearchForm extends React.Component{
       }
     
     componentDidMount() {
-        document.addEventListener('click', this.handleClickOutside, true);         
-      }
+        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
+    }
     
+   
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
-      };
+        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
+     };
+
 
       createResultList(){
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
-                    <div className="autocomplete-item">                  
-                          {this.state.searchResult[i]['autosuggest']}
-                    </div>
-                  </a>
+                <div className="jumpto-item-holder">
+                    <a className="container jumpto-result-link" href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i}>   
+                      <div className="autocomplete-item jumpto-result-text">                  
+                            {this.state.searchResult[i]['autosuggest']}
+                      </div>
+                    </a>
+                </div>
                 
                 )
           }

@@ -102,7 +102,7 @@ class JumpTo extends React.Component{
 
     componentDidMount(){
         document.addEventListener('click', this.handleClickOutside, true);
-        document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
+        document.addEventListener("keydown", keyboardNavigationForJumpto, false);
     }
       
     componentWillUnmount() {

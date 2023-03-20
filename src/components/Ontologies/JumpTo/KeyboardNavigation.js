@@ -57,7 +57,7 @@ function performEnter(){
 
 
 function selectTheNextSibling(selectedElement){
-    let nextSiblng = selectedElement?.parentNode?.parentNode?.nextSibling?.firstChild.firstChild;
+    let nextSiblng = getNextSiblings();
     selectedElement.classList.remove('selected-by-arrow-key');
     if(nextSiblng && nextSiblng.classList.contains('jumpto-result-text')){                    
         nextSiblng.classList.add('selected-by-arrow-key');
@@ -69,7 +69,7 @@ function selectTheNextSibling(selectedElement){
 
 
 function selectThePreviousSibling(selectedElement){
-    let previousSibling = selectedElement?.parentNode?.parentNode?.previousSibling?.firstChild.firstChild;
+    let previousSibling = getPreviousSiblings();
     selectedElement.classList.remove('selected-by-arrow-key');
     if(previousSibling && previousSibling.classList.contains('jumpto-result-text')){                    
         previousSibling.classList.add('selected-by-arrow-key');
@@ -80,8 +80,41 @@ function selectThePreviousSibling(selectedElement){
 }
 
 
-function selectTheFirstItem(){
-    let jumtoItems = document.getElementsByClassName('jumpto-result-text');
+
+function getNextSiblings(){
+    let holders = document.getElementsByClassName('jumpto-item-holder');
+    let lastSelectedIndexObserved = false;
+    for(let item of holders){
+        if(lastSelectedIndexObserved){
+            return item.firstChild.firstChild;
+        }
+        if(item.firstChild.firstChild.classList.contains('selected-by-arrow-key')){
+            lastSelectedIndexObserved = true;
+        }
+    }
+    return null;
+}
+
+
+function getPreviousSiblings(){
+    let holders = document.getElementsByClassName('jumpto-item-holder');
+    holders = [].slice.call(holders);    
+    holders = holders.reverse();
+    let lastSelectedIndexObserved = false;
+    for(let item of holders){
+        if(lastSelectedIndexObserved){
+            return item.firstChild.firstChild;
+        }
+        if(item.firstChild.firstChild.classList.contains('selected-by-arrow-key')){
+            lastSelectedIndexObserved = true;
+        }
+    }
+    return null;
+}
+
+
+function selectTheFirstItem(){    
+    let jumtoItems = document.getElementsByClassName('jumpto-result-text');    
     jumtoItems[0].classList.add('selected-by-arrow-key');
 }
 
