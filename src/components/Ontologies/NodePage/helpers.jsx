@@ -13,7 +13,7 @@ import Toolkit from "../../common/Toolkit";
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       "fullIRI": [object.iri, true], 
-      "SubClass Of": [object.subClassOf, false]     
+      "SubClass Of": [object.subClassOf, false],     
     }
     
     if(formatText("Synonyms", object.synonyms, false) !== "N/A"){
@@ -24,8 +24,8 @@ import Toolkit from "../../common/Toolkit";
       metadata['Equivalent to'] = [object.eqAxiom, false];
     }
     
-    if(formatText("Used in axiom", object, false) !== "N/A" && formatText("Used in axiom", object, false).length !== 0){
-      metadata['Used in axiom'] = [object, false];
+    if(formatText("Used in axiom", object.relations, false) !== "N/A" && formatText("Used in axiom", object.relations, false).length !== 0){
+      metadata['Used in axiom'] = [object.relations, false];
     }
     
     if(object.annotation){
@@ -118,7 +118,7 @@ export function propertyMetaData(object){
     return synonymsTag(text);
   }
   else if (label === "Used in axiom"){
-    return createRelations(text);
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
   else if (label === "Equivalent to"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)

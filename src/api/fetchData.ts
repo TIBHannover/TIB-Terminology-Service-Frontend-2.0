@@ -301,7 +301,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
   let parents = await getParents(node, mode);
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
-    node['relations'] = rels;
+    node['relations'] = await getRelations(node['iri'], ontology);
     node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
     node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
   }
@@ -409,7 +409,6 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
-  
     let result= "";
     result += "<ul>"
     for(let i=0; i < parentRes["terms"].length; i++){
@@ -433,24 +432,30 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
  * @returns 
  */
 export async function getRelations(nodeIri:string, ontologyId:string){
-  let url = <string> "";
-  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/relatedfroms';
+  let url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/relatedfroms';
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   if (typeof(res) !== "undefined"){
-    let result:Array<any> = [];
-    result.push(res);
-    for(let item of result){
-      let subResult:Array<any> = [];
-      for(let i=0; i < item[i].length; i++){
-        subResult.push('<li>' + item[i]["label"] + "</li>")
+    let entries = Object.keys(res)
+    let entries1 = Object.values(res)
+    let result = "";
+    for(let keys in entries){
+      let title = entries[keys]
+      for(let i=0; i < title.length; i++){
+        result+= title[i]
       }
-      return subResult;
-    }
-    return result;
-  }
-  return "N/A"
+      for(let items in entries1){
+        let tags = entries1[items]
+        for(let j=0; j < tags.length; j++){
+          result += "<ul>"
+          result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(tags[j]["iri"]) + '>' + tags[j]["label"] + '</a>'+ '</li>';                
+          result += "<ul>"
+        }
+        return result
 
+      }
+    }
+  }         
 }
 
 
