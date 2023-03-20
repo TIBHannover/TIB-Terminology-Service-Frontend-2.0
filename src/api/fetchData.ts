@@ -103,6 +103,31 @@ export async function getOntologyRootTerms(ontologyId:string) {
   
 }
 
+
+export async function getListOfTerms(ontologyId:string, page:any, size:any) {
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/terms?page=" + page + "&size=" + size;
+    let result = await (await fetch(url, getCallSetting)).json();    
+    let totalTermsCount = result['page']['totalElements'];
+    result = result['_embedded'];
+    if(!result){
+      return [];
+    }
+    if(typeof(result['terms']) === "undefined"){
+      return [];
+    }
+    return {"results": result['terms'], "totalTermsCount":totalTermsCount };
+
+    
+  }
+  catch(e){
+    return [];
+  }
+
+}
+
+
 /**
  * Get the list of individuals for an ontology
  */
@@ -434,20 +459,6 @@ async function getPageCount(url: string){
 }
 
 
-/**
- * check if a node exist in a list of nodes obtain from API
- * @param nodesList
- * @param nodeIri
- * @returns 
- */
-function nodeExistInList(nodesList: Array<any>, nodeIri:string){
-  for(let i=0; i < nodesList.length; i++){
-    if (nodesList[i]['iri'] === nodeIri){
-      return true;
-    }
-  }
-  return false;
-}
 
 
 /**

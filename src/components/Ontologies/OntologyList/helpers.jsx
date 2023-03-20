@@ -1,4 +1,5 @@
 import {getAllCollectionsIds} from '../../../api/fetchData';
+import Toolkit from '../../common/Toolkit';
 
 
 /**
@@ -80,59 +81,34 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
  */
 export function ontology_has_searchKey(ontology, value){
     try{
+        value = value.toLowerCase();
         if (ontology.ontologyId.includes(value)) {
             return true;
         }
-        if (ontology.config.title.includes(value)) {
+        if (ontology.config.title.toLowerCase().includes(value)) {
             return true;
         }
-        if (ontology.config.description != null &&  ontology.config.description.includes(value)) {
+        if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
             return true;
         }
 
         return false;
     }
-    catch (e){
-        console.info(e);
+    catch (e){        
         return false;
     }
 }
 
 
-
- /**
- * Sort an array of objects based on a key
- *
- * @param {*} array
- * @param {*} key
- * @returns
- */
-  export function sortBasedOnKey (array, key) {
-    if (key === 'alphabetic'){
-        return array;
+export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
+    if(key === "title"){
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
     }
-    return array.sort(function (a, b) {
-        let x = a[key];
-        const y = b[key];
-        return ((x < y) ? 1 : ((x > y) ? -1 : 0))
-    })
-  }
-
-
-/**
- * Sort an array of ontologies based on the title
- *
- * @param {*} array
- * @param {*} key
- * @returns
- */
-export function sortOntologyBasedOnTitle (ontologies) {
-    return ontologies.sort(function (a, b) {
-      let x = a["ontologyId"]; 
-      let y = b["ontologyId"];      
-      return (x<y ? -1 : 1 )
-    })
-  }
+    else if(key === 'ontologyId'){
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
+    }
+    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
+}
 
 
 export async function createCollectionsCheckBoxes(filterCollection, selectedCollections){
