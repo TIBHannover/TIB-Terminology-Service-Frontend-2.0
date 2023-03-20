@@ -1,4 +1,5 @@
 import React from "react";
+import {keyboardNavigationForJumpto} from './KeyboardNavigation';
 
 
 class JumpTo extends React.Component{
@@ -62,7 +63,7 @@ class JumpTo extends React.Component{
         let jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
         jumpResultList.push(
-            <div className="jump-tree-container">
+            <div className="jump-tree-container jumpto-autosuggest-item">
                 {this.jumpToButton(this.state.jumpResult[i])}
             </div>          
         )
@@ -100,11 +101,13 @@ class JumpTo extends React.Component{
     }
 
     componentDidMount(){
-        document.addEventListener('click', this.handleClickOutside, true);        
+        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
     }
       
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
+        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
     };
 
 
