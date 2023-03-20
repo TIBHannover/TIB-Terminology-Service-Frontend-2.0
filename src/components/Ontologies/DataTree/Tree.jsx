@@ -274,7 +274,11 @@ class Tree extends React.Component {
      * Process the keyboard navigation
      * @param {*} event 
      */
-    processKeyNavigation(event){        
+    processKeyNavigation(event){
+        let jumtoItems = document.getElementsByClassName('jumpto-result-text');
+        if(jumtoItems.length !== 0){
+            return false;
+        }
         if(event.code === "ArrowDown" || event.code === "ArrowUp" || event.code === "ArrowRight" || event.code === "ArrowLeft"){            
             event.preventDefault();
         }
@@ -330,7 +334,7 @@ class Tree extends React.Component {
             }
         }
         catch(e){
-            console.info(e)
+            // console.info(e)
         }        
     }
   
