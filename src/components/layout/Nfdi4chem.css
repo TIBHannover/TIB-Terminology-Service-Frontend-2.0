@@ -948,104 +948,6 @@ p{
     width: 100%;
 }
 
-#jumpresult-container{
-    /* 
-       The style for the jump autocomplete field
-    */
-    height: fit-content;
-    border: 0.5px solid black;
-    display: block;
-    padding-bottom: 20px;
-    padding-top: 10px;
-    position: absolute;
-    z-index: 999;
-    padding-left: 10x;
-    padding-right: 10px;
-    background-color: white;
-    width: 700px;
-    text-align: left;
-    padding-left: 10px;
-}
-
-.jump-autocomplete-container{
-    /* 
-       The style for the jump autocomplete item's div 
-    */
-    margin-top: -15px;
-
-}
-.jump-autocomplete-item{
-    /* 
-       The style for the jump autocomplete field
-    */
-    position:relative;
-    margin-left: 10px;
-    margin-bottom: -30px;
-    padding: 7px;
-}
-
-.container a{
-    text-decoration: none;
-}
-
-.jump-autocomplete-item:hover{
-    /* 
-       The style for the mouse hover in Jump To
-    */
-    vertical-align: top;
-    background-color: #f5f5f5;
-}
-
-.jmp-term-button{
-    /* 
-        The style for a button representing a term (class/propperty) in jump to
-    */
-
-    background-color: #0E6668;
-    color: white;
-    margin-left: 15px;
-    padding: 6px;
-    margin-top: -5px;
-    font-size: 12px;
-    border-color:  #0E6668;
-    float: right;
- }
-
-.jmp-ontology-button{
-    /* 
-        The style for a button representing an ontology in jump to
-    */
-
-    background-color: #bbae9e;
-    color: white;
-    margin-top: -5px;
-    margin-left: 10px;
-    padding: 6px;
-    margin-right: 10px;
-    font-size: 12px;
-    border-color: #bbae9e !important;
-    float: right;
-}
-
-.jmp-term-button:hover{
-    /* 
-        The style for a button representing a term (class/propperty) on hover in Jump to
-    */
-
-    text-decoration: none;
-    background-color: #1baeb1;
-    color: white;
- }
-
-.jmp-ontology-button:hover{
-    /* 
-        The style for a button representing an ontology on hover in Jump to
-    */
-
-    text-decoration: none !important;
-    background-color: #bbae9e !important;
-    color: white;
-}
 
 #search-box {
     /* 
@@ -1394,78 +1296,6 @@ p{
 -------------------------------------
 */
 
-.form-control{
-    /*
-        The styles for the jump to search box in tree view container.  
-     */
-    display: block;
-    height: calc(2.25rem + 2px);
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-}
-
-.form-fixer{
-    /*
-        styles for fixing/modifying search box in tree view 
-     */
-    margin-bottom: 12px;
-    margin-left: 30px;
-}
-
-#jmp-tree-container{
-    /*
-        styles for the 'jump to' container on top of tree view 
-     */
-    top: auto !important; 
-    height: fit-content;
-    border: 0.1px solid black;
-    display: block;
-    padding-bottom: 10px;
-    position: absolute;
-    z-index: 99999;
-    padding-left: 10x;
-    padding-right: 10px;
-    background-color: white;
-    width: 400px;
-    text-align: left;
-    padding-left: 10px;
-    margin-left: 114px;
-    margin-top: -12px;
-}
-
-.jump-tree-container{
-    /* 
-       The style for the jump result list div 
-    */
-    margin-top: -15px;
-    text-align: left;
-}
-
-.jump-tree-item{
-    /* 
-       The style for the jump results [i] result
-    */
-    position:relative;
-    margin-left: 10px;
-    margin-bottom: -30px;
-    padding: 7px;
-}
-.container a{
-    text-decoration: none;
-}
-
-.jump-tree-item:hover{
-    /* 
-       The style for the mouse hover in Jump To
-    */
-    vertical-align: top;
-    background-color: #f5f5f5;
-}
 
 .tree-container{
     /*
@@ -1878,4 +1708,170 @@ p{
     */
 
     margin-top: 40px;
+}
+
+/* 
+---------------------------------------------------
+Jumpto styles
+---------------------------------------------------
+*/
+
+
+.jumpto-container{
+    /* 
+        The general style for jumpto container
+    */
+
+    height: fit-content;
+    padding-right: 10px;
+    padding-left: 10x;
+    text-align: left;
+    background-color: white;
+    position: absolute;
+    display: block;
+
+}
+
+
+.jumpto-search-container{
+    /* 
+       The style for the jump autocomplete field in the search bar
+    */
+    
+    border: 0.5px solid black;    
+    padding-bottom: 20px;
+    padding-top: 10px;    
+    z-index: 999;        
+    width: 700px;        
+}
+
+.jumpto-tree-container{
+    /*
+        styles for the 'jump to' container on top of components in the ontology page 
+     */
+    top: auto !important;     
+    border: 0.1px solid black;    
+    padding-bottom: 10px;    
+    z-index: 99999;        
+    width: 400px;    
+    margin-left: 114px;
+    margin-top: -12px;
+}
+
+.jumpto-item-holder{
+    /* 
+       The style for the jumpto result list div 
+    */
+    margin-top: -15px;
+    text-align: left;
+}
+
+
+.jumpto-result-text{
+    /* 
+       The style for the jump results div
+    */
+    position:relative;
+    margin-left: 10px;
+    margin-bottom: -30px;
+    padding: 7px;
+}
+
+.jumpto-result-link:hover{
+    text-decoration: none !important;
+}
+
+
+.jumpto-result-text:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    vertical-align: top;
+    background-color: #f5f5f5;
+    text-decoration: none;
+}
+
+
+.button-in-jumpto{
+    /* 
+        The syle for a button in jumpto result
+    */
+
+    color: white;
+    padding: 6px;
+    float: right;
+    font-size: 12px;
+    margin-top: -5px;
+}
+
+.button-in-jumpto:hover{
+    text-decoration: none !important;
+    color: white;
+}
+
+
+.jmp-term-button{
+    /* 
+        The style for a button representing a term (class/propperty) in jump to
+    */
+
+    background-color: #0E6668;    
+    margin-left: 15px;    
+    border-color:  #0E6668;    
+ }
+
+
+.jmp-ontology-button{
+    /* 
+        The style for a button representing an ontology in jump to
+    */
+
+    background-color: #bbae9e;        
+    margin-left: 10px;    
+    margin-right: 10px;    
+    border-color: #bbae9e !important;    
+}
+
+.jmp-term-button:hover{
+    /* 
+        The style for a button representing a term (class/propperty) on hover in Jump to
+    */
+
+    text-decoration: none;
+    background-color: #1baeb1;
+    color: white;
+ }
+
+.jmp-ontology-button:hover{
+    /* 
+        The style for a button representing an ontology on hover in Jump to
+    */
+
+    text-decoration: none !important;
+    background-color: #bbae9e !important;
+    color: white;
+}
+
+
+.jumpto-search-box{
+    /*
+        The styles for the jump to search box in tree view container.  
+     */
+    display: block;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+}
+
+.jumpto-form-fixer{
+    /*
+        styles for fixing/modifying search box in tree view 
+     */
+    margin-bottom: 12px;
+    margin-left: 30px;
 }

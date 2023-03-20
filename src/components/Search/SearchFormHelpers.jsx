@@ -22,16 +22,16 @@ export function setJumpResultButtons(resultItem){
                     return (
                         <div>
                             {resultItem['label']}
-                         <div className="btn btn-default ontology-button">{resultItem['ontology_name']}</div>
+                         <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }
                 else{
                     return(
-                        <div className="jump-autocomplete-item">  
+                        <div className="jump-autocomplete-item jumpto-result-text">  
                             {resultItem['label']}
-                          <div className="btn btn-default term-button">{resultItem['short_form']}</div>
-                          <div className="btn btn-default ontology-button">{resultItem['ontology_name']}</div>
+                          <div className="btn btn-default button-in-jumpto term-button">{resultItem['short_form']}</div>
+                          <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }       
@@ -46,18 +46,18 @@ export function setJumpResultButtons(resultItem){
             {(() => { 
                 if(resultItem["type"] === 'ontology'){
                     return (
-                        <div>
+                        <div className="jumpto-result-text">
                             {resultItem['label']}
-                         <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_name']}</div>
+                         <div className="btn btn-default button-in-jumpto jmp-ontology-button">{resultItem['ontology_name']}</div>
                         </div>
                     )
                 }
                 else{
                     return(
-                        <div>
+                        <div className="jumpto-result-text">
                             {resultItem['label']}
-                          <div className="btn btn-default jmp-ontology-button">{resultItem['ontology_name']}</div>
-                          <div className="btn btn-default jmp-term-button">{resultItem['short_form']}</div>
+                          <div className="btn btn-default button-in-jumpto jmp-ontology-button">{resultItem['ontology_name']}</div>
+                          <div className="btn btn-default button-in-jumpto jmp-term-button">{resultItem['short_form']}</div>
                         </div>
                     )
                 }       

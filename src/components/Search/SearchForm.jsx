@@ -114,7 +114,7 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <div className="jump-autocomplete-container">
+            <div className="jumpto-item-holder">
                {setJumpResultButtons(this.state.jumpResult[i])}
             </div>          
           )
@@ -150,7 +150,7 @@ class SearchForm extends React.Component{
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
-                <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
+                <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
                   <div>
                     <h4>Jump To</h4>
                     {this.createJumpResultList()}
