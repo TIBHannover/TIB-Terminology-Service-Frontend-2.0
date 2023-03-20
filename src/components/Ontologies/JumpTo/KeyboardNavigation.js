@@ -10,6 +10,10 @@ export function keyboardNavigationForJumpto(event){
             event.preventDefault();
             performArrowDown();
         }
+        else if(event.key === "ArrowUp"){
+            event.preventDefault();
+            performArrowUp();
+        }
     }
     catch(e){
         console.info(e);
@@ -28,6 +32,17 @@ function performArrowDown(){
 }
 
 
+function performArrowUp(){
+    let selectedElement = document.getElementsByClassName('selected-by-arrow-key');
+    if(selectedElement.length === 0){
+        selectTheLastElement();
+    }   
+    else{                
+        selectThePreviousSibling(selectedElement[0]);
+    }
+}
+
+
 
 function selectTheNextSibling(selectedElement){
     let nextSiblng = selectedElement?.parentNode?.parentNode?.nextSibling?.firstChild.firstChild;
@@ -41,7 +56,24 @@ function selectTheNextSibling(selectedElement){
 }
 
 
+function selectThePreviousSibling(selectedElement){
+    let previousSibling = selectedElement?.parentNode?.parentNode?.previousSibling?.firstChild.firstChild;
+    selectedElement.classList.remove('selected-by-arrow-key');
+    if(previousSibling && previousSibling.classList.contains('jumpto-result-text')){                    
+        previousSibling.classList.add('selected-by-arrow-key');
+    }
+    else{
+        selectTheLastElement();
+    }
+}
+
+
 function selectTheFirstItem(){
     let jumtoItems = document.getElementsByClassName('jumpto-result-text');
     jumtoItems[0].classList.add('selected-by-arrow-key');
+}
+
+function selectTheLastElement(){
+    let jumtoItems = document.getElementsByClassName('jumpto-result-text');
+    jumtoItems[jumtoItems.length - 1].classList.add('selected-by-arrow-key');
 }
