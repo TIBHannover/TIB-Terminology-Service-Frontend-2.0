@@ -446,15 +446,16 @@ export async function getRelations(nodeIri:string, ontologyId:string){
       }
       for(let items in entries1){
         let tags = entries1[items]
+        result += "<ul>"
         for(let j=0; j < tags.length; j++){
-          result += "<ul>"
           result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(tags[j]["iri"]) + '>' + tags[j]["label"] + '</a>'+ '</li>';                
-          result += "<ul>"
         }
-        return result
-
+        result += "<ul>"
       }
+      
+      
     }
+    return result
   }         
 }
 
