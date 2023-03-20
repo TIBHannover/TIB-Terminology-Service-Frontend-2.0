@@ -422,7 +422,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     return result;
   }
   return "N/A"
-
+ }
 }
 
 /**
