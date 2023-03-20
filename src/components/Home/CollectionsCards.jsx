@@ -82,6 +82,31 @@ export function createHomePageContent() {
       </div>
       <br></br>
       <div className="row">
+      <div className="col-sm-6">
+          <div className="collection-card">
+            <a
+              href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['NFDI4Culture']['ontology_list_url']}
+              className="collection-image-anchor"
+            >
+              <img
+                class="img-fluid collection-logo nfdi4culture-logo"
+                alt="NFDI4Culture"
+                src={collectionsInfoJson['NFDI4Culture']['logo']}
+              />
+            </a>
+            <div className="collection-card-text">
+              <p className="trunc">{collectionsInfoJson['NFDI4Culture']['text']}</p>
+              <a
+                href={
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collectionsInfoJson['NFDI4Culture']['html_id']
+                }
+                className="show-more-text-link"
+              >
+                [Read More]
+              </a>
+            </div>
+          </div>
+        </div>
         <div className="col-sm-6">
           <div className="collection-card">
             <a
@@ -99,36 +124,6 @@ export function createHomePageContent() {
               <a
                 href={
                   process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collectionsInfoJson['CoyPu']['html_id']
-                }
-                className="show-more-text-link"
-              >
-                [Read More]
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-6">
-          <div className="collection-card">
-            <a
-              href={
-                process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['FAIR Data Spaces']['ontology_list_url']
-              }
-              className="collection-image-anchor"
-            >
-              <img
-                class="img-fluid collection-logo"
-                alt="FAIR Data Spaces"
-                src={collectionsInfoJson['FAIR Data Spaces']['logo']}
-              />
-            </a>
-            <div className="collection-card-text">
-              <p className="trunc">
-                {collectionsInfoJson['FAIR Data Spaces']['text']}
-              </p>
-              <a
-                href={
-                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
-                  collectionsInfoJson['FAIR Data Spaces']['html_id']
                 }
                 className="show-more-text-link"
               >
@@ -186,6 +181,39 @@ export function createHomePageContent() {
                 href={
                   process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
                   collectionsInfoJson['FID Baudigital']['html_id']
+                }
+                className="show-more-text-link"
+              >
+                [Read More]
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br></br>
+      <div className="row">
+        <div className="col-sm-6">
+          <div className="collection-card">
+            <a
+              href={
+                process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['FAIR Data Spaces']['ontology_list_url']
+              }
+              className="collection-image-anchor"
+            >
+              <img
+                class="img-fluid collection-logo"
+                alt="FAIR Data Spaces"
+                src={collectionsInfoJson['FAIR Data Spaces']['logo']}
+              />
+            </a>
+            <div className="collection-card-text">
+              <p className="trunc">
+                {collectionsInfoJson['FAIR Data Spaces']['text']}
+              </p>
+              <a
+                href={
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+                  collectionsInfoJson['FAIR Data Spaces']['html_id']
                 }
                 className="show-more-text-link"
               >

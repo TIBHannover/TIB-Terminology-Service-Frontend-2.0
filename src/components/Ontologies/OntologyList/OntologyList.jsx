@@ -1,9 +1,18 @@
 import React from 'react';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, sortBasedOnKey, createCollectionsCheckBoxes, sortOntologyBasedOnTitle} from './helpers';
+import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, createCollectionsCheckBoxes, sortArrayOfOntologiesBasedOnKey} from './helpers';
 import Pagination from "../../common/Pagination/Pagination";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+
+
+
+const TITLE_SORT_KEY = "title";
+const CLASS_SORT_KEY = "numberOfTerms";
+const PROPERT_SORT_KEY = "numberOfProperties";
+const INDIVIDUAL_SORT_KEY = "numberOfIndividuals";
+const PREFIX_SORT_KEY = "ontologyId";
+const TIME_SORT_KEY = "loaded";
 
 
 
@@ -21,7 +30,7 @@ class OntologyList extends React.Component {
       ontologyListContent: '',
       unFilteredOntologies: [],
       unFilteredHiddenStatus: [],
-      sortField: 'alphabetic',
+      sortField: TITLE_SORT_KEY,
       selectedCollections: [],
       listOfAllCollectionsCheckBoxes: [],
       keywordFilterString: "",
@@ -43,7 +52,7 @@ class OntologyList extends React.Component {
    async setComponentData (){    
     try{
       let allOntologies = await getAllOntologies();
-      allOntologies = sortOntologyBasedOnTitle(allOntologies);
+      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -55,8 +64,8 @@ class OntologyList extends React.Component {
   
       this.setState({
         isLoaded: true,
-        ontologies: sortBasedOnKey(allOntologies, this.state.sortField),
-        unFilteredOntologies: sortBasedOnKey(allOntologies, this.state.sortField),
+        ontologies: allOntologies,
+        unFilteredOntologies: allOntologies,
         ontologiesHiddenStatus: hiddenStatus,
         unFilteredHiddenStatus: hiddenStatus,
         ontologyListContent: this.createOntologyList()
@@ -95,7 +104,7 @@ class OntologyList extends React.Component {
       keywordFilter = "";
     }
     if(!sortBy){
-      sortBy = "alphabetic";
+      sortBy = TITLE_SORT_KEY;
     }
     this.setState({
       sortField: sortBy.trim(),
@@ -176,7 +185,7 @@ class OntologyList extends React.Component {
      */
   handleSortChange = (e, value) => {
     let ontologies = this.state.ontologies;
-    let sortedOntology = e.target.value !== "alphabetic"  ? sortBasedOnKey(ontologies, e.target.value) : sortOntologyBasedOnTitle(ontologies);
+    let sortedOntology = sortArrayOfOntologiesBasedOnKey(ontologies, e.target.value);
     this.setState({
       sortField: e.target.value,
       ontologies: sortedOntology
@@ -238,7 +247,7 @@ class OntologyList extends React.Component {
       currentUrlParams.append('and', this.state.exclusiveCollections);
     }
 
-    if(this.state.sortField !== "numberOfTerms"){
+    if(this.state.sortField !== TITLE_SORT_KEY){
       currentUrlParams.append('sorting', this.state.sortField);
     }
     
@@ -249,7 +258,7 @@ class OntologyList extends React.Component {
 
 
 async runFacet(selectedCollections, enteredKeyword, page=1){
-  if (selectedCollections.length === 0 && enteredKeyword === ""){
+  if (selectedCollections.length === 0 && enteredKeyword === "" && this.state.sortField === TITLE_SORT_KEY){
     // no filter exist
     let preOntologies = this.state.unFilteredOntologies;
     let preHiddenStatus = this.state.unFilteredHiddenStatus;
@@ -271,7 +280,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
   if(enteredKeyword !== ""){
     // run keyword filter    
     for (let i = 0; i < ontologies.length; i++) {
-      let ontology = ontologies[i]
+      let ontology = ontologies[i];
       if (ontology_has_searchKey(ontology, enteredKeyword)) {
         keywordOntologies.push(ontology)
       }
@@ -292,8 +301,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
 
   }
 
-
-  ontologies = this.state.sortField !== "alphabetic" ? sortBasedOnKey(ontologies, this.state.sortField) : sortOntologyBasedOnTitle(ontologies) ;
+  ontologies = sortArrayOfOntologiesBasedOnKey(ontologies, this.state.sortField);
   let hiddenStatus = [];
   for(let i=0; i < ontologies.length; i++){
     if (i <= this.state.pageSize){
@@ -401,10 +409,12 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
-                        <option value={'alphabetic'} key="alphabetic">Alphabetically</option>
-                        <option value={'numberOfTerms'} key="numberOfTerms">Classes Count</option>
-                        <option value={'numberOfProperties'} key="numberOfProperties">Properties Count</option>
-                        <option value={'numberOfIndividuals'} key="numberOfIndividuals">Individuals Count</option>
+                        <option value={TITLE_SORT_KEY} key={TITLE_SORT_KEY}>Title</option>
+                        <option value={PREFIX_SORT_KEY} key={PREFIX_SORT_KEY}>Prefix</option>
+                        <option value={CLASS_SORT_KEY} key={CLASS_SORT_KEY}>Classes Count</option>
+                        <option value={PROPERT_SORT_KEY} key={PROPERT_SORT_KEY}>Properties Count</option>
+                        <option value={INDIVIDUAL_SORT_KEY} key={INDIVIDUAL_SORT_KEY}>Individuals Count</option>
+                        <option value={TIME_SORT_KEY} key={TIME_SORT_KEY}>Data Loaded</option>
                       </select>  
                     </div>                                                                                
                   </div>
@@ -413,7 +423,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                 <Pagination 
                   clickHandler={this.handlePagination} 
                   count={this.pageCount()}
-                  initialPageNumber={this.state.pageNumber}               
+                  pageNumber={this.state.pageNumber}               
                 />
               </div>
             </div>

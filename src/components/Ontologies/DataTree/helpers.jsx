@@ -1,33 +1,7 @@
 import React from 'react';
 import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
-import TreeNode from './TreeNode';
+import TreeNodeController from './TreeNode';
 
-
-
-/**
- * Create a hierarchical list form a flat list. 
- * @param {*} flatList 
- * @returns 
- */
-export function buildHierarchicalArray(flatList){
-    let map = {}; 
-    let node = "";
-    let roots = [];
-    for (let i = 0; i < flatList.length; i++) {
-        map[flatList[i].id] = i; 
-        flatList[i].childrenList = [];
-    }
-    
-    for (let i = 0; i < flatList.length; i++) {
-        node = flatList[i];
-        if (node.parent !== "#") {
-        flatList[map[node.parent]].childrenList.push(node);
-        } else {
-        roots.push(node);
-        }
-    }
-    return roots;
-}
 
 
   /**
@@ -38,7 +12,7 @@ export function buildHierarchicalArray(flatList){
    */
   export function expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
     let subNodes = [];
-    let treeNode = new TreeNode();
+    let treeNode = new TreeNodeController();
     for(let i = 0; i < nodeList.length; i++){
       let childNodeChildren = [];
       if(nodeList[i].iri !== targetIri){
@@ -95,14 +69,14 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
   let targetNodeIri = e.dataset.iri;
   let targetNodeId = e.dataset.id;
   let Id = e.id;
-  let treeNode = new TreeNode();
+  let treeNode = new TreeNodeController();
   if(document.getElementById(Id).classList.contains("closed")){
       // expand node
       let res = [];      
       if(isSkos){
         res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
       }
-      else{
+      else{        
         res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
       }
       let ul = document.createElement("ul");
@@ -248,7 +222,7 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
   let siblingsNodes = "";
   let targetUl = "";
   let children = "";
-  let treeNode = new TreeNode();
+  let treeNode = new TreeNodeController();
   if(showFlag){
     // Show the siblings    
     if(!parent){
@@ -324,21 +298,6 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
     
   }
 
-
-  
-  /**
-   * Check a node is part of the list of a list of nodes or not
-   * @param {*} nodeIri 
-   * @param {*} roots 
-   */
-  export function nodeExistInList(nodeIri, list){
-    for(let item of list){
-      if (item["iri"] === nodeIri){
-        return true
-      }
-    }
-    return false;
-  }
 
 
 /**
