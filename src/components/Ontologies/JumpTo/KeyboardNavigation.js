@@ -5,7 +5,7 @@ export function keyboardNavigationForJumpto(event){
     if(jumtoItems.length === 0){
         return false;
     }    
-    try{
+    try{        
         if(event.key === "ArrowDown"){
             event.preventDefault();
             performArrowDown();
@@ -14,9 +14,13 @@ export function keyboardNavigationForJumpto(event){
             event.preventDefault();
             performArrowUp();
         }
+        else if(event.key === "Enter"){
+            event.preventDefault();
+            performEnter();
+        }
     }
     catch(e){
-        console.info(e);
+        // console.info(e);
     }
 }
 
@@ -36,9 +40,17 @@ function performArrowUp(){
     let selectedElement = document.getElementsByClassName('selected-by-arrow-key');
     if(selectedElement.length === 0){
         selectTheLastElement();
-    }   
-    else{                
+    }
+    else{
         selectThePreviousSibling(selectedElement[0]);
+    }
+}
+
+
+function performEnter(){
+    let selectedElement = document.getElementsByClassName('selected-by-arrow-key');
+    if(selectedElement.length !== 0){
+        selectedElement[0].parentNode.click();
     }
 }
 

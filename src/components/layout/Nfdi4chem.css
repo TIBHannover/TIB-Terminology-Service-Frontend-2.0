@@ -1875,3 +1875,12 @@ Jumpto styles
     margin-bottom: 12px;
     margin-left: 30px;
 }
+
+.selected-by-arrow-key{
+    /* 
+        Style for the keyboard up/down arrow for jump to result
+    */
+
+    background-color: #dfdddd;
+
+}
