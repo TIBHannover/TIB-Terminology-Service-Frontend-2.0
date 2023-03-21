@@ -125,17 +125,19 @@ class SearchForm extends React.Component{
 
       urlOnto(){
         let urlPath = window.location.pathname;
-        if(urlPath === "/ontologies/:ontologyId"){
-          return (
+        let showBox = [];
+        if(urlPath.includes("/ontologies/:ontologyId")){
+          showBox.push(
             <div class="input-group-prepend">
                 <div class="input-group-text">
                   Search               
-                  OntologyID                   
+                  Onto                 
                   All
                 </div>
               </div>
           )
         }
+        return showBox;
       }
 
 
@@ -145,10 +147,20 @@ class SearchForm extends React.Component{
         }
       }
 
-      render(){
+      render(){ 
+        let urlPath = window.location.pathname; 
+        urlPath = urlPath.includes("/ontologies")            
           return(
               <div className='col-sm-10'>
-                <div class="input-group input-group-lg">                                   
+                <div class="input-group input-group-lg">
+                  {urlPath &&
+                <div class="input-group-prepend">
+                <div class="input-group-text">
+                  Search               
+                  Onto                 
+                  All
+                </div>
+              </div> }                                 
                   <input 
                     type="text" 
                     class="form-control search-input" 
