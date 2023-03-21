@@ -103,14 +103,14 @@ class DataTreePage extends React.Component {
 
 render(){
   return(    
-     <div className="row tree-view-container"> 
-        <div className="col-sm-6 tree-container-left-part" id="tree-container-left-pane">       
+     <div className="tree-view-container"> 
+        <div className="tree-container-left-part" id="tree-container-left-pane">       
           <JumpTo
             ontologyId={this.props.ontology}
             isSkos={this.props.isSkos} 
             componentIdentity={this.props.componentIdentity}         
            />
-          <div className='row'>
+          <div className=''>
                 <Tree
                   rootNodes={this.props.rootNodes}
                   componentIdentity={this.props.componentIdentity}
@@ -127,34 +127,31 @@ render(){
                 />
           </div>        
         </div>
-        <div className='col-sm-1 tree-view-resize-area'></div>
-        {this.state.termTree && this.state.showNodeDetailPage && 
-          <div className="col-sm-5 node-table-container">
+        <div className='tree-view-resize-area'></div>
+        <div className="node-table-container">
+          {this.state.termTree && this.state.showNodeDetailPage &&           
+              <MatomoWrapper>
+              <NodePage
+                iri={this.state.selectedNodeIri}
+                ontology={this.state.ontologyId}
+                componentIdentity="term"
+                extractKey="terms"
+                isSkos={this.props.isSkos}
+                isIndividual={false}
+              />
+              </MatomoWrapper>        
+          }
+          {this.state.propertyTree && this.state.showNodeDetailPage &&           
             <MatomoWrapper>
             <NodePage
-              iri={this.state.selectedNodeIri}
-              ontology={this.state.ontologyId}
-              componentIdentity="term"
-              extractKey="terms"
-              isSkos={this.props.isSkos}
-              isIndividual={false}
+                iri={this.state.selectedNodeIri}
+                ontology={this.state.ontologyId}
+                componentIdentity="property"
+                extractKey="properties"
+                isIndividual={false}
             />
-            </MatomoWrapper>
-        </div>
-        }
-        {this.state.propertyTree && this.state.showNodeDetailPage && 
-          <div className="col-sm-5 node-table-container">
-          <MatomoWrapper>
-          <NodePage
-              iri={this.state.selectedNodeIri}
-              ontology={this.state.ontologyId}
-              componentIdentity="property"
-              extractKey="properties"
-              isIndividual={false}
-          />
-          </MatomoWrapper>
-        </div>
-        }
+            </MatomoWrapper>}
+        </div>        
     </div>  
   )
 }

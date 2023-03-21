@@ -1339,7 +1339,7 @@ p{
     padding: 10px;
     margin-top: 0px !important;
     width: 145%;
-    margin-left: -23%;
+    margin-left: -23%;    
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1512,8 +1512,8 @@ p{
     background-color: #f5f5f5;
 }
 
-.tree-container{
-    /*
+.tree-container-left-part{
+     /*
         The styles for the tree view container. 
         It is responsible for the left part of the tree page that keeps the tree inside. 
      */
@@ -1527,8 +1527,10 @@ p{
     padding-right: 10px !important;
     background-color: white;
     scrollbar-width: none;    
+    width: 50%;
+    float: left;
 }
-.tree-container::-webkit-scrollbar {
+.tree-container-left-part::-webkit-scrollbar {
     display: none;
 }
 
@@ -1540,6 +1542,10 @@ p{
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 30px;
+    width: 50%;    
+    float: right;
+    background-color: white;
+    height: 1000px;
 }
 
 .reset-tree-btn{

@@ -1467,35 +1467,40 @@ p{
     background-color: #f5f5f5;
 }
 
-.tree-container{
+.tree-container-left-part{
     /*
-        The styles for the tree view container. 
-        It is responsible for the left part of the tree page that keeps the tree inside. 
-     */
+       The styles for the tree view container. 
+       It is responsible for the left part of the tree page that keeps the tree inside. 
+    */
 
-    height: 1000px;
-    overflow-y: scroll;
-    padding-bottom: 500px !important;
-    padding-top: 30px !important;
-    z-index: 900;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-    /* background-color: #fafafa; */    
-    overflow-x: scroll;
-    scrollbar-width: none;    
+   height: 1000px;
+   overflow-y: scroll;
+   padding-bottom: 500px !important;
+   padding-top: 30px !important;
+   z-index: 900;
+   padding-left: 10px !important;
+   padding-right: 10px !important;
+   background-color: white;
+   scrollbar-width: none;    
+   width: 50%;
+   float: left;
 }
-.tree-container::-webkit-scrollbar {
-    display: none;
+.tree-container-left-part::-webkit-scrollbar {
+   display: none;
 }
 
 .node-table-container{
-    /* 
-        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
-    */
+   /* 
+       The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
+   */
 
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-top: 30px;
+   padding-left: 50px;
+   padding-right: 50px;
+   padding-top: 30px;
+   width: 50%;    
+   float: right;
+   background-color: white;
+   height: 1000px;
 }
 
 .reset-tree-btn{
