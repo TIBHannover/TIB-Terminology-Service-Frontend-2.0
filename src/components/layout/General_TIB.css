@@ -1795,11 +1795,7 @@ p{
 
 
 @media only screen and (max-width: 3000px) and (min-width: 1501px) {
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
+    .li-label-text{      
         width: 140px;     
     }   
     .tree-view-container{        
@@ -1810,8 +1806,7 @@ p{
    }
    .node-table-container{
        width: 780px;         
-   }
-     
+   }   
   }
 
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {
@@ -1827,7 +1822,9 @@ p{
    .node-table-container{
        width: 680px;         
    }
-     
+   .tree-node-li {        
+        font-size: 11px !important;    
+    }     
   }
 @media only screen and (max-width: 1301px) and (min-width: 1026px) {
     .li-label-text{                    
@@ -1842,7 +1839,9 @@ p{
    .node-table-container{
        width: 580px;         
    }
-     
+   .tree-node-li {        
+        font-size: 11px !important;    
+    }     
   }
 
 
@@ -1858,16 +1857,20 @@ p{
     .tree-container-left-part{                               
        width: 500px;       
    }
-   
-
    .node-table-container{  
        width: 480px;         
    }
+   .tree-node-li {        
+        font-size: 9px !important;    
+    }
   }
 
   @media only screen and (max-width: 900px){
     .li-label-text{    
         width: 100px;     
+    }
+    .tree-node-li {        
+        font-size: 9px !important;    
     }
   }
 
