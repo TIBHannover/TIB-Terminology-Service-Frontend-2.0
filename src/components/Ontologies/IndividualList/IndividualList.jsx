@@ -211,14 +211,14 @@ class IndividualsList extends React.Component {
 
     render(){
         return(
-            <div className="row tree-view-container" onClick={(e) => this.processClick(e)}> 
-                <div className="col-sm-6">
+            <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
+                <div className="tree-container-left-part">
                   <JumpTo
                     ontologyId={this.props.ontology}
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
                    />
-                    <div className="row">
+                    <div className="">
                         {this.state.listView && 
                             <div className="col-sm-12 tree-container">
                                 {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
@@ -243,19 +243,20 @@ class IndividualsList extends React.Component {
                             this.createIndividualTree()
                         }                        
                     </div>                    
-                </div>                                    
-                {this.state.showNodeDetailPage && 
-                    <div className="col-sm-6 node-table-container">
-                        <NodePage
-                        iri={this.state.selectedNodeIri}
-                        ontology={this.props.ontology}
-                        componentIdentity="individual"
-                        extractKey="individuals"
-                        isSkos={this.state.isSkos}
-                        isIndividual={true}
-                        />
-                    </div>
-                }
+                </div>
+                <div className='tree-view-resize-area'></div>
+                <div className="node-table-container">
+                    {this.state.showNodeDetailPage &&                     
+                            <NodePage
+                            iri={this.state.selectedNodeIri}
+                            ontology={this.props.ontology}
+                            componentIdentity="individual"
+                            extractKey="individuals"
+                            isSkos={this.state.isSkos}
+                            isIndividual={true}
+                            />                
+                    }
+                </div>
             </div>
         );        
     }

@@ -1236,11 +1236,13 @@ p{
         Style for the tree view detail info containers (class/property).
     */
 
-    background-color: white;
-    padding: 10px;
+    background-color: white;    
     margin-top: 0px !important;
-    width: 145%;
+    width: 1750px;
     margin-left: -23%;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;    
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1340,22 +1342,96 @@ p{
 -------------------------------------
 */
 
-
-.tree-container{
+.form-control{
     /*
+        The styles for the jump to search box in tree view container.  
+     */
+    display: block;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+}
+
+.form-fixer{
+    /*
+        styles for fixing/modifying search box in tree view 
+     */
+    margin-bottom: 12px;
+    margin-left: 30px;
+}
+
+#jmp-tree-container{
+    /*
+        styles for the 'jump to' container on top of tree view 
+     */
+    top: auto !important; 
+    height: fit-content;
+    border: 0.1px solid black;
+    display: block;
+    padding-bottom: 10px;
+    position: absolute;
+    z-index: 99999;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 400px;
+    text-align: left;
+    padding-left: 10px;
+    margin-left: 114px;
+    margin-top: -12px;    
+}
+
+.jump-tree-container{
+    /* 
+       The style for the jump result list div 
+    */
+    margin-top: -15px;
+    text-align: left;
+}
+
+.jump-tree-item{
+    /* 
+       The style for the jump results [i] result
+    */
+    position:relative;
+    margin-left: 10px;
+    margin-bottom: -30px;
+    padding: 7px;
+}
+.container a{
+    text-decoration: none;
+}
+
+.jump-tree-item:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    vertical-align: top;
+    background-color: #f5f5f5;
+}
+
+.tree-container-left-part{
+     /*
         The styles for the tree view container. 
         It is responsible for the left part of the tree page that keeps the tree inside. 
      */
 
     height: 1000px;
     overflow-y: scroll;
-    padding-bottom: 500px !important;
-    padding-top: 30px !important;
-    z-index: 900;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+    padding-bottom: 500px !important;    
+    z-index: 880;    
     background-color: white;
-    border-right: 1px solid black;    
+    scrollbar-width: none;    
+    width: 900px;
+    float: left;
+}
+.tree-container-left-part::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -1367,6 +1443,31 @@ p{
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 30px;
+    width: 880px;
+    float: left;
+    background-color: white;
+    height: 1000px;  
+    overflow: scroll;  
+}
+
+.tree-view-resize-area{
+    /*
+        Style for the resize div in the tree view 
+    */
+    cursor: e-resize;
+    width: 10px;        
+    background-image: linear-gradient(#000, #000);
+    background-size: 2px 100%;
+    background-repeat: no-repeat;
+    background-position: center center;        
+}
+
+.resizable-container{
+    /* 
+        Style for the container with resizeable pane
+    */
+
+    display: flex;
 }
 
 .reset-tree-btn{
@@ -1444,7 +1545,7 @@ p{
     cursor: pointer;    
     border-left: 1px dotted !important;
     border-left-color: gray;
-    font-size: 13px !important;        
+    font-size: 13px;    
 }
 
 .tree-node-li::before{
@@ -1570,7 +1671,6 @@ p{
     font-size: 13px !important;    
 }
 
-
 .isLoading {
     /* 
         Style for the loading animation
@@ -1597,30 +1697,86 @@ p{
     100% { transform: rotate(360deg); }
   }
 
-@media only screen and (max-width: 1500px) and (min-width: 1300px) {
-    .tree-node-li {
-        font-size: 11px !important;
-    }
-}
 
-@media only screen and (max-width: 1299px) and (min-width: 1026px) {
-    .tree-node-li {
-        font-size: 9px !important;
+@media only screen and (max-width: 3000px) and (min-width: 1501px) {
+    .li-label-text{      
+        width: 140px;     
+    }   
+    .tree-view-container{        
+        width: 1750px;            
     }
-}
+    .tree-container-left-part{                        
+       width: 900px;       
+   }
+   .node-table-container{
+       width: 780px;         
+   }   
+  }
+
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {
+    .li-label-text{       
+        width: 140px;     
+    }    
+    .tree-view-container{        
+        width: 1360px;        
+    }
+    .tree-container-left-part{                        
+       width: 700px;       
+   }
+   .node-table-container{
+       width: 680px;         
+   }
+   .tree-node-li {        
+        font-size: 11px !important;    
+    }     
+  }
+@media only screen and (max-width: 1301px) and (min-width: 1026px) {
+    .li-label-text{                    
+        width: 140px;     
+    }   
+    .tree-view-container{        
+        width: 1200px;            
+    }
+    .tree-container-left-part{                        
+       width: 600px;       
+   }
+   .node-table-container{
+       width: 580px;         
+   }
+   .tree-node-li {        
+        font-size: 11px !important;    
+    }     
+  }
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .tree-node-li {
-        font-size: 9px;
+    .li-label-text{       
+        width: 100px;     
     }
-}
+    .tree-view-container{       
+                     
+        width: 1000px;        
+        padding-top: 20px;    
+    }
+    .tree-container-left-part{                               
+       width: 500px;       
+   }
+   .node-table-container{  
+       width: 480px;         
+   }
+   .tree-node-li {        
+        font-size: 9px !important;    
+    }
+  }
 
-@media only screen and (max-width: 900px){
-    .tree-node-li {
-        font-size: 8px;
+  @media only screen and (max-width: 900px){
+    .li-label-text{    
+        width: 100px;     
     }
-}
+    .tree-node-li {        
+        font-size: 9px !important;    
+    }
+  }
 
 /* 
 ------------------------------------------------------------
@@ -1712,7 +1868,7 @@ p{
     */
 
     margin-top: 30px;
-    width: 100%;
+    width: 100%;    
 }
 
 .table-list-label-anchor{

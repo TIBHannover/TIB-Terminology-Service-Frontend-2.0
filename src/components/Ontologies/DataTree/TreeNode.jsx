@@ -178,11 +178,6 @@ class TreeNodeController{
     isNodeLeaf(node){
         return node.classList.contains("leaf-node");
     }
-    
-
-
-
-
 }
 
 export default TreeNodeController;
