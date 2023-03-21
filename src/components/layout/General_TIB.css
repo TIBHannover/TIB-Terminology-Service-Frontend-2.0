@@ -1520,7 +1520,8 @@ p{
 
     font-size: 15px !important;
     padding-bottom: 10px;
-    padding-top: 5px;    
+    padding-top: 5px;
+    word-break: break-all;    
 }
 
 .node-detail-table-row{
