@@ -1480,7 +1480,7 @@ p{
     text-align: left;
     padding-left: 10px;
     margin-left: 114px;
-    margin-top: -12px;
+    margin-top: -12px;    
 }
 
 .jump-tree-container{
@@ -1737,6 +1737,14 @@ p{
     padding-left: 0;
     cursor: pointer;        
     font-size: 13px !important;    
+}
+
+.tree-view-resize-area{
+    /*
+        Style for the resize div in the tree view 
+    */
+    cursor: e-resize;
+    width: 5px;
 }
 
 

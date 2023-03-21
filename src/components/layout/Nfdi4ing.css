@@ -1604,6 +1604,14 @@ p{
     font-size: 13px !important;    
 }
 
+.tree-view-resize-area{
+    /*
+        Style for the resize div in the tree view 
+    */
+    cursor: e-resize;
+    width: 5px;
+}
+
 
 .isLoading {
     /* 

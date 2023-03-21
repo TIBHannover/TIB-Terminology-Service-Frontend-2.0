@@ -68,26 +68,26 @@ render(){
             isSkos={this.props.isSkos} 
             componentIdentity={this.props.componentIdentity}         
            />
-        <div className='row'>
-              <Tree
-                rootNodes={this.props.rootNodes}
-                componentIdentity={this.props.componentIdentity}
-                iri={this.props.iri}
-                key={this.props.key}                    
-                ontology={this.props.ontology}
-                rootNodeNotExist={this.props.rootNodeNotExist}
-                iriChangerFunction={this.props.iriChangerFunction}
-                lastState={this.props.lastState}
-                domStateKeeper={this.props.domStateKeeper}
-                isSkos={this.props.isSkos}
-                nodeSelectionHandler={this.handleTreeNodeSelection}
-                individualViewChanger={""}
-              />
-        </div>                 
-        
+          <div className='row'>
+                <Tree
+                  rootNodes={this.props.rootNodes}
+                  componentIdentity={this.props.componentIdentity}
+                  iri={this.props.iri}
+                  key={this.props.key}                    
+                  ontology={this.props.ontology}
+                  rootNodeNotExist={this.props.rootNodeNotExist}
+                  iriChangerFunction={this.props.iriChangerFunction}
+                  lastState={this.props.lastState}
+                  domStateKeeper={this.props.domStateKeeper}
+                  isSkos={this.props.isSkos}
+                  nodeSelectionHandler={this.handleTreeNodeSelection}
+                  individualViewChanger={""}
+                />
+          </div>        
         </div>
+        <div className='col-sm-1 tree-view-resize-area'></div>
         {this.state.termTree && this.state.showNodeDetailPage && 
-          <div className="col-sm-6 node-table-container">
+          <div className="col-sm-5 node-table-container">
             <MatomoWrapper>
             <NodePage
               iri={this.state.selectedNodeIri}
@@ -101,7 +101,7 @@ render(){
         </div>
         }
         {this.state.propertyTree && this.state.showNodeDetailPage && 
-          <div className="col-sm-6 node-table-container">
+          <div className="col-sm-5 node-table-container">
           <MatomoWrapper>
           <NodePage
               iri={this.state.selectedNodeIri}
