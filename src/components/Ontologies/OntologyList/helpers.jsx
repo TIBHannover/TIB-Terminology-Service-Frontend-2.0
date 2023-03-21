@@ -1,4 +1,5 @@
 import {getAllCollectionsIds} from '../../../api/fetchData';
+import Toolkit from '../../common/Toolkit';
 
 
 /**
@@ -80,46 +81,34 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
  */
 export function ontology_has_searchKey(ontology, value){
     try{
+        value = value.toLowerCase();
         if (ontology.ontologyId.includes(value)) {
             return true;
         }
-        if (ontology.config.title.includes(value)) {
+        if (ontology.config.title.toLowerCase().includes(value)) {
             return true;
         }
-        if (ontology.config.description != null &&  ontology.config.description.includes(value)) {
+        if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
             return true;
         }
 
         return false;
     }
-    catch (e){
-        console.info(e);
+    catch (e){        
         return false;
     }
 }
 
 
-export function sortArrayOfObjectBasedOnKey(objectsArray, key) {
+export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
     if(key === "title"){
-        return objectsArray.sort(function (a, b) {
-            let x = a['config'][key]; 
-            let y = b['config'][key];
-            return (x<y ? -1 : 1 )
-          });
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
     }
     else if(key === 'ontologyId'){
-        return objectsArray.sort(function (a, b) {
-            let x = a[key]; 
-            let y = b[key];
-            return (x<y ? -1 : 1 )
-          });    
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
     }
-    return objectsArray.sort(function (a, b) {
-      let x = a[key]; 
-      let y = b[key];
-      return (x<y ? 1 : -1 )
-    });
-  }
+    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
+}
 
 
 export async function createCollectionsCheckBoxes(filterCollection, selectedCollections){

@@ -1,5 +1,6 @@
-import _ from "lodash";
-import React from "react";
+import _ from 'lodash';
+import Toolkit from "../../common/Toolkit";
+
 
 /**
  * Create the metadata for a class detail table
@@ -11,7 +12,8 @@ import React from "react";
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
-      "fullIRI": [object.iri, true]      
+      "fullIRI": [object.iri, true], 
+      "SubClass Of": [object.subClassOf, false],     
     }
     
     if(formatText("Synonyms", object.synonyms, false) !== "N/A"){
@@ -21,13 +23,9 @@ import React from "react";
     if(object.eqAxiom !== "N/A"){
       metadata['Equivalent to'] = [object.eqAxiom, false];
     }
-
-    if(object.subClassOf !== "N/A"){
-      metadata['SubClass Of'] = [object.subClassOf, false];
-    }
     
-    if(formatText("Used in axiom", object, false) !== "N/A" && formatText("Used in axiom", object, false).length !== 0){
-      metadata['Used in axiom'] = [object, false];
+    if(formatText("Used in axiom", object.relations, false) !== "N/A" && formatText("Used in axiom", object.relations, false).length !== 0){
+      metadata['Used in axiom'] = [object.relations, false];
     }
     
     if(object.annotation){
@@ -120,7 +118,7 @@ export function propertyMetaData(object){
     return synonymsTag(text);
   }
   else if (label === "Used in axiom"){
-    return createRelations(text);
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
   else if (label === "Equivalent to"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
@@ -129,7 +127,7 @@ export function propertyMetaData(object){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
 
-  return transformToLink(text)
+  return Toolkit.transformStringOfLinksToAnchors(text)
 }
 
 /**
@@ -222,28 +220,4 @@ function createRelations(object){
   return relsToRender;
 }
 
-/**
- * Check if the tetx contains link to render is as anchor
- */
-function transformToLink(text){  
-  if(typeof(text) !== "string"){
-    return text;
-  }
-  let splitedText = text.split("http");
-  if (splitedText.length === 1){
-    // no https inside text
-    return text;
-  }
-  else{
-    let result = [];
-    text = text.split(",");
-    for(let link of text){
-      // let label = document.createTextNode(link);
-      let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
-      result.push(anchor);
-      result.push(",  ");
-    }
-    return result;
-  }
 
-}
