@@ -103,7 +103,7 @@ class DataTreePage extends React.Component {
 
 render(){
   return(    
-     <div className="tree-view-container"> 
+     <div className="tree-view-container resizable-container"> 
         <div className="tree-container-left-part" id="tree-container-left-pane">       
           <JumpTo
             ontologyId={this.props.ontology}

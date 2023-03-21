@@ -1269,11 +1269,11 @@ p{
        Style for the tree view detail info containers (class/property).
    */
 
-   background-color: white;
-   padding: 10px;
-   margin-top: 0px !important;
-   width: 145%;
-   margin-left: -23%;
+    background-color: white;   
+    margin-top: 0px !important;
+    width: 1750px;
+    margin-left: -23%;
+    padding-top: 20px; 
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1397,14 +1397,11 @@ p{
 
    height: 1000px;
    overflow-y: scroll;
-   padding-bottom: 500px !important;
-   padding-top: 30px !important;
-   z-index: 900;
-   padding-left: 10px !important;
-   padding-right: 10px !important;
+   padding-bottom: 500px !important;    
+   z-index: 880;    
    background-color: white;
    scrollbar-width: none;    
-   width: 50%;
+   width: 900px;
    float: left;
 }
 .tree-container-left-part::-webkit-scrollbar {
@@ -1419,10 +1416,30 @@ p{
    padding-left: 50px;
    padding-right: 50px;
    padding-top: 30px;
-   width: 50%;    
-   float: right;
+   width: 880px;
+   float: left;
    background-color: white;
-   height: 1000px;
+   height: 1000px;    
+}
+
+.tree-view-resize-area{
+   /*
+       Style for the resize div in the tree view 
+   */
+   cursor: e-resize;
+   width: 10px;        
+   background-image: linear-gradient(#000, #000);
+   background-size: 2px 100%;
+   background-repeat: no-repeat;
+   background-position: center center;        
+}
+
+.resizable-container{
+    /* 
+        Style for the container with resizeable pane
+    */
+
+    display: flex;
 }
 
 .reset-tree-btn{
@@ -1612,19 +1629,6 @@ p{
     cursor: pointer;        
     font-size: 13px !important;    
 }
-
-.tree-view-resize-area{
-    /*
-        Style for the resize div in the tree view 
-    */
-    cursor: e-resize;
-    width: 5px !important;        
-    background-image: linear-gradient(#000, #000);
-    background-size: 2px 100%;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
 
 .isLoading {
     /* 
