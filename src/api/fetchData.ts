@@ -436,27 +436,24 @@ export async function getRelations(nodeIri:string, ontologyId:string){
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   if (typeof(res) !== "undefined"){
-    let entries = Object.keys(res)
-    let entries1 = Object.values(res)
+    let entries = Object.entries(res)
     let result = "";
-    for(let keys in entries){
-      let title = entries[keys]
-      for(let i=0; i < title.length; i++){
-        result+= title[i]
-      }
-      for(let items in entries1){
-        let tags = entries1[items]
-        result += "<ul>"
-        for(let j=0; j < tags.length; j++){
-          result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(tags[j]["iri"]) + '>' + tags[j]["label"] + '</a>'+ '</li>';                
-        }
-        result += "<ul>"
-      }
-      
-      
+    
+    for(let [k,v] of entries){
+      //console.info(`${JSON.stringify(k)}: ${JSON.stringify(v)}`)
+                
+      result += k 
+      result+="<ul>"        
+      for(let item of v){
+        result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>'+ '</li>';
+      } 
+      result+="<ul>"  
     }
+    
+      
     return result
-  }         
+  }  
+      
 }
 
 
