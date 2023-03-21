@@ -219,12 +219,12 @@ class Tree extends React.Component {
         }
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
-        let targetNodeSpan = treeNode.getClickedNodeSpan(target);
+        let targetNodeDiv = treeNode.getClickedNodeDiv(target);
         let clickedNodeIri = "";
         let clickedNodeId = "";
         let showNodeDetailPage = false;
-        if(targetNodeSpan){
-            targetNodeSpan.classList.add("clicked");
+        if(targetNodeDiv){
+            targetNodeDiv.classList.add("clicked");
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);
             showNodeDetailPage = true;
@@ -257,7 +257,7 @@ class Tree extends React.Component {
             return true;
         }
         
-        if (e.target.tagName === "SPAN"){ 
+        if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
             this.selectNode(e.target);
         }
         else if (e.target.tagName === "I"){   
@@ -481,7 +481,7 @@ async showSiblings(){
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
                 <div className='row'>          
                     {!this.state.treeDomContent.__html 
-                    ? <div className='col-sm-10'>{this.state.treeDomContent}</div> 
+                    ? <div className='col-sm-10 tree'>{this.state.treeDomContent}</div> 
                     : <div className='col-sm-10' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
                     }
                                 

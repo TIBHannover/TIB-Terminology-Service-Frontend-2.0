@@ -1533,6 +1533,7 @@ p{
     display: none;
 }
 
+
 .node-table-container{
     /* 
         The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
@@ -1595,8 +1596,9 @@ p{
     color: white;
     padding: 5px;
     border-radius: 50px;
-    font-size: 10px;
+    font-size: 8px;
     margin-right: 5px;
+    display: inline-block;
 }
 
 
@@ -1617,8 +1619,7 @@ p{
 
     font-size: 15px !important;
     padding-bottom: 10px;
-    padding-top: 5px;
-    word-break: break-all;
+    padding-top: 5px;    
 }
 
 .node-detail-table-row{
@@ -1665,10 +1666,7 @@ p{
     */
 
     display: inline-block;
-    width: 300px;
-    vertical-align: top;
     padding-left: 3px;
-    word-break: break-all;
 }
 
 
@@ -1678,6 +1676,10 @@ p{
     */
 
     padding-left: 5px;
+    display: inline-block;
+    width: 200px;
+    vertical-align: top;
+    margin-bottom: 5px; 
 }
 
 .tree-text-container:hover{
