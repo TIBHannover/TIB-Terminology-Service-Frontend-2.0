@@ -10,6 +10,7 @@ class SearchForm extends React.Component{
           clickInfo: false,
           searchResult: [],
           jumpResult: [],
+          ontologyId: '',
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
@@ -31,11 +32,13 @@ class SearchForm extends React.Component{
           searchResult =  (await searchResult.json())['response']['docs'];
           let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
           jumpResult = (await jumpResult.json())['response']['docs'];
+          let ontology_name = jumpResult['ontology_name']
           this.setState({
               searchResult: searchResult,
               jumpResult: jumpResult,
               result: true,
-              enteredTerm: enteredTerm
+              enteredTerm: enteredTerm,
+              ontologyId: ontology_name
           });
         }
         else if (enteredTerm.length == 0){
@@ -125,8 +128,9 @@ class SearchForm extends React.Component{
 
       urlOnto(){
         let urlPath = window.location.pathname;
+        
         let showBox = [];
-        if(urlPath.includes("/ontologies/:ontologyId")){
+        if(urlPath.includes("/ontologies/" + this.state.ontologyId)){
           showBox.push(
             <div class="input-group-prepend">
                 <div class="input-group-text">
@@ -148,19 +152,19 @@ class SearchForm extends React.Component{
       }
 
       render(){ 
-        let urlPath = window.location.pathname; 
-        urlPath = urlPath.includes("/ontologies")            
+        let urlPath = window.location.pathname;      
+        urlPath = urlPath.includes("/ontologies/" + this.state.ontologyId)            
           return(
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
                   {urlPath &&
-                <div class="input-group-prepend">
-                <div class="input-group-text">
-                  Search               
-                  Onto                 
-                  All
-                </div>
-              </div> }                                 
+                   <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      Search               
+                      Onto                 
+                      All
+                    </div>
+                   </div> }                                 
                   <input 
                     type="text" 
                     class="form-control search-input" 
