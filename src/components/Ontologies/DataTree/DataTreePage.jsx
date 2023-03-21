@@ -17,10 +17,15 @@ class DataTreePage extends React.Component {
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      ontologyId: '' 
+      ontologyId: '',
+      lastPageX: 0,
+      resizeOn: false
     })
     this.setComponentData = this.setComponentData.bind(this);
     this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.moveToResize = this.moveToResize.bind(this);
+    this.releaseMouseFromResize = this.releaseMouseFromResize.bind(this);
   }
 
 
@@ -42,27 +47,66 @@ class DataTreePage extends React.Component {
   }
 
 
-/**
- * The function indicates what should happen when a tree node is selected 
- * Or when an Iri is given in the url
- */
-handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
-  this.setState({
-    selectedNodeIri: selectedNodeIri,
-    showNodeDetailPage: ShowDetailTable
-  });
-}
+  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
+    this.setState({
+      selectedNodeIri: selectedNodeIri,
+      showNodeDetailPage: ShowDetailTable
+    });
+  }
 
 
-componentDidMount(){
-  this.setComponentData();
-}
+  onMouseDown(event){
+    let targetElement = event.target;
+    if (!targetElement.classList.contains('tree-view-resize-area')){
+      return null;
+    }
+    this.setState({
+      lastPageX: event.pageX,
+      resizeOn: true
+    });
+  }
+
+  moveToResize(event){
+    if(!this.state.resizeOn){
+      return null;
+    }
+    let targetElement = event.target;
+    if (!targetElement.classList.contains('tree-view-resize-area')){
+      return null;
+    }
+    let addedWidth = (event.pageX - this.state.lastPageX) / 3;    
+    let treeLeftPane = document.getElementById("tree-container-left-pane");
+    let currentWidth = parseInt(treeLeftPane.offsetWidth);    
+    treeLeftPane.style.width = (currentWidth + addedWidth) + "px";    
+  }
+
+  releaseMouseFromResize(event){
+    if(!this.state.resizeOn){
+      return null;
+    }    
+    this.setState({
+      resizeOn: false,
+      lastPageX: event.pageX
+    });    
+  }
+
+
+  componentDidMount(){
+    this.setComponentData();
+    document.body.addEventListener("mousedown", this.onMouseDown, false);
+    document.body.addEventListener("mousemove", this.moveToResize);
+    document.body.addEventListener("mouseup", this.releaseMouseFromResize);
+  }
+
+  componentWillUnmount(){
+    // document.body.removeEventListener("mousemove", this.onMouseDown, false);
+  }
 
 
 render(){
   return(    
      <div className="row tree-view-container"> 
-        <div className="col-sm-6 tree-container-left-part">       
+        <div className="col-sm-6 tree-container-left-part" id="tree-container-left-pane">       
           <JumpTo
             ontologyId={this.props.ontology}
             isSkos={this.props.isSkos} 

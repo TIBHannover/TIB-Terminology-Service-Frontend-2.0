@@ -1480,9 +1480,12 @@ p{
     z-index: 900;
     padding-left: 10px !important;
     padding-right: 10px !important;
-    /* background-color: #fafafa; */
-    border-right: 1px solid black;
+    /* background-color: #fafafa; */    
     overflow-x: scroll;
+    scrollbar-width: none;    
+}
+.tree-container::-webkit-scrollbar {
+    display: none;
 }
 
 .node-table-container{
@@ -1698,7 +1701,11 @@ p{
         Style for the resize div in the tree view 
     */
     cursor: e-resize;
-    width: 5px;
+    width: 5px !important;        
+    background-image: linear-gradient(#000, #000);
+    background-size: 2px 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 
