@@ -72,8 +72,11 @@ class DataTreePage extends React.Component {
     }   
     let addedWidth = (event.clientX - this.state.lastPageX) / 1;    
     let treeLeftPane = document.getElementById("tree-container-left-pane");
-    let currentWidth = parseInt(treeLeftPane.offsetWidth);    
-    treeLeftPane.style.width = (currentWidth + addedWidth) + "px";
+    let treeRightPane = document.getElementById("tree-container-right-pane");
+    let currentWidthLeft = parseInt(treeLeftPane.offsetWidth);    
+    let currentWidthRight = parseInt(treeRightPane.offsetWidth);    
+    treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
+    treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
     this.setState({lastPageX: event.clientX});  
   }
 
@@ -128,7 +131,7 @@ render(){
           </div>        
         </div>
         <div className='tree-view-resize-area'></div>
-        <div className="node-table-container">
+        <div className="node-table-container" id="tree-container-right-pane">
           {this.state.termTree && this.state.showNodeDetailPage &&           
               <MatomoWrapper>
               <NodePage
