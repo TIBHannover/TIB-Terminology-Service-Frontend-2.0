@@ -191,7 +191,7 @@ class TermList extends React.Component{
                     <div className="col-sm-3 text-right list-header-element">
                         <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>
                     </div>
-                    <div className="col-sm-3">
+                    <div className="col-sm-3 list-header-element">
                         <Pagination 
                             clickHandler={this.handlePagination} 
                             count={this.pageCount()}
