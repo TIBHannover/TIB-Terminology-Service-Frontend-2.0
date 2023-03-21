@@ -1274,6 +1274,8 @@ p{
     width: 1750px;
     margin-left: -23%;
     padding-top: 20px; 
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .ontology-detail-table, .ontology-metric-table{

@@ -81,7 +81,7 @@ class DataTreePage extends React.Component {
     this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
     this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
     this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
-    
+    this.adjustFontSizeBasedOnResize('p-icon-style', currentWidthLeft + addedWidth);    
   }
 
 

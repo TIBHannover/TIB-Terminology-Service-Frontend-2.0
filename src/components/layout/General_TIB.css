@@ -1339,7 +1339,9 @@ p{
     margin-top: 0px !important;
     width: 1750px;
     margin-left: -23%;
-    padding-top: 20px;    
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;    
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1963,7 +1965,7 @@ p{
     */
 
     margin-top: 30px;
-    width: 100%;
+    width: 100%;    
 }
 
 .table-list-label-anchor{

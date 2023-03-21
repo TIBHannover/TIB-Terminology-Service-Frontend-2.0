@@ -1289,11 +1289,13 @@ p{
        Style for the tree view detail info containers (class/property).
    */
 
-   background-color: white;   
-   margin-top: 0px !important;
-   width: 1750px;
-   margin-left: -23%;
-   padding-top: 20px; 
+    background-color: white;   
+    margin-top: 0px !important;
+    width: 1750px;
+    margin-left: -23%;
+    padding-top: 20px; 
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .ontology-detail-table, .ontology-metric-table{
