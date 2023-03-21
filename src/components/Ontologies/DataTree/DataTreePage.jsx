@@ -78,7 +78,27 @@ class DataTreePage extends React.Component {
     treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
     treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
     this.setState({lastPageX: event.clientX});  
+    this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
+    this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
+    this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
+    
   }
+
+
+  adjustFontSizeBasedOnResize(targetClassName , currentSize){
+    let allNodes = document.getElementsByClassName(targetClassName);    
+    let newFontSize = "13px"
+    if(currentSize < 700){
+          newFontSize = "7px";
+    }
+    if(currentSize < 400){
+      newFontSize = "5px";
+    }
+    for(let node of allNodes){
+      node.style.fontSize = newFontSize;
+    }
+  }
+
 
   releaseMouseFromResize(event){
     if(!this.state.resizeOn){

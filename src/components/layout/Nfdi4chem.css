@@ -1595,7 +1595,7 @@ p{
     cursor: pointer;    
     border-left: 1px dotted !important;
     border-left-color: gray;
-    font-size: 13px !important;
+    font-size: 13px;
 }
 
 .tree-node-li::before{
