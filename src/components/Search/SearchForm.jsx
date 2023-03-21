@@ -1,6 +1,5 @@
 import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
-import SearchInOntology from './widgets/SearchInOntology';
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -21,6 +20,7 @@ class SearchForm extends React.Component{
         this.suggestionHandler = this.suggestionHandler.bind(this); 
         this.autoRef = React.createRef(); 
         this.handleClickOutside = this.handleClickOutside.bind(this);
+        this.urlOnto = this.urlOnto.bind(this);
       }
       
 
@@ -123,6 +123,21 @@ class SearchForm extends React.Component{
         return jumpResultList
       }
 
+      urlOnto(){
+        let urlPath = window.location.pathname;
+        if(urlPath === "/ontologies/:ontologyId"){
+          return (
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                  Search               
+                  OntologyID                   
+                  All
+                </div>
+              </div>
+          )
+        }
+      }
+
 
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -133,8 +148,7 @@ class SearchForm extends React.Component{
       render(){
           return(
               <div className='col-sm-10'>
-                <div class="input-group input-group-lg">
-                  <SearchInOntology/>                  
+                <div class="input-group input-group-lg">                                   
                   <input 
                     type="text" 
                     class="form-control search-input" 
