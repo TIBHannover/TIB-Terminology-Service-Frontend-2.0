@@ -127,22 +127,19 @@ class SearchForm extends React.Component{
       }
 
       urlOnto(){
-        let urlPath = window.location.pathname;
-        
         let showBox = [];
-        if(urlPath.includes("/ontologies/" + this.state.ontologyId)){
-          showBox.push(
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                  Search               
-                  Onto                 
-                  All
-                </div>
-              </div>
+        let ontologyId = this.state.ontologyId;
+        console.info(ontologyId)
+          showBox.push(           
+              <div className="search-in-box">
+                <b>Search:</b>
+                <div className='ontologyID-in-search'>
+                  {ontologyId} 
+                </div>                                                                                                          
+              </div>            
           )
+          return showBox;
         }
-        return showBox;
-      }
 
 
       _handleKeyDown = (e) => {
@@ -158,13 +155,7 @@ class SearchForm extends React.Component{
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
                   {urlPath &&
-                   <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      Search               
-                      Onto                 
-                      All
-                    </div>
-                   </div> }                                 
+                   this.urlOnto() }                                 
                   <input 
                     type="text" 
                     class="form-control search-input" 
