@@ -438,21 +438,19 @@ export async function getRelations(nodeIri:string, ontologyId:string){
   if (typeof(res) !== "undefined"){
     let entries = Object.entries(res)
     let result = "";
-    
+    result += "<ul>"
     for(let [k,v] of entries){
-      //console.info(`${JSON.stringify(k)}: ${JSON.stringify(v)}`)
-                
-      result += k 
-      result+="<ul>"        
+      //console.info(`${JSON.stringify(k)}: ${JSON.stringify(v)}`)               
+      result += k             
       for(let item of v){
         result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>'+ '</li>';
-      } 
-      result+="<ul>"  
+      }      
     }
-    
+    result += "<ul>"
       
     return result
-  }  
+  } 
+  return "N/A"; 
       
 }
 
