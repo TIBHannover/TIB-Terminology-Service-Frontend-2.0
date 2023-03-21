@@ -61,7 +61,7 @@ class DataTreePage extends React.Component {
       return null;
     }
     this.setState({
-      lastPageX: event.pageX,
+      lastPageX: event.clientX,
       resizeOn: true
     });
   }
@@ -69,15 +69,12 @@ class DataTreePage extends React.Component {
   moveToResize(event){
     if(!this.state.resizeOn){
       return null;
-    }
-    let targetElement = event.target;
-    if (!targetElement.classList.contains('tree-view-resize-area')){
-      return null;
-    }
-    let addedWidth = (event.pageX - this.state.lastPageX) / 3;    
+    }   
+    let addedWidth = (event.clientX - this.state.lastPageX) / 1;    
     let treeLeftPane = document.getElementById("tree-container-left-pane");
     let currentWidth = parseInt(treeLeftPane.offsetWidth);    
-    treeLeftPane.style.width = (currentWidth + addedWidth) + "px";    
+    treeLeftPane.style.width = (currentWidth + addedWidth) + "px";
+    this.setState({lastPageX: event.clientX});  
   }
 
   releaseMouseFromResize(event){
@@ -85,9 +82,8 @@ class DataTreePage extends React.Component {
       return null;
     }    
     this.setState({
-      resizeOn: false,
-      lastPageX: event.pageX
-    });    
+      resizeOn: false      
+    });
   }
 
 
@@ -99,7 +95,9 @@ class DataTreePage extends React.Component {
   }
 
   componentWillUnmount(){
-    // document.body.removeEventListener("mousemove", this.onMouseDown, false);
+    document.body.addEventListener("mousedown", this.onMouseDown, false);
+    document.body.addEventListener("mousemove", this.moveToResize);
+    document.body.addEventListener("mouseup", this.releaseMouseFromResize);
   }
 
 
