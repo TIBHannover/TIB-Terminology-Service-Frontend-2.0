@@ -1656,33 +1656,79 @@ p{
     100% { transform: rotate(360deg); }
   }
 
-  @media only screen and (max-width: 1500px) and (min-width: 1026px) {
+  @media only screen and (max-width: 3000px) and (min-width: 1501px) {
     .li-label-text{
         /* 
             Style for the a node span title text in the tree
         */
             
         width: 140px;     
+    }   
+    .tree-view-container{        
+        width: 1750px;            
     }
+    .tree-container-left-part{                        
+       width: 900px;       
+   }
+   .node-table-container{
+       width: 780px;         
+   }
+     
+  }
+
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {
+    .li-label-text{       
+        width: 140px;     
+    }    
+    .tree-view-container{        
+        width: 1360px;        
+    }
+    .tree-container-left-part{                        
+       width: 700px;       
+   }
+   .node-table-container{
+       width: 680px;         
+   }
+     
+  }
+@media only screen and (max-width: 1301px) and (min-width: 1026px) {
+    .li-label-text{                    
+        width: 140px;     
+    }   
+    .tree-view-container{        
+        width: 1200px;            
+    }
+    .tree-container-left-part{                        
+       width: 600px;       
+   }
+   .node-table-container{
+       width: 580px;         
+   }
+     
   }
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
+    .li-label-text{       
         width: 100px;     
     }
+    .tree-view-container{       
+                     
+        width: 1000px;        
+        padding-top: 20px;    
+    }
+    .tree-container-left-part{                               
+       width: 500px;       
+   }
+   
+
+   .node-table-container{  
+       width: 480px;         
+   }
   }
 
   @media only screen and (max-width: 900px){
-    .li-label-text{
-        /* 
-            Style for the a node span title text in the tree
-        */
-            
+    .li-label-text{    
         width: 100px;     
     }
   }
