@@ -40,7 +40,7 @@
         "keyForRenderAsComponent": "termListPage",
         "keyForRenderAsTabItem": "termList-tab",
         "tabId": 4,
-        "tabTitle": "Class Tree",
+        "tabTitle": "Class List",
         "urlEndPoint": "/termList"
     }
 }
