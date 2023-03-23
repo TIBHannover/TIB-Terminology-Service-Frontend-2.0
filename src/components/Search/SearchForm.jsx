@@ -1,4 +1,5 @@
 import React from 'react';
+import queryString from 'query-string';
 import {setJumpResultButtons} from './SearchFormHelpers';
 
 class SearchForm extends React.Component{
@@ -23,8 +24,31 @@ class SearchForm extends React.Component{
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
         this.searchInOntoHandler = this.searchInOntoHandler.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
       }
       
+      setComponentData(){
+        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
+        let enteredTerm = targetQueryParams.q;  
+        let ontologies = targetQueryParams.ontology;
+        let facetSelected = false;
+        if(typeof(ontologies) === "string"){
+          ontologies = [ontologies];
+          facetSelected= true;
+        }
+        else if(typeof(ontologies) === "undefined"){
+          ontologies = [];
+        }    
+        this.setState({         
+          selectedOntologies: ontologies,
+          facetIsSelected: facetSelected,
+          isLoaded: true,
+          enteredTerm: enteredTerm
+        }, () => {
+          this.searchInOntoHandler(ontologies, "");
+        });
+      }
+
 
       async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value;        
@@ -159,6 +183,7 @@ class SearchForm extends React.Component{
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
           this.submitHandler();
+          this.searchInOntoHandler();
         }
       }
 
