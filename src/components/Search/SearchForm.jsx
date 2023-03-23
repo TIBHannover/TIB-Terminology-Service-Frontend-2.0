@@ -11,7 +11,9 @@ class SearchForm extends React.Component{
           clickInfo: false,
           searchResult: [],
           jumpResult: [],
+          entry: [],
           ontologyId: '',
+          facetIsSelected: false,
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
@@ -40,7 +42,7 @@ class SearchForm extends React.Component{
           ontologies = [];
         }    
         this.setState({         
-          selectedOntologies: ontologies,
+          ontologyId: ontologies,
           facetIsSelected: facetSelected,
           isLoaded: true,
           enteredTerm: enteredTerm
@@ -105,17 +107,29 @@ class SearchForm extends React.Component{
           });
       }
 
-    async searchInOntoHandler(enteredTerm){
+    async searchInOntoHandler(enteredTerm, ontologies){
       let urlPath = window.location.pathname;      
-      if(urlPath.includes("/ontologies/" + this.state.ontologyId)){
-        let entry = await fetch(`${this.state.api_base_url}/search?q=${enteredTerm}&ontology=${this.state.ontologyId}`)
+      if(urlPath.includes("/ontologies/" + ontologies)){
+        let entry = await fetch(`${this.state.api_base_url}/search?q=${enteredTerm}&ontology=${ontologies}`)
         entry = (await entry.json())['response']['docs']
         this.setState({
-          selection: entry,
+          entry: entry,
           result: true
-        })
+        }, () => {
+          this.updateURL(ontologies);
+        });
       } 
 
+    }
+
+    updateURL(ontologies){
+      let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+      this.props.history.push(window.location.pathname);
+      let currentUrlParams = new URLSearchParams();   
+      for(let ontos of ontologies){
+        currentUrlParams.append('ontology', ontos);
+      }
+      this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
     }
     
       handleClickOutside(){
@@ -183,7 +197,6 @@ class SearchForm extends React.Component{
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
           this.submitHandler();
-          this.searchInOntoHandler();
         }
       }
 
@@ -193,8 +206,8 @@ class SearchForm extends React.Component{
           return(
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
-                  {urlPath &&
-                   this.urlOnto() }                                 
+                  {/* {urlPath &&
+                   this.urlOnto() }                                  */}
                   <input 
                     type="text" 
                     class="form-control search-input" 
@@ -205,7 +218,8 @@ class SearchForm extends React.Component{
                     id="s-field"                    
                     ></input>
                   <div class="input-group-append">
-                    <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
+                    {this.searchInOntoHandler() &&
+                    <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>}  
                   </div>
                 </div>
                                       
