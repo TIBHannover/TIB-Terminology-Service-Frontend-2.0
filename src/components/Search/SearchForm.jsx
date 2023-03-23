@@ -78,13 +78,24 @@ class SearchForm extends React.Component{
       }
 
 
-    submitHandler(event){          
+    submitHandler(ontologies){ 
+      let urlPath = window.location.pathname;          
         let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
           url.searchParams.append('q', enteredTerm);
+          url.searchParams.append('page', 1);
+          url.pathname = "/ts/search";
+          window.location.replace(url);
+        }
+        else if(enteredTerm !== "" && urlPath.includes("/ontologies/" + this.state.ontologyId)){
+          let url = new URL(window.location);    
+          url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          url.searchParams.append('q', enteredTerm);
+          url.searchParams.append('ontology', ontologies)
           url.searchParams.append('page', 1);
           url.pathname = "/ts/search";
           window.location.replace(url);
