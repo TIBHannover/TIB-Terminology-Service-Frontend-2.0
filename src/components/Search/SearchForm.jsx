@@ -22,6 +22,7 @@ class SearchForm extends React.Component{
         this.autoRef = React.createRef(); 
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
+        this.searchInOntoHandler = this.searchInOntoHandler.bind(this);
       }
       
 
@@ -79,6 +80,19 @@ class SearchForm extends React.Component{
             result: true
           });
       }
+
+    async searchInOntoHandler(enteredTerm){
+      let urlPath = window.location.pathname;      
+      if(urlPath.includes("/ontologies/" + this.state.ontologyId)){
+        let entry = await fetch(`${this.state.api_base_url}/search?q=${enteredTerm}&ontology=${this.state.ontologyId}`)
+        entry = (await entry.json())['response']['docs']
+        this.setState({
+          selection: entry,
+          result: true
+        })
+      } 
+
+    }
     
       handleClickOutside(){
         document.addEventListener("click", (event) =>{
