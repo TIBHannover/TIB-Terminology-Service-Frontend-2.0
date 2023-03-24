@@ -166,9 +166,7 @@ class Tree extends React.Component {
             }
                      
         }
-
-        this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        this.props.nodeSelectionHandler(target, showNodeDetailPage);  
+        
         this.setState({
             targetNodeIri: target,       
             treeDomContent: treeList,
@@ -180,6 +178,10 @@ class Tree extends React.Component {
             siblingsButtonShow: fullTreeMode,
             siblingsVisible: !fullTreeMode,
             lastSelectedItemId: lastSelectedItemId
+        }, () => {
+            this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
+            this.props.nodeSelectionHandler(target, showNodeDetailPage);
+            this.props.iriChangerFunction(target, this.props.componentIdentity);
         });  
     }
 
