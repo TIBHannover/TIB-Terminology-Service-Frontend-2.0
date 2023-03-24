@@ -1385,6 +1385,15 @@ p{
     left: 0;
     width: 100%;
 }
+
+.tree-action-end-line{
+    /* 
+        The line at the end of the tree action button area
+    */
+
+    width: 90%;
+}
+
 .tree{
     /* 
         The tree wrapper
@@ -1395,7 +1404,6 @@ p{
     overflow-y: scroll;
     height: 1000px;
 }
-
 
 
 .node-table-container{

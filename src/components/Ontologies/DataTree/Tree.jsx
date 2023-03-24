@@ -511,7 +511,7 @@ async showSiblings(){
                         </button>
                     }
                 </div>
-                <hr></hr>                     
+                <hr className="tree-action-end-line"></hr>                     
             </div>                      
         ];
     }
