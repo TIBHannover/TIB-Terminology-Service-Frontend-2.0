@@ -1430,12 +1430,13 @@ p{
 
 .node-metadata-label{
     /* 
-        The metadata label style for nodes (class/property)  in the detail table 
+        The metadata label style for nodes (class/property)  in the detail table
     */
 
     font-weight: bold !important;
     font-size: 13.5px !important;
     text-align: left;
+    word-wrap: break-word;
 }
 
 .node-metadata-value{
@@ -1446,6 +1447,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;    
+    overflow-x: scroll;
 }
 
 .node-detail-table-row{

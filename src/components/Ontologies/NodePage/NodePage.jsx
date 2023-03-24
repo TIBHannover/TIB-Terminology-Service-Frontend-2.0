@@ -58,7 +58,7 @@ class NodePage extends React.Component {
     let row = [
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
           <div className='row'>
-            <div className="col-sm-4 col-md-3 node-metadata-value" key={metadataLabel + "-label"}>
+            <div className="col-sm-4 col-md-3" key={metadataLabel + "-label"}>
               <div className="node-metadata-label">{metadataLabel}</div>
             </div>
             <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>

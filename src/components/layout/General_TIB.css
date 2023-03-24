@@ -1494,6 +1494,7 @@ p{
     font-weight: bold !important;
     font-size: 13.5px !important;
     text-align: left;
+    word-wrap: break-word;
 }
 
 .node-metadata-value{
@@ -1504,6 +1505,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;    
+    overflow-x: scroll;
 }
 
 .node-detail-table-row{
