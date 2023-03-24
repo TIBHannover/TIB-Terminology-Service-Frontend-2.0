@@ -1869,7 +1869,6 @@ Jumpto styles
     background-color: white;
     position: absolute;
     display: block;
-
 }
 
 
@@ -1894,8 +1893,7 @@ Jumpto styles
     padding-bottom: 10px;    
     z-index: 99999;        
     width: 400px;    
-    margin-left: 114px;
-    margin-top: -12px;
+    margin-left: 85px;    
 }
 
 .jumpto-item-holder{
