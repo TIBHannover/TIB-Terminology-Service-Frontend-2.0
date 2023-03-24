@@ -1357,7 +1357,7 @@ p{
 
     margin-top: 110px;
     z-index: 9000;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 1000px;
 }
 
@@ -1447,7 +1447,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;    
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 .node-detail-table-row{
