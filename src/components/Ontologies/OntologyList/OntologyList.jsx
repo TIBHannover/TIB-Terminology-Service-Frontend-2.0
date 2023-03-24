@@ -423,7 +423,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                 <Pagination 
                   clickHandler={this.handlePagination} 
                   count={this.pageCount()}
-                  pageNumber={this.state.pageNumber}               
+                  initialPageNumber={this.state.pageNumber}               
                 />
               </div>
             </div>
