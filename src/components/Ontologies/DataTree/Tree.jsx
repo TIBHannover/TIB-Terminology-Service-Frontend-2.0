@@ -53,6 +53,7 @@ class Tree extends React.Component {
         this.reduceTree = this.reduceTree.bind(this);   
         this.processKeyNavigation = this.processKeyNavigation.bind(this);
         this.loadTheTreeLastState = this.loadTheTreeLastState.bind(this);    
+        this.createTreeActionButtons = this.createTreeActionButtons.bind(this);
     }
 
 
@@ -217,6 +218,7 @@ class Tree extends React.Component {
         if(this.props.isIndividual){
             return true;
         }
+        console.info(target)
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
         let targetNodeDiv = treeNode.getClickedNodeDiv(target);
@@ -257,8 +259,11 @@ class Tree extends React.Component {
             return true;
         }
         
-        if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
+        if (e.target.tagName === "DIV" && e.target.classList.contains("tree-text-container")){ 
             this.selectNode(e.target);
+        }
+        else if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
+            this.selectNode(e.target.parentNode);
         }
         else if (e.target.tagName === "I"){   
             // expand a node by clicking on the expand icon
@@ -286,7 +291,7 @@ class Tree extends React.Component {
             let lastSelectedItemId = this.state.lastSelectedItemId;
             let treeNode = new TreeNodeController();
             if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){                
-                let node = treeNode.getNodeLabelTextById("0");
+                let node = treeNode.getNodeLabelTextById("0");                
                 this.selectNode(node);
             }
             else if(lastSelectedItemId && event.key === "ArrowDown"){
@@ -301,8 +306,7 @@ class Tree extends React.Component {
                 performArrowUp(node, this.selectNode, lastSelectedItemId);
                                        
             }
-            else if(lastSelectedItemId && event.key === "ArrowRight"){
-                console.info(333)
+            else if(lastSelectedItemId && event.key === "ArrowRight"){                
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
@@ -477,22 +481,15 @@ async showSiblings(){
     }
 
 
-    render(){
-        return (
-            <div className="col-sm-12 tree-container" id="tree-container"  onClick={(e) => this.processClick(e)}>
-                {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
-                {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
-                {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
-                <div className='row'>          
-                    {!this.state.treeDomContent.__html 
-                    ? <div className='col-sm-10 tree'>{this.state.treeDomContent}</div> 
-                    : <div className='col-sm-10' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
-                    }
-                                
-                    <div className='col-sm-2'>
+    createTreeActionButtons(){
+        return [
+            <div className='tree-action-button-area'>
+                <div className='tree-action-btn-holder'>
                     {!this.props.isIndividual && 
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
                     }
+                </div>
+                <div className='tree-action-btn-holder'>
                     {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                         {!this.state.reduceBtnActive
@@ -500,7 +497,9 @@ async showSiblings(){
                                 : "Full Tree"
                         }
                         </button>                
-                    }                
+                    } 
+                </div>
+                <div className='tree-action-btn-holder'>
                     {this.state.siblingsButtonShow && !this.props.isIndividual &&
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
                         {!this.state.siblingsVisible
@@ -510,12 +509,31 @@ async showSiblings(){
                         </button>                
                     }
                     {this.props.isIndividual &&
-                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.props.individualViewChanger}>
+                        <button className='btn btn-secondary btn-sm tree-action-btn tree-action-btn-holder' onClick={this.props.individualViewChanger}>
                             Show In List
                         </button>
-                    } 
+                    }
+                </div>
+                <hr className="tree-action-end-line"></hr>                     
+            </div>                      
+        ];
+    }
+
+
+    render(){
+        return (
+            <div className="col-sm-12" onClick={(e) => this.processClick(e)}>
+                {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
+                {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
+                {!this.state.isLoadingTheComponent && !this.state.noNodeExist && this.createTreeActionButtons()}                
+                {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
+                    <div className='row'>
+                        {!this.state.treeDomContent.__html 
+                        ? <div className='col-sm-12 tree'>{this.state.treeDomContent}</div> 
+                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+                        }                                                    
                     </div>
-                </div>}
+                }
             </div>
         );
     }

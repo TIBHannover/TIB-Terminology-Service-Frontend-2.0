@@ -117,45 +117,45 @@ class TreeNodeController{
 
     scrollToNode(id){
         let position = document.getElementById(id).offsetTop;
-        document.getElementById('tree-container').scrollTop = position;
+        document.getElementById('tree').scrollTop = position;
     }
 
     scrollToNextNode(id){
         let position = document.getElementById(id).nextSibling.offsetTop;
-        document.getElementById('tree-container').scrollTop = position;
+        document.getElementById('tree').scrollTop = position;
     }
 
     scrollToPreviousNode(id){
         let position = document.getElementById(id).previousSibling.offsetTop;
-        document.getElementById('tree-container').scrollTop = position;
+        document.getElementById('tree').scrollTop = position;
     }
 
     getClickedNodeDiv(node){
-        if(node.parentNode.tagName === "DIV"){
-            return node.parentNode;    
+        if(node.tagName === "DIV"){
+            return node;    
         }
         return null;
     }
 
-    getClickedNodeIri(node){
-        return node.parentNode.parentNode.dataset.iri;
+    getClickedNodeIri(node){        
+        return node.parentNode.dataset.iri;
     }
 
     getClickedNodeId(node){
-        return node.parentNode.parentNode.id;
+        return node.parentNode.id;
     }
 
     getNodeLabelTextById(id){
-        return document.getElementById(id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+        return document.getElementById(id).getElementsByClassName('tree-text-container')[0];
     }
 
     getFirstChildLabelText(id){
-        return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+        return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0];
     }
 
     getNodeNextSiblings(id){
         let node = document.getElementById(id);
-        return node.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+        return node.nextSibling.getElementsByClassName('tree-text-container')[0];
     }
 
     getParentNode(id){

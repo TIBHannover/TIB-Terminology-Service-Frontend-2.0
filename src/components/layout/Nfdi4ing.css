@@ -204,7 +204,7 @@ p{
     */
     
     background-color: white !important;
-    margin-top: 10px;
+    margin-bottom: 10px;
     padding: 10px;
     height: auto;
     text-align: justify;
@@ -738,8 +738,7 @@ p{
     display: flex;
     padding-left: 0;
     list-style: none;
-    justify-content: flex-end;
-    margin-top: 30px;
+    justify-content: flex-end;    
   }
  
  .pagination-btn{
@@ -1141,7 +1140,15 @@ p{
 */
 
 
-#ontology-list-sorting{
+.ontologylist-sort-grid{
+    /* 
+        Style for the sort dropdown wrapper in ontology list
+    */
+
+    margin-bottom: 10px;
+}
+
+.ontology-list-sorting{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
     */
@@ -1359,23 +1366,59 @@ p{
 -------------------------------------
 */
 
-.tree-container-left-part{
+.tree-page-left-part{
     /*
        The styles for the tree view container. 
        It is responsible for the left part of the tree page that keeps the tree inside. 
     */
-
-   height: 1000px;
-   overflow-y: scroll;
+       
    padding-bottom: 500px !important;    
-   z-index: 880;    
-   background-color: white;
-   scrollbar-width: none;    
+   background-color: white;    
    width: 900px;
    float: left;
+   position: relative;
 }
-.tree-container-left-part::-webkit-scrollbar {
-   display: none;
+.tree-page-left-part::-webkit-scrollbar {
+   /* display: none; */
+}
+
+.tree-container{
+    /* 
+        Tree container (tree and action buttons) style
+    */
+
+    margin-top: 80px;    
+}
+
+.tree-action-button-area{
+    /* 
+        The tree action buttons container
+    */
+
+    padding-left: 30px;    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.tree-action-end-line{
+    /* 
+        The line at the end of the tree action button area
+    */
+
+    width: 90%;
+}
+
+.tree{
+    /* 
+        The tree wrapper
+    */
+
+    margin-top: 110px;
+    z-index: 9000;
+    overflow-y: auto;
+    height: 1000px;
 }
 
 .node-table-container{
@@ -1447,12 +1490,13 @@ p{
 
 .node-metadata-label{
     /* 
-        The metadata label style for nodes (class/property)  in the detail table 
+        The metadata label style for nodes (class/property)  in the detail table
     */
 
     font-weight: bold !important;
     font-size: 13.5px !important;
     text-align: left;
+    word-wrap: break-word;
 }
 
 .node-metadata-value{
@@ -1463,6 +1507,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;    
+    overflow-x: auto;
 }
 
 .node-detail-table-row{
@@ -1507,8 +1552,7 @@ p{
         Style for the a node span title text in the tree
     */
 
-    display: inline-block;
-    padding-left: 3px;
+    display: inline-block;    
 }
 
 
@@ -1516,12 +1560,13 @@ p{
     /* 
         The style for a node container in the tree view
     */
-
-    padding-left: 5px;
-    display: inline-block;
-    width: 200px;
+    
+    display: inline-block;    
     vertical-align: top;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
+    width: 600%;
+    position: absolute;
+    padding-left: 5px;
 }
 
 .tree-text-container:hover{
@@ -1575,6 +1620,16 @@ p{
     font-size: 11px !important;
     margin-bottom: 5px !important;
     width: 100% !important;
+}
+
+.tree-action-btn-holder{    
+    /* 
+        The button dic holder
+    */
+
+    width: 110px;
+    display: inline-block;
+    text-align: center;
 }
 
 .node-tag{
@@ -1637,13 +1692,11 @@ p{
   }
 
   @media only screen and (max-width: 3000px) and (min-width: 1501px) {
-    .li-label-text{      
-        width: 140px;     
-    }   
+    
     .tree-view-container{        
         width: 1750px;            
     }
-    .tree-container-left-part{                        
+    .tree-page-left-part{                        
        width: 900px;       
    }
    .node-table-container{
@@ -1652,13 +1705,11 @@ p{
   }
 
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {
-    .li-label-text{       
-        width: 140px;     
-    }    
+     
     .tree-view-container{        
         width: 1360px;        
     }
-    .tree-container-left-part{                        
+    .tree-page-left-part{                        
        width: 700px;       
    }
    .node-table-container{
@@ -1669,13 +1720,11 @@ p{
     }     
   }
 @media only screen and (max-width: 1301px) and (min-width: 1026px) {
-    .li-label-text{                    
-        width: 140px;     
-    }   
+   
     .tree-view-container{        
         width: 1200px;            
     }
-    .tree-container-left-part{                        
+    .tree-page-left-part{                        
        width: 600px;       
    }
    .node-table-container{
@@ -1688,15 +1737,13 @@ p{
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .li-label-text{       
-        width: 100px;     
-    }
+    
     .tree-view-container{       
                      
         width: 1000px;        
         padding-top: 20px;    
     }
-    .tree-container-left-part{                               
+    .tree-page-left-part{                               
        width: 500px;       
    }
    .node-table-container{  
@@ -1708,9 +1755,7 @@ p{
   }
 
   @media only screen and (max-width: 900px){
-    .li-label-text{    
-        width: 100px;     
-    }
+  
     .tree-node-li {        
         font-size: 9px !important;    
     }
@@ -1842,7 +1887,7 @@ p{
         Style for the element on top of the list table
     */
 
-    margin-top: 40px;
+    /* margin-top: 40px; */
 }
 
 .list-header-element > .pagination-holder{
@@ -1865,6 +1910,18 @@ p{
 Jumpto styles
 ---------------------------------------------------
 */
+
+.jumpto-wrapper{
+    /*
+        styles for jumpto wrapper
+     */
+    margin-bottom: 120px;
+    margin-left: 30px;     
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+}
 
 
 .jumpto-container{
@@ -1904,8 +1961,7 @@ Jumpto styles
     padding-bottom: 10px;    
     z-index: 99999;        
     width: 400px;    
-    margin-left: 114px;
-    margin-top: -12px;
+    margin-left: 85px;    
 }
 
 .jumpto-item-holder{
@@ -2016,14 +2072,6 @@ Jumpto styles
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-}
-
-.jumpto-form-fixer{
-    /*
-        styles for fixing/modifying search box in tree view 
-     */
-    margin-bottom: 12px;
-    margin-left: 30px;
 }
 
 .selected-by-arrow-key{

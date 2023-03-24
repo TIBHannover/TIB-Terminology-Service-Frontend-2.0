@@ -113,13 +113,13 @@ class JumpTo extends React.Component{
 
     render(){
         return(
-            <div className='row'>
+            <div className='row jumpto-wrapper'>
                 <div className='col-sm-12'>
-                    <div class="input-group jumpto-form-fixer">
+                    <div class="input-group">                        
                         <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            Jump to:
-                        </div>
+                            <div class="input-group-text">
+                                Jump to:
+                            </div>
                         </div>
                         <input class="form-control jumpto-search-box col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
                     </div> 
@@ -127,7 +127,7 @@ class JumpTo extends React.Component{
                     <div ref={this.autoRef}  className="col-md-12 justify-content-md-center jumpto-container jumpto-tree-container" id="jmp-tree-container">
                         {this.createJumpResultList()}       
                     </div>} 
-                </div>
+                </div>                
             </div>
         );
     }

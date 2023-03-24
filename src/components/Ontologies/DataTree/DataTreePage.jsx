@@ -71,19 +71,19 @@ class DataTreePage extends React.Component {
       return null;
     }   
     let addedWidth = (event.clientX - this.state.lastPageX) / 1;    
-    let treeLeftPane = document.getElementById("tree-container-left-pane");
-    let treeRightPane = document.getElementById("tree-container-right-pane");
+    let treeLeftPane = document.getElementById("tree-page-left-pane");
+    let treeRightPane = document.getElementById("tree-page-right-pane");
     let currentWidthLeft = parseInt(treeLeftPane.offsetWidth);    
     let currentWidthRight = parseInt(treeRightPane.offsetWidth);    
     treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
     treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
     this.setState({lastPageX: event.clientX});  
-    this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
-    this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
-    this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
-    this.adjustFontSizeBasedOnResize('p-icon-style', currentWidthLeft + addedWidth);    
-    this.adjustTreeNodeWidthBasedOnResize('tree-text-container', currentWidthLeft + addedWidth);    
-    this.adjustTreeNodeWidthBasedOnResize('li-label-text', currentWidthLeft + addedWidth);    
+    // this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
+    // this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
+    // this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
+    // this.adjustFontSizeBasedOnResize('p-icon-style', currentWidthLeft + addedWidth);    
+    // this.adjustTreeNodeWidthBasedOnResize('tree-text-container', currentWidthLeft + addedWidth);    
+    // this.adjustTreeNodeWidthBasedOnResize('li-label-text', currentWidthLeft + addedWidth);    
   }
 
 
@@ -146,13 +146,13 @@ class DataTreePage extends React.Component {
 render(){
   return(    
      <div className="tree-view-container resizable-container"> 
-        <div className="tree-container-left-part" id="tree-container-left-pane">       
+        <div className="tree-page-left-part" id="tree-page-left-pane">       
           <JumpTo
             ontologyId={this.props.ontology}
             isSkos={this.props.isSkos} 
             componentIdentity={this.props.componentIdentity}         
            />
-          <div className=''>
+          <div className='tree-container'>
                 <Tree
                   rootNodes={this.props.rootNodes}
                   componentIdentity={this.props.componentIdentity}
@@ -170,7 +170,7 @@ render(){
           </div>        
         </div>
         <div className='tree-view-resize-area'></div>
-        <div className="node-table-container" id="tree-container-right-pane">
+        <div className="node-table-container" id="tree-page-right-pane">
           {this.state.termTree && this.state.showNodeDetailPage &&           
               <MatomoWrapper>
               <NodePage
