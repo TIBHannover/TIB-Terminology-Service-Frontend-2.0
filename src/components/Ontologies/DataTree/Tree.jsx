@@ -218,6 +218,7 @@ class Tree extends React.Component {
         if(this.props.isIndividual){
             return true;
         }
+        console.info(target)
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
         let targetNodeDiv = treeNode.getClickedNodeDiv(target);
@@ -258,8 +259,11 @@ class Tree extends React.Component {
             return true;
         }
         
-        if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
+        if (e.target.tagName === "DIV" && e.target.classList.contains("tree-text-container")){ 
             this.selectNode(e.target);
+        }
+        else if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
+            this.selectNode(e.target.parentNode);
         }
         else if (e.target.tagName === "I"){   
             // expand a node by clicking on the expand icon
@@ -287,7 +291,7 @@ class Tree extends React.Component {
             let lastSelectedItemId = this.state.lastSelectedItemId;
             let treeNode = new TreeNodeController();
             if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){                
-                let node = treeNode.getNodeLabelTextById("0");
+                let node = treeNode.getNodeLabelTextById("0");                
                 this.selectNode(node);
             }
             else if(lastSelectedItemId && event.key === "ArrowDown"){
@@ -302,8 +306,7 @@ class Tree extends React.Component {
                 performArrowUp(node, this.selectNode, lastSelectedItemId);
                                        
             }
-            else if(lastSelectedItemId && event.key === "ArrowRight"){
-                console.info(333)
+            else if(lastSelectedItemId && event.key === "ArrowRight"){                
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
