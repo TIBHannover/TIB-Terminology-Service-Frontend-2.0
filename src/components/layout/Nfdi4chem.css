@@ -1355,7 +1355,7 @@ p{
         The tree wrapper
     */
 
-    margin-top: 100px;
+    margin-top: 110px;
     z-index: 9000;
     overflow-y: scroll;
     height: 1000px;
@@ -1558,6 +1558,16 @@ p{
     font-size: 11px !important;
     margin-bottom: 5px !important;
     width: 100% !important;
+}
+
+.tree-action-btn-holder{    
+    /* 
+        The button dic holder
+    */
+
+    width: 110px;
+    display: inline-block;
+    text-align: center;
 }
 
 .node-tag{
@@ -1824,6 +1834,18 @@ Jumpto styles
 ---------------------------------------------------
 */
 
+.jumpto-wrapper{
+    /*
+        styles for jumpto wrapper
+     */
+    margin-bottom: 120px;
+    margin-left: 30px;     
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+}
+
 
 .jumpto-container{
     /* 
@@ -1972,18 +1994,6 @@ Jumpto styles
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-}
-
-.jumpto-wrapper{
-    /*
-        styles for jumpto wrapper
-     */
-    margin-bottom: 120px;
-    margin-left: 30px;     
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
 }
 
 .selected-by-arrow-key{

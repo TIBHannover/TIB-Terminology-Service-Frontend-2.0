@@ -480,13 +480,13 @@ async showSiblings(){
 
     createTreeActionButtons(){
         return [
-            <div className='row tree-action-button-area'>
-                <div className='col-sm-2'>
+            <div className='tree-action-button-area'>
+                <div className='tree-action-btn-holder'>
                     {!this.props.isIndividual && 
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
                     }
                 </div>
-                <div className='col-sm-2'>
+                <div className='tree-action-btn-holder'>
                     {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                         {!this.state.reduceBtnActive
@@ -496,7 +496,7 @@ async showSiblings(){
                         </button>                
                     } 
                 </div>
-                <div className='col-sm-2'>
+                <div className='tree-action-btn-holder'>
                     {this.state.siblingsButtonShow && !this.props.isIndividual &&
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
                         {!this.state.siblingsVisible
@@ -506,7 +506,7 @@ async showSiblings(){
                         </button>                
                     }
                     {this.props.isIndividual &&
-                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.props.individualViewChanger}>
+                        <button className='btn btn-secondary btn-sm tree-action-btn tree-action-btn-holder' onClick={this.props.individualViewChanger}>
                             Show In List
                         </button>
                     }

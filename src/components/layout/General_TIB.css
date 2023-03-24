@@ -1113,6 +1113,18 @@ p{
 -------------------------------------
 */
 
+.jumpto-wrapper{
+    /*
+        styles for jumpto wrapper
+     */
+    margin-bottom: 120px;
+    margin-left: 30px;     
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+}
+
 .ontologylist-sort-grid{
     /* 
         Style for the sort dropdown wrapper in ontology list
@@ -1391,7 +1403,7 @@ p{
         The line at the end of the tree action button area
     */
 
-    width: 90%;
+    width: 90%;    
 }
 
 .tree{
@@ -1399,7 +1411,7 @@ p{
         The tree wrapper
     */
 
-    margin-top: 100px;
+    margin-top: 110px;
     z-index: 9000;
     overflow-y: scroll;
     height: 1000px;
@@ -1603,9 +1615,20 @@ p{
         Styles for the tree-related action buttons like "reset"
     */
 
-    font-size: 11px !important;
+    font-size: 10px !important;
     margin-bottom: 5px !important;
-    width: 100% !important;
+    width: 100px !important;
+    display: inline;
+}
+
+.tree-action-btn-holder{    
+    /* 
+        The button dic holder
+    */
+
+    width: 110px;
+    display: inline-block;
+    text-align: center;
 }
 
 .node-tag{
@@ -2018,18 +2041,6 @@ Jumpto styles
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-}
-
-.jumpto-wrapper{
-    /*
-        styles for jumpto wrapper
-     */
-    margin-bottom: 120px;
-    margin-left: 30px;     
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
 }
 
 .selected-by-arrow-key{
