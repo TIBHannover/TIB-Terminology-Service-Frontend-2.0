@@ -4,11 +4,9 @@ import App from '../App';
 
 test("Test The App Home Page is running", ()=>{
     render(<App />);
-    
-    expect(screen.getByText("Home")).toBeInTheDocument();
+    let homeInHeaderNavBar = screen.getByText("Home");    
+    expect(homeInHeaderNavBar).toBeInTheDocument();
 });
 
 
-
-// let homeOptionInHeader = <a class="nav-link navbar-item" href="/ts/">Home</a>;
 
