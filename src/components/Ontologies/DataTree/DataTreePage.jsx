@@ -152,7 +152,7 @@ render(){
             isSkos={this.props.isSkos} 
             componentIdentity={this.props.componentIdentity}         
            />
-          <div className=''>
+          <div className='tree-container'>
                 <Tree
                   rootNodes={this.props.rootNodes}
                   componentIdentity={this.props.componentIdentity}

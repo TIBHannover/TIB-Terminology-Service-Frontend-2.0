@@ -113,9 +113,9 @@ class JumpTo extends React.Component{
 
     render(){
         return(
-            <div className='row'>
+            <div className='row jumpto-wrapper'>
                 <div className='col-sm-12'>
-                    <div class="input-group jumpto-form-fixer">                        
+                    <div class="input-group">                        
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 Jump to:
