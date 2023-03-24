@@ -1383,14 +1383,33 @@ p{
 }
 
 .tree-container{
-   /* 
-       Tree container style
-   */
+    /* 
+        Tree container (tree and action buttons) style
+    */
 
-   margin-top: 100px;    
-   z-index: 9000;
-   overflow-y: scroll;
-   height: 1000px;
+    margin-top: 80px;    
+}
+
+.tree-action-button-area{
+    /* 
+        The tree action buttons container
+    */
+
+    padding-left: 30px;    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.tree{
+    /* 
+        The tree wrapper
+    */
+
+    margin-top: 100px;
+    z-index: 9000;
+    overflow-y: scroll;
+    height: 1000px;
 }
 
 .node-table-container{
@@ -1522,8 +1541,7 @@ p{
         Style for the a node span title text in the tree
     */
 
-    display: inline-block;
-    padding-left: 3px;
+    display: inline-block;    
 }
 
 
@@ -1531,12 +1549,12 @@ p{
     /* 
         The style for a node container in the tree view
     */
-
-    padding-left: 5px;
-    display: inline-block;
-    width: 200px;
+    
+    display: inline-block;    
     vertical-align: top;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
+    width: 600%;
+    position: absolute;
 }
 
 .tree-text-container:hover{
@@ -1652,9 +1670,7 @@ p{
   }
 
   @media only screen and (max-width: 3000px) and (min-width: 1501px) {
-    .li-label-text{      
-        width: 140px;     
-    }   
+    
     .tree-view-container{        
         width: 1750px;            
     }
@@ -1667,9 +1683,7 @@ p{
   }
 
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {
-    .li-label-text{       
-        width: 140px;     
-    }    
+     
     .tree-view-container{        
         width: 1360px;        
     }
@@ -1684,9 +1698,7 @@ p{
     }     
   }
 @media only screen and (max-width: 1301px) and (min-width: 1026px) {
-    .li-label-text{                    
-        width: 140px;     
-    }   
+   
     .tree-view-container{        
         width: 1200px;            
     }
@@ -1703,9 +1715,7 @@ p{
 
 
 @media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .li-label-text{       
-        width: 100px;     
-    }
+    
     .tree-view-container{       
                      
         width: 1000px;        
@@ -1723,9 +1733,7 @@ p{
   }
 
   @media only screen and (max-width: 900px){
-    .li-label-text{    
-        width: 100px;     
-    }
+  
     .tree-node-li {        
         font-size: 9px !important;    
     }

@@ -53,6 +53,7 @@ class Tree extends React.Component {
         this.reduceTree = this.reduceTree.bind(this);   
         this.processKeyNavigation = this.processKeyNavigation.bind(this);
         this.loadTheTreeLastState = this.loadTheTreeLastState.bind(this);    
+        this.createTreeActionButtons = this.createTreeActionButtons.bind(this);
     }
 
 
@@ -477,22 +478,15 @@ async showSiblings(){
     }
 
 
-    render(){
-        return (
-            <div className="col-sm-12" id="tree-container"  onClick={(e) => this.processClick(e)}>
-                {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
-                {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
-                {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
-                <div className='row'>          
-                    {!this.state.treeDomContent.__html 
-                    ? <div className='col-sm-10 tree'>{this.state.treeDomContent}</div> 
-                    : <div className='col-sm-10' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
-                    }
-                                
-                    <div className='col-sm-2'>
+    createTreeActionButtons(){
+        return [
+            <div className='row tree-action-button-area'>
+                <div className='col-sm-2'>
                     {!this.props.isIndividual && 
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
                     }
+                </div>
+                <div className='col-sm-2'>
                     {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                         {!this.state.reduceBtnActive
@@ -500,7 +494,9 @@ async showSiblings(){
                                 : "Full Tree"
                         }
                         </button>                
-                    }                
+                    } 
+                </div>
+                <div className='col-sm-2'>
                     {this.state.siblingsButtonShow && !this.props.isIndividual &&
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
                         {!this.state.siblingsVisible
@@ -513,9 +509,28 @@ async showSiblings(){
                         <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.props.individualViewChanger}>
                             Show In List
                         </button>
-                    } 
+                    }
+                </div>
+                <hr></hr>                     
+            </div>                      
+        ];
+    }
+
+
+    render(){
+        return (
+            <div className="col-sm-12" id="tree-container"  onClick={(e) => this.processClick(e)}>
+                {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
+                {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
+                {!this.state.isLoadingTheComponent && !this.state.noNodeExist && this.createTreeActionButtons()}                
+                {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
+                    <div className='row'>
+                        {!this.state.treeDomContent.__html 
+                        ? <div className='col-sm-12 tree'>{this.state.treeDomContent}</div> 
+                        : <div className='col-sm-12' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+                        }                                                    
                     </div>
-                </div>}
+                }
             </div>
         );
     }

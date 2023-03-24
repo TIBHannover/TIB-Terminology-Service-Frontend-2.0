@@ -78,12 +78,12 @@ class DataTreePage extends React.Component {
     treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
     treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
     this.setState({lastPageX: event.clientX});  
-    this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
-    this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
-    this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
-    this.adjustFontSizeBasedOnResize('p-icon-style', currentWidthLeft + addedWidth);    
-    this.adjustTreeNodeWidthBasedOnResize('tree-text-container', currentWidthLeft + addedWidth);    
-    this.adjustTreeNodeWidthBasedOnResize('li-label-text', currentWidthLeft + addedWidth);    
+    // this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
+    // this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
+    // this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
+    // this.adjustFontSizeBasedOnResize('p-icon-style', currentWidthLeft + addedWidth);    
+    // this.adjustTreeNodeWidthBasedOnResize('tree-text-container', currentWidthLeft + addedWidth);    
+    // this.adjustTreeNodeWidthBasedOnResize('li-label-text', currentWidthLeft + addedWidth);    
   }
 
 
