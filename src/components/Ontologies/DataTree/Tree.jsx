@@ -519,7 +519,7 @@ async showSiblings(){
 
     render(){
         return (
-            <div className="col-sm-12" id="tree-container"  onClick={(e) => this.processClick(e)}>
+            <div className="col-sm-12" onClick={(e) => this.processClick(e)}>
                 {this.state.isLoadingTheComponent && <div className="isLoading"></div>}
                 {this.state.noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && this.createTreeActionButtons()}                
@@ -527,7 +527,7 @@ async showSiblings(){
                     <div className='row'>
                         {!this.state.treeDomContent.__html 
                         ? <div className='col-sm-12 tree'>{this.state.treeDomContent}</div> 
-                        : <div className='col-sm-12' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
                         }                                                    
                     </div>
                 }
