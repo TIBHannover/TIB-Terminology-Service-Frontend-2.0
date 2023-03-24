@@ -212,37 +212,40 @@ class IndividualsList extends React.Component {
     render(){
         return(
             <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
-                <div className="tree-container-left-part">
+                <div className="tree-page-left-part">
                   <JumpTo
                     ontologyId={this.props.ontology}
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
-                   />
-                    <div className="">
-                        {this.state.listView && 
-                            <div className="col-sm-12 tree-container">
-                                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
-                                <div className="row">
-                                    <div className="col-sm-10">
-                                        <ul>
-                                            {this.createIndividualList()}
-                                        </ul>
-                                    </div>
-                                    {typeof(this.props.iri) !== "undefined" && this.state.individuals.length !== 0 &&
-                                    <div className="col-sm-2">
-                                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
-                                            {this.state.listView ? "Show In Tree" : ""}
-                                        </button>                                
-                                    </div>
-                                    }
+                   />                    
+                    {this.state.listView &&
+                            <div className="tree-container">
+                                <div className="col-sm-12">
+                                    {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
+                                    <div className="row">
+                                        <div className="col-sm-10">
+                                            <ul>
+                                                {this.createIndividualList()}
+                                            </ul>
+                                        </div>
+                                        {typeof(this.props.iri) !== "undefined" && this.state.individuals.length !== 0 &&
+                                        <div className="col-sm-2">
+                                            <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
+                                                {this.state.listView ? "Show In Tree" : ""}
+                                            </button>                                
+                                        </div>
+                                        }
 
+                                    </div>
                                 </div>
-                            </div>
+                            </div> 
                         }                        
                         {!this.state.listView &&
-                            this.createIndividualTree()
+                            <div className="tree-container">
+                                {this.createIndividualTree()}
+                            </div>                            
                         }                        
-                    </div>                    
+                                       
                 </div>
                 <div className='tree-view-resize-area'></div>
                 <div className="node-table-container">
