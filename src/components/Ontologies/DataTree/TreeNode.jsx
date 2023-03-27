@@ -127,7 +127,7 @@ class TreeNodeController{
 
     scrollToPreviousNode(id){
         let position = document.getElementById(id).previousSibling.offsetTop;
-        document.getElementById('trea-container').scrollTop = position;
+        document.getElementById('trea-container').scrollTop = position;        
     }
 
     getClickedNodeDiv(node){
