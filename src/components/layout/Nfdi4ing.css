@@ -1437,13 +1437,15 @@ p{
        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
    */
 
-   padding-left: 50px;
-   padding-right: 50px;
-   padding-top: 30px;
-   width: 880px;
-   float: left;
-   background-color: white;
-   height: 1000px;    
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px;
+    width: 880px;
+    float: left;
+    background-color: white;
+    height: 1000px;
+    min-width: 880px;
+    max-width: 880px;     
 }
 
 .tree-view-resize-area{

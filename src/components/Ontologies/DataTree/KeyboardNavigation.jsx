@@ -9,7 +9,7 @@ export function performArrowUp(currentNode, nodeSelectorFunction, scrollToElemen
         let parentNode = treeNode.getParentNode(currentNode.id);
         let parentNodeLabelText = treeNode.getNodeLabelTextById(parentNode.id);
         nodeSelectorFunction(parentNodeLabelText);                    
-        treeNode.scrollToNode(scrollToElementId);
+        treeNode.scrollToNode(parentNode.id);
     }
     else if(treeNode.isNodeClosed(currentNode.previousSibling) || treeNode.isNodeLeaf(currentNode.previousSibling)){
         let previousSiblingNode = treeNode.getNodeLabelTextById(currentNode.previousSibling.id);
