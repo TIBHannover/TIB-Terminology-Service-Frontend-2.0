@@ -485,38 +485,50 @@ async showSiblings(){
 
     createTreeActionButtons(){
         return [
-            <div className='tree-action-button-area'>
-                <div className='tree-action-btn-holder'>
-                    {!this.props.isIndividual && 
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
-                    }
-                </div>
-                <div className='tree-action-btn-holder'>
-                    {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
-                        {!this.state.reduceBtnActive
-                                ? "Sub Tree"
-                                : "Full Tree"
+            <div className='row tree-action-button-area'>
+                <div className="col-sm-4 text-right">
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">
+                            {!this.props.isIndividual && 
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
+                            }
+                        </div>                        
+                    </div>
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">
+                            {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
+                                {!this.state.reduceBtnActive
+                                        ? "Sub Tree"
+                                        : "Full Tree"
+                                }
+                                </button>                
+                            }
+                        </div>                         
+                    </div>
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">
+                            {this.state.siblingsButtonShow && !this.props.isIndividual &&
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
+                                {!this.state.siblingsVisible
+                                    ? "Show Siblings"
+                                    : "Hide Siblings"
+                                    }    
+                                </button>                
+                            }
+                        </div>                        
+                        {this.props.isIndividual &&                            
+                            <div className='row tree-action-btn-holder'>
+                                <div className="col-sm-12">
+                                    <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.props.individualViewChanger}>
+                                        Show In List
+                                    </button>
+                                </div>                                
+                            </div>                        
                         }
-                        </button>                
-                    } 
-                </div>
-                <div className='tree-action-btn-holder'>
-                    {this.state.siblingsButtonShow && !this.props.isIndividual &&
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
-                        {!this.state.siblingsVisible
-                            ? "Show Siblings"
-                            : "Hide Siblings"
-                            }    
-                        </button>                
-                    }
-                    {this.props.isIndividual &&
-                        <button className='btn btn-secondary btn-sm tree-action-btn tree-action-btn-holder' onClick={this.props.individualViewChanger}>
-                            Show In List
-                        </button>
-                    }
-                </div>
-                <hr className="tree-action-end-line"></hr>                     
+                    </div>
+                </div>               
+                {/* <hr className="tree-action-end-line"></hr>                      */}
             </div>                      
         ];
     }

@@ -1347,11 +1347,9 @@ p{
         The tree action buttons container
     */
 
-    padding-left: 30px;    
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    position: absolute;    
+    margin-top: -80px;
+    right: 20px;
 }
 
 .tree-action-end-line{
@@ -1367,7 +1365,7 @@ p{
         The tree wrapper
     */
 
-    margin-top: 110px;
+    margin-top: 10px;
     z-index: 9000;
     overflow-y: auto;
     height: 1000px;
@@ -1393,8 +1391,7 @@ p{
    */
     cursor: e-resize;
     width: 10px;        
-    border-left: 1px solid black;
-    margin-left: -0.5px;
+    border-left: 1px solid black;    
    /* background-image: linear-gradient(#000, #000); */
    /* background-size: 2px 100%;
    background-repeat: no-repeat;
@@ -1582,9 +1579,8 @@ p{
         The button dic holder
     */
 
-    width: 110px;
-    display: inline-block;
-    text-align: center;
+    /* width: 110px;    
+    text-align: center; */
 }
 
 .node-tag{
@@ -1860,7 +1856,7 @@ Jumpto styles
     position: absolute;
     top: 0;
     left: 0;
-    width: 80%;
+    width: 100%;
 }
 
 
