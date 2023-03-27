@@ -9,16 +9,12 @@ import Toolkit from "../../common/Toolkit";
  export function classMetaData(object){
     let metadata = {
       "Label": [object.label, false],
-      "Synonyms": [object.synonyms, false],
+      "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       "fullIRI": [object.iri, true], 
       "SubClass Of": [object.subClassOf, false],     
-    }
-    
-    if(("Synonyms", object.synonyms, false) !== "N/A"){
-      metadata['Synonyms'] = [(object.synonyms).join(',\n'), false];
     }
     
     if(object.eqAxiom !== "N/A"){
