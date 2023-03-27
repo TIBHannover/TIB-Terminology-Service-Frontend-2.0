@@ -13,7 +13,8 @@ class DataTreePage extends React.Component {
     super(props)
     this.state = ({
       selectedNodeIri: '',
-      showNodeDetailPage: false,
+      showNodeDetailPageClass: false,
+      showNodeDetailPageProperty: false,
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
@@ -47,11 +48,20 @@ class DataTreePage extends React.Component {
   }
 
 
-  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
-    this.setState({
-      selectedNodeIri: selectedNodeIri,
-      showNodeDetailPage: ShowDetailTable
-    });
+  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable, componentIdentity){
+    if(componentIdentity === "term"){
+      this.setState({
+        selectedNodeIri: selectedNodeIri,
+        showNodeDetailPageClass: ShowDetailTable
+      });
+    }
+    else{
+      this.setState({
+        selectedNodeIri: selectedNodeIri,
+        showNodeDetailPageProperty: ShowDetailTable
+      });
+    }
+    
   }
 
 
@@ -171,7 +181,7 @@ render(){
         </div>
         <div className='tree-view-resize-area'></div>
         <div className="node-table-container" id="tree-page-right-pane">
-          {this.state.termTree && this.state.showNodeDetailPage &&           
+          {this.state.termTree && this.state.showNodeDetailPageClass &&           
               <MatomoWrapper>
               <NodePage
                 iri={this.state.selectedNodeIri}
@@ -183,7 +193,7 @@ render(){
               />
               </MatomoWrapper>        
           }
-          {this.state.propertyTree && this.state.showNodeDetailPage &&           
+          {this.state.propertyTree && this.state.showNodeDetailPageProperty &&           
             <MatomoWrapper>
             <NodePage
                 iri={this.state.selectedNodeIri}

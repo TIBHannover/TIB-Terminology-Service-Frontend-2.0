@@ -14,6 +14,19 @@
     This is the css script for the general application style.    
 */
 
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 20px;
+    border: transparent;
+}
+
+
 body{
     /* 
        The style for the site body
@@ -1122,7 +1135,7 @@ p{
     position: absolute;
     top: 0;
     left: 0;
-    width: 80%;
+    width: 100%;
 }
 
 .ontologylist-sort-grid{
@@ -1368,8 +1381,8 @@ p{
         It is responsible for the left part of the tree page that keeps the tree inside. 
      */
         
-    padding-bottom: 500px !important;    
-    background-color: white;    
+    padding-bottom: 500px !important;
+    background-color: white;
     width: 900px;
     float: left;
     position: relative;    
@@ -1390,12 +1403,10 @@ p{
     /* 
         The tree action buttons container
     */
-
-    padding-left: 30px;    
+    
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    margin-top: -80px;
+    right: 20px;
 }
 
 .tree-action-end-line{
@@ -1411,12 +1422,12 @@ p{
         The tree wrapper
     */
 
-    margin-top: 110px;
+    margin-top: 10px;
     z-index: 9000;
     overflow-y: auto;
-    height: 1000px;
+    height: 1000px;  
+    overflow-x: hidden;  
 }
-
 
 .node-table-container{
     /* 
@@ -1429,8 +1440,7 @@ p{
     width: 880px;
     float: left;
     background-color: white;
-    height: 1000px;  
-    overflow: auto;  
+    height: 1000px;      
 }
 
 .tree-view-resize-area{
@@ -1439,10 +1449,10 @@ p{
     */
     cursor: e-resize;
     width: 10px;        
-    background-image: linear-gradient(#000, #000);
+    border-left: 1px solid black;    
+    /* background-image: linear-gradient(#000, #000);
     background-size: 2px 100%;
-    background-repeat: no-repeat;
-    background-position: center center;        
+    background-repeat: no-repeat;       */
 }
 
 .resizable-container{
@@ -1504,8 +1514,8 @@ p{
 
     font-size: 15px !important;
     padding-bottom: 10px;
-    padding-top: 5px;    
-    overflow-x: auto;
+    padding-top: 5px;
+    overflow: hidden;
 }
 
 .node-detail-table-row{
@@ -1621,7 +1631,7 @@ p{
     font-size: 10px !important;
     margin-bottom: 5px !important;
     width: 100px !important;
-    display: inline;
+    /* display: inline; */
 }
 
 .tree-action-btn-holder{    
@@ -1629,9 +1639,8 @@ p{
         The button dic holder
     */
 
-    width: 110px;
-    display: inline-block;
-    text-align: center;
+    /* width: 110px;     */
+    /* right: 0; */
 }
 
 .node-tag{
@@ -1704,62 +1713,7 @@ p{
    .node-table-container{
        width: 780px;         
    }   
-  }
-
-@media only screen and (max-width: 1500px) and (min-width: 1300px) {     
-    .tree-view-container{        
-        width: 1360px;        
-    }
-    .tree-page-left-part{                        
-       width: 700px;       
-   }
-   .node-table-container{
-       width: 680px;         
-   }
-   .tree-node-li {        
-        font-size: 11px !important;    
-    }     
-  }
-@media only screen and (max-width: 1301px) and (min-width: 1026px) {
-     
-    .tree-view-container{        
-        width: 1200px;            
-    }
-    .tree-page-left-part{                        
-       width: 600px;       
-   }
-   .node-table-container{
-       width: 580px;         
-   }
-   .tree-node-li {        
-        font-size: 11px !important;    
-    }     
-  }
-
-
-@media only screen and (max-width: 1025px) and (min-width: 901px) {   
-    .tree-view-container{       
-                     
-        width: 1000px;        
-        padding-top: 20px;    
-    }
-    .tree-page-left-part{                               
-       width: 500px;       
-   }
-   .node-table-container{  
-       width: 480px;         
-   }
-   .tree-node-li {        
-        font-size: 9px !important;    
-    }
-  }
-
-  @media only screen and (max-width: 900px){
-    
-    .tree-node-li {        
-        font-size: 9px !important;    
-    }
-  } */
+  }*/
 
 /* 
 ------------------------------------------------------------
