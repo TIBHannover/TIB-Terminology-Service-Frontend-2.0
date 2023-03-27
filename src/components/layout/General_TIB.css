@@ -1440,7 +1440,9 @@ p{
     width: 880px;
     float: left;
     background-color: white;
-    height: 1000px;      
+    height: 1000px;
+    min-width: 880px;
+    max-width: 880px;      
 }
 
 .tree-view-resize-area{
@@ -1515,7 +1517,7 @@ p{
     font-size: 15px !important;
     padding-bottom: 10px;
     padding-top: 5px;
-    overflow: hidden;
+    overflow: hidden;    
 }
 
 .node-detail-table-row{
