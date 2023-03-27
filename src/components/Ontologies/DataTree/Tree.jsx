@@ -131,7 +131,8 @@ class Tree extends React.Component {
         }        
         else if (!target || resetFlag){                        
             let result = this.buildTheTreeFirstLayer(this.state.rootNodes);
-            treeList = result.treeDomContent;                
+            treeList = result.treeDomContent;
+            target = "";                
         }                    
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
@@ -180,7 +181,7 @@ class Tree extends React.Component {
             lastSelectedItemId: lastSelectedItemId
         }, () => {
             this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-            this.props.nodeSelectionHandler(target, showNodeDetailPage);
+            this.props.nodeSelectionHandler(target, showNodeDetailPage, this.state.componentIdentity);
             this.props.iriChangerFunction(target, this.props.componentIdentity);
         });  
     }
@@ -195,7 +196,11 @@ class Tree extends React.Component {
             currentUrlParams.append('iri', stateObj.selectedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
             this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-        }      
+            this.props.nodeSelectionHandler(stateObj.selectedNodeIri, true, this.state.componentIdentity);
+        }
+        else{
+            this.props.nodeSelectionHandler("", false, this.state.componentIdentity);
+        }        
     }
 
 
@@ -231,7 +236,7 @@ class Tree extends React.Component {
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);
             showNodeDetailPage = true;
-            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage);
+            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage, this.state.componentIdentity);
             this.setState({
                 showNodeDetailPage: showNodeDetailPage,
                 selectedNodeIri: clickedNodeIri,
@@ -347,7 +352,7 @@ class Tree extends React.Component {
   resetTree(){
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-    this.props.nodeSelectionHandler("", false);
+    this.props.nodeSelectionHandler("", false, this.state.componentIdentity);
     this.setState({
       resetTreeFlag: true,
       treeDomContent: "",
