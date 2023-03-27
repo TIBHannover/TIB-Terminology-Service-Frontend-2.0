@@ -75,12 +75,12 @@ import Toolkit from "../../common/Toolkit";
 export function propertyMetaData(object){  
   let metadata = {
     "Label": [object.label, false],
+    "Synonyms": [object.synonyms, false],
     "CURIE":  [object.obo_id, false],
     "Term ID":  [object.short_form, false],
     "Description": [object.description, false],    
     "fullIRI": [object.iri, true],
-    "Ontology": [object.ontology_name, false],
-    "Synonyms": [object.synonyms, false]
+    "Ontology": [object.ontology_name, false] 
   };
 
   if(object.annotation){
@@ -114,9 +114,9 @@ export function propertyMetaData(object){
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
-  else if (label === "Synonyms"){
-    return synonymsTag(text);
-  }
+  // else if (label === "Synonyms"){
+  //   return synonymsTag(text);
+  // }
   else if (label === "Used in axiom"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
