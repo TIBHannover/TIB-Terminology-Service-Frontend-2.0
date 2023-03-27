@@ -59,13 +59,11 @@ class SearchForm extends React.Component{
           searchResult =  (await searchResult.json())['response']['docs'];
           let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
           jumpResult = (await jumpResult.json())['response']['docs'];
-          let ontology_name = jumpResult['ontology_name']
           this.setState({
               searchResult: searchResult,
               jumpResult: jumpResult,
               result: true,
-              enteredTerm: enteredTerm,
-              ontologyId: ontology_name
+              enteredTerm: enteredTerm
           });
         }
         else if (enteredTerm.length == 0){
@@ -192,7 +190,6 @@ class SearchForm extends React.Component{
       urlOnto(){
         let showBox = [];
         let ontologyId = this.state.ontologyId;
-        console.info(ontologyId)
           showBox.push(           
               <div className="search-in-box">
                 <b>Search:</b>
@@ -217,8 +214,8 @@ class SearchForm extends React.Component{
           return(
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
-                  {/* {urlPath &&
-                   this.urlOnto() }                                  */}
+                  {urlPath &&
+                   this.urlOnto() }                                 
                   <input 
                     type="text" 
                     class="form-control search-input" 
