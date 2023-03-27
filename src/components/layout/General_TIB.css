@@ -1425,7 +1425,7 @@ p{
     margin-top: 10px;
     z-index: 9000;
     overflow-y: auto;
-    height: 1000px;  
+    max-height: 1000px;  
     overflow-x: hidden;  
 }
 
