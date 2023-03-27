@@ -188,8 +188,11 @@ class SearchForm extends React.Component{
       }
 
       urlOnto(){
+        let urlPath = window.location.pathname
+        let ontologyId = urlPath.split('/'); 
+        ontologyId = ontologyId[3];            
+        urlPath = urlPath.includes("/ontologies/" + ontologyId)
         let showBox = [];
-        let ontologyId = this.state.ontologyId;
           showBox.push(           
               <div className="search-in-box">
                 <b>Search:</b>
@@ -198,7 +201,7 @@ class SearchForm extends React.Component{
                 </div>                                                                                                          
               </div>            
           )
-          return showBox;
+          return showBox;          
         }
 
 
@@ -208,14 +211,11 @@ class SearchForm extends React.Component{
         }
       }
 
-      render(){ 
-        let urlPath = window.location.pathname;      
-        urlPath = urlPath.includes("/ontologies/" + this.state.ontologyId)            
+      render(){             
           return(
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
-                  {urlPath &&
-                   this.urlOnto() }                                 
+                  {this.urlOnto()}                              
                   <input 
                     type="text" 
                     class="form-control search-input" 
