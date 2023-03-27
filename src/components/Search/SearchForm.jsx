@@ -25,30 +25,6 @@ class SearchForm extends React.Component{
         this.autoRef = React.createRef(); 
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
-        this.searchInOntoHandler = this.searchInOntoHandler.bind(this);
-        this.setComponentData = this.setComponentData.bind(this);
-      }
-      
-      setComponentData(){
-        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
-        let enteredTerm = targetQueryParams.q;  
-        let ontologies = targetQueryParams.ontology;
-        let facetSelected = false;
-        if(typeof(ontologies) === "string"){
-          ontologies = [ontologies];
-          facetSelected= true;
-        }
-        else if(typeof(ontologies) === "undefined"){
-          ontologies = [];
-        }    
-        this.setState({         
-          ontologyId: ontologies,
-          facetIsSelected: facetSelected,
-          isLoaded: true,
-          enteredTerm: enteredTerm
-        }, () => {
-          this.searchInOntoHandler(ontologies, "");
-        });
       }
 
 
@@ -76,8 +52,10 @@ class SearchForm extends React.Component{
       }
 
 
-    submitHandler(ontologies){ 
-      let urlPath = window.location.pathname;          
+    submitHandler(){ 
+        let urlPath = window.location.pathname
+        let ontologyId = urlPath.split('/'); 
+        ontologyId = ontologyId[3];                      
         let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
           let url = new URL(window.location);    
@@ -88,12 +66,12 @@ class SearchForm extends React.Component{
           url.pathname = "/ts/search";
           window.location.replace(url);
         }
-        else if(enteredTerm !== "" && urlPath.includes("/ontologies/" + this.state.ontologyId)){
+        else if(enteredTerm !== "" && urlPath.includes("/ontologies/" + ontologyId)){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
           url.searchParams.append('q', enteredTerm);
-          url.searchParams.append('ontology', ontologies)
+          url.searchParams.append('ontology', ontologyId)
           url.searchParams.append('page', 1);
           url.pathname = "/ts/search";
           window.location.replace(url);
@@ -115,21 +93,6 @@ class SearchForm extends React.Component{
             result: true
           });
       }
-
-    async searchInOntoHandler(enteredTerm, ontologies){
-      let urlPath = window.location.pathname;      
-      if(urlPath.includes("/ontologies/" + ontologies)){
-        let entry = await fetch(`${this.state.api_base_url}/search?q=${enteredTerm}&ontology=${ontologies}`)
-        entry = (await entry.json())['response']['docs']
-        this.setState({
-          entry: entry,
-          result: true
-        }, () => {
-          this.updateURL(ontologies);
-        });
-      } 
-
-    }
 
     updateURL(ontologies){
       let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
@@ -232,8 +195,7 @@ class SearchForm extends React.Component{
                     id="s-field"                    
                     ></input>
                   <div class="input-group-append">
-                    {this.searchInOntoHandler() &&
-                    <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>}  
+                    <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
                   </div>
                 </div>
                                       
