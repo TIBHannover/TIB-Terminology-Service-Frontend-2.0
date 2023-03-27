@@ -1383,9 +1383,7 @@ p{
     width: 880px;
     float: left;
     background-color: white;
-    height: 1000px; 
-    min-width: 880px;
-    max-width: 880px;    
+    height: 1000px;     
 }
 
 .tree-view-resize-area{
