@@ -9,6 +9,18 @@
 ------------------------
 */
 
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 20px;
+    border: transparent;
+}
+
 
 /* 
     This is the css script for the general application style.    
@@ -1379,12 +1391,14 @@ p{
    /*
        Style for the resize div in the tree view 
    */
-   cursor: e-resize;
-   width: 10px;        
-   background-image: linear-gradient(#000, #000);
-   background-size: 2px 100%;
+    cursor: e-resize;
+    width: 10px;        
+    border-left: 1px solid black;
+    margin-left: -0.5px;
+   /* background-image: linear-gradient(#000, #000); */
+   /* background-size: 2px 100%;
    background-repeat: no-repeat;
-   background-position: center center;        
+   background-position: center center;         */
 }
 
 .resizable-container{
