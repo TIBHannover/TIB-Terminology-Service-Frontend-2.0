@@ -219,8 +219,7 @@ class Tree extends React.Component {
     selectNode(target){    
         if(this.props.isIndividual){
             return true;
-        }
-        console.info(target)
+        }        
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
         let targetNodeDiv = treeNode.getClickedNodeDiv(target);
@@ -443,7 +442,7 @@ async showSiblings(){
         }
         }
         catch(e){
-        console.info(e);
+        // console.info(e);
         }
         
     }
@@ -527,8 +526,7 @@ async showSiblings(){
                             </div>                        
                         }
                     </div>
-                </div>               
-                {/* <hr className="tree-action-end-line"></hr>                      */}
+                </div>                 
             </div>                      
         ];
     }
@@ -543,8 +541,8 @@ async showSiblings(){
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
                     <div className='row'>
                         {!this.state.treeDomContent.__html 
-                        ? <div className='col-sm-12 tree'>{this.state.treeDomContent}</div> 
-                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+                        ? <div className='col-sm-12 tree' id="trea-container">{this.state.treeDomContent}</div> 
+                        : <div className='col-sm-12 tree' id="trea-container" dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
                         }                                                    
                     </div>
                 }
