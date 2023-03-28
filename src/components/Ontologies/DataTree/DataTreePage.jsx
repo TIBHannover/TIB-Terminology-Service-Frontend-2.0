@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../JumpTo/Jumpto';
+import PaneResize from '../../common/PaneResize/PaneResize';
 
 
 
@@ -22,11 +23,9 @@ class DataTreePage extends React.Component {
       lastPageX: 0,
       resizeOn: false
     })
+    this.paneResize = new PaneResize();
     this.setComponentData = this.setComponentData.bind(this);
-    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.moveToResize = this.moveToResize.bind(this);
-    this.releaseMouseFromResize = this.releaseMouseFromResize.bind(this);
+    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);    
   }
 
 
@@ -65,52 +64,20 @@ class DataTreePage extends React.Component {
   }
 
 
-  onMouseDown(event){
-    let targetElement = event.target;
-    if (!targetElement.classList.contains('tree-view-resize-area')){
-      return null;
-    }
-    this.setState({
-      lastPageX: event.clientX,
-      resizeOn: true
-    });
-  }
-
-  moveToResize(event){
-    if(!this.state.resizeOn){
-      return null;
-    }   
-    let addedWidth = (event.clientX - this.state.lastPageX) / 1;    
-    let treeLeftPane = document.getElementById("tree-page-left-pane");
-    let treeRightPane = document.getElementById("tree-page-right-pane");
-    let currentWidthLeft = parseInt(treeLeftPane.offsetWidth);    
-    let currentWidthRight = parseInt(treeRightPane.offsetWidth);    
-    treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
-    treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
-    this.setState({lastPageX: event.clientX});        
-  } 
-
-  releaseMouseFromResize(event){
-    if(!this.state.resizeOn){
-      return null;
-    }    
-    this.setState({
-      resizeOn: false      
-    });
-  }
+ 
 
 
   componentDidMount(){
-    this.setComponentData();
-    document.body.addEventListener("mousedown", this.onMouseDown, false);
-    document.body.addEventListener("mousemove", this.moveToResize);
-    document.body.addEventListener("mouseup", this.releaseMouseFromResize);
+    this.setComponentData();        
+    document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+    document.body.addEventListener("mousemove", this.paneResize.moveToResize);
+    document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
   }
 
-  componentWillUnmount(){
-    document.body.addEventListener("mousedown", this.onMouseDown, false);
-    document.body.addEventListener("mousemove", this.moveToResize);
-    document.body.addEventListener("mouseup", this.releaseMouseFromResize);
+  componentWillUnmount(){  
+    document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+    document.body.addEventListener("mousemove", this.paneResize.moveToResize);
+    document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
   }
 
 
