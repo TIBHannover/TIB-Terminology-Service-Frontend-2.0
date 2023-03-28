@@ -17,7 +17,7 @@ class IndividualsList extends React.Component {
             showNodeDetailPage: false,
             selectedNodeIri: " ",
             listView: true,
-            isRendered: false
+            isRendered: false            
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
@@ -39,6 +39,12 @@ class IndividualsList extends React.Component {
                 individuals: sortIndividuals(indvList),
                 ontology: ontology                
             });
+            if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
+                let currentUrlParams = new URLSearchParams();
+                currentUrlParams.append('iri', this.props.iri);
+                this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+                this.props.iriChangerFunction(this.props.iri, this.props.componentIdentity);              
+            }
         }
         catch(error){
             this.setState({
@@ -50,12 +56,12 @@ class IndividualsList extends React.Component {
     }
 
    
-    selectNode(target){    
+    selectNode(target){        
         let selectedElement = document.querySelectorAll(".clicked");
         for(let i=0; i < selectedElement.length; i++){
             selectedElement[i].classList.remove("clicked");
         }
-        if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){
+        if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){            
             target.classList.add("clicked");
             this.setState({
                 showNodeDetailPage: true,
@@ -64,7 +70,7 @@ class IndividualsList extends React.Component {
             let currentUrlParams = new URLSearchParams();
             currentUrlParams.append('iri', target.dataset.iri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(target.dataset.iri, this.state.componentIdentity);    
+            this.props.iriChangerFunction(target.dataset.iri, this.props.componentIdentity);    
         }
         else{
             target.classList.remove("clicked");            
@@ -187,14 +193,7 @@ class IndividualsList extends React.Component {
 
 
     componentDidMount(){
-        this.setComponentData();        
-        if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', this.props.iri);
-            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(this.props.iri, this.state.componentIdentity);              
-        }
-        
+        this.setComponentData();                
     }
 
     componentDidUpdate(){
@@ -202,7 +201,7 @@ class IndividualsList extends React.Component {
         if(this.props.iri !== this.state.selectedNodeIri){
             this.setState({
                 showNodeDetailPage: showDetailTable,
-                selectedNodeIri: this.props.iri              
+                selectedNodeIri: this.props.iri
             });
         }
         if(!this.state.isRendered){

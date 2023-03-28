@@ -244,6 +244,8 @@ class OntologyPage extends React.Component {
  * Need to pass it to the DataTree component
  */
   changeInputIri(iri, componentId){
+    console.info(iri)
+    console.info(componentId)
     if(componentId === "term"){
       this.setState({
         targetTermIri: iri
