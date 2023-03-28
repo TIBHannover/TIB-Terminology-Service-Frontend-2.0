@@ -490,7 +490,8 @@ async showSiblings(){
     createTreeActionButtons(){
         return [
             <div className='row tree-action-button-area'>
-                <div className="col-sm-4 text-right">
+                <div className="col-sm-6"></div>                
+                <div className="col-sm-5 text-center">
                     <div className='row tree-action-btn-holder'>
                         <div className="col-sm-12">
                             {!this.props.isIndividual && 
@@ -531,7 +532,8 @@ async showSiblings(){
                             </div>                        
                         }
                     </div>
-                </div>                 
+                </div> 
+                <div className="col-sm-1"></div>               
             </div>                      
         ];
     }
@@ -546,8 +548,8 @@ async showSiblings(){
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
                     <div className='row'>
                         {!this.state.treeDomContent.__html 
-                        ? <div className='col-sm-12 tree' id="trea-container">{this.state.treeDomContent}</div> 
-                        : <div className='col-sm-12 tree' id="trea-container" dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+                        ? <div className='col-sm-12 tree'>{this.state.treeDomContent}</div> 
+                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
                         }                                                    
                     </div>
                 }

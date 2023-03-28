@@ -39,7 +39,7 @@ export function performArrowDown(currentNode, nodeSelectorFunction, scrollToElem
         nodeSelectorFunction(firstChildNode);
         treeNode.scrollToNode(scrollToElementId);
     }
-    else if(currentNode.nextSibling){                    
+    else if(currentNode.nextSibling){                            
         let nextNode = treeNode.getNodeNextSiblings(currentNode.id);
         nodeSelectorFunction(nextNode);
         treeNode.scrollToNextNode(scrollToElementId);

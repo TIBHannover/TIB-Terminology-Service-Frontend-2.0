@@ -1384,11 +1384,14 @@ p{
        It is responsible for the left part of the tree page that keeps the tree inside. 
     */
        
-   padding-bottom: 500px !important;    
-   background-color: white;    
-   width: 900px;
-   float: left;
-   position: relative;
+    padding-bottom: 500px !important;    
+    background-color: white;    
+    width: 900px;
+    float: left;
+    position: relative;
+    overflow-y: scroll;
+    height: 1000px;
+    overflow-x: hidden;
 }
 .tree-page-left-part::-webkit-scrollbar {
    /* display: none; */
@@ -1406,10 +1409,14 @@ p{
     /* 
         The tree action buttons container
     */
-
-    position: absolute;    
-    margin-top: -80px;
-    right: 20px;
+    
+    position: sticky;
+    margin-top: -200px;    
+    top: 0;    
+    width: 40%;
+    float: right;
+    z-index: 999999;
+    background: white;
 }
 
 .tree-action-end-line{
@@ -1425,10 +1432,8 @@ p{
         The tree wrapper
     */
 
-    margin-top: 10px;
-    z-index: 9000;
-    overflow-y: auto;
-    height: 1000px;
+    margin-top: -70px;
+    z-index: 999;
     overflow-x: hidden;
 }
 
@@ -1702,18 +1707,33 @@ p{
     100% { transform: rotate(360deg); }
   }
 
-  /* @media only screen and (max-width: 3000px) and (min-width: 1501px) {
-    
+  @media only screen and (max-width: 3000px) and (min-width: 1501px) {       
     .tree-view-container{        
         width: 1750px;            
+    }      
+}
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {       
+    .tree-view-container{        
+        width: 1350px;            
     }
-    .tree-page-left-part{                        
-       width: 900px;       
-   }
-   .node-table-container{
-       width: 780px;         
-   }   
-  } */
+    .jumpto-wrapper{
+        width: 90% !important;
+    }
+    .tree-action-button-area{
+        right: 30px !important;
+    }       
+}
+@media only screen and (max-width: 1299px) and (min-width: 901px) {       
+    .tree-view-container{        
+        width: 1200px;            
+    }
+    .jumpto-wrapper{
+        width: 80% !important;
+    }
+    .tree-action-button-area{
+        right: 40px !important;
+    }      
+}
 
 /* 
 ------------------------------------------------------------
@@ -1867,15 +1887,16 @@ Jumpto styles
 .jumpto-wrapper{
     /*
         styles for jumpto wrapper
-     */
-    margin-bottom: 120px;
+     */    
     margin-left: 30px;     
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100%;   
+    z-index: 999999;
+    background: white;
+    height: 80px;     
 }
-
 
 .jumpto-container{
     /* 
