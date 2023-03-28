@@ -171,22 +171,25 @@ class IndividualsList extends React.Component {
 
     renderIndividualListSection(){
         return [
-            <div className="col-sm-12 tree-container">
-                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
+            <div className="col-sm-12">
+                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                
+                {typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
+                    <div className="row tree-action-button-area">
+                        <div className="col-sm-5"></div>
+                        <div className="col-sm-6">
+                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.switchView}>
+                                {this.state.listView ? "Show In Tree" : ""}
+                            </button>                                
+                        </div>
+                        <div className="col-sm-1"></div>
+                    </div>                    
+                }                
                 <div className="row">
-                    <div className="col-sm-10">
+                    <div className="col-sm-12">
                         <ul>
                             {this.createIndividualList()}
                         </ul>
-                    </div>
-                    {typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
-                    <div className="col-sm-2">
-                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
-                            {this.state.listView ? "Show In Tree" : ""}
-                        </button>                                
-                    </div>
-                    }
-
+                    </div>                    
                 </div>
             </div>
         ];
