@@ -13,6 +13,7 @@ class SearchForm extends React.Component{
           jumpResult: [],
           entry: [],
           ontologyId: '',
+          insideOnto: false,
           facetIsSelected: false,
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
@@ -29,7 +30,7 @@ class SearchForm extends React.Component{
 
 
       async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value;        
+        enteredTerm = enteredTerm.target.value                
         if (enteredTerm.length > 0){
           let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
           searchResult =  (await searchResult.json())['response']['docs'];
@@ -42,6 +43,15 @@ class SearchForm extends React.Component{
               enteredTerm: enteredTerm
           });
         }
+        // else if(enteredTerm.length > 0 && this.state.insideOnto){
+        //   let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=` + ontologyId)
+        //   searchResult = (await searchResult.json())['response']['docs'];
+        //   console.info(searchResult)
+        //   this.setState({
+        //     searchResult: searchResult,
+        //     result: true 
+        //   });
+        // }
         else if (enteredTerm.length == 0){
             this.setState({
                 result: false,
@@ -52,10 +62,7 @@ class SearchForm extends React.Component{
       }
 
 
-    submitHandler(){ 
-        let urlPath = window.location.pathname
-        let ontologyId = urlPath.split('/'); 
-        ontologyId = ontologyId[3].toUpperCase();                      
+    submitHandler(){                      
         let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
           let url = new URL(window.location);    
@@ -66,14 +73,6 @@ class SearchForm extends React.Component{
           url.pathname = "/ts/search";
           window.location.replace(url);
         }
-        else if(enteredTerm !== "" && urlPath.includes("/ontologies/" + ontologyId)){
-          let url = new URL(window.location);    
-          url.searchParams.append('q', enteredTerm);
-          url.searchParams.append('ontology', ontologyId)
-          url.searchParams.append('page', 1);
-          url.pathname = "/ts/search";
-          window.location.replace(url);
-        }        
     }
 
     submitJumpHandler(e){
@@ -158,6 +157,7 @@ class SearchForm extends React.Component{
           )
           return showBox;          
         }
+        
 
 
       _handleKeyDown = (e) => {
