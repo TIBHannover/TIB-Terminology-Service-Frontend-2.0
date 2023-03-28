@@ -17,7 +17,7 @@ class IndividualsList extends React.Component {
             showNodeDetailPage: false,
             selectedNodeIri: " ",
             listView: true,
-            isRendered: false
+            isRendered: false            
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
@@ -26,6 +26,7 @@ class IndividualsList extends React.Component {
         this.createIndividualTree = this.createIndividualTree.bind(this);
         this.switchView = this.switchView.bind(this);
         this.selectNodeOnLoad = this.selectNodeOnLoad.bind(this);
+        this.renderIndividualListSection = this.renderIndividualListSection.bind(this);
     }
 
 
@@ -38,6 +39,12 @@ class IndividualsList extends React.Component {
                 individuals: sortIndividuals(indvList),
                 ontology: ontology                
             });
+            if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
+                let currentUrlParams = new URLSearchParams();
+                currentUrlParams.append('iri', this.props.iri);
+                this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+                this.props.iriChangerFunction(this.props.iri, this.props.componentIdentity);              
+            }
         }
         catch(error){
             this.setState({
@@ -48,17 +55,13 @@ class IndividualsList extends React.Component {
         }
     }
 
-
-    /**
-     * Select a node in list
-     * @param {*} e 
-     */
-    selectNode(target){    
+   
+    selectNode(target){        
         let selectedElement = document.querySelectorAll(".clicked");
         for(let i=0; i < selectedElement.length; i++){
             selectedElement[i].classList.remove("clicked");
         }
-        if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){
+        if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){            
             target.classList.add("clicked");
             this.setState({
                 showNodeDetailPage: true,
@@ -67,17 +70,14 @@ class IndividualsList extends React.Component {
             let currentUrlParams = new URLSearchParams();
             currentUrlParams.append('iri', target.dataset.iri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(target.dataset.iri, this.state.componentIdentity);    
+            this.props.iriChangerFunction(target.dataset.iri, this.props.componentIdentity);    
         }
         else{
             target.classList.remove("clicked");            
         }    
     }
 
-
-    /**
-     * Select the node that is given by iri in url
-     */
+    
     selectNodeOnLoad(){        
         let node = document.getElementById(this.props.iri);
         if(node){
@@ -90,11 +90,7 @@ class IndividualsList extends React.Component {
     }
 
 
-
-    /**
-     * Process a click on the list container div. 
-     * @param {*} e 
-     */
+    
     processClick(e){
         if(!this.state.listView){            
             // select a class on the individual tree. Load the tree view for the class
@@ -112,10 +108,6 @@ class IndividualsList extends React.Component {
     }
 
 
-    /**
-     * Create the List view
-     * @returns 
-     */
     createIndividualList(){
         let result = [];
         let individuals = this.state.individuals;
@@ -139,14 +131,11 @@ class IndividualsList extends React.Component {
     }
 
 
-    handleNodeSelection(x, y){
-
+    handleNodeSelectionInTreeView(x, y){
+        return true;
     }
 
-
-    /**
-     * Switch the view from tree to list and vice versa
-     */
+    
     switchView(){
         let listview = this.state.listView;        
         this.setState({
@@ -157,9 +146,6 @@ class IndividualsList extends React.Component {
 
 
 
-    /**
-     * Show an individuals in the tree view
-     */
     createIndividualTree(){
         let result = [
             <Tree 
@@ -173,7 +159,7 @@ class IndividualsList extends React.Component {
                 lastState={this.props.lastState}
                 domStateKeeper={this.props.domStateKeeper}
                 isSkos={this.props.isSkos}
-                nodeSelectionHandler={this.handleNodeSelection}
+                nodeSelectionHandler={this.handleNodeSelectionInTreeView}
                 isIndividual={true}
                 individualViewChanger={this.switchView}
             />
@@ -181,17 +167,33 @@ class IndividualsList extends React.Component {
         return result;
     }
 
+    renderIndividualListSection(){
+        return [
+            <div className="col-sm-12 tree-container">
+                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
+                <div className="row">
+                    <div className="col-sm-10">
+                        <ul>
+                            {this.createIndividualList()}
+                        </ul>
+                    </div>
+                    {typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
+                    <div className="col-sm-2">
+                        <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
+                            {this.state.listView ? "Show In Tree" : ""}
+                        </button>                                
+                    </div>
+                    }
+
+                </div>
+            </div>
+        ];
+    }
+
 
 
     componentDidMount(){
-        this.setComponentData();        
-        if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', this.props.iri);
-            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(this.props.iri, this.state.componentIdentity);              
-        }
-        
+        this.setComponentData();                
     }
 
     componentDidUpdate(){
@@ -199,7 +201,7 @@ class IndividualsList extends React.Component {
         if(this.props.iri !== this.state.selectedNodeIri){
             this.setState({
                 showNodeDetailPage: showDetailTable,
-                selectedNodeIri: this.props.iri              
+                selectedNodeIri: this.props.iri
             });
         }
         if(!this.state.isRendered){
@@ -217,49 +219,24 @@ class IndividualsList extends React.Component {
                     ontologyId={this.props.ontology}
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
-                   />                    
-                    {this.state.listView &&
-                            <div className="tree-container">
-                                <div className="col-sm-12">
-                                    {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
-                                    <div className="row">
-                                        <div className="col-sm-10">
-                                            <ul>
-                                                {this.createIndividualList()}
-                                            </ul>
-                                        </div>
-                                        {typeof(this.props.iri) !== "undefined" && this.state.individuals.length !== 0 &&
-                                        <div className="col-sm-2">
-                                            <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
-                                                {this.state.listView ? "Show In Tree" : ""}
-                                            </button>                                
-                                        </div>
-                                        }
-
-                                    </div>
-                                </div>
-                            </div> 
-                        }                        
-                        {!this.state.listView &&
-                            <div className="tree-container">
-                                {this.createIndividualTree()}
-                            </div>                            
-                        }                        
-                                       
-                </div>
-                <div className='tree-view-resize-area'></div>
-                <div className="node-table-container">
-                    {this.state.showNodeDetailPage &&                     
-                            <NodePage
-                            iri={this.state.selectedNodeIri}
-                            ontology={this.props.ontology}
-                            componentIdentity="individual"
-                            extractKey="individuals"
-                            isSkos={this.state.isSkos}
-                            isIndividual={true}
-                            />                
-                    }
-                </div>
+                   />
+                    <div className="row">
+                        {this.state.listView && this.renderIndividualListSection()} 
+                        {!this.state.listView && this.createIndividualTree()}
+                    </div>                    
+                </div>                                    
+                {this.state.showNodeDetailPage && 
+                    <div className="col-sm-6 node-table-container">
+                        <NodePage
+                        iri={this.state.selectedNodeIri}
+                        ontology={this.props.ontology}
+                        componentIdentity="individual"
+                        extractKey="individuals"
+                        isSkos={this.state.isSkos}
+                        isIndividual={true}
+                        />
+                    </div>
+                }
             </div>
         );        
     }

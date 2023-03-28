@@ -131,7 +131,7 @@ class OntologyPage extends React.Component {
         activeTab: TERM_LIST_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab,
-        targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
+        targetTermListIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
 
       });
     }
@@ -221,7 +221,7 @@ class OntologyPage extends React.Component {
      */
   tabChange = (e, v) => {
     try{
-      let selectedTabId = e.target.dataset.value;    
+      let selectedTabId = e.target.dataset.value;         
       this.setState({
         waiting: true
       });
@@ -243,7 +243,7 @@ class OntologyPage extends React.Component {
  * Change the selected iri in the dataTree component.
  * Need to pass it to the DataTree component
  */
-  changeInputIri(iri, componentId){
+  changeInputIri(iri, componentId){   
     if(componentId === "term"){
       this.setState({
         targetTermIri: iri
@@ -362,7 +362,7 @@ class OntologyPage extends React.Component {
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
                                 <TermList                              
-                                iri={this.state.targetIndividualIri}
+                                iri={this.state.targetTermListIri}
                                 componentIdentity={'termList'}
                                 key={'termListPage'}
                                 ontology={this.state.ontologyId}                              
