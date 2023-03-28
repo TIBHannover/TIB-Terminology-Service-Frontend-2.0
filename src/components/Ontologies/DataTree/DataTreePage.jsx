@@ -87,47 +87,8 @@ class DataTreePage extends React.Component {
     let currentWidthRight = parseInt(treeRightPane.offsetWidth);    
     treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
     treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
-    this.setState({lastPageX: event.clientX});  
-    // this.adjustFontSizeBasedOnResize('tree-node-li', currentWidthLeft + addedWidth);
-    // this.adjustFontSizeBasedOnResize('fa-plus', currentWidthLeft + addedWidth);
-    // this.adjustFontSizeBasedOnResize('fa-minus', currentWidthLeft + addedWidth);
-    // this.adjustFontSizeBasedOnResize('p-icon-style', currentWidthLeft + addedWidth);    
-    // this.adjustTreeNodeWidthBasedOnResize('tree-text-container', currentWidthLeft + addedWidth);    
-    // this.adjustTreeNodeWidthBasedOnResize('li-label-text', currentWidthLeft + addedWidth);    
-  }
-
-
-  adjustFontSizeBasedOnResize(targetClassName , currentSize){
-    let allNodes = document.getElementsByClassName(targetClassName);    
-    let newFontSize = "13px"
-    if(currentSize < 700 && currentSize >= 401){
-          newFontSize = "7px";
-    }
-    else if(currentSize < 400){
-      newFontSize = "5px";
-    }
-    for(let node of allNodes){
-      node.style.fontSize = newFontSize;
-    }
-  }
-
-  adjustTreeNodeWidthBasedOnResize(targetClassName , currentSize){
-    let allNodes = document.getElementsByClassName(targetClassName);    
-    let newWidth = "400px"; 
-    if(currentSize < 850 && currentSize >= 600){
-      newWidth = "200px";
-    }
-    else if(currentSize < 600 && currentSize >= 400){
-      newWidth = "140px";
-    }
-    else if(currentSize < 400){
-      newWidth = "70px";
-    }
-    for(let node of allNodes){
-      node.style.width = newWidth;
-    }
-  }
-
+    this.setState({lastPageX: event.clientX});        
+  } 
 
   releaseMouseFromResize(event){
     if(!this.state.resizeOn){
