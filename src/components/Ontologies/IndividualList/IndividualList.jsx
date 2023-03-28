@@ -84,8 +84,9 @@ class IndividualsList extends React.Component {
     selectNodeOnLoad(){        
         let node = document.getElementById(this.props.iri);
         if(node){
-            node.classList.add('clicked');
-            document.getElementById(this.props.iri).scrollIntoView();
+            node.classList.add('clicked');            
+            let position = document.getElementById(this.props.iri).offsetTop;
+            document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;            
             this.setState({
                 isRendered: true
             });
@@ -151,21 +152,23 @@ class IndividualsList extends React.Component {
 
     createIndividualTree(){
         let result = [
-            <Tree 
-                rootNodes={this.props.rootNodes}
-                componentIdentity={this.props.componentIdentity}
-                iri={this.state.selectedNodeIri}
-                key={this.props.key}
-                ontology={this.props.ontology}
-                rootNodeNotExist={false}
-                iriChangerFunction={this.props.iriChangerFunction}
-                lastState={this.props.lastState}
-                domStateKeeper={this.props.domStateKeeper}
-                isSkos={this.props.isSkos}
-                nodeSelectionHandler={this.handleNodeSelectionInTreeView}
-                isIndividual={true}
-                individualViewChanger={this.switchView}
-            />
+            <div className='tree-container'>
+                <Tree 
+                    rootNodes={this.props.rootNodes}
+                    componentIdentity={this.props.componentIdentity}
+                    iri={this.state.selectedNodeIri}
+                    key={this.props.key}
+                    ontology={this.props.ontology}
+                    rootNodeNotExist={false}
+                    iriChangerFunction={this.props.iriChangerFunction}
+                    lastState={this.props.lastState}
+                    domStateKeeper={this.props.domStateKeeper}
+                    isSkos={this.props.isSkos}
+                    nodeSelectionHandler={this.handleNodeSelectionInTreeView}
+                    isIndividual={true}
+                    individualViewChanger={this.switchView}
+                />
+            </div>          
         ];
         return result;
     }
