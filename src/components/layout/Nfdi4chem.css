@@ -1080,6 +1080,11 @@ p{
     color: white !important;
 }
 
+.search-in-box{
+    background-color: #DFE4E5;
+    display: inline-block;
+}
+
 
 /* 
 -------------------------------------
