@@ -87,6 +87,16 @@ class SearchForm extends React.Component{
           url.pathname = "/ts/search";
           window.location.replace(url);
         }
+        if(enteredTerm !== "" && this.state.ontologyId){
+          let url = new URL(window.location);    
+          url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          url.searchParams.append('q', enteredTerm);
+          url.searchParams.append('ontology', (this.state.ontologyId).toUpperCase());
+          url.searchParams.append('page', 1);
+          url.pathname = "/ts/search";
+          window.location.replace(url);
+        }
     }
 
     submitJumpHandler(e){
