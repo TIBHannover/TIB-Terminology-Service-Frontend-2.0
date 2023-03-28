@@ -219,49 +219,25 @@ class IndividualsList extends React.Component {
                     ontologyId={this.props.ontology}
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
-                   />                    
-                    {this.state.listView &&
-                            <div className="tree-container">
-                                <div className="col-sm-12">
-                                    {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}
-                                    <div className="row">
-                                        <div className="col-sm-10">
-                                            <ul>
-                                                {this.createIndividualList()}
-                                            </ul>
-                                        </div>
-                                        {typeof(this.props.iri) !== "undefined" && this.state.individuals.length !== 0 &&
-                                        <div className="col-sm-2">
-                                            <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
-                                                {this.state.listView ? "Show In Tree" : ""}
-                                            </button>                                
-                                        </div>
-                                        }
-
-                                    </div>
-                                </div>
-                            </div> 
-                        }                        
-                        {!this.state.listView &&
-                            <div className="tree-container">
-                                {this.createIndividualTree()}
-                            </div>                            
-                        }                        
-                                       
+                   />
+                    <div className="row">
+                        {this.state.listView && this.renderIndividualListSection()} 
+                        {!this.state.listView && this.createIndividualTree()}
+                    </div>                    
                 </div>
-                <div className='tree-view-resize-area'></div>
-                <div className="node-table-container">
-                    {this.state.showNodeDetailPage &&                     
-                            <NodePage
-                            iri={this.state.selectedNodeIri}
-                            ontology={this.props.ontology}
-                            componentIdentity="individual"
-                            extractKey="individuals"
-                            isSkos={this.state.isSkos}
-                            isIndividual={true}
-                            />                
-                    }
-                </div>
+                <div className='tree-view-resize-area'></div>                                
+                {this.state.showNodeDetailPage && 
+                    <div className="col-sm-6 node-table-container">
+                        <NodePage
+                        iri={this.state.selectedNodeIri}
+                        ontology={this.props.ontology}
+                        componentIdentity="individual"
+                        extractKey="individuals"
+                        isSkos={this.state.isSkos}
+                        isIndividual={true}
+                        />
+                    </div>
+                }
             </div>
         );        
     }
