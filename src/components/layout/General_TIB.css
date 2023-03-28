@@ -1127,6 +1127,15 @@ p{
     display: inline-block;
 }
 
+.search-form-nav:hover{
+    text-decoration: underline;
+}
+
+.search-form-nav-clicked{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 /* 
 -------------------------------------

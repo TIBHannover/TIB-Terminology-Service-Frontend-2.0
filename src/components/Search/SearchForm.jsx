@@ -139,7 +139,7 @@ class SearchForm extends React.Component{
       createResultList(){
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
-            if(this.state.urlPath){
+            if(this.state.urlPath & !this.state.insideOnto){
               resultList.push(
                 <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
                   <div className="autocomplete-item">                  
@@ -149,7 +149,7 @@ class SearchForm extends React.Component{
               
               )
             }
-            else {
+            else if(this.state.insideOnto){
               resultList.push(
                 <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
                   <div className="autocomplete-item">                  
@@ -181,9 +181,23 @@ class SearchForm extends React.Component{
             <div class="input-group-prepend">
               <div class="input-group-text">       
               <div className="search-in-box">
-                Search:               
+                Search:
+                {this.state.urlPath 
+                ? <a className="search-form-nav search-form-nav-clicked" href={""} onClick={() => {this.setState({insideOnto: true})}}>               
+                    {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
+                  </a>
+                : <a className="search-form-nav">
                   {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
-                All                                                                                                                          
+                </a>
+                 }
+                {this.state.urlPath 
+                ? <a className="search-form-nav" href={""} onClick={() => {this.setState({insideOnto: false})}}>               
+                    All
+                  </a>
+                : <a className="search-form-nav search-form-nav-clicked">
+                  All
+                </a>
+                 }                                                                                                                          
               </div>
               </div> 
             </div>                 
