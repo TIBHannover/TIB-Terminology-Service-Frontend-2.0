@@ -524,11 +524,13 @@ async showSiblings(){
                         </div>                        
                         {this.props.isIndividual &&                            
                             <div className='row tree-action-btn-holder'>
-                                <div className="col-sm-12">
+                                <div className="col-sm-1"></div>
+                                <div className="col-sm-3">
                                     <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.props.individualViewChanger}>
                                         Show In List
                                     </button>
-                                </div>                                
+                                </div>
+                                <div className="col-sm-8"></div>                                
                             </div>                        
                         }
                     </div>

@@ -64,13 +64,13 @@ class DataTreePage extends React.Component {
 
   componentDidMount(){
     this.setComponentData();        
-    document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+    document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
     document.body.addEventListener("mousemove", this.paneResize.moveToResize);
     document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
   }
 
   componentWillUnmount(){  
-    document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+    document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
     document.body.addEventListener("mousemove", this.paneResize.moveToResize);
     document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
   }
