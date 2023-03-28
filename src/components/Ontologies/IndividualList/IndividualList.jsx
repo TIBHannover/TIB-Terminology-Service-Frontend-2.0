@@ -231,14 +231,14 @@ class IndividualsList extends React.Component {
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
                    />
-                    <div className="row">
+                    <div>
                         {this.state.listView && this.renderIndividualListSection()} 
                         {!this.state.listView && this.createIndividualTree()}
                     </div>                    
                 </div>
                 {this.paneResize.generateVerticalResizeLine()}                                
                 {this.state.showNodeDetailPage && 
-                    <div className="col-sm-6 node-table-container" id="page-right-pane">
+                    <div className="node-table-container" id="page-right-pane">
                         <NodePage
                         iri={this.state.selectedNodeIri}
                         ontology={this.props.ontology}
