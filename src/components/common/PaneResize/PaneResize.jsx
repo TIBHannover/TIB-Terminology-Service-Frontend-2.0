@@ -9,7 +9,7 @@
  *          <div id="page-left-pane>
  *              // your left content
  *          </div>
- *          {PaneResizeClassInstance.generateVerticalResizeLine()}
+ *          {MyPaneResizeClassInstance.generateVerticalResizeLine()}
  *          <div id="page-right-pane>
  *              // your right content
  *          </div>
@@ -17,9 +17,9 @@
  * 
  * 
  * You need also add the mouse events listeners to your componentDidMount() function:
- *      document.body.addEventListener("mousedown", PaneResizeClassInstance.onMouseDown);
-        document.body.addEventListener("mousemove", PaneResizeClassInstance.moveToResize);
-        document.body.addEventListener("mouseup", PaneResizeClassInstance.releaseMouseFromResize);
+ *      document.body.addEventListener("mousedown", MyPaneResizeClassInstance.onMouseDown);
+        document.body.addEventListener("mousemove", MyPaneResizeClassInstance.moveToResize);
+        document.body.addEventListener("mouseup", MyPaneResizeClassInstance.releaseMouseFromResize);
  * 
  * 
  * Note: Remeber to remove these listeners when component is unmount.

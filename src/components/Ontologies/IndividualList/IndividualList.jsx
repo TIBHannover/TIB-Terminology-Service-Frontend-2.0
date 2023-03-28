@@ -5,6 +5,7 @@ import NodePage from '../NodePage/NodePage';
 import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
+import PaneResize from "../../common/PaneResize/PaneResize";
 
 
 class IndividualsList extends React.Component {
@@ -19,6 +20,7 @@ class IndividualsList extends React.Component {
             listView: true,
             isRendered: false            
         });
+        this.paneResize = new PaneResize();
         this.setComponentData = this.setComponentData.bind(this);
         this.createIndividualList = this.createIndividualList.bind(this);
         this.selectNode = this.selectNode.bind(this);
@@ -193,7 +195,10 @@ class IndividualsList extends React.Component {
 
 
     componentDidMount(){
-        this.setComponentData();                
+        this.setComponentData();
+        document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+        document.body.addEventListener("mousemove", this.paneResize.moveToResize);
+        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                
     }
 
     componentDidUpdate(){
@@ -209,12 +214,18 @@ class IndividualsList extends React.Component {
         }
     }
 
+    componentWillUnmount(){  
+        document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+        document.body.addEventListener("mousemove", this.paneResize.moveToResize);
+        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
+      }
+
 
 
     render(){
         return(
             <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
-                <div className="tree-page-left-part">
+                <div className="tree-page-left-part" id="page-left-pane">
                   <JumpTo
                     ontologyId={this.props.ontology}
                     isSkos={this.props.isSkos}
@@ -225,9 +236,9 @@ class IndividualsList extends React.Component {
                         {!this.state.listView && this.createIndividualTree()}
                     </div>                    
                 </div>
-                <div className='tree-view-resize-area'></div>                                
+                {this.paneResize.generateVerticalResizeLine()}                                
                 {this.state.showNodeDetailPage && 
-                    <div className="col-sm-6 node-table-container">
+                    <div className="col-sm-6 node-table-container" id="page-right-pane">
                         <NodePage
                         iri={this.state.selectedNodeIri}
                         ontology={this.props.ontology}
