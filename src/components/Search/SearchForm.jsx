@@ -68,8 +68,6 @@ class SearchForm extends React.Component{
         }
         else if(enteredTerm !== "" && urlPath.includes("/ontologies/" + ontologyId)){
           let url = new URL(window.location);    
-          url.searchParams.delete('q');
-          url.searchParams.delete('page');
           url.searchParams.append('q', enteredTerm);
           url.searchParams.append('ontology', ontologyId)
           url.searchParams.append('page', 1);
@@ -94,15 +92,6 @@ class SearchForm extends React.Component{
           });
       }
 
-    updateURL(ontologies){
-      let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-      this.props.history.push(window.location.pathname);
-      let currentUrlParams = new URLSearchParams();   
-      for(let ontos of ontologies){
-        currentUrlParams.append('ontology', ontos);
-      }
-      this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
-    }
     
       handleClickOutside(){
         document.addEventListener("click", (event) =>{
@@ -161,7 +150,8 @@ class SearchForm extends React.Component{
               <div class="input-group-text">       
               <div className="search-in-box">
                 Search:               
-                  {ontologyId}                                                                                                                        
+                  {"\n" + ontologyId + "\n"}
+                All                                                                                                                          
               </div>
               </div> 
             </div>                 
