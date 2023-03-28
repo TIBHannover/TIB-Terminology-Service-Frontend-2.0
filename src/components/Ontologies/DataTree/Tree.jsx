@@ -490,9 +490,8 @@ async showSiblings(){
     createTreeActionButtons(){
         return [
             <div className='row tree-action-button-area'>
-                <div className="col-sm-4"></div>
-                <div className="col-sm-4"></div>
-                <div className="col-sm-4">
+                <div className="col-sm-6"></div>                
+                <div className="col-sm-5 text-center">
                     <div className='row tree-action-btn-holder'>
                         <div className="col-sm-12">
                             {!this.props.isIndividual && 
@@ -533,7 +532,8 @@ async showSiblings(){
                             </div>                        
                         }
                     </div>
-                </div>                 
+                </div> 
+                <div className="col-sm-1"></div>               
             </div>                      
         ];
     }
