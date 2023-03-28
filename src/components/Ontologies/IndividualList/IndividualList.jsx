@@ -29,6 +29,7 @@ class IndividualsList extends React.Component {
         this.switchView = this.switchView.bind(this);
         this.selectNodeOnLoad = this.selectNodeOnLoad.bind(this);
         this.renderIndividualListSection = this.renderIndividualListSection.bind(this);
+        this.createActionButtonSection = this.createActionButtonSection.bind(this);
     }
 
 
@@ -169,21 +170,29 @@ class IndividualsList extends React.Component {
         return result;
     }
 
+
+    createActionButtonSection(){
+        return [
+            typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
+                <div className="row tree-action-button-area">
+                    <div className="col-sm-5"></div>
+                    <div className="col-sm-6">
+                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.switchView}>
+                            {this.state.listView ? "Show In Tree" : ""}
+                        </button>                                
+                    </div>
+                    <div className="col-sm-1"></div>
+                </div>                    
+                   
+        ];
+    }
+
+
     renderIndividualListSection(){
         return [
             <div className="col-sm-12">
                 {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                
-                {typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
-                    <div className="row tree-action-button-area">
-                        <div className="col-sm-5"></div>
-                        <div className="col-sm-6">
-                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.switchView}>
-                                {this.state.listView ? "Show In Tree" : ""}
-                            </button>                                
-                        </div>
-                        <div className="col-sm-1"></div>
-                    </div>                    
-                }                
+                {this.createActionButtonSection()}    
                 <div className="row">
                     <div className="col-sm-12">
                         <ul>
@@ -199,7 +208,7 @@ class IndividualsList extends React.Component {
 
     componentDidMount(){
         this.setComponentData();
-        document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+        document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
         document.body.addEventListener("mousemove", this.paneResize.moveToResize);
         document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                
     }
@@ -218,7 +227,7 @@ class IndividualsList extends React.Component {
     }
 
     componentWillUnmount(){  
-        document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
+        document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
         document.body.addEventListener("mousemove", this.paneResize.moveToResize);
         document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
       }
