@@ -1385,7 +1385,9 @@ p{
     background-color: white;
     width: 900px;
     float: left;
-    position: relative;    
+    position: relative; 
+    overflow-y: scroll;
+    height: 1000px;   
 }
 .tree-page-left-part::-webkit-scrollbar {
     /* display: none; */
@@ -1396,7 +1398,7 @@ p{
         Tree container (tree and action buttons) style
     */
 
-    margin-top: 80px;    
+    margin-top: 80px;       
 }
 
 .tree-action-button-area{
@@ -1424,9 +1426,9 @@ p{
 
     margin-top: 10px;
     z-index: 9000;
-    overflow-y: auto;
-    max-height: 1000px;  
-    overflow-x: hidden;  
+    /* overflow-y: scroll;
+    height: 1000px;       */
+    overflow-x: hidden;    
 }
 
 .node-table-container{

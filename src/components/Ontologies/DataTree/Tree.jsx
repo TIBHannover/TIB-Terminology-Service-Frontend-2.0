@@ -546,8 +546,8 @@ async showSiblings(){
                 {!this.state.isLoadingTheComponent && !this.state.noNodeExist && 
                     <div className='row'>
                         {!this.state.treeDomContent.__html 
-                        ? <div className='col-sm-12 tree' id="trea-container">{this.state.treeDomContent}</div> 
-                        : <div className='col-sm-12 tree' id="trea-container" dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
+                        ? <div className='col-sm-12 tree'>{this.state.treeDomContent}</div> 
+                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: this.state.treeDomContent.__html}}></div>
                         }                                                    
                     </div>
                 }

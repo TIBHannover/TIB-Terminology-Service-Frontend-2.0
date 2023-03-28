@@ -118,17 +118,17 @@ class TreeNodeController{
 
     scrollToNode(id){
         let position = document.getElementById(id).offsetTop;
-        document.getElementById('trea-container').scrollTop = position;
+        document.getElementById('tree-page-left-pane').scrollTop = position;
     }
 
     scrollToNextNode(id){
         let position = document.getElementById(id).nextSibling.offsetTop;
-        document.getElementById('trea-container').scrollTop = position;
+        document.getElementById('tree-page-left-pane').scrollTop = position;
     }
 
     scrollToPreviousNode(id){
         let position = document.getElementById(id).previousSibling.offsetTop;
-        document.getElementById('trea-container').scrollTop = position;        
+        document.getElementById('tree-page-left-pane').scrollTop = position;        
     }
 
     getClickedNodeDiv(node){

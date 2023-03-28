@@ -1384,11 +1384,13 @@ p{
        It is responsible for the left part of the tree page that keeps the tree inside. 
     */
        
-   padding-bottom: 500px !important;    
-   background-color: white;    
-   width: 900px;
-   float: left;
-   position: relative;
+    padding-bottom: 500px !important;    
+    background-color: white;    
+    width: 900px;
+    float: left;
+    position: relative;
+    overflow-y: scroll;
+    height: 1000px;
 }
 .tree-page-left-part::-webkit-scrollbar {
    /* display: none; */
