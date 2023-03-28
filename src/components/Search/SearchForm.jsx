@@ -10,6 +10,7 @@ class SearchForm extends React.Component{
           result: false,
           clickInfo: false,
           searchResult: [],
+          ontoSearchResult: [],
           jumpResult: [],
           entry: [],
           ontologyId: '',
@@ -33,7 +34,6 @@ class SearchForm extends React.Component{
       setComponentData(){
         //let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
         let urlPath = window.location.pathname
-        console.info(urlPath)
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
@@ -46,7 +46,7 @@ class SearchForm extends React.Component{
 
       async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value                
-        if (enteredTerm.length > 0){
+        if (enteredTerm.length > 0 && !this.state.urlPath){
           let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
           searchResult =  (await searchResult.json())['response']['docs'];
           let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
@@ -58,12 +58,11 @@ class SearchForm extends React.Component{
               enteredTerm: enteredTerm
           });
         }
-        else if(enteredTerm.length > 0 && this.urlOnto()){
-          let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=`)
-          searchResult = (await searchResult.json())['response']['docs'];
-          console.info(searchResult)
+        else if(enteredTerm.length > 0 && this.state.urlPath){
+          let ontoSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`)
+          ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
           this.setState({
-            searchResult: searchResult,
+            searchResult: ontoSearchResult,
             result: true 
           });
         }
@@ -161,7 +160,7 @@ class SearchForm extends React.Component{
               <div class="input-group-text">       
               <div className="search-in-box">
                 Search:               
-                  {"\n" + this.state.ontologyId + "\n"}
+                  {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
                 All                                                                                                                          
               </div>
               </div> 
