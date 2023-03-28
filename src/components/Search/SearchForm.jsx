@@ -139,14 +139,26 @@ class SearchForm extends React.Component{
       createResultList(){
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
-            resultList.push(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
-                    <div className="autocomplete-item">                  
-                          {this.state.searchResult[i]['autosuggest']}
-                    </div>
-                  </a>
-                
-                )
+            if(this.state.urlPath){
+              resultList.push(
+                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
+                  <div className="autocomplete-item">                  
+                        {this.state.searchResult[i]['autosuggest']}
+                  </div>
+                </a>
+              
+              )
+            }
+            else {
+              resultList.push(
+                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
+                  <div className="autocomplete-item">                  
+                        {this.state.searchResult[i]['autosuggest']}
+                  </div>
+                </a>
+              
+              )
+            }           
           }
           return resultList
       }
