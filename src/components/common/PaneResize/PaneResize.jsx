@@ -1,3 +1,34 @@
+/**
+ * This is the class for having a two-pain page in a way that each pane would be resizeable. Example: Tree View
+ * 
+ * How to use:
+ * 
+ * The page structure (rendered result) has to be like this in order for this functionality to perform:
+ * 
+ *      <div className="resizable-container">
+ *          <div id="page-left-pane>
+ *              // your left content
+ *          </div>
+ *          {PaneResizeClassInstance.generateVerticalResizeLine()}
+ *          <div id="page-right-pane>
+ *              // your right content
+ *          </div>
+ *      </div>
+ * 
+ * 
+ * You need also add the mouse events listeners to your componentDidMount() function:
+ *      document.body.addEventListener("mousedown", PaneResizeClassInstance.onMouseDown);
+        document.body.addEventListener("mousemove", PaneResizeClassInstance.moveToResize);
+        document.body.addEventListener("mouseup", PaneResizeClassInstance.releaseMouseFromResize);
+ * 
+ * 
+ * Note: Remeber to remove these listeners when component is unmount.
+ * 
+ * 
+ * 
+ */
+
+
 
 class PaneResize{
 
