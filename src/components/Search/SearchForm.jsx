@@ -55,7 +55,7 @@ class SearchForm extends React.Component{
     submitHandler(){ 
         let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
-        ontologyId = ontologyId[3];                      
+        ontologyId = ontologyId[3].toUpperCase();                      
         let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
           let url = new URL(window.location);    
@@ -191,7 +191,7 @@ class SearchForm extends React.Component{
                                       
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
-                {this.state.result &&
+                {this.state.result && !urlPath &&
                 <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4>Jump To</h4>
