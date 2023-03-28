@@ -153,7 +153,7 @@ class SearchForm extends React.Component{
       urlOnto(){
         let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
-        ontologyId = ontologyId[3];            
+        ontologyId = ontologyId[3].toUpperCase();            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
         let showBox = [];
           showBox.push(
