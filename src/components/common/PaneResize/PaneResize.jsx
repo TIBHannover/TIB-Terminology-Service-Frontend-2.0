@@ -6,9 +6,16 @@ class PaneResize{
         this.isResizeOn = false;
     }
 
+
+    generateVerticalResizeLine(){
+        return [
+            <div className='page-resize-vertical-line'></div>
+        ];
+    }
+
     onMouseDown(event){
         let targetElement = event.target;
-        if (!targetElement.classList.contains('tree-view-resize-area')){
+        if (!targetElement.classList.contains('page-resize-vertical-line')){
           return null;
         }
         this.lastPagePositionX = event.clientX;
@@ -21,12 +28,12 @@ class PaneResize{
           return null;
         }   
         let addedWidth = (event.clientX - this.lastPagePositionX) / 1;    
-        let treeLeftPane = document.getElementById("tree-page-left-pane");
-        let treeRightPane = document.getElementById("tree-page-right-pane");
-        let currentWidthLeft = parseInt(treeLeftPane.offsetWidth);    
-        let currentWidthRight = parseInt(treeRightPane.offsetWidth);    
-        treeLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
-        treeRightPane.style.width = (currentWidthRight - addedWidth) + "px";
+        let pageLeftPane = document.getElementById("page-left-pane");
+        let pageRightPane = document.getElementById("page-right-pane");
+        let currentWidthLeft = parseInt(pageLeftPane.offsetWidth);    
+        let currentWidthRight = parseInt(pageRightPane.offsetWidth);    
+        pageLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
+        pageRightPane.style.width = (currentWidthRight - addedWidth) + "px";
         this.lastPagePositionX = event.clientX;        
       } 
     

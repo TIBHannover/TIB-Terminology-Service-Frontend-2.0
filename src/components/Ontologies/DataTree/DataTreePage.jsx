@@ -19,9 +19,7 @@ class DataTreePage extends React.Component {
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
-      ontologyId: '',
-      lastPageX: 0,
-      resizeOn: false
+      ontologyId: ''
     })
     this.paneResize = new PaneResize();
     this.setComponentData = this.setComponentData.bind(this);
@@ -64,9 +62,6 @@ class DataTreePage extends React.Component {
   }
 
 
- 
-
-
   componentDidMount(){
     this.setComponentData();        
     document.body.addEventListener("mousedown", this.paneResize.onMouseDown, false);
@@ -84,7 +79,7 @@ class DataTreePage extends React.Component {
 render(){
   return(    
      <div className="tree-view-container resizable-container"> 
-        <div className="tree-page-left-part" id="tree-page-left-pane">       
+        <div className="tree-page-left-part" id="page-left-pane">       
           <JumpTo
             ontologyId={this.props.ontology}
             isSkos={this.props.isSkos} 
@@ -107,8 +102,8 @@ render(){
                 />
           </div>        
         </div>
-        <div className='tree-view-resize-area'></div>
-        <div className="node-table-container" id="tree-page-right-pane">
+        {this.paneResize.generateVerticalResizeLine()}
+        <div className="node-table-container" id="page-right-pane">
           {this.state.termTree && this.state.showNodeDetailPageClass &&           
               <MatomoWrapper>
               <NodePage
