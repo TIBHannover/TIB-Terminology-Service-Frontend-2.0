@@ -139,7 +139,7 @@ class SearchForm extends React.Component{
       createResultList(){
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
-            if(this.state.urlPath & !this.state.insideOnto){
+            if(this.state.urlPath){
               resultList.push(
                 <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
                   <div className="autocomplete-item">                  
@@ -149,7 +149,7 @@ class SearchForm extends React.Component{
               
               )
             }
-            else if(this.state.insideOnto){
+            else {
               resultList.push(
                 <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
                   <div className="autocomplete-item">                  
@@ -183,7 +183,7 @@ class SearchForm extends React.Component{
               <div className="search-in-box">
                 Search:
                 {this.state.urlPath 
-                ? <a className="search-form-nav search-form-nav-clicked" href={""} onClick={() => {this.setState({insideOnto: true})}}>               
+                ? <a className="search-form-nav search-form-nav-clicked" href={""}>               
                     {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
                   </a>
                 : <a className="search-form-nav">
@@ -191,7 +191,7 @@ class SearchForm extends React.Component{
                 </a>
                  }
                 {this.state.urlPath 
-                ? <a className="search-form-nav" href={""} onClick={() => {this.setState({insideOnto: false})}}>               
+                ? <a className="search-form-nav" href={""}>               
                     All
                   </a>
                 : <a className="search-form-nav search-form-nav-clicked">
