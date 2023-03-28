@@ -177,7 +177,7 @@ class IndividualsList extends React.Component {
                             {this.createIndividualList()}
                         </ul>
                     </div>
-                    {typeof(this.props.iri) !== "undefined" && this.state.individuals.length !== 0 &&
+                    {typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
                     <div className="col-sm-2">
                         <button className='btn btn-secondary btn-sm tree-action-btn sticky-top' onClick={this.switchView}>
                             {this.state.listView ? "Show In Tree" : ""}

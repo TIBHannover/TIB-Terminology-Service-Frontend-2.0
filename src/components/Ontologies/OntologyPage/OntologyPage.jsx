@@ -221,7 +221,7 @@ class OntologyPage extends React.Component {
      */
   tabChange = (e, v) => {
     try{
-      let selectedTabId = e.target.dataset.value;    
+      let selectedTabId = e.target.dataset.value;         
       this.setState({
         waiting: true
       });
@@ -243,9 +243,7 @@ class OntologyPage extends React.Component {
  * Change the selected iri in the dataTree component.
  * Need to pass it to the DataTree component
  */
-  changeInputIri(iri, componentId){
-    console.info(iri)
-    console.info(componentId)
+  changeInputIri(iri, componentId){   
     if(componentId === "term"){
       this.setState({
         targetTermIri: iri
