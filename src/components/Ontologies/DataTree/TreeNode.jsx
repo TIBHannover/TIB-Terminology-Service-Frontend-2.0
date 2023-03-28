@@ -14,8 +14,7 @@ class TreeNodeController{
     }
 
 
-    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
-        console.info(nodeObject)
+    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
         let partOfSymbol = "";

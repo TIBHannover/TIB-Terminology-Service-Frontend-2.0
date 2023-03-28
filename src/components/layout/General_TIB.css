@@ -26,7 +26,6 @@
     border: transparent;
 }
 
-
 body{
     /* 
        The style for the site body
@@ -1376,7 +1375,8 @@ p{
     float: left;
     position: relative; 
     overflow-y: scroll;
-    height: 1000px;     
+    height: 1000px;
+    overflow-x: hidden;   
 }
 .tree-page-left-part::-webkit-scrollbar {
     /* display: none; */
