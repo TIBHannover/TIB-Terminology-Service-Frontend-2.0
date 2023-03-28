@@ -1697,17 +1697,33 @@ p{
   }
 
 
-/* @media only screen and (max-width: 3000px) and (min-width: 1501px) {       
+@media only screen and (max-width: 3000px) and (min-width: 1501px) {       
     .tree-view-container{        
         width: 1750px;            
+    }      
+}
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {       
+    .tree-view-container{        
+        width: 1350px;            
     }
-    .tree-page-left-part{                        
-       width: 900px;       
-   }
-   .node-table-container{
-       width: 780px;         
-   }   
-  }*/
+    .jumpto-wrapper{
+        width: 90% !important;
+    }
+    .tree-action-button-area{
+        right: 30px !important;
+    }       
+}
+@media only screen and (max-width: 1299px) and (min-width: 901px) {       
+    .tree-view-container{        
+        width: 1200px;            
+    }
+    .jumpto-wrapper{
+        width: 80% !important;
+    }
+    .tree-action-button-area{
+        right: 40px !important;
+    }      
+}
 
 /* 
 ------------------------------------------------------------
