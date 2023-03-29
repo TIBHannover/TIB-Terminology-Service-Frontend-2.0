@@ -70,7 +70,7 @@ class OntologyList extends React.Component {
         unFilteredHiddenStatus: hiddenStatus,
         ontologyListContent: this.createOntologyList()
       }, () => {
-        // this.processUrlProps(); 
+        this.processUrlProps(); 
       });
     }
 

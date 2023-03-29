@@ -5,17 +5,9 @@ import App from '../App';
 
 
 
-test("List has ontology", async ()=>{
-    const ontologyListEndPoint = "/ontologies?page=1";
-    render(
-        <MemoryRouter initialEntries={[ontologyListEndPoint]}>
-            <OntologyList />
-        </MemoryRouter>
-    );
-    
-    // render(<OntologyList />);    
-    await screen.findByText("Browse Ontologies");
-    // let x = await container.findByText("Loaded:");
-    // // await waitFor(()=> expect(screen.getByText("Browse Ontologies")).toBeInTheDocument(), {timeout:5000});
-    // screen.debug(container);
+test("List has ontology", async ()=>{    
+    render(<OntologyList />);
+         
+    const testOntologyDescription = "The base ontology of the test Standard.";
+    await screen.findByText(testOntologyDescription);    
 });

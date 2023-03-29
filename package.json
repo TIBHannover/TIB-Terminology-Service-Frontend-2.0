@@ -71,6 +71,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
-    "eslint": "^8.16.0"
+    "eslint": "^8.16.0",
+    "msw": "^1.2.1"
   }
 }
