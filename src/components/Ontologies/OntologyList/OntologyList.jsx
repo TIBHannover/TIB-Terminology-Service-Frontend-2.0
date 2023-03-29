@@ -88,7 +88,7 @@ class OntologyList extends React.Component {
    * Process the input parameter in the url.
    * Inputs are used for setting facet filters
    */
-   processUrlProps(){
+   processUrlProps(){    
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let collections = targetQueryParams.collection;
     let sortBy = targetQueryParams.sorting;

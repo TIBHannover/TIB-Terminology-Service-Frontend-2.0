@@ -23,6 +23,12 @@ export const server = setupServer(
 
 function createOntologyListRestApiJsonResponse(){
     return {
+        "page": {
+            "size": 20,
+            "totalElements": 115,
+            "totalPages": 6,
+            "number": 0
+        },
         "_embedded": {
             "ontologies": [
                 {
