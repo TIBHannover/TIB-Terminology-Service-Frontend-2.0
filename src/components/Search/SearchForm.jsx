@@ -80,7 +80,7 @@ class SearchForm extends React.Component{
 
     submitHandler(){                      
         let enteredTerm = document.getElementById('s-field').value;        
-        if(enteredTerm !== ""){
+        if(enteredTerm !== "" && this.state.insideOnto){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
@@ -89,7 +89,7 @@ class SearchForm extends React.Component{
           url.pathname = "/ts/search";
           window.location.replace(url);
         }
-        if(enteredTerm !== "" && this.state.ontologyId){
+        if(enteredTerm !== "" && this.state.ontologyId && !this.state.insideOnto){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
@@ -128,14 +128,40 @@ class SearchForm extends React.Component{
           }          
         })       
       }
+
+      handleAllClick(){
+        document.addEventListener("click", (event) => {
+          if(this.allRef.current){
+            if(this.allRef.current.contains(event.target))
+            this.setState({
+              insideOnto: false
+            })
+          }
+        } )
+      }
+
+      handleOntoClick(){
+        document.addEventListener("click", (event) => {
+          if(this.ontoRef.current){
+            if(this.ontoRef.current.contains(event.target))
+            this.setState({
+              insideOnto: true
+            })
+          }
+        } )
+      }
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener('click', this.handleAllClick, true);
+        document.addEventListener('click', this.handleOntoClick, true);
         this.setComponentData();         
       }
     
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
+        document.removeEventListener('click', this.handleAllClick, true);
+        document.removeEventListener('click', this.handleOntoClick, true);
       };
 
       createResultList(){
@@ -184,10 +210,12 @@ class SearchForm extends React.Component{
               <div class="input-group-text">       
               <div className="search-in-box">
                 Search:                
-                <a className="search-form-nav search-form-nav-clicked" href={""}>               
+                <a ref={this.ontoRef} className="search-form-nav search-form-nav-clicked" href={""}>               
                     {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
                   </a>
-                All                                                                                                                          
+                <a ref={this.allRef} href={""}>  
+                All
+                </a>                                                                                                                          
               </div>
               </div> 
             </div>                 
