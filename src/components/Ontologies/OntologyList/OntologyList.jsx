@@ -70,11 +70,11 @@ class OntologyList extends React.Component {
         unFilteredHiddenStatus: hiddenStatus,
         ontologyListContent: this.createOntologyList()
       }, () => {
-        this.processUrlProps(); 
+        // this.processUrlProps(); 
       });
     }
 
-    catch(error){
+    catch(error){      
       this.setState({
         isLoaded: true,
         error
@@ -406,7 +406,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                     <h3 className='h-headers'>Browse Ontologies</h3>
                   </div>
                   <div className='col-sm-4 form-inline'  id="ontologylist-sort-grid">
-                    <div class="form-group">
+                    <div className="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
                         <option value={TITLE_SORT_KEY} key={TITLE_SORT_KEY}>Title</option>

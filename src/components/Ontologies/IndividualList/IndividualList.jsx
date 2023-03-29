@@ -130,7 +130,7 @@ class IndividualsList extends React.Component {
         }
         if (result.length === 0 && this.state.isLoaded){
             result.push(
-                <div class="alert alert-success">
+                <div className="alert alert-success">
                     This ontology has no individual.
                 </div>
             );
