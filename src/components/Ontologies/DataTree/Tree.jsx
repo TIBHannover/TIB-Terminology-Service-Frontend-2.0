@@ -131,7 +131,8 @@ class Tree extends React.Component {
         }        
         else if (!target || resetFlag){                        
             let result = this.buildTheTreeFirstLayer(this.state.rootNodes);
-            treeList = result.treeDomContent;                
+            treeList = result.treeDomContent;
+            target = "";                
         }                    
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
@@ -180,7 +181,7 @@ class Tree extends React.Component {
             lastSelectedItemId: lastSelectedItemId
         }, () => {
             this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-            this.props.nodeSelectionHandler(target, showNodeDetailPage);
+            this.props.nodeSelectionHandler(target, showNodeDetailPage, this.state.componentIdentity);
             this.props.iriChangerFunction(target, this.props.componentIdentity);
         });  
     }
@@ -195,7 +196,11 @@ class Tree extends React.Component {
             currentUrlParams.append('iri', stateObj.selectedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
             this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-        }      
+            this.props.nodeSelectionHandler(stateObj.selectedNodeIri, true, this.state.componentIdentity);
+        }
+        else{
+            this.props.nodeSelectionHandler("", false, this.state.componentIdentity);
+        }        
     }
 
 
@@ -219,8 +224,7 @@ class Tree extends React.Component {
     selectNode(target){    
         if(this.props.isIndividual){
             return true;
-        }
-        console.info(target)
+        }        
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();
         let targetNodeDiv = treeNode.getClickedNodeDiv(target);
@@ -232,7 +236,7 @@ class Tree extends React.Component {
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);
             showNodeDetailPage = true;
-            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage);
+            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage, this.state.componentIdentity);
             this.setState({
                 showNodeDetailPage: showNodeDetailPage,
                 selectedNodeIri: clickedNodeIri,
@@ -348,7 +352,7 @@ class Tree extends React.Component {
   resetTree(){
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-    this.props.nodeSelectionHandler("", false);
+    this.props.nodeSelectionHandler("", false, this.state.componentIdentity);
     this.setState({
       resetTreeFlag: true,
       treeDomContent: "",
@@ -443,7 +447,7 @@ async showSiblings(){
         }
         }
         catch(e){
-        console.info(e);
+        // console.info(e);
         }
         
     }
@@ -485,38 +489,53 @@ async showSiblings(){
 
     createTreeActionButtons(){
         return [
-            <div className='tree-action-button-area'>
-                <div className='tree-action-btn-holder'>
-                    {!this.props.isIndividual && 
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
-                    }
-                </div>
-                <div className='tree-action-btn-holder'>
-                    {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
-                        {!this.state.reduceBtnActive
-                                ? "Sub Tree"
-                                : "Full Tree"
+            <div className='row tree-action-button-area'>
+                <div className="col-sm-6"></div>                
+                <div className="col-sm-5 text-center">
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">
+                            {!this.props.isIndividual && 
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
+                            }
+                        </div>                        
+                    </div>
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">
+                            {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
+                                {!this.state.reduceBtnActive
+                                        ? "Sub Tree"
+                                        : "Full Tree"
+                                }
+                                </button>                
+                            }
+                        </div>                         
+                    </div>
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">
+                            {this.state.siblingsButtonShow && !this.props.isIndividual &&
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
+                                {!this.state.siblingsVisible
+                                    ? "Show Siblings"
+                                    : "Hide Siblings"
+                                    }    
+                                </button>                
+                            }
+                        </div>                        
+                        {this.props.isIndividual &&                            
+                            <div className='row tree-action-btn-holder'>
+                                <div className="col-sm-1"></div>
+                                <div className="col-sm-3">
+                                    <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.props.individualViewChanger}>
+                                        Show In List
+                                    </button>
+                                </div>
+                                <div className="col-sm-8"></div>                                
+                            </div>                        
                         }
-                        </button>                
-                    } 
-                </div>
-                <div className='tree-action-btn-holder'>
-                    {this.state.siblingsButtonShow && !this.props.isIndividual &&
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showSiblings}>
-                        {!this.state.siblingsVisible
-                            ? "Show Siblings"
-                            : "Hide Siblings"
-                            }    
-                        </button>                
-                    }
-                    {this.props.isIndividual &&
-                        <button className='btn btn-secondary btn-sm tree-action-btn tree-action-btn-holder' onClick={this.props.individualViewChanger}>
-                            Show In List
-                        </button>
-                    }
-                </div>
-                <hr className="tree-action-end-line"></hr>                     
+                    </div>
+                </div> 
+                <div className="col-sm-1"></div>               
             </div>                      
         ];
     }

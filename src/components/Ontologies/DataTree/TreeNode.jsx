@@ -14,7 +14,7 @@ class TreeNodeController{
     }
 
 
-    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
+    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
         let partOfSymbol = "";
@@ -58,7 +58,7 @@ class TreeNodeController{
     }
 
 
-    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
+    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
         this.textDiv = document.createElement("div");
@@ -69,7 +69,7 @@ class TreeNodeController{
         this.textDivContainer = document.createElement("div");
         this.textDivContainer.classList.add("tree-text-container");
         let node = document.createElement(this.nodeRootElementName);
-        node.setAttribute("id", nodeId);
+        node.setAttribute("id", nodeObject.id + "_" + nodeObject.parent);
         node.setAttribute("data-iri", nodeObject.iri);
         node.setAttribute("data-id", nodeObject.id); 
         node.classList.add(this.classes);
@@ -117,17 +117,17 @@ class TreeNodeController{
 
     scrollToNode(id){
         let position = document.getElementById(id).offsetTop;
-        document.getElementById('tree').scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
     }
 
     scrollToNextNode(id){
         let position = document.getElementById(id).nextSibling.offsetTop;
-        document.getElementById('tree').scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
     }
 
     scrollToPreviousNode(id){
         let position = document.getElementById(id).previousSibling.offsetTop;
-        document.getElementById('tree').scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;        
     }
 
     getClickedNodeDiv(node){
@@ -153,7 +153,7 @@ class TreeNodeController{
         return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0];
     }
 
-    getNodeNextSiblings(id){
+    getNodeNextSiblings(id){         
         let node = document.getElementById(id);
         return node.nextSibling.getElementsByClassName('tree-text-container')[0];
     }

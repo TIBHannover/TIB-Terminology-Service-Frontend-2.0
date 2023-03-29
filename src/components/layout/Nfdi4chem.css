@@ -9,6 +9,18 @@
 ------------------------
 */
 
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 20px;
+    border: transparent;
+}
+
 
 /* 
     This is the css script for the general application style.    
@@ -1317,11 +1329,14 @@ p{
        It is responsible for the left part of the tree page that keeps the tree inside. 
     */
        
-   padding-bottom: 500px !important;    
-   background-color: white;    
-   width: 900px;
-   float: left;
-   position: relative;
+    padding-bottom: 500px !important;    
+    background-color: white;    
+    width: 900px;
+    float: left;
+    position: relative;
+    overflow-y: scroll;
+    height: 1000px;
+    overflow-x: hidden;
 }
 .tree-page-left-part::-webkit-scrollbar {
    /* display: none; */
@@ -1339,12 +1354,14 @@ p{
     /* 
         The tree action buttons container
     */
-
-    padding-left: 30px;    
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    
+    position: sticky;
+    margin-top: -200px;    
+    top: 0;    
+    width: 40%;
+    float: right;
+    z-index: 999999;
+    background: white;
 }
 
 .tree-action-end-line{
@@ -1360,10 +1377,9 @@ p{
         The tree wrapper
     */
 
-    margin-top: 110px;
-    z-index: 9000;
-    overflow-y: auto;
-    height: 1000px;
+    margin-top: -70px;
+    z-index: 999;
+    overflow-x: hidden;
 }
 
 .node-table-container{
@@ -1371,25 +1387,26 @@ p{
        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
    */
 
-   padding-left: 50px;
-   padding-right: 50px;
-   padding-top: 30px;
-   width: 880px;
-   float: left;
-   background-color: white;
-   height: 1000px;    
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px;
+    width: 880px;
+    float: left;
+    background-color: white;
+    height: 1000px;        
 }
 
-.tree-view-resize-area{
+.page-resize-vertical-line{
    /*
        Style for the resize div in the tree view 
    */
-   cursor: e-resize;
-   width: 10px;        
-   background-image: linear-gradient(#000, #000);
-   background-size: 2px 100%;
+    cursor: e-resize;
+    width: 10px;        
+    border-left: 1px solid black;    
+   /* background-image: linear-gradient(#000, #000); */
+   /* background-size: 2px 100%;
    background-repeat: no-repeat;
-   background-position: center center;        
+   background-position: center center;         */
 }
 
 .resizable-container{
@@ -1451,8 +1468,8 @@ p{
 
     font-size: 15px !important;
     padding-bottom: 10px;
-    padding-top: 5px;    
-    overflow-x: auto;
+    padding-top: 5px;
+    overflow: hidden;
 }
 
 .node-detail-table-row{
@@ -1573,9 +1590,8 @@ p{
         The button dic holder
     */
 
-    width: 110px;
-    display: inline-block;
-    text-align: center;
+    /* width: 110px;    
+    text-align: center; */
 }
 
 .node-tag{
@@ -1637,74 +1653,33 @@ p{
     100% { transform: rotate(360deg); }
   }
 
-  @media only screen and (max-width: 3000px) and (min-width: 1501px) {
-    
+  @media only screen and (max-width: 3000px) and (min-width: 1501px) {       
     .tree-view-container{        
         width: 1750px;            
-    }
-    .tree-page-left-part{                        
-       width: 900px;       
-   }
-   .node-table-container{
-       width: 780px;         
-   }   
-  }
-
-@media only screen and (max-width: 1500px) and (min-width: 1300px) {
-      
+    }      
+}
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {       
     .tree-view-container{        
-        width: 1360px;        
+        width: 1350px;            
     }
-    .tree-page-left-part{                        
-       width: 700px;       
-   }
-   .node-table-container{
-       width: 680px;         
-   }
-   .tree-node-li {        
-        font-size: 11px !important;    
-    }     
-  }
-@media only screen and (max-width: 1301px) and (min-width: 1026px) {
-   
+    .jumpto-wrapper{
+        width: 90% !important;
+    }
+    .tree-action-button-area{
+        right: 30px !important;
+    }       
+}
+@media only screen and (max-width: 1299px) and (min-width: 901px) {       
     .tree-view-container{        
         width: 1200px;            
     }
-    .tree-page-left-part{                        
-       width: 600px;       
-   }
-   .node-table-container{
-       width: 580px;         
-   }
-   .tree-node-li {        
-        font-size: 11px !important;    
-    }     
-  }
-
-
-@media only screen and (max-width: 1025px) and (min-width: 901px) {
-  
-    .tree-view-container{       
-                     
-        width: 1000px;        
-        padding-top: 20px;    
+    .jumpto-wrapper{
+        width: 80% !important;
     }
-    .tree-page-left-part{                               
-       width: 500px;       
-   }
-   .node-table-container{  
-       width: 480px;         
-   }
-   .tree-node-li {        
-        font-size: 9px !important;    
-    }
-  }
-
-  @media only screen and (max-width: 900px){   
-    .tree-node-li {        
-        font-size: 9px !important;    
-    }
-  }
+    .tree-action-button-area{
+        right: 40px !important;
+    }      
+}
 
 
 /* 
@@ -1860,13 +1835,15 @@ Jumpto styles
 .jumpto-wrapper{
     /*
         styles for jumpto wrapper
-     */
-    margin-bottom: 120px;
+     */    
     margin-left: 30px;     
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
-    width: 80%;
+    width: 100%;   
+    z-index: 999999;
+    background: white;
+    height: 80px;     
 }
 
 
