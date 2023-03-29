@@ -1022,6 +1022,20 @@ p{
     color: white;
 }
 
+.search-in-box{
+    background-color: #DFE4E5;
+    display: inline-block;
+}
+
+.search-form-nav:hover{
+    text-decoration: underline;
+}
+
+.search-form-nav-clicked{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 /* 
 -------------------------------------

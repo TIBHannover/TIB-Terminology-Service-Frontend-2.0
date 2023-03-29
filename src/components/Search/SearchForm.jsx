@@ -1,4 +1,5 @@
 import React from 'react';
+import queryString from 'query-string';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 
@@ -11,7 +12,13 @@ class SearchForm extends React.Component{
           result: false,
           clickInfo: false,
           searchResult: [],
+          ontoSearchResult: [],
           jumpResult: [],
+          entry: [],
+          ontologyId: '',
+          urlPath: '',
+          insideOnto: false,
+          facetIsSelected: false,
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
@@ -21,13 +28,29 @@ class SearchForm extends React.Component{
         this.submitJumpHandler = this.submitJumpHandler.bind(this);  
         this.suggestionHandler = this.suggestionHandler.bind(this); 
         this.autoRef = React.createRef(); 
+        this.allRef =  React.createRef();
+        this.ontoRef =  React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
+        this.urlOnto = this.urlOnto.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
       }
-      
+
+      setComponentData(){
+        //let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+        let urlPath = window.location.pathname
+        let ontologyId = urlPath.split('/'); 
+        ontologyId = ontologyId[3]            
+        urlPath = urlPath.includes("/ontologies/" + ontologyId)
+        this.setState({
+          ontologyId: ontologyId,
+          urlPath: urlPath
+        })
+      }
+
 
       async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value;        
-        if (enteredTerm.length > 0){
+        enteredTerm = enteredTerm.target.value                
+        if (enteredTerm.length > 0 && !this.state.urlPath){
           let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
           searchResult =  (await searchResult.json())['response']['docs'];
           let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
@@ -37,6 +60,14 @@ class SearchForm extends React.Component{
               jumpResult: jumpResult,
               result: true,
               enteredTerm: enteredTerm
+          });
+        }
+        else if(enteredTerm.length > 0 && this.state.urlPath){
+          let ontoSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`)
+          ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
+          this.setState({
+            searchResult: ontoSearchResult,
+            result: true 
           });
         }
         else if (enteredTerm.length == 0){
@@ -49,9 +80,9 @@ class SearchForm extends React.Component{
       }
 
 
-    submitHandler(event){          
+    submitHandler(){                      
         let enteredTerm = document.getElementById('s-field').value;        
-        if(enteredTerm !== ""){
+        if(enteredTerm !== "" && this.state.insideOnto){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
@@ -59,7 +90,17 @@ class SearchForm extends React.Component{
           url.searchParams.append('page', 1);
           url.pathname = "/ts/search";
           window.location.replace(url);
-        }        
+        }
+        if(enteredTerm !== "" && this.state.ontologyId && !this.state.insideOnto){
+          let url = new URL(window.location);    
+          url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          url.searchParams.append('q', enteredTerm);
+          url.searchParams.append('ontology', (this.state.ontologyId).toUpperCase());
+          url.searchParams.append('page', 1);
+          url.pathname = "/ts/search";
+          window.location.replace(url);
+        }
     }
 
     submitJumpHandler(e){
@@ -77,6 +118,7 @@ class SearchForm extends React.Component{
             result: true
           });
       }
+
     
       handleClickOutside(){
         document.addEventListener("click", (event) =>{
@@ -88,32 +130,68 @@ class SearchForm extends React.Component{
           }          
         })       
       }
+
+      handleAllClick(){
+        document.addEventListener("click", (event) => {
+          if(this.allRef.current){
+            if(this.allRef.current.contains(event.target))
+            this.setState({
+              insideOnto: false
+            })
+          }
+        } )
+      }
+
+      handleOntoClick(){
+        document.addEventListener("click", (event) => {
+          if(this.ontoRef.current){
+            if(this.ontoRef.current.contains(event.target))
+            this.setState({
+              insideOnto: true
+            })
+          }
+        } )
+      }
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
         document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
-    }
+        document.addEventListener('click', this.handleAllClick, true);
+        document.addEventListener('click', this.handleOntoClick, true);
+        this.setComponentData();         
+      }
     
    
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
         document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
-     };
-
+        document.removeEventListener('click', this.handleAllClick, true);
+        document.removeEventListener('click', this.handleOntoClick, true);
+      };
 
       createResultList(){
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
-            resultList.push(
-                <div className="jumpto-item-holder">
-                    <a className="container jumpto-result-link" href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i}>   
-                      <div className="autocomplete-item jumpto-result-text">                  
-                            {this.state.searchResult[i]['autosuggest']}
-                      </div>
-                    </a>
-                </div>
-                
-                )
+            if(this.state.urlPath){
+              resultList.push(
+                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
+                  <div className="autocomplete-item">                  
+                        {this.state.searchResult[i]['autosuggest']}
+                  </div>
+                </a>
+              
+              )
+            }
+            else {
+              resultList.push(
+                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
+                  <div className="autocomplete-item">                  
+                        {this.state.searchResult[i]['autosuggest']}
+                  </div>
+                </a>
+              
+              )
+            }           
           }
           return resultList
       }
@@ -130,6 +208,27 @@ class SearchForm extends React.Component{
         return jumpResultList
       }
 
+      urlOnto(){
+        let showBox = [];
+          showBox.push(
+            <div class="input-group-prepend">
+              <div class="input-group-text">       
+              <div className="search-in-box">
+                Search:                
+                <a ref={this.ontoRef} className="search-form-nav search-form-nav-clicked" href={""}>               
+                    {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
+                  </a>
+                <a ref={this.allRef} href={""}>  
+                All
+                </a>                                                                                                                          
+              </div>
+              </div> 
+            </div>                 
+          )
+          return showBox;          
+        }
+        
+
 
       _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -137,10 +236,11 @@ class SearchForm extends React.Component{
         }
       }
 
-      render(){
+      render(){                    
           return(
               <div className='col-sm-10'>
                 <div class="input-group input-group-lg">
+                  {this.state.urlPath && this.urlOnto()}                              
                   <input 
                     type="text" 
                     class="form-control search-input" 
@@ -157,8 +257,8 @@ class SearchForm extends React.Component{
                                       
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
-                {this.state.result &&
-                <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
+                {this.state.result && !this.state.urlPath &&
+                <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
                   <div>
                     <h4>Jump To</h4>
                     {this.createJumpResultList()}
