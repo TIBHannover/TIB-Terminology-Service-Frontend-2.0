@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import {server} from './tests/Server';
+import {server} from './tests/MockBackend/Server';
 
 
 setupFilesAfterEnv: ['<rootDir>/jest-setup.js']

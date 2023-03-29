@@ -1,7 +1,5 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import OntologyList from '../components/Ontologies/OntologyList/OntologyList';
-import {BrowserRouter, MemoryRouter} from 'react-router-dom';
-import App from '../App';
 
 
 
