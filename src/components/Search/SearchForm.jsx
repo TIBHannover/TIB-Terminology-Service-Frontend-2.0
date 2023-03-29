@@ -26,6 +26,8 @@ class SearchForm extends React.Component{
         this.submitJumpHandler = this.submitJumpHandler.bind(this);  
         this.suggestionHandler = this.suggestionHandler.bind(this); 
         this.autoRef = React.createRef(); 
+        this.allRef =  React.createRef();
+        this.ontoRef =  React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
@@ -181,23 +183,11 @@ class SearchForm extends React.Component{
             <div class="input-group-prepend">
               <div class="input-group-text">       
               <div className="search-in-box">
-                Search:
-                {this.state.urlPath 
-                ? <a className="search-form-nav search-form-nav-clicked" href={""}>               
+                Search:                
+                <a className="search-form-nav search-form-nav-clicked" href={""}>               
                     {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
                   </a>
-                : <a className="search-form-nav">
-                  {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
-                </a>
-                 }
-                {this.state.urlPath 
-                ? <a className="search-form-nav" href={""}>               
-                    All
-                  </a>
-                : <a className="search-form-nav search-form-nav-clicked">
-                  All
-                </a>
-                 }                                                                                                                          
+                All                                                                                                                          
               </div>
               </div> 
             </div>                 
