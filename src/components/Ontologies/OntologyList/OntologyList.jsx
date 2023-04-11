@@ -46,6 +46,7 @@ class OntologyList extends React.Component {
     this.processUrlProps = this.processUrlProps.bind(this);
     this.updateUrl= this.updateUrl.bind(this);
     this.handleSwitchange = this.handleSwitchange.bind(this);
+    this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
   }
 
 
@@ -127,6 +128,13 @@ class OntologyList extends React.Component {
         listOfAllCollectionsCheckBoxes: data
       });
     });
+  }
+
+  handlePageSizeDropDownChange(e){
+    let size = parseInt(e.target.value);
+    this.setState({
+      pageSize: size 
+    })
   }
 
 
@@ -401,6 +409,18 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
             <div className='row'>
               {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
               <div className='col-sm-8' id="ontology-list-grid">
+                {!this.state.loaded &&                            
+                      <div class="form-group">
+                        <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
+                          <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
+                            <option value={10} key="10">10</option>
+                            <option value={20} key="20">20</option>
+                            <option value={30} key="30">30</option>
+                            <option value={40} key="40">40</option>
+                          </select>  
+                       </div>                                                                                
+                          
+                  }
                 <div className='row' id="ontology-list-top-row">
                   <div className='col-sm-8'>                    
                     <h3 className='h-headers'>Browse Ontologies</h3>
