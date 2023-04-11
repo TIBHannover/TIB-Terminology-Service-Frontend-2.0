@@ -25,7 +25,7 @@ class OntologyList extends React.Component {
       ontologies: [],
       pageNumber: 1,
       target: this.props.target,
-      pageSize: 5,
+      pageSize: 10,
       ontologiesHiddenStatus: [],
       ontologyListContent: '',
       unFilteredOntologies: [],
