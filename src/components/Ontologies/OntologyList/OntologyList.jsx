@@ -136,10 +136,9 @@ class OntologyList extends React.Component {
     */
   handlePageSizeDropDownChange(e){
     let size = parseInt(e.target.value);
+    let pageNumber = this.state.pageNumber + 1;
     this.setState({
       pageSize: size
-    }, () => {
-      this.updateUrl(size); 
     })
   }
 
