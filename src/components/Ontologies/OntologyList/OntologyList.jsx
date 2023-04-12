@@ -244,7 +244,7 @@ class OntologyList extends React.Component {
 /**
  * Update the url based on facet values
  */
-  updateUrl(selectedCollections, enteredKeyword, pageSize){    
+  updateUrl(selectedCollections, enteredKeyword){    
     this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
@@ -263,8 +263,6 @@ class OntologyList extends React.Component {
       currentUrlParams.append('sorting', this.state.sortField);
     }
 
-    currentUrlParams.append('size', pageSize);
-    
     currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
   }
