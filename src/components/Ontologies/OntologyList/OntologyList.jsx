@@ -47,7 +47,6 @@ class OntologyList extends React.Component {
     this.updateUrl= this.updateUrl.bind(this);
     this.handleSwitchange = this.handleSwitchange.bind(this);
     this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
-    this.updateURL = this.updateURL.bind(this);
   }
 
 
@@ -140,20 +139,9 @@ class OntologyList extends React.Component {
     this.setState({
       pageSize: size
     }, () => {
-      this.updateURL(size); 
+      this.updateUrl(size); 
     })
   }
-
-  /**
-   * updating the url
-   */
-  updateURL(pageSize){
-    let currentUrlParams = new URLSearchParams();
-    currentUrlParams.append('size', pageSize);
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-  }
-
-
 
   /**
      * Handle the click on the pagination
@@ -256,7 +244,7 @@ class OntologyList extends React.Component {
 /**
  * Update the url based on facet values
  */
-  updateUrl(selectedCollections, enteredKeyword){    
+  updateUrl(selectedCollections, enteredKeyword, pageSize){    
     this.props.history.push(window.location.pathname);
     let currentUrlParams = new URLSearchParams();
 
@@ -274,6 +262,8 @@ class OntologyList extends React.Component {
     if(this.state.sortField !== TITLE_SORT_KEY){
       currentUrlParams.append('sorting', this.state.sortField);
     }
+
+    currentUrlParams.append('size', pageSize);
     
     currentUrlParams.append('page', this.state.pageNumber);
     this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
