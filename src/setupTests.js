@@ -6,9 +6,6 @@ setupFilesAfterEnv: ['<rootDir>/jest-setup.js']
 jest.setTimeout(100000);
 
 
-
-
-
 const originalError = console.error
 beforeAll(() => {
   server.listen();
