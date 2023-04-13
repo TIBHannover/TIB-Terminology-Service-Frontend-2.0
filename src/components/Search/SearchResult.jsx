@@ -38,6 +38,7 @@ class SearchResult extends React.Component{
         this.alsoInResult = this.alsoInResult.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
         this.handleAlsoResult = this.handleAlsoResult.bind(this);
+        this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
     }
 
 
@@ -299,6 +300,20 @@ createSearchResultList () {
     this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
+
+  /**
+    * Handles the page size values from dropdown
+    * @param {*} value
+    */
+  handlePageSizeDropDownChange(e){
+    let selectedCollections = this.state.selectedCollections;
+    let size = parseInt(e.target.value);
+    let pageNumber = this.state.pageNumber + 1;
+    this.setState({
+      pageSize: size
+    });
+    this.runFacet(selectedCollections, this.state.keywordFilterString);
+  }
 
 
   /**
