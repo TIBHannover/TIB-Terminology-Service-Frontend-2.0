@@ -421,7 +421,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                   <div className='col-sm-4 form-inline'  id="ontologylist-sort-grid">
                       <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
-                          <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
+                          <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
                             <option value={10} key="10">10</option>
                             <option value={20} key="20">20</option>
                             <option value={30} key="30">30</option>

@@ -419,10 +419,10 @@ createSearchResultList () {
             </div>
             <div className='col-sm-8' id="search-list-grid">
               {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}  
-                 <div className='col-sm-4' id="search-list-grid">       
+                 <div className='col-sm-4 search-dropdown'>       
                       <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
-                          <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
+                          <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
                             <option value={10} key="10">10</option>
                             <option value={20} key="20">20</option>
                             <option value={30} key="30">30</option>
