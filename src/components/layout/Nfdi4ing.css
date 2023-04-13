@@ -1027,6 +1027,105 @@ p{
     margin-bottom: -20px;
 }
 
+#jumpresult-container{
+    /* 
+       The style for the jump autocomplete field
+    */
+    height: fit-content;
+    border: 0.5px solid black;
+    display: block;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    position: absolute;
+    z-index: 999;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 700px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.jump-autocomplete-container{
+    /* 
+       The style for the jump autocomplete item's div 
+    */
+    margin-top: -15px;
+
+}
+.jump-autocomplete-item{
+    /* 
+       The style for the jump autocomplete field
+    */
+    position:relative;
+    margin-left: 10px;
+    margin-bottom: -30px;
+    padding: 7px;
+}
+.container a{
+    text-decoration: none;
+}
+
+.jump-autocomplete-item:hover{
+    /* 
+       The style for the mouse hover in Jump To
+    */
+    vertical-align: top;
+    background-color: #f5f5f5;
+}
+
+.jmp-term-button{
+    /* 
+        The style for a button representing a term (class/propperty) in jump to
+    */
+
+    background-color: #0E6668;
+    color: white;
+    margin-left: 15px;
+    padding: 6px;
+    margin-top: -5px;
+    font-size: 12px;
+    border-color:  #0E6668;
+    float: right;
+ }
+
+.jmp-ontology-button{
+    /* 
+        The style for a button representing an ontology in jump to
+    */
+
+    background-color: #bbae9e;
+    color: white;
+    margin-top: -5px;
+    margin-left: 10px;
+    padding: 6px;
+    margin-right: 10px;
+    font-size: 12px;
+    border-color: #bbae9e !important;
+    float: right;
+}
+
+.jmp-term-button:hover{
+    /* 
+        The style for a button representing a term (class/propperty) on hover in Jump to
+    */
+
+    text-decoration: none;
+    background-color: #1baeb1;
+    color: white;
+ }
+
+.jmp-ontology-button:hover{
+    /* 
+        The style for a button representing an ontology on hover in Jump to
+    */
+
+    text-decoration: none !important;
+    background-color: #bbae9e !important;
+    color: white;
+}
+
+
 
 #search-box {
     /* 
