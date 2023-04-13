@@ -87,7 +87,6 @@ class Pagination extends React.Component{
 
     previousButtonClickedValue(){
         let activePageNumber = parseInt(this.state.activePageNumber);
-        console.info(activePageNumber)
         if (activePageNumber > 1){
             return activePageNumber - 1;                    
         }
