@@ -306,13 +306,12 @@ createSearchResultList () {
     * @param {*} value
     */
   handlePageSizeDropDownChange(e){
-    let selectedCollections = this.state.selectedCollections;
     let size = parseInt(e.target.value);
     let pageNumber = this.state.pageNumber + 1;
     this.setState({
       pageSize: size
     });
-    this.runFacet(selectedCollections, this.state.keywordFilterString);
+    this.setComponentData();
   }
 
 
