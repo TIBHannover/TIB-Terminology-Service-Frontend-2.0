@@ -1150,6 +1150,20 @@ p{
     padding-bottom: 7px;
 }
 
+.search-dropdown{
+    /* 
+       positioning search drop-down
+    */
+    margin-left: 600px;
+}
+
+.dropdown-colour{
+    /* 
+       colour for search drop-down
+    */
+   background-color: white;
+}
+
 /* 
 -------------------------------------
     The Facet fields in Search results styles 
