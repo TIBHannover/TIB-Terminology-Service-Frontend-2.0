@@ -415,9 +415,11 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
               {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
               <div className='col-sm-8' id="ontology-list-grid">                                                                                                                                                                                         
                 <div className='row' id="ontology-list-top-row">
-                  <div className='col-sm-8'>                    
+                  <div className='col-sm-4'>                    
                     <h3 className='h-headers'>Browse Ontologies</h3>                   
-                  </div>
+                  </div>                 
+                </div>
+                <div className='row'>
                   <div className='col-sm-4 form-inline result-per-page-align'>
                      <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
@@ -429,7 +431,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                           </select>  
                       </div>
                   </div>
-                  <div className='col-sm-2 form-inline ontologylist-sort-grid'  id="ontologylist-sort-grid">                     
+                  <div className='col-sm-4 form-inline ontologylist-sort-grid'  id="ontologylist-sort-grid">                     
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu ontology-list-sorting' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
