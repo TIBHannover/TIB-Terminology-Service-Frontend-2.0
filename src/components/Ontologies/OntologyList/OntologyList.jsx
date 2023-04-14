@@ -416,10 +416,10 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
               <div className='col-sm-8' id="ontology-list-grid">                                                                                                                                                                                         
                 <div className='row' id="ontology-list-top-row">
                   <div className='col-sm-8'>                    
-                    <h3 className='h-headers'>Browse Ontologies</h3>
+                    <h3 className='h-headers'>Browse Ontologies</h3>                   
                   </div>
-                  <div className='col-sm-4 form-inline'  id="ontologylist-sort-grid">
-                      <div class="form-group">
+                  <div className='col-sm-4 form-inline result-per-page-align'>
+                     <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
                           <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
                             <option value={10} key="10">10</option>
@@ -427,7 +427,9 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                             <option value={30} key="30">30</option>
                             <option value={40} key="40">40</option>
                           </select>  
-                       </div>
+                      </div>
+                  </div>
+                  <div className='col-sm-2 form-inline ontologylist-sort-grid'  id="ontologylist-sort-grid">                     
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu ontology-list-sorting' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
