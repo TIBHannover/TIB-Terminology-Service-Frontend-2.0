@@ -5,8 +5,8 @@ class TreeNodeController{
     constructor(){
         this.classes = "tree-node-li";
         this.iconInTree = "";
-        this.textSpanContainer = "";
-        this.textSpan = "";
+        this.textDivContainer = "";
+        this.textDiv = "";
         this.nodeRootElementName = "li";
         this.nodeIri = "";
         this.nodeId = "";
@@ -14,21 +14,21 @@ class TreeNodeController{
     }
 
 
-    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
+    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
         let partOfSymbol = "";
-        this.textSpan = React.createElement("span", {"className": "li-label-text"}, nodeLabel);
+        this.textDiv = React.createElement("div", {"className": "li-label-text"}, nodeLabel);
 
         if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject['a_attr']["class"] === "part_of"){
-            partOfSymbol = React.createElement("span", {"className": "p-icon-style"}, "P");            
+            partOfSymbol = React.createElement("div", {"className": "p-icon-style"}, "P");            
         }
 
         if(nodeIsClicked){
-            this.textSpanContainer = React.createElement("span", {"className": "tree-text-container clicked targetNodeByIri"}, partOfSymbol, this.textSpan);
+            this.textDivContainer = React.createElement("div", {"className": "tree-text-container clicked targetNodeByIri"}, partOfSymbol, this.textDiv);
         }
         else{
-            this.textSpanContainer = React.createElement("span", {"className": "tree-text-container"}, partOfSymbol, this.textSpan);
+            this.textDivContainer = React.createElement("div", {"className": "tree-text-container"}, partOfSymbol, this.textDiv);
         }        
         this.nodeIri = nodeObject.iri;
         if (!nodeHasChildren){
@@ -50,7 +50,7 @@ class TreeNodeController{
             "className": this.classes,
             "id": nodeId
             }
-            , this.iconInTree, this.textSpanContainer, this.children
+            , this.iconInTree, this.textDivContainer, this.children
             );
         
         return node;
@@ -58,24 +58,24 @@ class TreeNodeController{
     }
 
 
-    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){
+    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
-        this.textSpan = document.createElement("span");
+        this.textDiv = document.createElement("div");
         let label = document.createTextNode(nodeLabel);
-        this.textSpan.classList.add("li-label-text");
-        this.textSpan.appendChild(label);
+        this.textDiv.classList.add("li-label-text");
+        this.textDiv.appendChild(label);
         this.iconInTree = document.createElement("i");
-        this.textSpanContainer = document.createElement("span");
-        this.textSpanContainer.classList.add("tree-text-container");
+        this.textDivContainer = document.createElement("div");
+        this.textDivContainer.classList.add("tree-text-container");
         let node = document.createElement(this.nodeRootElementName);
-        node.setAttribute("id", nodeId);
+        node.setAttribute("id", nodeObject.id + "_" + nodeObject.parent);
         node.setAttribute("data-iri", nodeObject.iri);
         node.setAttribute("data-id", nodeObject.id); 
         node.classList.add(this.classes);
         if(nodeIsClicked){            
-            this.textSpanContainer.classList.add("clicked");
-            this.textSpanContainer.classList.add("targetNodeByIri");
+            this.textDivContainer.classList.add("clicked");
+            this.textDivContainer.classList.add("targetNodeByIri");
         }        
         this.nodeIri = nodeObject.iri;
         if (!nodeHasChildren){
@@ -94,15 +94,15 @@ class TreeNodeController{
 
         node.appendChild(this.iconInTree);
         if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject["a_attr"]["class"] === "part_of"){
-            let partOfSymbol = document.createElement("span");
+            let partOfSymbol = document.createElement("div");
             let pText = document.createTextNode("P");
             partOfSymbol.appendChild(pText);
             partOfSymbol.classList.add("p-icon-style");      
-            this.textSpanContainer.appendChild(partOfSymbol);
+            this.textDivContainer.appendChild(partOfSymbol);
           }
         
-        this.textSpanContainer.appendChild(this.textSpan);
-        node.appendChild(this.textSpanContainer);
+        this.textDivContainer.appendChild(this.textDiv);
+        node.appendChild(this.textDivContainer);
                
         return node;
     }
@@ -117,45 +117,45 @@ class TreeNodeController{
 
     scrollToNode(id){
         let position = document.getElementById(id).offsetTop;
-        document.getElementById('tree-container').scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
     }
 
     scrollToNextNode(id){
         let position = document.getElementById(id).nextSibling.offsetTop;
-        document.getElementById('tree-container').scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
     }
 
     scrollToPreviousNode(id){
         let position = document.getElementById(id).previousSibling.offsetTop;
-        document.getElementById('tree-container').scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;        
     }
 
-    getClickedNodeSpan(node){
-        if(node.parentNode.tagName === "SPAN"){
-            return node.parentNode;    
+    getClickedNodeDiv(node){
+        if(node.tagName === "DIV"){
+            return node;    
         }
         return null;
     }
 
-    getClickedNodeIri(node){
-        return node.parentNode.parentNode.dataset.iri;
+    getClickedNodeIri(node){        
+        return node.parentNode.dataset.iri;
     }
 
     getClickedNodeId(node){
-        return node.parentNode.parentNode.id;
+        return node.parentNode.id;
     }
 
     getNodeLabelTextById(id){
-        return document.getElementById(id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+        return document.getElementById(id).getElementsByClassName('tree-text-container')[0];
     }
 
     getFirstChildLabelText(id){
-        return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+        return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0];
     }
 
-    getNodeNextSiblings(id){
+    getNodeNextSiblings(id){         
         let node = document.getElementById(id);
-        return node.nextSibling.getElementsByClassName('tree-text-container')[0].getElementsByClassName('li-label-text')[0];
+        return node.nextSibling.getElementsByClassName('tree-text-container')[0];
     }
 
     getParentNode(id){
@@ -178,11 +178,6 @@ class TreeNodeController{
     isNodeLeaf(node){
         return node.classList.contains("leaf-node");
     }
-    
-
-
-
-
 }
 
 export default TreeNodeController;
