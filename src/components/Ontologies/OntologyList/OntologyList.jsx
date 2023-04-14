@@ -430,7 +430,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                        </div>
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
-                      <select className='site-dropdown-menu' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
+                      <select className='site-dropdown-menu ontology-list-sorting' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
                         <option value={TITLE_SORT_KEY} key={TITLE_SORT_KEY}>Title</option>
                         <option value={PREFIX_SORT_KEY} key={PREFIX_SORT_KEY}>Prefix</option>
                         <option value={CLASS_SORT_KEY} key={CLASS_SORT_KEY}>Classes Count</option>
