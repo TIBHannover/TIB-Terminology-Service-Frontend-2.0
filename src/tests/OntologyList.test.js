@@ -9,6 +9,6 @@ test("List has ontology", async ()=>{
     const history = createMemoryHistory();
     render(<OntologyList location={propsLocation} history={history} />);
          
-    const testOntologyDescription = "The base ontology of the test Standard.";
-    await screen.findByText(testOntologyDescription);    
+    const testOntologyDescription = "The base ontology of the ABCD Test Standard.";
+    expect(await screen.findByText(testOntologyDescription)).toBeVisible();    
 });

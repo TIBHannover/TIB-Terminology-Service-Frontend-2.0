@@ -3,7 +3,7 @@ import {server} from './tests/MockBackend/Server';
 
 
 setupFilesAfterEnv: ['<rootDir>/jest-setup.js']
-jest.setTimeout(100000);
+// jest.setTimeout(100000);
 
 
 const originalError = console.error

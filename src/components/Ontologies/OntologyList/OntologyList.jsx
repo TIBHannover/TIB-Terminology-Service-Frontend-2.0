@@ -50,9 +50,9 @@ class OntologyList extends React.Component {
 
 
    async setComponentData (){    
-    try{
-      let allOntologies = await getAllOntologies();
-      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);
+    try{      
+      let allOntologies = await getAllOntologies();      
+      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);      
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -60,8 +60,7 @@ class OntologyList extends React.Component {
           } else {
             hiddenStatus[i] = false
           }
-      }
-  
+      }      
       this.setState({
         isLoaded: true,
         ontologies: allOntologies,
@@ -89,7 +88,7 @@ class OntologyList extends React.Component {
    * Inputs are used for setting facet filters
    */
    processUrlProps(){    
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);     
     let collections = targetQueryParams.collection;
     let sortBy = targetQueryParams.sorting;
     let page = targetQueryParams.page;
@@ -330,7 +329,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
  * @returns
  */
   createOntologyList () {
-    let ontologyList = []
+    let ontologyList = []        
     for (let i = 0; i < this.state.ontologies.length; i++) {
       let item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
@@ -362,7 +361,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
             </div>                    
       )
     }
-
+    
     return ontologyList
   }
 
