@@ -1222,6 +1222,11 @@ p{
     margin-top: 5px;
 }
 
+.result-per-page-align{
+    margin-left: 315px;
+    margin-bottom: 10px;
+}
+
 
 .ontology-title-text-in-box{
     /* 
@@ -1254,6 +1259,11 @@ p{
     */
 
     padding-left: 40px;
+}
+
+#ontologylist-search-grid{
+    padding-left: 0px;
+    margin-top: 30px;
 }
 
 
@@ -1983,7 +1993,7 @@ Jumpto styles
     border: 0.5px solid black;    
     padding-bottom: 20px;
     padding-top: 10px;    
-    z-index: 999;        
+    z-index: 9999999;        
     width: 700px;        
 }
 
