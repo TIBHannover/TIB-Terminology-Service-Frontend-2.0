@@ -210,23 +210,7 @@ class SearchForm extends React.Component{
       }
 
       urlOnto(){
-        let showBox = [];
-          showBox.push(
-            <div class="input-group-prepend">
-              <div class="input-group-text">       
-              <div className="search-in-box">
-                Search:                
-                <a ref={this.ontoRef} className="search-form-nav search-form-nav-clicked" href={""}>               
-                    {"\n" + (this.state.ontologyId).toUpperCase() + "\n"}
-                  </a>
-                <a ref={this.allRef} href={""}>  
-                All
-                </a>                                                                                                                          
-              </div>
-              </div> 
-            </div>                 
-          )
-          return showBox;          
+                  
         }
         
 
