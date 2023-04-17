@@ -28,8 +28,6 @@ class SearchForm extends React.Component{
         this.submitJumpHandler = this.submitJumpHandler.bind(this);  
         this.suggestionHandler = this.suggestionHandler.bind(this); 
         this.autoRef = React.createRef(); 
-        this.allRef =  React.createRef();
-        this.ontoRef =  React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
@@ -130,33 +128,9 @@ class SearchForm extends React.Component{
           }          
         })       
       }
-
-      handleAllClick(){
-        document.addEventListener("click", (event) => {
-          if(this.allRef.current){
-            if(this.allRef.current.contains(event.target))
-            this.setState({
-              insideOnto: false
-            })
-          }
-        } )
-      }
-
-      handleOntoClick(){
-        document.addEventListener("click", (event) => {
-          if(this.ontoRef.current){
-            if(this.ontoRef.current.contains(event.target))
-            this.setState({
-              insideOnto: true
-            })
-          }
-        } )
-      }
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
-        document.addEventListener('click', this.handleAllClick, true);
-        document.addEventListener('click', this.handleOntoClick, true);
         this.setComponentData();         
         document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
     }
@@ -164,8 +138,6 @@ class SearchForm extends React.Component{
    
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
-        document.removeEventListener('click', this.handleAllClick, true);
-        document.removeEventListener('click', this.handleOntoClick, true);
         document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
      };
 
