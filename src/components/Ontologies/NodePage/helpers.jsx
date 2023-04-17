@@ -9,26 +9,20 @@ import Toolkit from "../../common/Toolkit";
  export function classMetaData(object){
     let metadata = {
       "Label": [object.label, false],
+      "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
-      "fullIRI": [object.iri, true]      
-    }
-    
-    if(formatText("Synonyms", object.synonyms, false) !== "N/A"){
-      metadata['Synonyms'] = [object.synonyms, false];
+      "fullIRI": [object.iri, true], 
+      "SubClass Of": [object.subClassOf, false],     
     }
     
     if(object.eqAxiom !== "N/A"){
       metadata['Equivalent to'] = [object.eqAxiom, false];
     }
-
-    if(object.subClassOf !== "N/A"){
-      metadata['SubClass Of'] = [object.subClassOf, false];
-    }
     
-    if(formatText("Used in axiom", object, false) !== "N/A" && formatText("Used in axiom", object, false).length !== 0){
-      metadata['Used in axiom'] = [object, false];
+    if(formatText("Used in axiom", object.relations, false) !== "N/A" && formatText("Used in axiom", object.relations, false).length !== 0){
+      metadata['Used in axiom'] = [object.relations, false];
     }
     
     if(object.annotation){
@@ -78,12 +72,12 @@ import Toolkit from "../../common/Toolkit";
 export function propertyMetaData(object){  
   let metadata = {
     "Label": [object.label, false],
+    "Synonyms": [object.synonyms, false],
     "CURIE":  [object.obo_id, false],
     "Term ID":  [object.short_form, false],
     "Description": [object.description, false],    
     "fullIRI": [object.iri, true],
-    "Ontology": [object.ontology_name, false],
-    "Synonyms": [object.synonyms, false]
+    "Ontology": [object.ontology_name, false] 
   };
 
   if(object.annotation){
@@ -117,11 +111,11 @@ export function propertyMetaData(object){
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
-  else if (label === "Synonyms"){
-    return synonymsTag(text);
-  }
+  // else if (label === "Synonyms"){
+  //   return synonymsTag(text);
+  // }
   else if (label === "Used in axiom"){
-    return createRelations(text);
+    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
   else if (label === "Equivalent to"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)

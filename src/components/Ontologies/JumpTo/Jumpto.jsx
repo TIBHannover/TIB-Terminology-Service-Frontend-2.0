@@ -1,4 +1,5 @@
 import React from "react";
+import {keyboardNavigationForJumpto} from './KeyboardNavigation';
 
 
 class JumpTo extends React.Component{
@@ -62,7 +63,7 @@ class JumpTo extends React.Component{
         let jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
         jumpResultList.push(
-            <div className="jump-tree-container">
+            <div className="jumpto-item-holder jumpto-autosuggest-item">
                 {this.jumpToButton(this.state.jumpResult[i])}
             </div>          
         )
@@ -89,10 +90,10 @@ class JumpTo extends React.Component{
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/individuals?iri=' + encodeURIComponent(resultItem['iri']);       
         }         
         content.push(
-            <a href={targetHref} className="container">
-            <div className="jump-tree-item">         
-                {resultItem['label']}
-            </div>
+            <a href={targetHref} className="jumto-result-link container">
+                <div className="jumpto-result-text">
+                    {resultItem['label']}
+                </div>
             </a>
         ); 
         
@@ -100,31 +101,33 @@ class JumpTo extends React.Component{
     }
 
     componentDidMount(){
-        document.addEventListener('click', this.handleClickOutside, true);        
+        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener("keydown", keyboardNavigationForJumpto, false);
     }
       
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
+        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
     };
 
 
     render(){
         return(
-            <div className='row jumpto-container'>
-                <div className='col-sm-12'>
-                    <div class="input-group form-fixer">
+            <div className='row jumpto-wrapper'>
+                <div className='col-sm-8'>
+                    <div class="input-group">                        
                         <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            Jump to:
+                            <div class="input-group-text">
+                                Jump to:
+                            </div>
                         </div>
-                        </div>
-                        <input class="form-control col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
+                        <input class="form-control jumpto-search-box col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
                     </div> 
                     {this.state.result && 
-                    <div ref={this.autoRef} id = "jmp-tree-container" className="col-md-12 justify-content-md-center">
+                    <div ref={this.autoRef}  className="col-md-12 justify-content-md-center jumpto-container jumpto-tree-container" id="jmp-tree-container">
                         {this.createJumpResultList()}       
                     </div>} 
-                </div>
+                </div>                
             </div>
         );
     }

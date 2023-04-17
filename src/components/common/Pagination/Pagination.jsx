@@ -87,7 +87,6 @@ class Pagination extends React.Component{
 
     previousButtonClickedValue(){
         let activePageNumber = parseInt(this.state.activePageNumber);
-        console.info(activePageNumber)
         if (activePageNumber > 1){
             return activePageNumber - 1;                    
         }
@@ -124,9 +123,12 @@ class Pagination extends React.Component{
     componentDidUpdate(){        
         let inCommingPageCount = parseInt(this.props.count);
         let currentPageCount = parseInt(this.state.pageCount);
-        if(inCommingPageCount !==  currentPageCount){
+        let inCommingPageNumber = parseInt(this.props.initialPageNumber);
+        let currentPageNumber = parseInt(this.state.activePageNumber);
+        if(inCommingPageCount !==  currentPageCount || inCommingPageNumber !== currentPageNumber){
             this.setState({                
-                pageCount: parseInt(this.props.count)
+                pageCount: parseInt(this.props.count),
+                activePageNumber: parseInt(this.props.initialPageNumber)
             }, () => {this.setTheListOfPageNumbersToRender()});
         }
     }

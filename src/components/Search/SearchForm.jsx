@@ -1,5 +1,7 @@
 import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
+import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
+
 
 class SearchForm extends React.Component{
     constructor (props) {
@@ -88,22 +90,28 @@ class SearchForm extends React.Component{
       }
     
     componentDidMount() {
-        document.addEventListener('click', this.handleClickOutside, true);         
-      }
+        document.addEventListener('click', this.handleClickOutside, true);
+        document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
+    }
     
+   
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
-      };
+        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
+     };
+
 
       createResultList(){
           const resultList = []          
           for(let i=0; i < this.state.searchResult.length; i++){
             resultList.push(
-                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
-                    <div className="autocomplete-item">                  
-                          {this.state.searchResult[i]['autosuggest']}
-                    </div>
-                  </a>
+                <div className="jumpto-item-holder">
+                    <a className="container jumpto-result-link" href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i}>   
+                      <div className="autocomplete-item jumpto-result-text">                  
+                            {this.state.searchResult[i]['autosuggest']}
+                      </div>
+                    </a>
+                </div>
                 
                 )
           }
@@ -114,7 +122,7 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <div className="jump-autocomplete-container">
+            <div className="jumpto-item-holder">
                {setJumpResultButtons(this.state.jumpResult[i])}
             </div>          
           )
@@ -150,7 +158,7 @@ class SearchForm extends React.Component{
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result &&
-                <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center">
+                <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
                   <div>
                     <h4>Jump To</h4>
                     {this.createJumpResultList()}
