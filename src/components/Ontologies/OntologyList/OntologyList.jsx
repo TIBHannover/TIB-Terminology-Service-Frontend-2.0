@@ -420,6 +420,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                   </div>                 
                 </div>
                 <div className='row'>
+                  <div className='col-sm-4 form-inline'/>
                   <div className='col-sm-4 form-inline result-per-page-align'>
                      <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
