@@ -82,7 +82,7 @@ class SearchForm extends React.Component{
 
     submitHandler(){                      
         let enteredTerm = document.getElementById('s-field').value;        
-        if(enteredTerm !== "" && this.state.insideOnto){
+        if(enteredTerm !== ""){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
@@ -91,7 +91,7 @@ class SearchForm extends React.Component{
           url.pathname = "/ts/search";
           window.location.replace(url);
         }
-        if(enteredTerm !== "" && this.state.ontologyId && !this.state.insideOnto){
+        if(enteredTerm !== "" && this.state.ontologyId){
           let url = new URL(window.location);    
           url.searchParams.delete('q');
           url.searchParams.delete('page');
