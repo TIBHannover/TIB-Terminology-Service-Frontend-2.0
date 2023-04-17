@@ -34,9 +34,15 @@ class SearchForm extends React.Component{
       }
 
       setComponentData(){
-        //let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-        let urlPath = window.location.pathname
         let sUrlPath = window.location.search
+        sUrlPath = sUrlPath.split('&')
+        for(let i=0; i < sUrlPath.length; i++){
+          let pos = sUrlPath[i].indexOf("=") + 1
+          let value = sUrlPath[i].substring(pos)
+          console.info(value)
+        }
+        //console.info(sUrlPath)
+        let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
