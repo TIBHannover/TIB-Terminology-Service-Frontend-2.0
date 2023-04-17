@@ -182,7 +182,14 @@ class SearchForm extends React.Component{
       }
 
       urlOnto(){
-                  
+        let placeholder= "";
+           if(this.state.ontologyId && this.state.urlPath){
+             placeholder = "Search in \n" + this.state.ontologyId;
+           }
+           else {
+            placeholder = "Search for ontology, term, properties and individuals"
+           }
+           return placeholder;       
         }
         
 
@@ -196,12 +203,11 @@ class SearchForm extends React.Component{
       render(){                    
           return(
               <div className='col-sm-10'>
-                <div class="input-group input-group-lg">
-                  {this.state.urlPath && this.urlOnto()}                              
+                <div class="input-group input-group-lg">                              
                   <input 
                     type="text" 
                     class="form-control search-input" 
-                    placeholder="Search for ontology, term, properties" 
+                    placeholder={this.urlOnto()}
                     aria-describedby="basic-addon2"
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
