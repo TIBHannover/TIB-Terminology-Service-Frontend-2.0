@@ -1172,6 +1172,7 @@ p{
     */
 
     margin-bottom: 10px;
+    padding-left: 50px;
 }
 
 .ontology-list-sorting{
@@ -1187,8 +1188,8 @@ p{
 }
 
 .result-per-page-align{
-    margin-left: 315px;
     margin-bottom: 10px;
+    padding-left: 50px;
 }
 
 
