@@ -222,7 +222,7 @@ class SearchForm extends React.Component{
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
                 {this.state.result && !this.state.urlPath &&
                 <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>}
-                {this.state.result &&
+                {this.state.result && !this.state.urlPath &&
                 <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
                   <div>
                     <h4>Jump To</h4>
