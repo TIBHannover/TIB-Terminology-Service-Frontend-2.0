@@ -4,11 +4,11 @@ export function nfdi4ingHomePage(){
             <div className="col-sm-8">
                 <div className="row">
                     <div className="col-sm-4">
-                        <a href="#" class="d-block">
-                            <img class="img-fluid home-image" alt="Blog image" src="/about.svg"/>
+                        <a href="#" className="d-block">
+                            <img className="img-fluid home-image" alt="Blog image" src="/about.svg"/>
                         </a>
-                        <div class="p-3">
-                            <div class="font-weight-bold mb-2">
+                        <div className="p-3">
+                            <div className="font-weight-bold mb-2">
                                 <h4><b><center>NFDI4Ing Terminology Service</center></b></h4>
                             </div>
                             <p>
@@ -20,11 +20,11 @@ export function nfdi4ingHomePage(){
                         </div>   
                     </div>
                     <div className="col-sm-4">
-                        <a href="#" class="d-block">
-                            <img class="img-fluid home-image" alt="Blog image" src="/brainstorm.svg"/>
+                        <a href="#" className="d-block">
+                            <img className="img-fluid home-image" alt="Blog image" src="/brainstorm.svg"/>
                         </a>
-                        <div class="p-3">
-                            <div class="font-weight-bold mb-2">
+                        <div className="p-3">
+                            <div className="font-weight-bold mb-2">
                                <h4><b><center>Community Vision of NFDI4Ing</center></b></h4>
                             </div>
                             <p>
@@ -36,11 +36,11 @@ export function nfdi4ingHomePage(){
                         </div>   
                     </div>
                     <div className="col-sm-4">
-                        <a href="#" class="d-block">
-                            <img class="img-fluid home-image" alt="Blog image" src="/function.svg"/>
+                        <a href="#" className="d-block">
+                            <img className="img-fluid home-image" alt="Blog image" src="/function.svg"/>
                         </a>
-                        <div class="p-3">
-                            <div class="font-weight-bold mb-2">
+                        <div className="p-3">
+                            <div className="font-weight-bold mb-2">
                              <h4><b><center>Specifications</center></b></h4>
                             </div>
                             <p> 

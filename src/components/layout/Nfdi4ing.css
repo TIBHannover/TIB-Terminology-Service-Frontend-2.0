@@ -1134,6 +1134,20 @@ p{
     padding-bottom: 7px;
 }
 
+.search-dropdown{
+    /* 
+       positioning search drop-down
+    */
+    margin-left: 600px;
+}
+
+.dropdown-colour{
+    /* 
+       colour for search drop-down
+    */
+   background-color: white;
+}
+
 /* 
 -------------------------------------
     The Facet fields in Search results styles 
@@ -1927,7 +1941,7 @@ Jumpto styles
     border: 0.5px solid black;    
     padding-bottom: 20px;
     padding-top: 10px;    
-    z-index: 999;        
+    z-index: 9999999;        
     width: 700px;        
 }
 
