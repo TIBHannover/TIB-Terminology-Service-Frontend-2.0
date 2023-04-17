@@ -1,11 +1,12 @@
-import App from "../App";
+import {render, screen} from '@testing-library/react';
+import App from '../App';
 
-it("Test App is running", () => {
-    shallow(<App />);
+
+test("Test The App Home Page is running", ()=>{
+    render(<App />);
+    let homeInHeaderNavBar = screen.getByText("Home");    
+    expect(homeInHeaderNavBar).toBeInTheDocument();
 });
 
-it("Test App has header", ()=>{
-    let application = shallow(<App />);
-    let homeOptionInHeader = <a class="nav-link navbar-item" href="/ts/">Home</a>;
-    expect(application.contains(homeOptionInHeader)).toEqual(true); 
-});
+
+
