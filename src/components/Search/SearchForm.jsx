@@ -15,13 +15,13 @@ class SearchForm extends React.Component{
           ontoSearchResult: [],
           jumpResult: [],
           entry: [],
+          sUrlOntologies: [],
           ontologyId: '',
           urlPath: '',
           sUrlPath: '',
           insideOnto: false,
           facetIsSelected: false,
-          api_base_url: "https://service.tib.eu/ts4tib/api",
-          sUrlOntologies: []
+          api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
