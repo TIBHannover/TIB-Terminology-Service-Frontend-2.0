@@ -71,15 +71,21 @@ export function createOntologyPageHeadSection(ontology){
 function collpaseSiteHeader(){
     let siteHeader = document.getElementsByClassName('header-wrapper')[0];    
     let collpaseIcone = document.getElementsByClassName('header-collpase-icon')[0];
+    let collpaseButton = document.getElementsByClassName('header-collapse-btn')[0];
+    let ontologyBannerContainer = document.getElementsByClassName('ont-info-bar')[0];
     if(collpaseIcone.classList.contains('fa-angle-double-up')){
         siteHeader.style.display = 'none';
+        ontologyBannerContainer.style.display = 'none';
         collpaseIcone.classList.remove('fa-angle-double-up');
         collpaseIcone.classList.add('fa-angle-double-down');
+        collpaseButton.style.marginTop = '-30px';
     }
     else{
         siteHeader.style.display = 'block';
+        ontologyBannerContainer.style.display = 'block';
         collpaseIcone.classList.add('fa-angle-double-up');
         collpaseIcone.classList.remove('fa-angle-double-down');
+        collpaseButton.style.marginTop = '';     
     }
     
 }
