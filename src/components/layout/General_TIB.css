@@ -1126,6 +1126,7 @@ p{
 
 .facet-btn{
    border: 1px solid transparent;
+   border-radius: 10px;
    display: inline-block;
    padding: 0.375rem 0.75rem;
    background-color: white;
@@ -1137,6 +1138,7 @@ p{
 .remove-btn{
     padding: 2px;
     margin-left: 15px;
+    border-radius: 20px;
 }
 
 .chosen-facets{
