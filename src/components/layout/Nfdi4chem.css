@@ -1630,6 +1630,11 @@ p{
 --------------------------------------
 */
 
+.term-list-container{
+    padding-right: 40px !important;
+    padding-bottom: 40px !important;
+}
+
 .term-list-table{
     /* 
         Style for the list of terms table
@@ -1673,6 +1678,10 @@ p{
     */
 
     /* margin-top: 40px; */
+}
+
+.number-of-result-text-container{
+    padding-top: 8px;
 }
 
 /* 
@@ -1928,7 +1937,13 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
-    }   
+    }
+    .list-header-element{
+        font-size: 14px !important;
+    }
+    .pagination-holder{
+        font-size: 12px;
+    }    
 }
 
 @media only screen and (max-width: 900px) {
