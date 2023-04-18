@@ -384,6 +384,9 @@ createSearchResultList () {
      
   }
 
+  /**
+    * facet buttons listing as per facet selections
+    */
   facetButton(){
     let ontologies = this.state.selectedOntologies;
     let types = this.state.selectedTypes;
@@ -461,9 +464,11 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}  
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}
                  <div className='row'>
-                   {this.facetButton()}
+                   {this.facetButton()} 
+                  </div>  
+                 <div className='row'>                                                      
                     <div className='col-sm-4 search-dropdown'>     
                       <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
