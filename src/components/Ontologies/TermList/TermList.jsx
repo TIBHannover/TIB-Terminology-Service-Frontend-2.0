@@ -26,6 +26,7 @@ class TermList extends React.Component{
         this.updateURL = this.updateURL.bind(this);
         this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
         this.resetList = this.resetList.bind(this);
+        this.storePageSizeInLocalStorage = this.storePageSizeInLocalStorage.bind(this);
     }
 
 
@@ -41,7 +42,7 @@ class TermList extends React.Component{
         if(!iriInUrl){
             listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
             iriInUrl = null;
-            sizeInUrl = (sizeInUrl === 1) ? this.state.pageSize : sizeInUrl;
+            sizeInUrl = localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20;
         }
         else{
             listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iriInUrl), this.state.mode)];
@@ -59,9 +60,15 @@ class TermList extends React.Component{
             lastLoadedUrl: window.location.href,
             iri: iriInUrl
         }, ()=> {
-            localStorage.setItem('termListPageSize', sizeInUrl);
+            this.storePageSizeInLocalStorage(sizeInUrl);            
             this.updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);
         });
+    }
+
+    storePageSizeInLocalStorage(size){
+        if(parseInt(size) !== 1){
+            localStorage.setItem('termListPageSize', size);
+        }
     }
 
    
@@ -87,8 +94,8 @@ class TermList extends React.Component{
         let pageNumber = this.state.pageNumber + 1;
         this.setState({
             pageSize: size
-        }, () => {
-            localStorage.setItem('termListPageSize', size);
+        }, () => {        
+            this.storePageSizeInLocalStorage(size);
             this.updateURL(pageNumber, size);
         });
     }
@@ -100,7 +107,7 @@ class TermList extends React.Component{
             pageNumber: 0,
             pageSize: 20
         }, () => {
-            localStorage.setItem('termListPageSize', 20);
+            this.storePageSizeInLocalStorage(this.state.pageSize);
             this.updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
         });
     }
