@@ -11,7 +11,7 @@ class TermList extends React.Component{
         this.state = ({
             ontologyId: "",
             pageNumber: 0,
-            pageSize: 20,
+            pageSize: localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20,
             listOfTerms: [],
             totalNumberOfTerms: 0,
             lastLoadedUrl: "",
@@ -41,7 +41,7 @@ class TermList extends React.Component{
         if(!iriInUrl){
             listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
             iriInUrl = null;
-            sizeInUrl = (sizeInUrl === 1) ? 20 : sizeInUrl;
+            sizeInUrl = (sizeInUrl === 1) ? this.state.pageSize : sizeInUrl;
         }
         else{
             listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iriInUrl), this.state.mode)];
@@ -59,6 +59,7 @@ class TermList extends React.Component{
             lastLoadedUrl: window.location.href,
             iri: iriInUrl
         }, ()=> {
+            localStorage.setItem('termListPageSize', sizeInUrl);
             this.updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);
         });
     }
@@ -87,6 +88,7 @@ class TermList extends React.Component{
         this.setState({
             pageSize: size
         }, () => {
+            localStorage.setItem('termListPageSize', size);
             this.updateURL(pageNumber, size);
         });
     }
@@ -98,6 +100,7 @@ class TermList extends React.Component{
             pageNumber: 0,
             pageSize: 20
         }, () => {
+            localStorage.setItem('termListPageSize', 20);
             this.updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
         });
     }
