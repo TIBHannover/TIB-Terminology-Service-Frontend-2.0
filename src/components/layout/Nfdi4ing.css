@@ -1310,6 +1310,7 @@ p{
     margin-bottom: 10px;
     border-radius: 5px !important;
     margin: auto;
+    margin-top: -30px;
 }
 
 .ontology-detail-page-container, .tree-view-container{
