@@ -15,7 +15,7 @@ class SearchForm extends React.Component{
           ontoSearchResult: [],
           jumpResult: [],
           entry: [],
-          sUrlOntologies: '',
+          sUrlOntologies: [],
           ontologyId: '',
           urlPath: '',
           sUrlPath: '',
@@ -75,21 +75,22 @@ class SearchForm extends React.Component{
             result: true 
           });
         }
-        else if(enteredTerm.length > 0 && this.state.sUrlPath){
-          let sUrlOntologies = this.state.sUrlOntologies
-          let fSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&${sUrlOntologies}`)
-          fSearchResult = (await fSearchResult.json())['response']['docs'];
-          this.setState({
-            searchResult: fSearchResult,
-            result: true 
-          });
-        }
         else if (enteredTerm.length == 0){
             this.setState({
                 result: false,
                 enteredTerm: ""
             });
             
+        }
+        else if(enteredTerm.length > 0 && window.location.search) {
+          let sUrlOntologies = this.state.sUrlOntologies
+          let fSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&${sUrlOntologies}`)
+          fSearchResult = (await fSearchResult.json())['response']['docs'];
+          console.info(fSearchResult)
+          this.setState({
+            searchResult: fSearchResult,
+            result: true 
+          });
         }
       }
 
