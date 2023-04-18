@@ -40,6 +40,7 @@ class SearchResult extends React.Component{
         this.handleAlsoResult = this.handleAlsoResult.bind(this);
         this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
         this.facetButton = this.facetButton.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
 
@@ -384,6 +385,17 @@ createSearchResultList () {
      
   }
 
+  handleDelete(){
+    let ontologies = this.state.selectedOntologies
+    let types = this.state.selectedTypes;
+    let collections = this.state.selectedCollections;
+    let params = new URLSearchParams(window.location.search)
+    console.log(params.toString())
+    params.delete('ontology')
+    console.log(params.toString())
+    this.props.history.push(window.location.pathname + "?" + params.toString());
+  }
+
   /**
     * facet buttons listing as per facet selections
     */
@@ -397,7 +409,7 @@ createSearchResultList () {
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{onto}
-              <i className="fa fa-remove remove-btn \n"></i>
+              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
         )
