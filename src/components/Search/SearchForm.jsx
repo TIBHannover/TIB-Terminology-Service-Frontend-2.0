@@ -83,19 +83,6 @@ class SearchForm extends React.Component{
             result: true 
           });
         }
-        else if(enteredTerm.length > 0 && !this.state.urlPath){
-          let sUrlOntologies = this.state.sUrlOntologies
-          for(let i=0; i < sUrlOntologies.length; i++){
-            let value = sUrlOntologies[i] 
-            console.log(value)          
-          }
-          let ontoSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
-            ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
-            this.setState({
-              searchResult: ontoSearchResult,
-              result: true 
-            });
-        }
         else if (enteredTerm.length == 0){
             this.setState({
                 result: false,
