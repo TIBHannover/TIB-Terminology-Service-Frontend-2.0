@@ -39,6 +39,7 @@ class SearchResult extends React.Component{
         this.setComponentData = this.setComponentData.bind(this);
         this.handleAlsoResult = this.handleAlsoResult.bind(this);
         this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
+        this.facetButton = this.facetButton.bind(this);
     }
 
 
@@ -383,6 +384,24 @@ createSearchResultList () {
      
   }
 
+  facetButton(){
+    let ontologies = this.state.selectedOntologies
+    let facetRow = []
+    for(let onto of ontologies){
+      if(ontologies){
+        facetRow.push(
+          <div className='col-sm-4'>
+            <a className='facet-btn' href>{onto}
+              <i className="fa fa-remove remove-btn \n"></i>
+            </a>
+          </div>
+        )
+      }
+    }
+    return facetRow;
+
+  }
+
   
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){      
@@ -420,11 +439,7 @@ createSearchResultList () {
             <div className='col-sm-8' id="search-list-grid">
               {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}  
                  <div className='row'>
-                  <div className='col-sm-4'>
-                     <a className='facet-btn' href>Test
-                        <i className="fa fa-remove remove-btn \n"></i>
-                     </a>
-                  </div>
+                   {this.facetButton()}
                     <div className='col-sm-4 search-dropdown'>     
                       <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
