@@ -395,7 +395,7 @@ createSearchResultList () {
     for(let onto of ontologies){
       if(ontologies){
         facetRow.push(
-          <div className='col-sm-4'>
+          <div className='col-sm-2'>
             <a className='facet-btn' href>{onto}
               <i className="fa fa-remove remove-btn \n"></i>
             </a>
@@ -406,7 +406,7 @@ createSearchResultList () {
     for(let typ of types){
       if(types){
         facetRow.push(
-          <div className='col-sm-4'>
+          <div className='col-sm-2'>
             <a className='facet-btn' href>{typ}
               <i className="fa fa-remove remove-btn \n"></i>
             </a>
@@ -417,7 +417,7 @@ createSearchResultList () {
     for(let col of collections){
       if(collections){
         facetRow.push(
-          <div className='col-sm-4'>
+          <div className='col-sm-2'>
             <a className='facet-btn' href>{col}
               <i className="fa fa-remove remove-btn \n"></i>
             </a>

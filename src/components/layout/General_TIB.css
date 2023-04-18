@@ -1129,16 +1129,18 @@ p{
    border-radius: 10px;
    display: inline-block;
    padding: 0.375rem 0.75rem;
+   padding-right: 0.3rem;
    background-color: white;
-   color: black;
-   font-size: 16px;
-   
+   color: #5F6469;
+   font-weight: bold;
+   font-size: 16px;  
 }
 
 .remove-btn{
     padding: 2px;
     margin-left: 15px;
     border-radius: 20px;
+    font-size: 15px;
 }
 
 .chosen-facets{
