@@ -57,8 +57,27 @@ export function createOntologyPageHeadSection(ontology){
             <div className='col-sm-1'>
                 <br></br>
                 <br></br>                
-                <button className='btn header-collapse-btn'><i className='fa fa-angle-double-up header-collpase-icon'></i></button>
+                <button className='btn header-collapse-btn' onClick={() => {collpaseSiteHeader()}}>
+                    <i className='fa fa-angle-double-up header-collpase-icon'></i>
+                </button>
             </div>            
         </div>                
     ];
+}
+
+
+function collpaseSiteHeader(){
+    let siteHeader = document.getElementsByClassName('header-wrapper')[0];    
+    let collpaseIcone = document.getElementsByClassName('header-collpase-icon')[0];
+    if(collpaseIcone.classList.contains('fa-angle-double-up')){
+        siteHeader.style.display = 'none';
+        collpaseIcone.classList.remove('fa-angle-double-up');
+        collpaseIcone.classList.add('fa-angle-double-down');
+    }
+    else{
+        siteHeader.style.display = 'block';
+        collpaseIcone.classList.add('fa-angle-double-up');
+        collpaseIcone.classList.remove('fa-angle-double-down');
+    }
+    
 }
