@@ -422,7 +422,7 @@ createSearchResultList () {
                  <div className='row'>
                   <div className='col-sm-4'>
                      <a className='facet-btn' href>Test
-                        <i className="fa fa-remove remove-btn"></i>
+                        <i className="fa fa-remove remove-btn \n"></i>
                      </a>
                   </div>
                     <div className='col-sm-4 search-dropdown'>     

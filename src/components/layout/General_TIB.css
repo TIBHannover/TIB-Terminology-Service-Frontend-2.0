@@ -1129,11 +1129,14 @@ p{
    display: inline-block;
    padding: 0.375rem 0.75rem;
    background-color: white;
-   color: green;
+   color: black;
+   font-size: 16px;
+   
 }
 
 .remove-btn{
     padding: 2px;
+    margin-left: 15px;
 }
 
 .chosen-facets{
