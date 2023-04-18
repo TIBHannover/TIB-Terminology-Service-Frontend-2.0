@@ -57,7 +57,7 @@ export function createOntologyPageHeadSection(ontology){
             <div className='col-sm-1'>
                 <br></br>
                 <br></br>                
-                <button className='btn btn-primary header-collapse-btn'><i className='fa fa-angle-double-up'></i></button>
+                <button className='btn header-collapse-btn'><i className='fa fa-angle-double-up header-collpase-icon'></i></button>
             </div>            
         </div>                
     ];
