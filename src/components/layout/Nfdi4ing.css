@@ -495,7 +495,7 @@ p{
 -------------------------------------
 */
 
-.header-warpper{
+.header-wrapper{
     /* 
        The main box for the site header
     */
@@ -1280,7 +1280,7 @@ p{
     /* 
         The style for the header collpase icon
     */
-    font-size: 24px;
+    font-size: 20px;
     border: none;
 }
 
