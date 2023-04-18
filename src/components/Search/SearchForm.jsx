@@ -15,7 +15,7 @@ class SearchForm extends React.Component{
           ontoSearchResult: [],
           jumpResult: [],
           entry: [],
-          sUrlOntologies: [],
+          sUrlOntologies: '',
           ontologyId: '',
           urlPath: '',
           sUrlPath: '',
@@ -40,14 +40,6 @@ class SearchForm extends React.Component{
         let sUrlOntologies = sUrlPath.split('&')
         sUrlOntologies.pop()
         sUrlOntologies.shift()
-        // for(let i=0; i < sUrlPath.length; i++){
-        //   let pos = sUrlPath[i].indexOf("=") + 1
-        //   for(let j=0; j < pos.length; j++){
-        //     let value = sUrlPath[i].substring(pos)
-        //     value = value.push()
-        //     console.info(value) 
-        //   }                 
-        // }
         let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
@@ -80,6 +72,15 @@ class SearchForm extends React.Component{
           ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
           this.setState({
             searchResult: ontoSearchResult,
+            result: true 
+          });
+        }
+        else if(enteredTerm.length > 0 && this.state.sUrlPath){
+          let sUrlOntologies = this.state.sUrlOntologies
+          let fSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&${sUrlOntologies}`)
+          fSearchResult = (await fSearchResult.json())['response']['docs'];
+          this.setState({
+            searchResult: fSearchResult,
             result: true 
           });
         }
