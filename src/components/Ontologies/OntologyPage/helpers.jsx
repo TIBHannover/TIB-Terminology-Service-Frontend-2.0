@@ -45,22 +45,24 @@ export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontolo
 
 export function createOntologyPageHeadSection(ontology){
     return [
-        <div className='row ont-info-bar'>
-            <div className= "col-sm-6">
-                <div>
-                <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h4>
-                </div>
-                <div>
-                <a href={ontology.config.id}>{ontology.config.id}</a>
+        <div className='span'>
+            <div className='row ont-info-bar'>
+                <div className= "col-sm-12">
+                    <div>
+                    <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h4>
+                    </div>
+                    <div>
+                    <a href={ontology.config.id}>{ontology.config.id}</a>
+                    </div>
                 </div>
             </div>
-            <div className='col-sm-1'>
-                <br></br>
-                <br></br>                
-                <button className='btn header-collapse-btn' onClick={() => {collpaseSiteHeader()}}>
-                    <i className='fa fa-angle-double-up header-collpase-icon'></i>
-                </button>
-            </div>            
+            <div className='row collpase-button-container justify-content-md-center'>
+                <div className='col-sm-1'>                                  
+                    <div className='header-collapse-btn' onClick={() => {collpaseSiteHeader()}}>
+                        <i className='fa fa-angle-double-up header-collpase-icon'></i>
+                    </div>
+                </div>
+            </div>                        
         </div>                
     ];
 }

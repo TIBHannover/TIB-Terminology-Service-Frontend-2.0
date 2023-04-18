@@ -1265,23 +1265,37 @@ p{
 -------------------------------------
 */
 
+.collpase-button-container{
+    /* 
+        Style for the header collapse button container
+    */
+    padding-top: 0;
+    margin-top: -2px;
+}
+
 .header-collapse-btn{
     /* 
         The style for the header collpase button
     */
-    background-color: #dbdbdb !important;
-    color: black !important;
-    width: 50px;
+    background-color: transparent !important;
+    color: black !important;    
     padding: 0px;    
     margin-bottom: 0;
+    border-right: 20px solid transparent;
+    border-top: 20px solid white;    
+    border-left: 20px solid transparent;
+    cursor: pointer;
+    text-align: center;    
 }
 
 .header-collpase-icon{
     /* 
         The style for the header collpase icon
     */
-    font-size: 20px;
+    font-size: 22px;
     border: none;
+    position: relative;
+    top: -20px;
 }
 
 
@@ -1292,10 +1306,10 @@ p{
     background-color: white;
     padding: 5px;
     padding-bottom: 1px;
-    width: 94%;
+    width: 97%;
     margin-bottom: 10px;
     border-radius: 5px !important;
-    margin-right: 10px;   
+    margin: auto;
 }
 
 .ontology-detail-page-container, .tree-view-container{
