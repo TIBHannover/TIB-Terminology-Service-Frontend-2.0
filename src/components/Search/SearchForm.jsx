@@ -17,9 +17,11 @@ class SearchForm extends React.Component{
           entry: [],
           ontologyId: '',
           urlPath: '',
+          sUrlPath: '',
           insideOnto: false,
           facetIsSelected: false,
-          api_base_url: "https://service.tib.eu/ts4tib/api"
+          api_base_url: "https://service.tib.eu/ts4tib/api",
+          sUrlOntologies: []
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
@@ -35,20 +37,26 @@ class SearchForm extends React.Component{
 
       setComponentData(){
         let sUrlPath = window.location.search
-        sUrlPath = sUrlPath.split('&')
-        for(let i=0; i < sUrlPath.length; i++){
-          let pos = sUrlPath[i].indexOf("=") + 1
-          let value = sUrlPath[i].substring(pos)
-          console.info(value)
-        }
-        //console.info(sUrlPath)
+        let sUrlOntologies = sUrlPath.split('&')
+        sUrlOntologies.pop()
+        sUrlOntologies.shift()
+        // for(let i=0; i < sUrlPath.length; i++){
+        //   let pos = sUrlPath[i].indexOf("=") + 1
+        //   for(let j=0; j < pos.length; j++){
+        //     let value = sUrlPath[i].substring(pos)
+        //     value = value.push()
+        //     console.info(value) 
+        //   }                 
+        // }
         let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
         this.setState({
           ontologyId: ontologyId,
-          urlPath: urlPath
+          urlPath: urlPath,
+          sUrlPath: sUrlPath,
+          sUrlOntologies: sUrlOntologies
         })
       }
 
@@ -74,6 +82,19 @@ class SearchForm extends React.Component{
             searchResult: ontoSearchResult,
             result: true 
           });
+        }
+        else if(enteredTerm.length > 0 && !this.state.urlPath){
+          let sUrlOntologies = this.state.sUrlOntologies
+          for(let i=0; i < sUrlOntologies.length; i++){
+            let value = sUrlOntologies[i] 
+            console.log(value)          
+          }
+          let ontoSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
+            ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
+            this.setState({
+              searchResult: ontoSearchResult,
+              result: true 
+            });
         }
         else if (enteredTerm.length == 0){
             this.setState({
