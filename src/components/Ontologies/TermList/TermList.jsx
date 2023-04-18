@@ -162,14 +162,15 @@ class TermList extends React.Component{
 
     render(){
         return(
-            <div className="tree-view-container">
+            <div className="tree-view-container term-list-container">
                 <div className="row">
                     <div className="col-sm-4">
-                        <div className="list-header-element">
+                        <div className="termlist-jumpto-container  list-header-element">
                             <JumpTo                        
                                 ontologyId={this.state.ontologyId}                                
                                 isSkos={this.props.isSkos}
                                 componentIdentity={this.props.componentIdentity}
+                                containerBootstrapClass="col-sm-12"
                             />
                         </div>                    
                     </div>
@@ -191,7 +192,7 @@ class TermList extends React.Component{
                             <button className='btn btn-secondary btn-sm tree-action-btn list-header-element' onClick={this.resetList}>Show All Classes</button> 
                         }
                     </div>
-                    <div className="col-sm-3 text-right list-header-element">
+                    <div className="col-sm-3 text-right list-header-element number-of-result-text-container">
                         <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>
                     </div>
                     <div className="col-sm-3">

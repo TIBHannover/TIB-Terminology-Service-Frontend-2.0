@@ -1656,6 +1656,11 @@ p{
 --------------------------------------
 */
 
+.term-list-container{
+    padding-right: 40px !important;
+    padding-bottom: 40px !important;
+}
+
 .term-list-table{
     /* 
         Style for the list of terms table
@@ -1700,6 +1705,11 @@ p{
 
     /* margin-top: 40px; */
 }
+
+.number-of-result-text-container{
+    padding-top: 8px;
+}
+
 
 /* 
 ---------------------------------------------------
@@ -1913,7 +1923,7 @@ Media Query Area for bein responsive
         width: 1200px;            
     }
     .jumpto-wrapper{
-        width: 80% !important;
+        width: 80% !important;        
     }
     .tree-action-button-area{
         right: 40px !important;
@@ -1953,6 +1963,12 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
+    }
+    .list-header-element{
+        font-size: 12px !important;
+    }
+    .pagination-holder{
+        font-size: 12px;
     }   
 }
 
