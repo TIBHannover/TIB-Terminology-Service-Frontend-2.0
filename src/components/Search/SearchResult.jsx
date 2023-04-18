@@ -390,10 +390,17 @@ createSearchResultList () {
     let types = this.state.selectedTypes;
     let collections = this.state.selectedCollections;
     let params = new URLSearchParams(window.location.search)
-    console.log(params.toString())
-    params.delete('ontology')
-    console.log(params.toString())
-    this.props.history.push(window.location.pathname + "?" + params.toString());
+    for(let ontos of ontologies){
+      params.delete('ontology', ontos)
+    }
+    for(let typ of types){
+      params.delete('type', typ)
+    }
+    for(let col of collections){
+      params.delete('collection', col)
+    }
+    
+    window.location.replace(window.location.pathname + "?" + params.toString());
   }
 
   /**
@@ -420,7 +427,7 @@ createSearchResultList () {
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{typ}
-              <i className="fa fa-remove remove-btn \n"></i>
+              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
         )
@@ -431,7 +438,7 @@ createSearchResultList () {
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{col}
-              <i className="fa fa-remove remove-btn \n"></i>
+              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
         )
