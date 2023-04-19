@@ -1921,8 +1921,7 @@ Jumpto styles
     border: 0.5px solid black;    
     padding-bottom: 20px;
     padding-top: 10px;    
-    z-index: 9999999;        
-    width: 700px;        
+    z-index: 9999999;               
 }
 
 .jumpto-tree-container{
