@@ -15,7 +15,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@live-change/interval-tree": "^1.0.12",
-    "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.1",
@@ -71,6 +70,8 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^8.16.0"
+    "@testing-library/jest-dom": "^5.16.5",
+    "eslint": "^8.16.0",
+    "msw": "^1.2.1"
   }
 }
