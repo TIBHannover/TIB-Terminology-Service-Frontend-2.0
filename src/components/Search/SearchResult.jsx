@@ -425,19 +425,16 @@ createSearchResultList () {
     let types = this.state.selectedTypes;
     let collections = this.state.selectedCollections;
     let facetRow = [];
-    for(let onto of ontologies){
-      if(ontologies){
+    for(let onto of ontologies){     
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{onto}
               <i onClick={this.handleOntoDelete} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
-        )
-      }
+        )     
     }
-    for(let typ of types){
-      if(types){
+    for(let typ of types){    
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{typ}
@@ -446,9 +443,7 @@ createSearchResultList () {
           </div>
         )
       }
-    }
-    for(let col of collections){
-      if(collections){
+    for(let col of collections){    
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{col}
@@ -457,7 +452,6 @@ createSearchResultList () {
           </div>
         )
       }
-    }
     return facetRow;
 
   }
