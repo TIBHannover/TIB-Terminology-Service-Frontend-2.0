@@ -40,7 +40,9 @@ class SearchResult extends React.Component{
         this.handleAlsoResult = this.handleAlsoResult.bind(this);
         this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
         this.facetButton = this.facetButton.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
+        this.handleOntoDelete = this.handleOntoDelete.bind(this);
+        this.handleTypDelete = this.handleTypDelete.bind(this);
+        this.handleColDelete = this.handleColDelete.bind(this);
     }
 
 
@@ -385,19 +387,31 @@ createSearchResultList () {
      
   }
 
-  handleDelete(){
+  handleOntoDelete(){
     let ontologies = this.state.selectedOntologies
+    let params = new URLSearchParams(window.location.search)
+    for(let i=0; i< ontologies.length; i++){
+      params.delete('ontology', ontologies[i])
+    }
+    
+    window.location.replace(window.location.pathname + "?" + params.toString());
+  }
+
+  handleTypDelete(){
     let types = this.state.selectedTypes;
+    let params = new URLSearchParams(window.location.search)
+    for(let i=0; i< types.length; i++){
+      params.delete('type', types[i])
+    }
+    
+    window.location.replace(window.location.pathname + "?" + params.toString());
+  }
+
+  handleColDelete(){
     let collections = this.state.selectedCollections;
     let params = new URLSearchParams(window.location.search)
-    for(let ontos of ontologies){
-      params.delete('ontology', ontos)
-    }
-    for(let typ of types){
-      params.delete('type', typ)
-    }
-    for(let col of collections){
-      params.delete('collection', col)
+    for(let i=0; i< collections.length; i++){
+      params.delete('collection', collections[i])
     }
     
     window.location.replace(window.location.pathname + "?" + params.toString());
@@ -411,39 +425,33 @@ createSearchResultList () {
     let types = this.state.selectedTypes;
     let collections = this.state.selectedCollections;
     let facetRow = [];
-    for(let onto of ontologies){
-      if(ontologies){
+    for(let onto of ontologies){     
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{onto}
-              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
+              <i onClick={this.handleOntoDelete} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
-        )
-      }
+        )     
     }
-    for(let typ of types){
-      if(types){
+    for(let typ of types){    
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{typ}
-              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
+              <i onClick={this.handleTypDelete} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
         )
       }
-    }
-    for(let col of collections){
-      if(collections){
+    for(let col of collections){    
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{col}
-              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
+              <i onClick={this.handleColDelete} className="fa fa-remove remove-btn \n"></i>
             </a>
           </div>
         )
       }
-    }
     return facetRow;
 
   }
