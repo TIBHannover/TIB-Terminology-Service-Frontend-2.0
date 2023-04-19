@@ -1241,6 +1241,11 @@ p{
 -------------------------------------
 */
 
+.header-collapseable-section{        
+    opacity: 1;    
+    transition: .6s ease opacity,.6s ease transform;
+}
+
 .collpase-button-container{
     /* 
         Style for the header collapse button container
