@@ -39,6 +39,8 @@ class SearchResult extends React.Component{
         this.setComponentData = this.setComponentData.bind(this);
         this.handleAlsoResult = this.handleAlsoResult.bind(this);
         this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
+        this.facetButton = this.facetButton.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
 
@@ -383,6 +385,69 @@ createSearchResultList () {
      
   }
 
+  handleDelete(){
+    let ontologies = this.state.selectedOntologies
+    let types = this.state.selectedTypes;
+    let collections = this.state.selectedCollections;
+    let params = new URLSearchParams(window.location.search)
+    for(let ontos of ontologies){
+      params.delete('ontology', ontos)
+    }
+    for(let typ of types){
+      params.delete('type', typ)
+    }
+    for(let col of collections){
+      params.delete('collection', col)
+    }
+    
+    window.location.replace(window.location.pathname + "?" + params.toString());
+  }
+
+  /**
+    * facet buttons listing as per facet selections
+    */
+  facetButton(){
+    let ontologies = this.state.selectedOntologies;
+    let types = this.state.selectedTypes;
+    let collections = this.state.selectedCollections;
+    let facetRow = [];
+    for(let onto of ontologies){
+      if(ontologies){
+        facetRow.push(
+          <div className='col-sm-2'>
+            <a className='facet-btn' href>{onto}
+              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
+            </a>
+          </div>
+        )
+      }
+    }
+    for(let typ of types){
+      if(types){
+        facetRow.push(
+          <div className='col-sm-2'>
+            <a className='facet-btn' href>{typ}
+              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
+            </a>
+          </div>
+        )
+      }
+    }
+    for(let col of collections){
+      if(collections){
+        facetRow.push(
+          <div className='col-sm-2'>
+            <a className='facet-btn' href>{col}
+              <i onClick={() => this.handleDelete()} className="fa fa-remove remove-btn \n"></i>
+            </a>
+          </div>
+        )
+      }
+    }
+    return facetRow;
+
+  }
+
   
   componentDidMount(){
     if(!this.state.isLoaded && !this.state.isFiltered){      
@@ -418,8 +483,12 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}  
-                 <div className='col-sm-4 search-dropdown'>       
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}
+                 <div className='row'>
+                   {this.facetButton()} 
+                  </div>  
+                 <div className='row'>                                                      
+                    <div className='col-sm-4 search-dropdown'>     
                       <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
                           <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
@@ -429,7 +498,9 @@ createSearchResultList () {
                             <option value={40} key="40">40</option>
                           </select>  
                        </div>
-                      </div> 
+                    </div> 
+                  </div>
+                 
               {this.state.searchResult.length > 0 && this.createSearchResultList()}              
               {this.state.searchResult.length > 0 && 
                 <Pagination 
