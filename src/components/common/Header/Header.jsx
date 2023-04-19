@@ -4,7 +4,7 @@ import SearchForm from "../../Search/SearchForm";
 
 function Header () {
   return (
-    <div className='header-wrapper'>
+    <div className='header-wrapper header-collapseable-section'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
             {/* <a href="#">Login</a> */}
