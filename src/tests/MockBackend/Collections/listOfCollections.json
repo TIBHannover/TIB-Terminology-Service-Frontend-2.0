@@ -1,0 +1,23 @@
+{
+    "_embedded": {
+        "strings": [            
+            {
+                "content": "NFDI4CHEM"
+            },        
+            {
+                "content": "NFDI4ING"
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://service.tib.eu/ts4tib/api/ontologies/schemavalues"
+        }
+    },
+    "page": {
+        "size": 20,
+        "totalElements": 2,
+        "totalPages": 1,
+        "number": 0
+    }
+}
