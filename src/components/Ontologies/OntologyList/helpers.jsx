@@ -22,7 +22,6 @@ export function BuildCollectionForCard(collections){
         else{
             result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
             collections[i]}>{collections[i]}</a></span>)
-            result.push(",")
         }
         
     }
