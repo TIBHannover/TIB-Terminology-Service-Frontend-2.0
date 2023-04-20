@@ -32,7 +32,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo"
+                className="img-fluid collection-logo"
                 alt="NFDI4Ing"
                 src={collectionsInfoJson['NFDI4Ing']['logo']}
               />
@@ -58,7 +58,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo"
+                className="img-fluid collection-logo"
                 alt="NFDI4Chem"
                 src={collectionsInfoJson['NFDI4Chem']['logo']}
               />
@@ -89,7 +89,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo nfdi4culture-logo"
+                className="img-fluid collection-logo nfdi4culture-logo"
                 alt="NFDI4Culture"
                 src={collectionsInfoJson['NFDI4Culture']['logo']}
               />
@@ -114,7 +114,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo coypu-logo"
+                className="img-fluid collection-logo coypu-logo"
                 alt="CoyPu"
                 src={collectionsInfoJson['CoyPu']['logo']}
               />
@@ -142,7 +142,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo"
+                className="img-fluid collection-logo"
                 alt="FID Move"
                 src={collectionsInfoJson['FID Move']['logo']}
               />
@@ -168,7 +168,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo"
+                className="img-fluid collection-logo"
                 alt="FID Baudigital"
                 src={collectionsInfoJson['FID Baudigital']['logo']}
               />
@@ -201,7 +201,7 @@ export function createHomePageContent() {
               className="collection-image-anchor"
             >
               <img
-                class="img-fluid collection-logo"
+                className="img-fluid collection-logo"
                 alt="FAIR Data Spaces"
                 src={collectionsInfoJson['FAIR Data Spaces']['logo']}
               />
