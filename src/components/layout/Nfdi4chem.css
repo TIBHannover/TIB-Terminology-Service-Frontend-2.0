@@ -1164,7 +1164,6 @@ p{
 }
 
 
-
 /* 
 -------------------------------------
     The ontology detail page styles. It contains the ontology overview page.
@@ -1172,8 +1171,10 @@ p{
 */
 
 .header-collapseable-section{        
-    opacity: 1;    
-    transition: .6s ease opacity,.6s ease transform;
+    padding: 0 18px;
+    max-height: 200px;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
 }
 
 .collpase-button-container{
