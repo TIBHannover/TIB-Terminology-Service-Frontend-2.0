@@ -239,7 +239,7 @@ class IndividualsList extends React.Component {
 
     render(){
         return(
-            <div className="row tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
+            <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
                 <div className="tree-page-left-part" id="page-left-pane">
                   <JumpTo
                     ontologyId={this.props.ontology}
