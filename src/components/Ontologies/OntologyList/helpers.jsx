@@ -1,5 +1,6 @@
 import {getAllCollectionsIds} from '../../../api/fetchData';
 import Toolkit from '../../common/Toolkit';
+import collectionsInfoJson from '../../../assets/collectionsText.json';
 
 
 /**
@@ -14,11 +15,13 @@ export function BuildCollectionForCard(collections){
     let result = [];
     for(let i=0; i < collections.length; i++){
         if (i !== collections.length - 1){
-            result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + collections[i]}>{collections[i]}</a></span>)
+            result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+            collections[i] }>{collections[i]}</a></span>)
             result.push(",")
         }
         else{
-            result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + collections[i]}>{collections[i]}</a></span>)
+            result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+            collections[i]}>{collections[i]}</a></span>)
         }
         
     }
@@ -39,10 +42,10 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
             <h3 className='ontology-list-facet-header'>Filter</h3>            
             <div className='row'>
                 <div className='col-sm-12' id="ontologylist-search-grid">
-                    <div class="input-group mb-3">                        
+                    <div className="input-group mb-3">                        
                         <input 
                             type="text" 
-                            class="form-control" 
+                            className="form-control" 
                             aria-label="By keyword" 
                             aria-describedby="By keyword" 
                             placeholder='By keyword'
@@ -57,9 +60,9 @@ export function CreateFacet(filterWordChange, allCollectionsCheckboxes, enteredK
                     <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
                     <div  className="col-sm-12 facet-box" >
                         <div className='facet-switch-holder'>
-                            <div class="custom-control custom-switch">                                
-                                <input type="checkbox" class="custom-control-input" id="facet-switch" onChange={onSwitchChange} />
-                                <label class="custom-control-label" for="facet-switch">Intersection</label>
+                            <div className="custom-control custom-switch">                                
+                                <input type="checkbox" className="custom-control-input" id="facet-switch" onChange={onSwitchChange} />
+                                <label className="custom-control-label" for="facet-switch">Intersection</label>
                             </div>                           
                         </div>
                         <div>
@@ -118,9 +121,9 @@ export async function createCollectionsCheckBoxes(filterCollection, selectedColl
         result.push(
         <div className="row facet-item-row">
             <div className='col-sm-9'>
-                <div class="form-check">
+                <div className="form-check">
                     <input 
-                        class="form-check-input collection-checkbox"
+                        className="form-check-input collection-checkbox"
                         type="checkbox" 
                         value={record['collection']}
                         id={"col-checkbox-" + record['collection']} 
@@ -128,13 +131,13 @@ export async function createCollectionsCheckBoxes(filterCollection, selectedColl
                         onClick={filterCollection}
                         data-isChecked={selectedCollections.includes(record['collection'])}
                     />                    
-                    <label class="form-check-label" for={"col-checkbox-" + record['collection']} >
+                    <label className="form-check-label" for={"col-checkbox-" + record['collection']} >
                        {record['collection']}
                     </label>
                 </div>
             </div>
             <div className='col-sm-3'>
-                <span class="facet-result-count">{record['ontologiesCount']}</span>
+                <span className="facet-result-count">{record['ontologiesCount']}</span>
             </div>
         </div>
         );

@@ -51,9 +51,9 @@ class OntologyList extends React.Component {
 
 
    async setComponentData (){    
-    try{
-      let allOntologies = await getAllOntologies();
-      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);
+    try{      
+      let allOntologies = await getAllOntologies();      
+      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);      
       let hiddenStatus = [];
       for (let i = 0; i < allOntologies.length; i++) {
           if (i < this.state.pageSize) {
@@ -61,8 +61,7 @@ class OntologyList extends React.Component {
           } else {
             hiddenStatus[i] = false
           }
-      }
-  
+      }      
       this.setState({
         isLoaded: true,
         ontologies: allOntologies,
@@ -75,7 +74,7 @@ class OntologyList extends React.Component {
       });
     }
 
-    catch(error){
+    catch(error){      
       this.setState({
         isLoaded: true,
         error
@@ -89,8 +88,8 @@ class OntologyList extends React.Component {
    * Process the input parameter in the url.
    * Inputs are used for setting facet filters
    */
-   processUrlProps(){
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+   processUrlProps(){    
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);     
     let collections = targetQueryParams.collection;
     let sortBy = targetQueryParams.sorting;
     let page = targetQueryParams.page;
@@ -343,7 +342,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
  * @returns
  */
   createOntologyList () {
-    let ontologyList = []
+    let ontologyList = []        
     for (let i = 0; i < this.state.ontologies.length; i++) {
       let item = this.state.ontologies[i]
       ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
@@ -375,7 +374,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
             </div>                    
       )
     }
-
+    
     return ontologyList
   }
 
@@ -415,11 +414,14 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
               {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
               <div className='col-sm-8' id="ontology-list-grid">                                                                                                                                                                                         
                 <div className='row' id="ontology-list-top-row">
-                  <div className='col-sm-8'>                    
-                    <h3 className='h-headers'>Browse Ontologies</h3>
-                  </div>
-                  <div className='col-sm-4 form-inline'  id="ontologylist-sort-grid">
-                      <div class="form-group">
+                  <div className='col-sm-4'>                    
+                    <h3 className='h-headers'>Browse Ontologies</h3>                   
+                  </div>                 
+                </div>
+                <div className='row'>
+                  <div className='col-sm-4 form-inline'/>
+                  <div className='col-sm-4 form-inline result-per-page-align'>
+                     <div class="form-group">
                         <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
                           <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
                             <option value={10} key="10">10</option>
@@ -427,7 +429,9 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
                             <option value={30} key="30">30</option>
                             <option value={40} key="40">40</option>
                           </select>  
-                       </div>
+                      </div>
+                  </div>
+                  <div className='col-sm-4 form-inline ontologylist-sort-grid'  id="ontologylist-sort-grid">                     
                     <div class="form-group">
                       <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
                       <select className='site-dropdown-menu ontology-list-sorting' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
