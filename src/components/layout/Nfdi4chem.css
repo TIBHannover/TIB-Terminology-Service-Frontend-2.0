@@ -1073,6 +1073,28 @@ p{
     margin-left: 600px;
 }
 
+.facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
+    border: 1px solid transparent;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    padding-right: 0.3rem;
+    background-color: white;
+    color: #5F6469;
+    font-weight: bold;
+    font-size: 16px;  
+ }
+ 
+ .remove-btn{
+     padding: 2px;
+     margin-left: 15px;
+     border-radius: 20px;
+     font-size: 15px;
+ }
+
 .dropdown-colour{
     /* 
        colour for search drop-down

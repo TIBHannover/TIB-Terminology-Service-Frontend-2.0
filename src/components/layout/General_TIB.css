@@ -1125,6 +1125,9 @@ p{
 }
 
 .facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
    border: 1px solid transparent;
    border-radius: 10px;
    display: inline-block;
