@@ -443,15 +443,18 @@ createSearchResultList () {
           </div>
         )
       }
-    for(let col of collections){    
-        facetRow.push(
-          <div className='col-sm-2'>
-            <a className='facet-btn' href>{col}
-              <i onClick={this.handleColDelete} className="fa fa-remove remove-btn \n"></i>
-            </a>
-          </div>
-        )
+      if(process.env.REACT_APP_PROJECT_ID === "general"){
+        for(let col of collections){    
+          facetRow.push(
+            <div className='col-sm-2'>
+              <a className='facet-btn' href>{col}
+                <i onClick={this.handleColDelete} className="fa fa-remove remove-btn \n"></i>
+              </a>
+            </div>
+          )
+        }
       }
+    
     return facetRow;
 
   }
