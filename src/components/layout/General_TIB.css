@@ -1138,12 +1138,10 @@ p{
     */
     background-color: white;
     padding: 5px;
-    padding-bottom: 1px;
-    width: 97%;
+    padding-bottom: 1px;    
     margin-bottom: 10px;
-    border-radius: 5px !important;
-    margin: auto;
-    margin-top: -30px;
+    border-radius: 5px !important;    
+    margin-top: -30px;    
 }
 
 .ont-info-bar-title{
