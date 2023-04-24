@@ -80,6 +80,10 @@ function collpaseSiteHeader(){
         collpaseIcone.classList.add('fa-angle-double-down');
         siteHeader.style.marginTop = '-10px';
         applicationContent.style.minHeight = '800px';
+
+        siteHeader.style.overflow = 'hidden';
+        siteHeader.style.padding = '0';
+        ontologyBannerContainer.style.overflow = 'hidden';
     }
     else{
         siteHeader.style.maxHeight = '200px';
@@ -88,6 +92,10 @@ function collpaseSiteHeader(){
         collpaseIcone.classList.remove('fa-angle-double-down');
         siteHeader.style.marginTop = '10px';
         applicationContent.style.minHeight = '500px';
+
+        siteHeader.style.overflow = '';
+        siteHeader.style.padding = '10px';
+        ontologyBannerContainer.style.overflow = '';
     }
     
 }

@@ -1091,10 +1091,8 @@ p{
 -------------------------------------
 */
 
-.header-collapseable-section{        
-    padding: 0 18px;
-    max-height: 200px;
-    overflow: hidden;
+.header-collapseable-section{            
+    max-height: 200px;    
     transition: max-height 0.4s ease-out;
 }
 
