@@ -307,7 +307,7 @@ class OntologyPage extends React.Component {
         <div className='row justify-content-center'>
             {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
             {createOntologyPageHeadSection(this.state.ontology)}          
-            <div className='col-sm-8'>
+            <div className='col-sm-12'>
                 <ul className="nav nav-tabs">
                     {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
                 </ul>

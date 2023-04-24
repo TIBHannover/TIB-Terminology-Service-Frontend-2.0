@@ -1159,9 +1159,7 @@ p{
     */
 
     background-color: white;    
-    margin-top: 0px !important;
-    width: 1750px;
-    margin-left: -23%;
+    margin-top: 0px !important;   
     padding-top: 20px;
     padding-left: 10px;
     padding-right: 10px;    
@@ -1232,8 +1230,8 @@ p{
         The style for the ontology detail page navbar
     */
 
-    width: 145%;
-    margin-left: -23%;
+    /* width: 145%; */
+    /* margin-left: -23%; */
 }
 
 
@@ -1909,14 +1907,10 @@ Media Query Area for bein responsive
 */
 
 @media only screen and (max-width: 3000px) and (min-width: 1501px) {       
-    .tree-view-container, .ontology-detail-page-container{        
-        width: 1750px;            
-    }      
+          
 }
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {       
-    .tree-view-container, .ontology-detail-page-container{        
-        width: 1350px;            
-    }
+    
     .jumpto-wrapper{
         width: 90% !important;
     }
@@ -1931,9 +1925,7 @@ Media Query Area for bein responsive
     }       
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
-    .tree-view-container, .ontology-detail-page-container{        
-        width: 1200px;            
-    }
+    
     .jumpto-wrapper{
         width: 80% !important;        
     }
