@@ -17,12 +17,14 @@ import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
-import Login from './components/User/Login/Login';
+import LoginForm from './components/User/Login/Login';
 import UserProfile from './components/User/Profile/Profile';
-import { isLogin } from './components/User/Login/Auth';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
+
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./keycloak";
 
 
 // import css file based on the target project
@@ -35,11 +37,6 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 function App() {
   AppHelpers.setSiteTitleAndFavIcon();
   AppHelpers.checkBackendStatus();
-
-  // set login status
-  isLogin().then((resp) => {
-    localStorage.setItem('isLogin', resp);
-  });
 
   const [loading, setLoading] = useState(true); 
   useEffect(() => {    
@@ -61,7 +58,8 @@ function App() {
               <h2><strong>Login ...</strong></h2>
           </div>                                
           </div>
-      </div>   
+      </div>
+    <ReactKeycloakProvider authClient={keycloak}>   
      <BrowserRouter>
         <MatomoWrapper> 
           <Header />               
@@ -82,7 +80,7 @@ function App() {
               <CookieBanner />
               <Switch>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
-                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
+                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={LoginForm}/>    
                 <Route  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>                
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
@@ -106,6 +104,7 @@ function App() {
           )}              
         </MatomoWrapper>
       </BrowserRouter>
+      </ReactKeycloakProvider>
     </div>
   );
 }

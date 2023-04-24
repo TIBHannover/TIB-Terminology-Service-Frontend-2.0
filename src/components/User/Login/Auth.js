@@ -1,3 +1,5 @@
+import { useKeycloak } from "@react-keycloak/web";
+
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
@@ -45,11 +47,13 @@ export async function isLogin(){
 }
 
 
-export function userIsLoginByLocalStorage(){
-    if(localStorage.getItem('isLogin') && localStorage.getItem('isLogin') === "true"){
-        return true;
+export function UserIsLogin(){
+    const { keycloak, initialized } = useKeycloak();
+    
+    if(!keycloak.authenticated){
+        return false;
     }
-    return false;
+    return true;
 }
 
 

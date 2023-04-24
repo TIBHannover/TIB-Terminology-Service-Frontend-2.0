@@ -1,6 +1,6 @@
 import React from "react";
-import { userIsLoginByLocalStorage } from "../../User/Login/Auth";
-import Login from "../../User/Login/Login";
+import { UserIsLogin } from "../../User/Login/Auth";
+import LoginForm from "../../User/Login/Login";
 import GithubController from '../../GithubController/GithubController';
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
@@ -187,11 +187,11 @@ class IssueList extends React.Component{
         return (
             <div className="row tree-view-container">
                 <div className="col-sm-12">
-                    {!userIsLoginByLocalStorage() && 
-                        <Login isModal={false} />
+                    {!UserIsLogin() && 
+                        <LoginForm onlyLoginButton={false} />
                     }
                     {this.state.waiting && <div className="isLoading"></div>}
-                    {userIsLoginByLocalStorage() && !this.state.waiting &&                        
+                    {UserIsLogin() && !this.state.waiting &&                        
                         <div className="row">
                             <div className="row">
                                 {this.createIssueStateDropDown()}
