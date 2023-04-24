@@ -70,37 +70,23 @@ export function createOntologyPageHeadSection(ontology){
 
 function collpaseSiteHeader(){
     let siteHeader = document.getElementsByClassName('header-wrapper')[0];    
-    let collpaseIcone = document.getElementsByClassName('header-collpase-icon')[0];
-    let collpaseButton = document.getElementsByClassName('header-collapse-btn')[0];
+    let collpaseIcone = document.getElementsByClassName('header-collpase-icon')[0];    
     let ontologyBannerContainer = document.getElementsByClassName('ont-info-bar')[0];
     let applicationContent = document.getElementsByClassName('application-content')[0];
     if(collpaseIcone.classList.contains('fa-angle-double-up')){
-        siteHeader.style.opacity = 0;
-        siteHeader.style.transform = 'scale(0)';
-        ontologyBannerContainer.style.opacity = 0;
-        ontologyBannerContainer.style.transform = 'scale(0)';
-        window.setTimeout(function(){
-            siteHeader.style.display = 'none';
-            ontologyBannerContainer.style.display = 'none';
-          },400);        
+        siteHeader.style.maxHeight = '0';
+        ontologyBannerContainer.style.maxHeight = '0';
         collpaseIcone.classList.remove('fa-angle-double-up');
         collpaseIcone.classList.add('fa-angle-double-down');
-        collpaseButton.style.marginTop = '-30px';
+        siteHeader.style.marginTop = '-10px';
         applicationContent.style.minHeight = '800px';
     }
     else{
-        siteHeader.style.display = 'block';
-        ontologyBannerContainer.style.display = 'block';
-        window.setTimeout(function(){
-            siteHeader.style.opacity = 1;
-            siteHeader.style.transform = 'scale(1)';
-            ontologyBannerContainer.style.opacity = 1;
-            ontologyBannerContainer.style.transform = 'scale(1)';
-          },0);
-
+        siteHeader.style.maxHeight = '200px';
+        ontologyBannerContainer.style.maxHeight = '200px';
         collpaseIcone.classList.add('fa-angle-double-up');
         collpaseIcone.classList.remove('fa-angle-double-down');
-        collpaseButton.style.marginTop = '';
+        siteHeader.style.marginTop = '10px';
         applicationContent.style.minHeight = '500px';
     }
     
