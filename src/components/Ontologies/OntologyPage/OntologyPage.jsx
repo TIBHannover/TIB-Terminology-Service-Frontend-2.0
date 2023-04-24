@@ -47,7 +47,7 @@ class OntologyPage extends React.Component {
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
-    this.changeTreeContent = this.changeTreeContent.bind(this);
+    this.changeTreeContent = this.changeTreeContent.bind(this);    
   }
 
 
@@ -297,17 +297,17 @@ class OntologyPage extends React.Component {
 
 
 
-  render () {
+  render () {    
     if (this.state.error) {
       return <div>Error: {this.state.error.message}</div>
     } else if (!this.state.isLoaded) {
       return <div>Loading...</div>
     } else {
-      return (
+      return (        
         <div className='row justify-content-center'>
             {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
             {createOntologyPageHeadSection(this.state.ontology)}          
-            <div className='col-sm-8'>
+            <div className='col-sm-12'>
                 <ul className="nav nav-tabs">
                     {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
                 </ul>
