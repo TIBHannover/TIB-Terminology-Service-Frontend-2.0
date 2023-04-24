@@ -963,6 +963,7 @@ p{
     */
 
     margin-bottom: 10px;
+    padding-left: 50px;
 }
 
 .ontology-list-sorting{
@@ -975,6 +976,11 @@ p{
     border-color: white;
     color: #42484e;
     margin-top: 5px;
+}
+
+.result-per-page-align{
+    margin-bottom: 10px;
+    padding-left: 50px;
 }
 
 
@@ -1009,6 +1015,11 @@ p{
     */
 
     padding-left: 40px;
+}
+
+#ontologylist-search-grid{
+    padding-left: 0px;
+    margin-top: 30px;
 }
 
 
