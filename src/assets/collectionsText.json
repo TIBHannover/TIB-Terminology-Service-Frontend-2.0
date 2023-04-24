@@ -41,7 +41,7 @@
     },
     "FAIR Data Spaces":{
         "id":"FAIR Data Spaces",
-        "html_id":"FAIR_Data_Spaces",
+        "html_id":"FAIR Data Spaces",
         "name":"FAIR Data Spaces Project",
         "text":"The collection of ontologies used in FAIR Data Spaces project is developed by the demonstrators from the  biodiversity, engineering sciences, and healthcare domain to enable the implementation of a common cloud-based data space for industry and academia within the Gaia-X European data infrastructure.  The focus of this collection is to ensure interoperability and reusability in Gaia-X, especially for organizations.",
         "logo":"/FAIR_DS_Logo_RGB.svg",
@@ -51,7 +51,7 @@
     },    
     "FID Move":{
         "id":"FID move",
-        "html_id":"FID_move",
+        "html_id":"FID move",
         "name":"FID Move Project",
         "text":"The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.",
         "logo":"/fidmove_logo.svg",
@@ -61,7 +61,7 @@
     },
     "FID Baudigital":{
         "id":"FID BAUdigital",
-        "html_id":"FID_BAUdigital",
+        "html_id":"FID BAUdigital",
         "name":"FID Baudigital Project",
         "text":"The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.",
         "logo":"/bau-digital_logo210420_RZ_Web_RGB_11.svg",
