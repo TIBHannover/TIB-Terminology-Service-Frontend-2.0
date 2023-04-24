@@ -162,7 +162,7 @@ class TermList extends React.Component{
 
     render(){
         return(
-            <div className="tree-view-container term-list-container">
+            <div className="row tree-view-container term-list-container">
                 <div className="row">
                     <div className="col-sm-4">
                         <div className="termlist-jumpto-container  list-header-element">
