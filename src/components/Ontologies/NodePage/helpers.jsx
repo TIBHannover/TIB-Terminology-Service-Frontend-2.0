@@ -25,7 +25,7 @@ import Toolkit from "../../common/Toolkit";
       metadata['Used in axiom'] = [object.relations, false];
     }
 
-    if(object.instancesList.length !== 0){
+    if(object.instancesList &&  object.instancesList.length !== 0){
       metadata['Instances'] = [object.instancesList, false];
     }
     
@@ -126,9 +126,10 @@ export function formatText (label, text, isLink = false) {
 function createInstancesList(instancesList){
   let result = [];  
   for(let instance of instancesList){
+    let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + instance['ontology_name'] + "/individuals?iri=" + encodeURIComponent(instance['iri']);
     result.push(
-      <li>
-        <a href={instance['iri']} target='_blank'>
+      <li>        
+        <a href={individualUrl} target='_blank'>
           {instance['label']}
         </a>
       </li>
