@@ -14,8 +14,7 @@ import Toolkit from "../../common/Toolkit";
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       "fullIRI": [object.iri, true], 
-      "SubClass Of": [object.subClassOf, false],
-      "Instances": [object.instancesList, false]     
+      "SubClass Of": [object.subClassOf, false]    
     }
     
     if(object.eqAxiom !== "N/A"){
@@ -24,6 +23,10 @@ import Toolkit from "../../common/Toolkit";
     
     if(formatText("Used in axiom", object.relations, false) !== "N/A" && formatText("Used in axiom", object.relations, false).length !== 0){
       metadata['Used in axiom'] = [object.relations, false];
+    }
+
+    if(object.instancesList.length !== 0){
+      metadata['Instances'] = [object.instancesList, false];
     }
     
     if(object.annotation){
