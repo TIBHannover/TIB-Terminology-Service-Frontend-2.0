@@ -241,13 +241,14 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string,
     node['subClassOf'] = 'N/A';
     return node;
   }
-  // node = node['_embedded'][mode][0];
+ 
   let parents = await getParents(node, mode);
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
     node['relations'] = await getRelations(node['iri'], ontology);
     node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
     node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
+    node['instancesList'] = await getIndividualInstancesForClass(ontology, node['iri']);
   }
   else{
     node['relations'] = [];
@@ -463,7 +464,7 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
 export async function getIndividualInstancesForClass(ontologyId:string, classIri:string){
   try{
     let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;
-    let callUrl = baseUrl + "/" + ontologyId + "/" + encodeURIComponent(classIri) + "/terminstances";
+    let callUrl = baseUrl + "/" + ontologyId + "/" + encodeURIComponent(encodeURIComponent(classIri)) + "/terminstances";
     let result = await fetch(callUrl, getCallSetting);
     result = await result.json();
     result = result['_embedded'];
