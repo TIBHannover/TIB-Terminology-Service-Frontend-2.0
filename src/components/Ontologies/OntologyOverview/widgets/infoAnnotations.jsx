@@ -12,6 +12,7 @@ class InfoAnnotations extends React.Component{
         this.formatCreators = this.formatCreators.bind(this);
         this.alphabeticSort = this.alphabeticSort.bind(this);
         this.createOverview = this.createOverview.bind(this);
+        this.formatSubject = this.formatSubject.bind(this);
     }
 
     /**
@@ -22,6 +23,19 @@ class InfoAnnotations extends React.Component{
         let value = []
         for (let i = 0; i < creators.length; i++) {
           value.push(creators[i])
+        }
+        answer = value.join(',\n')
+        return answer
+      }
+    
+    /**
+     * Handle the subjects in classifications 
+     */   
+      formatSubject(Subject){
+        let answer = []
+        let value = []
+        for(let i=0; i< Subject.length; i++){
+          value.push(Subject[i])
         }
         answer = value.join(',\n')
         return answer
@@ -169,6 +183,12 @@ class InfoAnnotations extends React.Component{
                            <td className="ontology-overview-table-id-column"><b>Creator</b></td>
                            <td>
                              {this.formatCreators(ontology.config.creators)}
+                           </td>
+                        </tr>
+                        <tr>
+                           <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+                           <td>
+                             {this.formatSubject(ontology.config.classifications[1].Subject)}
                            </td>
                         </tr>
                         <tr>
