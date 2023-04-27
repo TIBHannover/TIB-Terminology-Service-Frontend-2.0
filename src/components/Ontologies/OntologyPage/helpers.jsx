@@ -89,8 +89,7 @@ function collpaseSiteHeader(){
         siteHeader.style.maxHeight = '200px';
         ontologyBannerContainer.style.maxHeight = '200px';
         collpaseIcone.classList.add('fa-angle-double-up');
-        collpaseIcone.classList.remove('fa-angle-double-down');
-        siteHeader.style.marginTop = '10px';
+        collpaseIcone.classList.remove('fa-angle-double-down');        
         applicationContent.style.minHeight = '500px';
 
         siteHeader.style.overflow = '';
