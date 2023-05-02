@@ -23,8 +23,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
 
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import keycloak from "./keycloak";
+import { AuthProvider } from "react-oidc-context";
 
 
 // import css file based on the target project
@@ -37,6 +36,12 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 function App() {
   AppHelpers.setSiteTitleAndFavIcon();
   AppHelpers.checkBackendStatus();
+
+  const oidcConfig = {
+    authority: "http://localhost:8000/",
+    client_id: "TS-local",
+    realm: "Test"
+  };
 
   const [loading, setLoading] = useState(true); 
   useEffect(() => {    
@@ -59,7 +64,7 @@ function App() {
           </div>                                
           </div>
       </div>
-    <ReactKeycloakProvider authClient={keycloak}>   
+    <AuthProvider {...oidcConfig}>   
      <BrowserRouter>
         <MatomoWrapper> 
           <Header />               
@@ -104,7 +109,7 @@ function App() {
           )}              
         </MatomoWrapper>
       </BrowserRouter>
-      </ReactKeycloakProvider>
+      </AuthProvider>
     </div>
   );
 }
