@@ -15,10 +15,8 @@ class SearchForm extends React.Component{
           ontoSearchResult: [],
           jumpResult: [],
           entry: [],
-          sUrlOntologies: [],
           ontologyId: '',
           urlPath: '',
-          sUrlPath: '',
           insideOnto: false,
           facetIsSelected: false,
           api_base_url: "https://service.tib.eu/ts4tib/api"
@@ -36,19 +34,13 @@ class SearchForm extends React.Component{
       }
 
       setComponentData(){
-        let sUrlPath = window.location.search
-        let sUrlOntologies = sUrlPath.split('&')
-        sUrlOntologies.pop()
-        sUrlOntologies.shift()
         let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
         this.setState({
           ontologyId: ontologyId,
-          urlPath: urlPath,
-          sUrlPath: sUrlPath,
-          sUrlOntologies: sUrlOntologies
+          urlPath: urlPath
         })
       }
 
