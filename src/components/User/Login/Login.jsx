@@ -3,7 +3,7 @@ import { useAuth } from "react-oidc-context";
 
 export default function LoginForm(onlyLoginButton){
     const auth = useAuth();
-
+    console.info(auth.user)
     return [
         <span>                
             {!auth.isAuthenticated && onlyLoginButton &&                    
@@ -23,11 +23,11 @@ export default function LoginForm(onlyLoginButton){
             {auth.isAuthenticated &&                     
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle user-profile-dropdown" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {localStorage.getItem("name")}
+                        {auth.user?.profile?.name}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
                         <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
-                        <a class="dropdown-item" href="#" onClick={() => void auth.removeUser()}>Logout ({auth.user?.profile.sub}{" "})</a>                            
+                        <a class="dropdown-item" href="#" onClick={() => void auth.removeUser()}>Logout</a>                            
                     </div>                        
                 </div>
             }

@@ -2,6 +2,7 @@ import React from "react";
 import { UserIsLogin } from "../../User/Login/Auth";
 import LoginForm from "../../User/Login/Login";
 import GithubController from '../../GithubController/GithubController';
+import { withAuth } from "react-oidc-context";
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
@@ -40,7 +41,7 @@ class IssueList extends React.Component{
         this.updateURL = this.updateURL.bind(this);
         this.createPagination = this.createPagination.bind(this);
         this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);
-        this.gitHubController = new GithubController();
+        this.gitHubController = new GithubController(this.props.auth.user?.access_token);
     }
 
 
@@ -187,11 +188,11 @@ class IssueList extends React.Component{
         return (
             <div className="row tree-view-container">
                 <div className="col-sm-12">
-                    {!UserIsLogin() && 
+                    {!this.props.auth.isAuthenticated && 
                         <LoginForm onlyLoginButton={false} />
                     }
                     {this.state.waiting && <div className="isLoading"></div>}
-                    {UserIsLogin() && !this.state.waiting &&                        
+                    {this.props.auth.isAuthenticated && !this.state.waiting &&                        
                         <div className="row">
                             <div className="row">
                                 {this.createIssueStateDropDown()}
@@ -217,4 +218,4 @@ class IssueList extends React.Component{
 
 }
 
-export default withRouter(IssueList);
+export default withAuth(withRouter(IssueList));
