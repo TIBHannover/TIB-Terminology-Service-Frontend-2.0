@@ -31,14 +31,17 @@ class InfoAnnotations extends React.Component{
     /**
      * Handle the subjects in classifications 
      */   
-      formatSubject(Subject){
+      formatSubject(){
+        let ontology = this.props.ontology;
+        if(ontology.config.classifications[1] !== undefined){
         let answer = []
         let value = []
-        for(let i=0; i< Subject.length; i++){
-          value.push(Subject[i])
+        for(let i=0; i< ontology.config.classifications[1].Subject.length; i++){
+          value.push(ontology.config.classifications[1].Subject[i])
         }
         answer = value.join(',\n')
         return answer
+        }          
       }
 
     /**
@@ -189,7 +192,7 @@ class InfoAnnotations extends React.Component{
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Subject</b></td>
                            <td>
-                             {this.formatSubject(ontology.config.classifications[1].Subject)}
+                             {this.formatSubject()}
                            </td>
                         </tr>}
                         <tr>
