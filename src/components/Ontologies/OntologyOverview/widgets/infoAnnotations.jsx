@@ -185,7 +185,7 @@ class InfoAnnotations extends React.Component{
                              {this.formatCreators(ontology.config.creators)}
                            </td>
                         </tr>
-                        {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && "nfdi4chem" &&
+                        {process.env.REACT_APP_PROJECT_ID === "general" && 
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Subject</b></td>
                            <td>
