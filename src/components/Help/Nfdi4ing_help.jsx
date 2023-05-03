@@ -241,7 +241,7 @@ export function nfdi4IngHelp(){
                     <div class="card-header" id="usage-heading-9">
                     <h5 class="mb-0">
                         <button class="btn btn-link collpase-text-btn" data-toggle="collapse" data-target="#usage-collapse-9" aria-expanded="false" aria-controls="usage-collapse-9">
-                            Where can I visualize my ontologies?
+                        Do you want to visualise your Ontologies?
                         </button>
                     </h5>
                     </div>
@@ -249,7 +249,7 @@ export function nfdi4IngHelp(){
                         <div class="card-body">
                             <p className='justify'>
                                 <ul>
-                                    <li><a href="https://service.tib.eu/sc3/" target={"_blank"}>Ontology Curation Portal</a></li>
+                                    <li>The <a href="https://service.tib.eu/sc3/" target={"_blank"}>Ontology Curation Portal</a> allows you to collect your ontologies in projects. Each ontology of a project can then be visualised in different formats.</li>
                                 </ul>    
                             </p>                            
                         </div>
