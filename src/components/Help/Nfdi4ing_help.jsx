@@ -234,6 +234,29 @@ export function nfdi4IngHelp(){
                 </div>
             </div>
             {/* accordion-8 end */}
+            <br/>
+            {/* accordion-9 start */}
+            <div id="usage-accordion-9">
+                <div class="card">
+                    <div class="card-header" id="usage-heading-9">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collpase-text-btn" data-toggle="collapse" data-target="#usage-collapse-9" aria-expanded="false" aria-controls="usage-collapse-9">
+                            Where can I visualize my ontologies?
+                        </button>
+                    </h5>
+                    </div>
+                    <div id="usage-collapse-9" class="collapse" aria-labelledby="usage-heading-9" data-parent="#usage-accordion-9">
+                        <div class="card-body">
+                            <p className='justify'>
+                                <ul>
+                                    <li><a href="https://service.tib.eu/sc3/" target={"_blank"}>Ontology Curation Portal</a></li>
+                                </ul>    
+                            </p>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* accordion-9 end */}
         </div>
     ];
 
