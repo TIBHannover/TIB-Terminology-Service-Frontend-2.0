@@ -1,5 +1,4 @@
 import React from 'react';
-import queryString from 'query-string';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 
@@ -160,28 +159,27 @@ class SearchForm extends React.Component{
 
 
       createResultList(){
-          const resultList = []          
+          const resultList = [];
           for(let i=0; i < this.state.searchResult.length; i++){
             if(this.state.urlPath){
               resultList.push(
                 <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
-                  <div className="autocomplete-item">                  
+                  <div className="autocomplete-item item-for-navigation">
                         {this.state.searchResult[i]['autosuggest']}
                   </div>
-                </a>
+                </a>     
               
               )
             }
             else {
               resultList.push(
                 <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
-                  <div className="autocomplete-item">                  
+                  <div className="autocomplete-item item-for-navigation">
                         {this.state.searchResult[i]['autosuggest']}
                   </div>
-                </a>
-              
+                </a>    
               )
-            }           
+            }    
           }
           return resultList
       }

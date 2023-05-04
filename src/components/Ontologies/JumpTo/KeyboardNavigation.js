@@ -1,7 +1,5 @@
-
-
 export function keyboardNavigationForJumpto(event){
-    let jumtoItems = document.getElementsByClassName('jumpto-result-text');
+    let jumtoItems = document.getElementsByClassName('item-for-navigation');
     if(jumtoItems.length === 0){
         return false;
     }    
@@ -26,11 +24,11 @@ export function keyboardNavigationForJumpto(event){
 
 
 function performArrowDown(){
-    let selectedElement = document.getElementsByClassName('selected-by-arrow-key');
+    let selectedElement = document.getElementsByClassName('selected-by-arrow-key');    
     if(selectedElement.length === 0){
         selectTheFirstItem();
     }   
-    else{                
+    else{        
         selectTheNextSibling(selectedElement[0]);
     }
 }
@@ -57,9 +55,9 @@ function performEnter(){
 
 
 function selectTheNextSibling(selectedElement){
-    let nextSiblng = getNextSiblings();
+    let nextSiblng = getNextSiblings();    
     selectedElement.classList.remove('selected-by-arrow-key');
-    if(nextSiblng && nextSiblng.classList.contains('jumpto-result-text')){                    
+    if(nextSiblng && nextSiblng.classList.contains('item-for-navigation')){                    
         nextSiblng.classList.add('selected-by-arrow-key');
     }
     else{
@@ -71,7 +69,7 @@ function selectTheNextSibling(selectedElement){
 function selectThePreviousSibling(selectedElement){
     let previousSibling = getPreviousSiblings();
     selectedElement.classList.remove('selected-by-arrow-key');
-    if(previousSibling && previousSibling.classList.contains('jumpto-result-text')){                    
+    if(previousSibling && previousSibling.classList.contains('item-for-navigation')){                    
         previousSibling.classList.add('selected-by-arrow-key');
     }
     else{
@@ -82,13 +80,13 @@ function selectThePreviousSibling(selectedElement){
 
 
 function getNextSiblings(){
-    let holders = document.getElementsByClassName('jumpto-item-holder');
+    let naviationalItems = document.getElementsByClassName('item-for-navigation');
     let lastSelectedIndexObserved = false;
-    for(let item of holders){
+    for(let item of naviationalItems){        
         if(lastSelectedIndexObserved){
-            return item.firstChild.firstChild;
+            return item;
         }
-        if(item.firstChild.firstChild.classList.contains('selected-by-arrow-key')){
+        if(item.classList.contains('selected-by-arrow-key')){
             lastSelectedIndexObserved = true;
         }
     }
@@ -97,15 +95,15 @@ function getNextSiblings(){
 
 
 function getPreviousSiblings(){
-    let holders = document.getElementsByClassName('jumpto-item-holder');
-    holders = [].slice.call(holders);    
-    holders = holders.reverse();
+    let naviationalItems = document.getElementsByClassName('item-for-navigation');
+    naviationalItems = [].slice.call(naviationalItems);    
+    naviationalItems = naviationalItems.reverse();
     let lastSelectedIndexObserved = false;
-    for(let item of holders){
+    for(let item of naviationalItems){
         if(lastSelectedIndexObserved){
-            return item.firstChild.firstChild;
+            return item;
         }
-        if(item.firstChild.firstChild.classList.contains('selected-by-arrow-key')){
+        if(item.classList.contains('selected-by-arrow-key')){
             lastSelectedIndexObserved = true;
         }
     }
@@ -114,11 +112,11 @@ function getPreviousSiblings(){
 
 
 function selectTheFirstItem(){    
-    let jumtoItems = document.getElementsByClassName('jumpto-result-text');    
-    jumtoItems[0].classList.add('selected-by-arrow-key');
+    let naviationalItems = document.getElementsByClassName('item-for-navigation');    
+    naviationalItems[0].classList.add('selected-by-arrow-key');
 }
 
 function selectTheLastElement(){
-    let jumtoItems = document.getElementsByClassName('jumpto-result-text');
-    jumtoItems[jumtoItems.length - 1].classList.add('selected-by-arrow-key');
+    let naviationalItems = document.getElementsByClassName('item-for-navigation');
+    naviationalItems[naviationalItems.length - 1].classList.add('selected-by-arrow-key');
 }
