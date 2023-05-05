@@ -14,7 +14,7 @@ import Toolkit from "../../common/Toolkit";
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       "fullIRI": [object.iri, true], 
-      "SubClass Of": [object.subClassOf, false],     
+      "SubClass Of": [object.subClassOf, false]    
     }
     
     if(object.eqAxiom !== "N/A"){
@@ -23,6 +23,10 @@ import Toolkit from "../../common/Toolkit";
     
     if(formatText("Used in axiom", object.relations, false) !== "N/A" && formatText("Used in axiom", object.relations, false).length !== 0){
       metadata['Used in axiom'] = [object.relations, false];
+    }
+
+    if(object.instancesList &&  object.instancesList.length !== 0){
+      metadata['Instances'] = [object.instancesList, false];
     }
     
     if(object.annotation){
@@ -95,25 +99,13 @@ export function propertyMetaData(object){
 }
 
 
-
-
-/**
-   * Format the text. check if a text input is a link to a simple text. 
-   * @param {*} text 
-   * @param {*} label 
-   * @param {*} isLink 
-   * @returns 
-   */
- export function formatText (label, text, isLink = false) {
+export function formatText (label, text, isLink = false) {
   if (text === null || text === '' || typeof(text) === "undefined") {
     return 'N/A'
   }
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
-  // else if (label === "Synonyms"){
-  //   return synonymsTag(text);
-  // }
   else if (label === "Used in axiom"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }
@@ -122,14 +114,32 @@ export function propertyMetaData(object){
   }
   else if (label === "SubClass Of"){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
+  }  
+  else if (label === "Instances"){    
+    return <ul>{createInstancesList(text)}</ul>;
   }
 
-  return Toolkit.transformStringOfLinksToAnchors(text)
+  return Toolkit.transformStringOfLinksToAnchors(text);
 }
 
-/**
- * Create tag for the synonyms relation
- */
+
+function createInstancesList(instancesList){
+  let result = [];  
+  for(let instance of instancesList){
+    let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + instance['ontology_name'] + "/individuals?iri=" + encodeURIComponent(instance['iri']);
+    result.push(
+      <li>        
+        <a href={individualUrl} target='_blank'>
+          {instance['label']}
+        </a>
+      </li>
+    );
+  }  
+  return result;
+}
+
+
+
 function synonymsTag(objectList){
   if(objectList.length === 0){
     return "N/A";
