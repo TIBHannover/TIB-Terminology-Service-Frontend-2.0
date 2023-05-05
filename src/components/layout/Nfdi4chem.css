@@ -1009,7 +1009,6 @@ p{
     overflow-y: hidden;
     padding-top: 20px;
     display: flex;
-    min-height: 100vh;
 }
 
 .searchresult-card-description{
