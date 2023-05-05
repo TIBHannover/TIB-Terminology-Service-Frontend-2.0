@@ -1034,6 +1034,20 @@ p{
     color: white;
 }
 
+.search-in-box{
+    background-color: #DFE4E5;
+    display: inline-block;
+}
+
+.search-form-nav:hover{
+    text-decoration: underline;
+}
+
+.search-form-nav-clicked{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 /* 
 -------------------------------------
@@ -1107,6 +1121,32 @@ p{
        positioning search drop-down
     */
     margin-left: 600px;
+}
+
+.facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
+   border: 1px solid transparent;
+   border-radius: 10px;
+   display: inline-block;
+   padding: 0.375rem 0.75rem;
+   padding-right: 0.3rem;
+   background-color: white;
+   color: #5F6469;
+   font-weight: bold;
+   font-size: 16px;  
+}
+
+.remove-btn{
+    padding: 2px;
+    margin-left: 15px;
+    border-radius: 20px;
+    font-size: 15px;
+}
+
+.chosen-facets{
+
 }
 
 .dropdown-colour{
@@ -2048,5 +2088,5 @@ Jumpto styles
         Style for the keyboard up/down arrow for jump to result
     */
 
-    background-color: #dfdddd;
+    background-color: #dfdddd;    
 }

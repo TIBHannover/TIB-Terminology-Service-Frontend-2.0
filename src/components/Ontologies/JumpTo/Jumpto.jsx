@@ -91,7 +91,7 @@ class JumpTo extends React.Component{
         }         
         content.push(
             <a href={targetHref} className="jumto-result-link container">
-                <div className="jumpto-result-text">
+                <div className="jumpto-result-text item-for-navigation">
                     {resultItem['label']}
                 </div>
             </a>
