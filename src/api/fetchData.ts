@@ -336,6 +336,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     result += "<ul>"
     for(let i=0; i < parentRes["terms"].length; i++){
       result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
+    }
     if (typeof(res) !== "undefined"){
       for(let i=0; i < res["strings"].length; i++){ 
       result += '<li>'+ res["strings"][i]["content"] +'</li>';     
@@ -343,8 +344,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     result += "<ul>"
     
   }
-  return result;
- }
+  return result; 
 }
 
 

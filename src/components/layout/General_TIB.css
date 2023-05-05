@@ -1034,6 +1034,20 @@ p{
     color: white;
 }
 
+.search-in-box{
+    background-color: #DFE4E5;
+    display: inline-block;
+}
+
+.search-form-nav:hover{
+    text-decoration: underline;
+}
+
+.search-form-nav-clicked{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 /* 
 -------------------------------------
@@ -1050,7 +1064,6 @@ p{
     overflow-y: hidden;
     padding-top: 20px;
     display: flex;
-    min-height: 100vh;
 }
 
 
@@ -1110,6 +1123,32 @@ p{
     margin-left: 600px;
 }
 
+.facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
+   border: 1px solid transparent;
+   border-radius: 10px;
+   display: inline-block;
+   padding: 0.375rem 0.75rem;
+   padding-right: 0.3rem;
+   background-color: white;
+   color: #5F6469;
+   font-weight: bold;
+   font-size: 16px;  
+}
+
+.remove-btn{
+    padding: 2px;
+    margin-left: 15px;
+    border-radius: 20px;
+    font-size: 15px;
+}
+
+.chosen-facets{
+
+}
+
 .dropdown-colour{
     /* 
        colour for search drop-down
@@ -1146,6 +1185,7 @@ p{
     */
 
     margin-bottom: 10px;
+    padding-left: 50px;
 }
 
 .ontology-list-sorting{
@@ -1157,7 +1197,12 @@ p{
     background-color: white;
     border-color: white;
     color: #42484e;
-    margin-top: 5px;
+}
+
+.result-per-page-align{
+    margin-bottom: 10px;
+    padding-left: 50px;
+      
 }
 
 
@@ -1197,6 +1242,7 @@ p{
 
 #ontologylist-search-grid{
     padding-left: 0px;
+    margin-top: 30px;
 }
 
 
@@ -2043,5 +2089,5 @@ Jumpto styles
         Style for the keyboard up/down arrow for jump to result
     */
 
-    background-color: #dfdddd;
+    background-color: #dfdddd;    
 }
