@@ -14,11 +14,8 @@ class SearchForm extends React.Component{
           ontoSearchResult: [],
           jumpResult: [],
           entry: [],
-          sUrlOntologies: [],
           ontologyId: '',
           urlPath: '',
-          sUrlPath: '',
-          insideOnto: false,
           facetIsSelected: false,
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
@@ -35,10 +32,6 @@ class SearchForm extends React.Component{
       }
 
       setComponentData(){
-        let sUrlPath = window.location.search
-        let sUrlOntologies = sUrlPath.split('&')
-        sUrlOntologies.pop()
-        sUrlOntologies.shift()
         let urlPath = window.location.pathname
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
@@ -46,8 +39,6 @@ class SearchForm extends React.Component{
         this.setState({
           ontologyId: ontologyId,
           urlPath: urlPath,
-          sUrlPath: sUrlPath,
-          sUrlOntologies: sUrlOntologies
         })
       }
 
@@ -78,18 +69,7 @@ class SearchForm extends React.Component{
             this.setState({
                 result: false,
                 enteredTerm: ""
-            });
-            
-        }
-        else if(enteredTerm.length > 0 && window.location.search) {
-          let sUrlOntologies = this.state.sUrlOntologies
-          let fSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&${sUrlOntologies}`)
-          fSearchResult = (await fSearchResult.json())['response']['docs'];
-          console.info(fSearchResult)
-          this.setState({
-            searchResult: fSearchResult,
-            result: true 
-          });
+            });          
         }
       }
 
