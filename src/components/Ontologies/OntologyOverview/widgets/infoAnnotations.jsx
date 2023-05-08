@@ -12,6 +12,7 @@ class InfoAnnotations extends React.Component{
         this.formatCreators = this.formatCreators.bind(this);
         this.alphabeticSort = this.alphabeticSort.bind(this);
         this.createOverview = this.createOverview.bind(this);
+        this.formatSubject = this.formatSubject.bind(this);
     }
 
     /**
@@ -25,6 +26,22 @@ class InfoAnnotations extends React.Component{
         }
         answer = value.join(',\n')
         return answer
+      }
+    
+    /**
+     * Handle the subjects in classifications 
+     */   
+      formatSubject(){
+        let ontology = this.props.ontology;
+        if(ontology.config.classifications[1] !== undefined){
+        let answer = []
+        let value = []
+        for(let i=0; i< ontology.config.classifications[1].Subject.length; i++){
+          value.push(ontology.config.classifications[1].Subject[i])
+        }
+        answer = value.join(',\n')
+        return answer
+        }          
       }
 
     /**
@@ -171,6 +188,13 @@ class InfoAnnotations extends React.Component{
                              {this.formatCreators(ontology.config.creators)}
                            </td>
                         </tr>
+                        {process.env.REACT_APP_PROJECT_ID === "general" && 
+                        <tr>
+                           <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+                           <td>
+                             {this.formatSubject()}
+                           </td>
+                        </tr>}
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                            <td>
