@@ -325,29 +325,6 @@ p{
     text-align: center;    
 }
 
-@media only screen and (max-width: 1025px) {
-    .application-content{
-        /* 
-            The style for the application inner content (between the header and footer)
-        */
-            
-        width: 95%;                
-    }
-
-    .site-footer{
-        font-size: 10px;
-        position: fixed;
-    }
-
-    .footer-logo{
-        /* 
-            Logos on the site footer
-        */
-
-        width: 200px;
-        height: 50px;
-    }
-}
 
 /* 
 ------------------------
@@ -424,7 +401,7 @@ p{
 -------------------------------------
 */
 
-.header-warpper{
+.header-wrapper{
     /* 
        The main box for the site header
     */
@@ -744,63 +721,6 @@ p{
  
     display: none;
  }
- 
- 
- @media only screen and (max-width: 1025px) and (min-width: 901px){
-    .navbar-item {
-       /* 
-          The style for elements in navbar
-       */
-      float: right !important;
-     }
- 
-     .navbar-nav{
-       /* 
-          The navbar ul style 
-       */
- 
-       margin-top: 10px;
-       margin-right: 40px;
-     }
- 
-     .navbar-collapse-btn{
-       /* 
-          Navbar collapse button styles
-       */
- 
-      margin-right: 40px;
-    }
-    
-    
- }
- 
- @media only screen and (max-width: 900px) {
-    .navbar-item {
-       /* 
-          The style for elements in navbar
-       */
-      float: right !important;
-     }
- 
-     .navbar-nav{
-       /* 
-          The navbar ul style 
-       */
- 
-       margin-top: 10px;
-     }
- 
-     .site-header-searchbox-holder{
-       /* 
-          The warapper box for the site main search input
-       */
-    
-       padding-left: 0px;
-       padding-right: 0px;
-       margin-bottom: 40px;
-    }
- 
- }
 
 /* 
 ------------------------
@@ -892,85 +812,6 @@ p{
     font-size: 13px;
 }
 
-@media only screen and (max-width: 1500px) and (min-width: 1026px) {        
-    .collection-card{
-        /* 
-            Style for the collection box on the home page.
-        */
-            
-        padding: 10px;
-        
-    }
-
-    .collection-logo{
-        /* 
-            Collection logo image style
-        */
-    
-              
-        margin-left: 0px;
-    }
-  }
-
-
-@media only screen and (max-width: 1025px) and (min-width: 901px) {
-    .general-home-page-content{
-        /* 
-            Style for the home page content above the stats box
-        */
-    
-        padding-left: 5%;
-        padding-right: 5%;    
-    }
-    
-    .collection-card{
-        /* 
-            Style for the collection box on the home page.
-        */
-            
-        padding: 10px;
-        
-    }
-
-    .collection-logo{
-        /* 
-            Collection logo image style
-        */
-    
-              
-        margin-left: 0px;
-    }
-  }
-
-  @media only screen and (max-width: 900px){
-    .general-home-page-content{
-        /* 
-            Style for the home page content above the stats box
-        */
-    
-        padding-left: 5%;
-        padding-right: 5%;    
-    }
-
-    .collection-card{
-        /* 
-            Style for the collection box on the home page.
-        */
-            
-        padding: 10px;
-        
-    }
-
-    .collection-logo{
-        /* 
-            Collection logo image style
-        */
-    
-              
-        margin-left: 0px;
-    }
-  }
-
 
 /* 
 -------------------------------------
@@ -1034,6 +875,20 @@ p{
     color: white;
 }
 
+.search-in-box{
+    background-color: #DFE4E5;
+    display: inline-block;
+}
+
+.search-form-nav:hover{
+    text-decoration: underline;
+}
+
+.search-form-nav-clicked{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 /* 
 -------------------------------------
@@ -1050,7 +905,6 @@ p{
     overflow-y: hidden;
     padding-top: 20px;
     display: flex;
-    min-height: 100vh;
 }
 
 
@@ -1108,6 +962,32 @@ p{
        positioning search drop-down
     */
     margin-left: 600px;
+}
+
+.facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
+   border: 1px solid transparent;
+   border-radius: 10px;
+   display: inline-block;
+   padding: 0.375rem 0.75rem;
+   padding-right: 0.3rem;
+   background-color: white;
+   color: #5F6469;
+   font-weight: bold;
+   font-size: 16px;  
+}
+
+.remove-btn{
+    padding: 2px;
+    margin-left: 15px;
+    border-radius: 20px;
+    font-size: 15px;
+}
+
+.chosen-facets{
+
 }
 
 .dropdown-colour{
@@ -1250,17 +1130,57 @@ p{
 -------------------------------------
 */
 
+.header-collapseable-section{            
+    max-height: 200px;    
+    transition: max-height 0.4s ease-out;
+}
+
+.collpase-button-container{
+    /* 
+        Style for the header collapse button container
+    */
+    padding-top: 0;
+    margin-top: -2px;
+}
+
+.header-collapse-btn{
+    /* 
+        The style for the header collpase button
+    */
+    background-color: transparent !important;
+    color: black !important;    
+    padding: 0px;    
+    margin-bottom: 0;
+    border-right: 20px solid transparent;
+    border-top: 20px solid white;    
+    border-left: 20px solid transparent;
+    cursor: pointer;
+    text-align: center;    
+}
+
+.header-collpase-icon{
+    /* 
+        The style for the header collpase icon
+    */
+    font-size: 22px;
+    border: none;
+    position: relative;
+    top: -20px;
+}
+
+
 .ont-info-bar{
     /* 
         Style for the ontology header above onto tabs
     */
     background-color: white;
-    padding: 10px;
-    width: 94.8%;
+    padding: 5px;
+    padding-bottom: 1px;
+    width: 97%;
     margin-bottom: 10px;
     border-radius: 5px !important;
-    margin-right: 10px;
-   
+    margin: auto;
+    margin-top: -30px;
 }
 
 .ont-info-bar-title{
@@ -1376,7 +1296,6 @@ p{
     color: #0E6668;
 }
 
-
 /* 
 -------------------------------------
     The Tree view and detail table styles (for both classes and properties)
@@ -1455,7 +1374,8 @@ p{
     width: 880px;
     float: left;
     background-color: white;
-    height: 1000px;       
+    height: 1000px;
+    overflow-y: auto;       
 }
 
 .page-resize-vertical-line{
@@ -1464,10 +1384,7 @@ p{
     */
     cursor: e-resize;
     width: 10px;        
-    border-left: 1px solid black;    
-    /* background-image: linear-gradient(#000, #000);
-    background-size: 2px 100%;
-    background-repeat: no-repeat;       */
+    border-left: 1px solid black;   
 }
 
 .resizable-container{
@@ -1718,34 +1635,6 @@ p{
   }
 
 
-@media only screen and (max-width: 3000px) and (min-width: 1501px) {       
-    .tree-view-container{        
-        width: 1750px;            
-    }      
-}
-@media only screen and (max-width: 1500px) and (min-width: 1300px) {       
-    .tree-view-container{        
-        width: 1350px;            
-    }
-    .jumpto-wrapper{
-        width: 90% !important;
-    }
-    .tree-action-button-area{
-        right: 30px !important;
-    }       
-}
-@media only screen and (max-width: 1299px) and (min-width: 901px) {       
-    .tree-view-container{        
-        width: 1200px;            
-    }
-    .jumpto-wrapper{
-        width: 80% !important;
-    }
-    .tree-action-button-area{
-        right: 40px !important;
-    }      
-}
-
 /* 
 ------------------------------------------------------------
     This is the css script for the Collections components (page).
@@ -1796,17 +1685,6 @@ p{
     /* padding: 30px; */
 }
 
-@media only screen and (max-width: 1025px) {
-    .collection-logo-in-list{
-        /* 
-            Style for the collection logos images
-        */
-    
-        width: 200px;
-        height: 150px;
-    }
-  }
-
 
 /* 
 --------------------------------------
@@ -1829,6 +1707,11 @@ p{
   Term List
 --------------------------------------
 */
+
+.term-list-container{
+    padding-right: 40px !important;
+    padding-bottom: 40px !important;
+}
 
 .term-list-table{
     /* 
@@ -1874,6 +1757,11 @@ p{
 
     /* margin-top: 40px; */
 }
+
+.number-of-result-text-container{
+    padding-top: 8px;
+}
+
 
 /* 
 ---------------------------------------------------
@@ -2049,5 +1937,122 @@ Jumpto styles
         Style for the keyboard up/down arrow for jump to result
     */
 
-    background-color: #dfdddd;
+    background-color: #dfdddd;    
 }
+
+
+
+/* 
+-------------------------------------------------------
+Media Query Area for bein responsive
+-------------------------------------------------------
+*/
+
+@media only screen and (max-width: 3000px) and (min-width: 1501px) {       
+    .tree-view-container, .ontology-detail-page-container{        
+        width: 1750px;            
+    }      
+}
+@media only screen and (max-width: 1500px) and (min-width: 1300px) {       
+    .tree-view-container, .ontology-detail-page-container{        
+        width: 1350px;            
+    }
+    .jumpto-wrapper{
+        width: 90% !important;
+    }
+    .tree-action-button-area{
+        right: 30px !important;
+    }
+    .collection-card{     
+        padding: 10px;        
+    }
+    .collection-logo{      
+        margin-left: 0px;
+    }       
+}
+@media only screen and (max-width: 1299px) and (min-width: 901px) {       
+    .tree-view-container, .ontology-detail-page-container{        
+        width: 1200px;            
+    }
+    .jumpto-wrapper{
+        width: 80% !important;        
+    }
+    .tree-action-button-area{
+        right: 40px !important;
+    }
+    .application-content{ 
+        width: 95%;                
+    }
+
+    .site-footer{
+        font-size: 10px;        
+    }
+    .footer-logo{
+        width: 200px;
+        height: 50px;
+    }
+    .navbar-item {
+       float: right !important;
+      }
+  
+    .navbar-nav{    
+        margin-top: 10px;
+        margin-right: 40px;
+    }
+    .navbar-collapse-btn{      
+        margin-right: 40px;
+    }
+    .collection-card{     
+        padding: 10px;        
+    }
+    .collection-logo{      
+        margin-left: 0px;
+    }
+    .general-home-page-content{
+        padding-left: 5%;
+        padding-right: 5%;    
+    }
+    .collection-logo-in-list{    
+        width: 200px;
+        height: 150px;
+    }
+    .list-header-element{
+        font-size: 12px !important;
+    }
+    .pagination-holder{
+        font-size: 12px;
+    }   
+}
+
+@media only screen and (max-width: 900px) {
+    .navbar-item {      
+      float: right !important;
+     }
+ 
+     .navbar-nav{     
+       margin-top: 10px;
+     }
+ 
+     .site-header-searchbox-holder{      
+       padding-left: 0px;
+       padding-right: 0px;
+       margin-bottom: 40px;
+    }
+    .general-home-page-content{ 
+        padding-left: 5%;
+        padding-right: 5%;    
+    }
+
+    .collection-card{ 
+        padding: 10px;        
+    }
+
+    .collection-logo{
+        margin-left: 0px;
+    }
+    .collection-logo-in-list{    
+        width: 200px;
+        height: 150px;
+    }
+ 
+ }
