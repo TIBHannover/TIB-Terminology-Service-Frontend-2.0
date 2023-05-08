@@ -91,7 +91,7 @@ class JumpTo extends React.Component{
         }         
         content.push(
             <a href={targetHref} className="jumto-result-link container">
-                <div className="jumpto-result-text">
+                <div className="jumpto-result-text item-for-navigation">
                     {resultItem['label']}
                 </div>
             </a>
@@ -114,7 +114,7 @@ class JumpTo extends React.Component{
     render(){
         return(
             <div className='row jumpto-wrapper'>
-                <div className='col-sm-8'>
+                <div className={this.props.containerBootstrapClass ? this.props.containerBootstrapClass : 'col-sm-8'}>
                     <div class="input-group">                        
                         <div class="input-group-prepend">
                             <div class="input-group-text">
