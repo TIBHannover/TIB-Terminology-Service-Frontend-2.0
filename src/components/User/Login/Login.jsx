@@ -27,7 +27,7 @@ export default function LoginForm(onlyLoginButton){
                     </button>
                     <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
                         <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
-                        <a class="dropdown-item" href="#" onClick={() => void auth.removeUser()}>Logout</a>                            
+                        <a class="dropdown-item" href="#" onClick={() => void auth.signoutRedirect()}>Logout</a>                            
                     </div>                        
                 </div>
             }

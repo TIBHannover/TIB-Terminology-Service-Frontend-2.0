@@ -40,7 +40,8 @@ function App() {
   const oidcConfig = {
     client_id: process.env.REACT_APP_KEYCLOAK_CLIENT_ID,
     authority: process.env.REACT_APP_KEYCLOAK_ENDPOINT,    
-    redirect_uri: process.env.REACT_APP_LOGIN_REDIRECT_URL
+    redirect_uri: process.env.REACT_APP_LOGIN_REDIRECT_URL,
+    post_logout_redirect_uri: process.env.REACT_APP_LOGIN_REDIRECT_URL
   };
 
   const [loading, setLoading] = useState(true); 
