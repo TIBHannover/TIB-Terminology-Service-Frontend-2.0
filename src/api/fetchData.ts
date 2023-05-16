@@ -317,7 +317,6 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
     return resultHtml;
   }
   return "N/A";
-
 }
 
 

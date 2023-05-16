@@ -170,7 +170,8 @@ class TermList extends React.Component{
 
 
     componentDidMount(){
-        this.loadComponent();
+        this.loadComponent();  
+        document.body.style.overflow = 'hidden';      
     }
 
 
@@ -179,7 +180,11 @@ class TermList extends React.Component{
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
             this.loadComponent();
-        }
+        }                
+    }
+
+    componentWillUnmount(){
+        document.body.style.overflow = 'visible';
     }
 
 
@@ -226,13 +231,15 @@ class TermList extends React.Component{
                             initialPageNumber={this.state.pageNumber + 1}
                         />
                     </div>
-                </div>               
-                <table class="table table-striped term-list-table">
-                    {createClassListTableHeader()}
-                    <tbody>
-                        {this.state.tableBodyContent}               
-                    </tbody>
-                </table>
+                </div>                 
+                <div className="row class-list-tablle-holder">                                      
+                    <table class="table table-striped term-list-table">
+                        {createClassListTableHeader()}
+                        <tbody>
+                            {this.state.tableBodyContent}               
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
