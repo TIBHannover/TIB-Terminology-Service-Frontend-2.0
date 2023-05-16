@@ -1,9 +1,9 @@
 import React from "react";
-import {getListOfTerms, getNodeByIri, getSubClassOf} from '../../../api/fetchData';
+import {getListOfTerms, getNodeByIri, getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 import JumpTo from "../JumpTo/Jumpto";
-import {createClassListTableHeader} from './hekpers';
+import {createClassListTableHeader, setContributorField} from './hekpers';
 
 
 class TermList extends React.Component{
@@ -144,6 +144,7 @@ class TermList extends React.Component{
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
             let subclassOfText = await getSubClassOf(term['iri'], term['ontology_name']);
+            let equivalentToText = await getEqAxiom(term['iri'], term['ontology_name']);
             result.push(
                 <tr>
                     <td>
@@ -153,13 +154,13 @@ class TermList extends React.Component{
                     </td>
                     <td>{term['short_form']}</td>
                     <td>{term['description'] ? term['description'] : ""}</td>
-                    <td>Alternative Term</td>
+                    <td>{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
                     <td><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
-                    <td>Equivalent to</td>
+                    <td><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
                     <td>{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
-                    <td>See Also</td>
-                    <td>Contributor</td>
-                    <td>Comment</td>
+                    <td>{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+                    <td>{setContributorField(term)}</td>
+                    <td>{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
                 </tr>
             );
         }

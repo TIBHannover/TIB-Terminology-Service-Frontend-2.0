@@ -299,7 +299,7 @@ export async function isSkosOntology(ontologyId) {
 
 
 
-async function getEqAxiom(nodeIri:string, ontologyId:string){
+export async function getEqAxiom(nodeIri:string, ontologyId:string){
   let url = <string> "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
   let res = await fetch(url, getCallSetting);
@@ -332,18 +332,21 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
-    let result= "";
-    result += "<ul>"
-    for(let i=0; i < parentRes["terms"].length; i++){
-      result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
-    }
-    if (typeof(res) !== "undefined"){
-      for(let i=0; i < res["strings"].length; i++){ 
-      result += '<li>'+ res["strings"][i]["content"] +'</li>';     
-    }
-    result += "<ul>"
-    
+  let result= "";
+  if(!parentRes){
+    return result;
   }
+  result += "<ul>"
+  for(let i=0; i < parentRes["terms"].length; i++){
+    result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
+  }
+  if (typeof(res) !== "undefined"){
+    for(let i=0; i < res["strings"].length; i++){ 
+    result += '<li>'+ res["strings"][i]["content"] +'</li>';     
+  }
+  result += "<ul>"
+  
+}
   return result; 
 }
 
