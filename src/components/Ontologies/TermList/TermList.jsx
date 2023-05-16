@@ -1,5 +1,5 @@
 import React from "react";
-import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
+import {getListOfTerms, getNodeByIri, getSubClassOf} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 import JumpTo from "../JumpTo/Jumpto";
@@ -17,7 +17,8 @@ class TermList extends React.Component{
             totalNumberOfTerms: 0,
             lastLoadedUrl: "",
             mode: "terms",
-            iri: null
+            iri: null,
+            tableBodyContent: ""
         });
 
         this.loadComponent = this.loadComponent.bind(this);
@@ -66,11 +67,14 @@ class TermList extends React.Component{
         });
     }
 
+
+
     storePageSizeInLocalStorage(size){
         if(parseInt(size) !== 1){
             localStorage.setItem('termListPageSize', size);
         }
     }
+
 
    
     pageCount () {    
@@ -81,6 +85,7 @@ class TermList extends React.Component{
     }
 
 
+
     handlePagination (value) {
         this.setState({
           pageNumber: value - 1          
@@ -88,6 +93,7 @@ class TermList extends React.Component{
             this.updateURL(value, this.state.pageSize);
         })
     }
+
 
 
     handlePageSizeDropDownChange(e){
@@ -102,6 +108,7 @@ class TermList extends React.Component{
     }
 
 
+
     resetList(){
         this.setState({
             iri: null,
@@ -114,6 +121,7 @@ class TermList extends React.Component{
     }
 
 
+
     updateURL(pageNumber, pageSize, iri=null){
         let currentUrlParams = new URLSearchParams();
         if(iri){
@@ -122,17 +130,20 @@ class TermList extends React.Component{
         else{
             currentUrlParams.append('page', pageNumber);
             currentUrlParams.append('size', pageSize);
-        }               
+        }
+        this.createList();               
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
     }
 
 
-    createList(){
+
+    async createList(){
         let result = [];
         let listOfterms = this.state.listOfTerms;
         let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
+            let subclassOfText = await getSubClassOf(term['iri'], term['ontology_name']);
             result.push(
                 <tr>
                     <td>
@@ -143,7 +154,7 @@ class TermList extends React.Component{
                     <td>{term['short_form']}</td>
                     <td>{term['description'] ? term['description'] : ""}</td>
                     <td>Alternative Term</td>
-                    <td>SubClass Of</td>
+                    <td><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
                     <td>Equivalent to</td>
                     <td>Example of usage</td>
                     <td>See Also</td>
@@ -152,13 +163,17 @@ class TermList extends React.Component{
                 </tr>
             );
         }
-        return result;
+        this.setState({tableBodyContent: result});
     }
+
+
 
     componentDidMount(){
         this.loadComponent();
     }
 
+
+    
     componentDidUpdate(){
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
@@ -214,7 +229,7 @@ class TermList extends React.Component{
                 <table class="table table-striped term-list-table">
                     {createClassListTableHeader()}
                     <tbody>
-                        {this.createList()}               
+                        {this.state.tableBodyContent}               
                     </tbody>
                 </table>
             </div>
