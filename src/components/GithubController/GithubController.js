@@ -1,10 +1,10 @@
 
 class GithubController{
-    constructor(access_token){
+    constructor(){
         this.githubApiBaseUrl = "https://api.github.com/";
         this.callHeader  = {
             'Accept': 'application/json',
-            'Authorization' : 'Bearer ' + access_token
+            'Authorization' : 'Bearer ' + process.env.REACT_APP_GITHUB_ACCESS_TOKEN
           };
         this.getCallSetting = {method: 'GET', headers: this.callHeader};
     }

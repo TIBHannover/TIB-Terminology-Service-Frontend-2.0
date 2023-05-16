@@ -41,7 +41,7 @@ class IssueList extends React.Component{
         this.updateURL = this.updateURL.bind(this);
         this.createPagination = this.createPagination.bind(this);
         this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);
-        this.gitHubController = new GithubController(this.props.auth.user?.access_token);
+        this.gitHubController = new GithubController();
     }
 
 
