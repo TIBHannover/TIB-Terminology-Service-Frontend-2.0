@@ -3,6 +3,7 @@ import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 import JumpTo from "../JumpTo/Jumpto";
+import {createClassListTableHeader} from './hekpers';
 
 
 class TermList extends React.Component{
@@ -141,6 +142,13 @@ class TermList extends React.Component{
                     </td>
                     <td>{term['short_form']}</td>
                     <td>{term['description'] ? term['description'] : ""}</td>
+                    <td>Alternative Term</td>
+                    <td>SubClass Of</td>
+                    <td>Equivalent to</td>
+                    <td>Example of usage</td>
+                    <td>See Also</td>
+                    <td>Contributor</td>
+                    <td>Comment</td>
                 </tr>
             );
         }
@@ -204,13 +212,7 @@ class TermList extends React.Component{
                     </div>
                 </div>               
                 <table class="table table-striped term-list-table">
-                    <thead>
-                        <tr>                
-                            <th scope="col">Label</th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Description</th>
-                        </tr>
-                    </thead>
+                    {createClassListTableHeader()}
                     <tbody>
                         {this.createList()}               
                     </tbody>
