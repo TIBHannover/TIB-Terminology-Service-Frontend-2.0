@@ -233,7 +233,7 @@ class TermList extends React.Component{
                     </div>
                 </div>                 
                 <div className="row class-list-tablle-holder">                                      
-                    <table class="table table-striped term-list-table">
+                    <table class="table table-striped term-list-table class-list-table">
                         {createClassListTableHeader()}
                         <tbody>
                             {this.state.tableBodyContent}               

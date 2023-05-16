@@ -1723,21 +1723,19 @@ p{
     transform: rotateX(180deg);    
 }
 
-tbody {
+.class-list-table tbody {
     display: block;
     height: 1000px;
     overflow: auto;
 }
-thead, tbody tr {
+.class-list-table thead, tbody tr {
     display: table;
     width: 100%;
     table-layout: fixed;
 }
-td{
+.class-list-table td{
     width: 300px;
 }
-
-
 
 .term-list-table{
     /* 
