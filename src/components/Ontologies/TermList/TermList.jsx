@@ -18,7 +18,8 @@ class TermList extends React.Component{
             lastLoadedUrl: "",
             mode: "terms",
             iri: null,
-            tableBodyContent: ""
+            tableBodyContent: "",
+            tableIsLoading: true
         });
 
         this.loadComponent = this.loadComponent.bind(this);
@@ -88,7 +89,9 @@ class TermList extends React.Component{
 
     handlePagination (value) {
         this.setState({
-          pageNumber: value - 1          
+          pageNumber: value - 1,
+          tableIsLoading: true,
+          tableBodyContent: ""    
         }, ()=> {
             this.updateURL(value, this.state.pageSize);
         })
@@ -100,7 +103,9 @@ class TermList extends React.Component{
         let size = parseInt(e.target.value);
         let pageNumber = this.state.pageNumber + 1;
         this.setState({
-            pageSize: size
+            pageSize: size,
+            tableIsLoading: true,
+            tableBodyContent: "" 
         }, () => {        
             this.storePageSizeInLocalStorage(size);
             this.updateURL(pageNumber, size);
@@ -113,7 +118,9 @@ class TermList extends React.Component{
         this.setState({
             iri: null,
             pageNumber: 0,
-            pageSize: 20
+            pageSize: 20,
+            tableIsLoading: true,
+            tableBodyContent: "" 
         }, () => {
             this.storePageSizeInLocalStorage(this.state.pageSize);
             this.updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
@@ -164,7 +171,10 @@ class TermList extends React.Component{
                 </tr>
             );
         }
-        this.setState({tableBodyContent: result});
+        this.setState({
+            tableBodyContent: result,
+            tableIsLoading: false
+        });
     }
 
 
@@ -236,6 +246,7 @@ class TermList extends React.Component{
                     <table class="table table-striped term-list-table class-list-table">
                         {createClassListTableHeader()}
                         <tbody>
+                            {this.state.tableIsLoading && <div className="isLoading"></div>}
                             {this.state.tableBodyContent}               
                         </tbody>
                     </table>
