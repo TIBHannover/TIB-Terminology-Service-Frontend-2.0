@@ -156,7 +156,7 @@ class TermList extends React.Component{
                     <td>Alternative Term</td>
                     <td><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
                     <td>Equivalent to</td>
-                    <td>Example of usage</td>
+                    <td>{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
                     <td>See Also</td>
                     <td>Contributor</td>
                     <td>Comment</td>
@@ -173,7 +173,7 @@ class TermList extends React.Component{
     }
 
 
-    
+
     componentDidUpdate(){
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
