@@ -1,5 +1,4 @@
 import React from "react";
-import { UserIsLogin } from "../../User/Login/Auth";
 import LoginForm from "../../User/Login/Login";
 import GithubController from '../../GithubController/GithubController';
 import { withAuth } from "react-oidc-context";

@@ -1723,7 +1723,7 @@ p{
         source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader
     */
 
-    margin-left: 40%;
+    margin: auto;
     border: 16px solid #ffffff;
     border-radius: 50%;
     border-top: 15px solid #1565C0;

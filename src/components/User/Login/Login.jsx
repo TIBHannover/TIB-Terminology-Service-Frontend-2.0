@@ -1,22 +1,21 @@
 import { useAuth } from "react-oidc-context";
 
 
-export default function LoginForm(onlyLoginButton){
-    const auth = useAuth();
-    console.info(auth.user)
+export default function LoginForm(props){
+    const auth = useAuth();    
     return [
         <span>                
-            {!auth.isAuthenticated && onlyLoginButton &&                    
+            {!auth.isAuthenticated && props.onlyLoginButton &&                    
                 <span>
                     <a type="button" onClick={() => void auth.signinRedirect()}>Login</a>                    
                 </span>                    
             }
-            {!auth.isAuthenticated && !onlyLoginButton &&                
+            {!auth.isAuthenticated && !props.onlyLoginButton &&      
                 <div className="row">
                     <div className="col-sm-12 text-center">
                         <h5>You need to login for accessing this section.</h5>
                         <br></br>
-                        <a type="button" onClick={() => void auth.signinRedirect()}>Login</a>
+                        <a className="btn btn-primary" type="button" onClick={() => void auth.signinRedirect()}>Login</a>                        
                     </div>
                 </div>                   
             }
