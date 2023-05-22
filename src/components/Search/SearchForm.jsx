@@ -168,7 +168,7 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <div className="jumpto-item-holder">
+            <div className="jump-autocomplete-container">
                {setJumpResultButtons(this.state.jumpResult[i])}
             </div>          
           )
