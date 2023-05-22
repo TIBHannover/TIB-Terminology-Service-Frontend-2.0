@@ -1839,13 +1839,13 @@ Jumpto styles
     /* 
         The general style for jumpto container
     */
-
+    
     height: fit-content;
     padding-right: 10px;
     padding-left: 10x;
     text-align: left;
     background-color: white;
-    position: absolute;
+    position: relative;
     display: block;
 
 }
@@ -1855,12 +1855,12 @@ Jumpto styles
     /* 
        The style for the jump autocomplete field in the search bar
     */
-    
+    line-height: initial;
     border: 0.5px solid black;    
     padding-bottom: 20px;
     padding-top: 10px;    
     z-index: 9999999;        
-    width: 700px;        
+    width: 100%;        
 }
 
 .jumpto-tree-container{
