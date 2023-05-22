@@ -416,7 +416,7 @@ p{
  }
 
  @media only screen and (min-width: 1200px) {
-    .header-warpper{
+    .header-wrapper{
         max-height: 220px;
      }
   }
