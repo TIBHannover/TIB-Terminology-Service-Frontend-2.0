@@ -888,6 +888,21 @@ p{
     margin-bottom: -20px;
 }
 
+.jump-autocomplete-container{
+    line-height: initial !important;
+    height: 50px;
+}
+.jump-autocomplete-item{
+    /* 
+       The style for the jump autocomplete field
+    */
+
+    margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+
 
 #search-box {
     /* 
