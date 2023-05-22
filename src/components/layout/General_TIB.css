@@ -412,7 +412,6 @@ p{
     background-color: #0E6668;
     padding: 10px;
     margin-bottom: 10px;
-    max-height: 200px;
  }
 
  @media only screen and (min-width: 1200px) {
@@ -1150,8 +1149,7 @@ p{
 -------------------------------------
 */
 
-.header-collapseable-section{            
-    max-height: 200px;    
+.header-collapseable-section{                
     transition: max-height 0.4s ease-out;
 }
 
