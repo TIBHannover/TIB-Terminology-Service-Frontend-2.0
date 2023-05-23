@@ -214,12 +214,12 @@ class InfoAnnotations extends React.Component{
                              <a 
                                className='btn btn-primary btn-dark download-ontology-btn'                                
                                onClick={async () => {                    
-                                 const jsonFile = JSON.stringify(this.state.ontologyObject);
+                                 const jsonFile = JSON.stringify(ontology);
                                  const blob = new Blob([jsonFile],{type:'application/json'});
                                  const href = await URL.createObjectURL(blob);
                                  const link = document.createElement('a');
                                  link.href = href;
-                                 link.download = this.state.ontologyObject.ontologyId + "_metadata.json";
+                                 link.download = ontology.ontologyId + "_metadata.json";
                                  document.body.appendChild(link);
                                  link.click();
                                  document.body.removeChild(link);
