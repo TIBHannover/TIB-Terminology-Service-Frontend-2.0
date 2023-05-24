@@ -1963,6 +1963,7 @@ Jumpto styles
 ---------------------------------------------
 Term Request
 ---------------------------------------------
+
 */
 
 .close-mark-btn{
@@ -1974,6 +1975,11 @@ Term Request
 }
 .submit-term-request-modal-btn{
     background-color: green !important;
+}
+
+.required_input::after{
+    content: "*";
+    color: red;
 }
 
 
