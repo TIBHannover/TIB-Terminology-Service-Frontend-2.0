@@ -43,7 +43,7 @@ class OntologyOverview extends React.Component {
         <div className='col-sm-3'>
           <OntologyStatsBox ontology={this.props.ontology} />
           <br></br>
-          <TermRequest />
+          {this.props.ontology.ontologyId === "vibso" ? <TermRequest /> : ""}
         </div>
     </div>
    );
