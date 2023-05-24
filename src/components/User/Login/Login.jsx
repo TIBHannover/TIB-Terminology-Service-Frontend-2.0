@@ -2,7 +2,25 @@ import { useAuth } from "react-oidc-context";
 
 
 export default function LoginForm(props){
-    const auth = useAuth();    
+    const auth = useAuth();
+    console.info(auth?.user?.access_token)
+    var token = auth?.user?.access_token;
+    if (token){
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        console.info(JSON.parse(jsonPayload));
+    }
+    
+
+
+
+
+
+    localStorage.setItem("test_token", auth?.user?.access_token) 
     return [
         <span>                
             {!auth.isAuthenticated && props.onlyLoginButton &&                    

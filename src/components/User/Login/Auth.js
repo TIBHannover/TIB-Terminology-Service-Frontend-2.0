@@ -1,24 +1,16 @@
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
-        document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
-        document.getElementById("login-loading").style.display = "block";
+        // document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
+        // document.getElementById("login-loading").style.display = "block";
         let code = cUrl.split("code=")[1];
         let data = new FormData();
-        data.append("code", code);
-        fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/login', {method: "POST", body: data})
+        data.append("code", code);       
+        fetch('https://github.com/login/oauth/access_token', {method: "POST", body: data})
             .then((resp) => resp.json())
             .then((resp) => {                
-                if(resp["data"]){
-                    localStorage.setItem("name", resp["data"]["name"]);
-                    localStorage.setItem("company", resp["data"]["company"]);
-                    localStorage.setItem("github_home", resp["data"]["github_home"]);
-                    localStorage.setItem("avatar", resp["data"]["avatar"]);
-                    localStorage.setItem("token", resp["data"]["token"]);
-                    window.location.replace("/ts");
-                    return true;               
-                }
-                return false;
+                console.info(resp)
+                return true;
             })
             .catch((e) => {
                 return false;

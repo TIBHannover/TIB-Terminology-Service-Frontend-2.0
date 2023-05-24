@@ -35,7 +35,7 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 
 function App() {
   AppHelpers.setSiteTitleAndFavIcon();
-  AppHelpers.checkBackendStatus();
+  AppHelpers.checkBackendStatus();  
 
   const oidcConfig = {
     client_id: process.env.REACT_APP_KEYCLOAK_CLIENT_ID,
