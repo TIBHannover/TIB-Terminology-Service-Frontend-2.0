@@ -1,5 +1,9 @@
 import React from "react";
-
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { ContentState, EditorState } from 'draft-js';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
+import templatePath from './template.md';
 
 
 const GENERIC_ISSUE_ID = 1;
@@ -8,19 +12,59 @@ const TERM_REQUEST_ISSUE_ID = 2;
 
 class TermRequest extends React.Component{
     constructor(props){
-        super(props);
-        this.state = ({
-            issueType: GENERIC_ISSUE_ID
-        });
+        super(props);      
+        this.state = {
+            editorState:  null,
+            issueType: GENERIC_ISSUE_ID,
+        };
+        this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.createGenericIssueFields = this.createGenericIssueFields.bind(this);
         this.createIssueTypeDropDown = this.createIssueTypeDropDown.bind(this);
         this.changeIssueType = this.changeIssueType.bind(this);
+        this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
 
     }
 
 
-    createGenericIssueFields(){
 
+    setTermRequestTemplate(){
+        fetch(templatePath)
+        .then((response) => response.text()) 
+        .then((text) => {
+            console.info(text)
+            this.setState({
+                editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
+            });
+        });
+        
+    }
+
+    onTextAreaChange = (newEditorState) => {
+        this.setState({ editorState: newEditorState });
+      };
+
+
+    createGenericIssueFields(){
+        return [
+            <Editor
+                editorState={this.state.editorState}
+                onEditorStateChange={this.onTextAreaChange}
+                toolbar={{
+                    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
+                    inline: {
+                    options: ['bold', 'italic', 'underline', 'strikethrough'],
+                    },
+                    blockType: {
+                    inDropdown: true,
+                    options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
+                    },
+                    list: {
+                    inDropdown: true,
+                    options: ['unordered', 'ordered'],
+                    },
+                }}
+            />
+        ];
     }
 
     createIssueTypeDropDown(){
@@ -42,11 +86,9 @@ class TermRequest extends React.Component{
         });
     }
 
-    
-
-
-
-
+    componentDidMount(){
+        this.setTermRequestTemplate()
+    }
 
     render(){
         return(
@@ -72,7 +114,14 @@ class TermRequest extends React.Component{
                                     <label className="required_input" for="issueTitle">Issue Title</label>
                                     <input type="text" class="form-control" id="issueTitle" placeholder="Enter Issue Title"></input>
                                 </div>
-                            </div>                            
+                            </div>
+                            <br></br>
+                            <div className="row">
+                                <div className="col-sm-10">
+                                    {this.createGenericIssueFields()}                                    
+                                </div>
+                            </div>
+
                         </div>
                         
                         <div class="modal-footer">

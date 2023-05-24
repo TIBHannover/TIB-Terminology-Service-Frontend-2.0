@@ -1982,6 +1982,16 @@ Term Request
     color: red;
 }
 
+.rdw-editor-wrapper{
+    border: 1px solid rgb(218, 216, 216) !important;
+    border-radius: 10px !important;
+}
+
+.rdw-editor-main{
+    height: 400px !important;
+    padding: 10px ;
+}
+
 
 
 
