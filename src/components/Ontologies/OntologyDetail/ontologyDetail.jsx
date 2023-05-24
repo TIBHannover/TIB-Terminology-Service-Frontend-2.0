@@ -1,6 +1,7 @@
 import React from 'react';
 import queryString from 'query-string'; 
 import NodePage from '../NodePage/NodePage';
+import NotesPage from './Notes/NotesPage'
 
 
 const DETAIL_TAB_ID = 0;
@@ -82,8 +83,12 @@ class ontologyDetail extends React.Component{
         <div className="node-table-container" id="page-right-pane">
             {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
                     <NodePage 
-                        ontology={this.state.ontology}
                         componentIdentity={'detail'}
+                    />
+                }
+            {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
+                    <NotesPage 
+                        componentIdentity={'notes'}
                     />
                 }
         </div>
