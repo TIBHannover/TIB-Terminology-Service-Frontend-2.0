@@ -69,6 +69,25 @@ class ontologyDetail extends React.Component{
       });
     }      
   }
+  componentDidMount(){
+    this.setTabOnLoad();
+   }
+
+  componentDidUpdate(){
+    this.setTabOnLoad();
+   }
+
+  render(){
+      return(
+        <div>
+            
+        </div>
+        
+     )
+  }
+
 }
+
+
 
 export default ontologyDetail;
