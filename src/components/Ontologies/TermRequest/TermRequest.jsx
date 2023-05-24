@@ -6,8 +6,8 @@ import { stateFromMarkdown } from 'draft-js-import-markdown';
 import templatePath from './template.md';
 
 
-const GENERIC_ISSUE_ID = 1;
-const TERM_REQUEST_ISSUE_ID = 2;
+const GENERIC_ISSUE_ID = "1";
+const TERM_REQUEST_ISSUE_ID = "2";
 
 
 class TermRequest extends React.Component{
@@ -27,15 +27,19 @@ class TermRequest extends React.Component{
 
 
 
-    setTermRequestTemplate(){
-        fetch(templatePath)
-        .then((response) => response.text()) 
-        .then((text) => {
-            console.info(text)
-            this.setState({
-                editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
+    setTermRequestTemplate(issueType){        
+        if(issueType === TERM_REQUEST_ISSUE_ID){
+            fetch(templatePath)
+            .then((response) => response.text()) 
+            .then((text) => {            
+                this.setState({
+                    editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
+                });
             });
-        });
+        }
+        else{
+            this.setState({editorState:null})
+        }       
         
     }
 
@@ -80,15 +84,14 @@ class TermRequest extends React.Component{
     }
 
 
-    changeIssueType(e){        
+    changeIssueType(e){                   
         this.setState({
             issueType: e.target.value
+        }, ()=>{
+            this.setTermRequestTemplate(e.target.value); 
         });
     }
-
-    componentDidMount(){
-        this.setTermRequestTemplate()
-    }
+   
 
     render(){
         return(
