@@ -79,8 +79,13 @@ class ontologyDetail extends React.Component{
 
   render(){
       return(
-        <div>
-            
+        <div className="node-table-container" id="page-right-pane">
+            {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
+                    <NodePage 
+                        ontology={this.state.ontology}
+                        componentIdentity={'detail'}
+                    />
+                }
         </div>
         
      )
