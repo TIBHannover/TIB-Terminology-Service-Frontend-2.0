@@ -11,7 +11,9 @@ class ontologyDetail extends React.Component{
         super(props)
         this.state= ({
             waiting: false,
-            activeTab: DETAIL_TAB_ID
+            activeTab: DETAIL_TAB_ID,
+            lastRequestedTab: "",
+            targetTermIri: " "
 
         })
         this.tabChange = this.tabChange.bind(this);
@@ -25,7 +27,7 @@ class ontologyDetail extends React.Component{
     let requestedTab = this.props.match.params.tab;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
-    if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
+    if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
       this.setState({        
         activeTab: NOTES_TAB_ID,
         waiting: false,
@@ -38,7 +40,6 @@ class ontologyDetail extends React.Component{
         activeTab: DETAIL_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab
-
       });
     }
   }
