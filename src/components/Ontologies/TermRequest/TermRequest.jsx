@@ -3,6 +3,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
+import draftToMarkdown from 'draftjs-to-markdown';
 import templatePath from './template.md';
 
 
@@ -17,6 +18,10 @@ class TermRequest extends React.Component{
         this.state = {
             editorState:  null,
             issueType: GENERIC_ISSUE_ID,
+            submitFinished: false,
+            errorInSubmit: false,
+            newIssueUrl: "",
+            modalIsOpen: false
         };
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.createGenericIssueFields = this.createGenericIssueFields.bind(this);
@@ -24,6 +29,8 @@ class TermRequest extends React.Component{
         this.changeIssueType = this.changeIssueType.bind(this);
         this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
 
     }
 
@@ -97,7 +104,8 @@ class TermRequest extends React.Component{
 
     submitIssueRequest(){
         let issueTitle = document.getElementById('issueTitle').value;
-        let issueContent = this.state.editorState.getCurrentContent().getPlainText('\u0001');
+        let issueContent = this.state.editorState.getCurrentContent();        
+        issueContent = draftToMarkdown(convertToRaw(issueContent));
         let data = new FormData();
         data.append("title", issueTitle);
         data.append("content", issueContent);
@@ -105,55 +113,120 @@ class TermRequest extends React.Component{
         fetch('http://localhost:5000/requestNewTerm', {method: 'POST', body: data})
             .then((response) => response.json())
             .then((data) => {
-                console.info(data)
+                if(data['result']){
+                    this.setState({
+                        errorInSubmit: false,
+                        submitFinished: true,
+                        newIssueUrl: data['result'] 
+                    });
+                }
+                else{
+                    this.setState({
+                        errorInSubmit: true,
+                        submitFinished: true,
+                        newIssueUrl: ""
+                    });
+                }
             })
             .catch((error) => {
-                console.info(error)
+                this.setState({
+                    errorInSubmit: true,
+                    submitFinished: true,
+                    newIssueUrl: ""
+                });
             });
+    }
+
+    openModal(){
+        this.setState({modalIsOpen: true});
+    }
+
+
+    closeModal(){        
+        this.setState({
+            editorState:  null,
+            issueType: GENERIC_ISSUE_ID,
+            submitFinished: false,
+            errorInSubmit: false,
+            newIssueUrl: "",
+            modalIsOpen: false
+        });
     }
    
 
     render(){
         return(
             <span>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#term-request-modal">
+            <button type="button" 
+                class="btn btn-primary" 
+                data-toggle="modal" 
+                data-target="#term-request-modal" 
+                data-backdrop="static"
+                data-keyboard="false"
+                onClick={this.openModal}
+                >
                 File a new Issue 
             </button>
             
-            <div class="modal" id="term-request-modal">
+            {this.state.modalIsOpen && <div class="modal" id="term-request-modal">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
                             <h4 class="modal-title">File an issue for this Ontology</h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
-                        
-                        <div class="modal-body">
-                            <p>You can file a new issue here. The issue can have a General Topic or a new Term Request</p>
-                            
-                            <div className="row">
-                                <div className="col-sm-8">
-                                    {this.createIssueTypeDropDown()}
-                                    <label className="required_input" for="issueTitle">Issue Title</label>
-                                    <input type="text" class="form-control" id="issueTitle" placeholder="Enter Issue Title"></input>
-                                </div>
-                            </div>
-                            <br></br>
-                            <div className="row">
-                                <div className="col-sm-10">
-                                    {this.createGenericIssueFields()}                                    
-                                </div>
-                            </div>
+                        <br></br>
+                        <span>
+                            {!this.state.submitFinished && 
+                                <div class="modal-body">
+                                    <p>You can file a new issue here. The issue can have a General Topic or a new Term Request</p>
+                                    
+                                    <div className="row">
+                                        <div className="col-sm-8">
+                                            {this.createIssueTypeDropDown()}
+                                            <label className="required_input" for="issueTitle">Issue Title</label>
+                                            <input type="text" class="form-control" id="issueTitle" placeholder="Enter Issue Title"></input>
+                                        </div>
+                                    </div>
+                                    <br></br>
+                                    <div className="row">
+                                        <div className="col-sm-10">
+                                            {this.createGenericIssueFields()}                                    
+                                        </div>
+                                    </div>
 
-                        </div>
+                                </div>
+                            }
+                            {this.state.submitFinished && !this.state.errorInSubmit &&
+                                <div className="row text-center">
+                                    <div className="col-sm-12">                                    
+                                        <div class="alert alert-success">
+                                            Your issue is requested successfully!
+                                        </div>
+                                        <a href={this.state.newIssueUrl} target="_blank">{this.state.newIssueUrl}</a>
+                                    </div>
+                                </div>
+                            }
+                            {this.state.submitFinished && this.state.errorInSubmit &&
+                                <div className="row text-center">
+                                    <div className="col-sm-10">
+                                        <div class="alert alert-danger">
+                                            Something went wrong. Please try again!
+                                        </div>  
+                                    </div>
+                                </div>                                                              
+                            }
+                        </span>                        
                         
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitIssueRequest}>Submit</button>
+                        <div class="modal-footer">                            
+                            <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>
+                            {!this.state.submitFinished && 
+                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitIssueRequest}>Submit</button>
+                            }
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
             </span>
         );
     }
