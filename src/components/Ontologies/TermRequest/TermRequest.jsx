@@ -1,9 +1,10 @@
 import React from "react";
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { ContentState, EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import templatePath from './template.md';
+
 
 
 const GENERIC_ISSUE_ID = "1";
@@ -22,6 +23,7 @@ class TermRequest extends React.Component{
         this.createIssueTypeDropDown = this.createIssueTypeDropDown.bind(this);
         this.changeIssueType = this.changeIssueType.bind(this);
         this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
+        this.submitIssueRequest = this.submitIssueRequest.bind(this);
 
     }
 
@@ -91,6 +93,24 @@ class TermRequest extends React.Component{
             this.setTermRequestTemplate(e.target.value); 
         });
     }
+
+
+    submitIssueRequest(){
+        let issueTitle = document.getElementById('issueTitle').value;
+        let issueContent = this.state.editorState.getCurrentContent().getPlainText('\u0001');
+        let data = new FormData();
+        data.append("title", issueTitle);
+        data.append("content", issueContent);
+        data.append("access_token", "");
+        fetch('http://localhost:5000/requestNewTerm', {method: 'POST', body: data})
+            .then((response) => response.json())
+            .then((data) => {
+                console.info(data)
+            })
+            .catch((error) => {
+                console.info(error)
+            });
+    }
    
 
     render(){
@@ -129,7 +149,7 @@ class TermRequest extends React.Component{
                         
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary submit-term-request-modal-btn">Submit</button>
+                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitIssueRequest}>Submit</button>
                         </div>
                     </div>
                 </div>
