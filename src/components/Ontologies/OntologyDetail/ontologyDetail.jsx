@@ -14,12 +14,21 @@ class ontologyDetail extends React.Component{
             waiting: false,
             activeTab: DETAIL_TAB_ID,
             lastRequestedTab: "",
-            targetTermIri: " "
+            targetTermIri: " ",
+            componentIdentity: ""
 
         })
         this.tabChange = this.tabChange.bind(this);
         this.setTabOnLoad = this.setTabOnLoad.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
     }
+
+ setComponentData(){
+    let targetIri = this.props.iri;
+    let ontology = this.props.ontology;
+    let extractKey = this.props.extractKey;
+    let componentIdentity = this.props.componentIdentity;
+ }
 
  /**
    * Set the active tab and its page on load
