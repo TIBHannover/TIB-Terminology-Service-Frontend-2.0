@@ -183,7 +183,7 @@ function makeTag(objectList){
   return tags;
 }
 
-export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontologyId, activeTabId){
+export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontologyId, activeTabId){
   let result = [];
   for(let configItemKey in tabMetadataJson){
       let configObject = tabMetadataJson[configItemKey];
