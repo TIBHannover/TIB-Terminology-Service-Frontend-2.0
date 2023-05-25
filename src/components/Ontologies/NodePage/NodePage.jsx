@@ -2,7 +2,11 @@ import React from 'react';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import NodePageTabConfig from './listOfComponentsTabs.json'
 
+
+const DETAIL_TAB_ID = 0;
+const NOTES_TAB_ID = 1;
 
 class NodePage extends React.Component {
   constructor (props) {
@@ -12,6 +16,7 @@ class NodePage extends React.Component {
       iriIsCopied: false,
       prevNode: "",
       componentIdentity: "",
+      activeTab: DETAIL_TAB_ID,
       isSkos: false,
       showDataAsJsonBtnHref: ""
     })
