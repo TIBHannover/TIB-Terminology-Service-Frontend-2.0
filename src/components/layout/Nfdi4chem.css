@@ -1957,6 +1957,32 @@ Term Request
 
 
 /* 
+---------------------------------------------
+Notes
+---------------------------------------------
+*/
+
+.notes-container{
+    padding: 20px !important;
+}
+
+.note-list-card{
+    background-color: white !important;    
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #7AABAC;    
+}
+
+.note-list-title{
+    color: black;
+    font-weight: bold;    
+}
+
+
+
+
+/* 
 -------------------------------------------------------
 Media Query Area for bein responsive
 -------------------------------------------------------
