@@ -1,0 +1,19 @@
+{
+    "Detail":{
+        "id":"detail",
+        "keyForRenderAsComponent": "NodePage",
+        "keyForRenderAsTabItem": "detail-tab",
+        "tabId": 0,
+        "tabTitle": "Detail",
+        "urlEndPoint": ""
+    },
+
+    "Notes":{
+        "id":"notes",
+        "keyForRenderAsComponent": "NotesPage",
+        "keyForRenderAsTabItem": "notes-tab",
+        "tabId": 1,
+        "tabTitle": "Notes",
+        "urlEndPoint": "/notes"
+    }
+}
