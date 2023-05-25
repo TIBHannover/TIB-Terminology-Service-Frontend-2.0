@@ -1,6 +1,6 @@
 import React from 'react';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
-import {classMetaData, propertyMetaData, formatText} from './helpers';
+import {classMetaData, propertyMetaData, formatText, renderOntologyPageTabs} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import queryString from 'query-string'; 
@@ -19,6 +19,8 @@ class NodePage extends React.Component {
       componentIdentity: "",
       activeTab: DETAIL_TAB_ID,
       isSkos: false,
+      lastRequestedTab: "",
+      waiting: false,
       showDataAsJsonBtnHref: ""
     })
     this.setComponentData = this.setComponentData.bind(this);
@@ -194,6 +196,9 @@ class NodePage extends React.Component {
           </Helmet>
         </div>
         </HelmetProvider>
+        <ul className="nav nav-tabs">
+          {renderOntologyPageTabs(NodePageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
+        </ul>
         {this.createTable()}
         <div className='col-sm-12'  key={"json-button-row"}>
           <div className='row'>
