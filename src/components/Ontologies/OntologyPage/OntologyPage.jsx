@@ -1,6 +1,5 @@
 import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
-import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -16,6 +15,7 @@ const TERM_TREE_TAB_ID = 1;
 const PROPERTY_TREE_TAB_ID = 2;
 const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
+const Notes_TAB_ID = 5;
 
 
 
@@ -132,6 +132,14 @@ class OntologyPage extends React.Component {
         waiting: false,
         lastRequestedTab: requestedTab,
         targetTermListIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
+
+      });
+    }
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){          
+      this.setState({       
+        activeTab: Notes_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab
 
       });
     }
