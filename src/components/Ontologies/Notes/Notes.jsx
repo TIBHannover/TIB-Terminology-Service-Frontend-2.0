@@ -2,8 +2,11 @@ import React from "react";
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
+import ReactMarkdown from 'react-markdown'
 import draftToMarkdown from 'draftjs-to-markdown';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+
 
 
 
@@ -24,7 +27,9 @@ class OntologyNotes extends React.Component{
            username: "TS User",
            noteSubmited: false,
            submitSeccuess: false,
-           listRenderContent: ''
+           listRenderContent: '',
+           selectedNote: null,
+           noteDetailPage: false
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -34,6 +39,9 @@ class OntologyNotes extends React.Component{
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.submitNote = this.submitNote.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.createNoteDetailPage = this.createNoteDetailPage.bind(this);
+        this.selectNote = this.selectNote.bind(this);
+        this.backToListClick = this.backToListClick.bind(this);
     }
 
 
@@ -85,7 +93,7 @@ class OntologyNotes extends React.Component{
             result.push(
                 <div className="row">
                     <div className="col-sm-12 note-list-card">
-                        <a href='#' className="note-list-title">{note['title']}</a>                        
+                        <Link to={'notes/' + note['id']} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>                        
                         <br/>
                         <small>
                             <ul className="">
@@ -241,8 +249,65 @@ class OntologyNotes extends React.Component{
     }
 
 
+    selectNote(e){
+        let noteId = e.target.attributes.value.nodeValue;       
+        let selctedNote = null;
+        let allNotes = this.state.notesList;
+        for(let note of allNotes){            
+            if (note['id'] === parseInt(noteId)){
+                selctedNote = note; 
+            }
+        }
+        this.setState({
+            selectedNote: selctedNote,
+            noteDetailPage: true
+        });
+    }
+
+
+
+    backToListClick(){
+        this.setState({
+            selectedNoteId: null,
+            noteDetailPage: false
+        });
+    }
+
+
+    createNoteDetailPage(){
+        return [
+            <span>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <Link 
+                            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.props.ontology + '/notes' } 
+                            onClick={this.backToListClick} 
+                            className="btn btn-primary">
+                            Back to Note List
+                        </Link>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <br></br>  
+                        <h2>{this.state.selectedNote['title']}</h2>                      
+                        <small>{" opened on " + this.state.selectedNote['created_at'] + " by " + this.state.selectedNote['creator_user']}</small>
+                        <br></br>
+                        <br></br>
+                        <span>
+                            <ReactMarkdown>{this.state.selectedNote['content']}</ReactMarkdown>
+                        </span>
+                    
+                    </div>
+                </div>
+            </span>           
+        ];
+    }
+
+
 
     componentDidMount(){
+        // console.info(this.props.targetNoteId)
         this.getNotesForOntology();
     }
 
@@ -253,18 +318,21 @@ class OntologyNotes extends React.Component{
     render(){
         return (
             <div className="tree-view-container notes-container">
-                <div className="row">
-                    <div className="col-sm-8">
-                        {this.state.listRenderContent}
+                {!this.state.noteDetailPage && 
+                    <div className="row">                    
+                        <div className="col-sm-8">
+                            {this.state.listRenderContent}
+                        </div>
+                        <div className="col-sm-4">
+                            {this.createAddNoteModal()}
+                        </div>                    
                     </div>
-                    <div className="col-sm-4">
-                        {this.createAddNoteModal()}
-                    </div>
-                </div>
+                }
+                {this.state.noteDetailPage && this.state.selectedNote && this.createNoteDetailPage()}
             </div>
         );
     }
 
 }
 
-export default OntologyNotes;
+export default withRouter(OntologyNotes);

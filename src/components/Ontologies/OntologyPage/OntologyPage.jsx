@@ -96,7 +96,7 @@ class OntologyPage extends React.Component {
    * Set the active tab and its page on load
    */
   setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;
+    let requestedTab = this.props.match.params.tab;    
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
     if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
@@ -383,7 +383,8 @@ class OntologyPage extends React.Component {
                                 <OntologyNotes                                                              
                                 componentIdentity={'notes'}
                                 key={'notesPage'}
-                                ontology={this.state.ontologyId}                                                              
+                                ontology={this.state.ontologyId}
+                                targetNoteId={this.props.match.params.targetId}                                                            
                                 />
                 }
                 {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
