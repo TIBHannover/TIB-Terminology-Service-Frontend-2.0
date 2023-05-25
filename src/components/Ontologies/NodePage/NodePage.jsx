@@ -140,12 +140,39 @@ class NodePage extends React.Component {
     }
   }
 
+  /**
+     * Handle the tab change in the node detail Top menu
+     *
+     * @param {*} e
+     * @param {*} value
+     */
+  tabChange = (e, v) => {
+    try{
+      let selectedTabId = e.target.dataset.value;         
+      this.setState({
+        waiting: true
+      });
+  
+      this.setState({
+        activeTab: parseInt(selectedTabId),
+        waiting: false
+      });
+    } 
+    catch(e){
+      this.setState({
+        activeTab: DETAIL_TAB_ID,
+        waiting: false
+      });
+    }      
+  }
+
 
 
   componentDidMount(){
     if(this.state.data && this.state.prevNode !== this.props.iri){
       this.setComponentData();      
     }
+    this.setTabOnLoad();
   }
 
 
@@ -153,6 +180,7 @@ class NodePage extends React.Component {
     if(this.state.prevNode !== this.props.iri){
       this.setComponentData();
     }
+    this.setTabOnLoad();
   }
 
 
