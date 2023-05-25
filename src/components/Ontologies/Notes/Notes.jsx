@@ -45,13 +45,24 @@ class OntologyNotes extends React.Component{
     }
 
 
-    getNotesForOntology(){
+    getNotesForOntology(inputNoteId=null){
         let ontologyId = this.props.ontology;
         let url = process.env.REACT_APP_TEST_BACKEND_URL + '/getNotes/' + ontologyId;
         fetch(url).then((resp) => resp.json())
-        .then((data) => {        
+        .then((data) => {
+            let selectedNote = null;
+            let allNotes = data['result'];
+            let showNoteDetail = false;
+            for(let note of allNotes){            
+                if (note['id'] === parseInt(inputNoteId)){
+                    selectedNote = note; 
+                    showNoteDetail = true;
+                }
+            }     
             this.setState({
-                notesList: data['result']                
+                notesList: allNotes,
+                selectedNote: selectedNote,
+                noteDetailPage: showNoteDetail               
             });
         })
         .then(()=>{this.createNotesList()});
@@ -306,9 +317,9 @@ class OntologyNotes extends React.Component{
 
 
 
-    componentDidMount(){
-        // console.info(this.props.targetNoteId)
-        this.getNotesForOntology();
+    componentDidMount(){        
+        let inputNoteId = this.props.targetNoteId;         
+        this.getNotesForOntology(inputNoteId);
     }
 
 
