@@ -30,8 +30,8 @@ export function nfdi4ingHomePage() {
                     <p><small>In principle everyone that works with a need for the use of unambiguous language. Like organisations and institutions or in science and research. The NFDI4Ing Terminology Services is a free service offer that everyone can use via this frontend or our REST machine-to-machine communication interface.</small></p>
                   </Carousel.Caption>
                   <img
-                    className="d-block wh-100"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432"
+                    className="d-block min-vh-100"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/128px-Solid_white.svg.png?20220303184432"
                     alt="Image One"
                   />
                 </Carousel.Item>
@@ -41,8 +41,8 @@ export function nfdi4ingHomePage() {
                     <p><b>Science and Research</b> Among other things, for the development of innovative data and knowledge management systems (research data management, publishing), as a source for training new language models (natural language processing) and much more.</p>
                   </Carousel.Caption>
                   <img
-                    className="d-block wh-100"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432"
+                    className="d-block min-vh-100"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/128px-Solid_white.svg.png?20220303184432"
                     alt="Image Two"
                   />
                 </Carousel.Item>
@@ -52,15 +52,15 @@ export function nfdi4ingHomePage() {
                     <p><b>Industry</b> I order to find and agree on a common vocabulary. E.g. in medicine for the clear designation of diseases, symptoms or therapies, but also for the billing system.</p>
                   </Carousel.Caption>
                   <img
-                    className="d-block wh-100"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432"
+                    className="d-block min-vh-100"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/128px-Solid_white.svg.png?20220303184432"
                     alt="Image Three"
                   />
                 </Carousel.Item>
                 <Carousel.Item interval={15000}>
                   <img
-                    className="d-block wh-100"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/512px-Solid_white.svg.png?20220303184432"
+                    className="d-block min-vh-100"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/128px-Solid_white.svg.png?20220303184432"
                     alt="Image Three"
                   />
                   <Carousel.Caption>
