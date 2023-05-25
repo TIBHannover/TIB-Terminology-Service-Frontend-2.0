@@ -2,7 +2,8 @@ import React from 'react';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import NodePageTabConfig from './listOfComponentsTabs.json'
+import NodePageTabConfig from './listOfComponentsTabs.json';
+import queryString from 'query-string'; 
 
 
 const DETAIL_TAB_ID = 0;
@@ -23,6 +24,8 @@ class NodePage extends React.Component {
     this.setComponentData = this.setComponentData.bind(this);
     this.createRow = this.createRow.bind(this);
     this.createTable = this.createTable.bind(this);
+    this.tabChange = this.tabChange.bind(this);
+    this.setTabOnLoad = this.setTabOnLoad.bind(this);
   }
 
 
@@ -110,6 +113,31 @@ class NodePage extends React.Component {
       result.push(row);
     }
     return result;
+  }
+
+  /**
+   * Set the active tab and its page on load
+   */
+  setTabOnLoad(){
+    let requestedTab = this.props.match.params.tab;
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let lastRequestedTab = this.state.lastRequestedTab;    
+    if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
+      this.setState({        
+        activeTab: NOTES_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        targetTermIri: targetQueryParams.iri
+      });
+    }
+    else if (requestedTab !== lastRequestedTab){
+      this.setState({        
+        activeTab: DETAIL_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab
+
+      });
+    }
   }
 
 
