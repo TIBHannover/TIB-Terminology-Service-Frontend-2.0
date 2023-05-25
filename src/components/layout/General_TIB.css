@@ -2008,7 +2008,9 @@ Notes
     padding: 10px;
     height: auto;
     text-align: justify;
-    border: 1px solid #7AABAC;    
+    border: 1px solid #7AABAC; 
+    margin-bottom: 10px;
+    border-radius: 5px;   
 }
 
 .note-list-title{

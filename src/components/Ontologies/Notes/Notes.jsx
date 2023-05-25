@@ -11,6 +11,7 @@ const ONTOLOGY_COMPONENT_ID = 1;
 const CLASS_COMPONENT_ID = 2;
 const PROPERTY_COMPONENT_ID = 3;
 const INDIVIDUAL_COMPONENT_ID = 4;
+const COMPONENT_VALUES = ['', 'ontology', 'class', 'property', 'individual']
 
 
 class OntologyNotes extends React.Component{
@@ -18,7 +19,12 @@ class OntologyNotes extends React.Component{
         super(props);
         this.state = ({
            notesList: [],
+           targetArtifact: ONTOLOGY_COMPONENT_ID,
            editorState:  null,
+           username: "TS User",
+           noteSubmited: false,
+           submitSeccuess: false,
+           listRenderContent: ''
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -26,6 +32,8 @@ class OntologyNotes extends React.Component{
         this.changeArtifactType = this.changeArtifactType.bind(this);
         this.createComponentDropDown = this.createComponentDropDown.bind(this);
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
+        this.submitNote = this.submitNote.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
 
@@ -35,10 +43,10 @@ class OntologyNotes extends React.Component{
         fetch(url).then((resp) => resp.json())
         .then((data) => {        
             this.setState({
-                notesList: data['result'],
-                targetArtifact: ONTOLOGY_COMPONENT_ID
+                notesList: data['result']                
             });
-        });
+        })
+        .then(()=>{this.createNotesList()});
     }
 
 
@@ -97,7 +105,7 @@ class OntologyNotes extends React.Component{
         }
 
         if(result.length === 0){
-            return [
+            result = [
                 <div className="row">
                     <div className="col-sm-12">                                    
                         <div class="alert alert-success">
@@ -108,7 +116,7 @@ class OntologyNotes extends React.Component{
             ];
         }
 
-        return result;
+        this.setState({listRenderContent: result});
 
     }
 
@@ -130,6 +138,16 @@ class OntologyNotes extends React.Component{
                 </select>  
             </div>            
         ];
+    }
+
+
+    closeModal(){        
+        this.setState({
+            editorState:  null,
+            targetArtifact: ONTOLOGY_COMPONENT_ID,            
+        });
+        document.getElementById('noteTitle').value = '';
+        document.getElementById('noteIri').value = '';
     }
 
 
@@ -175,13 +193,51 @@ class OntologyNotes extends React.Component{
                         </div>                        
                         <div class="modal-footer">                            
                             <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitIssueRequest}>Submit</button>                            
+                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" data-dismiss="modal" onClick={this.submitNote}>Submit</button>                            
                         </div>
                     </div>
                 </div>
             </div>
             </span>
         ];
+    }
+
+
+    submitNote(){
+        let noteTitle = document.getElementById('noteTitle').value;
+        let noteIri = document.getElementById('noteIri').value;
+        let noteContent = this.state.editorState.getCurrentContent();        
+        noteContent = draftToMarkdown(convertToRaw(noteContent));
+        let data = new FormData();
+        data.append("title", noteTitle);
+        data.append("targetIri", noteIri);
+        data.append("content", noteContent);
+        data.append("ontologyId", this.props.ontology);
+        data.append("userName", this.state.username);
+        data.append("component", COMPONENT_VALUES[this.state.targetArtifact]);
+        fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/createNote', {method: 'POST', body: data})
+            .then((response) => response.json())
+            .then((data) => {
+                if(data['result']){
+                    this.setState({
+                        submitSeccuess: true,
+                        noteSubmited: true
+                    });
+                    this.getNotesForOntology();
+                }
+                else{
+                    this.setState({
+                        submitSeccuess: false,
+                        noteSubmited: true
+                    });
+                }
+            })
+            .catch((error) => {
+                this.setState({
+                    submitSeccuess: false,
+                    noteSubmited: true
+                });
+            });
     }
 
 
@@ -192,12 +248,14 @@ class OntologyNotes extends React.Component{
 
 
 
+
+
     render(){
         return (
             <div className="tree-view-container notes-container">
                 <div className="row">
                     <div className="col-sm-8">
-                        {this.createNotesList()}
+                        {this.state.listRenderContent}
                     </div>
                     <div className="col-sm-4">
                         {this.createAddNoteModal()}
