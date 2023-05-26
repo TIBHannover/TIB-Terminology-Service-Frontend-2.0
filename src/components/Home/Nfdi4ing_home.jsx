@@ -108,30 +108,30 @@ export function nfdi4ingHomePage() {
                 <br/>
                 </Carousel.Item>
                 <Carousel.Item interval={15000}>
-                <p><b>Application Profile Service:</b> An application profile is a set of requirements for subject and use-case specific metadata. In the <a
-                  className="ahome"
+                <p> <a
+                  className="ahome" target="_blank" 
                   href="https://www.aims-projekt.de/"
                 >
-                  AIMS
-                </a> frontend users can search and drag vocabulary terms into their application profile. The Terminology Service is used to retrieve these vocabulary terms, by automatically querying its REST Interface.</p>
+                  Application Profile Service:
+                </a> An application profile is a set of requirements for subject and use-case specific metadata. In the AIMS frontend users can search and drag vocabulary terms into their application profile. The Terminology Service is used to retrieve these vocabulary terms, by automatically querying its REST Interface.</p>
                 <br/>
                 </Carousel.Item>
                 <Carousel.Item interval={15000}>
                 <p><a
-                  className="ahome"
+                  className="ahome" target="_blank" 
                   href="https://orkg.org/"
                 >
-                  ORKG:
-                </a> The Open Research Knowledge Graph (ORKG) aims to describe research papers in a structured manner. With the ORKG, papers are easier to find and compare. </p>
+                  Open Research Knowledge Graph: 
+                </a> ORKG aims to describe research papers in a structured manner. With the ORKG, papers are easier to find and compare. </p>
                 <br/>
                 </Carousel.Item>
                 <Carousel.Item interval={15000}>
-                <p><a
-                  className="ahome"
+                <p><b>Termclick:</b> <a
+                  className="ahome" target="_blank" 
                   href="https://addons.mozilla.org/en-US/firefox/addon/termclick/"
                 >
-                  Termclick:
-                </a> TermClick is a browser extension that allows you to highlight text within a web page and look up its meaning in the NFDI4Ing Terminology Service. TermClick is configurable to groups or specific individual terminologies.  Currently, the plugin is only available for the FireFox browser, but it will be migrated to other browsers as well.</p>
+                  Termclick
+                </a> is a browser extension that allows you to highlight text within a web page and look up its meaning in the NFDI4Ing Terminology Service. TermClick is configurable to groups or specific individual terminologies.  Currently, the plugin is only available for the FireFox browser, but it will be migrated to other browsers as well.</p>
                 <br/>
                 </Carousel.Item>
                 <Carousel.Item interval={15000}>
