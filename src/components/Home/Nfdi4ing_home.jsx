@@ -23,7 +23,7 @@ export function nfdi4ingHomePage() {
                 </h4>
               </div>
               <div>
-              <Carousel variant="dark" controls={false}>
+              <Carousel variant="dark" controls={true} nextIcon="" prevIcon="">
                 <Carousel.Item interval={15000}>
                 <p>NFDI4Ing Terminology Service is a repository for ontologies in the broad engineering domain. It aims to serve as a central access point to the latest ontology versions. Most of the ontologies in our service are managed in various Git repositories such as GitLab or GitHub. Only a few of them are still managed on self-hosted web servers.</p>
                 <br/>
@@ -65,7 +65,7 @@ export function nfdi4ingHomePage() {
                   </b>
                 </h4>
               </div>
-              <Carousel variant="dark" controls={false}>
+              <Carousel variant="dark" controls={true}  nextIcon="" prevIcon="">
                 <Carousel.Item interval={15000}>
                 <p>In principle everyone that works with a need for the use of unambiguous language. Like organisations and institutions or in science and research. The NFDI4Ing Terminology Services is a free offer that everyone can use via this frontend or our REST machine-to-machine communication interface. The <a
                   className="ahome"
@@ -102,7 +102,7 @@ export function nfdi4ingHomePage() {
                   </b>
                 </h4>
               </div>
-              <Carousel variant="dark" controls={false}>
+              <Carousel variant="dark" controls={true} nextIcon="" prevIcon="">
               <Carousel.Item interval={15000}>
               <p>The NFDI4Ing Terminology Service is used by various tools and services already. In addition, it has been used to train Named Entity Recognition models for a series of experiments. We look forward to every message that shows us where the service is also used.</p>
                 <br/>
