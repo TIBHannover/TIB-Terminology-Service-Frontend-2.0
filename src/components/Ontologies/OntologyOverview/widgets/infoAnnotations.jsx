@@ -123,6 +123,18 @@ class InfoAnnotations extends React.Component{
                    <table className="ontology-detail-table" striped="columns">
                     <tbody>
                         <tr>
+                          <td className="ontology-overview-table-id-column"><b>Version</b></td>
+                          <td>
+                            {ontology.config.version}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
+                          <td>
+                            <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+                          </td>
+                        </tr>
+                        <tr>
                           <td className="ontology-overview-table-id-column"><b>IRI</b></td>
                           <td>
                             <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
