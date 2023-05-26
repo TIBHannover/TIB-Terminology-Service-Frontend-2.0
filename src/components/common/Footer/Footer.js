@@ -44,7 +44,7 @@ const Footer = () => (
                         <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"}  className='footer-link'>Imprint</Link>
                     </li>
                     {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                        <li>Join <a href="https://www.linkedin.com/showcase/nfdi4ing-terminology-service/?viewAsMember=true">Linkedin Page</a></li>
+                        <li>Join <a href="https://www.linkedin.com/showcase/nfdi4ing-terminology-service/?viewAsMember=true"> <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="linkedin" width="20" height="20"></img> Page</a></li>
                     }
                     {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                         <li><small>Free SVG Background by <a href="https://bgjar.com">BGJar</a></small></li>

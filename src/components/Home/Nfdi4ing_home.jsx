@@ -56,7 +56,7 @@ export function nfdi4ingHomePage() {
               <div className="font-weight-bold mb-2">
                 <h4>
                   <b>
-                    <center>What can this Service do for me?</center>
+                    <center>What is this service for?</center>
                   </b>
                 </h4>
               </div>
@@ -103,7 +103,12 @@ export function nfdi4ingHomePage() {
               </div>
               <Carousel variant="dark" controls={false}>
                 <Carousel.Item interval={15000}>
-                <p><b>Application Profile Service:</b> The AIMS project focuses on the creation and sharing of metadata standards as so-called application profiles. An application profile is a set of requirements for subject and use-case specific metadata and represented in RDF and SHACL. Within the frontend, users can search and drag vocabulary terms into their application profile as properties and define options about them. The Terminology Service is used to retrieve these vocabulary terms, by automatically querying its REST Interface.</p>
+                <p><b>Application Profile Service (<a
+                  className="ahome"
+                  href="https://www.aims-projekt.de/"
+                >
+                  AIMS
+                </a>):</b> An application profile is a set of requirements for subject and use-case specific metadata and represented in RDF and SHACL. Users can search and drag vocabulary terms into their application profile as properties and define options about them. The Terminology Service is used to retrieve these vocabulary terms, by automatically querying its REST Interface.</p>
                 <br/>
                 </Carousel.Item>
                 <Carousel.Item interval={15000}>
