@@ -18,49 +18,11 @@ export function nfdi4ingHomePage() {
               <div className="font-weight-bold mb-2">
                 <h4>
                   <b>
-                    <center>Who uses the Service?</center>
-                  </b>
-                </h4>
-              </div>
-              <div>
-              <Carousel variant="dark" controls={false}>
-                <Carousel.Item interval={15000}>
-                <p>In principle everyone that works with a need for the use of unambiguous language. Like organisations and institutions or in science and research. The NFDI4Ing Terminology Services is a free offer that everyone can use via this frontend or our REST machine-to-machine communication interface. The <a
-                  className="ahome"
-                  href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}
-                >
-                  Documentation
-                </a> is available here.</p>
-                <br/>
-                </Carousel.Item>
-                <Carousel.Item interval={15000}>
-                <p><b>1) Science and Research:</b> Among other things, for the development of innovative data and knowledge management systems (research data management, publishing), as a source for training new language models (natural language processing) and much more. Researchers will find terminologies here that cover many facets of the broad field of engineering.</p>
-                <br/>
-                </Carousel.Item>
-                <Carousel.Item interval={15000}>
-                <p><b>2) Industry:</b> In situations where a common vocabulary needs to be found and agreed upon. For example, in text editors that support engineers in the creation of technical specifications or reports. In medicine for the unambiguous designation of diseases, symptoms or therapies, but also for the billing system. The use of a controlled vocabulary enables high expressiveness.</p>
-                <br/>
-                </Carousel.Item>
-              </Carousel>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-4">
-            <a href="#" className="d-block">
-              <img
-                className="img-fluid home-image"
-                alt="Blog image"
-                src="/brainstorm.svg"
-              />
-            </a>
-            <div className="p-3">
-              <div className="font-weight-bold mb-2">
-                <h4>
-                  <b>
                     <center>What is this service for?</center>
                   </b>
                 </h4>
               </div>
+              <div>
               <Carousel variant="dark" controls={false}>
                 <Carousel.Item interval={15000}>
                 <p>NFDI4Ing Terminology Service is a repository for ontologies in the broad engineering domain. It aims to serve as a central access point to the latest ontology versions. Most of the ontologies in our service are managed in various Git repositories such as GitLab or GitHub. Only a few of them are still managed on self-hosted web servers.</p>
@@ -81,6 +43,44 @@ export function nfdi4ingHomePage() {
                 >
                   Swagger Documentation
                 </a>.</p>
+                <br/>
+                </Carousel.Item>
+              </Carousel>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-4">
+            <a href="#" className="d-block">
+              <img
+                className="img-fluid home-image"
+                alt="Blog image"
+                src="/brainstorm.svg"
+              />
+            </a>
+            <div className="p-3">
+              <div className="font-weight-bold mb-2">
+                <h4>
+                  <b>
+                    <center>Who uses the Service?</center>
+                  </b>
+                </h4>
+              </div>
+              <Carousel variant="dark" controls={false}>
+                <Carousel.Item interval={15000}>
+                <p>In principle everyone that works with a need for the use of unambiguous language. Like organisations and institutions or in science and research. The NFDI4Ing Terminology Services is a free offer that everyone can use via this frontend or our REST machine-to-machine communication interface. The <a
+                  className="ahome"
+                  href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}
+                >
+                  Documentation
+                </a> is available here.</p>
+                <br/>
+                </Carousel.Item>
+                <Carousel.Item interval={15000}>
+                <p><b>1) Science and Research:</b> Among other things, for the development of innovative data and knowledge management systems (research data management, publishing), as a source for training new language models (natural language processing) and much more. Researchers will find terminologies here that cover many facets of the broad field of engineering.</p>
+                <br/>
+                </Carousel.Item>
+                <Carousel.Item interval={15000}>
+                <p><b>2) Industry:</b> In situations where a common vocabulary needs to be found and agreed upon. For example, in text editors that support engineers in the creation of technical specifications or reports. In medicine for the unambiguous designation of diseases, symptoms or therapies, but also for the billing system. The use of a controlled vocabulary enables high expressiveness.</p>
                 <br/>
                 </Carousel.Item>
               </Carousel>
