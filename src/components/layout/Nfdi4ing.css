@@ -238,7 +238,7 @@ p{
     background: white;   
     border-top: 1px #d1d3d9 solid;
     background-image: url('../../assets/img/polygon_background.svg');
-    background-repeat: space no-repeat;
+    background-size: cover;
     background-position: right center;
     padding-top: 20px;
     color: #4f6d7a;
@@ -480,7 +480,7 @@ p{
  
     background-position: right center;
     background-image: url('../../assets/img/polygon_background.svg');
-    background-repeat: space no-repeat;
+    background-size: cover;
     background-color: #4f6d7a;
     padding: 10px;
  }
