@@ -250,7 +250,7 @@ class TermList extends React.Component{
                         {createShowColumnsTags()}                        
                         {createClassListTableHeader()}
                         <tbody>
-                            {this.state.tableIsLoading && <div className="isLoading"></div>}
+                            {this.state.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
                             {!this.state.tableIsLoading && this.state.tableBodyContent}               
                         </tbody>
                     </table>

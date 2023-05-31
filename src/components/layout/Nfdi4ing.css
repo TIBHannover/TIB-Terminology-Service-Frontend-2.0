@@ -1857,6 +1857,10 @@ p{
     margin-right: 5px;    
 }
 
+.is-loading-term-list{    
+    margin-right: 50%;
+}
+
 /* 
 ---------------------------------------------------
 Jumpto styles
