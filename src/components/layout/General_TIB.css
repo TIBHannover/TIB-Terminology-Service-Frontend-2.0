@@ -1817,7 +1817,7 @@ p{
 
 .show-hidden-column{
     background-color: #2E7A7B;
-    width: 80px;
+    width: 180px;
     color: white;
     border-radius: 5px;
     padding: 2px;
@@ -1826,6 +1826,7 @@ p{
     margin-bottom: 10px;
     display: none;
     cursor: pointer;
+    margin-right: 5px;    
 }
 
 
