@@ -412,8 +412,13 @@ p{
     background-color: #0E6668;
     padding: 10px;
     margin-bottom: 10px;
-    max-height: 200px;
  }
+
+ @media only screen and (min-width: 1200px) {
+    .header-wrapper{
+        max-height: 220px;
+     }
+  }
  
  .container.site-header{
     /* 
@@ -830,7 +835,7 @@ p{
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
-    width: 700px;
+    width: 100%;
     text-align: left;
 }
 .autocomplete-item{
@@ -848,6 +853,20 @@ p{
     vertical-align: top;
     background-color: #dfdddd;
     width: 100%;
+}
+
+.jump-autocomplete-container{
+    line-height: initial !important;
+    height: 50px;
+}
+.jump-autocomplete-item{
+    /* 
+       The style for the jump autocomplete field
+    */
+
+    margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
 
 #search-box {
@@ -1130,8 +1149,7 @@ p{
 -------------------------------------
 */
 
-.header-collapseable-section{            
-    max-height: 200px;    
+.header-collapseable-section{                
     transition: max-height 0.4s ease-out;
 }
 
@@ -1817,7 +1835,7 @@ Jumpto styles
     padding-left: 10x;
     text-align: left;
     background-color: white;
-    position: absolute;
+    position: relative;
     display: block;
 }
 
@@ -1831,7 +1849,7 @@ Jumpto styles
     padding-bottom: 20px;
     padding-top: 10px;    
     z-index: 9999999;        
-    width: 700px;        
+    width: 100%;        
 }
 
 .jumpto-tree-container{

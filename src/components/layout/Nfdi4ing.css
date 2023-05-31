@@ -238,6 +238,7 @@ p{
     background: white;   
     border-top: 1px #d1d3d9 solid;
     background-image: url('../../assets/img/polygon_background.svg');
+    background-size: cover;
     background-position: right center;
     padding-top: 20px;
     color: #4f6d7a;
@@ -479,12 +480,13 @@ p{
  
     background-position: right center;
     background-image: url('../../assets/img/polygon_background.svg');
+    background-size: cover;
     background-color: #4f6d7a;
     padding: 10px;
  }
 
  @media only screen and (min-width: 1200px) {
-    .header-warpper{
+    .header-wrapper{
         max-height: 220px;
      }
   }
@@ -888,6 +890,21 @@ p{
     margin-bottom: -20px;
 }
 
+.jump-autocomplete-container{
+    line-height: initial !important;
+    height: 50px;
+}
+.jump-autocomplete-item{
+    /* 
+       The style for the jump autocomplete field
+    */
+
+    margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+
 
 #search-box {
     /* 
@@ -1163,8 +1180,7 @@ p{
 -------------------------------------
 */
 
-.header-collapseable-section{            
-    max-height: 200px;    
+.header-collapseable-section{                
     transition: max-height 0.4s ease-out;
 }
 
@@ -1848,13 +1864,13 @@ Jumpto styles
     /* 
         The general style for jumpto container
     */
-
+    
     height: fit-content;
     padding-right: 10px;
     padding-left: 10x;
     text-align: left;
     background-color: white;
-    position: absolute;
+    position: relative;
     display: block;
 
 }
@@ -1864,12 +1880,12 @@ Jumpto styles
     /* 
        The style for the jump autocomplete field in the search bar
     */
-    
+    line-height: initial;
     border: 0.5px solid black;    
     padding-bottom: 20px;
     padding-top: 10px;    
     z-index: 9999999;        
-    width: 700px;        
+    width: 100%;        
 }
 
 .jumpto-tree-container{

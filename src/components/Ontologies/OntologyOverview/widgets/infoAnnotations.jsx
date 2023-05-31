@@ -123,6 +123,18 @@ class InfoAnnotations extends React.Component{
                    <table className="ontology-detail-table" striped="columns">
                     <tbody>
                         <tr>
+                          <td className="ontology-overview-table-id-column"><b>Version</b></td>
+                          <td>
+                            {ontology.config.version}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
+                          <td>
+                            <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+                          </td>
+                        </tr>
+                        <tr>
                           <td className="ontology-overview-table-id-column"><b>IRI</b></td>
                           <td>
                             <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
@@ -214,12 +226,12 @@ class InfoAnnotations extends React.Component{
                              <a 
                                className='btn btn-primary btn-dark download-ontology-btn'                                
                                onClick={async () => {                    
-                                 const jsonFile = JSON.stringify(this.state.ontologyObject);
+                                 const jsonFile = JSON.stringify(ontology);
                                  const blob = new Blob([jsonFile],{type:'application/json'});
                                  const href = await URL.createObjectURL(blob);
                                  const link = document.createElement('a');
                                  link.href = href;
-                                 link.download = this.state.ontologyObject.ontologyId + "_metadata.json";
+                                 link.download = ontology.ontologyId + "_metadata.json";
                                  document.body.appendChild(link);
                                  link.click();
                                  document.body.removeChild(link);
