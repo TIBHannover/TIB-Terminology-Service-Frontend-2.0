@@ -2,7 +2,7 @@ export function createClassListTableHeader(){
     return [
         <thead>
             <tr>                
-                <th scope="col">Label</th>
+                <th scope="col" className="label-col">Label <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
                 <th scope="col">ID</th>
                 <th scope="col">Description</th>
                 <th scope="col">Alternative Term</th>
@@ -17,7 +17,6 @@ export function createClassListTableHeader(){
     ];
 }
 
-
 export function setContributorField(term){
     if (term['annotation']['contributor']){
         return term['annotation']['contributor'];
@@ -30,5 +29,13 @@ export function setContributorField(term){
     }
     else{
         return "N/A";
+    }
+}
+
+
+function hideTableColumn(){
+    let tableCells = document.getElementsByClassName('label-col');
+    for(let cell of tableCells){
+        cell.style.visibility = "hidden";
     }
 }

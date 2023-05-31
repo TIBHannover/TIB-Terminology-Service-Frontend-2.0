@@ -325,6 +325,13 @@ p{
     text-align: center;    
 }
 
+.hidden-fa{
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
 
 /* 
 ------------------------

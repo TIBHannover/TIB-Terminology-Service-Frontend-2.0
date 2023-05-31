@@ -158,7 +158,7 @@ class TermList extends React.Component{
             let equivalentToText = await getEqAxiom(term['iri'], term['ontology_name']);
             result.push(
                 <tr>
-                    <td>
+                    <td className="label-col">
                         <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
                             {term['label']}
                         </a>                        
