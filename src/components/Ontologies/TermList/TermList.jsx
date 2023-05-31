@@ -61,7 +61,8 @@ class TermList extends React.Component{
             pageNumber: pageNumberInUrl - 1,
             pageSize: sizeInUrl,
             lastLoadedUrl: window.location.href,
-            iri: iriInUrl
+            iri: iriInUrl,
+            tableBodyContent: ''
         }, ()=> {
             this.storePageSizeInLocalStorage(sizeInUrl);            
             this.updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);
@@ -91,6 +92,7 @@ class TermList extends React.Component{
         this.setState({
           pageNumber: value - 1,
           tableIsLoading: true,
+          listOfTerms: [],
           tableBodyContent: ""    
         }, ()=> {
             this.updateURL(value, this.state.pageSize);
@@ -105,6 +107,7 @@ class TermList extends React.Component{
         this.setState({
             pageSize: size,
             tableIsLoading: true,
+            listOfTerms: [],
             tableBodyContent: "" 
         }, () => {        
             this.storePageSizeInLocalStorage(size);
@@ -120,6 +123,7 @@ class TermList extends React.Component{
             pageNumber: 0,
             pageSize: 20,
             tableIsLoading: true,
+            listOfTerms: [],
             tableBodyContent: "" 
         }, () => {
             this.storePageSizeInLocalStorage(this.state.pageSize);
@@ -171,17 +175,21 @@ class TermList extends React.Component{
                 </tr>
             );
         }
-        this.setState({
-            tableBodyContent: result,
-            tableIsLoading: false
-        });
+        
+        if(result.length !== 0){
+            this.setState({
+                tableBodyContent: result,
+                tableIsLoading: false
+            });
+        }
+        
+        
     }
 
 
 
     componentDidMount(){
-        this.loadComponent();  
-        document.body.style.overflow = 'hidden';      
+        this.loadComponent();          
     }
 
 
@@ -189,14 +197,9 @@ class TermList extends React.Component{
     componentDidUpdate(){
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
-            this.loadComponent();
+            this.loadComponent();            
         }                
     }
-
-    componentWillUnmount(){
-        document.body.style.overflow = 'visible';
-    }
-
 
 
     render(){
@@ -247,7 +250,7 @@ class TermList extends React.Component{
                         {createClassListTableHeader()}
                         <tbody>
                             {this.state.tableIsLoading && <div className="isLoading"></div>}
-                            {this.state.tableBodyContent}               
+                            {!this.state.tableIsLoading && this.state.tableBodyContent}               
                         </tbody>
                     </table>
                 </div>
