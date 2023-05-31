@@ -1771,6 +1771,7 @@ p{
     overflow-x: auto;
     overflow-y: scroll;
     transform: rotateX(180deg);
+    padding: 20px;
 }
 
 .class-list-tablle-holder table{

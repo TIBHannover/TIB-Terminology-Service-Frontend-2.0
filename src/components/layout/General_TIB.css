@@ -1735,16 +1735,17 @@ p{
     overflow-x: auto;
     overflow-y: scroll;
     transform: rotateX(180deg);
+    padding: 20px;
 }
 
 .class-list-tablle-holder table{
-    transform: rotateX(180deg);    
+    transform: rotateX(180deg);        
 }
 
 .class-list-table tbody {
     display: block;
     height: 1000px;
-    overflow: auto;
+    overflow: auto;    
 }
 .class-list-table thead, tbody tr {
     display: table;
@@ -1752,7 +1753,7 @@ p{
     table-layout: fixed;
 }
 .class-list-table td{
-    width: 300px;
+    width: 300px;    
 }
 
 .term-list-table{
