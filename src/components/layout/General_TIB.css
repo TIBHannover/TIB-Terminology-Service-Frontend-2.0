@@ -1752,6 +1752,7 @@ p{
     display: table;
     width: 100%;
     table-layout: fixed;
+    direction: ltr;
 }
 .class-list-table td{
     width: 300px;    
