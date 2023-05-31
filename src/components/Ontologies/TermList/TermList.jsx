@@ -163,15 +163,15 @@ class TermList extends React.Component{
                             {term['label']}
                         </a>                        
                     </td>
-                    <td>{term['short_form']}</td>
-                    <td>{term['description'] ? term['description'] : ""}</td>
-                    <td>{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
-                    <td><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
-                    <td><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
-                    <td>{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
-                    <td>{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
-                    <td>{setContributorField(term)}</td>
-                    <td>{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
+                    <td className="id-col">{term['short_form']}</td>
+                    <td className="des-col">{term['description'] ? term['description'] : ""}</td>
+                    <td className="alt-term-col">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
+                    <td className="sub-class-col"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
+                    <td className="eqv-col"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
+                    <td className="ex-usage-col">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
+                    <td className="see-also-col">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+                    <td className="contrib-col">{setContributorField(term)}</td>
+                    <td className="comment-col">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
                 </tr>
             );
         }
