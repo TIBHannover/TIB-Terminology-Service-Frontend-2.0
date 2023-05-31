@@ -17,6 +17,15 @@ export function createClassListTableHeader(){
     ];
 }
 
+
+export function createShowColumnsTags(){
+    return [
+        <div class="show-hidden-column" id="label-col-show" onClick={showTableColumn}>Label <i className="fa fa-eye"></i></div>
+    ];
+}
+
+
+
 export function setContributorField(term){
     if (term['annotation']['contributor']){
         return term['annotation']['contributor'];
@@ -36,6 +45,17 @@ export function setContributorField(term){
 function hideTableColumn(){
     let tableCells = document.getElementsByClassName('label-col');
     for(let cell of tableCells){
-        cell.style.visibility = "hidden";
+        cell.style.display = "none";
     }
+    document.getElementById('label-col-show').style.display = "block";
+   
+}
+
+function showTableColumn(){
+    let tableCells = document.getElementsByClassName('label-col');
+    for(let cell of tableCells){
+        cell.style.display = "";
+    }
+    document.getElementById('label-col-show').style.display = "none";
+   
 }

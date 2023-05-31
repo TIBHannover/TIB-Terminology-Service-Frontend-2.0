@@ -3,7 +3,7 @@ import {getListOfTerms, getNodeByIri, getSubClassOf, getEqAxiom} from '../../../
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 import JumpTo from "../JumpTo/Jumpto";
-import {createClassListTableHeader, setContributorField} from './hekpers';
+import {createClassListTableHeader, setContributorField, createShowColumnsTags} from './hekpers';
 
 
 class TermList extends React.Component{
@@ -246,7 +246,8 @@ class TermList extends React.Component{
                     </div>
                 </div>                 
                 <div className="row class-list-tablle-holder">                                      
-                    <table class="table table-striped term-list-table class-list-table">
+                    <table class="table table-striped term-list-table class-list-table" id="class-list-table">
+                        {createShowColumnsTags()}                        
                         {createClassListTableHeader()}
                         <tbody>
                             {this.state.tableIsLoading && <div className="isLoading"></div>}
