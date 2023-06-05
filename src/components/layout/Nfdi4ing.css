@@ -398,6 +398,13 @@ p{
     text-align: center;    
 }
 
+.hidden-fa, .fa-eye{
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
 
 /* 
 ------------------------
