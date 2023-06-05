@@ -206,7 +206,10 @@ class Tree extends React.Component {
 
     buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
-        let lastSelectedItemId = 0;          
+        let lastSelectedItemId = 0;
+        let sortKey = (rootNodes[0].label ? 'label' : 'text');
+        console.info(Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true))        
+        rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
         for(let i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
