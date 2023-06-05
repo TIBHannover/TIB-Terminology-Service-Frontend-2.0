@@ -1,3 +1,6 @@
+import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
+
+
 export function setJumpResultButtons(resultItem){
     let content = [];
     let targetHref = "";
@@ -67,4 +70,49 @@ export function setJumpResultButtons(resultItem){
     }
  
     return content;    
+}
+
+/**
+ * Check if an ontology is part of a set of collections. Used in the facet filter
+ * @param {*} collectionsOntologies 
+ * @param {*} ontologyId 
+ */
+export function ontologyIsPartOfSelectedCollections(collectionsOntologies, ontologyId){    
+    for(let onto of collectionsOntologies){        
+        if(onto["ontologyId"] === ontologyId.toLowerCase()){
+            return true;
+        }
+    }    
+    return false;
+}
+
+/**
+ * Set the ontology list  for filter based on the selected ontology and collections
+ * @param {*} selectedOntologies 
+ * @param {*} selectedCollections 
+ */
+export async function setOntologyForFilter(selectedOntologies, selectedCollections){
+    let result = [];    
+    if(selectedOntologies.length === 0 && selectedCollections.length === 0){
+        return [[], "all"];
+    }
+    else if(selectedCollections.length === 0){
+        return [selectedOntologies, ""];
+    }
+    else if(selectedOntologies.length === 0){
+        let collectionOntologies = await getCollectionOntologies(selectedCollections, false);
+        for(let onto of collectionOntologies){
+            result.push(onto['ontologyId']);
+        }
+        return [result, ""];
+    }
+    else{
+        let collectionOntologies = await getCollectionOntologies(selectedCollections, false);
+        for(let onto of selectedOntologies){          
+            if(ontologyIsPartOfSelectedCollections(collectionOntologies, onto)){
+                result.push(onto);
+            }
+        }
+        return [result, ""];
+    }        
 }
