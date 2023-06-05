@@ -104,6 +104,69 @@ export default class TreeHelper{
   }
 
 
+  static showSiblingsForRootNode(nodes, selectedNodeIri){
+    let treeNode = new TreeNodeController();
+    let sortKey = TreeHelper.getTheNodeSortKey(nodes);
+    if(sortKey){
+        nodes = Toolkit.sortListOfObjectsByKey(nodes, sortKey, true);
+    }  
+    for(let i=0; i < nodes.length; i++){
+        if (nodes[i].iri === selectedNodeIri){
+            continue;
+        }                
+        let node = treeNode.buildNodeWithTradionalJs(nodes[i], nodes[i].id);
+        document.getElementById("tree-root-ul").appendChild(node);
+    }   
+  }
+
+
+  static async showSiblings(targetNodes, ontologyId, childExtractName){
+      let treeNode = new TreeNodeController();
+      for (let node of targetNodes){
+          let parentUl = node.parentNode.parentNode;
+          let parentId = parentUl.id.split("children_for_")[1];                    
+          let Iri = document.getElementById(parentId);                    
+          Iri = Iri.dataset.iri;
+          let res =  await getChildrenJsTree(ontologyId, Iri, parentId, childExtractName);
+          let sortKey = TreeHelper.getTheNodeSortKey(res);
+          if(sortKey){
+              res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
+          }   
+          for(let i=0; i < res.length; i++){
+              if (res[i].iri === node.parentNode.dataset.iri){
+                  continue;
+              }                        
+              let item = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
+              parentUl.appendChild(item);      
+          }   
+      }
+  }
+
+
+  static hideSiblingsForRootNode(selectedIri){
+      let parentUl = document.getElementById("tree-root-ul");
+      let children = [].slice.call(parentUl.childNodes);
+      for(let i=0; i < children.length; i++){
+          if(children[i].dataset.iri !== selectedIri){
+              children[i].remove();
+          }
+      }
+  }
+
+
+  static hideSiblings(targetNodes){
+      for (let node of targetNodes){
+          let parentUl = node.parentNode.parentNode;
+          let children = [].slice.call(parentUl.childNodes);
+          for(let i=0; i < children.length; i++){
+              if(children[i].dataset.iri !== node.parentNode.dataset.iri){
+                  children[i].remove();
+              }
+          }
+      }
+  }
+
+
    
   static async nodeHasChildren(ontology, nodeIri, mode){
       let node = "";

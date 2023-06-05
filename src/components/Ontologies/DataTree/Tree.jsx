@@ -1,7 +1,7 @@
 import React from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
-import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
+import { getNodeJsTree} from '../../../api/fetchData';
 import TreeNodeController from "./TreeNode";
 import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
@@ -366,87 +366,44 @@ class Tree extends React.Component {
 
 async showSiblings(){
         try{    
-        let targetNodes = document.getElementsByClassName("targetNodeByIri");
-        let treeNode = new TreeNodeController()   
-        if(!this.state.siblingsVisible){
-            if(this.state.isSkos){
-                SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
-            }
-            else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
-                // Target node is a root node            
-                let res = await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, targetNodes[0].parentNode.dataset.iri, 'true') ;
-                let sortKey = TreeHelper.getTheNodeSortKey(res);
-                if(sortKey){
-                    res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
-                }  
-                for(let i=0; i < res.length; i++){
-                    if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
-                        continue;
-                    }                
-                    let node = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
-                    document.getElementById("tree-root-ul").appendChild(node);
-                }   
-    
+            let targetNodes = document.getElementsByClassName("targetNodeByIri");        
+            if(!this.state.siblingsVisible){
+                if(this.state.isSkos){
+                    SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
+                }
+                else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+                    // Target node is a root node            
+                    let res = await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, targetNodes[0].parentNode.dataset.iri, 'true') ;
+                    TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
+                }
+                else{
+                    await TreeHelper.showSiblings(targetNodes, this.state.ontologyId, this.state.childExtractName);
+                }
+                
+                this.setState({siblingsVisible: true}, ()=>{ 
+                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                });
             }
             else{
-                for (let node of targetNodes){
-                    let parentUl = node.parentNode.parentNode;
-                    let parentId = parentUl.id.split("children_for_")[1];                    
-                    let Iri = document.getElementById(parentId);                    
-                    Iri = Iri.dataset.iri;
-                    let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName);
-                    let sortKey = TreeHelper.getTheNodeSortKey(res);
-                    if(sortKey){
-                        res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
-                    }   
-                    for(let i=0; i < res.length; i++){
-                        if (res[i].iri === node.parentNode.dataset.iri){
-                            continue;
-                        }                        
-                        let item = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
-                        parentUl.appendChild(item);      
-                    }   
+                if(this.state.isSkos){
+                    SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
+                } 
+        
+                if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+                    // Target node is a root node
+                    TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
                 }
-            }
-            
-            this.setState({siblingsVisible: true}, ()=>{ 
-                this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            });
-        }
-        else{
-            if(this.state.isSkos){
-                SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
-            } 
-    
-            if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
-            // Target node is a root node
-            let parentUl = document.getElementById("tree-root-ul");
-            let children = [].slice.call(parentUl.childNodes);
-            for(let i=0; i < children.length; i++){
-                if(children[i].dataset.iri !== targetNodes[0].parentNode.dataset.iri){
-                children[i].remove();
+                else{
+                    TreeHelper.hideSiblings(targetNodes);
                 }
+                
+                this.setState({siblingsVisible: false}, ()=>{
+                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                });
             }
-            }
-            else{
-            for (let node of targetNodes){
-                let parentUl = node.parentNode.parentNode;
-                let children = [].slice.call(parentUl.childNodes);
-                for(let i=0; i < children.length; i++){
-                if(children[i].dataset.iri !== node.parentNode.dataset.iri){
-                    children[i].remove();
-                }
-                }
-            }
-            }
-            
-            this.setState({siblingsVisible: false}, ()=>{
-            this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            });
-        }
         }
         catch(e){
-        // console.info(e);
+            // console.info(e);
         }
         
     }
