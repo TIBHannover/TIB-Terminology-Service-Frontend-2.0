@@ -59,14 +59,13 @@ class SearchForm extends React.Component{
             });
           }
           else if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){
-            let result = [];
+            let ontologies = [];
             let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`)
             ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
             for(let onto of ontologiesForCollection){
-              result.push(onto['ontologyId']);
+              ontologies.push(onto['ontologyId']);
             }
-            console.info(result)
-            let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${result}&rows=5`)
+            let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
             searchResult =  (await searchResult.json())['response']['docs'];
             let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
             jumpResult = (await jumpResult.json())['response']['docs'];
