@@ -121,12 +121,12 @@ export async function setOntologyForFilter(selectedOntologies, selectedCollectio
  * Set the autosuggest based on the Collection project
  */
 
-export async function ontologyForAutosuggest(){
+export async function ontologyForAutosuggest(collection){
     let result = [];
-    let collectionOntologies = await getCollectionOntologies;
+    let collectionOntologies = await getCollectionOntologies(collection, false);
     for(let onto of collectionOntologies){
         result.push(onto['ontologyId']);
     }
-    return [result, ""];
+    return result;
 
 }
