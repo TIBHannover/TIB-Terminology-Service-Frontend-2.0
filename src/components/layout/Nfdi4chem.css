@@ -1974,6 +1974,67 @@ Jumpto styles
 
 }
 
+/* 
+---------------------------------------------
+Term Request
+---------------------------------------------
+
+*/
+
+.close-mark-btn{
+    background-color: white !important;
+}
+.close-term-request-modal-btn{
+    background-color: red !important;
+    float: left !important;
+}
+.submit-term-request-modal-btn{
+    background-color: green !important;
+}
+
+.required_input::after{
+    content: "*";
+    color: red;
+}
+
+.rdw-editor-wrapper{
+    border: 1px solid rgb(218, 216, 216) !important;
+    border-radius: 10px !important;
+}
+
+.rdw-editor-main{
+    height: 400px !important;
+    padding: 10px ;
+}
+
+
+/* 
+---------------------------------------------
+Notes
+---------------------------------------------
+*/
+
+.notes-container{
+    padding: 20px !important;
+}
+
+.note-list-card{
+    background-color: white !important;    
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #7AABAC;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.note-list-title{
+    color: black;
+    font-weight: bold;    
+}
+
+
+
 
 /* 
 -------------------------------------------------------

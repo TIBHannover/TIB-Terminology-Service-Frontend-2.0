@@ -1,6 +1,5 @@
 import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
-import { Link } from 'react-router-dom';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -8,6 +7,7 @@ import queryString from 'query-string';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
+import OntologyNotes from '../Notes/Notes';
 import Toolkit from '../../common/Toolkit';
 
 
@@ -16,6 +16,7 @@ const TERM_TREE_TAB_ID = 1;
 const PROPERTY_TREE_TAB_ID = 2;
 const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
+const Notes_TAB_ID = 5;
 
 
 
@@ -95,7 +96,7 @@ class OntologyPage extends React.Component {
    * Set the active tab and its page on load
    */
   setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;
+    let requestedTab = this.props.match.params.tab;    
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
     if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
@@ -132,6 +133,14 @@ class OntologyPage extends React.Component {
         waiting: false,
         lastRequestedTab: requestedTab,
         targetTermListIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
+
+      });
+    }
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){          
+      this.setState({       
+        activeTab: Notes_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab
 
       });
     }
@@ -368,6 +377,14 @@ class OntologyPage extends React.Component {
                                 ontology={this.state.ontologyId}                              
                                 iriChangerFunction={this.changeInputIri}                              
                                 isSkos={this.state.isSkosOntology}                              
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) &&
+                                <OntologyNotes                                                              
+                                componentIdentity={'notes'}
+                                key={'notesPage'}
+                                ontology={this.state.ontologyId}
+                                targetNoteId={this.props.match.params.targetId}                                                            
                                 />
                 }
                 {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
