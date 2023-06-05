@@ -67,7 +67,25 @@ class SearchForm extends React.Component{
             }
             let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
             searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
+            let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
+            jumpResult = (await jumpResult.json())['response']['docs'];
+            this.setState({
+              searchResult: searchResult,
+              jumpResult: jumpResult,
+              result: true,
+              enteredTerm: enteredTerm
+            });
+          }
+          else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
+            let ontologies = [];
+            let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4ING&exclusive=false`)
+            ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
+            for(let onto of ontologiesForCollection){
+              ontologies.push(onto['ontologyId']);
+            }
+            let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
+            searchResult =  (await searchResult.json())['response']['docs'];
+            let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
             jumpResult = (await jumpResult.json())['response']['docs'];
             this.setState({
               searchResult: searchResult,
