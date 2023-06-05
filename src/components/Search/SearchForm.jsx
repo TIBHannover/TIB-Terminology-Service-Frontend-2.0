@@ -1,5 +1,5 @@
 import React from 'react';
-import {setJumpResultButtons} from './SearchFormHelpers';
+import {setJumpResultButtons, ontologyForAutosuggest} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 
 
