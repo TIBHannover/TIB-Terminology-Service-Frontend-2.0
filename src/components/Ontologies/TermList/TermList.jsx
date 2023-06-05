@@ -191,8 +191,7 @@ class TermList extends React.Component{
         let tableHeaders = document.getElementsByTagName('th');
         for(let th of tableHeaders){
             if(th.style.display === "none"){                
-                let targetCells = document.getElementsByClassName(th.className);
-                console.info(targetCells)
+                let targetCells = document.getElementsByClassName(th.className);                
                 for(let cell of targetCells){
                     cell.style.display = "none";
                 }
