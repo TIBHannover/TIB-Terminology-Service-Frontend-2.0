@@ -5,7 +5,7 @@ import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
 import TreeNodeController from "./TreeNode";
 import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
-import TreeHelper from "./helpers";
+import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
 
 
