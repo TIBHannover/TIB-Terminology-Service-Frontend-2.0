@@ -116,3 +116,17 @@ export async function setOntologyForFilter(selectedOntologies, selectedCollectio
         return [result, ""];
     }        
 }
+
+/**
+ * Set the autosuggest based on the Collection project
+ */
+
+export async function ontologyForAutosuggest(){
+    let result = [];
+    let collectionOntologies = await getCollectionOntologies;
+    for(let onto of collectionOntologies){
+        result.push(onto['ontologyId']);
+    }
+    return [result, ""];
+
+}
