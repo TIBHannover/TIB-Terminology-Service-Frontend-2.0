@@ -5,19 +5,16 @@ import Toolkit from "../../common/Toolkit";
 
 
 
-  /**
-   * Expand a node in the tree in loading. Used for jumping directly to a node given by Iri.
-   * @param {*} nodeList 
-   * @param {*} parentId 
-   * @returns 
-   */
-  export function expandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
+export default class TreeHelper{
+
+
+  static autoExpandTargetNode(nodeList, parentId, targetIri, targetHasChildren){
     let subNodes = [];
     let treeNode = new TreeNodeController();
     for(let i = 0; i < nodeList.length; i++){
       let childNodeChildren = [];
       if(nodeList[i].iri !== targetIri){
-        let subUl = expandTargetNode(nodeList[i].childrenList, nodeList[i].id, targetIri, targetHasChildren);
+        let subUl = TreeHelper.autoExpandTargetNode(nodeList[i].childrenList, nodeList[i].id, targetIri, targetHasChildren);
         childNodeChildren.push(subUl);
       }           
       let isClicked = false;
@@ -62,58 +59,121 @@ import Toolkit from "../../common/Toolkit";
   }
 
 
+  static async expandNode(e, ontologyId, childExtractName, isSkos){
+    let targetNodeIri = e.dataset.iri;
+    let targetNodeId = e.dataset.id;
+    let Id = e.id;
+    let treeNode = new TreeNodeController();
+    if(document.getElementById(Id).classList.contains("closed")){
+        // expand node
+        let res = [];      
+        if(isSkos){
+          res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
+        }
+        else{        
+          res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+        }
+        let sortKey = TreeHelper.getTheNodeSortKey(res);
+        if(sortKey){
+            res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
+        }   
+        let ul = document.createElement("ul");
+        ul.setAttribute("id", "children_for_" + Id);
+        ul.classList.add("tree-node-ul");
+        for(let i=0; i < res.length; i++){
+          let node = isSkos ? await shapeSkosMetadata(res[i]) : res[i];        
+          let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
+          ul.appendChild(listItem);      
+        }      
+        document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
+        document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
+        document.getElementById(Id).classList.remove("closed");
+        document.getElementById(Id).classList.add("opened");      
+        document.getElementById(Id).appendChild(ul);
+    }
+    else if (!document.getElementById(Id).classList.contains("leaf-node")){
+      // close an already expanded node
+        document.getElementById(Id).classList.remove("opened");
+        document.getElementById(Id).classList.add("closed");      
+        document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
+        document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
+        document.getElementById("children_for_" + Id).remove();
+    }
+        
+  }
 
-/**
- * Expand/collapse a node on click
- */
-export async function expandNode(e, ontologyId, childExtractName, isSkos){
-  let targetNodeIri = e.dataset.iri;
-  let targetNodeId = e.dataset.id;
-  let Id = e.id;
-  let treeNode = new TreeNodeController();
-  if(document.getElementById(Id).classList.contains("closed")){
-      // expand node
-      let res = [];      
-      if(isSkos){
-        res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
+
+   
+  static async nodeHasChildren(ontology, nodeIri, mode){
+      let node = "";
+      if(mode === 'term'){
+        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
       }
-      else{        
-        res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+      else if(mode === "property"){
+        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
       }
-      let sortKey = getTheNodeSortKey(res);
-      if(sortKey){
-          res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
-      }   
-      let ul = document.createElement("ul");
-      ul.setAttribute("id", "children_for_" + Id);
-      ul.classList.add("tree-node-ul");
-      for(let i=0; i < res.length; i++){
-        let node = isSkos ? await shapeSkosMetadata(res[i]) : res[i];        
-        let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
-        ul.appendChild(listItem);      
-      }      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
-      document.getElementById(Id).classList.remove("closed");
-      document.getElementById(Id).classList.add("opened");      
-      document.getElementById(Id).appendChild(ul);
-  }
-  else if (!document.getElementById(Id).classList.contains("leaf-node")){
-    // close an already expanded node
-      document.getElementById(Id).classList.remove("opened");
-      document.getElementById(Id).classList.add("closed");      
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
-      document.getElementById("children_for_" + Id).remove();
-  }
+      else{
+        return false;
+      }
+      return node.has_children;
       
+  }
+
+
+  static async nodeIsRoot(ontology, nodeIri, mode){
+      let node = "";
+      if(mode === 'term'){
+        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
+      }
+      else{
+        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
+      }
+      return node.is_root;
+      
+    }
+  
+
+
+    static setIsExpandedAndHasChildren(nodeObject){
+      let hasChildren = false;
+      let isExpanded = false;
+      if (nodeObject.childrenList.length === 0 && !nodeObject.children && !nodeObject.opened){
+        //  root node is a leaf
+        hasChildren = false;
+        isExpanded = false;
+      }            
+      else if(nodeObject.childrenList.length === 0 && nodeObject.children && !nodeObject.opened){
+          // root is not leaf but does not include the target node on its sub-tree
+          hasChildren = true;
+          isExpanded = false;
+      }
+      else{
+          // root is not leaf and include the target node on its sub-tree
+          hasChildren = true;
+          isExpanded = true;
+      }
+      return {"hasChildren": hasChildren, "isExpanded": isExpanded}
+    }
+
+
+
+    static getTheNodeSortKey(nodesList){
+      if(nodesList.length !== 0){
+        return nodesList[0].label ? 'label' : 'text';
+      }
+      return null;
+    }
+
+
+
 }
 
 
 
-/**
- * shape the skos metadata to match the format that expand tree node needs
- */
+
+
+
+
 async function shapeSkosMetadata(skosNode, isRootNode=false){
   if(isRootNode){
     skosNode = skosNode.data;
@@ -128,9 +188,6 @@ async function shapeSkosMetadata(skosNode, isRootNode=false){
 }
 
 
-/**
- * Build the skos ontology subtree. Used when the concept iri is given
- */
 export async function buildSkosSubtree(ontologyId, iri, fullTree=false){
   let treeNodes = [];
   let targetNode = await getSkosNodeByIri(ontologyId, encodeURIComponent(iri));
@@ -266,75 +323,4 @@ export async function showHidesiblingsForSkos(showFlag, ontologyId, iri){
     }
   }
 
-}
-
-
-  /**
-   * Check a node has children or not
-   */
-  export async function nodeHasChildren(ontology, nodeIri, mode){
-    let node = "";
-    if(mode === 'term'){
-      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
-    }
-    else if(mode === "property"){
-      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
-    }
-    else{
-      return false;
-    }
-    return node.has_children;
-    
-  }
-
-
-  /**
-   * Check a node is root or not
-   */
-   export async function nodeIsRoot(ontology, nodeIri, mode){
-    let node = "";
-    if(mode === 'term'){
-      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
-    }
-    else{
-      node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
-    }
-    return node.is_root;
-    
-  }
-
-
-
-/**
- * Set the isExpanded and has_children for a node in tree.
- * Used on loading a sub-tree when iri is given.
- * @param {*} nodeObject 
- */
-export function setIsExpandedAndHasChildren(nodeObject){
-  let hasChildren = false;
-  let isExpanded = false;
-  if (nodeObject.childrenList.length === 0 && !nodeObject.children && !nodeObject.opened){
-    //  root node is a leaf
-    hasChildren = false;
-    isExpanded = false;
-  }            
-  else if(nodeObject.childrenList.length === 0 && nodeObject.children && !nodeObject.opened){
-      // root is not leaf but does not include the target node on its sub-tree
-      hasChildren = true;
-      isExpanded = false;
-  }
-  else{
-      // root is not leaf and include the target node on its sub-tree
-      hasChildren = true;
-      isExpanded = true;
-  }
-  return {"hasChildren": hasChildren, "isExpanded": isExpanded}
-}
-
-
-export function getTheNodeSortKey(nodesList){
-  if(nodesList.length !== 0){
-    return nodesList[0].label ? 'label' : 'text';
-  }
-  return null;
 }
