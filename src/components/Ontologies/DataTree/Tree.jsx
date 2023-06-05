@@ -6,9 +6,7 @@ import TreeNodeController from "./TreeNode";
 import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
 import TreeHelper from "./helpers";
-import {    
-    buildSkosSubtree, 
-    showHidesiblingsForSkos} from './helpers';
+import SkosHelper from "./SkosHelpers";
 
 
 
@@ -133,7 +131,7 @@ class Tree extends React.Component {
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
             if(this.state.isSkos){                
-                treeList = await buildSkosSubtree(this.state.ontologyId, target, viewMode);                                                       
+                treeList = await SkosHelper.buildSkosSubtree(this.state.ontologyId, target, viewMode);                                                       
             }
             else{                
                 targetHasChildren = await TreeHelper.nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
@@ -372,7 +370,7 @@ async showSiblings(){
         let treeNode = new TreeNodeController()   
         if(!this.state.siblingsVisible){
             if(this.state.isSkos){
-                showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
+                SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
             }
             else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
                 // Target node is a root node            
@@ -417,7 +415,7 @@ async showSiblings(){
         }
         else{
             if(this.state.isSkos){
-            showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
+                SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
             } 
     
             if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
