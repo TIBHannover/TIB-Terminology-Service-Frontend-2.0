@@ -1,6 +1,7 @@
 import React from 'react';
 import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
 import TreeNodeController from './TreeNode';
+import Toolkit from "../../common/Toolkit";
 
 
 
@@ -79,6 +80,10 @@ export async function expandNode(e, ontologyId, childExtractName, isSkos){
       else{        
         res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
       }
+      let sortKey = getTheNodeSortKey(res);
+      if(sortKey){
+          res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
+      }   
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
@@ -326,3 +331,10 @@ export function setIsExpandedAndHasChildren(nodeObject){
   return {"hasChildren": hasChildren, "isExpanded": isExpanded}
 }
 
+
+export function getTheNodeSortKey(nodesList){
+  if(nodesList.length !== 0){
+    return nodesList[0].label ? 'label' : 'text';
+  }
+  return null;
+}

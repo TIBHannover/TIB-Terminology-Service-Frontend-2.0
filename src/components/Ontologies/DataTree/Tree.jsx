@@ -12,7 +12,7 @@ import {
     expandNode,
     buildSkosSubtree, 
     showHidesiblingsForSkos,
-    setIsExpandedAndHasChildren } from './helpers';
+    setIsExpandedAndHasChildren, getTheNodeSortKey } from './helpers';
 
 
 
@@ -207,9 +207,10 @@ class Tree extends React.Component {
     buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
         let lastSelectedItemId = 0;
-        let sortKey = (rootNodes[0].label ? 'label' : 'text');
-        console.info(Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true))        
-        rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
+        let sortKey = getTheNodeSortKey(rootNodes);
+        if(sortKey){
+            rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
+        }        
         for(let i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
@@ -387,6 +388,10 @@ async showSiblings(){
                 let url = process.env.REACT_APP_API_BASE_URL + "/";
                 url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
                 let res =  await (await fetch(url, getCallSetting)).json();          
+                let sortKey = getTheNodeSortKey(res);
+                if(sortKey){
+                    res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
+                }  
                 for(let i=0; i < res.length; i++){
                     if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
                         continue;
@@ -402,7 +407,11 @@ async showSiblings(){
                     let parentId = parentUl.id.split("children_for_")[1];                    
                     let Iri = document.getElementById(parentId);                    
                     Iri = Iri.dataset.iri;
-                    let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
+                    let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName);
+                    let sortKey = getTheNodeSortKey(res);
+                    if(sortKey){
+                        res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
+                    }   
                     for(let i=0; i < res.length; i++){
                         if (res[i].iri === node.parentNode.dataset.iri){
                             continue;
