@@ -1,7 +1,6 @@
 import React from 'react';
-import {setJumpResultButtons, setOntologyForFilter ,ontologyForAutosuggest} from './SearchFormHelpers';
+import {setJumpResultButtons ,ontologyForAutosuggest} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
-import { getCollectionOntologies } from '../../api/fetchData';
 
 
 class SearchForm extends React.Component{
