@@ -187,9 +187,22 @@ class TermList extends React.Component{
     }
 
 
+    hideHiddenColumnsOnLoad(){
+        let tableHeaders = document.getElementsByTagName('th');
+        for(let th of tableHeaders){
+            if(th.style.display === "none"){                
+                let targetCells = document.getElementsByClassName(th.className);                
+                for(let cell of targetCells){
+                    cell.style.display = "none";
+                }
+            }
+        }
+    }
+
+
 
     componentDidMount(){
-        this.loadComponent();          
+        this.loadComponent();             
     }
 
 
@@ -197,8 +210,9 @@ class TermList extends React.Component{
     componentDidUpdate(){
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
-            this.loadComponent();            
-        }                
+            this.loadComponent();                       
+        }
+        this.hideHiddenColumnsOnLoad();                 
     }
 
 
