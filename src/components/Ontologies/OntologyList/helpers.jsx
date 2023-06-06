@@ -103,7 +103,7 @@ export function ontology_has_searchKey(ontology, value){
 }
 
 
-export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
+export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {    
     if(key === "title"){
         return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
     }

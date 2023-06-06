@@ -1,18 +1,12 @@
 import React from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import { withRouter } from 'react-router-dom';
-import { getNodeJsTree, getChildrenJsTree} from '../../../api/fetchData';
+import { getNodeJsTree} from '../../../api/fetchData';
 import TreeNodeController from "./TreeNode";
 import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
-import {
-    nodeHasChildren,
-    nodeIsRoot, 
-    expandTargetNode, 
-    expandNode,
-    buildSkosSubtree, 
-    showHidesiblingsForSkos,
-    setIsExpandedAndHasChildren } from './helpers';
+import TreeHelper from "./TreeHelpers";
+import SkosHelper from "./SkosHelpers";
 
 
 
@@ -137,10 +131,10 @@ class Tree extends React.Component {
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
             if(this.state.isSkos){                
-                treeList = await buildSkosSubtree(this.state.ontologyId, target, viewMode);                                                       
+                treeList = await SkosHelper.buildSkosSubtree(this.state.ontologyId, target, viewMode);                                                       
             }
             else{                
-                targetHasChildren = await nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
+                targetHasChildren = await TreeHelper.nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                
                 listOfNodes =  await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, target, viewMode);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
                 if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
@@ -152,11 +146,11 @@ class Tree extends React.Component {
                 else{                    
                     for(let i=0; i < rootNodesWithChildren.length; i++){      
                         let treeNode = new TreeNodeController();
-                        let result = setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
+                        let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
                         rootNodesWithChildren[i]['has_children'] = result.hasChildren;      
                         if(rootNodesWithChildren[i].childrenList.length !== 0){
-                            treeNode.children = expandTargetNode(rootNodesWithChildren[i].childrenList, i, target, targetHasChildren);            
+                            treeNode.children = TreeHelper.autoExpandTargetNode(rootNodesWithChildren[i].childrenList, i, target, targetHasChildren);            
                         }
                         let isClicked = false;        
                         let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
@@ -206,7 +200,11 @@ class Tree extends React.Component {
 
     buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
-        let lastSelectedItemId = 0;          
+        let lastSelectedItemId = 0;
+        let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
+        if(sortKey){
+            rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
+        }        
         for(let i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
@@ -273,7 +271,7 @@ class Tree extends React.Component {
         }
         else if (e.target.tagName === "I"){   
             // expand a node by clicking on the expand icon
-            expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
+            TreeHelper.expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
               this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
             });       
         }
@@ -316,7 +314,7 @@ class Tree extends React.Component {
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
-                    expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
+                    TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });  
                 }
@@ -332,7 +330,7 @@ class Tree extends React.Component {
                 let node = document.getElementById(lastSelectedItemId); 
                 let parentNode = treeNode.getParentNode(node.id);
                 if(treeNode.isNodeExpanded(node)){  
-                    expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
+                    TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     });
                 }
@@ -368,86 +366,44 @@ class Tree extends React.Component {
 
 async showSiblings(){
         try{    
-        let targetNodes = document.getElementsByClassName("targetNodeByIri");
-        let treeNode = new TreeNodeController()   
-        if(!this.state.siblingsVisible){
-            if(this.state.isSkos){
-                showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
-            }
-            else if(!this.state.isSkos && await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
-                // Target node is a root node
-                let callHeader = {
-                'Accept': 'application/json'
-                };
-                let getCallSetting = {method: 'GET', headers: callHeader};
-                let extractName = this.state.childExtractName;
-                let url = process.env.REACT_APP_API_BASE_URL + "/";
-                url += this.state.ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodes[0].parentNode.dataset.iri)) + "/jstree?viewMode=All&siblings=true";
-                let res =  await (await fetch(url, getCallSetting)).json();          
-                for(let i=0; i < res.length; i++){
-                    if (res[i].iri === targetNodes[0].parentNode.dataset.iri){
-                        continue;
-                    }                
-                    let node = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
-                    document.getElementById("tree-root-ul").appendChild(node);
-                }   
-    
+            let targetNodes = document.getElementsByClassName("targetNodeByIri");        
+            if(!this.state.siblingsVisible){
+                if(this.state.isSkos){
+                    SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
+                }
+                else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+                    // Target node is a root node            
+                    let res = await getNodeJsTree(this.state.ontologyId, this.state.childExtractName, targetNodes[0].parentNode.dataset.iri, 'true') ;
+                    TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
+                }
+                else{
+                    await TreeHelper.showSiblings(targetNodes, this.state.ontologyId, this.state.childExtractName);
+                }
+                
+                this.setState({siblingsVisible: true}, ()=>{ 
+                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                });
             }
             else{
-                for (let node of targetNodes){
-                    let parentUl = node.parentNode.parentNode;
-                    let parentId = parentUl.id.split("children_for_")[1];                    
-                    let Iri = document.getElementById(parentId);                    
-                    Iri = Iri.dataset.iri;
-                    let res =  await getChildrenJsTree(this.state.ontologyId, Iri, parentId, this.state.childExtractName); 
-                    for(let i=0; i < res.length; i++){
-                        if (res[i].iri === node.parentNode.dataset.iri){
-                            continue;
-                        }                        
-                        let item = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
-                        parentUl.appendChild(item);      
-                    }   
+                if(this.state.isSkos){
+                    SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
+                } 
+        
+                if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
+                    // Target node is a root node
+                    TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
                 }
-            }
-            
-            this.setState({siblingsVisible: true}, ()=>{ 
-                this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            });
-        }
-        else{
-            if(this.state.isSkos){
-            showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
-            } 
-    
-            if(!this.state.isSkos && await nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
-            // Target node is a root node
-            let parentUl = document.getElementById("tree-root-ul");
-            let children = [].slice.call(parentUl.childNodes);
-            for(let i=0; i < children.length; i++){
-                if(children[i].dataset.iri !== targetNodes[0].parentNode.dataset.iri){
-                children[i].remove();
+                else{
+                    TreeHelper.hideSiblings(targetNodes);
                 }
+                
+                this.setState({siblingsVisible: false}, ()=>{
+                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                });
             }
-            }
-            else{
-            for (let node of targetNodes){
-                let parentUl = node.parentNode.parentNode;
-                let children = [].slice.call(parentUl.childNodes);
-                for(let i=0; i < children.length; i++){
-                if(children[i].dataset.iri !== node.parentNode.dataset.iri){
-                    children[i].remove();
-                }
-                }
-            }
-            }
-            
-            this.setState({siblingsVisible: false}, ()=>{
-            this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            });
-        }
         }
         catch(e){
-        // console.info(e);
+            // console.info(e);
         }
         
     }
