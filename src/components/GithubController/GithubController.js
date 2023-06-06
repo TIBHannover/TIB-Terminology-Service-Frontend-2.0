@@ -1,54 +1,24 @@
 
 class GithubController{    
     
-    async getOntologyIssueListForUser(ontologyIssueTrackerUrl, username, issueState, resultCountPerPage=10, pageNumber=1){
-        try{
-            if(!ontologyIssueTrackerUrl){
-                return [];
-            }
-            let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];            
-            let url = this.githubApiBaseUrl + "repos/" + urlPath + "?creator=" + username + "&state=" + issueState + "&per_page=" + resultCountPerPage + "&page=" + pageNumber;            
-            let issuesList = await fetch(url, this.getCallSetting);
-            issuesList = await issuesList.json();            
-            for(let issue of issuesList){
-                issue['labels'] = await this.getAnIssueLabelsList(issue);
-            }
-            return issuesList;
+    async getOntologyIssueListForUser(ontologyId, ontologyIssueTrackerUrl, issueState, resultCountPerPage=10, pageNumber=1){
+        try{ 
+            let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];
+            let data = new FormData();
+            data.append("issuePath", urlPath);
+            data.append("issueState", issueState);
+            data.append("size", resultCountPerPage);
+            data.append("pageNumber", pageNumber);            
+            let result = await fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/issues/' + ontologyId, {method: 'POST', body: data});
+            result = await result.json();
+            console.info(result)            
+            return result.result;
         }
         catch(e){
             // console.info(e)
             return [];
         }        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // async getOntologyIssueListForUser(ontologyIssueTrackerUrl, username, issueState, resultCountPerPage=10, pageNumber=1){
-    //     try{
-    //         if(!ontologyIssueTrackerUrl){
-    //             return [];
-    //         }
-    //         let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];            
-    //         let url = this.githubApiBaseUrl + "repos/" + urlPath + "?creator=" + username + "&state=" + issueState + "&per_page=" + resultCountPerPage + "&page=" + pageNumber;            
-    //         let issuesList = await fetch(url, this.getCallSetting);
-    //         issuesList = await issuesList.json();            
-    //         for(let issue of issuesList){
-    //             issue['labels'] = await this.getAnIssueLabelsList(issue);
-    //         }
-    //         return issuesList;
-    //     }
-    //     catch(e){
-    //         // console.info(e)
-    //         return [];
-    //     }        
-    // }
     
     async getAnIssueLabelsList(issueObject){        
         try{            

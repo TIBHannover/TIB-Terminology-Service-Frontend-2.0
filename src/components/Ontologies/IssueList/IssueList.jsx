@@ -58,7 +58,7 @@ class IssueList extends React.Component{
         let selectedTypeId = urlParameter['selectedTypeId'];
         let issueStateValue =  ISSUE_STATES_VALUES[selectedTypeId];
         let resultCountPerPage = this.state.resultCountPerPage;
-        listOfIssues = await this.gitHubController.getOntologyIssueListForUser(issueTrackerUrl, username, issueStateValue, resultCountPerPage, pageNumber);
+        listOfIssues = await this.gitHubController.getOntologyIssueListForUser(ontology.ontologyId, issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
         if(listOfIssues.length === 0){
             this.setState({
                 waiting: false,
