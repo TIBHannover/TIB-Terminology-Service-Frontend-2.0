@@ -187,11 +187,11 @@ class IssueList extends React.Component{
         return (
             <div className="row tree-view-container">
                 <div className="col-sm-12">
-                    {!this.props.auth.isAuthenticated && 
+                    {/* {!this.props.auth.isAuthenticated && 
                         <LoginForm onlyLoginButton={false} />
-                    }
+                    } */}
                     {this.state.waiting && <div className="isLoading"></div>}
-                    {this.props.auth.isAuthenticated && !this.state.waiting &&                        
+                    {!this.state.waiting &&                        
                         <div className="row">
                             <div className="row">
                                 {this.createIssueStateDropDown()}
