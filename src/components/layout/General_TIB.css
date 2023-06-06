@@ -326,12 +326,114 @@ p{
     text-align: center;    
 }
 
+.backend-is-down-message{
+    /* 
+        The message regarding the backend issue. 
+    */
+
+    display: none;
+}
+
+.github-login-btn, .github-login-btn:hover, .github-login-btn:focus{
+    /* 
+        GitHub sign in button.
+    */
+
+    background-color: black;
+    color: white;
+    width: 300px;
+    border: 1px solid black;
+}
+
+.loginModal {
+    /* 
+        Style for the login modal.
+    */
+
+    margin-top: 10%;
+}
+
+.modal-title{
+    /* 
+        A modal title style.    
+    */
+
+    color: black;
+}
+
+.fa-github{
+    /* 
+        Gothub fontawsome style.
+    */
+
+    border: none;
+    font-size: 30px;
+}
+
+.overlay {
+    /* 
+        Login loading spinner container
+    */
+
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    top: 40%;
+    left: 0px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    display: none;
+ }
+
+ .spinner-grow{
+    /* 
+        Login loading spinner
+    */
+
+    width: 300px;
+    height: 300px;
+ }
+
+ .login-load-text{
+    /* 
+        Login loading text
+    */
+
+    color: black;
+ }
+
+
+@media only screen and (max-width: 1025px) {
+    .application-content{
+        /* 
+            The style for the application inner content (between the header and footer)
+        */
+            
+        width: 95%;                
+    }
+
+    .site-footer{
+        font-size: 10px;
+        position: fixed;
+    }
+
+    .footer-logo{
+        /* 
+            Logos on the site footer
+        */
+
+        width: 200px;
+        height: 50px;
+    }
 .hidden-fa, .fa-eye{
     border: none;
     font-size: 14px;
     cursor: pointer;
     margin-left: 5px;
+    }
 }
+
 
 
 /* 
@@ -1640,7 +1742,7 @@ p{
         source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader
     */
 
-    margin-left: 40%;
+    margin: auto;
     border: 16px solid #ffffff;
     border-radius: 50%;
     border-top: 15px solid #1565C0;
@@ -1808,9 +1910,72 @@ p{
         Style for the element on top of the list table
     */
 
-    /* margin-top: 40px; */
+    margin-top: 40px;
+}
+/* 
+--------------------------------------
+  User-related components such as Login and profile
+--------------------------------------
+*/
+
+.user-profile-dropdown{
+    font-size: 12px;
 }
 
+
+/* 
+--------------------------------------
+  Github issue list
+--------------------------------------
+*/
+
+.git-issue-card{
+    /* 
+        Style for each issue card in the issue list
+    */
+
+    background-color: white !important;    
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #7AABAC;    
+}
+
+.git-issue-title{
+    /* 
+        The title url for each issue
+    */
+
+    color: black;
+    font-weight: bold;    
+}
+
+.git-issue-tag-link{
+    /* 
+        Style for the label url in an issue
+    */
+
+    color: black;    
+}
+
+.git-issue-tag-link:hover{
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.git-issue-label-tag{
+    /* 
+        Style for the label tags for an issue
+    */
+
+    display: inline;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+    
 .number-of-result-text-container{
     padding-top: 8px;
 }
