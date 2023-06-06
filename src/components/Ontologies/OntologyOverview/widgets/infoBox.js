@@ -11,6 +11,16 @@ function formatCreators (creators) {
   return answer
 }
 
+function formatSubject(Subject){
+  let answer = []
+  let value = []
+  for(let i=0; i< Subject.length; i++){
+    value.push(Subject[i])
+  }
+  answer = value.join(',\n')
+  return answer
+}
+
 function alphabeticSort(item){
    return item.sort();
 }
@@ -50,8 +60,7 @@ function OntologyInfoBox (props) {
         <td>{(value).join(',\n')}</td>
       </tr>
     )
-  }
-        
+  }    
 
   return (
     <div className="ontology-detail-table-wrapper">
@@ -142,6 +151,12 @@ function OntologyInfoBox (props) {
             <td className="ontology-overview-table-id-column"><b>Creator</b></td>
             <td>
               {formatCreators(ontology.config.creators)}
+            </td>
+          </tr>
+          <tr>
+            <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+            <td>
+              {formatSubject(ontology.config.classifications.Subject)}
             </td>
           </tr>
           <tr>

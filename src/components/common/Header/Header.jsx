@@ -6,7 +6,7 @@ import LoginForm from '../../User/Login/Login';
 
 function Header () {
   return (
-    <div className='header-warpper'>
+    <div className='header-wrapper header-collapseable-section'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
             <LoginForm onlyLoginButton={true}></LoginForm>

@@ -11,7 +11,12 @@ class SearchForm extends React.Component{
           result: false,
           clickInfo: false,
           searchResult: [],
+          ontoSearchResult: [],
           jumpResult: [],
+          entry: [],
+          ontologyId: '',
+          urlPath: '',
+          facetIsSelected: false,
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
@@ -22,12 +27,25 @@ class SearchForm extends React.Component{
         this.suggestionHandler = this.suggestionHandler.bind(this); 
         this.autoRef = React.createRef(); 
         this.handleClickOutside = this.handleClickOutside.bind(this);
+        this.urlOnto = this.urlOnto.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
       }
-      
+
+      setComponentData(){
+        let urlPath = window.location.pathname
+        let ontologyId = urlPath.split('/'); 
+        ontologyId = ontologyId[3]            
+        urlPath = urlPath.includes("/ontologies/" + ontologyId)
+        this.setState({
+          ontologyId: ontologyId,
+          urlPath: urlPath,
+        })
+      }
+
 
       async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value;        
-        if (enteredTerm.length > 0){
+        enteredTerm = enteredTerm.target.value                
+        if (enteredTerm.length > 0 && !this.state.urlPath){
           let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
           searchResult =  (await searchResult.json())['response']['docs'];
           let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
@@ -39,17 +57,24 @@ class SearchForm extends React.Component{
               enteredTerm: enteredTerm
           });
         }
+        else if(enteredTerm.length > 0 && this.state.urlPath){
+          let ontoSearchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`)
+          ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
+          this.setState({
+            searchResult: ontoSearchResult,
+            result: true 
+          });
+        }
         else if (enteredTerm.length == 0){
             this.setState({
                 result: false,
                 enteredTerm: ""
-            });
-            
+            });          
         }
       }
 
 
-    submitHandler(event){          
+    submitHandler(){                      
         let enteredTerm = document.getElementById('s-field').value;        
         if(enteredTerm !== ""){
           let url = new URL(window.location);    
@@ -59,7 +84,17 @@ class SearchForm extends React.Component{
           url.searchParams.append('page', 1);
           url.pathname = "/ts/search";
           window.location.replace(url);
-        }        
+        }
+        if(enteredTerm !== "" && this.state.ontologyId){
+          let url = new URL(window.location);    
+          url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          url.searchParams.append('q', enteredTerm);
+          url.searchParams.append('ontology', (this.state.ontologyId).toUpperCase());
+          url.searchParams.append('page', 1);
+          url.pathname = "/ts/search";
+          window.location.replace(url);
+        }
     }
 
     submitJumpHandler(e){
@@ -77,6 +112,7 @@ class SearchForm extends React.Component{
             result: true
           });
       }
+
     
       handleClickOutside(){
         document.addEventListener("click", (event) =>{
@@ -91,6 +127,7 @@ class SearchForm extends React.Component{
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
+        this.setComponentData();         
         document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
     }
     
@@ -102,18 +139,27 @@ class SearchForm extends React.Component{
 
 
       createResultList(){
-          const resultList = []          
+          const resultList = [];
           for(let i=0; i < this.state.searchResult.length; i++){
-            resultList.push(
-                <div className="jumpto-item-holder">
-                    <a className="container jumpto-result-link" href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i}>   
-                      <div className="autocomplete-item jumpto-result-text">                  
-                            {this.state.searchResult[i]['autosuggest']}
-                      </div>
-                    </a>
-                </div>
-                
-                )
+            if(this.state.urlPath){
+              resultList.push(
+                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
+                  <div className="autocomplete-item item-for-navigation">
+                        {this.state.searchResult[i]['autosuggest']}
+                  </div>
+                </a>     
+              
+              )
+            }
+            else {
+              resultList.push(
+                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
+                  <div className="autocomplete-item item-for-navigation">
+                        {this.state.searchResult[i]['autosuggest']}
+                  </div>
+                </a>    
+              )
+            }    
           }
           return resultList
       }
@@ -122,13 +168,25 @@ class SearchForm extends React.Component{
         const jumpResultList = []
         for(let i=0; i < this.state.jumpResult.length; i++){
           jumpResultList.push(
-            <div className="jumpto-item-holder">
+            <div className="jump-autocomplete-container">
                {setJumpResultButtons(this.state.jumpResult[i])}
             </div>          
           )
         }
         return jumpResultList
       }
+
+      urlOnto(){
+        let placeholder= "";
+           if(this.state.ontologyId && this.state.urlPath){
+             placeholder = "Search in \n" + this.state.ontologyId;
+           }
+           else {
+            placeholder = "Search for ontology, term, properties and individuals"
+           }
+           return placeholder;       
+        }
+        
 
 
       _handleKeyDown = (e) => {
@@ -137,14 +195,14 @@ class SearchForm extends React.Component{
         }
       }
 
-      render(){
+      render(){                    
           return(
               <div className='col-sm-10'>
-                <div class="input-group input-group-lg">
+                <div class="input-group input-group-lg">                              
                   <input 
                     type="text" 
                     class="form-control search-input" 
-                    placeholder="Search for ontology, term, properties" 
+                    placeholder={this.urlOnto()}
                     aria-describedby="basic-addon2"
                     onChange={this.handleChange}
                     onKeyDown={this._handleKeyDown}
@@ -157,7 +215,9 @@ class SearchForm extends React.Component{
                                       
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
-                {this.state.result &&
+                {this.state.result && !this.state.urlPath &&
+                <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>}
+                {this.state.result && !this.state.urlPath &&
                 <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
                   <div>
                     <h4>Jump To</h4>

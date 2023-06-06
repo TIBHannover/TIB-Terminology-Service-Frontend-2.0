@@ -45,13 +45,56 @@ export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontolo
 
 export function createOntologyPageHeadSection(ontology){
     return [
-        <div className= "ont-info-bar">
-            <div>
-              <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h4>
+        <div className='span'>
+            <div className='row ont-info-bar header-collapseable-section'>
+                <div className= "col-sm-12">
+                    <div>
+                    <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h4>
+                    </div>
+                    <div>
+                    <a href={ontology.config.id}>{ontology.config.id}</a>
+                    </div>
+                </div>
             </div>
-            <div>
-              <a href={ontology.config.id}>{ontology.config.id}</a>
-            </div>
-        </div>
+            <div className='row collpase-button-container justify-content-md-center'>
+                <div className='col-sm-1'>                                  
+                    <div className='header-collapse-btn' onClick={() => {collpaseSiteHeader()}}>
+                        <i className='fa fa-angle-double-up header-collpase-icon'></i>
+                    </div>
+                </div>
+            </div>                        
+        </div>                
     ];
+}
+
+
+function collpaseSiteHeader(){
+    let siteHeader = document.getElementsByClassName('header-wrapper')[0];    
+    let collpaseIcone = document.getElementsByClassName('header-collpase-icon')[0];    
+    let ontologyBannerContainer = document.getElementsByClassName('ont-info-bar')[0];
+    let applicationContent = document.getElementsByClassName('application-content')[0];
+    if(collpaseIcone.classList.contains('fa-angle-double-up')){
+        siteHeader.style.maxHeight = '0';
+        ontologyBannerContainer.style.maxHeight = '0';
+        collpaseIcone.classList.remove('fa-angle-double-up');
+        collpaseIcone.classList.add('fa-angle-double-down');
+        siteHeader.style.marginTop = '-10px';
+        applicationContent.style.minHeight = '800px';
+
+        siteHeader.style.overflow = 'hidden';
+        siteHeader.style.padding = '0';
+        ontologyBannerContainer.style.overflow = 'hidden';
+    }
+    else{
+        siteHeader.style.maxHeight = '200px';
+        ontologyBannerContainer.style.maxHeight = '200px';
+        collpaseIcone.classList.add('fa-angle-double-up');
+        collpaseIcone.classList.remove('fa-angle-double-down');        
+        applicationContent.style.minHeight = '500px';
+
+        siteHeader.style.overflow = '';
+        siteHeader.style.padding = '10px';
+        ontologyBannerContainer.style.overflow = '';
+    }
+    
 }
