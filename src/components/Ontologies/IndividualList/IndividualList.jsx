@@ -252,18 +252,18 @@ class IndividualsList extends React.Component {
                     </div>                    
                 </div>
                 {this.paneResize.generateVerticalResizeLine()}                                
-                {this.state.showNodeDetailPage && 
-                    <div className="node-table-container" id="page-right-pane">
-                        <NodePage
-                        iri={this.state.selectedNodeIri}
-                        ontology={this.props.ontology}
-                        componentIdentity="individual"
-                        extractKey="individuals"
-                        isSkos={this.state.isSkos}
-                        isIndividual={true}
-                        />
-                    </div>
-                }
+                <div className="node-table-container" id="page-right-pane">
+                    {this.state.showNodeDetailPage &&                     
+                            <NodePage
+                            iri={this.state.selectedNodeIri}
+                            ontology={this.props.ontology}
+                            componentIdentity="individual"
+                            extractKey="individuals"
+                            isSkos={this.state.isSkos}
+                            isIndividual={true}
+                            />                    
+                    }
+                </div>
             </div>
         );        
     }
