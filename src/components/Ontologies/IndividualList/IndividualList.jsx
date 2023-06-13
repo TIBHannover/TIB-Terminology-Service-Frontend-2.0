@@ -6,6 +6,7 @@ import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
+import Toolkit from "../../common/Toolkit";
 
 
 class IndividualsList extends React.Component {
@@ -165,7 +166,7 @@ class IndividualsList extends React.Component {
                     domStateKeeper={this.props.domStateKeeper}
                     isSkos={this.props.isSkos}
                     nodeSelectionHandler={this.handleNodeSelectionInTreeView}
-                    isIndividual={true}
+                    isIndividual={this.props.isSkos ? false : true}
                     individualViewChanger={this.switchView}
                 />
             </div>          
@@ -239,7 +240,7 @@ class IndividualsList extends React.Component {
 
     render(){
         return(
-            <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
+            <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}>                                 
                 <div className="tree-page-left-part" id="page-left-pane">
                   <JumpTo
                     ontologyId={this.props.ontology}
@@ -247,8 +248,9 @@ class IndividualsList extends React.Component {
                     componentIdentity={this.props.componentIdentity}          
                    />
                     <div>
-                        {this.state.listView && this.renderIndividualListSection()} 
-                        {!this.state.listView && this.createIndividualTree()}
+                        {this.props.isSkos && this.createIndividualTree()}
+                        {!this.props.isSkos && this.state.listView && this.renderIndividualListSection()} 
+                        {!this.props.isSkos && !this.state.listView && this.createIndividualTree()}
                     </div>                    
                 </div>
                 {this.paneResize.generateVerticalResizeLine()}                                

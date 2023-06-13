@@ -342,7 +342,7 @@ class Tree extends React.Component {
             }
         }
         catch(e){
-            // console.info(e)
+            console.info(e)
         }        
     }
   

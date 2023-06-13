@@ -125,14 +125,7 @@ class NodePage extends React.Component {
 
   render () {    
     return (
-      <div className='row'>
-        <HelmetProvider>
-        <div>
-          <Helmet>
-            <title>{`${this.state.data.ontology_name} - ${this.state.data.short_form}`}</title>
-          </Helmet>
-        </div>
-        </HelmetProvider>
+      <div className='row'>       
         {this.createTable()}
         <div className='col-sm-12'  key={"json-button-row"}>
           <div className='row'>
