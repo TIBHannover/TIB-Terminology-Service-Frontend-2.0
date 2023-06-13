@@ -6,7 +6,7 @@ import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
-import Toolkit from "../../common/Toolkit";
+
 
 
 class IndividualsList extends React.Component {
@@ -31,6 +31,7 @@ class IndividualsList extends React.Component {
         this.selectNodeOnLoad = this.selectNodeOnLoad.bind(this);
         this.renderIndividualListSection = this.renderIndividualListSection.bind(this);
         this.createActionButtonSection = this.createActionButtonSection.bind(this);
+        this.handleNodeSelectionInTreeView = this.handleNodeSelectionInTreeView.bind(this);
     }
 
 
@@ -61,7 +62,10 @@ class IndividualsList extends React.Component {
     }
 
    
-    selectNode(target){        
+    selectNode(target){ 
+        if(this.props.isSkos && !this.state.listView){
+            return true;
+        }        
         let selectedElement = document.querySelectorAll(".clicked");
         for(let i=0; i < selectedElement.length; i++){
             selectedElement[i].classList.remove("clicked");
@@ -83,7 +87,10 @@ class IndividualsList extends React.Component {
     }
 
     
-    selectNodeOnLoad(){        
+    selectNodeOnLoad(){
+        if(this.props.isSkos && !this.state.listView){
+            return true;
+        }      
         let node = document.getElementById(this.props.iri);
         if(node){
             node.classList.add('clicked');            
@@ -97,16 +104,18 @@ class IndividualsList extends React.Component {
 
 
     
-    processClick(e){
-        if(!this.state.listView){            
+    processClick(e){        
+        if(this.props.isSkos && !this.state.listView){            
+            return true;
+        } 
+        if(!this.state.listView){
             // select a class on the individual tree. Load the tree view for the class
-            if(e.target.parentNode.parentNode.classList.contains("opened")){                
+            if(e.target.parentNode.parentNode.classList.contains("opened")){
                 let path = window.location.pathname;
-                let targetIri = encodeURIComponent(e.target.parentNode.parentNode.dataset.iri)
+                let targetIri = encodeURIComponent(e.target.parentNode.parentNode.dataset.iri);
                 path = path.split("individuals")[0];
-                window.location.replace(path + "terms?iri=" + targetIri)
+                window.location.replace(path + "terms?iri=" + targetIri);
             }
-            
         }        
         else if (e.target.tagName === "SPAN"){ 
             this.selectNode(e.target);
@@ -137,8 +146,13 @@ class IndividualsList extends React.Component {
     }
 
 
-    handleNodeSelectionInTreeView(x, y){
-        return true;
+    handleNodeSelectionInTreeView(selectedNodeIri, ShowDetailTable, componentIdentity="individual"){
+        if(this.props.isSkos){
+            this.setState({
+                selectedNodeIri: selectedNodeIri,
+                showNodeDetailPage: ShowDetailTable
+              });
+        }
     }
 
     
@@ -239,7 +253,7 @@ class IndividualsList extends React.Component {
 
     render(){
         return(
-            <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}>                                 
+            <div className="tree-view-container resizable-container" onClick={(e) =>  this.processClick(e)}>                                 
                 <div className="tree-page-left-part" id="page-left-pane">
                   <JumpTo
                     ontologyId={this.props.ontology}

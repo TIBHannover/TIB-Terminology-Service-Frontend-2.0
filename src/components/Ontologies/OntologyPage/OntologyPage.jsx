@@ -32,6 +32,7 @@ class OntologyPage extends React.Component {
       errorRootTerms: null,      
       activeTab: OVERVIEW_TAB_ID,
       rootTerms: [],
+      skosRootIndividuals: [],
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
@@ -152,19 +153,20 @@ class OntologyPage extends React.Component {
      */
   async getRootTerms (ontologyId) {    
     let rootTerms = [];
+    let skosRootIndividuals = [];
     let isSkos = await isSkosOntology(ontologyId);    
     if(isSkos){
-      rootTerms = await getSkosOntologyRootConcepts(ontologyId);
-      rootTerms = await shapeSkosConcepts(rootTerms);
+      skosRootIndividuals = await getSkosOntologyRootConcepts(ontologyId);
+      skosRootIndividuals = await shapeSkosConcepts(skosRootIndividuals);
     }
-    else{
-      rootTerms = await getOntologyRootTerms(ontologyId);
-    }    
+    rootTerms = await getOntologyRootTerms(ontologyId);
+
     if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
         this.setState({
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
+          skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: false,
           isSkosOntology: isSkos
         });
@@ -173,6 +175,7 @@ class OntologyPage extends React.Component {
         this.setState({
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
+          skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: true,
           isSkosOntology: isSkos
         });
@@ -182,6 +185,7 @@ class OntologyPage extends React.Component {
       this.setState({
         isRootTermsLoaded: true,
         errorRootTerms: 'Can not get this ontology root terms',
+        skosRootIndividuals: [],
         rootNodeNotExist: true,
         isSkosOntology: isSkos
       });
@@ -348,7 +352,7 @@ class OntologyPage extends React.Component {
                 }
                 {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                                 <IndividualsList
-                                rootNodes={this.state.rootTerms}                                                    
+                                rootNodes={this.state.skosRootIndividuals}                                                    
                                 iri={this.state.targetIndividualIri}
                                 componentIdentity={'individual'}
                                 key={'individualsTreePage'}

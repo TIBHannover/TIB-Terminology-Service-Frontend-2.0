@@ -28,8 +28,8 @@ class NodePage extends React.Component {
     let componentIdentity = this.props.componentIdentity;
     let isSkos = this.props.isSkos;
     let node = {};
-    let showDataAsJsonBtnHref = "";
-    if(isSkos){
+    let showDataAsJsonBtnHref = "";    
+    if(isSkos && componentIdentity !== "term"){
       node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));
       showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
     }
