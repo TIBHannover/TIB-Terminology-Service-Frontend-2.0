@@ -342,7 +342,7 @@ class Tree extends React.Component {
             }
         }
         catch(e){
-            console.info(e)
+            // console.info(e)
         }        
     }
   
@@ -432,10 +432,13 @@ async showSiblings(){
     componentDidMount(){
         this.setComponentData();
         document.addEventListener("keydown", this.processKeyNavigation, false);
+        if(this.props.isSkos){
+            document.getElementsByClassName('tree-container')[0].style.marginTop = '100px';
+        }        
     }
     
     componentDidUpdate(){
-        this.setComponentData();        
+        this.setComponentData();                
     }
 
     componentWillUnmount(){
@@ -477,19 +480,17 @@ async showSiblings(){
                                     }    
                                 </button>                
                             }
-                        </div>                        
-                        {this.props.isIndividual &&                            
-                            <div className='row tree-action-btn-holder'>
-                                <div className="col-sm-1"></div>
-                                <div className="col-sm-3">
-                                    <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.props.individualViewChanger}>
-                                        Show In List
-                                    </button>
-                                </div>
-                                <div className="col-sm-8"></div>                                
-                            </div>                        
-                        }
+                        </div>                                                                       
                     </div>
+                    <div className='row tree-action-btn-holder'>                                
+                        <div className="col-sm-12">
+                        {this.props.showListSwitchEnabled &&
+                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.props.individualViewChanger}>
+                                Show In List
+                            </button>
+                        }
+                        </div>                            
+                    </div> 
                 </div> 
                 <div className="col-sm-1"></div>               
             </div>                      

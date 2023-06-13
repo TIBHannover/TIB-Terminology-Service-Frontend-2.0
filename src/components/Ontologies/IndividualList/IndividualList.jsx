@@ -41,7 +41,8 @@ class IndividualsList extends React.Component {
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
-                ontology: ontology                
+                ontology: ontology,
+                listView: !this.props.isSkos
             });
             if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
                 let currentUrlParams = new URLSearchParams();
@@ -167,6 +168,7 @@ class IndividualsList extends React.Component {
                     isSkos={this.props.isSkos}
                     nodeSelectionHandler={this.handleNodeSelectionInTreeView}
                     isIndividual={this.props.isSkos ? false : true}
+                    showListSwitchEnabled={true}
                     individualViewChanger={this.switchView}
                 />
             </div>          
@@ -178,14 +180,12 @@ class IndividualsList extends React.Component {
     createActionButtonSection(){
         return [
             typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
-                <div className="row tree-action-button-area">
-                    <div className="col-sm-5"></div>
-                    <div className="col-sm-6">
+                <div className="row tree-action-button-holder">                    
+                    <div className="col-sm-12">
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.switchView}>
                             {this.state.listView ? "Show In Tree" : ""}
                         </button>                                
-                    </div>
-                    <div className="col-sm-1"></div>
+                    </div>                    
                 </div>                    
                    
         ];
@@ -195,8 +195,7 @@ class IndividualsList extends React.Component {
     renderIndividualListSection(){
         return [
             <div className="col-sm-12">
-                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                
-                {this.createActionButtonSection()}    
+                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                    
                 <div className="row">
                     <div className="col-sm-12">
                         <ul>
@@ -214,7 +213,7 @@ class IndividualsList extends React.Component {
         this.setComponentData();
         document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
         document.body.addEventListener("mousemove", this.paneResize.moveToResize);
-        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                
+        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                              
     }
 
     componentDidUpdate(){
@@ -227,7 +226,7 @@ class IndividualsList extends React.Component {
         }
         if(!this.state.isRendered){
             this.selectNodeOnLoad();
-        }
+        }        
     }
 
     componentWillUnmount(){  
@@ -247,10 +246,16 @@ class IndividualsList extends React.Component {
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
                    />
-                    <div>
-                        {this.props.isSkos && this.createIndividualTree()}
-                        {!this.props.isSkos && this.state.listView && this.renderIndividualListSection()} 
-                        {!this.props.isSkos && !this.state.listView && this.createIndividualTree()}
+                   <div className='row tree-action-button-area'>
+                        <div className="col-sm-6"></div> 
+                        <div className="col-sm-5 text-center">
+                            {this.createActionButtonSection()}
+                        </div>
+                        <div className="col-sm-1"></div>   
+                   </div>                   
+                    <div>                        
+                        {this.state.listView && this.renderIndividualListSection()} 
+                        {!this.state.listView && this.createIndividualTree()}
                     </div>                    
                 </div>
                 {this.paneResize.generateVerticalResizeLine()}                                
