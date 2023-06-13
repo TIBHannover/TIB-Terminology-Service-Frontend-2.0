@@ -222,15 +222,15 @@ class Tree extends React.Component {
     selectNode(target){    
         if(this.props.isIndividual){
             return true;
-        }    
+        }
         let treeNode = new TreeNodeController();
-        treeNode.unClickAllNodes();
-        let targetNodeDiv = treeNode.getClickedNodeDiv(target);        
+        treeNode.unClickAllNodes();        
+        let targetNodeDiv = treeNode.getClickedNodeDiv(target);
         let clickedNodeIri = "";
         let clickedNodeId = "";
-        let showNodeDetailPage = false;
+        let showNodeDetailPage = false;         
         if(targetNodeDiv){
-            targetNodeDiv.classList.add("clicked");                    
+            targetNodeDiv.classList.add("clicked");            
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);
             showNodeDetailPage = true;
@@ -244,12 +244,11 @@ class Tree extends React.Component {
                 lastSelectedItemId: clickedNodeId
             }, () =>{
                 this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            });
-        
+            });            
             let currentUrlParams = new URLSearchParams();
             currentUrlParams.append('iri', clickedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
-            this.props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);    
+            this.props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);
         }    
     }
 
@@ -261,8 +260,7 @@ class Tree extends React.Component {
     processClick(e){        
         if(this.props.isIndividual){
             return true;
-        }
-        
+        }        
         if (e.target.tagName === "DIV" && e.target.classList.contains("tree-text-container")){             
             this.selectNode(e.target);
         }
@@ -368,7 +366,7 @@ async showSiblings(){
         try{    
             let targetNodes = document.getElementsByClassName("targetNodeByIri");        
             if(!this.state.siblingsVisible){
-                if(this.state.isSkos && this.state.componentIdentity === "individual"){
+                if(this.state.isSkos && this.props.componentIdentity === "individual"){
                     SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
                 }
                 else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
@@ -385,7 +383,7 @@ async showSiblings(){
                 });
             }
             else{
-                if(this.state.isSkos && this.state.componentIdentity === "individual"){
+                if(this.state.isSkos && this.props.componentIdentity === "individual"){
                     SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
                 } 
         
@@ -431,8 +429,8 @@ async showSiblings(){
 
     componentDidMount(){
         this.setComponentData();
-        document.addEventListener("keydown", this.processKeyNavigation, false);
-        if(this.props.isSkos && this.state.componentIdentity === "individual"){
+        document.addEventListener("keydown", this.processKeyNavigation, false);    
+        if(this.props.isSkos && this.props.componentIdentity === "individual"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
         }        
     }
@@ -477,7 +475,7 @@ async showSiblings(){
                                 {!this.state.siblingsVisible
                                     ? "Show Siblings"
                                     : "Hide Siblings"
-                                    }    
+                                }
                                 </button>                
                             }
                         </div>                                                                       
