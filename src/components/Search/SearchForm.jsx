@@ -49,8 +49,19 @@ class SearchForm extends React.Component{
           let params = new URLSearchParams(document.location.search);
           let selectedType = params.getAll("type");
           let selectedOntology = params.getAll("ontology")
-          console.info(selectedType, selectedOntology) 
+          selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
+          console.info( selectedOntology)
+          console.info(selectedType) 
           if(process.env.REACT_APP_PROJECT_ID === "general"){
+            if(selectedOntology !== null){
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
+              searchResult =  (await searchResult.json())['response']['docs'];
+              console.info(searchResult);
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
+              jumpResult = (await jumpResult.json())['response']['docs'];
+              console.info(jumpResult);
+
+            }
             let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
             searchResult =  (await searchResult.json())['response']['docs'];
             let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5`)
