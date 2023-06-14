@@ -361,7 +361,7 @@ class OntologyPage extends React.Component {
                                 lastState={""}
                                 domStateKeeper={this.changeTreeContent}
                                 isSkos={this.state.isSkosOntology}
-                                individualTabChanged={this.state.individualTabChanged}
+                                individualTabChanged={this.state.individualTabChanged}                                
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&

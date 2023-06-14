@@ -92,7 +92,7 @@ class IndividualsList extends React.Component {
             return true;
         }      
         let node = document.getElementById(this.props.iri);
-        if(node){
+        if(node){            
             node.classList.add('clicked');            
             let position = document.getElementById(this.props.iri).offsetTop;
             document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;            
@@ -175,7 +175,7 @@ class IndividualsList extends React.Component {
                     iri={this.state.selectedNodeIri}
                     key={this.props.key}
                     ontology={this.props.ontology}
-                    rootNodeNotExist={false}
+                    rootNodeNotExist={this.props.isSkos ? false : true}
                     iriChangerFunction={this.props.iriChangerFunction}
                     lastState={this.props.lastState}
                     domStateKeeper={this.props.domStateKeeper}
@@ -183,7 +183,7 @@ class IndividualsList extends React.Component {
                     nodeSelectionHandler={this.handleNodeSelectionInTreeView}
                     isIndividual={this.props.isSkos ? false : true}
                     showListSwitchEnabled={true}
-                    individualViewChanger={this.switchView}
+                    individualViewChanger={this.switchView}                
                 />
             </div>          
         ];

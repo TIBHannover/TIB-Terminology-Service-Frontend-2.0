@@ -97,7 +97,7 @@ class Tree extends React.Component {
           }); 
 
     }
-    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist){
+    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist && componentIdentity !== "individuals"){
       this.setState({
         isLoadingTheComponent: false,
         noNodeExist: true
@@ -229,10 +229,10 @@ class Tree extends React.Component {
         let clickedNodeIri = "";
         let clickedNodeId = "";
         let showNodeDetailPage = false;         
-        if(targetNodeDiv){
+        if(targetNodeDiv){            
             targetNodeDiv.classList.add("clicked");            
             clickedNodeIri = treeNode.getClickedNodeIri(target);
-            clickedNodeId = treeNode.getClickedNodeId(target);
+            clickedNodeId = treeNode.getClickedNodeId(target);            
             showNodeDetailPage = true;
             this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage, this.state.componentIdentity);
             this.setState({
@@ -243,7 +243,9 @@ class Tree extends React.Component {
                 reduceBtnActive: false,
                 lastSelectedItemId: clickedNodeId
             }, () =>{
-                this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                if(this.state.componentIdentity !== "individual"){
+                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                }                
             });            
             let currentUrlParams = new URLSearchParams();
             currentUrlParams.append('iri', clickedNodeIri);
@@ -269,8 +271,10 @@ class Tree extends React.Component {
         }
         else if (e.target.tagName === "I"){
             // expand a node by clicking on the expand icon
-            TreeHelper.expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
-              this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+            TreeHelper.expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {
+                if(this.state.componentIdentity !== "individual"){
+                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                }              
             });
         }
     }
@@ -312,8 +316,10 @@ class Tree extends React.Component {
                 // Expand the node if it has children. if it is already expanded, move the select into children
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
-                    TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {      
-                        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {
+                        if(this.state.componentIdentity !== "individual"){
+                            this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                        }
                     });  
                 }
                 else if(!treeNode.isNodeLeaf(node)){
@@ -328,8 +334,10 @@ class Tree extends React.Component {
                 let node = document.getElementById(lastSelectedItemId); 
                 let parentNode = treeNode.getParentNode(node.id);
                 if(treeNode.isNodeExpanded(node)){  
-                    TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {      
-                        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {
+                        if(this.state.componentIdentity !== "individual"){
+                            this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                        }
                     });
                 }
                 else if(parentNode.tagName === "LI"){
@@ -379,7 +387,9 @@ async showSiblings(){
                 }
                 
                 this.setState({siblingsVisible: true}, ()=>{ 
-                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    if(this.state.componentIdentity !== "individual"){
+                        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    }
                 });
             }
             else{
@@ -396,7 +406,9 @@ async showSiblings(){
                 }
                 
                 this.setState({siblingsVisible: false}, ()=>{
-                    this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    if(this.state.componentIdentity !== "individual"){
+                        this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+                    }
                 });
             }
         }
@@ -424,9 +436,6 @@ async showSiblings(){
     }
 
 
-    
-
-
     componentDidMount(){
         this.setComponentData();
         document.addEventListener("keydown", this.processKeyNavigation, false);    
@@ -436,7 +445,7 @@ async showSiblings(){
     }
     
     componentDidUpdate(){
-        this.setComponentData();                
+        this.setComponentData();
     }
 
     componentWillUnmount(){
