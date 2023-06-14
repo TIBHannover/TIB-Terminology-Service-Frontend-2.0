@@ -55,7 +55,7 @@ class SearchForm extends React.Component{
               let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
               searchResult =  (await searchResult.json())['response']['docs'];
               console.info(searchResult);
-              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}&type=${selectedType}`)
               jumpResult = (await jumpResult.json())['response']['docs'];
               console.info(jumpResult);
               this.setState({
