@@ -47,8 +47,8 @@ class SearchForm extends React.Component{
         enteredTerm = enteredTerm.target.value               
         if (enteredTerm.length > 0 && !this.state.urlPath){
           let params = new URLSearchParams(document.location.search);
-          let selectedType = params.get("type");
-          let selectedOntology = params.get("ontology")
+          let selectedType = params.getAll("type");
+          let selectedOntology = params.getAll("ontology")
           console.info(selectedType, selectedOntology) 
           if(process.env.REACT_APP_PROJECT_ID === "general"){
             let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5`)
