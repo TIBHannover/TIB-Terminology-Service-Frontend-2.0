@@ -47,16 +47,17 @@ class SearchForm extends React.Component{
         enteredTerm = enteredTerm.target.value               
         if (enteredTerm.length > 0 && !this.state.urlPath){ 
           let params = new URLSearchParams(document.location.search);
-          let selectedType = params.getAll("type");       
+          let selectedType = params.getAll("type");
+          selectedType = selectedType.map(onto => onto.toLowerCase());       
           let selectedOntology = params.getAll("ontology")         
           selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
           let selectedCollection = params.getAll("collection")            
           if(process.env.REACT_APP_PROJECT_ID === "general"){
             if(selectedOntology){
               let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
-              searchResult =  (await searchResult.json())['response']['docs']
+              searchResult =  (await searchResult.json())['response']['docs'];
               let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
-              jumpResult = (await jumpResult.json())['response']['docs']
+              jumpResult = (await jumpResult.json())['response']['docs'];
               this.setState({
                 searchResult: searchResult,
                 jumpResult: jumpResult,
@@ -64,8 +65,8 @@ class SearchForm extends React.Component{
                 enteredTerm: enteredTerm
               });
             }
-            else if(selectedType && selectedOntology){
-              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${this.state.selectedOntology}&type=${this.state.selectedType}`)
+            else if(selectedType || selectedOntology){
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&type=${selectedType}&ontology=${selectedOntology}`)
               jumpResult = (await jumpResult.json())['response']['docs']
               console.info(jumpResult)
               this.setState({
