@@ -15,6 +15,7 @@ class Tree extends React.Component {
         super(props)
         this.state = ({
           rootNodes: [],
+          rootNodesForSkos: [],
           selectedNodeIri: '',
           showNodeDetailPage: false,
           componentIdentity: "",
@@ -54,6 +55,7 @@ class Tree extends React.Component {
    
    async setComponentData(){
     let rootNodes = this.props.rootNodes;
+    let rootNodesForSkos = this.props.rootNodesForSkos;
     let ontologyId = this.props.ontology;
     let componentIdentity = this.props.componentIdentity;
     let resetFlag = this.state.resetTreeFlag;
@@ -83,6 +85,7 @@ class Tree extends React.Component {
 
         this.setState({                                              
             rootNodes: rootNodes,
+            rootNodesForSkos: rootNodesForSkos,
             componentIdentity: componentIdentity, 
             termTree: termTree,
             propertyTree: propertyTree,
@@ -97,7 +100,7 @@ class Tree extends React.Component {
           }); 
 
     }
-    else if(rootNodes.length === 0 && !this.state.noNodeExist && this.props.rootNodeNotExist && componentIdentity !== "individuals"){
+    else if((rootNodes.length === 0 || rootNodesForSkos.length === 0) && !this.state.noNodeExist && this.props.rootNodeNotExist && componentIdentity !== "individuals"){
       this.setState({
         isLoadingTheComponent: false,
         noNodeExist: true
@@ -123,8 +126,14 @@ class Tree extends React.Component {
             this.loadTheTreeLastState();
             return true;
         }        
-        else if (!target || resetFlag){                        
-            let result = this.buildTheTreeFirstLayer(this.state.rootNodes);
+        else if (!target || resetFlag){
+            let result = [];
+            if(this.state.isSkos && this.state.componentIdentity === "individual"){
+                result = this.buildTheTreeFirstLayer(this.state.rootNodesForSkos);
+            }
+            else{
+                result = this.buildTheTreeFirstLayer(this.state.rootNodes);
+            }                                 
             treeList = result.treeDomContent;
             target = "";                
         }                    

@@ -323,6 +323,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                                 <DataTreePage
                                 rootNodes={this.state.rootTerms}
+                                rootNodesForSkos={this.state.skosRootIndividuals}
                                 componentIdentity={'term'}
                                 iri={this.state.targetTermIri}
                                 key={'termTreePage'}                    
@@ -339,6 +340,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                                 <DataTreePage
                                 rootNodes={this.state.rootProps}
+                                rootNodesForSkos={[]}
                                 componentIdentity={'property'}
                                 iri={this.state.targetPropertyIri}
                                 key={'propertyTreePage'}
@@ -352,7 +354,8 @@ class OntologyPage extends React.Component {
                 }
                 {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                                 <IndividualsList
-                                rootNodes={this.state.skosRootIndividuals}                                                    
+                                rootNodes={this.state.rootTerms}
+                                rootNodesForSkos={this.state.skosRootIndividuals}                                                    
                                 iri={this.state.targetIndividualIri}
                                 componentIdentity={'individual'}
                                 key={'individualsTreePage'}

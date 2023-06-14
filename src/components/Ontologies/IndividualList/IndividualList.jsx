@@ -171,11 +171,12 @@ class IndividualsList extends React.Component {
             <div className='tree-container'>
                 <Tree 
                     rootNodes={this.props.rootNodes}
+                    rootNodesForSkos={this.props.rootNodesForSkos}
                     componentIdentity={this.props.componentIdentity}
                     iri={this.state.selectedNodeIri}
                     key={this.props.key}
                     ontology={this.props.ontology}
-                    rootNodeNotExist={this.props.isSkos ? false : true}
+                    rootNodeNotExist={this.props.isSkos ? this.props.rootNodesForSkos.length === 0 : this.props.rootNodes.length === 0}
                     iriChangerFunction={this.props.iriChangerFunction}
                     lastState={this.props.lastState}
                     domStateKeeper={this.props.domStateKeeper}
