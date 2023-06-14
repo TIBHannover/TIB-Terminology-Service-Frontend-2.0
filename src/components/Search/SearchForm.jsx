@@ -17,9 +17,6 @@ class SearchForm extends React.Component{
           ontologyId: '',
           urlPath: '',
           facetIsSelected: false,
-          selectedCollection: [],
-          selectedOntology: [],
-          selectedType: [],
           api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
@@ -39,16 +36,7 @@ class SearchForm extends React.Component{
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
-        let params = new URLSearchParams(document.location.search);
-        let selectedType = params.getAll("type");       
-        let selectedOntology = params.getAll("ontology")         
-        selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
-        let selectedCollection = params.getAll("collection")
-        console.info(selectedCollection)
         this.setState({
-          selectedCollection: selectedCollection,
-          selectedOntology: selectedOntology,
-          selectedType: selectedType,
           ontologyId: ontologyId,
           urlPath: urlPath,
         })
@@ -57,12 +45,17 @@ class SearchForm extends React.Component{
 
       async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value               
-        if (enteredTerm.length > 0 && !this.state.urlPath){             
+        if (enteredTerm.length > 0 && !this.state.urlPath){ 
+          let params = new URLSearchParams(document.location.search);
+          let selectedType = params.getAll("type");       
+          let selectedOntology = params.getAll("ontology")         
+          selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
+          let selectedCollection = params.getAll("collection")            
           if(process.env.REACT_APP_PROJECT_ID === "general"){
-            if(this.state.selectedOntology){
-              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.selectedOntology}`)
+            if(selectedOntology){
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
               searchResult =  (await searchResult.json())['response']['docs']
-              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${this.state.selectedOntology}`)
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
               jumpResult = (await jumpResult.json())['response']['docs']
               this.setState({
                 searchResult: searchResult,
@@ -71,7 +64,7 @@ class SearchForm extends React.Component{
                 enteredTerm: enteredTerm
               });
             }
-            else if(this.state.selectedType && this.state.selectedOntology){
+            else if(selectedType && selectedOntology){
               let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${this.state.selectedOntology}&type=${this.state.selectedType}`)
               jumpResult = (await jumpResult.json())['response']['docs']
               console.info(jumpResult)
@@ -81,7 +74,7 @@ class SearchForm extends React.Component{
                 enteredTerm: enteredTerm
               });
             }
-            else if(this.state.selectedCollection === "NFDI4CHEM"){
+            else if(selectedCollection === "NFDI4CHEM"){
               let ontologies = [];
             let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`)
             ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
