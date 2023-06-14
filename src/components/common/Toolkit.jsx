@@ -21,15 +21,15 @@ class Toolkit{
         let sortNumber = !isReverse ? 1 : -1;
         if(parentKey){
             return objectList.sort(function (a, b) {
-                let x = a[parentKey][key]; 
-                let y = b[parentKey][key];
+                let x = typeof a[key] === "number" ? a[parentKey][key]: a[parentKey][key]?.toLowerCase(); 
+                let y = typeof b[key] === "number" ? b[parentKey][key]: b[parentKey][key]?.toLowerCase(); 
                 return (x<y ? sortNumber : (-1 * sortNumber) )
               });
         }
         else{
             return objectList.sort(function (a, b) {
-                let x = a[key]; 
-                let y = b[key];
+                let x = typeof a[key] === "number" ? a[key]: a[key]?.toLowerCase(); 
+                let y = typeof b[key] === "number" ? b[key]: b[key]?.toLowerCase(); 
                 return (x<y ? sortNumber : (-1 * sortNumber) )
               });
         }        
