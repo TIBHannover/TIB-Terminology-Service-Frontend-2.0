@@ -105,6 +105,28 @@ class NodeDetail extends React.Component{
         }
         return result;
       }
+
+      render(){
+        return(
+          <div>
+            {this.createTable()}
+            <div className='col-sm-12'  key={"json-button-row"}>
+             <div className='row'>
+               <div className='col-sm-12 node-metadata-value'>
+                 <a 
+                   href={this.state.showDataAsJsonBtnHref} 
+                   target='_blank' 
+                   rel="noreferrer"
+                   className='btn btn-primary btn-dark download-ontology-btn'
+                  >
+                    Show Data as JSON
+                 </a>
+               </div>            
+             </div>
+           </div>
+          </div>
+        )
+      }
     
 
 }
