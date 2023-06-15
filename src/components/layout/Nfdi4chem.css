@@ -334,6 +334,13 @@ p{
     text-align: center;    
 }
 
+.hidden-fa, .fa-eye{
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
 
 /* 
 ------------------------
@@ -1694,6 +1701,33 @@ p{
     padding-bottom: 40px !important;
 }
 
+.class-list-tablle-holder{
+    overflow-x: auto;
+    overflow-y: scroll;
+    transform: rotateX(180deg);
+    padding: 20px;
+}
+
+.class-list-tablle-holder table{
+    transform: rotateX(180deg);    
+}
+
+.class-list-table tbody {
+    display: block;
+    height: 1000px;
+    overflow: auto;
+    direction:rtl;
+}
+.class-list-table thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    direction: ltr;
+}
+.class-list-table td{
+    width: 300px;
+}
+
 .term-list-table{
     /* 
         Style for the list of terms table
@@ -1741,6 +1775,24 @@ p{
 
 .number-of-result-text-container{
     padding-top: 8px;
+}
+
+.show-hidden-column{
+    background-color: #2E7A7B;
+    width: 180px;
+    color: white;
+    border-radius: 5px;
+    padding: 2px;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    display: none;
+    cursor: pointer;
+    margin-right: 5px;    
+}
+
+.is-loading-term-list{    
+    margin-right: 50%;
 }
 
 /* 

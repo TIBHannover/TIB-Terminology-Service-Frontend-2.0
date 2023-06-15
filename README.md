@@ -2,6 +2,8 @@
 
 This project was created with React 17.0
 
+Public URL : https://terminology.tib.eu/ts
+
 ### Prerequisites
 
 In order to run the frontend, ensure that Node.js is installed (version ^14.13.1 || >=16.0.0). Check whether you have the right version installed using your command prompt or terminal, run: `node --version`. For more information about installing or upgrading Node.js, see: https://nodejs.org/en/download/.

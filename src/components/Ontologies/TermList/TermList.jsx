@@ -1,8 +1,9 @@
 import React from "react";
-import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
+import {getListOfTerms, getNodeByIri, getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import { withRouter } from 'react-router-dom';
 import JumpTo from "../JumpTo/Jumpto";
+import {createClassListTableHeader, setContributorField, createShowColumnsTags} from './hekpers';
 
 
 class TermList extends React.Component{
@@ -16,7 +17,9 @@ class TermList extends React.Component{
             totalNumberOfTerms: 0,
             lastLoadedUrl: "",
             mode: "terms",
-            iri: null
+            iri: null,
+            tableBodyContent: "",
+            tableIsLoading: true
         });
 
         this.loadComponent = this.loadComponent.bind(this);
@@ -58,18 +61,22 @@ class TermList extends React.Component{
             pageNumber: pageNumberInUrl - 1,
             pageSize: sizeInUrl,
             lastLoadedUrl: window.location.href,
-            iri: iriInUrl
+            iri: iriInUrl,
+            tableBodyContent: ''
         }, ()=> {
             this.storePageSizeInLocalStorage(sizeInUrl);            
             this.updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);
         });
     }
 
+
+
     storePageSizeInLocalStorage(size){
         if(parseInt(size) !== 1){
             localStorage.setItem('termListPageSize', size);
         }
     }
+
 
    
     pageCount () {    
@@ -80,20 +87,28 @@ class TermList extends React.Component{
     }
 
 
+
     handlePagination (value) {
         this.setState({
-          pageNumber: value - 1          
+          pageNumber: value - 1,
+          tableIsLoading: true,
+          listOfTerms: [],
+          tableBodyContent: ""    
         }, ()=> {
             this.updateURL(value, this.state.pageSize);
         })
     }
 
 
+
     handlePageSizeDropDownChange(e){
         let size = parseInt(e.target.value);
         let pageNumber = this.state.pageNumber + 1;
         this.setState({
-            pageSize: size
+            pageSize: size,
+            tableIsLoading: true,
+            listOfTerms: [],
+            tableBodyContent: "" 
         }, () => {        
             this.storePageSizeInLocalStorage(size);
             this.updateURL(pageNumber, size);
@@ -101,16 +116,21 @@ class TermList extends React.Component{
     }
 
 
+
     resetList(){
         this.setState({
             iri: null,
             pageNumber: 0,
-            pageSize: 20
+            pageSize: 20,
+            tableIsLoading: true,
+            listOfTerms: [],
+            tableBodyContent: "" 
         }, () => {
             this.storePageSizeInLocalStorage(this.state.pageSize);
             this.updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
         });
     }
+
 
 
     updateURL(pageNumber, pageSize, iri=null){
@@ -121,43 +141,79 @@ class TermList extends React.Component{
         else{
             currentUrlParams.append('page', pageNumber);
             currentUrlParams.append('size', pageSize);
-        }               
+        }
+        this.createList();               
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
     }
 
 
-    createList(){
+
+    async createList(){
         let result = [];
         let listOfterms = this.state.listOfTerms;
         let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
+            let subclassOfText = await getSubClassOf(term['iri'], term['ontology_name']);
+            let equivalentToText = await getEqAxiom(term['iri'], term['ontology_name']);
             result.push(
                 <tr>
-                    <td>
+                    <td className="label-col">
                         <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
                             {term['label']}
                         </a>                        
                     </td>
-                    <td>{term['short_form']}</td>
-                    <td>{term['description'] ? term['description'] : ""}</td>
+                    <td className="id-col">{term['short_form']}</td>
+                    <td className="des-col">{term['description'] ? term['description'] : ""}</td>
+                    <td className="alt-term-col">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
+                    <td className="sub-class-col"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
+                    <td className="eqv-col"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
+                    <td className="ex-usage-col">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
+                    <td className="see-also-col">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+                    <td className="contrib-col">{setContributorField(term)}</td>
+                    <td className="comment-col">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
                 </tr>
             );
         }
-        return result;
+        
+        if(result.length !== 0){
+            this.setState({
+                tableBodyContent: result,
+                tableIsLoading: false
+            });
+        }
+        
+        
     }
 
-    componentDidMount(){
-        this.loadComponent();
+
+    hideHiddenColumnsOnLoad(){
+        let tableHeaders = document.getElementsByTagName('th');
+        for(let th of tableHeaders){
+            if(th.style.display === "none"){                
+                let targetCells = document.getElementsByClassName(th.className);                
+                for(let cell of targetCells){
+                    cell.style.display = "none";
+                }
+            }
+        }
     }
+
+
+
+    componentDidMount(){
+        this.loadComponent();             
+    }
+
+
 
     componentDidUpdate(){
         let currentUrl = window.location.href;
         if(currentUrl !== this.state.lastLoadedUrl){
-            this.loadComponent();
+            this.loadComponent();                       
         }
+        this.hideHiddenColumnsOnLoad();                 
     }
-
 
 
     render(){
@@ -202,19 +258,17 @@ class TermList extends React.Component{
                             initialPageNumber={this.state.pageNumber + 1}
                         />
                     </div>
-                </div>               
-                <table class="table table-striped term-list-table">
-                    <thead>
-                        <tr>                
-                            <th scope="col">Label</th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.createList()}               
-                    </tbody>
-                </table>
+                </div>                 
+                <div className="row class-list-tablle-holder">                                      
+                    <table class="table table-striped term-list-table class-list-table" id="class-list-table">
+                        {createShowColumnsTags()}                        
+                        {createClassListTableHeader()}
+                        <tbody>
+                            {this.state.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
+                            {!this.state.tableIsLoading && this.state.tableBodyContent}               
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
