@@ -3,7 +3,6 @@ import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText, renderNodePageTabs} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NodePageTabConfig from './listOfComponentsTabs.json';
-import queryString from 'query-string'; 
 
 
 const DETAIL_TAB_ID = 0;
