@@ -6,6 +6,7 @@ import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
+import NodeDetail from "../NodePage/NodeDetail/NodeDetail";
 
 
 class IndividualsList extends React.Component {
@@ -254,7 +255,7 @@ class IndividualsList extends React.Component {
                 {this.paneResize.generateVerticalResizeLine()}                                
                 {this.state.showNodeDetailPage && 
                     <div className="node-table-container" id="page-right-pane">
-                        <NodePage
+                        <NodeDetail
                         iri={this.state.selectedNodeIri}
                         ontology={this.props.ontology}
                         componentIdentity="individual"
