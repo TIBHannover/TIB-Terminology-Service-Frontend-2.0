@@ -115,16 +115,30 @@ class SearchForm extends React.Component{
             for(let onto of ontologiesForCollection){
               ontologies.push(onto['ontologyId']);
             }
-            let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
-            searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
-            jumpResult = (await jumpResult.json())['response']['docs'];
-            this.setState({
-              searchResult: searchResult,
-              jumpResult: jumpResult,
-              result: true,
-              enteredTerm: enteredTerm
-            });
+            if(selectedOntology){
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              searchResult =  (await searchResult.json())['response']['docs'];
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              jumpResult = (await jumpResult.json())['response']['docs'];
+              this.setState({
+                searchResult: searchResult,
+                jumpResult: jumpResult,
+                result: true,
+                enteredTerm: enteredTerm
+              });
+            }
+            else {
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
+              searchResult =  (await searchResult.json())['response']['docs'];
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
+              jumpResult = (await jumpResult.json())['response']['docs'];
+              this.setState({
+                searchResult: searchResult,
+                jumpResult: jumpResult,
+                result: true,
+                enteredTerm: enteredTerm
+              });
+            }            
           }
           else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
             let ontologies = [];
@@ -133,16 +147,30 @@ class SearchForm extends React.Component{
             for(let onto of ontologiesForCollection){
               ontologies.push(onto['ontologyId']);
             }
-            let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
-            searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
-            jumpResult = (await jumpResult.json())['response']['docs'];
-            this.setState({
-              searchResult: searchResult,
-              jumpResult: jumpResult,
-              result: true,
-              enteredTerm: enteredTerm
-            });
+            if(selectedOntology){
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              searchResult =  (await searchResult.json())['response']['docs'];
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              jumpResult = (await jumpResult.json())['response']['docs'];
+              this.setState({
+                searchResult: searchResult,
+                jumpResult: jumpResult,
+                result: true,
+                enteredTerm: enteredTerm
+              });
+            }
+            else{
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
+              searchResult =  (await searchResult.json())['response']['docs'];
+              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`)
+              jumpResult = (await jumpResult.json())['response']['docs'];
+              this.setState({
+                searchResult: searchResult,
+                jumpResult: jumpResult,
+                result: true,
+                enteredTerm: enteredTerm
+              });
+            }           
           }
         }
         else if(enteredTerm.length > 0 && this.state.urlPath){
