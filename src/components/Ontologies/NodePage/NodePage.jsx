@@ -123,14 +123,14 @@ class NodePage extends React.Component {
    */
   setTabOnLoad(){
     let requestedTab = '';
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    // let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
     if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
       this.setState({        
         activeTab: NOTES_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab,
-        targetTermIri: targetQueryParams.iri
+        
       });
     }
     else if (requestedTab !== lastRequestedTab){
@@ -173,7 +173,8 @@ class NodePage extends React.Component {
 
   componentDidMount(){
     if(this.state.data && this.state.prevNode !== this.props.iri){
-      this.setComponentData();      
+      this.setComponentData(); 
+      this.setTabOnLoad();     
     }
     // this.setTabOnLoad();
   }
@@ -182,8 +183,13 @@ class NodePage extends React.Component {
   componentDidUpdate(){    
     if(this.state.prevNode !== this.props.iri){
       this.setComponentData();
+      this.setTabOnLoad();
     }
     // this.setTabOnLoad();
+  }
+
+  componentWillUnmount(){
+    this.setTabOnLoad();
   }
 
 
@@ -197,11 +203,18 @@ class NodePage extends React.Component {
           </Helmet>
         </div>
         </HelmetProvider>
-        <ul className="nav nav-tabs">
-          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
+        <ul className="nav nav-tabs nav-tabs-node">
+          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology, this.state.activeTab)}
         </ul>
         {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
-          <NodeDetail/>
+          <NodeDetail
+          iri={this.props.iri}
+          ontology={this.props.ontology}
+          componentIdentity="term"
+          extractKey="terms"
+          isSkos={this.props.isSkos}
+          isIndividual={false}
+          />
         }
         {/* {this.createTable()}
         <div className='col-sm-12'  key={"json-button-row"}>

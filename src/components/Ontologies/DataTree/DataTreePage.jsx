@@ -107,7 +107,7 @@ render(){
         <div className="node-table-container" id="page-right-pane">
           {this.state.termTree && this.state.showNodeDetailPageClass &&           
               <MatomoWrapper>
-              <NodeDetail
+              <NodePage
                 iri={this.state.selectedNodeIri}
                 ontology={this.state.ontologyId}
                 componentIdentity="term"
@@ -119,7 +119,7 @@ render(){
           }
           {this.state.propertyTree && this.state.showNodeDetailPageProperty &&           
             <MatomoWrapper>
-            <NodeDetail
+            <NodePage
                 iri={this.state.selectedNodeIri}
                 ontology={this.state.ontologyId}
                 componentIdentity="property"
