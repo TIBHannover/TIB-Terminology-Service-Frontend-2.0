@@ -1,6 +1,7 @@
 import React from 'react';
 import {getNodeByIri, getSkosNodeByIri} from '../../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 class NodeDetail extends React.Component{
     constructor (props) {
@@ -124,6 +125,13 @@ class NodeDetail extends React.Component{
       render(){
         return(
           <div>
+            <HelmetProvider>
+             <div>
+              <Helmet>
+                <title>{`${this.state.data.ontology_name} - ${this.state.data.short_form}`}</title>
+              </Helmet>
+              </div>
+            </HelmetProvider>
             {this.createTable()}
             <div className='col-sm-12'  key={"json-button-row"}>
              <div className='row'>

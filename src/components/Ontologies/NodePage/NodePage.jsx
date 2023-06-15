@@ -1,9 +1,8 @@
 import React from 'react';
-import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText, renderNodePageTabs} from './helpers';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import NodeDetail from './NodeDetail/NodeDetail';
+import NodeNotes from './NodeNotes/NodeNotes';
 import queryString from 'query-string'; 
 
 
@@ -98,13 +97,6 @@ class NodePage extends React.Component {
   render () {    
     return (
       <div className='row'>
-        <HelmetProvider>
-        <div>
-          <Helmet>
-            <title>{`${this.state.data.ontology_name} - ${this.state.data.short_form}`}</title>
-          </Helmet>
-        </div>
-        </HelmetProvider>
         <ul className="nav nav-tabs nav-tabs-node">
           {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology, this.state.activeTab)}
         </ul>
@@ -117,6 +109,9 @@ class NodePage extends React.Component {
           isSkos={this.props.isSkos}
           isIndividual={false}
           />
+        }
+        {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
+          <NodeNotes/>
         }
       </div>
     )
