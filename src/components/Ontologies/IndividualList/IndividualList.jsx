@@ -255,7 +255,7 @@ class IndividualsList extends React.Component {
                 {this.paneResize.generateVerticalResizeLine()}                                
                 {this.state.showNodeDetailPage && 
                     <div className="node-table-container" id="page-right-pane">
-                        <NodeDetail
+                        <NodePage
                         iri={this.state.selectedNodeIri}
                         ontology={this.props.ontology}
                         componentIdentity="individual"
