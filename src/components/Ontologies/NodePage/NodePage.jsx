@@ -3,6 +3,8 @@ import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText, renderNodePageTabs} from './helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import NodePageTabConfig from './listOfComponentsTabs.json';
+import NodeDetail from './NodeDetail/NodeDetail';
+import queryString from 'query-string'; 
 
 
 const DETAIL_TAB_ID = 0;
@@ -116,30 +118,30 @@ class NodePage extends React.Component {
     return result;
   }
 
-  // /**
-  //  * Set the active tab and its page on load
-  //  */
-  // setTabOnLoad(){
-  //   let requestedTab = '';
-  //   let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-  //   let lastRequestedTab = this.state.lastRequestedTab;    
-  //   if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
-  //     this.setState({        
-  //       activeTab: NOTES_TAB_ID,
-  //       waiting: false,
-  //       lastRequestedTab: requestedTab,
-  //       targetTermIri: targetQueryParams.iri
-  //     });
-  //   }
-  //   else if (requestedTab !== lastRequestedTab){
-  //     this.setState({        
-  //       activeTab: DETAIL_TAB_ID,
-  //       waiting: false,
-  //       lastRequestedTab: requestedTab
+  /**
+   * Set the active tab and its page on load
+   */
+  setTabOnLoad(){
+    let requestedTab = '';
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let lastRequestedTab = this.state.lastRequestedTab;    
+    if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
+      this.setState({        
+        activeTab: NOTES_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        targetTermIri: targetQueryParams.iri
+      });
+    }
+    else if (requestedTab !== lastRequestedTab){
+      this.setState({        
+        activeTab: DETAIL_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab
 
-  //     });
-  //   }
-  // }
+      });
+    }
+  }
 
   /**
      * Handle the tab change in the node detail Top menu
@@ -198,7 +200,10 @@ class NodePage extends React.Component {
         <ul className="nav nav-tabs">
           {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
         </ul>
-        {this.createTable()}
+        {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
+          <NodeDetail/>
+        }
+        {/* {this.createTable()}
         <div className='col-sm-12'  key={"json-button-row"}>
           <div className='row'>
             <div className='col-sm-12 node-metadata-value'>
@@ -212,7 +217,7 @@ class NodePage extends React.Component {
               </a>
             </div>            
           </div>
-        </div>
+        </div> */}
       </div>
     )
   }

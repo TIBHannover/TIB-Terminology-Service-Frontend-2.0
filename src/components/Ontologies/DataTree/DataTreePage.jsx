@@ -6,6 +6,7 @@ import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../JumpTo/Jumpto';
 import PaneResize from '../../common/PaneResize/PaneResize';
+import NodeDetail from '../NodePage/NodeDetail/NodeDetail';
 
 
 
@@ -106,7 +107,7 @@ render(){
         <div className="node-table-container" id="page-right-pane">
           {this.state.termTree && this.state.showNodeDetailPageClass &&           
               <MatomoWrapper>
-              <NodePage
+              <NodeDetail
                 iri={this.state.selectedNodeIri}
                 ontology={this.state.ontologyId}
                 componentIdentity="term"
@@ -118,7 +119,7 @@ render(){
           }
           {this.state.propertyTree && this.state.showNodeDetailPageProperty &&           
             <MatomoWrapper>
-            <NodePage
+            <NodeDetail
                 iri={this.state.selectedNodeIri}
                 ontology={this.state.ontologyId}
                 componentIdentity="property"

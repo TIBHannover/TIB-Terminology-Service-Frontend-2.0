@@ -1,6 +1,6 @@
 import React from 'react';
-import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
-import {classMetaData, propertyMetaData, formatText} from './helpers';
+import {getNodeByIri, getSkosNodeByIri} from '../../../../api/fetchData';
+import {classMetaData, propertyMetaData, formatText} from '../helpers';
 
 class NodeDetail extends React.Component{
     constructor (props) {
@@ -104,6 +104,21 @@ class NodeDetail extends React.Component{
           result.push(row);
         }
         return result;
+      }
+
+      componentDidMount(){
+        if(this.state.data && this.state.prevNode !== this.props.iri){
+          this.setComponentData();      
+        }
+        // this.setTabOnLoad();
+      }
+    
+    
+      componentDidUpdate(){    
+        if(this.state.prevNode !== this.props.iri){
+          this.setComponentData();
+        }
+        // this.setTabOnLoad();
       }
 
       render(){
