@@ -193,7 +193,8 @@ export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontology, 
                   onClick={tabChangeHandler} 
                   data-value={configObject['tabId']} 
                   className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
-                  to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology + configObject['urlEndPoint']}>
+                  //to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology + configObject['urlEndPoint']}
+                  >
               
                   {configObject['tabTitle']}
               </Link>
