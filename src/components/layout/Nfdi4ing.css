@@ -1371,7 +1371,7 @@ p{
        
     padding-bottom: 500px !important;    
     background-color: white;    
-    width: 900px;
+    width: 5000px;
     float: left;
     position: relative;
     overflow-y: scroll;
@@ -1429,8 +1429,7 @@ p{
 
     padding-left: 50px;
     padding-right: 50px;
-    padding-top: 30px;
-    width: 880px;
+    padding-top: 30px;    
     float: left;
     background-color: white;
     height: 1000px;
