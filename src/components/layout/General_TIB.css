@@ -1370,7 +1370,7 @@ p{
     width: 40%;
     float: right;
     z-index: 999999;
-    background: white;
+    background: white;    
 }
 
 .tree-action-end-line{
@@ -1595,14 +1595,6 @@ p{
     /* display: inline; */
 }
 
-.tree-action-btn-holder{    
-    /* 
-        The button dic holder
-    */
-
-    /* width: 110px;     */
-    /* right: 0; */
-}
 
 .node-tag{
     /* 

@@ -28,12 +28,11 @@ export default class SkosHelper{
           let leafClass = i !==0 ? " opened" : " closed";
           let clickedClass = i === 0 ? " clicked" : "";    
           let symbol = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
-          let textSpan = React.createElement("span", {"className": "li-label-text"}, node.label);
-          let containerSpan = React.createElement("span", {"className": "tree-text-container" + clickedClass}, textSpan);
+          let textSpan = React.createElement("div", {"className": "li-label-text"}, node.label);
+          let containerSpan = React.createElement("div", {"className": "tree-text-container" + clickedClass}, textSpan);
           let hasChildren = await skosNodeHasChildren(ontologyId, node.iri);    
           if (!hasChildren){
-            leafClass = " leaf-node";
-            // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+            leafClass = " leaf-node";            
             symbol = React.createElement("i", {"className": ""}, "");
           }
           else if(hasChildren && i === 0){
@@ -51,7 +50,7 @@ export default class SkosHelper{
           let parentId = i+1 < treeNodes.length ? ("children_for_" + treeNodes[i + 1].iri) : false;
           if(!parentId){
             break;
-          }
+          }          
           ul = React.createElement("ul", {className: "tree-node-ul", id: parentId}, nodeInTree);
           childNode = ul;
         }
@@ -64,8 +63,8 @@ export default class SkosHelper{
             if(node.iri !== treeNodes[treeNodes.length - 1].iri){
               let leafClass = " closed";        
               let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
-              let textSpan = React.createElement("span", {"className": "li-label-text"}, node.text);
-              let containerSpan = React.createElement("span", {"className": "tree-text-container"}, textSpan);        
+              let textSpan = React.createElement("div", {"className": "li-label-text"}, node.text);
+              let containerSpan = React.createElement("div", {"className": "tree-text-container"}, textSpan);        
               if (!node.children){
                 leafClass = " leaf-node";
                 // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
