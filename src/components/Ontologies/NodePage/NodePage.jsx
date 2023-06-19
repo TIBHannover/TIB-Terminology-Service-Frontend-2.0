@@ -4,10 +4,12 @@ import NodePageTabConfig from './listOfComponentsTabs.json';
 import NodeDetail from './NodeDetail/NodeDetail';
 import NodeNotes from './NodeNotes/NodeNotes';
 import queryString from 'query-string'; 
+import NodeGraph from './NodeGraph/NodeGraph';
 
 
 const DETAIL_TAB_ID = 0;
 const NOTES_TAB_ID = 1;
+const GRAPH_TAB_ID = 2;
 
 class NodePage extends React.Component {
   constructor (props) {
@@ -37,6 +39,14 @@ class NodePage extends React.Component {
     if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
       this.setState({        
         activeTab: NOTES_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        
+      });
+    }
+    if (requestedTab !== lastRequestedTab && requestedTab === 'graph'){
+      this.setState({        
+        activeTab: GRAPH_TAB_ID,
         waiting: false,
         lastRequestedTab: requestedTab,
         
@@ -112,6 +122,9 @@ class NodePage extends React.Component {
         }
         {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
           <NodeNotes/>
+        }
+        {!this.state.waiting && (this.state.activeTab === GRAPH_TAB_ID) &&
+          <NodeGraph/>
         }
       </div>
     )
