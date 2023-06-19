@@ -32,6 +32,7 @@ class OntologyPage extends React.Component {
       errorRootTerms: null,      
       activeTab: OVERVIEW_TAB_ID,
       rootTerms: [],
+      skosRootIndividuals: [],
       rootProps: [],
       waiting: false,
       targetTermIri: " ",
@@ -152,19 +153,20 @@ class OntologyPage extends React.Component {
      */
   async getRootTerms (ontologyId) {    
     let rootTerms = [];
+    let skosRootIndividuals = [];
     let isSkos = await isSkosOntology(ontologyId);    
     if(isSkos){
-      rootTerms = await getSkosOntologyRootConcepts(ontologyId);
-      rootTerms = await shapeSkosConcepts(rootTerms);
+      skosRootIndividuals = await getSkosOntologyRootConcepts(ontologyId);
+      skosRootIndividuals = await shapeSkosConcepts(skosRootIndividuals);
     }
-    else{
-      rootTerms = await getOntologyRootTerms(ontologyId);
-    }    
+    rootTerms = await getOntologyRootTerms(ontologyId);
+
     if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
         this.setState({
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
+          skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: false,
           isSkosOntology: isSkos
         });
@@ -173,6 +175,7 @@ class OntologyPage extends React.Component {
         this.setState({
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
+          skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: true,
           isSkosOntology: isSkos
         });
@@ -182,6 +185,7 @@ class OntologyPage extends React.Component {
       this.setState({
         isRootTermsLoaded: true,
         errorRootTerms: 'Can not get this ontology root terms',
+        skosRootIndividuals: [],
         rootNodeNotExist: true,
         isSkosOntology: isSkos
       });
@@ -305,7 +309,7 @@ class OntologyPage extends React.Component {
     } else {
       return (
         <div className='row justify-content-center'>
-            {Toolkit.createHelmet(this.state.ontology.config.preferredPrefix)}
+            {Toolkit.createHelmet(this.state.ontology.ontologyId)}            
             {createOntologyPageHeadSection(this.state.ontology)}          
             <div className='col-sm-8'>
                 <ul className="nav nav-tabs">
@@ -319,6 +323,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                                 <DataTreePage
                                 rootNodes={this.state.rootTerms}
+                                rootNodesForSkos={this.state.skosRootIndividuals}
                                 componentIdentity={'term'}
                                 iri={this.state.targetTermIri}
                                 key={'termTreePage'}                    
@@ -335,6 +340,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                                 <DataTreePage
                                 rootNodes={this.state.rootProps}
+                                rootNodesForSkos={[]}
                                 componentIdentity={'property'}
                                 iri={this.state.targetPropertyIri}
                                 key={'propertyTreePage'}
@@ -348,7 +354,8 @@ class OntologyPage extends React.Component {
                 }
                 {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                                 <IndividualsList
-                                rootNodes={this.state.rootTerms}                                                    
+                                rootNodes={this.state.rootTerms}
+                                rootNodesForSkos={this.state.skosRootIndividuals}                                                    
                                 iri={this.state.targetIndividualIri}
                                 componentIdentity={'individual'}
                                 key={'individualsTreePage'}
@@ -357,7 +364,7 @@ class OntologyPage extends React.Component {
                                 lastState={""}
                                 domStateKeeper={this.changeTreeContent}
                                 isSkos={this.state.isSkosOntology}
-                                individualTabChanged={this.state.individualTabChanged}
+                                individualTabChanged={this.state.individualTabChanged}                                
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&

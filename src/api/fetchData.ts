@@ -125,10 +125,15 @@ export async function getIndividualsList(ontologyId:string){
 
 
 export async function getSkosOntologyRootConcepts(ontologyId:string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
-  let results =  await (await fetch(url, getCallSetting)).json();
-  return results;
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
+    let results =  await (await fetch(url, getCallSetting)).json();
+    return results;
+  }
+  catch(e){
+    return [];
+  }  
 }
 
 

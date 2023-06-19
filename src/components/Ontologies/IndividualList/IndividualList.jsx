@@ -8,6 +8,7 @@ import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
 
 
+
 class IndividualsList extends React.Component {
     constructor(props){
         super(props);
@@ -30,6 +31,7 @@ class IndividualsList extends React.Component {
         this.selectNodeOnLoad = this.selectNodeOnLoad.bind(this);
         this.renderIndividualListSection = this.renderIndividualListSection.bind(this);
         this.createActionButtonSection = this.createActionButtonSection.bind(this);
+        this.handleNodeSelectionInTreeView = this.handleNodeSelectionInTreeView.bind(this);
     }
 
 
@@ -40,7 +42,8 @@ class IndividualsList extends React.Component {
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
-                ontology: ontology                
+                ontology: ontology,
+                listView: !this.props.isSkos
             });
             if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
                 let currentUrlParams = new URLSearchParams();
@@ -59,7 +62,10 @@ class IndividualsList extends React.Component {
     }
 
    
-    selectNode(target){        
+    selectNode(target){ 
+        if(this.props.isSkos && !this.state.listView){
+            return true;
+        }        
         let selectedElement = document.querySelectorAll(".clicked");
         for(let i=0; i < selectedElement.length; i++){
             selectedElement[i].classList.remove("clicked");
@@ -81,9 +87,12 @@ class IndividualsList extends React.Component {
     }
 
     
-    selectNodeOnLoad(){        
+    selectNodeOnLoad(){
+        if(this.props.isSkos && !this.state.listView){
+            return true;
+        }      
         let node = document.getElementById(this.props.iri);
-        if(node){
+        if(node){            
             node.classList.add('clicked');            
             let position = document.getElementById(this.props.iri).offsetTop;
             document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;            
@@ -95,16 +104,18 @@ class IndividualsList extends React.Component {
 
 
     
-    processClick(e){
-        if(!this.state.listView){            
+    processClick(e){        
+        if(this.props.isSkos && !this.state.listView){            
+            return true;
+        } 
+        if(!this.state.listView){
             // select a class on the individual tree. Load the tree view for the class
-            if(e.target.parentNode.parentNode.classList.contains("opened")){                
+            if(e.target.parentNode.parentNode.classList.contains("opened")){
                 let path = window.location.pathname;
-                let targetIri = encodeURIComponent(e.target.parentNode.parentNode.dataset.iri)
+                let targetIri = encodeURIComponent(e.target.parentNode.parentNode.dataset.iri);
                 path = path.split("individuals")[0];
-                window.location.replace(path + "terms?iri=" + targetIri)
+                window.location.replace(path + "terms?iri=" + targetIri);
             }
-            
         }        
         else if (e.target.tagName === "SPAN"){ 
             this.selectNode(e.target);
@@ -135,8 +146,13 @@ class IndividualsList extends React.Component {
     }
 
 
-    handleNodeSelectionInTreeView(x, y){
-        return true;
+    handleNodeSelectionInTreeView(selectedNodeIri, ShowDetailTable, componentIdentity="individual"){
+        if(this.props.isSkos){
+            this.setState({
+                selectedNodeIri: selectedNodeIri,
+                showNodeDetailPage: ShowDetailTable
+              });
+        }
     }
 
     
@@ -155,18 +171,20 @@ class IndividualsList extends React.Component {
             <div className='tree-container'>
                 <Tree 
                     rootNodes={this.props.rootNodes}
+                    rootNodesForSkos={this.props.rootNodesForSkos}
                     componentIdentity={this.props.componentIdentity}
                     iri={this.state.selectedNodeIri}
                     key={this.props.key}
                     ontology={this.props.ontology}
-                    rootNodeNotExist={false}
+                    rootNodeNotExist={this.props.isSkos ? this.props.rootNodesForSkos.length === 0 : this.props.rootNodes.length === 0}
                     iriChangerFunction={this.props.iriChangerFunction}
                     lastState={this.props.lastState}
                     domStateKeeper={this.props.domStateKeeper}
                     isSkos={this.props.isSkos}
                     nodeSelectionHandler={this.handleNodeSelectionInTreeView}
-                    isIndividual={true}
-                    individualViewChanger={this.switchView}
+                    isIndividual={this.props.isSkos ? false : true}
+                    showListSwitchEnabled={true}
+                    individualViewChanger={this.switchView}                
                 />
             </div>          
         ];
@@ -177,14 +195,12 @@ class IndividualsList extends React.Component {
     createActionButtonSection(){
         return [
             typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
-                <div className="row tree-action-button-area">
-                    <div className="col-sm-5"></div>
-                    <div className="col-sm-6">
+                <div className="row tree-action-button-holder">                    
+                    <div className="col-sm-12">
                         <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.switchView}>
                             {this.state.listView ? "Show In Tree" : ""}
                         </button>                                
-                    </div>
-                    <div className="col-sm-1"></div>
+                    </div>                    
                 </div>                    
                    
         ];
@@ -194,8 +210,7 @@ class IndividualsList extends React.Component {
     renderIndividualListSection(){
         return [
             <div className="col-sm-12">
-                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                
-                {this.createActionButtonSection()}    
+                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                    
                 <div className="row">
                     <div className="col-sm-12">
                         <ul>
@@ -213,7 +228,7 @@ class IndividualsList extends React.Component {
         this.setComponentData();
         document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
         document.body.addEventListener("mousemove", this.paneResize.moveToResize);
-        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                
+        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                              
     }
 
     componentDidUpdate(){
@@ -226,7 +241,7 @@ class IndividualsList extends React.Component {
         }
         if(!this.state.isRendered){
             this.selectNodeOnLoad();
-        }
+        }        
     }
 
     componentWillUnmount(){  
@@ -239,31 +254,38 @@ class IndividualsList extends React.Component {
 
     render(){
         return(
-            <div className="tree-view-container resizable-container" onClick={(e) => this.processClick(e)}> 
+            <div className="tree-view-container resizable-container" onClick={(e) =>  this.processClick(e)}>                                 
                 <div className="tree-page-left-part" id="page-left-pane">
                   <JumpTo
                     ontologyId={this.props.ontology}
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
                    />
-                    <div>
+                   <div className='row tree-action-button-area'>
+                        <div className="col-sm-6"></div> 
+                        <div className="col-sm-5 text-center">
+                            {this.createActionButtonSection()}
+                        </div>
+                        <div className="col-sm-1"></div>   
+                   </div>                   
+                    <div>                        
                         {this.state.listView && this.renderIndividualListSection()} 
                         {!this.state.listView && this.createIndividualTree()}
                     </div>                    
                 </div>
                 {this.paneResize.generateVerticalResizeLine()}                                
-                {this.state.showNodeDetailPage && 
-                    <div className="node-table-container" id="page-right-pane">
-                        <NodePage
-                        iri={this.state.selectedNodeIri}
-                        ontology={this.props.ontology}
-                        componentIdentity="individual"
-                        extractKey="individuals"
-                        isSkos={this.state.isSkos}
-                        isIndividual={true}
-                        />
-                    </div>
-                }
+                <div className="node-table-container" id="page-right-pane">
+                    {this.state.showNodeDetailPage &&                     
+                            <NodePage
+                            iri={this.state.selectedNodeIri}
+                            ontology={this.props.ontology}
+                            componentIdentity="individual"
+                            extractKey="individuals"
+                            isSkos={this.state.isSkos}
+                            isIndividual={true}
+                            />                    
+                    }
+                </div>
             </div>
         );        
     }

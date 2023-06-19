@@ -68,7 +68,7 @@ export default class TreeHelper{
     if(document.getElementById(Id).classList.contains("closed")){
         // expand node
         let res = [];      
-        if(isSkos){
+        if(isSkos && childExtractName !== "terms"){
           res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
         }
         else{        
@@ -82,10 +82,10 @@ export default class TreeHelper{
         ul.setAttribute("id", "children_for_" + Id);
         ul.classList.add("tree-node-ul");
         for(let i=0; i < res.length; i++){
-          let node = isSkos ? await SkosHelper.shapeSkosMetadata(res[i]) : res[i];        
+          let node = (isSkos  && childExtractName !== "terms") ? await SkosHelper.shapeSkosMetadata(res[i]) : res[i];        
           let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
           ul.appendChild(listItem);      
-        }      
+        }
         document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
         document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
         document.getElementById(Id).classList.remove("closed");

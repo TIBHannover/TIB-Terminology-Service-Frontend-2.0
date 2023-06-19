@@ -15,8 +15,7 @@ export async function shapeSkosConcepts(skosConcepts){
         res["has_children"] = await skosNodeHasChildren(cons['data']['ontology_name'], cons["data"]["iri"]);
         res["iri"] = cons["data"]["iri"];
         concepts.push(res);
-    }
-    console.info(concepts)
+    }    
     return concepts    
 }
 
