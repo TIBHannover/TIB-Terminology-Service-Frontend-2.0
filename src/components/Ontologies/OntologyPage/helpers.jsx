@@ -85,7 +85,7 @@ function collpaseSiteHeader(){
         ontologyBannerContainer.style.overflow = 'hidden';
     }
     else{
-        siteHeader.style.maxHeight = '200px';
+        siteHeader.style.maxHeight = (process.env.REACT_APP_PROJECT_ID === "nfdi4ing" ? '220px' : '200px');
         ontologyBannerContainer.style.maxHeight = '200px';
         collpaseIcone.classList.add('fa-angle-double-up');
         collpaseIcone.classList.remove('fa-angle-double-down');        
