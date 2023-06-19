@@ -1,3 +1,6 @@
+import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
+
+
 export function setJumpResultButtons(resultItem){
     let content = [];
     let targetHref = "";
@@ -20,7 +23,7 @@ export function setJumpResultButtons(resultItem){
             {(() => { 
                 if(resultItem["type"] === 'ontology'){
                     return (
-                        <div className="jumpto-result-text">
+                        <div className="jumpto-result-text item-for-navigation">
                             {resultItem['label']}
                             <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
                         </div>
@@ -28,7 +31,7 @@ export function setJumpResultButtons(resultItem){
                 }
                 else{
                     return(
-                        <div className="jump-autocomplete-item jumpto-result-text">  
+                        <div className="jump-autocomplete-item jumpto-result-text item-for-navigation">  
                             {resultItem['label']}
                           <div className="btn btn-default button-in-jumpto term-button">{resultItem['short_form']}</div>
                           <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
@@ -45,7 +48,7 @@ export function setJumpResultButtons(resultItem){
             {(() => { 
                 if(resultItem["type"] === 'ontology'){
                     return (
-                        <div className="jumpto-result-text">
+                        <div className="jumpto-result-text item-for-navigation">
                             {resultItem['label']}
                          <div className="btn btn-default button-in-jumpto jmp-ontology-button">{resultItem['ontology_name']}</div>
                         </div>
@@ -53,7 +56,7 @@ export function setJumpResultButtons(resultItem){
                 }
                 else{
                     return(
-                        <div className="jumpto-result-text">
+                        <div className="jumpto-result-text item-for-navigation">
                             {resultItem['label']}
                           <div className="btn btn-default button-in-jumpto jmp-ontology-button">{resultItem['ontology_name']}</div>
                           <div className="btn btn-default button-in-jumpto jmp-term-button">{resultItem['short_form']}</div>
@@ -67,4 +70,34 @@ export function setJumpResultButtons(resultItem){
     }
  
     return content;    
+}
+
+/**
+ * Check if an ontology is part of a set of collections. Used in the facet filter
+ * @param {*} collectionsOntologies 
+ * @param {*} ontologyId 
+ */
+export function ontologyIsPartOfSelectedCollections(collectionsOntologies, ontologyId){    
+    for(let onto of collectionsOntologies){        
+        if(onto["ontologyId"] === ontologyId.toLowerCase()){
+            return true;
+        }
+    }    
+    return false;
+}
+
+
+/**
+ * Set the autosuggest based on the Collection project
+ */
+
+export async function ontologyForAutosuggest(){
+    let result = [];
+    let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`)
+    ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
+    for(let onto of ontologiesForCollection){
+        result.push(onto['ontologyId']);
+      }
+    return result;
+
 }

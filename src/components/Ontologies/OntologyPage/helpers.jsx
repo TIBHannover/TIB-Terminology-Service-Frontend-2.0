@@ -15,8 +15,7 @@ export async function shapeSkosConcepts(skosConcepts){
         res["has_children"] = await skosNodeHasChildren(cons['data']['ontology_name'], cons["data"]["iri"]);
         res["iri"] = cons["data"]["iri"];
         concepts.push(res);
-    }
-    console.info(concepts)
+    }    
     return concepts    
 }
 
@@ -80,14 +79,21 @@ function collpaseSiteHeader(){
         collpaseIcone.classList.add('fa-angle-double-down');
         siteHeader.style.marginTop = '-10px';
         applicationContent.style.minHeight = '800px';
+
+        siteHeader.style.overflow = 'hidden';
+        siteHeader.style.padding = '0';
+        ontologyBannerContainer.style.overflow = 'hidden';
     }
     else{
         siteHeader.style.maxHeight = '200px';
         ontologyBannerContainer.style.maxHeight = '200px';
         collpaseIcone.classList.add('fa-angle-double-up');
-        collpaseIcone.classList.remove('fa-angle-double-down');
-        siteHeader.style.marginTop = '10px';
+        collpaseIcone.classList.remove('fa-angle-double-down');        
         applicationContent.style.minHeight = '500px';
+
+        siteHeader.style.overflow = '';
+        siteHeader.style.padding = '10px';
+        ontologyBannerContainer.style.overflow = '';
     }
     
 }

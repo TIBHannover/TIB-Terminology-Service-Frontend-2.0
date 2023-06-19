@@ -5,11 +5,8 @@ const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
 const size = 10000;
 
 
-/**
- * Get the ontology list 
- * @returns A list
- */
- export async function getAllOntologies (){
+
+export async function getAllOntologies (){
   let OntologiesListUrl = <any> process.env.REACT_APP_API_ONTOLOGY_LIST;
   return fetch(OntologiesListUrl, getCallSetting)
     .then((s) => s.json())
@@ -22,12 +19,7 @@ const size = 10000;
 }
 
 
-
-/**
- * Get the ontology list for collection(s)
- * @returns A list of ontologies
- */
- export async function getCollectionOntologies (collections, exclusive){
+export async function getCollectionOntologies (collections, exclusive){
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
   answer = await answer.json();
@@ -51,12 +43,6 @@ const size = 10000;
 }
 
 
-
-/**
- * Get an ontology detail
- * @param ontologyid 
- * @returns 
- */
 export async function getOntologyDetail (ontologyid: string) {
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   return fetch(
@@ -72,11 +58,6 @@ export async function getOntologyDetail (ontologyid: string) {
     })
 }
 
-
-/**
- * fetch  the root terms (classes) for an ontology
- * @param ontologyId 
- */
 export async function getOntologyRootTerms(ontologyId:string) {
   try{
     let ontology = await getOntologyDetail(ontologyId);
@@ -128,9 +109,6 @@ export async function getListOfTerms(ontologyId:string, page:any, size:any) {
 }
 
 
-/**
- * Get the list of individuals for an ontology
- */
 export async function getIndividualsList(ontologyId:string){
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=100000";
@@ -146,24 +124,20 @@ export async function getIndividualsList(ontologyId:string){
 }
 
 
-/**
- * Get the SKOS ontologies root concepts
- * @param params 
- */
 export async function getSkosOntologyRootConcepts(ontologyId:string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
-  let results =  await (await fetch(url, getCallSetting)).json();
-  return results;
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
+    let results =  await (await fetch(url, getCallSetting)).json();
+    return results;
+  }
+  catch(e){
+    return [];
+  }  
 }
 
 
-
-/**
- * fetch  the root properties for an ontology
- * @param ontologyId 
- */
- export async function getOntologyRootProperties(ontologyId:string) {
+export async function getOntologyRootProperties(ontologyId:string) {
   try{
     let ontology = await getOntologyDetail(ontologyId);
     let propertiesLink = ontology['_links']['properties']['href'];
@@ -190,13 +164,6 @@ export async function getSkosOntologyRootConcepts(ontologyId:string) {
   
 }
 
-/**
- * Get the JS tree for a target node given by iri
- * @param ontologyId 
- * @param targetNodeType 
- * @param targetNodeIri 
- * @param viewMode 
- */
 export async function getNodeJsTree(ontologyId:string, targetNodeType:string, targetNodeIri:string, viewMode:any){
   try{
     let url = process.env.REACT_APP_API_BASE_URL + "/";
@@ -210,10 +177,6 @@ export async function getNodeJsTree(ontologyId:string, targetNodeType:string, ta
 }
 
 
-
-/**
- * Get the js tree for a node. It returns the subtree of that node as a flat list.
- */
 export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string, targetNodeId:string, extractName:string) {
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/";
@@ -223,9 +186,6 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
 }
 
 
-/**
- * Get the children for skos ontology terms
- */
 export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:string){
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
@@ -240,9 +200,6 @@ export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:strin
 }
 
 
-/**
- * Check an skos ontology node has children
-*/
 export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:string) {
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
@@ -263,15 +220,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
 }
 
 
-
-/**
- * Get a node metadata by its iri
- * @param ontology 
- * @param nodeIri 
- * @param mode 
- * @returns 
- */
- export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
+export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
   if(nodeIri === "%20"){
     // empty iri
     return false;
@@ -297,13 +246,14 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
     node['subClassOf'] = 'N/A';
     return node;
   }
-  // node = node['_embedded'][mode][0];
+ 
   let parents = await getParents(node, mode);
   if(mode === "terms"){
     let rels = await getClassRelations(node, ontology);
     node['relations'] = await getRelations(node['iri'], ontology);
     node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
     node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
+    node['instancesList'] = await getIndividualInstancesForClass(ontology, node['iri']);
   }
   else{
     node['relations'] = [];
@@ -313,9 +263,6 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
 }
 
 
-/**
- * Get Skos node by Iri
- */
 export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontology +  "/individuals/" + encodeURIComponent(nodeIri);
@@ -332,9 +279,6 @@ export async function getSkosNodeByIri(ontology:string, nodeIri:string) {
 }
 
 
-/**
- * Get an Skos node parent concept
- */
 export async function getSkosNodeParent(ontology, iri) {
   let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
   let url = baseUrl +  "/" + ontology +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
@@ -347,9 +291,6 @@ export async function getSkosNodeParent(ontology, iri) {
 }
 
 
-/**
- * Check of ontology is SKOS 
- */
 export async function isSkosOntology(ontologyId) {
   let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
   let url = baseUrl + "/" + ontologyId;
@@ -363,14 +304,7 @@ export async function isSkosOntology(ontologyId) {
 
 
 
-
-/**
- * Get a class to Equivalent Axioms
- * @param classid 
- * @returns 
- */
-
-async function getEqAxiom(nodeIri:string, ontologyId:string){
+export async function getEqAxiom(nodeIri:string, ontologyId:string){
   let url = <string> "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
   let res = await fetch(url, getCallSetting);
@@ -388,16 +322,9 @@ async function getEqAxiom(nodeIri:string, ontologyId:string){
     return resultHtml;
   }
   return "N/A";
-
 }
 
-/**
- * Get subClass Of values for selected node
- * @param ontology 
- * @param nodeIri 
- * @param mode 
- * @returns 
- */
+
 export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let url = <string> "";
   let parentUrl = <string> "";
@@ -409,28 +336,25 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   res = res["_embedded"];
-    let result= "";
-    result += "<ul>"
-    for(let i=0; i < parentRes["terms"].length; i++){
-      result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
-    }
-    if (typeof(res) !== "undefined"){
-      for(let i=0; i < res["strings"].length; i++){ 
-      result += '<li>'+ res["strings"][i]["content"] +'</li>';     
-    }
-    result += "<ul>"
-    
+  let result= "";
+  if(!parentRes){
+    return result;
   }
+  result += "<ul>"
+  for(let i=0; i < parentRes["terms"].length; i++){
+    result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
+  }
+  if (typeof(res) !== "undefined"){
+    for(let i=0; i < res["strings"].length; i++){ 
+    result += '<li>'+ res["strings"][i]["content"] +'</li>';     
+  }
+  result += "<ul>"
+  
+}
   return result; 
 }
 
-/**
- * Get subClass Of values for selected node
- * @param ontology 
- * @param nodeIri 
- * @param mode 
- * @returns 
- */
+
 export async function getRelations(nodeIri:string, ontologyId:string){
   let url = <string>""
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/relatedfroms';
@@ -440,8 +364,7 @@ export async function getRelations(nodeIri:string, ontologyId:string){
     let entries = Object.entries(res)
     let result = "";
     
-    for(let [k,v] of entries){
-      //console.info(`${JSON.stringify(k)}: ${JSON.stringify(v)}`)               
+    for(let [k,v] of entries){               
       result += k 
       result += "<ul>"            
       for(let item of v){
@@ -457,24 +380,6 @@ export async function getRelations(nodeIri:string, ontologyId:string){
 
 
 
-/**
- * get the page field from json result (TS api paginates the results)
- * @param url 
- * @returns 
- */
-async function getPageCount(url: string){
-  let answer = await fetch(url, getCallSetting);
-  answer = await answer.json();
-  return Math.ceil(answer['page']['totalElements'] / size);
-}
-
-
-
-
-/**
- * Get a list of all existing collections. 
- * @returns 
- */
 export async function getAllCollectionsIds() {
   let url = <any> process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
   let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_URL;
@@ -498,12 +403,6 @@ export async function getAllCollectionsIds() {
 }
 
 
-
-/**
- * Get a node parents
- * @param node 
- * @returns 
- */
 export async function getParents(node:any, mode:string) {
   if(mode === "individuals"){
     return [];
@@ -524,11 +423,6 @@ export async function getParents(node:any, mode:string) {
 }
 
 
-/**
- * Get a class relations
- * @param classNode
- * @param ontologyId
- */
 export async function getClassRelations(classNode:any, ontologyId:string) {
   if(typeof(classNode['_links']['graph']) === "undefined"){
     return [];
@@ -574,6 +468,29 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
 }
 
 
+export async function getIndividualInstancesForClass(ontologyId:string, classIri:string){
+  try{
+    let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let callUrl = baseUrl + "/" + ontologyId + "/" + encodeURIComponent(encodeURIComponent(classIri)) + "/terminstances";
+    let result = await fetch(callUrl, getCallSetting);
+    result = await result.json();
+    result = result['_embedded'];
+    if(!result || typeof(result['individuals']) === "undefined"){
+      return [];
+    }
+    return result['individuals'];
+  }
+  catch(e){
+    return [];
+  }
+}
+
+
+async function getPageCount(url: string){
+  let answer = await fetch(url, getCallSetting);
+  answer = await answer.json();
+  return Math.ceil(answer['page']['totalElements'] / size);
+}
 
 export function getClassName (classid: string) {
   return fetch(
@@ -597,7 +514,6 @@ export function getClassName (classid: string) {
 }
 
 
-
 export function fetchConceptById (id: string) {
   return fetch(
     'https://service.tib.eu/ts4tib/api/terms' +
@@ -615,6 +531,7 @@ export function fetchConceptById (id: string) {
       return { conceptId: id, concept: s?._embedded?.terms[0] }
     })
 }
+
 
 export function autocompleteConcept (text: string, ontology:string|undefined) {
   let quert = ''
@@ -637,9 +554,11 @@ export function autocompleteConcept (text: string, ontology:string|undefined) {
     })
 }
 
+
 function mapOlsToIriAndNameTuple (item: any) {
   return { iri: item?.iri, label: item?.label }
 }
+
 
 export const fetch_data = (url: string) => {
   return fetch(url, {
@@ -655,11 +574,6 @@ export const fetch_data = (url: string) => {
     })
 }
 
-/**
-   *
-   * @param url Get url with http or https protocol
-   * @returns concatinate s to http
-   */
 export const fix_url = (url: string) => {
   if (url.substr(0, 5) === 'http:') {
     return url.replace('http', 'https')
@@ -668,11 +582,6 @@ export const fix_url = (url: string) => {
   }
 }
 
-/**
-   *
-   * @param url
-   * @returns return url from https to /terms
-   */
 export const get_url_prefix = (url: string | undefined) => {
   if (url === undefined) return ''
   return fix_url(url.substring(0, url.search('/terms') + 7))

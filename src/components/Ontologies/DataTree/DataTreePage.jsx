@@ -88,6 +88,7 @@ render(){
           <div className='tree-container'>
                 <Tree
                   rootNodes={this.props.rootNodes}
+                  rootNodesForSkos={this.props.rootNodesForSkos}
                   componentIdentity={this.props.componentIdentity}
                   iri={this.props.iri}
                   key={this.props.key}                    

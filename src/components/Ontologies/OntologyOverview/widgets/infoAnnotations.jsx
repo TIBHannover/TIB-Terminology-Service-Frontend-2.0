@@ -12,6 +12,7 @@ class InfoAnnotations extends React.Component{
         this.formatCreators = this.formatCreators.bind(this);
         this.alphabeticSort = this.alphabeticSort.bind(this);
         this.createOverview = this.createOverview.bind(this);
+        this.formatSubject = this.formatSubject.bind(this);
     }
 
     /**
@@ -25,6 +26,22 @@ class InfoAnnotations extends React.Component{
         }
         answer = value.join(',\n')
         return answer
+      }
+    
+    /**
+     * Handle the subjects in classifications 
+     */   
+      formatSubject(){
+        let ontology = this.props.ontology;
+        if(ontology.config.classifications[1] !== undefined){
+        let answer = []
+        let value = []
+        for(let i=0; i< ontology.config.classifications[1].Subject.length; i++){
+          value.push(ontology.config.classifications[1].Subject[i])
+        }
+        answer = value.join(',\n')
+        return answer
+        }          
       }
 
     /**
@@ -106,6 +123,18 @@ class InfoAnnotations extends React.Component{
                    <table className="ontology-detail-table" striped="columns">
                     <tbody>
                         <tr>
+                          <td className="ontology-overview-table-id-column"><b>Version</b></td>
+                          <td>
+                            {ontology.config.version}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
+                          <td>
+                            <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+                          </td>
+                        </tr>
+                        <tr>
                           <td className="ontology-overview-table-id-column"><b>IRI</b></td>
                           <td>
                             <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
@@ -171,6 +200,13 @@ class InfoAnnotations extends React.Component{
                              {this.formatCreators(ontology.config.creators)}
                            </td>
                         </tr>
+                        {process.env.REACT_APP_PROJECT_ID === "general" && 
+                        <tr>
+                           <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+                           <td>
+                             {this.formatSubject()}
+                           </td>
+                        </tr>}
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                            <td>
@@ -190,12 +226,12 @@ class InfoAnnotations extends React.Component{
                              <a 
                                className='btn btn-primary btn-dark download-ontology-btn'                                
                                onClick={async () => {                    
-                                 const jsonFile = JSON.stringify(this.state.ontologyObject);
+                                 const jsonFile = JSON.stringify(ontology);
                                  const blob = new Blob([jsonFile],{type:'application/json'});
                                  const href = await URL.createObjectURL(blob);
                                  const link = document.createElement('a');
                                  link.href = href;
-                                 link.download = this.state.ontologyObject.ontologyId + "_metadata.json";
+                                 link.download = ontology.ontologyId + "_metadata.json";
                                  document.body.appendChild(link);
                                  link.click();
                                  document.body.removeChild(link);
