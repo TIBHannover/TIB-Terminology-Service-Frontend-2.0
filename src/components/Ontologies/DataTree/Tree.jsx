@@ -254,10 +254,7 @@ class Tree extends React.Component {
     }
 
 
-    /**
-     * Process a click on the tree container div. 
-     * @param {*} e 
-     */
+    
     processClick(e){
         if(this.props.isIndividual){
             return true;
@@ -279,10 +276,6 @@ class Tree extends React.Component {
 
     
 
-    /**
-     * Process the keyboard navigation
-     * @param {*} event 
-     */
     processKeyNavigation(event){
         let jumtoItems = document.getElementsByClassName('jumpto-result-text');
         if(jumtoItems.length !== 0){
