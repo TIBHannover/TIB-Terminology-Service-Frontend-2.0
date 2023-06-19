@@ -8,7 +8,22 @@ import TreeNodeController from './TreeNode';
 export default class SkosHelper{
 
 
-    static async buildSkosSubtree(ontologyId, iri, fullTree=false){
+    static async buildSkosTree(ontologyId, targetIri=null, fullTree=false){
+        let subTreeObject = await SkosHelper.buildSkosSubTree(ontologyId, targetIri);
+        let ul = subTreeObject.ul;
+        let treeNodesArrayLastIndex = subTreeObject.treeNodesArray.length - 1;
+        if(fullTree){          
+          ul = await SkosHelper.buildSkosFullTree(ontologyId, subTreeObject.treeNodesArray[treeNodesArrayLastIndex].iri, subTreeObject.nodeSubTree);      
+        }
+        else{
+          ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, subTreeObject.nodeSubTree);   
+        }      
+        return ul;
+    }
+
+
+
+    static async buildSkosSubTree(ontologyId, iri){
         let treeNodes = [];
         let targetNode = await getSkosNodeByIri(ontologyId, encodeURIComponent(iri));
         treeNodes.push(targetNode);  
@@ -22,7 +37,7 @@ export default class SkosHelper{
         }  
         let nodeInTree = "";
         let childNode = "";
-        let ul = "";
+        let ul = "";  
         for(let i=0; i < treeNodes.length; i++){
           let node = treeNodes[i];    
           let leafClass = i !==0 ? " opened" : " closed";
@@ -51,47 +66,44 @@ export default class SkosHelper{
           if(!parentId){
             break;
           }          
-          ul = React.createElement("ul", {className: "tree-node-ul", id: parentId}, nodeInTree);
+          ul = React.createElement("ul", {className: "tree-node-ul", id: parentId}, nodeInTree);           
           childNode = ul;
         }
-        if(fullTree){
-          // show the full tree
-          let listOfNodes = [];
-          let rootNodes = await getSkosOntologyRootConcepts(ontologyId);
-          for(let i=0; i < rootNodes.length; i++){
-            let node = await SkosHelper.shapeSkosMetadata(rootNodes[i], true);      
-            if(node.iri !== treeNodes[treeNodes.length - 1].iri){
-              let leafClass = " closed";        
-              let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
-              let textSpan = React.createElement("div", {"className": "li-label-text"}, node.text);
-              let containerSpan = React.createElement("div", {"className": "tree-text-container"}, textSpan);        
-              if (!node.children){
-                leafClass = " leaf-node";
-                // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
-                symbol = React.createElement("i", {"className": ""}, "");
-              }          
-              let element = React.createElement("li", {         
-                  "data-iri":node.iri, 
-                  "data-id": node.iri,
-                  "className": "tree-node-li" + leafClass,
-                  "id": node.iri
-                }
-                  , symbol, containerSpan
-                  );
-              listOfNodes.push(element);
+        return  {"ul": ul, "nodeSubTree": nodeInTree, "treeNodesArray": treeNodes};
+    }
+
+
+
+    static async buildSkosFullTree(skosOntologyId, excludedRootNodeIri=null, exludedRootNodeSubtreeContent=null){
+      let listOfNodes = [];
+      let rootNodes = await getSkosOntologyRootConcepts(skosOntologyId);
+      for(let i=0; i < rootNodes.length; i++){
+        let node = await SkosHelper.shapeSkosMetadata(rootNodes[i], true);      
+        if(node.iri !== excludedRootNodeIri){
+          let leafClass = " closed";        
+          let symbol = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
+          let textSpan = React.createElement("div", {"className": "li-label-text"}, node.text);
+          let containerSpan = React.createElement("div", {"className": "tree-text-container"}, textSpan);        
+          if (!node.children){
+            leafClass = " leaf-node";
+            // symbol = React.createElement("i", {"className": "fa fa-close"}, "");
+            symbol = React.createElement("i", {"className": ""}, "");
+          }          
+          let element = React.createElement("li", {         
+              "data-iri":node.iri, 
+              "data-id": node.iri,
+              "className": "tree-node-li" + leafClass,
+              "id": node.iri
             }
-            else{
-              listOfNodes.push(nodeInTree);
-            } 
-          }
-          ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, listOfNodes);   
-      
+              , symbol, containerSpan
+              );
+          listOfNodes.push(element);
         }
         else{
-          ul = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, nodeInTree);   
-        }
-      
-        return ul;
+          listOfNodes.push(exludedRootNodeSubtreeContent);
+        } 
+      }
+      return React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, listOfNodes);      
     }
 
 
