@@ -5,9 +5,11 @@ class NodeGraph extends React.Component{
         super(props)
         this.state = ({
           data: true,
+          iri: "",
           iriIsCopied: false,
           prevNode: "",
           componentIdentity: "",
+          ontology: "",
           isSkos: false,
           lastRequestedTab: "",
           waiting: false,
@@ -15,6 +17,7 @@ class NodeGraph extends React.Component{
 
         })
         this.setComponentData = this.setComponentData.bind(this);
+        this.generateGraph = this.generateGraph.bind(this);
     }
 
     async setComponentData(){
@@ -25,18 +28,12 @@ class NodeGraph extends React.Component{
         let isSkos = this.props.isSkos;
         let node = {};
         let showDataAsJsonBtnHref = "";
-        if(isSkos){
-          node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));
-          showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
-        }
-        else{      
-          node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);
-          showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/" + extractKey + "?iri=" + encodeURIComponent(node.iri);
-        }
         if(node.iri){
           this.setState({
             prevNode: node.iri,
+            iri: targetIri,
             data: node,
+            ontology: ontology,
             iriIsCopied: false,
             componentIdentity: componentIdentity,
             isSkos: isSkos,
@@ -46,10 +43,26 @@ class NodeGraph extends React.Component{
        
       }
 
+    generateGraph(){
+        if(this.state.iri){
+            window["initLegacyGraphView"](
+                process.env.REACT_APP_API_BASE_URL + `/api/ontologies/`+ this.state.ontology + `terms?iri=` + encodeURIComponent(this.state.iri)
+            );
+        }
+    }
+
+    componentDidMount(){
+        this.generateGraph();
+    }
+
+    componentDidUpdate(){
+        this.generateGraph();
+    }
+
     render(){
         return(
-            <div>
-                Graph view 
+            <div id="ontology_vis">
+               {this.generateGraph()}
             </div>
         )
     }
