@@ -17,7 +17,7 @@ class NodeGraph extends React.Component{
 
         })
         this.setComponentData = this.setComponentData.bind(this);
-        this.generateGraph = this.generateGraph.bind(this);
+        //this.generateGraph = this.generateGraph.bind(this);
     }
 
     async setComponentData(){
@@ -43,27 +43,25 @@ class NodeGraph extends React.Component{
        
       }
 
-    generateGraph(){
-        if(this.state.iri){
-            window["initLegacyGraphView"](
-                process.env.REACT_APP_API_BASE_URL + `/api/ontologies/`+ this.state.ontology + `terms?iri=` + encodeURIComponent(this.state.iri)
-            );
-        }
-    }
+    // generateGraph(){
+    //     if(this.props.iri){
+    //         window["initLegacyGraphView"](
+    //             process.env.REACT_APP_API_BASE_URL + `/api/ontologies/`+ this.props.ontology + `terms?iri=` + encodeURIComponent(this.props.iri)
+    //         );
+    //     }
+    // }
 
     componentDidMount(){
-        this.generateGraph();
+        //this.generateGraph();
     }
 
     componentDidUpdate(){
-        this.generateGraph();
+        //this.generateGraph();
     }
 
     render(){
         return(
-            <div id="ontology_vis">
-               {this.generateGraph()}
-            </div>
+            <div id="ontology_vis"/>     
         )
     }
 
