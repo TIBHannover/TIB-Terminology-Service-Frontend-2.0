@@ -3,7 +3,7 @@ import { useAuth } from "react-oidc-context";
 
 export default function LoginForm(props){
     const auth = useAuth();
-    console.info(auth?.user?.access_token)
+    // console.info(auth?.user?.access_token)
     var token = auth?.user?.access_token;
     if (token){
         var base64Url = token.split('.')[1];
@@ -15,10 +15,6 @@ export default function LoginForm(props){
         console.info(JSON.parse(jsonPayload));
     }
     
-
-
-
-
 
     localStorage.setItem("test_token", auth?.user?.access_token) 
     return [

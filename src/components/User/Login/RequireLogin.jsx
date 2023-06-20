@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { isLogin } from "./Auth"
+import { isLogin } from "./TS/Auth";
 import {Route} from 'react-router-dom';
-import Login from "./Login";
+import Login from "./TS/Login";
 
 
 function RequireLoginRoute({component: Component, ...rest}){

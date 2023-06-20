@@ -1,5 +1,6 @@
 import React from "react";
-import LoginForm from "../Login/Login";
+// import LoginForm from "../Login/Keycloak/Login";
+import Login from "../Login/TS/Login";
 import { withAuth } from "react-oidc-context";
 
 
@@ -8,8 +9,8 @@ class UserProfile extends React.Component{
     render(){
         return [
             <div className="row">
-                {!this.props.auth.isAuthenticated && 
-                    <LoginForm onlyLoginButton={true} />
+                {!this.props.auth.isAuthenticated &&                     
+                    <Login isModal={false} />
                 }
                 {this.props.auth.isAuthenticated &&
                     <div className="row">

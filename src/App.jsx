@@ -17,12 +17,15 @@ import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
-import LoginForm from './components/User/Login/Login';
-import UserProfile from './components/User/Profile/Profile';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
 
+// Auth related Imports
+// import LoginForm from './components/User/Login/Login';
+import Login from './components/User/Login/TS/Login';
+import { isLogin } from './components/User/Login/TS/Auth';
+import UserProfile from './components/User/Profile/Profile';
 import { AuthProvider } from "react-oidc-context";
 
 
@@ -35,6 +38,12 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 
 function App() {
   AppHelpers.setSiteTitleAndFavIcon();
+
+   // set login status
+   isLogin().then((resp) => {
+    localStorage.setItem('isLogin', resp);
+  });
+
   AppHelpers.checkBackendStatus();  
 
   const oidcConfig = {
@@ -86,7 +95,7 @@ function App() {
               <CookieBanner />
               <Switch>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
-                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={LoginForm}/>    
+                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
                 <Route  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>                
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&

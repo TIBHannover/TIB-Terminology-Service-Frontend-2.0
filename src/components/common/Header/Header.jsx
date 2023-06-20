@@ -1,7 +1,8 @@
 import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG';
 import SearchForm from "../../Search/SearchForm";
-import LoginForm from '../../User/Login/Login';
+// import LoginForm from '../../User/Login/Login';
+import Login from '../../User/Login/TS/Login';
 
 
 function Header () {
@@ -9,7 +10,8 @@ function Header () {
     <div className='header-wrapper header-collapseable-section'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
-            <LoginForm onlyLoginButton={true}></LoginForm>
+            {/* <LoginForm onlyLoginButton={true}></LoginForm> */}
+            <Login isModal={true}></Login>
             
           </div>
           <div className='row site-header-nav-logo-holder'>
