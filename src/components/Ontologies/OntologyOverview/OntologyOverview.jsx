@@ -1,6 +1,7 @@
 import React from 'react';
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
+import TermRequest from '../TermRequest/TermRequest';
 
 
 class OntologyOverview extends React.Component {
@@ -41,6 +42,8 @@ class OntologyOverview extends React.Component {
         </div>
         <div className='col-sm-3'>
           <OntologyStatsBox ontology={this.props.ontology} />
+          <br></br>
+          {this.props.ontology.ontologyId === "vibso" ? <TermRequest /> : ""}
         </div>
     </div>
    );

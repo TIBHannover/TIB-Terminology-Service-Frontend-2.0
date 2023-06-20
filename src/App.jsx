@@ -17,9 +17,13 @@ import Help from "./components/Help/Help";
 import UsagePage from './components/Usage/Usage';
 import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
+import LoginForm from './components/User/Login/Login';
+import UserProfile from './components/User/Profile/Profile';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
+
+import { AuthProvider } from "react-oidc-context";
 
 
 // import css file based on the target project
@@ -31,7 +35,14 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 
 function App() {
   AppHelpers.setSiteTitleAndFavIcon();
-  AppHelpers.checkBackendStatus();
+  AppHelpers.checkBackendStatus();  
+
+  const oidcConfig = {
+    client_id: process.env.REACT_APP_KEYCLOAK_CLIENT_ID,
+    authority: process.env.REACT_APP_KEYCLOAK_ENDPOINT,    
+    redirect_uri: process.env.REACT_APP_LOGIN_REDIRECT_URL,
+    post_logout_redirect_uri: process.env.REACT_APP_LOGIN_REDIRECT_URL
+  };
 
   const [loading, setLoading] = useState(true); 
   useEffect(() => {    
@@ -41,7 +52,20 @@ function App() {
   }, []);
 
   return (
-    <div className="App">   
+    <div className="App">
+      <div class="overlay" id="login-loading">
+          <div class="d-flex flex-column align-items-center justify-content-center">  
+            <div className="row">
+              <div class="spinner-grow text-primary" role="status">
+                <span class="sr-only">Login ...</span>
+              </div>
+            </div>
+            <div className="row login-load-text">
+              <h2><strong>Login ...</strong></h2>
+          </div>                                
+          </div>
+      </div>
+    <AuthProvider {...oidcConfig}>   
      <BrowserRouter>
         <MatomoWrapper> 
           <Header />               
@@ -61,11 +85,13 @@ function App() {
               <span id="backend-is-down-message-span"></span>
               <CookieBanner />
               <Switch>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>            
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
+                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={LoginForm}/>    
+                <Route  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>                
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyPage}/>
+                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?/:targetId?"} component={OntologyPage}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
@@ -84,6 +110,7 @@ function App() {
           )}              
         </MatomoWrapper>
       </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }
