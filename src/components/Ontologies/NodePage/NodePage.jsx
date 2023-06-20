@@ -124,7 +124,14 @@ class NodePage extends React.Component {
           <NodeNotes/>
         }
         {!this.state.waiting && (this.state.activeTab === GRAPH_TAB_ID) &&
-          <NodeGraph/>
+          <NodeGraph
+          iri={this.props.iri}
+          ontology={this.props.ontology}
+          componentIdentity={this.props.componentIdentity}
+          extractKey={this.props.extractKey}
+          isSkos={this.props.isSkos}
+          isIndividual={false}
+          />
         }
       </div>
     )
