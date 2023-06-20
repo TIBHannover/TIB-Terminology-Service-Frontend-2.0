@@ -41,7 +41,7 @@ function App() {
 
    // set login status
    isLogin().then((resp) => {
-    localStorage.setItem('isLogin', resp);
+    localStorage.setItem('isLoginInTs', resp);
   });
 
   AppHelpers.checkBackendStatus();  
