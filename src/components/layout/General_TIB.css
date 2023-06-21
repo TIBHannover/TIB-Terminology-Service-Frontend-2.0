@@ -1335,7 +1335,7 @@ p{
         
     padding-bottom: 500px !important;
     background-color: white;
-    width: 5000px;
+    width: 100%;
     float: left;
     position: relative; 
     overflow-y: scroll;
@@ -1344,6 +1344,21 @@ p{
 }
 .tree-page-left-part::-webkit-scrollbar {
     /* display: none; */
+}
+
+.node-table-container{
+    /* 
+        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
+    */
+
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 30px;    
+    float: left;
+    background-color: white;
+    height: 1000px;
+    overflow-y: auto;
+    width: 100%;
 }
 
 .tree-container{
@@ -1385,20 +1400,6 @@ p{
     z-index: 999;
     overflow-x: hidden; 
 
-}
-
-.node-table-container{
-    /* 
-        The styles for the container that wrapp a node (class/property) detail table on the right side of the tree view page.
-    */
-
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-top: 30px;    
-    float: left;
-    background-color: white;
-    height: 1000px;
-    overflow-y: auto;       
 }
 
 .page-resize-vertical-line{

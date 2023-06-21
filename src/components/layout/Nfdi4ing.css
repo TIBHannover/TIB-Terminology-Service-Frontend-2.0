@@ -1371,7 +1371,7 @@ p{
        
     padding-bottom: 500px !important;    
     background-color: white;    
-    width: 5000px;
+    width: 100%;
     float: left;
     position: relative;
     overflow-y: scroll;
@@ -1433,7 +1433,8 @@ p{
     float: left;
     background-color: white;
     height: 1000px;
-    overflow-y: auto;   
+    overflow-y: auto;
+    width: 100%;
 }
 
 .page-resize-vertical-line{
