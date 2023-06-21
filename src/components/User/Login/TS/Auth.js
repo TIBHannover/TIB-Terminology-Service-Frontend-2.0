@@ -6,7 +6,7 @@ export function auth(){
         let code = cUrl.split("code=")[1];
         let data = new FormData();
         data.append("code", code);
-        fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/auth/login', {method: "POST", body: data})
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", body: data})
             .then((resp) => resp.json())
             .then((resp) => {                
                 if(resp["_result"]){
@@ -32,7 +32,7 @@ export async function isLogin(){
     if(localStorage.getItem("token")){
         let data = new FormData();
         data.append("token", localStorage.getItem("token"));
-        let result = await fetch(process.env.REACT_APP_AUTH_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", body: data});
+        let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", body: data});
         result = await result.json()
         result = result["_result"]
         if(result && result["valid"] === true){
