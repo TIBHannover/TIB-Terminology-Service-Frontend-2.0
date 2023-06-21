@@ -16,6 +16,7 @@
         "tabTitle": "Notes",
         "urlEndPoint": "/notes"
     },
+
     "GraphView":{
         "id":"graph",
         "keyForRenderAsComponent": "NodeGraph",
@@ -23,5 +24,14 @@
         "tabId": 2,
         "tabTitle": "Graph View",
         "urlEndPoint": "/graph"
+    },
+
+    "WebVowl":{
+        "id":"webvowl",
+        "keyForRenderAsComponent": "NodeWebVowl",
+        "keyForRenderAsTabItem": "webvowl-tab",
+        "tabId": 3,
+        "tabTitle": "WebVowl View",
+        "urlEndPoint": "/webvowl"
     }
 }
