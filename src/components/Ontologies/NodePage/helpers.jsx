@@ -35,7 +35,8 @@ import Toolkit from "../../common/Toolkit";
         result.push(
           <div>
             {cite['definition']}
-            Reference : {cite['oboXrefs'][0]['url']}
+            <br/>
+             [<b>Reference</b>: {cite['oboXrefs'][0]['url']}]
           </div>
         )
       }
