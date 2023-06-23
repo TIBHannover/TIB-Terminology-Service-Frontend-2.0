@@ -28,6 +28,20 @@ import Toolkit from "../../common/Toolkit";
     if(object.instancesList &&  object.instancesList.length !== 0){
       metadata['Instances'] = [object.instancesList, false];
     }
+
+    if(object.obo_definition_citation){
+      let result = [];
+      for(let cite of object.obo_definition_citation){
+        result.push(
+          <div>
+            {cite['definition']}
+            <br/>
+             [<span className="node-metadata-label">Reference</span>:  <a href={cite['oboXrefs'][0]['url']} target="_blank">{cite['oboXrefs'][0]['url']}</a>]
+          </div>
+        )
+      }
+      metadata['Description'] = [result, false];
+    }
     
     if(object.annotation){
       for(let key in object.annotation){
