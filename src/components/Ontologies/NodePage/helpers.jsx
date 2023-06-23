@@ -36,7 +36,7 @@ import Toolkit from "../../common/Toolkit";
           <div>
             {cite['definition']}
             <br/>
-             [<b>Reference</b>:  <a href={cite['oboXrefs'][0]['url']} target="_blank">{cite['oboXrefs'][0]['url']}</a>]
+             [<span className="node-metadata-label">Reference</span>:  <a href={cite['oboXrefs'][0]['url']} target="_blank">{cite['oboXrefs'][0]['url']}</a>]
           </div>
         )
       }
