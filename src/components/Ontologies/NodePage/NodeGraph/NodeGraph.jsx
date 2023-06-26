@@ -46,16 +46,12 @@ class NodeGraph extends React.Component{
     generateGraph(){
         if(this.props.iri){
             window["initLegacyGraphView"](
-                process.env.REACT_APP_API_BASE_URL + `/`+ this.props.ontology + `/terms?iri=` + encodeURIComponent(this.props.iri) + `/graph`
+                process.env.REACT_APP_API_BASE_URL + `/`+ this.props.ontology + `/terms/` + encodeURIComponent(this.props.iri) + `/graph`
             );
         }
     }
 
     componentDidMount(){
-        this.generateGraph();
-    }
-
-    componentDidUpdate(){
         this.generateGraph();
     }
 
