@@ -17,7 +17,7 @@ class NodeGraph extends React.Component{
 
         })
         this.setComponentData = this.setComponentData.bind(this);
-        //this.generateGraph = this.generateGraph.bind(this);
+        this.generateGraph = this.generateGraph.bind(this);
     }
 
     async setComponentData(){
@@ -43,16 +43,16 @@ class NodeGraph extends React.Component{
        
       }
 
-    // generateGraph(){
-    //     if(this.props.iri){
-    //         window["initLegacyGraphView"](
-    //             process.env.REACT_APP_API_BASE_URL + `/api/ontologies/`+ this.props.ontology + `terms?iri=` + encodeURIComponent(this.props.iri)
-    //         );
-    //     }
-    // }
+    generateGraph(){
+        if(this.props.iri){
+            window["initLegacyGraphView"](
+                process.env.REACT_APP_API_BASE_URL + `/`+ this.props.ontology + `/terms?iri=` + encodeURIComponent(this.props.iri)
+            );
+        }
+    }
 
     componentDidMount(){
-        //this.generateGraph();
+        this.generateGraph();
     }
 
     componentDidUpdate(){
