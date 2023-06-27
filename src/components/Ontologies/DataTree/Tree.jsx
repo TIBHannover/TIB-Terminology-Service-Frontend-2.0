@@ -140,7 +140,7 @@ class Tree extends React.Component {
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
             if(this.state.isSkos && this.state.componentIdentity === "individual"){                                
-                treeList = await SkosHelper.buildSkosSubtree(this.state.ontologyId, target, viewMode);                                              
+                treeList = await SkosHelper.buildSkosTree(this.state.ontologyId, target, viewMode);                                              
             }
             else{                
                 targetHasChildren = await TreeHelper.nodeHasChildren(this.state.ontologyId, target, this.state.componentIdentity);                

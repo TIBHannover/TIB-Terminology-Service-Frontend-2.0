@@ -16,7 +16,7 @@ class TreeNodeController{
 
     buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
-        let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
+        let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);           
         let partOfSymbol = "";
         this.textDiv = React.createElement("div", {"className": "li-label-text"}, nodeLabel);
 
@@ -31,7 +31,7 @@ class TreeNodeController{
             this.textDivContainer = React.createElement("div", {"className": "tree-text-container"}, partOfSymbol, this.textDiv);
         }        
         this.nodeIri = nodeObject.iri;
-        if (!nodeHasChildren){
+        if (!nodeHasChildren){            
             this.classes += " leaf-node";            
             this.iconInTree = React.createElement("i", {"className": ""}, "");
         } 
