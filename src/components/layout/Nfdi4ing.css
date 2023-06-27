@@ -1196,7 +1196,7 @@ p{
         Style for the header collapse button container
     */
     padding-top: 0;
-    margin-top: -2px;
+    margin-top: -10px;
 }
 
 .header-collapse-btn{
@@ -1231,11 +1231,9 @@ p{
     */
     background-color: white;
     padding: 5px;
-    padding-bottom: 1px;
-    width: 97%;
+    padding-bottom: 1px;    
     margin-bottom: 10px;
-    border-radius: 5px !important;
-    margin: auto;
+    border-radius: 5px !important;    
     margin-top: -30px;
 }
 
@@ -1245,12 +1243,12 @@ p{
    */
 
     background-color: white;   
-    margin-top: 0px !important;
-    width: 1750px;
-    margin-left: -23%;
+    margin-top: 0px !important;    
     padding-top: 20px; 
     padding-left: 10px;
     padding-right: 10px;
+    margin-left: -15px; 
+    margin-right: -15px;
 }
 
 .ontology-detail-table, .ontology-metric-table{
@@ -1355,8 +1353,7 @@ p{
         The style for the ontology detail page navbar
     */
     
-    width: 145%;
-    margin-left: -23%;
+    margin-left: -15px;
 }
 
 .nav-tabs-node{
@@ -1378,7 +1375,7 @@ p{
        
     padding-bottom: 500px !important;    
     background-color: white;    
-    width: 900px;
+    width: 100%;
     float: left;
     position: relative;
     overflow-y: scroll;
@@ -1436,12 +1433,12 @@ p{
 
     padding-left: 50px;
     padding-right: 50px;
-    padding-top: 30px;
-    width: 880px;
+    padding-top: 30px;    
     float: left;
     background-color: white;
     height: 1000px;
-    overflow-y: auto;   
+    overflow-y: auto;
+    width: 100%;
 }
 
 .page-resize-vertical-line{
@@ -2059,14 +2056,10 @@ Media Query Area for bein responsive
 */
 
 @media only screen and (max-width: 3000px) and (min-width: 1501px) {       
-    .tree-view-container, .ontology-detail-page-container{        
-        width: 1750px;            
-    }      
+     
 }
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {       
-    .tree-view-container, .ontology-detail-page-container{        
-        width: 1350px;            
-    }
+   
     .jumpto-wrapper{
         width: 90% !important;
     }
@@ -2081,19 +2074,13 @@ Media Query Area for bein responsive
     }       
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
-    .tree-view-container, .ontology-detail-page-container{        
-        width: 1200px;            
-    }
+    
     .jumpto-wrapper{
         width: 80% !important;
     }
     .tree-action-button-area{
         right: 40px !important;
-    }
-    .application-content{ 
-        width: 95%;                
-    }
-
+    }   
     .site-footer{
         font-size: 10px;        
     }
