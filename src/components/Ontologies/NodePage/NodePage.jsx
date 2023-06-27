@@ -1,7 +1,15 @@
 import React from 'react';
-import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
-import {classMetaData, propertyMetaData, formatText} from './helpers';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import {classMetaData, propertyMetaData, formatText, renderNodePageTabs} from './helpers';
+import NodePageTabConfig from './listOfComponentsTabs.json';
+import NodeDetail from './NodeDetail/NodeDetail';
+import NodeNotes from './NodeNotes/NodeNotes';
+import queryString from 'query-string'; 
+import NodeGraph from './NodeGraph/NodeGraph';
+
+
+const DETAIL_TAB_ID = 0;
+const NOTES_TAB_ID = 1;
+const GRAPH_TAB_ID = 2;
 
 
 class NodePage extends React.Component {
@@ -12,135 +20,120 @@ class NodePage extends React.Component {
       iriIsCopied: false,
       prevNode: "",
       componentIdentity: "",
+      activeTab: DETAIL_TAB_ID,
       isSkos: false,
+      lastRequestedTab: "",
+      waiting: false,
       showDataAsJsonBtnHref: ""
     })
-    this.setComponentData = this.setComponentData.bind(this);
-    this.createRow = this.createRow.bind(this);
-    this.createTable = this.createTable.bind(this);
+    this.tabChange = this.tabChange.bind(this);
+    this.setTabOnLoad = this.setTabOnLoad.bind(this);
   }
 
-
- async setComponentData(){
-    let targetIri = this.props.iri;
-    let ontology = this.props.ontology;
-    let extractKey = this.props.extractKey;
-    let componentIdentity = this.props.componentIdentity;
-    let isSkos = this.props.isSkos;
-    let node = {};
-    let showDataAsJsonBtnHref = "";    
-    if(isSkos && componentIdentity !== "term"){
-      node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));
-      showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
-    }
-    else{      
-      node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);
-      showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/" + extractKey + "?iri=" + encodeURIComponent(node.iri);
-    }
-    if(node.iri){
-      this.setState({
-        prevNode: node.iri,
-        data: node,
-        iriIsCopied: false,
-        componentIdentity: componentIdentity,
-        isSkos: isSkos,
-        showDataAsJsonBtnHref:showDataAsJsonBtnHref
+  /**
+   * Set the active tab and its page on load
+   */
+  setTabOnLoad(){
+    let requestedTab = '';
+    // let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let lastRequestedTab = this.state.lastRequestedTab;    
+    if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
+      this.setState({        
+        activeTab: NOTES_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        
       });
     }
-   
-  }
+    if (requestedTab !== lastRequestedTab && requestedTab === 'graph'){
+      this.setState({        
+        activeTab: GRAPH_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab,
+        
+      });
+    }
+    else if (requestedTab !== lastRequestedTab){
+      this.setState({        
+        activeTab: DETAIL_TAB_ID,
+        waiting: false,
+        lastRequestedTab: requestedTab
 
+      });
+    }
+  }
 
   /**
-   * create a table row 
-   */
-  createRow(metadataLabel, metadataValue, copyButton){
-    let row = [
-      <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
-          <div className='row'>
-            <div className="col-sm-4 col-md-3" key={metadataLabel + "-label"}>
-              <div className="node-metadata-label">{metadataLabel}</div>
-            </div>
-            <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
-              {formatText(metadataLabel, metadataValue, copyButton)}
-              {copyButton &&
-                <button 
-                  type="button" 
-                  class="btn btn-secondary btn-sm copy-link-btn"
-                  key={"copy-btn"} 
-                  onClick={() => {                  
-                    navigator.clipboard.writeText(metadataValue);
-                    this.setState({
-                      iriIsCopied: true
-                    });
-                  }}
-                  >
-                  copy {this.state.iriIsCopied && <i class="fa fa-check" aria-hidden="true"></i>}
-                </button>
-              }
-            </div>
-          </div>
-        </div>
-    ];
-
-    return row;
-  }
-
-
-  /**
-   * Create the view to render 
-   */
-  createTable(){    
-    let metadataToRender = "";
-    if(this.state.componentIdentity === "term" || this.state.componentIdentity === "individual"){
-      metadataToRender =  classMetaData(this.state.data);
-    }
-    else{
-      metadataToRender = propertyMetaData(this.state.data);
-    }
-    let result = [];
-    
-    for(let key of Object.keys(metadataToRender)){    
-      let row = this.createRow(key, metadataToRender[key][0], metadataToRender[key][1]);
-      result.push(row);
-    }
-    return result;
+     * Handle the tab change in the node detail Top menu
+     *
+     * @param {*} e
+     * @param {*} value
+     */
+  tabChange = (e, v) => {
+    try{
+      let selectedTabId = e.target.dataset.value;         
+      this.setState({
+        waiting: true
+      });
+  
+      this.setState({
+        activeTab: parseInt(selectedTabId),
+        waiting: false
+      });
+    } 
+    catch(e){
+      this.setState({
+        activeTab: DETAIL_TAB_ID,
+        waiting: false
+      });
+    }      
   }
 
 
 
-  componentDidMount(){
-    if(this.state.data && this.state.prevNode !== this.props.iri){
-      this.setComponentData();      
-    }
+  componentDidMount(){         
+      this.setTabOnLoad();     
   }
 
 
-  componentDidUpdate(){    
-    if(this.state.prevNode !== this.props.iri){
-      this.setComponentData();
-    }
+  componentDidUpdate(){      
+      this.setTabOnLoad();
+  }
+
+  componentWillUnmount(){
+    this.setTabOnLoad();
   }
 
 
   render () {    
     return (
-      <div className='row'>       
-        {this.createTable()}
-        <div className='col-sm-12'  key={"json-button-row"}>
-          <div className='row'>
-            <div className='col-sm-12 node-metadata-value'>
-              <a 
-                href={this.state.showDataAsJsonBtnHref} 
-                target='_blank' 
-                rel="noreferrer"
-                className='btn btn-primary btn-dark download-ontology-btn'
-                >
-                  Show Data as JSON
-              </a>
-            </div>            
-          </div>
-        </div>
+      <div className='row'>
+        <ul className="nav nav-tabs nav-tabs-node">
+          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology, this.state.activeTab)}
+        </ul>
+        {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
+          <NodeDetail
+          iri={this.props.iri}
+          ontology={this.props.ontology}
+          componentIdentity={this.props.componentIdentity}
+          extractKey={this.props.extractKey}
+          isSkos={this.props.isSkos}
+          isIndividual={false}
+          />
+        }
+        {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
+          <NodeNotes/>
+        }
+        {!this.state.waiting && (this.state.activeTab === GRAPH_TAB_ID) &&
+          <NodeGraph
+          iri={this.props.iri}
+          ontology={this.props.ontology}
+          componentIdentity={this.props.componentIdentity}
+          extractKey={this.props.extractKey}
+          isSkos={this.props.isSkos}
+          isIndividual={false}
+          />
+        }
       </div>
     )
   }

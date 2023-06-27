@@ -1,0 +1,19 @@
+{
+    "Detail":{
+        "id":"detail",
+        "keyForRenderAsComponent": "NodePage",
+        "keyForRenderAsTabItem": "detail-tab",
+        "tabId": 0,
+        "tabTitle": "Detail",
+        "urlEndPoint": ""
+    },
+
+    "GraphView":{
+        "id":"graph",
+        "keyForRenderAsComponent": "NodeGraph",
+        "keyForRenderAsTabItem": "graph-tab",
+        "tabId": 2,
+        "tabTitle": "Graph View",
+        "urlEndPoint": "/graph"
+    }
+}
