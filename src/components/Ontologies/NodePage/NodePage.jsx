@@ -5,13 +5,12 @@ import NodeDetail from './NodeDetail/NodeDetail';
 import NodeNotes from './NodeNotes/NodeNotes';
 import queryString from 'query-string'; 
 import NodeGraph from './NodeGraph/NodeGraph';
-import NodeWebVowl from './NodeWebVowl/NodeWebVowl';
 
 
 const DETAIL_TAB_ID = 0;
 const NOTES_TAB_ID = 1;
 const GRAPH_TAB_ID = 2;
-const WEBVOWL_TAB_ID = 3;
+
 
 class NodePage extends React.Component {
   constructor (props) {
@@ -124,16 +123,6 @@ class NodePage extends React.Component {
         }
         {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
           <NodeNotes/>
-        }
-        {!this.state.waiting && (this.state.activeTab === WEBVOWL_TAB_ID) &&
-          <NodeWebVowl
-          iri={this.props.iri}
-          ontology={this.props.ontology}
-          componentIdentity={this.props.componentIdentity}
-          extractKey={this.props.extractKey}
-          isSkos={this.props.isSkos}
-          isIndividual={false}
-          />
         }
         {!this.state.waiting && (this.state.activeTab === GRAPH_TAB_ID) &&
           <NodeGraph
