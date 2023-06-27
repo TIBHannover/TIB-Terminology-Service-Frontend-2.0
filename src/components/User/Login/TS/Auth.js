@@ -6,6 +6,8 @@ export function auth(){
         let code = cUrl.split("code=")[1];
         let data = new FormData();
         data.append("code", code);
+        data.append("auth_provider", 'github');
+        data.append("frontend_id", process.env.REACT_APP_PROJECT_ID);
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", body: data})
             .then((resp) => resp.json())
             .then((resp) => {                
