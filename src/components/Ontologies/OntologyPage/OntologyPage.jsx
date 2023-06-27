@@ -57,12 +57,8 @@ class OntologyPage extends React.Component {
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
-<<<<<<< HEAD
     this.changeTreeContent = this.changeTreeContent.bind(this);
-    this.storeListOfGitIssuesState = this.storeListOfGitIssuesState.bind(this);
-=======
-    this.changeTreeContent = this.changeTreeContent.bind(this);    
->>>>>>> master
+    this.storeListOfGitIssuesState = this.storeListOfGitIssuesState.bind(this);    
   }
 
 
