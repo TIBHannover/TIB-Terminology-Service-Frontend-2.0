@@ -8,15 +8,6 @@
         "urlEndPoint": ""
     },
 
-    "Notes":{
-        "id":"notes",
-        "keyForRenderAsComponent": "NodeNotes",
-        "keyForRenderAsTabItem": "notes-tab",
-        "tabId": 1,
-        "tabTitle": "Notes",
-        "urlEndPoint": "/notes"
-    },
-
     "GraphView":{
         "id":"graph",
         "keyForRenderAsComponent": "NodeGraph",
