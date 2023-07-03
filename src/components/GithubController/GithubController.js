@@ -9,13 +9,12 @@ class GithubController{
             data.append("issueState", issueState);
             data.append("size", resultCountPerPage);
             data.append("pageNumber", pageNumber);            
-            let result = await fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/issues/' + ontologyId, {method: 'POST', body: data});
+            let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/issuelist', {method: 'POST', body: data});
             result = await result.json();
-            console.info(result)            
-            return result.result;
+            result = result['_result']            
+            return result.issues;
         }
-        catch(e){
-            // console.info(e)
+        catch(e){            
             return [];
         }        
     }
