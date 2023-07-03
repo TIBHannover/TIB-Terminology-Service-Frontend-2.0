@@ -20,9 +20,13 @@ export function auth(){
                     window.location.replace("/ts");
                     return true;               
                 }
+                document.getElementsByClassName("App")[0].style.filter = "";
+                document.getElementById("login-loading").style.display = "none";
                 return false;
             })
             .catch((e) => {
+                document.getElementsByClassName("App")[0].style.filter = "";
+                document.getElementById("login-loading").style.display = "none";
                 return false;
             })
     }   
