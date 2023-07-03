@@ -28,6 +28,7 @@ import { isLogin } from './components/User/Login/TS/Auth';
 import UserProfile from './components/User/Profile/Profile';
 import { AuthProvider } from "react-oidc-context";
 
+import Sitemap from './components/Sitemap/Sitemap';
 
 // import css file based on the target project
 process.env.REACT_APP_PROJECT_ID === "general" && import ('./components/layout/General_TIB.css');
@@ -112,6 +113,7 @@ function App() {
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
+                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>
             </Switch>
           </div>
           <Footer /> 
