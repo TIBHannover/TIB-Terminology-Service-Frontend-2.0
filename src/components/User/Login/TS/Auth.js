@@ -38,6 +38,7 @@ export async function isLogin(){
     if(localStorage.getItem("token")){
         let data = new FormData();
         data.append("token", localStorage.getItem("token"));
+        data.append("auth_provider", 'github');
         let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", body: data});
         result = await result.json()
         result = result["_result"]
