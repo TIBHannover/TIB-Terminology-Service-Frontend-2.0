@@ -166,7 +166,13 @@ class SearchResult extends React.Component{
     });
   }
       
-  let filteredSearch = await (await fetch(baseUrl)).json();
+  let filteredSearch = await (await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      authorization: process.env.REACT_APP_HEADER_INFO_TIB,
+      Accept: 'application/json',
+    },
+  })).json();
   let filteredSearchResults = filteredSearch['response']['docs'];
   let expandedResults = await (await fetch(baseUrl)).json();
   expandedResults = expandedResults['expanded'];    
