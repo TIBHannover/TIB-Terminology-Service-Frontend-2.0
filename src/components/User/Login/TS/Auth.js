@@ -34,8 +34,8 @@ export function auth(){
 
 
 
-export async function isLogin(){    
-    if(localStorage.getItem("token")){
+export async function isLogin(){        
+    if(localStorage.getItem("token")){        
         let data = new FormData();
         data.append("token", localStorage.getItem("token"));
         data.append("auth_provider", 'github');
@@ -47,7 +47,7 @@ export async function isLogin(){
         }
         return false;
     }
-    else{
+    else{        
         return false;
     }
 }

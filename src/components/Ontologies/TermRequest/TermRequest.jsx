@@ -110,7 +110,7 @@ class TermRequest extends React.Component{
         data.append("title", issueTitle);
         data.append("content", issueContent);
         data.append("access_token", "");
-        fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/requestNewTerm', {method: 'POST', body: data})
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/requestNewTerm', {method: 'POST', body: data})
             .then((response) => response.json())
             .then((data) => {
                 if(data['result']){
