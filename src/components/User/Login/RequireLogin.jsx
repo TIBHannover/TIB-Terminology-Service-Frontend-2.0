@@ -13,7 +13,6 @@ function RenderIfLogin({component: Component}){
     }
     return "";
    
-    
 }
 
 export default RenderIfLogin;

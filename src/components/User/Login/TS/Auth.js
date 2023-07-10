@@ -17,6 +17,7 @@ export function auth(){
                     localStorage.setItem("company", resp["company"]);
                     localStorage.setItem("github_home", resp["github_home"]);                    
                     localStorage.setItem("token", resp["token"]);
+                    localStorage.setItem("ts_username", resp["ts_username"]);
                     window.location.replace("/ts");
                     return true;               
                 }

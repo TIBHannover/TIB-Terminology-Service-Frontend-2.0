@@ -107,17 +107,21 @@ class TermRequest extends React.Component{
         let issueContent = this.state.editorState.getCurrentContent();        
         issueContent = draftToMarkdown(convertToRaw(issueContent));
         let data = new FormData();
+        data.append("ontology_id", this.props.ontologyId);
+        data.append("username", localStorage.getItem("ts_username"));
+        data.append("frontend_id", process.env.REACT_APP_PROJECT_ID);
         data.append("title", issueTitle);
         data.append("content", issueContent);
-        data.append("access_token", "");
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/requestNewTerm', {method: 'POST', body: data})
+        data.append("access_token", localStorage.getItem("token"));
+        data.append("auth_provider", 'github');
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_github_issue', {method: 'POST', body: data})
             .then((response) => response.json())
             .then((data) => {
-                if(data['result']){
+                if(data['_result']){
                     this.setState({
                         errorInSubmit: false,
                         submitFinished: true,
-                        newIssueUrl: data['result'] 
+                        newIssueUrl: data['_result']['new_issue_url'] 
                     });
                 }
                 else{
