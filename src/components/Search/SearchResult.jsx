@@ -169,7 +169,6 @@ class SearchResult extends React.Component{
   let filteredSearch = await (await fetch(baseUrl, {
     method: 'GET',
     headers: {
-      authorization: process.env.REACT_APP_HEADER_INFO_TIB,
       Accept: 'application/json',
       'user-agent': process.env.REACT_APP_HEADER_INFO_TIB,
     },
