@@ -10,6 +10,7 @@ import templatePath from './template.md';
 
 const GENERIC_ISSUE_ID = "1";
 const TERM_REQUEST_ISSUE_ID = "2";
+const ISSUE_TYPES = {"1": "general", "2": "termRequest"};
 
 
 class TermRequest extends React.Component{
@@ -106,6 +107,7 @@ class TermRequest extends React.Component{
         let issueTitle = document.getElementById('issueTitle').value;
         let issueContent = this.state.editorState.getCurrentContent();        
         issueContent = draftToMarkdown(convertToRaw(issueContent));
+        let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
         data.append("ontology_id", this.props.ontologyId);
         data.append("username", localStorage.getItem("ts_username"));
@@ -114,6 +116,7 @@ class TermRequest extends React.Component{
         data.append("content", issueContent);
         data.append("access_token", localStorage.getItem("token"));
         data.append("auth_provider", 'github');
+        data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_github_issue', {method: 'POST', body: data})
             .then((response) => response.json())
             .then((data) => {
