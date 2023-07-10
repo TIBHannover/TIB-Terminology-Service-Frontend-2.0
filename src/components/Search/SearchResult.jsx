@@ -171,6 +171,7 @@ class SearchResult extends React.Component{
     headers: {
       authorization: process.env.REACT_APP_HEADER_INFO_TIB,
       Accept: 'application/json',
+      'user-agent': process.env.REACT_APP_HEADER_INFO_TIB,
     },
   })).json();
   let filteredSearchResults = filteredSearch['response']['docs'];
