@@ -166,17 +166,18 @@ class SearchResult extends React.Component{
     });
   }
   
-  let headers = new Headers({
+  let headers ={
     "Accept"       : "application/json",
     "Content-Type" : "application/json",
-    "User-Agent"   : "TIBCENTRAL"
-});
+    'user-agent'   : "TIBCENTRAL",
+  };
+console.info(headers)
   let filteredSearch = await (await fetch(baseUrl, {
+    method: 'GET',
     mode: 'cors',
-    headers: {
-      headers
-    },
+    headers: headers,
   })).json();
+  
   let filteredSearchResults = filteredSearch['response']['docs'];
   let expandedResults = await (await fetch(baseUrl)).json();
   expandedResults = expandedResults['expanded'];    

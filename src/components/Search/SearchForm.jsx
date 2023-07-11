@@ -51,10 +51,19 @@ class SearchForm extends React.Component{
           selectedType = selectedType.map(onto => onto.toLowerCase());       
           let selectedOntology = params.getAll("ontology")         
           selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
-          let selectedCollection = params.getAll("collection")            
+          let selectedCollection = params.getAll("collection")  
+          let headers ={
+            "Accept"       : "application/json",
+            "Content-Type" : "application/json",
+            'user-agent'   : "TIBCENTRAL",
+          };          
           if(process.env.REACT_APP_PROJECT_ID === "general"){
             if(selectedOntology){
-              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
+                method: 'GET',
+                mode: 'cors',
+                headers: headers,
+              })
               searchResult =  (await searchResult.json())['response']['docs'];
               let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
               jumpResult = (await jumpResult.json())['response']['docs'];
