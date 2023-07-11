@@ -5,7 +5,7 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
 import templatePath from './template.md';
-
+import AuthTool from "../../User/Login/authTools";
 
 
 const GENERIC_ISSUE_ID = "1";
@@ -109,15 +109,13 @@ class TermRequest extends React.Component{
         issueContent = draftToMarkdown(convertToRaw(issueContent));
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
+        let headers = AuthTool.setHeaderForTsMicroBackend(withAccessToken=true);       
         data.append("ontology_id", this.props.ontologyId);
-        data.append("username", localStorage.getItem("ts_username"));
-        data.append("frontend_id", process.env.REACT_APP_PROJECT_ID);
+        data.append("username", localStorage.getItem("ts_username"));        
         data.append("title", issueTitle);
-        data.append("content", issueContent);
-        data.append("access_token", localStorage.getItem("token"));
-        data.append("auth_provider", 'github');
+        data.append("content", issueContent);        
         data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_github_issue', {method: 'POST', body: data})
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
                 if(data['_result']){
