@@ -170,7 +170,7 @@ class SearchResult extends React.Component{
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      'user-agent': process.env.REACT_APP_HEADER_INFO_TIB,
+      'user-agent': 'TIBCENTRAL',
     },
   })).json();
   let filteredSearchResults = filteredSearch['response']['docs'];
