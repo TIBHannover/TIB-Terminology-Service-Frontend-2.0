@@ -54,7 +54,7 @@ async function getIssueList(){
 
 
 function renderIssueTableRows(issuesList){
-    if(!issuesList){
+    if(!issuesList || issuesList.length === 0){
         return [];
     }
     let result = [];
@@ -63,7 +63,7 @@ function renderIssueTableRows(issuesList){
             <tr>                                            
                 <td scope="col" class="col-6"><a href={issue['issue_url']} target="_blank">{issue['issue_url']}</a></td>
                 <td scope="col" class="col-2">{ISSUE_TYPE[issue['issue_type']]}</td>
-                <td scope="col" class="col-2"><a  href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + issue['ontology_id']} target="_blank">{issue['ontology_id']}</a></td>
+                <td scope="col" class="col-2"><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + issue['ontology_id']} target="_blank">{issue['ontology_id']}</a></td>
                 <td scope="col" class="col-2">{issue['created_at']}</td>                            
             </tr>
         );
