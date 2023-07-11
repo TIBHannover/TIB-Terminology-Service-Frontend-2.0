@@ -6,11 +6,10 @@ export function auth(){
     if(cUrl.includes("code=")){
         document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
         document.getElementById("login-loading").style.display = "block";
-        let code = cUrl.split("code=")[1];
-        let data = new FormData();
+        let code = cUrl.split("code=")[1];        
         let headers = AuthTool.setHeaderForTsMicroBackend();
-        headers["TS_Auth_APP_Code"] = code;                       
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", headers:headers, body: data})
+        headers["X-TS-Auth-APP-Code"] = code;                       
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", headers:headers})
             .then((resp) => resp.json())
             .then((resp) => {                
                 if(resp["_result"]){
@@ -40,7 +39,7 @@ export function auth(){
 export async function isLogin(){        
     if(localStorage.getItem("token")){        
         let data = new FormData();
-        let headers = AuthTool.setHeaderForTsMicroBackend(withAccessToken=true);
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
         let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", headers:headers, body: data});
         result = await result.json()
         result = result["_result"]
@@ -68,10 +67,9 @@ export function Logout(){
         localStorage.removeItem("token");
         localStorage.removeItem("name");
         localStorage.removeItem("company");
-        localStorage.removeItem("github_home");  
-        localStorage.removeItem("avatar");  
+        localStorage.removeItem("github_home");           
         localStorage.removeItem("isLoginInTs");  
-        // --> send a logout request to backend to destroy the token
+        localStorage.removeItem("ts_username");        
         window.location.replace("/ts");
     }    
 }

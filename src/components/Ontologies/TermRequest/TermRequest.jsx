@@ -109,7 +109,7 @@ class TermRequest extends React.Component{
         issueContent = draftToMarkdown(convertToRaw(issueContent));
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
-        let headers = AuthTool.setHeaderForTsMicroBackend(withAccessToken=true);       
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         data.append("ontology_id", this.props.ontologyId);
         data.append("username", localStorage.getItem("ts_username"));        
         data.append("title", issueTitle);

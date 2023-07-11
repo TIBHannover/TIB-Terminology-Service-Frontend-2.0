@@ -22,7 +22,7 @@ export default function SubmitedIssueRequests(){
 
 async function getIssueList(){
     let data = new FormData();
-    let headers = AuthTool.setHeaderForTsMicroBackend(withAccessToken=true);
+    let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
     data.append("username", localStorage.getItem("ts_username"));    
     fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_submited_issues', {method: 'POST', headers:headers, body: data})
             .then((response) => response.json())
