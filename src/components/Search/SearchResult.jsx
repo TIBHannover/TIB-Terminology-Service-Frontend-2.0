@@ -165,12 +165,16 @@ class SearchResult extends React.Component{
         totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
     });
   }
-      
+  
+  let headers = new Headers({
+    "Accept"       : "application/json",
+    "Content-Type" : "application/json",
+    "User-Agent"   : "TIBCENTRAL"
+});
   let filteredSearch = await (await fetch(baseUrl, {
-    method: 'GET',
+    mode: 'cors',
     headers: {
-      Accept: 'application/json',
-      'frontend': 'TIBCENTRAL',
+      headers
     },
   })).json();
   let filteredSearchResults = filteredSearch['response']['docs'];
