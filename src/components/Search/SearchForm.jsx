@@ -1,6 +1,7 @@
 import React from 'react';
 import {setJumpResultButtons ,ontologyForAutosuggest} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
+import {apiHeaders} from '../../api/headers';
 
 
 class SearchForm extends React.Component{
@@ -51,18 +52,13 @@ class SearchForm extends React.Component{
           selectedType = selectedType.map(onto => onto.toLowerCase());       
           let selectedOntology = params.getAll("ontology")         
           selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
-          let selectedCollection = params.getAll("collection")  
-          let headers ={
-            "Accept"       : "application/json",
-            "Content-Type" : "application/json",
-            'user-agent'   : "TIBCENTRAL",
-          };          
+          let selectedCollection = params.getAll("collection")            
           if(process.env.REACT_APP_PROJECT_ID === "general"){
             if(selectedOntology){
               let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
                 method: 'GET',
                 mode: 'cors',
-                headers: headers,
+                headers: apiHeaders(),
               })
               searchResult =  (await searchResult.json())['response']['docs'];
               let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
