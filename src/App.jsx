@@ -20,6 +20,7 @@ import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
+import SubmitedIssueRequests from './components/User/SubmitedIssueRequests/SubmitedIssueRequests';
 
 // Auth related Imports
 // import LoginForm from './components/User/Login/Login';
@@ -27,6 +28,7 @@ import Login from './components/User/Login/TS/Login';
 import { isLogin } from './components/User/Login/TS/Auth';
 import UserProfile from './components/User/Profile/Profile';
 import { AuthProvider } from "react-oidc-context";
+import RequireLoginRoute from './components/User/Login/RequireLoginRoute';
 
 import Sitemap from './components/Sitemap/Sitemap';
 
@@ -97,7 +99,8 @@ function App() {
               <Switch>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
                 <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
-                <Route  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>                
+                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>
+                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests}/>
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
                 {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}

@@ -59,8 +59,9 @@ class Login extends React.Component{
                         <button class="btn btn-secondary dropdown-toggle user-profile-dropdown" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                            {localStorage.getItem("name")}
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userProfileDropdown">
                             <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
+                            <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</a>
                             <a class="dropdown-item" href="#" onClick={() => {Logout();}}>Logout</a>                            
                         </div>                        
                     </div>

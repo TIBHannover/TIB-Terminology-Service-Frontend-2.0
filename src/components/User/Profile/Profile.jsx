@@ -11,15 +11,8 @@ class UserProfile extends React.Component{
     render(){
         return [
             <div className="row">
-                {(!this.props.auth.isAuthenticated && !userIsLoginByLocalStorage()) &&                     
-                    <Login isModal={false} />
-                }
-                {(this.props.auth.isAuthenticated  || userIsLoginByLocalStorage()) &&
-                    <div className="row">                        
-                        {!this.props.auth.isAuthenticated && userIsLoginByLocalStorage && buildProfileByTsBackend()}
-                        {this.props.auth.isAuthenticated && buildProfileByKecloak()}
-                    </div>                   
-                }              
+                 {!this.props.auth.isAuthenticated && userIsLoginByLocalStorage && buildProfileByTsBackend()}
+                {this.props.auth.isAuthenticated && buildProfileByKecloak()}        
             </div>                    
         ];
     }

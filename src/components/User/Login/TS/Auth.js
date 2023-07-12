@@ -1,14 +1,15 @@
+import AuthTool from "../authTools";
+
+
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
         document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
         document.getElementById("login-loading").style.display = "block";
-        let code = cUrl.split("code=")[1];
-        let data = new FormData();
-        data.append("code", code);
-        data.append("auth_provider", 'github');
-        data.append("frontend_id", process.env.REACT_APP_PROJECT_ID);
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", body: data})
+        let code = cUrl.split("code=")[1];        
+        let headers = AuthTool.setHeaderForTsMicroBackend();
+        headers["X-TS-Auth-APP-Code"] = code;                       
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", headers:headers})
             .then((resp) => resp.json())
             .then((resp) => {                
                 if(resp["_result"]){
@@ -17,6 +18,7 @@ export function auth(){
                     localStorage.setItem("company", resp["company"]);
                     localStorage.setItem("github_home", resp["github_home"]);                    
                     localStorage.setItem("token", resp["token"]);
+                    localStorage.setItem("ts_username", resp["ts_username"]);
                     window.location.replace("/ts");
                     return true;               
                 }
@@ -34,12 +36,11 @@ export function auth(){
 
 
 
-export async function isLogin(){    
-    if(localStorage.getItem("token")){
+export async function isLogin(){        
+    if(localStorage.getItem("token")){        
         let data = new FormData();
-        data.append("token", localStorage.getItem("token"));
-        data.append("auth_provider", 'github');
-        let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", body: data});
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+        let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", headers:headers, body: data});
         result = await result.json()
         result = result["_result"]
         if(result && result["valid"] === true){
@@ -47,7 +48,7 @@ export async function isLogin(){
         }
         return false;
     }
-    else{
+    else{        
         return false;
     }
 }
@@ -66,10 +67,9 @@ export function Logout(){
         localStorage.removeItem("token");
         localStorage.removeItem("name");
         localStorage.removeItem("company");
-        localStorage.removeItem("github_home");  
-        localStorage.removeItem("avatar");  
+        localStorage.removeItem("github_home");           
         localStorage.removeItem("isLoginInTs");  
-        // --> send a logout request to backend to destroy the token
+        localStorage.removeItem("ts_username");        
         window.location.replace("/ts");
     }    
 }
