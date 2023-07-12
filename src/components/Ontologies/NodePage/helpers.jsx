@@ -197,11 +197,12 @@ function makeTag(objectList){
   return tags;
 }
 
-export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontology, activeTabId){
+export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontology, activeTabId, componentIdentity){
   let result = [];
   for(let configItemKey in tabMetadataJson){
       let configObject = tabMetadataJson[configItemKey];
-      result.push(
+      if(componentIdentity === "term"){
+        result.push(
           <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
               <Link 
                   onClick={tabChangeHandler} 
@@ -214,6 +215,7 @@ export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontology, 
               </Link>
           </li>
       );
+    }
   }
 
   return result;
