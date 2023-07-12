@@ -18,7 +18,6 @@ class SearchForm extends React.Component{
           ontologyId: '',
           urlPath: '',
           facetIsSelected: false,
-          api_base_url: "https://service.tib.eu/ts4tib/api"
         })
         this.handleChange = this.handleChange.bind(this);
         this.createResultList = this.createResultList.bind(this);
@@ -55,13 +54,15 @@ class SearchForm extends React.Component{
           let selectedCollection = params.getAll("collection")            
           if(process.env.REACT_APP_PROJECT_ID === "general"){
             if(selectedOntology){
-              let searchResult = await fetch(`${this.state.api_base_url}/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
-                method: 'GET',
+              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
                 mode: 'cors',
                 headers: apiHeaders(),
-              })
+              });
               searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`)
+              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
+                mode: 'cors',
+                headers: apiHeaders(), 
+              });
               jumpResult = (await jumpResult.json())['response']['docs'];
               this.setState({
                 searchResult: searchResult,
@@ -73,7 +74,6 @@ class SearchForm extends React.Component{
             else if(selectedType || selectedOntology){
               let jumpResult = await fetch(`${this.state.api_base_url}/select?q=${enteredTerm}&rows=5&type=${selectedType}&ontology=${selectedOntology}`)
               jumpResult = (await jumpResult.json())['response']['docs']
-              console.info(jumpResult)
               this.setState({
                 jumpResult: jumpResult,
                 result: true,
