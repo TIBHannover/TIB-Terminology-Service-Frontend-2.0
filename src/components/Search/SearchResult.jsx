@@ -5,7 +5,8 @@ import Facet from './Facet/facet';
 import Pagination from "../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
 import Toolkit from '../common/Toolkit';
-import { AlsoInHelpers } from "./AlsoInHelpers"
+import { AlsoInHelpers } from "./AlsoInHelpers";
+import { apiHeaders } from '../../api/headers';
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -166,22 +167,14 @@ class SearchResult extends React.Component{
     });
   }
   
-  let headers ={
-    "Accept"       : "application/json",
-    "Content-Type" : "application/json",
-    'user-agent'   : "TIBCENTRAL",
-  };
-console.info(headers)
   let filteredSearch = await (await fetch(baseUrl, {
-    method: 'GET',
     mode: 'cors',
-    headers: headers,
+    headers: apiHeaders(),
   })).json();
-  
   let filteredSearchResults = filteredSearch['response']['docs'];
-  let expandedResults = await (await fetch(baseUrl)).json();
+  let expandedResults = await (await fetch(baseUrl,{mode: 'cors', headers: apiHeaders(),})).json();
   expandedResults = expandedResults['expanded'];    
-  let totalSearch = await (await fetch(totalResultBaseUrl)).json();
+  let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
   let totalSaerchResultsCount = totalSearch['response']['numFound'];
   let filteredFacetFields = totalSearch['facet_counts'];
   filteredFacetFields = await setFacetCounts(triggerField, this.state.enteredTerm, filteredFacetFields, facetData, collections, types, ontologiesForFilter[0]);    
@@ -211,7 +204,7 @@ async handleExact(){
       searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
     });
     
-    let exactResult = await fetch(searchUrl)
+    let exactResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
       searchResult: exactResult,
@@ -389,7 +382,10 @@ createSearchResultList () {
       });
      }
 
-    let targetUrl = await fetch(baseUrl)
+    let targetUrl = await fetch(baseUrl,{
+      mode: 'cors',
+      headers: apiHeaders(),
+    })
     let resultJson = (await targetUrl.json());
     let newResults = resultJson['response']['docs']
     this.setState({
