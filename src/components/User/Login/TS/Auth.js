@@ -19,16 +19,19 @@ export function auth(){
                     localStorage.setItem("github_home", resp["github_home"]);                    
                     localStorage.setItem("token", resp["token"]);
                     localStorage.setItem("ts_username", resp["ts_username"]);
+                    localStorage.setItem("isLoginInTs", 'true');
                     window.location.replace("/ts");
                     return true;               
                 }
                 document.getElementsByClassName("App")[0].style.filter = "";
                 document.getElementById("login-loading").style.display = "none";
+                localStorage.setItem("isLoginInTs", 'false');
                 return false;
             })
             .catch((e) => {
                 document.getElementsByClassName("App")[0].style.filter = "";
                 document.getElementById("login-loading").style.display = "none";
+                localStorage.setItem("isLoginInTs", 'false');
                 return false;
             })
     }   
@@ -44,11 +47,14 @@ export async function isLogin(){
         result = await result.json()
         result = result["_result"]
         if(result && result["valid"] === true){
+            localStorage.setItem("isLoginInTs", 'true');
             return true
         }
+        localStorage.setItem("isLoginInTs", 'false');
         return false;
     }
-    else{        
+    else{
+        localStorage.setItem("isLoginInTs", 'false');
         return false;
     }
 }
@@ -68,8 +74,9 @@ export function Logout(){
         localStorage.removeItem("name");
         localStorage.removeItem("company");
         localStorage.removeItem("github_home");           
-        localStorage.removeItem("isLoginInTs");  
-        localStorage.removeItem("ts_username");        
+        localStorage.setItem("isLoginInTs", "false");  
+        localStorage.removeItem("ts_username");
+        localStorage.setItem("authProvider", "undefined")        
         window.location.replace("/ts");
     }    
 }

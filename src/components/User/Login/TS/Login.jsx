@@ -4,14 +4,24 @@ import {auth, userIsLoginByLocalStorage, Logout} from "./Auth";
 class Login extends React.Component{
     constructor(props){
         super(props);       
-        this.gitHubLoginUrl = this.gitHubLoginUrl.bind(this);        
+        this.authProviderUrl = this.authProviderUrl.bind(this);        
     }
 
-    gitHubLoginUrl(){
-        let loginUrl = "https://github.com/login/oauth/authorize?scope=user";
-        loginUrl += "&client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID;
+    authProviderUrl(e){
+        let authProvider = e.target.getAttribute("authProvider");
+        let loginUrl = "";
+        if(authProvider === "github"){
+            loginUrl = process.env.REACT_APP_GITHUB_AUTH_BASE_URL;
+            loginUrl += "&client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID;                   
+        }
+        else{
+            loginUrl = process.env.REACT_APP_ORCID_AUTH_BASE_URL;
+            loginUrl += "&client_id=" + process.env.REACT_APP_ORCID_CLIENT_ID;            
+        }
+        
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
-        return loginUrl;       
+        localStorage.setItem("authProvider", authProvider);
+        return loginUrl;
     }
 
     componentDidMount(){
@@ -33,8 +43,12 @@ class Login extends React.Component{
                                     <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <a href={this.gitHubLoginUrl()} className="btn btn-primary github-login-btn">
+                                    <a href={this.authProviderUrl()} authProvider="github" className="btn btn-primary github-login-btn">
                                         <i className="fa fa-github"></i> Sign in with GitHub
+                                    </a>
+                                    <br></br>
+                                    <a href={this.authProviderUrl()} authProvider="orcid" className="btn btn-primary orcid-login-btn">
+                                        <i className="fa fa-orcid"></i> Sign in with ORCID
                                     </a>
                                 </div>                            
                             </div>
