@@ -4,7 +4,8 @@ import {auth, userIsLoginByLocalStorage, Logout} from "./Auth";
 class Login extends React.Component{
     constructor(props){
         super(props);       
-        this.authProviderUrl = this.authProviderUrl.bind(this);        
+        this.authProviderUrl = this.authProviderUrl.bind(this); 
+        this.buildAuthButtons = this.buildAuthButtons.bind(this);       
     }
 
     authProviderUrl(e){
@@ -21,8 +22,29 @@ class Login extends React.Component{
         
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
         localStorage.setItem("authProvider", authProvider);
-        return loginUrl;
+        window.location.replace(loginUrl);
     }
+
+
+    buildAuthButtons(){
+        return [
+            <span>
+                <div className="row justify-content-center">
+                    <a onClick={(e) => {this.authProviderUrl(e)}}  authProvider="github" className="btn btn-primary github-login-btn">
+                        <i className="fa fa-github"></i> Sign in with GitHub
+                    </a>
+                </div>
+                <br></br>
+                <div className="row justify-content-center">
+                    <a onClick={(e) => {this.authProviderUrl(e)}} authProvider="orcid" className="btn btn-primary orcid-login-btn">
+                    <i class="fa-brands fa-orcid"></i> Sign in with ORCID
+                    </a>
+                </div>   
+            </span>
+        ];
+    }
+
+
 
     componentDidMount(){
         auth();        
@@ -34,26 +56,20 @@ class Login extends React.Component{
                 {!userIsLoginByLocalStorage() && this.props.isModal &&
                     // render the modal. Used in the site header 
                     <span>
-                    <a type="button" data-toggle="modal" data-target="#loginModal">Login</a>
-                    <div class="modal fade loginModal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
-                                    <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                        <a type="button" data-toggle="modal" data-target="#loginModal">Login</a>
+                        <div class="modal fade loginModal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                                        <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                                    </div>
+                                    <div class="modal-body">
+                                        {this.buildAuthButtons()}
+                                    </div>                            
                                 </div>
-                                <div class="modal-body text-center">
-                                    <a href={this.authProviderUrl()} authProvider="github" className="btn btn-primary github-login-btn">
-                                        <i className="fa fa-github"></i> Sign in with GitHub
-                                    </a>
-                                    <br></br>
-                                    <a href={this.authProviderUrl()} authProvider="orcid" className="btn btn-primary orcid-login-btn">
-                                        <i className="fa fa-orcid"></i> Sign in with ORCID
-                                    </a>
-                                </div>                            
                             </div>
                         </div>
-                    </div>
                     </span>                    
                 }
                 {!userIsLoginByLocalStorage() && !this.props.isModal &&
@@ -62,9 +78,7 @@ class Login extends React.Component{
                         <div className="col-sm-12 text-center">
                             <h5>You need to login for accessing this section.</h5>
                             <br></br>
-                            <a href={this.gitHubLoginUrl()} className="btn btn-primary github-login-btn">
-                                <i className="fa fa-github"></i> Sign in with GitHub
-                            </a>
+                            {this.buildAuthButtons()}
                         </div>
                     </div>                   
                 }
