@@ -6,6 +6,7 @@ class AuthTool{
         let header = {};
         header["X-TS-Frontend-Id"] = process.env.REACT_APP_PROJECT_ID;
         header["X-TS-Auth-Provider"] = localStorage.getItem('authProvider');
+        header['X-TS-Orcid-Id'] = localStorage.getItem("orcid_id");
          
         if (withAccessToken){
             header["Authorization"] = localStorage.getItem("token");            
