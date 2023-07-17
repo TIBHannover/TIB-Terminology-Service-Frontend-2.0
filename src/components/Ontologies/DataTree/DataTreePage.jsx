@@ -15,8 +15,7 @@ class DataTreePage extends React.Component {
     super(props)
     this.state = ({
       selectedNodeIri: '',      
-      showDetailTable: false,
-      componentIdentity: "",
+      showDetailTable: false,      
       termTree: false,
       propertyTree: false,
       ontologyId: ''
@@ -36,8 +35,7 @@ class DataTreePage extends React.Component {
       termTree = false
     }
     this.setState({
-      ontologyId: this.props.ontology,
-      componentIdentity: this.props.componentIdentity,
+      ontologyId: this.props.ontology,      
       selectedNodeIri: this.props.iri,
       termTree: termTree,
       propertyTree: !termTree
@@ -45,8 +43,8 @@ class DataTreePage extends React.Component {
   }
 
 
-  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable, componentIdentity){
-    if(componentIdentity === "term"){
+  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
+    if(this.props.componentIdentity === "term"){
       this.setState({
         selectedNodeIri: selectedNodeIri,        
         showDetailTable: ShowDetailTable
@@ -101,12 +99,12 @@ render(){
                   nodeSelectionHandler={this.handleTreeNodeSelection}
                   individualViewChanger={""}
                 />
-          </div>        
+          </div>
         </div>
         {this.state.showDetailTable && this.paneResize.generateVerticalResizeLine()}
-        {this.state.showDetailTable &&   
+        {this.state.showDetailTable &&
           <div className="node-table-container" id="page-right-pane">
-            {this.state.termTree &&           
+            {this.state.termTree &&
                 <MatomoWrapper>
                 <NodePage
                   iri={this.state.selectedNodeIri}

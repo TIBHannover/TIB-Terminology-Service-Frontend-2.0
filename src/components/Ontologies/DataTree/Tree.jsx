@@ -184,7 +184,7 @@ class Tree extends React.Component {
             lastSelectedItemId: lastSelectedItemId
         }, () => {
             this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-            this.props.nodeSelectionHandler(target, showNodeDetailPage, this.state.componentIdentity);
+            this.props.nodeSelectionHandler(target, showNodeDetailPage);
             this.props.iriChangerFunction(target, this.props.componentIdentity);
         });  
     }
@@ -199,10 +199,10 @@ class Tree extends React.Component {
             currentUrlParams.append('iri', stateObj.selectedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
             this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-            this.props.nodeSelectionHandler(stateObj.selectedNodeIri, true, this.state.componentIdentity);
+            this.props.nodeSelectionHandler(stateObj.selectedNodeIri, true);
         }
         else{
-            this.props.nodeSelectionHandler("", false, this.state.componentIdentity);
+            this.props.nodeSelectionHandler("", false);
         }        
     }
 
@@ -243,7 +243,7 @@ class Tree extends React.Component {
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);            
             showNodeDetailPage = true;
-            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage, this.state.componentIdentity);
+            this.props.nodeSelectionHandler(clickedNodeIri, showNodeDetailPage);
             this.setState({
                 showNodeDetailPage: showNodeDetailPage,
                 selectedNodeIri: clickedNodeIri,
@@ -361,7 +361,7 @@ class Tree extends React.Component {
   resetTree(){
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-    this.props.nodeSelectionHandler("", false, this.state.componentIdentity);
+    this.props.nodeSelectionHandler("", false);
     this.setState({
       resetTreeFlag: true,
       treeDomContent: "",
