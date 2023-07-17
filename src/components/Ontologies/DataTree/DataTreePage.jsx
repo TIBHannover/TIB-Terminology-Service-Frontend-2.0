@@ -14,9 +14,8 @@ class DataTreePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
-      selectedNodeIri: '',
-      showNodeDetailPageClass: false,
-      showNodeDetailPageProperty: false,
+      selectedNodeIri: '',      
+      showDetailTable: false,
       componentIdentity: "",
       termTree: false,
       propertyTree: false,
@@ -49,14 +48,14 @@ class DataTreePage extends React.Component {
   handleTreeNodeSelection(selectedNodeIri, ShowDetailTable, componentIdentity){
     if(componentIdentity === "term"){
       this.setState({
-        selectedNodeIri: selectedNodeIri,
-        showNodeDetailPageClass: ShowDetailTable
+        selectedNodeIri: selectedNodeIri,        
+        showDetailTable: ShowDetailTable
       });
     }
     else{
       this.setState({
-        selectedNodeIri: selectedNodeIri,
-        showNodeDetailPageProperty: ShowDetailTable
+        selectedNodeIri: selectedNodeIri,        
+        showDetailTable: ShowDetailTable
       });
     }
     
@@ -104,31 +103,33 @@ render(){
                 />
           </div>        
         </div>
-        {this.paneResize.generateVerticalResizeLine()}
-        <div className="node-table-container" id="page-right-pane">
-          {this.state.termTree && this.state.showNodeDetailPageClass &&           
+        {this.state.showDetailTable && this.paneResize.generateVerticalResizeLine()}
+        {this.state.showDetailTable &&   
+          <div className="node-table-container" id="page-right-pane">
+            {this.state.termTree &&           
+                <MatomoWrapper>
+                <NodePage
+                  iri={this.state.selectedNodeIri}
+                  ontology={this.state.ontologyId}
+                  componentIdentity="term"
+                  extractKey="terms"
+                  isSkos={this.props.isSkos}
+                  isIndividual={false}
+                />
+                </MatomoWrapper>        
+            }
+            {this.state.propertyTree &&           
               <MatomoWrapper>
               <NodePage
-                iri={this.state.selectedNodeIri}
-                ontology={this.state.ontologyId}
-                componentIdentity="term"
-                extractKey="terms"
-                isSkos={this.props.isSkos}
-                isIndividual={false}
+                  iri={this.state.selectedNodeIri}
+                  ontology={this.state.ontologyId}
+                  componentIdentity="property"
+                  extractKey="properties"
+                  isIndividual={false}
               />
-              </MatomoWrapper>        
-          }
-          {this.state.propertyTree && this.state.showNodeDetailPageProperty &&           
-            <MatomoWrapper>
-            <NodePage
-                iri={this.state.selectedNodeIri}
-                ontology={this.state.ontologyId}
-                componentIdentity="property"
-                extractKey="properties"
-                isIndividual={false}
-            />
-            </MatomoWrapper>}
-        </div>        
+              </MatomoWrapper>}
+          </div>
+        }       
     </div>  
   )
 }
