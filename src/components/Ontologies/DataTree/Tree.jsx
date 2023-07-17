@@ -28,7 +28,7 @@ class Tree extends React.Component {
           resetTreeFlag: false,
           siblingsVisible: false,
           siblingsButtonShow: false,
-          reduceTreeBtnShow: false,
+          subOrFullTreeBtnShow: false,
           reduceBtnActive: true,
           viewMode: true,
           reload: false,
@@ -112,8 +112,10 @@ class Tree extends React.Component {
 
    async buildTheTree(resetFlag, viewMode, reload){
         let target = this.props.iri;
-        target =  target ? target.trim() : null;
-        let fullTreeMode = this.state.reduceBtnActive;
+        target =  target ? target.trim() : null;        
+        let siblingsButtonShow = this.state.reduceBtnActive;
+        let siblingsVisible = !this.state.reduceBtnActive;
+        let subOrFullTreeBtnShow = true;
         let treeList = "";
         let targetHasChildren = ""                        
         let listOfNodes =  [];
@@ -135,7 +137,10 @@ class Tree extends React.Component {
                 result = this.buildTheTreeFirstLayer(this.state.rootNodes);
             }                                 
             treeList = result.treeDomContent;
-            target = "";                
+            target = "";            
+            siblingsButtonShow = false;
+            siblingsVisible = false;
+            subOrFullTreeBtnShow = false;           
         }                    
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
@@ -176,11 +181,11 @@ class Tree extends React.Component {
             treeDomContent: treeList,
             selectedNodeIri: target,
             showNodeDetailPage: showNodeDetailPage,
-            reduceTreeBtnShow: true,
+            subOrFullTreeBtnShow: subOrFullTreeBtnShow,            
             reload: false,
             isLoadingTheComponent: false,
-            siblingsButtonShow: fullTreeMode,
-            siblingsVisible: !fullTreeMode,
+            siblingsButtonShow: siblingsButtonShow,
+            siblingsVisible: siblingsVisible,
             lastSelectedItemId: lastSelectedItemId
         }, () => {
             this.props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
@@ -248,7 +253,7 @@ class Tree extends React.Component {
                 showNodeDetailPage: showNodeDetailPage,
                 selectedNodeIri: clickedNodeIri,
                 siblingsButtonShow: false,
-                reduceTreeBtnShow: true,
+                subOrFullTreeBtnShow: true,
                 reduceBtnActive: false,
                 lastSelectedItemId: clickedNodeId
             }, () =>{
@@ -370,7 +375,7 @@ class Tree extends React.Component {
       siblingsButtonShow: false,
       reload: false,
       showNodeDetailPage: false,
-      reduceTreeBtnShow: false,
+      subOrFullTreeBtnShow: false,
       lastSelectedItemId: false
     });
   }
@@ -433,11 +438,11 @@ async showSiblings(){
         let showSiblings = !reduceBtnActive;
         this.props.domStateKeeper("", this.state, this.props.componentIdentity);
         this.setState({
-        reduceBtnActive: !reduceBtnActive,
-        siblingsButtonShow: showSiblings,
-        reload: true, 
-        treeDomContent: "",
-        isLoadingTheComponent: true
+            reduceBtnActive: !reduceBtnActive,
+            siblingsButtonShow: showSiblings,
+            reload: true, 
+            treeDomContent: "",
+            isLoadingTheComponent: true
         });
     }
 
@@ -473,7 +478,7 @@ async showSiblings(){
                     </div>
                     <div className='row tree-action-btn-holder'>
                         <div className="col-sm-12">
-                            {this.state.reduceTreeBtnShow && !this.props.isIndividual &&  
+                            {this.state.subOrFullTreeBtnShow && !this.props.isIndividual &&  
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.reduceTree}>
                                 {!this.state.reduceBtnActive
                                         ? "Sub Tree"
