@@ -22,7 +22,8 @@ class DataTreePage extends React.Component {
     })
     this.paneResize = new PaneResize();
     this.setComponentData = this.setComponentData.bind(this);
-    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);    
+    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
+    this.handleResetTreeEevent = this.handleResetTreeEevent.bind(this);
   }
 
 
@@ -60,8 +61,14 @@ class DataTreePage extends React.Component {
   }
 
 
+  handleResetTreeEevent(){
+    this.paneResize.resetTheWidthToOrignial();
+  }
+
+
   componentDidMount(){
-    this.setComponentData();        
+    this.setComponentData();
+    this.paneResize.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
     document.body.addEventListener("mousemove", this.paneResize.moveToResize);
     document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
@@ -98,6 +105,7 @@ render(){
                   isSkos={this.props.isSkos}
                   nodeSelectionHandler={this.handleTreeNodeSelection}
                   individualViewChanger={""}
+                  handleResetTreeInParent={this.handleResetTreeEevent}
                 />
           </div>
         </div>

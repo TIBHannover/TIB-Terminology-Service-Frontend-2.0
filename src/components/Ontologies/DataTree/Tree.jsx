@@ -362,6 +362,7 @@ class Tree extends React.Component {
     this.props.history.push(window.location.pathname);
     this.props.domStateKeeper("", this.state, this.props.componentIdentity);
     this.props.nodeSelectionHandler("", false);
+    this.props.handleResetTreeInParent();
     this.setState({
       resetTreeFlag: true,
       treeDomContent: "",
