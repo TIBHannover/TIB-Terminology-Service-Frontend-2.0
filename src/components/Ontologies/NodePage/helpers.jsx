@@ -9,29 +9,14 @@ import { Link } from 'react-router-dom';
  */
  export function classMetaData(object){
     let metadata = {
+      "Label": [object.label, false],
+      "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
       "Description": [object.description  ? object.description[0] : "", false],
       "fullIRI": [object.iri, true], 
       "SubClass Of": [object.subClassOf, false]    
     }
-
-    /** Label (can be imported) */
-    if(object.is_defining_ontology === false){
-      let result = [];
-      result.push(
-        <div>
-          {object.label}
-          <br/>
-          <span>Imported</span>
-        </div>        
-      )
-      metadata['Label'] = [result, false];
-    }   
-    
-    /** Synonyms */
-    metadata['Synonyms'] = [object.synonyms ? (object.synonyms).join(',\n') : "", false];
-    
     
     if(object.eqAxiom !== "N/A"){
       metadata['Equivalent to'] = [object.eqAxiom, false];
