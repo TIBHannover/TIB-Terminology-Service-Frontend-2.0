@@ -53,33 +53,42 @@ class TermRequest extends React.Component{
         
     }
 
+
+
     onTextAreaChange = (newEditorState) => {
         this.setState({ editorState: newEditorState });
       };
 
 
+
     createGenericIssueFields(){
         return [
-            <Editor
-                editorState={this.state.editorState}
-                onEditorStateChange={this.onTextAreaChange}
-                toolbar={{
-                    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
-                    inline: {
-                    options: ['bold', 'italic', 'underline', 'strikethrough'],
-                    },
+            <div>
+                <label className="required_input" htmlFor="git-issue-content-box">Issue Content</label>
+                <Editor
+                    editorState={this.state.editorState}
+                    onEditorStateChange={this.onTextAreaChange}
+                    wrapperClassName="git-issue-content-box" 
+                    id="git-issue-content-box"               
+                    toolbar={{
+                        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
+                        inline: {
+                            options: ['bold', 'italic', 'underline', 'strikethrough'],
+                        },
                     blockType: {
-                    inDropdown: true,
-                    options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
+                        inDropdown: true,
+                        options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
                     },
                     list: {
-                    inDropdown: true,
-                    options: ['unordered', 'ordered'],
-                    },
-                }}
-            />
+                        inDropdown: true,
+                        options: ['unordered', 'ordered'],
+                        },
+                    }}
+                />
+            </div>            
         ];
     }
+
 
     createIssueTypeDropDown(){
         return [            
@@ -104,9 +113,21 @@ class TermRequest extends React.Component{
 
 
     submitIssueRequest(){
-        let issueTitle = document.getElementById('issueTitle').value;
+        let issueTitle = document.getElementById('issueTitle').value; 
+        if(!this.state.editorState){            
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            return;
+        }
         let issueContent = this.state.editorState.getCurrentContent();        
-        issueContent = draftToMarkdown(convertToRaw(issueContent));
+        issueContent = draftToMarkdown(convertToRaw(issueContent));        
+        console.info(issueContent)
+        if(!issueTitle || issueTitle === ""){
+            document.getElementById('issueTitle').style.borderColor = 'red';
+            return;
+        }
+        
+        
+        
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
@@ -115,36 +136,39 @@ class TermRequest extends React.Component{
         data.append("title", issueTitle);
         data.append("content", issueContent);        
         data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
-            .then((response) => response.json())
-            .then((data) => {
-                if(data['_result']){
-                    this.setState({
-                        errorInSubmit: false,
-                        submitFinished: true,
-                        newIssueUrl: data['_result']['new_issue_url'] 
-                    });
-                }
-                else{
-                    this.setState({
-                        errorInSubmit: true,
-                        submitFinished: true,
-                        newIssueUrl: ""
-                    });
-                }
-            })
-            .catch((error) => {
-                this.setState({
-                    errorInSubmit: true,
-                    submitFinished: true,
-                    newIssueUrl: ""
-                });
-            });
+        // fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         if(data['_result']){
+        //             this.setState({
+        //                 errorInSubmit: false,
+        //                 submitFinished: true,
+        //                 newIssueUrl: data['_result']['new_issue_url'] 
+        //             });
+        //         }
+        //         else{
+        //             this.setState({
+        //                 errorInSubmit: true,
+        //                 submitFinished: true,
+        //                 newIssueUrl: ""
+        //             });
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         this.setState({
+        //             errorInSubmit: true,
+        //             submitFinished: true,
+        //             newIssueUrl: ""
+        //         });
+        //     });
     }
+
+
 
     openModal(){
         this.setState({modalIsOpen: true});
     }
+
 
 
     closeModal(){        
