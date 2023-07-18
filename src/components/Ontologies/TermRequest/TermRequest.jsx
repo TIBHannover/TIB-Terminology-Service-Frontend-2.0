@@ -32,7 +32,7 @@ class TermRequest extends React.Component{
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
-
+        this.onTextInputChange = this.onTextInputChange.bind(this);
     }
 
 
@@ -56,6 +56,7 @@ class TermRequest extends React.Component{
 
 
     onTextAreaChange = (newEditorState) => {
+        document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
         this.setState({ editorState: newEditorState });
       };
 
@@ -69,7 +70,7 @@ class TermRequest extends React.Component{
                     editorState={this.state.editorState}
                     onEditorStateChange={this.onTextAreaChange}
                     wrapperClassName="git-issue-content-box" 
-                    id="git-issue-content-box"               
+                    id="git-issue-content-box"                    
                     toolbar={{
                         options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
                         inline: {
@@ -112,21 +113,36 @@ class TermRequest extends React.Component{
     }
 
 
+    onTextInputChange(){       
+        document.getElementById('issueTitle').style.borderColor = '';
+    }
+
+
     submitIssueRequest(){
         let issueTitle = document.getElementById('issueTitle').value; 
+        let formIsValid = true;
+        let issueContent = "";
         if(!this.state.editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            return;
+            formIsValid = false;
         }
-        let issueContent = this.state.editorState.getCurrentContent();        
-        issueContent = draftToMarkdown(convertToRaw(issueContent));        
-        console.info(issueContent)
+        else{
+            issueContent = this.state.editorState.getCurrentContent();        
+            issueContent = draftToMarkdown(convertToRaw(issueContent));  
+        }
+        
         if(!issueTitle || issueTitle === ""){
             document.getElementById('issueTitle').style.borderColor = 'red';
+            formIsValid = false;
+        }        
+        if(!issueContent || issueContent.trim() === ""){
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+
+        if(!formIsValid){
             return;
         }
-        
-        
         
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
@@ -136,31 +152,33 @@ class TermRequest extends React.Component{
         data.append("title", issueTitle);
         data.append("content", issueContent);        
         data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
-        // fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         if(data['_result']){
-        //             this.setState({
-        //                 errorInSubmit: false,
-        //                 submitFinished: true,
-        //                 newIssueUrl: data['_result']['new_issue_url'] 
-        //             });
-        //         }
-        //         else{
-        //             this.setState({
-        //                 errorInSubmit: true,
-        //                 submitFinished: true,
-        //                 newIssueUrl: ""
-        //             });
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         this.setState({
-        //             errorInSubmit: true,
-        //             submitFinished: true,
-        //             newIssueUrl: ""
-        //         });
-        //     });
+        data.append("issue_tracker_url", "");
+        
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
+            .then((response) => response.json())
+            .then((data) => {
+                if(data['_result']){
+                    this.setState({
+                        errorInSubmit: false,
+                        submitFinished: true,
+                        newIssueUrl: data['_result']['new_issue_url'] 
+                    });
+                }
+                else{
+                    this.setState({
+                        errorInSubmit: true,
+                        submitFinished: true,
+                        newIssueUrl: ""
+                    });
+                }
+            })
+            .catch((error) => {
+                this.setState({
+                    errorInSubmit: true,
+                    submitFinished: true,
+                    newIssueUrl: ""
+                });
+            });
     }
 
 
@@ -185,7 +203,7 @@ class TermRequest extends React.Component{
 
     render(){
         return(
-            <span>
+            <span>            
             <button type="button" 
                 class="btn btn-primary" 
                 data-toggle="modal" 
@@ -208,13 +226,12 @@ class TermRequest extends React.Component{
                         <span>
                             {!this.state.submitFinished && 
                                 <div class="modal-body">
-                                    <p>You can file a new issue here. The issue can have a General Topic or a new Term Request</p>
-                                    
+                                    <p>You can file a new issue here. The issue can have a General Topic or a new Term Request</p>                             
                                     <div className="row">
                                         <div className="col-sm-8">
                                             {this.createIssueTypeDropDown()}
                                             <label className="required_input" for="issueTitle">Issue Title</label>
-                                            <input type="text" class="form-control" id="issueTitle" placeholder="Enter Issue Title"></input>
+                                            <input type="text" class="form-control" onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Issue Title"></input>
                                         </div>
                                     </div>
                                     <br></br>
