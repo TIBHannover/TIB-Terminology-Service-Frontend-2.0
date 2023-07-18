@@ -4,8 +4,7 @@ import AuthTool from "../authTools";
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
-        document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
-        document.getElementById("login-loading").style.display = "block";
+        AuthTool.enableLoginAnimation();
         let code = cUrl.split("code=")[1];        
         let headers = AuthTool.setHeaderForTsMicroBackend();
         headers["X-TS-Auth-APP-Code"] = code;                       
@@ -13,22 +12,17 @@ export function auth(){
             .then((resp) => resp.json())
             .then((resp) => {                
                 if(resp["_result"]){
-                    resp = resp["_result"];
-                    localStorage.setItem("name", resp["name"]);
-                    localStorage.setItem("company", resp["company"]);
-                    localStorage.setItem("github_home", resp["github_home"]);                    
-                    localStorage.setItem("token", resp["token"]);
-                    localStorage.setItem("ts_username", resp["ts_username"]);
+                    AuthTool.setAuthResponseInLocalStorage(resp["_result"])
                     window.location.replace("/ts");
                     return true;               
                 }
-                document.getElementsByClassName("App")[0].style.filter = "";
-                document.getElementById("login-loading").style.display = "none";
+                AuthTool.disableLoginAnimation();
+                localStorage.setItem("isLoginInTs", 'false');
                 return false;
             })
             .catch((e) => {
-                document.getElementsByClassName("App")[0].style.filter = "";
-                document.getElementById("login-loading").style.display = "none";
+                AuthTool.disableLoginAnimation();
+                localStorage.setItem("isLoginInTs", 'false');
                 return false;
             })
     }   
@@ -38,17 +32,20 @@ export function auth(){
 
 export async function isLogin(){        
     if(localStorage.getItem("token")){        
-        let data = new FormData();
+        let data = new FormData();        
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
         let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", headers:headers, body: data});
         result = await result.json()
         result = result["_result"]
         if(result && result["valid"] === true){
+            localStorage.setItem("isLoginInTs", 'true');
             return true
         }
+        localStorage.setItem("isLoginInTs", 'false');
         return false;
     }
-    else{        
+    else{
+        localStorage.setItem("isLoginInTs", 'false');
         return false;
     }
 }
@@ -62,14 +59,15 @@ export function userIsLoginByLocalStorage(){
 }
 
 
-export function Logout(){
-    if(localStorage.getItem("token")){
-        localStorage.removeItem("token");
-        localStorage.removeItem("name");
-        localStorage.removeItem("company");
-        localStorage.removeItem("github_home");           
-        localStorage.removeItem("isLoginInTs");  
-        localStorage.removeItem("ts_username");        
-        window.location.replace("/ts");
-    }    
+export function Logout(){    
+    localStorage.setItem("token", "");
+    localStorage.setItem("isLoginInTs", "false");  
+    localStorage.setItem("ts_username", "");    
+    localStorage.setItem("name", "");
+    localStorage.setItem("company", "");
+    localStorage.setItem("github_home", "");
+    localStorage.setItem("orcid_id", "");             
+    localStorage.setItem("authProvider", "undefined");
+    window.location.replace("/ts");
+        
 }
