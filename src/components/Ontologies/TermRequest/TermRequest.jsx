@@ -22,40 +22,25 @@ class TermRequest extends React.Component{
             errorInSubmit: false,
             newIssueUrl: "",
             modalIsOpen: false,
-            issueTemplates: []
+            issueTemplates: [],
+            selectedTemplate: 0,
+            selectedTemplateText: ""
         };
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.createGenericIssueFields = this.createGenericIssueFields.bind(this);
         this.createIssueTypeDropDown = this.createIssueTypeDropDown.bind(this);
-        this.changeIssueType = this.changeIssueType.bind(this);
-        this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
+        this.changeIssueType = this.changeIssueType.bind(this);        
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onTextInputChange = this.onTextInputChange.bind(this);
         this.createIssueTemplatesDropDown = this.createIssueTemplatesDropDown.bind(this);
         this.loadTemplates = this.loadTemplates.bind(this);
+        this.templateDropDownChange = this.templateDropDownChange.bind(this);
 
         this.loadTemplates();
     }
 
-
-
-    setTermRequestTemplate(issueType){        
-        // if(issueType === TERM_REQUEST_ISSUE_ID){
-        //     fetch(templatePath)
-        //     .then((response) => response.text()) 
-        //     .then((text) => {            
-        //         this.setState({
-        //             editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
-        //         });
-        //     });
-        // }
-        // else{
-        //     this.setState({editorState:null})
-        // }       
-        
-    }
 
 
 
@@ -155,11 +140,32 @@ class TermRequest extends React.Component{
 
 
 
+    templateDropDownChange(e){
+        this.setState({
+            selectedTemplate: e.target.value
+        });      
+
+        let selectedTemplateUrl = e.target.options[e.target.selectedIndex].getAttribute('url');
+        if(!selectedTemplateUrl){
+            this.setState({
+                editorState:  EditorState.createWithContent(stateFromMarkdown("")),
+            }); 
+            return;
+        }
+        fetch(selectedTemplateUrl)
+            .then(resp => resp.text())
+            .then((templateText) => {
+                this.setState({
+                    editorState:  EditorState.createWithContent(stateFromMarkdown(templateText)),
+                }); 
+            });
+    }
+
+
+
     changeIssueType(e){                   
         this.setState({
             issueType: e.target.value
-        }, ()=>{
-            this.setTermRequestTemplate(e.target.value); 
         });
     }
 
@@ -285,7 +291,7 @@ class TermRequest extends React.Component{
                                             {
                                                 <div class="form-group">
                                                     <label for="issue-templates" className='col-form-label'>Issue Template</label>
-                                                    <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-templates" value={0}>
+                                                    <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-templates" value={this.state.selectedTemplate} onChange={this.templateDropDownChange}>
                                                         <option value={0} key={0}>None</option>
                                                         {this.createIssueTemplatesDropDown()}
                                                     </select>  
