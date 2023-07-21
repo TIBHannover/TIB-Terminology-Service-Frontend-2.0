@@ -157,7 +157,8 @@ class TermRequest extends React.Component{
             .then((templateText) => {
                 this.setState({
                     editorState:  EditorState.createWithContent(stateFromMarkdown(templateText)),
-                }); 
+                });
+                document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
             });
     }
 
@@ -253,7 +254,8 @@ class TermRequest extends React.Component{
             submitFinished: false,
             errorInSubmit: false,
             newIssueUrl: "",
-            modalIsOpen: false
+            modalIsOpen: false,
+            selectedTemplate: 0
         });
     }
 
@@ -284,7 +286,11 @@ class TermRequest extends React.Component{
                         <span>
                             {!this.state.submitFinished && 
                                 <div class="modal-body">
-                                    <p>You can file a new issue here. The issue can have a General Topic or a new Term Request</p>                             
+                                    <p>You can file a new issue here.</p>
+                                    <div class="alert alert-info">
+                                        <strong>Note:</strong> Please select a proper issue template (if exist). These templates 
+                                            are defined by the repository owner and are the expected way of reporting an issue. 
+                                    </div>
                                     <div className="row">
                                         <div className="col-sm-8">
                                             {this.createIssueTypeDropDown()}
