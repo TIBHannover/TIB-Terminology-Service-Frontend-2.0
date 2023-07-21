@@ -4,7 +4,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
-import templatePath from './template.md';
 import AuthTool from "../../User/Login/authTools";
 
 
@@ -22,7 +21,8 @@ class TermRequest extends React.Component{
             submitFinished: false,
             errorInSubmit: false,
             newIssueUrl: "",
-            modalIsOpen: false
+            modalIsOpen: false,
+            issueTemplates: []
         };
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.createGenericIssueFields = this.createGenericIssueFields.bind(this);
@@ -33,23 +33,27 @@ class TermRequest extends React.Component{
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onTextInputChange = this.onTextInputChange.bind(this);
+        this.createIssueTemplatesDropDown = this.createIssueTemplatesDropDown.bind(this);
+        this.loadTemplates = this.loadTemplates.bind(this);
+
+        this.loadTemplates();
     }
 
 
 
     setTermRequestTemplate(issueType){        
-        if(issueType === TERM_REQUEST_ISSUE_ID){
-            fetch(templatePath)
-            .then((response) => response.text()) 
-            .then((text) => {            
-                this.setState({
-                    editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
-                });
-            });
-        }
-        else{
-            this.setState({editorState:null})
-        }       
+        // if(issueType === TERM_REQUEST_ISSUE_ID){
+        //     fetch(templatePath)
+        //     .then((response) => response.text()) 
+        //     .then((text) => {            
+        //         this.setState({
+        //             editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
+        //         });
+        //     });
+        // }
+        // else{
+        //     this.setState({editorState:null})
+        // }       
         
     }
 
@@ -104,6 +108,53 @@ class TermRequest extends React.Component{
     }
 
 
+
+    loadTemplates(){        
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        let data = new FormData();
+        data.append("repo_url", this.props.ontology.config.repoUrl);
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates', {method: 'POST', headers:headers, body: data})
+            .then((response) => response.json())
+            .then((data) => {
+                if(data['_result']){
+                    this.setState({                       
+                        issueTemplates: data['_result']['templates'] 
+                    });
+                }
+                else{
+                    this.setState({                        
+                        issueTemplates: false
+                    });
+                }
+            })
+            .catch((error) => {
+                this.setState({
+                    issueTemplates: false
+                });
+            });
+    }
+
+
+
+    createIssueTemplatesDropDown(){        
+        let templates = this.state.issueTemplates;
+        
+        let result = [];
+        let value = 1;
+        if(!templates){
+            return "";
+        }
+        for(let temp of templates){
+            result.push(
+                <option value={value} key={value} url={temp['template_url']}>{temp['template_name']}</option> 
+            );
+            value += 1;
+        }
+        return result;
+    }
+
+
+
     changeIssueType(e){                   
         this.setState({
             issueType: e.target.value
@@ -147,12 +198,12 @@ class TermRequest extends React.Component{
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
-        data.append("ontology_id", this.props.ontologyId);
+        data.append("ontology_id", this.props.ontology.ontologyId);
         data.append("username", localStorage.getItem("ts_username"));        
         data.append("title", issueTitle);
         data.append("content", issueContent);        
         data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
-        data.append("issue_tracker_url", "");
+        data.append("repo_url", this.props.ontology.config.repoUrl);
         
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
             .then((response) => response.json())
@@ -199,6 +250,7 @@ class TermRequest extends React.Component{
             modalIsOpen: false
         });
     }
+
    
 
     render(){
@@ -230,6 +282,15 @@ class TermRequest extends React.Component{
                                     <div className="row">
                                         <div className="col-sm-8">
                                             {this.createIssueTypeDropDown()}
+                                            {
+                                                <div class="form-group">
+                                                    <label for="issue-templates" className='col-form-label'>Issue Template</label>
+                                                    <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-templates" value={0}>
+                                                        <option value={0} key={0}>None</option>
+                                                        {this.createIssueTemplatesDropDown()}
+                                                    </select>  
+                                                </div>
+                                            }
                                             <label className="required_input" for="issueTitle">Issue Title</label>
                                             <input type="text" class="form-control" onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Issue Title"></input>
                                         </div>

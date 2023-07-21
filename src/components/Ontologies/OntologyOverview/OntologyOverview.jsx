@@ -45,7 +45,7 @@ class OntologyOverview extends React.Component {
         <div className='col-sm-3'>
           <OntologyStatsBox ontology={this.props.ontology} />
           <br></br>
-          <RenderIfLogin component={<TermRequest ontologyId={this.props.ontology.ontologyId} />} />
+          <RenderIfLogin component={<TermRequest ontology={this.props.ontology} />} />
         </div>
     </div>
    );
