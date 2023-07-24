@@ -223,6 +223,39 @@ export function createHomePageContent() {
           </div>
         </div>
       </div>
+      <br></br>
+      <div className="row">
+        <div className="col-sm-6">
+          <div className="collection-card">
+            <a
+              href={
+                process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['NFDI4Cat']['ontology_list_url']
+              }
+              className="collection-image-anchor"
+            >
+              <img
+                className="img-fluid collection-logo"
+                alt="NFDI4Cat"
+                src={collectionsInfoJson['NFDI4Cat']['logo']}
+              />
+            </a>
+            <div className="collection-card-text">
+              <p className="trunc">
+                {collectionsInfoJson['NFDI4Cat']['text']}
+              </p>
+              <a
+                href={
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+                  collectionsInfoJson['NFDI4Cat']['html_id']
+                }
+                className="show-more-text-link"
+              >
+                [Read More]
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>,
   ];
 
