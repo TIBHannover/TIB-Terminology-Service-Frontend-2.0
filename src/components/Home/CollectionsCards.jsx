@@ -222,9 +222,6 @@ export function createHomePageContent() {
             </div>
           </div>
         </div>
-      </div>
-      <br></br>
-      <div className="row">
         <div className="col-sm-6">
           <div className="collection-card">
             <a
