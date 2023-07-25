@@ -34,6 +34,7 @@ export async function isLogin(){
     if(localStorage.getItem("token")){        
         let data = new FormData();        
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+        data.append("username", localStorage.getItem('ts_username'));
         let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", headers:headers, body: data});
         result = await result.json()
         result = result["_result"]
