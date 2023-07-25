@@ -51,7 +51,17 @@ class NodeGraph extends React.Component{
     }
 
     componentDidMount(){
+      if(this.state.data && this.state.prevNode !== this.props.iri){
+        this.setComponentData();      
+      }
         this.generateGraph();
+    }
+
+    componentDidUpdate(){    
+      if(this.state.prevNode !== this.props.iri){
+        this.setComponentData();
+      }
+      this.generateGraph();
     }
 
     render(){
