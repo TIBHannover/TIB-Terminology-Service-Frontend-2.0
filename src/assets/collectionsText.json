@@ -68,5 +68,15 @@
         "ontology_list_url": "/ontologies?collection=FID+BAUdigital&and=false&page=1",
         "project_homepage":"https://www.fid-bau.de/",
         "domain_ts_link": ""
-    }    
+    },
+    "NFDI4Cat":{
+        "id":"NFDI4CAT",
+        "html_id":"NFDI4CAT",
+        "name":"NFDI4Cat Project",
+        "text":"NFDI4Cat is a community-driven and user-oriented initiative to secure the digital future of catalysis",
+        "logo":"/logo_text.svg",
+        "ontology_list_url": "/ontologies?collection=NFDI4CAT&and=false&page=1",
+        "project_homepage":"https://nfdi4cat.org/en/",
+        "domain_ts_link": ""
+    }     
 }
