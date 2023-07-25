@@ -9,7 +9,8 @@ class AuthTool{
         header['X-TS-Orcid-Id'] = localStorage.getItem("orcid_id");
          
         if (withAccessToken){
-            header["Authorization"] = localStorage.getItem("token");            
+            header["Authorization"] = localStorage.getItem("token");
+            header["X-TS-User-Token"] = localStorage.getItem("ts_user_token");
         }
         return header;
     }
@@ -17,20 +18,18 @@ class AuthTool{
 
     static setAuthResponseInLocalStorage(response){
         let authProvider = localStorage.getItem('authProvider');
+        localStorage.setItem("token", response["token"]);
+        localStorage.setItem("ts_username", response["ts_username"]);
+        localStorage.setItem("ts_user_token", response["ts_user_token"]);
+        localStorage.setItem("isLoginInTs", 'true');
         if(authProvider === 'github'){            
             localStorage.setItem("name", response["name"]);
             localStorage.setItem("company", response["company"]);
-            localStorage.setItem("github_home", response["github_home"]);                    
-            localStorage.setItem("token", response["token"]);
-            localStorage.setItem("ts_username", response["ts_username"]);
-            localStorage.setItem("isLoginInTs", 'true');
+            localStorage.setItem("github_home", response["github_home"]);                                
         }
         else if(authProvider === "orcid"){
-            localStorage.setItem("name", response["name"]);                    
-            localStorage.setItem("token", response["token"]);
-            localStorage.setItem("orcid_id", response["orcid_id"]);
-            localStorage.setItem("ts_username", response["ts_username"]);
-            localStorage.setItem("isLoginInTs", 'true');
+            localStorage.setItem("name", response["name"]);            
+            localStorage.setItem("orcid_id", response["orcid_id"]);            
         }
     }
 
