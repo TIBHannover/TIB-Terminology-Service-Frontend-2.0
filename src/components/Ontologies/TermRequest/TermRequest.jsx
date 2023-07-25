@@ -38,7 +38,9 @@ class TermRequest extends React.Component{
         this.loadTemplates = this.loadTemplates.bind(this);
         this.templateDropDownChange = this.templateDropDownChange.bind(this);
 
-        this.loadTemplates();
+        if(localStorage.getItem('authProvider') === 'github'){
+            this.loadTemplates();
+        }        
     }
 
 
@@ -98,6 +100,7 @@ class TermRequest extends React.Component{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
         data.append("repo_url", this.props.ontology.config.repoUrl);
+        data.append("username", localStorage.getItem('ts_username'));
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates', {method: 'POST', headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
@@ -262,6 +265,9 @@ class TermRequest extends React.Component{
    
 
     render(){
+        if(localStorage.getItem('authProvider') !== 'github'){
+            return "";
+        }
         return(
             <span>            
             <button type="button" 
