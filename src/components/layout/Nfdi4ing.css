@@ -2225,6 +2225,11 @@ Login and Auth
     color: black;
  }
 
+ .login-modal-hint-text{
+    color: black !important;
+    text-align: justify;
+ }
+
 
 /* 
 -------------------------------------------------------

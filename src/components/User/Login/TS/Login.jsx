@@ -61,10 +61,15 @@ class Login extends React.Component{
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                                        <h5 class="modal-title" id="loginModalLabel">Login</h5>                                        
                                         <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
                                     </div>
                                     <div class="modal-body">
+                                        <div className="login-modal-hint-text">  
+                                            <strong>Attention:</strong> Some of the features, such as term request, are only available if you 
+                                                        authenticate with Github. 
+                                        </div>
+                                        <br></br> 
                                         {this.buildAuthButtons()}
                                     </div>                            
                                 </div>
@@ -77,6 +82,10 @@ class Login extends React.Component{
                     <div className="row">
                         <div className="col-sm-12 text-center">
                             <h5>You need to login for accessing this section.</h5>
+                            <div>  
+                                <strong>Attention:</strong> Some of the features, such as term request, are only available if you 
+                                            authenticate with Github. 
+                            </div> 
                             <br></br>
                             {this.buildAuthButtons()}
                         </div>
