@@ -37,9 +37,19 @@
            var tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:true}}
            var term = termiri
            var visoptions={
-             physics:
-               false
-               ,
+             physics:{
+              stabilization: {
+    	        enabled: true // <------ Disables animation.
+              },
+              barnesHut: {
+                gravitationalConstant: -23000,
+                centralGravity: 0,
+                springLength: 0,
+                springConstant: 0.5,
+                damping: 1,
+                avoidOverlap: 1
+               }
+              },
              layout: {
                hierarchical: false},
              edges:{
