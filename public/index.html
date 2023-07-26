@@ -42,20 +42,28 @@
     	        enabled: true // <------ Disables animation.
               },
               barnesHut: {
-                gravitationalConstant: -23000,
+                gravitationalConstant: 0,
                 centralGravity: 0,
                 springLength: 0,
-                springConstant: 0.5,
-                damping: 1,
+                springConstant: 0,
+                damping: 0.09,
                 avoidOverlap: 1
                }
               },
-             layout: {
-               hierarchical: false},
-             edges:{
-              arrows:{middle:{enabled: true}},
-              dashes:true,
+              repulsion: {
+                centralGravity: 0.1,
+                springLength: 50,
+                springConstant: 0.05,
+                nodeDistance: 100,
+                damping: 0.09
               },
+              hierarchicalRepulsion: {
+                centralGravity: 0.5,
+                springLength: 150,
+                springConstant: 0.01,
+                nodeDistance: 60,
+                damping: 0.09
+              }
             }
 
           var app = require("ols-graphview");
