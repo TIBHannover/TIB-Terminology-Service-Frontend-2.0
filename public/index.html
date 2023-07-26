@@ -36,11 +36,28 @@
        function initLegacyGraphView(endpointPrefix, termiri) {
            var tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:true}}
            var term = termiri
+           var visoptions={
+             physics:{
+               forceAtlas2Based: {
+               gravitationalConstant: -50,
+               centralGravity: 0.01,
+               springConstant: 0.08,
+               springLength: 100,
+               damping: 0.4,
+               avoidOverlap: 0},
+               },
+             layout: {
+               hierarchical: false},
+             edges:{
+              arrows:{middle:{enabled: true}},
+              dashes:true,
+              },
+            }
 
           var app = require("ols-graphview");
           var instance = new app();
 
-          instance.visstart("ontology_vis", term, tmpnetworkOptions, {})
+          instance.visstart("ontology_vis", term, tmpnetworkOptions, {}, visoptions)
         }
     </script>   
   </head>
