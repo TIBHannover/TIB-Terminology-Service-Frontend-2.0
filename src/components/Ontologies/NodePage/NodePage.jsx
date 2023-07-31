@@ -109,7 +109,7 @@ class NodePage extends React.Component {
     return (
       <div className='row'>
         <ul className="nav nav-tabs nav-tabs-node">
-          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology, this.state.activeTab)}
+          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology, this.state.activeTab, this.props.componentIdentity)}
         </ul>
         {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
           <NodeDetail
