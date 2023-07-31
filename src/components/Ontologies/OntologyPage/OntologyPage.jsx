@@ -408,6 +408,7 @@ class OntologyPage extends React.Component {
                                 isSkos={this.state.isSkosOntology}                              
                                 />
                 }              
+                          
                 {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
                             <IssueList                                                           
                                   componentIdentity={'gitIssues'}

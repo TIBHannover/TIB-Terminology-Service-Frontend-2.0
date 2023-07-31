@@ -5,11 +5,12 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
 import templatePath from './template.md';
-
+import AuthTool from "../../User/Login/authTools";
 
 
 const GENERIC_ISSUE_ID = "1";
 const TERM_REQUEST_ISSUE_ID = "2";
+const ISSUE_TYPES = {"1": "general", "2": "termRequest"};
 
 
 class TermRequest extends React.Component{
@@ -106,18 +107,22 @@ class TermRequest extends React.Component{
         let issueTitle = document.getElementById('issueTitle').value;
         let issueContent = this.state.editorState.getCurrentContent();        
         issueContent = draftToMarkdown(convertToRaw(issueContent));
+        let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        data.append("ontology_id", this.props.ontologyId);
+        data.append("username", localStorage.getItem("ts_username"));        
         data.append("title", issueTitle);
-        data.append("content", issueContent);
-        data.append("access_token", "");
-        fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/requestNewTerm', {method: 'POST', body: data})
+        data.append("content", issueContent);        
+        data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
-                if(data['result']){
+                if(data['_result']){
                     this.setState({
                         errorInSubmit: false,
                         submitFinished: true,
-                        newIssueUrl: data['result'] 
+                        newIssueUrl: data['_result']['new_issue_url'] 
                     });
                 }
                 else{
