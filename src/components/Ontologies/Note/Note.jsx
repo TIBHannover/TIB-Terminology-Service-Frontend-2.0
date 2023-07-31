@@ -16,6 +16,12 @@ const PROPERTY_COMPONENT_ID = 3;
 const INDIVIDUAL_COMPONENT_ID = 4;
 const COMPONENT_VALUES = ['', 'ontology', 'class', 'property', 'individual']
 
+const VISIBILITY_ONLY_ME = 1;
+const VISIBILITY_TS_USRES = 2;
+const VISIBILITY_PUBLIC = 3;
+const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
+
+
 
 class OntologyNotes extends React.Component{
     constructor(props){
@@ -23,8 +29,8 @@ class OntologyNotes extends React.Component{
         this.state = ({
            notesList: [],
            targetArtifact: ONTOLOGY_COMPONENT_ID,
-           editorState:  null,
-           username: "TS User",
+           visibility: VISIBILITY_ONLY_ME,
+           editorState:  null,           
            noteSubmited: false,
            submitSeccuess: false,
            listRenderContent: '',
@@ -42,6 +48,8 @@ class OntologyNotes extends React.Component{
         this.createNoteDetailPage = this.createNoteDetailPage.bind(this);
         this.selectNote = this.selectNote.bind(this);
         this.backToListClick = this.backToListClick.bind(this);
+        this.createVisibilityDropDown = this.createVisibilityDropDown.bind(this);
+        this.changeVisibility = this.changeVisibility.bind(this);
     }
 
 
@@ -92,6 +100,8 @@ class OntologyNotes extends React.Component{
         ];
     }
 
+
+
     onTextAreaChange = (newEditorState) => {
         this.setState({ editorState: newEditorState });
       };
@@ -139,11 +149,21 @@ class OntologyNotes extends React.Component{
 
     }
 
+
+
     changeArtifactType(e){                   
         this.setState({
             targetArtifact: e.target.value
         });
     }
+
+
+    changeVisibility(e){                   
+        this.setState({
+            visibility: e.target.value
+        });
+    }
+
 
     createTypeDropDown(){
         return [            
@@ -154,6 +174,20 @@ class OntologyNotes extends React.Component{
                     <option value={CLASS_COMPONENT_ID} key={CLASS_COMPONENT_ID}>Class</option>
                     <option value={PROPERTY_COMPONENT_ID} key={PROPERTY_COMPONENT_ID}>Property</option>
                     <option value={INDIVIDUAL_COMPONENT_ID} key={INDIVIDUAL_COMPONENT_ID}>Individual</option>
+                </select>  
+            </div>            
+        ];
+    }
+
+
+    createVisibilityDropDown(){
+        return [            
+            <div class="form-group">
+                <label for="note_visibility" className='col-form-label'>Visibility</label>
+                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="note_visibility" value={this.state.visibility} onChange={this.changeVisibility}>
+                    <option value={VISIBILITY_ONLY_ME} key={VISIBILITY_ONLY_ME}>Only me</option>
+                    <option value={VISIBILITY_TS_USRES} key={VISIBILITY_TS_USRES}>Only Terminology Service Users</option>
+                    <option value={VISIBILITY_PUBLIC} key={VISIBILITY_PUBLIC}>Everyone</option>                    
                 </select>  
             </div>            
         ];
@@ -195,6 +229,7 @@ class OntologyNotes extends React.Component{
                             <div className="row">
                                 <div className="col-sm-8">
                                     {this.createTypeDropDown()}
+                                    {this.createVisibilityDropDown()}
                                     <label className="required_input" for="noteTitle">Title</label>
                                     <input type="text" class="form-control" id="noteTitle" placeholder="Enter Title"></input>
                                     <br></br>
