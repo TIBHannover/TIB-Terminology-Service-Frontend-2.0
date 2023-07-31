@@ -9,6 +9,7 @@ import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
 import Toolkit from '../../common/Toolkit';
 import IssueList from '../IssueList/IssueList';
+import OntologyNotes from '../Note/Note';
 
 
 
@@ -407,8 +408,15 @@ class OntologyPage extends React.Component {
                                 iriChangerFunction={this.changeInputIri}                              
                                 isSkos={this.state.isSkosOntology}                              
                                 />
-                }              
-                          
+                }
+                {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) &&
+                                <OntologyNotes                                                              
+                                componentIdentity={'notes'}
+                                key={'notesPage'}
+                                ontology={this.state.ontologyId}
+                                targetNoteId={this.props.match.params.targetId}                                                            
+                                />
+                }                                      
                 {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
                             <IssueList                                                           
                                   componentIdentity={'gitIssues'}
