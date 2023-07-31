@@ -8,6 +8,7 @@ class AuthTool{
         header["X-TS-Frontend-Token"] = process.env.REACT_APP_MICRO_BACKEND_TOKEN;
         header["X-TS-Auth-Provider"] = localStorage.getItem('authProvider');
         header['X-TS-Orcid-Id'] = localStorage.getItem("orcid_id");
+        header["X-TS-User-Name"] = localStorage.getItem("ts_username");
          
         if (withAccessToken){
             header["Authorization"] = localStorage.getItem("token");
