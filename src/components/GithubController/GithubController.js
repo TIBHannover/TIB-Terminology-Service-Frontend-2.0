@@ -8,14 +8,17 @@ class GithubController{
             data.append("issuePath", urlPath);
             data.append("issueState", issueState);
             data.append("size", resultCountPerPage);
-            data.append("pageNumber", pageNumber);            
-            let result = await fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/issues/' + ontologyId, {method: 'POST', body: data});
+            data.append("pageNumber", pageNumber);
+            let endpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/issuelist' 
+            let header = {};
+            header["X-TS-Frontend-Id"] = process.env.REACT_APP_PROJECT_ID;
+            header["X-TS-Frontend-Token"] = process.env.REACT_APP_MICRO_BACKEND_TOKEN;
+            let result = await fetch(endpoint, {method: 'POST', headers:header, body: data});
             result = await result.json();
-            console.info(result)            
-            return result.result;
+            result = result['_result']            
+            return result.issues;
         }
-        catch(e){
-            // console.info(e)
+        catch(e){            
             return [];
         }        
     }
