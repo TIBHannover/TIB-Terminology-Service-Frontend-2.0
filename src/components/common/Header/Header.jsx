@@ -1,13 +1,18 @@
 import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG';
 import SearchForm from "../../Search/SearchForm";
+// import LoginForm from '../../User/Login/Login';
+import Login from '../../User/Login/TS/Login';
+
 
 function Header () {
   return (
     <div className='header-wrapper header-collapseable-section'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
-            {/* <a href="#">Login</a> */}
+            {/* <LoginForm onlyLoginButton={true}></LoginForm> */}
+            <Login isModal={true}></Login>
+            
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>
