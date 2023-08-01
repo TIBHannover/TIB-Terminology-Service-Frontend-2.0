@@ -1391,6 +1391,14 @@ p{
     margin-left: 0%;
 }
 
+.issue-report-btn{
+    /* 
+        Style for the buttons regarding issue report and term request to Github.
+    */
+
+    margin-bottom: 10px;
+}
+
 
 /* 
 -------------------------------------

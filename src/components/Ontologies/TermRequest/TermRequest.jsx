@@ -271,7 +271,7 @@ class TermRequest extends React.Component{
         return(
             <span>            
             <button type="button" 
-                class="btn btn-primary" 
+                class="btn btn-primary issue-report-btn" 
                 data-toggle="modal" 
                 data-target="#term-request-modal" 
                 data-backdrop="static"
