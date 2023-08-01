@@ -313,7 +313,7 @@ class TermRequest extends React.Component{
                                             <br></br>
                                             You can find all the submitted term requests and issues in your profile:
                                             <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/submitedIssueRequests'}>
-                                                {process.env.REACT_APP_PROJECT_SUB_PATH + '/submitedIssueRequests'}
+                                                <b>My Submitted Issues</b>
                                             </a>
                                         </div>
                                         <a href={this.state.newIssueUrl} target="_blank">{this.state.newIssueUrl}</a>
