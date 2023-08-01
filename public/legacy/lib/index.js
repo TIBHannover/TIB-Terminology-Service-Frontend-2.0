@@ -97,7 +97,7 @@ module.exports = visualisation = function(){
         },
    dataOptions :{
      showAllRelationships: false,
-     maximumNodesPerWebserviceCall:200
+     maximumNodesPerWebserviceCall:100
    },
         clusterOptions: {
             automaticClusterThreshold:50,
