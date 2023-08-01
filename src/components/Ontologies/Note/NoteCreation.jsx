@@ -177,14 +177,14 @@ class NoteCreation extends React.Component{
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">{"Add a New Note For " + this.props.ontologyId}</h4>
+                            <h4 class="modal-title">{"Add a New Note For " + this.props.targetArtifactLabel}</h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>                                                
                         <div class="modal-body">                                    
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {this.createTypeDropDown()}
+                                    {this.props.targetArtifactType === "ontology" && this.createTypeDropDown()}
                                     {this.createVisibilityDropDown()}
                                     <label className="required_input" for="noteTitle">Title</label>
                                     <input type="text" class="form-control" id="noteTitle" placeholder="Enter Title"></input>
