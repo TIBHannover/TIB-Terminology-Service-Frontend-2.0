@@ -168,7 +168,7 @@ class OntologyNotes extends React.Component{
                             {this.state.listRenderContent}
                         </div>
                         <div className="col-sm-4">
-                            <NoteCreation />
+                            <NoteCreation ontologyId={this.props.ontology}  />
                         </div>                    
                     </div>
                 }

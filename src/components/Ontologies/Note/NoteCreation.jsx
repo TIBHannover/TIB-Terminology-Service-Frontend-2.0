@@ -177,7 +177,7 @@ class NoteCreation extends React.Component{
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">Add a New Note For this Ontology</h4>
+                            <h4 class="modal-title">{"Add a New Note For " + this.props.ontologyId}</h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>                                                
