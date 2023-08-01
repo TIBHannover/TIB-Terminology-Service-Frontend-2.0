@@ -5,19 +5,15 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
 import AuthTool from "../../User/Login/authTools";
+import templatePath from './termRequestTemplate.md';
 
-
-const GENERIC_ISSUE_ID = "1";
-const TERM_REQUEST_ISSUE_ID = "2";
-const ISSUE_TYPES = {"1": "general", "2": "termRequest"};
 
 
 class TermRequest extends React.Component{
     constructor(props){
         super(props);      
         this.state = {
-            editorState:  null,
-            issueType: GENERIC_ISSUE_ID,
+            editorState:  null,            
             submitFinished: false,
             errorInSubmit: false,
             newIssueUrl: "",
@@ -35,6 +31,7 @@ class TermRequest extends React.Component{
         this.createIssueTemplatesDropDown = this.createIssueTemplatesDropDown.bind(this);
         this.loadTemplates = this.loadTemplates.bind(this);
         this.templateDropDownChange = this.templateDropDownChange.bind(this);
+        this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
 
         if(localStorage.getItem('authProvider') === 'github'){
             this.loadTemplates();
@@ -79,6 +76,18 @@ class TermRequest extends React.Component{
         ];
     }
 
+
+    setTermRequestTemplate(){        
+        if(this.props.reportType === "termRequest"){
+            fetch(templatePath)
+            .then((response) => response.text()) 
+            .then((text) => {            
+                this.setState({
+                    editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
+                });
+            });
+        }                      
+    }
 
 
     loadTemplates(){        
@@ -228,16 +237,24 @@ class TermRequest extends React.Component{
 
 
 
-    closeModal(){        
+    closeModal(){
+        let editorState = this.state.editorState;
+        if(this.props.reportType === "general"){
+            editorState = null;
+        }      
         this.setState({
-            editorState:  null,
-            issueType: GENERIC_ISSUE_ID,
+            editorState:  editorState,            
             submitFinished: false,
             errorInSubmit: false,
             newIssueUrl: "",
             modalIsOpen: false,
             selectedTemplate: 0
         });
+    }
+
+
+    componentDidMount(){
+        this.setTermRequestTemplate();
     }
 
    
