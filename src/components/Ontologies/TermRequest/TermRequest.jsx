@@ -27,9 +27,7 @@ class TermRequest extends React.Component{
             selectedTemplateText: ""
         };
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.createGenericIssueFields = this.createGenericIssueFields.bind(this);
-        this.createIssueTypeDropDown = this.createIssueTypeDropDown.bind(this);
-        this.changeIssueType = this.changeIssueType.bind(this);        
+        this.createGenericIssueFields = this.createGenericIssueFields.bind(this);        
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -56,7 +54,7 @@ class TermRequest extends React.Component{
     createGenericIssueFields(){
         return [
             <div>
-                <label className="required_input" htmlFor="git-issue-content-box">Issue Content</label>
+                <label className="required_input" htmlFor="git-issue-content-box">Content</label>
                 <Editor
                     editorState={this.state.editorState}
                     onEditorStateChange={this.onTextAreaChange}
@@ -77,19 +75,6 @@ class TermRequest extends React.Component{
                         },
                     }}
                 />
-            </div>            
-        ];
-    }
-
-
-    createIssueTypeDropDown(){
-        return [            
-            <div class="form-group">
-                <label for="issue-types" className='col-form-label'>Issue Type</label>
-                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-types" value={this.state.issueType} onChange={this.changeIssueType}>
-                    <option value={GENERIC_ISSUE_ID} key={GENERIC_ISSUE_ID}>General</option>
-                    <option value={TERM_REQUEST_ISSUE_ID} key={TERM_REQUEST_ISSUE_ID}>Term Request</option>                            
-                </select>  
             </div>            
         ];
     }
@@ -167,13 +152,6 @@ class TermRequest extends React.Component{
 
 
 
-    changeIssueType(e){                   
-        this.setState({
-            issueType: e.target.value
-        });
-    }
-
-
     onTextInputChange(){       
         document.getElementById('issueTitle').style.borderColor = '';
     }
@@ -204,7 +182,7 @@ class TermRequest extends React.Component{
         if(!formIsValid){
             return;
         }
-        
+                
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
@@ -212,7 +190,7 @@ class TermRequest extends React.Component{
         data.append("username", localStorage.getItem("ts_username"));        
         data.append("title", issueTitle);
         data.append("content", issueContent);        
-        data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
+        data.append("issueType", this.props.reportType);
         data.append("repo_url", this.props.ontology.config.repoUrl);
         
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
@@ -273,34 +251,37 @@ class TermRequest extends React.Component{
             <button type="button" 
                 class="btn btn-primary issue-report-btn" 
                 data-toggle="modal" 
-                data-target="#term-request-modal" 
+                data-target={"#" + this.props.reportType + "_issue_modal"}
                 data-backdrop="static"
                 data-keyboard="false"
                 onClick={this.openModal}
                 >
-                File a new Issue 
+                {this.props.reportType === "termRequest" ? "File a Term Request" : "File a General Issue "} 
             </button>
             
-            {this.state.modalIsOpen && <div class="modal" id="term-request-modal">
+            {this.state.modalIsOpen && <div class="modal" id={this.props.reportType + "_issue_modal"}>
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">File an issue for this Ontology</h4>
+                            <h4 class="modal-title">
+                                File {this.props.reportType === "termRequest" ? "a Term Request for " : "a General Issue for "} 
+                                {this.props.ontology.ontologyId}
+                            </h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>
                         <span>
                             {!this.state.submitFinished && 
                                 <div class="modal-body">
-                                    <p>You can file a new issue here.</p>
-                                    <div class="alert alert-info">
+                                {this.props.reportType === "general" &&                           
+                                    <div class="alert alert-info">                                        
                                         <strong>Note:</strong> Please select a proper issue template (if exist). These templates 
-                                            are defined by the repository owner and are the expected way of reporting an issue. 
+                                        are defined by the repository owner and are the expected way of reporting an issue.                                         
                                     </div>
+                                }
                                     <div className="row">
-                                        <div className="col-sm-8">
-                                            {this.createIssueTypeDropDown()}
-                                            {
+                                        <div className="col-sm-8">                                            
+                                            {this.props.reportType === "general" &&    
                                                 <div class="form-group">
                                                     <label for="issue-templates" className='col-form-label'>Issue Template</label>
                                                     <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-templates" value={this.state.selectedTemplate} onChange={this.templateDropDownChange}>
@@ -308,9 +289,11 @@ class TermRequest extends React.Component{
                                                         {this.createIssueTemplatesDropDown()}
                                                     </select>  
                                                 </div>
-                                            }
-                                            <label className="required_input" for="issueTitle">Issue Title</label>
-                                            <input type="text" class="form-control" onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Issue Title"></input>
+                                            }                                            
+                                            <label className="required_input" for="issueTitle">
+                                                {this.props.reportType === "general" ? "Issue Title" : "Term Request Title"}
+                                            </label>
+                                            <input type="text" class="form-control" onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Title ..."></input>
                                         </div>
                                     </div>
                                     <br></br>
@@ -326,7 +309,12 @@ class TermRequest extends React.Component{
                                 <div className="row text-center">
                                     <div className="col-sm-12">                                    
                                         <div class="alert alert-success">
-                                            Your issue is requested successfully!
+                                            Your Request is submitted successfully!
+                                            <br></br>
+                                            You can find all the submitted term requests and issues in your profile:
+                                            <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/submitedIssueRequests'}>
+                                                {process.env.REACT_APP_PROJECT_SUB_PATH + '/submitedIssueRequests'}
+                                            </a>
                                         </div>
                                         <a href={this.state.newIssueUrl} target="_blank">{this.state.newIssueUrl}</a>
                                     </div>
