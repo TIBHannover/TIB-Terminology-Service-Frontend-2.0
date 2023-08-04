@@ -1,4 +1,5 @@
 import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
+import { apiHeaders } from '../../api/headers';
 
 
 export function setResultTitleAndLabel(resultItem){
@@ -107,7 +108,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         ontologiesForFilter.forEach(item => {
             url = url + `&ontology=${item.toLowerCase()}`;
         });  
-        res = await (await fetch(url)).json();
+        res = await (await fetch(url,{mode: 'cors', headers: apiHeaders(),})).json();
         res = res['facet_counts'];
         filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
         return filteredFacetFields;
@@ -121,7 +122,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         ontologiesForFilter.forEach(item => {
             url = url + `&ontology=${item.toLowerCase()}`;
         });
-        let res = await (await fetch(url)).json();
+        let res = await (await fetch(url,{mode: 'cors', headers: apiHeaders(),})).json();
         res = res['facet_counts'];
         filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];        
                         
@@ -134,7 +135,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         collectionOntologies.forEach(item => {
             url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
         });
-        res = await (await fetch(url)).json();
+        res = await (await fetch(url,{mode: 'cors', headers: apiHeaders(),})).json();
         res = res['facet_counts'];    
         filteredFacetFields["facet_fields"]["ontology_name"] = res["facet_fields"]["ontology_name"];
         return filteredFacetFields;
@@ -148,7 +149,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         ontologiesForFilter.forEach(item => {
             url = url + `&ontology=${item.toLowerCase()}`;
         });
-        let res = await (await fetch(url)).json();
+        let res = await (await fetch(url,{mode: 'cors', headers: apiHeaders(),})).json();
         res = res['facet_counts'];
         filteredFacetFields["facet_fields"]["type"] = res["facet_fields"]["type"];
 
@@ -162,7 +163,7 @@ export async function setFacetCounts(triggerField, enteredTerm, filteredFacetFie
         collectionOntologies.forEach(item => {
             url = url + `&ontology=${item['ontologyId'].toLowerCase()}`;
         });
-        res = await (await fetch(url)).json();
+        res = await (await fetch(url, {mode: 'cors', headers: apiHeaders(),})).json();
         res = res['facet_counts'];
         filteredFacetFields["facet_fields"]["ontology_name"] = res["facet_fields"]["ontology_name"];
         return filteredFacetFields;

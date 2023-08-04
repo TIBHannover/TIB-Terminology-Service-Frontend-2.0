@@ -1,4 +1,5 @@
 import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
+import { apiHeaders } from '../../api/headers';
 
 
 export function setJumpResultButtons(resultItem){
@@ -93,7 +94,10 @@ export function ontologyIsPartOfSelectedCollections(collectionsOntologies, ontol
 
 export async function ontologyForAutosuggest(){
     let result = [];
-    let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`)
+    let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`,{
+        mode: 'cors',
+        headers: apiHeaders(),
+    })
     ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
     for(let onto of ontologiesForCollection){
         result.push(onto['ontologyId']);

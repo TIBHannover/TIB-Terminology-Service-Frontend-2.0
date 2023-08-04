@@ -1,7 +1,8 @@
 const callHeader = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'user-agent': process.env.REACT_APP_PROJECT_ID === 'general' ? 'TIBCENTRAL' : process.env.REACT_APP_PROJECT_ID === 'nfdi4chem' ? 'NFDI4CHEM' : process.env.REACT_APP_PROJECT_ID === 'nfdi4ing' ? 'NFDI4ING': 'TIBCENTRAL',
 };
-const getCallSetting:RequestInit = {method: 'GET', headers: callHeader};
+const getCallSetting:RequestInit = {method: 'GET',mode: 'cors', headers: callHeader};
 const size = 10000;
 
 
