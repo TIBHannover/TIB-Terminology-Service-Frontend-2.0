@@ -186,11 +186,18 @@ class NoteCreation extends React.Component{
                                 <div className="col-sm-8">
                                     {this.props.targetArtifactType === "ontology" && this.createTypeDropDown()}
                                     {this.createVisibilityDropDown()}
+                                    {this.state.targetArtifact === ONTOLOGY_COMPONENT_ID &&
+                                        <p>About: <strong>{this.props.targetArtifactLabel}</strong></p>
+                                    }
+                                    {this.state.targetArtifact !== ONTOLOGY_COMPONENT_ID &&
+                                        <div>
+                                            <label className="required_input" for="noteIri">Please Select the target term</label>
+                                            <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input>
+                                            <br></br>
+                                        </div>
+                                    }
                                     <label className="required_input" for="noteTitle">Title</label>
-                                    <input type="text" class="form-control" id="noteTitle" placeholder="Enter Title"></input>
-                                    <br></br>
-                                    <label className="required_input" for="noteIri">Target Iri</label>
-                                    <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input>
+                                    <input type="text" class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
                                 </div>
                             </div>
                             <br></br>
