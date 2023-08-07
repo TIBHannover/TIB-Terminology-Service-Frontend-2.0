@@ -2,6 +2,7 @@ import React from "react";
 import { Editor } from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToMarkdown from 'draftjs-to-markdown';
+import Autocomplete from 'react-autocomplete';
 
 
 
@@ -192,7 +193,21 @@ class NoteCreation extends React.Component{
                                     {this.state.targetArtifact !== ONTOLOGY_COMPONENT_ID &&
                                         <div>
                                             <label className="required_input" for="noteIri">Please Select the target term</label>
-                                            <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input>
+                                            {/* <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input> */}
+                                            <Autocomplete
+                                                getItemValue={(item) => item.label}
+                                                items={[
+                                                    { label: 'apple' },
+                                                    { label: 'banana' },
+                                                    { label: 'pear' }
+                                                ]}
+                                                renderItem={(item, isHighlighted) =>
+                                                    <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+                                                    {item.label}
+                                                    </div>
+                                                }
+                                                // onSelect={(value) => console.log('Selected:', value)}
+                                            />
                                             <br></br>
                                         </div>
                                     }

@@ -227,6 +227,7 @@ class IndividualsList extends React.Component {
 
     componentDidMount(){
         this.setComponentData();
+        this.paneResize.setOriginalWidthForLeftPanes();
         document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
         document.body.addEventListener("mousemove", this.paneResize.moveToResize);
         document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                              
@@ -274,19 +275,19 @@ class IndividualsList extends React.Component {
                         {!this.state.listView && this.createIndividualTree()}
                     </div>                    
                 </div>
-                {this.paneResize.generateVerticalResizeLine()}                                
-                <div className="node-table-container" id="page-right-pane">
-                    {this.state.showNodeDetailPage &&                     
-                            <NodePage
+                {this.state.showNodeDetailPage && this.paneResize.generateVerticalResizeLine()}                                
+                {this.state.showNodeDetailPage &&
+                    <div className="node-table-container" id="page-right-pane">                     
+                        <NodePage
                             iri={this.state.selectedNodeIri}
                             ontology={this.props.ontology}
                             componentIdentity="individual"
                             extractKey="individuals"
                             isSkos={this.state.isSkos}
                             isIndividual={true}
-                            />                    
-                    }
-                </div>
+                        />                    
+                    </div>
+                }
             </div>
         );        
     }

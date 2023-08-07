@@ -14,17 +14,16 @@ class DataTreePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = ({
-      selectedNodeIri: '',
-      showNodeDetailPageClass: false,
-      showNodeDetailPageProperty: false,
-      componentIdentity: "",
+      selectedNodeIri: '',      
+      showDetailTable: false,      
       termTree: false,
       propertyTree: false,
       ontologyId: ''
     })
     this.paneResize = new PaneResize();
     this.setComponentData = this.setComponentData.bind(this);
-    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);    
+    this.handleTreeNodeSelection = this.handleTreeNodeSelection.bind(this);
+    this.handleResetTreeEevent = this.handleResetTreeEevent.bind(this);
   }
 
 
@@ -37,8 +36,7 @@ class DataTreePage extends React.Component {
       termTree = false
     }
     this.setState({
-      ontologyId: this.props.ontology,
-      componentIdentity: this.props.componentIdentity,
+      ontologyId: this.props.ontology,      
       selectedNodeIri: this.props.iri,
       termTree: termTree,
       propertyTree: !termTree
@@ -46,25 +44,31 @@ class DataTreePage extends React.Component {
   }
 
 
-  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable, componentIdentity){
-    if(componentIdentity === "term"){
+  handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
+    if(this.props.componentIdentity === "term"){
       this.setState({
-        selectedNodeIri: selectedNodeIri,
-        showNodeDetailPageClass: ShowDetailTable
+        selectedNodeIri: selectedNodeIri,        
+        showDetailTable: ShowDetailTable
       });
     }
     else{
       this.setState({
-        selectedNodeIri: selectedNodeIri,
-        showNodeDetailPageProperty: ShowDetailTable
+        selectedNodeIri: selectedNodeIri,        
+        showDetailTable: ShowDetailTable
       });
     }
     
   }
 
 
+  handleResetTreeEevent(){
+    this.paneResize.resetTheWidthToOrignial();
+  }
+
+
   componentDidMount(){
-    this.setComponentData();        
+    this.setComponentData();
+    this.paneResize.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
     document.body.addEventListener("mousemove", this.paneResize.moveToResize);
     document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
@@ -101,34 +105,37 @@ render(){
                   isSkos={this.props.isSkos}
                   nodeSelectionHandler={this.handleTreeNodeSelection}
                   individualViewChanger={""}
+                  handleResetTreeInParent={this.handleResetTreeEevent}
                 />
-          </div>        
+          </div>
         </div>
-        {this.paneResize.generateVerticalResizeLine()}
-        <div className="node-table-container" id="page-right-pane">
-          {this.state.termTree && this.state.showNodeDetailPageClass &&           
+        {this.state.showDetailTable && this.paneResize.generateVerticalResizeLine()}
+        {this.state.showDetailTable &&
+          <div className="node-table-container" id="page-right-pane">
+            {this.state.termTree &&
+                <MatomoWrapper>
+                <NodePage
+                  iri={this.state.selectedNodeIri}
+                  ontology={this.state.ontologyId}
+                  componentIdentity="term"
+                  extractKey="terms"
+                  isSkos={this.props.isSkos}
+                  isIndividual={false}
+                />
+                </MatomoWrapper>        
+            }
+            {this.state.propertyTree &&           
               <MatomoWrapper>
               <NodePage
-                iri={this.state.selectedNodeIri}
-                ontology={this.state.ontologyId}
-                componentIdentity="term"
-                extractKey="terms"
-                isSkos={this.props.isSkos}
-                isIndividual={false}
+                  iri={this.state.selectedNodeIri}
+                  ontology={this.state.ontologyId}
+                  componentIdentity="property"
+                  extractKey="properties"
+                  isIndividual={false}
               />
-              </MatomoWrapper>        
-          }
-          {this.state.propertyTree && this.state.showNodeDetailPageProperty &&           
-            <MatomoWrapper>
-            <NodePage
-                iri={this.state.selectedNodeIri}
-                ontology={this.state.ontologyId}
-                componentIdentity="property"
-                extractKey="properties"
-                isIndividual={false}
-            />
-            </MatomoWrapper>}
-        </div>        
+              </MatomoWrapper>}
+          </div>
+        }       
     </div>  
   )
 }
