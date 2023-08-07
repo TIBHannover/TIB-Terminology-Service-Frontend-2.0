@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import NoteCreation from "./NoteCreation";
+import AuthTool from "../../User/Login/authTools";
 
 
 
@@ -30,12 +31,14 @@ class OntologyNotes extends React.Component{
 
 
     getNotesForOntology(inputNoteId=null){
-        let ontologyId = this.props.ontology;
-        let url = process.env.REACT_APP_TEST_BACKEND_URL + '/getNotes/' + ontologyId;
-        fetch(url).then((resp) => resp.json())
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
+        let ontologyId = this.props.ontology.ontologyId;
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
+        
+        fetch(url, {headers:headers}).then((resp) => resp.json())
         .then((data) => {
             let selectedNote = null;
-            let allNotes = data['result'];
+            let allNotes = data['_result']['notes'];
             let showNoteDetail = false;
             for(let note of allNotes){            
                 if (note['id'] === parseInt(inputNoteId)){
@@ -65,13 +68,13 @@ class OntologyNotes extends React.Component{
                         <br/>
                         <small>
                             <ul className="">
-                                <li>type: {note['component']}</li>
-                                <li>iri: {note['target_iri']}</li>
+                                <li>type: {note['semantic_component_type']}</li>
+                                <li>iri: {note['semantic_component_iri']}</li>
                             </ul>                            
                         </small>
                         <div>
                             <small>
-                                {" opened on " + note['created_at'] + " by " + note['creator_user']}
+                                {" opened on " + note['created_at'] + " by " + note['created_by']}
                             </small>
                         </div>
 
