@@ -4,6 +4,7 @@ import { convertToRaw } from 'draft-js';
 import draftToMarkdown from 'draftjs-to-markdown';
 import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
+import AuthTool from "../../User/Login/authTools";
 
 
 
@@ -186,23 +187,23 @@ class NoteCreation extends React.Component{
             return;
         }
         
-        
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
         data.append("title", noteTitle);
-        data.append("targetIri", selectedTargetTermIri);
+        data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
-        data.append("ontologyId", this.props.ontologyId);
-        data.append("userName", this.state.username);
-        data.append("component", COMPONENT_VALUES[this.state.targetArtifact]);
-        fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/createNote', {method: 'POST', body: data})
+        data.append("ontology_id", this.props.ontologyId);        
+        data.append("semantic_component_type", COMPONENT_VALUES[this.state.targetArtifact]);
+        data.append("visibility",  VISIBILITY_VALUES[this.state.visibility]);
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_note', {method: 'POST',  headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
-                if(data['result']){
+                if(data['_result']){
                     this.setState({
                         submitSeccuess: true,
                         noteSubmited: true
                     });
-                    this.getNotesForOntology();
+                    
                 }
                 else{
                     this.setState({
@@ -271,6 +272,31 @@ class NoteCreation extends React.Component{
             value,
             onChange: this.onAutoCompleteTextBoxChange
         };
+
+        if(this.state.noteSubmited && this.state.submitSeccuess){
+            return [
+                <div className="row text-center">
+                    <div className="col-sm-12">                                    
+                        <div class="alert alert-success">
+                            Your Note is submitted successfully!                           
+                        </div>                        
+                    </div>
+                </div>
+            ]
+        }
+
+        if(this.state.noteSubmited && !this.state.submitSeccuess){
+            return [
+                <div className="row text-center">
+                    <div className="col-sm-10">
+                        <div class="alert alert-danger">
+                            Something went wrong. Please try again!
+                        </div>  
+                    </div>
+                </div>  
+
+            ];
+        }
 
 
         return [
