@@ -87,7 +87,9 @@ class NoteCreation extends React.Component{
 
     changeArtifactType(e){                   
         this.setState({
-            targetArtifact: e.target.value
+            targetArtifact: e.target.value,
+            autoCompleteSuggestionsList: [],
+            enteredTermInAutoComplete: ""
         });
     }
 
@@ -239,12 +241,12 @@ class NoteCreation extends React.Component{
                                 <div className="col-sm-8">
                                     {this.props.targetArtifactType === "ontology" && this.createTypeDropDown()}
                                     {this.createVisibilityDropDown()}
-                                    {this.state.targetArtifact === ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
                                         <p>About: <strong>{this.props.targetArtifactLabel}</strong></p>
                                     }
-                                    {this.state.targetArtifact !== ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
                                         <div>
-                                            <label className="required_input" for="noteIri">Please Select the target term</label>
+                                            <label className="required_input" for="noteIri">About</label>
                                             {/* <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input> */}
                                             <Autosuggest
                                                 suggestions={this.state.autoCompleteSuggestionsList}
