@@ -132,7 +132,7 @@ class OntologyNotes extends React.Component{
                 <div className="row">
                     <div className="col-sm-12">
                         <Link 
-                            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.props.ontology + '/notes' } 
+                            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.props.ontology.ontologyId + '/notes' } 
                             onClick={this.backToListClick} 
                             className="btn btn-primary">
                             Back to Note List
