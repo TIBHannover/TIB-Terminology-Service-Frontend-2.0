@@ -2,8 +2,8 @@ import React from "react";
 import { Editor } from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToMarkdown from 'draftjs-to-markdown';
-import Autocomplete from 'react-autocomplete';
 import {getAutoCompleteResult} from "../../../api/fetchData";
+import Autosuggest from 'react-autosuggest';
 
 
 
@@ -18,6 +18,15 @@ const VISIBILITY_TS_USRES = 2;
 const VISIBILITY_PUBLIC = 3;
 const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
 
+const getAutoCompleteValue = suggestion => suggestion.label;
+
+const rendetAutoCompleteItem = suggestion => (
+    <div>
+      {suggestion.label}
+    </div>
+);
+
+
 
 
 class NoteCreation extends React.Component{
@@ -28,7 +37,9 @@ class NoteCreation extends React.Component{
            visibility: VISIBILITY_ONLY_ME,
            editorState:  null,           
            noteSubmited: false,
-           submitSeccuess: false           
+           submitSeccuess: false,
+           autoCompleteSuggestionsList: [],
+           enteredTermInAutoComplete: ""
         });
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
@@ -39,6 +50,8 @@ class NoteCreation extends React.Component{
         this.createVisibilityDropDown = this.createVisibilityDropDown.bind(this);
         this.changeVisibility = this.changeVisibility.bind(this);
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
+        this.clearAutoComplete = this.clearAutoComplete.bind(this);
+        this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
     }
 
 
@@ -163,8 +176,8 @@ class NoteCreation extends React.Component{
     }
 
 
-    async onAutoCompleteChange(e){
-        enteredTerm = e.target.value;         
+    async onAutoCompleteChange({value}){
+        let enteredTerm = value;              
         let type = COMPONENT_VALUES[this.state.targetArtifact];
         
         if(type !== "property" && type !== "individual"){
@@ -172,13 +185,38 @@ class NoteCreation extends React.Component{
         }       
         if (enteredTerm.length > 0){
             let autoCompleteResult = await getAutoCompleteResult(enteredTerm, this.props.ontologyId, type);
-            console.info(autoCompleteResult);
+            this.setState({
+                autoCompleteSuggestionsList: autoCompleteResult
+            });
+            // console.info(autoCompleteResult);
                         
         }       
     }
 
 
+    clearAutoComplete(){
+        this.setState({
+            autoCompleteSuggestionsList: []
+        });
+    }
+
+
+    onAutoCompleteTextBoxChange = (event, { newValue }) => {
+        this.setState({
+          enteredTermInAutoComplete: newValue
+        });
+      };
+
+
     render(){
+        const value = this.state.enteredTermInAutoComplete
+        const inputProps = {
+            placeholder: 'Type your target term',
+            value,
+            onChange: this.onAutoCompleteTextBoxChange
+        };
+
+
         return [
             <span>
             <button type="button" 
@@ -211,19 +249,13 @@ class NoteCreation extends React.Component{
                                         <div>
                                             <label className="required_input" for="noteIri">Please Select the target term</label>
                                             {/* <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input> */}
-                                            <Autocomplete
-                                                getItemValue={(item) => item.label}
-                                                items={[
-                                                    { label: 'apple' },
-                                                    { label: 'banana' },
-                                                    { label: 'pear' }
-                                                ]}
-                                                renderItem={(item, isHighlighted) =>
-                                                    <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
-                                                        {item.label}
-                                                    </div>
-                                                }
-                                                // onSelect={(value) => console.log('Selected:', value)}
+                                            <Autosuggest
+                                                suggestions={this.state.autoCompleteSuggestionsList}
+                                                onSuggestionsFetchRequested={this.onAutoCompleteChange}
+                                                onSuggestionsClearRequested={this.clearAutoComplete}
+                                                getSuggestionValue={getAutoCompleteValue}
+                                                renderSuggestion={rendetAutoCompleteItem}
+                                                inputProps={inputProps}
                                             />
                                             <br></br>
                                         </div>
