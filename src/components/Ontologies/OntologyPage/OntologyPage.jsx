@@ -413,7 +413,7 @@ class OntologyPage extends React.Component {
                                 <OntologyNotes                                                              
                                 componentIdentity={'notes'}
                                 key={'notesPage'}
-                                ontology={this.state.ontologyId}
+                                ontology={this.state.ontology}
                                 targetNoteId={this.props.match.params.targetId}                                                            
                                 />
                 }                                      

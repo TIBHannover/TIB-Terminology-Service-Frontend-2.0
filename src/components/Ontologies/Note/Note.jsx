@@ -200,9 +200,9 @@ class OntologyNotes extends React.Component{
                         </div>
                         <div className="col-sm-4">
                             <NoteCreation 
-                                targetArtifactLabel={this.props.ontology}  
+                                targetArtifactLabel={this.props.ontology.config.title}  
                                 targetArtifactType={"ontology"}
-                                ontologyId={this.props.ontology}
+                                ontologyId={this.props.ontology.ontologyId}                                
                                 noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
                             />
                         </div>                    

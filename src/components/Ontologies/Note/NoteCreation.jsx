@@ -184,6 +184,10 @@ class NoteCreation extends React.Component{
         if(!formIsValid){
             return;
         }
+
+        if(parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID){
+            selectedTargetTermIri = this.props.ontologyId;
+        }
         
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
@@ -280,7 +284,7 @@ class NoteCreation extends React.Component{
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">{"Add a New Note For " + this.props.targetArtifactLabel}</h4>
+                            <h4 class="modal-title">{"Add a New Note For: " + this.props.targetArtifactLabel}</h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>                                                
