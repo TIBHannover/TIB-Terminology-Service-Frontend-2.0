@@ -162,6 +162,7 @@ class OntologyNotes extends React.Component{
             noteSubmited: true,
             noteSubmitSeccuess: success
         });
+        this.getNotesForOntology();
     }
 
 
@@ -179,7 +180,7 @@ class OntologyNotes extends React.Component{
                 <div className="row">
                     {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
                         <div className="row text-center">
-                            <div className="col-sm-12">                                    
+                            <div className="col-sm-8">                                    
                                 <div class="alert alert-success">
                                     Your Note is submitted successfully!                           
                                 </div>                        
@@ -188,7 +189,7 @@ class OntologyNotes extends React.Component{
                     }
                     {this.state.noteSubmited && !this.state.noteSubmitSeccuess &&
                         <div className="row text-center">
-                            <div className="col-sm-10">
+                            <div className="col-sm-8">
                                 <div class="alert alert-danger">
                                     Something went wrong. Please try again!
                                 </div>  
