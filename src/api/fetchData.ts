@@ -487,6 +487,25 @@ export async function getIndividualInstancesForClass(ontologyId:string, classIri
 }
 
 
+export async function getAutoCompleteResult(enteredTerm:string, ontologyId:string, type:string){
+  try{
+    let autocompleteApiBaseUrl = <any> process.env.REACT_APP_SEARCH_URL;
+    autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
+    let url = `${autocompleteApiBaseUrl}?q=${enteredTerm}&ontology=${ontologyId}&type=${type}&rows=10`;
+    let result = await fetch(url, getCallSetting);
+    result = await result.json();
+    result = result['response']['docs'];
+    return result;
+  }
+  catch(e){
+    return [];
+  }
+
+}
+
+
+
+
 async function getPageCount(url: string){
   let answer = await fetch(url, getCallSetting);
   answer = await answer.json();

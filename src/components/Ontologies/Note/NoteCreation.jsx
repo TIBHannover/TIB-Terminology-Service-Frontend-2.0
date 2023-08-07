@@ -3,6 +3,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToMarkdown from 'draftjs-to-markdown';
 import Autocomplete from 'react-autocomplete';
+import {getAutoCompleteResult} from "../../../api/fetchData";
 
 
 
@@ -37,6 +38,7 @@ class NoteCreation extends React.Component{
         this.closeModal = this.closeModal.bind(this);        
         this.createVisibilityDropDown = this.createVisibilityDropDown.bind(this);
         this.changeVisibility = this.changeVisibility.bind(this);
+        this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
     }
 
 
@@ -132,7 +134,7 @@ class NoteCreation extends React.Component{
         data.append("title", noteTitle);
         data.append("targetIri", noteIri);
         data.append("content", noteContent);
-        data.append("ontologyId", this.props.ontology);
+        data.append("ontologyId", this.props.ontologyId);
         data.append("userName", this.state.username);
         data.append("component", COMPONENT_VALUES[this.state.targetArtifact]);
         fetch(process.env.REACT_APP_TEST_BACKEND_URL + '/createNote', {method: 'POST', body: data})
@@ -158,6 +160,21 @@ class NoteCreation extends React.Component{
                     noteSubmited: true
                 });
             });
+    }
+
+
+    async onAutoCompleteChange(e){
+        enteredTerm = e.target.value;         
+        let type = COMPONENT_VALUES[this.state.targetArtifact];
+        
+        if(type !== "property" && type !== "individual"){
+            type = this.props.isSkos ? "individual" : "class"; 
+        }       
+        if (enteredTerm.length > 0){
+            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, this.props.ontologyId, type);
+            console.info(autoCompleteResult);
+                        
+        }       
     }
 
 
@@ -203,7 +220,7 @@ class NoteCreation extends React.Component{
                                                 ]}
                                                 renderItem={(item, isHighlighted) =>
                                                     <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
-                                                    {item.label}
+                                                        {item.label}
                                                     </div>
                                                 }
                                                 // onSelect={(value) => console.log('Selected:', value)}
