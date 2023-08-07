@@ -37,8 +37,6 @@ class NoteCreation extends React.Component{
            targetArtifact: ONTOLOGY_COMPONENT_ID,
            visibility: VISIBILITY_ONLY_ME,
            editorState:  null,           
-           noteSubmited: false,
-           submitSeccuess: false,
            autoCompleteSuggestionsList: [],
            enteredTermInAutoComplete: "",
            selectedTermFromAutoComplete: {"iri": null, "label": null}
@@ -199,24 +197,17 @@ class NoteCreation extends React.Component{
             .then((response) => response.json())
             .then((data) => {
                 if(data['_result']){
-                    this.setState({
-                        submitSeccuess: true,
-                        noteSubmited: true
-                    });
-                    
+                    this.props.noteListSubmitStatusHandler(true);
+                    document.getElementById('noteCreationCloseModal').click();                
                 }
                 else{
-                    this.setState({
-                        submitSeccuess: false,
-                        noteSubmited: true
-                    });
+                    this.props.noteListSubmitStatusHandler(false);
+                    document.getElementById('noteCreationCloseModal').click();
                 }
             })
             .catch((error) => {
-                this.setState({
-                    submitSeccuess: false,
-                    noteSubmited: true
-                });
+                this.props.noteListSubmitStatusHandler(false);
+                document.getElementById('noteCreationCloseModal').click();
             });
     }
 
@@ -273,32 +264,6 @@ class NoteCreation extends React.Component{
             onChange: this.onAutoCompleteTextBoxChange
         };
 
-        if(this.state.noteSubmited && this.state.submitSeccuess){
-            return [
-                <div className="row text-center">
-                    <div className="col-sm-12">                                    
-                        <div class="alert alert-success">
-                            Your Note is submitted successfully!                           
-                        </div>                        
-                    </div>
-                </div>
-            ]
-        }
-
-        if(this.state.noteSubmited && !this.state.submitSeccuess){
-            return [
-                <div className="row text-center">
-                    <div className="col-sm-10">
-                        <div class="alert alert-danger">
-                            Something went wrong. Please try again!
-                        </div>  
-                    </div>
-                </div>  
-
-            ];
-        }
-
-
         return [
             <span>
             <button type="button" 
@@ -320,7 +285,7 @@ class NoteCreation extends React.Component{
                         </div>
                         <br></br>                                                
                         <div class="modal-body">                                    
-                            <div className="row">
+                            <div className="row">                                
                                 <div className="col-sm-8">
                                     {this.props.targetArtifactType === "ontology" && this.createTypeDropDown()}
                                     {this.createVisibilityDropDown()}
@@ -355,7 +320,7 @@ class NoteCreation extends React.Component{
 
                         </div>                        
                         <div class="modal-footer">                            
-                            <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
+                            <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
                             <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>                            
                         </div>
                     </div>

@@ -15,14 +15,17 @@ class OntologyNotes extends React.Component{
            notesList: [],           
            listRenderContent: '',
            selectedNote: null,
-           noteDetailPage: false
+           noteDetailPage: false,
+           noteSubmited: false,
+           noteSubmitSeccuess: false
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
         this.createNotesList = this.createNotesList.bind(this);                        
         this.createNoteDetailPage = this.createNoteDetailPage.bind(this);
         this.selectNote = this.selectNote.bind(this);
-        this.backToListClick = this.backToListClick.bind(this);        
+        this.backToListClick = this.backToListClick.bind(this);      
+        this.setNoteCreationResultStatus = this.setNoteCreationResultStatus.bind(this);  
     }
 
 
@@ -151,6 +154,14 @@ class OntologyNotes extends React.Component{
     }
 
 
+    setNoteCreationResultStatus(success){
+        this.setState({
+            noteSubmited: true,
+            noteSubmitSeccuess: success
+        });
+    }
+
+
 
     componentDidMount(){        
         let inputNoteId = this.props.targetNoteId;         
@@ -162,6 +173,26 @@ class OntologyNotes extends React.Component{
     render(){
         return (
             <div className="tree-view-container notes-container">
+                <div className="row">
+                    {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
+                        <div className="row text-center">
+                            <div className="col-sm-12">                                    
+                                <div class="alert alert-success">
+                                    Your Note is submitted successfully!                           
+                                </div>                        
+                            </div>
+                        </div>
+                    }
+                    {this.state.noteSubmited && !this.state.noteSubmitSeccuess &&
+                        <div className="row text-center">
+                            <div className="col-sm-10">
+                                <div class="alert alert-danger">
+                                    Something went wrong. Please try again!
+                                </div>  
+                            </div>
+                        </div>  
+                    }
+                </div>
                 {!this.state.noteDetailPage && 
                     <div className="row">                    
                         <div className="col-sm-8">
@@ -172,6 +203,7 @@ class OntologyNotes extends React.Component{
                                 targetArtifactLabel={this.props.ontology}  
                                 targetArtifactType={"ontology"}
                                 ontologyId={this.props.ontology}
+                                noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
                             />
                         </div>                    
                     </div>
