@@ -40,7 +40,7 @@ class NoteCreation extends React.Component{
            submitSeccuess: false,
            autoCompleteSuggestionsList: [],
            enteredTermInAutoComplete: "",
-           selectedTermFromAutoComplete: {}
+           selectedTermFromAutoComplete: {"iri": null, "label": null}
         });
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
@@ -57,8 +57,14 @@ class NoteCreation extends React.Component{
     }
 
 
+    onTextInputChange(){       
+        document.getElementById('noteTitle').style.borderColor = '';
+    }
+
+
     onTextAreaChange = (newEditorState) => {
-        this.setState({ editorState: newEditorState });
+        document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+        this.setState({ editorState: newEditorState });        
     };
 
 
@@ -138,21 +144,52 @@ class NoteCreation extends React.Component{
             targetArtifact: ONTOLOGY_COMPONENT_ID,
             autoCompleteSuggestionsList: [],
             enteredTermInAutoComplete: "",
-            selectedTermFromAutoComplete: {}          
+            selectedTermFromAutoComplete: {"iri": null, "label": null}         
         });
         document.getElementById('noteTitle').value = '';
         document.getElementById('noteIri').value = '';
     }
 
 
+   
+
     submitNote(){
+        let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle').value;
-        let noteIri = document.getElementById('noteIri').value;
-        let noteContent = this.state.editorState.getCurrentContent();        
-        noteContent = draftToMarkdown(convertToRaw(noteContent));
+        let selectedTargetTermIri = this.state.selectedTermFromAutoComplete['iri'];        
+        let noteContent = "";
+        if(!this.state.editorState){            
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+        else{
+            noteContent = this.state.editorState.getCurrentContent();        
+            noteContent = draftToMarkdown(convertToRaw(noteContent));  
+        }
+
+        if(!noteTitle || noteTitle === ""){
+            document.getElementById('noteTitle').style.borderColor = 'red';
+            formIsValid = false;
+        }
+        
+        if(!noteContent || noteContent.trim() === ""){
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+
+        if(parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
+            document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+        
+        if(!formIsValid){
+            return;
+        }
+        
+        
         let data = new FormData();
         data.append("title", noteTitle);
-        data.append("targetIri", noteIri);
+        data.append("targetIri", selectedTargetTermIri);
         data.append("content", noteContent);
         data.append("ontologyId", this.props.ontologyId);
         data.append("userName", this.state.username);
@@ -199,6 +236,7 @@ class NoteCreation extends React.Component{
 
 
     clearAutoComplete(){
+        document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
         this.setState({
             autoCompleteSuggestionsList: []
         });
@@ -206,6 +244,7 @@ class NoteCreation extends React.Component{
 
 
     onAutoCompleteTextBoxChange = (event, { newValue }) => {
+        document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
         this.setState({
           enteredTermInAutoComplete: newValue
         });
@@ -278,7 +317,7 @@ class NoteCreation extends React.Component{
                                         </div>
                                     }
                                     <label className="required_input" for="noteTitle">Title</label>
-                                    <input type="text" class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
+                                    <input type="text" onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
                                 </div>
                             </div>
                             <br></br>
@@ -291,7 +330,7 @@ class NoteCreation extends React.Component{
                         </div>                        
                         <div class="modal-footer">                            
                             <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" data-dismiss="modal" onClick={this.submitNote}>Submit</button>                            
+                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>                            
                         </div>
                     </div>
                 </div>
