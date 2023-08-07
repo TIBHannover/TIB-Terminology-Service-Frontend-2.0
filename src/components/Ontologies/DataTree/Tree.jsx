@@ -471,7 +471,7 @@ async showSiblings(){
                 <div className="col-sm-5 text-center">
                     <div className='row tree-action-btn-holder'>
                         <div className="col-sm-12">
-                            {!this.props.isIndividual && 
+                            {!this.props.isIndividual && this.state.selectedNodeIri !== "" &&
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
                             }
                         </div>                        
