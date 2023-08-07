@@ -39,7 +39,8 @@ class NoteCreation extends React.Component{
            noteSubmited: false,
            submitSeccuess: false,
            autoCompleteSuggestionsList: [],
-           enteredTermInAutoComplete: ""
+           enteredTermInAutoComplete: "",
+           selectedTermFromAutoComplete: {}
         });
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
@@ -52,6 +53,7 @@ class NoteCreation extends React.Component{
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
         this.clearAutoComplete = this.clearAutoComplete.bind(this);
         this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
+        this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);
     }
 
 
@@ -133,7 +135,10 @@ class NoteCreation extends React.Component{
     closeModal(){        
         this.setState({
             editorState:  null,
-            targetArtifact: ONTOLOGY_COMPONENT_ID,            
+            targetArtifact: ONTOLOGY_COMPONENT_ID,
+            autoCompleteSuggestionsList: [],
+            enteredTermInAutoComplete: "",
+            selectedTermFromAutoComplete: {}          
         });
         document.getElementById('noteTitle').value = '';
         document.getElementById('noteIri').value = '';
@@ -205,6 +210,19 @@ class NoteCreation extends React.Component{
           enteredTermInAutoComplete: newValue
         });
       };
+    
+
+    
+      onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
+            let autoCompleteSelectedTerm = this.state.selectedTermFromAutoComplete;
+            autoCompleteSelectedTerm['iri'] = this.state.autoCompleteSuggestionsList[suggestionIndex]['iri'];
+            autoCompleteSelectedTerm['label'] = this.state.autoCompleteSuggestionsList[suggestionIndex]['label'];
+            this.setState({
+                selectedTermFromAutoComplete: autoCompleteSelectedTerm
+            });
+        
+      }
+
 
 
     render(){
@@ -246,14 +264,14 @@ class NoteCreation extends React.Component{
                                     }
                                     {parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
                                         <div>
-                                            <label className="required_input" for="noteIri">About</label>
-                                            {/* <input type="text" class="form-control" id="noteIri" placeholder="Enter iri"></input> */}
+                                            <label className="required_input" for="noteIri">About</label>                                            
                                             <Autosuggest
                                                 suggestions={this.state.autoCompleteSuggestionsList}
                                                 onSuggestionsFetchRequested={this.onAutoCompleteChange}
                                                 onSuggestionsClearRequested={this.clearAutoComplete}
                                                 getSuggestionValue={getAutoCompleteValue}
                                                 renderSuggestion={rendetAutoCompleteItem}
+                                                onSuggestionSelected={this.onAutoCompleteSelecteion}
                                                 inputProps={inputProps}
                                             />
                                             <br></br>
