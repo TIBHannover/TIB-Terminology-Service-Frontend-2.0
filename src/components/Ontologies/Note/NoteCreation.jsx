@@ -176,10 +176,9 @@ class NoteCreation extends React.Component{
     }
 
 
-    async onAutoCompleteChange({value}){
-        let enteredTerm = value;              
-        let type = COMPONENT_VALUES[this.state.targetArtifact];
-        
+    async onAutoCompleteChange({value}){   
+        let enteredTerm = value;                  
+        let type = COMPONENT_VALUES[this.state.targetArtifact];        
         if(type !== "property" && type !== "individual"){
             type = this.props.isSkos ? "individual" : "class"; 
         }       
@@ -187,9 +186,7 @@ class NoteCreation extends React.Component{
             let autoCompleteResult = await getAutoCompleteResult(enteredTerm, this.props.ontologyId, type);
             this.setState({
                 autoCompleteSuggestionsList: autoCompleteResult
-            });
-            // console.info(autoCompleteResult);
-                        
+            });                        
         }       
     }
 
