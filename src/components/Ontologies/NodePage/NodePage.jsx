@@ -126,6 +126,7 @@ class NodePage extends React.Component {
             componentIdentity={'notes'}
             key={'notesPage'}
             ontology={this.props.ontology}
+            targetArtifactIri={this.props.iri}
             // targetNoteId={this.props.match.params.targetId}                                                            
           />
         }

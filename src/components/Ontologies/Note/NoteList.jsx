@@ -23,7 +23,8 @@ class NoteList extends React.Component{
            noteTotalPageCount: 0,
            selectedNoteId: -1,
            componentIsLoading: true,
-           noteExist: true
+           noteExist: true,
+           targetArtifactIri: null
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -40,7 +41,10 @@ class NoteList extends React.Component{
         let ontologyId = this.props.ontology.ontologyId;
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
         url += ('&page=' + this.state.noteListPage + '&size=' + this.state.notePageSize)
-        
+        if(this.props.targetArtifactIri){
+            url += ('&artifact_iri=' + this.props.targetArtifactIri)
+        }
+                
         fetch(url, {headers:headers}).then((resp) => resp.json())
         .then((data) => {            
             let allNotes = data['_result']['notes'];
@@ -50,7 +54,8 @@ class NoteList extends React.Component{
                 notesList: allNotes,                
                 noteDetailPage: showNoteDetail,
                 selectedNoteId: inputNoteId,
-                noteTotalPageCount: noteStats['totalPageCount']            
+                noteTotalPageCount: noteStats['totalPageCount'],
+                targetArtifactIri: this.props.targetArtifactIri        
             });
         })
         .then(()=>{this.createNotesList()});
@@ -150,6 +155,14 @@ class NoteList extends React.Component{
     componentDidMount(){        
         let inputNoteId = this.props.targetNoteId;        
         this.getNotesForOntology(inputNoteId);
+    }
+
+
+    componentDidUpdate(){
+        let currentTargetArtifactIri = this.state.targetArtifactIri;
+        if(currentTargetArtifactIri !== this.props.targetArtifactIri){
+            this.getNotesForOntology();
+        }
     }
 
 
