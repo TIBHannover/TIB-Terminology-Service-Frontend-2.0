@@ -18,7 +18,9 @@ class OntologyNotes extends React.Component{
            selectedNote: null,
            noteDetailPage: false,
            noteSubmited: false,
-           noteSubmitSeccuess: false
+           noteSubmitSeccuess: false,
+           noteListPage: 1,
+           notePageSize: 10
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -34,6 +36,7 @@ class OntologyNotes extends React.Component{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
         let ontologyId = this.props.ontology.ontologyId;
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
+        url += ('&page=' + this.state.noteListPage + '&size=' + this.state.notePageSize)
         
         fetch(url, {headers:headers}).then((resp) => resp.json())
         .then((data) => {
