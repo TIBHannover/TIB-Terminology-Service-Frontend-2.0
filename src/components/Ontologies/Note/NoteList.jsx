@@ -22,7 +22,8 @@ class NoteList extends React.Component{
            notePageSize: 10,
            noteTotalPageCount: 0,
            selectedNoteId: -1,
-           componentIsLoading: true
+           componentIsLoading: true,
+           noteExist: true
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -59,6 +60,7 @@ class NoteList extends React.Component{
  
     createNotesList(){
         let notes = this.state.notesList;
+        let noteExist = true;
         let result = [];
         for(let note of notes){            
             result.push(
@@ -84,11 +86,12 @@ class NoteList extends React.Component{
         }
 
         if(result.length === 0){
+            noteExist = false
             result = [
                 <div className="row">
                     <div className="col-sm-12">                                    
                         <div class="alert alert-success">
-                            There is no Note for this Ontology.
+                            No Note found.
                         </div>                                        
                     </div>
                 </div>
@@ -97,7 +100,8 @@ class NoteList extends React.Component{
 
         this.setState({
             listRenderContent: result,
-            componentIsLoading: false
+            componentIsLoading: false,
+            noteExist: noteExist
         });
 
     }
@@ -176,11 +180,13 @@ class NoteList extends React.Component{
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
                         <div className="col-sm-8">
-                            <Pagination 
-                                clickHandler={this.handlePagination} 
-                                count={this.state.noteTotalPageCount}
-                                initialPageNumber={this.state.noteListPage}
-                            />
+                            {this.state.noteExist &&  
+                                <Pagination 
+                                    clickHandler={this.handlePagination} 
+                                    count={this.state.noteTotalPageCount}
+                                    initialPageNumber={this.state.noteListPage}
+                                />
+                            }
                             {this.state.listRenderContent}
                         </div>
                         <div className="col-sm-4">
