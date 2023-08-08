@@ -354,77 +354,77 @@ class OntologyPage extends React.Component {
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                                 <DataTreePage
-                                rootNodes={this.state.rootTerms}
-                                rootNodesForSkos={this.state.skosRootIndividuals}
-                                componentIdentity={'term'}
-                                iri={this.state.targetTermIri}
-                                key={'termTreePage'}                    
-                                ontology={this.state.ontologyId}
-                                rootNodeNotExist={this.state.rootNodeNotExist}
-                                iriChangerFunction={this.changeInputIri}
-                                lastState={this.state.classTreeDomLastState}
-                                domStateKeeper={this.changeTreeContent}
-                                isSkos={this.state.isSkosOntology}
-                                isIndividuals={false}
+                                  rootNodes={this.state.rootTerms}
+                                  rootNodesForSkos={this.state.skosRootIndividuals}
+                                  componentIdentity={'term'}
+                                  iri={this.state.targetTermIri}
+                                  key={'termTreePage'}                    
+                                  ontology={this.state.ontologyId}
+                                  rootNodeNotExist={this.state.rootNodeNotExist}
+                                  iriChangerFunction={this.changeInputIri}
+                                  lastState={this.state.classTreeDomLastState}
+                                  domStateKeeper={this.changeTreeContent}
+                                  isSkos={this.state.isSkosOntology}
+                                  isIndividuals={false}
                                 />
                 }
 
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                                 <DataTreePage
-                                rootNodes={this.state.rootProps}
-                                rootNodesForSkos={[]}
-                                componentIdentity={'property'}
-                                iri={this.state.targetPropertyIri}
-                                key={'propertyTreePage'}
-                                ontology={this.state.ontologyId}
-                                rootNodeNotExist={this.state.rootNodeNotExist}
-                                iriChangerFunction={this.changeInputIri}
-                                lastState={this.state.propertyTreeDomLastState}
-                                domStateKeeper={this.changeTreeContent}
-                                isIndividuals={false}
+                                  rootNodes={this.state.rootProps}
+                                  rootNodesForSkos={[]}
+                                  componentIdentity={'property'}
+                                  iri={this.state.targetPropertyIri}
+                                  key={'propertyTreePage'}
+                                  ontology={this.state.ontologyId}
+                                  rootNodeNotExist={this.state.rootNodeNotExist}
+                                  iriChangerFunction={this.changeInputIri}
+                                  lastState={this.state.propertyTreeDomLastState}
+                                  domStateKeeper={this.changeTreeContent}
+                                  isIndividuals={false}
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                                 <IndividualsList
-                                rootNodes={this.state.rootTerms}
-                                rootNodesForSkos={this.state.skosRootIndividuals}                                                    
-                                iri={this.state.targetIndividualIri}
-                                componentIdentity={'individual'}
-                                key={'individualsTreePage'}
-                                ontology={this.state.ontologyId}                              
-                                iriChangerFunction={this.changeInputIri}
-                                lastState={""}
-                                domStateKeeper={this.changeTreeContent}
-                                isSkos={this.state.isSkosOntology}
-                                individualTabChanged={this.state.individualTabChanged}                                
+                                  rootNodes={this.state.rootTerms}
+                                  rootNodesForSkos={this.state.skosRootIndividuals}                                                    
+                                  iri={this.state.targetIndividualIri}
+                                  componentIdentity={'individual'}
+                                  key={'individualsTreePage'}
+                                  ontology={this.state.ontologyId}                              
+                                  iriChangerFunction={this.changeInputIri}
+                                  lastState={""}
+                                  domStateKeeper={this.changeTreeContent}
+                                  isSkos={this.state.isSkosOntology}
+                                  individualTabChanged={this.state.individualTabChanged}                                
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
                                 <TermList                              
-                                iri={this.state.targetTermListIri}
-                                componentIdentity={'termList'}
-                                key={'termListPage'}
-                                ontology={this.state.ontologyId}                              
-                                iriChangerFunction={this.changeInputIri}                              
-                                isSkos={this.state.isSkosOntology}                              
+                                  iri={this.state.targetTermListIri}
+                                  componentIdentity={'termList'}
+                                  key={'termListPage'}
+                                  ontology={this.state.ontologyId}                              
+                                  iriChangerFunction={this.changeInputIri}                              
+                                  isSkos={this.state.isSkosOntology}                              
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) &&
                                 <NoteList                                                              
-                                componentIdentity={'notes'}
-                                key={'notesPage'}
-                                ontology={this.state.ontology}
-                                targetNoteId={this.props.match.params.targetId}                                                            
+                                  componentIdentity={'notes'}
+                                  key={'notesPage'}
+                                  ontology={this.state.ontology}
+                                  targetNoteId={this.props.match.params.targetId}                                                            
                                 />
                 }                                      
                 {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
                                 <IssueList                                                           
-                                      componentIdentity={'gitIssues'}
-                                      key={'gitIssueList'}
-                                      ontology={this.state.ontology}                              
-                                      isSkos={this.state.isSkosOntology}
-                                      lastState={this.state.issueListComponentState}                                  
-                                      storeListOfGitIssuesState={this.storeListOfGitIssuesState}
+                                  componentIdentity={'gitIssues'}
+                                  key={'gitIssueList'}
+                                  ontology={this.state.ontology}                              
+                                  isSkos={this.state.isSkosOntology}
+                                  lastState={this.state.issueListComponentState}                                  
+                                  storeListOfGitIssuesState={this.storeListOfGitIssuesState}
                                 />
                 } 
 

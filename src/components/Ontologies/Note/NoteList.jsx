@@ -21,7 +21,8 @@ class NoteList extends React.Component{
            noteListPage: 1,
            notePageSize: 10,
            noteTotalPageCount: 0,
-           selectedNoteId: -1
+           selectedNoteId: -1,
+           componentIsLoading: true
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -33,7 +34,7 @@ class NoteList extends React.Component{
     }
 
 
-    getNotesForOntology(){
+    getNotesForOntology(inputNoteId=-1){
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
         let ontologyId = this.props.ontology.ontologyId;
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
@@ -43,11 +44,12 @@ class NoteList extends React.Component{
         .then((data) => {            
             let allNotes = data['_result']['notes'];
             let noteStats = data['_result']['stats'];            
-            let showNoteDetail = false;            
+            let showNoteDetail = inputNoteId === -1 ? false : true;            
             this.setState({
                 notesList: allNotes,                
                 noteDetailPage: showNoteDetail,
-                noteTotalPageCount: noteStats['totalPageCount']              
+                selectedNoteId: inputNoteId,
+                noteTotalPageCount: noteStats['totalPageCount']            
             });
         })
         .then(()=>{this.createNotesList()});
@@ -93,7 +95,10 @@ class NoteList extends React.Component{
             ];
         }
 
-        this.setState({listRenderContent: result});
+        this.setState({
+            listRenderContent: result,
+            componentIsLoading: false
+        });
 
     }
 
@@ -139,8 +144,8 @@ class NoteList extends React.Component{
 
 
     componentDidMount(){        
-        let inputNoteId = this.props.targetNoteId;         
-        this.getNotesForOntology();
+        let inputNoteId = this.props.targetNoteId;        
+        this.getNotesForOntology(inputNoteId);
     }
 
 
@@ -168,7 +173,7 @@ class NoteList extends React.Component{
                         </div>  
                     }
                 </div>
-                {!this.state.noteDetailPage && 
+                {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
                         <div className="col-sm-8">
                             <Pagination 
