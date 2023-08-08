@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import NoteCreation from "./NoteCreation";
 import AuthTool from "../../User/Login/authTools";
-
+import Pagination from "../../common/Pagination/Pagination";
 
 
 
@@ -20,7 +20,8 @@ class OntologyNotes extends React.Component{
            noteSubmited: false,
            noteSubmitSeccuess: false,
            noteListPage: 1,
-           notePageSize: 10
+           notePageSize: 10,
+           noteTotalPageCount: 0
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
@@ -28,7 +29,8 @@ class OntologyNotes extends React.Component{
         this.createNoteDetailPage = this.createNoteDetailPage.bind(this);
         this.selectNote = this.selectNote.bind(this);
         this.backToListClick = this.backToListClick.bind(this);      
-        this.setNoteCreationResultStatus = this.setNoteCreationResultStatus.bind(this);  
+        this.setNoteCreationResultStatus = this.setNoteCreationResultStatus.bind(this); 
+        this.handlePagination = this.handlePagination.bind(this); 
     }
 
 
@@ -42,6 +44,7 @@ class OntologyNotes extends React.Component{
         .then((data) => {
             let selectedNote = null;
             let allNotes = data['_result']['notes'];
+            let noteStats = data['_result']['stats'];            
             let showNoteDetail = false;
             for(let note of allNotes){            
                 if (note['id'] === parseInt(inputNoteId)){
@@ -52,7 +55,8 @@ class OntologyNotes extends React.Component{
             this.setState({
                 notesList: allNotes,
                 selectedNote: selectedNote,
-                noteDetailPage: showNoteDetail               
+                noteDetailPage: showNoteDetail,
+                noteTotalPageCount: noteStats['totalPageCount']              
             });
         })
         .then(()=>{this.createNotesList()});
@@ -100,6 +104,16 @@ class OntologyNotes extends React.Component{
 
         this.setState({listRenderContent: result});
 
+    }
+
+
+    handlePagination (value) {
+        this.setState({
+          noteListPage: value,          
+          tableBodyContent: ""    
+        }, ()=> {
+            this.getNotesForOntology();
+        })
     }
 
 
@@ -203,6 +217,11 @@ class OntologyNotes extends React.Component{
                 {!this.state.noteDetailPage && 
                     <div className="row">                    
                         <div className="col-sm-8">
+                            <Pagination 
+                                clickHandler={this.handlePagination} 
+                                count={this.state.noteTotalPageCount}
+                                initialPageNumber={this.state.noteListPage}
+                            />
                             {this.state.listRenderContent}
                         </div>
                         <div className="col-sm-4">
