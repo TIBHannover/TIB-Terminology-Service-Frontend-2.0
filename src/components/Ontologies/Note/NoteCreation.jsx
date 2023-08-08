@@ -269,15 +269,19 @@ class NoteCreation extends React.Component{
 
         return [
             <span>
-            <button type="button" 
-                class="btn btn-primary" 
-                data-toggle="modal" 
-                data-target="#add-note-modal" 
-                data-backdrop="static"
-                data-keyboard="false"                
-                >
-                +Add New Note
-            </button>
+            <div className="row">
+                <div className="col-sm-12 text-center">
+                    <button type="button" 
+                        class="btn btn-primary" 
+                        data-toggle="modal" 
+                        data-target="#add-note-modal" 
+                        data-backdrop="static"
+                        data-keyboard="false"                
+                        >
+                        +Add New Note
+                    </button>
+                </div>
+            </div>
             
             <div class="modal" id="add-note-modal">
                 <div class="modal-dialog modal-xl">
