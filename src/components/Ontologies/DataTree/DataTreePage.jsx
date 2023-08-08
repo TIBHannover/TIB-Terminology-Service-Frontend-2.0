@@ -36,7 +36,7 @@ class DataTreePage extends React.Component {
       termTree = false
     }
     this.setState({
-      ontologyId: this.props.ontology,      
+      ontologyId: this.props.ontology.ontologyId,      
       selectedNodeIri: this.props.iri,
       termTree: termTree,
       propertyTree: !termTree
@@ -86,7 +86,7 @@ render(){
      <div className="tree-view-container resizable-container"> 
         <div className="tree-page-left-part" id="page-left-pane">       
           <JumpTo
-            ontologyId={this.props.ontology}
+            ontologyId={this.props.ontology.ontologyId}
             isSkos={this.props.isSkos} 
             componentIdentity={this.props.componentIdentity}         
            />
@@ -97,7 +97,7 @@ render(){
                   componentIdentity={this.props.componentIdentity}
                   iri={this.props.iri}
                   key={this.props.key}                    
-                  ontology={this.props.ontology}
+                  ontology={this.props.ontology.ontologyId}
                   rootNodeNotExist={this.props.rootNodeNotExist}
                   iriChangerFunction={this.props.iriChangerFunction}
                   lastState={this.props.lastState}
@@ -116,7 +116,7 @@ render(){
                 <MatomoWrapper>
                 <NodePage
                   iri={this.state.selectedNodeIri}
-                  ontology={this.state.ontologyId}
+                  ontology={this.props.ontology}
                   componentIdentity="term"
                   extractKey="terms"
                   isSkos={this.props.isSkos}
@@ -128,7 +128,7 @@ render(){
               <MatomoWrapper>
               <NodePage
                   iri={this.state.selectedNodeIri}
-                  ontology={this.state.ontologyId}
+                  ontology={this.props.ontology}
                   componentIdentity="property"
                   extractKey="properties"
                   isIndividual={false}

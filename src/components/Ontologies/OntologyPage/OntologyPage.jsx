@@ -359,7 +359,7 @@ class OntologyPage extends React.Component {
                                   componentIdentity={'term'}
                                   iri={this.state.targetTermIri}
                                   key={'termTreePage'}                    
-                                  ontology={this.state.ontologyId}
+                                  ontology={this.state.ontology}
                                   rootNodeNotExist={this.state.rootNodeNotExist}
                                   iriChangerFunction={this.changeInputIri}
                                   lastState={this.state.classTreeDomLastState}
@@ -376,7 +376,7 @@ class OntologyPage extends React.Component {
                                   componentIdentity={'property'}
                                   iri={this.state.targetPropertyIri}
                                   key={'propertyTreePage'}
-                                  ontology={this.state.ontologyId}
+                                  ontology={this.state.ontology}
                                   rootNodeNotExist={this.state.rootNodeNotExist}
                                   iriChangerFunction={this.changeInputIri}
                                   lastState={this.state.propertyTreeDomLastState}
@@ -391,7 +391,7 @@ class OntologyPage extends React.Component {
                                   iri={this.state.targetIndividualIri}
                                   componentIdentity={'individual'}
                                   key={'individualsTreePage'}
-                                  ontology={this.state.ontologyId}                              
+                                  ontology={this.state.ontology}                              
                                   iriChangerFunction={this.changeInputIri}
                                   lastState={""}
                                   domStateKeeper={this.changeTreeContent}
@@ -410,7 +410,7 @@ class OntologyPage extends React.Component {
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) &&
-                                <NoteList                                                              
+                                <NoteList                  
                                   componentIdentity={'notes'}
                                   key={'notesPage'}
                                   ontology={this.state.ontology}

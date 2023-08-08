@@ -7,7 +7,14 @@
         "tabTitle": "Detail",
         "urlEndPoint": ""
     },
-
+    "Notes":{
+        "id":"note_tab",
+        "keyForRenderAsComponent": "Notes",
+        "keyForRenderAsTabItem": "note-tab",
+        "tabId": 1,
+        "tabTitle": "Notes",
+        "urlEndPoint": "/notes"
+    },
     "GraphView":{
         "id":"graph",
         "keyForRenderAsComponent": "NodeGraph",

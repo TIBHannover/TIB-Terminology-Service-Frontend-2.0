@@ -201,21 +201,19 @@ export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontology, 
   let result = [];
   for(let configItemKey in tabMetadataJson){
       let configObject = tabMetadataJson[configItemKey];
-      if(componentIdentity === "term"){
+      if(componentIdentity === "term" || configObject['id'] !== 'graph'){
         result.push(
           <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
               <Link 
                   onClick={tabChangeHandler} 
                   data-value={configObject['tabId']} 
-                  className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
-                  //to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology + configObject['urlEndPoint']}
-                  >
-              
+                  className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}                   
+                  >              
                   {configObject['tabTitle']}
               </Link>
           </li>
-      );
-    }
+        );
+      }      
   }
 
   return result;

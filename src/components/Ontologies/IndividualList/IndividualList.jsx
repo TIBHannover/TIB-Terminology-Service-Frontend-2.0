@@ -6,7 +6,7 @@ import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
-import NodeDetail from "../NodePage/NodeDetail/NodeDetail";
+
 
 
 
@@ -37,13 +37,13 @@ class IndividualsList extends React.Component {
 
 
     async setComponentData(){
-        let ontology = this.props.ontology;        
+        let ontologyId = this.props.ontology.ontologyId;        
         try{            
-            let indvList = await getIndividualsList(ontology);            
+            let indvList = await getIndividualsList(ontologyId);            
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
-                ontology: ontology,
+                ontology: this.props.ontology,
                 listView: !this.props.isSkos
             });
             if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
@@ -57,7 +57,7 @@ class IndividualsList extends React.Component {
             this.setState({
                 isLoaded: true,
                 individuals: [],
-                ontology: ontology                
+                ontology: this.props.ontology                
             });
         }
     }
@@ -176,7 +176,7 @@ class IndividualsList extends React.Component {
                     componentIdentity={this.props.componentIdentity}
                     iri={this.state.selectedNodeIri}
                     key={this.props.key}
-                    ontology={this.props.ontology}
+                    ontology={this.props.ontology.ontologyId}
                     rootNodeNotExist={this.props.isSkos ? this.props.rootNodesForSkos.length === 0 : this.props.rootNodes.length === 0}
                     iriChangerFunction={this.props.iriChangerFunction}
                     lastState={this.props.lastState}
@@ -259,7 +259,7 @@ class IndividualsList extends React.Component {
             <div className="tree-view-container resizable-container" onClick={(e) =>  this.processClick(e)}>                                 
                 <div className="tree-page-left-part" id="page-left-pane">
                   <JumpTo
-                    ontologyId={this.props.ontology}
+                    ontologyId={this.props.ontology.ontologyId}
                     isSkos={this.props.isSkos}
                     componentIdentity={this.props.componentIdentity}          
                    />

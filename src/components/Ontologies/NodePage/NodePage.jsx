@@ -1,10 +1,10 @@
 import React from 'react';
-import {classMetaData, propertyMetaData, formatText, renderNodePageTabs} from './helpers';
+import {renderNodePageTabs} from './helpers';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import NodeDetail from './NodeDetail/NodeDetail';
-import NodeNotes from './NodeNotes/NodeNotes';
 import queryString from 'query-string'; 
 import NodeGraph from './NodeGraph/NodeGraph';
+import NoteList from '../Note/NoteList';
 
 
 const DETAIL_TAB_ID = 0;
@@ -109,12 +109,12 @@ class NodePage extends React.Component {
     return (
       <div className='row'>
         <ul className="nav nav-tabs nav-tabs-node">
-          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology, this.state.activeTab, this.props.componentIdentity)}
+          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology.ontologyId, this.state.activeTab, this.props.componentIdentity)}
         </ul>
         {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
           <NodeDetail
           iri={this.props.iri}
-          ontology={this.props.ontology}
+          ontology={this.props.ontology.ontologyId}
           componentIdentity={this.props.componentIdentity}
           extractKey={this.props.extractKey}
           isSkos={this.props.isSkos}
@@ -122,12 +122,17 @@ class NodePage extends React.Component {
           />
         }
         {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
-          <NodeNotes/>
+          <NoteList                                                              
+            componentIdentity={'notes'}
+            key={'notesPage'}
+            ontology={this.props.ontology}
+            // targetNoteId={this.props.match.params.targetId}                                                            
+          />
         }
         {!this.state.waiting && (this.state.activeTab === GRAPH_TAB_ID) &&
           <NodeGraph
           iri={this.props.iri}
-          ontology={this.props.ontology}
+          ontology={this.props.ontology.ontologyId}
           componentIdentity={this.props.componentIdentity}
           extractKey={this.props.extractKey}
           isSkos={this.props.isSkos}
