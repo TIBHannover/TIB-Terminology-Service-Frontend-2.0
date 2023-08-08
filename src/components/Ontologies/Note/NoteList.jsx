@@ -9,7 +9,7 @@ import Pagination from "../../common/Pagination/Pagination";
 
 
 
-class OntologyNotes extends React.Component{
+class NoteList extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
@@ -241,4 +241,4 @@ class OntologyNotes extends React.Component{
 
 }
 
-export default withRouter(OntologyNotes);
+export default withRouter(NoteList);

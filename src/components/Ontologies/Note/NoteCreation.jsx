@@ -145,8 +145,7 @@ class NoteCreation extends React.Component{
             enteredTermInAutoComplete: "",
             selectedTermFromAutoComplete: {"iri": null, "label": null}         
         });
-        document.getElementById('noteTitle').value = '';
-        document.getElementById('noteIri').value = '';
+        document.getElementById('noteTitle').value = '';        
     }
 
 
