@@ -1,10 +1,10 @@
 import React from "react";
-import ReactMarkdown from 'react-markdown'
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import NoteCreation from "./NoteCreation";
 import AuthTool from "../../User/Login/authTools";
 import Pagination from "../../common/Pagination/Pagination";
+import NoteDetail from "./NoteDetail";
 
 
 
@@ -14,19 +14,18 @@ class NoteList extends React.Component{
         super(props);
         this.state = ({
            notesList: [],           
-           listRenderContent: '',
-           selectedNote: null,
+           listRenderContent: '',           
            noteDetailPage: false,
            noteSubmited: false,
            noteSubmitSeccuess: false,
            noteListPage: 1,
            notePageSize: 10,
-           noteTotalPageCount: 0
+           noteTotalPageCount: 0,
+           selectedNoteId: -1
         });
 
         this.getNotesForOntology = this.getNotesForOntology.bind(this);
-        this.createNotesList = this.createNotesList.bind(this);                        
-        this.createNoteDetailPage = this.createNoteDetailPage.bind(this);
+        this.createNotesList = this.createNotesList.bind(this);        
         this.selectNote = this.selectNote.bind(this);
         this.backToListClick = this.backToListClick.bind(this);      
         this.setNoteCreationResultStatus = this.setNoteCreationResultStatus.bind(this); 
@@ -34,27 +33,19 @@ class NoteList extends React.Component{
     }
 
 
-    getNotesForOntology(inputNoteId=null){
+    getNotesForOntology(){
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
         let ontologyId = this.props.ontology.ontologyId;
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
         url += ('&page=' + this.state.noteListPage + '&size=' + this.state.notePageSize)
         
         fetch(url, {headers:headers}).then((resp) => resp.json())
-        .then((data) => {
-            let selectedNote = null;
+        .then((data) => {            
             let allNotes = data['_result']['notes'];
             let noteStats = data['_result']['stats'];            
-            let showNoteDetail = false;
-            for(let note of allNotes){            
-                if (note['id'] === parseInt(inputNoteId)){
-                    selectedNote = note; 
-                    showNoteDetail = true;
-                }
-            }     
+            let showNoteDetail = false;            
             this.setState({
-                notesList: allNotes,
-                selectedNote: selectedNote,
+                notesList: allNotes,                
                 noteDetailPage: showNoteDetail,
                 noteTotalPageCount: noteStats['totalPageCount']              
             });
@@ -120,16 +111,9 @@ class NoteList extends React.Component{
 
     selectNote(e){
         let noteId = e.target.attributes.value.nodeValue;       
-        let selctedNote = null;
-        let allNotes = this.state.notesList;
-        for(let note of allNotes){            
-            if (note['id'] === parseInt(noteId)){
-                selctedNote = note; 
-            }
-        }
-        this.setState({
-            selectedNote: selctedNote,
-            noteDetailPage: true
+        this.setState({            
+            noteDetailPage: true,
+            selectedNoteId: noteId
         });
     }
 
@@ -137,41 +121,11 @@ class NoteList extends React.Component{
 
     backToListClick(){
         this.setState({
-            selectedNoteId: null,
+            selectedNoteId: -1,
             noteDetailPage: false
         });
     }
 
-
-    createNoteDetailPage(){
-        return [
-            <span>
-                <div className="row">
-                    <div className="col-sm-12">
-                        <Link 
-                            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.props.ontology.ontologyId + '/notes' } 
-                            onClick={this.backToListClick} 
-                            className="btn btn-primary">
-                            Back to Note List
-                        </Link>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-sm-12">
-                        <br></br>  
-                        <h2>{this.state.selectedNote['title']}</h2>                      
-                        <small>{" opened on " + this.state.selectedNote['created_at'] + " by " + this.state.selectedNote['creator_user']}</small>
-                        <br></br>
-                        <br></br>
-                        <span>
-                            <ReactMarkdown>{this.state.selectedNote['content']}</ReactMarkdown>
-                        </span>
-                    
-                    </div>
-                </div>
-            </span>           
-        ];
-    }
 
 
     setNoteCreationResultStatus(success){
@@ -186,7 +140,7 @@ class NoteList extends React.Component{
 
     componentDidMount(){        
         let inputNoteId = this.props.targetNoteId;         
-        this.getNotesForOntology(inputNoteId);
+        this.getNotesForOntology();
     }
 
 
@@ -234,7 +188,21 @@ class NoteList extends React.Component{
                         </div>                    
                     </div>
                 }
-                {this.state.noteDetailPage && this.state.selectedNote && this.createNoteDetailPage()}
+                {this.state.noteDetailPage &&
+                    <span>
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <Link 
+                                    to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.props.ontology.ontologyId + '/notes' } 
+                                    onClick={this.backToListClick} 
+                                    className="btn btn-primary">
+                                    Back to Note List
+                                </Link>
+                            </div>
+                        </div>
+                        <NoteDetail noteId={this.state.selectedNoteId} />
+                    </span>                    
+                }
             </div>
         );
     }
