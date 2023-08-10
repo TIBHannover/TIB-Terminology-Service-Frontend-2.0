@@ -5,7 +5,7 @@
         "keyForRenderAsTabItem": "detail-tab",
         "tabId": 0,
         "tabTitle": "Detail",
-        "urlEndPoint": ""
+        "urlEndPoint": "detail"
     },
     "Notes":{
         "id":"note_tab",
@@ -13,7 +13,7 @@
         "keyForRenderAsTabItem": "note-tab",
         "tabId": 1,
         "tabTitle": "Notes",
-        "urlEndPoint": "/notes"
+        "urlEndPoint": "notes"
     },
     "GraphView":{
         "id":"graph",
@@ -21,6 +21,6 @@
         "keyForRenderAsTabItem": "graph-tab",
         "tabId": 2,
         "tabTitle": "Graph View",
-        "urlEndPoint": "/graph"
+        "urlEndPoint": "graph"
     }
 }

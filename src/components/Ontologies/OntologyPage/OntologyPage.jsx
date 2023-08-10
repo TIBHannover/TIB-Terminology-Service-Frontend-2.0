@@ -106,7 +106,7 @@ class OntologyPage extends React.Component {
    * Set the active tab and its page on load
    */
   setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;    
+    let requestedTab = this.props.match.params.tab;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let lastRequestedTab = this.state.lastRequestedTab;    
     if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){

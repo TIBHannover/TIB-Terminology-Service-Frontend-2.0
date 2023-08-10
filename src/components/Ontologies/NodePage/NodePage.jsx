@@ -1,16 +1,20 @@
 import React from 'react';
-import {renderNodePageTabs} from './helpers';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import NodeDetail from './NodeDetail/NodeDetail';
 import queryString from 'query-string'; 
 import NodeGraph from './NodeGraph/NodeGraph';
 import NoteList from '../Note/NoteList';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
+import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+
 
 
 const DETAIL_TAB_ID = 0;
 const NOTES_TAB_ID = 1;
 const GRAPH_TAB_ID = 2;
+
 
 
 class NodePage extends React.Component {
@@ -26,53 +30,46 @@ class NodePage extends React.Component {
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.fetchTheTargetTerm = this.fetchTheTargetTerm.bind(this);
+    this.renderTabs = this.renderTabs.bind(this);
   }
 
 
   setTabOnLoad(){
-    let requestedTab = '';    
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let requestedTab = targetQueryParams.subtab;       
     let lastRequestedTab = this.state.lastRequestedTab;    
+    let activeTabId = this.state.activeTab;        
     if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
-      this.setState({        
-        activeTab: NOTES_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab,
-        
-      });
+      activeTabId = NOTES_TAB_ID;
     }
-    if (requestedTab !== lastRequestedTab && requestedTab === 'graph'){
-      this.setState({        
-        activeTab: GRAPH_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab,
-        
-      });
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'graph'){
+      activeTabId = GRAPH_TAB_ID;      
     }
     else if (requestedTab !== lastRequestedTab){
-      this.setState({        
-        activeTab: DETAIL_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab
-
-      });
-    }
+      activeTabId = DETAIL_TAB_ID;
+    }  
+    
+    if(activeTabId !== this.state.activeTab){
+        this.setState({        
+          activeTab: activeTabId,
+          waiting: false,
+          lastRequestedTab: requestedTab      
+        });
+    }    
   }
 
   
 
-  tabChange = (e, v) => {
+  tabChange = (e, v) => {         
     try{
-      let selectedTabId = e.target.dataset.value;         
-      this.setState({
-        waiting: true
-      });
-  
+      let selectedTabId = e.target.dataset.value;      
+      this.setState({waiting: true});  
       this.setState({
         activeTab: parseInt(selectedTabId),
         waiting: false
       });
     } 
-    catch(e){
+    catch(e){          
       this.setState({
         activeTab: DETAIL_TAB_ID,
         waiting: false
@@ -96,6 +93,35 @@ class NodePage extends React.Component {
     });
   }
 
+ 
+
+  renderTabs(){
+      let result = [];         
+      for(let configItemKey in NodePageTabConfig){
+          let configObject = NodePageTabConfig[configItemKey];
+          let locationObject = window.location;
+          const searchParams = new URLSearchParams(window.location.search);
+          searchParams.set('subtab', NodePageTabConfig[configItemKey]['urlEndPoint']);          
+          let linkUrl = locationObject.pathname + "?" +  searchParams.toString();
+          if(this.props.componentIdentity === "term" || configObject['id'] !== 'graph'){
+            result.push(
+              <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
+                  <Link 
+                      onClick={this.tabChange} 
+                      data-value={configObject['tabId']} 
+                      className={(this.state.activeTab === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}
+                      to={linkUrl}           
+                      >              
+                      {configObject['tabTitle']}
+                  </Link>
+              </li>
+            );
+          }      
+        }
+  
+    return result;
+  }
+
 
 
   componentDidMount(){         
@@ -117,7 +143,7 @@ class NodePage extends React.Component {
     return (
       <div className='row'>
         <ul className="nav nav-tabs nav-tabs-node">
-          {renderNodePageTabs(NodePageTabConfig, this.tabChange, this.props.ontology.ontologyId, this.state.activeTab, this.props.componentIdentity)}
+          {this.renderTabs()}
         </ul>
         {!this.state.waiting && (this.state.activeTab === DETAIL_TAB_ID) &&
           <NodeDetail
@@ -155,4 +181,4 @@ class NodePage extends React.Component {
   }
 }
 
-export default NodePage;
+export default withRouter(NodePage);
