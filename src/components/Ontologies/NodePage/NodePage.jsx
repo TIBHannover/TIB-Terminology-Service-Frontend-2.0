@@ -38,7 +38,7 @@ class NodePage extends React.Component {
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let requestedTab = targetQueryParams.subtab;       
     let lastRequestedTab = this.state.lastRequestedTab;    
-    let activeTabId = this.state.activeTab;        
+    let activeTabId = this.state.activeTab;            
     if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
       activeTabId = NOTES_TAB_ID;
     }

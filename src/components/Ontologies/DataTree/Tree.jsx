@@ -200,8 +200,8 @@ class Tree extends React.Component {
         stateObj.isLoadingTheComponent = false;
         this.setState({...stateObj});        
         if(stateObj.selectedNodeIri !== ""){
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', stateObj.selectedNodeIri);
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('iri', stateObj.selectedNodeIri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
             this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
             this.props.nodeSelectionHandler(stateObj.selectedNodeIri, true);
@@ -261,8 +261,8 @@ class Tree extends React.Component {
                     this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 }                
             });            
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', clickedNodeIri);
+            let currentUrlParams = new URLSearchParams(window.location.search);            
+            currentUrlParams.set('iri', clickedNodeIri);            
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
             this.props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);
         }    

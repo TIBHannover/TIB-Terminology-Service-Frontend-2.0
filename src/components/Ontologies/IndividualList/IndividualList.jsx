@@ -47,8 +47,8 @@ class IndividualsList extends React.Component {
                 listView: !this.props.isSkos
             });
             if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
-                let currentUrlParams = new URLSearchParams();
-                currentUrlParams.append('iri', this.props.iri);
+                let currentUrlParams = new URLSearchParams(window.location.search);
+                currentUrlParams.set('iri', this.props.iri);
                 this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
                 this.props.iriChangerFunction(this.props.iri, this.props.componentIdentity);              
             }
@@ -77,8 +77,8 @@ class IndividualsList extends React.Component {
                 showNodeDetailPage: true,
                 selectedNodeIri: target.dataset.iri,
             });
-            let currentUrlParams = new URLSearchParams();
-            currentUrlParams.append('iri', target.dataset.iri);
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.set('iri', target.dataset.iri);
             this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
             this.props.iriChangerFunction(target.dataset.iri, this.props.componentIdentity);    
         }
