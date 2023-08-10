@@ -5,6 +5,7 @@ import NoteCreation from "./NoteCreation";
 import AuthTool from "../../User/Login/authTools";
 import Pagination from "../../common/Pagination/Pagination";
 import NoteDetail from "./NoteDetail";
+import queryString from 'query-string'; 
 
 
 
@@ -37,17 +38,23 @@ class NoteList extends React.Component{
     }
 
 
-    setComponentData(inputNoteId=-1){        
+    setComponentData(){
+        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);     
+        let inputNoteIdFromUrl = targetQueryParams.noteId;
+        let inputNoteId = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
+        console.info(inputNoteId)
+
         if(inputNoteId !== -1 && inputNoteId !== this.state.selectedNoteId){
             this.setState({
                 selectedNoteId: inputNoteId,
                 noteDetailPage: true
-            });
-            return true;
+            });            
         }
         else if(this.state.selectedNoteId === -1){
             this.loadNoteList();
-        }        
+        }
+        
+        return true;
     }
 
 
@@ -80,11 +87,15 @@ class NoteList extends React.Component{
         let notes = this.state.notesList;
         let noteExist = true;
         let result = [];
-        for(let note of notes){            
+        for(let note of notes){
+            const searchParams = new URLSearchParams(window.location.search);
+            let locationObject = window.location;
+            searchParams.set('noteId', note['id']); 
+            let noteUrl = locationObject.pathname + "?" +  searchParams.toString();
             result.push(
                 <div className="row">
                     <div className="col-sm-12 note-list-card">
-                        <Link to={'notes/' + note['id']} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>                        
+                        <Link to={noteUrl} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>                        
                         <br/>
                         <small>
                             <ul className="">
@@ -165,17 +176,15 @@ class NoteList extends React.Component{
 
 
 
-    componentDidMount(){        
-        let inputNoteId = this.props.targetNoteId;        
-        this.setComponentData(inputNoteId);
+    componentDidMount(){            
+        this.setComponentData();
     }
 
 
     componentDidUpdate(){
-        let currentTargetArtifactIri = this.state.targetArtifactIri;
-        let inputNoteId = this.props.targetNoteId;
+        let currentTargetArtifactIri = this.state.targetArtifactIri;        
         if(currentTargetArtifactIri !== this.props.targetArtifactIri){
-            this.setComponentData(inputNoteId);
+            this.setComponentData();
         }
     }
 

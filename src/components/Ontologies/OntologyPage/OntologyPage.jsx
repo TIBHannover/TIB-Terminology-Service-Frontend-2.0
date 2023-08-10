@@ -413,8 +413,7 @@ class OntologyPage extends React.Component {
                                 <NoteList                  
                                   componentIdentity={'notes'}
                                   key={'notesPage'}
-                                  ontology={this.state.ontology}
-                                  targetNoteId={this.props.match.params.targetId}                                                            
+                                  ontology={this.state.ontology}                                  
                                 />
                 }                                      
                 {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
