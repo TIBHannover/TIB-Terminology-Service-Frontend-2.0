@@ -32,7 +32,9 @@ class NoteDetail extends React.Component{
 
 
     componentDidMount(){
-        this.getTheNote();
+        if(this.props.noteId){
+            this.getTheNote();
+        }        
     }
 
 

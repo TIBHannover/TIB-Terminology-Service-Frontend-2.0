@@ -156,6 +156,7 @@ class NoteCreation extends React.Component{
         let noteTitle = document.getElementById('noteTitle').value;
         let selectedTargetTermIri = this.state.selectedTermFromAutoComplete['iri'];        
         let noteContent = "";
+        let targetArtifactId = this.state.targetArtifact;
         if(!this.state.editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
@@ -175,7 +176,7 @@ class NoteCreation extends React.Component{
             formIsValid = false;
         }
 
-        if(parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
+        if(parseInt(targetArtifactId) !== ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
             document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
             formIsValid = false;
         }
@@ -184,8 +185,16 @@ class NoteCreation extends React.Component{
             return;
         }
 
-        if(parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID){
+        if(parseInt(targetArtifactId) === ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = this.props.ontologyId;
+        }
+
+        
+        let targetArtifactType = COMPONENT_VALUES[targetArtifactId];
+        
+        if(this.props.targetArtifactType){
+            selectedTargetTermIri = this.props.targetArtifactIri;
+            targetArtifactType = this.props.targetArtifactType;
         }
         
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
@@ -194,7 +203,7 @@ class NoteCreation extends React.Component{
         data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
         data.append("ontology_id", this.props.ontologyId);        
-        data.append("semantic_component_type", COMPONENT_VALUES[this.state.targetArtifact]);
+        data.append("semantic_component_type", targetArtifactType);
         data.append("visibility",  VISIBILITY_VALUES[this.state.visibility]);
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_note', {method: 'POST',  headers:headers, body: data})
             .then((response) => response.json())
