@@ -121,6 +121,7 @@ render(){
                   extractKey="terms"
                   isSkos={this.props.isSkos}
                   isIndividual={false}
+                  typeForNote="class"
                 />
                 </MatomoWrapper>        
             }
@@ -132,6 +133,7 @@ render(){
                   componentIdentity="property"
                   extractKey="properties"
                   isIndividual={false}
+                  typeForNote="property"
               />
               </MatomoWrapper>}
           </div>

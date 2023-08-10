@@ -285,6 +285,7 @@ class IndividualsList extends React.Component {
                             extractKey="individuals"
                             isSkos={this.state.isSkos}
                             isIndividual={true}
+                            typeForNote="individual"
                         />                    
                     </div>
                 }

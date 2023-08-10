@@ -206,6 +206,7 @@ class NoteList extends React.Component{
                             <NoteCreation 
                                 targetArtifactLabel={this.props.ontology.config.title}  
                                 targetArtifactType={"ontology"}
+                                targetArtifactIri={this.props.targetArtifactIri}
                                 ontologyId={this.props.ontology.ontologyId}                                
                                 noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
                             />

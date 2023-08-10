@@ -1,19 +1,17 @@
 import React from 'react';
-import {getNodeByIri, getSkosNodeByIri} from '../../../../api/fetchData';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+
+
 
 class NodeDetail extends React.Component{
     constructor (props) {
         super(props)
         this.state = ({
-          data: true,
-          iriIsCopied: false,
-          prevNode: "",
+          data: {"iri": null},
+          iriIsCopied: false,          
           componentIdentity: "",
-          isSkos: false,
-          lastRequestedTab: "",
-          waiting: false,
+          isSkos: false,          
           showDataAsJsonBtnHref: ""
         })
         this.setComponentData = this.setComponentData.bind(this);
@@ -21,25 +19,20 @@ class NodeDetail extends React.Component{
         this.createTable = this.createTable.bind(this);
       }
 
-      async setComponentData(){
-        let targetIri = this.props.iri;
-        let ontology = this.props.ontology;
+      async setComponentData(){        
         let extractKey = this.props.extractKey;
         let componentIdentity = this.props.componentIdentity;
         let isSkos = this.props.isSkos;
-        let node = {};
+        let node = this.props.node;
         let showDataAsJsonBtnHref = "";
-        if(isSkos){
-          node = await getSkosNodeByIri(ontology, encodeURIComponent(targetIri));
+        if(isSkos){          
           showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
         }
-        else{      
-          node = await getNodeByIri(ontology, encodeURIComponent(targetIri), extractKey, this.props.isIndividual);
+        else{           
           showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/" + extractKey + "?iri=" + encodeURIComponent(node.iri);
-        }
-        if(node.iri){
-          this.setState({
-            prevNode: node.iri,
+        }        
+        if(node){
+          this.setState({            
             data: node,
             iriIsCopied: false,
             componentIdentity: componentIdentity,
@@ -108,18 +101,14 @@ class NodeDetail extends React.Component{
       }
 
       componentDidMount(){
-        if(this.state.data && this.state.prevNode !== this.props.iri){
-          this.setComponentData();      
-        }
-        // this.setTabOnLoad();
+        this.setComponentData();       
       }
     
     
       componentDidUpdate(){    
-        if(this.state.prevNode !== this.props.iri){
+        if(this.props.node.iri !== this.state.data.iri){
           this.setComponentData();
-        }
-        // this.setTabOnLoad();
+        }      
       }
 
       render(){

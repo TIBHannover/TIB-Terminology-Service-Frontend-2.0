@@ -207,7 +207,8 @@ export function renderNodePageTabs(tabMetadataJson, tabChangeHandler, ontology, 
               <Link 
                   onClick={tabChangeHandler} 
                   data-value={configObject['tabId']} 
-                  className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}                   
+                  className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}
+                  to={"#"}           
                   >              
                   {configObject['tabTitle']}
               </Link>
