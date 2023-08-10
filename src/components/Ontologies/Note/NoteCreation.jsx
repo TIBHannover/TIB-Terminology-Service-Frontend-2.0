@@ -287,7 +287,7 @@ class NoteCreation extends React.Component{
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">{"Add a New Note For: " + this.props.targetArtifactLabel}</h4>
+                            <h4 class="modal-title">{"Add a New Note For: "} <b>{this.props.targetArtifactLabel}</b></h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>                                                
@@ -297,7 +297,7 @@ class NoteCreation extends React.Component{
                                     {this.props.targetArtifactType === "ontology" && this.createTypeDropDown()}
                                     {this.createVisibilityDropDown()}
                                     {parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
-                                        <p>About: <strong>{this.props.targetArtifactLabel}</strong></p>
+                                        <p>About: <b>{this.props.targetArtifactLabel}</b></p>
                                     }
                                     {parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
                                         <div>

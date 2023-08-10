@@ -204,8 +204,8 @@ class NoteList extends React.Component{
                         </div>
                         <div className="col-sm-4">
                             <NoteCreation 
-                                targetArtifactLabel={this.props.ontology.config.title}  
-                                targetArtifactType={"ontology"}
+                                targetArtifactLabel={this.props.targetArtifactLabel}  
+                                targetArtifactType={this.props.targetArtifactType}
                                 targetArtifactIri={this.props.targetArtifactIri}
                                 ontologyId={this.props.ontology.ontologyId}                                
                                 noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
