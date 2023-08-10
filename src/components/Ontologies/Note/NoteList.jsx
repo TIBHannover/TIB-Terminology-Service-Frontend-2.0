@@ -171,7 +171,8 @@ class NoteList extends React.Component{
         this.setState({
             selectedArtifactType: e.target.value,
             noteListPage: DEFAULT_PAGE_NUMBER,
-            notePageSize: DEFAULT_PAGE_SIZE            
+            notePageSize: DEFAULT_PAGE_SIZE,
+            noteSubmited: false           
         }, () =>{
             this.setComponentData();
         });
