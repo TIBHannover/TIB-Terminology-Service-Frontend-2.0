@@ -2143,6 +2143,32 @@ Jumpto styles
 
 }
 
+
+/* 
+---------------------------------------------
+Notes
+---------------------------------------------
+*/
+
+.notes-container{
+    padding: 60px !important;
+}
+
+.note-list-card{
+    background-color: white !important;    
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #7AABAC;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.note-list-title{
+    color: black;
+    font-weight: bold;    
+}
+
 /* 
 -------------------------------------------------------
 Login and Auth

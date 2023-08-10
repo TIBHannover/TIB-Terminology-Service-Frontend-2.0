@@ -8,6 +8,16 @@ import NoteDetail from "./NoteDetail";
 import queryString from 'query-string'; 
 
 
+const ALL_TYPE = 0
+const ONTOLOGY_TYPE = 1
+const CLASS_TYPE = 2
+const PROPERTY_TYPE = 3
+const INDIVIDUAL_TYPE = 4
+const TYPES_VALUES = ['all', 'ontology', 'class', 'property', 'individual']
+
+const DEFAULT_PAGE_NUMBER = 1
+const DEFAULT_PAGE_SIZE = 10
+
 
 
 class NoteList extends React.Component{
@@ -19,13 +29,14 @@ class NoteList extends React.Component{
            noteDetailPage: false,
            noteSubmited: false,
            noteSubmitSeccuess: false,
-           noteListPage: 1,
-           notePageSize: 10,
+           noteListPage: DEFAULT_PAGE_NUMBER,
+           notePageSize: DEFAULT_PAGE_SIZE,
            noteTotalPageCount: 0,
            selectedNoteId: -1,
            componentIsLoading: true,
            noteExist: true,
-           targetArtifactIri: null
+           targetArtifactIri: null,
+           selectedArtifactType: ALL_TYPE
         });
 
         this.setComponentData = this.setComponentData.bind(this);
@@ -35,14 +46,15 @@ class NoteList extends React.Component{
         this.setNoteCreationResultStatus = this.setNoteCreationResultStatus.bind(this); 
         this.handlePagination = this.handlePagination.bind(this); 
         this.loadNoteList = this.loadNoteList.bind(this);
+        this.changeArtifactTypeFilter = this.changeArtifactTypeFilter.bind(this);
+        this.createArtifactTypeFilter = this.createArtifactTypeFilter.bind(this);
     }
 
 
     setComponentData(){
         let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);     
         let inputNoteIdFromUrl = targetQueryParams.noteId;
-        let inputNoteId = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
-        console.info(inputNoteId)
+        let inputNoteId = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);        
 
         if(inputNoteId !== -1 && inputNoteId !== this.state.selectedNoteId){
             this.setState({
@@ -65,6 +77,9 @@ class NoteList extends React.Component{
         url += ('&page=' + this.state.noteListPage + '&size=' + this.state.notePageSize)
         if(this.props.targetArtifactIri){
             url += ('&artifact_iri=' + this.props.targetArtifactIri)
+        }
+        if(parseInt(this.state.selectedArtifactType) !== ALL_TYPE){
+            url += ('&artifact_type=' + TYPES_VALUES[this.state.selectedArtifactType])
         }
                 
         fetch(url, {headers:headers}).then((resp) => resp.json())
@@ -136,13 +151,40 @@ class NoteList extends React.Component{
     }
 
 
+    createArtifactTypeFilter(){
+        return [            
+            <div class="form-group">
+                <label for="artifact-types" className='col-form-label'>Type</label>
+                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="artifact-types" value={this.state.selectedArtifactType} onChange={this.changeArtifactTypeFilter}>
+                    <option value={ALL_TYPE} key={ALL_TYPE}>All</option>
+                    <option value={ONTOLOGY_TYPE} key={ONTOLOGY_TYPE}>Ontology</option>
+                    <option value={CLASS_TYPE} key={CLASS_TYPE}>Class</option>
+                    <option value={PROPERTY_TYPE} key={PROPERTY_TYPE}>Property</option>
+                    <option value={INDIVIDUAL_TYPE} key={INDIVIDUAL_TYPE}>Individual</option>
+                </select>  
+            </div>            
+        ];
+    }
+
+
+    changeArtifactTypeFilter(e){                   
+        this.setState({
+            selectedArtifactType: e.target.value,
+            noteListPage: DEFAULT_PAGE_NUMBER,
+            notePageSize: DEFAULT_PAGE_SIZE            
+        }, () =>{
+            this.setComponentData();
+        });
+    }
+
+
     handlePagination (value) {
         this.setState({
           noteListPage: value,          
           tableBodyContent: ""    
         }, ()=> {
             this.setComponentData();
-        })
+        });
     }
 
 
@@ -223,17 +265,28 @@ class NoteList extends React.Component{
                 </div>
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
-                        <div className="col-sm-8">
-                            {this.state.noteExist &&  
-                                <Pagination 
-                                    clickHandler={this.handlePagination} 
-                                    count={this.state.noteTotalPageCount}
-                                    initialPageNumber={this.state.noteListPage}
-                                />
-                            }
-                            {this.state.listRenderContent}
+                        <div className="col-sm-10">
+                            <div className="row">
+                                <div className="col-sm-6">
+                                    {!this.props.targetArtifactType && this.createArtifactTypeFilter()}
+                                </div>
+                                <div className="col-sm-6">
+                                    {this.state.noteExist &&  
+                                        <Pagination 
+                                            clickHandler={this.handlePagination} 
+                                            count={this.state.noteTotalPageCount}
+                                            initialPageNumber={this.state.noteListPage}
+                                        />
+                                    }
+                                </div>                                
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    {this.state.listRenderContent}
+                                </div>
+                            </div>                            
                         </div>
-                        <div className="col-sm-4">
+                        <div className="col-sm-2">
                             <NoteCreation 
                                 targetArtifactLabel={this.props.targetArtifactLabel}  
                                 targetArtifactType={this.props.targetArtifactType}
