@@ -193,7 +193,8 @@ class NoteList extends React.Component{
         let noteId = e.target.attributes.value.nodeValue;       
         this.setState({            
             noteDetailPage: true,
-            selectedNoteId: noteId
+            selectedNoteId: noteId,
+            noteSubmited: false
         });
     }
 
