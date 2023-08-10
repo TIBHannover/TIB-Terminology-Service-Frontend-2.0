@@ -165,6 +165,14 @@ class NoteList extends React.Component{
     }
 
 
+    generateBackButton(){
+        const searchParams = new URLSearchParams(window.location.search);
+        let locationObject = window.location;
+        searchParams.delete('noteId'); 
+        return locationObject.pathname + "?" +  searchParams.toString();
+    }
+
+
 
     setNoteCreationResultStatus(success){
         this.setState({
@@ -241,7 +249,7 @@ class NoteList extends React.Component{
                         <div className="row">
                             <div className="col-sm-12">
                                 <Link 
-                                    to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.props.ontology.ontologyId + '/notes' } 
+                                    to={this.generateBackButton()} 
                                     onClick={this.backToListClick} 
                                     className="btn btn-primary">
                                     Back to Note List
