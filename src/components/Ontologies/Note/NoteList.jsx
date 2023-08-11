@@ -120,7 +120,7 @@ class NoteList extends React.Component{
                         </small>
                         <div>
                             <small>
-                                {" opened on " + note['created_at'] + " by " + note['created_by']}
+                                {" opened on " + note['created_at'] + " by " + AuthTool.getUserName(note['created_by'])}
                             </small>
                         </div>
 

@@ -44,7 +44,7 @@ class NoteDetail extends React.Component{
                 <div className="col-sm-12">
                     <br></br>  
                     <h2>{this.state.note['title']}</h2>                      
-                    <small>{" opened on " + this.state.note['created_at'] + " by " + this.state.note['created_by']}</small>
+                    <small>{" opened on " + this.state.note['created_at'] + " by " + AuthTool.getUserName(this.state.note['created_by'])}</small>
                     <br></br>
                     <br></br>
                     <span>

@@ -47,6 +47,20 @@ class AuthTool{
         document.getElementById("login-loading").style.display = "none";
     }
 
+
+    static getUserName(internalUserName){
+        if (!internalUserName){
+            return internalUserName;
+        }
+        else if(internalUserName.includes("github")){
+            return internalUserName.split("github_")[1];
+        }
+        else if (internalUserName.includes("orcid")){
+            return internalUserName.split("orcid_")[1];
+        }
+        return internalUserName;
+    }
+
 }
 
 export default AuthTool;
