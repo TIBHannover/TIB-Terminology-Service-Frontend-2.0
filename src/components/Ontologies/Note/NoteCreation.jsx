@@ -296,19 +296,19 @@ class NoteCreation extends React.Component{
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">{"Add a New Note For: "} <b>{this.props.targetArtifactLabel}</b></h4>
+                            <h4 class="modal-title">{"Add a New Note"}</h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>                                                
                         <div class="modal-body">                                    
                             <div className="row">                                
                                 <div className="col-sm-8">
-                                    {this.props.targetArtifactType === "ontology" && this.createTypeDropDown()}
+                                    {this.props.isGeneric && this.createTypeDropDown()}
                                     {this.createVisibilityDropDown()}
-                                    {parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
-                                        <p>About: <b>{this.props.targetArtifactLabel}</b></p>
+                                    {this.props.isGeneric && parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
+                                        <p>About: <b>{this.props.ontologyId}</b></p>
                                     }
-                                    {parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
+                                    {this.props.isGeneric && parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
                                         <div>
                                             <label className="required_input" for="noteIri">About</label>                                            
                                             <Autosuggest
@@ -322,6 +322,9 @@ class NoteCreation extends React.Component{
                                             />
                                             <br></br>
                                         </div>
+                                    }
+                                    {!this.props.isGeneric && 
+                                        <p>About: <b>{this.props.targetArtifactLabel}</b></p>
                                     }
                                     <label className="required_input" for="noteTitle">Title</label>
                                     <input type="text" onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            

@@ -164,6 +164,7 @@ class NodePage extends React.Component {
             targetArtifactIri={this.props.iri}
             targetArtifactType={this.props.typeForNote}
             targetArtifactLabel={this.state.targetTerm.label}
+            isGeneric={false}
             // targetNoteId={this.props.match.params.targetId}                                                            
           />
         }

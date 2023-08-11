@@ -270,7 +270,7 @@ class NoteList extends React.Component{
                         <div className="col-sm-10">
                             <div className="row">
                                 <div className="col-sm-6">
-                                    {!this.props.targetArtifactType && this.createArtifactTypeFilter()}
+                                    {typeof(this.props.targetArtifactType) === 'undefined' && this.createArtifactTypeFilter()}
                                 </div>
                                 <div className="col-sm-6">
                                     {this.state.noteExist &&  
@@ -295,6 +295,7 @@ class NoteList extends React.Component{
                                 targetArtifactIri={this.props.targetArtifactIri}
                                 ontologyId={this.props.ontology.ontologyId}                                
                                 noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
+                                isGeneric={this.props.isGeneric}
                             />
                         </div>                    
                     </div>
