@@ -202,7 +202,10 @@ class NoteList extends React.Component{
     backToListClick(){
         this.setState({
             selectedNoteId: -1,
-            noteDetailPage: false
+            noteDetailPage: false,
+            noteSubmited: false
+        }, () => {
+            this.setComponentData();
         });
     }
 
@@ -249,27 +252,25 @@ class NoteList extends React.Component{
     
     render(){
         return (
-            <div className="tree-view-container notes-container">
-                <div className="row">
-                    {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
-                        <div className="row text-center">
-                            <div className="col-sm-8">                                    
-                                <div class="alert alert-success">
-                                    Your Note is submitted successfully!                           
-                                </div>                        
-                            </div>
+            <div className="tree-view-container notes-container">                
+                {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
+                    <div className="row text-center">
+                        <div className="col-sm-8">                                    
+                            <div class="alert alert-success">
+                                Your Note is submitted successfully!                           
+                            </div>                        
                         </div>
-                    }
-                    {this.state.noteSubmited && !this.state.noteSubmitSeccuess &&
-                        <div className="row text-center">
-                            <div className="col-sm-8">
-                                <div class="alert alert-danger">
-                                    Something went wrong. Please try again!
-                                </div>  
-                            </div>
-                        </div>  
-                    }
-                </div>
+                    </div>
+                }
+                {this.state.noteSubmited && !this.state.noteSubmitSeccuess &&
+                    <div className="row text-center">
+                        <div className="col-sm-8">
+                            <div class="alert alert-danger">
+                                Something went wrong. Please try again!
+                            </div>  
+                        </div>
+                    </div>  
+                }                
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
                         <div className="col-sm-10">

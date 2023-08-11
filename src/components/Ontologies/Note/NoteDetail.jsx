@@ -25,6 +25,7 @@ class NoteDetail extends React.Component{
                 note: note
             })
         }).catch((error) => {
+            throw error
             // this.props.noteListSubmitStatusHandler(false);
             // document.getElementById('noteCreationCloseModal').click();
         });

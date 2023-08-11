@@ -146,6 +146,7 @@ class NoteCreation extends React.Component{
 
     closeModal(){                
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
+        document.body.classList.remove('modal-open');
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
