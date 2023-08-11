@@ -7,6 +7,7 @@ import NoteList from '../Note/NoteList';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Toolkit from '../../common/Toolkit';
 
 
 
@@ -98,11 +99,8 @@ class NodePage extends React.Component {
   renderTabs(){
       let result = [];         
       for(let configItemKey in NodePageTabConfig){
-          let configObject = NodePageTabConfig[configItemKey];
-          let locationObject = window.location;
-          const searchParams = new URLSearchParams(window.location.search);
-          searchParams.set('subtab', NodePageTabConfig[configItemKey]['urlEndPoint']);          
-          let linkUrl = locationObject.pathname + "?" +  searchParams.toString();
+          let configObject = NodePageTabConfig[configItemKey];                 
+          let linkUrl = Toolkit.setParamInUrl('subtab', NodePageTabConfig[configItemKey]['urlEndPoint'])
           if(this.props.componentIdentity === "term" || configObject['id'] !== 'graph'){
             result.push(
               <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>

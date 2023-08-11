@@ -6,6 +6,7 @@ import AuthTool from "../../User/Login/authTools";
 import Pagination from "../../common/Pagination/Pagination";
 import NoteDetail from "./NoteDetail";
 import queryString from 'query-string'; 
+import Toolkit from "../../common/Toolkit";
 
 
 const ALL_TYPE = 0
@@ -102,11 +103,8 @@ class NoteList extends React.Component{
         let notes = this.state.notesList;
         let noteExist = true;
         let result = [];
-        for(let note of notes){
-            const searchParams = new URLSearchParams(window.location.search);
-            let locationObject = window.location;
-            searchParams.set('noteId', note['id']); 
-            let noteUrl = locationObject.pathname + "?" +  searchParams.toString();
+        for(let note of notes){            
+            let noteUrl = Toolkit.setParamInUrl('noteId', note['id']);
             result.push(
                 <div className="row">
                     <div className="col-sm-12 note-list-card">

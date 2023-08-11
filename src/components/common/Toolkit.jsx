@@ -56,6 +56,7 @@ class Toolkit{
         }    
     }
 
+
     static buildHierarchicalArrayFromFlat(flatList, idKeyName, parentKeyName){
         let map = {}; 
         let node = "";
@@ -84,6 +85,14 @@ class Toolkit{
             }
         }
         return false;
+    }
+
+
+    static setParamInUrl(param, newValue){
+        let locationObject = window.location;
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set(param, newValue);          
+        return locationObject.pathname + "?" +  searchParams.toString();
     }
 }
 

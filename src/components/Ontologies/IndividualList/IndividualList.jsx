@@ -6,6 +6,7 @@ import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
 import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
+import Toolkit from "../../common/Toolkit";
 
 
 
@@ -47,9 +48,8 @@ class IndividualsList extends React.Component {
                 listView: !this.props.isSkos
             });
             if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
-                let currentUrlParams = new URLSearchParams(window.location.search);
-                currentUrlParams.set('iri', this.props.iri);
-                this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+                let newUrl = Toolkit.setParamInUrl('iri', this.props.iri)                
+                this.props.history.push(newUrl);
                 this.props.iriChangerFunction(this.props.iri, this.props.componentIdentity);              
             }
         }
@@ -77,9 +77,8 @@ class IndividualsList extends React.Component {
                 showNodeDetailPage: true,
                 selectedNodeIri: target.dataset.iri,
             });
-            let currentUrlParams = new URLSearchParams(window.location.search);
-            currentUrlParams.set('iri', target.dataset.iri);
-            this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+            let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
+            this.props.history.push(newUrl);
             this.props.iriChangerFunction(target.dataset.iri, this.props.componentIdentity);    
         }
         else{
