@@ -216,12 +216,19 @@ class NoteList extends React.Component{
 
 
 
-    setNoteCreationResultStatus(success){
+    setNoteCreationResultStatus(success, newNoteId=-1){        
+        if(newNoteId !== -1){            
+            let newUrl = Toolkit.setParamInUrl('noteId', newNoteId);
+            this.props.history.push(newUrl);
+        }
+        
         this.setState({
             noteSubmited: true,
-            noteSubmitSeccuess: success
+            noteSubmitSeccuess: success            
+        }, () => {
+            this.setComponentData();
         });
-        this.setComponentData();
+        
     }
 
 

@@ -39,7 +39,8 @@ class NoteCreation extends React.Component{
            editorState:  null,           
            autoCompleteSuggestionsList: [],
            enteredTermInAutoComplete: "",
-           selectedTermFromAutoComplete: {"iri": null, "label": null}
+           selectedTermFromAutoComplete: {"iri": null, "label": null},
+           modalIsOpen: false
         });
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
@@ -53,6 +54,7 @@ class NoteCreation extends React.Component{
         this.clearAutoComplete = this.clearAutoComplete.bind(this);
         this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
         this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);
+        this.openModal = this.openModal.bind(this);
     }
 
 
@@ -137,15 +139,24 @@ class NoteCreation extends React.Component{
     }
 
 
-    closeModal(){        
+    openModal(){
+        this.setState({modalIsOpen: true})
+    }
+
+
+    closeModal(){                
+        let modalBackDrop = document.getElementsByClassName('modal-backdrop');
+        if(modalBackDrop.length === 1){
+            modalBackDrop[0].remove();
+        }
         this.setState({
             editorState:  null,
             targetArtifact: ONTOLOGY_COMPONENT_ID,
             autoCompleteSuggestionsList: [],
             enteredTermInAutoComplete: "",
-            selectedTermFromAutoComplete: {"iri": null, "label": null}         
-        });
-        document.getElementById('noteTitle').value = '';        
+            selectedTermFromAutoComplete: {"iri": null, "label": null},
+            modalIsOpen: false     
+        });            
     }
 
 
@@ -209,17 +220,18 @@ class NoteCreation extends React.Component{
             .then((response) => response.json())
             .then((data) => {
                 if(data['_result']){
-                    this.props.noteListSubmitStatusHandler(true);
-                    document.getElementById('noteCreationCloseModal').click();                
+                    let newNoteId = data['_result']['note_created']['id'];
+                    this.props.noteListSubmitStatusHandler(true, newNoteId);                                        
+                    this.closeModal();
                 }
                 else{
                     this.props.noteListSubmitStatusHandler(false);
-                    document.getElementById('noteCreationCloseModal').click();
+                    this.closeModal();          
                 }
             })
-            .catch((error) => {
+            .catch((error) => {                
                 this.props.noteListSubmitStatusHandler(false);
-                document.getElementById('noteCreationCloseModal').click();
+                this.closeModal();               
             });
     }
 
@@ -285,66 +297,69 @@ class NoteCreation extends React.Component{
                         data-toggle="modal" 
                         data-target="#add-note-modal" 
                         data-backdrop="static"
-                        data-keyboard="false"                
+                        data-keyboard="false" 
+                        onClick={() => {this.openModal()}}               
                         >
                         +Add New Note
                     </button>
                 </div>
             </div>
             
-            <div class="modal" id="add-note-modal">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">                    
-                        <div class="modal-header">
-                            <h4 class="modal-title">{"Add a New Note"}</h4>
-                            <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
-                        </div>
-                        <br></br>                                                
-                        <div class="modal-body">                                    
-                            <div className="row">                                
-                                <div className="col-sm-8">
-                                    {this.props.isGeneric && this.createTypeDropDown()}
-                                    {this.createVisibilityDropDown()}
-                                    {this.props.isGeneric && parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
-                                        <p>About: <b>{this.props.ontologyId}</b></p>
-                                    }
-                                    {this.props.isGeneric && parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
-                                        <div>
-                                            <label className="required_input" for="noteIri">About</label>                                            
-                                            <Autosuggest
-                                                suggestions={this.state.autoCompleteSuggestionsList}
-                                                onSuggestionsFetchRequested={this.onAutoCompleteChange}
-                                                onSuggestionsClearRequested={this.clearAutoComplete}
-                                                getSuggestionValue={getAutoCompleteValue}
-                                                renderSuggestion={rendetAutoCompleteItem}
-                                                onSuggestionSelected={this.onAutoCompleteSelecteion}
-                                                inputProps={inputProps}
-                                            />
-                                            <br></br>
-                                        </div>
-                                    }
-                                    {!this.props.isGeneric && 
-                                        <p>About: <b>{this.props.targetArtifactLabel}</b></p>
-                                    }
-                                    <label className="required_input" for="noteTitle">Title</label>
-                                    <input type="text" onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
-                                </div>
+            {this.state.modalIsOpen && 
+                <div class="modal" id="add-note-modal">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">                    
+                            <div class="modal-header">
+                                <h4 class="modal-title">{"Add a New Note"}</h4>
+                                <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                             </div>
-                            <br></br>
-                            <div className="row">
-                                <div className="col-sm-10">
-                                    {this.createGenericIssueFields()}    
+                            <br></br>                                                
+                            <div class="modal-body">                                    
+                                <div className="row">                                
+                                    <div className="col-sm-8">
+                                        {this.props.isGeneric && this.createTypeDropDown()}
+                                        {this.createVisibilityDropDown()}
+                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
+                                            <p>About: <b>{this.props.ontologyId}</b></p>
+                                        }
+                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
+                                            <div>
+                                                <label className="required_input" for="noteIri">About</label>                                            
+                                                <Autosuggest
+                                                    suggestions={this.state.autoCompleteSuggestionsList}
+                                                    onSuggestionsFetchRequested={this.onAutoCompleteChange}
+                                                    onSuggestionsClearRequested={this.clearAutoComplete}
+                                                    getSuggestionValue={getAutoCompleteValue}
+                                                    renderSuggestion={rendetAutoCompleteItem}
+                                                    onSuggestionSelected={this.onAutoCompleteSelecteion}
+                                                    inputProps={inputProps}
+                                                />
+                                                <br></br>
+                                            </div>
+                                        }
+                                        {!this.props.isGeneric && 
+                                            <p>About: <b>{this.props.targetArtifactLabel}</b></p>
+                                        }
+                                        <label className="required_input" for="noteTitle">Title</label>
+                                        <input type="text" onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
+                                    </div>
                                 </div>
-                            </div>
+                                <br></br>
+                                <div className="row">
+                                    <div className="col-sm-10">
+                                        {this.createGenericIssueFields()}    
+                                    </div>
+                                </div>
 
-                        </div>                        
-                        <div class="modal-footer">                            
-                            <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                            <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>                            
+                            </div>                        
+                            <div class="modal-footer">                            
+                                <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
+                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>                            
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                }
             </span>
         ];
     }
