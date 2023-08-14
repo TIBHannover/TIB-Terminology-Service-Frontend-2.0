@@ -112,16 +112,16 @@ class NoteCommnentList extends React.Component{
             placeholder: "leave a comment ..."
         });
 
+        let submitButton = <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
+
         return [
             <span>
                 {rowWithSingleColumn({content: this.state.commentListToRener, columnClass: "col-sm-12"})}
                 <hr></hr>
-                {rowWithSingleColumn({content: editor, columnClass: "col-sm-9"})}
-                {rowWithSingleColumn({
-                    content: <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>,
-                    columnClass: "col-sm-9" 
-                })}
-                
+                {localStorage.getItem('isLoginInTs') === 'true' && 
+                    [rowWithSingleColumn({content: editor, columnClass: "col-sm-9"}), 
+                    rowWithSingleColumn({content: submitButton, columnClass: "col-sm-9"})]
+                }                
             </span>
         ];
     }
