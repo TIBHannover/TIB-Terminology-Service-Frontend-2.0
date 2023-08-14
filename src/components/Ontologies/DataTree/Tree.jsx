@@ -260,8 +260,12 @@ class Tree extends React.Component {
                     this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 }                
             });            
-            let newUrl = Toolkit.setParamInUrl('iri', clickedNodeIri);            
-            this.props.history.push(newUrl);
+            
+            let locationObject = window.location;
+            const searchParams = new URLSearchParams(locationObject.search);
+            searchParams.set('iri', clickedNodeIri);               
+            searchParams.delete('noteId');
+            this.props.history.push(locationObject.pathname + "?" +  searchParams.toString());
             this.props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);
         }    
     }

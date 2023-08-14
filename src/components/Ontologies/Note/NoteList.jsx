@@ -58,13 +58,13 @@ class NoteList extends React.Component{
         let inputNoteIdFromUrl = targetQueryParams.noteId;
         let inputNoteId = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);        
 
-        if(inputNoteId !== -1 && inputNoteId !== this.state.selectedNoteId){
+        if(inputNoteId !== -1 && inputNoteId !== this.state.selectedNoteId){            
             this.setState({
                 selectedNoteId: inputNoteId,
                 noteDetailPage: true
             });            
         }
-        else if(this.state.selectedNoteId === -1){
+        else if(inputNoteId === -1){
             this.loadNoteList();
         }
         
