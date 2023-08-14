@@ -2275,6 +2275,12 @@ Login and Auth
     color: black;
  }
 
+ .fa-comment{
+    border: none;
+    font-size: 16px;
+    margin-left: 5px;
+ }
+
   /* 
  ----------------------------------------------
 React-Autosuggest library

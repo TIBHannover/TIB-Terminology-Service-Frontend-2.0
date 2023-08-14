@@ -2243,6 +2243,12 @@ Login and Auth
     text-align: justify;
  }
 
+ .fa-comment{
+    border: none;
+    font-size: 16px;
+    margin-left: 5px;
+ }
+
 
   /* 
  ----------------------------------------------

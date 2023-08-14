@@ -110,13 +110,14 @@ class NoteList extends React.Component{
                     <div className="col-sm-12">
                         <div className="card note-list-card">
                             <div class="card-header">
-                                {" Opened on " + note['created_at'] + " by "} 
-                                <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                                <small>
+                                    {" Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                                </small>
                             </div>
                             <div className="card-body">
-                                <h3 className="card-title">
+                                <h5 className="card-title">
                                     <Link to={noteUrl} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>
-                                </h3>
+                                </h5>
                                 <p className="card-text">
                                     <small>
                                         <ul className="">
@@ -124,6 +125,7 @@ class NoteList extends React.Component{
                                             <li>About: {note['semantic_component_iri']}</li>
                                         </ul>                            
                                     </small>
+                                    <small>{note['comments_count']}</small><i class="fa fa-comment" aria-hidden="true"></i>
                                 </p>                        
                             </div>
                         </div>
