@@ -2186,6 +2186,13 @@ Notes
     float: right;
 }
 
+.note-comment-card{
+    padding: 20px;
+    padding-left: 0;
+    border-left: 1px solid #ccc; 
+    margin-left: 20px; 
+}
+
 /* 
 -------------------------------------------------------
 Login and Auth

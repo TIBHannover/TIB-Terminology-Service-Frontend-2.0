@@ -67,8 +67,7 @@ class NoteDetail extends React.Component{
     render(){
         return(                           
             <span>
-                {this.create_note_card()}
-                <hr></hr>
+                {this.create_note_card()}                
                 <NoteCommnentList note={this.state.note}  />
             </span>  
         );

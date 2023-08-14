@@ -4,6 +4,8 @@ import { submitNoteComment } from "../../../api/tsMicroBackendCalls";
 import draftToMarkdown from 'draftjs-to-markdown';
 import { convertToRaw } from 'draft-js';
 import { rowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
+import AuthTool from "../../User/Login/authTools";
+import ReactMarkdown from 'react-markdown';
 
 
 
@@ -11,10 +13,13 @@ class NoteCommnentList extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            commentEditorState: null
+            commentEditorState: null,
+            commentListToRener: "",
+            noteId: null            
         });
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.submitComment = this.submitComment.bind(this);
+        this.createCommentList = this.createCommentList.bind(this);
     }
 
 
@@ -22,6 +27,35 @@ class NoteCommnentList extends React.Component{
         document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
         this.setState({ commentEditorState: newEditorState });        
     };
+
+
+    createCommentList(){        
+        let comments = this.props.note['comments'] ? this.props.note['comments'] : [];
+        console.info(this.props.note)        
+        let result = [];
+        for (let comment of comments){
+            let body = [
+                <div className="card">
+                    <div className="card-header">
+                        {" Opened on " + comment['created_at'] + " by "}  <b>{AuthTool.getUserName(comment['created_by'])}</b> 
+                    </div>
+                    <div class="card-body">                        
+                        <p className="card-text">
+                            <ReactMarkdown>{comment['content']}</ReactMarkdown>
+                        </p>                        
+                    </div>
+                </div> 
+            ];
+            result.push(
+                rowWithSingleColumn({content: body, rowClass: "note-comment-card", columnClass: "col-sm-9"})
+            );
+        }
+        this.setState({
+            commentListToRener: result,
+            noteId: this.props.note['id']
+        });
+    }
+
 
 
     submitComment(){
@@ -52,6 +86,17 @@ class NoteCommnentList extends React.Component{
     }
 
 
+    componentDidMount(){
+        this.createCommentList();
+    }
+
+    componentDidUpdate(){
+        if(this.state.noteId !== this.props.note['id']){
+            this.createCommentList();
+        }
+    }
+
+
     render(){
         let editor = textEditor({
             editorState: this.state.commentEditorState, 
@@ -63,6 +108,8 @@ class NoteCommnentList extends React.Component{
 
         return [
             <span>
+                {rowWithSingleColumn({content: this.state.commentListToRener, columnClass: "col-sm-12"})}
+                <hr></hr>
                 {rowWithSingleColumn({content: editor, columnClass: "col-sm-9"})}
                 {rowWithSingleColumn({
                     content: <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>,
