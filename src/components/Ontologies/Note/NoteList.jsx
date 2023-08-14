@@ -107,21 +107,26 @@ class NoteList extends React.Component{
             let noteUrl = Toolkit.setParamInUrl('noteId', note['id']);
             result.push(
                 <div className="row">
-                    <div className="col-sm-12 note-list-card">
-                        <Link to={noteUrl} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>                        
-                        <br/>
-                        <small>
-                            <ul className="">
-                                <li>type: {note['semantic_component_type']}</li>
-                                <li>iri: {note['semantic_component_iri']}</li>
-                            </ul>                            
-                        </small>
-                        <div>
-                            <small>
-                                {" opened on " + note['created_at'] + " by " + AuthTool.getUserName(note['created_by'])}
-                            </small>
+                    <div className="col-sm-12">
+                        <div className="card note-list-card">
+                            <div class="card-header">
+                                {" Opened on " + note['created_at'] + " by "} 
+                                <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                            </div>
+                            <div className="card-body">
+                                <h3 className="card-title">
+                                    <Link to={noteUrl} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>
+                                </h3>
+                                <p className="card-text">
+                                    <small>
+                                        <ul className="">
+                                            <li>type: {note['semantic_component_type']}</li>
+                                            <li>About: {note['semantic_component_iri']}</li>
+                                        </ul>                            
+                                    </small>
+                                </p>                        
+                            </div>
                         </div>
-
                     </div>
                 </div>
             );
@@ -273,7 +278,7 @@ class NoteList extends React.Component{
                 }                
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
-                        <div className="col-sm-10">
+                        <div className="col-sm-9">
                             <div className="row">
                                 <div className="col-sm-6">
                                     {typeof(this.props.targetArtifactType) === 'undefined' && this.createArtifactTypeFilter()}
@@ -318,6 +323,7 @@ class NoteList extends React.Component{
                                 </Link>
                             </div>
                         </div>
+                        <br></br>
                         <NoteDetail noteId={this.state.selectedNoteId} />
                     </span>                    
                 }

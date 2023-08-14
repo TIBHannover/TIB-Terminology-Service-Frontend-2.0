@@ -2154,14 +2154,9 @@ Notes
 }
 
 .note-list-card{
-    background-color: white !important;    
-    padding: 10px;
-    height: auto;
-    text-align: justify;
-    border: 1px solid #7AABAC; 
-    margin-bottom: 10px;
-    border-radius: 5px;   
+    margin-bottom: 20px;
 }
+
 
 .note-list-title{
     color: black;

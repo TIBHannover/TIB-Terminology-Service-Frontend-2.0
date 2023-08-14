@@ -42,16 +42,19 @@ class NoteDetail extends React.Component{
     render(){
         return(                           
             <div className="row">
-                <div className="col-sm-12">
-                    <br></br>  
-                    <h2>{this.state.note['title']}</h2>                      
-                    <small>{" opened on " + this.state.note['created_at'] + " by " + AuthTool.getUserName(this.state.note['created_by'])}</small>
-                    <br></br>
-                    <br></br>
-                    <span>
-                        <ReactMarkdown>{this.state.note['content']}</ReactMarkdown>
-                    </span>
-                
+                <div className="col-sm-9">
+                    <div className="card">
+                        <div className="card-header">
+                            {" Opened on " + this.state.note['created_at'] + " by "} 
+                            <b>{AuthTool.getUserName(this.state.note['created_by'])}</b> 
+                        </div>
+                        <div class="card-body">
+                            <h1 className="card-title note-list-title">{this.state.note['title']}</h1>
+                            <p className="card-text">
+                                <ReactMarkdown>{this.state.note['content']}</ReactMarkdown>
+                            </p>                        
+                        </div>
+                    </div>                
                 </div>
             </div>            
         );
