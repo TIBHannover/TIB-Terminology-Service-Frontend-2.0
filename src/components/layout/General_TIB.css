@@ -1364,6 +1364,14 @@ p{
     color: #0E6668;
 }
 
+.issue-report-btn{
+    /* 
+        Style for the buttons regarding issue report and term request to Github.
+    */
+
+    margin-bottom: 10px;
+}
+
 /* 
 -------------------------------------
     The Tree view and detail table styles (for both classes and properties)
@@ -2244,6 +2252,11 @@ Login and Auth
     */
 
     color: black;
+ }
+
+ .login-modal-hint-text{
+    color: black !important;
+    text-align: justify;
  }
 
 

@@ -4,42 +4,82 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
-import templatePath from './template.md';
 import AuthTool from "../../User/Login/authTools";
 import textEditor from "../../common/TextEditor/TextEditor";
+import templatePath from './termRequestTemplate.md';
 
-
-const GENERIC_ISSUE_ID = "1";
-const TERM_REQUEST_ISSUE_ID = "2";
-const ISSUE_TYPES = {"1": "general", "2": "termRequest"};
 
 
 class TermRequest extends React.Component{
     constructor(props){
         super(props);      
         this.state = {
-            editorState:  null,
-            issueType: GENERIC_ISSUE_ID,
+            editorState:  null,            
             submitFinished: false,
             errorInSubmit: false,
             newIssueUrl: "",
-            modalIsOpen: false
+            modalIsOpen: false,
+            issueTemplates: [],
+            selectedTemplate: 0,
+            selectedTemplateText: ""
         };
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.createGenericIssueFields = this.createGenericIssueFields.bind(this);
-        this.createIssueTypeDropDown = this.createIssueTypeDropDown.bind(this);
-        this.changeIssueType = this.changeIssueType.bind(this);
-        this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
+        this.createGenericIssueFields = this.createGenericIssueFields.bind(this);        
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.onTextInputChange = this.onTextInputChange.bind(this);
+        this.createIssueTemplatesDropDown = this.createIssueTemplatesDropDown.bind(this);
+        this.loadTemplates = this.loadTemplates.bind(this);
+        this.templateDropDownChange = this.templateDropDownChange.bind(this);
+        this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
 
+        if(localStorage.getItem('authProvider') === 'github'){
+            this.loadTemplates();
+        }        
     }
 
 
 
-    setTermRequestTemplate(issueType){        
-        if(issueType === TERM_REQUEST_ISSUE_ID){
+
+    onTextAreaChange = (newEditorState) => {
+        document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+        this.setState({ editorState: newEditorState });
+      };
+
+
+
+    createGenericIssueFields(){
+        return [
+            <div>
+                <label className="required_input" htmlFor="git-issue-content-box">Content</label>
+                <Editor
+                    editorState={this.state.editorState}
+                    onEditorStateChange={this.onTextAreaChange}
+                    wrapperClassName="git-issue-content-box" 
+                    id="git-issue-content-box"                    
+                    toolbar={{
+                        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
+                        inline: {
+                            options: ['bold', 'italic', 'underline', 'strikethrough'],
+                        },
+                    blockType: {
+                        inDropdown: true,
+                        options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
+                    },
+                    list: {
+                        inDropdown: true,
+                        options: ['unordered', 'ordered'],
+                        },
+                    }}
+                />
+            </div>            
+        ];
+    }
+
+
+    setTermRequestTemplate(){        
+        if(this.props.reportType === "termRequest"){
             fetch(templatePath)
             .then((response) => response.text()) 
             .then((text) => {            
@@ -47,75 +87,122 @@ class TermRequest extends React.Component{
                     editorState:  EditorState.createWithContent(stateFromMarkdown(text)),
                 });
             });
-        }
-        else{
-            this.setState({editorState:null})
-        }       
+        }                      
+    }
+
+
+    loadTemplates(){        
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        let data = new FormData();
+        data.append("repo_url", this.props.ontology.config.repoUrl);
+        data.append("username", localStorage.getItem('ts_username'));
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates', {method: 'POST', headers:headers, body: data})
+            .then((response) => response.json())
+            .then((data) => {
+                if(data['_result']){
+                    this.setState({                       
+                        issueTemplates: data['_result']['templates'] 
+                    });
+                }
+                else{
+                    this.setState({                        
+                        issueTemplates: false
+                    });
+                }
+            })
+            .catch((error) => {
+                this.setState({
+                    issueTemplates: false
+                });
+            });
+    }
+
+
+
+    createIssueTemplatesDropDown(){        
+        let templates = this.state.issueTemplates;
         
-    }
-
-    onTextAreaChange = (newEditorState) => {
-        this.setState({ editorState: newEditorState });
-      };
-
-
-    createGenericIssueFields(){
-        return [
-            <Editor
-                editorState={this.state.editorState}
-                onEditorStateChange={this.onTextAreaChange}
-                toolbar={{
-                    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
-                    inline: {
-                    options: ['bold', 'italic', 'underline', 'strikethrough'],
-                    },
-                    blockType: {
-                    inDropdown: true,
-                    options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
-                    },
-                    list: {
-                    inDropdown: true,
-                    options: ['unordered', 'ordered'],
-                    },
-                }}
-            />
-        ];
-    }
-
-    createIssueTypeDropDown(){
-        return [            
-            <div class="form-group">
-                <label for="issue-types" className='col-form-label'>Issue Type</label>
-                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-types" value={this.state.issueType} onChange={this.changeIssueType}>
-                    <option value={GENERIC_ISSUE_ID} key={GENERIC_ISSUE_ID}>General</option>
-                    <option value={TERM_REQUEST_ISSUE_ID} key={TERM_REQUEST_ISSUE_ID}>Term Request</option>                            
-                </select>  
-            </div>            
-        ];
+        let result = [];
+        let value = 1;
+        if(!templates){
+            return "";
+        }
+        for(let temp of templates){
+            result.push(
+                <option value={value} key={value} url={temp['template_url']}>{temp['template_name']}</option> 
+            );
+            value += 1;
+        }
+        return result;
     }
 
 
-    changeIssueType(e){                   
+
+    templateDropDownChange(e){
         this.setState({
-            issueType: e.target.value
-        }, ()=>{
-            this.setTermRequestTemplate(e.target.value); 
-        });
+            selectedTemplate: e.target.value
+        });      
+
+        let selectedTemplateUrl = e.target.options[e.target.selectedIndex].getAttribute('url');
+        if(!selectedTemplateUrl){
+            this.setState({
+                editorState:  EditorState.createWithContent(stateFromMarkdown("")),
+            }); 
+            return;
+        }
+        fetch(selectedTemplateUrl)
+            .then(resp => resp.text())
+            .then((templateText) => {
+                this.setState({
+                    editorState:  EditorState.createWithContent(stateFromMarkdown(templateText)),
+                });
+                document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+            });
+    }
+
+
+
+    onTextInputChange(){       
+        document.getElementById('issueTitle').style.borderColor = '';
     }
 
 
     submitIssueRequest(){
-        let issueTitle = document.getElementById('issueTitle').value;
-        let issueContent = this.state.editorState.getCurrentContent();        
-        issueContent = draftToMarkdown(convertToRaw(issueContent));
+        let issueTitle = document.getElementById('issueTitle').value; 
+        let formIsValid = true;
+        let issueContent = "";
+        if(!this.state.editorState){            
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+        else{
+            issueContent = this.state.editorState.getCurrentContent();        
+            issueContent = draftToMarkdown(convertToRaw(issueContent));  
+        }
+        
+        if(!issueTitle || issueTitle === ""){
+            document.getElementById('issueTitle').style.borderColor = 'red';
+            formIsValid = false;
+        }        
+        if(!issueContent || issueContent.trim() === ""){
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+
+        if(!formIsValid){
+            return;
+        }
+                
         let issueTypeSelect = document.getElementById('issue-types');
         let data = new FormData();
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
-        data.append("ontology_id", this.props.ontologyId);
+        data.append("ontology_id", this.props.ontology.ontologyId);
         data.append("username", localStorage.getItem("ts_username"));        
         data.append("title", issueTitle);
         data.append("content", issueContent);        
-        data.append("issueType", ISSUE_TYPES[issueTypeSelect.value]);
+        data.append("issueType", this.props.reportType);
+        data.append("repo_url", this.props.ontology.config.repoUrl);
+        
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
@@ -143,55 +230,88 @@ class TermRequest extends React.Component{
             });
     }
 
+
+
     openModal(){
         this.setState({modalIsOpen: true});
     }
 
 
-    closeModal(){        
+
+    closeModal(){
+        let editorState = this.state.editorState;
+        if(this.props.reportType === "general"){
+            editorState = null;
+        }      
         this.setState({
-            editorState:  null,
-            issueType: GENERIC_ISSUE_ID,
+            editorState:  editorState,            
             submitFinished: false,
             errorInSubmit: false,
             newIssueUrl: "",
-            modalIsOpen: false
+            modalIsOpen: false,
+            selectedTemplate: 0
         });
     }
+
+
+    componentDidMount(){
+        this.setTermRequestTemplate();
+    }
+
    
 
     render(){
+        if(localStorage.getItem('authProvider') !== 'github'){
+            return "";
+        }
         return(
-            <span>
+            <span>            
             <button type="button" 
-                class="btn btn-primary" 
+                class="btn btn-primary issue-report-btn" 
                 data-toggle="modal" 
-                data-target="#term-request-modal" 
+                data-target={"#" + this.props.reportType + "_issue_modal"}
                 data-backdrop="static"
                 data-keyboard="false"
                 onClick={this.openModal}
                 >
-                File a new Issue 
+                {this.props.reportType === "termRequest" ? "File a Term Request" : "File a General Issue "} 
             </button>
             
-            {this.state.modalIsOpen && <div class="modal" id="term-request-modal">
+            {this.state.modalIsOpen && <div class="modal" id={this.props.reportType + "_issue_modal"}>
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
-                            <h4 class="modal-title">File an issue for this Ontology</h4>
+                            <h4 class="modal-title">
+                                File {this.props.reportType === "termRequest" ? "a Term Request for " : "a General Issue for "} 
+                                {this.props.ontology.ontologyId}
+                            </h4>
                             <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>
                         <span>
                             {!this.state.submitFinished && 
                                 <div class="modal-body">
-                                    <p>You can file a new issue here. The issue can have a General Topic or a new Term Request</p>
-                                    
+                                {this.props.reportType === "general" &&                           
+                                    <div class="alert alert-info">                                        
+                                        <strong>Note:</strong> Please select a proper issue template (if exist). These templates 
+                                        are defined by the repository owner and are the expected way of reporting an issue.                                         
+                                    </div>
+                                }
                                     <div className="row">
-                                        <div className="col-sm-8">
-                                            {this.createIssueTypeDropDown()}
-                                            <label className="required_input" for="issueTitle">Issue Title</label>
-                                            <input type="text" class="form-control" id="issueTitle" placeholder="Enter Issue Title"></input>
+                                        <div className="col-sm-8">                                            
+                                            {this.props.reportType === "general" &&    
+                                                <div class="form-group">
+                                                    <label for="issue-templates" className='col-form-label'>Issue Template</label>
+                                                    <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-templates" value={this.state.selectedTemplate} onChange={this.templateDropDownChange}>
+                                                        <option value={0} key={0}>None</option>
+                                                        {this.createIssueTemplatesDropDown()}
+                                                    </select>  
+                                                </div>
+                                            }                                            
+                                            <label className="required_input" for="issueTitle">
+                                                {this.props.reportType === "general" ? "Issue Title" : "Term Request Title"}
+                                            </label>
+                                            <input type="text" class="form-control" onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Title ..."></input>
                                         </div>
                                     </div>
                                     <br></br>
@@ -207,7 +327,12 @@ class TermRequest extends React.Component{
                                 <div className="row text-center">
                                     <div className="col-sm-12">                                    
                                         <div class="alert alert-success">
-                                            Your issue is requested successfully!
+                                            Your Request is submitted successfully!
+                                            <br></br>
+                                            You can find all the submitted term requests and issues in your profile:
+                                            <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/submitedIssueRequests'}>
+                                                <b>My Submitted Issues</b>
+                                            </a>
                                         </div>
                                         <a href={this.state.newIssueUrl} target="_blank">{this.state.newIssueUrl}</a>
                                     </div>
