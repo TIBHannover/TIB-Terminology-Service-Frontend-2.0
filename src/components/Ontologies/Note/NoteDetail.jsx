@@ -69,7 +69,7 @@ class NoteDetail extends React.Component{
             <span>
                 {this.create_note_card()}
                 <hr></hr>
-                <NoteCommnentList commentList={this.state.note['comments']}  />
+                <NoteCommnentList note={this.state.note}  />
             </span>  
         );
     }
