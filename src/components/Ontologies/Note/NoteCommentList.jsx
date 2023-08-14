@@ -24,7 +24,12 @@ class NoteCommnentList extends React.Component{
             <span>
                 <div className="row">
                     <div className="col-sm-9">
-                        {textEditor(this.state.commentEditorState, this.onTextAreaChange, "note-comment-editor")}
+                        {textEditor({
+                            editorState: this.state.commentEditorState, 
+                            textChangeHandlerFunction: this.onTextAreaChange,
+                            wrapperClassName: "note-comment-editor", 
+                            placeholder: "leave a comment ..."
+                        })}
                     </div>
                 </div>                
             </span>

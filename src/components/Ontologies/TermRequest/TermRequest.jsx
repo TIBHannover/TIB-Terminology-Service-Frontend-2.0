@@ -286,7 +286,12 @@ class TermRequest extends React.Component{
                                     <br></br>
                                     <div className="row">
                                         <div className="col-sm-10">                                        
-                                            {textEditor(this.state.editorState, this.onTextAreaChange, "git-issue-content-box", "git-issue-content-box")}     
+                                            {textEditor({
+                                                editorState: this.state.editorState,
+                                                textChangeHandlerFunction: this.onTextAreaChange,
+                                                placeholder: "Content",
+                                                wrapperClassName: "git-issue-content-box"
+                                            })}     
                                         </div>
                                     </div>
 

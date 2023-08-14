@@ -323,7 +323,12 @@ class NoteCreation extends React.Component{
                                 <br></br>
                                 <div className="row">
                                     <div className="col-sm-10">
-                                        {textEditor(this.state.editorState, this.onTextAreaChange)}    
+                                        {textEditor({
+                                            editorState: this.state.editorState,
+                                            textChangeHandlerFunction: this.onTextAreaChange,
+                                            placeholder: "Note Content",
+                                            wrapperClassName: ""
+                                        })}    
                                     </div>
                                 </div>
 
