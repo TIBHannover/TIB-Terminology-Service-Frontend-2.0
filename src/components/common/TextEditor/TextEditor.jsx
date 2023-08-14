@@ -6,8 +6,7 @@ export default function textEditor(editorState, textChangeHandlerFunction, class
         <Editor
             editorState={editorState}
             onEditorStateChange={textChangeHandlerFunction}
-            className={className}
-            id={id}
+            wrapperClassName={className}            
             toolbar={{
                     options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
                     inline: {

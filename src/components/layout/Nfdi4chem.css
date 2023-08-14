@@ -2133,6 +2133,11 @@ Notes
     font-weight: bold;    
 }
 
+.note-comment-editor{
+    background-color: #e9e6e6;
+    height: 50%;
+}
+
 
 /* 
 -------------------------------------------------------

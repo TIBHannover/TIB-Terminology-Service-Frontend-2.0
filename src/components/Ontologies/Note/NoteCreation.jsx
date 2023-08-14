@@ -244,7 +244,7 @@ class NoteCreation extends React.Component{
     
 
     
-      onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
+    onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
             let autoCompleteSelectedTerm = this.state.selectedTermFromAutoComplete;
             autoCompleteSelectedTerm['iri'] = this.state.autoCompleteSuggestionsList[suggestionIndex]['iri'];
             autoCompleteSelectedTerm['label'] = this.state.autoCompleteSuggestionsList[suggestionIndex]['label'];
@@ -252,7 +252,7 @@ class NoteCreation extends React.Component{
                 selectedTermFromAutoComplete: autoCompleteSelectedTerm
             });
         
-      }
+    }
 
 
 

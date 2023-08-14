@@ -1,6 +1,7 @@
 import React from "react";
 import AuthTool from "../../User/Login/authTools";
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown';
+import NoteCommnentList from "./NoteCommentList";
 
 
 
@@ -8,10 +9,10 @@ class NoteDetail extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-           note: {}
+           note: {}           
         });
         this.getTheNote = this.getTheNote.bind(this);
-        this.create_note_card = this.create_note_card.bind(this);
+        this.create_note_card = this.create_note_card.bind(this);        
     }
 
 
@@ -67,6 +68,8 @@ class NoteDetail extends React.Component{
         return(                           
             <span>
                 {this.create_note_card()}
+                <hr></hr>
+                <NoteCommnentList />
             </span>  
         );
     }
