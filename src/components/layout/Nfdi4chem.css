@@ -2155,6 +2155,11 @@ Notes
     margin-left: 20px; 
 }
 
+.note-card-header-meta{
+    display: inline;
+    margin-left: 20px;
+}
+
 
 /* 
 -------------------------------------------------------
@@ -2243,7 +2248,7 @@ Login and Auth
     text-align: justify;
  }
 
- .fa-comment{
+ .fa-comment, .fa-question-circle{
     border: none;
     font-size: 16px;
     margin-left: 5px;

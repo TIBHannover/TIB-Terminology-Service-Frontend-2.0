@@ -19,6 +19,10 @@ const TYPES_VALUES = ['all', 'ontology', 'class', 'property', 'individual']
 const DEFAULT_PAGE_NUMBER = 1
 const DEFAULT_PAGE_SIZE = 10
 
+const VISIBILITY_HELP = {
+    "me": "Only you can see this Note.", 
+    "internal": "Only the registered users in TS can see this Note.", 
+    "public": "Everyone on the Internet can see this Note."}
 
 
 class NoteList extends React.Component{
@@ -106,13 +110,26 @@ class NoteList extends React.Component{
         for(let note of notes){            
             let noteUrl = Toolkit.setParamInUrl('noteId', note['id']);
             result.push(
-                <div className="row">
+                <div className="row" key={note['id']}>
                     <div className="col-sm-12">
                         <div className="card note-list-card">
                             <div class="card-header">
-                                <small>
-                                    {" Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
-                                </small>
+                                <div className="row">
+                                    <div className="col-sm-9">
+                                        <small>
+                                            {" Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                                        </small>
+                                    </div>
+                                    <div className="col-sm-3 text-right">
+                                        <div className="note-card-header-meta">
+                                            <small>{note['comments_count']}</small><i class="fa fa-comment" aria-hidden="true"></i>
+                                        </div>
+                                        <div className="note-card-header-meta">
+                                            <small>{"Visibility: " + note['visibility']}</small>
+                                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title={VISIBILITY_HELP[note['visibility']]}></i>
+                                        </div>                                        
+                                    </div>
+                                </div>                                
                             </div>
                             <div className="card-body">
                                 <h5 className="card-title">
@@ -124,8 +141,7 @@ class NoteList extends React.Component{
                                             <li>type: {note['semantic_component_type']}</li>
                                             <li>About: {note['semantic_component_iri']}</li>
                                         </ul>                            
-                                    </small>
-                                    <small>{note['comments_count']}</small><i class="fa fa-comment" aria-hidden="true"></i>
+                                    </small>                                    
                                 </p>                        
                             </div>
                         </div>
