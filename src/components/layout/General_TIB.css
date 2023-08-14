@@ -2171,9 +2171,13 @@ Notes
     font-weight: bold;    
 }
 
-.note-comment-editor{
+.note-comment-editor-warpper{
     background-color: #e9e6e6;
-    height: 50%;
+    height: 250px;
+}
+
+.note-comment-editor{
+    height: 190px !important;
 }
 
 

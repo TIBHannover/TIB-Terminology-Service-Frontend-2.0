@@ -19,7 +19,7 @@ class NoteDetail extends React.Component{
     getTheNote(){
         let noteId = this.props.noteId;
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
-        let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId;
+        let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId + '&withComments=True';
         fetch(url, {headers:headers}).then((resp) => resp.json())
         .then((data) => {
             let note = data['_result']['note'];
@@ -69,7 +69,7 @@ class NoteDetail extends React.Component{
             <span>
                 {this.create_note_card()}
                 <hr></hr>
-                <NoteCommnentList />
+                <NoteCommnentList commentList={this.state.note['comments']}  />
             </span>  
         );
     }

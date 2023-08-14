@@ -27,7 +27,8 @@ class NoteCommnentList extends React.Component{
                         {textEditor({
                             editorState: this.state.commentEditorState, 
                             textChangeHandlerFunction: this.onTextAreaChange,
-                            wrapperClassName: "note-comment-editor", 
+                            wrapperClassName: "note-comment-editor-warpper", 
+                            editorClassName: "note-comment-editor",
                             placeholder: "leave a comment ..."
                         })}
                     </div>
