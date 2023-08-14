@@ -3,6 +3,7 @@ import textEditor from "../../common/TextEditor/TextEditor";
 import { submitNoteComment } from "../../../api/tsMicroBackendCalls";
 import draftToMarkdown from 'draftjs-to-markdown';
 import { convertToRaw } from 'draft-js';
+import { rowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 
 
 
@@ -18,7 +19,7 @@ class NoteCommnentList extends React.Component{
 
 
     onTextAreaChange = (newEditorState) => {
-        // document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+        document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
         this.setState({ commentEditorState: newEditorState });        
     };
 
@@ -52,24 +53,22 @@ class NoteCommnentList extends React.Component{
 
 
     render(){
+        let editor = textEditor({
+            editorState: this.state.commentEditorState, 
+            textChangeHandlerFunction: this.onTextAreaChange,
+            wrapperClassName: "note-comment-editor-warpper", 
+            editorClassName: "note-comment-editor",
+            placeholder: "leave a comment ..."
+        });
+
         return [
             <span>
-                <div className="row">
-                    <div className="col-sm-9">
-                        {textEditor({
-                            editorState: this.state.commentEditorState, 
-                            textChangeHandlerFunction: this.onTextAreaChange,
-                            wrapperClassName: "note-comment-editor-warpper", 
-                            editorClassName: "note-comment-editor",
-                            placeholder: "leave a comment ..."
-                        })}
-                    </div>
-                </div>  
-                <div className="row">
-                    <div className="col-sm-9">
-                        <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>
-                    </div>
-                </div>              
+                {rowWithSingleColumn({content: editor, columnClass: "col-sm-9"})}
+                {rowWithSingleColumn({
+                    content: <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>,
+                    columnClass: "col-sm-9" 
+                })}
+                
             </span>
         ];
     }
