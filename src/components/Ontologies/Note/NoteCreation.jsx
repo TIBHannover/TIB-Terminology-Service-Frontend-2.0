@@ -1,10 +1,10 @@
 import React from "react";
-import { Editor } from 'react-draft-wysiwyg';
 import { convertToRaw } from 'draft-js';
 import draftToMarkdown from 'draftjs-to-markdown';
 import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
 import AuthTool from "../../User/Login/authTools";
+import textEditor from "../../common/TextEditor/TextEditor";
 
 
 
@@ -67,31 +67,6 @@ class NoteCreation extends React.Component{
         document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
         this.setState({ editorState: newEditorState });        
     };
-
-
-    createGenericIssueFields(){
-        return [
-            <Editor
-                editorState={this.state.editorState}
-                onEditorStateChange={this.onTextAreaChange}
-                toolbar={{
-                    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
-                    inline: {
-                    options: ['bold', 'italic', 'underline', 'strikethrough'],
-                    },
-                    blockType: {
-                    inDropdown: true,
-                    options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
-                    },
-                    list: {
-                    inDropdown: true,
-                    options: ['unordered', 'ordered'],
-                    },
-                }}
-            />
-        ];
-    }
-
 
 
     changeArtifactType(e){                   
@@ -348,7 +323,7 @@ class NoteCreation extends React.Component{
                                 <br></br>
                                 <div className="row">
                                     <div className="col-sm-10">
-                                        {this.createGenericIssueFields()}    
+                                        {textEditor(this.state.editorState, this.onTextAreaChange)}    
                                     </div>
                                 </div>
 

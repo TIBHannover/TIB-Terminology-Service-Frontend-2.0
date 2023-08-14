@@ -1,5 +1,4 @@
 import React from "react";
-import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
@@ -23,8 +22,7 @@ class TermRequest extends React.Component{
             selectedTemplate: 0,
             selectedTemplateText: ""
         };
-        this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.createGenericIssueFields = this.createGenericIssueFields.bind(this);        
+        this.onTextAreaChange = this.onTextAreaChange.bind(this);            
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -47,35 +45,6 @@ class TermRequest extends React.Component{
         this.setState({ editorState: newEditorState });
       };
 
-
-
-    createGenericIssueFields(){
-        return [
-            <div>
-                <label className="required_input" htmlFor="git-issue-content-box">Content</label>
-                <Editor
-                    editorState={this.state.editorState}
-                    onEditorStateChange={this.onTextAreaChange}
-                    wrapperClassName="git-issue-content-box" 
-                    id="git-issue-content-box"                    
-                    toolbar={{
-                        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
-                        inline: {
-                            options: ['bold', 'italic', 'underline', 'strikethrough'],
-                        },
-                    blockType: {
-                        inDropdown: true,
-                        options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code'],
-                    },
-                    list: {
-                        inDropdown: true,
-                        options: ['unordered', 'ordered'],
-                        },
-                    }}
-                />
-            </div>            
-        ];
-    }
 
 
     setTermRequestTemplate(){        
@@ -316,8 +285,8 @@ class TermRequest extends React.Component{
                                     </div>
                                     <br></br>
                                     <div className="row">
-                                        <div className="col-sm-10">
-                                            {textEditor(this.state.editorState, this.onTextAreaChange)}     
+                                        <div className="col-sm-10">                                        
+                                            {textEditor(this.state.editorState, this.onTextAreaChange, "git-issue-content-box", "git-issue-content-box")}     
                                         </div>
                                     </div>
 
