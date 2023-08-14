@@ -2142,6 +2142,12 @@ Notes
     height: 190px !important;
 }
 
+.note-comment-submit-btn{
+    background-color: #008000 !important;
+    margin-top: 2px;
+    float: right;
+}
+
 
 /* 
 -------------------------------------------------------

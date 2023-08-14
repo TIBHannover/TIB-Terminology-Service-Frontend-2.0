@@ -335,7 +335,7 @@ class NoteCreation extends React.Component{
                             </div>                        
                             <div class="modal-footer">                            
                                 <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>                            
+                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>
                             </div>
                         </div>
                     </div>

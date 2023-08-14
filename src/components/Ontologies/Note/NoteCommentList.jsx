@@ -10,6 +10,7 @@ class NoteCommnentList extends React.Component{
             commentEditorState: null
         });
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
+        this.submitComment = this.submitComment.bind(this);
     }
 
 
@@ -17,6 +18,11 @@ class NoteCommnentList extends React.Component{
         // document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
         this.setState({ commentEditorState: newEditorState });        
     };
+
+
+    submitComment(){
+
+    }
 
 
     render(){
@@ -32,7 +38,12 @@ class NoteCommnentList extends React.Component{
                             placeholder: "leave a comment ..."
                         })}
                     </div>
-                </div>                
+                </div>  
+                <div className="row">
+                    <div className="col-sm-9">
+                        <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitNote}>Submit</button>
+                    </div>
+                </div>              
             </span>
         ];
     }
