@@ -12,7 +12,8 @@ class NoteDetail extends React.Component{
            note: {}           
         });
         this.getTheNote = this.getTheNote.bind(this);
-        this.create_note_card = this.create_note_card.bind(this);        
+        this.create_note_card = this.create_note_card.bind(this); 
+        this.reloadNoteDetail = this.reloadNoteDetail.bind(this);       
     }
 
 
@@ -27,10 +28,17 @@ class NoteDetail extends React.Component{
                 note: note
             })
         }).catch((error) => {
-            throw error
+            // throw error
             // this.props.noteListSubmitStatusHandler(false);
             // document.getElementById('noteCreationCloseModal').click();
         });
+    }
+
+
+    reloadNoteDetail(){
+        this.setState({note: {}}, () => {
+            this.getTheNote();
+        });        
     }
 
 
@@ -68,7 +76,10 @@ class NoteDetail extends React.Component{
         return(                           
             <span>
                 {this.create_note_card()}                
-                <NoteCommnentList note={this.state.note}  />
+                <NoteCommnentList 
+                    note={this.state.note}  
+                    noteDetailReloader={this.reloadNoteDetail}    
+                />
             </span>  
         );
     }

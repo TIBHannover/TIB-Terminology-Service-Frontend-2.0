@@ -30,8 +30,7 @@ class NoteCommnentList extends React.Component{
 
 
     createCommentList(){        
-        let comments = this.props.note['comments'] ? this.props.note['comments'] : [];
-        console.info(this.props.note)        
+        let comments = this.props.note['comments'] ? this.props.note['comments'] : [];        
         let result = [];
         for (let comment of comments){
             let body = [
@@ -81,7 +80,14 @@ class NoteCommnentList extends React.Component{
 
         let data = {'noteId': this.props.note['id'], 'content': commentContent};
         submitNoteComment(data).then((result) => {
-            console.info(result);
+            if(result){                
+                this.setState({
+                    noteId: null,
+                    commentEditorState: null
+                }, ()=> {
+                    this.props.noteDetailReloader();
+                })                
+            }
         });
     }
 
