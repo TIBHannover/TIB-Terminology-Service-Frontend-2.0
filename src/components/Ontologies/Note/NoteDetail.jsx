@@ -2,6 +2,8 @@ import React from "react";
 import AuthTool from "../../User/Login/authTools";
 import ReactMarkdown from 'react-markdown';
 import NoteCommnentList from "./NoteCommentList";
+import { errorNotFound } from "../../common/ErrorPages/ErrorPages";
+import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 
 
 
@@ -9,7 +11,8 @@ class NoteDetail extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-           note: {}           
+           note: {},
+           noteNotFound: false 
         });
         this.getTheNote = this.getTheNote.bind(this);
         this.create_note_card = this.create_note_card.bind(this); 
@@ -18,19 +21,17 @@ class NoteDetail extends React.Component{
 
 
     getTheNote(){
-        let noteId = this.props.noteId;
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
-        let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId + '&withComments=True';
-        fetch(url, {headers:headers}).then((resp) => resp.json())
-        .then((data) => {
-            let note = data['_result']['note'];
-            this.setState({
-                note: note
-            })
-        }).catch((error) => {
-            // throw error
-            // this.props.noteListSubmitStatusHandler(false);
-            // document.getElementById('noteCreationCloseModal').click();
+        let noteId = this.props.noteId;        
+        getNoteDetail({noteId: noteId}).then((result) => {
+            if(result === '404'){
+                this.setState({noteNotFound: true});
+            }
+            else{
+                this.setState({
+                    note: result,
+                    noteNotFound: false
+                })
+            }
         });
     }
 
@@ -50,7 +51,7 @@ class NoteDetail extends React.Component{
 
 
 
-    create_note_card(){
+    create_note_card(){                        
         return [
             <div className="row">
                 <div className="col-sm-9">
@@ -73,6 +74,9 @@ class NoteDetail extends React.Component{
 
 
     render(){
+        if(this.state.noteNotFound){
+            return errorNotFound();
+        }
         return(                           
             <span>
                 {this.create_note_card()}                

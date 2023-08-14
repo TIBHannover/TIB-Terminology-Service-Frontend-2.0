@@ -18,7 +18,21 @@ export async function submitNoteComment({noteId, content}){
     catch(e){
         return false;
     }
-    
+}
 
 
+export async function getNoteDetail({noteId}){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+        let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId + '&withComments=True';
+        let result = await fetch(url, {headers:headers});
+        if (result.status === 404){
+            return '404';
+        }
+        result = await result.json();
+        return result['_result']['note']
+    }
+    catch(e){
+        return {}
+    }
 }
