@@ -11,6 +11,7 @@ class NoteDetail extends React.Component{
            note: {}
         });
         this.getTheNote = this.getTheNote.bind(this);
+        this.create_note_card = this.create_note_card.bind(this);
     }
 
 
@@ -39,8 +40,9 @@ class NoteDetail extends React.Component{
     }
 
 
-    render(){
-        return(                           
+
+    create_note_card(){
+        return [
             <div className="row">
                 <div className="col-sm-9">
                     <div className="card">
@@ -56,7 +58,16 @@ class NoteDetail extends React.Component{
                         </div>
                     </div>                
                 </div>
-            </div>            
+            </div>     
+        ];
+    }
+
+
+    render(){
+        return(                           
+            <span>
+                {this.create_note_card()}
+            </span>  
         );
     }
 
