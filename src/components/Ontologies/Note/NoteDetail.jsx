@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import NoteCommnentList from "./NoteCommentList";
 import { errorNotFound } from "../../common/ErrorPages/ErrorPages";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
+import { buildNoteCardHeader } from "./helpers";
 
 
 
@@ -57,8 +58,7 @@ class NoteDetail extends React.Component{
                 <div className="col-sm-9">
                     <div className="card">
                         <div className="card-header">
-                            {" Opened on " + this.state.note['created_at'] + " by "} 
-                            <b>{AuthTool.getUserName(this.state.note['created_by'])}</b> 
+                            {buildNoteCardHeader(this.state.note)}                            
                         </div>
                         <div class="card-body">
                             <h1 className="card-title note-list-title">{this.state.note['title']}</h1>

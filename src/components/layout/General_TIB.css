@@ -2193,10 +2193,6 @@ Notes
     margin-left: 20px; 
 }
 
-.note-card-header-meta{
-    display: inline;
-    margin-left: 20px;
-}
 
 
 /* 
@@ -2290,6 +2286,12 @@ Login and Auth
     border: none;
     font-size: 16px;
     margin-left: 5px;
+ }
+ 
+ .fa-eye{
+    border: none;
+    font-size: 16px;
+    margin-right: 5px;
  }
 
 

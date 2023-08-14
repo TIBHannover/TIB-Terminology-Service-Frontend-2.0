@@ -30,9 +30,11 @@ export async function getNoteDetail({noteId}){
             return '404';
         }
         result = await result.json();
-        return result['_result']['note']
+        let note = result['_result']['note'];
+        note['comments_count'] = note['comments'].length;
+        return note;
     }
-    catch(e){
+    catch(e){        
         return {}
     }
 }

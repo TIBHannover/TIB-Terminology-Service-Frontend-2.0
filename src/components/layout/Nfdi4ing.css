@@ -2286,6 +2286,12 @@ Login and Auth
     margin-left: 5px;
  }
 
+ .fa-eye{
+    border: none;
+    font-size: 16px;
+    margin-right: 5px;
+ }
+
   /* 
  ----------------------------------------------
 React-Autosuggest library
