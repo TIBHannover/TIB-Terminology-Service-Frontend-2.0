@@ -6,6 +6,7 @@ import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
 import templatePath from './template.md';
 import AuthTool from "../../User/Login/authTools";
+import textEditor from "../../common/TextEditor/TextEditor";
 
 
 const GENERIC_ISSUE_ID = "1";
@@ -196,7 +197,7 @@ class TermRequest extends React.Component{
                                     <br></br>
                                     <div className="row">
                                         <div className="col-sm-10">
-                                            {this.createGenericIssueFields()}                                    
+                                            {textEditor(this.state.editorState, this.onTextAreaChange)}     
                                         </div>
                                     </div>
 
