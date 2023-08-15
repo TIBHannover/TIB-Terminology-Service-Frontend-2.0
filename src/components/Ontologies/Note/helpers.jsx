@@ -1,4 +1,5 @@
 import AuthTool from "../../User/Login/authTools";
+import DeleteModal from "../../common/DeleteModal/DeleteModal";
 
 
 const VISIBILITY_HELP = {
@@ -18,12 +19,15 @@ export function buildNoteCardHeader(note){
                 </small>
             </div>
             <div className="col-sm-3">
-                <div className="row">
-                    <div className="col-sm-6">
-                        <small>{note['comments_count']}</small><i class="fa fa-comment" aria-hidden="true"></i>
+                <div className="row">                    
+                    <div className="col-xs-3 col-sm-3 col-md-4 text-nowrap note-header-meta">
+                        <i class="fa fa-comment" aria-hidden="true"></i><small>{note['comments_count']}</small>
                     </div>
-                    <div className="col-sm-6" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
+                    <div className="col-xs-3 col-sm-3 col-md-4 text-nowrap note-header-meta" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
                         <small><i class="fa-solid fa-eye"></i>{note['visibility']}</small>                        
+                    </div>
+                    <div className="col-xs-3 col-sm-3 col-md-4 text-nowrap note-header-meta">
+                        <DeleteModal />              
                     </div>
                 </div>                                                      
             </div>

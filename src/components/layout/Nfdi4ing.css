@@ -2282,14 +2282,13 @@ Login and Auth
 
  .fa-comment, .fa-question-circle{
     border: none;
-    font-size: 16px;
-    margin-left: 5px;
+    font-size: 16px;    
  }
 
  .fa-eye{
     border: none;
     font-size: 16px;
-    margin-right: 5px;
+    margin-right: 2px;
  }
 
   /* 
@@ -2428,7 +2427,10 @@ Media Query Area for bein responsive
     }
     .pagination-holder{
         font-size: 12px;
-    }    
+    }   
+    .note-header-meta, .fa-eye, .fa-comment{
+        font-size: 10px;
+    } 
 }
 
 @media only screen and (max-width: 900px) {
@@ -2460,6 +2462,9 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
+    }
+    .note-header-meta, .fa-eye, .fa-comment{
+        font-size: 8px;
     }
  
  }
