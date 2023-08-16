@@ -2160,6 +2160,34 @@ Notes
     margin-left: 20px;
 }
 
+.dropdown-toggle::after {
+    display: none; 
+}
+.fa-ellipsis-h{
+    border: none;
+    font-size: 20px;    
+}
+.note-dropdown-btn{
+    background-color: #F7F7F7 !important;
+    color: black !important;
+    border: none !important;
+}
+
+.note-dropdown-btn:active,
+.note-dropdown-btn:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.dropdown-menu .dropdown-item:hover {
+    background-color: transparent;
+    color: inherit;
+}
+  
+.dropdown-menu .dropdown-item:hover {
+    cursor: auto;
+}
+
 
 /* 
 -------------------------------------------------------
