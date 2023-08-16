@@ -1,5 +1,5 @@
 import AuthTool from "../../User/Login/authTools";
-import DeleteModal from "../../common/DeleteModal/DeleteModal";
+import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 
 
 const VISIBILITY_HELP = {
@@ -12,7 +12,7 @@ const VISIBILITY_HELP = {
 
 export function buildNoteCardHeader(note){
     return [
-        <div className="row">
+        <div className="row">        
             <div className="col-sm-9">
                 <small>
                     {" Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
@@ -32,9 +32,9 @@ export function buildNoteCardHeader(note){
                                 {note['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
-                                        <div class="dropdown-item note-dropdown-menu"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
-                                        <div class="dropdown-item note-dropdown-menu">
-                                            <DeleteModal
+                                        <div class="dropdown-item note-dropdown-item"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
+                                        <div class="dropdown-item note-dropdown-item">
+                                            <DeleteModalBtn
                                                 modalId={note['id']}
                                              />
                                         </div>
@@ -45,6 +45,9 @@ export function buildNoteCardHeader(note){
                     </div>
                 </div>                                                      
             </div>
+            <DeleteModal
+                modalId={note['id']}
+            />
         </div> 
     ];
 }

@@ -2194,7 +2194,7 @@ Notes
 }
 
 .note-dropdown-toggle::after {
-    display: none; 
+    display: none !important; 
 }
 .fa-ellipsis-h{
     border: none;
@@ -2207,12 +2207,12 @@ Notes
 }
 
 .note-dropdown-menu .note-dropdown-item:hover {
-    background-color: transparent;
-    color: inherit;
+    background-color: transparent !important;
+    color: inherit !important;
 }
   
 .note-dropdown-menu .note-dropdown-item:hover {
-    cursor: auto;
+    cursor: auto !important;
 }
 
 .note-card-footer{
@@ -2236,7 +2236,7 @@ Notes
 }
 
 .note-edit-btn:hover{
-    color: black;
+    color: black !important;
 }
 
 .borderless-btn:active,
