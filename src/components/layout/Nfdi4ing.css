@@ -2463,7 +2463,7 @@ Media Query Area for bein responsive
  }
 
 
- .dropdown-toggle::after {
+.note-dropdown-toggle::after {
     display: none; 
 }
 .fa-ellipsis-h{
@@ -2476,12 +2476,12 @@ Media Query Area for bein responsive
     border: none !important;
 }
 
-.dropdown-menu .dropdown-item:hover {
+.note-dropdown-menu .note-dropdown-item:hover {
     background-color: transparent;
     color: inherit;
 }
   
-.dropdown-menu .dropdown-item:hover {
+.note-dropdown-menu .note-dropdown-item:hover {
     cursor: auto;
 }
 

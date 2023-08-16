@@ -2128,6 +2128,7 @@ Notes
     margin-bottom: 20px;
 }
 
+
 .note-list-title{
     color: black;
     font-weight: bold;    
@@ -2155,12 +2156,7 @@ Notes
     margin-left: 20px; 
 }
 
-.note-card-header-meta{
-    display: inline;
-    margin-left: 20px;
-}
-
-.dropdown-toggle::after {
+.note-dropdown-toggle::after {
     display: none; 
 }
 .fa-ellipsis-h{
@@ -2173,12 +2169,12 @@ Notes
     border: none !important;
 }
 
-.dropdown-menu .dropdown-item:hover {
+.note-dropdown-menu .note-dropdown-item:hover {
     background-color: transparent;
     color: inherit;
 }
   
-.dropdown-menu .dropdown-item:hover {
+.note-dropdown-menu .note-dropdown-item:hover {
     cursor: auto;
 }
 

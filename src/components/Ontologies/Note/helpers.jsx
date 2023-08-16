@@ -22,18 +22,22 @@ export function buildNoteCardHeader(note){
                 <div className="row">                    
                     <div className="col-sm-12 text-right">
                         <div class="dropdown custom-dropdown">
-                            <button class="btn btn-secondary dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-ellipsis-h"></i>
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">                                
-                                <div class="dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
+                            <div class="dropdown-menu note-dropdown-menu" aria-labelledby="dropdownMenu2">                                
+                                <div class="dropdown-item note-dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
                                     <small><i class="fa-solid fa-eye"></i>{note['visibility']}</small>
                                 </div>
                                 {note['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
-                                        <div class="dropdown-item"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
-                                        <div class="dropdown-item"><DeleteModal /></div>
+                                        <div class="dropdown-item note-dropdown-menu"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
+                                        <div class="dropdown-item note-dropdown-menu">
+                                            <DeleteModal
+                                                modalId={note['id']}
+                                             />
+                                        </div>
                                     </span>                                    
                                 }
                             </div>
