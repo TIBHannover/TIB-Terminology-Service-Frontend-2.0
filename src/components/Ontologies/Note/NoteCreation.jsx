@@ -257,6 +257,9 @@ class NoteCreation extends React.Component{
 
 
     render(){
+        if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
+            return "";
+        }
         const value = this.state.enteredTermInAutoComplete
         const inputProps = {
             placeholder: 'Type your target term',

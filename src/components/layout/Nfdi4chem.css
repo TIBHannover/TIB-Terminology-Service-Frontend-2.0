@@ -2173,12 +2173,6 @@ Notes
     border: none !important;
 }
 
-.note-dropdown-btn:active,
-.note-dropdown-btn:focus {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
 .dropdown-menu .dropdown-item:hover {
     background-color: transparent;
     color: inherit;
@@ -2191,6 +2185,32 @@ Notes
 .note-card-footer{
     border-top: none !important;
     background-color: white !important;    
+}
+
+.btn-delete-note{
+    background-color: white !important;
+    border: none !important;
+    color: red;
+}
+.btn-delete-note:hover{
+    color: red;
+}
+
+.note-edit-btn{
+    border: none !important;
+    background-color: white !important;
+    color: black !important;
+}
+
+.note-edit-btn:hover{
+    color: black;
+}
+
+.borderless-btn:active,
+.borderless-btn:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 

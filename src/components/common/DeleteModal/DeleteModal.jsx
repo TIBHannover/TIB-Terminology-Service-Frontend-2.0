@@ -5,8 +5,8 @@ import React from "react";
 const DeleteModal = (props) => {
     return (
         <div>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
-                <i class="fa fa-trash" aria-hidden="true"></i>
+            <button type="button" class="btn btn-danger btn-sm btn-delete-note borderless-btn" data-toggle="modal" data-target="#deleteModal">
+                Delete
             </button>
             <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
