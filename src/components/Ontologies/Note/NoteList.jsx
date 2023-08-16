@@ -114,9 +114,19 @@ class NoteList extends React.Component{
                                 {buildNoteCardHeader(note)}                        
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title">
-                                    <Link to={noteUrl} className="note-list-title" value={note['id']} onClick={this.selectNote}>{note['title']}</Link>
-                                </h5>
+                                <div className="row">
+                                    <div className="coll-sm-12">
+                                        <h5 className="card-title">
+                                            <Link to={noteUrl} 
+                                                className="note-list-title" 
+                                                value={note['id']} 
+                                                onClick={this.selectNote}
+                                                >
+                                                {note['title']}
+                                            </Link>
+                                        </h5>
+                                    </div>                                    
+                                </div>                                
                                 <p className="card-text">
                                     <small>
                                         <ul className="">
@@ -125,6 +135,9 @@ class NoteList extends React.Component{
                                         </ul>                            
                                     </small>                                    
                                 </p>                        
+                            </div>
+                            <div class="card-footer note-card-footer text-muted">                                
+                                <i class="fa fa-comment" aria-hidden="true"></i><small>{note['comments_count']}</small>
                             </div>
                         </div>
                     </div>

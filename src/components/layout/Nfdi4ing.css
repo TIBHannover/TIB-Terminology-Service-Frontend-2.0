@@ -2427,10 +2427,7 @@ Media Query Area for bein responsive
     }
     .pagination-holder{
         font-size: 12px;
-    }   
-    .note-header-meta, .fa-eye, .fa-comment{
-        font-size: 10px;
-    } 
+    }     
 }
 
 @media only screen and (max-width: 900px) {
@@ -2462,11 +2459,7 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
-    }
-    .note-header-meta, .fa-eye, .fa-comment{
-        font-size: 8px;
-    }
- 
+    } 
  }
 
 
@@ -2496,4 +2489,9 @@ Media Query Area for bein responsive
   
 .dropdown-menu .dropdown-item:hover {
     cursor: auto;
+}
+
+.note-card-footer{
+    border-top: none !important;
+    background-color: white !important;    
 }

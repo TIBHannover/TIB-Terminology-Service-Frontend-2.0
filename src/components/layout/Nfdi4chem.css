@@ -2188,6 +2188,11 @@ Notes
     cursor: auto;
 }
 
+.note-card-footer{
+    border-top: none !important;
+    background-color: white !important;    
+}
+
 
 /* 
 -------------------------------------------------------
@@ -2374,10 +2379,7 @@ Media Query Area for bein responsive
     }
     .collection-logo{      
         margin-left: 0px;
-    }
-    .note-header-meta, .fa-eye, .fa-comment{
-        font-size: 12px;
-    }       
+    }         
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
     
@@ -2425,10 +2427,7 @@ Media Query Area for bein responsive
     }
     .pagination-holder{
         font-size: 12px;
-    }
-    .note-header-meta, .fa-eye, .fa-comment{
-        font-size: 10px;
-    }    
+    }     
 }
 
 @media only screen and (max-width: 900px) {
@@ -2461,8 +2460,4 @@ Media Query Area for bein responsive
         width: 200px;
         height: 150px;
     }
-    .note-header-meta, .fa-eye, .fa-comment{
-        font-size: 8px;
-    }
- 
  }
