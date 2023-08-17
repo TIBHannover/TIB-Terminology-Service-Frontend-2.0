@@ -7,6 +7,7 @@ export const DeleteModalBtn = (props) => {
                 class="btn btn-danger btn-sm btn-delete-note borderless-btn" 
                 data-toggle="modal" 
                 data-target={"#deleteModal" + props.modalId}
+                data-backdrop="static"
                 >
                 Delete
         </button>
@@ -46,9 +47,11 @@ export const DeleteModal = (props) => {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id={"deleteModalLabel" + props.modalId}>Confirmation</h5>
-                            <button type="button" class="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
+                            {!submited && 
+                                <button type="button" class="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            }
                         </div>
                         <div class="modal-body">
                             {!submited && 
