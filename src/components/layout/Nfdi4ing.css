@@ -2515,3 +2515,12 @@ Media Query Area for bein responsive
   outline: none !important;
   box-shadow: none !important;
 }
+
+.btn-danger{
+    background-color: red !important;
+ }
+
+ .close-btn-message-modal{
+    background-color: #008d3b !important;
+    color: white;
+ }

@@ -15,7 +15,7 @@ export function buildNoteCardHeader(note){
         <div className="row">        
             <div className="col-sm-9">
                 <small>
-                    {" Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                    {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
             </div>
             <div className="col-sm-3">

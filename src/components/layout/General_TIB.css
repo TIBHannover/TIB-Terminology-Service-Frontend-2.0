@@ -77,6 +77,15 @@ p{
     font-size: 14px;
  }
 
+ .btn-danger{
+    background-color: red !important;
+ }
+
+ .close-btn-message-modal{
+    background-color: #008d3b !important;
+    color: white;
+ }
+
  .term-button{
     /* 
         The style for a button representing a term (class/propperty)

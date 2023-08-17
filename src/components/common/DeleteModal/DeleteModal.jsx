@@ -24,7 +24,7 @@ export const DeleteModal = (props) => {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id={"deleteModalLabel" + props.modalId}>Confirmation</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -33,8 +33,7 @@ export const DeleteModal = (props) => {
                             <br></br>
                             <strong>This action is not reversible.</strong>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <div class="modal-footer justify-content-center">                            
                             <button type="button" class="btn btn-danger">Delete</button>
                         </div>
                     </div>
