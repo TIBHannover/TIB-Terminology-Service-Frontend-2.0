@@ -4,7 +4,7 @@ import draftToMarkdown from 'draftjs-to-markdown';
 import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
 import AuthTool from "../../User/Login/authTools";
-import textEditor from "../../common/TextEditor/TextEditor";
+import TextEditor from "../../common/TextEditor/TextEditor";
 
 
 
@@ -326,12 +326,13 @@ class NoteCreation extends React.Component{
                                 <br></br>
                                 <div className="row">
                                     <div className="col-sm-10">
-                                        {textEditor({
-                                            editorState: this.state.editorState,
-                                            textChangeHandlerFunction: this.onTextAreaChange,
-                                            placeholder: "Note Content",
-                                            wrapperClassName: ""
-                                        })}    
+                                        <TextEditor 
+                                            editorState={this.state.editorState} 
+                                            textChangeHandlerFunction={this.onTextAreaChange}
+                                            wrapperClassName=""
+                                            editorClassName=""
+                                            placeholder="Note Content"
+                                        />                                         
                                     </div>
                                 </div>
 

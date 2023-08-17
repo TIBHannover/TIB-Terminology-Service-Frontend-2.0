@@ -1,11 +1,11 @@
 import React from "react";
-import textEditor from "../../common/TextEditor/TextEditor";
 import { submitNoteComment } from "../../../api/tsMicroBackendCalls";
 import draftToMarkdown from 'draftjs-to-markdown';
 import { convertToRaw } from 'draft-js';
 import AuthTool from "../../User/Login/authTools";
 import ReactMarkdown from 'react-markdown';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
+import TextEditor from "../../common/TextEditor/TextEditor";
 
 
 
@@ -108,13 +108,13 @@ class NoteCommnentList extends React.Component{
 
 
     render(){
-        let editor = textEditor({
-            editorState: this.state.commentEditorState, 
-            textChangeHandlerFunction: this.onTextAreaChange,
-            wrapperClassName: "note-comment-editor-warpper", 
-            editorClassName: "note-comment-editor",
-            placeholder: "leave a comment ..."
-        });
+        let editor = <TextEditor 
+                        editorState={this.state.commentEditorState} 
+                        textChangeHandlerFunction={this.onTextAreaChange}
+                        wrapperClassName="note-comment-editor-warpper"
+                        editorClassName="note-comment-editor"
+                        placeholder="leave a comment ..."
+                    />
 
         let submitButton = <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
 

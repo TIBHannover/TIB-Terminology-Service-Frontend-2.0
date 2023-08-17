@@ -1,14 +1,15 @@
+import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 
 
-export default function textEditor({editorState, textChangeHandlerFunction, wrapperClassName="", editorClassName="", placeholder=""}){
-    return [
+const TextEditor = (props) =>{
+    return (
         <Editor
-            editorState={editorState}
-            onEditorStateChange={textChangeHandlerFunction}
-            wrapperClassName={wrapperClassName}
-            editorClassName={editorClassName}
-            placeholder={placeholder}          
+            editorState={props.editorState}
+            onEditorStateChange={props.textChangeHandlerFunction}
+            wrapperClassName={props.wrapperClassName}
+            editorClassName={props.editorClassName}
+            placeholder={props.placeholder}          
             toolbar={{
                     options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
                     inline: {
@@ -24,5 +25,8 @@ export default function textEditor({editorState, textChangeHandlerFunction, wrap
                     },
             }}
         />
-    ];
+    );
 }
+
+
+export default TextEditor;
