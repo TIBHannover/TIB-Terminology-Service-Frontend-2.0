@@ -1,10 +1,9 @@
 import React from "react";
-import AuthTool from "../../User/Login/authTools";
 import ReactMarkdown from 'react-markdown';
 import NoteCommnentList from "./NoteCommentList";
-import { errorNotFound } from "../../common/ErrorPages/ErrorPages";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { buildNoteCardHeader } from "./helpers";
+import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 
 
 
@@ -75,7 +74,7 @@ class NoteDetail extends React.Component{
 
     render(){
         if(this.state.noteNotFound){
-            return errorNotFound();
+            return (<NotFoundErrorPage />)
         }
         return(                           
             <span>

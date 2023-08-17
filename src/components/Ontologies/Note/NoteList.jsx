@@ -8,6 +8,7 @@ import NoteDetail from "./NoteDetail";
 import queryString from 'query-string'; 
 import Toolkit from "../../common/Toolkit";
 import { buildNoteCardHeader } from "./helpers";
+import {AlertBox} from "../../common/Alerts/Alerts";
 
 
 const ALL_TYPE = 0
@@ -148,13 +149,11 @@ class NoteList extends React.Component{
         if(result.length === 0){
             noteExist = false
             result = [
-                <div className="row">
-                    <div className="col-sm-12">                                    
-                        <div class="alert alert-success">
-                            No Note found.
-                        </div>                                        
-                    </div>
-                </div>
+                <AlertBox 
+                    type="info"
+                    message="This Ontology does not have any note yet."
+                    alertColumnClass="col-sm-12"
+                />                
             ];
         }
 
@@ -272,29 +271,27 @@ class NoteList extends React.Component{
         return (
             <div className="tree-view-container notes-container">                
                 {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
-                    <div className="row text-center">
-                        <div className="col-sm-8">                                    
-                            <div class="alert alert-success">
-                                Your Note is submitted successfully!                           
-                            </div>                        
-                        </div>
-                    </div>
+                    <AlertBox
+                        type="success" 
+                        message="Your Note is submitted successfully! "
+                        alertColumnClass="col-sm-8"
+                    />                    
                 }
                 {this.state.noteSubmited && !this.state.noteSubmitSeccuess &&
-                    <div className="row text-center">
-                        <div className="col-sm-8">
-                            <div class="alert alert-danger">
-                                Something went wrong. Please try again!
-                            </div>  
-                        </div>
-                    </div>  
+                    <AlertBox
+                        type="danger"
+                        message="Something went wrong. Please try again!"
+                        alertColumnClass="col-sm-8"
+                    />                   
                 }                
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
                         <div className="col-sm-9">
                             <div className="row">
                                 <div className="col-sm-6">
-                                    {typeof(this.props.targetArtifactType) === 'undefined' && this.createArtifactTypeFilter()}
+                                    {this.state.noteExist && typeof(this.props.targetArtifactType) === 'undefined' && 
+                                        this.createArtifactTypeFilter()
+                                    }
                                 </div>
                                 <div className="col-sm-6">
                                     {this.state.noteExist &&  

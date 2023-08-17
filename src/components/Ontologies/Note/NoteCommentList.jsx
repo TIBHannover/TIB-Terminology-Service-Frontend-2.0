@@ -3,9 +3,9 @@ import textEditor from "../../common/TextEditor/TextEditor";
 import { submitNoteComment } from "../../../api/tsMicroBackendCalls";
 import draftToMarkdown from 'draftjs-to-markdown';
 import { convertToRaw } from 'draft-js';
-import { rowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 import AuthTool from "../../User/Login/authTools";
 import ReactMarkdown from 'react-markdown';
+import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 
 
 
@@ -46,7 +46,11 @@ class NoteCommnentList extends React.Component{
                 </div> 
             ];
             result.push(
-                rowWithSingleColumn({content: body, rowClass: "note-comment-card", columnClass: "col-sm-9"})
+                <RowWithSingleColumn 
+                    content={body}
+                    columnClass="col-sm-9"
+                    rowClass="note-comment-card"
+                />         
             );
         }
         this.setState({
@@ -116,11 +120,25 @@ class NoteCommnentList extends React.Component{
 
         return [
             <span>
-                {rowWithSingleColumn({content: this.state.commentListToRener, columnClass: "col-sm-12"})}
-                <hr></hr>
+                <RowWithSingleColumn 
+                    content={this.state.commentListToRener}
+                    columnClass="col-sm-12"
+                    rowClass=""
+                />
+                <hr></hr>                
                 {localStorage.getItem('isLoginInTs') === 'true' && 
-                    [rowWithSingleColumn({content: editor, columnClass: "col-sm-9"}), 
-                    rowWithSingleColumn({content: submitButton, columnClass: "col-sm-9"})]
+                    [
+                        <RowWithSingleColumn 
+                            content={editor}
+                            columnClass="col-sm-9"
+                            rowClass=""
+                        />,
+                         <RowWithSingleColumn 
+                            content={submitButton}
+                            columnClass="col-sm-9"
+                            rowClass=""
+                        />
+                    ]                   
                 }                
             </span>
         ];

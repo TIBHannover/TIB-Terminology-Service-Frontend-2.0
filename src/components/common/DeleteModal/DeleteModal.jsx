@@ -1,4 +1,5 @@
 import {React, useState} from "react";
+import AlertBox from "../Alerts/Alerts";
 
 
 export const DeleteModalBtn = (props) => {
@@ -62,22 +63,18 @@ export const DeleteModal = (props) => {
                                 </span>                                
                             }
                             {submited && deleteSuccess &&
-                                <div className="row text-center">
-                                    <div className="col-sm-8">                                    
-                                        <div class="alert alert-success">
-                                            Deleted successfully!                           
-                                        </div>                        
-                                    </div>
-                                </div>
+                                <AlertBox 
+                                    type="success"
+                                    message="Deleted successfully!"
+                                    alertColumnClass="col-sm-12"                                    
+                                />                                
                             }
                             {submited && !deleteSuccess &&
-                                <div className="row text-center">
-                                    <div className="col-sm-8">
-                                        <div class="alert alert-danger">
-                                            Something went wrong. Please try again!
-                                        </div>  
-                                    </div>
-                                </div>  
+                                <AlertBox
+                                    type="danger" 
+                                    message="Something went wrong. Please try again!"
+                                    alertColumnClass="col-sm-12"
+                                />                                 
                             }
                         </div>
                         <div class="modal-footer justify-content-center">                            
