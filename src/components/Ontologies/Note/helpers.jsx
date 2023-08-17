@@ -17,16 +17,15 @@ export function buildNoteCardHeader(note){
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
     let redirectAfterDeleteEndpoint = window.location.href;
+    let searchParams = new URLSearchParams(window.location.search);
+    let locationObject = window.location;
+    searchParams.set('page', 1);
+    searchParams.set('size', 10);
     if (redirectAfterDeleteEndpoint.includes("noteId=")){
-        // we are on the note page
-        let searchParams = new URLSearchParams(window.location.search);
-        let locationObject = window.location;
-        searchParams.delete('noteId'); 
-        redirectAfterDeleteEndpoint = locationObject.pathname;        
-        if (searchParams.toString() !== ""){
-            redirectAfterDeleteEndpoint +=  ("?" +  searchParams.toString());
-        }
+        // we are on the note page                
+        searchParams.delete('noteId');                 
     }
+    redirectAfterDeleteEndpoint = locationObject.pathname + "?" +  searchParams.toString();
 
     return [
         <div className="row">        

@@ -51,6 +51,7 @@ class NoteList extends React.Component{
         this.loadNoteList = this.loadNoteList.bind(this);
         this.changeArtifactTypeFilter = this.changeArtifactTypeFilter.bind(this);
         this.createArtifactTypeFilter = this.createArtifactTypeFilter.bind(this);
+        this.updateURL = this.updateURL.bind(this);
     }
 
 
@@ -76,13 +77,17 @@ class NoteList extends React.Component{
     loadNoteList(){
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
         let ontologyId = this.props.ontology.ontologyId;
+        let currentUrlParams = new URL(window.location).searchParams;                      
+        let pageNumber = currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER;
+        let pageSize = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE; 
+        let type = currentUrlParams.get('type') ? currentUrlParams.get('type') : TYPES_VALUES[this.state.selectedArtifactType]
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
-        url += ('&page=' + this.state.noteListPage + '&size=' + this.state.notePageSize)
+        url += ('&page=' + pageNumber + '&size=' + pageSize)
         if(this.props.targetArtifactIri){
             url += ('&artifact_iri=' + this.props.targetArtifactIri)
         }
-        if(parseInt(this.state.selectedArtifactType) !== ALL_TYPE){
-            url += ('&artifact_type=' + TYPES_VALUES[this.state.selectedArtifactType])
+        if(type !== TYPES_VALUES[ALL_TYPE]){
+            url += ('&artifact_type=' + type);
         }
                 
         fetch(url, {headers:headers}).then((resp) => resp.json())
@@ -93,10 +98,24 @@ class NoteList extends React.Component{
                 notesList: allNotes,                
                 noteDetailPage: false,                
                 noteTotalPageCount: noteStats['totalPageCount'],
-                targetArtifactIri: this.props.targetArtifactIri        
+                targetArtifactIri: this.props.targetArtifactIri,
+                noteListPage: parseInt(pageNumber),
+                notePageSize: parseInt(pageSize),
+                selectedArtifactType: TYPES_VALUES.indexOf(type)        
             });
         })
         .then(()=>{this.createNotesList()});
+    }
+
+
+
+    updateURL(pageNumber, pageSize, type=ALL_TYPE){
+        let currentUrlParams = new URLSearchParams();
+        currentUrlParams.set('type', TYPES_VALUES[parseInt(type)]);
+        currentUrlParams.set('page', pageNumber);
+        currentUrlParams.set('size', pageSize);                
+        this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        this.setComponentData();
     }
 
 
@@ -188,8 +207,8 @@ class NoteList extends React.Component{
             noteListPage: DEFAULT_PAGE_NUMBER,
             notePageSize: DEFAULT_PAGE_SIZE,
             noteSubmited: false           
-        }, () =>{
-            this.setComponentData();
+        }, () =>{                        
+            this.updateURL(this.state.noteListPage, this.state.notePageSize, this.state.selectedArtifactType)
         });
     }
 
@@ -198,8 +217,8 @@ class NoteList extends React.Component{
         this.setState({
           noteListPage: value,          
           tableBodyContent: ""    
-        }, ()=> {
-            this.setComponentData();
+        }, ()=> {            
+            this.updateURL(value, this.state.notePageSize, this.state.selectedArtifactType);
         });
     }
 
