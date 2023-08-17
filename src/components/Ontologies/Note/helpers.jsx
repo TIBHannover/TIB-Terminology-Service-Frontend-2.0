@@ -10,14 +10,23 @@ const VISIBILITY_HELP = {
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
-const redirectAfterDeleteEndpoint = window.location.href;
-console.info(redirectAfterDeleteEndpoint)
 
 
 export function buildNoteCardHeader(note){    
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
+    let redirectAfterDeleteEndpoint = window.location.href;
+    if (redirectAfterDeleteEndpoint.includes("noteId=")){
+        // we are on the note page
+        let searchParams = new URLSearchParams(window.location.search);
+        let locationObject = window.location;
+        searchParams.delete('noteId'); 
+        redirectAfterDeleteEndpoint = locationObject.pathname;        
+        if (searchParams.toString() !== ""){
+            redirectAfterDeleteEndpoint +=  ("?" +  searchParams.toString());
+        }
+    }
 
     return [
         <div className="row">        
@@ -70,6 +79,8 @@ export function buildCommentCardHeader(comment){
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", comment['id']);
     deleteFormData.append("objectType", 'comment');
+    let redirectAfterDeleteEndpoint = window.location.href;
+    console.info(redirectAfterDeleteEndpoint)
 
     return [
         <div className="row">        
