@@ -19,7 +19,7 @@ export const DeleteModalBtn = (props) => {
 
 export const DeleteModal = (props) => {
     const [submited, setSubmited] = useState(false);
-    const [deleteSuccess, setDeleteSuccess] = useState(false);        
+    const [deleteSuccess, setDeleteSuccess] = useState(false);       
     
     const deleteResource = async () => {
         try{
