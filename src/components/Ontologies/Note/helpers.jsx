@@ -12,6 +12,7 @@ const VISIBILITY_HELP = {
 export function buildNoteCardHeader(note){
     const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
     const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+    const redirectAfterDeleteEndpoint = window.location.href;
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
@@ -55,7 +56,7 @@ export function buildNoteCardHeader(note){
                 formData={deleteFormData}
                 callHeaders={callHeader}
                 deleteEndpoint={deleteEndpoint}
-                afterDeleteRedirectUrl={""}
+                afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
             />
         </div> 
     ];
