@@ -9,8 +9,13 @@ const VISIBILITY_HELP = {
 }
 
 
-
 export function buildNoteCardHeader(note){
+    const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
+    const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+    let deleteFormData = new FormData();
+    deleteFormData.append("objectId", note['id']);
+    deleteFormData.append("objectType", 'note');
+
     return [
         <div className="row">        
             <div className="col-sm-9">
@@ -35,7 +40,7 @@ export function buildNoteCardHeader(note){
                                         <div class="dropdown-item note-dropdown-item"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
                                         <div class="dropdown-item note-dropdown-item">
                                             <DeleteModalBtn
-                                                modalId={note['id']}
+                                                modalId={note['id']}                                                
                                              />
                                         </div>
                                     </span>                                    
@@ -47,6 +52,10 @@ export function buildNoteCardHeader(note){
             </div>
             <DeleteModal
                 modalId={note['id']}
+                formData={deleteFormData}
+                callHeaders={callHeader}
+                deleteEndpoint={deleteEndpoint}
+                afterDeleteRedirectUrl={""}
             />
         </div> 
     ];
