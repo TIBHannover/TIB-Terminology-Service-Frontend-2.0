@@ -6,6 +6,7 @@ import AuthTool from "../../User/Login/authTools";
 import ReactMarkdown from 'react-markdown';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 import TextEditor from "../../common/TextEditor/TextEditor";
+import { buildCommentCardHeader } from "./helpers";
 
 
 
@@ -36,7 +37,7 @@ class NoteCommnentList extends React.Component{
             let body = [
                 <div className="card">
                     <div className="card-header">
-                        {" Opened on " + comment['created_at'] + " by "}  <b>{AuthTool.getUserName(comment['created_by'])}</b> 
+                        {buildCommentCardHeader(comment)}
                     </div>
                     <div class="card-body">                        
                         <p className="card-text">
