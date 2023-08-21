@@ -38,7 +38,7 @@ export const NoteCardHeader = (props) => {
     redirectAfterDeleteEndpoint = locationObject.pathname + "?" +  searchParams.toString();
 
     return [
-        <div className="row">        
+        <div className="row" key={"note-" + note['id']}>        
             <div className="col-sm-9">
                 <small>
                     {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
@@ -115,7 +115,7 @@ export const CommentCardHeader = (props) =>{
     let redirectAfterDeleteEndpoint = window.location.href;    
 
     return [
-        <div className="row">        
+        <div className="row" key={"c-" + comment['id']}>        
             <div className="col-sm-9">
                 <small>
                     {"Opened on " + comment['created_at'] + " by "} <b>{AuthTool.getUserName(comment['created_by'])}</b> 
@@ -135,7 +135,16 @@ export const CommentCardHeader = (props) =>{
                                 {comment['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
-                                        <div class="dropdown-item note-dropdown-item"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
+                                        <div class="dropdown-item note-dropdown-item">
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-danger btn-sm note-edit-btn borderless-btn"
+                                                data-id={comment['id']}
+                                                data-content={comment['content']}
+                                                onClick={props.editHandlerFunc}>
+                                                <i class="far fa-edit"></i> Edit
+                                            </button>
+                                        </div>
                                         <div class="dropdown-item note-dropdown-item">
                                             <DeleteModalBtn
                                                 modalId={"_comment-" + comment['id']}                                                

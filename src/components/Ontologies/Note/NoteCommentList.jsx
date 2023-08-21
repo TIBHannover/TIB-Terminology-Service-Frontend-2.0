@@ -1,7 +1,8 @@
 import React from "react";
-import { submitNoteComment } from "../../../api/tsMicroBackendCalls";
+import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendCalls";
 import draftToMarkdown from 'draftjs-to-markdown';
-import { convertToRaw } from 'draft-js';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
+import { convertToRaw, EditorState } from 'draft-js';
 import ReactMarkdown from 'react-markdown';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 import TextEditor from "../../common/TextEditor/TextEditor";
@@ -15,11 +16,15 @@ class NoteCommnentList extends React.Component{
         this.state = ({
             commentEditorState: null,
             commentListToRener: "",
-            noteId: null            
+            noteId: null,
+            editMode: false,
+            editCommentId: -1
         });
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.submitComment = this.submitComment.bind(this);
         this.createCommentList = this.createCommentList.bind(this);
+        this.handleEditButton = this.handleEditButton.bind(this);
+        this.edit = this.edit.bind(this);
     }
 
 
@@ -36,7 +41,7 @@ class NoteCommnentList extends React.Component{
             let body = [
                 <div className="card">
                     <div className="card-header">
-                        <CommentCardHeader comment={comment} />                        
+                        <CommentCardHeader comment={comment}  editHandlerFunc={this.handleEditButton} />                        
                     </div>
                     <div class="card-body">                        
                         <p className="card-text">
@@ -57,6 +62,24 @@ class NoteCommnentList extends React.Component{
             commentListToRener: result,
             noteId: this.props.note['id']
         });
+    }
+
+
+
+    handleEditButton(e){
+        let commentId = e.target.getAttribute('data-id');
+        let commentContent = e.target.getAttribute('data-content');
+        if(commentContent){
+            let content =  EditorState.createWithContent(stateFromMarkdown(commentContent));
+            let editorBox = document.getElementsByClassName("note-comment-editor-warpper")[0];
+            editorBox.scrollIntoView();            
+            this.setState({
+                commentEditorState: content,
+                editMode: true,
+                editCommentId: commentId
+            });
+        }        
+
     }
 
 
@@ -96,6 +119,43 @@ class NoteCommnentList extends React.Component{
     }
 
 
+    edit(){
+        let commentContent = "";
+        let formIsValid = true;
+        if(!this.state.commentEditorState){            
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+        else{
+            commentContent = this.state.commentEditorState.getCurrentContent();        
+            commentContent = draftToMarkdown(convertToRaw(commentContent));  
+        }
+
+        if(!commentContent || commentContent.trim() === ""){
+            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+            formIsValid = false;
+        }
+
+        if(!formIsValid){
+            return;
+        }
+
+        let data = {'commentId': this.state.editCommentId, 'content': commentContent};
+        editNoteComment(data).then((result) => {
+            if(result){                
+                this.setState({
+                    noteId: null,
+                    commentEditorState: null,
+                    editNoteComment: -1,
+                    editMode: false
+                }, ()=> {
+                    this.props.noteDetailReloader();
+                })                
+            }
+        });
+    }
+
+
     componentDidMount(){
         this.createCommentList();
     }
@@ -116,15 +176,18 @@ class NoteCommnentList extends React.Component{
                         placeholder="leave a comment ..."
                     />
 
-        let submitButton = <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
+        let submitButton = !this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
+        let editButton = this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
 
         return [
             <span>
-                <RowWithSingleColumn 
-                    content={this.state.commentListToRener}
-                    columnClass="col-sm-12"
-                    rowClass=""
-                />
+                {!this.state.editMode &&
+                    <RowWithSingleColumn 
+                        content={this.state.commentListToRener}
+                        columnClass="col-sm-12"
+                        rowClass=""
+                    />
+                }
                 <hr></hr>                
                 {localStorage.getItem('isLoginInTs') === 'true' && 
                     [
@@ -135,6 +198,11 @@ class NoteCommnentList extends React.Component{
                         />,
                          <RowWithSingleColumn 
                             content={submitButton}
+                            columnClass="col-sm-9"
+                            rowClass=""
+                        />,
+                        <RowWithSingleColumn 
+                            content={editButton}
                             columnClass="col-sm-9"
                             rowClass=""
                         />

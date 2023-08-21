@@ -21,6 +21,24 @@ export async function submitNoteComment({noteId, content}){
 }
 
 
+export async function editNoteComment({commentId, content}){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        let data = new FormData();
+        data.append("comment_id", commentId);
+        data.append("content", content);
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_comment';
+        let result = await fetch(url, {method: 'POST',  headers:headers, body: data});
+        result = await result.json();
+        result = result['_result']['comment_updated'];
+        return result;
+    }
+    catch(e){
+        return false;
+    }
+}
+
+
 export async function getNoteDetail({noteId}){
     try{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
