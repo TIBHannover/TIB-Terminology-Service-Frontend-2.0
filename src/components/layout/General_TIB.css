@@ -2195,6 +2195,12 @@ Notes
     float: right;
 }
 
+.note-comment-cancel-edit-btn{
+    margin-top: 2px;
+    float: right;
+    margin-right: 5px;
+}
+
 .note-comment-card{
     padding: 20px;
     padding-left: 0;

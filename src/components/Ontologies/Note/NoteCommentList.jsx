@@ -25,6 +25,7 @@ class NoteCommnentList extends React.Component{
         this.createCommentList = this.createCommentList.bind(this);
         this.handleEditButton = this.handleEditButton.bind(this);
         this.edit = this.edit.bind(this);
+        this.cancelEdit = this.cancelEdit.bind(this);
     }
 
 
@@ -156,6 +157,15 @@ class NoteCommnentList extends React.Component{
     }
 
 
+    cancelEdit(){
+        this.setState({
+            editNoteComment: -1,
+            editMode: false,
+            commentEditorState: null
+        });
+    }
+
+
     componentDidMount(){
         this.createCommentList();
     }
@@ -178,6 +188,7 @@ class NoteCommnentList extends React.Component{
 
         let submitButton = !this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
         let editButton = this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
+        let cancelButton = this.state.editMode && <button type="button" class="btn btn-danger note-comment-cancel-edit-btn" onClick={this.cancelEdit}>Cancel</button>;
 
         return [
             <span>
@@ -202,7 +213,7 @@ class NoteCommnentList extends React.Component{
                             rowClass=""
                         />,
                         <RowWithSingleColumn 
-                            content={editButton}
+                            content={[editButton, cancelButton]}
                             columnClass="col-sm-9"
                             rowClass=""
                         />

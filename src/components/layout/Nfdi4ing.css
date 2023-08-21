@@ -2524,3 +2524,9 @@ Media Query Area for bein responsive
     background-color: #008d3b !important;
     color: white;
  }
+
+ .note-comment-cancel-edit-btn{
+    margin-top: 2px;
+    float: right;
+    margin-right: 5px;
+}
