@@ -57,9 +57,7 @@ class NoteDetail extends React.Component{
                 <div className="col-sm-9">
                     <div className="card">
                         <div className="card-header">
-                            <NoteCardHeader 
-                                note={this.state.note}
-                            />                            
+                            <NoteCardHeader note={this.state.note} />              
                         </div>
                         <div class="card-body">
                             <h1 className="card-title note-list-title">{this.state.note['title']}</h1>

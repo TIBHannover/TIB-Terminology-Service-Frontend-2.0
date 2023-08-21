@@ -7,9 +7,9 @@ import Pagination from "../../common/Pagination/Pagination";
 import NoteDetail from "./NoteDetail";
 import queryString from 'query-string'; 
 import Toolkit from "../../common/Toolkit";
-import { buildNoteCardHeader } from "./helpers";
 import {AlertBox} from "../../common/Alerts/Alerts";
 import NoteCardHeader from "./helpers";
+import { buildNoteAboutPart } from "./helpers";
 
 
 const ALL_TYPE = 0
@@ -132,10 +132,7 @@ class NoteList extends React.Component{
                     <div className="col-sm-12">
                         <div className="card note-list-card">
                             <div class="card-header">
-                                <NoteCardHeader 
-                                    note={note}  
-                                    noteEditAfterSubmitHandler={this.setNoteCreationResultStatus}    
-                                />                                
+                                <NoteCardHeader note={note} />                  
                             </div>
                             <div className="card-body">
                                 <div className="row">
@@ -155,7 +152,7 @@ class NoteList extends React.Component{
                                     <small>
                                         <ul className="">
                                             <li>type: {note['semantic_component_type']}</li>
-                                            <li>About: {note['semantic_component_label']}</li>
+                                            <li>About: {buildNoteAboutPart(note)}</li>
                                         </ul>                            
                                     </small>                                    
                                 </p>                        
