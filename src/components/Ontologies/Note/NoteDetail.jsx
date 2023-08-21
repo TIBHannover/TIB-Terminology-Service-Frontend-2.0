@@ -2,8 +2,8 @@ import React from "react";
 import ReactMarkdown from 'react-markdown';
 import NoteCommnentList from "./NoteCommentList";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
-import { buildNoteCardHeader } from "./helpers";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
+import NoteCardHeader from "./helpers";
 
 
 
@@ -57,7 +57,9 @@ class NoteDetail extends React.Component{
                 <div className="col-sm-9">
                     <div className="card">
                         <div className="card-header">
-                            {buildNoteCardHeader(this.state.note)}                            
+                            <NoteCardHeader 
+                                note={this.state.note}
+                            />                            
                         </div>
                         <div class="card-body">
                             <h1 className="card-title note-list-title">{this.state.note['title']}</h1>

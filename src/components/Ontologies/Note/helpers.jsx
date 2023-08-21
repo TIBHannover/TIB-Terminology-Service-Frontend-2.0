@@ -1,3 +1,4 @@
+import {React, useState, useEffect} from "react";
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import NoteEdit from "./NoteEdit";
@@ -13,7 +14,15 @@ const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/del
 const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
-export function buildNoteCardHeader(note, noteEditAfterSubmitHandler){    
+export const NoteCardHeader = (props) => {
+    const [note, setNote] = useState({});
+
+    useEffect(() => {
+        setNote(props.note)
+    }
+    , [props.note]);
+
+
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
@@ -77,7 +86,7 @@ export function buildNoteCardHeader(note, noteEditAfterSubmitHandler){
             <NoteEdit 
                 note={note}
                 key={"editNode" + note['id']}
-                noteListSubmitStatusHandler={noteEditAfterSubmitHandler}
+                noteListSubmitStatusHandler={props.noteEditAfterSubmitHandler}
             />
             <DeleteModal
                 modalId={note['id']}
@@ -145,3 +154,5 @@ export function buildCommentCardHeader(comment){
         </div> 
     ];
 }
+
+export default NoteCardHeader;

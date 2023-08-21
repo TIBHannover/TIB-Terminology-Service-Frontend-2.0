@@ -255,8 +255,8 @@ class NoteEdit extends React.Component{
     }
 
 
-    componentDidUpdate(){
-        if(this.props.note['id'] !== this.state.noteEditId){
+    componentDidUpdate(){        
+        if(this.props.note['id'] && this.props.note['id'] !== this.state.noteEditId){
             let content =  EditorState.createWithContent(stateFromMarkdown(this.props.note['content']));
             this.setState({
                 noteEditId: this.props.note['id'],
