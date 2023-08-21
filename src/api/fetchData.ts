@@ -498,6 +498,7 @@ export async function getAutoCompleteResult(enteredTerm:string, ontologyId:strin
     return result;
   }
   catch(e){
+    throw e
     return [];
   }
 

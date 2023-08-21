@@ -222,7 +222,7 @@ class NoteEdit extends React.Component{
             type = this.props.isSkos ? "individual" : "class"; 
         }       
         if (enteredTerm.length > 0){
-            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, this.props.ontologyId, type);
+            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, this.props.note['ontology_id'], type);
             this.setState({
                 autoCompleteSuggestionsList: autoCompleteResult
             });                        
@@ -279,8 +279,8 @@ class NoteEdit extends React.Component{
         if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
             return "";
         }
-        let value = this.state.enteredTermInAutoComplete
-        let inputPropsAutoSuggest = {
+        const value = this.state.enteredTermInAutoComplete
+        const inputPropsAutoSuggest = {
             placeholder: 'Type your target term',
             value,
             onChange: this.onAutoCompleteTextBoxChange
