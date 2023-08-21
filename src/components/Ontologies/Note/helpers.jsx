@@ -51,14 +51,14 @@ export function buildNoteCardHeader(note, noteEditAfterSubmitHandler){
                                         <div class="dropdown-divider"></div>
                                         <div class="dropdown-item note-dropdown-item">
                                         <button type="button" 
-                                            class="btn btn-primary" 
+                                            class="btn btn-sm borderless-btn note-edit-btn" 
                                             data-toggle="modal" 
                                             data-target={"#edit-note-modal" + note['id']}
                                             data-backdrop="static"
                                             data-keyboard="false"
                                             key={"editNode" + note['id']}                      
                                             >
-                                            Edit
+                                            <i class="far fa-edit"></i> Edit
                                         </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">

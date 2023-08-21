@@ -151,7 +151,7 @@ class NoteList extends React.Component{
                                     <small>
                                         <ul className="">
                                             <li>type: {note['semantic_component_type']}</li>
-                                            <li>About: {note['semantic_component_iri']}</li>
+                                            <li>About: {note['semantic_component_label']}</li>
                                         </ul>                            
                                     </small>                                    
                                 </p>                        

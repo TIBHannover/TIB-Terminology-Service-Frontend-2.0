@@ -56,8 +56,7 @@ class NoteEdit extends React.Component{
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
         this.clearAutoComplete = this.clearAutoComplete.bind(this);
         this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
-        this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);
-        this.openModal = this.openModal.bind(this);
+        this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);        
         this.onTextInputChange = this.onTextInputChange.bind(this);
     }
 
@@ -116,11 +115,6 @@ class NoteEdit extends React.Component{
                 </select>  
             </div>            
         ];
-    }
-
-
-    openModal(){
-        this.setState({modalIsOpen: true})
     }
 
 
