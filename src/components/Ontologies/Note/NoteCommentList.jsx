@@ -2,11 +2,10 @@ import React from "react";
 import { submitNoteComment } from "../../../api/tsMicroBackendCalls";
 import draftToMarkdown from 'draftjs-to-markdown';
 import { convertToRaw } from 'draft-js';
-import AuthTool from "../../User/Login/authTools";
 import ReactMarkdown from 'react-markdown';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 import TextEditor from "../../common/TextEditor/TextEditor";
-import { buildCommentCardHeader } from "./helpers";
+import { CommentCardHeader } from "./helpers";
 
 
 
@@ -37,7 +36,7 @@ class NoteCommnentList extends React.Component{
             let body = [
                 <div className="card">
                     <div className="card-header">
-                        {buildCommentCardHeader(comment)}
+                        <CommentCardHeader comment={comment} />                        
                     </div>
                     <div class="card-body">                        
                         <p className="card-text">

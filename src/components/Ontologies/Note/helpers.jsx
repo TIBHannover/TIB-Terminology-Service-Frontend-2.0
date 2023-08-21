@@ -102,12 +102,17 @@ export const NoteCardHeader = (props) => {
 
 
 
-export function buildCommentCardHeader(comment){    
+export const CommentCardHeader = (props) =>{
+    const [comment, setComment] = useState({});
+
+    useEffect(() => {
+        setComment(props.comment);
+    },[props.comment]);
+    
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", comment['id']);
     deleteFormData.append("objectType", 'comment');
-    let redirectAfterDeleteEndpoint = window.location.href;
-    console.info(redirectAfterDeleteEndpoint)
+    let redirectAfterDeleteEndpoint = window.location.href;    
 
     return [
         <div className="row">        
