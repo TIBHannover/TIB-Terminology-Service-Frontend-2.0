@@ -49,7 +49,7 @@ class NoteEdit extends React.Component{
         this.changeArtifactType = this.changeArtifactType.bind(this);
         this.createTypeDropDown = this.createTypeDropDown.bind(this);
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.submitNote = this.submitNote.bind(this);
+        this.edit = this.edit.bind(this);
         this.closeModal = this.closeModal.bind(this);        
         this.createVisibilityDropDown = this.createVisibilityDropDown.bind(this);
         this.changeVisibility = this.changeVisibility.bind(this);
@@ -58,11 +58,13 @@ class NoteEdit extends React.Component{
         this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
         this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);
         this.openModal = this.openModal.bind(this);
+        this.onTextInputChange = this.onTextInputChange.bind(this);
     }
 
 
-    onTextInputChange(){       
-        document.getElementById('noteTitle').style.borderColor = '';
+    onTextInputChange(e){        
+        document.getElementById("noteTitle" + this.props.note['id']).style.borderColor = '';
+        this.setState({noteTitle: e.target.value})
     }
 
 
@@ -141,9 +143,9 @@ class NoteEdit extends React.Component{
 
    
 
-    submitNote(){
+    edit(){
         let formIsValid = true;
-        let noteTitle = document.getElementById('noteTitle').value;
+        let noteTitle = document.getElementById("noteTitle" + this.props.note['id']).value;
         let selectedTargetTermIri = this.state.selectedTermFromAutoComplete['iri'];        
         let noteContent = "";
         let targetArtifactId = this.state.targetArtifact;
@@ -157,7 +159,7 @@ class NoteEdit extends React.Component{
         }
 
         if(!noteTitle || noteTitle === ""){
-            document.getElementById('noteTitle').style.borderColor = 'red';
+            document.getElementById("noteTitle" + this.props.note['id']).style.borderColor = 'red';
             formIsValid = false;
         }
         
@@ -176,7 +178,7 @@ class NoteEdit extends React.Component{
         }
 
         if(parseInt(targetArtifactId) === ONTOLOGY_COMPONENT_ID){
-            selectedTargetTermIri = this.props.ontologyId;
+            selectedTargetTermIri = this.props.note['ontology_id'];
         }
 
         
@@ -189,17 +191,18 @@ class NoteEdit extends React.Component{
         
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
+        data.append("noteId", this.props.note['id']);
         data.append("title", noteTitle);
         data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
-        data.append("ontology_id", this.props.ontologyId);        
+        data.append("ontology_id", this.props.note['ontology_id']);        
         data.append("semantic_component_type", targetArtifactType);
         data.append("visibility",  VISIBILITY_VALUES[this.state.visibility]);
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_note', {method: 'POST',  headers:headers, body: data})
+        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_note', {method: 'POST',  headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
                 if(data['_result']){
-                    let newNoteId = data['_result']['note_created']['id'];
+                    let newNoteId = data['_result']['note_updated']['id'];
                     this.props.noteListSubmitStatusHandler(true, newNoteId);                                        
                     this.closeModal();
                 }
@@ -267,7 +270,8 @@ class NoteEdit extends React.Component{
                 visibility: VISIBILITY_VALUES.indexOf(this.props.note['visibility']),
                 editorState: content,
                 noteTitle: this.props.note['title'],
-                enteredTermInAutoComplete: this.props.note['semantic_component_label']
+                enteredTermInAutoComplete: this.props.note['semantic_component_label'],
+                selectedTermFromAutoComplete: {"iri":  this.props.note['semantic_component_iri'], "label":  this.props.note['semantic_component_label']}
             });
         }
     }
@@ -323,7 +327,7 @@ class NoteEdit extends React.Component{
                                         <input 
                                             type="text"
                                             value={this.state.noteTitle} 
-                                            onChange={() => {this.onTextInputChange()}}                                                 
+                                            onChange={this.onTextInputChange} 
                                             class="form-control" 
                                             id={"noteTitle" + targetNote['id']}
                                             placeholder="Enter Title">                                            
@@ -346,7 +350,7 @@ class NoteEdit extends React.Component{
                             </div>                        
                             <div class="modal-footer">                            
                                 <button type="button" id={"noteCreationCloseModal" + targetNote['id']} class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" >Close</button>
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Edit</button>
+                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.edit}>Edit</button>
                             </div>
                         </div>
                     </div>

@@ -131,7 +131,7 @@ class NoteList extends React.Component{
                     <div className="col-sm-12">
                         <div className="card note-list-card">
                             <div class="card-header">
-                                {buildNoteCardHeader(note)}                        
+                                {buildNoteCardHeader(note, this.setNoteCreationResultStatus)}                        
                             </div>
                             <div className="card-body">
                                 <div className="row">

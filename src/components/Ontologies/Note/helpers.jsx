@@ -13,7 +13,7 @@ const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/del
 const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
-export function buildNoteCardHeader(note){    
+export function buildNoteCardHeader(note, noteEditAfterSubmitHandler){    
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
@@ -77,7 +77,7 @@ export function buildNoteCardHeader(note){
             <NoteEdit 
                 note={note}
                 key={"editNode" + note['id']}
-
+                noteListSubmitStatusHandler={noteEditAfterSubmitHandler}
             />
             <DeleteModal
                 modalId={note['id']}
