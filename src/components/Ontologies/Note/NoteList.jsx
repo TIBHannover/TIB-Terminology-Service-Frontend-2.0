@@ -335,7 +335,7 @@ class NoteList extends React.Component{
                                 targetArtifactIri={this.props.targetArtifactIri}
                                 ontologyId={this.props.ontology.ontologyId}                                
                                 noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
-                                isGeneric={this.props.isGeneric}
+                                isGeneric={this.props.isGeneric}                                
                             />
                         </div>                    
                     </div>

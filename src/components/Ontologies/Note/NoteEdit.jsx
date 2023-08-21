@@ -1,5 +1,6 @@
 import React from "react";
-import { convertToRaw } from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
 import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
@@ -30,7 +31,7 @@ const rendetAutoCompleteItem = suggestion => (
 
 
 
-class NoteCreation extends React.Component{
+class NoteEdit extends React.Component{
     constructor(props){
         super(props);
         this.state = ({           
@@ -40,6 +41,8 @@ class NoteCreation extends React.Component{
            autoCompleteSuggestionsList: [],
            enteredTermInAutoComplete: "",
            selectedTermFromAutoComplete: {"iri": null, "label": null},
+           noteEditId: -1,
+           noteTitle: "",
            modalIsOpen: false
         });
         
@@ -228,7 +231,7 @@ class NoteCreation extends React.Component{
 
 
     clearAutoComplete(){
-        document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
+        // document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
         this.setState({
             autoCompleteSuggestionsList: []
         });
@@ -236,7 +239,7 @@ class NoteCreation extends React.Component{
 
 
     onAutoCompleteTextBoxChange = (event, { newValue }) => {
-        document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
+        // document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
         this.setState({
           enteredTermInAutoComplete: newValue
         });
@@ -255,55 +258,55 @@ class NoteCreation extends React.Component{
     }
 
 
+    componentDidUpdate(){
+        if(this.props.note['id'] !== this.state.noteEditId){
+            let content =  EditorState.createWithContent(stateFromMarkdown(this.props.note['content']));
+            this.setState({
+                noteEditId: this.props.note['id'],
+                targetArtifact: COMPONENT_VALUES.indexOf(this.props.note['semantic_component_type']),
+                visibility: VISIBILITY_VALUES.indexOf(this.props.note['visibility']),
+                editorState: content,
+                noteTitle: this.props.note['title'],
+                enteredTermInAutoComplete: this.props.note['semantic_component_label']
+            });
+        }
+    }
+
+
 
     render(){
+        let targetNote = this.props.note;
         if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
             return "";
         }
-        const value = this.state.enteredTermInAutoComplete
-        const inputPropsAutoSuggest = {
+        let value = this.state.enteredTermInAutoComplete
+        let inputPropsAutoSuggest = {
             placeholder: 'Type your target term',
             value,
             onChange: this.onAutoCompleteTextBoxChange
         };
 
         return [
-            <span>            
-            <div className="row">
-                <div className="col-sm-12 text-center">
-                    <button type="button" 
-                        class="btn btn-primary" 
-                        data-toggle="modal" 
-                        data-target="#add-note-modal" 
-                        data-backdrop="static"
-                        data-keyboard="false" 
-                        onClick={() => {this.openModal()}}           
-                        >
-                        +Add New Note
-                    </button>
-                </div>
-            </div>            
-            
-            {this.state.modalIsOpen && 
-                <div class="modal" id="add-note-modal">
+            <span>                        
+                <div class="modal" id={"edit-note-modal" + targetNote['id']} key={"edit-note-modal" + targetNote['id']}>
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">                    
                             <div class="modal-header">
-                                <h4 class="modal-title">{"Add a New Note"}</h4>
+                                <h4 class="modal-title">{"Edit This Note"}</h4>
                                 <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                             </div>
                             <br></br>                                                
                             <div class="modal-body">                                    
                                 <div className="row">                                
                                     <div className="col-sm-8">
-                                        {this.props.isGeneric && this.createTypeDropDown()}
+                                        {this.createTypeDropDown()}
                                         {this.createVisibilityDropDown()}
-                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
-                                            <p>About: <b>{this.props.ontologyId}</b></p>
+                                        {parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
+                                            <p>About: <b>{this.props.note['ontology_id']}</b></p>
                                         }
-                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
+                                        {parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
                                             <div>
-                                                <label className="required_input" for="noteIri">About</label>                                            
+                                                <label className="required_input">About</label>                                            
                                                 <Autosuggest
                                                     suggestions={this.state.autoCompleteSuggestionsList}
                                                     onSuggestionsFetchRequested={this.onAutoCompleteChange}
@@ -311,16 +314,20 @@ class NoteCreation extends React.Component{
                                                     getSuggestionValue={getAutoCompleteValue}
                                                     renderSuggestion={rendetAutoCompleteItem}
                                                     onSuggestionSelected={this.onAutoCompleteSelecteion}
-                                                    inputProps={inputPropsAutoSuggest}
+                                                    inputProps={inputPropsAutoSuggest}                                                    
                                                 />
                                                 <br></br>
                                             </div>
-                                        }
-                                        {!this.props.isGeneric && 
-                                            <p>About: <b>{this.props.targetArtifactLabel}</b></p>
-                                        }
-                                        <label className="required_input" for="noteTitle">Title</label>
-                                        <input type="text" onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
+                                        }                                      
+                                        <label className="required_input" for={"noteTitle" + targetNote['id']}>Title</label>
+                                        <input 
+                                            type="text"
+                                            value={this.state.noteTitle} 
+                                            onChange={() => {this.onTextInputChange()}}                                                 
+                                            class="form-control" 
+                                            id={"noteTitle" + targetNote['id']}
+                                            placeholder="Enter Title">                                            
+                                        </input>                                                                                          
                                     </div>
                                 </div>
                                 <br></br>
@@ -338,17 +345,16 @@ class NoteCreation extends React.Component{
 
                             </div>                        
                             <div class="modal-footer">                            
-                                <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>
+                                <button type="button" id={"noteCreationCloseModal" + targetNote['id']} class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" >Close</button>
+                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Edit</button>
                             </div>
                         </div>
                     </div>
-                </div>
-                }
+                </div>                
             </span>
         ];
     }
 
 }
 
-export default NoteCreation;
+export default NoteEdit;

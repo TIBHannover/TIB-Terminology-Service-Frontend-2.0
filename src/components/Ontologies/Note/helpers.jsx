@@ -1,5 +1,6 @@
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
+import NoteEdit from "./NoteEdit";
 
 
 const VISIBILITY_HELP = {
@@ -48,10 +49,22 @@ export function buildNoteCardHeader(note){
                                 {note['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
-                                        <div class="dropdown-item note-dropdown-item"><button type="button" class="btn btn-danger btn-sm note-edit-btn borderless-btn">Edit</button></div>
+                                        <div class="dropdown-item note-dropdown-item">
+                                        <button type="button" 
+                                            class="btn btn-primary" 
+                                            data-toggle="modal" 
+                                            data-target={"#edit-note-modal" + note['id']}
+                                            data-backdrop="static"
+                                            data-keyboard="false"
+                                            key={"editNode" + note['id']}                      
+                                            >
+                                            Edit
+                                        </button>
+                                        </div>
                                         <div class="dropdown-item note-dropdown-item">
                                             <DeleteModalBtn
-                                                modalId={note['id']}                                                
+                                                modalId={note['id']}  
+                                                key={"deleteBtnNode" + note['id']}                                              
                                              />
                                         </div>
                                     </span>                                    
@@ -61,12 +74,18 @@ export function buildNoteCardHeader(note){
                     </div>
                 </div>                                                      
             </div>
+            <NoteEdit 
+                note={note}
+                key={"editNode" + note['id']}
+
+            />
             <DeleteModal
                 modalId={note['id']}
                 formData={deleteFormData}
                 callHeaders={callHeader}
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
+                key={"deleteNode" + note['id']}
             />
         </div> 
     ];
@@ -115,6 +134,7 @@ export function buildCommentCardHeader(comment){
                     </div>
                 </div>                                                      
             </div>
+            
             <DeleteModal
                 modalId={"_comment-" + comment['id']}
                 formData={deleteFormData}

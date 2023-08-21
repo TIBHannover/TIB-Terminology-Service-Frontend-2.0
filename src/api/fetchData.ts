@@ -504,8 +504,6 @@ export async function getAutoCompleteResult(enteredTerm:string, ontologyId:strin
 }
 
 
-
-
 async function getPageCount(url: string){
   let answer = await fetch(url, getCallSetting);
   answer = await answer.json();
