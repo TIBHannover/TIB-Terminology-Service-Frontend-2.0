@@ -4,6 +4,7 @@ import NoteCommnentList from "./NoteCommentList";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import NoteCardHeader from "./helpers";
+import { buildNoteAboutPart } from "./helpers";
 
 
 
@@ -61,6 +62,13 @@ class NoteDetail extends React.Component{
                         </div>
                         <div class="card-body">
                             <h1 className="card-title note-list-title">{this.state.note['title']}</h1>
+                            <small>
+                                <ul className="">
+                                    <li>type: {this.state.note['semantic_component_type']}</li>
+                                    <li>About: {buildNoteAboutPart(this.state.note)}</li>
+                                </ul>                            
+                            </small>   
+                            <hr></hr>
                             <p className="card-text">
                                 <ReactMarkdown>{this.state.note['content']}</ReactMarkdown>
                             </p>                        
