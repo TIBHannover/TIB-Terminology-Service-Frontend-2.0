@@ -58,6 +58,21 @@ class NoteEdit extends React.Component{
         this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
         this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);        
         this.onTextInputChange = this.onTextInputChange.bind(this);
+        this.setComponentData = this.setComponentData.bind(this);
+    }
+
+
+    setComponentData(){
+        let content =  EditorState.createWithContent(stateFromMarkdown(this.props.note['content']));
+        this.setState({
+            noteEditId: this.props.note['id'],
+            targetArtifact: COMPONENT_VALUES.indexOf(this.props.note['semantic_component_type']),
+            visibility: VISIBILITY_VALUES.indexOf(this.props.note['visibility']),
+            editorState: content,
+            noteTitle: this.props.note['title'],
+            enteredTermInAutoComplete: this.props.note['semantic_component_label'],
+            selectedTermFromAutoComplete: {"iri":  this.props.note['semantic_component_iri'], "label":  this.props.note['semantic_component_label']}
+        });
     }
 
 
@@ -255,18 +270,18 @@ class NoteEdit extends React.Component{
     }
 
 
+
+    componentDidMount(){
+        if(this.props.note['id']){
+            this.setComponentData();
+        }        
+    }
+
+
+
     componentDidUpdate(){        
         if(this.props.note['id'] && this.props.note['id'] !== this.state.noteEditId){
-            let content =  EditorState.createWithContent(stateFromMarkdown(this.props.note['content']));
-            this.setState({
-                noteEditId: this.props.note['id'],
-                targetArtifact: COMPONENT_VALUES.indexOf(this.props.note['semantic_component_type']),
-                visibility: VISIBILITY_VALUES.indexOf(this.props.note['visibility']),
-                editorState: content,
-                noteTitle: this.props.note['title'],
-                enteredTermInAutoComplete: this.props.note['semantic_component_label'],
-                selectedTermFromAutoComplete: {"iri":  this.props.note['semantic_component_iri'], "label":  this.props.note['semantic_component_label']}
-            });
+            this.setComponentData();
         }
     }
 
