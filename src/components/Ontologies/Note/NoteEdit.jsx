@@ -113,7 +113,7 @@ class NoteEdit extends React.Component{
                     <option value={CLASS_COMPONENT_ID} key={CLASS_COMPONENT_ID}>Class</option>
                     <option value={PROPERTY_COMPONENT_ID} key={PROPERTY_COMPONENT_ID}>Property</option>
                     <option value={INDIVIDUAL_COMPONENT_ID} key={INDIVIDUAL_COMPONENT_ID}>Individual</option>
-                </select>  
+                </select>   
             </div>            
         ];
     }
@@ -146,7 +146,10 @@ class NoteEdit extends React.Component{
             enteredTermInAutoComplete: "",
             selectedTermFromAutoComplete: {"iri": null, "label": null},
             modalIsOpen: false     
-        });            
+        });
+        let searchParams = new URLSearchParams(window.location.search);
+        let locationObject = window.location;        
+        window.location.replace(locationObject.pathname + "?" +  searchParams.toString());
     }
 
 
@@ -211,17 +214,14 @@ class NoteEdit extends React.Component{
             .then((response) => response.json())
             .then((data) => {
                 if(data['_result']){
-                    let newNoteId = data['_result']['note_updated']['id'];
-                    this.props.noteListSubmitStatusHandler(true, newNoteId);                                        
+                    let newNoteId = data['_result']['note_updated']['id'];                    
                     this.closeModal();
                 }
-                else{
-                    this.props.noteListSubmitStatusHandler(false);
+                else{                    
                     this.closeModal();          
                 }
             })
             .catch((error) => {                
-                this.props.noteListSubmitStatusHandler(false);
                 this.closeModal();               
             });
     }
