@@ -30,7 +30,10 @@ export function auth(){
 
 
 
-export async function isLogin(){        
+export async function isLogin(){      
+    if(!process.env.REACT_APP_AUTH_FEATURE || process.env.REACT_APP_AUTH_FEATURE !== "true"){
+        return false;
+    }  
     if(localStorage.getItem("token")){        
         let data = new FormData();        
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});

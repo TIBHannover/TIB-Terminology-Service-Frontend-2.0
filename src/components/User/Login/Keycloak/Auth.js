@@ -20,7 +20,7 @@ export function auth(){
 
 
 
-export async function isLogin(){    
+export async function isLogin(){ 
     if(localStorage.getItem("token")){
         let data = new FormData();
         data.append("token", localStorage.getItem("token"));
