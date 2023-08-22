@@ -8,8 +8,8 @@ import NoteDetail from "./NoteDetail";
 import queryString from 'query-string'; 
 import Toolkit from "../../common/Toolkit";
 import {AlertBox} from "../../common/Alerts/Alerts";
-import NoteCardHeader from "./helpers";
-import { buildNoteAboutPart } from "./helpers";
+import NoteCard from "./Cards";
+
 
 
 const ALL_TYPE = 0
@@ -128,43 +128,11 @@ class NoteList extends React.Component{
         let noteExist = true;
         let result = [];
         for(let note of notes){            
-            let noteUrl = Toolkit.setParamInUrl('noteId', note['id']);
             result.push(
-                <div className="row" key={note['id']}>
-                    <div className="col-sm-12">
-                        <div className="card note-list-card">
-                            <div class="card-header">
-                                <NoteCardHeader note={note} /> 
-                            </div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="coll-sm-12">
-                                        <h5 className="card-title">
-                                            <Link to={noteUrl} 
-                                                className="note-list-title" 
-                                                value={note['id']} 
-                                                onClick={this.selectNote}
-                                                >
-                                                {note['title']}
-                                            </Link>
-                                        </h5>
-                                    </div>                                    
-                                </div>                                
-                                <p className="card-text">
-                                    <small>
-                                        <ul className="">
-                                            <li>type: {note['semantic_component_type']}</li>
-                                            <li>About: {buildNoteAboutPart(note)}</li>
-                                        </ul>                            
-                                    </small>                                    
-                                </p>                        
-                            </div>
-                            <div class="card-footer note-card-footer text-muted">                                
-                                <i class="fa fa-comment" aria-hidden="true"></i><small>{note['comments_count']}</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <NoteCard 
+                    note={note}
+                    noteSelectionHandler={this.selectNote}
+                />
             );
         }
 
