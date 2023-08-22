@@ -141,7 +141,8 @@ export const CommentCardHeader = (props) =>{
                                                 class="btn btn-danger btn-sm note-edit-btn borderless-btn"
                                                 data-id={comment['id']}
                                                 data-content={comment['content']}
-                                                onClick={props.editHandlerFunc}>
+                                                onClick={props.editHandlerFunc}
+                                                >
                                                 <i class="far fa-edit"></i> Edit
                                             </button>
                                         </div>

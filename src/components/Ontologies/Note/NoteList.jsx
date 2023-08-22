@@ -64,7 +64,8 @@ class NoteList extends React.Component{
         if(inputNoteId !== -1 && inputNoteId !== this.state.selectedNoteId){            
             this.setState({
                 selectedNoteId: inputNoteId,
-                noteDetailPage: true
+                noteDetailPage: true,
+                componentIsLoading: false
             });            
         }
         else if(inputNoteId === -1){
@@ -102,7 +103,8 @@ class NoteList extends React.Component{
                 targetArtifactIri: this.props.targetArtifactIri,
                 noteListPage: parseInt(pageNumber),
                 notePageSize: parseInt(pageSize),
-                selectedArtifactType: TYPES_VALUES.indexOf(type)        
+                selectedArtifactType: TYPES_VALUES.indexOf(type),
+                componentIsLoading: false      
             });
         })
         .then(()=>{this.createNotesList()});
@@ -132,7 +134,7 @@ class NoteList extends React.Component{
                     <div className="col-sm-12">
                         <div className="card note-list-card">
                             <div class="card-header">
-                                <NoteCardHeader note={note} />                  
+                                <NoteCardHeader note={note} /> 
                             </div>
                             <div className="card-body">
                                 <div className="row">
@@ -207,7 +209,8 @@ class NoteList extends React.Component{
             selectedArtifactType: e.target.value,
             noteListPage: DEFAULT_PAGE_NUMBER,
             notePageSize: DEFAULT_PAGE_SIZE,
-            noteSubmited: false           
+            noteSubmited: false,
+            componentIsLoading: true      
         }, () =>{                        
             this.updateURL(this.state.noteListPage, this.state.notePageSize, this.state.selectedArtifactType)
         });
@@ -217,7 +220,8 @@ class NoteList extends React.Component{
     handlePagination (value) {
         this.setState({
           noteListPage: value,          
-          tableBodyContent: ""    
+          tableBodyContent: "" ,
+          componentIsLoading: true   
         }, ()=> {            
             this.updateURL(value, this.state.notePageSize, this.state.selectedArtifactType);
         });
@@ -287,7 +291,7 @@ class NoteList extends React.Component{
 
 
     
-    render(){
+    render(){    
         return (
             <div className="tree-view-container notes-container">                
                 {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
@@ -341,6 +345,9 @@ class NoteList extends React.Component{
                         </div>                    
                     </div>
                 }
+                {!this.state.noteDetailPage && this.state.componentIsLoading && 
+                    <div className="is-loading-term-list isLoading"></div>
+                }
                 {this.state.noteDetailPage &&
                     <span>
                         <div className="row">
@@ -356,7 +363,7 @@ class NoteList extends React.Component{
                         <br></br>
                         <NoteDetail noteId={this.state.selectedNoteId} />
                     </span>                    
-                }
+                }                
             </div>
         );
     }
