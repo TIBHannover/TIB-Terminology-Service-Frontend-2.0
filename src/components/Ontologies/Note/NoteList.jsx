@@ -237,6 +237,10 @@ class NoteList extends React.Component{
         }, () => {
             this.setComponentData();
         });
+
+        setTimeout(() => {
+            this.setState({noteSubmited: false});
+        }, 5000);
         
     }
 
