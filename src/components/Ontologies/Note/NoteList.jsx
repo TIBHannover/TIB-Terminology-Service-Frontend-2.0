@@ -196,7 +196,7 @@ class NoteList extends React.Component{
             noteDetailPage: true,
             selectedNoteId: noteId,
             noteSubmited: false
-        });
+        });        
     }
 
 
@@ -208,7 +208,7 @@ class NoteList extends React.Component{
             noteSubmited: false,
             componentIsLoading: true
         }, () => {
-            this.setComponentData();
+            this.updateURL(this.state.noteListPage, this.state.notePageSize, this.state.selectedArtifactType);
         });
     }
 

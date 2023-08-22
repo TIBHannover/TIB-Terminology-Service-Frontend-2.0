@@ -51,7 +51,12 @@ class NoteDetail extends React.Component{
     componentDidMount(){
         if(this.props.noteId){
             this.getTheNote();
-        }        
+        }
+        let searchParams = new URLSearchParams(window.location.search);        
+        searchParams.delete('page');
+        searchParams.delete('size');
+        searchParams.delete('type');
+        this.props.history.push(window.location.pathname + "?" +  searchParams.toString());         
     }
 
 
