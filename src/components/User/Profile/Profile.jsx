@@ -9,7 +9,7 @@ import {buildProfileByTsBackend, buildProfileByKecloak} from './ProfileFields';
 class UserProfile extends React.Component{
 
     render(){
-        if(!process.env.REACT_APP_AUTH_FEATURE || process.env.REACT_APP_AUTH_FEATURE !== "true"){
+        if(process.env.REACT_APP_AUTH_FEATURE !== "true"){
             return null;
         }
         return [

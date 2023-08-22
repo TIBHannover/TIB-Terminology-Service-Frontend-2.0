@@ -185,6 +185,10 @@ class NoteCommnentList extends React.Component{
 
 
     render(){
+        if(!process.env.REACT_APP_NOTE_FEATURE || process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+            return null;
+        }
+        
         let editor = <TextEditor 
                         editorState={this.state.commentEditorState} 
                         textChangeHandlerFunction={this.onTextAreaChange}

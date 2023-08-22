@@ -261,6 +261,9 @@ class NoteList extends React.Component{
 
     
     render(){    
+        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+            return null;
+        }
         return (
             <div className="tree-view-container notes-container">                
                 {this.state.noteSubmited && this.state.noteSubmitSeccuess &&

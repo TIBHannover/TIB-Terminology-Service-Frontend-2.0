@@ -56,7 +56,10 @@ class NoteDetail extends React.Component{
 
 
 
-    create_note_card(){                        
+    create_note_card(){        
+        if(!process.env.REACT_APP_NOTE_FEATURE || process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+            return null;
+        }                
         return [
             <div className="row">
                 <div className="col-sm-9">

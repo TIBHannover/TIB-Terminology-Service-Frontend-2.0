@@ -409,7 +409,7 @@ class OntologyPage extends React.Component {
                                   isSkos={this.state.isSkosOntology}                              
                                 />
                 }
-                {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) &&
+                {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) && process.env.REACT_APP_NOTE_FEATURE === "true" &&
                                 <NoteList                  
                                   componentIdentity={'notes'}
                                   key={'notesPage'}

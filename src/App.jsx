@@ -42,7 +42,7 @@ process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && import ('./components/layout/
 function App() {
   AppHelpers.setSiteTitleAndFavIcon();
 
-  if(!process.env.REACT_APP_AUTH_FEATURE || process.env.REACT_APP_AUTH_FEATURE !== "true"){
+  if(process.env.REACT_APP_AUTH_FEATURE !== "true"){
     // set login status
     isLogin().then((resp) => {
       localStorage.setItem('isLoginInTs', resp);
