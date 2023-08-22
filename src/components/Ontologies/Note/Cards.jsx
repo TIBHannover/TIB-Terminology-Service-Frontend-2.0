@@ -71,7 +71,7 @@ export const NoteCard = (props) => {
 export const CommentCard = (props) =>{
     
     return (
-        <div className="card">
+        <div className="card" id={"comment-card-" + props.comment['id']}>
             <div className="card-header">
                 <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler} />                        
             </div>
@@ -103,7 +103,7 @@ export const NoteCardHeader = (props) => {
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;
     searchParams.set('page', 1);
-    searchParams.set('size', 10);
+    searchParams.set('size', 10);   
     if (redirectAfterDeleteEndpoint.includes("noteId=")){
         // we are on the note page                
         searchParams.delete('noteId');                 
@@ -129,37 +129,39 @@ export const NoteCardHeader = (props) => {
                                 <div class="dropdown-item note-dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
                                     <small><i class="fa-solid fa-eye"></i>{note['visibility']}</small>
                                 </div>
-                                <button 
-                                    type="button" 
-                                    class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
-                                    onClick={() => {
-                                        let searchParams = new URLSearchParams(window.location.search);
-                                        let locationObject = window.location;
-                                        searchParams.delete('comment');
-                                        searchParams.set('noteId', note['id']); 
-                                        navigator.clipboard.writeText(locationObject.host + locationObject.pathname + "?" +  searchParams.toString());
-                                        setLinkCopied(true);
-                                        setTimeout(() => {
-                                            setLinkCopied(false);
-                                        }, 2000); 
-                                    }}
-                                    >
-                                    <i class="fa-solid fa-copy"></i> Link
-                                </button>
+                                <div class="dropdown-item note-dropdown-item">
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
+                                        onClick={() => {
+                                            let searchParams = new URLSearchParams(window.location.search);
+                                            let locationObject = window.location;
+                                            searchParams.delete('comment');
+                                            searchParams.set('noteId', note['id']); 
+                                            navigator.clipboard.writeText(locationObject.host + locationObject.pathname + "?" +  searchParams.toString());
+                                            setLinkCopied(true);
+                                            setTimeout(() => {
+                                                setLinkCopied(false);
+                                            }, 2000); 
+                                        }}
+                                        >
+                                        <i class="fa-solid fa-copy"></i> Link
+                                    </button>
+                                </div>
                                 {note['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
                                         <div class="dropdown-item note-dropdown-item">
-                                        <button type="button" 
-                                            class="btn btn-sm borderless-btn note-edit-btn" 
-                                            data-toggle="modal" 
-                                            data-target={"#edit-note-modal" + note['id']}
-                                            data-backdrop="static"
-                                            data-keyboard="false"
-                                            key={"editNode" + note['id']}                      
-                                            >
-                                            <i class="far fa-edit"></i> Edit
-                                        </button>
+                                            <button type="button" 
+                                                class="btn btn-sm borderless-btn note-edit-btn" 
+                                                data-toggle="modal" 
+                                                data-target={"#edit-note-modal" + note['id']}
+                                                data-backdrop="static"
+                                                data-keyboard="false"
+                                                key={"editNode" + note['id']}                      
+                                                >
+                                                <i class="far fa-edit"></i> Edit
+                                            </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
                                             <DeleteModalBtn
@@ -203,8 +205,11 @@ export const CommentCardHeader = (props) =>{
     
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", comment['id']);
-    deleteFormData.append("objectType", 'comment');
-    let redirectAfterDeleteEndpoint = window.location.href;    
+    deleteFormData.append("objectType", 'comment');        
+    let searchParams = new URLSearchParams(window.location.search);
+    let locationObject = window.location;
+    searchParams.delete('comment');    
+    let redirectAfterDeleteEndpoint = locationObject.pathname + "?" +  searchParams.toString();  
 
     return [
         <div className="row" key={"c-" + comment['id']}>        

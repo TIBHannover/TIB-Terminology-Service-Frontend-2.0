@@ -6,6 +6,7 @@ import { convertToRaw, EditorState } from 'draft-js';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import { CommentCard } from "./Cards";
+import { withRouter } from 'react-router-dom';
 
 
 
@@ -43,7 +44,7 @@ class NoteCommnentList extends React.Component{
                 <RowWithSingleColumn 
                     content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
                     columnClass="col-sm-9"
-                    rowClass="note-comment-card"
+                    rowClass="note-comment-card"                    
                 />         
             );
         }
@@ -146,6 +147,9 @@ class NoteCommnentList extends React.Component{
 
 
     cancelEdit(){
+        let searchParams = new URLSearchParams(window.location.search);     
+        searchParams.delete('comment');
+        this.props.history.push(window.location.pathname + "?" +  searchParams.toString());
         this.setState({
             editNoteComment: -1,
             editMode: false,
@@ -154,14 +158,29 @@ class NoteCommnentList extends React.Component{
     }
 
 
+    jumpToCommentIfExist(){
+        let searchParams = new URLSearchParams(window.location.search);     
+        let commentId = searchParams.get('comment');
+        let commentBox = document.getElementById("comment-card-" + commentId);
+        if(commentBox){            
+            commentBox.style.border = '2px solid red';            
+            setTimeout(() => {
+                commentBox.style.borderColor = '';
+            },5000); 
+            commentBox.scrollIntoView();
+        }
+    }
+
+
     componentDidMount(){
-        this.createCommentList();
+        this.createCommentList();        
     }
 
     componentDidUpdate(){
         if(this.state.noteId !== this.props.note['id']){
-            this.createCommentList();
+            this.createCommentList();            
         }
+        this.jumpToCommentIfExist();
     }
 
 
@@ -212,6 +231,6 @@ class NoteCommnentList extends React.Component{
     }
 }
 
-export default NoteCommnentList;
+export default withRouter(NoteCommnentList);
 
 

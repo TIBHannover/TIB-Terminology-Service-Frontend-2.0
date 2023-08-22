@@ -5,6 +5,7 @@ import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import { buildNoteAboutPart } from "./helpers";
 import { NoteCardHeader } from "./Cards";
+import { withRouter } from 'react-router-dom';
 
 
 
@@ -38,6 +39,9 @@ class NoteDetail extends React.Component{
 
 
     reloadNoteDetail(){
+        let searchParams = new URLSearchParams(window.location.search);     
+        searchParams.delete('comment');
+        this.props.history.push(window.location.pathname + "?" +  searchParams.toString());
         this.setState({note: {}}, () => {
             this.getTheNote();
         });        
@@ -97,4 +101,4 @@ class NoteDetail extends React.Component{
 
 }
 
-export default NoteDetail;
+export default withRouter(NoteDetail);
