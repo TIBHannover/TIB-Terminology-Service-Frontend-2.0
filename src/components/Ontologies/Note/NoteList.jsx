@@ -121,7 +121,7 @@ class NoteList extends React.Component{
 
 
     updateURL(pageNumber, pageSize, type=ALL_TYPE){
-        let currentUrlParams = new URLSearchParams();
+        let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.set('type', TYPES_VALUES[parseInt(type)]);
         currentUrlParams.set('page', pageNumber);
         currentUrlParams.set('size', pageSize);                
@@ -214,10 +214,10 @@ class NoteList extends React.Component{
 
 
     generateBackButton(){
-        const searchParams = new URLSearchParams(window.location.search);
-        let locationObject = window.location;
-        searchParams.delete('noteId'); 
-        return locationObject.pathname + "?" +  searchParams.toString();
+        const searchParams = new URLSearchParams(window.location.search);        
+        searchParams.delete('noteId');
+        searchParams.delete('comment');  
+        return window.location.pathname + "?" +  searchParams.toString();
     }
 
 

@@ -24,8 +24,13 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 export const NoteCard = (props) => {
-
-    let noteUrl = Toolkit.setParamInUrl('noteId', props.note['id']);
+    
+    let searchParams = new URLSearchParams(window.location.search);        
+    searchParams.set('noteId', props.note['id']);
+    searchParams.delete('page');
+    searchParams.delete('size');
+    searchParams.delete('type');
+    let noteUrl = window.location.pathname + "?" +  searchParams.toString();
 
     return(
         <div className="row" key={props.note['id']}>
@@ -137,6 +142,9 @@ export const NoteCardHeader = (props) => {
                                             let searchParams = new URLSearchParams(window.location.search);
                                             let locationObject = window.location;
                                             searchParams.delete('comment');
+                                            searchParams.delete('page');
+                                            searchParams.delete('size');
+                                            searchParams.delete('type');
                                             searchParams.set('noteId', note['id']); 
                                             navigator.clipboard.writeText(locationObject.host + locationObject.pathname + "?" +  searchParams.toString());
                                             setLinkCopied(true);
