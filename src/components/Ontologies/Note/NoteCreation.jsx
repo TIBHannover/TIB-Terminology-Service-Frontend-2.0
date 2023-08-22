@@ -7,6 +7,7 @@ import AuthTool from "../../User/Login/authTools";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import DropDown from "../../common/DropDown/DropDown";
 import * as constantsVars from './Constants';
+import { submitNote } from "../../../api/tsMicroBackendCalls";
 
 
 
@@ -26,7 +27,7 @@ class NoteCreation extends React.Component{
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.submitNote = this.submitNote.bind(this);
+        this.submit = this.submit.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.changeVisibility = this.changeVisibility.bind(this);
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
@@ -88,7 +89,7 @@ class NoteCreation extends React.Component{
 
    
 
-    submitNote(){
+    submit(){
         let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle').value;
         let selectedTargetTermIri = this.state.selectedTermFromAutoComplete['iri'];        
@@ -142,23 +143,10 @@ class NoteCreation extends React.Component{
         data.append("ontology_id", this.props.ontologyId);        
         data.append("semantic_component_type", targetArtifactType);
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[this.state.visibility]);
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_note', {method: 'POST',  headers:headers, body: data})
-            .then((response) => response.json())
-            .then((data) => {
-                if(data['_result']){
-                    let newNoteId = data['_result']['note_created']['id'];
-                    this.props.noteListSubmitStatusHandler(true, newNoteId);                                        
-                    this.closeModal();
-                }
-                else{
-                    this.props.noteListSubmitStatusHandler(false);
-                    this.closeModal();          
-                }
-            })
-            .catch((error) => {                
-                this.props.noteListSubmitStatusHandler(false);
-                this.closeModal();               
-            });
+        submitNote(data).then((newNoteId) => {
+            this.props.noteListSubmitStatusHandler(newNoteId);
+            this.closeModal();
+        });
     }
 
 
@@ -303,7 +291,7 @@ class NoteCreation extends React.Component{
                             </div>                        
                             <div class="modal-footer">                            
                                 <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitNote}>Submit</button>
+                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submit}>Submit</button>
                             </div>
                         </div>
                     </div>

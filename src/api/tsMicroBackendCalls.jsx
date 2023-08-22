@@ -2,6 +2,22 @@ import AuthTool from "../components/User/Login/authTools";
 
 
 
+export async function submitNote(noteDataForm){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_note';
+        let result = await fetch(url, {method: 'POST',  headers:headers, body: noteDataForm});
+        result = await result.json();
+        result = result['_result']['note_created']['id'];
+        return result;
+    }
+    catch(e){
+        return false;
+    }
+}
+
+
+
 export async function submitNoteComment({noteId, content}){
     try{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
