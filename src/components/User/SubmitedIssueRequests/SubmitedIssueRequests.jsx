@@ -7,12 +7,17 @@ const ISSUE_TYPE = {"general": "Generel", "termRequest": "Term Request"}
 
 
 export default function SubmitedIssueRequests(){    
+    
     const [issuesList, setIssuesList] = useState(null);  
 
     if(!issuesList){
         getIssueList().then((resp) => {        
             setIssuesList(resp);
         });
+    }
+
+    if(process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true"){            
+        return null;
     }
    
     return [

@@ -57,7 +57,7 @@ class NoteDetail extends React.Component{
 
 
     create_note_card(){        
-        if(!process.env.REACT_APP_NOTE_FEATURE || process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
             return null;
         }                
         return [

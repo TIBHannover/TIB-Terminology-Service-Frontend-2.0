@@ -230,6 +230,9 @@ class TermRequest extends React.Component{
    
 
     render(){
+        if(process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true"){            
+            return null;
+        }
         if(localStorage.getItem('authProvider') !== 'github'){
             return "";
         }

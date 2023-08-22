@@ -195,7 +195,7 @@ class NoteCreation extends React.Component{
 
 
     render(){
-        if(!process.env.REACT_APP_NOTE_FEATURE || process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
             return null;
         }
         if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){

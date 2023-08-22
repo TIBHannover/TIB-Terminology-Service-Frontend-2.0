@@ -183,6 +183,9 @@ class IssueList extends React.Component{
 
 
     render(){
+        if(process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true"){            
+            return null;
+        }
         return (
             <div className="row tree-view-container">
                 <div className="col-sm-12">

@@ -227,7 +227,7 @@ class NoteEdit extends React.Component{
 
 
     render(){
-        if(!process.env.REACT_APP_NOTE_FEATURE || process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
             return null;
         }
         let targetNote = this.props.note;

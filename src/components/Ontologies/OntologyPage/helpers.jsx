@@ -27,6 +27,9 @@ export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontolo
         if(process.env.REACT_APP_NOTE_FEATURE !== "true" && configItemKey === "Notes"){
             continue;
         }
+        if(process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true" && configItemKey === "IssueList"){
+            continue;
+        }
         result.push(
             <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
                 <Link 

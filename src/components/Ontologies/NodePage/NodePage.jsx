@@ -102,6 +102,9 @@ class NodePage extends React.Component {
           let configObject = NodePageTabConfig[configItemKey];                 
           let linkUrl = Toolkit.setParamInUrl('subtab', NodePageTabConfig[configItemKey]['urlEndPoint'])
           if(this.props.componentIdentity === "term" || configObject['id'] !== 'graph'){
+            if(process.env.REACT_APP_NOTE_FEATURE !== "true" && configItemKey === "Notes"){
+              continue;
+            }
             result.push(
               <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
                   <Link 
