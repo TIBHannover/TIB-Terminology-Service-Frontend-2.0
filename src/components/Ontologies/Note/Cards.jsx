@@ -3,6 +3,8 @@ import NoteCardHeader from "./helpers";
 import { buildNoteAboutPart } from "./helpers";
 import Toolkit from "../../common/Toolkit";
 import { Link } from 'react-router-dom';
+import { CommentCardHeader } from "./helpers";
+import ReactMarkdown from 'react-markdown';
 
 
 
@@ -48,8 +50,29 @@ export const NoteCard = (props) => {
             </div>
         </div>
     );
-
 }
+
+
+
+export const CommentCard = (props) =>{
+    
+    return (
+        <div className="card">
+            <div className="card-header">
+                <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler} />                        
+            </div>
+            <div class="card-body">                        
+                <p className="card-text">
+                    <ReactMarkdown>{props.comment['content']}</ReactMarkdown>
+                </p>                        
+            </div>
+        </div>
+    );
+}
+
+
+
+
 
 
 export default NoteCard;

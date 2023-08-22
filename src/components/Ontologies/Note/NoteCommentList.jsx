@@ -3,10 +3,10 @@ import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendC
 import draftToMarkdown from 'draftjs-to-markdown';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import { convertToRaw, EditorState } from 'draft-js';
-import ReactMarkdown from 'react-markdown';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
 import TextEditor from "../../common/TextEditor/TextEditor";
-import { CommentCardHeader } from "./helpers";
+import { CommentCard } from "./Cards";
+
 
 
 
@@ -38,22 +38,10 @@ class NoteCommnentList extends React.Component{
     createCommentList(){        
         let comments = this.props.note['comments'] ? this.props.note['comments'] : [];        
         let result = [];
-        for (let comment of comments){
-            let body = [
-                <div className="card">
-                    <div className="card-header">
-                        <CommentCardHeader comment={comment}  editHandlerFunc={this.handleEditButton} />                        
-                    </div>
-                    <div class="card-body">                        
-                        <p className="card-text">
-                            <ReactMarkdown>{comment['content']}</ReactMarkdown>
-                        </p>                        
-                    </div>
-                </div> 
-            ];
+        for (let comment of comments){            
             result.push(
                 <RowWithSingleColumn 
-                    content={body}
+                    content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
                     columnClass="col-sm-9"
                     rowClass="note-comment-card"
                 />         
