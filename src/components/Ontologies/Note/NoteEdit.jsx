@@ -8,6 +8,7 @@ import AuthTool from "../../User/Login/authTools";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import DropDown from "../../common/DropDown/DropDown";
 import * as constantsVars from './Constants';
+import { submitNote } from "../../../api/tsMicroBackendCalls";
 
 
 
@@ -157,24 +158,12 @@ class NoteEdit extends React.Component{
         data.append("title", noteTitle);
         data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
-        data.append("ontology_id", this.props.note['ontology_id']);        
+        data.append("ontology_id", this.props.note['ontology_id']);
         data.append("semantic_component_type", targetArtifactType);
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[this.state.visibility]);
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_note', {method: 'POST',  headers:headers, body: data})
-            .then((response) => response.json())
-            .then((data) => {
-                if(data['_result']){
-                    let newNoteId = data['_result']['note_updated']['id'];                    
-                    this.closeModal();
-                }
-                else{                    
-                    this.closeModal();          
-                }
-            })
-            .catch((error) => {                
-                this.closeModal();               
-            });
+        submitNote(data, true).then((updatedNoteId) => {this.closeModal();});
     }
+
 
 
     async onAutoCompleteChange({value}){   
