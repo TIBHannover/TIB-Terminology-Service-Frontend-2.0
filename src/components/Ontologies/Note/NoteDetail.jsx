@@ -3,8 +3,8 @@ import ReactMarkdown from 'react-markdown';
 import NoteCommnentList from "./NoteCommentList";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
-import NoteCardHeader from "./helpers";
 import { buildNoteAboutPart } from "./helpers";
+import { NoteCardHeader } from "./Cards";
 
 
 
