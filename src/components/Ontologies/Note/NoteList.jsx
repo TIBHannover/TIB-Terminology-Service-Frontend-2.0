@@ -9,6 +9,7 @@ import queryString from 'query-string';
 import Toolkit from "../../common/Toolkit";
 import {AlertBox} from "../../common/Alerts/Alerts";
 import NoteCard from "./Cards";
+import DropDown from "../../common/DropDown/DropDown";
 
 
 
@@ -18,6 +19,14 @@ const CLASS_TYPE = 2
 const PROPERTY_TYPE = 3
 const INDIVIDUAL_TYPE = 4
 const TYPES_VALUES = ['all', 'ontology', 'class', 'property', 'individual']
+const COMPONENT_TYPES_FOR_DROPDOWN = [
+    {label: "All", value:ALL_TYPE},
+    {label: "Ontology", value:ONTOLOGY_TYPE},
+    {label: "Class", value:CLASS_TYPE},
+    {label: "Property", value:PROPERTY_TYPE},
+    {label: "Individual", value:INDIVIDUAL_TYPE}
+];
+
 
 const DEFAULT_PAGE_NUMBER = 1
 const DEFAULT_PAGE_SIZE = 10
@@ -50,8 +59,7 @@ class NoteList extends React.Component{
         this.setNoteCreationResultStatus = this.setNoteCreationResultStatus.bind(this); 
         this.handlePagination = this.handlePagination.bind(this); 
         this.loadNoteList = this.loadNoteList.bind(this);
-        this.changeArtifactTypeFilter = this.changeArtifactTypeFilter.bind(this);
-        this.createArtifactTypeFilter = this.createArtifactTypeFilter.bind(this);
+        this.changeArtifactTypeFilter = this.changeArtifactTypeFilter.bind(this);        
         this.updateURL = this.updateURL.bind(this);
     }
 
@@ -155,21 +163,6 @@ class NoteList extends React.Component{
 
     }
 
-
-    createArtifactTypeFilter(){
-        return [            
-            <div class="form-group">
-                <label for="artifact-types" className='col-form-label'>Type</label>
-                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="artifact-types" value={this.state.selectedArtifactType} onChange={this.changeArtifactTypeFilter}>
-                    <option value={ALL_TYPE} key={ALL_TYPE}>All</option>
-                    <option value={ONTOLOGY_TYPE} key={ONTOLOGY_TYPE}>Ontology</option>
-                    <option value={CLASS_TYPE} key={CLASS_TYPE}>Class</option>
-                    <option value={PROPERTY_TYPE} key={PROPERTY_TYPE}>Property</option>
-                    <option value={INDIVIDUAL_TYPE} key={INDIVIDUAL_TYPE}>Individual</option>
-                </select>  
-            </div>            
-        ];
-    }
 
 
     changeArtifactTypeFilter(e){                   
@@ -286,7 +279,13 @@ class NoteList extends React.Component{
                             <div className="row">
                                 <div className="col-sm-6">
                                     {this.state.noteExist && typeof(this.props.targetArtifactType) === 'undefined' && 
-                                        this.createArtifactTypeFilter()
+                                        <DropDown 
+                                            options={COMPONENT_TYPES_FOR_DROPDOWN}
+                                            dropDownId="note-artifact-types-in-list"
+                                            dropDownTitle="Type"
+                                            dropDownValue={this.state.selectedArtifactType}
+                                            dropDownChangeHandler={this.changeArtifactTypeFilter}
+                                        /> 
                                     }
                                 </div>
                                 <div className="col-sm-6">
