@@ -5,27 +5,8 @@ import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
 import AuthTool from "../../User/Login/authTools";
 import TextEditor from "../../common/TextEditor/TextEditor";
-
-
-
-const ONTOLOGY_COMPONENT_ID = 1;
-const CLASS_COMPONENT_ID = 2;
-const PROPERTY_COMPONENT_ID = 3;
-const INDIVIDUAL_COMPONENT_ID = 4;
-const COMPONENT_VALUES = ['', 'ontology', 'class', 'property', 'individual']
-
-const VISIBILITY_ONLY_ME = 1;
-const VISIBILITY_TS_USRES = 2;
-const VISIBILITY_PUBLIC = 3;
-const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
-
-const getAutoCompleteValue = suggestion => suggestion.label;
-
-const rendetAutoCompleteItem = suggestion => (
-    <div>
-      {suggestion.label}
-    </div>
-);
+import DropDown from "../../common/DropDown/DropDown";
+import * as constantsVars from './Constants';
 
 
 
@@ -34,8 +15,8 @@ class NoteCreation extends React.Component{
     constructor(props){
         super(props);
         this.state = ({           
-           targetArtifact: ONTOLOGY_COMPONENT_ID,
-           visibility: VISIBILITY_ONLY_ME,
+           targetArtifact: constantsVars.ONTOLOGY_COMPONENT_ID,
+           visibility: constantsVars.VISIBILITY_ONLY_ME,
            editorState:  null,           
            autoCompleteSuggestionsList: [],
            enteredTermInAutoComplete: "",
@@ -44,11 +25,9 @@ class NoteCreation extends React.Component{
         });
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
-        this.createTypeDropDown = this.createTypeDropDown.bind(this);
         this.onTextAreaChange = this.onTextAreaChange.bind(this);
         this.submitNote = this.submitNote.bind(this);
-        this.closeModal = this.closeModal.bind(this);        
-        this.createVisibilityDropDown = this.createVisibilityDropDown.bind(this);
+        this.closeModal = this.closeModal.bind(this);
         this.changeVisibility = this.changeVisibility.bind(this);
         this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
         this.clearAutoComplete = this.clearAutoComplete.bind(this);
@@ -85,35 +64,6 @@ class NoteCreation extends React.Component{
     }
 
 
-    createTypeDropDown(){
-        return [            
-            <div class="form-group">
-                <label for="artifact-types" className='col-form-label'>Target Artifact</label>
-                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="artifact-types" value={this.state.targetArtifact} onChange={this.changeArtifactType}>
-                    <option value={ONTOLOGY_COMPONENT_ID} key={ONTOLOGY_COMPONENT_ID}>Ontology</option>
-                    <option value={CLASS_COMPONENT_ID} key={CLASS_COMPONENT_ID}>Class</option>
-                    <option value={PROPERTY_COMPONENT_ID} key={PROPERTY_COMPONENT_ID}>Property</option>
-                    <option value={INDIVIDUAL_COMPONENT_ID} key={INDIVIDUAL_COMPONENT_ID}>Individual</option>
-                </select>  
-            </div>            
-        ];
-    }
-
-
-    createVisibilityDropDown(){
-        return [            
-            <div class="form-group">
-                <label for="note_visibility" className='col-form-label'>Visibility</label>
-                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="note_visibility" value={this.state.visibility} onChange={this.changeVisibility}>
-                    <option value={VISIBILITY_ONLY_ME} key={VISIBILITY_ONLY_ME}>Only me</option>
-                    <option value={VISIBILITY_TS_USRES} key={VISIBILITY_TS_USRES}>Only Terminology Service Users</option>
-                    <option value={VISIBILITY_PUBLIC} key={VISIBILITY_PUBLIC}>Everyone</option>                    
-                </select>  
-            </div>            
-        ];
-    }
-
-
     openModal(){
         this.setState({modalIsOpen: true})
     }
@@ -127,7 +77,7 @@ class NoteCreation extends React.Component{
         }
         this.setState({
             editorState:  null,
-            targetArtifact: ONTOLOGY_COMPONENT_ID,
+            targetArtifact: constantsVars.ONTOLOGY_COMPONENT_ID,
             autoCompleteSuggestionsList: [],
             enteredTermInAutoComplete: "",
             selectedTermFromAutoComplete: {"iri": null, "label": null},
@@ -163,7 +113,7 @@ class NoteCreation extends React.Component{
             formIsValid = false;
         }
 
-        if(parseInt(targetArtifactId) !== ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
+        if(parseInt(targetArtifactId) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
             document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
             formIsValid = false;
         }
@@ -172,12 +122,12 @@ class NoteCreation extends React.Component{
             return;
         }
 
-        if(parseInt(targetArtifactId) === ONTOLOGY_COMPONENT_ID){
+        if(parseInt(targetArtifactId) === constantsVars.ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = this.props.ontologyId;
         }
 
         
-        let targetArtifactType = COMPONENT_VALUES[targetArtifactId];
+        let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifactId];
         
         if(this.props.targetArtifactType){
             selectedTargetTermIri = this.props.targetArtifactIri;
@@ -191,7 +141,7 @@ class NoteCreation extends React.Component{
         data.append("content", noteContent);
         data.append("ontology_id", this.props.ontologyId);        
         data.append("semantic_component_type", targetArtifactType);
-        data.append("visibility",  VISIBILITY_VALUES[this.state.visibility]);
+        data.append("visibility",  constantsVars.VISIBILITY_VALUES[this.state.visibility]);
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_note', {method: 'POST',  headers:headers, body: data})
             .then((response) => response.json())
             .then((data) => {
@@ -214,7 +164,7 @@ class NoteCreation extends React.Component{
 
     async onAutoCompleteChange({value}){   
         let enteredTerm = value;                  
-        let type = COMPONENT_VALUES[this.state.targetArtifact];        
+        let type = constantsVars.NOTE_COMPONENT_VALUES[this.state.targetArtifact];        
         if(type !== "property" && type !== "individual"){
             type = this.props.isSkos ? "individual" : "class"; 
         }       
@@ -296,20 +246,34 @@ class NoteCreation extends React.Component{
                             <div class="modal-body">                                    
                                 <div className="row">                                
                                     <div className="col-sm-8">
-                                        {this.props.isGeneric && this.createTypeDropDown()}
-                                        {this.createVisibilityDropDown()}
-                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) === ONTOLOGY_COMPONENT_ID &&
+                                        {this.props.isGeneric && 
+                                            <DropDown 
+                                                options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
+                                                dropDownId="note-artifact-types"
+                                                dropDownTitle="Target Artifact"
+                                                dropDownValue={this.state.targetArtifact}
+                                                dropDownChangeHandler={this.changeArtifactType}
+                                            /> 
+                                        }
+                                        <DropDown 
+                                            options={constantsVars.VISIBILITY_FOR_DROPDOWN}
+                                            dropDownId="note_visibility_dropdown"
+                                            dropDownTitle="Visibility"
+                                            dropDownValue={this.state.visibility}
+                                            dropDownChangeHandler={this.changeVisibility}
+                                        /> 
+                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                                             <p>About: <b>{this.props.ontologyId}</b></p>
                                         }
-                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) !== ONTOLOGY_COMPONENT_ID &&
+                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                             <div>
                                                 <label className="required_input" for="noteIri">About</label>                                            
                                                 <Autosuggest
                                                     suggestions={this.state.autoCompleteSuggestionsList}
                                                     onSuggestionsFetchRequested={this.onAutoCompleteChange}
                                                     onSuggestionsClearRequested={this.clearAutoComplete}
-                                                    getSuggestionValue={getAutoCompleteValue}
-                                                    renderSuggestion={rendetAutoCompleteItem}
+                                                    getSuggestionValue={constantsVars.getAutoCompleteValue}
+                                                    renderSuggestion={constantsVars.rendetAutoCompleteItem}
                                                     onSuggestionSelected={this.onAutoCompleteSelecteion}
                                                     inputProps={inputPropsAutoSuggest}
                                                 />
