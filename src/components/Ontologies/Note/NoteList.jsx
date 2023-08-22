@@ -285,7 +285,7 @@ class NoteList extends React.Component{
                         <div className="col-sm-9">
                             <div className="row">
                                 <div className="col-sm-6">
-                                    {this.state.noteExist && typeof(this.props.targetArtifactType) === 'undefined' && 
+                                    {typeof(this.props.targetArtifactType) === 'undefined' && 
                                         <DropDown 
                                             options={COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types-in-list"
