@@ -14,4 +14,15 @@ export const AlertBox = (props) => {
 }
 
 
+
+export const CopiedSuccessAlert = (props) =>{
+    return (
+        <div className="note-link-copy-message">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            <small>{props.message}</small>
+        </div>
+    );
+}
+
+
 export default AlertBox;

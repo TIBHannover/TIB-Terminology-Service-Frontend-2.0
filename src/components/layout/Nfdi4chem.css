@@ -2224,6 +2224,16 @@ Notes
   box-shadow: none !important;
 }
 
+.note-link-copy-message{
+    display: inline;
+    margin-left: 20px;
+    background-color: #3efa3e;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
 
 /* 
 -------------------------------------------------------

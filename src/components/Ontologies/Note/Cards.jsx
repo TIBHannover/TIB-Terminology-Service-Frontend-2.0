@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import NoteEdit from "./NoteEdit";
+import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 
 
 
@@ -87,6 +88,7 @@ export const CommentCard = (props) =>{
 
 export const NoteCardHeader = (props) => {
     const [note, setNote] = useState({});
+    const [linkCopied, setLinkCopied] = useState(false);
 
     useEffect(() => {
         setNote(props.note)
@@ -114,6 +116,7 @@ export const NoteCardHeader = (props) => {
                 <small>
                     {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
+                {linkCopied && <CopiedSuccessAlert message="link copied" />}
             </div>
             <div className="col-sm-3">
                 <div className="row">                    
@@ -126,6 +129,23 @@ export const NoteCardHeader = (props) => {
                                 <div class="dropdown-item note-dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
                                     <small><i class="fa-solid fa-eye"></i>{note['visibility']}</small>
                                 </div>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
+                                    onClick={() => {
+                                        let searchParams = new URLSearchParams(window.location.search);
+                                        let locationObject = window.location;
+                                        searchParams.delete('comment');
+                                        searchParams.set('noteId', note['id']); 
+                                        navigator.clipboard.writeText(locationObject.host + locationObject.pathname + "?" +  searchParams.toString());
+                                        setLinkCopied(true);
+                                        setTimeout(() => {
+                                            setLinkCopied(false);
+                                        }, 2000); 
+                                    }}
+                                    >
+                                    <i class="fa-solid fa-copy"></i> Link
+                                </button>
                                 {note['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
@@ -175,6 +195,7 @@ export const NoteCardHeader = (props) => {
 
 export const CommentCardHeader = (props) =>{
     const [comment, setComment] = useState({});
+    const [linkCopied, setLinkCopied] = useState(false);
 
     useEffect(() => {
         setComment(props.comment);
@@ -191,6 +212,7 @@ export const CommentCardHeader = (props) =>{
                 <small>
                     {"Opened on " + comment['created_at'] + " by "} <b>{AuthTool.getUserName(comment['created_by'])}</b> 
                 </small>
+                {linkCopied && <CopiedSuccessAlert message="link copied" />}
             </div>
             <div className="col-sm-3">
                 <div className="row">                    
@@ -201,7 +223,20 @@ export const CommentCardHeader = (props) =>{
                             </button>
                             <div class="dropdown-menu note-dropdown-menu" aria-labelledby="dropdownMenu2">                                
                                 <div class="dropdown-item note-dropdown-item">
-                                    <small>Copy link</small>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
+                                        onClick={() => {
+                                            let url = window.location.host + Toolkit.setParamInUrl('comment', comment['id']);                                            
+                                            navigator.clipboard.writeText(url);
+                                            setLinkCopied(true);
+                                            setTimeout(() => {
+                                                setLinkCopied(false);
+                                            }, 2000); 
+                                        }}
+                                        >
+                                        <i class="fa-solid fa-copy"></i> Link
+                                    </button>
                                 </div>
                                 {comment['can_edit'] &&
                                     <span>

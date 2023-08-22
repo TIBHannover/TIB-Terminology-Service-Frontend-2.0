@@ -212,7 +212,8 @@ class NoteList extends React.Component{
         this.setState({
             selectedNoteId: -1,
             noteDetailPage: false,
-            noteSubmited: false
+            noteSubmited: false,
+            componentIsLoading: true
         }, () => {
             this.setComponentData();
         });
