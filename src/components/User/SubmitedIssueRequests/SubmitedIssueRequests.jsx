@@ -44,11 +44,9 @@ export default function SubmitedIssueRequests(){
 }
 
 
-async function getIssueList(){
-    let data = new FormData();
-    let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
-    data.append("username", localStorage.getItem("ts_username"));    
-    let issueList = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_submited_issues', {method: 'POST', headers:headers, body: data});
+async function getIssueList(){    
+    let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});    
+    let issueList = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_submited_issues', {method: 'GET', headers:headers});
     issueList = await issueList.json();
     issueList = issueList['_result'];
     if(issueList && issueList['submited_issues']){                                   
