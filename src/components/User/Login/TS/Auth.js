@@ -13,7 +13,7 @@ export function auth(){
             .then((resp) => {                
                 if(resp["_result"]){
                     AuthTool.setAuthResponseInLocalStorage(resp["_result"])
-                    window.location.replace("/ts");
+                    window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH);
                     return true;               
                 }
                 AuthTool.disableLoginAnimation();
@@ -72,6 +72,6 @@ export function Logout(){
     localStorage.setItem("github_home", "");
     localStorage.setItem("orcid_id", "");             
     localStorage.setItem("authProvider", "undefined");
-    window.location.replace("/ts");
+    window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH);
         
 }
