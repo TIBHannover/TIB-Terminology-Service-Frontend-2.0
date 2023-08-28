@@ -64,7 +64,7 @@ const Footer = () => (
                 }
 
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                  <h6>FUNDING</h6>
+                  <h6>COMMUNITY</h6>
                 }
 
                 
