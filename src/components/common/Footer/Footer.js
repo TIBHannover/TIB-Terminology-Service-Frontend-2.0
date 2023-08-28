@@ -19,8 +19,8 @@ const Footer = () => (
                             <img src="/dfg_logo.png" alt="" className="footer-logo"/>
                          </a>
                          <ul className="footer-list">
-                            <li>NFDI4ING is funded by DFG</li>
-                            <li>Project Number 442146713</li>
+                            <li><small>NFDI4ING is funded by DFG</small></li>
+                            <li><small>Project Number 442146713</small></li>
                         </ul>
 
                     </span>
