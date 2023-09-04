@@ -13,9 +13,18 @@ const Footer = () => (
                     </a>
                 }       
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                    <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
-                        <img src="/dfg_logo.png" alt="" className="footer-logo"/>
-                    </a>
+                    <span>
+
+                        <a href="https://www.dfg.de/en/index.jsp" target="_blank" rel="noopener noreferrer">
+                            <img src="/dfg_logo.png" alt="" className="footer-logo"/>
+                         </a>
+                         <ul className="footer-list">
+                            <li><small>NFDI4ING is funded by DFG</small></li>
+                            <li><small>Project Number 442146713</small></li>
+                        </ul>
+
+                    </span>
+
                 }
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
                     <span>
@@ -55,7 +64,7 @@ const Footer = () => (
                 }
 
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                  <h6>FUNDING</h6>
+                  <h6>COMMUNITY</h6>
                 }
 
                 

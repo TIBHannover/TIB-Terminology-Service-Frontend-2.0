@@ -34,7 +34,13 @@ class PaneResize{
 
     constructor(){
         this.lastPagePositionX = 0;
-        this.isResizeOn = false;
+        this.isResizeOn = false;        
+        this.originalLeftPaneWidth = 0;
+    }
+
+
+    setOriginalWidthForLeftPanes(){        
+        this.originalLeftPaneWidth = document.getElementById("page-left-pane").offsetWidth;
     }
 
 
@@ -74,7 +80,15 @@ class PaneResize{
           return null;
         }
         this.isResizeOn = false;    
-      }
+    }
+
+
+    resetTheWidthToOrignial(){
+        let pageLeftPane = document.getElementById("page-left-pane");                    
+        pageLeftPane.style.width = this.originalLeftPaneWidth + "px";        ;
+        this.lastPagePositionX = 0;
+        this.isResizeOn = false;   
+    }
 
 }
 

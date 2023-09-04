@@ -3,6 +3,7 @@ import {createStatsBox} from './StatsBox';
 import {createHomePageContent} from './CollectionsCards';
 import {nfdi4chemHomePage} from './Nfdi4chem_home';
 import {nfdi4ingHomePage} from './Nfdi4ing_home';
+import {apiHeaders} from '../../api/headers'
 
 class Home extends React.Component{
   constructor(props){
@@ -14,7 +15,11 @@ class Home extends React.Component{
   }
 
   async Stats(){
-    let statsResult = await fetch(process.env.REACT_APP_STATS_API_URL)
+    let statsResult = await fetch(process.env.REACT_APP_STATS_API_URL, {
+      method: 'GET',
+      mode: 'cors',
+      headers: apiHeaders(),
+    })
     statsResult = (await statsResult.json());
     this.setState({
       statsResult: statsResult
