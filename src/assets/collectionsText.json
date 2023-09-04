@@ -78,5 +78,15 @@
         "ontology_list_url": "/ontologies?collection=NFDI4CAT&and=false&page=1",
         "project_homepage":"https://nfdi4cat.org/en/",
         "domain_ts_link": ""
+    },
+    "ESS":{
+        "id": "ESS",
+        "html_id": "ESS",
+        "name": "Earth System Sciences",
+        "text": "The ESS Terminology Service is a collection of Earth System Science terminologies and a single point of access to the latest terminology versions. The service provides researchers, repository staff, and everybody interested with the ability to describe their research results in a semantically correct, machine-understandable way. The ESS TS is being developed by the BITS project titled “BluePrints for the Integration of Terminology Services in Earth System Sciences”  and is maintained by TIB as an extension of the TIB Central Terminology Service. It can be used either by humans through the website or by machines via the TS API.",
+        "logo": "/Color_logo_-_no_background.svg",
+        "ontology_list_url": "/ontologies?collection=ESS&and=false&page=1",
+        "project_homepage": "https://projects.tib.eu/bits",
+        "domain_ts_link": ""
     }     
 }
