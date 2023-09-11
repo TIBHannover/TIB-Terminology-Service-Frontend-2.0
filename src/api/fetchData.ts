@@ -322,9 +322,10 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
     resultHtml += "<ul>";
     let s = res['strings'][0]['content']
     s = (new DOMParser()).parseFromString(s, 'text/html');
-    let items = s.querySelectorAll('a','href');
+    let item = s.querySelectorAll('a','href');
     let spanItem = s.querySelectorAll('span');
-    console.info(items, spanItem)
+    console.info(item[0]['innerText'])
+    console.info(spanItem)
     return resultHtml;
   }
   return "N/A";
