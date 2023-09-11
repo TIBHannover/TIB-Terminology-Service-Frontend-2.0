@@ -349,8 +349,9 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     for(let i=0; i < res["strings"].length; i++){
     let s = res['strings'][i]['content']
     s = (new DOMParser()).parseFromString(s, 'text/html');
-    let items = s.querySelectorAll('a','href');
-    console.info(items)
+    let items = s.querySelectorAll('a');
+    for(let j=0; j < items.length; j++){
+    }
     result += '<li>'+ res["strings"][i]["content"] +'</li>';     
   }
   result += "<ul>"
