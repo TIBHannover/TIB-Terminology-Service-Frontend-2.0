@@ -320,7 +320,7 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
       let spanItem = dom.querySelectorAll('span');
       resultHtml += "<ul>";
       resultHtml += "<li>";
-      resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[0]['href']) + '>' + str[0]['innerText'] + '</a>';
+      resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/props?iri=' + encodeURIComponent(str[0]['href']) + '>' + str[0]['innerText'] + '</a>';
       resultHtml += '&nbsp;'+ spanItem[0]['innerText'] + '&nbsp;';
       resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[1]['href']) + '>' + str[1]['innerText'] + '</a>'; 
       resultHtml += "</li>";
