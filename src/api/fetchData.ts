@@ -313,19 +313,20 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
   res = res["_embedded"];
   if (typeof(res) !== "undefined"){
     let resultHtml = <string> "";
-    resultHtml += "<ul>";
-    for(let item of res["strings"]){
-      resultHtml += "<li>";
-      resultHtml += item["content"];
-      resultHtml += "</li>";
-    }
-    resultHtml += "<ul>";
-    let s = res['strings'][0]['content']
-    s = (new DOMParser()).parseFromString(s, 'text/html');
-    let item = s.querySelectorAll('a','href');
-    let spanItem = s.querySelectorAll('span');
-    console.info(item[0]['innerText'])
-    console.info(spanItem)
+    
+    let item = res["strings"][0]['content']
+      let dom = (new DOMParser()).parseFromString(item, 'text/html');
+      let str = dom.querySelectorAll('a');
+      let spanItem = dom.querySelectorAll('span');
+      resultHtml += "<ul>";
+      resultHtml += '<li>' + '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[0]['href']) + '>' + str[0]['innerText'] + '</a>' + spanItem[0]['innerText'] + '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[1]['href']) + '>' + str[1]['innerText'] + '</a>' + '</li>'; 
+      resultHtml += "</ul>";
+    // let s = res['strings'][0]['content']
+    // s = (new DOMParser()).parseFromString(s, 'text/html');
+    // let item = s.querySelectorAll('a','href');
+    // let spanItem = s.querySelectorAll('span');
+    // console.info(item[0]['innerText'])
+    // console.info(spanItem)
     return resultHtml;
   }
   return "N/A";
@@ -353,10 +354,6 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
   }
   if (typeof(res) !== "undefined"){
     for(let i=0; i < res["strings"].length; i++){
-    let s = res['strings'][i]['content']
-    s = (new DOMParser()).parseFromString(s, 'text/html');
-    let items = s.querySelectorAll('span');
-    //console.info(items)
     result += '<li>'+ res["strings"][i]["content"] +'</li>';     
   }
   result += "<ul>"
