@@ -319,7 +319,11 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
       let str = dom.querySelectorAll('a');
       let spanItem = dom.querySelectorAll('span');
       resultHtml += "<ul>";
-      resultHtml += '<li>' + '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[0]['href']) + '>' + str[0]['innerText'] + '</a>' + spanItem[0]['innerText'] + '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[1]['href']) + '>' + str[1]['innerText'] + '</a>' + '</li>'; 
+      resultHtml += "<li>";
+      resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[0]['href']) + '>' + str[0]['innerText'] + '</a>';
+      resultHtml += '&nbsp;'+ spanItem[0]['innerText'] + '&nbsp;';
+      resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[1]['href']) + '>' + str[1]['innerText'] + '</a>'; 
+      resultHtml += "</li>";
       resultHtml += "</ul>";
     // let s = res['strings'][0]['content']
     // s = (new DOMParser()).parseFromString(s, 'text/html');
