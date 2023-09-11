@@ -323,7 +323,8 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
     let s = res['strings'][0]['content']
     s = (new DOMParser()).parseFromString(s, 'text/html');
     let items = s.querySelectorAll('a','href');
-    console.info(items)
+    let spanItem = s.querySelectorAll('span');
+    console.info(items, spanItem)
     return resultHtml;
   }
   return "N/A";
@@ -354,7 +355,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     let s = res['strings'][i]['content']
     s = (new DOMParser()).parseFromString(s, 'text/html');
     let items = s.querySelectorAll('span');
-    console.info(items)
+    //console.info(items)
     result += '<li>'+ res["strings"][i]["content"] +'</li>';     
   }
   result += "<ul>"
