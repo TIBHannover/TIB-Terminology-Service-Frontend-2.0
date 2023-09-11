@@ -320,6 +320,10 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
       resultHtml += "</li>";
     }
     resultHtml += "<ul>";
+    let s = res['strings'][0]['content']
+    s = (new DOMParser()).parseFromString(s, 'text/html');
+    let items = s.querySelectorAll('a','href');
+    console.info(items)
     return resultHtml;
   }
   return "N/A";
@@ -349,9 +353,8 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     for(let i=0; i < res["strings"].length; i++){
     let s = res['strings'][i]['content']
     s = (new DOMParser()).parseFromString(s, 'text/html');
-    let items = s.querySelectorAll('a');
-    for(let j=0; j < items.length; j++){
-    }
+    let items = s.querySelectorAll('span');
+    console.info(items)
     result += '<li>'+ res["strings"][i]["content"] +'</li>';     
   }
   result += "<ul>"
