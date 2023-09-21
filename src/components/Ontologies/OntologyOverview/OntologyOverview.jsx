@@ -19,7 +19,7 @@ class OntologyOverview extends React.Component {
   async showOntoJson(){
     let showDataAsJsonBtnHref = "";
     if(this.props.ontology){
-      showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + this.props.ontology;
+      showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + this.props.ontology.ontologyId;
     }
     this.setState({
       showDataAsJsonBtnHref: showDataAsJsonBtnHref
