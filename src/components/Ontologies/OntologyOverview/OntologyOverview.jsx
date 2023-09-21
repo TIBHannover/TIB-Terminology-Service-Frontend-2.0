@@ -41,6 +41,18 @@ class OntologyOverview extends React.Component {
         </div>
         <div className='col-sm-3'>
           <OntologyStatsBox ontology={this.props.ontology} />
+          <div className='row'>
+               <div className='col-sm-12 node-metadata-value'>
+                 <a 
+                   href={this.state.showDataAsJsonBtnHref} 
+                   target='_blank' 
+                   rel="noreferrer"
+                   className='btn btn-primary btn-dark download-ontology-btn'
+                  >
+                    Show Data as JSON
+                 </a>
+               </div>            
+             </div>
         </div>
     </div>
    );
