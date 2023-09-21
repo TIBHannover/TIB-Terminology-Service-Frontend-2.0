@@ -8,10 +8,21 @@ class OntologyOverview extends React.Component {
     super(props)
     this.state = ({
       ontologyShowAll: false,
-      showMoreLessOntologiesText: "+ Show More"      
+      showMoreLessOntologiesText: "+ Show More",
+      showDataAsJsonBtnHref: ""      
     })
     
     this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
+    this.showOntoJson = this.showOntoJson.bind(this);
+  }
+
+  async showOntoJson(){
+    let showDataAsJsonBtnHref = "";
+    showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + this.props.ontology;
+
+    this.setState({
+      showDataAsJsonBtnHref: showDataAsJsonBtnHref
+    })
   }
 
 
@@ -49,7 +60,7 @@ class OntologyOverview extends React.Component {
                    rel="noreferrer"
                    className='btn btn-primary btn-dark download-ontology-btn'
                   >
-                    Show Data as JSON
+                    Show Ontology as JSON
                  </a>
                </div>            
              </div>
