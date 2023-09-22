@@ -65,7 +65,7 @@ class OntologyOverview extends React.Component {
                    rel="noreferrer"
                    className='btn btn-primary btn-dark download-ontology-btn'
                   >
-                    Show Ontology as JSON
+                    Show Ontology Metdata as JSON
                  </a>
                </div>            
              </div>
