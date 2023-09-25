@@ -253,6 +253,39 @@ export function createHomePageContent() {
           </div>
         </div>
       </div>
+      <br/>
+      <div className='row'>
+        <div className='col-sm-6'>
+          <div className='collection-card'>
+          <a
+              href={
+                process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['ESS']['ontology_list_url']
+              }
+              className="collection-image-anchor"
+            >
+              <img
+                className="img-fluid collection-logo"
+                alt="ESS"
+                src={collectionsInfoJson['ESS']['logo']}
+              />
+            </a>
+            <div className="collection-card-text">
+              <p className="trunc">
+                {collectionsInfoJson['ESS']['text']}
+              </p>
+              <a
+                href={
+                  process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+                  collectionsInfoJson['ESS']['html_id']
+                }
+                className="show-more-text-link"
+              >
+                [Read More]
+              </a>
+          </div>
+        </div>
+      </div>
+     </div>
     </div>,
   ];
 

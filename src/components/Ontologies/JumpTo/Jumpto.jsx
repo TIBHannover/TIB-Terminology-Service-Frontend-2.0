@@ -125,7 +125,7 @@ class JumpTo extends React.Component{
                                 Jump to:
                             </div>
                         </div>
-                        <input class="form-control jumpto-search-box col-sm-8 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
+                        <input class="form-control jumpto-search-box col-sm-6 rounded-right ac_input" type="text" name="jmp-search-box" aria-label="Jump to:" onChange={this.handleChange} ></input>
                     </div> 
                     {this.state.result && 
                     <div ref={this.autoRef}  className="col-md-12 justify-content-md-center jumpto-container jumpto-tree-container" id="jmp-tree-container">

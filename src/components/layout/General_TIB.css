@@ -1526,7 +1526,7 @@ p{
 
 .node-metadata-value{
     /* 
-        The metadata value style for nodes (class/property)  in the detail table. 
+        The metadata value style for nodes (class/property)  in the detail table and the overview table. 
     */
 
     font-size: 15px !important;

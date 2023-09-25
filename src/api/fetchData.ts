@@ -320,6 +320,25 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
       resultHtml += "</li>";
     }
     resultHtml += "<ul>";
+
+    
+    // let item = res["strings"][0]['content']
+    //   let dom = (new DOMParser()).parseFromString(item, 'text/html');
+    //   let str = dom.querySelectorAll('a');
+    //   let spanItem = dom.querySelectorAll('span');
+    //   resultHtml += "<ul>";
+    //   resultHtml += "<li>";
+    //   resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/props?iri=' + encodeURIComponent(str[0]['href']) + '>' + str[0]['innerText'] + '</a>';
+    //   resultHtml += '&nbsp;'+ spanItem[0]['innerText'] + '&nbsp;';
+    //   resultHtml += '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(str[1]['href']) + '>' + str[1]['innerText'] + '</a>'; 
+    //   resultHtml += "</li>";
+    //   resultHtml += "</ul>";
+    // let s = res['strings'][0]['content']
+    // s = (new DOMParser()).parseFromString(s, 'text/html');
+    // let item = s.querySelectorAll('a','href');
+    // let spanItem = s.querySelectorAll('span');
+    // console.info(item[0]['innerText'])
+    // console.info(spanItem)
     return resultHtml;
   }
   return "N/A";
@@ -346,7 +365,7 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
     result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
   }
   if (typeof(res) !== "undefined"){
-    for(let i=0; i < res["strings"].length; i++){ 
+    for(let i=0; i < res["strings"].length; i++){
     result += '<li>'+ res["strings"][i]["content"] +'</li>';     
   }
   result += "<ul>"
