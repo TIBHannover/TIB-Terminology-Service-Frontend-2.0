@@ -146,7 +146,8 @@ export const NoteCardHeader = (props) => {
                                             searchParams.delete('size');
                                             searchParams.delete('type');
                                             searchParams.set('noteId', note['id']); 
-                                            navigator.clipboard.writeText(locationObject.host + locationObject.pathname + "?" +  searchParams.toString());
+                                            console.info(locationObject)
+                                            navigator.clipboard.writeText(locationObject.origin + locationObject.pathname + "?" +  searchParams.toString());
                                             setLinkCopied(true);
                                             setTimeout(() => {
                                                 setLinkCopied(false);
@@ -240,7 +241,7 @@ export const CommentCardHeader = (props) =>{
                                         type="button" 
                                         class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
                                         onClick={() => {
-                                            let url = window.location.host + Toolkit.setParamInUrl('comment', comment['id']);                                            
+                                            let url = window.location.origin + Toolkit.setParamInUrl('comment', comment['id']);                                            
                                             navigator.clipboard.writeText(url);
                                             setLinkCopied(true);
                                             setTimeout(() => {
