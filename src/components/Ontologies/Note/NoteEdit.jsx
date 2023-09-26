@@ -1,11 +1,8 @@
 import React from "react";
-import { convertToRaw, EditorState } from 'draft-js';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
-import draftToMarkdown from 'draftjs-to-markdown';
 import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
 import AuthTool from "../../User/Login/authTools";
-import TextEditor from "../../common/TextEditor/TextEditor";
+import TextEditor, {getTextEditorContent, createTextEditorStateFromJson}  from "../../common/TextEditor/TextEditor";
 import DropDown from "../../common/DropDown/DropDown";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
@@ -43,12 +40,12 @@ class NoteEdit extends React.Component{
 
 
     setComponentData(){
-        let content =  EditorState.createWithContent(stateFromMarkdown(this.props.note['content']));
+        let editorState = createTextEditorStateFromJson(this.props.note['content']);    
         this.setState({
             noteEditId: this.props.note['id'],
             targetArtifact: constantsVars.NOTE_COMPONENT_VALUES.indexOf(this.props.note['semantic_component_type']),
             visibility: constantsVars.VISIBILITY_VALUES.indexOf(this.props.note['visibility']),
-            editorState: content,
+            editorState: editorState,
             noteTitle: this.props.note['title'],
             enteredTermInAutoComplete: this.props.note['semantic_component_label'],
             selectedTermFromAutoComplete: {"iri":  this.props.note['semantic_component_iri'], "label":  this.props.note['semantic_component_label']}
@@ -117,8 +114,7 @@ class NoteEdit extends React.Component{
             formIsValid = false;
         }
         else{
-            noteContent = this.state.editorState.getCurrentContent();        
-            noteContent = draftToMarkdown(convertToRaw(noteContent));  
+            noteContent = getTextEditorContent(this.state.editorState);             
         }
 
         if(!noteTitle || noteTitle === ""){

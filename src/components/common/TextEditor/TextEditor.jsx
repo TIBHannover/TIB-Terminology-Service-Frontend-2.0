@@ -1,5 +1,9 @@
 import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
+import { convertToRaw, EditorState, convertFromRaw, ContentState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import DOMPurify from 'dompurify';
+
 
 
 const TextEditor = (props) =>{
@@ -26,6 +30,37 @@ const TextEditor = (props) =>{
             }}
         />
     );
+}
+
+
+
+export function getTextEditorContent(editorState){
+    let content = editorState.getCurrentContent();  
+    return JSON.stringify(convertToRaw(content)); 
+}
+
+
+export function createTextEditorStateFromJson(jsonInput){    
+    try{
+        return EditorState.createWithContent(convertFromRaw(JSON.parse(jsonInput)));      
+    }
+    catch(e){
+         return EditorState.createWithContent(ContentState.createFromText(''));
+    }  
+}
+
+
+
+export function createHtmlFromEditorJson(jsonInput){
+    try{
+        let editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(jsonInput)));                       
+        let noteContent = convertToRaw(editorState.getCurrentContent());
+        noteContent = draftToHtml(noteContent);
+        return DOMPurify.sanitize(noteContent, { USE_PROFILES: { html: true } });
+    } 
+    catch(e){
+        return "";
+    }
 }
 
 

@@ -1,10 +1,8 @@
 import React from "react";
-import { convertToRaw } from 'draft-js';
-import draftToMarkdown from 'draftjs-to-markdown';
 import {getAutoCompleteResult} from "../../../api/fetchData";
 import Autosuggest from 'react-autosuggest';
 import AuthTool from "../../User/Login/authTools";
-import TextEditor from "../../common/TextEditor/TextEditor";
+import TextEditor, {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import DropDown from "../../common/DropDown/DropDown";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
@@ -100,8 +98,7 @@ class NoteCreation extends React.Component{
             formIsValid = false;
         }
         else{
-            noteContent = this.state.editorState.getCurrentContent();        
-            noteContent = draftToMarkdown(convertToRaw(noteContent));  
+            noteContent = getTextEditorContent(this.state.editorState);
         }
 
         if(!noteTitle || noteTitle === ""){

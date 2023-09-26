@@ -1,11 +1,13 @@
 import React from "react";
-import ReactMarkdown from 'react-markdown';
+import {EditorState, ContentState } from 'draft-js';
 import NoteCommnentList from "./NoteCommentList";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import { buildNoteAboutPart } from "./helpers";
 import { NoteCardHeader } from "./Cards";
 import { withRouter } from 'react-router-dom';
+import {createHtmlFromEditorJson}  from "../../common/TextEditor/TextEditor";
+
 
 
 
@@ -14,6 +16,7 @@ class NoteDetail extends React.Component{
         super(props);
         this.state = ({
            note: {},
+           noteContent: EditorState.createWithContent(ContentState.createFromText('')),
            noteNotFound: false 
         });
         this.getTheNote = this.getTheNote.bind(this);
@@ -27,10 +30,11 @@ class NoteDetail extends React.Component{
         getNoteDetail({noteId: noteId}).then((result) => {
             if(result === '404'){
                 this.setState({noteNotFound: true});
-            }
-            else{
+            }            
+            else{                
                 this.setState({
                     note: result,
+                    noteContent: createHtmlFromEditorJson(result['content']),
                     noteNotFound: false
                 })
             }
@@ -76,8 +80,8 @@ class NoteDetail extends React.Component{
                                 </ul>                            
                             </small>   
                             <hr></hr>
-                            <p className="card-text">
-                                <ReactMarkdown>{this.state.note['content']}</ReactMarkdown>
+                            <p className="card-text">                                                            
+                                <div dangerouslySetInnerHTML={{ __html: this.state.noteContent}}></div>                                
                             </p>                        
                         </div>
                     </div>                
