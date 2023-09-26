@@ -45,7 +45,8 @@ export function createTextEditorStateFromJson(jsonInput){
         return EditorState.createWithContent(convertFromRaw(JSON.parse(jsonInput)));      
     }
     catch(e){
-         return EditorState.createWithContent(ContentState.createFromText(''));
+        let empty = createTextEditorEmptyText();
+         return empty;
     }  
 }
 
@@ -61,6 +62,12 @@ export function createHtmlFromEditorJson(jsonInput){
     catch(e){
         return "";
     }
+}
+
+
+
+export function createTextEditorEmptyText(){
+    return EditorState.createWithContent(ContentState.createFromText(''));
 }
 
 

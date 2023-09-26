@@ -1,10 +1,7 @@
 import React from "react";
 import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendCalls";
-import draftToMarkdown from 'draftjs-to-markdown';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
-import { convertToRaw, EditorState } from 'draft-js';
 import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
-import TextEditor from "../../common/TextEditor/TextEditor";
+import TextEditor, {getTextEditorContent, createTextEditorEmptyText, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
 import { CommentCard } from "./Cards";
 import { withRouter } from 'react-router-dom';
 
@@ -15,7 +12,7 @@ class NoteCommnentList extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
-            commentEditorState: null,
+            commentEditorState: createTextEditorEmptyText(),
             commentListToRener: "",
             noteId: null,
             editMode: false,
@@ -60,7 +57,7 @@ class NoteCommnentList extends React.Component{
         let commentId = e.target.getAttribute('data-id');
         let commentContent = e.target.getAttribute('data-content');
         if(commentContent){
-            let content =  EditorState.createWithContent(stateFromMarkdown(commentContent));
+            let content =  createTextEditorStateFromJson(commentContent);
             let editorBox = document.getElementsByClassName("note-comment-editor-warpper")[0];
             editorBox.scrollIntoView();            
             this.setState({
@@ -81,9 +78,8 @@ class NoteCommnentList extends React.Component{
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
         }
-        else{
-            commentContent = this.state.commentEditorState.getCurrentContent();        
-            commentContent = draftToMarkdown(convertToRaw(commentContent));  
+        else{                    
+            commentContent = getTextEditorContent(this.state.commentEditorState);
         }
 
         if(!commentContent || commentContent.trim() === ""){
@@ -116,9 +112,8 @@ class NoteCommnentList extends React.Component{
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
         }
-        else{
-            commentContent = this.state.commentEditorState.getCurrentContent();        
-            commentContent = draftToMarkdown(convertToRaw(commentContent));  
+        else{               
+            commentContent = getTextEditorContent(this.state.commentEditorState);
         }
 
         if(!commentContent || commentContent.trim() === ""){

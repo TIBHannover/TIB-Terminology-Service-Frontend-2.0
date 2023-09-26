@@ -2,11 +2,11 @@ import {React, useState, useEffect} from "react";
 import { buildNoteAboutPart } from "./helpers";
 import Toolkit from "../../common/Toolkit";
 import { Link } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import NoteEdit from "./NoteEdit";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
+import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
 
 
 
@@ -74,6 +74,7 @@ export const NoteCard = (props) => {
 
 
 export const CommentCard = (props) =>{
+    let commnetContent = createHtmlFromEditorJson(props.comment['content']);
     
     return (
         <div className="card" id={"comment-card-" + props.comment['id']}>
@@ -81,8 +82,8 @@ export const CommentCard = (props) =>{
                 <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler} />                        
             </div>
             <div class="card-body">                        
-                <p className="card-text">
-                    <ReactMarkdown>{props.comment['content']}</ReactMarkdown>
+                <p className="card-text">                    
+                    <div dangerouslySetInnerHTML={{ __html: commnetContent}}></div>  
                 </p>                        
             </div>
         </div>

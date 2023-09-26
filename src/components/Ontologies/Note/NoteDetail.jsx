@@ -1,12 +1,11 @@
 import React from "react";
-import {EditorState, ContentState } from 'draft-js';
 import NoteCommnentList from "./NoteCommentList";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import { buildNoteAboutPart } from "./helpers";
 import { NoteCardHeader } from "./Cards";
 import { withRouter } from 'react-router-dom';
-import {createHtmlFromEditorJson}  from "../../common/TextEditor/TextEditor";
+import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
 
 
 
@@ -16,7 +15,7 @@ class NoteDetail extends React.Component{
         super(props);
         this.state = ({
            note: {},
-           noteContent: EditorState.createWithContent(ContentState.createFromText('')),
+           noteContent: createTextEditorEmptyText(),
            noteNotFound: false 
         });
         this.getTheNote = this.getTheNote.bind(this);
