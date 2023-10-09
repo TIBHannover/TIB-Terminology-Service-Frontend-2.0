@@ -1805,7 +1805,7 @@ p{
     display: block;
     height: 1000px;
     overflow: auto;
-    direction:rtl;
+    direction: ltr;
 }
 .class-list-table thead, tbody tr {
     display: table;
