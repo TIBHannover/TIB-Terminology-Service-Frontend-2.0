@@ -113,28 +113,23 @@ export function propertyMetaData(object){
 }
 
 
-export function formatText (label, text, isLink = false) {
+export function formatText (tableLabel, text, isLink = false) {
   if (text === null || text === '' || typeof(text) === "undefined") {
     return 'N/A'
   }  
-  else if (isLink && label !== "Label") {
+  else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
-  else if (label === "Used in axiom"){
-    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
-  }
-  else if (label === "Equivalent to"){
-    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
-  }
-  else if (label === "SubClass Of"){
+  else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(tableLabel)){
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }  
-  else if (label === "Instances"){    
+  else if (tableLabel === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
 
   return Toolkit.transformStringOfLinksToAnchors(text);
 }
+
 
 
 function createInstancesList(instancesList){
