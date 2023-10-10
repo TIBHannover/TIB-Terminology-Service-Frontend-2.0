@@ -146,8 +146,7 @@ export const NoteCardHeader = (props) => {
                                             searchParams.delete('page');
                                             searchParams.delete('size');
                                             searchParams.delete('type');
-                                            searchParams.set('noteId', note['id']); 
-                                            console.info(locationObject)
+                                            searchParams.set('noteId', note['id']);                                             
                                             navigator.clipboard.writeText(locationObject.origin + locationObject.pathname + "?" +  searchParams.toString());
                                             setLinkCopied(true);
                                             setTimeout(() => {

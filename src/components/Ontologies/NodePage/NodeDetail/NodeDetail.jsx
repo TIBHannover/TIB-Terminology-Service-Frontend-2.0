@@ -1,6 +1,7 @@
 import React from 'react';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 
 
 
@@ -8,8 +9,7 @@ class NodeDetail extends React.Component{
     constructor (props) {
         super(props)
         this.state = ({
-          data: {"iri": null},
-          iriIsCopied: false,          
+          data: {"iri": null},                
           componentIdentity: "",
           isSkos: false,          
           showDataAsJsonBtnHref: ""
@@ -33,8 +33,7 @@ class NodeDetail extends React.Component{
         }        
         if(node){
           this.setState({            
-            data: node,
-            iriIsCopied: false,
+            data: node,            
             componentIdentity: componentIdentity,
             isSkos: isSkos,
             showDataAsJsonBtnHref:showDataAsJsonBtnHref
@@ -47,7 +46,7 @@ class NodeDetail extends React.Component{
       /**
        * create a table row 
        */
-      createRow(metadataLabel, metadataValue, copyButton){
+      createRow(metadataLabel, metadataValue, isLink){
         let row = [
           <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
               <div className='row'>
@@ -55,22 +54,8 @@ class NodeDetail extends React.Component{
                   <div className="node-metadata-label">{metadataLabel}</div>
                 </div>
                 <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
-                  {formatText(metadataLabel, metadataValue, copyButton)}
-                  {copyButton &&
-                    <button 
-                      type="button" 
-                      class="btn btn-secondary btn-sm copy-link-btn"
-                      key={"copy-btn"} 
-                      onClick={() => {                  
-                        navigator.clipboard.writeText(metadataValue);
-                        this.setState({
-                          iriIsCopied: true
-                        });
-                      }}
-                      >
-                      copy {this.state.iriIsCopied && <i class="fa fa-check" aria-hidden="true"></i>}
-                    </button>
-                  }
+                  {formatText(metadataLabel, metadataValue, isLink)}
+                  {isLink && <CopyLinkButton  valueToCopy={metadataValue} />}
                 </div>
               </div>
             </div>

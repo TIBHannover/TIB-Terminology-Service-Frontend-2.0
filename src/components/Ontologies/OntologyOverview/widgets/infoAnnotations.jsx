@@ -1,4 +1,7 @@
-import React from 'react'
+import React from 'react';
+import OntologyInfoBox from './infoBox';
+
+
 
 class InfoAnnotations extends React.Component{
     constructor(props){
@@ -11,7 +14,7 @@ class InfoAnnotations extends React.Component{
         this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
         this.formatCreators = this.formatCreators.bind(this);
         this.alphabeticSort = this.alphabeticSort.bind(this);
-        this.createOverview = this.createOverview.bind(this);
+        // this.createOverview = this.createOverview.bind(this);
         this.formatSubject = this.formatSubject.bind(this);
     }
 
@@ -103,157 +106,157 @@ class InfoAnnotations extends React.Component{
     /**
      * Ontology Overview 
      */
-    createOverview(){
-        let ontology = this.props.ontology;
-        if (!ontology || ontology === null) {
-            return false
-        }
-        else{
-            return(
-                <div className="ontology-detail-table-wrapper">
-                  <div className='row'>
-                    <div className='col-sm-11 ontology-detail-text'>
-                       <h4><b>{ontology.config.title}</b></h4>
-                       <p>
-                         {ontology.config.description}
-                       </p>
-                    </div>
-                   </div>
+    // createOverview(){
+    //     let ontology = this.props.ontology;
+    //     if (!ontology || ontology === null) {
+    //         return false
+    //     }
+    //     else{
+    //         return(
+    //             <div className="ontology-detail-table-wrapper">
+    //               <div className='row'>
+    //                 <div className='col-sm-11 ontology-detail-text'>
+    //                    <h4><b>{ontology.config.title}</b></h4>
+    //                    <p>
+    //                      {ontology.config.description}
+    //                    </p>
+    //                 </div>
+    //                </div>
 
-                   <table className="ontology-detail-table" striped="columns">
-                    <tbody>
-                        <tr>
-                          <td className="ontology-overview-table-id-column"><b>Version</b></td>
-                          <td>
-                            {ontology.config.version}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
-                          <td>
-                            <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="ontology-overview-table-id-column"><b>IRI</b></td>
-                          <td>
-                            <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
-                             {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
-                             ? <button 
-                                 type="button" 
-                                 class="btn btn-secondary btn-sm copy-link-btn"
-                                 onClick={() => {                  
-                                 navigator.clipboard.writeText(ontology.config.id);
-                                  }}
-                                >
-                                copy
-                               </button>          
-                            : ""
-                            }  
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="ontology-overview-table-id-column"><b>HomePage</b></td>
-                          <td>
-                            <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
-                             {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
-                               ? <button 
-                                   type="button" 
-                                   class="btn btn-secondary btn-sm copy-link-btn"
-                                   onClick={() => {                  
-                                     navigator.clipboard.writeText(ontology.config.homepage);
-                                      }}
-                                  >
-                                    copy 
-                                 </button>  
-                                : ""
-                             }               
-                           </td>
-                        </tr>
-                        <tr>
-                          <td className="ontology-overview-table-id-column"><b>Issue tracker</b></td>
-                          <td>
-                            <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
-                              {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
-                              ? <button 
-                                   type="button" 
-                                   class="btn btn-secondary btn-sm copy-link-btn"
-                                   onClick={() => {                  
-                                   navigator.clipboard.writeText(ontology.config.tracker);                     
-                                      }}
-                                 >
-                                copy 
-                               </button>  
-                               : ""
-                              }               
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="ontology-overview-table-id-column"><b>License</b></td>
-                          <td>
-                            <a href={ontology.config.license.url} target="_blank" rel="noopener noreferrer">{ontology.config.license.label}</a>
-                          </td>
-                        </tr>
-                        <tr>
-                           <td className="ontology-overview-table-id-column"><b>Creator</b></td>
-                           <td>
-                             {this.formatCreators(ontology.config.creators)}
-                           </td>
-                        </tr>
-                        {process.env.REACT_APP_PROJECT_ID === "general" && 
-                        <tr>
-                           <td className="ontology-overview-table-id-column"><b>Subject</b></td>
-                           <td>
-                             {this.formatSubject()}
-                           </td>
-                        </tr>}
-                        <tr>
-                           <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
-                           <td>
-                              {String(ontology.config.skos)}
-                           </td>
-                        </tr>
-                        <tr>
-                           <td className="ontology-overview-table-id-column"><b>Download</b></td>
-                           <td>                     
-                             <a                
-                               href={"https://service.tib.eu/ts4tib/ontologies/" + ontology.ontologyId + "/download"}
-                               className='btn btn-primary btn-dark download-ontology-btn'
-                               target="_blank"                               
-                              >
-                              <i class="fa fa-download"></i>OWL
-                             </a>
-                             <a 
-                               className='btn btn-primary btn-dark download-ontology-btn'                                
-                               onClick={async () => {                    
-                                 const jsonFile = JSON.stringify(ontology);
-                                 const blob = new Blob([jsonFile],{type:'application/json'});
-                                 const href = await URL.createObjectURL(blob);
-                                 const link = document.createElement('a');
-                                 link.href = href;
-                                 link.download = ontology.ontologyId + "_metadata.json";
-                                 document.body.appendChild(link);
-                                 link.click();
-                                 document.body.removeChild(link);
-                               }}
-                              >
-                              <i class="fa fa-download"></i>Ontology metadata as JSON</a>
-                            </td>
-                        </tr>                                         
-                    </tbody>
-                   </table>
-                </div> 
-            )
-        }
-    }
+    //                <table className="ontology-detail-table" striped="columns">
+    //                 <tbody>
+    //                     <tr>
+    //                       <td className="ontology-overview-table-id-column"><b>Version</b></td>
+    //                       <td>
+    //                         {ontology.config.version}
+    //                       </td>
+    //                     </tr>
+    //                     <tr>
+    //                       <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
+    //                       <td>
+    //                         <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+    //                       </td>
+    //                     </tr>
+    //                     <tr>
+    //                       <td className="ontology-overview-table-id-column"><b>IRI</b></td>
+    //                       <td>
+    //                         <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
+    //                          {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
+    //                          ? <button 
+    //                              type="button" 
+    //                              class="btn btn-secondary btn-sm copy-link-btn"
+    //                              onClick={() => {                  
+    //                              navigator.clipboard.writeText(ontology.config.id);
+    //                               }}
+    //                             >
+    //                             copy
+    //                            </button>          
+    //                         : ""
+    //                         }  
+    //                       </td>
+    //                     </tr>
+    //                     <tr>
+    //                       <td className="ontology-overview-table-id-column"><b>HomePage</b></td>
+    //                       <td>
+    //                         <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
+    //                          {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
+    //                            ? <button 
+    //                                type="button" 
+    //                                class="btn btn-secondary btn-sm copy-link-btn"
+    //                                onClick={() => {                  
+    //                                  navigator.clipboard.writeText(ontology.config.homepage);
+    //                                   }}
+    //                               >
+    //                                 copy 
+    //                              </button>  
+    //                             : ""
+    //                          }               
+    //                        </td>
+    //                     </tr>
+    //                     <tr>
+    //                       <td className="ontology-overview-table-id-column"><b>Issue tracker</b></td>
+    //                       <td>
+    //                         <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
+    //                           {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
+    //                           ? <button 
+    //                                type="button" 
+    //                                class="btn btn-secondary btn-sm copy-link-btn"
+    //                                onClick={() => {                  
+    //                                navigator.clipboard.writeText(ontology.config.tracker);                     
+    //                                   }}
+    //                              >
+    //                             copy 
+    //                            </button>  
+    //                            : ""
+    //                           }               
+    //                       </td>
+    //                     </tr>
+    //                     <tr>
+    //                       <td className="ontology-overview-table-id-column"><b>License</b></td>
+    //                       <td>
+    //                         <a href={ontology.config.license.url} target="_blank" rel="noopener noreferrer">{ontology.config.license.label}</a>
+    //                       </td>
+    //                     </tr>
+    //                     <tr>
+    //                        <td className="ontology-overview-table-id-column"><b>Creator</b></td>
+    //                        <td>
+    //                          {this.formatCreators(ontology.config.creators)}
+    //                        </td>
+    //                     </tr>
+    //                     {process.env.REACT_APP_PROJECT_ID === "general" && 
+    //                     <tr>
+    //                        <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+    //                        <td>
+    //                          {this.formatSubject()}
+    //                        </td>
+    //                     </tr>}
+    //                     <tr>
+    //                        <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
+    //                        <td>
+    //                           {String(ontology.config.skos)}
+    //                        </td>
+    //                     </tr>
+    //                     <tr>
+    //                        <td className="ontology-overview-table-id-column"><b>Download</b></td>
+    //                        <td>                     
+    //                          <a                
+    //                            href={"https://service.tib.eu/ts4tib/ontologies/" + ontology.ontologyId + "/download"}
+    //                            className='btn btn-primary btn-dark download-ontology-btn'
+    //                            target="_blank"                               
+    //                           >
+    //                           <i class="fa fa-download"></i>OWL
+    //                          </a>
+    //                          <a 
+    //                            className='btn btn-primary btn-dark download-ontology-btn'                                
+    //                            onClick={async () => {                    
+    //                              const jsonFile = JSON.stringify(ontology);
+    //                              const blob = new Blob([jsonFile],{type:'application/json'});
+    //                              const href = await URL.createObjectURL(blob);
+    //                              const link = document.createElement('a');
+    //                              link.href = href;
+    //                              link.download = ontology.ontologyId + "_metadata.json";
+    //                              document.body.appendChild(link);
+    //                              link.click();
+    //                              document.body.removeChild(link);
+    //                            }}
+    //                           >
+    //                           <i class="fa fa-download"></i>Ontology metadata as JSON</a>
+    //                         </td>
+    //                     </tr>                                         
+    //                 </tbody>
+    //                </table>
+    //             </div> 
+    //         )
+    //     }
+    // }
 
     componentDidMount(){
-        this.createOverview();
+        // this.createOverview();
         this.createAnnotations();
     }
 
     componentDidUpdate(){
-        this.createOverview();
+        // this.createOverview();
         this.createAnnotations();
     }
 
@@ -261,7 +264,8 @@ class InfoAnnotations extends React.Component{
     render(){
         return(
             <div>
-                {this.createOverview()}
+                {/* {this.createOverview()} */}
+                <OntologyInfoBox  ontology={this.props.ontology} />
                 {this.state.ontologyShowAll &&
                   <table className="ontology-detail-table">
                     <tbody>

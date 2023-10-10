@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import CopyLinkButton from '../../../common/CopyButton/CopyButton';
+
+
+
 
 
 function formatCreators (creators) {
@@ -29,6 +33,8 @@ function skosValue(skos){
   return JSON.parse(skos);
 }
 
+
+
 function HandleShowMoreLess(){
   const [ontologyShowAll, setOntologyShowAll] = useState(false);
   const [showMoreLessOntologiesText, setshowMoreLessOntologiesText] = useState("+ Show additional information")
@@ -40,27 +46,24 @@ function HandleShowMoreLess(){
 }
 
 
-function OntologyInfoBox (props) {
-  const [ontologyIriCopied, setOntologyIriCopied]  = useState(false);
-  const [ontologyVersionCopied, setOntologyVersionCopied]  = useState(false);
-  const [ontologyHomepageCopied, setOntologyHomepageCopied]  = useState(false);
-  const [ontologyTrackerCopied, setOntologyTrackerCopied]  = useState(false);
+
+const OntologyInfoBox = (props) => {  
   const [ontologyObject, setOntologyObject]  = useState(props.ontology);
   const ontology = props.ontology;
   if (!ontology || ontology === null) {
     return false
   }
   
-  let entries = Object.entries(ontology.config.annotations);
-  let annotations = [];
-  for(let [key,value] of entries){
-    annotations.push(
-      <tr>
-        <td className="ontology-overview-table-id-column"><b>{key}</b></td>
-        <td>{(value).join(',\n')}</td>
-      </tr>
-    )
-  }    
+  // let entries = Object.entries(ontology.config.annotations);
+  // let annotations = [];
+  // for(let [key,value] of entries){
+  //   annotations.push(
+  //     <tr>
+  //       <td className="ontology-overview-table-id-column"><b>{key}</b></td>
+  //       <td>{(value).join(',\n')}</td>
+  //     </tr>
+  //   )
+  // }    
 
   return (
     <div className="ontology-detail-table-wrapper">
@@ -80,20 +83,8 @@ function OntologyInfoBox (props) {
             <td>
               <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
               {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
-                ? <button 
-                    type="button" 
-                    class="btn btn-secondary btn-sm copy-link-btn"
-                    onClick={() => {                  
-                      navigator.clipboard.writeText(ontology.config.id);
-                      setOntologyIriCopied(true);
-                      setOntologyVersionCopied(false);
-                      setOntologyHomepageCopied(false);
-                      setOntologyTrackerCopied(false);
-                    }}
-                    >
-                      copy {ontologyIriCopied && <i class="fa fa-check" aria-hidden="true"></i>}
-                    </button>          
-              : ""
+                ? <CopyLinkButton  valueToCopy={ontology.config.id}  />                         
+                : ""
               }              
             </td>
           </tr>         
@@ -102,20 +93,8 @@ function OntologyInfoBox (props) {
             <td>
               <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
               {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
-                  ? <button 
-                    type="button" 
-                    class="btn btn-secondary btn-sm copy-link-btn"
-                    onClick={() => {                  
-                      navigator.clipboard.writeText(ontology.config.homepage);
-                      setOntologyIriCopied(false);
-                      setOntologyVersionCopied(false);
-                      setOntologyHomepageCopied(true);
-                      setOntologyTrackerCopied(false);
-                    }}
-                    >
-                      copy {ontologyHomepageCopied && <i class="fa fa-check" aria-hidden="true"></i>}
-                    </button>  
-                : ""
+                  ? <CopyLinkButton  valueToCopy={ontology.config.homepage}  />                   
+                  : ""
               }              
             </td>
           </tr>
@@ -124,21 +103,9 @@ function OntologyInfoBox (props) {
             <td>
               <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
               {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
-                ? <button 
-                    type="button" 
-                    class="btn btn-secondary btn-sm copy-link-btn"
-                    onClick={() => {                  
-                      navigator.clipboard.writeText(ontology.config.tracker);
-                      setOntologyIriCopied(false);
-                      setOntologyVersionCopied(false);
-                      setOntologyHomepageCopied(false);
-                      setOntologyTrackerCopied(true);
-                    }}
-                    >
-                      copy {ontologyTrackerCopied && <i class="fa fa-check" aria-hidden="true"></i>}
-                    </button>  
+                ?  <CopyLinkButton  valueToCopy={ontology.config.tracker}  />                
                 : ""
-                }              
+              }
             </td>
           </tr>         
           <tr>
@@ -156,7 +123,7 @@ function OntologyInfoBox (props) {
           <tr>
             <td className="ontology-overview-table-id-column"><b>Subject</b></td>
             <td>
-              {formatSubject(ontology.config.classifications.Subject)}
+              {formatSubject(ontology.config.classifications[1].Subject)}
             </td>
           </tr>
           <tr>
@@ -191,11 +158,8 @@ function OntologyInfoBox (props) {
                 >
                 <i class="fa fa-download"></i>Ontology metadata as JSON</a>
             </td>
-          </tr>
-          <tr>
-            <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
-          </tr>       
-          {alphabeticSort(annotations)}                     
+          </tr>                
+          {/* {alphabeticSort(annotations)}                      */}
         </tbody>
       </table>
     </div>
