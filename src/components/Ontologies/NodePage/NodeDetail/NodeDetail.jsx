@@ -2,6 +2,7 @@ import React from 'react';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
+import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 
 
 
@@ -41,6 +42,16 @@ class NodeDetail extends React.Component{
         }
        
       }
+
+
+      setLabelAsLink(node, type){
+        let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(node.ontology_name);
+        let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(node.iri);  
+        if(type === 'property'){
+            targetHref = baseUrl +'/props?iri=' + encodeURIComponent(node.iri);        
+        }        
+        return targetHref         
+      }
     
     
       /**
@@ -55,7 +66,13 @@ class NodeDetail extends React.Component{
                 </div>
                 <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
                   {formatText(metadataLabel, metadataValue, isLink)}
-                  {isLink && <CopyLinkButton  valueToCopy={metadataValue} />}
+                  {isLink && metadataLabel !== "Label" && <CopyLinkButton  valueToCopy={metadataValue} />}
+                  {metadataLabel === "Label" && 
+                    <CopyLinkButtonMarkdownFormat  
+                      label={metadataValue} 
+                      url={this.setLabelAsLink(this.state.data, this.state.componentIdentity)}                         
+                    />
+                  }
                 </div>
               </div>
             </div>

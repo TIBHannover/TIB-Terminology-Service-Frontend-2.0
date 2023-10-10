@@ -7,11 +7,8 @@ import Toolkit from "../../common/Toolkit";
  * The boolean in each value indicates that the metadata is a link or not.
  */
  export function classMetaData(object){
-    // let labelAsLink = 
-
-
     let metadata = {
-      "Label": [object.label, true],
+      "Label": [object.label, false],
       "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
@@ -90,7 +87,7 @@ import Toolkit from "../../common/Toolkit";
  * Create the metadata for a Property detail table
  * The boolean in each value indicates that the metadata is a link or not.
  */
-export function propertyMetaData(object){  
+export function propertyMetaData(object){    
   let metadata = {
     "Label": [object.label, false],
     "Synonyms": [object.synonyms, false],
@@ -119,8 +116,8 @@ export function propertyMetaData(object){
 export function formatText (label, text, isLink = false) {
   if (text === null || text === '' || typeof(text) === "undefined") {
     return 'N/A'
-  }
-  else if (isLink) {
+  }  
+  else if (isLink && label !== "Label") {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
   else if (label === "Used in axiom"){
@@ -154,6 +151,7 @@ function createInstancesList(instancesList){
   }  
   return result;
 }
+
 
 
 
