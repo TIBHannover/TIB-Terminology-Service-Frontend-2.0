@@ -44,12 +44,16 @@ class NodeDetail extends React.Component{
       }
 
 
-      setLabelAsLink(node, type){
+      setLabelAsLink(){
+        let node = this.state.data;
         let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(node.ontology_name);
         let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(node.iri);  
-        if(type === 'property'){
+        if(this.state.componentIdentity === 'property'){
             targetHref = baseUrl +'/props?iri=' + encodeURIComponent(node.iri);        
-        }        
+        }
+        else if (this.state.componentIdentity === 'individual'){
+          targetHref = baseUrl +'/individuals?iri=' + encodeURIComponent(node.iri); 
+        }      
         return targetHref         
       }
     
@@ -67,12 +71,7 @@ class NodeDetail extends React.Component{
                 <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
                   {formatText(metadataLabel, metadataValue, isLink)}
                   {isLink && metadataLabel !== "Label" && <CopyLinkButton  valueToCopy={metadataValue} />}
-                  {metadataLabel === "Label" && 
-                    <CopyLinkButtonMarkdownFormat  
-                      label={metadataValue} 
-                      url={this.setLabelAsLink(this.state.data, this.state.componentIdentity)}                         
-                    />
-                  }
+                  {metadataLabel === "Label" && <CopyLinkButtonMarkdownFormat  label={metadataValue} url={this.setLabelAsLink()}/>}
                 </div>
               </div>
             </div>
