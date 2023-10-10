@@ -7,6 +7,9 @@ import Toolkit from "../../common/Toolkit";
  * The boolean in each value indicates that the metadata is a link or not.
  */
  export function classMetaData(object){
+    // let labelAsLink = 
+
+
     let metadata = {
       "Label": [object.label, true],
       "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
@@ -153,93 +156,5 @@ function createInstancesList(instancesList){
 }
 
 
-
-function synonymsTag(objectList){
-  if(objectList.length === 0){
-    return "N/A";
-  }
-  let synTags = [];
-  let counter = 0;
-  for(let object of objectList){
-    synTags.push(
-      <div className='synonyms-tag' key={counter}>
-        <div className="synonyms-button" >
-          {object}
-        </div>
-      </div>
-    );
-    counter ++;
-  }
-  return synTags;
-}
-
-
-/**
- * Create tag for the subClass relation
- */
-function makeTag(objectList){
-  if(objectList.length === 0){
-    return "N/A";
-  }
-  let tags = [];
-  let counter = 0;
-  for(let object of objectList){
-    tags.push(      
-      <div className='node-tag' key={counter}>
-        <a className='btn term-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + object['ontology'] + "/terms?iri=" + object['iri']} target="_blank">
-          {object['label']}
-        </a>
-      </div>
-    );
-    counter ++;
-  }
-  return tags;
-}
-
-
-
-/**
- * Create the relations row value to render
- * @param {*} relations 
- */
-function createRelations(object){
-  if(typeof(object['relations']) === "undefined"){
-    return "N/A";
-  }
-  if(object['relations'].length === 0){
-    return "N/A";
-  }
-  let groupedRelations = _.groupBy(object['relations'], res => res.relation);  
-  let relsToRender = [];
-  for(let rel of Object.keys(groupedRelations)){
-    if(typeof(rel) !== "undefined" && rel !== "undefined"){
-      relsToRender.push(
-        <ul>
-          <li key={groupedRelations[rel][0]['relation']}>
-            <div title="property">
-              <a className='node-relation-link' 
-                href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + object['ontology_name'] + "/props?iri=" + groupedRelations[rel][0]['relationUrl']} 
-                target="_blank">
-                {rel}
-              </a>                  
-            </div>        
-            <ul>
-              {groupedRelations[rel].map(function(value){
-                return <li key={value['target']}>
-                  <div title="term">
-                    <a className='node-relation-link' href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + object['ontology_name'] + "/terms?iri=" + value['targetUrl']} target="_blank">
-                          {value["target"]}                      
-                      </a>
-                  </div>                   
-                </li>
-              })}
-            </ul>
-          </li>
-        </ul>
-      );
-    }
-  }
-  return relsToRender;
-}
 
 
