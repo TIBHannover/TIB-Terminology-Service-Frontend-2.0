@@ -36,24 +36,20 @@ class Toolkit{
     }
 
     
-    static transformStringOfLinksToAnchors(text){  
-        if(typeof(text) !== "string"){
-            return text;
-        }
-        let splitedText = text.split("http");
-        if (splitedText.length === 1){        
-            return text;
-        }
-        else{
-            let result = [];
-            text = text.split(",");
-            for(let link of text){                
-                let anchor = React.createElement("a", {"href": link, "target": "_blank"}, link);      
-                result.push(anchor);
-                result.push(",  ");
+    static transformLinksInStringToAnchor(text){  
+        try{    
+            if(typeof(text) !== "string"){
+                return text;
             }
+            let urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;            
+            let result = text.replace(urlRegex, (url) => {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });           
             return result;
-        }    
+        }   
+        catch(e){
+            return text;
+        }           
     }
 
 
