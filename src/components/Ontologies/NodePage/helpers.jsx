@@ -132,7 +132,7 @@ export function formatText (label, text, isLink = false) {
   else if (label === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
-
+  return text;
   let formatedText = Toolkit.transformLinksInStringToAnchor(text);
   return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
 }
