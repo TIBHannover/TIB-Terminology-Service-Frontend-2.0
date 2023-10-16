@@ -53,7 +53,7 @@ class NodeDetail extends React.Component{
         }
         else if (this.state.componentIdentity === 'individual'){
           targetHref = baseUrl +'/individuals?iri=' + encodeURIComponent(node.iri); 
-        }      
+        }        
         return targetHref         
       }
     
@@ -71,7 +71,9 @@ class NodeDetail extends React.Component{
                 <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
                   {formatText(metadataLabel, metadataValue, isLink)}
                   {isLink && metadataLabel !== "Label" && <CopyLinkButton  valueToCopy={metadataValue} />}
-                  {metadataLabel === "Label" && <CopyLinkButtonMarkdownFormat  label={metadataValue} url={this.setLabelAsLink()}/>}
+                  {metadataLabel === "Label" && 
+                    <CopyLinkButtonMarkdownFormat  label={this.state.data.ontology_prefix + ":" + this.state.data.label} url={this.setLabelAsLink()}/>
+                  }
                 </div>
               </div>
             </div>
