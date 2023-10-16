@@ -34,7 +34,7 @@ import Toolkit from "../../common/Toolkit";
       for(let cite of object.obo_definition_citation){
         result.push(
           <div>
-            {cite['definition']}
+            {Toolkit.transformLinksInStringToAnchor(cite['definition'])}
             <br/>
              [<span className="node-metadata-label">Reference</span>:  <a href={cite['oboXrefs'][0]['url']} target="_blank">{cite['oboXrefs'][0]['url']}</a>]
           </div>
@@ -126,8 +126,11 @@ export function formatText (tableLabel, text, isLink = false) {
   else if (tableLabel === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
-  return text;
-  let formatedText = Toolkit.transformLinksInStringToAnchor(text);
+  else if (tableLabel === "Description"){
+    return text;
+  }
+  // return text;
+  let formatedText = Toolkit.transformLinksInStringToAnchor(text);  
   return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
 }
 
