@@ -126,8 +126,9 @@ export function formatText (tableLabel, text, isLink = false) {
   else if (tableLabel === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
-
-  return Toolkit.transformStringOfLinksToAnchors(text);
+  return text;
+  let formatedText = Toolkit.transformLinksInStringToAnchor(text);
+  return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
 }
 
 
