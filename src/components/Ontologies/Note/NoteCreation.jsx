@@ -20,7 +20,8 @@ class NoteCreation extends React.Component{
            autoCompleteSuggestionsList: [],
            enteredTermInAutoComplete: "",
            selectedTermFromAutoComplete: {"iri": null, "label": null},
-           modalIsOpen: false
+           modalIsOpen: false,
+           noteTitle: ""
         });
         
         this.changeArtifactType = this.changeArtifactType.bind(this);
@@ -38,6 +39,9 @@ class NoteCreation extends React.Component{
 
     onTextInputChange(){       
         document.getElementById('noteTitle').style.borderColor = '';
+        this.setState({
+            noteTitle: document.getElementById('noteTitle').value
+        });
     }
 
 
@@ -68,20 +72,27 @@ class NoteCreation extends React.Component{
     }
 
 
-    closeModal(){                
+    closeModal(newNoteId=true){                
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
         document.body.classList.remove('modal-open');
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
-        this.setState({
-            editorState:  null,
-            targetArtifact: constantsVars.ONTOLOGY_COMPONENT_ID,
-            autoCompleteSuggestionsList: [],
-            enteredTermInAutoComplete: "",
-            selectedTermFromAutoComplete: {"iri": null, "label": null},
-            modalIsOpen: false     
-        });            
+        if(newNoteId){
+            this.setState({
+                editorState:  null,
+                targetArtifact: constantsVars.ONTOLOGY_COMPONENT_ID,
+                autoCompleteSuggestionsList: [],
+                enteredTermInAutoComplete: "",
+                selectedTermFromAutoComplete: {"iri": null, "label": null},
+                modalIsOpen: false     
+            });   
+        } 
+        else{
+            this.setState({
+                modalIsOpen: false 
+            });
+        }                
     }
 
 
@@ -142,7 +153,7 @@ class NoteCreation extends React.Component{
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[this.state.visibility]);
         submitNote(data).then((newNoteId) => {
             this.props.noteListSubmitStatusHandler(newNoteId);
-            this.closeModal();
+            this.closeModal(newNoteId);
         });
     }
 
@@ -272,7 +283,7 @@ class NoteCreation extends React.Component{
                                             <p>About: <b>{this.props.targetArtifactLabel}</b></p>
                                         }
                                         <label className="required_input" for="noteTitle">Title</label>
-                                        <input type="text" onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
+                                        <input type="text" value={this.state.noteTitle} onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
                                     </div>
                                 </div>
                                 <br></br>
