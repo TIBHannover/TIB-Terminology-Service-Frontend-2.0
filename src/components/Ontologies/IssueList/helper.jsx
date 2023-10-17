@@ -36,14 +36,16 @@ export function createIssueDescription(issue){
 
 
 
-export function loadUrlParameter(reload, pageNumberInState, selectedTypeIdInState){
-    let result = {"pageNumber": pageNumberInState, "selectedStateId": selectedTypeIdInState};
+export function loadUrlParameter(reload, pageNumberInState, selectedStateId, selectedType ){
+    let result = {"pageNumber": pageNumberInState, "selectedStateId": selectedStateId, "selectedType": selectedType};
     if(!reload){
         let url = new URL(window.location);
         let pageNumber = url.searchParams.get('page');
         let selectedStateId = url.searchParams.get('stateId');
+        let selectedType = url.searchParams.get('type');
         result['selectedStateId'] = !selectedStateId ? OPEN_ISSUE_ID : parseInt(selectedStateId);
         result['pageNumber'] = !pageNumber ? 1 : parseInt(pageNumber);
+        result['selectedType'] = !selectedType ? 'issue' : selectedType;
         return result;
     }
     return result;

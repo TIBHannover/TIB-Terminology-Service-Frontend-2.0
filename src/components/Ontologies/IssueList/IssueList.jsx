@@ -34,7 +34,8 @@ class IssueList extends React.Component{
             issueTrackerUrl: null,
             pageNumber: 1,
             resultCountPerPage: 10,
-            noMoreIssuesExist: false     
+            noMoreIssuesExist: false,
+            selectedType: "issue"
         });
         this.setComponentData = this.setComponentData.bind(this);
         this.createIssuesList = this.createIssuesList.bind(this);        
@@ -42,7 +43,8 @@ class IssueList extends React.Component{
         this.handlePagination = this.handlePagination.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.createPagination = this.createPagination.bind(this);
-        this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);        
+        this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);  
+        this.handleTypeChange = this.handleTypeChange.bind(this);      
     }
 
 
@@ -54,9 +56,10 @@ class IssueList extends React.Component{
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];                 
-        let urlParameter = loadUrlParameter(reload, this.state.pageNumber, this.state.selectedStateId);
+        let urlParameter = loadUrlParameter(reload, this.state.pageNumber, this.state.selectedStateId, this.state.selectedType);
         let pageNumber = urlParameter['pageNumber'];
         let selectedStateId = urlParameter['selectedStateId'];
+        let selectedType = urlParameter['selectedType'];        
         let issueStateValue =  ISSUE_STATES_VALUES[selectedStateId];
         let resultCountPerPage = this.state.resultCountPerPage;
         listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
@@ -65,7 +68,7 @@ class IssueList extends React.Component{
                 waiting: false,
                 noMoreIssuesExist: true
             });
-            this.updateURL(pageNumber, selectedStateId);
+            this.updateURL(pageNumber, selectedStateId, selectedType);
             return true;
         }
         this.setState({
@@ -74,17 +77,18 @@ class IssueList extends React.Component{
             issueTrackerUrl: issueTrackerUrl,
             selectedStateId: selectedStateId,
             pageNumber: pageNumber,
-            noMoreIssuesExist: false
+            noMoreIssuesExist: false,
+            selectedType: selectedType
         }, () => {
             this.createIssuesList();
-            this.updateURL(pageNumber, selectedStateId);
+            this.updateURL(pageNumber, selectedStateId, selectedType);
         });
     }
 
     
     loadTheComponentPreviousState(){
         this.setState({...this.props.lastState});
-        this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedStateId);
+        this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedStateId, 'issue');
     }
         
     
@@ -119,10 +123,20 @@ class IssueList extends React.Component{
     }
 
 
-    updateURL(pageNumber, stateId){
+    handleTypeChange(e){
+        this.setState({
+            selectedType: e.target.value
+        }, () => {
+            this.setComponentData(true);
+        });
+    }
+
+
+    updateURL(pageNumber, stateId, type){
         let currentUrlParams = new URLSearchParams();
         currentUrlParams.append('page', pageNumber);
-        currentUrlParams.append('stateId', stateId);              
+        currentUrlParams.append('stateId', stateId);      
+        currentUrlParams.append('type', type);              
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
     }
 
@@ -191,13 +205,13 @@ class IssueList extends React.Component{
                                 <div className="col-sm-3">                                    
                                     <div class="form-check-inline">
                                         <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="typeRadio" value={"issue"} checked />
+                                            <input type="radio" class="form-check-input" name="typeRadio" value={"issue"} onChange={this.handleTypeChange}/>
                                             Issue
                                         </label>
                                     </div>
                                     <div class="form-check-inline">
                                         <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="typeRadio" value={"pr"} />
+                                            <input type="radio" class="form-check-input" name="typeRadio" value={"pr"} onChange={this.handleTypeChange}/>
                                             Pull Request
                                         </label>
                                     </div>                                                                
