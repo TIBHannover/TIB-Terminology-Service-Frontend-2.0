@@ -1,10 +1,10 @@
 import React from "react";
-import GithubController from '../../GithubController/GithubController';
 import { withAuth } from "react-oidc-context";
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
     createIssueTitle, setUrlParameter} from './helper';
+import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
 
 
 const OPEN_ISSUE_ID = 1;
@@ -24,8 +24,7 @@ class IssueList extends React.Component{
             listOfAllIssues: [],
             waiting: true,
             contentForRender: "",
-            selectedTypeId: OPEN_ISSUE_ID,
-            username: "StroemPhi",
+            selectedTypeId: OPEN_ISSUE_ID,            
             issueTrackerUrl: null,
             pageNumber: 1,
             resultCountPerPage: 10,
@@ -38,8 +37,7 @@ class IssueList extends React.Component{
         this.handlePagination = this.handlePagination.bind(this);
         this.updateURL = this.updateURL.bind(this);
         this.createPagination = this.createPagination.bind(this);
-        this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);
-        this.gitHubController = new GithubController();
+        this.loadTheComponentPreviousState = this.loadTheComponentPreviousState.bind(this);        
     }
 
 
@@ -50,14 +48,13 @@ class IssueList extends React.Component{
         }
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
-        let listOfIssues = [];
-        let username = this.state.username;                
+        let listOfIssues = [];                 
         let urlParameter = setUrlParameter(reload, this.state.pageNumber, this.state.selectedTypeId);
         let pageNumber = urlParameter['pageNumber'];
         let selectedTypeId = urlParameter['selectedTypeId'];
         let issueStateValue =  ISSUE_STATES_VALUES[selectedTypeId];
         let resultCountPerPage = this.state.resultCountPerPage;
-        listOfIssues = await this.gitHubController.getOntologyIssueListForUser(ontology.ontologyId, issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
+        listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
         if(listOfIssues.length === 0){
             this.setState({
                 waiting: false,
