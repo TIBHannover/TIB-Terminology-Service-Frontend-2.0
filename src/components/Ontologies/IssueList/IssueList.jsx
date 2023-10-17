@@ -5,12 +5,18 @@ import {createLabelTags,
     createIssueDescription, 
     createIssueTitle, setUrlParameter} from './helper';
 import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
+import DropDown from "../../common/DropDown/DropDown";
 
 
 const OPEN_ISSUE_ID = 1;
 const CLOSE_ISSUE_ID = 2;
 const ALL_ISSUE_ID = 3;
 const ISSUE_STATES_VALUES = ["", "open", "closed", "all"]
+const ISSUE_STATES_FOR_DROPDOWN = [    
+    {label: "Open", value:OPEN_ISSUE_ID},
+    {label: "All", value:ALL_ISSUE_ID},
+    {label: "Closed", value:CLOSE_ISSUE_ID}    
+];
 
 
 
@@ -31,8 +37,7 @@ class IssueList extends React.Component{
             noMoreIssuesExist: false     
         });
         this.setComponentData = this.setComponentData.bind(this);
-        this.createIssuesList = this.createIssuesList.bind(this);
-        this.createIssueStateDropDown = this.createIssueStateDropDown.bind(this);
+        this.createIssuesList = this.createIssuesList.bind(this);        
         this.handleIssueStateChange = this.handleIssueStateChange.bind(this);
         this.handlePagination = this.handlePagination.bind(this);
         this.updateURL = this.updateURL.bind(this);
@@ -135,22 +140,6 @@ class IssueList extends React.Component{
         ];
     }
 
-
-    createIssueStateDropDown(){
-        return [
-            <div className='col-sm-4 form-inline'>
-                <div class="form-group">
-                    <label for="issue-state-types" className='col-form-label'>State</label>
-                    <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-state-types" value={this.state.selectedTypeId} onChange={this.handleIssueStateChange}>
-                    <option value={OPEN_ISSUE_ID} key={OPEN_ISSUE_ID}>Open</option>
-                    <option value={CLOSE_ISSUE_ID} key={CLOSE_ISSUE_ID}>Closed</option>
-                    <option value={ALL_ISSUE_ID} key={ALL_ISSUE_ID}>All</option>                    
-                    </select>  
-                </div>                                                                                
-            </div>
-        ];
-    }
-
     
     
     createIssuesList(){
@@ -185,15 +174,18 @@ class IssueList extends React.Component{
         }
         return (
             <div className="row tree-view-container">
-                <div className="col-sm-12">
-                    {/* {!this.props.auth.isAuthenticated && 
-                        <LoginForm onlyLoginButton={false} />
-                    } */}
+                <div className="col-sm-12">                  
                     {this.state.waiting && <div className="isLoading"></div>}
                     {!this.state.waiting &&                        
                         <div className="row">
-                            <div className="row">
-                                {this.createIssueStateDropDown()}
+                            <div className="row">                                
+                                <DropDown 
+                                    options={ISSUE_STATES_FOR_DROPDOWN}
+                                    dropDownId="issue-state-types"
+                                    dropDownTitle="State"
+                                    dropDownValue={this.state.selectedTypeId}
+                                    dropDownChangeHandler={this.handleIssueStateChange}
+                                /> 
                             </div>                            
                             <div className="col-sm-8">
                                 {!this.state.noMoreIssuesExist && this.state.contentForRender}
