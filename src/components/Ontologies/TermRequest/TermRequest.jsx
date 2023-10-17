@@ -20,7 +20,8 @@ class TermRequest extends React.Component{
             modalIsOpen: false,
             issueTemplates: [],
             selectedTemplate: 0,
-            selectedTemplateText: ""
+            selectedTemplateText: "",
+            issueTitle: ""
         };
         this.onTextAreaChange = this.onTextAreaChange.bind(this);            
         this.submitIssueRequest = this.submitIssueRequest.bind(this);
@@ -31,6 +32,7 @@ class TermRequest extends React.Component{
         this.loadTemplates = this.loadTemplates.bind(this);
         this.templateDropDownChange = this.templateDropDownChange.bind(this);
         this.setTermRequestTemplate = this.setTermRequestTemplate.bind(this);
+        this.goBackToModalContent = this.goBackToModalContent.bind(this);
 
         if(localStorage.getItem('authProvider') === 'github'){
             this.loadTemplates();
@@ -133,6 +135,9 @@ class TermRequest extends React.Component{
 
     onTextInputChange(){       
         document.getElementById('issueTitle').style.borderColor = '';
+        this.setState({
+            issueTitle: document.getElementById('issueTitle').value
+        });
     }
 
 
@@ -161,8 +166,7 @@ class TermRequest extends React.Component{
         if(!formIsValid){
             return;
         }
-                
-        let issueTypeSelect = document.getElementById('issue-types');
+                        
         let data = new FormData();
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         data.append("ontology_id", this.props.ontology.ontologyId);
@@ -203,6 +207,15 @@ class TermRequest extends React.Component{
 
     openModal(){
         this.setState({modalIsOpen: true});
+    }
+
+
+    goBackToModalContent(){
+        this.setState({
+            errorInSubmit: false,
+            submitFinished: false,
+            newIssueUrl: ""
+        });
     }
 
 
@@ -249,7 +262,8 @@ class TermRequest extends React.Component{
                 {this.props.reportType === "termRequest" ? "File a Term Request" : "File a General Issue "} 
             </button>
             
-            {this.state.modalIsOpen && <div class="modal" id={this.props.reportType + "_issue_modal"}>
+            {this.state.modalIsOpen && 
+            <div class="modal" id={this.props.reportType + "_issue_modal"}>
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">                    
                         <div class="modal-header">
@@ -283,7 +297,7 @@ class TermRequest extends React.Component{
                                             <label className="required_input" for="issueTitle">
                                                 {this.props.reportType === "general" ? "Issue Title" : "Term Request Title"}
                                             </label>
-                                            <input type="text" class="form-control" onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Title ..."></input>
+                                            <input type="text" class="form-control" value={this.state.issueTitle}  onChange={() => {this.onTextInputChange()}} id="issueTitle" placeholder="Enter Title ..."></input>
                                         </div>
                                     </div>
                                     <br></br>
@@ -318,7 +332,7 @@ class TermRequest extends React.Component{
                             }
                             {this.state.submitFinished && this.state.errorInSubmit &&
                                 <div className="row text-center">
-                                    <div className="col-sm-10">
+                                    <div className="col-sm-12">
                                         <div class="alert alert-danger">
                                             Something went wrong. Please try again!
                                         </div>  
@@ -329,6 +343,9 @@ class TermRequest extends React.Component{
                         
                         <div class="modal-footer">                            
                             <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>
+                            {this.state.submitFinished && this.state.errorInSubmit &&
+                                <button type="button" class="btn btn-primary" onClick={this.goBackToModalContent}>Go Back</button>
+                            }
                             {!this.state.submitFinished && 
                                 <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submitIssueRequest}>Submit</button>
                             }

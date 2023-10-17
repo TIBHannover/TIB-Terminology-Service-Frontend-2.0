@@ -285,6 +285,36 @@ export function createHomePageContent() {
           </div>
         </div>
       </div>
+        <div className="col-sm-6">
+          <div className="collection-card">
+            <a
+                href={
+                    process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['NFDI4ENERGY']['ontology_list_url']
+                }
+                className="collection-image-anchor"
+            >
+              <img
+                  className="img-fluid collection-logo"
+                  alt="NFDI4ENERGY"
+                  src={collectionsInfoJson['NFDI4ENERGY']['logo']}
+              />
+            </a>
+            <div className="collection-card-text">
+              <p className="trunc">
+                {collectionsInfoJson['NFDI4ENERGY']['text']}
+              </p>
+              <a
+                  href={
+                      process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+                      collectionsInfoJson['NFDI4ENERGY']['html_id']
+                  }
+                  className="show-more-text-link"
+              >
+                [Read More]
+              </a>
+            </div>
+          </div>
+        </div>
      </div>
     </div>,
   ];
