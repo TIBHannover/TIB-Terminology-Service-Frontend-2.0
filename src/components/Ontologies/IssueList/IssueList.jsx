@@ -3,7 +3,7 @@ import { withAuth } from "react-oidc-context";
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
-    createIssueTitle, setUrlParameter} from './helper';
+    createIssueTitle, loadUrlParameter} from './helper';
 import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
 import DropDown from "../../common/DropDown/DropDown";
 
@@ -30,7 +30,7 @@ class IssueList extends React.Component{
             listOfAllIssues: [],
             waiting: true,
             contentForRender: "",
-            selectedTypeId: OPEN_ISSUE_ID,            
+            selectedStateId: OPEN_ISSUE_ID,            
             issueTrackerUrl: null,
             pageNumber: 1,
             resultCountPerPage: 10,
@@ -54,10 +54,10 @@ class IssueList extends React.Component{
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];                 
-        let urlParameter = setUrlParameter(reload, this.state.pageNumber, this.state.selectedTypeId);
+        let urlParameter = loadUrlParameter(reload, this.state.pageNumber, this.state.selectedStateId);
         let pageNumber = urlParameter['pageNumber'];
-        let selectedTypeId = urlParameter['selectedTypeId'];
-        let issueStateValue =  ISSUE_STATES_VALUES[selectedTypeId];
+        let selectedStateId = urlParameter['selectedStateId'];
+        let issueStateValue =  ISSUE_STATES_VALUES[selectedStateId];
         let resultCountPerPage = this.state.resultCountPerPage;
         listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
         if(listOfIssues.length === 0){
@@ -65,26 +65,26 @@ class IssueList extends React.Component{
                 waiting: false,
                 noMoreIssuesExist: true
             });
-            this.updateURL(pageNumber, selectedTypeId);
+            this.updateURL(pageNumber, selectedStateId);
             return true;
         }
         this.setState({
             listOfIssuesToRender: listOfIssues,
             waiting: false,
             issueTrackerUrl: issueTrackerUrl,
-            selectedTypeId: selectedTypeId,
+            selectedStateId: selectedStateId,
             pageNumber: pageNumber,
             noMoreIssuesExist: false
         }, () => {
             this.createIssuesList();
-            this.updateURL(pageNumber, selectedTypeId);
+            this.updateURL(pageNumber, selectedStateId);
         });
     }
 
     
     loadTheComponentPreviousState(){
         this.setState({...this.props.lastState});
-        this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedTypeId);
+        this.updateURL(this.props.lastState.pageNumber, this.props.lastState.selectedStateId);
     }
         
     
@@ -92,7 +92,7 @@ class IssueList extends React.Component{
         this.setState({waiting:true});
         let selectedIssueStateId = parseInt(e.target.value);
         this.setState({
-            selectedTypeId: selectedIssueStateId,
+            selectedStateId: selectedIssueStateId,
             pageNumber: 1
         }, ()=>{
             this.setComponentData(true);
@@ -184,12 +184,11 @@ class IssueList extends React.Component{
                                         options={ISSUE_STATES_FOR_DROPDOWN}
                                         dropDownId="issue-state-types"
                                         dropDownTitle="State"
-                                        dropDownValue={this.state.selectedTypeId}
+                                        dropDownValue={this.state.selectedStateId}
                                         dropDownChangeHandler={this.handleIssueStateChange}
                                     /> 
                                 </div>
-                                <div className="col-sm-3">
-                                    <label>Type: </label>                           
+                                <div className="col-sm-3">                                    
                                     <div class="form-check-inline">
                                         <label class="form-check-label">
                                             <input type="radio" class="form-check-input" name="typeRadio" value={"issue"} checked />

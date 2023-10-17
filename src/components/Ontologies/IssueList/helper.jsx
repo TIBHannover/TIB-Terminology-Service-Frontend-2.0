@@ -35,23 +35,14 @@ export function createIssueDescription(issue){
 }
 
 
-export function getIssuesBasedOnState(listOfAllIssues, state){
-    let listOfIssues = [];
-    for(let issue of listOfAllIssues){
-        if(issue['state'] === state){
-            listOfIssues.push(issue);
-        }
-    }
-    return listOfIssues;
-}
 
-export function setUrlParameter(reload, pageNumberInState, selectedTypeIdInState){
-    let result = {"pageNumber": pageNumberInState, "selectedTypeId": selectedTypeIdInState};
+export function loadUrlParameter(reload, pageNumberInState, selectedTypeIdInState){
+    let result = {"pageNumber": pageNumberInState, "selectedStateId": selectedTypeIdInState};
     if(!reload){
         let url = new URL(window.location);
         let pageNumber = url.searchParams.get('page');
-        let selectedTypeId = url.searchParams.get('stateId');
-        result['selectedTypeId'] = !selectedTypeId ? OPEN_ISSUE_ID : parseInt(selectedTypeId);
+        let selectedStateId = url.searchParams.get('stateId');
+        result['selectedStateId'] = !selectedStateId ? OPEN_ISSUE_ID : parseInt(selectedStateId);
         result['pageNumber'] = !pageNumber ? 1 : parseInt(pageNumber);
         return result;
     }
