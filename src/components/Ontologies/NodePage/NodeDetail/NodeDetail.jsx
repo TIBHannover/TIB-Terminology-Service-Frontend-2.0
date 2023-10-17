@@ -72,7 +72,11 @@ class NodeDetail extends React.Component{
                   {formatText(metadataLabel, metadataValue, isLink)}
                   {isLink && metadataLabel !== "Label" && <CopyLinkButton  valueToCopy={metadataValue} />}
                   {metadataLabel === "Label" && 
-                    <CopyLinkButtonMarkdownFormat  label={this.state.data.ontology_prefix + ":" + this.state.data.label} url={this.setLabelAsLink()}/>
+                    <CopyLinkButtonMarkdownFormat  
+                        label={this.state.data.ontology_prefix + ":" + this.state.data.label} 
+                        url={this.setLabelAsLink()}
+                        tooltipText={"This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " + this.state.data.ontology_prefix + ":" + this.state.data.label}
+                    />
                   }
                 </div>
               </div>

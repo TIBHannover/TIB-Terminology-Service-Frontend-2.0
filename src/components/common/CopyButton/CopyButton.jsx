@@ -41,8 +41,11 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
                     setCopied(false);
                 }, 1000); 
             }}
+            data-toggle="tooltip"
+            data-placement="left" 
+            title={props.tooltipText}
             >
-            get markdown link {copied && <i class="fa fa-check" aria-hidden="true"></i>}
+            copy markdown link {copied && <i class="fa fa-check" aria-hidden="true"></i>}
         </button>
     ];
 }
