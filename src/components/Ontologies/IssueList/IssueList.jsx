@@ -176,27 +176,46 @@ class IssueList extends React.Component{
             <div className="row tree-view-container">
                 <div className="col-sm-12">                  
                     {this.state.waiting && <div className="isLoading"></div>}
-                    {!this.state.waiting &&                        
-                        <div className="row">
-                            <div className="row">                                
-                                <DropDown 
-                                    options={ISSUE_STATES_FOR_DROPDOWN}
-                                    dropDownId="issue-state-types"
-                                    dropDownTitle="State"
-                                    dropDownValue={this.state.selectedTypeId}
-                                    dropDownChangeHandler={this.handleIssueStateChange}
-                                /> 
-                            </div>                            
-                            <div className="col-sm-8">
-                                {!this.state.noMoreIssuesExist && this.state.contentForRender}
-                                {this.state.noMoreIssuesExist && 
-                                    <div class="alert alert-info">
-                                        No Result. 
+                    {!this.state.waiting && 
+                        <span>
+                            <div className="row">
+                                <div className="col-sm-3">                                
+                                    <DropDown 
+                                        options={ISSUE_STATES_FOR_DROPDOWN}
+                                        dropDownId="issue-state-types"
+                                        dropDownTitle="State"
+                                        dropDownValue={this.state.selectedTypeId}
+                                        dropDownChangeHandler={this.handleIssueStateChange}
+                                    /> 
+                                </div>
+                                <div className="col-sm-3">
+                                    <label>Type: </label>                           
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="typeRadio" value={"issue"} checked />
+                                            Issue
+                                        </label>
                                     </div>
-                                }
-                                {this.createPagination()}                                
-                            </div>                            
-                        </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="typeRadio" value={"pr"} />
+                                            Pull Request
+                                        </label>
+                                    </div>                                                                
+                                </div>                            
+                            </div>
+                            <div className="row">                            
+                                <div className="col-sm-8">
+                                    {!this.state.noMoreIssuesExist && this.state.contentForRender}
+                                    {this.state.noMoreIssuesExist && 
+                                        <div class="alert alert-info">
+                                            No Result. 
+                                        </div>
+                                    }                                
+                                    {this.createPagination()}                                
+                                </div>                            
+                            </div>
+                        </span>
                     }
                 </div>
             </div>

@@ -1074,6 +1074,11 @@ p{
    background-color: white;
 }
 
+.form-check-inline,.form-check-input{
+    margin-top: 4px !important;
+    margin-left: 2px !important;
+}
+
 /* 
 -------------------------------------
     The Facet fields in Search results styles 
