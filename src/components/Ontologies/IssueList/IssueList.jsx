@@ -3,7 +3,7 @@ import { withAuth } from "react-oidc-context";
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
-    createIssueTitle, loadUrlParameter} from './helper';
+    createIssueTitle, loadUrlParameter, setTypeRadioBtn} from './helper';
 import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
 import DropDown from "../../common/DropDown/DropDown";
 
@@ -53,13 +53,15 @@ class IssueList extends React.Component{
             this.loadTheComponentPreviousState();
             return true;
         }
+        
         let ontology = this.props.ontology;
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];                 
-        let urlParameter = loadUrlParameter(reload, this.state.pageNumber, this.state.selectedStateId, this.state.selectedType);
-        let pageNumber = urlParameter['pageNumber'];
-        let selectedStateId = urlParameter['selectedStateId'];
-        let selectedType = urlParameter['selectedType'];        
+        let urlParameter = loadUrlParameter();        
+        let pageNumber = reload ? urlParameter['pageNumber'] : this.state.pageNumber;
+        let selectedStateId = reload ? urlParameter['selectedStateId'] : this.state.selectedStateId;
+        let selectedType = reload ? urlParameter['selectedType'] : this.state.selectedType;      
+        setTypeRadioBtn(selectedType);  
         let issueStateValue =  ISSUE_STATES_VALUES[selectedStateId];
         let resultCountPerPage = this.state.resultCountPerPage;
         listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
@@ -80,8 +82,7 @@ class IssueList extends React.Component{
             noMoreIssuesExist: false,
             selectedType: selectedType
         }, () => {
-            this.createIssuesList();
-            this.updateURL(pageNumber, selectedStateId, selectedType);
+            this.createIssuesList();            
         });
     }
 
@@ -99,7 +100,7 @@ class IssueList extends React.Component{
             selectedStateId: selectedIssueStateId,
             pageNumber: 1
         }, ()=>{
-            this.setComponentData(true);
+            this.updateURL(this.state.pageNumber, this.state.selectedStateId, this.state.selectedType);
         });        
         localStorage.setItem("selectedIssueStateId", selectedIssueStateId);
     }
@@ -107,7 +108,7 @@ class IssueList extends React.Component{
     
     handlePagination (e) {
         let paginationDirection = e.target.dataset.value;
-        let pageNumber = this.state.pageNumber;
+        let pageNumber = parseInt(this.state.pageNumber);
         if(paginationDirection === "minus" && pageNumber > 1){
             pageNumber -= 1;
         }
@@ -118,16 +119,16 @@ class IssueList extends React.Component{
           pageNumber: pageNumber,
           waiting: true         
         }, ()=> {            
-            this.setComponentData(true);
+            this.updateURL(this.state.pageNumber, this.state.selectedStateId, this.state.selectedType);
         })
     }
 
 
-    handleTypeChange(e){
+    handleTypeChange(e){        
         this.setState({
             selectedType: e.target.value
         }, () => {
-            this.setComponentData(true);
+            this.updateURL(this.state.pageNumber, this.state.selectedStateId, this.state.selectedType);
         });
     }
 
@@ -138,6 +139,7 @@ class IssueList extends React.Component{
         currentUrlParams.append('stateId', stateId);      
         currentUrlParams.append('type', type);              
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        this.setComponentData(true);
     }
 
 
@@ -188,48 +190,46 @@ class IssueList extends React.Component{
         }
         return (
             <div className="row tree-view-container">
-                <div className="col-sm-12">                  
+                <div className="col-sm-12">
+                    <div className="row">
+                        <div className="col-sm-3">                                
+                            <DropDown 
+                                options={ISSUE_STATES_FOR_DROPDOWN}
+                                dropDownId="issue-state-types"
+                                dropDownTitle="State"
+                                dropDownValue={this.state.selectedStateId}
+                                dropDownChangeHandler={this.handleIssueStateChange}
+                            /> 
+                        </div>
+                        <div className="col-sm-3">                                    
+                            <div class="form-check-inline form-check-inline-github-issue">
+                                <label class="form-check-label">
+                                    <input type="radio" id="issue_radio" class="form-check-input form-check-input-github-issue" name="typeRadio" value={"issue"} onChange={this.handleTypeChange}/>
+                                    Issue
+                                </label>
+                            </div>
+                            <div class="form-check-inline form-check-inline-github-issue">
+                                <label class="form-check-label">
+                                    <input type="radio" id="pr_radio" class="form-check-input form-check-input-github-issue" name="typeRadio" value={"pr"} onChange={this.handleTypeChange}/>
+                                    Pull Request
+                                </label>
+                            </div>                                                                
+                        </div>                            
+                    </div>
                     {this.state.waiting && <div className="isLoading"></div>}
-                    {!this.state.waiting && 
-                        <span>
-                            <div className="row">
-                                <div className="col-sm-3">                                
-                                    <DropDown 
-                                        options={ISSUE_STATES_FOR_DROPDOWN}
-                                        dropDownId="issue-state-types"
-                                        dropDownTitle="State"
-                                        dropDownValue={this.state.selectedStateId}
-                                        dropDownChangeHandler={this.handleIssueStateChange}
-                                    /> 
-                                </div>
-                                <div className="col-sm-3">                                    
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="typeRadio" value={"issue"} onChange={this.handleTypeChange}/>
-                                            Issue
-                                        </label>
+                    {!this.state.waiting &&
+                        <div className="row">                            
+                            <div className="col-sm-8">
+                                {!this.state.noMoreIssuesExist && this.state.contentForRender}
+                                {this.state.noMoreIssuesExist && 
+                                    <div class="alert alert-info">
+                                        No Result. 
                                     </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="typeRadio" value={"pr"} onChange={this.handleTypeChange}/>
-                                            Pull Request
-                                        </label>
-                                    </div>                                                                
-                                </div>                            
-                            </div>
-                            <div className="row">                            
-                                <div className="col-sm-8">
-                                    {!this.state.noMoreIssuesExist && this.state.contentForRender}
-                                    {this.state.noMoreIssuesExist && 
-                                        <div class="alert alert-info">
-                                            No Result. 
-                                        </div>
-                                    }                                
-                                    {this.createPagination()}                                
-                                </div>                            
-                            </div>
-                        </span>
-                    }
+                                }                                
+                                {this.createPagination()}                                
+                            </div>                            
+                        </div>
+                    }                                       
                 </div>
             </div>
             

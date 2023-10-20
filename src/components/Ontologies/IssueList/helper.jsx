@@ -36,19 +36,25 @@ export function createIssueDescription(issue){
 
 
 
-export function loadUrlParameter(reload, pageNumberInState, selectedStateId, selectedType ){
-    let result = {"pageNumber": pageNumberInState, "selectedStateId": selectedStateId, "selectedType": selectedType};
-    if(!reload){
-        let url = new URL(window.location);
-        let pageNumber = url.searchParams.get('page');
-        let selectedStateId = url.searchParams.get('stateId');
-        let selectedType = url.searchParams.get('type');
-        result['selectedStateId'] = !selectedStateId ? OPEN_ISSUE_ID : parseInt(selectedStateId);
-        result['pageNumber'] = !pageNumber ? 1 : parseInt(pageNumber);
-        result['selectedType'] = !selectedType ? 'issue' : selectedType;
-        return result;
+export function loadUrlParameter(){        
+    let url = new URL(window.location);
+    let result = [];     
+    result['selectedStateId'] = url.searchParams.get('stateId');
+    result['pageNumber'] = url.searchParams.get('page');
+    result['selectedType'] = url.searchParams.get('type');
+    return result;    
+}
+
+
+export function setTypeRadioBtn(selectedType){
+    if(selectedType === "issue"){
+        let radioBtn = document.getElementById("issue_radio");
+        radioBtn.checked = true;
     }
-    return result;
+    else{
+        let radioBtn = document.getElementById("pr_radio");
+        radioBtn.checked = true;
+    }
 }
 
 
