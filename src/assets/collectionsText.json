@@ -90,12 +90,12 @@
         "domain_ts_link": ""
     },
     "NFDI4ENERGY":{
-        "id": "NFDI4ENERGY",
-        "html_id": "NFDI4ENERGY",
-        "name": "NFDI4ENERGY Project",
+        "id": "NFDI4Energy",
+        "html_id": "NFDI4Energy",
+        "name": "NFDI4Energy Project",
         "text": "Explore energy-related ontologies effortlessly with the NFDI4Energy Terminology Service, maintained by TIB - Leibniz Information Centre for Science and Technology. Access the latest ontology versions, with options for both human users through the website and machine interaction via the TS API. This invaluable service is a key component of the NFDI4Energy consortium's involvement in the National Research Data Infrastructure.",
         "logo": "/logo_NFDI4ENERGY.svg",
-        "ontology_list_url": "/ontologies?collection=NFDI4ENERGY&and=false&page=1",
+        "ontology_list_url": "/ontologies?collection=NFDI4Energy&and=false&page=1",
         "project_homepage": "https://nfdi4energy.uol.de/",
         "domain_ts_link": ""
     }
