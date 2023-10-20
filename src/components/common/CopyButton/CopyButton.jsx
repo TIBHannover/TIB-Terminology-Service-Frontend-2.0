@@ -33,9 +33,22 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
             type="button" 
             class="btn btn-secondary btn-sm copy-link-btn"
             key={"copy-btn"} 
-            onClick={() => {                  
-                let copyValue = "[" + props.label + "](" + props.url + ")";
-                navigator.clipboard.writeText(copyValue);
+            onClick={() => {                                                  
+                let copyValue = document.createElement('a');
+                copyValue.href = props.url;
+                copyValue.textContent = props.label;                
+                let holderDiv = document.createElement('div');
+                holderDiv.style.position = "absolute";                
+                holderDiv.appendChild(copyValue);
+                document.body.appendChild(holderDiv);
+                let range = document.createRange();
+                range.selectNode(holderDiv);
+                let selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);                
+                document.execCommand("copy");
+                selection.removeAllRanges();
+                document.body.removeChild(holderDiv);  
                 setCopied(true);
                 setTimeout(() => {
                     setCopied(false);
@@ -45,7 +58,7 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
             data-placement="left" 
             title={props.tooltipText}
             >
-            copy markdown link {copied && <i class="fa fa-check" aria-hidden="true"></i>}
+            copy label as link {copied && <i class="fa fa-check" aria-hidden="true"></i>}
         </button>
     ];
 }
