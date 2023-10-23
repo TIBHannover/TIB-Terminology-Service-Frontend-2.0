@@ -153,7 +153,7 @@ class OntologyPage extends React.Component {
         lastRequestedTab: requestedTab
       });
     }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'gitIssues'){          
+    else if (requestedTab !== lastRequestedTab && requestedTab === 'gitpanel'){          
       this.setState({       
         activeTab: GIT_ISSUE_LIST_ID,
         waiting: false,

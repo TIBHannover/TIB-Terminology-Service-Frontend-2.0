@@ -6,6 +6,9 @@ import {createLabelTags,
     createIssueTitle, loadUrlParameter, setTypeRadioBtn} from './helper';
 import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
 import DropDown from "../../common/DropDown/DropDown";
+import TermRequest from '../TermRequest/TermRequest';
+import RenderIfLogin from '../../User/Login/RequireLogin';
+
 
 
 const OPEN_ISSUE_ID = 1;
@@ -217,21 +220,25 @@ class IssueList extends React.Component{
                         </div> 
                         <div className="col-sm-3">
                             {this.createPagination()}
-                        </div>                           
-                    </div>
-                    {this.state.waiting && <div className="isLoading"></div>}
-                    {!this.state.waiting &&
+                        </div>                        
+                    </div>                                       
                         <div className="row">                            
                             <div className="col-sm-9">
-                                {!this.state.noMoreIssuesExist && this.state.contentForRender}
-                                {this.state.noMoreIssuesExist && 
+                                {this.state.waiting && <div className="isLoading"></div>} 
+                                {!this.state.waiting && !this.state.noMoreIssuesExist && this.state.contentForRender}
+                                {!this.state.waiting && this.state.noMoreIssuesExist && 
                                     <div class="alert alert-info">
                                         No Result. 
                                     </div>
                                 }                                                            
-                            </div>                            
-                        </div>
-                    }                                       
+                            </div>
+                            
+                            <div className="col-sm-3 text-center">
+                                <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"general"} />} />
+                                <br></br>
+                                <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"termRequest"} />} />
+                            </div>
+                        </div>                                                         
                 </div>
             </div>
             
