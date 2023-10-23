@@ -58,19 +58,18 @@ class IssueList extends React.Component{
         let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
         let listOfIssues = [];                 
         let urlParameter = loadUrlParameter();        
-        let pageNumber = reload ? urlParameter['pageNumber'] : this.state.pageNumber;
-        let selectedStateId = reload ? urlParameter['selectedStateId'] : this.state.selectedStateId;
-        let selectedType = reload ? urlParameter['selectedType'] : this.state.selectedType;      
+        let pageNumber = urlParameter['pageNumber'] ? urlParameter['pageNumber'] : this.state.pageNumber;
+        let selectedStateId = urlParameter['selectedStateId'] ? urlParameter['selectedStateId'] : this.state.selectedStateId;
+        let selectedType = urlParameter['selectedType'] ? urlParameter['selectedType'] : this.state.selectedType;              
         setTypeRadioBtn(selectedType);  
         let issueStateValue =  ISSUE_STATES_VALUES[selectedStateId];
         let resultCountPerPage = this.state.resultCountPerPage;
-        listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, resultCountPerPage, pageNumber);
+        listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, selectedType, resultCountPerPage, pageNumber);
         if(listOfIssues.length === 0){
             this.setState({
                 waiting: false,
                 noMoreIssuesExist: true
-            });
-            this.updateURL(pageNumber, selectedStateId, selectedType);
+            });           
             return true;
         }
         this.setState({
@@ -126,10 +125,11 @@ class IssueList extends React.Component{
 
     handleTypeChange(e){        
         this.setState({
-            selectedType: e.target.value
-        }, () => {
-            this.updateURL(this.state.pageNumber, this.state.selectedStateId, this.state.selectedType);
+            selectedType: e.target.value,
+            pageNumber: 1,
+            waiting: true
         });
+        this.updateURL(1, this.state.selectedStateId, e.target.value);
     }
 
 

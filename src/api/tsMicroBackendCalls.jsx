@@ -76,12 +76,13 @@ export async function getNoteDetail({noteId}){
 }
 
 
-export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueState, resultCountPerPage=10, pageNumber=1){
+export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueState, issueType, resultCountPerPage=10, pageNumber=1){
     try{ 
         let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];        
         let endpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/issuelist?';
         endpoint += ("path=" + encodeURIComponent(urlPath));
         endpoint += ("&state=" + issueState);
+        endpoint += ("&type=" + issueType);
         endpoint += ("&size=" + resultCountPerPage);
         endpoint += ("&page=" + pageNumber);
         let header = {};
