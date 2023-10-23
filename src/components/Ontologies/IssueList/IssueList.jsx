@@ -214,19 +214,21 @@ class IssueList extends React.Component{
                                     Pull Request
                                 </label>
                             </div>                                                                
-                        </div>                            
+                        </div> 
+                        <div className="col-sm-3">
+                            {this.createPagination()}
+                        </div>                           
                     </div>
                     {this.state.waiting && <div className="isLoading"></div>}
                     {!this.state.waiting &&
                         <div className="row">                            
-                            <div className="col-sm-8">
+                            <div className="col-sm-9">
                                 {!this.state.noMoreIssuesExist && this.state.contentForRender}
                                 {this.state.noMoreIssuesExist && 
                                     <div class="alert alert-info">
                                         No Result. 
                                     </div>
-                                }                                
-                                {this.createPagination()}                                
+                                }                                                            
                             </div>                            
                         </div>
                     }                                       
