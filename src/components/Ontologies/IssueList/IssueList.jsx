@@ -189,7 +189,7 @@ class IssueList extends React.Component{
             return null;
         }
         return (
-            <div className="row tree-view-container">
+            <div className="row tree-view-container list-container">
                 <div className="col-sm-12">
                     <div className="row">
                         <div className="col-sm-3">                                
