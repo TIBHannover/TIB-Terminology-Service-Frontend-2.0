@@ -121,15 +121,15 @@ class SearchForm extends React.Component{
 
             }           
           }
-          else if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem" || "nfdi4ing"){
+          else { 
             let col = (process.env.REACT_APP_PROJECT_ID).toUpperCase();
-            if(selectedOntology || selectedType){
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&&type=${selectedType}ontology=${selectedOntology}`,{
+            if(selectedOntology){
+              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
                 mode: 'cors',
                 headers: apiHeaders(),
               })
               searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&&type=${selectedType}ontology=${selectedOntology}`,{
+              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
                 mode: 'cors',
                 headers: apiHeaders(),
               })
