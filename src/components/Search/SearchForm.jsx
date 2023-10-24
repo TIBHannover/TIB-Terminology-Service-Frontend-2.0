@@ -160,53 +160,6 @@ class SearchForm extends React.Component{
               });
             }            
           }
-          else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
-            let ontologies = [];
-            let ontologiesForCollection = await fetch(process.env.REACT_APP_API_URL + `/ontologies/filterby?schema=collection&classification=NFDI4ING&exclusive=false`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
-            for(let onto of ontologiesForCollection){
-              ontologies.push(onto['ontologyId']);
-            }
-            if(selectedOntology){
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }
-            else{
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }           
-          }
         }
         else if(enteredTerm.length > 0 && this.state.urlPath){
           let ontoSearchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`,{
