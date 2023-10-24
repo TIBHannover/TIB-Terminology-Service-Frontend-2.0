@@ -1,5 +1,5 @@
 import React from 'react';
-import {setJumpResultButtons ,ontologyForAutosuggest} from './SearchFormHelpers';
+import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 import {apiHeaders} from '../../api/headers';
 
@@ -83,7 +83,7 @@ class SearchForm extends React.Component{
                 enteredTerm: enteredTerm
               });
             }
-            else if(selectedCollection === "NFDI4CHEM"){
+            else if(selectedCollection == "NFDI4CHEM"){
             let ontologies = [];
             let ontologiesForCollection = await fetch(process.env.REACT_APP_API_URL + `/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`,{
               mode: 'cors',
