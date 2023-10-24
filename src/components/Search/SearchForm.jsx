@@ -205,8 +205,8 @@ class SearchForm extends React.Component{
     }
 
     submitJumpHandler(e){
-      for(let i=0; i < this.state.jumpResult.length; i++){
-      window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+      for(let item of this.state.jumpResult){
+      window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item['ontology_name'] + '/terms?iri=' + item['iri']);
       }
     }
     
@@ -276,10 +276,10 @@ class SearchForm extends React.Component{
 
       createJumpResultList(){
         const jumpResultList = []
-        for(let i=0; i < this.state.jumpResult.length; i++){
+        for(let item of this.state.jumpResult){
           jumpResultList.push(
             <div className="jump-autocomplete-container">
-               {setJumpResultButtons(this.state.jumpResult[i])}
+               {setJumpResultButtons(item)}
             </div>          
           )
         }
