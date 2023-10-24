@@ -17,7 +17,10 @@ class TreeNodeController{
     buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);           
-        let partOfSymbol = "";
+        let partOfSymbol = "";        
+        if (nodeObject.is_obsolete){
+            nodeLabel = React.createElement("s", {}, nodeLabel);
+        }        
         this.textDiv = React.createElement("div", {"className": "li-label-text"}, nodeLabel);
 
         if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject['a_attr']["class"] === "part_of"){
@@ -58,7 +61,7 @@ class TreeNodeController{
     }
 
 
-    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
+    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){                
         let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
         let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
         this.textDiv = document.createElement("div");

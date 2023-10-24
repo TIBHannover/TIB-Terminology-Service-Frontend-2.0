@@ -1,6 +1,7 @@
 import React from 'react';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import AlertBox from '../../../common/Alerts/Alerts';
 
 
 
@@ -121,6 +122,13 @@ class NodeDetail extends React.Component{
               </Helmet>
               </div>
             </HelmetProvider>
+            {this.state.data.is_obsolete &&
+              <AlertBox  
+                type="danger"
+               message="Attention: This term is deprecated!"
+                alertColumnClass="col-sm-12"
+              />
+            }
             {this.createTable()}
             <div className='col-sm-12'  key={"json-button-row"}>
              <div className='row'>
