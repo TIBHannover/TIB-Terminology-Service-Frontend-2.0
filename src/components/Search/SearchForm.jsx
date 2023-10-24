@@ -1,5 +1,5 @@
 import React from 'react';
-import {setJumpResultButtons ,ontologyForAutosuggest} from './SearchFormHelpers';
+import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 import {apiHeaders} from '../../api/headers';
 
@@ -52,7 +52,7 @@ class SearchForm extends React.Component{
           let selectedOntology = params.getAll("ontology")         
           selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
           let selectedCollection = params.getAll("collection")            
-          if(process.env.REACT_APP_PROJECT_ID === "general"){
+          if(process.env.REACT_APP_PROJECT_ID == "general"){
             if(selectedOntology){
               let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
                 mode: 'cors',
@@ -83,22 +83,13 @@ class SearchForm extends React.Component{
                 enteredTerm: enteredTerm
               });
             }
-            else if(selectedCollection === "NFDI4CHEM"){
-            let ontologies = [];
-            let ontologiesForCollection = await fetch(process.env.REACT_APP_API_URL + `/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
-            for(let onto of ontologiesForCollection){
-              ontologies.push(onto['ontologyId']);
-            }
-            let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
+            else if(selectedCollection){
+            let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
               mode: 'cors',
               headers: apiHeaders(),
             })
             searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
+            let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
               mode: 'cors',
               headers: apiHeaders(),
             })
@@ -130,16 +121,8 @@ class SearchForm extends React.Component{
 
             }           
           }
-          else if(process.env.REACT_APP_PROJECT_ID === "nfdi4chem"){
-            let ontologies = [];
-            let ontologiesForCollection = await fetch(process.env.REACT_APP_API_URL + `/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
-            for(let onto of ontologiesForCollection){
-              ontologies.push(onto['ontologyId']);
-            }
+          else { 
+            let col = (process.env.REACT_APP_PROJECT_ID).toUpperCase();
             if(selectedOntology){
               let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
                 mode: 'cors',
@@ -159,12 +142,12 @@ class SearchForm extends React.Component{
               });
             }
             else {
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
+              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
                 mode: 'cors',
                 headers: apiHeaders(),
               })
               searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
+              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
                 mode: 'cors',
                 headers: apiHeaders(),
               })
@@ -176,53 +159,6 @@ class SearchForm extends React.Component{
                 enteredTerm: enteredTerm
               });
             }            
-          }
-          else if(process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
-            let ontologies = [];
-            let ontologiesForCollection = await fetch(process.env.REACT_APP_API_URL + `/ontologies/filterby?schema=collection&classification=NFDI4ING&exclusive=false`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
-            for(let onto of ontologiesForCollection){
-              ontologies.push(onto['ontologyId']);
-            }
-            if(selectedOntology){
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }
-            else{
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&ontology=${ontologies}&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }           
           }
         }
         else if(enteredTerm.length > 0 && this.state.urlPath){
@@ -269,8 +205,8 @@ class SearchForm extends React.Component{
     }
 
     submitJumpHandler(e){
-      for(let i=0; i < this.state.jumpResult.length; i++){
-      window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.state.jumpResult[i]['ontology_name'] + '/terms?iri=' + this.state.jumpResult[i]['iri']);
+      for(let item of this.state.jumpResult){
+      window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item['ontology_name'] + '/terms?iri=' + item['iri']);
       }
     }
     
@@ -340,10 +276,10 @@ class SearchForm extends React.Component{
 
       createJumpResultList(){
         const jumpResultList = []
-        for(let i=0; i < this.state.jumpResult.length; i++){
+        for(let item of this.state.jumpResult){
           jumpResultList.push(
             <div className="jump-autocomplete-container">
-               {setJumpResultButtons(this.state.jumpResult[i])}
+               {setJumpResultButtons(item)}
             </div>          
           )
         }
