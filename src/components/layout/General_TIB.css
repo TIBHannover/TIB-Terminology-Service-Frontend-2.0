@@ -89,8 +89,8 @@ p{
  }
 
  .close-btn-message-modal{
-    background-color: #008d3b !important;
-    color: white;
+    background-color: white !important;    
+    color: #404040 !important;
  }
 
  .term-button{

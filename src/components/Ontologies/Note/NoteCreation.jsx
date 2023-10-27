@@ -228,7 +228,7 @@ class NoteCreation extends React.Component{
                         data-keyboard="false" 
                         onClick={() => {this.openModal()}}           
                         >
-                        +Add New Note
+                        Add Note
                     </button>
                 </div>
             </div>            
@@ -238,7 +238,7 @@ class NoteCreation extends React.Component{
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">                    
                             <div class="modal-header">
-                                <h4 class="modal-title">{"Add a New Note"}</h4>
+                                <h4 class="modal-title">{"Add a Note"}</h4>
                                 <button onClick={this.closeModal} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                             </div>
                             <br></br>                                                

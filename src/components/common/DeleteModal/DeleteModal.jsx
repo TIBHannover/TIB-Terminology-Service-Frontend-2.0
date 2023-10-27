@@ -78,7 +78,7 @@ export const DeleteModal = (props) => {
                             }
                         </div>
                         <div class="modal-footer justify-content-center">                            
-                            {!submited && <button type="button" class="btn btn-danger" onClick={deleteResource}>Delete</button>}
+                            {!submited && <button type="button" class="btn btn-secondary" onClick={deleteResource}>Delete</button>}
                             {submited && <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={redirectAfterDelete}>Close</button>}
                         </div>
                     </div>
