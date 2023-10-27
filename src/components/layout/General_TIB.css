@@ -1710,14 +1710,13 @@ p{
 
 .isLoading {
     /* 
-        Style for the loading animation
-        source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader
+        Style for the loading animation        
     */
 
     margin: auto;
     border: 16px solid #ffffff;
     border-radius: 50%;
-    border-top: 15px solid #1565C0;
+    border-top: 15px solid #404040;
     width: 120px;
     height: 120px;
     -webkit-animation: spin 2s linear infinite;
