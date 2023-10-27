@@ -196,6 +196,7 @@ class InfoAnnotations extends React.Component{
                               {String(ontology.config.skos)}
                            </td>
                         </tr>
+                        {ontology.config.allowDownload == true &&
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Download</b></td>
                            <td>                     
@@ -222,7 +223,7 @@ class InfoAnnotations extends React.Component{
                               >
                               <i class="fa fa-download"></i>Ontology metadata as JSON</a>
                             </td>
-                        </tr>                                         
+                        </tr> }                                                        
                     </tbody>
                    </table>
                 </div> 

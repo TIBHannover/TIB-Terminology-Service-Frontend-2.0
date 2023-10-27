@@ -34,6 +34,18 @@ Open the browser and enter the URL of the application: http://localhost:3000/.
 
 The default value in the [.env](https://git.tib.eu/terminology/tib-terminology-service-2.0/-/blob/master/.env) file is "general" to display TIB Terminology service. However, users can see other projects in the TIB environment collection by changing the project ID to their desired project ( eg. NFDI4Chem, NFDI4Ing). In order to fully transition to a new project view, users can also change the API endpoints, see selected project stats and project-filtered ontologies in the .env file.
 
+## Use of Sonarqube for code quality
+
+Sonarqube has been added
+
+Step 1 : Run `docker compose up`
+
+Step 2 : Login username: `admin`, pwd: `terminology`
+
+Step 3 : run the following command in separate terminal `node ./sonarqube/sonarqube.js`
+
+Step 4 : refresh the container on `http://localhost:9000`
+
 
 ## Conventions on Issue Reporting
 We use labels to indicate the status of an issue in the development process
