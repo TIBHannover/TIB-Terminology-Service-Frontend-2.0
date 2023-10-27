@@ -727,8 +727,8 @@ p{
     */
  
     position: relative;
-    display: block;
-    padding: 0.5rem 0.75rem;
+    display: block;    
+    padding: 5px;
     margin-left: -1px;
     line-height: 1.25;
     color: #0E6668;
@@ -2464,7 +2464,13 @@ Media Query Area for bein responsive
     }
     .collection-logo{      
         margin-left: 0px;
-    }       
+    }
+    button{        
+        font-size: 12px;        
+     }    
+    .btn-secondary{    
+        font-size: 12px;        
+     }        
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
     
@@ -2508,7 +2514,13 @@ Media Query Area for bein responsive
     }   
     .pagination-holder{
         font-size: 12px;
-    }   
+    }
+    button{        
+        font-size: 10px;        
+     }    
+    .btn-secondary{    
+        font-size: 10px;        
+     }   
 }
 
 @media only screen and (max-width: 900px) {
@@ -2540,5 +2552,11 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
-    } 
+    }
+    button{        
+        font-size: 9px;        
+     }    
+    .btn-secondary{    
+        font-size: 9px;        
+     }  
  }
