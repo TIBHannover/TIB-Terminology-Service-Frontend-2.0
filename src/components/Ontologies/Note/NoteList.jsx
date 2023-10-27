@@ -147,11 +147,14 @@ class NoteList extends React.Component{
         if(result.length === 0){
             noteExist = false
             result = [
-                <AlertBox 
-                    type="info"
-                    message="This Ontology does not have any note yet."
-                    alertColumnClass="col-sm-12"
-                />                
+                <span>
+                    <br></br>
+                    <AlertBox 
+                        type="info"
+                        alertColumnClass="col-sm-12"
+                        message="This Ontology does not have any note yet."
+                    />    
+                </span>                            
             ];
         }
 
@@ -282,7 +285,7 @@ class NoteList extends React.Component{
                 }                
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
                     <div className="row">                    
-                        <div className="col-sm-9">
+                        <div className="col-sm-12">
                             <div className="row">
                                 <div className="col-sm-6">
                                     {typeof(this.props.targetArtifactType) === 'undefined' && 
@@ -295,7 +298,7 @@ class NoteList extends React.Component{
                                         /> 
                                     }
                                 </div>
-                                <div className="col-sm-6">
+                                <div className="col-sm-4">
                                     {this.state.noteExist &&  
                                         <Pagination 
                                             clickHandler={this.handlePagination} 
@@ -303,24 +306,24 @@ class NoteList extends React.Component{
                                             initialPageNumber={this.state.noteListPage}
                                         />
                                     }
-                                </div>                                
+                                </div>
+                                <div className="col-sm-2">
+                                    <NoteCreation 
+                                        targetArtifactLabel={this.props.targetArtifactLabel}  
+                                        targetArtifactType={this.props.targetArtifactType}
+                                        targetArtifactIri={this.props.targetArtifactIri}
+                                        ontologyId={this.props.ontology.ontologyId}                                
+                                        noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
+                                        isGeneric={this.props.isGeneric}                                
+                                    />
+                                </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-12">
                                     {this.state.listRenderContent}
                                 </div>
                             </div>                            
-                        </div>
-                        <div className="col-sm-2">
-                            <NoteCreation 
-                                targetArtifactLabel={this.props.targetArtifactLabel}  
-                                targetArtifactType={this.props.targetArtifactType}
-                                targetArtifactIri={this.props.targetArtifactIri}
-                                ontologyId={this.props.ontology.ontologyId}                                
-                                noteListSubmitStatusHandler={this.setNoteCreationResultStatus}
-                                isGeneric={this.props.isGeneric}                                
-                            />
-                        </div>                    
+                        </div>                                          
                     </div>
                 }
                 {!this.state.noteDetailPage && this.state.componentIsLoading && 

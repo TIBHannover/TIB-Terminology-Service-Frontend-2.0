@@ -218,8 +218,8 @@ class NoteCreation extends React.Component{
 
         return [
             <span>            
-            <div className="row">
-                <div className="col-sm-12 text-center">
+            <div className="row float-right">
+                <div className="col-sm-12">
                     <button type="button" 
                         class="btn btn-secondary" 
                         data-toggle="modal" 

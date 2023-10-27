@@ -65,7 +65,7 @@ class NoteDetail extends React.Component{
         }                
         return [
             <div className="row">
-                <div className="col-sm-9">
+                <div className="col-sm-12">
                     <div className="card">
                         <div className="card-header">
                             <NoteCardHeader note={this.state.note} />              

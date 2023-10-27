@@ -40,7 +40,7 @@ class NoteCommnentList extends React.Component{
             result.push(
                 <RowWithSingleColumn 
                     content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
-                    columnClass="col-sm-9"
+                    columnClass="col-sm-12"
                     rowClass="note-comment-card"                    
                 />         
             );
@@ -210,17 +210,17 @@ class NoteCommnentList extends React.Component{
                     [
                         <RowWithSingleColumn 
                             content={editor}
-                            columnClass="col-sm-9"
+                            columnClass="col-sm-12"
                             rowClass=""
                         />,
                          <RowWithSingleColumn 
                             content={submitButton}
-                            columnClass="col-sm-9"
+                            columnClass="col-sm-12"
                             rowClass=""
                         />,
                         <RowWithSingleColumn 
                             content={[editButton, cancelButton]}
-                            columnClass="col-sm-9"
+                            columnClass="col-sm-12"
                             rowClass=""
                         />
                     ]                   
