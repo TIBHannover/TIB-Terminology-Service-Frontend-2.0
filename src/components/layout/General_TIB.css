@@ -393,6 +393,11 @@ p{
     padding: 20px !important;
 } 
 
+.custom-radio-btn-input:checked{
+    background-color: #404040;
+    color: #404040;
+}
+
 /* 
 ------------------------
     Cookies banner layout
