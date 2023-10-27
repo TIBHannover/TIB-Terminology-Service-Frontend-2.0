@@ -1543,6 +1543,8 @@ p{
     font-size: 13.5px !important;
     text-align: left;
     word-wrap: break-word;
+    padding-bottom: 10px;
+    padding-top: 5px;
 }
 
 .node-metadata-value{
