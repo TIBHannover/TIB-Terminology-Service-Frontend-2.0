@@ -271,7 +271,7 @@ class TermRequest extends React.Component{
                                 File {this.props.reportType === "termRequest" ? "a Term Request for " : "a General Issue for "} 
                                 {this.props.ontology.ontologyId}
                             </h4>
-                            <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
+                            <button onClick={this.closeModal} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>
                         <span>
@@ -342,9 +342,15 @@ class TermRequest extends React.Component{
                         </span>                        
                         
                         <div class="modal-footer">                            
-                            <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>
+                            {/* <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal">Close</button> */}
                             {this.state.submitFinished && this.state.errorInSubmit &&
-                                <button type="button" class="btn btn-secondary" onClick={this.goBackToModalContent}>Go Back</button>
+                                <div class="container-fluid">
+                                    <div className="row">
+                                        <div className="col-sm-12 d-flex justify-content-center">
+                                            <button type="button" class="btn btn-secondary" onClick={this.goBackToModalContent}>Go Back</button>
+                                        </div>                                        
+                                    </div>                                    
+                                </div>
                             }
                             {!this.state.submitFinished && 
                                 <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={this.submitIssueRequest}>Submit</button>

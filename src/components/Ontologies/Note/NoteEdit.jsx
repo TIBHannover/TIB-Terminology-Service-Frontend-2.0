@@ -308,7 +308,7 @@ class NoteEdit extends React.Component{
 
                             </div>                        
                             <div class="modal-footer">                            
-                                <button type="button" id={"noteCreationCloseModal" + targetNote['id']} class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" >Close</button>
+                                {/* <button type="button" id={"noteCreationCloseModal" + targetNote['id']} class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" >Close</button> */}
                                 <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={this.edit}>Save</button>
                             </div>
                         </div>

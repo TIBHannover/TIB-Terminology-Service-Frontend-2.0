@@ -2180,10 +2180,17 @@ Notes
     height: 190px !important;
 }
 
-.note-comment-submit-btn{
-    background-color: #008000 !important;
+.note-comment-submit-btn{    
     margin-top: 2px;
     float: right;
+}
+
+.note-comment-cancel-edit-btn{
+    margin-top: 2px;
+    float: right;
+    margin-right: 5px;
+    background-color: rgb(211, 208, 208) !important;
+    color: black !important;
 }
 
 .note-comment-card{
@@ -2525,11 +2532,6 @@ Media Query Area for bein responsive
     color: white;
  }
 
- .note-comment-cancel-edit-btn{
-    margin-top: 2px;
-    float: right;
-    margin-right: 5px;
-}
 
 .note-link-copy-message{
     display: inline;
