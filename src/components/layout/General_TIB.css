@@ -333,6 +333,11 @@ p{
     margin-left: 1px;
 }
 
+.fa-copy{  
+    font-size: 12px !important;
+    border: none !important;
+}
+
 .skeleton-loading-box{
     /* 
         Style for the skeleton loading boxes
@@ -1339,6 +1344,14 @@ p{
 
     margin-left: 20px !important;
     font-size: 10px !important;
+}
+
+.copy-link-icon-btn{
+    margin-left: 10px !important;
+    font-size: 10px !important;
+    background-color: white !important;
+    color: black !important;
+    border: none;
 }
 
 .download-ontology-btn{
