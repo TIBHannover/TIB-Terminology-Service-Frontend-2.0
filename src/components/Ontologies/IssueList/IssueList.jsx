@@ -233,7 +233,7 @@ class IssueList extends React.Component{
                                 }                                                            
                             </div>
                             
-                            <div className="col-sm-3 text-center">
+                            <div className="col-sm-3">
                                 <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"general"} />} />
                                 <br></br>
                                 <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"termRequest"} />} />
