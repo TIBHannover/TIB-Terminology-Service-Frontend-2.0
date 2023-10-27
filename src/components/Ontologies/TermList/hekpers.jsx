@@ -60,7 +60,8 @@ function hideTableColumn(e){
     for(let cell of tableCells){
         cell.style.display = "none";
     }
-    document.getElementById(columnClassName + '-show').style.display = "inline-block";
+    try{document.getElementById(columnClassName + '-show').style.display = "inline-block";}
+    catch(e){return true}        
    
 }
 

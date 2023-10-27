@@ -9,6 +9,7 @@
 ------------------------
 */
 
+@import "~font-awesome/css/font-awesome.css";
 
 /* 
     This is the css script for the general application style.    
@@ -381,12 +382,13 @@ p{
         width: 200px;
         height: 50px;
     }
-.hidden-fa, .fa-eye{
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: 5px;
-    }
+}
+
+.fa-eye-slash, .fa-eye{
+    border: none !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    margin-left: 5px !important;
 }
 
 .list-container{
