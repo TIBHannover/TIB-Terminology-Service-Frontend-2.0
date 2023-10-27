@@ -56,7 +56,7 @@
         "keyForRenderAsComponent": "gitIssueList",
         "keyForRenderAsTabItem": "gitIssueList-tab",
         "tabId": 6,
-        "tabTitle": "Github Issues",
-        "urlEndPoint": "/gitIssues"
+        "tabTitle": "Github Panel",
+        "urlEndPoint": "/gitpanel"
     }
 }

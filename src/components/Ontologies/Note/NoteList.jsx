@@ -265,7 +265,7 @@ class NoteList extends React.Component{
             return null;
         }
         return (
-            <div className="tree-view-container notes-container">                
+            <div className="tree-view-container list-container">                
                 {this.state.noteSubmited && this.state.noteSubmitSeccuess &&
                     <AlertBox
                         type="success" 

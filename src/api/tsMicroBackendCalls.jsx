@@ -74,3 +74,26 @@ export async function getNoteDetail({noteId}){
         return {}
     }
 }
+
+
+export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueState, issueType, resultCountPerPage=10, pageNumber=1){
+    try{ 
+        let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];        
+        let endpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/issuelist?';
+        endpoint += ("path=" + encodeURIComponent(urlPath));
+        endpoint += ("&state=" + issueState);
+        endpoint += ("&type=" + issueType);
+        endpoint += ("&size=" + resultCountPerPage);
+        endpoint += ("&page=" + pageNumber);
+        let header = {};
+        header["X-TS-Frontend-Id"] = process.env.REACT_APP_PROJECT_ID;
+        header["X-TS-Frontend-Token"] = process.env.REACT_APP_MICRO_BACKEND_TOKEN;
+        let result = await fetch(endpoint, {headers:header});
+        result = await result.json();
+        result = result['_result']            
+        return result.issues;
+    }
+    catch(e){            
+        return [];
+    }        
+}

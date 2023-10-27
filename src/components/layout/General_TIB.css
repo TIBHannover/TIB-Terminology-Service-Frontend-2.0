@@ -389,7 +389,9 @@ p{
     }
 }
 
-
+.list-container{
+    padding: 20px !important;
+} 
 
 /* 
 ------------------------
@@ -457,7 +459,7 @@ p{
   .cc_more_info{
     color: white;
     text-decoration: underline;
-  }
+  }  
 
 
 /* 
@@ -1079,6 +1081,11 @@ p{
        colour for search drop-down
     */
    background-color: white;
+}
+
+.form-check-inline-github-issue,.form-check-input-github-issue{
+    margin-top: 4px !important;
+    margin-left: 2px !important;
 }
 
 /* 
@@ -1792,11 +1799,6 @@ p{
 --------------------------------------
 */
 
-.term-list-container{
-    padding-right: 40px !important;
-    padding-bottom: 40px !important;    
-}
-
 .class-list-tablle-holder{
     overflow-x: auto;
     overflow-y: scroll;
@@ -1861,13 +1863,6 @@ p{
     margin-left: 10px;
 }
 
-.list-header-element{
-    /* 
-        Style for the element on top of the list table
-    */
-
-    margin-top: 40px;
-}
 /* 
 --------------------------------------
   User-related components such as Login and profile
@@ -2168,10 +2163,6 @@ Term Request
 Notes
 ---------------------------------------------
 */
-
-.notes-container{
-    padding: 60px !important;
-}
 
 .note-list-card{
     margin-bottom: 20px;
@@ -2508,10 +2499,7 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
-    }
-    .list-header-element{
-        font-size: 12px !important;
-    }
+    }   
     .pagination-holder{
         font-size: 12px;
     }   
