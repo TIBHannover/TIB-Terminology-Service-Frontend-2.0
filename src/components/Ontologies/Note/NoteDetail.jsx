@@ -71,7 +71,7 @@ class NoteDetail extends React.Component{
                             <NoteCardHeader note={this.state.note} />              
                         </div>
                         <div class="card-body">
-                            <h1 className="card-title note-list-title">{this.state.note['title']}</h1>
+                            <h4 className="card-title note-list-title">{this.state.note['title']}</h4>
                             <small>
                                 <ul className="">
                                     <li>type: {this.state.note['semantic_component_type']}</li>

@@ -190,6 +190,7 @@ class NoteCommnentList extends React.Component{
                         wrapperClassName="note-comment-editor-warpper"
                         editorClassName="note-comment-editor"
                         placeholder="leave a comment ..."
+                        textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                     />
 
         let submitButton = !this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;

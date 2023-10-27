@@ -309,6 +309,7 @@ class TermRequest extends React.Component{
                                                 wrapperClassName="git-issue-content-box"
                                                 editorClassName=""
                                                 placeholder="Content"
+                                                textSizeOptions={['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                                             />                                                                                           
                                         </div>
                                     </div>

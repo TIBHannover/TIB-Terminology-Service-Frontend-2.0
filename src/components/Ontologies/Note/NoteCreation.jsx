@@ -295,6 +295,7 @@ class NoteCreation extends React.Component{
                                             wrapperClassName=""
                                             editorClassName=""
                                             placeholder="Note Content"
+                                            textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                                         />                                         
                                     </div>
                                 </div>
