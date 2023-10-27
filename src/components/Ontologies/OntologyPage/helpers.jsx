@@ -54,10 +54,10 @@ export function createOntologyPageHeadSection(ontology){
             <div className='row ont-info-bar header-collapseable-section'>
                 <div className= "col-sm-12">
                     <div>
-                    <h4><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h4>
+                        <h2><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h2>
                     </div>
                     <div>
-                    <a href={ontology.config.id}>{ontology.config.id}</a>
+                        <a href={ontology.config.id}>{ontology.config.id}</a>
                     </div>
                 </div>
             </div>

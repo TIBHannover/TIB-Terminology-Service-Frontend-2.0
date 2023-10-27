@@ -398,6 +398,8 @@ p{
     color: #404040;
 }
 
+
+
 /* 
 ------------------------
     Cookies banner layout
@@ -1282,8 +1284,7 @@ p{
         Style for the ontology header title
     */
     color: black;
-    font-weight: bold;
-    font-size: 30px;
+    font-weight: bold;    
 }
 
 .ontology-detail-page-container, .tree-view-container{
@@ -2470,7 +2471,26 @@ Media Query Area for bein responsive
      }    
     .btn-secondary{    
         font-size: 12px;        
-     }        
+     }     
+    body{
+        font-size: 14px;
+    }
+    h1,h2,h3,h4,h5,h6{
+        font-size: 1rem !important;
+    }
+    button,.btn{
+        font-size: 10px !important;
+    }
+    .close{
+        font-size: 20px !important;
+    }
+    input::-moz-placeholder {
+        font-size: 11px !important;
+    } 
+    ::-webkit-input-placeholder {
+        font-size: 11px !important;
+     } 
+    
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
     
@@ -2514,13 +2534,25 @@ Media Query Area for bein responsive
     }   
     .pagination-holder{
         font-size: 12px;
+    } 
+     body{
+        font-size: 13px;
     }
-    button{        
-        font-size: 10px;        
-     }    
-    .btn-secondary{    
-        font-size: 10px;        
-     }   
+    h1,h2,h3,h4,h5,h6{
+        font-size: 1rem !important;
+    }
+    button,.btn{
+        font-size: 10px !important;
+    }
+    .close{
+        font-size: 20px !important;
+    } 
+    input::-moz-placeholder {
+        font-size: 11px !important;
+    } 
+    input::-webkit-input-placeholder {
+        font-size: 11px !important;
+     } 
 }
 
 @media only screen and (max-width: 900px) {
@@ -2553,10 +2585,22 @@ Media Query Area for bein responsive
         width: 200px;
         height: 150px;
     }
-    button{        
-        font-size: 9px;        
-     }    
-    .btn-secondary{    
-        font-size: 9px;        
-     }  
+    body{
+        font-size: 10px;
+    }
+    h1,h2,h3,h4,h5,h6{
+        font-size: 1rem !important;
+    }
+    button,.btn{
+        font-size: 10px !important;
+    }   
+    .close{
+        font-size: 20px !important;
+    }  
+    input::-moz-placeholder {
+        font-size: 10px !important;
+    } 
+    ::-webkit-input-placeholder {
+        font-size: 10px !important;
+     } 
  }

@@ -42,7 +42,7 @@ export const NoteCard = (props) => {
                     <div className="card-body">
                         <div className="row">
                             <div className="coll-sm-12">
-                                <h5 className="card-title">
+                                <h6 className="card-title">
                                     <Link to={noteUrl} 
                                         className="note-list-title" 
                                         value={props.note['id']} 
@@ -50,7 +50,7 @@ export const NoteCard = (props) => {
                                         >
                                         {props.note['title']}
                                     </Link>
-                                </h5>
+                                </h6>
                             </div>                                    
                         </div>                                
                         <p className="card-text">
