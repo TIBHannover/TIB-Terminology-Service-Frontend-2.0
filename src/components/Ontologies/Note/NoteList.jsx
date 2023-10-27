@@ -273,14 +273,14 @@ class NoteList extends React.Component{
                     <AlertBox
                         type="success" 
                         message="Your Note is submitted successfully! "
-                        alertColumnClass="col-sm-8"
+                        alertColumnClass="col-sm-12"
                     />                    
                 }
                 {this.state.noteSubmited && !this.state.noteSubmitSeccuess &&
                     <AlertBox
                         type="danger"
                         message="Something went wrong. Please try again!"
-                        alertColumnClass="col-sm-8"
+                        alertColumnClass="col-sm-12"
                     />                   
                 }                
                 {!this.state.noteDetailPage && !this.state.componentIsLoading &&
