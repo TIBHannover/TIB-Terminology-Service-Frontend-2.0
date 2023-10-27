@@ -219,13 +219,13 @@ class InfoAnnotations extends React.Component{
                            <td>                     
                              <a                
                                href={"https://service.tib.eu/ts4tib/ontologies/" + ontology.ontologyId + "/download"}
-                               className='btn btn-primary btn-dark download-ontology-btn'
+                               className='btn btn-secondary btn-dark download-ontology-btn'
                                target="_blank"                               
                               >
                               <i class="fa fa-download"></i>OWL
                              </a>
                              <a 
-                               className='btn btn-primary btn-dark download-ontology-btn'                                
+                               className='btn btn-secondary btn-dark download-ontology-btn'                                
                                onClick={async () => {                    
                                  const jsonFile = JSON.stringify(ontology);
                                  const blob = new Blob([jsonFile],{type:'application/json'});

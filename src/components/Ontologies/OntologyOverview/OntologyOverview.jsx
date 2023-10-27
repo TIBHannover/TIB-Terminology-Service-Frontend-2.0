@@ -70,7 +70,7 @@ class OntologyOverview extends React.Component {
                    href={this.state.showDataAsJsonBtnHref} 
                    target='_blank' 
                    rel="noreferrer"
-                   className='btn btn-primary btn-dark download-ontology-btn'
+                   className='btn btn-secondary btn-dark download-ontology-btn'
                   >
                     Show Ontology Metdata as JSON
                  </a>

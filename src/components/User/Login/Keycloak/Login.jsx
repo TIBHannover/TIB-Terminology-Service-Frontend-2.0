@@ -29,7 +29,7 @@ export default function LoginForm(props){
                     <div className="col-sm-12 text-center">
                         <h5>You need to login for accessing this section.</h5>
                         <br></br>
-                        <a className="btn btn-primary" type="button" onClick={() => void auth.signinRedirect()}>Login</a>                        
+                        <a className="btn btn-secondary" type="button" onClick={() => void auth.signinRedirect()}>Login</a>                        
                     </div>
                 </div>                   
             }

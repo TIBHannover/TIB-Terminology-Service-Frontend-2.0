@@ -221,7 +221,7 @@ class NoteCreation extends React.Component{
             <div className="row">
                 <div className="col-sm-12 text-center">
                     <button type="button" 
-                        class="btn btn-primary" 
+                        class="btn btn-secondary" 
                         data-toggle="modal" 
                         data-target="#add-note-modal" 
                         data-backdrop="static"
@@ -302,7 +302,7 @@ class NoteCreation extends React.Component{
                             </div>                        
                             <div class="modal-footer">                            
                                 <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submit}>Submit</button>
+                                <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={this.submit}>Submit</button>
                             </div>
                         </div>
                     </div>

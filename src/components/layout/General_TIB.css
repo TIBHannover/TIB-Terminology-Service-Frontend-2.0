@@ -75,6 +75,13 @@ p{
  button{
     background-color: #404040 !important;
     font-size: 14px;
+    border-color: #404040 !important;
+ }
+
+ .btn-secondary{
+    background-color: #404040 !important;
+    font-size: 14px;
+    border-color: #404040 !important;
  }
 
  .btn-danger{

@@ -192,8 +192,8 @@ class NoteCommnentList extends React.Component{
                         placeholder="leave a comment ..."
                     />
 
-        let submitButton = !this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
-        let editButton = this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
+        let submitButton = !this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
+        let editButton = this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
         let cancelButton = this.state.editMode && <button type="button" class="btn btn-danger note-comment-cancel-edit-btn" onClick={this.cancelEdit}>Cancel</button>;
 
         return [

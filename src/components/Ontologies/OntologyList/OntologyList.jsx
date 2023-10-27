@@ -349,7 +349,7 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
             <div className="row result-card" id={'ontology_' + i} key={item.ontologyId}>
               <div className='col-sm-9'>
                 <div className="ontology-card-title-section">                            
-                  <a  href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className='ontology-button btn btn-primary'>{item.ontologyId}</a>
+                  <a  href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className='ontology-button btn btn-secondary'>{item.ontologyId}</a>
                   <a  href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{item.config.title}</b></a>
                 </div>
                 <div className="ontology-card-description">

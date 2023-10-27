@@ -30,13 +30,13 @@ class Login extends React.Component{
         return [
             <span>
                 <div className="row justify-content-center">
-                    <a onClick={(e) => {this.authProviderUrl(e)}}  authProvider="github" className="btn btn-primary github-login-btn">
+                    <a onClick={(e) => {this.authProviderUrl(e)}}  authProvider="github" className="btn btn-secondary github-login-btn">
                         <i className="fa fa-github"></i> Sign in with GitHub
                     </a>
                 </div>
                 <br></br>
                 <div className="row justify-content-center">
-                    <a onClick={(e) => {this.authProviderUrl(e)}} authProvider="orcid" className="btn btn-primary orcid-login-btn">
+                    <a onClick={(e) => {this.authProviderUrl(e)}} authProvider="orcid" className="btn btn-secondary orcid-login-btn">
                     <i class="fa-brands fa-orcid"></i> Sign in with ORCID
                     </a>
                 </div>   

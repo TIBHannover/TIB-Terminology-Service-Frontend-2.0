@@ -333,7 +333,7 @@ class NoteList extends React.Component{
                                 <Link 
                                     to={this.generateBackButton()} 
                                     onClick={this.backToListClick} 
-                                    className="btn btn-primary">
+                                    className="btn btn-secondary">
                                     Back to Note List
                                 </Link>
                             </div>
