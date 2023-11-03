@@ -10,6 +10,7 @@ import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSectio
 import Toolkit from '../../common/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
+import ObsoleteTerms from '../ObsoleteTerms/ObsoleteTerms';
 
 
 
@@ -50,10 +51,10 @@ class OntologyPage extends React.Component {
       rootTerms: [],
       skosRootIndividuals: [],
       rootProps: [],
-      waiting: false,      
-      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
-      lastTabsStates: {"terms": "", "props": "", "gitIssues": ""},
-      rootNodeNotExist: false,      
+      waiting: false,
+      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": "", "obsoletes": ""},
+      lastTabsStates: {"terms": "", "props": "", "gitIssues": "", "obsoletes": ""},
+      rootNodeNotExist: false,
       isSkosOntology: false,
       ontologyShowAll: false,
       showMoreLessOntologiesText: "+ Show More",      
@@ -338,6 +339,15 @@ class OntologyPage extends React.Component {
                                   ontology={this.state.ontologyId}                              
                                   iriChangerFunction={this.changeInputIri}                              
                                   isSkos={this.state.isSkosOntology}                              
+                                />
+                }
+                {!this.state.waiting && (this.state.activeTab === OBSOLETE_TERMS_TAB_ID) &&
+                                <ObsoleteTerms
+                                  iri={this.state.lastIrisHistory['obsoletes']}
+                                  componentIdentity={'obsoletes'}
+                                  key={'obsoletesPage'}
+                                  ontology={this.state.ontologyId}                      
+                                  iriChangerFunction={this.changeInputIri}                                                              
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
