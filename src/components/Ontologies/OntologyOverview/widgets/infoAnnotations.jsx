@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import CopyLinkButton from '../../../common/CopyButton/CopyButton';
+
 
 class InfoAnnotations extends React.Component{
     constructor(props){
@@ -132,6 +134,10 @@ class InfoAnnotations extends React.Component{
                           <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
                           <td>
                             <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
+                            {typeof(ontology.config.versionIri) !== 'undefined' && ontology.config.versionIri !== null
+                                ? <CopyLinkButton  valueToCopy={ontology.config.versionIri}  />                                  
+                                : ""
+                             }  
                           </td>
                         </tr>
                         <tr>
@@ -139,16 +145,8 @@ class InfoAnnotations extends React.Component{
                           <td>
                             <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
                              {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
-                             ? <button 
-                                 type="button" 
-                                 class="btn btn-secondary btn-sm copy-link-btn"
-                                 onClick={() => {                  
-                                 navigator.clipboard.writeText(ontology.config.id);
-                                  }}
-                                >
-                                copy
-                               </button>          
-                            : ""
+                              ? <CopyLinkButton  valueToCopy={ontology.config.id}  />                                       
+                              : ""
                             }  
                           </td>
                         </tr>
@@ -157,15 +155,7 @@ class InfoAnnotations extends React.Component{
                           <td>
                             <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
                              {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
-                               ? <button 
-                                   type="button" 
-                                   class="btn btn-secondary btn-sm copy-link-btn"
-                                   onClick={() => {                  
-                                     navigator.clipboard.writeText(ontology.config.homepage);
-                                      }}
-                                  >
-                                    copy 
-                                 </button>  
+                                ? <CopyLinkButton  valueToCopy={ontology.config.homepage}  />                                  
                                 : ""
                              }               
                            </td>
@@ -175,16 +165,8 @@ class InfoAnnotations extends React.Component{
                           <td>
                             <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
                               {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
-                              ? <button 
-                                   type="button" 
-                                   class="btn btn-secondary btn-sm copy-link-btn"
-                                   onClick={() => {                  
-                                   navigator.clipboard.writeText(ontology.config.tracker);                     
-                                      }}
-                                 >
-                                copy 
-                               </button>  
-                               : ""
+                                ? <CopyLinkButton  valueToCopy={ontology.config.tracker}  />                                 
+                                : ""
                               }               
                           </td>
                         </tr>
@@ -201,12 +183,13 @@ class InfoAnnotations extends React.Component{
                            </td>
                         </tr>
                         {process.env.REACT_APP_PROJECT_ID === "general" && 
-                        <tr>
-                           <td className="ontology-overview-table-id-column"><b>Subject</b></td>
-                           <td>
-                             {this.formatSubject()}
-                           </td>
-                        </tr>}
+                          <tr>
+                            <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+                            <td>
+                              {this.formatSubject()}
+                            </td>
+                          </tr>
+                        }
                         <tr>
                            <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                            <td>

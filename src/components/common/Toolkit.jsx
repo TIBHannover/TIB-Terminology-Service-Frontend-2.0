@@ -41,7 +41,7 @@ class Toolkit{
             if(typeof(text) !== "string"){
                 return text;
             }
-            let urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;            
+            let urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;
             let result = text.replace(urlRegex, (url) => {
                 return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
             });           
