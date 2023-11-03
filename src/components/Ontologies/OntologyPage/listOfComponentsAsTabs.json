@@ -43,6 +43,14 @@
         "tabTitle": "Class List",
         "urlEndPoint": "/termList"
     },
+    "ObsoleteTerms":{
+        "id":"obsoleteterms",
+        "keyForRenderAsComponent": "obsoletetermspage",
+        "keyForRenderAsTabItem": "obsoleteterms-tab",
+        "tabId": 7,
+        "tabTitle": "Obsolete Terms",
+        "urlEndPoint": "/obsoletes"
+    },
     "Notes":{
         "id":"notes",
         "keyForRenderAsComponent": "notesPage",

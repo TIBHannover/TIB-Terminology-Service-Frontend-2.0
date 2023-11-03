@@ -49,10 +49,10 @@ class NodeDetail extends React.Component{
         let node = this.state.data;
         let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(node.ontology_name);
         let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(node.iri);  
-        if(this.state.componentIdentity === 'property'){
+        if(this.state.componentIdentity === 'props'){
             targetHref = baseUrl +'/props?iri=' + encodeURIComponent(node.iri);        
         }
-        else if (this.state.componentIdentity === 'individual'){
+        else if (this.state.componentIdentity === 'individuals'){
           targetHref = baseUrl +'/individuals?iri=' + encodeURIComponent(node.iri); 
         }        
         return targetHref         
@@ -93,7 +93,7 @@ class NodeDetail extends React.Component{
        */
       createTable(){    
         let metadataToRender = "";
-        if(this.state.componentIdentity === "term" || this.state.componentIdentity === "individual"){
+        if(this.state.componentIdentity === "terms" || this.state.componentIdentity === "individuals"){
           metadataToRender =  classMetaData(this.state.data);
         }
         else{

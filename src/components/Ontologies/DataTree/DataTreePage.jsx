@@ -29,7 +29,7 @@ class DataTreePage extends React.Component {
 
   setComponentData(){
     let termTree = "";
-    if (this.props.componentIdentity === "term"){
+    if (this.props.componentIdentity === "terms"){
       termTree = true;
     }
     else{
@@ -45,7 +45,7 @@ class DataTreePage extends React.Component {
 
 
   handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
-    if(this.props.componentIdentity === "term"){
+    if(this.props.componentIdentity === "terms"){
       this.setState({
         selectedNodeIri: selectedNodeIri,        
         showDetailTable: ShowDetailTable
@@ -117,7 +117,7 @@ render(){
                 <NodePage
                   iri={this.state.selectedNodeIri}
                   ontology={this.props.ontology}
-                  componentIdentity="term"
+                  componentIdentity="terms"
                   extractKey="terms"
                   isSkos={this.props.isSkos}
                   isIndividual={false}
@@ -130,7 +130,7 @@ render(){
               <NodePage
                   iri={this.state.selectedNodeIri}
                   ontology={this.props.ontology}
-                  componentIdentity="property"
+                  componentIdentity="props"
                   extractKey="properties"
                   isIndividual={false}
                   typeForNote="property"

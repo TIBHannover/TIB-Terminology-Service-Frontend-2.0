@@ -101,7 +101,7 @@ class NodePage extends React.Component {
       for(let configItemKey in NodePageTabConfig){
           let configObject = NodePageTabConfig[configItemKey];                 
           let linkUrl = Toolkit.setParamInUrl('subtab', NodePageTabConfig[configItemKey]['urlEndPoint'])
-          if(this.props.componentIdentity === "term" || configObject['id'] !== 'graph'){
+          if(this.props.componentIdentity === "terms" || configObject['id'] !== 'graph'){
             if(process.env.REACT_APP_NOTE_FEATURE !== "true" && configItemKey === "Notes"){
               continue;
             }

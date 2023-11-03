@@ -170,7 +170,7 @@ export default class TreeHelper{
    
   static async nodeHasChildren(ontology, nodeIri, mode){
       let node = "";
-      if(mode === 'term'){
+      if(mode === 'terms'){
         node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
       }
       else if(mode === "property"){
@@ -186,7 +186,7 @@ export default class TreeHelper{
 
   static async nodeIsRoot(ontology, nodeIri, mode){
       let node = "";
-      if(mode === 'term'){
+      if(mode === 'terms'){
         node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
       }
       else{

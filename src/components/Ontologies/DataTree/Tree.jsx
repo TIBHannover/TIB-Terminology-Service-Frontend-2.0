@@ -66,18 +66,18 @@ class Tree extends React.Component {
     let propertyTree = false;    
     let childExtractName = "";
     if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
-        if(componentIdentity === 'term'){         
+        if(componentIdentity === 'terms'){         
             termTree = true
             propertyTree = false;
             childExtractName = "terms";
                          
         } 
-        else if(componentIdentity === 'property'){
+        else if(componentIdentity === 'props'){
             termTree = false;
             propertyTree = true;
             childExtractName = "properties";              
         }
-        else if(componentIdentity === 'individual'){
+        else if(componentIdentity === 'individuals'){
             termTree = false;
             propertyTree = false;
             childExtractName = "individuals";   
@@ -130,7 +130,7 @@ class Tree extends React.Component {
         }        
         else if (!target || resetFlag){
             let result = [];
-            if(this.state.isSkos && this.state.componentIdentity === "individual"){
+            if(this.state.isSkos && this.state.componentIdentity === "individuals"){
                 result = this.buildTheTreeFirstLayer(this.state.rootNodesForSkos);
             }
             else{
@@ -144,7 +144,7 @@ class Tree extends React.Component {
         }                    
         else if((target != undefined && this.state.targetNodeIri != target) || reload ){
             showNodeDetailPage = true;
-            if(this.state.isSkos && this.state.componentIdentity === "individual"){                                
+            if(this.state.isSkos && this.state.componentIdentity === "individuals"){                                
                 treeList = await SkosHelper.buildSkosTree(this.state.ontologyId, target, viewMode);                                              
             }
             else{                
@@ -256,7 +256,7 @@ class Tree extends React.Component {
                 reduceBtnActive: false,
                 lastSelectedItemId: clickedNodeId
             }, () =>{
-                if(this.state.componentIdentity !== "individual"){
+                if(this.state.componentIdentity !== "individuals"){
                     this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 }                
             });            
@@ -288,7 +288,7 @@ class Tree extends React.Component {
         else if (e.target.tagName === "I"){
             // expand a node by clicking on the expand icon
             TreeHelper.expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {
-                if(this.state.componentIdentity !== "individual"){
+                if(this.state.componentIdentity !== "individuals"){
                     this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 }              
             });
@@ -329,7 +329,7 @@ class Tree extends React.Component {
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
                     TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {
-                        if(this.state.componentIdentity !== "individual"){
+                        if(this.state.componentIdentity !== "individuals"){
                             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                         }
                     });  
@@ -347,7 +347,7 @@ class Tree extends React.Component {
                 let parentNode = treeNode.getParentNode(node.id);
                 if(treeNode.isNodeExpanded(node)){  
                     TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {
-                        if(this.state.componentIdentity !== "individual"){
+                        if(this.state.componentIdentity !== "individuals"){
                             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                         }
                     });
@@ -387,7 +387,7 @@ async showSiblings(){
         try{    
             let targetNodes = document.getElementsByClassName("targetNodeByIri");        
             if(!this.state.siblingsVisible){
-                if(this.state.isSkos && this.props.componentIdentity === "individual"){
+                if(this.state.isSkos && this.props.componentIdentity === "individuals"){
                     SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
                 }
                 else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
@@ -400,13 +400,13 @@ async showSiblings(){
                 }
                 
                 this.setState({siblingsVisible: true}, ()=>{ 
-                    if(this.state.componentIdentity !== "individual"){
+                    if(this.state.componentIdentity !== "individuals"){
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     }
                 });
             }
             else{
-                if(this.state.isSkos && this.props.componentIdentity === "individual"){
+                if(this.state.isSkos && this.props.componentIdentity === "individuals"){
                     SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
                 } 
         
@@ -419,7 +419,7 @@ async showSiblings(){
                 }
                 
                 this.setState({siblingsVisible: false}, ()=>{
-                    if(this.state.componentIdentity !== "individual"){
+                    if(this.state.componentIdentity !== "individuals"){
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     }
                 });
@@ -452,7 +452,7 @@ async showSiblings(){
     componentDidMount(){
         this.setComponentData();
         document.addEventListener("keydown", this.processKeyNavigation, false);    
-        if(this.props.isSkos && this.props.componentIdentity === "individual"){
+        if(this.props.isSkos && this.props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
         }        
     }
