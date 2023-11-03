@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import PaneResize from "../../common/PaneResize/PaneResize";
 import DropDown from "../../common/DropDown/DropDown";
 import { getObsoleteTerms } from "../../../api/fetchData";
+import NodePage from "../NodePage/NodePage";
 
 
 const CLASS_TYPE = 0
@@ -16,6 +17,10 @@ const TERMS_TYPES_FOR_DROPDOWN = [
 
 const ObsoleteTerms = (props) => {
     let paneResize = new PaneResize();
+    const [selectedIri, setSelectedIri] = useState("");
+    const [selectedComponentId, setSelectedComponentId] = useState("terms"); 
+    const [extractKey, setExtractKey] = useState("terms");
+    const [typeForNote, setTypeForNote] = useState("class");
 
     useEffect(() => {
         paneResize.setOriginalWidthForLeftPanes();
@@ -29,16 +34,37 @@ const ObsoleteTerms = (props) => {
             document.body.addEventListener("mouseup", paneResize.releaseMouseFromResize);
         }
     });
+
+
+    const termTypeChangeHandler = (newComponentId) => {
+        setSelectedComponentId(newComponentId);
+        if (newComponentId === "terms"){
+            setExtractKey("terms");
+            setTypeForNote("class");
+        }
+        else{
+            setExtractKey("properties");
+            setTypeForNote("property");
+        }
+    }
     
 
     return(
         <div className="tree-view-container resizable-container">
             <div className="tree-page-left-part" id="page-left-pane">
-                <ObsoleteTermsList  ontologyId={props.ontology} />
+                <ObsoleteTermsList  ontologyId={props.ontology}  termTypeChangeHandler={termTypeChangeHandler} />
             </div>
             {paneResize.generateVerticalResizeLine()} 
             <div className="node-table-container" id="page-right-pane">
-                Right
+                <NodePage
+                    iri={selectedIri}
+                    ontology={props.ontology}
+                    componentIdentity={selectedComponentId}
+                    extractKey={extractKey}
+                    isSkos={false}
+                    isIndividual={false}
+                    typeForNote={typeForNote}
+                />   
             </div>
         </div>
     );
@@ -69,7 +95,13 @@ const ObsoleteTermsList = (props) => {
 
     
     const handleTermTypeChange = (e) => {
-        setSelectedType(e.target.value);
+        let newTypeId = e.target.value;
+        let newTypeString = "terms";
+        setSelectedType(newTypeId);
+        if(newTypeId === 1){
+            newTypeString = "props";
+        }
+        props.termTypeChangeHandler(newTypeString);
     }
 
     return (
@@ -86,6 +118,7 @@ const ObsoleteTermsList = (props) => {
                         /> 
                     </div>
                 </div>
+                <br></br>
                 <div className="row">
                     <div className="col-sm-12">
                         <ul>
