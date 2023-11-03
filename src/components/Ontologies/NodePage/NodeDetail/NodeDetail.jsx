@@ -2,6 +2,8 @@ import React from 'react';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import AlertBox from '../../../common/Alerts/Alerts';
+import CopyLinkButton from '../../../common/CopyButton/CopyButton';
+import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 
 
 
@@ -9,8 +11,7 @@ class NodeDetail extends React.Component{
     constructor (props) {
         super(props)
         this.state = ({
-          data: {"iri": null},
-          iriIsCopied: false,          
+          data: {"iri": null},                
           componentIdentity: "",
           isSkos: false,          
           showDataAsJsonBtnHref: ""
@@ -34,8 +35,7 @@ class NodeDetail extends React.Component{
         }        
         if(node){
           this.setState({            
-            data: node,
-            iriIsCopied: false,
+            data: node,            
             componentIdentity: componentIdentity,
             isSkos: isSkos,
             showDataAsJsonBtnHref:showDataAsJsonBtnHref
@@ -43,12 +43,26 @@ class NodeDetail extends React.Component{
         }
        
       }
+
+
+      setLabelAsLink(){
+        let node = this.state.data;
+        let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(node.ontology_name);
+        let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(node.iri);  
+        if(this.state.componentIdentity === 'property'){
+            targetHref = baseUrl +'/props?iri=' + encodeURIComponent(node.iri);        
+        }
+        else if (this.state.componentIdentity === 'individual'){
+          targetHref = baseUrl +'/individuals?iri=' + encodeURIComponent(node.iri); 
+        }        
+        return targetHref         
+      }
     
     
       /**
        * create a table row 
        */
-      createRow(metadataLabel, metadataValue, copyButton){
+      createRow(metadataLabel, metadataValue, isLink){
         let row = [
           <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
               <div className='row'>
@@ -56,21 +70,14 @@ class NodeDetail extends React.Component{
                   <div className="node-metadata-label">{metadataLabel}</div>
                 </div>
                 <div  className="col-sm-8 col-md-9 node-metadata-value"  key={metadataLabel + "-value"}>
-                  {formatText(metadataLabel, metadataValue, copyButton)}
-                  {copyButton &&
-                    <button 
-                      type="button" 
-                      class="btn btn-secondary btn-sm copy-link-btn"
-                      key={"copy-btn"} 
-                      onClick={() => {                  
-                        navigator.clipboard.writeText(metadataValue);
-                        this.setState({
-                          iriIsCopied: true
-                        });
-                      }}
-                      >
-                      copy {this.state.iriIsCopied && <i class="fa fa-check" aria-hidden="true"></i>}
-                    </button>
+                  {formatText(metadataLabel, metadataValue, isLink)}
+                  {isLink && metadataLabel !== "Label" && <CopyLinkButton  valueToCopy={metadataValue} />}
+                  {metadataLabel === "Label" && 
+                    <CopyLinkButtonMarkdownFormat  
+                        label={this.state.data.ontology_prefix + ":" + this.state.data.label} 
+                        url={this.setLabelAsLink()}
+                        tooltipText={"This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " + this.state.data.ontology_prefix + ":" + this.state.data.label}
+                    />
                   }
                 </div>
               </div>
