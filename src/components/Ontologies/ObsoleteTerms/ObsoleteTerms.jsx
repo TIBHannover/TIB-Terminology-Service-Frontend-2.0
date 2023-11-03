@@ -3,6 +3,7 @@ import PaneResize from "../../common/PaneResize/PaneResize";
 import DropDown from "../../common/DropDown/DropDown";
 import { getObsoleteTerms } from "../../../api/fetchData";
 import NodePage from "../NodePage/NodePage";
+import Toolkit from "../../common/Toolkit";
 
 
 const CLASS_TYPE = 0
@@ -47,12 +48,22 @@ const ObsoleteTerms = (props) => {
             setTypeForNote("property");
         }
     }
+
+
+    const iriChangeHandler = (newIri) => {
+        setSelectedIri(newIri);
+    }
     
 
     return(
         <div className="tree-view-container resizable-container">
             <div className="tree-page-left-part" id="page-left-pane">
-                <ObsoleteTermsList  ontologyId={props.ontology}  termTypeChangeHandler={termTypeChangeHandler} />
+                <ObsoleteTermsList  
+                    ontologyId={props.ontology.ontologyId}  
+                    termTypeChangeHandler={termTypeChangeHandler}
+                    iriChangeHandler={iriChangeHandler} 
+                    iriChangerFunction={props.iriChangerFunction}
+                />
             </div>
             {paneResize.generateVerticalResizeLine()} 
             <div className="node-table-container" id="page-right-pane">
@@ -87,22 +98,50 @@ const ObsoleteTermsList = (props) => {
         }
     }
 
+    function selectTerm(e){
+        if (e.target.tagName !== "SPAN"){
+            return true;
+        }
+        let selectedElement = document.querySelectorAll(".clicked");
+        for(let i=0; i < selectedElement.length; i++){
+            selectedElement[i].classList.remove("clicked");
+        }
+        let target = e.target;
+        if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){            
+            target.classList.add("clicked");
+            props.iriChangeHandler(target.dataset.iri);
+            // this.setState({
+            //     showNodeDetailPage: true,
+            //     selectedNodeIri: target.dataset.iri,
+            // });
+            // let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
+            // props.history.push(newUrl);            
+            props.iriChangerFunction(target.dataset.iri, "obsolete");    
+        }
+        else{
+            target.classList.remove("clicked");            
+        }    
+
+    }
+    
+
+    const handleTermTypeChange = (e) => {
+        let newTypeId = e.target.value;
+        let newTypeString = "terms";
+        setSelectedType(newTypeId);
+        if(parseInt(newTypeId) === 1){
+            newTypeString = "props";
+        }
+        console.info(newTypeString)
+        props.termTypeChangeHandler(newTypeString);
+    }
+
+
     useEffect(() => {
         fetchTerms();
         
     }, [selectedType]);
 
-
-    
-    const handleTermTypeChange = (e) => {
-        let newTypeId = e.target.value;
-        let newTypeString = "terms";
-        setSelectedType(newTypeId);
-        if(newTypeId === 1){
-            newTypeString = "props";
-        }
-        props.termTypeChangeHandler(newTypeString);
-    }
 
     return (
         <div className="row">
@@ -120,7 +159,7 @@ const ObsoleteTermsList = (props) => {
                 </div>
                 <br></br>
                 <div className="row">
-                    <div className="col-sm-12">
+                    <div className="col-sm-12" onClick={(e) =>  selectTerm(e)}>
                         <ul>
                             {createTermList(termsList)}
                         </ul>                        

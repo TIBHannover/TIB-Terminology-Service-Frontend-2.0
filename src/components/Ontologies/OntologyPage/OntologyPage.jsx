@@ -346,7 +346,7 @@ class OntologyPage extends React.Component {
                                   iri={this.state.lastIrisHistory['obsoletes']}
                                   componentIdentity={'obsoletes'}
                                   key={'obsoletesPage'}
-                                  ontology={this.state.ontologyId}                      
+                                  ontology={this.state.ontology}                      
                                   iriChangerFunction={this.changeInputIri}                                                              
                                 />
                 }
