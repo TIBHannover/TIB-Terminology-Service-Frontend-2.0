@@ -125,7 +125,7 @@ const ObsoleteTermsList = (props) => {
             }
             let iri = searchParams.get('iri') ? searchParams.get('iri') : false;            
             let getNodeKeyMode = (type === "class") ? "terms" : "properties";                     
-            if(iri){                
+            if(iri){                                
                 let selectedTerm = await getNodeByIri(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
                 let list = {getNodeKeyMode: []};
                 list[getNodeKeyMode] = [selectedTerm];                                        
@@ -134,6 +134,7 @@ const ObsoleteTermsList = (props) => {
                 document.getElementsByClassName("tree-text-container")[0].classList.add('clicked');
                 props.iriChangeHandler(iri);    
                 setIriIsGivenInUrl(true);
+                setLoading(false);
                 return true;
             }
             let list = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
@@ -209,20 +210,21 @@ const ObsoleteTermsList = (props) => {
     }
 
 
-    const backToListButtonClick = () => {
-        setLoading(true);
+    const backToListButtonClick = () => {        
         let searchParams = new URLSearchParams(window.location.search); 
         searchParams.delete('iri');
         let newUrl = window.location.pathname + "?" +  searchParams.toString(); 
         history.push(newUrl); 
-        setIriIsGivenInUrl(false);                  
+        setIriIsGivenInUrl(false); 
+        setLoading(true);   
+        props.iriChangeHandler(false);              
     }
 
 
     useEffect(() => {
         fetchTerms();
         
-    }, [selectedType, page, iriIsGivenInUrl]);
+    }, [selectedType, page, iriIsGivenInUrl, loading]);
 
 
     return (
@@ -249,7 +251,7 @@ const ObsoleteTermsList = (props) => {
                     }
                     {iriIsGivenInUrl && 
                         <div className="col-sm-5">   
-                            <button className="btn btn-secondary btn-sm" onClick={backToListButtonClick}>Show Term List</button>                  
+                            <button className="btn btn-secondary btn-sm" onClick={backToListButtonClick}>Show the List</button>                  
                         </div>
                     }                    
                 </div>
@@ -272,7 +274,7 @@ const ObsoleteTermsList = (props) => {
 
 
 function createTermList(termsList, componentType){
-    let result = [];
+    let result = [];             
     if(!termsList || termsList.length === 0){
         let typeText = componentType === 0 ? "Class" : "Property";
         return [
@@ -282,8 +284,10 @@ function createTermList(termsList, componentType){
                 alertColumnClass="col-sm-12"              
             />  
         ];
-    }    
-    termsList = termsList['terms'] ? termsList['terms'] : termsList['properties'];  
+    }
+    
+    termsList = termsList['terms'] ? termsList['terms'] : termsList['properties']; 
+    
     for (let term of termsList){
         result.push(
             <li className="list-node-li">
