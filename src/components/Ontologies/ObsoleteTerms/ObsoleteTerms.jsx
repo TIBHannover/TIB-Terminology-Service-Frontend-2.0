@@ -5,6 +5,7 @@ import DropDown from "../../common/DropDown/DropDown";
 import { getObsoleteTerms } from "../../../api/fetchData";
 import NodePage from "../NodePage/NodePage";
 import Toolkit from "../../common/Toolkit";
+import Pagination from "../../common/Pagination/Pagination";
 
 
 const CLASS_TYPE = 0
@@ -92,15 +93,20 @@ const ObsoleteTerms = (props) => {
 const ObsoleteTermsList = (props) => {
     const [selectedType, setSelectedType] = useState(0);
     const [termsList, setTermsList] = useState([]);
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(50);
+    const [totalCountOfTerms, setTotalCountOfTerms] = useState(0);
     const history = useHistory();
 
     async function fetchTerms(){
         try{
-            let termsList = await getObsoleteTerms(props.ontologyId, selectedType, 0, 1000);            
+            let termsList = await getObsoleteTerms(props.ontologyId, selectedType, page, pageSize);            
             setTermsList(termsList['_embedded']);
+            setTotalCountOfTerms(parseInt(termsList['page']['totalPages']))
         }
         catch (error){
             setTermsList([]);
+            setTotalCountOfTerms(0);
         }
     }
 
@@ -139,6 +145,19 @@ const ObsoleteTermsList = (props) => {
     }
 
 
+    const handlePagination = (newPage) => {
+        setPage(parseInt(newPage) - 1);
+        // this.setState({
+        //   pageNumber: value - 1,
+        //   tableIsLoading: true,
+        //   listOfTerms: [],
+        //   tableBodyContent: ""    
+        // }, ()=> {
+        //     this.updateURL(value, this.state.pageSize);
+        // })
+    }
+
+
     useEffect(() => {
         fetchTerms();
         
@@ -149,7 +168,7 @@ const ObsoleteTermsList = (props) => {
         <div className="row">
             <div className="col-sm-12">
                 <div className="row">
-                    <div className="col-sm-12">
+                    <div className="col-sm-6">
                         <DropDown 
                             options={TERMS_TYPES_FOR_DROPDOWN}
                             dropDownId="obsolete-terms-types-dropdown"
@@ -157,6 +176,13 @@ const ObsoleteTermsList = (props) => {
                             dropDownValue={selectedType}
                             dropDownChangeHandler={handleTermTypeChange}
                         /> 
+                    </div>
+                    <div className="col-sm-5">
+                        <Pagination 
+                            clickHandler={handlePagination} 
+                            count={totalCountOfTerms}
+                            initialPageNumber={page + 1}
+                        />
                     </div>
                 </div>
                 <br></br>
@@ -191,8 +217,6 @@ function createTermList(termsList){
     }
     return result;
 }
-
-
 
 
 
