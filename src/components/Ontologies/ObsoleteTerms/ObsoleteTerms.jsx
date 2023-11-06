@@ -6,6 +6,7 @@ import { getObsoleteTerms, getNodeByIri } from "../../../api/fetchData";
 import NodePage from "../NodePage/NodePage";
 import Toolkit from "../../common/Toolkit";
 import Pagination from "../../common/Pagination/Pagination";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 const CLASS_TYPE = 0
@@ -103,6 +104,7 @@ const ObsoleteTermsList = (props) => {
     const [pageSize, setPageSize] = useState(50);
     const [totalCountOfPages, setTotalCountOfPages] = useState(0);
     const [iriIsGivenInUrl, setIriIsGivenInUrl] = useState(false);
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
 
     async function fetchTerms(){
@@ -127,7 +129,7 @@ const ObsoleteTermsList = (props) => {
                 let selectedTerm = await getNodeByIri(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
                 let list = {getNodeKeyMode: []};
                 list[getNodeKeyMode] = [selectedTerm];                                        
-                setTermsList(list);                                
+                setTermsList(list);                         
                 setTotalCountOfPages(1); 
                 document.getElementsByClassName("tree-text-container")[0].classList.add('clicked');
                 props.iriChangeHandler(iri);    
@@ -137,10 +139,12 @@ const ObsoleteTermsList = (props) => {
             let list = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
             setTermsList(list['_embedded']);
             setTotalCountOfPages(parseInt(list['page']['totalPages']))
+            setLoading(false);
         }
         catch (error){            
             setTermsList([]);
             setTotalCountOfPages(0);
+            setLoading(false);
         }
     }
 
@@ -168,6 +172,7 @@ const ObsoleteTermsList = (props) => {
     
 
     const handleTermTypeChange = (e) => {
+        setLoading(true);
         let newTypeId = e.target.value;
         let newTypeString = "terms";
         let typeInUrl = "class";
@@ -189,6 +194,7 @@ const ObsoleteTermsList = (props) => {
 
 
     const handlePagination = (newPage) => {
+        setLoading(true);
         setPage(parseInt(newPage) - 1);
         let searchParams = new URLSearchParams(window.location.search);  
         searchParams.delete('iri');
@@ -204,12 +210,12 @@ const ObsoleteTermsList = (props) => {
 
 
     const backToListButtonClick = () => {
+        setLoading(true);
         let searchParams = new URLSearchParams(window.location.search); 
         searchParams.delete('iri');
         let newUrl = window.location.pathname + "?" +  searchParams.toString(); 
         history.push(newUrl); 
-        setIriIsGivenInUrl(false);
-        props.iriChangeHandler(false);          
+        setIriIsGivenInUrl(false);                  
     }
 
 
@@ -250,9 +256,12 @@ const ObsoleteTermsList = (props) => {
                 <br></br>
                 <div className="row">
                     <div className="col-sm-12" onClick={(e) =>  selectTerm(e)}>
-                        <ul>
-                            {createTermList(termsList)}
-                        </ul>                        
+                        {loading && <div className="is-loading-term-list isLoading"></div>}
+                        {!loading && 
+                            <ul>
+                                {createTermList(termsList, selectedType)}
+                            </ul>
+                        }                        
                     </div>
                 </div>
             </div>
@@ -262,10 +271,17 @@ const ObsoleteTermsList = (props) => {
 }
 
 
-function createTermList(termsList){
+function createTermList(termsList, componentType){
     let result = [];
     if(!termsList || termsList.length === 0){
-        return [];
+        let typeText = componentType === 0 ? "Class" : "Property";
+        return [
+            <AlertBox 
+                type="info"
+                message={`there is no obsolete ${typeText} found for this ontology!`}
+                alertColumnClass="col-sm-12"              
+            />  
+        ];
     }    
     termsList = termsList['terms'] ? termsList['terms'] : termsList['properties'];  
     for (let term of termsList){
@@ -276,7 +292,7 @@ function createTermList(termsList){
                 </span>
             </li>
         );
-    }
+    }     
     return result;
 }
 
