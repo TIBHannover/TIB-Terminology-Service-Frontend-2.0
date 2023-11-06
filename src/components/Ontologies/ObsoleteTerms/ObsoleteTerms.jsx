@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import { useHistory } from 'react-router-dom';
 import PaneResize from "../../common/PaneResize/PaneResize";
 import DropDown from "../../common/DropDown/DropDown";
-import { getObsoleteTerms } from "../../../api/fetchData";
+import { getObsoleteTerms, getNodeByIri } from "../../../api/fetchData";
 import NodePage from "../NodePage/NodePage";
 import Toolkit from "../../common/Toolkit";
 import Pagination from "../../common/Pagination/Pagination";
@@ -101,7 +101,7 @@ const ObsoleteTermsList = (props) => {
     const [termsList, setTermsList] = useState([]);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(50);
-    const [totalCountOfTerms, setTotalCountOfTerms] = useState(0);
+    const [totalCountOfPages, setTotalCountOfPages] = useState(0);
     const history = useHistory();
 
     async function fetchTerms(){
@@ -119,13 +119,24 @@ const ObsoleteTermsList = (props) => {
                 setSelectedType(1);
             }
             let iri = searchParams.get('iri') ? searchParams.get('iri') : false;
-            let termsList = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
-            setTermsList(termsList['_embedded']);
-            setTotalCountOfTerms(parseInt(termsList['page']['totalPages']))
+            let getNodeKeyMode = (type === "class") ? "terms" : "properties";
+            if(iri){
+                let selectedTerm = await getNodeByIri(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
+                let list = {getNodeKeyMode: []};
+                list[getNodeKeyMode] = [selectedTerm];                                        
+                setTermsList(list);                                
+                setTotalCountOfPages(1); 
+                document.getElementsByClassName("tree-text-container")[0].classList.add('clicked');
+                props.iriChangeHandler(iri);    
+                return true;
+            }
+            let list = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
+            setTermsList(list['_embedded']);
+            setTotalCountOfPages(parseInt(list['page']['totalPages']))
         }
         catch (error){
             setTermsList([]);
-            setTotalCountOfTerms(0);
+            setTotalCountOfPages(0);
         }
     }
 
@@ -169,6 +180,7 @@ const ObsoleteTermsList = (props) => {
         let newUrl = window.location.pathname + "?" +  searchParams.toString(); 
         history.push(newUrl);
         props.termTypeChangeHandler(newTypeString);
+        props.iriChangeHandler(false); 
     }
 
 
@@ -205,7 +217,7 @@ const ObsoleteTermsList = (props) => {
                     <div className="col-sm-5">
                         <Pagination 
                             clickHandler={handlePagination} 
-                            count={totalCountOfTerms}
+                            count={totalCountOfPages}
                             initialPageNumber={page + 1}
                         />
                     </div>
