@@ -24,7 +24,7 @@ const ObsoleteTerms = (props) => {
     const [selectedComponentId, setSelectedComponentId] = useState("terms"); 
     const [extractKey, setExtractKey] = useState("terms");
     const [typeForNote, setTypeForNote] = useState("class");
-    const [termIsSelected, setTermIsSelected] = useState(false);
+    const [termIsSelected, setTermIsSelected] = useState(false);   
 
     useEffect(() => {
         paneResize.setOriginalWidthForLeftPanes();
@@ -102,6 +102,7 @@ const ObsoleteTermsList = (props) => {
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(50);
     const [totalCountOfPages, setTotalCountOfPages] = useState(0);
+    const [showPagination, setShowPagination] = useState(true);
     const history = useHistory();
 
     async function fetchTerms(){
@@ -128,6 +129,7 @@ const ObsoleteTermsList = (props) => {
                 setTotalCountOfPages(1); 
                 document.getElementsByClassName("tree-text-container")[0].classList.add('clicked');
                 props.iriChangeHandler(iri);    
+                setShowPagination(false);
                 return true;
             }
             let list = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
@@ -140,7 +142,7 @@ const ObsoleteTermsList = (props) => {
         }
     }
 
-    function selectTerm(e){
+    function selectTerm(e){        
         if (e.target.tagName !== "SPAN"){
             return true;
         }
@@ -215,11 +217,13 @@ const ObsoleteTermsList = (props) => {
                         /> 
                     </div>
                     <div className="col-sm-5">
-                        <Pagination 
-                            clickHandler={handlePagination} 
-                            count={totalCountOfPages}
-                            initialPageNumber={page + 1}
-                        />
+                        {showPagination && 
+                            <Pagination 
+                                clickHandler={handlePagination} 
+                                count={totalCountOfPages}
+                                initialPageNumber={page + 1}
+                            />
+                        }
                     </div>
                 </div>
                 <br></br>
