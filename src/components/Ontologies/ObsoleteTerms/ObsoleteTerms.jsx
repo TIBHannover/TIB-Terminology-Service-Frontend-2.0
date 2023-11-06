@@ -114,13 +114,15 @@ const ObsoleteTermsList = (props) => {
             }
             let type = searchParams.get('type') ? searchParams.get('type') : "class";            
             if(type === "class" && selectedType !== 0){
-                setSelectedType(0);                
+                setSelectedType(0);
+                props.termTypeChangeHandler("terms");                
             }
             else if (type === "property" && selectedType !== 1){
                 setSelectedType(1);
+                props.termTypeChangeHandler("props");
             }
-            let iri = searchParams.get('iri') ? searchParams.get('iri') : false;
-            let getNodeKeyMode = (type === "class") ? "terms" : "properties";
+            let iri = searchParams.get('iri') ? searchParams.get('iri') : false;            
+            let getNodeKeyMode = (type === "class") ? "terms" : "properties";                     
             if(iri){                
                 let selectedTerm = await getNodeByIri(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
                 let list = {getNodeKeyMode: []};

@@ -228,13 +228,8 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string,
   }  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
   let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;  
-  let node = <any> "";
-  if(mode === "individuals"){
-    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri), getCallSetting);
-  }
-  else{
-    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
-  }
+  let node = <any> "";  
+  node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
 
   if (node.status === 404){
     return false;
