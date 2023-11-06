@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import { useHistory } from 'react-router-dom';
 import PaneResize from "../../common/PaneResize/PaneResize";
 import DropDown from "../../common/DropDown/DropDown";
 import { getObsoleteTerms } from "../../../api/fetchData";
@@ -22,6 +23,7 @@ const ObsoleteTerms = (props) => {
     const [selectedComponentId, setSelectedComponentId] = useState("terms"); 
     const [extractKey, setExtractKey] = useState("terms");
     const [typeForNote, setTypeForNote] = useState("class");
+    const [termIsSelected, setTermIsSelected] = useState(false);
 
     useEffect(() => {
         paneResize.setOriginalWidthForLeftPanes();
@@ -52,6 +54,7 @@ const ObsoleteTerms = (props) => {
 
     const iriChangeHandler = (newIri) => {
         setSelectedIri(newIri);
+        setTermIsSelected(true);
     }
     
 
@@ -66,17 +69,19 @@ const ObsoleteTerms = (props) => {
                 />
             </div>
             {paneResize.generateVerticalResizeLine()} 
-            <div className="node-table-container" id="page-right-pane">
-                <NodePage
-                    iri={selectedIri}
-                    ontology={props.ontology}
-                    componentIdentity={selectedComponentId}
-                    extractKey={extractKey}
-                    isSkos={false}
-                    isIndividual={false}
-                    typeForNote={typeForNote}
-                />   
-            </div>
+            {termIsSelected  && 
+                <div className="node-table-container" id="page-right-pane">
+                    <NodePage
+                        iri={selectedIri}
+                        ontology={props.ontology}
+                        componentIdentity={selectedComponentId}
+                        extractKey={extractKey}
+                        isSkos={false}
+                        isIndividual={false}
+                        typeForNote={typeForNote}
+                    />   
+                </div>
+            }
         </div>
     );
 
@@ -87,6 +92,7 @@ const ObsoleteTerms = (props) => {
 const ObsoleteTermsList = (props) => {
     const [selectedType, setSelectedType] = useState(0);
     const [termsList, setTermsList] = useState([]);
+    const history = useHistory();
 
     async function fetchTerms(){
         try{
@@ -109,13 +115,9 @@ const ObsoleteTermsList = (props) => {
         let target = e.target;
         if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){            
             target.classList.add("clicked");
-            props.iriChangeHandler(target.dataset.iri);
-            // this.setState({
-            //     showNodeDetailPage: true,
-            //     selectedNodeIri: target.dataset.iri,
-            // });
-            // let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
-            // props.history.push(newUrl);            
+            props.iriChangeHandler(target.dataset.iri);            
+            let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
+            history.push(newUrl);    
             props.iriChangerFunction(target.dataset.iri, "obsolete");    
         }
         else{
