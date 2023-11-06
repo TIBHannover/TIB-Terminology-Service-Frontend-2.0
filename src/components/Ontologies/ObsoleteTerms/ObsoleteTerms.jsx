@@ -53,9 +53,15 @@ const ObsoleteTerms = (props) => {
     }
 
 
-    const iriChangeHandler = (newIri) => {
-        setSelectedIri(newIri);
-        setTermIsSelected(true);
+    const iriChangeHandler = (newIri) => {        
+        if(newIri){
+            setSelectedIri(newIri);
+            setTermIsSelected(true);
+        }
+        else{
+            setSelectedIri("");
+            setTermIsSelected(false);
+        }        
     }
     
 
@@ -66,7 +72,7 @@ const ObsoleteTerms = (props) => {
                     ontologyId={props.ontology.ontologyId}  
                     termTypeChangeHandler={termTypeChangeHandler}
                     iriChangeHandler={iriChangeHandler} 
-                    iriChangerFunction={props.iriChangerFunction}
+                    iriStoringFunction={props.iriChangerFunction}
                 />
             </div>
             {paneResize.generateVerticalResizeLine()} 
@@ -100,7 +106,20 @@ const ObsoleteTermsList = (props) => {
 
     async function fetchTerms(){
         try{
-            let termsList = await getObsoleteTerms(props.ontologyId, selectedType, page, pageSize);            
+            let searchParams = new URLSearchParams(window.location.search); 
+            let pageNumber = searchParams.get('page') ? parseInt(searchParams.get('page')) - 1 : page;            
+            if (pageNumber !== page){
+                setPage(pageNumber);
+            }
+            let type = searchParams.get('type') ? searchParams.get('type') : "class";            
+            if(type === "class" && selectedType !== 0){
+                setSelectedType(0);                
+            }
+            else if (type === "property" && selectedType !== 1){
+                setSelectedType(1);
+            }
+            let iri = searchParams.get('iri') ? searchParams.get('iri') : false;
+            let termsList = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
             setTermsList(termsList['_embedded']);
             setTotalCountOfTerms(parseInt(termsList['page']['totalPages']))
         }
@@ -124,7 +143,7 @@ const ObsoleteTermsList = (props) => {
             props.iriChangeHandler(target.dataset.iri);            
             let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
             history.push(newUrl);    
-            props.iriChangerFunction(target.dataset.iri, "obsolete");    
+            props.iriStoringFunction(target.dataset.iri);    
         }
         else{
             target.classList.remove("clicked");            
@@ -136,32 +155,38 @@ const ObsoleteTermsList = (props) => {
     const handleTermTypeChange = (e) => {
         let newTypeId = e.target.value;
         let newTypeString = "terms";
+        let typeInUrl = "class";
         setSelectedType(newTypeId);
         if(parseInt(newTypeId) === 1){
             newTypeString = "props";
-        }
-        console.info(newTypeString)
+            typeInUrl = "property";
+        }        
+        setPage(0);
+        let searchParams = new URLSearchParams(window.location.search);  
+        searchParams.delete('iri');
+        searchParams.set('page', 1);
+        searchParams.set('type', typeInUrl);
+        let newUrl = window.location.pathname + "?" +  searchParams.toString(); 
+        history.push(newUrl);
         props.termTypeChangeHandler(newTypeString);
     }
 
 
     const handlePagination = (newPage) => {
         setPage(parseInt(newPage) - 1);
-        // this.setState({
-        //   pageNumber: value - 1,
-        //   tableIsLoading: true,
-        //   listOfTerms: [],
-        //   tableBodyContent: ""    
-        // }, ()=> {
-        //     this.updateURL(value, this.state.pageSize);
-        // })
+        let searchParams = new URLSearchParams(window.location.search);  
+        searchParams.delete('iri');
+        searchParams.set('page', newPage);
+        let newUrl = window.location.pathname + "?" +  searchParams.toString();         
+        props.iriChangeHandler(false);   
+        history.push(newUrl);              
     }
 
 
     useEffect(() => {
         fetchTerms();
         
-    }, [selectedType]);
+    }, [selectedType, page]);
 
 
     return (
