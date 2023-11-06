@@ -193,7 +193,11 @@ const ObsoleteTermsList = (props) => {
         searchParams.set('page', newPage);
         let newUrl = window.location.pathname + "?" +  searchParams.toString();         
         props.iriChangeHandler(false);   
-        history.push(newUrl);              
+        history.push(newUrl);  
+        let selectedElement = document.querySelectorAll(".clicked");
+        for(let i=0; i < selectedElement.length; i++){
+            selectedElement[i].classList.remove("clicked");
+        }            
     }
 
 
