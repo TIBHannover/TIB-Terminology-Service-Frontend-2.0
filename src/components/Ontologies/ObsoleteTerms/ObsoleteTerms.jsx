@@ -102,7 +102,7 @@ const ObsoleteTermsList = (props) => {
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(50);
     const [totalCountOfPages, setTotalCountOfPages] = useState(0);
-    const [showPagination, setShowPagination] = useState(true);
+    const [iriIsGivenInUrl, setIriIsGivenInUrl] = useState(false);
     const history = useHistory();
 
     async function fetchTerms(){
@@ -121,7 +121,7 @@ const ObsoleteTermsList = (props) => {
             }
             let iri = searchParams.get('iri') ? searchParams.get('iri') : false;
             let getNodeKeyMode = (type === "class") ? "terms" : "properties";
-            if(iri){
+            if(iri){                
                 let selectedTerm = await getNodeByIri(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
                 let list = {getNodeKeyMode: []};
                 list[getNodeKeyMode] = [selectedTerm];                                        
@@ -129,14 +129,14 @@ const ObsoleteTermsList = (props) => {
                 setTotalCountOfPages(1); 
                 document.getElementsByClassName("tree-text-container")[0].classList.add('clicked');
                 props.iriChangeHandler(iri);    
-                setShowPagination(false);
+                setIriIsGivenInUrl(true);
                 return true;
             }
             let list = await getObsoleteTerms(props.ontologyId, selectedType, pageNumber, pageSize);            
             setTermsList(list['_embedded']);
             setTotalCountOfPages(parseInt(list['page']['totalPages']))
         }
-        catch (error){
+        catch (error){            
             setTermsList([]);
             setTotalCountOfPages(0);
         }
@@ -201,10 +201,20 @@ const ObsoleteTermsList = (props) => {
     }
 
 
+    const backToListButtonClick = () => {
+        let searchParams = new URLSearchParams(window.location.search); 
+        searchParams.delete('iri');
+        let newUrl = window.location.pathname + "?" +  searchParams.toString(); 
+        history.push(newUrl); 
+        setIriIsGivenInUrl(false);
+        props.iriChangeHandler(false);          
+    }
+
+
     useEffect(() => {
         fetchTerms();
         
-    }, [selectedType, page]);
+    }, [selectedType, page, iriIsGivenInUrl]);
 
 
     return (
@@ -220,15 +230,20 @@ const ObsoleteTermsList = (props) => {
                             dropDownChangeHandler={handleTermTypeChange}
                         /> 
                     </div>
-                    <div className="col-sm-5">
-                        {showPagination && 
-                            <Pagination 
-                                clickHandler={handlePagination} 
-                                count={totalCountOfPages}
-                                initialPageNumber={page + 1}
-                            />
-                        }
-                    </div>
+                    {!iriIsGivenInUrl && 
+                        <div className="col-sm-5">                        
+                                <Pagination 
+                                    clickHandler={handlePagination} 
+                                    count={totalCountOfPages}
+                                    initialPageNumber={page + 1}
+                                />                        
+                        </div>
+                    }
+                    {iriIsGivenInUrl && 
+                        <div className="col-sm-5">   
+                            <button className="btn btn-secondary btn-sm" onClick={backToListButtonClick}>Show Term List</button>                  
+                        </div>
+                    }                    
                 </div>
                 <br></br>
                 <div className="row">
