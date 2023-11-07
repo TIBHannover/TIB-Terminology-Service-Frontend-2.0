@@ -10,7 +10,6 @@ import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSectio
 import Toolkit from '../../common/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
-import ObsoleteTerms from '../ObsoleteTerms/ObsoleteTerms';
 
 
 
@@ -22,14 +21,12 @@ const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
 const NOTES_TAB_ID = 5;
 const GIT_ISSUE_LIST_ID = 6;
-const OBSOLETE_TERMS_TAB_ID = 7;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "terms": TERM_TREE_TAB_ID,
   "props": PROPERTY_TREE_TAB_ID,
   "individuals": INDIVIDUAL_LIST_TAB_ID,
   "termList": TERM_LIST_TAB_ID,
-  "obsoletes": OBSOLETE_TERMS_TAB_ID,
   "notes": NOTES_TAB_ID,
   "gitpanel": GIT_ISSUE_LIST_ID
 }
@@ -52,8 +49,8 @@ class OntologyPage extends React.Component {
       skosRootIndividuals: [],
       rootProps: [],
       waiting: false,
-      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": "", "obsoletes": ""},
-      lastTabsStates: {"terms": "", "props": "", "gitIssues": "", "obsoletes": ""},
+      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
+      lastTabsStates: {"terms": "", "props": "", "gitIssues": ""},
       rootNodeNotExist: false,
       isSkosOntology: false,
       ontologyShowAll: false,
@@ -340,16 +337,7 @@ class OntologyPage extends React.Component {
                                   iriChangerFunction={this.changeInputIri}                              
                                   isSkos={this.state.isSkosOntology}                              
                                 />
-                }
-                {!this.state.waiting && (this.state.activeTab === OBSOLETE_TERMS_TAB_ID) &&
-                                <ObsoleteTerms
-                                  iri={this.state.lastIrisHistory['obsoletes']}
-                                  componentIdentity={'obsoletes'}
-                                  key={'obsoletesPage'}
-                                  ontology={this.state.ontology}                      
-                                  iriChangerFunction={this.changeInputIri}                                                              
-                                />
-                }
+                }             
                 {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
                                 <NoteList                  
                                   componentIdentity={'notes'}
