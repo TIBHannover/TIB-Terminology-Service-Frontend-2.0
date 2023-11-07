@@ -7,35 +7,37 @@ import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
 import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
+import queryString from 'query-string'; 
 
 
 
 class Tree extends React.Component {
     constructor (props) {
         super(props)
-        this.state = ({
-          rootNodes: [],
-          rootNodesForSkos: [],
-          selectedNodeIri: '',
-          showNodeDetailPage: false,
-          componentIdentity: "",
-          termTree: false,
-          propertyTree: false,
-          ontologyId: '',      
-          childExtractName: "",
-          targetNodeIri: "",
-          treeDomContent: "",
-          resetTreeFlag: false,
-          siblingsVisible: false,
-          siblingsButtonShow: false,
-          subOrFullTreeBtnShow: false,
-          reduceBtnActive: true,
-          viewMode: true,
-          reload: false,
-          isLoadingTheComponent: true,
-          noNodeExist: false,
-          isSkos: false,
-          lastSelectedItemId: null 
+        this.state = ({            
+            rootNodes: [],
+            rootNodesForSkos: [],
+            selectedNodeIri: '',
+            showNodeDetailPage: false,
+            componentIdentity: "",
+            termTree: false,
+            propertyTree: false,
+            ontologyId: '',      
+            childExtractName: "",
+            targetNodeIri: "",
+            treeDomContent: "",
+            resetTreeFlag: false,
+            siblingsVisible: false,
+            siblingsButtonShow: false,
+            subOrFullTreeBtnShow: false,
+            reduceBtnActive: true,
+            viewMode: true,
+            reload: false,
+            isLoadingTheComponent: true,
+            noNodeExist: false,
+            isSkos: false,
+            lastSelectedItemId: null,
+            obsoletesShown: false          
         })
     
         this.setComponentData = this.setComponentData.bind(this);
@@ -49,11 +51,14 @@ class Tree extends React.Component {
         this.processKeyNavigation = this.processKeyNavigation.bind(this);
         this.loadTheTreeLastState = this.loadTheTreeLastState.bind(this);    
         this.createTreeActionButtons = this.createTreeActionButtons.bind(this);
+        this.showObsoletes = this.showObsoletes.bind(this);
     }
 
 
    
    async setComponentData(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let showObsoltes = targetQueryParams.obsoletes === "true" ? true : false;          
     let rootNodes = this.props.rootNodes;
     let rootNodesForSkos = this.props.rootNodesForSkos;
     let ontologyId = this.props.ontology;
@@ -64,8 +69,8 @@ class Tree extends React.Component {
     let isSkos = this.props.isSkos;
     let termTree = false;
     let propertyTree = false;    
-    let childExtractName = "";
-    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
+    let childExtractName = "";     
+    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){                
         if(componentIdentity === 'terms'){         
             termTree = true
             propertyTree = false;
@@ -94,7 +99,8 @@ class Tree extends React.Component {
             resetTreeFlag: false,
             reload: false,
             noNodeExist: false,
-            isSkos: isSkos
+            isSkos: isSkos,
+            obsoletesShown: showObsoltes
           }, async () => {
             await this.buildTheTree(resetFlag, viewMode, reload);
           }); 
@@ -122,10 +128,10 @@ class Tree extends React.Component {
         let rootNodesWithChildren = [];
         let childrenList = [];  
         let lastSelectedItemId = "";
-        let showNodeDetailPage = false;
+        let showNodeDetailPage = false;       
 
         if(this.props.lastState && this.props.lastState.treeDomContent !== "" && !this.props.isIndividual){            
-            this.loadTheTreeLastState();
+            this.loadTheTreeLastState();            
             return true;
         }        
         else if (!target || resetFlag){
@@ -133,7 +139,7 @@ class Tree extends React.Component {
             if(this.state.isSkos && this.state.componentIdentity === "individuals"){
                 result = this.buildTheTreeFirstLayer(this.state.rootNodesForSkos);
             }
-            else{
+            else{                
                 result = this.buildTheTreeFirstLayer(this.state.rootNodes);
             }                                 
             treeList = result.treeDomContent;
@@ -142,7 +148,7 @@ class Tree extends React.Component {
             siblingsVisible = false;
             subOrFullTreeBtnShow = false;           
         }                    
-        else if((target != undefined && this.state.targetNodeIri != target) || reload ){
+        else if((target != undefined && this.state.targetNodeIri != target) || reload ){            
             showNodeDetailPage = true;
             if(this.state.isSkos && this.state.componentIdentity === "individuals"){                                
                 treeList = await SkosHelper.buildSkosTree(this.state.ontologyId, target, viewMode);                                              
@@ -217,8 +223,9 @@ class Tree extends React.Component {
         let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
         if(sortKey){
             rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
-        }        
-        for(let i=0; i < rootNodes.length; i++){
+        }
+        let i = 0;        
+        for(i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
@@ -226,7 +233,12 @@ class Tree extends React.Component {
             }  
             let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
             childrenList.push(node);
-        }        
+        }
+        
+        if(this.state.obsoletesShown){            
+           [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(this.props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
+        }
+
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);      
         return {"treeDomContent": treeList,  "lastSelectedItemId": lastSelectedItemId};
     }
@@ -365,25 +377,25 @@ class Tree extends React.Component {
     }
   
   
-  resetTree(){
-    this.props.history.push(window.location.pathname);
-    this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-    this.props.nodeSelectionHandler("", false);
-    this.props.handleResetTreeInParent();
-    this.setState({
-      resetTreeFlag: true,
-      treeDomContent: "",
-      siblingsVisible: false,
-      siblingsButtonShow: false,
-      reload: false,
-      showNodeDetailPage: false,
-      subOrFullTreeBtnShow: false,
-      lastSelectedItemId: false
-    });
-  }
+    resetTree(){
+        this.props.history.push(window.location.pathname);
+        this.props.domStateKeeper("", this.state, this.props.componentIdentity);
+        this.props.nodeSelectionHandler("", false);
+        this.props.handleResetTreeInParent();
+        this.setState({
+            resetTreeFlag: true,
+            treeDomContent: "",
+            siblingsVisible: false,
+            siblingsButtonShow: false,
+            reload: false,
+            showNodeDetailPage: false,
+            subOrFullTreeBtnShow: false,
+            lastSelectedItemId: false
+        });
+    }
 
 
-async showSiblings(){
+    async showSiblings(){
         try{    
             let targetNodes = document.getElementsByClassName("targetNodeByIri");        
             if(!this.state.siblingsVisible){
@@ -431,10 +443,7 @@ async showSiblings(){
         
     }
 
-
-    /**
-     * Reduce tree. show/hide the sub-tree when a node is opened by iri.
-     */
+   
     reduceTree(){
         let reduceBtnActive = this.state.reduceBtnActive;  
         let showSiblings = !reduceBtnActive;
@@ -446,6 +455,21 @@ async showSiblings(){
             treeDomContent: "",
             isLoadingTheComponent: true
         });
+    }
+
+
+    showObsoletes(){
+        let isObsoleteShown = this.state.obsoletesShown;  
+        this.props.domStateKeeper("", this.state, this.props.componentIdentity);            
+        this.setState({            
+            obsoletesShown: !isObsoleteShown,
+            reload: true,
+            isLoadingTheComponent: true,
+            treeDomContent: ""
+        }, () => {
+            let newUrl = Toolkit.setParamInUrl("obsoletes", !isObsoleteShown);
+            this.props.history.push(newUrl);
+        });        
     }
 
 
@@ -476,6 +500,13 @@ async showSiblings(){
                             {!this.props.isIndividual && this.state.selectedNodeIri !== "" &&
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
                             }
+                        </div>                        
+                    </div>
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">                            
+                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showObsoletes}>
+                                {!this.state.obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
+                            </button>                             
                         </div>                        
                     </div>
                     <div className='row tree-action-btn-holder'>

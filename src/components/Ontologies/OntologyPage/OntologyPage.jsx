@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
@@ -48,6 +48,8 @@ class OntologyPage extends React.Component {
       rootTerms: [],
       skosRootIndividuals: [],
       rootProps: [],
+      obsoleteTerms: [],
+      obsoleteProps: [],
       waiting: false,
       lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
       lastTabsStates: {"terms": "", "props": "", "gitIssues": ""},
@@ -131,16 +133,16 @@ class OntologyPage extends React.Component {
   /**
      * Get the ontology root classes 
      */
-  async getRootTerms (ontologyId) {    
+  async getRootTerms (ontologyId) {       
     let rootTerms = [];
-    let skosRootIndividuals = [];
+    let skosRootIndividuals = [];    
     let isSkos = await isSkosOntology(ontologyId);    
     if(isSkos){
       skosRootIndividuals = await getSkosOntologyRootConcepts(ontologyId);
       skosRootIndividuals = await shapeSkosConcepts(skosRootIndividuals);
     }
     rootTerms = await getOntologyRootTerms(ontologyId);
-
+    let obsoleteTerms = await getObsoleteTerms(ontologyId, "terms"); 
     if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
         this.setState({
@@ -148,7 +150,8 @@ class OntologyPage extends React.Component {
           rootTerms: rootTerms,
           skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: false,
-          isSkosOntology: isSkos
+          isSkosOntology: isSkos,
+          obsoleteTerms: obsoleteTerms          
         });
       }
       else{
@@ -157,7 +160,8 @@ class OntologyPage extends React.Component {
           rootTerms: rootTerms,
           skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: true,
-          isSkosOntology: isSkos
+          isSkosOntology: isSkos,
+          obsoleteTerms: obsoleteTerms
         });
       }      
     }
@@ -167,7 +171,8 @@ class OntologyPage extends React.Component {
         errorRootTerms: 'Can not get this ontology root terms',
         skosRootIndividuals: [],
         rootNodeNotExist: true,
-        isSkosOntology: isSkos
+        isSkosOntology: isSkos,
+        rootTermsWithObsoletes: []
       });
     }
   }
@@ -284,6 +289,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                                 <DataTreePage
                                   rootNodes={this.state.rootTerms}
+                                  obsoleteTerms={this.state.obsoleteTerms}
                                   rootNodesForSkos={this.state.skosRootIndividuals}
                                   componentIdentity={'terms'}
                                   iri={this.state.lastIrisHistory['terms']}
@@ -301,6 +307,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                                 <DataTreePage
                                   rootNodes={this.state.rootProps}
+                                  obsoleteProps={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
                                   componentIdentity={'props'}
                                   iri={this.state.lastIrisHistory['props']}

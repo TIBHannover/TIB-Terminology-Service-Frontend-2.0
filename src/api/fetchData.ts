@@ -500,13 +500,18 @@ export async function getAutoCompleteResult(enteredTerm:string, ontologyId:strin
 }
 
 
-export async function getObsoleteTerms(ontologyId:string, termType:string, page:string, size:string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/";
-  let typeMapper = ["terms", "properties"];
-  url += ontologyId + "/" + typeMapper[termType] + "/roots?includeObsoletes=true&page=" + page + "&size=" + size;
-  let res =  await (await fetch(url, getCallSetting)).json();
-  return res;
+export async function getObsoleteTerms(ontologyId:string, termType:string) {
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/";  
+    url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=1000";
+    let res =  await (await fetch(url, getCallSetting)).json();
+    return res['_embedded'][termType];
+  }
+  catch(e){
+    return [];
+  }
+  
 }
 
 

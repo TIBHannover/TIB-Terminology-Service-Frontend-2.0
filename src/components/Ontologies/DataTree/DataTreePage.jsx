@@ -6,7 +6,7 @@ import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../JumpTo/Jumpto';
 import PaneResize from '../../common/PaneResize/PaneResize';
-import NodeDetail from '../NodePage/NodeDetail/NodeDetail';
+
 
 
 
@@ -93,6 +93,8 @@ render(){
           <div className='tree-container'>
                 <Tree
                   rootNodes={this.props.rootNodes}
+                  obsoleteTerms={this.props.obsoleteTerms}
+                  obsoleteProps={this.props.obsoleteProps}                  
                   rootNodesForSkos={this.props.rootNodesForSkos}
                   componentIdentity={this.props.componentIdentity}
                   iri={this.props.iri}
