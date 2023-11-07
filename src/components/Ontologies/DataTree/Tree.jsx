@@ -163,8 +163,9 @@ class Tree extends React.Component {
                     treeList = result.treeDomContent;
                     lastSelectedItemId = result.lastSelectedItemId;
                 }
-                else{                    
-                    for(let i=0; i < rootNodesWithChildren.length; i++){      
+                else{ 
+                    let i = 0;                  
+                    for(i=0; i < rootNodesWithChildren.length; i++){      
                         let treeNode = new TreeNodeController();
                         let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
@@ -176,6 +177,11 @@ class Tree extends React.Component {
                         let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
                         childrenList.push(node);
                     }
+
+                    if(this.state.obsoletesShown){            
+                        [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(this.props.obsoleteTerms, childrenList, i, false);
+                     }
+
                     treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                        
                 }                
             }
@@ -447,13 +453,15 @@ class Tree extends React.Component {
     reduceTree(){
         let reduceBtnActive = this.state.reduceBtnActive;  
         let showSiblings = !reduceBtnActive;
+        let showObsolete = this.state.showNodeDetailPage ? false : this.state.obsoletesShown;
         this.props.domStateKeeper("", this.state, this.props.componentIdentity);
         this.setState({
             reduceBtnActive: !reduceBtnActive,
             siblingsButtonShow: showSiblings,
             reload: true, 
             treeDomContent: "",
-            isLoadingTheComponent: true
+            isLoadingTheComponent: true,
+            obsoletesShown: showObsolete
         });
     }
 
@@ -461,14 +469,12 @@ class Tree extends React.Component {
     showObsoletes(){
         let isObsoleteShown = this.state.obsoletesShown;  
         this.props.domStateKeeper("", this.state, this.props.componentIdentity);            
+        let newUrl = Toolkit.setParamInUrl("obsoletes", !isObsoleteShown);
+        this.props.history.push(newUrl);
         this.setState({            
-            obsoletesShown: !isObsoleteShown,
             reload: true,
             isLoadingTheComponent: true,
             treeDomContent: ""
-        }, () => {
-            let newUrl = Toolkit.setParamInUrl("obsoletes", !isObsoleteShown);
-            this.props.history.push(newUrl);
         });        
     }
 
