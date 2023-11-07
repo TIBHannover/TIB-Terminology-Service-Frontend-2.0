@@ -31,7 +31,7 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "termList": TERM_LIST_TAB_ID,
   "obsoletes": OBSOLETE_TERMS_TAB_ID,
   "notes": NOTES_TAB_ID,
-  "gitIssues": GIT_ISSUE_LIST_ID
+  "gitpanel": GIT_ISSUE_LIST_ID
 }
 
 
