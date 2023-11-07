@@ -40,7 +40,7 @@ class NoteCommnentList extends React.Component{
             result.push(
                 <RowWithSingleColumn 
                     content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
-                    columnClass="col-sm-9"
+                    columnClass="col-sm-12"
                     rowClass="note-comment-card"                    
                 />         
             );
@@ -190,11 +190,12 @@ class NoteCommnentList extends React.Component{
                         wrapperClassName="note-comment-editor-warpper"
                         editorClassName="note-comment-editor"
                         placeholder="leave a comment ..."
+                        textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                     />
 
-        let submitButton = !this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
-        let editButton = this.state.editMode && <button type="button" class="btn btn-primary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
-        let cancelButton = this.state.editMode && <button type="button" class="btn btn-danger note-comment-cancel-edit-btn" onClick={this.cancelEdit}>Cancel</button>;
+        let submitButton = !this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
+        let editButton = this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
+        let cancelButton = this.state.editMode && <button type="button" class="btn btn-secondary note-comment-cancel-edit-btn" onClick={this.cancelEdit}>Cancel</button>;
 
         return [
             <span>
@@ -210,17 +211,17 @@ class NoteCommnentList extends React.Component{
                     [
                         <RowWithSingleColumn 
                             content={editor}
-                            columnClass="col-sm-9"
+                            columnClass="col-sm-12"
                             rowClass=""
                         />,
                          <RowWithSingleColumn 
                             content={submitButton}
-                            columnClass="col-sm-9"
+                            columnClass="col-sm-12"
                             rowClass=""
                         />,
                         <RowWithSingleColumn 
                             content={[editButton, cancelButton]}
-                            columnClass="col-sm-9"
+                            columnClass="col-sm-12"
                             rowClass=""
                         />
                     ]                   

@@ -65,13 +65,13 @@ class NoteDetail extends React.Component{
         }                
         return [
             <div className="row">
-                <div className="col-sm-9">
+                <div className="col-sm-12">
                     <div className="card">
                         <div className="card-header">
                             <NoteCardHeader note={this.state.note} />              
                         </div>
                         <div class="card-body">
-                            <h1 className="card-title note-list-title">{this.state.note['title']}</h1>
+                            <h4 className="card-title note-list-title">{this.state.note['title']}</h4>
                             <small>
                                 <ul className="">
                                     <li>type: {this.state.note['semantic_component_type']}</li>

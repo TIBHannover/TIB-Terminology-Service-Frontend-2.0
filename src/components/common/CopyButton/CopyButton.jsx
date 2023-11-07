@@ -8,7 +8,7 @@ const CopyLinkButton = (props) => {
     return [
         <button 
             type="button" 
-            class="btn btn-secondary btn-sm copy-link-btn"
+            class="btn btn-sm copy-link-icon-btn borderless-btn"
             key={"copy-btn"} 
             onClick={() => {                  
                 navigator.clipboard.writeText(props.valueToCopy);
@@ -18,7 +18,7 @@ const CopyLinkButton = (props) => {
                 }, 1000); 
             }}
             >
-            copy {copied && <i class="fa fa-check" aria-hidden="true"></i>}
+            <i class="fa fa-solid fa-copy"></i> {copied && <i class="fa fa-check" aria-hidden="true"></i>}
         </button>
     ];
 }

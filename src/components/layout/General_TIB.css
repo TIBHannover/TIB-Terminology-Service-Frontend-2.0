@@ -9,6 +9,7 @@
 ------------------------
 */
 
+@import "~font-awesome/css/font-awesome.css";
 
 /* 
     This is the css script for the general application style.    
@@ -75,6 +76,13 @@ p{
  button{
     background-color: #404040 !important;
     font-size: 14px;
+    border-color: #404040 !important;
+ }
+
+ .btn-secondary{
+    background-color: #404040;
+    font-size: 14px;
+    border-color: #404040;
  }
 
  .btn-danger{
@@ -82,8 +90,8 @@ p{
  }
 
  .close-btn-message-modal{
-    background-color: #008d3b !important;
-    color: white;
+    background-color: white !important;    
+    color: #404040 !important;
  }
 
  .term-button{
@@ -325,6 +333,11 @@ p{
     margin-left: 1px;
 }
 
+.fa-copy{  
+    font-size: 12px !important;
+    border: none !important;
+}
+
 .skeleton-loading-box{
     /* 
         Style for the skeleton loading boxes
@@ -374,12 +387,22 @@ p{
         width: 200px;
         height: 50px;
     }
-.hidden-fa, .fa-eye{
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: 5px;
-    }
+}
+
+.fa-eye-slash, .fa-eye{
+    border: none !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    margin-left: 5px !important;
+}
+
+.list-container{
+    padding: 20px !important;
+} 
+
+.custom-radio-btn-input:checked{
+    background-color: #404040;
+    color: #404040;
 }
 
 
@@ -450,7 +473,7 @@ p{
   .cc_more_info{
     color: white;
     text-decoration: underline;
-  }
+  }  
 
 
 /* 
@@ -713,8 +736,8 @@ p{
     */
  
     position: relative;
-    display: block;
-    padding: 0.5rem 0.75rem;
+    display: block;    
+    padding: 5px;
     margin-left: -1px;
     line-height: 1.25;
     color: #0E6668;
@@ -758,6 +781,7 @@ p{
  
     text-decoration: none;
     color: #0E6668;
+    font-size: 13px;
  }
  
  .pagination-link:hover{
@@ -1074,6 +1098,11 @@ p{
    background-color: white;
 }
 
+.form-check-inline-github-issue,.form-check-input-github-issue{
+    margin-top: 4px !important;
+    margin-left: 2px !important;
+}
+
 /* 
 -------------------------------------
     The Facet fields in Search results styles 
@@ -1262,8 +1291,7 @@ p{
         Style for the ontology header title
     */
     color: black;
-    font-weight: bold;
-    font-size: 30px;
+    font-weight: bold;    
 }
 
 .ontology-detail-page-container, .tree-view-container{
@@ -1316,6 +1344,14 @@ p{
 
     margin-left: 20px !important;
     font-size: 10px !important;
+}
+
+.copy-link-icon-btn{
+    margin-left: 10px !important;
+    font-size: 10px !important;
+    background-color: white !important;
+    color: black !important;
+    border: none;
 }
 
 .download-ontology-btn{
@@ -1522,6 +1558,8 @@ p{
     font-size: 13.5px !important;
     text-align: left;
     word-wrap: break-word;
+    padding-bottom: 10px;
+    padding-top: 5px;
 }
 
 .node-metadata-value{
@@ -1687,14 +1725,13 @@ p{
 
 .isLoading {
     /* 
-        Style for the loading animation
-        source: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader
+        Style for the loading animation        
     */
 
     margin: auto;
     border: 16px solid #ffffff;
     border-radius: 50%;
-    border-top: 15px solid #1565C0;
+    border-top: 15px solid #404040;
     width: 120px;
     height: 120px;
     -webkit-animation: spin 2s linear infinite;
@@ -1785,11 +1822,6 @@ p{
 --------------------------------------
 */
 
-.term-list-container{
-    padding-right: 40px !important;
-    padding-bottom: 40px !important;    
-}
-
 .class-list-tablle-holder{
     overflow-x: auto;
     overflow-y: scroll;
@@ -1854,13 +1886,6 @@ p{
     margin-left: 10px;
 }
 
-.list-header-element{
-    /* 
-        Style for the element on top of the list table
-    */
-
-    margin-top: 40px;
-}
 /* 
 --------------------------------------
   User-related components such as Login and profile
@@ -2140,10 +2165,6 @@ Term Request
     background-color: red !important;
     float: left !important;
 }
-.submit-term-request-modal-btn{
-    background-color: green !important;
-}
-
 .required_input::after{
     content: "*";
     color: red;
@@ -2166,10 +2187,6 @@ Notes
 ---------------------------------------------
 */
 
-.notes-container{
-    padding: 60px !important;
-}
-
 .note-list-card{
     margin-bottom: 20px;
 }
@@ -2189,8 +2206,7 @@ Notes
     height: 190px !important;
 }
 
-.note-comment-submit-btn{
-    background-color: #008000 !important;
+.note-comment-submit-btn{    
     margin-top: 2px;
     float: right;
 }
@@ -2199,6 +2215,8 @@ Notes
     margin-top: 2px;
     float: right;
     margin-right: 5px;
+    background-color: rgb(211, 208, 208) !important;
+    color: black !important;
 }
 
 .note-comment-card{
@@ -2463,7 +2481,32 @@ Media Query Area for bein responsive
     }
     .collection-logo{      
         margin-left: 0px;
-    }       
+    }
+    button{        
+        font-size: 12px;        
+     }    
+    .btn-secondary{    
+        font-size: 12px;        
+     }     
+    body{
+        font-size: 14px;
+    }
+    h1,h2,h3,h4,h5,h6{
+        font-size: 1rem !important;
+    }
+    button,.btn{
+        font-size: 10px !important;
+    }
+    .close{
+        font-size: 20px !important;
+    }
+    input::-moz-placeholder {
+        font-size: 11px !important;
+    } 
+    ::-webkit-input-placeholder {
+        font-size: 11px !important;
+     } 
+    
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
     
@@ -2504,13 +2547,28 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
-    }
-    .list-header-element{
-        font-size: 12px !important;
-    }
+    }   
     .pagination-holder{
         font-size: 12px;
-    }   
+    } 
+     body{
+        font-size: 13px;
+    }
+    h1,h2,h3,h4,h5,h6{
+        font-size: 1rem !important;
+    }
+    button,.btn{
+        font-size: 10px !important;
+    }
+    .close{
+        font-size: 20px !important;
+    } 
+    input::-moz-placeholder {
+        font-size: 11px !important;
+    } 
+    input::-webkit-input-placeholder {
+        font-size: 11px !important;
+     } 
 }
 
 @media only screen and (max-width: 900px) {
@@ -2542,5 +2600,23 @@ Media Query Area for bein responsive
     .collection-logo-in-list{    
         width: 200px;
         height: 150px;
+    }
+    body{
+        font-size: 10px;
+    }
+    h1,h2,h3,h4,h5,h6{
+        font-size: 1rem !important;
+    }
+    button,.btn{
+        font-size: 10px !important;
+    }   
+    .close{
+        font-size: 20px !important;
+    }  
+    input::-moz-placeholder {
+        font-size: 10px !important;
     } 
+    ::-webkit-input-placeholder {
+        font-size: 10px !important;
+     } 
  }

@@ -42,7 +42,7 @@ export const NoteCard = (props) => {
                     <div className="card-body">
                         <div className="row">
                             <div className="coll-sm-12">
-                                <h5 className="card-title">
+                                <h6 className="card-title">
                                     <Link to={noteUrl} 
                                         className="note-list-title" 
                                         value={props.note['id']} 
@@ -50,7 +50,7 @@ export const NoteCard = (props) => {
                                         >
                                         {props.note['title']}
                                     </Link>
-                                </h5>
+                                </h6>
                             </div>                                    
                         </div>                                
                         <p className="card-text">
@@ -133,7 +133,7 @@ export const NoteCardHeader = (props) => {
                             </button>
                             <div class="dropdown-menu note-dropdown-menu" aria-labelledby="dropdownMenu2">                                
                                 <div class="dropdown-item note-dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
-                                    <small><i class="fa-solid fa-eye"></i>{note['visibility']}</small>
+                                    <small><i class="fa fa-solid fa-eye"></i>{note['visibility']}</small>
                                 </div>
                                 <div class="dropdown-item note-dropdown-item">
                                     <button 
@@ -154,7 +154,7 @@ export const NoteCardHeader = (props) => {
                                             }, 2000); 
                                         }}
                                         >
-                                        <i class="fa-solid fa-copy"></i> Link
+                                        <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
                                 </div>
                                 {note['can_edit'] &&
@@ -169,7 +169,7 @@ export const NoteCardHeader = (props) => {
                                                 data-keyboard="false"
                                                 key={"editNode" + note['id']}                      
                                                 >
-                                                <i class="far fa-edit"></i> Edit
+                                                <i class="fa fa-edit"></i> Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
@@ -249,7 +249,7 @@ export const CommentCardHeader = (props) =>{
                                             }, 2000); 
                                         }}
                                         >
-                                        <i class="fa-solid fa-copy"></i> Link
+                                        <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
                                 </div>
                                 {comment['can_edit'] &&
@@ -263,7 +263,7 @@ export const CommentCardHeader = (props) =>{
                                                 data-content={comment['content']}
                                                 onClick={props.editHandlerFunc}
                                                 >
-                                                <i class="far fa-edit"></i> Edit
+                                                <i class="fa fa-edit"></i> Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">

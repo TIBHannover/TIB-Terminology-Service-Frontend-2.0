@@ -218,17 +218,17 @@ class NoteCreation extends React.Component{
 
         return [
             <span>            
-            <div className="row">
-                <div className="col-sm-12 text-center">
+            <div className="row float-right">
+                <div className="col-sm-12">
                     <button type="button" 
-                        class="btn btn-primary" 
+                        class="btn btn-secondary" 
                         data-toggle="modal" 
                         data-target="#add-note-modal" 
                         data-backdrop="static"
                         data-keyboard="false" 
                         onClick={() => {this.openModal()}}           
                         >
-                        +Add New Note
+                        Add Note
                     </button>
                 </div>
             </div>            
@@ -238,8 +238,8 @@ class NoteCreation extends React.Component{
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">                    
                             <div class="modal-header">
-                                <h4 class="modal-title">{"Add a New Note"}</h4>
-                                <button type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">{"Add a Note"}</h4>
+                                <button onClick={this.closeModal} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                             </div>
                             <br></br>                                                
                             <div class="modal-body">                                    
@@ -295,14 +295,15 @@ class NoteCreation extends React.Component{
                                             wrapperClassName=""
                                             editorClassName=""
                                             placeholder="Note Content"
+                                            textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                                         />                                         
                                     </div>
                                 </div>
 
                             </div>                        
                             <div class="modal-footer">                            
-                                <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                            
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.submit}>Submit</button>
+                                {/* <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                             */}
+                                <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={this.submit}>Submit</button>
                             </div>
                         </div>
                     </div>

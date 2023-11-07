@@ -35,27 +35,26 @@ export function createIssueDescription(issue){
 }
 
 
-export function getIssuesBasedOnState(listOfAllIssues, state){
-    let listOfIssues = [];
-    for(let issue of listOfAllIssues){
-        if(issue['state'] === state){
-            listOfIssues.push(issue);
-        }
-    }
-    return listOfIssues;
+
+export function loadUrlParameter(){        
+    let url = new URL(window.location);
+    let result = [];     
+    result['selectedStateId'] = url.searchParams.get('stateId');
+    result['pageNumber'] = url.searchParams.get('page');
+    result['selectedType'] = url.searchParams.get('type');
+    return result;    
 }
 
-export function setUrlParameter(reload, pageNumberInState, selectedTypeIdInState){
-    let result = {"pageNumber": pageNumberInState, "selectedTypeId": selectedTypeIdInState};
-    if(!reload){
-        let url = new URL(window.location);
-        let pageNumber = url.searchParams.get('page');
-        let selectedTypeId = url.searchParams.get('stateId');
-        result['selectedTypeId'] = !selectedTypeId ? OPEN_ISSUE_ID : parseInt(selectedTypeId);
-        result['pageNumber'] = !pageNumber ? 1 : parseInt(pageNumber);
-        return result;
+
+export function setTypeRadioBtn(selectedType){
+    if(selectedType === "issue"){
+        let radioBtn = document.getElementById("issue_radio");
+        radioBtn.checked = true;
     }
-    return result;
+    else{
+        let radioBtn = document.getElementById("pr_radio");
+        radioBtn.checked = true;
+    }
 }
 
 

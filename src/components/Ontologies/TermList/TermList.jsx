@@ -218,10 +218,10 @@ class TermList extends React.Component{
 
     render(){
         return(
-            <div className="tree-view-container term-list-container">
+            <div className="tree-view-container list-container">
                 <div className="row">
                     <div className="col-sm-4">
-                        <div className="termlist-jumpto-container  list-header-element">
+                        <div className="termlist-jumpto-container">
                             <JumpTo                        
                                 ontologyId={this.state.ontologyId}                                
                                 isSkos={this.props.isSkos}
@@ -232,7 +232,7 @@ class TermList extends React.Component{
                     </div>
                     <div className="col-sm-2">
                         {!this.state.iri && 
-                            <div className='form-inline list-header-element result-per-page-dropdown-container'>
+                            <div className='form-inline result-per-page-dropdown-container'>
                                 <div class="form-group">
                                 <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
                                 <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
@@ -245,10 +245,10 @@ class TermList extends React.Component{
                             </div>
                         }
                         {this.state.iri &&                            
-                            <button className='btn btn-secondary btn-sm tree-action-btn list-header-element' onClick={this.resetList}>Show All Classes</button> 
+                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetList}>Show All Classes</button> 
                         }
                     </div>
-                    <div className="col-sm-3 text-right list-header-element number-of-result-text-container">
+                    <div className="col-sm-3 text-right number-of-result-text-container">
                         <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>
                     </div>
                     <div className="col-sm-3">

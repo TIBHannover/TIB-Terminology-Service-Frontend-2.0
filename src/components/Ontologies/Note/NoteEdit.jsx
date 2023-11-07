@@ -302,14 +302,15 @@ class NoteEdit extends React.Component{
                                             wrapperClassName=""
                                             editorClassName=""
                                             placeholder="Note Content"
+                                            textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                                         />                                         
                                     </div>
                                 </div>
 
                             </div>                        
                             <div class="modal-footer">                            
-                                <button type="button" id={"noteCreationCloseModal" + targetNote['id']} class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" >Close</button>
-                                <button type="button" class="btn btn-primary submit-term-request-modal-btn" onClick={this.edit}>Save</button>
+                                {/* <button type="button" id={"noteCreationCloseModal" + targetNote['id']} class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" >Close</button> */}
+                                <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={this.edit}>Save</button>
                             </div>
                         </div>
                     </div>

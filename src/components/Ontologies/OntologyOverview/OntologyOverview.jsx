@@ -1,8 +1,7 @@
 import React from 'react';
 import InfoAnnotations from './widgets/infoAnnotations';
 import OntologyStatsBox from './widgets/stats';
-import TermRequest from '../TermRequest/TermRequest';
-import RenderIfLogin from '../../User/Login/RequireLogin';
+
 
 
 
@@ -60,17 +59,14 @@ class OntologyOverview extends React.Component {
         </div>
         <div className='col-sm-3'>
           <OntologyStatsBox ontology={this.props.ontology} />
-          <br></br>
-          <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"general"} />} />
           <br></br>          
-          <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"termRequest"} />} />
           <div className='row'>
                <div className='col-sm-12 node-metadata-value'>
                  <a 
                    href={this.state.showDataAsJsonBtnHref} 
                    target='_blank' 
                    rel="noreferrer"
-                   className='btn btn-primary btn-dark download-ontology-btn'
+                   className='btn btn-secondary btn-dark download-ontology-btn'
                   >
                     Show Ontology Metdata as JSON
                  </a>
