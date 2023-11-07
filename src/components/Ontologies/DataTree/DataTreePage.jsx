@@ -93,8 +93,7 @@ render(){
           <div className='tree-container'>
                 <Tree
                   rootNodes={this.props.rootNodes}
-                  obsoleteTerms={this.props.obsoleteTerms}
-                  obsoleteProps={this.props.obsoleteProps}                  
+                  obsoleteTerms={this.props.obsoleteTerms}                               
                   rootNodesForSkos={this.props.rootNodesForSkos}
                   componentIdentity={this.props.componentIdentity}
                   iri={this.props.iri}

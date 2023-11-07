@@ -184,17 +184,20 @@ class OntologyPage extends React.Component {
      */
   async getRootProps (ontologyId) {
     let rootProps = await getOntologyRootProperties(ontologyId);
+    let obsoleteProps = await getObsoleteTerms(ontologyId, "properties"); 
     if (typeof rootProps != undefined){
       if(rootProps.length !== 0){
         this.setState({
           rootProps: rootProps,
-          rootNodeNotExist: false
+          rootNodeNotExist: false,
+          obsoleteProps: obsoleteProps
         });
       }
       else{
         this.setState({
           rootProps: rootProps,
-          rootNodeNotExist: true
+          rootNodeNotExist: true,
+          obsoleteProps: []
         });
       }
     }
@@ -307,7 +310,7 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                                 <DataTreePage
                                   rootNodes={this.state.rootProps}
-                                  obsoleteProps={this.state.obsoleteProps}
+                                  obsoleteTerms={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
                                   componentIdentity={'props'}
                                   iri={this.state.lastIrisHistory['props']}
