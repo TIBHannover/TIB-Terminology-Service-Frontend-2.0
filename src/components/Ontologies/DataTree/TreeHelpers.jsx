@@ -233,13 +233,18 @@ export default class TreeHelper{
     static renderObsoletes(obsoletes, resultArrayToPush, startIndex, targetSelectedNodeIri){
         let lastSelectedItemId = startIndex;  
         for(let i=0; i < obsoletes.length; i++){
-            let treeNode = new TreeNodeController();
-            let nodeIsClicked = (targetSelectedNodeIri && obsoletes[i].iri === targetSelectedNodeIri)  
-            if(nodeIsClicked){
-                lastSelectedItemId =  i + startIndex;
-            }  
-            let node = treeNode.buildNodeWithReact(obsoletes[i], i + startIndex, nodeIsClicked);                       
-            resultArrayToPush.push(node);
+          console.log(targetSelectedNodeIri)
+          console.log(obsoletes[i].iri)
+          if(targetSelectedNodeIri === obsoletes[i].iri){
+            continue;
+          }
+          let treeNode = new TreeNodeController();
+          let nodeIsClicked = (targetSelectedNodeIri && obsoletes[i].iri === targetSelectedNodeIri)  
+          if(nodeIsClicked){
+              lastSelectedItemId =  i + startIndex;
+          }  
+          let node = treeNode.buildNodeWithReact(obsoletes[i], i + startIndex, nodeIsClicked);                       
+          resultArrayToPush.push(node);
         }
       
         return [resultArrayToPush, lastSelectedItemId];

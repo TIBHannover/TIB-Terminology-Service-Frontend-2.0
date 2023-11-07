@@ -179,7 +179,7 @@ class Tree extends React.Component {
                     }
 
                     if(this.state.obsoletesShown){            
-                        [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(this.props.obsoleteTerms, childrenList, i, false);
+                        [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(this.props.obsoleteTerms, childrenList, i, target);
                      }
 
                     treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                        
