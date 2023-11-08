@@ -303,6 +303,9 @@ class Tree extends React.Component {
         else if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
             this.selectNode(e.target.parentNode);
         }
+        else if (e.target.tagName === "S"){ 
+            this.selectNode(e.target.parentNode.parentNode);
+        }
         else if (e.target.tagName === "I"){
             // expand a node by clicking on the expand icon
             TreeHelper.expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {

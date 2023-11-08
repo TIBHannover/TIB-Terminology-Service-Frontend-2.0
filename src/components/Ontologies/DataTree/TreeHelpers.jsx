@@ -232,9 +232,7 @@ export default class TreeHelper{
 
     static renderObsoletes(obsoletes, resultArrayToPush, startIndex, targetSelectedNodeIri){
         let lastSelectedItemId = startIndex;  
-        for(let i=0; i < obsoletes.length; i++){
-          console.log(targetSelectedNodeIri)
-          console.log(obsoletes[i].iri)
+        for(let i=0; i < obsoletes.length; i++){         
           if(targetSelectedNodeIri === obsoletes[i].iri){
             continue;
           }

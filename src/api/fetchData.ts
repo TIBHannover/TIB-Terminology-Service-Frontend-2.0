@@ -245,11 +245,18 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string,
  
   let parents = await getParents(node, mode);
   if(mode === "terms"){
-    let rels = await getClassRelations(node, ontology);
-    node['relations'] = await getRelations(node['iri'], ontology);
-    node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
-    node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
-    node['instancesList'] = await getIndividualInstancesForClass(ontology, node['iri']);
+    // let rels = await getClassRelations(node, ontology);
+    let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
+      getRelations(node['iri'], ontology),
+      getEqAxiom(node['iri'], ontology),
+      getSubClassOf(node['iri'], ontology),
+      getIndividualInstancesForClass(ontology, node['iri'])
+
+    ]);
+    node['relations'] = relations;
+    node['eqAxiom'] = eqAxiom;
+    node['subClassOf'] = subClassOf; 
+    node['instancesList'] = instancesList;
   }
   else{
     node['relations'] = [];
