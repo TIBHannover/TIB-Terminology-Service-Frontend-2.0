@@ -25,6 +25,7 @@ class Facet extends React.Component{
         this.createCollectionsCheckBoxes = this.createCollectionsCheckBoxes.bind(this);
         this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
         this.clearFacet = this.clearFacet.bind(this);
+        this.createAdvancedSearchCheckBoxes = this.createAdvancedSearchCheckBoxes.bind(this);
     }
 
     
@@ -210,6 +211,27 @@ class Facet extends React.Component{
         return result;
     }
 
+    /**
+     * Create the advanced search facet box     
+     * @returns 
+     */
+    createAdvancedSearchCheckBoxes(){
+        let result = [];
+                result.push(
+                    <div className="row facet-item-row">
+                        <div className='col-sm-9'>
+                            <div class="form-check">
+                                <input 
+                                    class="form-check-input search-facet-checkbox"
+                                    type="checkbox" 
+                                />                    
+                            </div>                      
+                        </div>                
+                    </div>
+                );
+        return result;
+    }
+
     
     /**
      * Handle click on the ontologies checkboxes
@@ -367,6 +389,13 @@ class Facet extends React.Component{
                         {this.createOntologiesCheckboxList()}                                                
                         <div className="text-center" id="search-facet-show-more-ontology-btn">
                             <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                        </div>                        
+                    </div>
+                    <h4>{"Advanced Search"}</h4>
+                    <div class="facet-box">                            
+                        {this.createAdvancedSearchCheckBoxes()}                                                
+                        <div className="text-center" id="search-facet-show-more-ontology-btn">
+                            <a className="show-more-btn"  onClick={''}>{}</a>
                         </div>                        
                     </div>
                     {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
