@@ -76,9 +76,7 @@ const TermList = (props) => {
 
 
     function handlePagination (value) {
-        setPageNumber(parseInt(value) - 1);
-        setTableIsLoading(true);
-        setListOfTerms([]);        
+        setPageNumber(parseInt(value) - 1);             
         updateURL(value, pageSize);
     }
 
@@ -87,9 +85,7 @@ const TermList = (props) => {
         let size = parseInt(e.target.value);
         let page = pageNumber + 1;
         setPageNumber(page);
-        setPageSize(size);
-        setTableIsLoading(true);
-        setListOfTerms([]);        
+        setPageSize(size);           
         storePageSizeInLocalStorage(size);
         updateURL(page, size);
     }
@@ -100,9 +96,7 @@ const TermList = (props) => {
         let size = Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
         setIri(null);
         setPageNumber(0);
-        setPageSize(size);
-        setTableIsLoading(true);
-        setListOfTerms([]);        
+        setPageSize(size);            
         storePageSizeInLocalStorage(pageSize);
         updateURL(1, size, null);
     }
@@ -127,6 +121,8 @@ const TermList = (props) => {
 
 
     useEffect(() => {
+        setTableIsLoading(true);
+        setListOfTerms([]);   
         loadComponent();
         hideHiddenColumnsOnLoad();               
     }, [pageNumber, pageSize, iri]);

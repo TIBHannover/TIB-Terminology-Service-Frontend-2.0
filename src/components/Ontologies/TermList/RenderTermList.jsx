@@ -82,18 +82,22 @@ export const RenderTermList = (props) => {
                             />                        
                         }
                         {props.iri &&                            
-                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.resetList}>Show All Classes</button> 
+                            <button className='btn btn-secondary ml-2' onClick={props.resetList}>Show All Classes</button> 
                         }
                     </div>
                     <div className="col-sm-3 text-right number-of-result-text-container">
-                        <b>{"Showing " + (props.pageNumber * props.pageSize + 1) + " - " + ((props.pageNumber + 1) * props.pageSize) + " of " + props.totalNumberOfTerms + " Classes"}</b>
+                        {!props.iri && 
+                            <b>{"Showing " + (props.pageNumber * props.pageSize + 1) + " - " + ((props.pageNumber + 1) * props.pageSize) + " of " + props.totalNumberOfTerms + " Classes"}</b>
+                        }
                     </div>
                     <div className="col-sm-3">
+                    {!props.iri && 
                         <Pagination 
                             clickHandler={props.handlePagination} 
                             count={props.pageCount()}
                             initialPageNumber={props.pageNumber + 1}
                         />
+                    }
                     </div>
                 </div>                 
                 <div className="row class-list-tablle-holder">                                      
