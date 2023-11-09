@@ -44,6 +44,7 @@ class SearchResult extends React.Component{
         this.handleOntoDelete = this.handleOntoDelete.bind(this);
         this.handleTypDelete = this.handleTypDelete.bind(this);
         this.handleColDelete = this.handleColDelete.bind(this);
+        this.handleObsolete =  this.handleObsolete.bind(this);
     }
 
 
@@ -212,6 +213,28 @@ async handleExact(){
     })
   }
 }
+
+/**
+ * Handle the obsolete search term when chosen by the user
+ */
+async handleObsolete(){
+  if(this.state.enteredTerm.length > 0){
+    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&obsoletes=true&rows=" + this.state.pageSize;
+    let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);      
+    collectionOntologies.forEach(onto => {
+      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
+    });
+    
+    let obsoletesResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
+    obsoletesResult = (await obsoletesResult.json())['response']['docs'];
+    this.setState({
+      searchResult: obsoletesResult,
+      isLoaded: true 
+    })
+  }
+}
+
+
 
 /**
  * Displaying 'Also in' in search result items
