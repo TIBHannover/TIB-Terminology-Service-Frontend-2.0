@@ -16,6 +16,7 @@ class SearchResult extends React.Component{
           newEnteredTerm: "",          
           searchResult: [],
           exactResult: [],
+          obsoletesResult: [],
           originalSearchResult: [],
           selectedOntologies: [],
           selectedTypes: [],
