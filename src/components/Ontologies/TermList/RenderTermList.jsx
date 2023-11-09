@@ -2,6 +2,12 @@ import {useEffect, useState} from "react";
 import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import JumpTo from "../JumpTo/Jumpto";
+import DropDown from "../../common/DropDown/DropDown";
+
+
+
+const PAGE_SIZES_FOR_DROPDOWN = [{label: "20", value:20}, {label: "30", value:30}, {label: "40", value:40}, {label: "50", value:50}];
+
 
 
 
@@ -15,8 +21,10 @@ export const RenderTermList = (props) => {
         let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
-            let subclassOfText = await getSubClassOf(term['iri'], term['ontology_name']);
-            let equivalentToText = await getEqAxiom(term['iri'], term['ontology_name']);
+            let [subclassOfText, equivalentToText] = await Promise.all([
+                getSubClassOf(term['iri'], term['ontology_name']),
+                getEqAxiom(term['iri'], term['ontology_name'])
+            ]);
             result.push(
                 <tr>
                     <td className="label-col">
@@ -64,17 +72,14 @@ export const RenderTermList = (props) => {
                     </div>
                     <div className="col-sm-2">
                         {!props.iri && 
-                            <div className='form-inline result-per-page-dropdown-container'>
-                                <div class="form-group">
-                                <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
-                                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={props.pageSize} onChange={props.handlePageSizeDropDownChange}>
-                                    <option value={20} key="20">20</option>
-                                    <option value={30} key="30">30</option>
-                                    <option value={40} key="40">40</option>
-                                    <option value={50} key="50">50</option>
-                                </select>  
-                                </div>                                                                                
-                            </div>
+                            <DropDown 
+                                options={PAGE_SIZES_FOR_DROPDOWN}
+                                dropDownId="list-result-per-page"
+                                containerClass="result-per-page-dropdown-container"
+                                dropDownTitle="Result Per Page"
+                                dropDownValue={props.pageSize}
+                                dropDownChangeHandler={props.handlePageSizeDropDownChange}
+                            />                        
                         }
                         {props.iri &&                            
                             <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.resetList}>Show All Classes</button> 

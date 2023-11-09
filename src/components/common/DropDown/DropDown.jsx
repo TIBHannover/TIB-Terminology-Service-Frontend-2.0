@@ -11,7 +11,7 @@ const DropDown = (props) => {
     }
     
     return (
-        <div class="form-group">
+        <div className={"form-group " + props.containerClass}>
             <label for={props.dropDownId} className='col-form-label'>{props.dropDownTitle}</label>
             <select 
                 className='site-dropdown-menu list-result-per-page-dropdown-menu' 
