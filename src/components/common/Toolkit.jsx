@@ -90,6 +90,11 @@ class Toolkit{
         searchParams.set(param, newValue);          
         return locationObject.pathname + "?" +  searchParams.toString();
     }
+
+
+    static getVarInLocalSrorageIfExist(varName, defaultValue){
+        return localStorage.getItem(varName) ? localStorage.getItem(varName) : defaultValue;
+    }
 }
 
 export default Toolkit;
