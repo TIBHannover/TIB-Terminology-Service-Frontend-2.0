@@ -6,53 +6,46 @@ import JumpTo from "../JumpTo/Jumpto";
 import {createClassListTableHeader, setContributorField, createShowColumnsTags} from './hekpers';
 
 
+const DEFAULT_PAGE_SIZE = 20;
 
 
-const TermList = (props) => {
-    const [ontologyId, setOntologyId] = useState("");
-    const [pageNumber, setPageNumber] = useState(0);
-    const [pageSize, setPageSize] = useState(localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20);
+const TermList = (props) => {    
+    let url = new URL(window.location);
+    let pageNumberInUrl = url.searchParams.get('page');
+    let sizeInUrl = url.searchParams.get('size');
+    let iriInUrl = url.searchParams.get('iri');        
+    pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
+    let internalSize = localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : DEFAULT_PAGE_SIZE;
+    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);
+
+    const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
+    const [pageSize, setPageSize] = useState(sizeInUrl);
     const [listOfTerms, setListOfTerms] = useState([]);
     const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);
     const [lastLoadedUrl, setLastLoadedUrl] = useState("");
     const [mode, setMode] = useState("terms");
-    const [iri, setIri] = useState("");
+    const [iri, setIri] = useState(iriInUrl);
     const [tableBodyContent, setTableBodyContent] = useState("");
-    const [tableIsLoading, setTableIsLoading] = useState(false);
+    const [tableIsLoading, setTableIsLoading] = useState(true);
+    const [urlProfile, setUrlProfile] = useState({iri:null, pageNumber: 0, pageSize: localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20});
     const history = useHistory();
 
 
-    async function loadComponent(){        
-        let url = new URL(window.location);
-        let pageNumberInUrl = url.searchParams.get('page');
-        let sizeInUrl = url.searchParams.get('size');
-        let iriInUrl = url.searchParams.get('iri');        
-        pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
-        sizeInUrl = !sizeInUrl ? this.state.pageSize : parseInt(sizeInUrl);
+    async function loadComponent(){                        
         let ontologyId = props.ontology;
-        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };
-        if(!iriInUrl){
-            listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
-            iriInUrl = null;
-            sizeInUrl = localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20;
+        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };        
+        if(!iri){
+            listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumber, pageSize);            
         }
         else{
-            listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iriInUrl), mode)];
-            listOfTermsAndStats["totalTermsCount"] = 1;
-            pageNumberInUrl = 1;
-            sizeInUrl = 1;
+            listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iri), mode)];
+            listOfTermsAndStats["totalTermsCount"] = 1;            
         }
-
-        setOntologyId(ontologyId);
+        
         setListOfTerms(listOfTermsAndStats['results']);
-        setTotalNumberOfTerms(listOfTermsAndStats['totalTermsCount']);
-        setPageNumber(pageNumberInUrl - 1);
-        setPageSize(sizeInUrl);
-        setLastLoadedUrl(window.location.href);
-        setIri(iriInUrl);
-        setTableBodyContent('');
-        storePageSizeInLocalStorage(sizeInUrl);            
-        updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);     
+        setTotalNumberOfTerms(listOfTermsAndStats['totalTermsCount']);        
+        setLastLoadedUrl(window.location.href);             
+        storePageSizeInLocalStorage(pageSize);        
     }
 
 
@@ -63,7 +56,7 @@ const TermList = (props) => {
     }
 
 
-    function updateURL(pageNumber, pageSize, iri=null){
+    function updateURL(pageNumber, pageSize, iri=null){        
         let currentUrlParams = new URLSearchParams();
         if(iri){
             currentUrlParams.append('iri', iri);
@@ -71,16 +64,108 @@ const TermList = (props) => {
         else{
             currentUrlParams.append('page', pageNumber);
             currentUrlParams.append('size', pageSize);
-        }
-        createList();        
+            currentUrlParams.delete('iri');
+        }        
         history.push(window.location.pathname + "?" + currentUrlParams.toString())
-
     }
+
+
+    function pageCount () {    
+        if (isNaN(Math.ceil(totalNumberOfTerms / pageSize))){
+            return 0;
+        }
+        return (Math.ceil(totalNumberOfTerms / pageSize))
+    }
+
+
+
+    function handlePagination (value) {
+        setPageNumber(parseInt(value) - 1);
+        setTableIsLoading(true);
+        setListOfTerms([]);        
+        updateURL(value, pageSize);
+    }
+
+
+    function handlePageSizeDropDownChange(e){
+        let size = parseInt(e.target.value);
+        let page = pageNumber + 1;
+        setPageNumber(page);
+        setPageSize(size);
+        setTableIsLoading(true);
+        setListOfTerms([]);        
+        storePageSizeInLocalStorage(size);
+        updateURL(page, size);
+    }
+
+
+
+    function resetList(){
+        let size = localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : DEFAULT_PAGE_SIZE;
+        setIri(null);
+        setPageNumber(0);
+        setPageSize(size);
+        setTableIsLoading(true);
+        setListOfTerms([]);        
+        storePageSizeInLocalStorage(pageSize);
+        updateURL(1, size, null);
+    }
+
+
+    function hideHiddenColumnsOnLoad(){
+        let tableHeaders = document.getElementsByTagName('th');
+        for(let th of tableHeaders){
+            if(th.style.display === "none"){                
+                let targetCells = document.getElementsByClassName(th.className);                
+                for(let cell of targetCells){
+                    cell.style.display = "none";
+                }
+            }
+        }
+    }
+
+
+    useEffect(() => {               
+        hideHiddenColumnsOnLoad();        
+    }, []);
+
+
+    useEffect(() => {
+        loadComponent();
+        hideHiddenColumnsOnLoad();               
+    }, [pageNumber, pageSize, iri]);
+
+
+    return (
+        <RenderTermList 
+            ontologyId={props.ontology}
+            isSkos={props.isSkos}
+            componentIdentity={props.componentIdentity}
+            iri={iri}
+            pageSize={pageSize}
+            handlePageSizeDropDownChange={handlePageSizeDropDownChange}
+            resetList={resetList}
+            pageNumber={pageNumber}
+            totalNumberOfTerms={totalNumberOfTerms}
+            handlePagination={handlePagination}
+            pageCount={pageCount}
+            tableIsLoading={tableIsLoading}            
+            listOfTerms={listOfTerms}
+            setTableIsLoading={setTableIsLoading}
+        />
+    );
+
+}
+
+
+
+const RenderTermList = (props) => {
+    const [tableBodyContent, setTableBodyContent] = useState("");
 
 
     async function createList(){
         let result = [];
-        let listOfterms = listOfTerms;
+        let listOfterms = props.listOfTerms;
         let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
@@ -108,97 +193,15 @@ const TermList = (props) => {
         
         if(result.length !== 0){
             setTableBodyContent(result);
-            setTableIsLoading(false);
+            props.setTableIsLoading(false);
         }                
     }
 
 
-    function pageCount () {    
-        if (isNaN(Math.ceil(totalNumberOfTerms / pageSize))){
-            return 0;
-        }
-        return (Math.ceil(totalNumberOfTerms / pageSize))
-    }
-
-
-
-    function handlePagination (value) {
-        setPageNumber(parseInt(value) - 1);
-        setTableIsLoading(true);
-        setListOfTerms([]);
-        setTableBodyContent("");
-        this.updateURL(value, this.state.pageSize);
-    }
-
-
-    function handlePageSizeDropDownChange(e){
-        let size = parseInt(e.target.value);
-        let page = pageNumber + 1;
-        setPageNumber(page);
-        setPageSize(size);
-        setTableIsLoading(true);
-        setListOfTerms([]);
-        setTableBodyContent("");
-        storePageSizeInLocalStorage(size);
-        updateURL(page, size);
-    }
-
-
-
-    function resetList(){
-        setIri(null);
-        setPageNumber(0);
-        setPageSize(20);
-        setTableIsLoading(true);
-        setListOfTerms([]);
-        setTableBodyContent("");
-        storePageSizeInLocalStorage(this.state.pageSize);
-        updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
-    }
-
-
-    function hideHiddenColumnsOnLoad(){
-        let tableHeaders = document.getElementsByTagName('th');
-        for(let th of tableHeaders){
-            if(th.style.display === "none"){                
-                let targetCells = document.getElementsByClassName(th.className);                
-                for(let cell of targetCells){
-                    cell.style.display = "none";
-                }
-            }
-        }
-    }
-
-
     useEffect(() => {
-        loadComponent();
-        hideHiddenColumnsOnLoad();
-    }, []);
+        createList();
+    }, [props.listOfTerms]);
 
-
-    return (
-        <RenderTermList 
-            ontologyId={""}
-            isSkos={""}
-            componentIdentity={props.componentIdentity}
-            iri={""}
-            pageSize={pageSize}
-            handlePageSizeDropDownChange={handlePageSizeDropDownChange}
-            resetList={resetList}
-            pageNumber={pageNumber}
-            totalNumberOfTerms={totalNumberOfTerms}
-            handlePagination={handlePagination}
-            pageCount={pageCount}
-            tableIsLoading={tableIsLoading}
-            tableBodyContent={tableBodyContent}
-        />
-    );
-
-}
-
-
-
-const RenderTermList = (props) => {
 
     return(
         <div className="tree-view-container list-container">
@@ -248,7 +251,7 @@ const RenderTermList = (props) => {
                         {createClassListTableHeader()}
                         <tbody>
                             {props.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
-                            {!props.tableIsLoading && props.tableBodyContent}               
+                            {!props.tableIsLoading && tableBodyContent}               
                         </tbody>
                     </table>
                 </div>
