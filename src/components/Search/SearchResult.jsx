@@ -198,7 +198,7 @@ class SearchResult extends React.Component{
  */
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
-    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=on&rows=" + this.state.pageSize;
+    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=true&rows=" + this.state.pageSize;
     let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);      
     collectionOntologies.forEach(onto => {
       searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
