@@ -1,139 +1,58 @@
-import React from "react";
-import {getListOfTerms, getNodeByIri, getSubClassOf, getEqAxiom} from '../../../api/fetchData';
-import Pagination from "../../common/Pagination/Pagination";
-import { withRouter } from 'react-router-dom';
-import JumpTo from "../JumpTo/Jumpto";
-import {createClassListTableHeader, setContributorField, createShowColumnsTags} from './hekpers';
+import {useEffect, useState} from "react";
+import { useHistory } from "react-router";
+import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
+import Toolkit from "../../common/Toolkit";
+import { RenderTermList } from "./RenderTermList";
 
 
-class TermList extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = ({
-            ontologyId: "",
-            pageNumber: 0,
-            pageSize: localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20,
-            listOfTerms: [],
-            totalNumberOfTerms: 0,
-            lastLoadedUrl: "",
-            mode: "terms",
-            iri: null,
-            tableBodyContent: "",
-            tableIsLoading: true
-        });
 
-        this.loadComponent = this.loadComponent.bind(this);
-        this.createList = this.createList.bind(this);
-        this.pageCount = this.pageCount.bind(this);
-        this.handlePagination = this.handlePagination.bind(this);
-        this.updateURL = this.updateURL.bind(this);
-        this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
-        this.resetList = this.resetList.bind(this);
-        this.storePageSizeInLocalStorage = this.storePageSizeInLocalStorage.bind(this);
-    }
+const DEFAULT_PAGE_SIZE = 20;
 
 
-    async loadComponent(){        
-        let url = new URL(window.location);
-        let pageNumberInUrl = url.searchParams.get('page');
-        let sizeInUrl = url.searchParams.get('size');
-        let iriInUrl = url.searchParams.get('iri');        
-        pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
-        sizeInUrl = !sizeInUrl ? this.state.pageSize : parseInt(sizeInUrl);
-        let ontologyId = this.props.ontology;
-        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };
-        if(!iriInUrl){
-            listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumberInUrl - 1, sizeInUrl);
-            iriInUrl = null;
-            sizeInUrl = localStorage.getItem('termListPageSize') ? localStorage.getItem('termListPageSize') : 20;
+const TermList = (props) => {    
+    let url = new URL(window.location);
+    let pageNumberInUrl = url.searchParams.get('page');
+    let sizeInUrl = url.searchParams.get('size');
+    let iriInUrl = url.searchParams.get('iri');        
+    pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
+    let internalSize =  Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
+    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);
+
+    const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
+    const [pageSize, setPageSize] = useState(sizeInUrl);
+    const [listOfTerms, setListOfTerms] = useState([]);
+    const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);    
+    const [mode, setMode] = useState("terms");
+    const [iri, setIri] = useState(iriInUrl);    
+    const [tableIsLoading, setTableIsLoading] = useState(true);    
+    const history = useHistory();
+
+
+    async function loadComponent(){                        
+        let ontologyId = props.ontology;
+        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };        
+        if(!iri){
+            listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumber, pageSize);            
         }
         else{
-            listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iriInUrl), this.state.mode)];
-            listOfTermsAndStats["totalTermsCount"] = 1;
-            pageNumberInUrl = 1;
-            sizeInUrl = 1;
+            listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iri), mode)];
+            listOfTermsAndStats["totalTermsCount"] = 1;            
         }
         
-        this.setState({
-            ontologyId: ontologyId,
-            listOfTerms: listOfTermsAndStats['results'],
-            totalNumberOfTerms: listOfTermsAndStats['totalTermsCount'],
-            pageNumber: pageNumberInUrl - 1,
-            pageSize: sizeInUrl,
-            lastLoadedUrl: window.location.href,
-            iri: iriInUrl,
-            tableBodyContent: ''
-        }, ()=> {
-            this.storePageSizeInLocalStorage(sizeInUrl);            
-            this.updateURL(pageNumberInUrl, sizeInUrl, iriInUrl);
-        });
+        setListOfTerms(listOfTermsAndStats['results']);
+        setTotalNumberOfTerms(listOfTermsAndStats['totalTermsCount']);                    
+        storePageSizeInLocalStorage(pageSize);        
     }
 
 
-
-    storePageSizeInLocalStorage(size){
+    function storePageSizeInLocalStorage(size){
         if(parseInt(size) !== 1){
             localStorage.setItem('termListPageSize', size);
         }
     }
 
 
-   
-    pageCount () {    
-        if (isNaN(Math.ceil(this.state.totalNumberOfTerms / this.state.pageSize))){
-            return 0;
-        }
-        return (Math.ceil(this.state.totalNumberOfTerms / this.state.pageSize))
-    }
-
-
-
-    handlePagination (value) {
-        this.setState({
-          pageNumber: value - 1,
-          tableIsLoading: true,
-          listOfTerms: [],
-          tableBodyContent: ""    
-        }, ()=> {
-            this.updateURL(value, this.state.pageSize);
-        })
-    }
-
-
-
-    handlePageSizeDropDownChange(e){
-        let size = parseInt(e.target.value);
-        let pageNumber = this.state.pageNumber + 1;
-        this.setState({
-            pageSize: size,
-            tableIsLoading: true,
-            listOfTerms: [],
-            tableBodyContent: "" 
-        }, () => {        
-            this.storePageSizeInLocalStorage(size);
-            this.updateURL(pageNumber, size);
-        });
-    }
-
-
-
-    resetList(){
-        this.setState({
-            iri: null,
-            pageNumber: 0,
-            pageSize: 20,
-            tableIsLoading: true,
-            listOfTerms: [],
-            tableBodyContent: "" 
-        }, () => {
-            this.storePageSizeInLocalStorage(this.state.pageSize);
-            this.updateURL(this.state.pageNumber + 1, this.state.pageSize, this.state.iri);
-        });
-    }
-
-
-
-    updateURL(pageNumber, pageSize, iri=null){
+    function updateURL(pageNumber, pageSize, iri=null){        
         let currentUrlParams = new URLSearchParams();
         if(iri){
             currentUrlParams.append('iri', iri);
@@ -141,53 +60,49 @@ class TermList extends React.Component{
         else{
             currentUrlParams.append('page', pageNumber);
             currentUrlParams.append('size', pageSize);
+            currentUrlParams.delete('iri');
+        }        
+        history.push(window.location.pathname + "?" + currentUrlParams.toString())
+    }
+
+
+    function pageCount () {    
+        if (isNaN(Math.ceil(totalNumberOfTerms / pageSize))){
+            return 0;
         }
-        this.createList();               
-        this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+        return (Math.ceil(totalNumberOfTerms / pageSize))
     }
 
 
 
-    async createList(){
-        let result = [];
-        let listOfterms = this.state.listOfTerms;
-        let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
-        for (let term of listOfterms){
-            let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
-            let subclassOfText = await getSubClassOf(term['iri'], term['ontology_name']);
-            let equivalentToText = await getEqAxiom(term['iri'], term['ontology_name']);
-            result.push(
-                <tr>
-                    <td className="label-col">
-                        <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
-                            {term['label']}
-                        </a>                        
-                    </td>
-                    <td className="id-col">{term['short_form']}</td>
-                    <td className="des-col">{term['description'] ? term['description'] : ""}</td>
-                    <td className="alt-term-col">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
-                    <td className="sub-class-col"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
-                    <td className="eqv-col"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
-                    <td className="ex-usage-col">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
-                    <td className="see-also-col">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
-                    <td className="contrib-col">{setContributorField(term)}</td>
-                    <td className="comment-col">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
-                </tr>
-            );
-        }
-        
-        if(result.length !== 0){
-            this.setState({
-                tableBodyContent: result,
-                tableIsLoading: false
-            });
-        }
-        
-        
+    function handlePagination (value) {
+        setPageNumber(parseInt(value) - 1);             
+        updateURL(value, pageSize);
     }
 
 
-    hideHiddenColumnsOnLoad(){
+    function handlePageSizeDropDownChange(e){
+        let size = parseInt(e.target.value);
+        let page = pageNumber + 1;
+        setPageNumber(page);
+        setPageSize(size);           
+        storePageSizeInLocalStorage(size);
+        updateURL(page, size);
+    }
+
+
+
+    function resetList(){
+        let size = Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
+        setIri(null);
+        setPageNumber(0);
+        setPageSize(size);            
+        storePageSizeInLocalStorage(pageSize);
+        updateURL(1, size, null);
+    }
+
+
+    function hideHiddenColumnsOnLoad(){
         let tableHeaders = document.getElementsByTagName('th');
         for(let th of tableHeaders){
             if(th.style.display === "none"){                
@@ -200,79 +115,39 @@ class TermList extends React.Component{
     }
 
 
-
-    componentDidMount(){
-        this.loadComponent();             
-    }
-
+    useEffect(() => {               
+        hideHiddenColumnsOnLoad();        
+    }, []);
 
 
-    componentDidUpdate(){
-        let currentUrl = window.location.href;
-        if(currentUrl !== this.state.lastLoadedUrl){
-            this.loadComponent();                       
-        }
-        this.hideHiddenColumnsOnLoad();                 
-    }
+    useEffect(() => {
+        setTableIsLoading(true);
+        setListOfTerms([]);   
+        loadComponent();
+        hideHiddenColumnsOnLoad();               
+    }, [pageNumber, pageSize, iri]);
 
 
-    render(){
-        return(
-            <div className="tree-view-container list-container">
-                <div className="row">
-                    <div className="col-sm-4">
-                        <div className="termlist-jumpto-container">
-                            <JumpTo                        
-                                ontologyId={this.state.ontologyId}                                
-                                isSkos={this.props.isSkos}
-                                componentIdentity={this.props.componentIdentity}
-                                containerBootstrapClass="col-sm-12"
-                            />
-                        </div>                    
-                    </div>
-                    <div className="col-sm-2">
-                        {!this.state.iri && 
-                            <div className='form-inline result-per-page-dropdown-container'>
-                                <div class="form-group">
-                                <label for="list-result-per-page" className='col-form-label'>Result Per Page</label>
-                                <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
-                                    <option value={20} key="20">20</option>
-                                    <option value={30} key="30">30</option>
-                                    <option value={40} key="40">40</option>
-                                    <option value={50} key="50">50</option>
-                                </select>  
-                                </div>                                                                                
-                            </div>
-                        }
-                        {this.state.iri &&                            
-                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetList}>Show All Classes</button> 
-                        }
-                    </div>
-                    <div className="col-sm-3 text-right number-of-result-text-container">
-                        <b>{"Showing " + (this.state.pageNumber * this.state.pageSize + 1) + " - " + ((this.state.pageNumber + 1) * this.state.pageSize) + " of " + this.state.totalNumberOfTerms + " Classes"}</b>
-                    </div>
-                    <div className="col-sm-3">
-                        <Pagination 
-                            clickHandler={this.handlePagination} 
-                            count={this.pageCount()}
-                            initialPageNumber={this.state.pageNumber + 1}
-                        />
-                    </div>
-                </div>                 
-                <div className="row class-list-tablle-holder">                                      
-                    <table class="table table-striped term-list-table class-list-table" id="class-list-table">
-                        {createShowColumnsTags()}                        
-                        {createClassListTableHeader()}
-                        <tbody>
-                            {this.state.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
-                            {!this.state.tableIsLoading && this.state.tableBodyContent}               
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
-    }
+    return (
+        <RenderTermList 
+            ontologyId={props.ontology}
+            isSkos={props.isSkos}
+            componentIdentity={props.componentIdentity}
+            iri={iri}
+            pageSize={pageSize}
+            handlePageSizeDropDownChange={handlePageSizeDropDownChange}
+            resetList={resetList}
+            pageNumber={pageNumber}
+            totalNumberOfTerms={totalNumberOfTerms}
+            handlePagination={handlePagination}
+            pageCount={pageCount}
+            tableIsLoading={tableIsLoading}            
+            listOfTerms={listOfTerms}
+            setTableIsLoading={setTableIsLoading}
+        />
+    );
 
 }
 
-export default withRouter(TermList);
+
+export default TermList;
