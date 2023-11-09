@@ -521,6 +521,8 @@ createSearchResultList () {
                   selectedCollections = {this.state.selectedCollections}
                   selectedOntologies = {this.state.selectedOntologies}
                   selectedTypes = {this.state.selectedTypes}
+                  exactData = {this.state.exactResult}
+                  obsoletesData = {this.state.obsoletesResult}
                 />
               }              
             </div>
