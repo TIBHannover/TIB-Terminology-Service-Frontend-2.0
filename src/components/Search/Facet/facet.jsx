@@ -415,7 +415,7 @@ class Facet extends React.Component{
                     <div class="facet-box">                            
                         {this.createAdvancedSearchCheckBoxes()}                                                
                         <div className="text-center" id="search-facet-show-more-ontology-btn">
-                            <a className="show-more-btn"  onClick={this.handleExactCheckBoxClick}></a>
+                            {this.handleExactCheckBoxClick}
                         </div>                        
                     </div>
                     {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
