@@ -331,7 +331,7 @@ class Facet extends React.Component{
      * Reset facet
      */
     clearFacet(){        
-        this.props.handleChange([], [], [], []);
+        this.props.handleChange([], [], []);
         let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
         for(let checkbox of allFacetCheckBoxes){            
             if(checkbox.dataset.ischecked !== "true"){
