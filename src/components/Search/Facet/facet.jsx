@@ -216,6 +216,8 @@ class Facet extends React.Component{
      * @returns 
      */
     createAdvancedSearchCheckBoxes(){
+        let exactData = this.props.exactData;
+        let obsoletesData = this.props.obsoletesData;
         let result = [];
                 result.push(
                     <div className="row facet-item-row">
