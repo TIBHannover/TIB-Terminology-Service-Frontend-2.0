@@ -226,7 +226,11 @@ class Facet extends React.Component{
                                 <input 
                                     class="form-check-input search-facet-checkbox"
                                     type="checkbox" 
-                                />                    
+                                    value={"Exact Match"}
+                                /> 
+                                <label class="form-check-label">
+                                    {"Exact Match"}
+                                </label>                   
                             </div>                      
                         </div>                
                     </div>
