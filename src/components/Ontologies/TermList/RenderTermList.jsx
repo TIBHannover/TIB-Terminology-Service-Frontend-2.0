@@ -59,6 +59,18 @@ export const RenderTermList = (props) => {
 
     return(
         <div className="tree-view-container list-container">
+                 <div className="row">
+                    <div className="col-sm-12">                       
+                        <JumpTo 
+                            targetType={"term"}
+                            isSkos={props.isSkos}
+                            ontologyId={props.ontologyId}
+                            label={"Jump to"}
+                            handleJumtoSelection={props.handleJumtoSelection}
+                        />
+                        <br></br>
+                    </div>
+                </div> 
                 <div className="row">
                     <div className="col-sm-3 mt-1">
                         <div className="termlist-jumpto-container">
@@ -97,18 +109,7 @@ export const RenderTermList = (props) => {
                         />
                     }
                     </div>
-                </div>    
-                <div className="row">
-                    <div className="col-sm-12">                       
-                        <JumpTo 
-                            targetType={"term"}
-                            isSkos={props.isSkos}
-                            ontologyId={props.ontologyId}
-                            label={"Jump to"}
-                        />
-                        <br></br>
-                    </div>
-                </div>             
+                </div>                               
                 <div className="row class-list-tablle-holder">                                      
                     <table class="table table-striped term-list-table class-list-table" id="class-list-table">
                         {createShowColumnsTags()}                        

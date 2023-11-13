@@ -24,7 +24,8 @@ const TermList = (props) => {
     const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);    
     const [mode, setMode] = useState("terms");
     const [iri, setIri] = useState(iriInUrl);    
-    const [tableIsLoading, setTableIsLoading] = useState(true);    
+    const [tableIsLoading, setTableIsLoading] = useState(true);   
+    const [selectedTermInJumpTo, setSelectedTermInJumpTo] = useState(null); 
     const history = useHistory();
 
 
@@ -98,7 +99,7 @@ const TermList = (props) => {
         setPageNumber(0);
         setPageSize(size);            
         storePageSizeInLocalStorage(pageSize);
-        updateURL(1, size, null);
+        updateURL(1, size, null);        
     }
 
 
@@ -112,6 +113,14 @@ const TermList = (props) => {
                 }
             }
         }
+    }
+
+
+    function handleJumtoSelection(selectedTerm){        
+        if(selectedTerm){
+            updateURL(pageNumber, pageSize, selectedTerm['iri']);
+            setIri(selectedTerm['iri']);
+        }      
     }
 
 
@@ -144,6 +153,7 @@ const TermList = (props) => {
             tableIsLoading={tableIsLoading}            
             listOfTerms={listOfTerms}
             setTableIsLoading={setTableIsLoading}
+            handleJumtoSelection={handleJumtoSelection}
         />
     );
 

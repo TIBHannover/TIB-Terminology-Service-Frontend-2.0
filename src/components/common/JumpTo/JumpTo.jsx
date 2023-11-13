@@ -44,6 +44,7 @@ const JumpTo = (props) => {
 
     function clearAutoComplete(){        
         setResultList([]);
+        props.handleJumtoSelection(null);
     }
 
 
@@ -51,7 +52,8 @@ const JumpTo = (props) => {
         let autoCompleteSelectedTerm = selectedTerm;
         autoCompleteSelectedTerm['iri'] = resultList[suggestionIndex]['iri'];
         autoCompleteSelectedTerm['label'] = resultList[suggestionIndex]['label'];
-        setSelectedTerm(autoCompleteSelectedTerm);    
+        setSelectedTerm(autoCompleteSelectedTerm);
+        props.handleJumtoSelection(autoCompleteSelectedTerm);   
     }
 
 
