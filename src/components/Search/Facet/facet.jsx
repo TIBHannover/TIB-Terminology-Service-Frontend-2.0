@@ -218,25 +218,38 @@ class Facet extends React.Component{
      * @returns 
      */
     createAdvancedSearchCheckBoxes(){
-        let result = [];
-                result.push(
-                    <div className="row facet-item-row">
-                        <div className='col-sm-9'>
-                            <div class="form-check">
-                                <input 
-                                    class="form-check-input search-facet-checkbox"
-                                    type="checkbox" 
-                                    value={"Exact Results"}
-                                    onClick={this.handleExactCheckboxClick}
-                                /> 
-                                <label class="form-check-label">
-                                    {"Exact Results"}
-                                </label>                   
-                            </div>                      
-                        </div>                
-                    </div>
-                );
-        return result;
+      <div>
+        <div className="row facet-item-row">
+            <div className='col-sm-9'>
+                <div class="form-check">
+                    <input 
+                        class="form-check-input search-facet-checkbox"
+                        type="checkbox" 
+                        value={"Exact Results"}
+                        onClick={this.handleExactCheckboxClick}
+                    /> 
+                    <label class="form-check-label">
+                        {"Exact Results"}
+                    </label>                   
+                </div>                     
+            </div>               
+        </div>
+        <div className="row facet-item-row">
+           <div className='col-sm-9'>
+                <div class="form-check">
+                    <input 
+                        class="form-check-input search-facet-checkbox"
+                        type="checkbox" 
+                        value={"Obsolete Results"}
+                        onClick={this.handleObsoletesCheckboxClick}
+                    /> 
+                    <label class="form-check-label">
+                        {"Obsolete Results"}
+                    </label>                   
+                </div> 
+            </div> 
+        </div>
+      </div>                    
     }
 
 
@@ -425,10 +438,7 @@ class Facet extends React.Component{
                     </div>
                     <h4>{"Advanced Search"}</h4>
                     <div class="facet-box">                            
-                        {this.createAdvancedSearchCheckBoxes()}                                                
-                        <div className="text-center" id="search-facet-show-more-ontology-btn">
-                            {this.handleExactCheckBoxClick}
-                        </div>                        
+                        {this.createAdvancedSearchCheckBoxes()}                                                                       
                     </div>
                     {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
                     <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
