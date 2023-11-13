@@ -26,6 +26,7 @@ class Facet extends React.Component{
         this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
         this.clearFacet = this.clearFacet.bind(this);
         this.createAdvancedSearchCheckBoxes = this.createAdvancedSearchCheckBoxes.bind(this);
+        this.handleExactCheckBoxClick = this.handleExactCheckBoxClick.bind(this);
     }
 
     
@@ -216,7 +217,6 @@ class Facet extends React.Component{
      * @returns 
      */
     createAdvancedSearchCheckBoxes(){
-        let exactData = this.props.exactData;
         let obsoletesData = this.props.obsoletesData;
         let result = [];
                 result.push(
@@ -226,16 +226,30 @@ class Facet extends React.Component{
                                 <input 
                                     class="form-check-input search-facet-checkbox"
                                     type="checkbox" 
-                                    value={"Exact Match"}
+                                    value={"Exact Results"}
+                                    onClick={this.handleExactCheckboxClick}
                                 /> 
                                 <label class="form-check-label">
-                                    {"Exact Match"}
+                                    {"Exact Results"}
                                 </label>                   
                             </div>                      
                         </div>                
                     </div>
                 );
         return result;
+    }
+
+
+    /**
+     * Handle click on advanced search to exact results
+     */
+    handleExactCheckBoxClick(e){
+        let exactData = this.props.exactData;
+        if(e.target.checked){
+            exactData.push(e.target.value);
+        }
+        this.props.handleChange(exactData, this.props.selectedCollections, this.props.selectedOntologies, this.props.selectedTypes);
+        this.setState({isLoading: true});            
     }
 
     
@@ -315,7 +329,7 @@ class Facet extends React.Component{
      * Reset facet
      */
     clearFacet(){        
-        this.props.handleChange([], [], []);
+        this.props.handleChange([], [], [], []);
         let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
         for(let checkbox of allFacetCheckBoxes){            
             if(checkbox.dataset.ischecked !== "true"){
@@ -362,8 +376,8 @@ class Facet extends React.Component{
                 
         let currentUrl = this.state.currentUrl;
         if(currentUrl !== window.location.href){
-            this.setComponentData();            
-        }     
+            this.setComponentData();          
+        }    
     }
 
 
@@ -401,7 +415,7 @@ class Facet extends React.Component{
                     <div class="facet-box">                            
                         {this.createAdvancedSearchCheckBoxes()}                                                
                         <div className="text-center" id="search-facet-show-more-ontology-btn">
-                            <a className="show-more-btn"  onClick={''}>{}</a>
+                            <a className="show-more-btn"  onClick={this.handleExactCheckBoxClick}></a>
                         </div>                        
                     </div>
                     {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
