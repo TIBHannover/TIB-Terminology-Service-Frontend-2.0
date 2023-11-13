@@ -2549,3 +2549,27 @@ Media Query Area for bein responsive
     margin-top: 4px !important;
     margin-left: 2px !important;
 }
+
+.autosuggest-jumpto-container {
+    position: relative;
+}
+  
+.autosuggest-jumpto-container label {
+    position: absolute;    
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white; 
+    padding: 2px 5px;
+    margin-left: 1px;    
+    z-index: 1;
+    background-color: rgb(214, 214, 214);
+}
+  
+.autosuggest-jumpto-container input {
+    padding-left: 80px; 
+}
+
+.form-check-input:checked{
+    background-color: #404040;
+    border-color: #404040;
+}

@@ -1,10 +1,8 @@
 import {useEffect, useState} from "react";
 import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
-// import JumpTo from "../JumpTo/Jumpto";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
-import Autosuggest from 'react-autosuggest';
 
 
 
@@ -62,12 +60,15 @@ export const RenderTermList = (props) => {
     return(
         <div className="tree-view-container list-container">
                 <div className="row">
-                    <div className="col-sm-4">
+                    <div className="col-sm-3 mt-1">
                         <div className="termlist-jumpto-container">
-                            
+                              <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="obsolte_check" />
+                                <label class="form-check-label" for="obsolte_check">Only show obsoltes</label>
+                            </div>
                         </div>                    
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-3">
                         {!props.iri && 
                             <DropDown 
                                 options={PAGE_SIZES_FOR_DROPDOWN}
@@ -82,7 +83,7 @@ export const RenderTermList = (props) => {
                             <button className='btn btn-secondary ml-2' onClick={props.resetList}>Show All Classes</button> 
                         }
                     </div>
-                    <div className="col-sm-3 text-right number-of-result-text-container">
+                    <div className="col-sm-3 text-right mt-1">
                         {!props.iri && 
                             <b>{"Showing " + (props.pageNumber * props.pageSize + 1) + " - " + ((props.pageNumber + 1) * props.pageSize) + " of " + props.totalNumberOfTerms + " Classes"}</b>
                         }
@@ -98,29 +99,14 @@ export const RenderTermList = (props) => {
                     </div>
                 </div>    
                 <div className="row">
-                    <div className="col-sm-12">
-                        {/* <JumpTo                        
-                            ontologyId={props.ontologyId}                                
-                            isSkos={props.isSkos}
-                            componentIdentity={props.componentIdentity}
-                            containerBootstrapClass="col-sm-12"
-                        /> */}
-                        {/* <label className="required_input" for="noteIri">About</label>                                            
-                        <Autosuggest
-                            suggestions={this.state.autoCompleteSuggestionsList}
-                            onSuggestionsFetchRequested={this.onAutoCompleteChange}
-                            onSuggestionsClearRequested={this.clearAutoComplete}
-                            getSuggestionValue={constantsVars.getAutoCompleteValue}
-                            renderSuggestion={constantsVars.rendetAutoCompleteItem}
-                            onSuggestionSelected={this.onAutoCompleteSelecteion}
-                            inputProps={inputPropsAutoSuggest}
-                        /> */}
+                    <div className="col-sm-12">                       
                         <JumpTo 
                             targetType={"term"}
                             isSkos={props.isSkos}
                             ontologyId={props.ontologyId}
                             label={"Jump to"}
                         />
+                        <br></br>
                     </div>
                 </div>             
                 <div className="row class-list-tablle-holder">                                      

@@ -429,6 +429,11 @@ p{
     padding-left: 80px; 
 }
 
+.form-check-input:checked{
+    background-color: #404040;
+    border-color: #404040;
+}
+
 
 /* 
 ------------------------
