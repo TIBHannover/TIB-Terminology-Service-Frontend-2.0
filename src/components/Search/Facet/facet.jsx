@@ -27,6 +27,7 @@ class Facet extends React.Component{
         this.clearFacet = this.clearFacet.bind(this);
         this.createAdvancedSearchCheckBoxes = this.createAdvancedSearchCheckBoxes.bind(this);
         this.handleExactCheckBoxClick = this.handleExactCheckBoxClick.bind(this);
+        this.handleObsoletesCheckBoxClick = this.handleObsoletesCheckBoxClick.bind(this);
     }
 
     
@@ -217,7 +218,6 @@ class Facet extends React.Component{
      * @returns 
      */
     createAdvancedSearchCheckBoxes(){
-        let obsoletesData = this.props.obsoletesData;
         let result = [];
                 result.push(
                     <div className="row facet-item-row">
@@ -249,6 +249,18 @@ class Facet extends React.Component{
             exactData.push(e.target.value);
         }
         this.props.handleChange(exactData, this.props.selectedCollections, this.props.selectedOntologies, this.props.selectedTypes);
+        this.setState({isLoading: true});            
+    }
+
+    /**
+     * Handle click on advanced search to exact results
+     */
+    handleObsoletesCheckBoxClick(e){
+        let obsoletesData = this.props.obsoletesData;
+        if(e.target.checked){
+            obsoletesData.push(e.target.value);
+        }
+        this.props.handleChange(obsoletesData, this.props.exactData, this.props.selectedCollections, this.props.selectedOntologies, this.props.selectedTypes);
         this.setState({isLoading: true});            
     }
 
