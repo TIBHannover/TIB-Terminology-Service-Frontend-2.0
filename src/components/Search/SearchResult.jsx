@@ -200,12 +200,7 @@ class SearchResult extends React.Component{
  */
 async handleExact(){
   if(this.state.enteredTerm.length > 0){
-    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=true&rows=" + this.state.pageSize;
-    let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);      
-    collectionOntologies.forEach(onto => {
-      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-    });
-    
+    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=true&rows=" + this.state.pageSize; 
     let exactResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
@@ -221,11 +216,6 @@ async handleExact(){
 async handleObsolete(){
   if(this.state.enteredTerm.length > 0){
     let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&obsoletes=true&rows=" + this.state.pageSize;
-    let collectionOntologies = await getCollectionOntologies([process.env.REACT_APP_PROJECT_NAME], false);      
-    collectionOntologies.forEach(onto => {
-      searchUrl = searchUrl + `&ontology=${onto["ontologyId"].toLowerCase()}`
-    });
-    
     let obsoletesResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
     obsoletesResult = (await obsoletesResult.json())['response']['docs'];
     this.setState({
