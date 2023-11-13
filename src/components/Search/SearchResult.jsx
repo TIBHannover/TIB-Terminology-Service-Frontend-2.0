@@ -507,7 +507,9 @@ createSearchResultList () {
               {(this.state.searchResult.length > 0 || (this.state.searchResult.length === 0 && this.state.facetIsSelected)) &&
                 <Facet
                   facetData = {this.state.facetFields}
-                  handleChange = {this.runSearch}              
+                  handleChange = {this.runSearch} 
+                  handleExact = {this.handleExact}
+                  handleObsolete = {this.handleObsolete}             
                   selectedCollections = {this.state.selectedCollections}
                   selectedOntologies = {this.state.selectedOntologies}
                   selectedTypes = {this.state.selectedTypes}

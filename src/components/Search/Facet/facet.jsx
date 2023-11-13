@@ -26,8 +26,6 @@ class Facet extends React.Component{
         this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
         this.clearFacet = this.clearFacet.bind(this);
         this.createAdvancedSearchCheckBoxes = this.createAdvancedSearchCheckBoxes.bind(this);
-        this.handleExactCheckBoxClick = this.handleExactCheckBoxClick.bind(this);
-        this.handleObsoletesCheckBoxClick = this.handleObsoletesCheckBoxClick.bind(this);
     }
 
     
@@ -228,7 +226,7 @@ class Facet extends React.Component{
                             class="form-check-input search-facet-checkbox"
                             type="checkbox" 
                             value={"Exact Results"}
-                            onClick={this.handleExactCheckboxClick}
+                            onClick={this.props.handleExact}
                         /> 
                         <label class="form-check-label">
                             {"Exact Results"}
@@ -243,7 +241,7 @@ class Facet extends React.Component{
                             class="form-check-input search-facet-checkbox"
                             type="checkbox" 
                             value={"Obsolete Results"}
-                            onClick={this.handleObsoletesCheckboxClick}
+                            onClick={this.props.handleObsolete}
                         /> 
                         <label class="form-check-label">
                             {"Obsolete Results"}
@@ -254,31 +252,6 @@ class Facet extends React.Component{
             </div> 
          );
          return result;                      
-    }
-
-
-    /**
-     * Handle click on advanced search to exact results
-     */
-    handleExactCheckBoxClick(e){
-        let exactData = this.props.exactData;
-        if(e.target.checked){
-            exactData.push(e.target.value);
-        }
-        this.props.handleChange(exactData, this.props.selectedCollections, this.props.selectedOntologies, this.props.selectedTypes);
-        this.setState({isLoading: true});            
-    }
-
-    /**
-     * Handle click on advanced search to exact results
-     */
-    handleObsoletesCheckBoxClick(e){
-        let obsoletesData = this.props.obsoletesData;
-        if(e.target.checked){
-            obsoletesData.push(e.target.value);
-        }
-        this.props.handleChange(obsoletesData, this.props.exactData, this.props.selectedCollections, this.props.selectedOntologies, this.props.selectedTypes);
-        this.setState({isLoading: true});            
     }
 
     
