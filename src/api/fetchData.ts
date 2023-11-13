@@ -504,6 +504,23 @@ export async function getAutoCompleteResult(enteredTerm:string, ontologyId:strin
 
 }
 
+export async function getObsoleteTermsForTermList(ontologyId:string, termType:string, page:any, size:any) {
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/";  
+    url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=" + size + "&page=" + page;    
+    let res =  await (await fetch(url, getCallSetting)).json();
+    let totalTermsCount = res['page']['totalElements'];
+    res = res['_embedded'];
+    return {"results": res['terms'], "totalTermsCount":totalTermsCount };
+  }
+  catch(e){
+    return {"results": [], "totalTermsCount":0};
+  }
+  
+}
+
+
 
 async function getPageCount(url: string){
   let answer = await fetch(url, getCallSetting);

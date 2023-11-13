@@ -75,8 +75,13 @@ export const RenderTermList = (props) => {
                     <div className="col-sm-3 mt-1">
                         <div className="termlist-jumpto-container">
                               <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="obsolte_check" />
-                                <label class="form-check-label" for="obsolte_check">Only show obsoltes</label>
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    id="obsolte_check_term_list" 
+                                    onChange={props.obsoletesCheckboxHandler}                                         
+                                />
+                                <label class="form-check-label" for="obsolte_check_term_list">Only show obsoltes</label>
                             </div>
                         </div>                    
                     </div>
