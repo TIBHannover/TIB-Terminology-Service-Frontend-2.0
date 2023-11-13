@@ -1,8 +1,10 @@
 import {useEffect, useState} from "react";
 import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
-import JumpTo from "../JumpTo/Jumpto";
+// import JumpTo from "../JumpTo/Jumpto";
+import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
+import Autosuggest from 'react-autosuggest';
 
 
 
@@ -62,12 +64,7 @@ export const RenderTermList = (props) => {
                 <div className="row">
                     <div className="col-sm-4">
                         <div className="termlist-jumpto-container">
-                            <JumpTo                        
-                                ontologyId={props.ontologyId}                                
-                                isSkos={props.isSkos}
-                                componentIdentity={props.componentIdentity}
-                                containerBootstrapClass="col-sm-12"
-                            />
+                            
                         </div>                    
                     </div>
                     <div className="col-sm-2">
@@ -99,7 +96,33 @@ export const RenderTermList = (props) => {
                         />
                     }
                     </div>
-                </div>                 
+                </div>    
+                <div className="row">
+                    <div className="col-sm-12">
+                        {/* <JumpTo                        
+                            ontologyId={props.ontologyId}                                
+                            isSkos={props.isSkos}
+                            componentIdentity={props.componentIdentity}
+                            containerBootstrapClass="col-sm-12"
+                        /> */}
+                        {/* <label className="required_input" for="noteIri">About</label>                                            
+                        <Autosuggest
+                            suggestions={this.state.autoCompleteSuggestionsList}
+                            onSuggestionsFetchRequested={this.onAutoCompleteChange}
+                            onSuggestionsClearRequested={this.clearAutoComplete}
+                            getSuggestionValue={constantsVars.getAutoCompleteValue}
+                            renderSuggestion={constantsVars.rendetAutoCompleteItem}
+                            onSuggestionSelected={this.onAutoCompleteSelecteion}
+                            inputProps={inputPropsAutoSuggest}
+                        /> */}
+                        <JumpTo 
+                            targetType={"term"}
+                            isSkos={props.isSkos}
+                            ontologyId={props.ontologyId}
+                            label={"Jump to"}
+                        />
+                    </div>
+                </div>             
                 <div className="row class-list-tablle-holder">                                      
                     <table class="table table-striped term-list-table class-list-table" id="class-list-table">
                         {createShowColumnsTags()}                        
