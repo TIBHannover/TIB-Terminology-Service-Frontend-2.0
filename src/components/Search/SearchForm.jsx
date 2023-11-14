@@ -11,6 +11,8 @@ class SearchForm extends React.Component{
           enteredTerm: "",
           result: false,
           clickInfo: false,
+          exact: true,
+          obsoletes: true,
           searchResult: [],
           ontoSearchResult: [],
           jumpResult: [],
@@ -29,6 +31,7 @@ class SearchForm extends React.Component{
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
+        this.handleExactButton = this.handleExactButton.bind(this);
       }
 
       setComponentData(){
@@ -234,6 +237,15 @@ class SearchForm extends React.Component{
           }          
         })       
       }
+
+    /**
+     * handling the exact match button
+     */
+    handleExactButton(e){
+      let url = new URL(window.location);
+      url.searchParams.append('exact', this.state.exact); 
+      window.location.replace(url);        
+    }
     
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
@@ -335,7 +347,7 @@ class SearchForm extends React.Component{
                   </div>
                 </div>}
 
-                <input type="checkbox" className='label-pos' value="exact match" onClick={''}/><label className="exact-label">Exact Match</label> 
+                <input type="checkbox" className='label-pos' value="exact match" onClick={this.handleExactButton}/><label className="exact-label">Exact Match</label> 
 
                 <input type="checkbox" className='label-pos' value="Obsolete results" onClick={''}/><label className="exact-label">Include Obsolete terms</label>
 
