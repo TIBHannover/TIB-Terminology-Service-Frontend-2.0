@@ -322,9 +322,6 @@ class SearchForm extends React.Component{
                     <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
                   </div>
                 </div>
-                <input type="checkbox" value="exact match"/><label>Exact Match</label> 
-                
-                <input type="checkbox" value="Obsolete results"/><label>Include Obsolete terms</label>
                                       
                 {this.state.result &&
                 <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
@@ -337,6 +334,11 @@ class SearchForm extends React.Component{
                     {this.createJumpResultList()}
                   </div>
                 </div>}
+
+                <input type="checkbox" value="exact match" onClick={''}/><label>Exact Match</label> 
+
+                <input type="checkbox" value="Obsolete results" onClick={''}/><label>Include Obsolete terms</label>
+                
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
                  <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
