@@ -507,14 +507,10 @@ createSearchResultList () {
               {(this.state.searchResult.length > 0 || (this.state.searchResult.length === 0 && this.state.facetIsSelected)) &&
                 <Facet
                   facetData = {this.state.facetFields}
-                  handleChange = {this.runSearch} 
-                  handleExact = {this.handleExact}
-                  handleObsolete = {this.handleObsolete}             
+                  handleChange = {this.runSearch}             
                   selectedCollections = {this.state.selectedCollections}
                   selectedOntologies = {this.state.selectedOntologies}
                   selectedTypes = {this.state.selectedTypes}
-                  exactData = {this.state.exactResult}
-                  obsoletesData = {this.state.obsoletesResult}
                 />
               }              
             </div>
