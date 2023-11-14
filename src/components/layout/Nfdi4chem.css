@@ -500,7 +500,7 @@ p{
 
  @media only screen and (min-width: 1200px) {
     .header-wrapper{
-        max-height: 220px;
+        max-height: 240px;
      }
   }
  
@@ -952,6 +952,19 @@ p{
 .search-in-box{
     background-color: #DFE4E5;
     display: inline-block;
+}
+
+.exact-label{
+    color: #eeee;
+    float: left;
+    margin-top: 7.5px;
+    margin-left: 10px;
+}
+
+.label-pos{
+    float: left;
+    margin-top: 11px;
+    margin-left: 10px;
 }
 
 
