@@ -335,10 +335,10 @@ class SearchForm extends React.Component{
                   </div>
                 </div>}
 
-                <input type="checkbox" value="exact match" onClick={''}/><label>Exact Match</label> 
+                <input type="checkbox" className='label-pos' value="exact match" onClick={''}/><label className="exact-label">Exact Match</label> 
 
-                <input type="checkbox" value="Obsolete results" onClick={''}/><label>Include Obsolete terms</label>
-                
+                <input type="checkbox" className='label-pos' value="Obsolete results" onClick={''}/><label className="exact-label">Include Obsolete terms</label>
+
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
                  <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
