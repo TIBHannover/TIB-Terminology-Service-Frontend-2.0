@@ -64,6 +64,7 @@ export const RenderTermList = (props) => {
                     </div>
                 </div> 
                 <div className="row">
+                    {!props.iri && 
                     <div className="col-sm-3 mt-1">
                         <div className="termlist-jumpto-container">
                               <div class="form-group form-check">
@@ -76,7 +77,7 @@ export const RenderTermList = (props) => {
                                 <label class="form-check-label" for="obsolte_check_term_list">Only show obsoletes</label>
                             </div>
                         </div>                    
-                    </div>
+                    </div>}
                     <div className="col-sm-3">
                         {!props.iri && 
                             <DropDown 
