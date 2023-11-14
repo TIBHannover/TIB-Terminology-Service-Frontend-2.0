@@ -487,11 +487,14 @@ export async function getIndividualInstancesForClass(ontologyId:string, classIri
 }
 
 
-export async function getAutoCompleteResult(enteredTerm:string, ontologyId:string, type:string){
+export async function getAutoCompleteResult(enteredTerm:string, ontologyId:string, type:string, obsoletes:any = null){
   try{
     let autocompleteApiBaseUrl = <any> process.env.REACT_APP_SEARCH_URL;
     autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
-    let url = `${autocompleteApiBaseUrl}?q=${enteredTerm}&ontology=${ontologyId}&type=${type}&rows=10`;
+    let url = `${autocompleteApiBaseUrl}?q=${enteredTerm}&ontology=${ontologyId}&type=${type}&rows=10`;    
+    if(obsoletes){
+      url += "&obsoletes=true";
+    }    
     let result = await fetch(url, getCallSetting);
     result = await result.json();
     result = result['response']['docs'];

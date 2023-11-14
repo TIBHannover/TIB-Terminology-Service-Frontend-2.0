@@ -59,6 +59,7 @@ export const RenderTermList = (props) => {
                             ontologyId={props.ontologyId}
                             label={"Jump to"}
                             handleJumtoSelection={props.handleJumtoSelection}
+                            obsoletes={props.isObsolete}
                         />
                         <br></br>
                     </div>
@@ -86,7 +87,7 @@ export const RenderTermList = (props) => {
                                 containerClass="result-per-page-dropdown-container"
                                 dropDownTitle="Result Per Page"
                                 dropDownValue={props.pageSize}
-                                dropDownChangeHandler={props.handlePageSizeDropDownChange}
+                                dropDownChangeHandler={props.handlePageSizeDropDownChange}                                
                             />                        
                         }
                         {props.iri &&                            
