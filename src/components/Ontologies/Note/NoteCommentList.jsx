@@ -39,7 +39,7 @@ class NoteCommnentList extends React.Component{
         for (let comment of comments){            
             result.push(
                 <RowWithSingleColumn 
-                    content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
+                    content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton}  ontologyId={this.props.ontologyId}/>}
                     columnClass="col-sm-12"
                     rowClass="note-comment-card"                    
                 />         
