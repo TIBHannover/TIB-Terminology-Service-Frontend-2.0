@@ -342,7 +342,7 @@ class NoteList extends React.Component{
                             </div>
                         </div>
                         <br></br>
-                        <NoteDetail noteId={this.state.selectedNoteId} />
+                        <NoteDetail noteId={this.state.selectedNoteId}  ontologyId={this.props.ontology.ontologyId}/>
                     </span>                    
                 }                
             </div>

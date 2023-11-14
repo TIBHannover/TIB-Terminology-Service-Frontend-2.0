@@ -99,7 +99,8 @@ class NoteDetail extends React.Component{
                 {this.create_note_card()}                
                 <NoteCommnentList 
                     note={this.state.note}  
-                    noteDetailReloader={this.reloadNoteDetail}    
+                    noteDetailReloader={this.reloadNoteDetail}
+                    ontologyId={this.props.ontologyId}    
                 />
             </span>  
         );

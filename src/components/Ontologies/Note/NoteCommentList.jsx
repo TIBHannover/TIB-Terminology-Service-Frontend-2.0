@@ -125,7 +125,7 @@ class NoteCommnentList extends React.Component{
             return;
         }
 
-        let data = {'commentId': this.state.editCommentId, 'content': commentContent};
+        let data = {'commentId': this.state.editCommentId, 'content': commentContent, 'ontologyId': this.props.ontologyId};
         editNoteComment(data).then((result) => {
             if(result){                
                 this.setState({
