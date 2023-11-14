@@ -126,6 +126,7 @@ const TermList = (props) => {
 
     function obsoletesCheckboxHandler(e){        
         setObsoletes(e.target.checked);
+        setPageNumber(0);
     }
 
 
