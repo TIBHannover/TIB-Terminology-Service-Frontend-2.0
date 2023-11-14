@@ -143,6 +143,9 @@ const TermList = (props) => {
         setListOfTerms([]);   
         loadComponent();
         hideHiddenColumnsOnLoad();
+        if(obsoletes && document.getElementById("obsolte_check_term_list")){
+            document.getElementById("obsolte_check_term_list").checked = true;
+        }  
         updateURL();               
     }, [pageNumber, pageSize, iri, obsoletes]);
 
