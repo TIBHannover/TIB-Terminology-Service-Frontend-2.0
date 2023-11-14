@@ -113,7 +113,7 @@ class SearchResult extends React.Component{
  async runSearch(ontologies, types, collections, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
   let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
-  let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `exact=${this.state.exact}` + `obsoletes=${this.state.obsoletes}`;
+  let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
   let collectionOntologies = [];
   let facetSelected = true;
   let facetData = this.state.facetFields;

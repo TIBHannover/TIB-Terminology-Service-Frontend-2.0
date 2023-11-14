@@ -11,8 +11,8 @@ class SearchForm extends React.Component{
           enteredTerm: "",
           result: false,
           clickInfo: false,
-          exact: true,
-          obsoletes: true,
+          exact: false,
+          obsoletes: false,
           searchResult: [],
           ontoSearchResult: [],
           jumpResult: [],
@@ -31,6 +31,8 @@ class SearchForm extends React.Component{
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.urlOnto = this.urlOnto.bind(this);
         this.setComponentData = this.setComponentData.bind(this);
+        this.exactHandler = this.exactHandler.bind(this);
+        this.obsoletesHandler = this.obsoletesHandler.bind(this);
       }
 
       setComponentData(){
@@ -206,6 +208,28 @@ class SearchForm extends React.Component{
         }
     }
 
+    exactHandler(e){
+      let url = new URL(window.location);
+      if(e.target.checked){      
+        url.searchParams.append('exact', true);
+      }
+      else{
+        url.searchParams.delete('exact');
+      }
+      window.location.replace(url);
+    }
+
+    obsoletesHandler(e){
+      let url = new URL(window.location);
+      if(e.target.checked){      
+        url.searchParams.append('obsoletes', true);
+      }
+      else{
+        url.searchParams.delete('obsoletes');
+      }
+      window.location.replace(url);
+    }
+
     submitJumpHandler(e){
       for(let item of this.state.jumpResult){
       window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item['ontology_name'] + '/terms?iri=' + item['iri']);
@@ -338,9 +362,9 @@ class SearchForm extends React.Component{
                   </div>
                 </div>}
 
-                <input type="checkbox" className='label-pos' value="exact match" onClick={''}/><label className="exact-label">Exact Match</label> 
+                <input type="checkbox" className='label-pos' value="exact match" onClick={this.exactHandler}/><label className="exact-label">Exact Match</label> 
 
-                <input type="checkbox" className='label-pos' value="Obsolete results" onClick={''}/><label className="exact-label">Include Obsolete terms</label>
+                <input type="checkbox" className='label-pos' value="Obsolete results" onClick={this.obsoletesHandler}/><label className="exact-label">Include Obsolete terms</label>
 
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
