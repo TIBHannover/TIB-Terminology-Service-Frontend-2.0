@@ -27,24 +27,11 @@ export const RenderTermList = (props) => {
                 getSubClassOf(term['iri'], term['ontology_name']),
                 getEqAxiom(term['iri'], term['ontology_name'])
             ]);
-            result.push(
-                <tr>
-                    <td className="label-col text-break">
-                        <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
-                            {term['label']}
-                        </a>                        
-                    </td>
-                    <td className="id-col text-break">{term['short_form']}</td>
-                    <td className="des-col text-break">{term['description'] ? term['description'] : ""}</td>
-                    <td className="alt-term-col text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
-                    <td className="sub-class-col text-break"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
-                    <td className="eqv-col text-break"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
-                    <td className="ex-usage-col text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
-                    <td className="see-also-col text-break">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
-                    <td className="contrib-col text-break">{setContributorField(term)}</td>
-                    <td className="comment-col text-break">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
-                </tr>
-            );
+            let tableBodyContent = !props.isObsolete 
+                                    ? createTableBody(term, termTreeUrl, subclassOfText, equivalentToText)
+                                    : createTableBodyForObsoletes(term, termTreeUrl, subclassOfText, equivalentToText)
+
+            result.push(tableBodyContent);
         }
         setTableBodyContent(result); 
         props.setTableIsLoading(false);         
@@ -86,7 +73,7 @@ export const RenderTermList = (props) => {
                                     id="obsolte_check_term_list" 
                                     onChange={props.obsoletesCheckboxHandler}                                         
                                 />
-                                <label class="form-check-label" for="obsolte_check_term_list">Only show obsoltes</label>
+                                <label class="form-check-label" for="obsolte_check_term_list">Only show obsoletes</label>
                             </div>
                         </div>                    
                     </div>
@@ -124,7 +111,7 @@ export const RenderTermList = (props) => {
                     {!noResultFlag && 
                         <table class="table table-striped term-list-table class-list-table" id="class-list-table">
                             {createShowColumnsTags()}                        
-                            {createClassListTableHeader()}
+                            {!props.isObsolete ? createClassListTableHeader() : createClassListTableHeaderForObsoletes()}
                             <tbody>
                                 {props.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
                                 {!props.tableIsLoading && tableBodyContent}               
@@ -138,13 +125,11 @@ export const RenderTermList = (props) => {
                         message="No Class Found! "
                         alertColumnClass="col-sm-12"
                     />
-
                 }
 
             </div>
     );
 }
-
 
 
 
@@ -166,6 +151,71 @@ function createClassListTableHeader(){
         </thead>
     ];
 }
+
+
+function createClassListTableHeaderForObsoletes(){
+    return [
+        <thead>
+            <tr>                
+                <th scope="col" className="label-col">Label <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="comment-col">Comment <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th> 
+                <th scope="col" className="id-col">ID <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="des-col">Description <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="alt-term-col">Alternative Term <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                {/* <th scope="col" className="sub-class-col">SubClass Of <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th> */}
+                <th scope="col" className="eqv-col">Equivalent to <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="ex-usage-col">Example of usage <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="see-also-col">See Also <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="contrib-col">Contributor <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>                
+            </tr>
+        </thead>
+    ];
+}
+
+
+function createTableBody(term, termTreeUrl, subclassOfText, equivalentToText){
+    return (
+        <tr>
+            <td className="label-col text-break">
+                <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
+                    {term['label']}
+                </a>                        
+            </td>
+            <td className="id-col text-break">{term['short_form']}</td>
+            <td className="des-col text-break">{term['description'] ? term['description'] : ""}</td>
+            <td className="alt-term-col text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
+            <td className="sub-class-col text-break"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
+            <td className="eqv-col text-break"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
+            <td className="ex-usage-col text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
+            <td className="see-also-col text-break">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+            <td className="contrib-col text-break">{setContributorField(term)}</td>
+            <td className="comment-col text-break">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
+        </tr>        
+    );
+}
+
+
+function createTableBodyForObsoletes(term, termTreeUrl, subclassOfText, equivalentToText){
+    return (
+        <tr>
+            <td className="label-col text-break">
+                <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
+                    {term['label']}
+                </a>                        
+            </td>
+            <td className="comment-col text-break">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
+            <td className="id-col text-break">{term['short_form']}</td>
+            <td className="des-col text-break">{term['description'] ? term['description'] : ""}</td>
+            <td className="alt-term-col text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
+            {/* <td className="sub-class-col text-break"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td> */}
+            <td className="eqv-col text-break"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
+            <td className="ex-usage-col text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
+            <td className="see-also-col text-break">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+            <td className="contrib-col text-break">{setContributorField(term)}</td>            
+        </tr>        
+    );
+}
+
 
 
 function createShowColumnsTags(){

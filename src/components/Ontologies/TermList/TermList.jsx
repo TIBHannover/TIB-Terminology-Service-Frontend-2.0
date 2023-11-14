@@ -165,6 +165,7 @@ const TermList = (props) => {
             setTableIsLoading={setTableIsLoading}
             handleJumtoSelection={handleJumtoSelection}
             obsoletesCheckboxHandler={obsoletesCheckboxHandler}
+            isObsolete={obsoletes}
         />
     );
 
