@@ -29,7 +29,9 @@ class SearchResult extends React.Component{
           totalResults: [],
           expandedResults: [],
           totalResultsCount: [],
-          facetIsSelected: false
+          facetIsSelected: false,
+          exact: false,
+          obsoletes: false
         })
         this.createSearchResultList = this.createSearchResultList.bind(this);
         this.handlePagination = this.handlePagination.bind(this);        
@@ -111,7 +113,7 @@ class SearchResult extends React.Component{
  async runSearch(ontologies, types, collections, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
   let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
-  let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
+  let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `exact=${this.state.exact}` + `obsoletes=${this.state.obsoletes}`;
   let collectionOntologies = [];
   let facetSelected = true;
   let facetData = this.state.facetFields;
@@ -317,8 +319,9 @@ createSearchResultList () {
     for(let col of collections){
       currentUrlParams.append('collection', col);
     }
-    
     currentUrlParams.append('page', this.state.pageNumber);
+    currentUrlParams.append('exact', this.state.exact);
+    currentUrlParams.append('obsoletes', this.state.obsoletes);
     this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
