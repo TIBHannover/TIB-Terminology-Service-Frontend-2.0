@@ -3,6 +3,7 @@ import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 
@@ -13,6 +14,7 @@ const PAGE_SIZES_FOR_DROPDOWN = [{label: "20", value:20}, {label: "30", value:30
 
 export const RenderTermList = (props) => {
     const [tableBodyContent, setTableBodyContent] = useState("");
+    const [noResultFlag, setNoResultFlag] = useState(false); 
 
 
     async function createList(){
@@ -44,16 +46,19 @@ export const RenderTermList = (props) => {
                 </tr>
             );
         }
-        
-        if(result.length !== 0){
-            setTableBodyContent(result);
-            props.setTableIsLoading(false);
-        }                
+        setTableBodyContent(result); 
+        props.setTableIsLoading(false);         
     }
 
 
     useEffect(() => {
-        createList();
+        if(props.listOfTerms.length !== 0){            
+            setNoResultFlag(false);
+            createList();            
+        }
+        else if(!props.iri){
+            setNoResultFlag(true);            
+        }
     }, [props.listOfTerms]);
 
 
@@ -116,15 +121,26 @@ export const RenderTermList = (props) => {
                     </div>
                 </div>                               
                 <div className="row class-list-tablle-holder">                                      
-                    <table class="table table-striped term-list-table class-list-table" id="class-list-table">
-                        {createShowColumnsTags()}                        
-                        {createClassListTableHeader()}
-                        <tbody>
-                            {props.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
-                            {!props.tableIsLoading && tableBodyContent}               
-                        </tbody>
-                    </table>
+                    {!noResultFlag && 
+                        <table class="table table-striped term-list-table class-list-table" id="class-list-table">
+                            {createShowColumnsTags()}                        
+                            {createClassListTableHeader()}
+                            <tbody>
+                                {props.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
+                                {!props.tableIsLoading && tableBodyContent}               
+                            </tbody>
+                        </table>
+                    }                    
                 </div>
+                {noResultFlag &&
+                    <AlertBox 
+                        type="info" 
+                        message="No Class Found! "
+                        alertColumnClass="col-sm-12"
+                    />
+
+                }
+
             </div>
     );
 }
