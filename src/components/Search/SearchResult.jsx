@@ -320,8 +320,6 @@ createSearchResultList () {
       currentUrlParams.append('collection', col);
     }
     currentUrlParams.append('page', this.state.pageNumber);
-    currentUrlParams.append('exact', this.state.exact);
-    currentUrlParams.append('obsoletes', this.state.obsoletes);
     this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
