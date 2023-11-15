@@ -213,10 +213,10 @@ class SearchForm extends React.Component{
       if(e.target.checked){      
         url.searchParams.append('exact', true);
       }
-      else{
+      else {
         url.searchParams.delete('exact');
       }
-      window.location.replace(url);
+      window.history.replaceState(null, null, url);
     }
 
     obsoletesHandler(e){
@@ -227,7 +227,7 @@ class SearchForm extends React.Component{
       else{
         url.searchParams.delete('obsoletes');
       }
-      window.location.replace(url);
+      window.history.replaceState(null, null, url);
     }
 
     submitJumpHandler(e){
