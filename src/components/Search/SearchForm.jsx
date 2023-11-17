@@ -19,6 +19,7 @@ class SearchForm extends React.Component{
           entry: [],
           ontologyId: '',
           urlPath: '',
+          url:'',
           facetIsSelected: false,
         })
         this.handleChange = this.handleChange.bind(this);
@@ -37,12 +38,15 @@ class SearchForm extends React.Component{
 
       setComponentData(){
         let urlPath = window.location.pathname
+        let url = window.location.search
+        url = url.includes("obsoletes")
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
         this.setState({
           ontologyId: ontologyId,
           urlPath: urlPath,
+          url:url 
         })
       }
 
@@ -55,7 +59,8 @@ class SearchForm extends React.Component{
           selectedType = selectedType.map(onto => onto.toLowerCase());       
           let selectedOntology = params.getAll("ontology")         
           selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
-          let selectedCollection = params.getAll("collection")            
+          let selectedCollection = params.getAll("collection") 
+          let obsoletes = params.get('obsoletes')           
           if(process.env.REACT_APP_PROJECT_ID == "general"){
             if(selectedOntology){
               let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
@@ -104,6 +109,20 @@ class SearchForm extends React.Component{
               result: true,
               enteredTerm: enteredTerm
             });
+            }
+            if(obsoletes){
+              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&obsoletes=true&rows=5`,{
+                mode: 'cors',
+                headers: apiHeaders(),
+              })
+              jumpResult = (await jumpResult.json())['response']['docs'];
+              console.info(jumpResult)
+              this.setState({
+                jumpResult: jumpResult,
+                result: true,
+                enteredTerm: enteredTerm
+              });
+
             }
             else {
             let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5`,{
