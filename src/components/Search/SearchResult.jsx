@@ -170,6 +170,16 @@ class SearchResult extends React.Component{
         totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
     });
   }
+
+  let params = new URLSearchParams(document.location.search);
+  let obsolete = params.get("obsoletes");
+  let exact = params.get("exact")
+  if(obsolete){
+    this.handleObsolete();
+  }
+  if(exact){
+    this.handleExact();
+  }
   
   let filteredSearch = await (await fetch(baseUrl, {
     mode: 'cors',
