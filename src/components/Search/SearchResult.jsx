@@ -56,6 +56,8 @@ class SearchResult extends React.Component{
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
     let enteredTerm = targetQueryParams.q;  
     let ontologies = targetQueryParams.ontology;
+    let obsoletes = targetQueryParams.obsoletes;
+    let exact = targetQueryParams.exact;
     let page = targetQueryParams.page;
     let types = targetQueryParams.type;
     let collections = targetQueryParams.collection;
@@ -92,12 +94,14 @@ class SearchResult extends React.Component{
       selectedCollections: collections,
       selectedOntologies: ontologies,
       selectedTypes: types,
+      obsoletes: obsoletes,
+      exact: exact,
       pageNumber: parseInt(page),
       facetIsSelected: facetSelected,
       isLoaded: true,
       enteredTerm: enteredTerm
     }, () => {
-      this.runSearch(ontologies, types, collections, "");
+      this.runSearch(ontologies, types, collections,obsoletes, "");
     });
   }
 
@@ -110,7 +114,7 @@ class SearchResult extends React.Component{
    * @param {*} collections 
    * @param {*} triggerField : which facet fields triggers the function. Values: type, ontology, collection
    */
- async runSearch(ontologies, types, collections, triggerField){    
+ async runSearch(ontologies, types, collections, obsoletes, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
   let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
   let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
@@ -170,15 +174,9 @@ class SearchResult extends React.Component{
         totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
     });
   }
-
-  let params = new URLSearchParams(document.location.search);
-  let obsolete = params.get("obsoletes");
-  let exact = params.get("exact")
-  if(obsolete){
+  
+  if(obsoletes){
     this.handleObsolete();
-  }
-  if(exact){
-    this.handleExact();
   }
   
   let filteredSearch = await (await fetch(baseUrl, {
@@ -202,7 +200,7 @@ class SearchResult extends React.Component{
     facetFields: filteredFacetFields,
     expandedResults: expandedResults
     }, () => {
-      this.updateURL(ontologies, types, collections);
+      this.updateURL(ontologies, types, collections,obsoletes);
     });
 }
 
