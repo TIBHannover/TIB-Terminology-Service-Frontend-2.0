@@ -204,7 +204,7 @@ class SearchResult extends React.Component{
     facetFields: filteredFacetFields,
     expandedResults: expandedResults
     }, () => {
-      this.updateURL(ontologies, types, collections);
+      this.updateURL(ontologies, types, collections,obsoletes,exact);
     });
 }
 
