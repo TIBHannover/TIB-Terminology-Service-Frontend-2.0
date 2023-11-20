@@ -138,7 +138,7 @@ export const RenderNoteList = (props) => {
                             </div>
                         </div>
                         <br></br>
-                        <NoteDetail noteId={props.selectedNoteId} />
+                        <NoteDetail noteId={props.selectedNoteId} ontologyId={props.ontologyId} />
                     </span>                    
                 }                
             </div>
