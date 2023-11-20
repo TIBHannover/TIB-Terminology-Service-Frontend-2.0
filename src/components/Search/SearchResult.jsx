@@ -101,7 +101,7 @@ class SearchResult extends React.Component{
       isLoaded: true,
       enteredTerm: enteredTerm
     }, () => {
-      this.runSearch(ontologies, types, collections,obsoletes, "");
+      this.runSearch(ontologies, types, collections,obsoletes,exact, "");
     });
   }
 
@@ -114,7 +114,7 @@ class SearchResult extends React.Component{
    * @param {*} collections 
    * @param {*} triggerField : which facet fields triggers the function. Values: type, ontology, collection
    */
- async runSearch(ontologies, types, collections, obsoletes, triggerField){    
+ async runSearch(ontologies, types, collections, obsoletes,exact, triggerField){    
   let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
   let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
   let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
@@ -142,7 +142,7 @@ class SearchResult extends React.Component{
         totalResultsCount: 0,
         facetFields: facetData
         }, () => {
-          this.updateURL(ontologies, types, collections,obsoletes);
+          this.updateURL(ontologies, types, collections,obsoletes,exact);
         });
         return true;
     }   
@@ -178,6 +178,10 @@ class SearchResult extends React.Component{
   if(obsoletes){
     this.handleObsolete();
   }
+
+  if(exact){
+    this.handleExact();
+  }
   
   let filteredSearch = await (await fetch(baseUrl, {
     mode: 'cors',
@@ -200,7 +204,7 @@ class SearchResult extends React.Component{
     facetFields: filteredFacetFields,
     expandedResults: expandedResults
     }, () => {
-      this.updateURL(ontologies, types, collections,obsoletes);
+      this.updateURL(ontologies, types, collections);
     });
 }
 
@@ -311,7 +315,7 @@ createSearchResultList () {
   /**
     * Update the url based on facet values
     */
-   updateURL(ontologies, types, collections, obsoletes){
+   updateURL(ontologies, types, collections, obsoletes, exact){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
@@ -331,6 +335,10 @@ createSearchResultList () {
 
     if(obsoletes){
       currentUrlParams.set('obsoletes', true);
+    }
+
+    if(exact){
+      currentUrlParams.set('exact', true);
     }
     this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
