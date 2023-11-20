@@ -79,7 +79,7 @@ export const CommentCard = (props) =>{
     return (
         <div className="card" id={"comment-card-" + props.comment['id']}>
             <div className="card-header">
-                <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler} />                        
+                <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler}  ontologyId={props.ontologyId}/>                        
             </div>
             <div class="card-body">                        
                 <p className="card-text">                    
@@ -105,6 +105,7 @@ export const NoteCardHeader = (props) => {
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
+    deleteFormData.append("ontology_id", props.ontologyId);
     let redirectAfterDeleteEndpoint = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;
@@ -214,7 +215,8 @@ export const CommentCardHeader = (props) =>{
     
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", comment['id']);
-    deleteFormData.append("objectType", 'comment');        
+    deleteFormData.append("objectType", 'comment');   
+    deleteFormData.append("ontology_id", props.ontologyId);     
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;
     searchParams.delete('comment');    
