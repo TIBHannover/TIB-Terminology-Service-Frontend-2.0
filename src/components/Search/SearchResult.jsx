@@ -142,7 +142,7 @@ class SearchResult extends React.Component{
         totalResultsCount: 0,
         facetFields: facetData
         }, () => {
-          this.updateURL(ontologies, types, collections);
+          this.updateURL(ontologies, types, collections,obsoletes);
         });
         return true;
     }   
@@ -311,7 +311,7 @@ createSearchResultList () {
   /**
     * Update the url based on facet values
     */
-   updateURL(ontologies, types, collections){
+   updateURL(ontologies, types, collections, obsoletes){
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
     let page = targetQueryParams.page;
     this.props.history.push(window.location.pathname);
@@ -328,6 +328,10 @@ createSearchResultList () {
       currentUrlParams.append('collection', col);
     }
     currentUrlParams.append('page', this.state.pageNumber);
+
+    if(obsoletes){
+      currentUrlParams.set('obsoletes', true);
+    }
     this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
 
    }
