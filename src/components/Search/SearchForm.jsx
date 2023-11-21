@@ -20,6 +20,8 @@ class SearchForm extends React.Component{
           ontologyId: '',
           urlPath: '',
           url:'',
+          exact: false,
+          obsoletes: false,
           facetIsSelected: false,
         })
         this.handleChange = this.handleChange.bind(this);
@@ -231,9 +233,17 @@ class SearchForm extends React.Component{
       let url = new URL(window.location);
       if(e.target.checked){      
         url.searchParams.append('exact', true);
+        this.setState({
+          exact: true
+        });
+        window.localStorage.setItem('exact', true)
       }
       else {
         url.searchParams.delete('exact');
+        this.setState({
+          exact: false
+        });
+        window.localStorage.setItem('exact', false)
       }
       window.history.replaceState(null, null, url);
     }
@@ -241,10 +251,18 @@ class SearchForm extends React.Component{
     obsoletesHandler(e){
       let url = new URL(window.location);
       if(e.target.checked){      
-        url.searchParams.append('obsoletes', true);
+        url.searchParams.append("obsoletes", true);
+        this.setState({
+          obsoletes: true
+        })
+        window.localStorage.setItem("obsoletes", true);
       }
       else{
         url.searchParams.delete('obsoletes');
+        this.setState({
+          obsoletes: false
+        });
+        window.localStorage.setItem("obsoletes", false);
       }
       window.history.replaceState(null, null, url);
     }
