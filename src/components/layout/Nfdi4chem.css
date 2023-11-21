@@ -2225,13 +2225,13 @@ Notes
     color: red;
 }
 
-.note-edit-btn{
+.note-action-menu-btn{
     border: none !important;
     background-color: white !important;
     color: black !important;
 }
 
-.note-edit-btn:hover{
+.note-action-menu-btn:hover{
     color: black;
 }
 
