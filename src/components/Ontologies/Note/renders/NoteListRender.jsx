@@ -24,7 +24,7 @@ const COMPONENT_TYPES_FOR_DROPDOWN = [
 
 
 
-export const RenderNoteList = (props) => {
+export const NoteListRender = (props) => {
 
     const [renderContent, setRenderContent] = useState("");
 

@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import { useHistory } from "react-router";
 import AuthTool from "../../User/Login/authTools";
 import Toolkit from "../../common/Toolkit";
-import {RenderNoteList} from "./renders/RenderNoteList";
+import { NoteListRender } from "./renders/NoteListRender";
 
 
 
@@ -158,7 +158,7 @@ const NoteList = (props) => {
     }
     else{
         return(
-            <RenderNoteList 
+            <NoteListRender 
                 noteSubmited={noteSubmited}
                 noteSubmitSeccuess={noteSubmitSeccuess}
                 noteDetailPage={showNoteDetailPage}

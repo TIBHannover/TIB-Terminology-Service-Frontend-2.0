@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 
 
 
-class NoteCommnentList extends React.Component{
+class NoteCommentList extends React.Component{
     constructor(props){
         super(props);
         this.state = ({
@@ -231,6 +231,6 @@ class NoteCommnentList extends React.Component{
     }
 }
 
-export default withRouter(NoteCommnentList);
+export default withRouter(NoteCommentList);
 
 
