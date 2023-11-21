@@ -96,14 +96,12 @@ const NoteList = (props) => {
         setSelectedArtifactType(e.target.value);
         setPageNumber(DEFAULT_PAGE_NUMBER);
         setPageSize(DEFAULT_PAGE_SIZE);
-        setNoteSubmited(false);
-        setComponentIsLoading(true);        
+        setNoteSubmited(false);          
     }
 
 
-    function handlePagination (value) {
-        setPageNumber(value);
-        setComponentIsLoading(true);        
+    function handlePagination (value) {        
+        setPageNumber(value);              
     }
 
 
@@ -126,8 +124,7 @@ const NoteList = (props) => {
     function backToListClick(){
         setSelectedNoteId(-1);
         setShowNoteDetailPage(false);
-        setNoteSubmited(false);
-        setComponentIsLoading(true);           
+        setNoteSubmited(false);             
     }
 
 
@@ -145,7 +142,8 @@ const NoteList = (props) => {
     }, []);
 
 
-    useEffect(() => {        
+    useEffect(() => {      
+        setComponentIsLoading(true);   
         updateURL();
         loadComponent();        
         

@@ -14,14 +14,14 @@ const NoteCreation = (props) => {
     const [editorState, setEditorState] = useState(null);
     const [autoCompleteSuggestionsList, setAutoCompleteSuggestionsList] = useState([]);
     const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState("");
-    const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
     const [noteTitle, setNoteTitle] = useState("");
+    const noteIdForRender = "-add-note";
 
 
-    function onTextInputChange(){       
-        document.getElementById('noteTitle').style.borderColor = '';
-        setNoteTitle(document.getElementById('noteTitle').value);        
+    function onTextInputChange(){        
+        document.getElementById("noteTitle" + noteIdForRender).style.borderColor = '';
+        setNoteTitle(document.getElementById('noteTitle' + noteIdForRender).value);        
     }
 
 
@@ -43,11 +43,6 @@ const NoteCreation = (props) => {
         setVisibility(e.target.value);        
     }
 
-    
-    function openModal(){
-        setModalIsOpen(true);        
-    }
-
 
     function closeModal(newNoteId=true){                
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
@@ -55,23 +50,17 @@ const NoteCreation = (props) => {
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
-        if(newNoteId){
-            setEditorState(null);
-            setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);
-            setAutoCompleteSuggestionsList([]);
-            setEnteredTermInAutoComplete("");
-            setSelectedTermFromAutoComplete({"iri": null, "label": null});
-            setModalIsOpen(false);             
-        } 
-        else{
-            setModalIsOpen(false);            
-        }                
+        setEditorState(null);
+        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);
+        setAutoCompleteSuggestionsList([]);
+        setEnteredTermInAutoComplete("");
+        setSelectedTermFromAutoComplete({"iri": null, "label": null});            
     }
 
 
     function submit(){
         let formIsValid = true;
-        let noteTitle = document.getElementById('noteTitle').value;
+        let noteTitle = document.getElementById('noteTitle' + noteIdForRender).value;
         let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
         let noteContent = "";        
         if(!editorState){            
@@ -83,7 +72,7 @@ const NoteCreation = (props) => {
         }
 
         if(!noteTitle || noteTitle === ""){
-            document.getElementById('noteTitle').style.borderColor = 'red';
+            document.getElementById('noteTitle' + noteIdForRender).style.borderColor = 'red';
             formIsValid = false;
         }
         
@@ -149,7 +138,7 @@ const NoteCreation = (props) => {
     function onAutoCompleteTextBoxChange (event, { newValue }){
         document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
         setEnteredTermInAutoComplete(newValue);        
-      };
+    }
     
 
     
@@ -171,9 +160,7 @@ const NoteCreation = (props) => {
     return (
         <NoteCreationRender 
             enteredTermInAutoComplete={enteredTermInAutoComplete}
-            onAutoCompleteTextBoxChange={onAutoCompleteTextBoxChange}
-            openModal={openModal}
-            modalIsOpen={modalIsOpen}
+            onAutoCompleteTextBoxChange={onAutoCompleteTextBoxChange}            
             closeModal={closeModal}
             isGeneric={props.isGeneric}
             targetArtifact={targetArtifact}
@@ -190,7 +177,9 @@ const NoteCreation = (props) => {
             onTextInputChange={onTextInputChange}
             editorState={editorState}
             onTextAreaChange={onTextAreaChange}
-            submit={submit}            
+            submit={submit}
+            targetNoteId={noteIdForRender}
+            mode={"newNote"}
         />
     );
 
