@@ -176,18 +176,13 @@ class SearchResult extends React.Component{
   }
   
   if(localStorage.getItem("obsoletes")){
-    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&obsoletes=true&rows=" + this.state.pageSize;
-    let obsoletesResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
-    obsoletesResult = (await obsoletesResult.json())['response']['docs'];
-    this.setState({
-      searchResult: obsoletesResult,
-      isLoaded: true 
-    });
+    baseUrl  = baseUrl + "&obsoletes=true";
   }
 
-  if(window.localStorage.getItem('exact')){
-    this.handleExact();
+  if(localStorage.getItem("exact")){
+    baseUrl = baseUrl + "&exact=true";
   }
+
   
   let filteredSearch = await (await fetch(baseUrl, {
     mode: 'cors',

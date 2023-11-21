@@ -231,19 +231,14 @@ class SearchForm extends React.Component{
 
     exactHandler(e){
       let url = new URL(window.location);
-      if(e.target.checked){      
+      if(e.target.checked){    
+        url.searchParams.delete('exact');  
         url.searchParams.append('exact', true);
-        this.setState({
-          exact: true
-        });
-        window.localStorage.setItem('exact', true)
+        window.localStorage.setItem("exact", true)
       }
       else {
         url.searchParams.delete('exact');
-        this.setState({
-          exact: false
-        });
-        window.localStorage.setItem('exact', false)
+        window.localStorage.setItem("exact", false)
       }
       window.history.replaceState(null, null, url);
     }
@@ -252,16 +247,10 @@ class SearchForm extends React.Component{
       let url = new URL(window.location);
       if(e.target.checked){      
         url.searchParams.append("obsoletes", true);
-        this.setState({
-          obsoletes: true
-        })
         window.localStorage.setItem("obsoletes", true);
       }
       else{
         url.searchParams.delete('obsoletes');
-        this.setState({
-          obsoletes: false
-        });
         window.localStorage.setItem("obsoletes", false);
       }
       window.history.replaceState(null, null, url);
