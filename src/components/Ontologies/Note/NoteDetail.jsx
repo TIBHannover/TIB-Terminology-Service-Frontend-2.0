@@ -63,6 +63,7 @@ const NoteDetail = (props) => {
             note={note}
             noteContent={noteContent}
             reloadNoteDetail={reloadNoteDetail}
+            isAdminForOntology={props.isAdminForOntology} 
         />
     );
 }

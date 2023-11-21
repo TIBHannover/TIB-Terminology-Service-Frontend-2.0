@@ -99,12 +99,14 @@ export const PinnModal = (props) => {
                         <div class="modal-body">
                             {!submited && 
                                 <span>
-                                    Are you sure you want to pin this note?                                     
+                                    Are you sure you want to {props.note['pinned'] ? "Unpin" : "Pin"} this note?                                     
                                 </span>                                
                             }                            
                         </div>
                         <div class="modal-footer justify-content-center">                            
-                            {!submited && <button type="button" class="btn btn-secondary" onClick={pinNote}>Pin</button>}
+                            {!submited && <button type="button" class="btn btn-secondary" onClick={pinNote}>
+                                {props.note['pinned'] ? "Unpin" : "Pin"}
+                            </button>}
                             {/* {submited && <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={redirectAfterDelete}>Close</button>} */}
                         </div>
                     </div>
