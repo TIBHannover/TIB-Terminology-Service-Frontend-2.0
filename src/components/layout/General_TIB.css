@@ -2269,7 +2269,7 @@ Notes
 }
 
 .note-action-menu-btn:hover{
-    color: black !important;
+    color: black !important;    
 }
 
 .borderless-btn:active,
@@ -2287,6 +2287,17 @@ Notes
     padding: 5px;
     border-radius: 10px;
     font-size: 12px;
+}
+
+.pinned-message-icon{
+    margin-left: 10px;
+    background-color: #404040;
+    color: white;
+    border-radius: 15px;
+    width: 60px;
+    display: inline-block;
+    text-align: center;
+    font-size: 13px;
 }
 
 
@@ -2393,6 +2404,12 @@ Login and Auth
     font-size: 16px;
     margin-right: 2px;
     color: red;
+ }
+
+ .fa-edit{
+    border: none;
+    font-size: 13px;
+    margin-right: 2px;    
  }
 
 

@@ -122,8 +122,8 @@ export const NoteCardHeader = (props) => {
                 <small>
                     {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
-                {linkCopied && <CopiedSuccessAlert message="link copied" />}
-                {note['pinned'] && "Pinned!"}
+                {note['pinned'] && <div className="pinned-message-icon">Pinned</div>}
+                {linkCopied && <CopiedSuccessAlert message="link copied" />}                
             </div>
             <div className="col-sm-3">
                 <div className="row">                    
@@ -164,7 +164,8 @@ export const NoteCardHeader = (props) => {
                                         <div class="dropdown-item note-dropdown-item">
                                             <PinnModalBtn
                                                 modalId={note['id']}  
-                                                key={"pinBtnNode" + note['id']}                                              
+                                                key={"pinBtnNode" + note['id']} 
+                                                note={note}                                             
                                              />
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
@@ -176,7 +177,7 @@ export const NoteCardHeader = (props) => {
                                                 data-keyboard="false"
                                                 key={"editNode" + note['id']}                      
                                                 >
-                                                <i class="fa fa-edit"></i> Edit
+                                                Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
@@ -275,7 +276,7 @@ export const CommentCardHeader = (props) =>{
                                                 data-content={comment['content']}
                                                 onClick={props.editHandlerFunc}
                                                 >
-                                                <i class="fa fa-edit"></i> Edit
+                                                Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">

@@ -2252,6 +2252,17 @@ Notes
     font-size: 12px;
 }
 
+.pinned-message-icon{
+    margin-left: 10px;
+    background-color: #404040;
+    color: white;
+    border-radius: 15px;
+    width: 60px;
+    display: inline-block;
+    text-align: center;
+    font-size: 13px;
+}
+
 
 /* 
 -------------------------------------------------------
@@ -2348,6 +2359,12 @@ Login and Auth
  .fa-eye{
     border: none;
     font-size: 16px;
+    margin-right: 2px;
+ }
+
+ .fa-edit{
+    border: none;
+    font-size: 13px;
     margin-right: 2px;
  }
 

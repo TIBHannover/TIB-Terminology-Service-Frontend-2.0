@@ -37,7 +37,7 @@ export const PinnModalBtn = (props) => {
                 data-target={"#pinModal" + props.modalId}
                 data-backdrop="static"
                 >
-                Pin
+                {props.note['pinned'] ? "Unpin" : "Pin"}                 
         </button>
     );
     
