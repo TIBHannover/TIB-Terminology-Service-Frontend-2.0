@@ -1,115 +1,85 @@
-import React from "react";
+import {useState} from "react";
 import {getAutoCompleteResult} from "../../../api/fetchData";
-import Autosuggest from 'react-autosuggest';
-import AuthTool from "../../User/Login/authTools";
-import TextEditor, {getTextEditorContent} from "../../common/TextEditor/TextEditor";
-import DropDown from "../../common/DropDown/DropDown";
+import {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
+import { NoteCreationRender } from "./renders/NoteCreationRender";
 
 
 
 
-class NoteCreation extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = ({           
-           targetArtifact: constantsVars.ONTOLOGY_COMPONENT_ID,
-           visibility: constantsVars.VISIBILITY_ONLY_ME,
-           editorState:  null,           
-           autoCompleteSuggestionsList: [],
-           enteredTermInAutoComplete: "",
-           selectedTermFromAutoComplete: {"iri": null, "label": null},
-           modalIsOpen: false,
-           noteTitle: ""
-        });
-        
-        this.changeArtifactType = this.changeArtifactType.bind(this);
-        this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.submit = this.submit.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-        this.changeVisibility = this.changeVisibility.bind(this);
-        this.onAutoCompleteChange = this.onAutoCompleteChange.bind(this);
-        this.clearAutoComplete = this.clearAutoComplete.bind(this);
-        this.onAutoCompleteTextBoxChange = this.onAutoCompleteTextBoxChange.bind(this);
-        this.onAutoCompleteSelecteion = this.onAutoCompleteSelecteion.bind(this);
-        this.openModal = this.openModal.bind(this);
-    }
+const NoteCreation = (props) => {
+    const [targetArtifact, setTargetArtifact] = useState(constantsVars.ONTOLOGY_COMPONENT_ID);
+    const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
+    const [editorState, setEditorState] = useState(null);
+    const [autoCompleteSuggestionsList, setAutoCompleteSuggestionsList] = useState([]);
+    const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState("");
+    const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [noteTitle, setNoteTitle] = useState("");
 
 
-    onTextInputChange(){       
+    function onTextInputChange(){       
         document.getElementById('noteTitle').style.borderColor = '';
-        this.setState({
-            noteTitle: document.getElementById('noteTitle').value
-        });
+        setNoteTitle(document.getElementById('noteTitle').value);        
     }
 
 
-    onTextAreaChange = (newEditorState) => {
+
+    function onTextAreaChange (newEditorState){
         document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
-        this.setState({ editorState: newEditorState });        
+        setEditorState(newEditorState);                
     };
 
 
-    changeArtifactType(e){                   
-        this.setState({
-            targetArtifact: e.target.value,
-            autoCompleteSuggestionsList: [],
-            enteredTermInAutoComplete: ""
-        });
+    function changeArtifactType(e){                   
+        setTargetArtifact( e.target.value);
+        setAutoCompleteSuggestionsList([]);
+        setEnteredTermInAutoComplete("");       
     }
 
 
-    changeVisibility(e){                   
-        this.setState({
-            visibility: e.target.value
-        });
+    function changeVisibility(e){                   
+        setVisibility(e.target.value);        
+    }
+
+    
+    function openModal(){
+        setModalIsOpen(true);        
     }
 
 
-    openModal(){
-        this.setState({modalIsOpen: true})
-    }
-
-
-    closeModal(newNoteId=true){                
+    function closeModal(newNoteId=true){                
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
         document.body.classList.remove('modal-open');
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
         if(newNoteId){
-            this.setState({
-                editorState:  null,
-                targetArtifact: constantsVars.ONTOLOGY_COMPONENT_ID,
-                autoCompleteSuggestionsList: [],
-                enteredTermInAutoComplete: "",
-                selectedTermFromAutoComplete: {"iri": null, "label": null},
-                modalIsOpen: false     
-            });   
+            setEditorState(null);
+            setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);
+            setAutoCompleteSuggestionsList([]);
+            setEnteredTermInAutoComplete("");
+            setSelectedTermFromAutoComplete({"iri": null, "label": null});
+            setModalIsOpen(false);             
         } 
         else{
-            this.setState({
-                modalIsOpen: false 
-            });
+            setModalIsOpen(false);            
         }                
     }
 
 
-   
-
-    submit(){
+    function submit(){
         let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle').value;
-        let selectedTargetTermIri = this.state.selectedTermFromAutoComplete['iri'];        
-        let noteContent = "";
-        let targetArtifactId = this.state.targetArtifact;
-        if(!this.state.editorState){            
+        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
+        let noteContent = "";        
+        if(!editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
         }
         else{
-            noteContent = getTextEditorContent(this.state.editorState);
+            noteContent = getTextEditorContent(editorState);
         }
 
         if(!noteTitle || noteTitle === ""){
@@ -122,7 +92,7 @@ class NoteCreation extends React.Component{
             formIsValid = false;
         }
 
-        if(parseInt(targetArtifactId) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
+        if(parseInt(targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
             document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
             formIsValid = false;
         }
@@ -131,188 +101,100 @@ class NoteCreation extends React.Component{
             return;
         }
 
-        if(parseInt(targetArtifactId) === constantsVars.ONTOLOGY_COMPONENT_ID){
-            selectedTargetTermIri = this.props.ontologyId;
+        if(parseInt(targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID){
+            selectedTargetTermIri = props.ontologyId;
         }
 
         
-        let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifactId];
+        let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];
         
-        if(this.props.targetArtifactType){
-            selectedTargetTermIri = this.props.targetArtifactIri;
-            targetArtifactType = this.props.targetArtifactType;
+        if(props.targetArtifactType){
+            selectedTargetTermIri = props.targetArtifactIri;
+            targetArtifactType = props.targetArtifactType;
         }
-        
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+                
         let data = new FormData();
         data.append("title", noteTitle);
         data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
-        data.append("ontology_id", this.props.ontologyId);        
+        data.append("ontology_id", props.ontologyId);        
         data.append("semantic_component_type", targetArtifactType);
-        data.append("visibility",  constantsVars.VISIBILITY_VALUES[this.state.visibility]);
+        data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
         submitNote(data).then((newNoteId) => {
-            this.props.noteListSubmitStatusHandler(newNoteId);
-            this.closeModal(newNoteId);
+            props.noteListSubmitStatusHandler(newNoteId);
+            closeModal(newNoteId);
         });
     }
 
 
-    async onAutoCompleteChange({value}){   
+    async function onAutoCompleteChange({value}){   
         let enteredTerm = value;                  
-        let type = constantsVars.NOTE_COMPONENT_VALUES[this.state.targetArtifact];        
+        let type = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];        
         if(type !== "property" && type !== "individual"){
-            type = this.props.isSkos ? "individual" : "class"; 
+            type = props.isSkos ? "individual" : "class"; 
         }       
         if (enteredTerm.length > 0){
-            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, this.props.ontologyId, type);
-            this.setState({
-                autoCompleteSuggestionsList: autoCompleteResult
-            });                        
+            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, props.ontologyId, type);
+            setAutoCompleteSuggestionsList(autoCompleteResult);                                  
         }       
     }
 
 
-    clearAutoComplete(){
+    function clearAutoComplete(){
         document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
-        this.setState({
-            autoCompleteSuggestionsList: []
-        });
+        setAutoCompleteSuggestionsList([]);        
     }
 
 
-    onAutoCompleteTextBoxChange = (event, { newValue }) => {
+    function onAutoCompleteTextBoxChange (event, { newValue }){
         document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
-        this.setState({
-          enteredTermInAutoComplete: newValue
-        });
+        setEnteredTermInAutoComplete(newValue);        
       };
     
 
     
-    onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
-            let autoCompleteSelectedTerm = this.state.selectedTermFromAutoComplete;
-            autoCompleteSelectedTerm['iri'] = this.state.autoCompleteSuggestionsList[suggestionIndex]['iri'];
-            autoCompleteSelectedTerm['label'] = this.state.autoCompleteSuggestionsList[suggestionIndex]['label'];
-            this.setState({
-                selectedTermFromAutoComplete: autoCompleteSelectedTerm
-            });
-        
+    function onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
+            let autoCompleteSelectedTerm = selectedTermFromAutoComplete;
+            autoCompleteSelectedTerm['iri'] = autoCompleteSuggestionsList[suggestionIndex]['iri'];
+            autoCompleteSelectedTerm['label'] = autoCompleteSuggestionsList[suggestionIndex]['label'];
+            setSelectedTermFromAutoComplete(autoCompleteSelectedTerm);        
     }
 
 
-
-    render(){
-        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
-            return null;
-        }
-        if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
-            return "";
-        }
-        const value = this.state.enteredTermInAutoComplete
-        const inputPropsAutoSuggest = {
-            placeholder: 'Type your target term',
-            value,
-            onChange: this.onAutoCompleteTextBoxChange
-        };
-
-        return [
-            <span>            
-            <div className="row float-right">
-                <div className="col-sm-12">
-                    <button type="button" 
-                        class="btn btn-secondary" 
-                        data-toggle="modal" 
-                        data-target="#add-note-modal" 
-                        data-backdrop="static"
-                        data-keyboard="false" 
-                        onClick={() => {this.openModal()}}           
-                        >
-                        Add Note
-                    </button>
-                </div>
-            </div>            
-            
-            {this.state.modalIsOpen && 
-                <div class="modal" id="add-note-modal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">                    
-                            <div class="modal-header">
-                                <h4 class="modal-title">{"Add a Note"}</h4>
-                                <button onClick={this.closeModal} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
-                            </div>
-                            <br></br>                                                
-                            <div class="modal-body">                                    
-                                <div className="row">                                
-                                    <div className="col-sm-8">
-                                        {this.props.isGeneric && 
-                                            <DropDown 
-                                                options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
-                                                dropDownId="note-artifact-types"
-                                                dropDownTitle="Target Artifact"
-                                                dropDownValue={this.state.targetArtifact}
-                                                dropDownChangeHandler={this.changeArtifactType}
-                                            /> 
-                                        }
-                                        <DropDown 
-                                            options={constantsVars.VISIBILITY_FOR_DROPDOWN}
-                                            dropDownId="note_visibility_dropdown"
-                                            dropDownTitle="Visibility"
-                                            dropDownValue={this.state.visibility}
-                                            dropDownChangeHandler={this.changeVisibility}
-                                        /> 
-                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
-                                            <p>About: <b>{this.props.ontologyId}</b></p>
-                                        }
-                                        {this.props.isGeneric && parseInt(this.state.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
-                                            <div>
-                                                <label className="required_input" for="noteIri">About</label>                                            
-                                                <Autosuggest
-                                                    suggestions={this.state.autoCompleteSuggestionsList}
-                                                    onSuggestionsFetchRequested={this.onAutoCompleteChange}
-                                                    onSuggestionsClearRequested={this.clearAutoComplete}
-                                                    getSuggestionValue={constantsVars.getAutoCompleteValue}
-                                                    renderSuggestion={constantsVars.rendetAutoCompleteItem}
-                                                    onSuggestionSelected={this.onAutoCompleteSelecteion}
-                                                    inputProps={inputPropsAutoSuggest}
-                                                />
-                                                <br></br>
-                                            </div>
-                                        }
-                                        {!this.props.isGeneric && 
-                                            <p>About: <b>{this.props.targetArtifactLabel}</b></p>
-                                        }
-                                        <label className="required_input" for="noteTitle">Title</label>
-                                        <input type="text" value={this.state.noteTitle} onChange={() => {this.onTextInputChange()}} class="form-control" id="noteTitle" placeholder="Enter Title"></input>                                                                                                            
-                                    </div>
-                                </div>
-                                <br></br>
-                                <div className="row">
-                                    <div className="col-sm-10">
-                                        <TextEditor 
-                                            editorState={this.state.editorState} 
-                                            textChangeHandlerFunction={this.onTextAreaChange}
-                                            wrapperClassName=""
-                                            editorClassName=""
-                                            placeholder="Note Content"
-                                            textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
-                                        />                                         
-                                    </div>
-                                </div>
-
-                            </div>                        
-                            <div class="modal-footer">                            
-                                {/* <button type="button" id="noteCreationCloseModal" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal" onClick={this.closeModal}>Close</button>                             */}
-                                <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={this.submit}>Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                }
-            </span>
-        ];
+    if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+        return null;
     }
+    if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
+        return "";
+    }
+
+    return (
+        <NoteCreationRender 
+            enteredTermInAutoComplete={enteredTermInAutoComplete}
+            onAutoCompleteTextBoxChange={onAutoCompleteTextBoxChange}
+            openModal={openModal}
+            modalIsOpen={modalIsOpen}
+            closeModal={closeModal}
+            isGeneric={props.isGeneric}
+            targetArtifact={targetArtifact}
+            changeArtifactType={changeArtifactType}
+            visibility={visibility}
+            changeVisibility={changeVisibility}
+            ontologyId={props.ontologyId}
+            autoCompleteSuggestionsList={autoCompleteSuggestionsList}
+            onAutoCompleteChange={onAutoCompleteChange}
+            clearAutoComplete={clearAutoComplete}
+            onAutoCompleteSelecteion={onAutoCompleteSelecteion}
+            targetArtifactLabel={props.targetArtifactLabel}
+            noteTitle={noteTitle}
+            onTextInputChange={onTextInputChange}
+            editorState={editorState}
+            onTextAreaChange={onTextAreaChange}
+            submit={submit}            
+        />
+    );
 
 }
+
 
 export default NoteCreation;
