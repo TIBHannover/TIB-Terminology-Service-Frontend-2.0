@@ -34,7 +34,13 @@ export const NoteListRender = (props) => {
         let noteExist = true;
         let result = [];
         for(let note of notes){            
-            result.push(<NoteCard note={note}  noteSelectionHandler={props.noteSelectHandler} />);
+            result.push(
+                <NoteCard 
+                    note={note}  
+                    noteSelectionHandler={props.noteSelectHandler} 
+                    isAdminForOntology={props.isAdminForOntology}
+                />
+            );
         }
 
         if(result.length === 0){
@@ -138,7 +144,11 @@ export const NoteListRender = (props) => {
                             </div>
                         </div>
                         <br></br>
-                        <NoteDetail noteId={props.selectedNoteId} ontologyId={props.ontologyId} />
+                        <NoteDetail 
+                            noteId={props.selectedNoteId} 
+                            ontologyId={props.ontologyId} 
+                            isAdminForOntology={props.isAdminForOntology}    
+                        />
                     </span>                    
                 }                
             </div>

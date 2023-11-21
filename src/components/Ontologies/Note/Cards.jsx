@@ -37,7 +37,7 @@ export const NoteCard = (props) => {
             <div className="col-sm-12">
                 <div className="card note-list-card">
                     <div class="card-header">
-                        <NoteCardHeader note={props.note} /> 
+                        <NoteCardHeader note={props.note} isAdminForOntology={props.isAdminForOntology}/> 
                     </div>
                     <div className="card-body">
                         <div className="row">
@@ -165,7 +165,9 @@ export const NoteCardHeader = (props) => {
                                             <PinnModalBtn
                                                 modalId={note['id']}  
                                                 key={"pinBtnNode" + note['id']} 
-                                                note={note}                                             
+                                                note={note}    
+                                                callHeaders={callHeader}
+                                                isAdminForOntology={props.isAdminForOntology}                                        
                                              />
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">

@@ -34,6 +34,7 @@ const NoteList = (props) => {
     const [noteExist, setNoteExist] = useState(true);
     const [targetArtifactIri, setTargetArtifactIri] = useState(null);
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
+    const [isAdminForOntology, setIsAdminForOntology] = useState(false);
 
     const history = useHistory();
 
@@ -79,6 +80,24 @@ const NoteList = (props) => {
             setTargetArtifactIri(props.targetArtifactIri)
             setComponentIsLoading(false);            
         })        
+    }
+
+
+    async function checkIsAdmin(){        
+        let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/is_entity_admin'; 
+        let formData = new FormData();
+        formData.append("ontology", props.ontology.ontologyId);
+        let postConfig = {method: 'POST',  headers:callHeaders, body: formData};        
+        try{
+            let result = await fetch(url, postConfig);
+            result = await result.json();
+            result = result['_result']['is_admin'];
+            result ? setIsAdminForOntology(true) : setIsAdminForOntology(false);
+        }
+        catch (e){            
+            setIsAdminForOntology(false);
+        }
     }
 
 
@@ -139,6 +158,7 @@ const NoteList = (props) => {
 
     useEffect(() => {
         loadComponent();
+        checkIsAdmin();
     }, []);
 
 
@@ -178,6 +198,7 @@ const NoteList = (props) => {
                 setNoteCreationResultStatus={setNoteCreationResultStatus}
                 backToListHandler={backToListClick}
                 setNoteExistState={setNoteExist}
+                isAdminForOntology={isAdminForOntology}
             />
         );
     }

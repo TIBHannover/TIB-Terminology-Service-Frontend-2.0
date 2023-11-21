@@ -30,6 +30,11 @@ export function buildNoteAboutPart(note){
 
 
 export const PinnModalBtn = (props) => {
+
+    if(!props.isAdminForOntology){
+        return "";
+    }
+
     return (
         <button type="button" 
                 class="btn btn-sm borderless-btn note-action-menu-btn" 
