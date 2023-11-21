@@ -1,85 +1,49 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendCalls";
-import { RowWithSingleColumn } from "../../common/Grid/BootstrapGrid";
-import TextEditor, {getTextEditorContent, createTextEditorEmptyText, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
-import { CommentCard } from "./Cards";
-import { withRouter } from 'react-router-dom';
+import {getTextEditorContent, createTextEditorEmptyText, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
+import { NoteCommentListRender } from "./renders/NoteCommentListRender";
 
 
 
+const NoteCommentList = (props) => {
+    const [commentEditorState, setCommentEditorState] = useState(createTextEditorEmptyText());    
+    const [noteId, setNoteId] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [editCommentId, setEditCommentId] = useState(-1);
 
-class NoteCommentList extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = ({
-            commentEditorState: createTextEditorEmptyText(),
-            commentListToRener: "",
-            noteId: null,
-            editMode: false,
-            editCommentId: -1
-        });
-        this.onTextAreaChange = this.onTextAreaChange.bind(this);
-        this.submitComment = this.submitComment.bind(this);
-        this.createCommentList = this.createCommentList.bind(this);
-        this.handleEditButton = this.handleEditButton.bind(this);
-        this.edit = this.edit.bind(this);
-        this.cancelEdit = this.cancelEdit.bind(this);
-    }
+    const history = useHistory();
 
 
-    onTextAreaChange = (newEditorState) => {
+    function onTextAreaChange (newEditorState){
         document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
-        this.setState({ commentEditorState: newEditorState });        
-    };
-
-
-    createCommentList(){        
-        let comments = this.props.note['comments'] ? this.props.note['comments'] : [];        
-        let result = [];
-        for (let comment of comments){            
-            result.push(
-                <RowWithSingleColumn 
-                    content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
-                    columnClass="col-sm-12"
-                    rowClass="note-comment-card"                    
-                />         
-            );
-        }
-        this.setState({
-            commentListToRener: result,
-            noteId: this.props.note['id']
-        });
+        setCommentEditorState(newEditorState);        
     }
 
 
-
-    handleEditButton(e){
+    function  handleEditButton(e){
         let commentId = e.target.getAttribute('data-id');
         let commentContent = e.target.getAttribute('data-content');
         if(commentContent){
             let content =  createTextEditorStateFromJson(commentContent);
             let editorBox = document.getElementsByClassName("note-comment-editor-warpper")[0];
             editorBox.scrollIntoView();            
-            this.setState({
-                commentEditorState: content,
-                editMode: true,
-                editCommentId: commentId
-            });
-        }        
-
+            setCommentEditorState(content);
+            setEditMode(true);
+            setEditCommentId(commentId);       
+        }
     }
 
 
-
-    submitComment(){
+    function submitComment(){
         let commentContent = "";
         let formIsValid = true;
-        if(!this.state.commentEditorState){            
+        if(!commentEditorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
         }
         else{                    
-            commentContent = getTextEditorContent(this.state.commentEditorState);
+            commentContent = getTextEditorContent(commentEditorState);
         }
 
         if(!commentContent || commentContent.trim() === ""){
@@ -91,29 +55,26 @@ class NoteCommentList extends React.Component{
             return;
         }
 
-        let data = {'noteId': this.props.note['id'], 'content': commentContent};
+        let data = {'noteId': props.note['id'], 'content': commentContent};
         submitNoteComment(data).then((result) => {
             if(result){                
-                this.setState({
-                    noteId: null,
-                    commentEditorState: null
-                }, ()=> {
-                    this.props.noteDetailReloader();
-                })                
+                setNoteId(null);
+                setCommentEditorState(null);
+                props.noteDetailReloader();            
             }
         });
     }
 
 
-    edit(){
+    function edit(){
         let commentContent = "";
         let formIsValid = true;
-        if(!this.state.commentEditorState){            
+        if(!commentEditorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
         }
         else{               
-            commentContent = getTextEditorContent(this.state.commentEditorState);
+            commentContent = getTextEditorContent(commentEditorState);
         }
 
         if(!commentContent || commentContent.trim() === ""){
@@ -125,35 +86,30 @@ class NoteCommentList extends React.Component{
             return;
         }
 
-        let data = {'commentId': this.state.editCommentId, 'content': commentContent};
+        let data = {'commentId': editCommentId, 'content': commentContent};
         editNoteComment(data).then((result) => {
             if(result){                
-                this.setState({
-                    noteId: null,
-                    commentEditorState: null,
-                    editNoteComment: -1,
-                    editMode: false
-                }, ()=> {
-                    this.props.noteDetailReloader();
-                })                
+                setNoteId(null);
+                setCommentEditorState(null);
+                setEditCommentId(-1);
+                setEditMode(false);
+                props.noteDetailReloader();              
             }
         });
     }
 
 
-    cancelEdit(){
+    function cancelEdit(){
         let searchParams = new URLSearchParams(window.location.search);     
-        searchParams.delete('comment');
-        this.props.history.push(window.location.pathname + "?" +  searchParams.toString());
-        this.setState({
-            editNoteComment: -1,
-            editMode: false,
-            commentEditorState: null
-        });
+        searchParams.delete('comment');        
+        history.push(window.location.pathname + "?" +  searchParams.toString());
+        setCommentEditorState(null);
+        setEditCommentId(-1);
+        setEditMode(false);    
     }
 
 
-    jumpToCommentIfExist(){
+    function jumpToCommentIfExist(){
         let searchParams = new URLSearchParams(window.location.search);     
         let commentId = searchParams.get('comment');
         let commentBox = document.getElementById("comment-card-" + commentId);
@@ -167,70 +123,38 @@ class NoteCommentList extends React.Component{
     }
 
 
-    componentDidMount(){
-        this.createCommentList();        
+    // useEffect(() => {
+
+    // }, []);
+
+    useEffect(() => {
+        jumpToCommentIfExist();
+    }, [props.note]);
+
+
+
+    if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+        return null;
     }
 
-    componentDidUpdate(){
-        if(this.state.noteId !== this.props.note['id']){
-            this.createCommentList();            
-        }
-        this.jumpToCommentIfExist();
-    }
+    return (
+        <NoteCommentListRender 
+            note={props.note}
+            handleEditButton={handleEditButton}
+            commentEditorState={commentEditorState}
+            onTextAreaChange={onTextAreaChange}
+            editMode={editMode}
+            submitComment={submitComment}
+            edit={edit}
+            cancelEdit={cancelEdit}
+        />
+    );
 
 
-    render(){
-        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
-            return null;
-        }
-        
-        let editor = <TextEditor 
-                        editorState={this.state.commentEditorState} 
-                        textChangeHandlerFunction={this.onTextAreaChange}
-                        wrapperClassName="note-comment-editor-warpper"
-                        editorClassName="note-comment-editor"
-                        placeholder="leave a comment ..."
-                        textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
-                    />
-
-        let submitButton = !this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.submitComment}>Comment</button>;
-        let editButton = this.state.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={this.edit}>Edit</button>;
-        let cancelButton = this.state.editMode && <button type="button" class="btn btn-secondary note-comment-cancel-edit-btn" onClick={this.cancelEdit}>Cancel</button>;
-
-        return [
-            <span>
-                {!this.state.editMode &&
-                    <RowWithSingleColumn 
-                        content={this.state.commentListToRener}
-                        columnClass="col-sm-12"
-                        rowClass=""
-                    />
-                }
-                <hr></hr>                
-                {localStorage.getItem('isLoginInTs') === 'true' && 
-                    [
-                        <RowWithSingleColumn 
-                            content={editor}
-                            columnClass="col-sm-12"
-                            rowClass=""
-                        />,
-                         <RowWithSingleColumn 
-                            content={submitButton}
-                            columnClass="col-sm-12"
-                            rowClass=""
-                        />,
-                        <RowWithSingleColumn 
-                            content={[editButton, cancelButton]}
-                            columnClass="col-sm-12"
-                            rowClass=""
-                        />
-                    ]                   
-                }                
-            </span>
-        ];
-    }
 }
 
-export default withRouter(NoteCommentList);
+
+
+export default NoteCommentList;
 
 
