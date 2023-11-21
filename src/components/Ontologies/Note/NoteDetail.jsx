@@ -68,7 +68,7 @@ class NoteDetail extends React.Component{
                 <div className="col-sm-12">
                     <div className="card">
                         <div className="card-header">
-                            <NoteCardHeader note={this.state.note} />              
+                            <NoteCardHeader note={this.state.note}   ontologyId={this.props.ontologyId} />              
                         </div>
                         <div class="card-body">
                             <h4 className="card-title note-list-title">{this.state.note['title']}</h4>
@@ -99,7 +99,8 @@ class NoteDetail extends React.Component{
                 {this.create_note_card()}                
                 <NoteCommnentList 
                     note={this.state.note}  
-                    noteDetailReloader={this.reloadNoteDetail}    
+                    noteDetailReloader={this.reloadNoteDetail}
+                    ontologyId={this.props.ontologyId}    
                 />
             </span>  
         );
