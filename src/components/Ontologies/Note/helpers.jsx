@@ -35,7 +35,11 @@ export const PinnModalBtn = (props) => {
         return "";
     }
 
-    if(parseInt(props.numberOfpinned) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES)){
+    if(props.note['visibility'] === "me"){
+        return "";
+    }
+        
+    if(parseInt(props.numberOfpinned) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES)  && !props.note['pinned']){
         return "";
     }
 
