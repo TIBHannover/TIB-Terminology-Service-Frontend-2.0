@@ -115,7 +115,8 @@ export const NoteListRender = (props) => {
                                         targetArtifactType={props.targetArtifactType}
                                         targetArtifactIri={props.targetArtifactIri}
                                         ontologyId={props.ontologyId}                                
-                                        noteListSubmitStatusHandler={props.setNoteCreationResultStatus}                                                                        
+                                        noteListSubmitStatusHandler={props.setNoteCreationResultStatus} 
+                                        isGeneric={props.isGeneric}                                                                     
                                     />
                                 </div>
                             </div>

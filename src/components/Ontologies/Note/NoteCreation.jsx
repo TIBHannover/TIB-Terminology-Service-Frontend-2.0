@@ -180,6 +180,7 @@ const NoteCreation = (props) => {
             submit={submit}
             targetNoteId={noteIdForRender}
             mode={"newNote"}
+            isGeneric={props.isGeneric}
         />
     );
 
