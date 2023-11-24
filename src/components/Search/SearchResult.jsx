@@ -175,13 +175,13 @@ class SearchResult extends React.Component{
     });
   }
   
-  if(localStorage.getItem("obsoletes")){
-    baseUrl  = baseUrl + "&obsoletes=true";
-  }
+  if(obsoletes){
+     baseUrl  = baseUrl + "&obsoletes=true";
+   }
 
-  if(localStorage.getItem("exact")){
-    baseUrl = baseUrl + "&exact=true";
-  }
+  if(exact){
+     baseUrl = baseUrl + "&exact=true";
+   }
 
   
   let filteredSearch = await (await fetch(baseUrl, {

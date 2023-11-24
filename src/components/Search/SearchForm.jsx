@@ -234,11 +234,11 @@ class SearchForm extends React.Component{
       if(e.target.checked){    
         url.searchParams.delete('exact');  
         url.searchParams.append('exact', true);
-        window.localStorage.setItem("exact", true)
+        //window.localStorage.setItem("exact", true)
       }
       else {
         url.searchParams.delete('exact');
-        window.localStorage.setItem("exact", false)
+        //window.localStorage.setItem("exact", false)
       }
       window.history.replaceState(null, null, url);
     }
@@ -247,11 +247,11 @@ class SearchForm extends React.Component{
       let url = new URL(window.location);
       if(e.target.checked){      
         url.searchParams.append("obsoletes", true);
-        window.localStorage.setItem("obsoletes", true);
+        //window.localStorage.setItem("obsoletes", true);
       }
       else{
         url.searchParams.delete('obsoletes');
-        window.localStorage.setItem("obsoletes", false);
+        //window.localStorage.setItem("obsoletes", false);
       }
       window.history.replaceState(null, null, url);
     }
