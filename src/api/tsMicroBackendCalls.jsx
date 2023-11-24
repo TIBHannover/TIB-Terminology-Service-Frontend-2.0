@@ -39,12 +39,13 @@ export async function submitNoteComment({noteId, content}){
 }
 
 
-export async function editNoteComment({commentId, content}){
+export async function editNoteComment({commentId, content, ontologyId}){
     try{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
         data.append("comment_id", commentId);
         data.append("content", content);
+        data.append("ontology_id", ontologyId);
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_comment';
         let result = await fetch(url, {method: 'POST',  headers:headers, body: data});
         result = await result.json();

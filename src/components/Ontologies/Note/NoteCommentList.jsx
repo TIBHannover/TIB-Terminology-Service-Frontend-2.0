@@ -86,7 +86,7 @@ const NoteCommentList = (props) => {
             return;
         }
 
-        let data = {'commentId': editCommentId, 'content': commentContent};
+        let data = {'commentId': editCommentId, 'content': commentContent, 'ontologyId': props.ontologyId};
         editNoteComment(data).then((result) => {
             if(result){                
                 setNoteId(null);
