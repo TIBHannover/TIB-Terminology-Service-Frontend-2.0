@@ -46,7 +46,7 @@ body{
     */
 
     overflow-x: hidden;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     min-height: 500px;
     padding-top: 30px;
 }
@@ -398,6 +398,7 @@ p{
 
 .list-container{
     padding: 20px !important;
+    /* margin-bottom: 300px; */
 } 
 
 .custom-radio-btn-input:checked{
@@ -2649,4 +2650,5 @@ Media Query Area for bein responsive
         font-size: 10px !important;
      } 
  }
+
 
