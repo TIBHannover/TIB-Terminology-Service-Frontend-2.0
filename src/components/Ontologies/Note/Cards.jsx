@@ -45,30 +45,27 @@ export const NoteCard = (props) => {
                     </div>
                     <div className="card-body">
                         <div className="row">
-                            <div className="coll-sm-12">
+                            <div className="col-sm-6">
                                 <h6 className="card-title">
                                     <Link to={noteUrl} 
-                                        className="note-list-title" 
+                                        className="note-list-title custom-truncate" 
                                         value={props.note['id']} 
                                         onClick={props.noteSelectionHandler}
                                         >
                                         {props.note['title']}
                                     </Link>
                                 </h6>
+                            </div>
+                            <div className="col-sm-5">
+                                <small>
+                                    About ({props.note['semantic_component_type']}): {buildNoteAboutPart(props.note)}                         
+                                </small>   
+                            </div>
+                            <div className="col-sm-1 text-right">
+                                <i class="fa fa-comment" aria-hidden="true"><small>{props.note['comments_count']}</small></i>
                             </div>                                    
-                        </div>                                
-                        <p className="card-text">
-                            <small>
-                                <ul className="">
-                                    <li>type: {props.note['semantic_component_type']}</li>
-                                    <li>About: {buildNoteAboutPart(props.note)}</li>
-                                </ul>                            
-                            </small>                                    
-                        </p>                        
-                    </div>
-                    <div class="card-footer note-card-footer text-muted">                                
-                        <i class="fa fa-comment" aria-hidden="true"></i><small>{props.note['comments_count']}</small>
-                    </div>
+                        </div>                                                                             
+                    </div>                    
                 </div>
             </div>
         </div>

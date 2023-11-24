@@ -845,13 +845,6 @@ p{
     -webkit-box-orient: vertical; 
 }
 
-.collection-card-text{
-    /* 
-        Style for the text part of a collection card
-    */
-
-}
-
 .collection-logo{
     /* 
         Collection logo image style
@@ -2188,13 +2181,32 @@ Notes
 */
 
 .note-list-card{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    border: 1px solid rgb(94, 93, 93) !important;   
 }
+
+.card-header{    
+    padding: 2px !important;    
+ }
+
+ .card-body{
+    padding: 5px !important;    
+ }
 
 
 .note-list-title{
     color: black;
-    font-weight: bold;    
+    font-weight: bold;
+    height: 18px;
+    width: 80%;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 0 5px;    
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
 }
 
 .note-comment-editor-warpper{
@@ -2248,10 +2260,10 @@ Notes
     cursor: auto !important;
 }
 
-.note-card-footer{
+/* .note-card-footer{
     border-top: none !important;
     background-color: white !important;    
-}
+} */
 
 .btn-delete-note{
     background-color: white !important;
@@ -2297,7 +2309,7 @@ Notes
     width: 60px;
     display: inline-block;
     text-align: center;
-    font-size: 13px;
+    font-size: 11px;
 }
 
 
@@ -2637,3 +2649,4 @@ Media Query Area for bein responsive
         font-size: 10px !important;
      } 
  }
+

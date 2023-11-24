@@ -2164,13 +2164,32 @@ Notes
     padding: 60px !important;
 }
 
+.card-header{    
+    padding: 2px !important;    
+ }
+
+ .card-body{
+    padding: 5px !important;    
+ }
+
 .note-list-card{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    border: 1px solid rgb(94, 93, 93) !important;
 }
 
 .note-list-title{
     color: black;
-    font-weight: bold;    
+    font-weight: bold;
+    height: 18px;
+    width: 80%;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 0 5px;    
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;     
 }
 
 .note-comment-editor-warpper{
@@ -2500,10 +2519,10 @@ Media Query Area for bein responsive
     cursor: auto;
 }
 
-.note-card-footer{
+/* .note-card-footer{
     border-top: none !important;
     background-color: white !important;    
-}
+} */
 
 .btn-delete-note{
     background-color: white !important;
@@ -2564,5 +2583,5 @@ Media Query Area for bein responsive
     width: 60px;
     display: inline-block;
     text-align: center;
-    font-size: 13px;
+    font-size: 11px;
 }
