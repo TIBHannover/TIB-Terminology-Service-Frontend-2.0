@@ -39,6 +39,7 @@ export const NoteListRender = (props) => {
                     note={note}  
                     noteSelectionHandler={props.noteSelectHandler} 
                     isAdminForOntology={props.isAdminForOntology}
+                    numberOfpinned={props.numberOfpinned}
                 />
             );
         }
@@ -148,6 +149,7 @@ export const NoteListRender = (props) => {
                             noteId={props.selectedNoteId} 
                             ontologyId={props.ontologyId} 
                             isAdminForOntology={props.isAdminForOntology}    
+                            numberOfpinned={props.numberOfpinned}
                         />
                     </span>                    
                 }                

@@ -20,6 +20,8 @@ const NoteList = (props) => {
     let page = currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER;
     let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE; 
     let selectedType = currentUrlParams.get('type') ? currentUrlParams.get('type') : ALL_TYPE;
+    let inputNoteIdFromUrl = currentUrlParams.get('noteId'); 
+    inputNoteIdFromUrl = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
     selectedType = TYPES_VALUES.indexOf(selectedType) !== -1 ? TYPES_VALUES.indexOf(selectedType) : ALL_TYPE; 
 
     const [noteList, setNoteList] = useState([]);
@@ -29,26 +31,23 @@ const NoteList = (props) => {
     const [pageNumber, setPageNumber] = useState(parseInt(page));
     const [pageSize, setPageSize] = useState(size);
     const [noteTotalPageCount, setNoteTotalPageCount] = useState(0);
-    const [selectedNoteId, setSelectedNoteId] = useState(-1);
+    const [selectedNoteId, setSelectedNoteId] = useState(inputNoteIdFromUrl);
     const [componentIsLoading, setComponentIsLoading] = useState(true);
     const [noteExist, setNoteExist] = useState(true);
     const [targetArtifactIri, setTargetArtifactIri] = useState(null);
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
     const [isAdminForOntology, setIsAdminForOntology] = useState(false);
+    const [numberOfPinned, setNumberOfPinned] = useState(0);
 
     const history = useHistory();
 
 
-    function loadComponent(){        
-        let url = new URL(window.location);     
-        let inputNoteIdFromUrl = url.searchParams.get('noteId'); 
-        let inputNoteId = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
-        if(inputNoteId !== -1 && inputNoteId !== selectedNoteId){            
-            setSelectedNoteId(inputNoteId);
+    function loadComponent(){                        
+        if(selectedNoteId !== -1){            
             setShowNoteDetailPage(true);
             setComponentIsLoading(false);                        
         }
-        else if(inputNoteId === -1){
+        else{
             loadNoteList();
         }
         
@@ -76,7 +75,8 @@ const NoteList = (props) => {
             let noteStats = data['_result']['stats'];                                  
             setNoteList(allNotes);
             setShowNoteDetailPage(false);
-            setNoteTotalPageCount(noteStats['totalPageCount']);            
+            setNoteTotalPageCount(noteStats['totalPageCount']);     
+            setNumberOfPinned(noteStats['number_of_pinned']);
             setTargetArtifactIri(props.targetArtifactIri)
             setComponentIsLoading(false);            
         })        
@@ -199,6 +199,7 @@ const NoteList = (props) => {
                 backToListHandler={backToListClick}
                 setNoteExistState={setNoteExist}
                 isAdminForOntology={isAdminForOntology}
+                numberOfpinned={numberOfPinned}
             />
         );
     }

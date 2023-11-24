@@ -12,19 +12,21 @@ const NoteDetail = (props) => {
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
     const [noteNotFound, setNoteNotFound] = useState(false);
     const [currentUrl, setCurrentUrl] = useState(window.location.href);
+    const [numberOfpinned, setNumberOfpinned] = useState(0);
 
     const history = useHistory();
 
 
     function getTheNote(){
         let noteId = props.noteId;        
-        getNoteDetail({noteId: noteId}).then((result) => {
+        getNoteDetail({noteId: noteId, ontologyId:props.ontologyId}).then((result) => {
             if(result === '404'){
                 setNoteNotFound(true);                
             }            
             else{    
-                setNote(result);
-                setNoteContent(createHtmlFromEditorJson(result['content']));
+                setNote(result['note']);
+                setNoteContent(createHtmlFromEditorJson(result['note']['content']));
+                setNumberOfpinned(result['number_of_pinned']);
                 setNoteNotFound(false);                
             }
         });
@@ -64,6 +66,7 @@ const NoteDetail = (props) => {
             noteContent={noteContent}
             reloadNoteDetail={reloadNoteDetail}
             isAdminForOntology={props.isAdminForOntology} 
+            numberOfpinned={numberOfpinned}
         />
     );
 }

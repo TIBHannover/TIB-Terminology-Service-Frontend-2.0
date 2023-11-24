@@ -37,7 +37,11 @@ export const NoteCard = (props) => {
             <div className="col-sm-12">
                 <div className="card note-list-card">
                     <div class="card-header">
-                        <NoteCardHeader note={props.note} isAdminForOntology={props.isAdminForOntology}/> 
+                        <NoteCardHeader 
+                            note={props.note} 
+                            isAdminForOntology={props.isAdminForOntology}
+                            numberOfpinned={props.numberOfpinned}
+                        /> 
                     </div>
                     <div className="card-body">
                         <div className="row">
@@ -168,7 +172,8 @@ export const NoteCardHeader = (props) => {
                                                 key={"pinBtnNode" + note['id']} 
                                                 note={note}    
                                                 callHeaders={callHeader}
-                                                isAdminForOntology={props.isAdminForOntology}                                        
+                                                isAdminForOntology={props.isAdminForOntology}
+                                                numberOfpinned={props.numberOfpinned}                                      
                                              />
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">

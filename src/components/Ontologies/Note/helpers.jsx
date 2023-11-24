@@ -35,6 +35,10 @@ export const PinnModalBtn = (props) => {
         return "";
     }
 
+    if(parseInt(props.numberOfpinned) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES)){
+        return "";
+    }
+
     return (
         <button type="button" 
                 class="btn btn-sm borderless-btn note-action-menu-btn" 
