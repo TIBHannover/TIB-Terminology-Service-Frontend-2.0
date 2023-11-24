@@ -7,7 +7,7 @@ import * as constantsVars from '../Constants';
 
 export const NoteCreationRender = (props) => {
 
-    const value = props.enteredTermInAutoComplete ? props.enteredTermInAutoComplete : "";    
+    const value = props.enteredTermInAutoComplete ? props.enteredTermInAutoComplete : "";     
     const inputPropsAutoSuggest = {
         placeholder: 'Type your target term',
         value,
@@ -58,7 +58,7 @@ export const NoteCreationRender = (props) => {
                                         dropDownTitle="Visibility"
                                         dropDownValue={props.visibility}
                                         dropDownChangeHandler={props.changeVisibility}
-                                    /> 
+                                    />                                     
                                     {parseInt(props.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <p>About: <b>{props.ontologyId}</b></p>
                                     }

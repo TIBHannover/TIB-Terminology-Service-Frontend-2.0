@@ -9,11 +9,13 @@ import { NoteCreationRender } from "./renders/NoteCreationRender";
 
 
 const NoteCreation = (props) => {
-    const [targetArtifact, setTargetArtifact] = useState(constantsVars.ONTOLOGY_COMPONENT_ID);
+    let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
+    targetArtifactType = targetArtifactType !== -1 ? targetArtifactType : 1;    
+    const [targetArtifact, setTargetArtifact] = useState(targetArtifactType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
     const [editorState, setEditorState] = useState(null);
     const [autoCompleteSuggestionsList, setAutoCompleteSuggestionsList] = useState([]);
-    const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState("");
+    const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState(props.targetArtifactLabel);
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
     const [noteTitle, setNoteTitle] = useState("");
     const noteIdForRender = "-add-note";
@@ -33,7 +35,7 @@ const NoteCreation = (props) => {
 
 
     function changeArtifactType(e){                   
-        setTargetArtifact( e.target.value);
+        setTargetArtifact(e.target.value);
         setAutoCompleteSuggestionsList([]);
         setEnteredTermInAutoComplete("");       
     }
