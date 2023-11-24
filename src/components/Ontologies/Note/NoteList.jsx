@@ -85,7 +85,7 @@ const NoteList = (props) => {
 
     async function checkIsAdmin(){        
         let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
-        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/is_entity_admin'; 
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
         formData.append("ontology", props.ontology.ontologyId);
         let postConfig = {method: 'POST',  headers:callHeaders, body: formData};        
