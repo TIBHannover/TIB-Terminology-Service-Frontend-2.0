@@ -1,6 +1,7 @@
 import React from 'react';
 import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 
@@ -26,7 +27,7 @@ class NodeDetail extends React.Component{
         let isSkos = this.props.isSkos;
         let node = this.props.node;
         let showDataAsJsonBtnHref = "";
-        if(isSkos){          
+        if(isSkos && componentIdentity === "individual"){          
           showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
         }
         else{           
@@ -48,10 +49,10 @@ class NodeDetail extends React.Component{
         let node = this.state.data;
         let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(node.ontology_name);
         let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(node.iri);  
-        if(this.state.componentIdentity === 'property'){
+        if(this.state.componentIdentity === 'props'){
             targetHref = baseUrl +'/props?iri=' + encodeURIComponent(node.iri);        
         }
-        else if (this.state.componentIdentity === 'individual'){
+        else if (this.state.componentIdentity === 'individuals'){
           targetHref = baseUrl +'/individuals?iri=' + encodeURIComponent(node.iri); 
         }        
         return targetHref         
@@ -92,7 +93,7 @@ class NodeDetail extends React.Component{
        */
       createTable(){    
         let metadataToRender = "";
-        if(this.state.componentIdentity === "term" || this.state.componentIdentity === "individual"){
+        if(this.state.componentIdentity === "terms" || this.state.componentIdentity === "individuals"){
           metadataToRender =  classMetaData(this.state.data);
         }
         else{
@@ -128,6 +129,13 @@ class NodeDetail extends React.Component{
               </Helmet>
               </div>
             </HelmetProvider>
+            {this.state.data.is_obsolete &&
+              <AlertBox  
+                type="danger"
+               message="Attention: This term is deprecated!"
+                alertColumnClass="col-sm-12"
+              />
+            }
             {this.createTable()}
             <div className='col-sm-12'  key={"json-button-row"}>
              <div className='row'>
