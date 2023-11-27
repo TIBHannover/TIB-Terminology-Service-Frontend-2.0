@@ -41,6 +41,15 @@ class SearchForm extends React.Component{
       setComponentData(){
         let urlPath = window.location.pathname
         let url = window.location.search
+        let params = new URL(window.location);
+        let obs = params.searchParams.getAll("obsoletes");
+        let exc = params.searchParams.getAll("exact");
+        if(obs){
+          document.getElementById("obsoletes-checkbox").checked = false;
+        }  
+        if(exc){
+          document.getElementById("exact-checkbox").checked = false;
+        }
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
@@ -234,6 +243,8 @@ class SearchForm extends React.Component{
         url.searchParams.delete('exact');  
         url.searchParams.append('exact', true);
         //window.localStorage.setItem("exact", true)
+        window.history.replaceState(null, null, url);
+        window.location.reload();
       }
       else {
         url.searchParams.delete('exact');
@@ -247,6 +258,8 @@ class SearchForm extends React.Component{
       if(e.target.checked){      
         url.searchParams.append("obsoletes", true);
         //window.localStorage.setItem("obsoletes", true);
+        window.history.replaceState(null, null, url);
+        window.location.reload();
         this.setState({
           obsoletesCheck: true
         })
@@ -302,7 +315,7 @@ class SearchForm extends React.Component{
    
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
-        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
+        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);  
      };
 
 
@@ -393,9 +406,9 @@ class SearchForm extends React.Component{
                   </div>
                 </div>}
 
-                <input type="checkbox" className='label-pos' value="exact match" onClick={this.exactHandler}/><label className="exact-label">Exact Match</label> 
+                <input type="checkbox" className='label-pos' id="exact-checkbox" value="exact match" onClick={this.exactHandler}/><label className="exact-label">Exact Match</label> 
 
-                <input type="checkbox" className='label-pos' value="Obsolete results" onClick={this.obsoletesHandler}/><label className="exact-label">Include Obsolete terms</label>
+                <input type="checkbox" className='label-pos' id="obsoletes-checkbox" value="Obsolete results" onClick={this.obsoletesHandler}/><label className="exact-label">Include Obsolete terms</label>
 
                 {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
