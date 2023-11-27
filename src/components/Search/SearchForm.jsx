@@ -21,7 +21,7 @@ class SearchForm extends React.Component{
           urlPath: '',
           url:'',
           exact: false,
-          obsoletes: false,
+          obsoletesCheck: false,
           facetIsSelected: false,
         })
         this.handleChange = this.handleChange.bind(this);
@@ -41,7 +41,6 @@ class SearchForm extends React.Component{
       setComponentData(){
         let urlPath = window.location.pathname
         let url = window.location.search
-        url = url.includes("obsoletes")
         let ontologyId = urlPath.split('/'); 
         ontologyId = ontologyId[3]            
         urlPath = urlPath.includes("/ontologies/" + ontologyId)
@@ -248,10 +247,16 @@ class SearchForm extends React.Component{
       if(e.target.checked){      
         url.searchParams.append("obsoletes", true);
         //window.localStorage.setItem("obsoletes", true);
+        this.setState({
+          obsoletesCheck: true
+        })
       }
       else{
         url.searchParams.delete('obsoletes');
         //window.localStorage.setItem("obsoletes", false);
+        this.setState({
+          obsoletesCheck: false
+        })
       }
       window.history.replaceState(null, null, url);
     }
