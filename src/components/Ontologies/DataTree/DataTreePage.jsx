@@ -6,7 +6,7 @@ import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../JumpTo/Jumpto';
 import PaneResize from '../../common/PaneResize/PaneResize';
-import NodeDetail from '../NodePage/NodeDetail/NodeDetail';
+
 
 
 
@@ -29,7 +29,7 @@ class DataTreePage extends React.Component {
 
   setComponentData(){
     let termTree = "";
-    if (this.props.componentIdentity === "term"){
+    if (this.props.componentIdentity === "terms"){
       termTree = true;
     }
     else{
@@ -45,7 +45,7 @@ class DataTreePage extends React.Component {
 
 
   handleTreeNodeSelection(selectedNodeIri, ShowDetailTable){
-    if(this.props.componentIdentity === "term"){
+    if(this.props.componentIdentity === "terms"){
       this.setState({
         selectedNodeIri: selectedNodeIri,        
         showDetailTable: ShowDetailTable
@@ -93,6 +93,7 @@ render(){
           <div className='tree-container'>
                 <Tree
                   rootNodes={this.props.rootNodes}
+                  obsoleteTerms={this.props.obsoleteTerms}                               
                   rootNodesForSkos={this.props.rootNodesForSkos}
                   componentIdentity={this.props.componentIdentity}
                   iri={this.props.iri}
@@ -117,7 +118,7 @@ render(){
                 <NodePage
                   iri={this.state.selectedNodeIri}
                   ontology={this.props.ontology}
-                  componentIdentity="term"
+                  componentIdentity="terms"
                   extractKey="terms"
                   isSkos={this.props.isSkos}
                   isIndividual={false}
@@ -130,7 +131,7 @@ render(){
               <NodePage
                   iri={this.state.selectedNodeIri}
                   ontology={this.props.ontology}
-                  componentIdentity="property"
+                  componentIdentity="props"
                   extractKey="properties"
                   isIndividual={false}
                   typeForNote="property"

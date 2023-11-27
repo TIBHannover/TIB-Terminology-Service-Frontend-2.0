@@ -3,6 +3,10 @@ import {keyboardNavigationForJumpto} from './KeyboardNavigation';
 import { apiHeaders } from "../../../api/headers";
 
 
+const TYPE_MAPPER  = {"terms": "class", "props": "property", "individuals": "individual"};
+
+
+
 class JumpTo extends React.Component{
     constructor(props){
         super(props);
@@ -25,7 +29,7 @@ class JumpTo extends React.Component{
      */
     async handleChange(enteredTerm){
         enteredTerm = enteredTerm.target.value; 
-        let type = this.props.componentIdentity;
+        let type = TYPE_MAPPER[this.props.componentIdentity];
         if(type !== "property" && type !== "individual"){
             type = this.props.isSkos ? "individual" : "class"; 
         }       
@@ -84,7 +88,7 @@ class JumpTo extends React.Component{
         if(this.props.componentIdentity === "termList"){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/termList?iri=' + encodeURIComponent(resultItem['iri']);
         } 
-        else if(resultItem["type"] === 'class' || this.props.componentIdentity === "term"){
+        else if(resultItem["type"] === 'class' || this.props.componentIdentity === "terms"){
             targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
         }
         else if(resultItem["type"] === 'property'){

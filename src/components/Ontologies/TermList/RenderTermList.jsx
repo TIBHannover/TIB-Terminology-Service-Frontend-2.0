@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import Pagination from "../../common/Pagination/Pagination";
-import JumpTo from "../JumpTo/Jumpto";
+import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 
@@ -13,6 +14,7 @@ const PAGE_SIZES_FOR_DROPDOWN = [{label: "20", value:20}, {label: "30", value:30
 
 export const RenderTermList = (props) => {
     const [tableBodyContent, setTableBodyContent] = useState("");
+    const [noResultFlag, setNoResultFlag] = useState(false); 
 
 
     async function createList(){
@@ -25,52 +27,59 @@ export const RenderTermList = (props) => {
                 getSubClassOf(term['iri'], term['ontology_name']),
                 getEqAxiom(term['iri'], term['ontology_name'])
             ]);
-            result.push(
-                <tr>
-                    <td className="label-col text-break">
-                        <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
-                            {term['label']}
-                        </a>                        
-                    </td>
-                    <td className="id-col text-break">{term['short_form']}</td>
-                    <td className="des-col text-break">{term['description'] ? term['description'] : ""}</td>
-                    <td className="alt-term-col text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
-                    <td className="sub-class-col text-break"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
-                    <td className="eqv-col text-break"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
-                    <td className="ex-usage-col text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
-                    <td className="see-also-col text-break">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
-                    <td className="contrib-col text-break">{setContributorField(term)}</td>
-                    <td className="comment-col text-break">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
-                </tr>
-            );
+            let tableBodyContent = !props.isObsolete 
+                                    ? createTableBody(term, termTreeUrl, subclassOfText, equivalentToText)
+                                    : createTableBodyForObsoletes(term, termTreeUrl, subclassOfText, equivalentToText)
+
+            result.push(tableBodyContent);
         }
-        
-        if(result.length !== 0){
-            setTableBodyContent(result);
-            props.setTableIsLoading(false);
-        }                
+        setTableBodyContent(result); 
+        props.setTableIsLoading(false);         
     }
 
 
     useEffect(() => {
-        createList();
+        if(props.listOfTerms.length !== 0){            
+            setNoResultFlag(false);
+            createList();            
+        }
+        else if(!props.iri){
+            setNoResultFlag(true);            
+        }
     }, [props.listOfTerms]);
 
 
     return(
         <div className="tree-view-container list-container">
-                <div className="row">
-                    <div className="col-sm-4">
-                        <div className="termlist-jumpto-container">
-                            <JumpTo                        
-                                ontologyId={props.ontologyId}                                
-                                isSkos={props.isSkos}
-                                componentIdentity={props.componentIdentity}
-                                containerBootstrapClass="col-sm-12"
-                            />
-                        </div>                    
+                 <div className="row">
+                    <div className="col-sm-12">                       
+                        <JumpTo 
+                            targetType={"term"}
+                            isSkos={props.isSkos}
+                            ontologyId={props.ontologyId}
+                            label={"Jump to"}
+                            handleJumtoSelection={props.handleJumtoSelection}
+                            obsoletes={props.isObsolete}
+                        />
+                        <br></br>
                     </div>
-                    <div className="col-sm-2">
+                </div> 
+                <div className="row">
+                    {!props.iri && 
+                    <div className="col-sm-3 mt-1">
+                        <div className="termlist-jumpto-container">
+                              <div class="form-group form-check">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    id="obsolte_check_term_list" 
+                                    onChange={props.obsoletesCheckboxHandler}                                         
+                                />
+                                <label class="form-check-label" for="obsolte_check_term_list">Only show obsoletes</label>
+                            </div>
+                        </div>                    
+                    </div>}
+                    <div className="col-sm-3">
                         {!props.iri && 
                             <DropDown 
                                 options={PAGE_SIZES_FOR_DROPDOWN}
@@ -78,14 +87,14 @@ export const RenderTermList = (props) => {
                                 containerClass="result-per-page-dropdown-container"
                                 dropDownTitle="Result Per Page"
                                 dropDownValue={props.pageSize}
-                                dropDownChangeHandler={props.handlePageSizeDropDownChange}
+                                dropDownChangeHandler={props.handlePageSizeDropDownChange}                                
                             />                        
                         }
                         {props.iri &&                            
                             <button className='btn btn-secondary ml-2' onClick={props.resetList}>Show All Classes</button> 
                         }
                     </div>
-                    <div className="col-sm-3 text-right number-of-result-text-container">
+                    <div className="col-sm-3 text-right mt-1">
                         {!props.iri && 
                             <b>{"Showing " + (props.pageNumber * props.pageSize + 1) + " - " + ((props.pageNumber + 1) * props.pageSize) + " of " + props.totalNumberOfTerms + " Classes"}</b>
                         }
@@ -99,21 +108,30 @@ export const RenderTermList = (props) => {
                         />
                     }
                     </div>
-                </div>                 
+                </div>                               
                 <div className="row class-list-tablle-holder">                                      
-                    <table class="table table-striped term-list-table class-list-table" id="class-list-table">
-                        {createShowColumnsTags()}                        
-                        {createClassListTableHeader()}
-                        <tbody>
-                            {props.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
-                            {!props.tableIsLoading && tableBodyContent}               
-                        </tbody>
-                    </table>
+                    {!noResultFlag && 
+                        <table class="table table-striped term-list-table class-list-table" id="class-list-table">
+                            {createShowColumnsTags()}                        
+                            {!props.isObsolete ? createClassListTableHeader() : createClassListTableHeaderForObsoletes()}
+                            <tbody>
+                                {props.tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
+                                {!props.tableIsLoading && tableBodyContent}               
+                            </tbody>
+                        </table>
+                    }                    
                 </div>
+                {noResultFlag &&
+                    <AlertBox 
+                        type="info" 
+                        message="No Class Found! "
+                        alertColumnClass="col-sm-12"
+                    />
+                }
+
             </div>
     );
 }
-
 
 
 
@@ -135,6 +153,71 @@ function createClassListTableHeader(){
         </thead>
     ];
 }
+
+
+function createClassListTableHeaderForObsoletes(){
+    return [
+        <thead>
+            <tr>                
+                <th scope="col" className="label-col">Label <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="comment-col">Comment <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th> 
+                <th scope="col" className="id-col">ID <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="des-col">Description <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="alt-term-col">Alternative Term <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                {/* <th scope="col" className="sub-class-col">SubClass Of <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th> */}
+                <th scope="col" className="eqv-col">Equivalent to <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="ex-usage-col">Example of usage <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="see-also-col">See Also <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>
+                <th scope="col" className="contrib-col">Contributor <a onClick={hideTableColumn}><i className="fa fa-eye-slash hidden-fa"></i></a></th>                
+            </tr>
+        </thead>
+    ];
+}
+
+
+function createTableBody(term, termTreeUrl, subclassOfText, equivalentToText){
+    return (
+        <tr>
+            <td className="label-col text-break">
+                <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
+                    {term['label']}
+                </a>                        
+            </td>
+            <td className="id-col text-break">{term['short_form']}</td>
+            <td className="des-col text-break">{term['description'] ? term['description'] : ""}</td>
+            <td className="alt-term-col text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
+            <td className="sub-class-col text-break"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>
+            <td className="eqv-col text-break"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
+            <td className="ex-usage-col text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
+            <td className="see-also-col text-break">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+            <td className="contrib-col text-break">{setContributorField(term)}</td>
+            <td className="comment-col text-break">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
+        </tr>        
+    );
+}
+
+
+function createTableBodyForObsoletes(term, termTreeUrl, subclassOfText, equivalentToText){
+    return (
+        <tr>
+            <td className="label-col text-break">
+                <a className="table-list-label-anchor"  href={termTreeUrl} target="_blank">
+                    {term['label']}
+                </a>                        
+            </td>
+            <td className="comment-col text-break">{term['annotation']['comment'] ? term['annotation']['comment'] : "N/A" }</td>
+            <td className="id-col text-break">{term['short_form']}</td>
+            <td className="des-col text-break">{term['description'] ? term['description'] : ""}</td>
+            <td className="alt-term-col text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A" }</td>
+            {/* <td className="sub-class-col text-break"><span  dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td> */}
+            <td className="eqv-col text-break"><span  dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>
+            <td className="ex-usage-col text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A" }</td>
+            <td className="see-also-col text-break">{term['annotation']['seeAlso'] ? term['annotation']['seeAlso'] : "N/A" }</td>
+            <td className="contrib-col text-break">{setContributorField(term)}</td>            
+        </tr>        
+    );
+}
+
 
 
 function createShowColumnsTags(){
