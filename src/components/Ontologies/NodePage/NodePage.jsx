@@ -82,7 +82,7 @@ class NodePage extends React.Component {
 
   async fetchTheTargetTerm(){
     let term = null
-    if(this.props.isSkos){
+    if(this.props.isSkos && this.props.componentIdentity === "individual"){
       term = await getSkosNodeByIri(this.props.ontology.ontologyId, encodeURIComponent(this.props.iri));      
     }
     else{      

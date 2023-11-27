@@ -26,7 +26,7 @@ class NodeDetail extends React.Component{
         let isSkos = this.props.isSkos;
         let node = this.props.node;
         let showDataAsJsonBtnHref = "";
-        if(isSkos){          
+        if(isSkos && componentIdentity === "individual"){          
           showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(node.iri);
         }
         else{           
