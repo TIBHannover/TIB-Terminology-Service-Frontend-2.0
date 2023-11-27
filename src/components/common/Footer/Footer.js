@@ -90,7 +90,10 @@ const Footer = () => (
                         <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} className='footer-link'>Documentation</Link>
                     </li>
                     <li>
-                        <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} className='footer-link'>API</Link>
+                        <a href="https://service.tib.eu/ts4tib/swagger-ui.html" target="_blank" rel="noopener noreferrer" className='footer-link'>API</a>
+                    </li>
+                    <li>
+                        <a href="https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker" target="_blank" rel="noopener noreferrer"  className='footer-link'>GitLab Issue Tracker</a>
                     </li>
                 </ul>
                 }

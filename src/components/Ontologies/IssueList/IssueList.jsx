@@ -177,7 +177,7 @@ class IssueList extends React.Component{
             );
         }
         this.setState({contentForRender: result}, () => {
-            this.props.storeListOfGitIssuesState(this.state);
+            this.props.storeListOfGitIssuesState("", this.state, "gitIssues");
         });        
     }
 

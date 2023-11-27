@@ -39,7 +39,7 @@ class NoteCommnentList extends React.Component{
         for (let comment of comments){            
             result.push(
                 <RowWithSingleColumn 
-                    content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton} />}
+                    content={<CommentCard comment={comment} commentEditHandler={this.handleEditButton}  ontologyId={this.props.ontologyId}/>}
                     columnClass="col-sm-12"
                     rowClass="note-comment-card"                    
                 />         
@@ -125,7 +125,7 @@ class NoteCommnentList extends React.Component{
             return;
         }
 
-        let data = {'commentId': this.state.editCommentId, 'content': commentContent};
+        let data = {'commentId': this.state.editCommentId, 'content': commentContent, 'ontologyId': this.props.ontologyId};
         editNoteComment(data).then((result) => {
             if(result){                
                 this.setState({

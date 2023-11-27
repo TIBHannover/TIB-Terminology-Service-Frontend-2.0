@@ -42,7 +42,7 @@
         "tabId": 4,
         "tabTitle": "Class List",
         "urlEndPoint": "/termList"
-    },
+    },  
     "Notes":{
         "id":"notes",
         "keyForRenderAsComponent": "notesPage",

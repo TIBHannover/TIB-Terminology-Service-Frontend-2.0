@@ -225,8 +225,7 @@ class NoteList extends React.Component{
 
 
 
-    setNoteCreationResultStatus(newNoteId=false){
-        console.info(newNoteId)        
+    setNoteCreationResultStatus(newNoteId=false){                
         let success = false;
         if(newNoteId){            
             let newUrl = Toolkit.setParamInUrl('noteId', newNoteId);
@@ -342,7 +341,7 @@ class NoteList extends React.Component{
                             </div>
                         </div>
                         <br></br>
-                        <NoteDetail noteId={this.state.selectedNoteId} />
+                        <NoteDetail noteId={this.state.selectedNoteId}  ontologyId={this.props.ontology.ontologyId}/>
                     </span>                    
                 }                
             </div>
