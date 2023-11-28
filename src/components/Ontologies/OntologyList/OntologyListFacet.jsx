@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { getAllCollectionsIds } from "../../../api/fetchData";
-
 
 
 export const OntologyListFacet = (props) => {
@@ -8,10 +6,9 @@ export const OntologyListFacet = (props) => {
     const [collectionBoxes, setCollectionBoxes] = useState('');
 
     
-    async function createCollectionsCheckBoxes(){
-        let allCollections = await getAllCollectionsIds();    
+    function createCollectionsCheckBoxes(){            
         let result = [];
-        for (let record of allCollections){
+        for (let record of props.allCollections){
             result.push(
             <div className="row facet-item-row">
                 <div className='col-sm-9'>
@@ -43,6 +40,19 @@ export const OntologyListFacet = (props) => {
     useEffect(() => {
         createCollectionsCheckBoxes();
     },[]);
+
+
+    useEffect(()=> {
+        // let allCollections = document.getElementsByClassName('collection-checkbox');
+        // console.info(allCollections)
+        // for(let checkbox of allCollections){
+        // if(checkbox.dataset.ischecked === "true"){
+        //     document.getElementById(checkbox.id).checked = true;
+        // }
+        // delete checkbox.dataset.ischecked;
+        // }
+        createCollectionsCheckBoxes();
+    }, [props.selectedCollections, props.allCollections]);
 
 
     return(

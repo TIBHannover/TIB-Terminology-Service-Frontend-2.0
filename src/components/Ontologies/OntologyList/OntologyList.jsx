@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
-import queryString from 'query-string'; 
-import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
+import { getAllOntologies, getCollectionOntologies, getAllCollectionsIds } from '../../../api/fetchData';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../common/Toolkit';
@@ -14,26 +13,26 @@ const TITLE_SORT_KEY = "title";
 
 const OntologyList = (props) => {
   let url = new URL(window.location);   
-  let collectionsInUrl = url.searchParams.get('collection');
-  let sortBy = url.searchParams.get('sorting');
-  let page = url.searchParams.get('page');
-  let keywordFilter = url.searchParams.get('keyword');
+  let collectionsInUrl = url.searchParams.get('collection');      
+  let sortByInUrl = url.searchParams.get('sorting');
+  let pageInUrl = url.searchParams.get('page');
+  let keywordFilterInUrl = url.searchParams.get('keyword');
   collectionsInUrl = typeof(collectionsInUrl) === "string" ? [collectionsInUrl] : [];
-  keywordFilter = keywordFilter ? keywordFilter : "";
-  sortBy = sortBy ? sortBy : TITLE_SORT_KEY;
-  page = page ? parseInt(page) : 1;
-
+  keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : "";
+  sortByInUrl = sortByInUrl ? sortByInUrl : TITLE_SORT_KEY;
+  pageInUrl = pageInUrl ? parseInt(pageInUrl) : 1;  
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [ontologies, setOntologies] = useState([]);
-  const [pageNumber, setPageNumber] = useState(page);  
+  const [pageNumber, setPageNumber] = useState(pageInUrl);  
   const [pageSize, setPageSize] = useState(10);
   const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);  
   const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);  
-  const [sortField, setSortField] = useState(sortBy);
-  const [selectedCollections, setSelectedCollections] = useState(collectionsInUrl);  
-  const [keywordFilterString, setKeywordFilterString] = useState(keywordFilter);
+  const [sortField, setSortField] = useState(sortByInUrl);
+  const [selectedCollections, setSelectedCollections] = useState([...collectionsInUrl]);
+  const [allCollections, setAllCollections] = useState([]);  
+  const [keywordFilterString, setKeywordFilterString] = useState(keywordFilterInUrl);
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
   const history = useHistory();
@@ -42,11 +41,13 @@ const OntologyList = (props) => {
 
   async function setComponentData (){    
     try{      
-      let allOntologies = await getAllOntologies();      
+      let allOntologies = await getAllOntologies();
+      let allCollections = await getAllCollectionsIds();      
       allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, sortField);           
       setIsLoaded(true);
       setOntologies(allOntologies);
       setUnFilteredOntologies(allOntologies);      
+      setAllCollections(allCollections); 
     }
     catch(error){      
       setIsLoaded(true);
@@ -95,17 +96,17 @@ const OntologyList = (props) => {
   }
 
 
-  function handleFacetCollection(e, value){    
-    let collection = e.target.value.trim();         
-    let currentSelectedCollections = [...selectedCollections];
-    if(e.target.checked){      
-      currentSelectedCollections.push(collection);
-      document.getElementById(e.target.id).checked = true;
+  function handleFacetCollection(e, value){        
+    let collection = e.target.value.trim();    
+    let currentSelectedCollections = [...selectedCollections];     
+    if(e.target.checked){            
+      currentSelectedCollections.push(collection);   
+      // document.getElementById(e.target.id).checked = true;      
     }
     else{      
       let index = currentSelectedCollections.indexOf(collection);
       currentSelectedCollections.splice(index, 1);        
-      document.getElementById(e.target.id).checked = false;    
+      // document.getElementById(e.target.id).checked = false;    
     }        
     setSelectedCollections(currentSelectedCollections);    
   }
@@ -144,7 +145,7 @@ const OntologyList = (props) => {
   }
 
 
-  function updateUrl(){       
+  function updateUrl(){           
     let currentUrlParams = new URLSearchParams();
 
     if(keywordFilterString !== ""){
@@ -152,7 +153,7 @@ const OntologyList = (props) => {
     }
 
     if(selectedCollections.length !== 0){
-      for(let col of selectedCollections){
+      for(let col of selectedCollections){        
         currentUrlParams.append('collection', col);        
       }
       currentUrlParams.append('and', exclusiveCollections);
@@ -162,7 +163,7 @@ const OntologyList = (props) => {
       currentUrlParams.append('sorting', sortField);
     }
 
-    currentUrlParams.append('page', pageNumber);    
+    currentUrlParams.append('page', pageNumber);            
     history.push(window.location.pathname + "?" + currentUrlParams.toString());    
   }
 
@@ -170,26 +171,19 @@ const OntologyList = (props) => {
 
   useEffect(() => {
     setComponentData();
-    showInPageRangeOntologies();
-    let allCollections = document.getElementsByClassName('collection-checkbox');
-    for(let checkbox of allCollections){
-      if(checkbox.dataset.ischecked === "true"){
-        document.getElementById(checkbox.id).checked = true;
-      }
-      delete checkbox.dataset.ischecked;
-    }
+    // showInPageRangeOntologies();    
   }, []);
 
 
 
-  useEffect(() => {    
+  useEffect(() => {        
       updateUrl();
       runFacet();
       showInPageRangeOntologies();
   }, [keywordFilterString, selectedCollections, sortField, exclusiveCollections]);
 
 
-  useEffect(() => {
+  useEffect(() => {    
     updateUrl();    
     showInPageRangeOntologies();
   }, [pageNumber, pageSize]);
@@ -211,6 +205,7 @@ const OntologyList = (props) => {
                 onSwitchChange={handleSwitchange}
                 handleFacetCollection={handleFacetCollection}
                 selectedCollections={selectedCollections}
+                allCollections={allCollections}
 
               />
             </div>
