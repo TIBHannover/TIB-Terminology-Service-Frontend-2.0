@@ -1,111 +1,75 @@
-import React from "react";
-import NoteCommnentList from "./NoteCommentList";
+import {useState, useEffect} from "react";
+import { useHistory } from "react-router";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
-import { buildNoteAboutPart } from "./helpers";
-import { NoteCardHeader } from "./Cards";
-import { withRouter } from 'react-router-dom';
 import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
+import { NoteDetailRender } from "./renders/NoteDetailRender";
 
 
 
+const NoteDetail = (props) => {
+    const [note, setNote] = useState({});
+    const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
+    const [noteNotFound, setNoteNotFound] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState(window.location.href);
+    const [numberOfpinned, setNumberOfpinned] = useState(0);
 
-class NoteDetail extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = ({
-           note: {},
-           noteContent: createTextEditorEmptyText(),
-           noteNotFound: false 
-        });
-        this.getTheNote = this.getTheNote.bind(this);
-        this.create_note_card = this.create_note_card.bind(this); 
-        this.reloadNoteDetail = this.reloadNoteDetail.bind(this);       
-    }
+    const history = useHistory();
 
 
-    getTheNote(){
-        let noteId = this.props.noteId;        
-        getNoteDetail({noteId: noteId}).then((result) => {
+    function getTheNote(){
+        let noteId = props.noteId;        
+        getNoteDetail({noteId: noteId, ontologyId:props.ontologyId}).then((result) => {
             if(result === '404'){
-                this.setState({noteNotFound: true});
+                setNoteNotFound(true);                
             }            
-            else{                
-                this.setState({
-                    note: result,
-                    noteContent: createHtmlFromEditorJson(result['content']),
-                    noteNotFound: false
-                })
+            else{    
+                setNote(result['note']);
+                setNoteContent(createHtmlFromEditorJson(result['note']['content']));
+                setNumberOfpinned(result['number_of_pinned']);
+                setNoteNotFound(false);                
             }
         });
     }
 
 
-    reloadNoteDetail(){
+    function reloadNoteDetail(){
         let searchParams = new URLSearchParams(window.location.search);     
-        searchParams.delete('comment');
-        this.props.history.push(window.location.pathname + "?" +  searchParams.toString());
-        this.setState({note: {}}, () => {
-            this.getTheNote();
-        });        
+        searchParams.delete('comment');        
+        history.push(window.location.pathname + "?" +  searchParams.toString());
+        setNote({});
+        setCurrentUrl(window.location.pathname + "?" +  searchParams.toString()); 
     }
 
 
-    componentDidMount(){
-        if(this.props.noteId){
-            this.getTheNote();
-        }             
+    useEffect(() => {
+        if(props.noteId){
+            getTheNote();
+        }  
+    }, []);
+
+    useEffect(() => {        
+        getTheNote();        
+    }, [props.noteId, currentUrl]);
+
+
+    if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
+        return null;
+    }    
+
+    if(noteNotFound){
+        return (<NotFoundErrorPage />)
     }
-
-
-
-    create_note_card(){        
-        if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
-            return null;
-        }                
-        return [
-            <div className="row">
-                <div className="col-sm-12">
-                    <div className="card">
-                        <div className="card-header">
-                            <NoteCardHeader note={this.state.note}   ontologyId={this.props.ontologyId} />              
-                        </div>
-                        <div class="card-body">
-                            <h4 className="card-title note-list-title">{this.state.note['title']}</h4>
-                            <small>
-                                <ul className="">
-                                    <li>type: {this.state.note['semantic_component_type']}</li>
-                                    <li>About: {buildNoteAboutPart(this.state.note)}</li>
-                                </ul>                            
-                            </small>   
-                            <hr></hr>
-                            <p className="card-text">                                                            
-                                <div dangerouslySetInnerHTML={{ __html: this.state.noteContent}}></div>                                
-                            </p>                        
-                        </div>
-                    </div>                
-                </div>
-            </div>     
-        ];
-    }
-
-
-    render(){
-        if(this.state.noteNotFound){
-            return (<NotFoundErrorPage />)
-        }
-        return(                           
-            <span>
-                {this.create_note_card()}                
-                <NoteCommnentList 
-                    note={this.state.note}  
-                    noteDetailReloader={this.reloadNoteDetail}
-                    ontologyId={this.props.ontologyId}    
-                />
-            </span>  
-        );
-    }
-
+    return(                           
+        <NoteDetailRender 
+            note={note}
+            noteContent={noteContent}
+            reloadNoteDetail={reloadNoteDetail}
+            isAdminForOntology={props.isAdminForOntology} 
+            numberOfpinned={numberOfpinned}
+        />
+    );
 }
 
-export default withRouter(NoteDetail);
+
+export default NoteDetail;
