@@ -19,8 +19,8 @@ export const OntologyListFacet = (props) => {
                             value={record['collection']}
                             id={"col-checkbox-" + record['collection']} 
                             key={record['collection']}
-                            onClick={props.handleFacetCollection}
-                            data-isChecked={props.selectedCollections.includes(record['collection'])}
+                            onClick={props.handleFacetCollection}                            
+                            checked={props.selectedCollections.includes(record['collection'])}
                         />                    
                         <label className="form-check-label" for={"col-checkbox-" + record['collection']} >
                            {record['collection']}
@@ -43,15 +43,7 @@ export const OntologyListFacet = (props) => {
 
 
     useEffect(()=> {
-        // let allCollections = document.getElementsByClassName('collection-checkbox');
-        // console.info(allCollections)
-        // for(let checkbox of allCollections){
-        // if(checkbox.dataset.ischecked === "true"){
-        //     document.getElementById(checkbox.id).checked = true;
-        // }
-        // delete checkbox.dataset.ischecked;
-        // }
-        createCollectionsCheckBoxes();
+        createCollectionsCheckBoxes();               
     }, [props.selectedCollections, props.allCollections]);
 
 

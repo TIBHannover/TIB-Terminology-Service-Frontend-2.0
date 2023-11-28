@@ -12,27 +12,18 @@ const TITLE_SORT_KEY = "title";
 
 
 const OntologyList = (props) => {
-  let url = new URL(window.location);   
-  let collectionsInUrl = url.searchParams.get('collection');      
-  let sortByInUrl = url.searchParams.get('sorting');
-  let pageInUrl = url.searchParams.get('page');
-  let keywordFilterInUrl = url.searchParams.get('keyword');
-  collectionsInUrl = typeof(collectionsInUrl) === "string" ? [collectionsInUrl] : [];
-  keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : "";
-  sortByInUrl = sortByInUrl ? sortByInUrl : TITLE_SORT_KEY;
-  pageInUrl = pageInUrl ? parseInt(pageInUrl) : 1;  
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [ontologies, setOntologies] = useState([]);
-  const [pageNumber, setPageNumber] = useState(pageInUrl);  
+  const [pageNumber, setPageNumber] = useState(1);  
   const [pageSize, setPageSize] = useState(10);
   const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);  
   const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);  
-  const [sortField, setSortField] = useState(sortByInUrl);
-  const [selectedCollections, setSelectedCollections] = useState([...collectionsInUrl]);
+  const [sortField, setSortField] = useState(TITLE_SORT_KEY);
+  const [selectedCollections, setSelectedCollections] = useState([]);
   const [allCollections, setAllCollections] = useState([]);  
-  const [keywordFilterString, setKeywordFilterString] = useState(keywordFilterInUrl);
+  const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
   const history = useHistory();
@@ -47,7 +38,7 @@ const OntologyList = (props) => {
       setIsLoaded(true);
       setOntologies(allOntologies);
       setUnFilteredOntologies(allOntologies);      
-      setAllCollections(allCollections); 
+      setAllCollections(allCollections);
     }
     catch(error){      
       setIsLoaded(true);
@@ -57,9 +48,29 @@ const OntologyList = (props) => {
   }
 
 
-  function handlePagination (value) {    
-    setPageNumber(parseInt(value));     
+
+  function setStateBasedOnUrlParams(){
+    let url = new URL(window.location);   
+    let collectionsInUrl = url.searchParams.getAll('collection');      
+    let sortByInUrl = url.searchParams.get('sorting');
+    let pageInUrl = url.searchParams.get('page');
+    let keywordFilterInUrl = url.searchParams.get('keyword');
+    collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
+    keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
+    sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
+    pageInUrl = pageInUrl ? parseInt(pageInUrl) : pageNumber; 
+    setSelectedCollections(collectionsInUrl);
+    setKeywordFilterString(keywordFilterInUrl);
+    setSortField(sortByInUrl);      
+    setPageNumber(pageInUrl);
   }
+
+
+
+  function handlePagination (value) {    
+    setPageNumber(parseInt(value));    
+  }
+
 
 
   function showInPageRangeOntologies(){
@@ -73,9 +84,11 @@ const OntologyList = (props) => {
   }
 
 
+
   function handlePageSizeDropDownChange(e){
     setPageSize(parseInt(e.target.value));    
   }
+
 
 
   function handleSortChange(e, value){
@@ -85,10 +98,28 @@ const OntologyList = (props) => {
     setOntologies(sortedOntology);     
   }
 
+
   
   function filterWordChange(e, value){
-    setKeywordFilterString(e.target.value);
+    let ontologiesList = [...ontologies]; 
+    let keywordOntologies = [];    
+    let newKeyword = e.target.value;    
+    if(newKeyword !== ""){                   
+      for (let i = 0; i < ontologiesList.length; i++) {
+        let ontology = ontologiesList[i];                
+        if (ontology_has_searchKey(ontology, newKeyword)) {
+          keywordOntologies.push(ontology)
+        }
+      }
+      setOntologies(keywordOntologies);
+      setKeywordFilterString(newKeyword);
+      setPageNumber(1);      
+      return true;
+    }
+    setKeywordFilterString("");
+    runCollectionFilter();
   }
+
 
 
   function handleSwitchange(e){
@@ -100,32 +131,19 @@ const OntologyList = (props) => {
     let collection = e.target.value.trim();    
     let currentSelectedCollections = [...selectedCollections];     
     if(e.target.checked){            
-      currentSelectedCollections.push(collection);   
-      // document.getElementById(e.target.id).checked = true;      
+      currentSelectedCollections.push(collection);         
     }
     else{      
       let index = currentSelectedCollections.indexOf(collection);
-      currentSelectedCollections.splice(index, 1);        
-      // document.getElementById(e.target.id).checked = false;    
+      currentSelectedCollections.splice(index, 1);      
     }        
     setSelectedCollections(currentSelectedCollections);    
   }
 
 
-  async function runFacet(){     
-    let ontologiesList = [...unFilteredOntologies]; 
-    let keywordOntologies = [];
-    if(keywordFilterString !== ""){
-      // run keyword filter    
-      for (let i = 0; i < ontologiesList.length; i++) {
-        let ontology = ontologiesList[i];
-        if (ontology_has_searchKey(ontology, keywordFilterString)) {
-          keywordOntologies.push(ontology)
-        }
-      }
-      ontologiesList = keywordOntologies;
-    }
-  
+
+  async function runCollectionFilter(){     
+    let ontologiesList = [...unFilteredOntologies];
     if(selectedCollections.length !== 0){
       // run collection filter
       let collectionOntologies = await getCollectionOntologies(selectedCollections, exclusiveCollections);
@@ -145,25 +163,22 @@ const OntologyList = (props) => {
   }
 
 
-  function updateUrl(){           
-    let currentUrlParams = new URLSearchParams();
+
+  function updateUrl(){         
+    let currentUrlParams = new URLSearchParams(window.location.search);  
+    currentUrlParams.delete('keyword');
 
     if(keywordFilterString !== ""){
-      currentUrlParams.append('keyword', keywordFilterString);
+      currentUrlParams.set('keyword', keywordFilterString);
     }
-
-    if(selectedCollections.length !== 0){
-      for(let col of selectedCollections){        
-        currentUrlParams.append('collection', col);        
-      }
-      currentUrlParams.append('and', exclusiveCollections);
+    
+    currentUrlParams.delete('collection');
+    for(let col of selectedCollections){      
+      currentUrlParams.append('collection', col);        
     }
-
-    if(sortField !== TITLE_SORT_KEY){
-      currentUrlParams.append('sorting', sortField);
-    }
-
-    currentUrlParams.append('page', pageNumber);            
+    currentUrlParams.set('and', exclusiveCollections);
+    currentUrlParams.set('sorting', sortField);
+    currentUrlParams.set('page', pageNumber);            
     history.push(window.location.pathname + "?" + currentUrlParams.toString());    
   }
 
@@ -171,22 +186,17 @@ const OntologyList = (props) => {
 
   useEffect(() => {
     setComponentData();
-    // showInPageRangeOntologies();    
+    showInPageRangeOntologies();
+    setStateBasedOnUrlParams();      
   }, []);
 
 
 
   useEffect(() => {        
-      updateUrl();
-      runFacet();
+      updateUrl();      
       showInPageRangeOntologies();
-  }, [keywordFilterString, selectedCollections, sortField, exclusiveCollections]);
+  }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections]);
 
-
-  useEffect(() => {    
-    updateUrl();    
-    showInPageRangeOntologies();
-  }, [pageNumber, pageSize]);
 
   
     if (error) {
