@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import { useHistory } from "react-router";
-import {getListOfTerms, getNodeByIri} from '../../../api/fetchData';
+import {getListOfTerms, getNodeByIri, getObsoleteTermsForTermList} from '../../../api/fetchData';
 import Toolkit from "../../common/Toolkit";
 import { RenderTermList } from "./RenderTermList";
 
@@ -14,9 +14,11 @@ const TermList = (props) => {
     let pageNumberInUrl = url.searchParams.get('page');
     let sizeInUrl = url.searchParams.get('size');
     let iriInUrl = url.searchParams.get('iri');        
+    let onlyObsoletes = url.searchParams.get('obsoletes');        
     pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
     let internalSize =  Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
-    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);
+    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);    
+    onlyObsoletes = !onlyObsoletes ? false : (onlyObsoletes === "true");
 
     const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
     const [pageSize, setPageSize] = useState(sizeInUrl);
@@ -24,15 +26,19 @@ const TermList = (props) => {
     const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);    
     const [mode, setMode] = useState("terms");
     const [iri, setIri] = useState(iriInUrl);    
-    const [tableIsLoading, setTableIsLoading] = useState(true);    
+    const [tableIsLoading, setTableIsLoading] = useState(true);   
+    const [obsoletes, setObsoletes] = useState(onlyObsoletes); 
     const history = useHistory();
 
 
     async function loadComponent(){                        
         let ontologyId = props.ontology;
-        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };        
-        if(!iri){
+        let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };         
+        if(!iri && !obsoletes){
             listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumber, pageSize);            
+        }
+        else if (!iri && obsoletes){
+            listOfTermsAndStats = await getObsoleteTermsForTermList(ontologyId, mode, pageNumber, pageSize);            
         }
         else{
             listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iri), mode)];
@@ -52,14 +58,15 @@ const TermList = (props) => {
     }
 
 
-    function updateURL(pageNumber, pageSize, iri=null){        
+    function updateURL(){        
         let currentUrlParams = new URLSearchParams();
         if(iri){
             currentUrlParams.append('iri', iri);
         }
         else{
-            currentUrlParams.append('page', pageNumber);
+            currentUrlParams.append('page', pageNumber + 1);
             currentUrlParams.append('size', pageSize);
+            currentUrlParams.append('obsoletes', obsoletes);
             currentUrlParams.delete('iri');
         }        
         history.push(window.location.pathname + "?" + currentUrlParams.toString())
@@ -76,18 +83,14 @@ const TermList = (props) => {
 
 
     function handlePagination (value) {
-        setPageNumber(parseInt(value) - 1);             
-        updateURL(value, pageSize);
+        setPageNumber(parseInt(value) - 1);        
     }
 
 
     function handlePageSizeDropDownChange(e){
-        let size = parseInt(e.target.value);
-        let page = pageNumber + 1;
-        setPageNumber(page);
+        let size = parseInt(e.target.value);        
         setPageSize(size);           
-        storePageSizeInLocalStorage(size);
-        updateURL(page, size);
+        storePageSizeInLocalStorage(size);        
     }
 
 
@@ -97,8 +100,7 @@ const TermList = (props) => {
         setIri(null);
         setPageNumber(0);
         setPageSize(size);            
-        storePageSizeInLocalStorage(pageSize);
-        updateURL(1, size, null);
+        storePageSizeInLocalStorage(pageSize);        
     }
 
 
@@ -115,8 +117,24 @@ const TermList = (props) => {
     }
 
 
+    function handleJumtoSelection(selectedTerm){        
+        if(selectedTerm){            
+            setIri(selectedTerm['iri']);
+        }      
+    }
+
+
+    function obsoletesCheckboxHandler(e){        
+        setObsoletes(e.target.checked);
+        setPageNumber(0);
+    }
+
+
     useEffect(() => {               
-        hideHiddenColumnsOnLoad();        
+        hideHiddenColumnsOnLoad();
+        if(obsoletes){
+            document.getElementById("obsolte_check_term_list").checked = true;
+        }        
     }, []);
 
 
@@ -124,8 +142,12 @@ const TermList = (props) => {
         setTableIsLoading(true);
         setListOfTerms([]);   
         loadComponent();
-        hideHiddenColumnsOnLoad();               
-    }, [pageNumber, pageSize, iri]);
+        hideHiddenColumnsOnLoad();
+        if(obsoletes && document.getElementById("obsolte_check_term_list")){
+            document.getElementById("obsolte_check_term_list").checked = true;
+        }  
+        updateURL();               
+    }, [pageNumber, pageSize, iri, obsoletes]);
 
 
     return (
@@ -144,6 +166,9 @@ const TermList = (props) => {
             tableIsLoading={tableIsLoading}            
             listOfTerms={listOfTerms}
             setTableIsLoading={setTableIsLoading}
+            handleJumtoSelection={handleJumtoSelection}
+            obsoletesCheckboxHandler={obsoletesCheckboxHandler}
+            isObsolete={obsoletes}
         />
     );
 

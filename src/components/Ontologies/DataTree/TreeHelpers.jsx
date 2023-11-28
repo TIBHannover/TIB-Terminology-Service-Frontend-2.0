@@ -170,7 +170,7 @@ export default class TreeHelper{
    
   static async nodeHasChildren(ontology, nodeIri, mode){
       let node = "";
-      if(mode === 'term'){
+      if(mode === 'terms'){
         node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
       }
       else if(mode === "property"){
@@ -186,7 +186,7 @@ export default class TreeHelper{
 
   static async nodeIsRoot(ontology, nodeIri, mode){
       let node = "";
-      if(mode === 'term'){
+      if(mode === 'terms'){
         node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
       }
       else{
@@ -226,6 +226,26 @@ export default class TreeHelper{
         return nodesList[0].label ? 'label' : 'text';
       }
       return null;
+    }
+
+
+
+    static renderObsoletes(obsoletes, resultArrayToPush, startIndex, targetSelectedNodeIri){
+        let lastSelectedItemId = startIndex;  
+        for(let i=0; i < obsoletes.length; i++){         
+          if(targetSelectedNodeIri === obsoletes[i].iri){
+            continue;
+          }
+          let treeNode = new TreeNodeController();
+          let nodeIsClicked = (targetSelectedNodeIri && obsoletes[i].iri === targetSelectedNodeIri)  
+          if(nodeIsClicked){
+              lastSelectedItemId =  i + startIndex;
+          }  
+          let node = treeNode.buildNodeWithReact(obsoletes[i], i + startIndex, nodeIsClicked);                       
+          resultArrayToPush.push(node);
+        }
+      
+        return [resultArrayToPush, lastSelectedItemId];
     }
 
 

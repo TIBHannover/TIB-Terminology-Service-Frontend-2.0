@@ -7,35 +7,37 @@ import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
 import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
+import queryString from 'query-string'; 
 
 
 
 class Tree extends React.Component {
     constructor (props) {
         super(props)
-        this.state = ({
-          rootNodes: [],
-          rootNodesForSkos: [],
-          selectedNodeIri: '',
-          showNodeDetailPage: false,
-          componentIdentity: "",
-          termTree: false,
-          propertyTree: false,
-          ontologyId: '',      
-          childExtractName: "",
-          targetNodeIri: "",
-          treeDomContent: "",
-          resetTreeFlag: false,
-          siblingsVisible: false,
-          siblingsButtonShow: false,
-          subOrFullTreeBtnShow: false,
-          reduceBtnActive: true,
-          viewMode: true,
-          reload: false,
-          isLoadingTheComponent: true,
-          noNodeExist: false,
-          isSkos: false,
-          lastSelectedItemId: null 
+        this.state = ({            
+            rootNodes: [],
+            rootNodesForSkos: [],
+            selectedNodeIri: '',
+            showNodeDetailPage: false,
+            componentIdentity: "",
+            termTree: false,
+            propertyTree: false,
+            ontologyId: '',      
+            childExtractName: "",
+            targetNodeIri: "",
+            treeDomContent: "",
+            resetTreeFlag: false,
+            siblingsVisible: false,
+            siblingsButtonShow: false,
+            subOrFullTreeBtnShow: false,
+            reduceBtnActive: true,
+            viewMode: true,
+            reload: false,
+            isLoadingTheComponent: true,
+            noNodeExist: false,
+            isSkos: false,
+            lastSelectedItemId: null,
+            obsoletesShown: false          
         })
     
         this.setComponentData = this.setComponentData.bind(this);
@@ -49,11 +51,14 @@ class Tree extends React.Component {
         this.processKeyNavigation = this.processKeyNavigation.bind(this);
         this.loadTheTreeLastState = this.loadTheTreeLastState.bind(this);    
         this.createTreeActionButtons = this.createTreeActionButtons.bind(this);
+        this.showObsoletes = this.showObsoletes.bind(this);
     }
 
 
    
    async setComponentData(){
+    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
+    let showObsoltes = targetQueryParams.obsoletes === "true" ? true : false;          
     let rootNodes = this.props.rootNodes;
     let rootNodesForSkos = this.props.rootNodesForSkos;
     let ontologyId = this.props.ontology;
@@ -64,20 +69,20 @@ class Tree extends React.Component {
     let isSkos = this.props.isSkos;
     let termTree = false;
     let propertyTree = false;    
-    let childExtractName = "";
-    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){
-        if(componentIdentity === 'term'){         
+    let childExtractName = "";     
+    if ((rootNodes.length != 0 && this.state.rootNodes.length == 0) || resetFlag || reload){                
+        if(componentIdentity === 'terms'){         
             termTree = true
             propertyTree = false;
             childExtractName = "terms";
                          
         } 
-        else if(componentIdentity === 'property'){
+        else if(componentIdentity === 'props'){
             termTree = false;
             propertyTree = true;
             childExtractName = "properties";              
         }
-        else if(componentIdentity === 'individual'){
+        else if(componentIdentity === 'individuals'){
             termTree = false;
             propertyTree = false;
             childExtractName = "individuals";   
@@ -94,7 +99,8 @@ class Tree extends React.Component {
             resetTreeFlag: false,
             reload: false,
             noNodeExist: false,
-            isSkos: isSkos
+            isSkos: isSkos,
+            obsoletesShown: showObsoltes
           }, async () => {
             await this.buildTheTree(resetFlag, viewMode, reload);
           }); 
@@ -122,18 +128,18 @@ class Tree extends React.Component {
         let rootNodesWithChildren = [];
         let childrenList = [];  
         let lastSelectedItemId = "";
-        let showNodeDetailPage = false;
+        let showNodeDetailPage = false;       
 
         if(this.props.lastState && this.props.lastState.treeDomContent !== "" && !this.props.isIndividual){            
-            this.loadTheTreeLastState();
+            this.loadTheTreeLastState();            
             return true;
         }        
         else if (!target || resetFlag){
             let result = [];
-            if(this.state.isSkos && this.state.componentIdentity === "individual"){
+            if(this.state.isSkos && this.state.componentIdentity === "individuals"){
                 result = this.buildTheTreeFirstLayer(this.state.rootNodesForSkos);
             }
-            else{
+            else{                
                 result = this.buildTheTreeFirstLayer(this.state.rootNodes);
             }                                 
             treeList = result.treeDomContent;
@@ -142,9 +148,9 @@ class Tree extends React.Component {
             siblingsVisible = false;
             subOrFullTreeBtnShow = false;           
         }                    
-        else if((target != undefined && this.state.targetNodeIri != target) || reload ){
+        else if((target != undefined && this.state.targetNodeIri != target) || reload ){            
             showNodeDetailPage = true;
-            if(this.state.isSkos && this.state.componentIdentity === "individual"){                                
+            if(this.state.isSkos && this.state.componentIdentity === "individuals"){                                
                 treeList = await SkosHelper.buildSkosTree(this.state.ontologyId, target, viewMode);                                              
             }
             else{                
@@ -157,8 +163,9 @@ class Tree extends React.Component {
                     treeList = result.treeDomContent;
                     lastSelectedItemId = result.lastSelectedItemId;
                 }
-                else{                    
-                    for(let i=0; i < rootNodesWithChildren.length; i++){      
+                else{ 
+                    let i = 0;                  
+                    for(i=0; i < rootNodesWithChildren.length; i++){      
                         let treeNode = new TreeNodeController();
                         let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
@@ -170,6 +177,11 @@ class Tree extends React.Component {
                         let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
                         childrenList.push(node);
                     }
+
+                    if(this.state.obsoletesShown){            
+                        [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(this.props.obsoleteTerms, childrenList, i, target);
+                     }
+
                     treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                        
                 }                
             }
@@ -217,8 +229,9 @@ class Tree extends React.Component {
         let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
         if(sortKey){
             rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
-        }        
-        for(let i=0; i < rootNodes.length; i++){
+        }
+        let i = 0;        
+        for(i=0; i < rootNodes.length; i++){
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
@@ -226,7 +239,12 @@ class Tree extends React.Component {
             }  
             let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
             childrenList.push(node);
-        }        
+        }
+        
+        if(this.state.obsoletesShown){            
+           [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(this.props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
+        }
+
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);      
         return {"treeDomContent": treeList,  "lastSelectedItemId": lastSelectedItemId};
     }
@@ -256,7 +274,7 @@ class Tree extends React.Component {
                 reduceBtnActive: false,
                 lastSelectedItemId: clickedNodeId
             }, () =>{
-                if(this.state.componentIdentity !== "individual"){
+                if(this.state.componentIdentity !== "individuals"){
                     this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 }                
             });            
@@ -285,10 +303,13 @@ class Tree extends React.Component {
         else if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
             this.selectNode(e.target.parentNode);
         }
+        else if (e.target.tagName === "S"){ 
+            this.selectNode(e.target.parentNode.parentNode);
+        }
         else if (e.target.tagName === "I"){
             // expand a node by clicking on the expand icon
             TreeHelper.expandNode(e.target.parentNode, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {
-                if(this.state.componentIdentity !== "individual"){
+                if(this.state.componentIdentity !== "individuals"){
                     this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 }              
             });
@@ -329,7 +350,7 @@ class Tree extends React.Component {
                 let node = document.getElementById(lastSelectedItemId);                
                 if(treeNode.isNodeClosed(node)){
                     TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName, this.state.isSkos).then((res) => {
-                        if(this.state.componentIdentity !== "individual"){
+                        if(this.state.componentIdentity !== "individuals"){
                             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                         }
                     });  
@@ -347,7 +368,7 @@ class Tree extends React.Component {
                 let parentNode = treeNode.getParentNode(node.id);
                 if(treeNode.isNodeExpanded(node)){  
                     TreeHelper.expandNode(node, this.state.ontologyId, this.state.childExtractName).then((res) => {
-                        if(this.state.componentIdentity !== "individual"){
+                        if(this.state.componentIdentity !== "individuals"){
                             this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                         }
                     });
@@ -365,29 +386,29 @@ class Tree extends React.Component {
     }
   
   
-  resetTree(){
-    this.props.history.push(window.location.pathname);
-    this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-    this.props.nodeSelectionHandler("", false);
-    this.props.handleResetTreeInParent();
-    this.setState({
-      resetTreeFlag: true,
-      treeDomContent: "",
-      siblingsVisible: false,
-      siblingsButtonShow: false,
-      reload: false,
-      showNodeDetailPage: false,
-      subOrFullTreeBtnShow: false,
-      lastSelectedItemId: false
-    });
-  }
+    resetTree(){
+        this.props.history.push(window.location.pathname);
+        this.props.domStateKeeper("", this.state, this.props.componentIdentity);
+        this.props.nodeSelectionHandler("", false);
+        this.props.handleResetTreeInParent();
+        this.setState({
+            resetTreeFlag: true,
+            treeDomContent: "",
+            siblingsVisible: false,
+            siblingsButtonShow: false,
+            reload: false,
+            showNodeDetailPage: false,
+            subOrFullTreeBtnShow: false,
+            lastSelectedItemId: false
+        });
+    }
 
 
-async showSiblings(){
+    async showSiblings(){
         try{    
             let targetNodes = document.getElementsByClassName("targetNodeByIri");        
             if(!this.state.siblingsVisible){
-                if(this.state.isSkos && this.props.componentIdentity === "individual"){
+                if(this.state.isSkos && this.props.componentIdentity === "individuals"){
                     SkosHelper.showHidesiblingsForSkos(true, this.state.ontologyId, this.state.selectedNodeIri);
                 }
                 else if(!this.state.isSkos && await TreeHelper.nodeIsRoot(this.state.ontologyId, targetNodes[0].parentNode.dataset.iri, this.state.componentIdentity)){
@@ -400,13 +421,13 @@ async showSiblings(){
                 }
                 
                 this.setState({siblingsVisible: true}, ()=>{ 
-                    if(this.state.componentIdentity !== "individual"){
+                    if(this.state.componentIdentity !== "individuals"){
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     }
                 });
             }
             else{
-                if(this.state.isSkos && this.props.componentIdentity === "individual"){
+                if(this.state.isSkos && this.props.componentIdentity === "individuals"){
                     SkosHelper.showHidesiblingsForSkos(false, this.state.ontologyId, this.state.selectedNodeIri);
                 } 
         
@@ -419,7 +440,7 @@ async showSiblings(){
                 }
                 
                 this.setState({siblingsVisible: false}, ()=>{
-                    if(this.state.componentIdentity !== "individual"){
+                    if(this.state.componentIdentity !== "individuals"){
                         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                     }
                 });
@@ -431,28 +452,40 @@ async showSiblings(){
         
     }
 
-
-    /**
-     * Reduce tree. show/hide the sub-tree when a node is opened by iri.
-     */
+   
     reduceTree(){
         let reduceBtnActive = this.state.reduceBtnActive;  
         let showSiblings = !reduceBtnActive;
+        let showObsolete = this.state.showNodeDetailPage ? false : this.state.obsoletesShown;
         this.props.domStateKeeper("", this.state, this.props.componentIdentity);
         this.setState({
             reduceBtnActive: !reduceBtnActive,
             siblingsButtonShow: showSiblings,
             reload: true, 
             treeDomContent: "",
-            isLoadingTheComponent: true
+            isLoadingTheComponent: true,
+            obsoletesShown: showObsolete
         });
+    }
+
+
+    showObsoletes(){
+        let isObsoleteShown = this.state.obsoletesShown;  
+        this.props.domStateKeeper("", this.state, this.props.componentIdentity);            
+        let newUrl = Toolkit.setParamInUrl("obsoletes", !isObsoleteShown);
+        this.props.history.push(newUrl);
+        this.setState({            
+            reload: true,
+            isLoadingTheComponent: true,
+            treeDomContent: ""
+        });        
     }
 
 
     componentDidMount(){
         this.setComponentData();
         document.addEventListener("keydown", this.processKeyNavigation, false);    
-        if(this.props.isSkos && this.props.componentIdentity === "individual"){
+        if(this.props.isSkos && this.props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
         }        
     }
@@ -476,6 +509,13 @@ async showSiblings(){
                             {!this.props.isIndividual && this.state.selectedNodeIri !== "" &&
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.resetTree}>Reset</button> 
                             }
+                        </div>                        
+                    </div>
+                    <div className='row tree-action-btn-holder'>
+                        <div className="col-sm-12">                            
+                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.showObsoletes}>
+                                {!this.state.obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
+                            </button>                             
                         </div>                        
                     </div>
                     <div className='row tree-action-btn-holder'>

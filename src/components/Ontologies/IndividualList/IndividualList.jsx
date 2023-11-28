@@ -146,7 +146,7 @@ class IndividualsList extends React.Component {
     }
 
 
-    handleNodeSelectionInTreeView(selectedNodeIri, ShowDetailTable, componentIdentity="individual"){
+    handleNodeSelectionInTreeView(selectedNodeIri, ShowDetailTable, componentIdentity="individuals"){
         if(this.props.isSkos){
             this.setState({
                 selectedNodeIri: selectedNodeIri,
@@ -280,7 +280,7 @@ class IndividualsList extends React.Component {
                         <NodePage
                             iri={this.state.selectedNodeIri}
                             ontology={this.props.ontology}
-                            componentIdentity="individual"
+                            componentIdentity="individuals"
                             extractKey="individuals"
                             isSkos={this.state.isSkos}
                             isIndividual={true}

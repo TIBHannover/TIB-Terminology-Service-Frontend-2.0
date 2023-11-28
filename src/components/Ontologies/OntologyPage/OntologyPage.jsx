@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTreePage from '../DataTree/DataTreePage';
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology} from '../../../api/fetchData';
+import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
@@ -19,8 +19,17 @@ const TERM_TREE_TAB_ID = 1;
 const PROPERTY_TREE_TAB_ID = 2;
 const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
-const Notes_TAB_ID = 5;
+const NOTES_TAB_ID = 5;
 const GIT_ISSUE_LIST_ID = 6;
+
+const TAB_ID_MAP_TO_TAB_ENDPOINT = {
+  "terms": TERM_TREE_TAB_ID,
+  "props": PROPERTY_TREE_TAB_ID,
+  "individuals": INDIVIDUAL_LIST_TAB_ID,
+  "termList": TERM_LIST_TAB_ID,
+  "notes": NOTES_TAB_ID,
+  "gitpanel": GIT_ISSUE_LIST_ID
+}
 
 
 
@@ -39,29 +48,23 @@ class OntologyPage extends React.Component {
       rootTerms: [],
       skosRootIndividuals: [],
       rootProps: [],
+      obsoleteTerms: [],
+      obsoleteProps: [],
       waiting: false,
-      targetTermIri: " ",
-      targetPropertyIri: " ",
-      targetIndividualIri: " ",
-      targetTermListIri: " ",
+      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
+      lastTabsStates: {"terms": "", "props": "", "gitIssues": ""},
       rootNodeNotExist: false,
-      classTreeDomLastState: "",
-      propertyTreeDomLastState: "",
       isSkosOntology: false,
       ontologyShowAll: false,
-      showMoreLessOntologiesText: "+ Show More",
-      issueListComponentState: null,
+      showMoreLessOntologiesText: "+ Show More",      
       isSkosOntology: false
     })
     this.tabChange = this.tabChange.bind(this);
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
-    this.changeTreeContent = this.changeTreeContent.bind(this);
-    this.storeListOfGitIssuesState = this.storeListOfGitIssuesState.bind(this);    
+    this.tabsStateKeeper = this.tabsStateKeeper.bind(this);    
   }
-
-
 
 
   /**
@@ -106,69 +109,23 @@ class OntologyPage extends React.Component {
    * Set the active tab and its page on load
    */
   setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;
+    let requestedTab = this.props.match.params.tab;    
+    let lastRequestedTab = this.state.lastRequestedTab;
+    if (requestedTab === lastRequestedTab){
+      return true;
+    }
+
+    let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;   
+    let irisHistory = this.state.lastIrisHistory;
     let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-    let lastRequestedTab = this.state.lastRequestedTab;    
-    if (requestedTab !== lastRequestedTab && requestedTab === 'terms'){
-      this.setState({        
-        activeTab: TERM_TREE_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab,
-        targetTermIri: targetQueryParams.iri
-      });
-    }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'props'){
-      this.setState({       
-        activeTab: PROPERTY_TREE_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab,
-        targetPropertyIri: targetQueryParams.iri
+    irisHistory[requestedTab] = targetQueryParams.iri;  
 
-      });      
-    }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'individuals'){    
-      let lastIri = this.state.targetIndividualIri;
-      this.setState({        
-        activeTab: INDIVIDUAL_LIST_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab,
-        targetIndividualIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
-
-      });
-    }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'termList'){    
-      let lastIri = this.state.targetTermListIri;
-      this.setState({       
-        activeTab: TERM_LIST_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab,
-        targetTermListIri: (typeof(targetQueryParams.iri) !== "undefined" ? targetQueryParams.iri : lastIri)
-
-      });
-    }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){          
-      this.setState({       
-        activeTab: Notes_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab
-      });
-    }
-    else if (requestedTab !== lastRequestedTab && requestedTab === 'gitpanel'){          
-      this.setState({       
-        activeTab: GIT_ISSUE_LIST_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab
-
-      });
-    }
-    else if (requestedTab !== lastRequestedTab){
-      this.setState({        
-        activeTab: OVERVIEW_TAB_ID,
-        waiting: false,
-        lastRequestedTab: requestedTab
-
-      });
-    }
+    this.setState({        
+      activeTab: activeTabId,
+      waiting: false,
+      lastRequestedTab: requestedTab,
+      lastIrisHistory: irisHistory
+    });
   }
 
 
@@ -176,16 +133,16 @@ class OntologyPage extends React.Component {
   /**
      * Get the ontology root classes 
      */
-  async getRootTerms (ontologyId) {    
+  async getRootTerms (ontologyId) {       
     let rootTerms = [];
-    let skosRootIndividuals = [];
+    let skosRootIndividuals = [];    
     let isSkos = await isSkosOntology(ontologyId);    
     if(isSkos){
       skosRootIndividuals = await getSkosOntologyRootConcepts(ontologyId);
       skosRootIndividuals = await shapeSkosConcepts(skosRootIndividuals);
     }
     rootTerms = await getOntologyRootTerms(ontologyId);
-
+    let obsoleteTerms = await getObsoleteTerms(ontologyId, "terms"); 
     if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
         this.setState({
@@ -193,7 +150,8 @@ class OntologyPage extends React.Component {
           rootTerms: rootTerms,
           skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: false,
-          isSkosOntology: isSkos
+          isSkosOntology: isSkos,
+          obsoleteTerms: obsoleteTerms          
         });
       }
       else{
@@ -202,7 +160,8 @@ class OntologyPage extends React.Component {
           rootTerms: rootTerms,
           skosRootIndividuals: skosRootIndividuals,
           rootNodeNotExist: true,
-          isSkosOntology: isSkos
+          isSkosOntology: isSkos,
+          obsoleteTerms: obsoleteTerms
         });
       }      
     }
@@ -212,7 +171,8 @@ class OntologyPage extends React.Component {
         errorRootTerms: 'Can not get this ontology root terms',
         skosRootIndividuals: [],
         rootNodeNotExist: true,
-        isSkosOntology: isSkos
+        isSkosOntology: isSkos,
+        rootTermsWithObsoletes: []
       });
     }
   }
@@ -224,17 +184,20 @@ class OntologyPage extends React.Component {
      */
   async getRootProps (ontologyId) {
     let rootProps = await getOntologyRootProperties(ontologyId);
+    let obsoleteProps = await getObsoleteTerms(ontologyId, "properties"); 
     if (typeof rootProps != undefined){
       if(rootProps.length !== 0){
         this.setState({
           rootProps: rootProps,
-          rootNodeNotExist: false
+          rootNodeNotExist: false,
+          obsoleteProps: obsoleteProps
         });
       }
       else{
         this.setState({
           rootProps: rootProps,
-          rootNodeNotExist: true
+          rootNodeNotExist: true,
+          obsoleteProps: []
         });
       }
     }
@@ -273,52 +236,26 @@ class OntologyPage extends React.Component {
  * Need to pass it to the DataTree component
  */
   changeInputIri(iri, componentId){   
-    if(componentId === "term"){
-      this.setState({
-        targetTermIri: iri
-      });
-    }
-    else if (componentId === "property"){
-      this.setState({
-        targetPropertyIri: iri
-      });
-    }
-    else if (componentId === "individual"){            
-      this.setState({
-        targetIndividualIri: iri
-      });
-    }
-    else if (componentId === "termList"){            
-      this.setState({
-        targetTermListIri: iri
-      });
-    }
-    
+    let irisHistory = this.state.lastIrisHistory;
+    irisHistory[componentId] = iri;
+    this.setState({
+      lastIrisHistory: irisHistory
+    });
   }
 
 
+  
   /**
-   * Change the data tree last state when the tree changes
-   * It keep the tree last state and keep it open on tab switch
-   * @param {*} domContent 
-   * @param {*} treeId: It is class or property tree (term/property)
+   * Stores the last state in for tabs components to prevent reload on tab change
    */
-  changeTreeContent(domContent, stateObject, treeId){
+  tabsStateKeeper(domContent, stateObject, componentId){
     typeof(domContent) !== "undefined" ? stateObject.treeDomContent = domContent : stateObject.treeDomContent = ""; 
-    if(treeId === "term"){      
-      this.setState({classTreeDomLastState: stateObject});
-    }
-    else if (treeId === "property"){
-      this.setState({propertyTreeDomLastState: stateObject});
-    }
+    let lastTabsStates = this.state.lastTabsStates;
+    lastTabsStates[componentId] = stateObject;
+    this.setState({
+      lastTabsStates: lastTabsStates
+    });
   }
-
-    storeListOfGitIssuesState(stateObject){
-        this.setState({
-        issueListComponentState: stateObject
-        });
-    }
-
 
   
   componentDidMount () {
@@ -355,15 +292,16 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
                                 <DataTreePage
                                   rootNodes={this.state.rootTerms}
+                                  obsoleteTerms={this.state.obsoleteTerms}
                                   rootNodesForSkos={this.state.skosRootIndividuals}
-                                  componentIdentity={'term'}
-                                  iri={this.state.targetTermIri}
+                                  componentIdentity={'terms'}
+                                  iri={this.state.lastIrisHistory['terms']}
                                   key={'termTreePage'}                    
                                   ontology={this.state.ontology}
                                   rootNodeNotExist={this.state.rootNodeNotExist}
                                   iriChangerFunction={this.changeInputIri}
-                                  lastState={this.state.classTreeDomLastState}
-                                  domStateKeeper={this.changeTreeContent}
+                                  lastState={this.state.lastTabsStates['terms']}
+                                  domStateKeeper={this.tabsStateKeeper}
                                   isSkos={this.state.isSkosOntology}
                                   isIndividuals={false}
                                 />
@@ -372,15 +310,16 @@ class OntologyPage extends React.Component {
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
                                 <DataTreePage
                                   rootNodes={this.state.rootProps}
+                                  obsoleteTerms={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
-                                  componentIdentity={'property'}
-                                  iri={this.state.targetPropertyIri}
+                                  componentIdentity={'props'}
+                                  iri={this.state.lastIrisHistory['props']}
                                   key={'propertyTreePage'}
                                   ontology={this.state.ontology}
                                   rootNodeNotExist={this.state.rootNodeNotExist}
                                   iriChangerFunction={this.changeInputIri}
-                                  lastState={this.state.propertyTreeDomLastState}
-                                  domStateKeeper={this.changeTreeContent}
+                                  lastState={this.state.lastTabsStates['props']}
+                                  domStateKeeper={this.tabsStateKeeper}
                                   isIndividuals={false}
                                 />
                 }
@@ -388,28 +327,28 @@ class OntologyPage extends React.Component {
                                 <IndividualsList
                                   rootNodes={this.state.rootTerms}
                                   rootNodesForSkos={this.state.skosRootIndividuals}                                                    
-                                  iri={this.state.targetIndividualIri}
-                                  componentIdentity={'individual'}
+                                  iri={this.state.lastIrisHistory['individuals']}
+                                  componentIdentity={'individuals'}
                                   key={'individualsTreePage'}
                                   ontology={this.state.ontology}                              
                                   iriChangerFunction={this.changeInputIri}
                                   lastState={""}
-                                  domStateKeeper={this.changeTreeContent}
+                                  domStateKeeper={this.tabsStateKeeper}
                                   isSkos={this.state.isSkosOntology}
                                   individualTabChanged={this.state.individualTabChanged}                                
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
                                 <TermList                              
-                                  iri={this.state.targetTermListIri}
+                                  iri={this.state.lastIrisHistory['termList']}
                                   componentIdentity={'termList'}
                                   key={'termListPage'}
                                   ontology={this.state.ontologyId}                              
                                   iriChangerFunction={this.changeInputIri}                              
                                   isSkos={this.state.isSkosOntology}                              
                                 />
-                }
-                {!this.state.waiting && (this.state.activeTab === Notes_TAB_ID) &&
+                }             
+                {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
                                 <NoteList                  
                                   componentIdentity={'notes'}
                                   key={'notesPage'}
@@ -423,8 +362,8 @@ class OntologyPage extends React.Component {
                                   key={'gitIssueList'}
                                   ontology={this.state.ontology}                              
                                   isSkos={this.state.isSkosOntology}
-                                  lastState={this.state.issueListComponentState}                                  
-                                  storeListOfGitIssuesState={this.storeListOfGitIssuesState}
+                                  lastState={this.state.lastTabsStates['gitIssues']}                                  
+                                  storeListOfGitIssuesState={this.tabsStateKeeper}
                                 />
                 } 
 

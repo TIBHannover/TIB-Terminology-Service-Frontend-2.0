@@ -228,13 +228,8 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string,
   }  
   let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
   let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;  
-  let node = <any> "";
-  if(mode === "individuals"){
-    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri), getCallSetting);
-  }
-  else{
-    node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
-  }
+  let node = <any> "";  
+  node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
 
   if (node.status === 404){
     return false;
@@ -250,11 +245,18 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string,
  
   let parents = await getParents(node, mode);
   if(mode === "terms"){
-    let rels = await getClassRelations(node, ontology);
-    node['relations'] = await getRelations(node['iri'], ontology);
-    node['eqAxiom'] = await getEqAxiom(node['iri'], ontology);
-    node['subClassOf'] = await getSubClassOf(node['iri'], ontology);
-    node['instancesList'] = await getIndividualInstancesForClass(ontology, node['iri']);
+    // let rels = await getClassRelations(node, ontology);
+    let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
+      getRelations(node['iri'], ontology),
+      getEqAxiom(node['iri'], ontology),
+      getSubClassOf(node['iri'], ontology),
+      getIndividualInstancesForClass(ontology, node['iri'])
+
+    ]);
+    node['relations'] = relations;
+    node['eqAxiom'] = eqAxiom;
+    node['subClassOf'] = subClassOf; 
+    node['instancesList'] = instancesList;
   }
   else{
     node['relations'] = [];
@@ -487,11 +489,14 @@ export async function getIndividualInstancesForClass(ontologyId:string, classIri
 }
 
 
-export async function getAutoCompleteResult(enteredTerm:string, ontologyId:string, type:string){
+export async function getAutoCompleteResult(enteredTerm:string, ontologyId:string, type:string, obsoletes:any = null){
   try{
     let autocompleteApiBaseUrl = <any> process.env.REACT_APP_SEARCH_URL;
     autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
-    let url = `${autocompleteApiBaseUrl}?q=${enteredTerm}&ontology=${ontologyId}&type=${type}&rows=10`;
+    let url = `${autocompleteApiBaseUrl}?q=${enteredTerm}&ontology=${ontologyId}&type=${type}&rows=10`;    
+    if(obsoletes){
+      url += "&obsoletes=true";
+    }    
     let result = await fetch(url, getCallSetting);
     result = await result.json();
     result = result['response']['docs'];
@@ -502,6 +507,38 @@ export async function getAutoCompleteResult(enteredTerm:string, ontologyId:strin
     return [];
   }
 
+}
+
+export async function getObsoleteTermsForTermList(ontologyId:string, termType:string, page:any, size:any) {
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/";  
+    url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=" + size + "&page=" + page;    
+    let res =  await (await fetch(url, getCallSetting)).json();
+    let totalTermsCount = res['page']['totalElements'];
+    res = res['_embedded'];
+    return {"results": res['terms'], "totalTermsCount":totalTermsCount };
+  }
+  catch(e){
+    return {"results": [], "totalTermsCount":0};
+  }
+  
+}
+
+
+
+export async function getObsoleteTerms(ontologyId:string, termType:string) {
+  try{
+    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let url = OntologiesBaseServiceUrl + "/";  
+    url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=1000";
+    let res =  await (await fetch(url, getCallSetting)).json();
+    return res['_embedded'][termType];
+  }
+  catch(e){
+    return [];
+  }
+  
 }
 
 
