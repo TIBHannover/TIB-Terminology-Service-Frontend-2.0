@@ -1,5 +1,5 @@
 import {React, useState, useEffect} from "react";
-import { buildNoteAboutPart } from "./helpers";
+import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
 import Toolkit from "../../common/Toolkit";
 import { Link } from 'react-router-dom';
 import AuthTool from "../../User/Login/authTools";
@@ -37,34 +37,35 @@ export const NoteCard = (props) => {
             <div className="col-sm-12">
                 <div className="card note-list-card">
                     <div class="card-header">
-                        <NoteCardHeader note={props.note} /> 
+                        <NoteCardHeader 
+                            note={props.note} 
+                            isAdminForOntology={props.isAdminForOntology}
+                            numberOfpinned={props.numberOfpinned}
+                        /> 
                     </div>
                     <div className="card-body">
                         <div className="row">
-                            <div className="coll-sm-12">
+                            <div className="col-sm-6">
                                 <h6 className="card-title">
                                     <Link to={noteUrl} 
-                                        className="note-list-title" 
+                                        className="note-list-title custom-truncate" 
                                         value={props.note['id']} 
                                         onClick={props.noteSelectionHandler}
                                         >
                                         {props.note['title']}
                                     </Link>
                                 </h6>
+                            </div>
+                            <div className="col-sm-5">
+                                <small>
+                                    About ({props.note['semantic_component_type']}): {buildNoteAboutPart(props.note)}                         
+                                </small>   
+                            </div>
+                            <div className="col-sm-1 text-right">
+                                <i class="fa fa-comment" aria-hidden="true"><small>{props.note['comments_count']}</small></i>
                             </div>                                    
-                        </div>                                
-                        <p className="card-text">
-                            <small>
-                                <ul className="">
-                                    <li>type: {props.note['semantic_component_type']}</li>
-                                    <li>About: {buildNoteAboutPart(props.note)}</li>
-                                </ul>                            
-                            </small>                                    
-                        </p>                        
-                    </div>
-                    <div class="card-footer note-card-footer text-muted">                                
-                        <i class="fa fa-comment" aria-hidden="true"></i><small>{props.note['comments_count']}</small>
-                    </div>
+                        </div>                                                                             
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -123,7 +124,8 @@ export const NoteCardHeader = (props) => {
                 <small>
                     {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
-                {linkCopied && <CopiedSuccessAlert message="link copied" />}
+                {note['pinned'] && <div className="pinned-message-icon">Pinned</div>}
+                {linkCopied && <CopiedSuccessAlert message="link copied" />}                
             </div>
             <div className="col-sm-3">
                 <div className="row">                    
@@ -139,7 +141,7 @@ export const NoteCardHeader = (props) => {
                                 <div class="dropdown-item note-dropdown-item">
                                     <button 
                                         type="button" 
-                                        class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
+                                        class="btn btn-danger btn-sm note-action-menu-btn borderless-btn"                                      
                                         onClick={() => {
                                             let searchParams = new URLSearchParams(window.location.search);
                                             let locationObject = window.location;
@@ -162,15 +164,25 @@ export const NoteCardHeader = (props) => {
                                     <span>
                                         <div class="dropdown-divider"></div>
                                         <div class="dropdown-item note-dropdown-item">
+                                            <PinnModalBtn
+                                                modalId={note['id']}  
+                                                key={"pinBtnNode" + note['id']} 
+                                                note={note}    
+                                                callHeaders={callHeader}
+                                                isAdminForOntology={props.isAdminForOntology}
+                                                numberOfpinned={props.numberOfpinned}                                      
+                                             />
+                                        </div>
+                                        <div class="dropdown-item note-dropdown-item">
                                             <button type="button" 
-                                                class="btn btn-sm borderless-btn note-edit-btn" 
+                                                class="btn btn-sm borderless-btn note-action-menu-btn" 
                                                 data-toggle="modal" 
                                                 data-target={"#edit-note-modal" + note['id']}
                                                 data-backdrop="static"
                                                 data-keyboard="false"
                                                 key={"editNode" + note['id']}                      
                                                 >
-                                                <i class="fa fa-edit"></i> Edit
+                                                Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
@@ -198,6 +210,11 @@ export const NoteCardHeader = (props) => {
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
                 key={"deleteNode" + note['id']}
+            />
+            <PinnModal 
+                note={note}
+                modalId={note['id']}
+                callHeaders={callHeader}
             />
         </div> 
     ];
@@ -241,7 +258,7 @@ export const CommentCardHeader = (props) =>{
                                 <div class="dropdown-item note-dropdown-item">
                                     <button 
                                         type="button" 
-                                        class="btn btn-danger btn-sm note-edit-btn borderless-btn"                                      
+                                        class="btn btn-danger btn-sm note-action-menu-btn borderless-btn"                                      
                                         onClick={() => {
                                             let url = window.location.origin + Toolkit.setParamInUrl('comment', comment['id']);                                            
                                             navigator.clipboard.writeText(url);
@@ -260,12 +277,12 @@ export const CommentCardHeader = (props) =>{
                                         <div class="dropdown-item note-dropdown-item">
                                             <button 
                                                 type="button" 
-                                                class="btn btn-danger btn-sm note-edit-btn borderless-btn"
+                                                class="btn btn-danger btn-sm note-action-menu-btn borderless-btn"
                                                 data-id={comment['id']}
                                                 data-content={comment['content']}
                                                 onClick={props.editHandlerFunc}
                                                 >
-                                                <i class="fa fa-edit"></i> Edit
+                                                Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
@@ -287,7 +304,7 @@ export const CommentCardHeader = (props) =>{
                 callHeaders={callHeader}
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
-            />
+            />            
         </div> 
     ];
 }

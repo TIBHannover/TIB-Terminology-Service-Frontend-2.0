@@ -58,18 +58,17 @@ export async function editNoteComment({commentId, content, ontologyId}){
 }
 
 
-export async function getNoteDetail({noteId}){
+export async function getNoteDetail({noteId, ontologyId}){
     try{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
-        let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId + '&withComments=True';
+        let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId + '&withComments=True&ontology=' + ontologyId;
         let result = await fetch(url, {headers:headers});
         if (result.status === 404){
             return '404';
         }
-        result = await result.json();
-        let note = result['_result']['note'];
-        note['comments_count'] = note['comments'].length;
-        return note;
+        result = await result.json();        
+        result['_result']['note']['comments_count'] = result['_result']['note']['comments'].length;
+        return result['_result'];
     }
     catch(e){        
         return {}
