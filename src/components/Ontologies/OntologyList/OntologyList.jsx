@@ -1,384 +1,176 @@
-import React from 'react';
+import {useState, useEffect} from 'react';
+import { useHistory } from 'react-router';
 import queryString from 'query-string'; 
 import { getAllOntologies, getCollectionOntologies } from '../../../api/fetchData';
-import {BuildCollectionForCard, CreateFacet, ontology_has_searchKey, createCollectionsCheckBoxes, sortArrayOfOntologiesBasedOnKey} from './helpers';
-import Pagination from "../../common/Pagination/Pagination";
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { OntologyListRender } from './OntologyListRender';
+import { OntologyListFacet } from './OntologyListFacet';
+import Toolkit from '../../common/Toolkit';
 
 
 
 const TITLE_SORT_KEY = "title";
-const CLASS_SORT_KEY = "numberOfTerms";
-const PROPERT_SORT_KEY = "numberOfProperties";
-const INDIVIDUAL_SORT_KEY = "numberOfIndividuals";
-const PREFIX_SORT_KEY = "ontologyId";
-const TIME_SORT_KEY = "loaded";
 
 
 
-class OntologyList extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = ({
-      error: null,
-      isLoaded: false,
-      ontologies: [],
-      pageNumber: 1,
-      target: this.props.target,
-      pageSize: 10,
-      ontologiesHiddenStatus: [],
-      ontologyListContent: '',
-      unFilteredOntologies: [],
-      unFilteredHiddenStatus: [],
-      sortField: TITLE_SORT_KEY,
-      selectedCollections: [],
-      listOfAllCollectionsCheckBoxes: [],
-      keywordFilterString: "",
-      exclusiveCollections: false
-    })
-    this.setComponentData = this.setComponentData.bind(this);
-    this.handleSortChange = this.handleSortChange.bind(this);
-    this.handleFacetCollection = this.handleFacetCollection.bind(this);
-    this.getAllCollections = this.getAllCollections.bind(this);
-    this.runFacet = this.runFacet.bind(this);
-    this.handlePagination = this.handlePagination.bind(this);
-    this.filterWordChange = this.filterWordChange.bind(this);
-    this.processUrlProps = this.processUrlProps.bind(this);
-    this.updateUrl= this.updateUrl.bind(this);
-    this.handleSwitchange = this.handleSwitchange.bind(this);
-    this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
-  }
+const OntologyList = (props) => {
+  let url = new URL(window.location);   
+  let collectionsInUrl = url.searchParams.get('collection');
+  let sortBy = url.searchParams.get('sorting');
+  let page = url.searchParams.get('page');
+  let keywordFilter = url.searchParams.get('keyword');
+  collectionsInUrl = typeof(collectionsInUrl) === "string" ? [collectionsInUrl] : [];
+  keywordFilter = keywordFilter ? keywordFilter : "";
+  sortBy = sortBy ? sortBy : TITLE_SORT_KEY;
+  page = page ? parseInt(page) : 1;
 
 
-   async setComponentData (){    
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [ontologies, setOntologies] = useState([]);
+  const [pageNumber, setPageNumber] = useState(page);  
+  const [pageSize, setPageSize] = useState(10);
+  const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);  
+  const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);  
+  const [sortField, setSortField] = useState(sortBy);
+  const [selectedCollections, setSelectedCollections] = useState(collectionsInUrl);  
+  const [keywordFilterString, setKeywordFilterString] = useState(keywordFilter);
+  const [exclusiveCollections, setExclusiveCollections] = useState(false);
+
+  const history = useHistory();
+
+
+
+  async function setComponentData (){    
     try{      
       let allOntologies = await getAllOntologies();      
-      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, this.state.sortField);      
-      let hiddenStatus = [];
-      for (let i = 0; i < allOntologies.length; i++) {
-          if (i < this.state.pageSize) {
-            hiddenStatus[i] = true
-          } else {
-            hiddenStatus[i] = false
-          }
-      }      
-      this.setState({
-        isLoaded: true,
-        ontologies: allOntologies,
-        unFilteredOntologies: allOntologies,
-        ontologiesHiddenStatus: hiddenStatus,
-        unFilteredHiddenStatus: hiddenStatus,
-        ontologyListContent: this.createOntologyList()
-      }, () => {
-        this.processUrlProps(); 
-      });
+      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, sortField);           
+      setIsLoaded(true);
+      setOntologies(allOntologies);
+      setUnFilteredOntologies(allOntologies);      
     }
-
     catch(error){      
-      this.setState({
-        isLoaded: true,
-        error
-      });
+      setIsLoaded(true);
+      setError(error);        
     }
   
   }
 
 
-  /**
-   * Process the input parameter in the url.
-   * Inputs are used for setting facet filters
-   */
-   processUrlProps(){    
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);     
-    let collections = targetQueryParams.collection;
-    let sortBy = targetQueryParams.sorting;
-    let page = targetQueryParams.page;
-    let keywordFilter = targetQueryParams.keyword;
-    if(!collections){
-      collections = [];
-    }
-    if(typeof(collections) === "string"){
-      collections = [collections];
-    }
-    if(!keywordFilter){
-      keywordFilter = "";
-    }
-    if(!sortBy){
-      sortBy = TITLE_SORT_KEY;
-    }
-    this.setState({
-      sortField: sortBy.trim(),
-      pageNumber: page
-    }, ()=> {
-      this.getAllCollections(collections);
-      this.runFacet(collections, keywordFilter.trim(), page);
-    });    
+  function handlePagination (value) {    
+    setPageNumber(parseInt(value));     
   }
 
 
-
-
-  /**
-   * Get the list of all Collections view (checkboxes)
-   */
-  getAllCollections(selectedCollections){
-    createCollectionsCheckBoxes(this.handleFacetCollection, selectedCollections).then(data => {
-      this.setState({
-        listOfAllCollectionsCheckBoxes: data
-      });
-    });
+  function showInPageRangeOntologies(){
+    let down = (pageNumber - 1) * pageSize;
+    let up = down + (pageSize - 1);
+    let hiddenStatus = new Array(ontologies.length).fill(false);
+    for (let i = down; i <= up; i++) {
+      hiddenStatus[i] = true;
+    }
+    setOntologiesHiddenStatus(hiddenStatus);   
   }
+
+
+  function handlePageSizeDropDownChange(e){
+    setPageSize(parseInt(e.target.value));    
+  }
+
+
+  function handleSortChange(e, value){
+    let newSortField = e.target.value;    
+    let sortedOntology = sortArrayOfOntologiesBasedOnKey(ontologies, newSortField);
+    setSortField(newSortField);
+    setOntologies(sortedOntology);     
+  }
+
   
-  /**
-    * Handles the page size values from dropdown
-    * @param {*} value
-    */
-  handlePageSizeDropDownChange(e){
-    let selectedCollections = this.state.selectedCollections;
-    let size = parseInt(e.target.value);
-    let pageNumber = this.state.pageNumber + 1;
-    this.setState({
-      pageSize: size
-    });
-    this.runFacet(selectedCollections, this.state.keywordFilterString);
-  }
-
-  /**
-     * Handle the click on the pagination
-     * This function get pass to the pagination component
-     * @param {*} value
-     */
-  handlePagination (value) {
-    this.setState({
-      pageNumber: value,
-      paginationReset: false
-    }, () => {
-        let down = (this.state.pageNumber - 1) * this.state.pageSize;
-        let up = down + (this.state.pageSize - 1);
-        let hiddenStatus = new Array(this.state.ontologies.length).fill(false);
-        for (let i = down; i <= up; i++) {
-          hiddenStatus[i] = true;
-        }
-        this.setState({
-          ontologiesHiddenStatus: hiddenStatus
-        });
-        this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
-    })
+  function filterWordChange(e, value){
+    setKeywordFilterString(e.target.value);
   }
 
 
-
-  /**
-     * Count the number of pages for the pagination
-     * @returns
-     */
-  pageCount () {    
-    return (Math.ceil(this.state.ontologies.length / this.state.pageSize))
+  function handleSwitchange(e){
+    setExclusiveCollections(e.target.checked);    
   }
 
 
-  /**
-   * Handle the change in the search box. Calls the filter function
-   * This function gets pass to filter word box.
-   * @param {*} e
-   * @param {*} value
-   */
-  filterWordChange = (e, value) => {
-    this.runFacet(this.state.selectedCollections, e.target.value);    
-  }
-
-
-
-  /**
-     * Handle the change in the sort dropDown menu
-     *
-     * @param {*} e
-     * @param {*} value
-     */
-  handleSortChange = (e, value) => {
-    let ontologies = this.state.ontologies;
-    let sortedOntology = sortArrayOfOntologiesBasedOnKey(ontologies, e.target.value);
-    this.setState({
-      sortField: e.target.value,
-      ontologies: sortedOntology
-    }, () => {
-      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
-    })
-  }
-
-
-  /**
-   * Handle facet filter for collection
-   * @returns 
-   */
-  handleFacetCollection = (e, value) => {
-    let selectedCollections = this.state.selectedCollections;
-    let collection = e.target.value.trim(); 
-    if(e.target.checked){
-      // do check
-      selectedCollections.push(collection);
+  function handleFacetCollection(e, value){    
+    let collection = e.target.value.trim();         
+    let currentSelectedCollections = [...selectedCollections];
+    if(e.target.checked){      
+      currentSelectedCollections.push(collection);
       document.getElementById(e.target.id).checked = true;
     }
-    else{
-      // do uncheck
-      let index = selectedCollections.indexOf(collection);
-      selectedCollections.splice(index, 1);        
+    else{      
+      let index = currentSelectedCollections.indexOf(collection);
+      currentSelectedCollections.splice(index, 1);        
       document.getElementById(e.target.id).checked = false;    
+    }        
+    setSelectedCollections(currentSelectedCollections);    
+  }
+
+
+  async function runFacet(){     
+    let ontologiesList = [...unFilteredOntologies]; 
+    let keywordOntologies = [];
+    if(keywordFilterString !== ""){
+      // run keyword filter    
+      for (let i = 0; i < ontologiesList.length; i++) {
+        let ontology = ontologiesList[i];
+        if (ontology_has_searchKey(ontology, keywordFilterString)) {
+          keywordOntologies.push(ontology)
+        }
+      }
+      ontologiesList = keywordOntologies;
     }
-    this.runFacet(selectedCollections, this.state.keywordFilterString);
+  
+    if(selectedCollections.length !== 0){
+      // run collection filter
+      let collectionOntologies = await getCollectionOntologies(selectedCollections, exclusiveCollections);
+      let collectionFilteredOntologies = [];
+      for (let onto of collectionOntologies){
+        if(typeof(ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
+          collectionFilteredOntologies.push(onto);
+        }
+      }
+      ontologiesList = collectionFilteredOntologies;
+  
+    }
+  
+    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);    
+    setOntologies(ontologiesList);
+    setPageNumber(1);    
   }
 
 
-  /**
-   * Handle the switch change between inersection and union
-   */
-  handleSwitchange(e){
-    this.setState({
-      exclusiveCollections: e.target.checked
-    }, ()=>{
-      this.runFacet(this.state.selectedCollections, this.state.keywordFilterString);      
-    });
-  }
-
-
-/**
- * Update the url based on facet values
- */
-  updateUrl(selectedCollections, enteredKeyword){    
-    this.props.history.push(window.location.pathname);
+  function updateUrl(){       
     let currentUrlParams = new URLSearchParams();
 
-    if(enteredKeyword !== ""){
-      currentUrlParams.append('keyword', enteredKeyword);
+    if(keywordFilterString !== ""){
+      currentUrlParams.append('keyword', keywordFilterString);
     }
 
     if(selectedCollections.length !== 0){
       for(let col of selectedCollections){
         currentUrlParams.append('collection', col);        
       }
-      currentUrlParams.append('and', this.state.exclusiveCollections);
+      currentUrlParams.append('and', exclusiveCollections);
     }
 
-    if(this.state.sortField !== TITLE_SORT_KEY){
-      currentUrlParams.append('sorting', this.state.sortField);
+    if(sortField !== TITLE_SORT_KEY){
+      currentUrlParams.append('sorting', sortField);
     }
 
-    currentUrlParams.append('page', this.state.pageNumber);
-    this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
+    currentUrlParams.append('page', pageNumber);    
+    history.push(window.location.pathname + "?" + currentUrlParams.toString());    
   }
 
 
 
-async runFacet(selectedCollections, enteredKeyword, page=1){
-  if (selectedCollections.length === 0 && enteredKeyword === "" && this.state.sortField === TITLE_SORT_KEY){
-    // no filter exist
-    let preOntologies = this.state.unFilteredOntologies;
-    let preHiddenStatus = this.state.unFilteredHiddenStatus;
-    this.setState({
-      selectedCollections: selectedCollections,
-      ontologies: preOntologies,
-      ontologiesHiddenStatus: preHiddenStatus,
-      pageNumber: page,
-      keywordFilterString: ""
-    }, ()=>{
-      this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
-      this.handlePagination(page);
-    });
-    return true;
-  }
-  
-  let ontologies = this.state.unFilteredOntologies; 
-  let keywordOntologies = [];
-  if(enteredKeyword !== ""){
-    // run keyword filter    
-    for (let i = 0; i < ontologies.length; i++) {
-      let ontology = ontologies[i];
-      if (ontology_has_searchKey(ontology, enteredKeyword)) {
-        keywordOntologies.push(ontology)
-      }
-    }
-    ontologies = keywordOntologies;
-  }
-
-  if(selectedCollections.length !== 0){
-    // run collection filter
-    let collectionOntologies = await getCollectionOntologies(selectedCollections, this.state.exclusiveCollections);
-    let collectionFilteredOntologies = [];
-    for (let onto of collectionOntologies){
-      if(typeof(ontologies.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
-        collectionFilteredOntologies.push(onto);
-      }
-    }
-    ontologies = collectionFilteredOntologies;
-
-  }
-
-  ontologies = sortArrayOfOntologiesBasedOnKey(ontologies, this.state.sortField);
-  let hiddenStatus = [];
-  for(let i=0; i < ontologies.length; i++){
-    if (i <= this.state.pageSize){
-      hiddenStatus.push(true);
-    }
-    else{
-      hiddenStatus.push(false);
-    }
-  }
-  this.setState({
-    selectedCollections: selectedCollections,
-    keywordFilterString: enteredKeyword,
-    ontologies: ontologies,
-    ontologiesHiddenStatus: hiddenStatus,
-    pageNumber: page
-  }, ()=>{
-    this.updateUrl(this.state.selectedCollections, this.state.keywordFilterString);
-    this.handlePagination(page);
-  });
-}
-
-
-/**
- * Create the ontology list view
- *
- * @returns
- */
-  createOntologyList () {
-    let ontologyList = []        
-    for (let i = 0; i < this.state.ontologies.length; i++) {
-      let item = this.state.ontologies[i]
-      ontologyList.push(this.state.ontologiesHiddenStatus[i] &&                
-            <div className="row result-card" id={'ontology_' + i} key={item.ontologyId}>
-              <div className='col-sm-9'>
-                <div className="ontology-card-title-section">                            
-                  <a  href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className='ontology-button btn btn-secondary'>{item.ontologyId}</a>
-                  <a  href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{item.config.title}</b></a>
-                </div>
-                <div className="ontology-card-description">
-                  <p>{item.config.description ? item.config.description : ""}</p>
-                </div>
-                {process.env.REACT_APP_PROJECT_ID === "general" &&
-                <div className='ontology-card-collection-name'>
-                  <b>Collections:</b>              
-                  {item.config.classifications[0]
-                    ? BuildCollectionForCard(item.config.classifications[0].collection)
-                    : "-"
-                    }
-                </div>}
-              </div>
-              <div className="col-sm-3 ontology-card-meta-data">
-                <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
-                <hr/>
-                <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
-                <hr />
-                <span className='ontology-meta-data-field-span'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
-              </div>
-            </div>                    
-      )
-    }
-    
-    return ontologyList
-  }
-
-  componentDidUpdate(){
+  useEffect(() => {
+    setComponentData();
+    showInPageRangeOntologies();
     let allCollections = document.getElementsByClassName('collection-checkbox');
     for(let checkbox of allCollections){
       if(checkbox.dataset.ischecked === "true"){
@@ -386,79 +178,101 @@ async runFacet(selectedCollections, enteredKeyword, page=1){
       }
       delete checkbox.dataset.ischecked;
     }
-  }
+  }, []);
+
+
+
+  useEffect(() => {    
+      updateUrl();
+      runFacet();
+      showInPageRangeOntologies();
+  }, [keywordFilterString, selectedCollections, sortField, exclusiveCollections]);
+
+
+  useEffect(() => {
+    updateUrl();    
+    showInPageRangeOntologies();
+  }, [pageNumber, pageSize]);
+
   
-  componentDidMount(){
-    this.setComponentData();
-  }
-
-
-  render () {    
-    const { error, isLoaded } = this.state
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
       return (
-        <div className='row justify-content-center' id="ontologyList-wrapper-div">
-          <HelmetProvider>
-            <div>
-              <Helmet>
-                 <title>Ontologies</title>
-              </Helmet>
+        <>
+          {Toolkit.createHelmet("Ontologies")}          
+          <div className='row justify-content-center' id="ontologyList-wrapper-div">
+            <div className='col-sm-4'>
+              <OntologyListFacet 
+                enteredKeyword={keywordFilterString}
+                filterWordChange={filterWordChange}
+                onSwitchChange={handleSwitchange}
+                handleFacetCollection={handleFacetCollection}
+                selectedCollections={selectedCollections}
+
+              />
             </div>
-          </HelmetProvider>
-          <div className='col-sm-8'>
-            <div className='row'>
-              {CreateFacet(this.filterWordChange, this.state.listOfAllCollectionsCheckBoxes, this.state.keywordFilterString, this.handleSwitchange)}
-              <div className='col-sm-8' id="ontology-list-grid">                                                                                                                                                                                         
-                <div className='row' id="ontology-list-top-row">
-                  <div className='col-sm-4'>                    
-                    <h3 className='h-headers'>Browse Ontologies</h3>                   
-                  </div>                 
-                </div>
-                <div className='row'>
-                  <div className='col-sm-4 form-inline'/>
-                  <div className='col-sm-4 form-inline result-per-page-align'>
-                     <div class="form-group">
-                        <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
-                          <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={this.state.pageSize} onChange={this.handlePageSizeDropDownChange}>
-                            <option value={10} key="10">10</option>
-                            <option value={20} key="20">20</option>
-                            <option value={30} key="30">30</option>
-                            <option value={40} key="40">40</option>
-                          </select>  
-                      </div>
-                  </div>
-                  <div className='col-sm-4 form-inline ontologylist-sort-grid'  id="ontologylist-sort-grid">                     
-                    <div class="form-group">
-                      <label for="ontology-list-sorting" className='col-form-label'>sorted by</label>
-                      <select className='site-dropdown-menu ontology-list-sorting' id="ontology-list-sorting" value={this.state.sortField} onChange={this.handleSortChange}>
-                        <option value={TITLE_SORT_KEY} key={TITLE_SORT_KEY}>Title</option>
-                        <option value={PREFIX_SORT_KEY} key={PREFIX_SORT_KEY}>Prefix</option>
-                        <option value={CLASS_SORT_KEY} key={CLASS_SORT_KEY}>Classes Count</option>
-                        <option value={PROPERT_SORT_KEY} key={PROPERT_SORT_KEY}>Properties Count</option>
-                        <option value={INDIVIDUAL_SORT_KEY} key={INDIVIDUAL_SORT_KEY}>Individuals Count</option>
-                        <option value={TIME_SORT_KEY} key={TIME_SORT_KEY}>Data Loaded</option>
-                      </select>  
-                    </div>                                                                                
-                  </div>
-                </div>              
-                {this.createOntologyList()}              
-                <Pagination 
-                  clickHandler={this.handlePagination} 
-                  count={this.pageCount()}
-                  initialPageNumber={this.state.pageNumber}               
-                />
-              </div>
+            <div className='col-sm-8'>
+              <OntologyListRender 
+                handlePagination={handlePagination}
+                pageCount={Math.ceil(ontologies.length / pageSize)}
+                pageNumber={pageNumber}
+                pageSize={pageSize}
+                handlePageSizeDropDownChange={handlePageSizeDropDownChange}
+                sortField={sortField}
+                handleSortChange={handleSortChange}
+                ontologies={ontologies}
+                ontologiesHiddenStatus={ontologiesHiddenStatus}
+              />
             </div>
           </div>          
-        </div>
-
+        </>
       )
     }
+
+}
+
+
+export default OntologyList;
+
+
+
+
+/**
+ * Search in an ontology metadata to check if it contains a value
+ * @param {ontology} ontology
+ * @param {string} value 
+ * @returns boolean
+ */
+function ontology_has_searchKey(ontology, value){
+  try{
+      value = value.toLowerCase();
+      if (ontology.ontologyId.includes(value)) {
+          return true;
+      }
+      if (ontology.config.title.toLowerCase().includes(value)) {
+          return true;
+      }
+      if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
+          return true;
+      }
+
+      return false;
+  }
+  catch (e){        
+      return false;
   }
 }
 
-export default OntologyList
+
+export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {    
+  if(key === "title"){
+      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
+  }
+  else if(key === 'ontologyId'){
+      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
+  }
+  return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
+}
