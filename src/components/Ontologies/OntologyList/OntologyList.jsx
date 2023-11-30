@@ -65,6 +65,40 @@ const OntologyList = (props) => {
     setPageNumber(pageInUrl);
   }
 
+  
+
+  function ontology_has_searchKey(ontology, value){
+    try{
+        value = value.toLowerCase();
+        if (ontology.ontologyId.includes(value)) {
+            return true;
+        }
+        if (ontology.config.title.toLowerCase().includes(value)) {
+            return true;
+        }
+        if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
+            return true;
+        }
+  
+        return false;
+    }
+    catch (e){        
+        return false;
+    }
+  }
+
+
+
+  function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {    
+    if(key === "title"){
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
+    }
+    else if(key === 'ontologyId'){
+        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
+    }
+    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
+  }
+
 
 
   function handlePagination (value) {    
@@ -100,30 +134,16 @@ const OntologyList = (props) => {
 
 
   
-  function filterWordChange(e, value){
-    let ontologiesList = [...ontologies]; 
-    let keywordOntologies = [];    
-    let newKeyword = e.target.value;    
-    if(newKeyword !== ""){                   
-      for (let i = 0; i < ontologiesList.length; i++) {
-        let ontology = ontologiesList[i];                
-        if (ontology_has_searchKey(ontology, newKeyword)) {
-          keywordOntologies.push(ontology)
-        }
-      }
-      setOntologies(keywordOntologies);
-      setKeywordFilterString(newKeyword);
-      setPageNumber(1);      
-      return true;
-    }
-    setKeywordFilterString("");
-    runCollectionFilter();
+  function filterWordChange(e){
+    setKeywordFilterString(e.target.value);
+    setPageNumber(1);    
   }
 
 
 
   function handleSwitchange(e){
-    setExclusiveCollections(e.target.checked);    
+    setExclusiveCollections(e.target.checked); 
+    setPageNumber(1);      
   }
 
 
@@ -137,15 +157,25 @@ const OntologyList = (props) => {
       let index = currentSelectedCollections.indexOf(collection);
       currentSelectedCollections.splice(index, 1);      
     }        
-    setSelectedCollections(currentSelectedCollections);    
+    setSelectedCollections(currentSelectedCollections);
+    setPageNumber(1);       
   }
 
 
 
-  async function runCollectionFilter(){     
+  async function runFilter(){     
     let ontologiesList = [...unFilteredOntologies];
-    if(selectedCollections.length !== 0){
-      // run collection filter
+    let keywordOntologies = [];          
+    if(keywordFilterString !== ""){                   
+      for (let i = 0; i < ontologiesList.length; i++) {
+        let ontology = ontologiesList[i];                
+        if (ontology_has_searchKey(ontology, keywordFilterString)) {
+          keywordOntologies.push(ontology)
+        }
+      }
+      ontologiesList = keywordOntologies;    
+    }
+    if(selectedCollections.length !== 0){      
       let collectionOntologies = await getCollectionOntologies(selectedCollections, exclusiveCollections);
       let collectionFilteredOntologies = [];
       for (let onto of collectionOntologies){
@@ -153,13 +183,11 @@ const OntologyList = (props) => {
           collectionFilteredOntologies.push(onto);
         }
       }
-      ontologiesList = collectionFilteredOntologies;
-  
+      ontologiesList = collectionFilteredOntologies;  
     }
   
     ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);    
-    setOntologies(ontologiesList);
-    setPageNumber(1);    
+    setOntologies(ontologiesList);        
   }
 
 
@@ -193,7 +221,8 @@ const OntologyList = (props) => {
 
 
   useEffect(() => {        
-      updateUrl();      
+      updateUrl();
+      runFilter();
       showInPageRangeOntologies();
   }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections]);
 
@@ -241,43 +270,3 @@ const OntologyList = (props) => {
 
 
 export default OntologyList;
-
-
-
-
-/**
- * Search in an ontology metadata to check if it contains a value
- * @param {ontology} ontology
- * @param {string} value 
- * @returns boolean
- */
-function ontology_has_searchKey(ontology, value){
-  try{
-      value = value.toLowerCase();
-      if (ontology.ontologyId.includes(value)) {
-          return true;
-      }
-      if (ontology.config.title.toLowerCase().includes(value)) {
-          return true;
-      }
-      if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
-          return true;
-      }
-
-      return false;
-  }
-  catch (e){        
-      return false;
-  }
-}
-
-
-export function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {    
-  if(key === "title"){
-      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
-  }
-  else if(key === 'ontologyId'){
-      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
-  }
-  return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
-}
