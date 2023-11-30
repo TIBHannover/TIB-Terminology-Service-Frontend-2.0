@@ -2574,7 +2574,7 @@ Media Query Area for bein responsive
     margin-left: 2px !important;
 }
 
-<<<<<<< HEAD
+
 .pinned-message-icon{
     margin-left: 10px;
     background-color: #404040;
@@ -2584,7 +2584,7 @@ Media Query Area for bein responsive
     display: inline-block;
     text-align: center;
     font-size: 11px;
-=======
+}
 .autosuggest-jumpto-container {
     position: relative;
 }
@@ -2607,5 +2607,4 @@ Media Query Area for bein responsive
 .form-check-input:checked{
     background-color: #404040;
     border-color: #404040;
->>>>>>> master
 }
