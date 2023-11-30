@@ -240,30 +240,34 @@ const OntologyList = (props) => {
         <>
           {Toolkit.createHelmet("Ontologies")}          
           <div className='row justify-content-center' id="ontologyList-wrapper-div">
-            <div className='col-sm-4'>
-              <OntologyListFacet 
-                enteredKeyword={keywordFilterString}
-                filterWordChange={filterWordChange}
-                onSwitchChange={handleSwitchange}
-                handleFacetCollection={handleFacetCollection}
-                selectedCollections={selectedCollections}
-                allCollections={allCollections}
-
-              />
-            </div>
             <div className='col-sm-8'>
-              <OntologyListRender 
-                handlePagination={handlePagination}
-                pageCount={Math.ceil(ontologies.length / pageSize)}
-                pageNumber={pageNumber}
-                pageSize={pageSize}
-                handlePageSizeDropDownChange={handlePageSizeDropDownChange}
-                sortField={sortField}
-                handleSortChange={handleSortChange}
-                ontologies={ontologies}
-                ontologiesHiddenStatus={ontologiesHiddenStatus}
-              />
-            </div>
+              <div className='row'>
+                <div className='col-sm-4'>
+                    <OntologyListFacet 
+                      enteredKeyword={keywordFilterString}
+                      filterWordChange={filterWordChange}
+                      onSwitchChange={handleSwitchange}
+                      handleFacetCollection={handleFacetCollection}
+                      selectedCollections={selectedCollections}
+                      allCollections={allCollections}
+
+                    />
+                </div>
+                <div className='col-sm-8'>
+                    <OntologyListRender 
+                      handlePagination={handlePagination}
+                      pageCount={Math.ceil(ontologies.length / pageSize)}
+                      pageNumber={pageNumber}
+                      pageSize={pageSize}
+                      handlePageSizeDropDownChange={handlePageSizeDropDownChange}
+                      sortField={sortField}
+                      handleSortChange={handleSortChange}
+                      ontologies={ontologies}
+                      ontologiesHiddenStatus={ontologiesHiddenStatus}
+                    />
+                </div>
+              </div>
+            </div>            
           </div>          
         </>
       )

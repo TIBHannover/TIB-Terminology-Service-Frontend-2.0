@@ -302,7 +302,16 @@ p{
     */
 
     border: none;
-    padding: 5px;    
+    padding: 5px;  
+    margin-left: 10px;      
+}
+
+.white-dropdown{
+    background-color: white;
+}
+
+.zero-padding-col{
+    padding: 0 !important;
 }
 
 .fa{
@@ -1144,15 +1153,6 @@ p{
 */
 
 
-.ontologylist-sort-grid{
-    /* 
-        Style for the sort dropdown wrapper in ontology list
-    */
-
-    margin-bottom: 10px;
-    padding-left: 50px;
-}
-
 .ontology-list-sorting{
     /* 
         The styles for sort type drop-down menu in the ontology list view.
@@ -1162,12 +1162,6 @@ p{
     background-color: white;
     border-color: white;
     color: #42484e;
-}
-
-.result-per-page-align{
-    margin-bottom: 10px;
-    padding-left: 50px;
-      
 }
 
 
@@ -1894,14 +1888,6 @@ p{
     background-color: white;
     border-color: white;
     color: #42484e;
-}
-
-.list-result-per-page-dropdown-menu{
-    /* 
-        The result per page dropdown (select element)
-    */
-
-    margin-left: 10px;
 }
 
 /* 

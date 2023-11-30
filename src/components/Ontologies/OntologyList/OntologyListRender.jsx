@@ -90,34 +90,39 @@ export const OntologyListRender = (props) =>{
 
     return(                    
         <div className='row'>           
-            <div className='col-sm-12' id="ontology-list-grid">                                                                                                                                                                                         
-                <div className='row' id="ontology-list-top-row">
+            <div className='col-sm-12'>                                                                                                                                                                                         
+                <div className='row'>
                     <div className='col-sm-4'>                    
-                    <h3 className='h-headers'>Browse Ontologies</h3>                   
+                        <h3 className='h-headers'>Browse Ontologies</h3>                   
                     </div>                 
                 </div>
-                <div className='row'>
-                    <div className='col-sm-4 form-inline'/>
-                        <div className='col-sm-4 form-inline result-per-page-align'>                                
-                            <DropDown 
-                                options={PAGE_SIZES_FOR_DROPDOWN}
-                                dropDownId="list-result-per-page"                                        
-                                dropDownTitle="Result Per Page"
-                                dropDownValue={props.pageSize}
-                                dropDownChangeHandler={props.handlePageSizeDropDownChange}                                
-                            />                                                                 
-                        </div>
-                    <div className='col-sm-4 form-inline ontologylist-sort-grid'  id="ontologylist-sort-grid">                     
+                <div className='row'>                    
+                    <div className='col-sm-6 text-right zero-padding-col'>                                
+                        <DropDown 
+                            options={PAGE_SIZES_FOR_DROPDOWN}
+                            dropDownId="list-result-per-page"                                        
+                            dropDownTitle="page size"
+                            dropDownValue={props.pageSize}
+                            dropDownChangeHandler={props.handlePageSizeDropDownChange}
+                            dropdownClassName={"white-dropdown"}                                
+                        />                                                                 
+                    </div>
+                    <div className='col-sm-6 text-right zero-padding-col'>                     
                         <DropDown 
                             options={SORT_DROPDONW_OPTIONS}
                             dropDownId="ontology-list-sorting"                                    
-                            dropDownTitle="Result Per Page"
+                            dropDownTitle="sorted by"
                             dropDownValue={props.sortField}
-                            dropDownChangeHandler={props.handleSortChange}                                
+                            dropDownChangeHandler={props.handleSortChange} 
+                            dropdownClassName={"white-dropdown"}                               
                         />                             
-                </div>
-            </div>              
-            {ontologyListContent}              
+                    </div>
+                </div>     
+                <div className='row'>
+                    <div className='col-sm-12'>
+                        {ontologyListContent} 
+                    </div>
+                </div>                         
             <Pagination 
                 clickHandler={props.handlePagination} 
                 count={props.pageCount}
