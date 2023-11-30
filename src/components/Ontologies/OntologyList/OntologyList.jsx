@@ -34,11 +34,11 @@ const OntologyList = (props) => {
     try{      
       let allOntologies = await getAllOntologies();
       let allCollections = await getAllCollectionsIds();      
-      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, sortField);           
-      setIsLoaded(true);
+      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, sortField);                 
       setOntologies(allOntologies);
       setUnFilteredOntologies(allOntologies);      
-      setAllCollections(allCollections);
+      setAllCollections(allCollections);      
+      setIsLoaded(true);
     }
     catch(error){      
       setIsLoaded(true);
@@ -65,7 +65,7 @@ const OntologyList = (props) => {
     setPageNumber(pageInUrl);
   }
 
-  
+
 
   function ontology_has_searchKey(ontology, value){
     try{
@@ -186,7 +186,7 @@ const OntologyList = (props) => {
       ontologiesList = collectionFilteredOntologies;  
     }
   
-    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);    
+    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);        
     setOntologies(ontologiesList);        
   }
 
@@ -220,11 +220,14 @@ const OntologyList = (props) => {
 
 
 
-  useEffect(() => {        
+  useEffect(() => {
+    if(isLoaded){
+      console.info(ontologies)
       updateUrl();
       runFilter();
       showInPageRangeOntologies();
-  }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections]);
+    }              
+  }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections, isLoaded]);
 
 
   
