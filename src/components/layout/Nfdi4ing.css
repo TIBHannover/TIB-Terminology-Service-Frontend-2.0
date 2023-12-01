@@ -2574,7 +2574,6 @@ Media Query Area for bein responsive
     margin-left: 2px !important;
 }
 
-
 .pinned-message-icon{
     margin-left: 10px;
     background-color: #404040;
@@ -2607,4 +2606,12 @@ Media Query Area for bein responsive
 .form-check-input:checked{
     background-color: #404040;
     border-color: #404040;
+}
+
+.white-dropdown{
+    background-color: white;
+}
+
+.zero-padding-col{
+    padding: 0 !important;
 }
