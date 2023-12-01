@@ -1,5 +1,5 @@
 import React from 'react';
-import DataTreePage from '../DataTree/DataTreePage';
+import DataTree from '../DataTree/DataTree';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -290,7 +290,7 @@ class OntologyPage extends React.Component {
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
-                                <DataTreePage
+                                <DataTree
                                   rootNodes={this.state.rootTerms}
                                   obsoleteTerms={this.state.obsoleteTerms}
                                   rootNodesForSkos={this.state.skosRootIndividuals}
@@ -308,7 +308,7 @@ class OntologyPage extends React.Component {
                 }
 
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
-                                <DataTreePage
+                                <DataTree
                                   rootNodes={this.state.rootProps}
                                   obsoleteTerms={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
