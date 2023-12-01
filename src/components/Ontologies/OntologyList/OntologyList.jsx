@@ -232,16 +232,16 @@ const OntologyList = (props) => {
 
   
     if (error) {
-      return <div>Error: {error.message}</div>
-    } else if (!isLoaded) {
-      return <div>Loading...</div>
-    } else {
-      return (
-        <>
-          {Toolkit.createHelmet("Ontologies")}          
-          <div className='row justify-content-center' id="ontologyList-wrapper-div">
-            <div className='col-sm-8'>
-              <div className='row'>
+      return <div>Error: Something Went Wrong!</div>
+    }     
+    return (
+      <>
+        {Toolkit.createHelmet("Ontologies")}          
+        <div className='row justify-content-center' id="ontologyList-wrapper-div">
+          <div className='col-sm-8'>
+          {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
+           {isLoaded &&  
+            <div className='row'>
                 <div className='col-sm-4'>
                     <OntologyListFacet 
                       enteredKeyword={keywordFilterString}
@@ -264,15 +264,15 @@ const OntologyList = (props) => {
                       handleSortChange={handleSortChange}
                       ontologies={ontologies}
                       ontologiesHiddenStatus={ontologiesHiddenStatus}
+                      isLoaded={isLoaded}
                     />
                 </div>
-              </div>
-            </div>            
-          </div>          
-        </>
-      )
-    }
-
+            </div>
+           }
+          </div>            
+        </div>          
+      </>
+    )
 }
 
 
