@@ -54,15 +54,18 @@ const OntologyList = (props) => {
     let collectionsInUrl = url.searchParams.getAll('collection');      
     let sortByInUrl = url.searchParams.get('sorting');
     let pageInUrl = url.searchParams.get('page');
+    let sizeInUrl = url.searchParams.get('size');
     let keywordFilterInUrl = url.searchParams.get('keyword');
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
     pageInUrl = pageInUrl ? parseInt(pageInUrl) : pageNumber; 
+    sizeInUrl = sizeInUrl ? parseInt(sizeInUrl) : pageSize; 
     setSelectedCollections(collectionsInUrl);
     setKeywordFilterString(keywordFilterInUrl);
     setSortField(sortByInUrl);      
     setPageNumber(pageInUrl);
+    setPageSize(sizeInUrl);
   }
 
 
@@ -109,9 +112,12 @@ const OntologyList = (props) => {
 
   function showInPageRangeOntologies(){
     let down = (pageNumber - 1) * pageSize;
-    let up = down + (pageSize - 1);
+    let up = down + pageSize;
+    if (up > ontologies.length){
+      up = ontologies.length;
+    }    
     let hiddenStatus = new Array(ontologies.length).fill(false);
-    for (let i = down; i <= up; i++) {
+    for (let i = down; i < up; i++) {
       hiddenStatus[i] = true;
     }
     setOntologiesHiddenStatus(hiddenStatus);   
@@ -206,28 +212,31 @@ const OntologyList = (props) => {
     }
     currentUrlParams.set('and', exclusiveCollections);
     currentUrlParams.set('sorting', sortField);
-    currentUrlParams.set('page', pageNumber);            
+    currentUrlParams.set('page', pageNumber);  
+    currentUrlParams.set('size', pageSize);            
     history.push(window.location.pathname + "?" + currentUrlParams.toString());    
   }
 
 
 
   useEffect(() => {
-    setComponentData();
-    showInPageRangeOntologies();
+    setComponentData();    
     setStateBasedOnUrlParams();      
   }, []);
 
 
 
   useEffect(() => {
-    if(isLoaded){
-      console.info(ontologies)
+    if(isLoaded){      
       updateUrl();
-      runFilter();
-      showInPageRangeOntologies();
+      runFilter();      
     }              
   }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections, isLoaded]);
+
+
+  useEffect(() => {          
+      showInPageRangeOntologies();
+  }, [ontologies]);
 
 
   
