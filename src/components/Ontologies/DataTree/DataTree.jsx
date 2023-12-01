@@ -24,15 +24,6 @@ const DataTree = (props) => {
   const history = useHistory();
 
 
-  function setComponentData(){
-    let termTree = (props.componentIdentity === "terms") ? true : false;     
-    setOntologyId(props.ontology.ontologyId);
-    setSelectedNodeIri(props.iri);
-    setIsTermTree(termTree);
-    setIsPropertyTree(!termTree);
-  }
-
-
 
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable){
       setSelectedNodeIri(selectedNodeIri);
@@ -52,82 +43,16 @@ const DataTree = (props) => {
   }
 
 
-  function selectNode(target){    
-      if(props.isIndividual){
-          return true;
-      }
-      let treeNode = new TreeNodeController();
-      treeNode.unClickAllNodes();        
-      let targetNodeDiv = treeNode.getClickedNodeDiv(target);
-      let clickedNodeIri = "";
-      let clickedNodeId = "";
-      let showNodeDetailPage = false;         
-      if(targetNodeDiv){            
-          targetNodeDiv.classList.add("clicked");            
-          clickedNodeIri = treeNode.getClickedNodeIri(target);
-          clickedNodeId = treeNode.getClickedNodeId(target);            
-          showNodeDetailPage = true;
-
-          setSelectedNodeIri(clickedNodeIri);
-          setShowDetailTable(showNodeDetailPage);
-
-          
-          // this.setState({
-          //     // showNodeDetailPage: showNodeDetailPage,
-          //     // selectedNodeIri: clickedNodeIri,
-          //     siblingsButtonShow: false,
-          //     subOrFullTreeBtnShow: true,
-          //     reduceBtnActive: false,
-          //     lastSelectedItemId: clickedNodeId
-          // }, () =>{
-          //     if(this.state.componentIdentity !== "individuals"){
-          //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-          //     }                
-          // });            
-          
-          let locationObject = window.location;
-          const searchParams = new URLSearchParams(locationObject.search);
-          searchParams.set('iri', clickedNodeIri);               
-          searchParams.delete('noteId');        
-          history.push(locationObject.pathname + "?" +  searchParams.toString());
-          props.iriChangerFunction(clickedNodeIri, this.state.componentIdentity);
-      }    
-  }
-
-
-  function processClick(e){
-      if(props.isIndividual){
-          return true;
-      }        
-      if (e.target.tagName === "DIV" && e.target.classList.contains("tree-text-container")){             
-          selectNode(e.target);
-      }
-      else if (e.target.tagName === "DIV" && e.target.classList.contains("li-label-text")){ 
-          selectNode(e.target.parentNode);
-      }
-      else if (e.target.tagName === "S"){ 
-          selectNode(e.target.parentNode.parentNode);
-      }
-      else if (e.target.tagName === "I"){
-          // expand a node by clicking on the expand icon
-          TreeHelper.expandNode(e.target.parentNode, ontologyId, childExtractName, props.isSkos).then((res) => {
-              if(props.componentIdentity !== "individuals"){
-                  // props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-              }              
-          });
-      }
-  }
-
-
-
-
-
   useEffect(() => {
-    setComponentData();
     paneResizeClass.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
+    let termTree = (props.componentIdentity === "terms") ? true : false;     
+    setOntologyId(props.ontology.ontologyId);
+    setSelectedNodeIri(props.iri);
+    setIsTermTree(termTree);
+    setIsPropertyTree(!termTree);
 
     return () => {
       document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
@@ -160,13 +85,13 @@ const DataTree = (props) => {
               componentIdentity={props.componentIdentity}
               iri={selectedNodeIri}
               key={props.key}                    
-              ontology={props.ontology.ontologyId}
+              ontologyId={props.ontology.ontologyId}
               rootNodeNotExist={props.rootNodeNotExist}
               iriChangerFunction={props.iriChangerFunction}
               lastState={props.lastState}
               domStateKeeper={props.domStateKeeper}
               isSkos={props.isSkos}
-              // nodeSelectionHandler={handleTreeNodeSelection}
+              handleNodeSelectionInDataTree={handleTreeNodeSelection}
               individualViewChanger={""}
               handleResetTreeInParent={handleResetTreeEevent}
             />
