@@ -123,9 +123,8 @@ class TreeNodeController{
         document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
     }
 
-    scrollToNextNode(id){        
-        let position = document.getElementById(id).nextSibling.offsetTop;
-        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+    scrollToNextNode(id){
+        document.getElementsByClassName('tree-page-left-part')[0].getElementById(id).nextSibling.scrollIntoView();        
     }
 
     scrollToPreviousNode(id){
