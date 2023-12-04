@@ -83,7 +83,7 @@ const DataTree = (props) => {
               obsoleteTerms={props.obsoleteTerms}                               
               rootNodesForSkos={props.rootNodesForSkos}
               componentIdentity={props.componentIdentity}
-              iri={selectedNodeIri}
+              selectedNodeIri={selectedNodeIri}
               key={props.key}                    
               ontologyId={props.ontology.ontologyId}
               rootNodeNotExist={props.rootNodeNotExist}

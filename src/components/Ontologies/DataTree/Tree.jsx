@@ -11,7 +11,9 @@ import KeyboardNavigator from "./KeyboardNavigation";
 
 
 
-const Tree = (props) => {
+const Tree = (props) => {    
+    let url = new URL(window.location);
+    let targetQueryParams = url.searchParams;
 
     const [treeDomContent, setTreeDomContent] = useState('');    
     const [childExtractName, setChildExtractName] = useState(getExtractName());
@@ -19,30 +21,26 @@ const Tree = (props) => {
     const [siblingsVisible, setSiblingsVisible] = useState(false);
     const [siblingsButtonShow, setSiblingsButtonShow] = useState(false);
     const [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(false);
-    const [reduceBtnActive, setReduceBtnActive] = useState(true);
-    const [viewMode, setViewMode] = useState(true);
+    const [subTreeMode, setSubTreeMode] = useState(targetQueryParams.get('iri') ? true : false);
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [noNodeExist, setNoNodeExist] = useState(false);    
     const [obsoletesShown, setObsoletesShown] = useState(false);
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));    
 
-    const history = useHistory();
-
+    const history = useHistory();    
     
     function setComponentData(){
         let url = new URL(window.location);
         let targetQueryParams = url.searchParams;
         let showObsoltes = targetQueryParams.get('obsoletes') === "true" ? true : false;      
-        let extractName = props.componentIdentity;     
-        if (props.rootNodes.length != 0 || resetTreeFlag || reload){                           
-            
-                                    
+        let extractName = props.componentIdentity;             
+        if (props.rootNodes.length != 0 || resetTreeFlag || reload){                                                
             setChildExtractName(extractName);
             setResetTreeFlag(false);
             setReload(false);
             setNoNodeExist(false);
-            setObsoletesShown(showObsoltes);
+            setObsoletesShown(showObsoltes);            
         }
         else if((props.rootNodes.length === 0 || props.rootNodesForSkos.length === 0) && !noNodeExist && props.rootNodeNotExist && props.componentIdentity !== "individuals"){
             setIsLoading(false);
@@ -61,12 +59,13 @@ const Tree = (props) => {
 
 
 
-    async function buildTheTree(){
-        let target = props.iri;
+    async function buildTheTree(){        
+        let target = props.selectedNodeIri;
         target =  target ? target.trim() : null;        
-        let siblingsButtonShow = reduceBtnActive;
-        let siblingsVisible = !reduceBtnActive;
-        let subOrFullTreeBtnShow = true;
+        let siblingsButtonShow = false;
+        let siblingsVisible = false;
+        let treeFullView = !subTreeMode;         
+        let subOrFullTreeBtnShow = false;
         let treeList = "";
         let targetHasChildren = ""                        
         let listOfNodes =  [];
@@ -90,17 +89,17 @@ const Tree = (props) => {
             treeList = result.treeDomContent;
             target = "";            
             siblingsButtonShow = false;
-            siblingsVisible = false;
-            subOrFullTreeBtnShow = false;           
+            siblingsVisible = false;                       
         }                    
         else if(target != undefined || reload){            
             showNodeDetailPage = true;
+            subOrFullTreeBtnShow = true;                       
             if(props.isSkos && props.componentIdentity === "individuals"){                                
-                treeList = await SkosHelper.buildSkosTree(props.ontologyId, target, viewMode);                                              
+                treeList = await SkosHelper.buildSkosTree(props.ontologyId, target, treeFullView);                                              
             }
             else{                
                 targetHasChildren = await TreeHelper.nodeHasChildren(props.ontologyId, target, props.componentIdentity);                
-                listOfNodes =  await getNodeJsTree(props.ontologyId, childExtractName, target, viewMode);
+                listOfNodes =  await getNodeJsTree(props.ontologyId, childExtractName, target, treeFullView);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
                 if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
                     // the target node is a root node
@@ -138,10 +137,10 @@ const Tree = (props) => {
         setReload(false);
         setIsLoading(false);
         setSiblingsButtonShow(siblingsButtonShow);
-        setSiblingsVisible(siblingsVisible);                
+        setSiblingsVisible(siblingsVisible);                      
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
         // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        // props.handleNodeSelectionInDataTree(target, showNodeDetailPage);
+        props.handleNodeSelectionInDataTree(target, showNodeDetailPage);
         props.iriChangerFunction(target, props.componentIdentity); 
     }
 
@@ -259,12 +258,11 @@ const Tree = (props) => {
 
 
 
-    function reduceTree(){        
-        let showSiblings = !reduceBtnActive;
+    function reduceTree(){                
         let showObsolete = props.showNodeDetailPage ? false : obsoletesShown;
         // this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-        setReduceBtnActive(showSiblings);
-        setSiblingsButtonShow(showSiblings);
+        setSubTreeMode(!subTreeMode);
+        setSiblingsButtonShow(!subTreeMode);
         setReload(true);
         setTreeDomContent("");
         setIsLoading(true);
@@ -320,7 +318,7 @@ const Tree = (props) => {
             props.handleNodeSelectionInDataTree(clickedNodeIri, showNodeDetailPage)
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
-            setReduceBtnActive(false);            
+            // setSubTreeMode(false);            
             keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
             // if(this.state.componentIdentity !== "individuals"){
                 //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
@@ -370,7 +368,7 @@ const Tree = (props) => {
                         <div className="col-sm-12">
                             {subOrFullTreeBtnShow && !props.isIndividual &&  
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={reduceTree}>
-                                {!reduceBtnActive
+                                {!subTreeMode
                                         ? "Sub Tree"
                                         : "Full Tree"
                                 }
