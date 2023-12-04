@@ -14,7 +14,7 @@ import KeyboardNavigator from "./KeyboardNavigation";
 const Tree = (props) => {
 
     const [treeDomContent, setTreeDomContent] = useState('');    
-    const [childExtractName, setChildExtractName] = useState('');
+    const [childExtractName, setChildExtractName] = useState(getExtractName());
     const [resetTreeFlag, setResetTreeFlag] = useState(false);
     const [siblingsVisible, setSiblingsVisible] = useState(false);
     const [siblingsButtonShow, setSiblingsButtonShow] = useState(false);
@@ -34,20 +34,11 @@ const Tree = (props) => {
         let url = new URL(window.location);
         let targetQueryParams = url.searchParams;
         let showObsoltes = targetQueryParams.get('obsoletes') === "true" ? true : false;      
-        let childExtractName = "1";     
-        if (props.rootNodes.length != 0 || resetTreeFlag || reload){                
-            if(props.componentIdentity === 'terms'){                         
-                childExtractName = "terms";
-                             
-            } 
-            else if(props.componentIdentity === 'props'){                
-                childExtractName = "properties";              
-            }
-            else if(props.componentIdentity === 'individuals'){                
-                childExtractName = "individuals";   
-            }
+        let extractName = props.componentIdentity;     
+        if (props.rootNodes.length != 0 || resetTreeFlag || reload){                           
             
-            setChildExtractName(childExtractName);
+                                    
+            setChildExtractName(extractName);
             setResetTreeFlag(false);
             setReload(false);
             setNoNodeExist(false);
@@ -57,6 +48,15 @@ const Tree = (props) => {
             setIsLoading(false);
             setNoNodeExist(true);            
         }        
+    }
+
+
+
+    function getExtractName(){
+        if(props.componentIdentity === 'props'){                
+            return "properties";
+        }
+        return props.componentIdentity;
     }
 
 
@@ -336,12 +336,14 @@ const Tree = (props) => {
     }
 
 
-    function expandNodeHandler(node){
-        TreeHelper.expandNode(node, props.ontologyId, childExtractName, props.isSkos).then((res) => {
-            if(props.componentIdentity !== "individuals"){
+
+    async function expandNodeHandler(node){        
+        await TreeHelper.expandNode(node, props.ontologyId, childExtractName, props.isSkos);
+        // .then((res) => {
+            // if(props.componentIdentity !== "individuals"){
                 // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            }
-        });  
+            // }
+        // });  
     }
 
 

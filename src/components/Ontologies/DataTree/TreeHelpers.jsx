@@ -60,7 +60,7 @@ export default class TreeHelper{
   }
 
 
-  static async expandNode(e, ontologyId, childExtractName, isSkos){
+  static async expandNode(e, ontologyId, childExtractName, isSkos){    
     let targetNodeIri = e.dataset.iri;
     let targetNodeId = e.dataset.id;
     let Id = e.id;
