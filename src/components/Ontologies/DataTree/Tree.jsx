@@ -479,7 +479,7 @@ const Tree = (props) => {
 
 
     useEffect(() => {
-        // setComponentData();
+        setComponentData();
         buildTheTree();
     }, [props.rootNodes, resetTreeFlag, reload]);
 
