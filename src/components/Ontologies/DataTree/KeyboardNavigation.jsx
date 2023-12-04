@@ -6,21 +6,20 @@ const NAVIGATION_KEYS = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"];
 
 
 class KeyboardNavigator{
-    constructor(selectedNodeId, afterRunEventFunction, expandNodeHandlerFunction){        
+    constructor(selectedNodeId, afterRunEventFunction, expandNodeHandlerFunction){                
         this.selectedNodeId = selectedNodeId;
         this.node = null;
         this.afterRunEventFunction = afterRunEventFunction; 
-        this.expandNodeHandlerFunction = expandNodeHandlerFunction;
-        document.addEventListener("keydown", this.run.bind(this), false);         
+        this.expandNodeHandlerFunction = expandNodeHandlerFunction;               
     }
 
 
-    updateSelectedNodeId(newId){
-        this.selectedNodeId = newId;
+    updateSelectedNodeId(newId){        
+        this.selectedNodeId = newId;        
     }
 
 
-    run(event){          
+    run(event){            
         let treeNodeManager = new TreeNodeController();      
         let jumtoItems = document.getElementsByClassName('jumpto-result-text');
         if(jumtoItems.length !== 0){
@@ -30,7 +29,7 @@ class KeyboardNavigator{
         if(NAVIGATION_KEYS.includes(event.code)){
             event.preventDefault();
         }
-        try{                      
+        try{                  
             if(!this.selectedNodeId && ["ArrowDown", "ArrowUp"].includes(event.key)){
                 // No term is selected yet. Pick the first one
                 this.node = treeNodeManager.getNodeLabelTextById("0");                
@@ -76,7 +75,7 @@ class KeyboardNavigator{
             }
         }
         catch(e){
-            console.info(e)
+            // console.info(e)
         }        
     }
 
@@ -120,7 +119,7 @@ class KeyboardNavigator{
             treeNodeManager.scrollToNode(this.selectedNodeId);
         }
         else if(this.node.nextSibling){                
-            let nextNode = treeNodeManager.getNodeNextSiblings(this.node.id);        
+            let nextNode = treeNodeManager.getNodeNextSiblings(this.node.id);
             this.afterRunEventFunction(nextNode);
             treeNodeManager.scrollToNextNode(this.selectedNodeId);
         }

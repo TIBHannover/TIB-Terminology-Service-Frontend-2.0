@@ -13,25 +13,23 @@ import KeyboardNavigator from "./KeyboardNavigation";
 
 const Tree = (props) => {
 
-    const  [treeDomContent, setTreeDomContent] = useState('');    
-    const  [childExtractName, setChildExtractName] = useState('');
-    const  [resetTreeFlag, setResetTreeFlag] = useState(false);
-    const  [siblingsVisible, setSiblingsVisible] = useState(false);
-    const  [siblingsButtonShow, setSiblingsButtonShow] = useState(false);
-    const  [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(false);
-    const  [reduceBtnActive, setReduceBtnActive] = useState(true);
-    const  [viewMode, setViewMode] = useState(true);
-    const  [reload, setReload] = useState(false);
-    const  [isLoading, setIsLoading] = useState(true);
-    const  [noNodeExist, setNoNodeExist] = useState(false);
-    // const  [lastSelectedItemId, setLastSelectedItemId] = useState(null);
-    const  [obsoletesShown, setObsoletesShown] = useState(false);    
+    const [treeDomContent, setTreeDomContent] = useState('');    
+    const [childExtractName, setChildExtractName] = useState('');
+    const [resetTreeFlag, setResetTreeFlag] = useState(false);
+    const [siblingsVisible, setSiblingsVisible] = useState(false);
+    const [siblingsButtonShow, setSiblingsButtonShow] = useState(false);
+    const [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(false);
+    const [reduceBtnActive, setReduceBtnActive] = useState(true);
+    const [viewMode, setViewMode] = useState(true);
+    const [reload, setReload] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [noNodeExist, setNoNodeExist] = useState(false);    
+    const [obsoletesShown, setObsoletesShown] = useState(false);
+    const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));    
 
     const history = useHistory();
 
-    const keyboardNavigationManager = new KeyboardNavigator(null, selectNode, expandNodeHandler);
-
-
+    
     function setComponentData(){
         let url = new URL(window.location);
         let targetQueryParams = url.searchParams;
@@ -140,8 +138,7 @@ const Tree = (props) => {
         setReload(false);
         setIsLoading(false);
         setSiblingsButtonShow(siblingsButtonShow);
-        setSiblingsVisible(siblingsVisible);        
-        // setLastSelectedItemId(selectedItemId);
+        setSiblingsVisible(siblingsVisible);                
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
         // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
         // props.handleNodeSelectionInDataTree(target, showNodeDetailPage);
@@ -206,8 +203,7 @@ const Tree = (props) => {
         setSiblingsVisible(false);
         setSiblingsButtonShow(false);
         setReload(true);
-        setSubOrFullTreeBtnShow(false);
-        // setLastSelectedItemId(false);    
+        setSubOrFullTreeBtnShow(false);        
         keyboardNavigationManager.updateSelectedNodeId(null);
     }
 
@@ -325,7 +321,6 @@ const Tree = (props) => {
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
             setReduceBtnActive(false);            
-            // setLastSelectedItemId(clickedNodeId);
             keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
             // if(this.state.componentIdentity !== "individuals"){
                 //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
@@ -408,15 +403,21 @@ const Tree = (props) => {
         ];
     }
 
+    
+    const handleKeyDown = (event) => {            
+        keyboardNavigationManager.run(event);
+    };
 
-    useEffect(() => {
-        setComponentData();           
+
+    useEffect(() => {       
+        setComponentData();                   
         if(props.isSkos && props.componentIdentity === "individuals"){
-            document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
+            document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
         }    
+        document.addEventListener("keydown", handleKeyDown, false);  
 
         return () => {
-            // document.removeEventListener("keydown", keyboardNavigationManager.run, false);
+            document.removeEventListener("keydown", handleKeyDown, false);
         };
     }, []);
 
