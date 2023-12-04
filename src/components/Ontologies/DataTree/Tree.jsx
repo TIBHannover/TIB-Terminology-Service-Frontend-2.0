@@ -3,10 +3,10 @@ import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import { getNodeJsTree} from '../../../api/fetchData';
 import TreeNodeController from "./TreeNode";
-import { performArrowDown, performArrowUp} from "./KeyboardNavigation";
 import Toolkit from "../../common/Toolkit";
 import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
+import KeyboardNavigator from "./KeyboardNavigation";
 
 
 
@@ -24,11 +24,12 @@ const Tree = (props) => {
     const  [reload, setReload] = useState(false);
     const  [isLoading, setIsLoading] = useState(true);
     const  [noNodeExist, setNoNodeExist] = useState(false);
-    const  [lastSelectedItemId, setLastSelectedItemId] = useState(null);
+    // const  [lastSelectedItemId, setLastSelectedItemId] = useState(null);
     const  [obsoletesShown, setObsoletesShown] = useState(false);    
 
-
     const history = useHistory();
+
+    const keyboardNavigationManager = new KeyboardNavigator(null, selectNode, expandNodeHandler);
 
 
     function setComponentData(){
@@ -73,7 +74,7 @@ const Tree = (props) => {
         let listOfNodes =  [];
         let rootNodesWithChildren = [];
         let childrenList = [];  
-        let lastSelectedItemId = "";
+        let selectedItemId = "";
         let showNodeDetailPage = false;       
 
         if(props.lastState && props.lastState.treeDomContent !== "" && !props.isIndividual){            
@@ -107,7 +108,7 @@ const Tree = (props) => {
                     // the target node is a root node
                     let result = buildTheTreeFirstLayer(rootNodesWithChildren, target);
                     treeList = result.treeDomContent;
-                    lastSelectedItemId = result.lastSelectedItemId;
+                    selectedItemId = result.selectedItemId;
                 }
                 else{ 
                     let i = 0;                  
@@ -125,7 +126,7 @@ const Tree = (props) => {
                     }
 
                     if(obsoletesShown){            
-                        [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
+                        [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
                      }
 
                     treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);                                        
@@ -139,8 +140,9 @@ const Tree = (props) => {
         setReload(false);
         setIsLoading(false);
         setSiblingsButtonShow(siblingsButtonShow);
-        setSiblingsVisible(siblingsVisible);
-        setLastSelectedItemId(lastSelectedItemId);
+        setSiblingsVisible(siblingsVisible);        
+        // setLastSelectedItemId(selectedItemId);
+        keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
         // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
         // props.handleNodeSelectionInDataTree(target, showNodeDetailPage);
         props.iriChangerFunction(target, props.componentIdentity); 
@@ -165,7 +167,7 @@ const Tree = (props) => {
 
     function buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
-        let lastSelectedItemId = 0;
+        let selectedItemId = 0;
         let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
         if(sortKey){
             rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
@@ -175,87 +177,23 @@ const Tree = (props) => {
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
-                lastSelectedItemId =  i;
+                selectedItemId =  i;
             }  
             let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
             childrenList.push(node);
         }
         
         if(obsoletesShown){            
-           [childrenList, lastSelectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
+           [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
         }
 
         let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);      
-        return {"treeDomContent": treeList,  "lastSelectedItemId": lastSelectedItemId};
+        return {"treeDomContent": treeList,  "selectedItemId": selectedItemId};
     }
 
 
 
-    function processKeyNavigation(event){
-        let jumtoItems = document.getElementsByClassName('jumpto-result-text');
-        if(jumtoItems.length !== 0){
-            return false;
-        }
-        if(event.code === "ArrowDown" || event.code === "ArrowUp" || event.code === "ArrowRight" || event.code === "ArrowLeft"){            
-            event.preventDefault();
-        }
-        try{            
-            let treeNode = new TreeNodeController();
-            if(!lastSelectedItemId && ["ArrowDown", "ArrowUp"].includes(event.key)){                
-                let node = treeNode.getNodeLabelTextById("0");                
-                selectNode(node);
-            }
-            else if(lastSelectedItemId && event.key === "ArrowDown"){
-                // select the next node. It is either the next siblings or the node first child
-                let node = document.getElementById(lastSelectedItemId);
-                performArrowDown(node, selectNode, lastSelectedItemId);                                     
-                    
-            }
-            else if(lastSelectedItemId && event.key === "ArrowUp"){
-                // select the previous node. It is either the previous siblings or last opened node.
-                let node = document.getElementById(lastSelectedItemId);                
-                performArrowUp(node, selectNode, lastSelectedItemId);
-                                       
-            }
-            else if(lastSelectedItemId && event.key === "ArrowRight"){                
-                // Expand the node if it has children. if it is already expanded, move the select into children
-                let node = document.getElementById(lastSelectedItemId);                
-                if(treeNode.isNodeClosed(node)){
-                    TreeHelper.expandNode(node, props.ontologyId, childExtractName, props.isSkos).then((res) => {
-                        if(props.componentIdentity !== "individuals"){
-                            // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                        }
-                    });  
-                }
-                else if(!treeNode.isNodeLeaf(node)){
-                    let childNode = treeNode.getFirstChildLabelText(node.id);
-                    selectNode(childNode);                    
-                    treeNode.scrollToNode(lastSelectedItemId);
-                }                
-                 
-            }
-            else if(lastSelectedItemId && event.key === "ArrowLeft"){
-                // Move the selection to the parent. If it is already moved, close the parent.
-                let node = document.getElementById(lastSelectedItemId); 
-                let parentNode = treeNode.getParentNode(node.id);
-                if(treeNode.isNodeExpanded(node)){  
-                    TreeHelper.expandNode(node, props.ontologyId, childExtractName).then((res) => {
-                        if(props.componentIdentity !== "individuals"){
-                            // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                        }
-                    });
-                }
-                else if(parentNode.tagName === "LI"){
-                    parentNode = treeNode.getNodeLabelTextById(parentNode.id);
-                    selectNode(parentNode);                    
-                    treeNode.scrollToNode(lastSelectedItemId);
-                }                 
-            }
-        }
-        catch(e){
-            // console.info(e)
-        }        
-    }
+    
 
 
     function resetTree(){        
@@ -269,7 +207,8 @@ const Tree = (props) => {
         setSiblingsButtonShow(false);
         setReload(true);
         setSubOrFullTreeBtnShow(false);
-        setLastSelectedItemId(false);    
+        // setLastSelectedItemId(false);    
+        keyboardNavigationManager.updateSelectedNodeId(null);
     }
 
 
@@ -360,19 +299,14 @@ const Tree = (props) => {
         else if (e.target.tagName === "S"){ 
             selectNode(e.target.parentNode.parentNode);
         }
-        else if (e.target.tagName === "I"){
-            // expand a node by clicking on the expand icon
-            TreeHelper.expandNode(e.target.parentNode, props.ontologyId, childExtractName, props.isSkos).then((res) => {
-                if(props.componentIdentity !== "individuals"){
-                    // props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                }              
-            });
+        else if (e.target.tagName === "I"){            
+            expandNodeHandler(e.target.parentNode);         
         }
     }
 
 
 
-    function selectNode(target){    
+    function selectNode(target){                    
         if(props.isIndividual){
             return true;
         }
@@ -381,17 +315,18 @@ const Tree = (props) => {
         let targetNodeDiv = treeNode.getClickedNodeDiv(target);
         let clickedNodeIri = "";
         let clickedNodeId = "";
-        let showNodeDetailPage = false;         
+        let showNodeDetailPage = false;                 
         if(targetNodeDiv){            
             targetNodeDiv.classList.add("clicked");            
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);            
-            showNodeDetailPage = true;
+            showNodeDetailPage = true;            
             props.handleNodeSelectionInDataTree(clickedNodeIri, showNodeDetailPage)
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
-            setReduceBtnActive(false);
-            setLastSelectedItemId(clickedNodeId);
+            setReduceBtnActive(false);            
+            // setLastSelectedItemId(clickedNodeId);
+            keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
             // if(this.state.componentIdentity !== "individuals"){
                 //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
                 //     }
@@ -403,6 +338,15 @@ const Tree = (props) => {
             history.push(locationObject.pathname + "?" +  searchParams.toString());
             props.iriChangerFunction(clickedNodeIri, props.componentIdentity);
         }    
+    }
+
+
+    function expandNodeHandler(node){
+        TreeHelper.expandNode(node, props.ontologyId, childExtractName, props.isSkos).then((res) => {
+            if(props.componentIdentity !== "individuals"){
+                // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
+            }
+        });  
     }
 
 
@@ -466,21 +410,20 @@ const Tree = (props) => {
 
 
     useEffect(() => {
-        setComponentData();
-        document.addEventListener("keydown", processKeyNavigation, false);    
+        setComponentData();           
         if(props.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
         }    
 
         return () => {
-            document.removeEventListener("keydown", processKeyNavigation, false);
+            // document.removeEventListener("keydown", keyboardNavigationManager.run, false);
         };
     }, []);
 
 
     useEffect(() => {
         setComponentData();
-        buildTheTree();
+        buildTheTree();        
     }, [props.rootNodes, resetTreeFlag, reload]);
 
 
