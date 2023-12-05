@@ -19,8 +19,8 @@ const Tree = (props) => {
     const [childExtractName, setChildExtractName] = useState(getExtractName());
     const [resetTreeFlag, setResetTreeFlag] = useState(false);
     const [siblingsVisible, setSiblingsVisible] = useState(false);
-    const [siblingsButtonShow, setSiblingsButtonShow] = useState(false);
-    const [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(false);
+    const [siblingsButtonShow, setSiblingsButtonShow] = useState(targetQueryParams.get('iri') ? true : false);
+    const [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(targetQueryParams.get('iri') ? true : false);
     const [subTreeMode, setSubTreeMode] = useState(targetQueryParams.get('iri') ? true : false);
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -133,10 +133,10 @@ const Tree = (props) => {
         }
         
         setTreeDomContent(treeList);
-        setSubOrFullTreeBtnShow(subOrFullTreeBtnShow);
+        // setSubOrFullTreeBtnShow(subOrFullTreeBtnShow);
         setReload(false);
         setIsLoading(false);
-        setSiblingsButtonShow(siblingsButtonShow);
+        // setSiblingsButtonShow(siblingsButtonShow);
         setSiblingsVisible(siblingsVisible);                      
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
         // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
@@ -260,12 +260,13 @@ const Tree = (props) => {
 
     function reduceTree(){                
         let showObsolete = props.showNodeDetailPage ? false : obsoletesShown;
+        let showSubtreeFlag = subTreeMode;
         // this.props.domStateKeeper("", this.state, this.props.componentIdentity);
-        setSubTreeMode(!subTreeMode);
-        setSiblingsButtonShow(!subTreeMode);
-        setReload(true);
+        setSubTreeMode(!showSubtreeFlag);
+        setSiblingsButtonShow(!showSubtreeFlag);
         setTreeDomContent("");
         setIsLoading(true);
+        setReload(true);
         setObsoletesShown(showObsolete);       
     }
 
@@ -425,7 +426,9 @@ const Tree = (props) => {
     useEffect(() => {
         setComponentData();
         buildTheTree();        
-    }, [props.rootNodes, resetTreeFlag, reload]);
+        console.log("subtreeMode: " + subTreeMode)
+        console.log("siblings button show: " + siblingsButtonShow)
+    }, [props.rootNodes, resetTreeFlag, reload, isLoading]);
 
 
 
