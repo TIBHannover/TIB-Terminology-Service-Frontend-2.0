@@ -171,9 +171,10 @@ class IndividualsList extends React.Component {
             <div className='tree-container'>
                 <Tree 
                     rootNodes={this.props.rootNodes}
+                    obsoleteTerms={[]}   
                     rootNodesForSkos={this.props.rootNodesForSkos}
                     componentIdentity={this.props.componentIdentity}
-                    iri={this.state.selectedNodeIri}
+                    selectedNodeIri={this.state.selectedNodeIri}
                     key={this.props.key}
                     ontology={this.props.ontology.ontologyId}
                     rootNodeNotExist={this.props.isSkos ? this.props.rootNodesForSkos.length === 0 : this.props.rootNodes.length === 0}
@@ -181,7 +182,7 @@ class IndividualsList extends React.Component {
                     lastState={this.props.lastState}
                     domStateKeeper={this.props.domStateKeeper}
                     isSkos={this.props.isSkos}
-                    nodeSelectionHandler={this.handleNodeSelectionInTreeView}
+                    handleNodeSelectionInDataTree={this.handleNodeSelectionInTreeView}
                     isIndividual={this.props.isSkos ? false : true}
                     showListSwitchEnabled={true}
                     individualViewChanger={this.switchView}                

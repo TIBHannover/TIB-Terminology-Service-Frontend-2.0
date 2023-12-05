@@ -1,28 +1,23 @@
 import {useState, useEffect} from 'react';
-import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
-import TreeNodeController from './TreeNode';
-import TreeHelper from './TreeHelpers';
 
 
 
 const DataTree = (props) => {
 
+  let url = new URL(window.location);
+  let targetQueryParams = url.searchParams;
+
   const [selectedNodeIri, setSelectedNodeIri] = useState('');
-  const [showDetailTable, setShowDetailTable] = useState(false);
+  const [showDetailTable, setShowDetailTable] = useState(targetQueryParams.get('iri') ? true : false);
   const [isTermTree, setIsTermTree] = useState(false);
   const [isPropertyTree, setIsPropertyTree] = useState(false);
-  const [ontologyId, setOntologyId] = useState('');
-  const [childExtractName, setChildExtractName] = useState('');
-
-  const paneResizeClass = new PaneResize();
-  const history = useHistory();
-
+  const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
 
 
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable){
@@ -31,8 +26,10 @@ const DataTree = (props) => {
   }
 
 
-  function handleResetTreeEevent(){
+  function handleResetTreeEvent(){
     paneResizeClass.resetTheWidthToOrignial();
+    setSelectedNodeIri("");
+    setShowDetailTable(false);
   }
 
 
@@ -48,8 +45,7 @@ const DataTree = (props) => {
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
-    let termTree = (props.componentIdentity === "terms") ? true : false;     
-    setOntologyId(props.ontology.ontologyId);
+    let termTree = (props.componentIdentity === "terms") ? true : false;         
     setSelectedNodeIri(props.iri);
     setIsTermTree(termTree);
     setIsPropertyTree(!termTree);
@@ -93,7 +89,7 @@ const DataTree = (props) => {
               isSkos={props.isSkos}
               handleNodeSelectionInDataTree={handleTreeNodeSelection}
               individualViewChanger={""}
-              handleResetTreeInParent={handleResetTreeEevent}
+              handleResetTreeInParent={handleResetTreeEvent}
             />
       </div>
     </div>

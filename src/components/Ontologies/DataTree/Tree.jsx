@@ -25,22 +25,19 @@ const Tree = (props) => {
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [noNodeExist, setNoNodeExist] = useState(false);    
-    const [obsoletesShown, setObsoletesShown] = useState(false);
+    const [obsoletesShown, setObsoletesShown] = useState(targetQueryParams.get('obsoletes') ? true : false);
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));    
 
     const history = useHistory();    
     
     function setComponentData(){
-        let url = new URL(window.location);
-        let targetQueryParams = url.searchParams;
-        let showObsoltes = targetQueryParams.get('obsoletes') === "true" ? true : false;      
+        let url = new URL(window.location);                 
         let extractName = props.componentIdentity;             
         if (props.rootNodes.length != 0 || resetTreeFlag || reload){                                                
             setChildExtractName(extractName);
             setResetTreeFlag(false);
             setReload(false);
-            setNoNodeExist(false);
-            setObsoletesShown(showObsoltes);            
+            setNoNodeExist(false);            
         }
         else if((props.rootNodes.length === 0 || props.rootNodesForSkos.length === 0) && !noNodeExist && props.rootNodeNotExist && props.componentIdentity !== "individuals"){
             setIsLoading(false);
@@ -62,10 +59,8 @@ const Tree = (props) => {
     async function buildTheTree(){        
         let target = props.selectedNodeIri;
         target =  target ? target.trim() : null;        
-        let siblingsButtonShow = false;
         let siblingsVisible = false;
-        let treeFullView = !subTreeMode;         
-        let subOrFullTreeBtnShow = false;
+        let treeFullView = !subTreeMode;        
         let treeList = "";
         let targetHasChildren = ""                        
         let listOfNodes =  [];
@@ -87,13 +82,11 @@ const Tree = (props) => {
                 result = buildTheTreeFirstLayer(props.rootNodes);
             }                                 
             treeList = result.treeDomContent;
-            target = "";            
-            siblingsButtonShow = false;
+            target = "";                        
             siblingsVisible = false;                       
         }                    
         else if(target != undefined || reload){            
-            showNodeDetailPage = true;
-            subOrFullTreeBtnShow = true;                       
+            showNodeDetailPage = true;                             
             if(props.isSkos && props.componentIdentity === "individuals"){                                
                 treeList = await SkosHelper.buildSkosTree(props.ontologyId, target, treeFullView);                                              
             }
@@ -132,15 +125,12 @@ const Tree = (props) => {
                      
         }
         
-        setTreeDomContent(treeList);
-        // setSubOrFullTreeBtnShow(subOrFullTreeBtnShow);
+        setTreeDomContent(treeList);        
         setReload(false);
-        setIsLoading(false);
-        // setSiblingsButtonShow(siblingsButtonShow);
+        setIsLoading(false);        
         setSiblingsVisible(siblingsVisible);                      
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
-        // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);
-        props.handleNodeSelectionInDataTree(target, showNodeDetailPage);
+        // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);        
         props.iriChangerFunction(target, props.componentIdentity); 
     }
 
@@ -194,15 +184,15 @@ const Tree = (props) => {
 
     function resetTree(){        
         history.push(window.location.pathname);
-        // props.domStateKeeper("", this.state, this.props.componentIdentity);
-        props.handleNodeSelectionInDataTree("", false);
-        // props.handleResetTreeInParent();
+        // props.domStateKeeper("", this.state, this.props.componentIdentity);        
+        props.handleResetTreeInParent();
         setResetTreeFlag(true);
         setTreeDomContent("");
         setSiblingsVisible(false);
         setSiblingsButtonShow(false);
         setReload(true);
-        setSubOrFullTreeBtnShow(false);        
+        setSubOrFullTreeBtnShow(false);
+        setSubTreeMode(false);        
         keyboardNavigationManager.updateSelectedNodeId(null);
     }
 
@@ -217,7 +207,7 @@ const Tree = (props) => {
                 }
                 else if(!props.isSkos && await TreeHelper.nodeIsRoot(props.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
                     // Target node is a root node            
-                    let res = await getNodeJsTree(props.ontologyId, childExtractName, targetNodes[0].parentNode.dataset.iri, 'true') ;
+                    let res = await getNodeJsTree(props.ontologyId, childExtractName, targetNodes[0].parentNode.dataset.iri, 'true');
                     TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
                 }
                 else{
@@ -249,6 +239,8 @@ const Tree = (props) => {
                 //     }
                 // });
             }
+
+            setSiblingsVisible(!siblingsVisible);
         }
         catch(e){
             // console.info(e);
@@ -258,16 +250,14 @@ const Tree = (props) => {
 
 
 
-    function reduceTree(){                
-        let showObsolete = props.showNodeDetailPage ? false : obsoletesShown;
+    function reduceTree(){                        
         let showSubtreeFlag = subTreeMode;
         // this.props.domStateKeeper("", this.state, this.props.componentIdentity);
         setSubTreeMode(!showSubtreeFlag);
         setSiblingsButtonShow(!showSubtreeFlag);
         setTreeDomContent("");
         setIsLoading(true);
-        setReload(true);
-        setObsoletesShown(showObsolete);       
+        setReload(true);        
     }
 
 
@@ -277,7 +267,8 @@ const Tree = (props) => {
         history.push(newUrl);
         setReload(true);
         setIsLoading(true);
-        setTreeDomContent("");        
+        setTreeDomContent("");
+        setObsoletesShown(!obsoletesShown);        
     }
 
 
@@ -319,7 +310,7 @@ const Tree = (props) => {
             props.handleNodeSelectionInDataTree(clickedNodeIri, showNodeDetailPage)
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
-            // setSubTreeMode(false);            
+            setSubTreeMode(false);            
             keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
             // if(this.state.componentIdentity !== "individuals"){
                 //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
@@ -426,9 +417,7 @@ const Tree = (props) => {
     useEffect(() => {
         setComponentData();
         buildTheTree();        
-        console.log("subtreeMode: " + subTreeMode)
-        console.log("siblings button show: " + siblingsButtonShow)
-    }, [props.rootNodes, resetTreeFlag, reload, isLoading]);
+    }, [props.rootNodes, props.selectedNodeIri, resetTreeFlag, reload, isLoading]);
 
 
 
