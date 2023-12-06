@@ -30,8 +30,7 @@ const Tree = (props) => {
 
     const history = useHistory();    
     
-    function setComponentData(){
-        let url = new URL(window.location);                 
+    function setComponentData(){                      
         let extractName = props.componentIdentity;             
         if (props.rootNodes.length != 0 || resetTreeFlag || reload){                                                
             setChildExtractName(extractName);
@@ -310,7 +309,7 @@ const Tree = (props) => {
             props.handleNodeSelectionInDataTree(clickedNodeIri, showNodeDetailPage)
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
-            setSubTreeMode(false);            
+            // setSubTreeMode(false);            
             keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
             // if(this.state.componentIdentity !== "individuals"){
                 //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
@@ -417,7 +416,7 @@ const Tree = (props) => {
     useEffect(() => {
         setComponentData();
         buildTheTree();        
-    }, [props.rootNodes, props.selectedNodeIri, resetTreeFlag, reload, isLoading]);
+    }, [props.rootNodes,  resetTreeFlag, reload, isLoading]);
 
 
 

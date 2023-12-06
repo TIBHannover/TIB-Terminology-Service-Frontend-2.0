@@ -86,7 +86,7 @@ class PaneResize{
     resetTheWidthToOrignial(){
         let pageLeftPane = document.getElementById("page-left-pane");                    
         pageLeftPane.style.width = this.originalLeftPaneWidth + "px";        ;
-        this.lastPagePositionX = 0;
+        this.lastPagePositionX = 0;        
         this.isResizeOn = false;   
     }
 

@@ -10,11 +10,8 @@ import PaneResize from '../../common/PaneResize/PaneResize';
 
 const DataTree = (props) => {
 
-  let url = new URL(window.location);
-  let targetQueryParams = url.searchParams;
-
   const [selectedNodeIri, setSelectedNodeIri] = useState('');
-  const [showDetailTable, setShowDetailTable] = useState(targetQueryParams.get('iri') ? true : false);
+  const [showDetailTable, setShowDetailTable] = useState(false);
   const [isTermTree, setIsTermTree] = useState(false);
   const [isPropertyTree, setIsPropertyTree] = useState(false);
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
@@ -26,7 +23,7 @@ const DataTree = (props) => {
   }
 
 
-  function handleResetTreeEvent(){
+  function handleResetTreeEvent(){    
     paneResizeClass.resetTheWidthToOrignial();
     setSelectedNodeIri("");
     setShowDetailTable(false);
@@ -41,6 +38,8 @@ const DataTree = (props) => {
 
 
   useEffect(() => {
+    let url = new URL(window.location);
+    let targetQueryParams = url.searchParams;    
     paneResizeClass.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
@@ -49,6 +48,7 @@ const DataTree = (props) => {
     setSelectedNodeIri(props.iri);
     setIsTermTree(termTree);
     setIsPropertyTree(!termTree);
+    setShowDetailTable(targetQueryParams.get('iri') ? true : false);
 
     return () => {
       document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
