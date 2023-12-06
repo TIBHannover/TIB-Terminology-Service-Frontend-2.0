@@ -72,10 +72,12 @@ class OntologyPage extends React.Component {
    */
   async getOntology (ontologyId) {
     let theOntology = await getOntologyDetail(ontologyId);
+    let isSkos = theOntology['config']?.['skos'];
     if (typeof theOntology != undefined){
       this.setState({
         isLoaded: true,
-        ontology: theOntology
+        ontology: theOntology,
+        isSkosOntology: isSkos
       });
     }
     else{
@@ -149,8 +151,7 @@ class OntologyPage extends React.Component {
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
           skosRootIndividuals: skosRootIndividuals,
-          rootNodeNotExist: false,
-          isSkosOntology: isSkos,
+          rootNodeNotExist: false,          
           obsoleteTerms: obsoleteTerms          
         });
       }

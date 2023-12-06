@@ -40,7 +40,7 @@ class IndividualsList extends React.Component {
     async setComponentData(){
         let ontologyId = this.props.ontology.ontologyId;        
         try{            
-            let indvList = await getIndividualsList(ontologyId);            
+            let indvList = await getIndividualsList(ontologyId);                        
             this.setState({
                 isLoaded: true,
                 individuals: sortIndividuals(indvList),
@@ -176,7 +176,7 @@ class IndividualsList extends React.Component {
                     componentIdentity={this.props.componentIdentity}
                     selectedNodeIri={this.state.selectedNodeIri}
                     key={this.props.key}
-                    ontology={this.props.ontology.ontologyId}
+                    ontologyId={this.props.ontology.ontologyId}
                     rootNodeNotExist={this.props.isSkos ? this.props.rootNodesForSkos.length === 0 : this.props.rootNodes.length === 0}
                     iriChangerFunction={this.props.iriChangerFunction}
                     lastState={this.props.lastState}
@@ -233,12 +233,12 @@ class IndividualsList extends React.Component {
         document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                              
     }
 
-    componentDidUpdate(){
+    componentDidUpdate(){        
         let showDetailTable = typeof(this.props.iri) !== "undefined" ? true : false;   
         if(this.props.iri !== this.state.selectedNodeIri){
             this.setState({
                 showNodeDetailPage: showDetailTable,
-                selectedNodeIri: this.props.iri
+                selectedNodeIri: this.props.iri                
             });
         }
         if(!this.state.isRendered){
