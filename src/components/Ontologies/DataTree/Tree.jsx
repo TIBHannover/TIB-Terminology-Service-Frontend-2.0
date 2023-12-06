@@ -347,13 +347,15 @@ const Tree = (props) => {
                             }
                         </div>                        
                     </div>
-                    <div className='row tree-action-btn-holder'>
-                        <div className="col-sm-12">                            
-                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={showObsoletes}>
-                                {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
-                            </button>                             
-                        </div>                        
-                    </div>
+                    {props.componentIdentity !== "individuals" && 
+                        <div className='row tree-action-btn-holder'>
+                            <div className="col-sm-12">                            
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={showObsoletes}>
+                                    {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
+                                </button>                             
+                            </div>                        
+                        </div>
+                    }
                     <div className='row tree-action-btn-holder'>
                         <div className="col-sm-12">
                             {subOrFullTreeBtnShow && !props.isIndividual &&  
