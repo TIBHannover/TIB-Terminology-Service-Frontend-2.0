@@ -60,69 +60,69 @@ const DataTree = (props) => {
 
   return(
     <div className="tree-view-container resizable-container"> 
-    <div className="tree-page-left-part" id="page-left-pane">       
-      <div className='row autosuggest-sticky'>
-        <div className='col-sm-10'>
-            <JumpTo
-              targetType={"term"}
-              ontologyId={props.ontology.ontologyId}
-              isSkos={props.isSkos} 
-              label={"Jump to"}
-              handleJumtoSelection={handleJumtoSelection}
-              obsoletes={false}
-            />
+      <div className="tree-page-left-part" id="page-left-pane">       
+        <div className='row autosuggest-sticky'>
+          <div className='col-sm-10'>
+              <JumpTo
+                targetType={"term"}
+                ontologyId={props.ontology.ontologyId}
+                isSkos={props.isSkos} 
+                label={"Jump to"}
+                handleJumtoSelection={handleJumtoSelection}
+                obsoletes={false}
+              />
+          </div>
+        </div>          
+        <div className='tree-container'>
+              <Tree
+                rootNodes={props.rootNodes}
+                obsoleteTerms={props.obsoleteTerms}                               
+                rootNodesForSkos={props.rootNodesForSkos}
+                componentIdentity={props.componentIdentity}
+                selectedNodeIri={selectedNodeIri}
+                key={props.key}                    
+                ontologyId={props.ontology.ontologyId}
+                rootNodeNotExist={props.rootNodeNotExist}
+                iriChangerFunction={props.iriChangerFunction}
+                lastState={props.lastState}
+                domStateKeeper={props.domStateKeeper}
+                isSkos={props.isSkos}
+                handleNodeSelectionInDataTree={handleTreeNodeSelection}
+                individualViewChanger={""}
+                handleResetTreeInParent={handleResetTreeEvent}
+              />
         </div>
-      </div>          
-      <div className='tree-container'>
-            <Tree
-              rootNodes={props.rootNodes}
-              obsoleteTerms={props.obsoleteTerms}                               
-              rootNodesForSkos={props.rootNodesForSkos}
-              componentIdentity={props.componentIdentity}
-              selectedNodeIri={selectedNodeIri}
-              key={props.key}                    
-              ontologyId={props.ontology.ontologyId}
-              rootNodeNotExist={props.rootNodeNotExist}
-              iriChangerFunction={props.iriChangerFunction}
-              lastState={props.lastState}
-              domStateKeeper={props.domStateKeeper}
-              isSkos={props.isSkos}
-              handleNodeSelectionInDataTree={handleTreeNodeSelection}
-              individualViewChanger={""}
-              handleResetTreeInParent={handleResetTreeEvent}
-            />
       </div>
-    </div>
-    {showDetailTable && paneResizeClass.generateVerticalResizeLine()}
-    {showDetailTable &&
-      <div className="node-table-container" id="page-right-pane">
-        {isTermTree &&
+      {showDetailTable && paneResizeClass.generateVerticalResizeLine()}
+      {showDetailTable &&
+        <div className="node-table-container" id="page-right-pane">
+          {isTermTree &&
+              <MatomoWrapper>
+              <NodePage
+                iri={selectedNodeIri}
+                ontology={props.ontology}
+                componentIdentity="terms"
+                extractKey="terms"
+                isSkos={props.isSkos}
+                isIndividual={false}
+                typeForNote="class"
+              />
+              </MatomoWrapper>        
+          }
+          {isPropertyTree &&           
             <MatomoWrapper>
             <NodePage
-              iri={selectedNodeIri}
-              ontology={props.ontology}
-              componentIdentity="terms"
-              extractKey="terms"
-              isSkos={props.isSkos}
-              isIndividual={false}
-              typeForNote="class"
+                iri={selectedNodeIri}
+                ontology={props.ontology}
+                componentIdentity="props"
+                extractKey="properties"
+                isIndividual={false}
+                typeForNote="property"
             />
-            </MatomoWrapper>        
-        }
-        {isPropertyTree &&           
-          <MatomoWrapper>
-          <NodePage
-              iri={selectedNodeIri}
-              ontology={props.ontology}
-              componentIdentity="props"
-              extractKey="properties"
-              isIndividual={false}
-              typeForNote="property"
-          />
-          </MatomoWrapper>}
-      </div>
-    }       
-</div>  
+            </MatomoWrapper>}
+        </div>
+      }       
+    </div>  
   );
 }
 

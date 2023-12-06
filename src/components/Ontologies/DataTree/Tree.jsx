@@ -125,8 +125,7 @@ const Tree = (props) => {
         }
         
         setTreeDomContent(treeList);        
-        setReload(false);
-        setIsLoading(false);        
+        setReload(false);              
         setSiblingsVisible(siblingsVisible);                      
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
         // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);        
@@ -407,16 +406,24 @@ const Tree = (props) => {
         }    
         document.addEventListener("keydown", handleKeyDown, false);  
 
+        setTimeout(() => {
+            setIsLoading(false);  
+        }, 2000);
+
         return () => {
             document.removeEventListener("keydown", handleKeyDown, false);
-        };
+        };        
     }, []);
 
 
     useEffect(() => {
         setComponentData();
-        buildTheTree();        
-    }, [props.rootNodes,  resetTreeFlag, reload, isLoading]);
+        buildTheTree();
+        setTimeout(() => {
+            setIsLoading(false);  
+        }, 2000);
+               
+    }, [props.rootNodes,  resetTreeFlag, reload]);
 
 
 
