@@ -19,7 +19,7 @@ class IndividualsList extends React.Component {
             isLoaded: false,
             ontology: "",
             showNodeDetailPage: false,
-            selectedNodeIri: " ",
+            selectedNodeIri: "",
             listView: true,
             isRendered: false            
         });
@@ -34,6 +34,7 @@ class IndividualsList extends React.Component {
         this.renderIndividualListSection = this.renderIndividualListSection.bind(this);
         this.createActionButtonSection = this.createActionButtonSection.bind(this);
         this.handleNodeSelectionInTreeView = this.handleNodeSelectionInTreeView.bind(this);
+        this.handleResetTreeEvent = this.handleResetTreeEvent.bind(this);
     }
 
 
@@ -165,6 +166,16 @@ class IndividualsList extends React.Component {
     }
 
 
+    handleResetTreeEvent(){    
+        this.paneResize.resetTheWidthToOrignial();
+        this.setState({
+            listView: false,
+            selectedNodeIri: "",
+            showNodeDetailPage: false
+        });
+    }
+
+
 
     createIndividualTree(){
         let result = [
@@ -185,7 +196,8 @@ class IndividualsList extends React.Component {
                     handleNodeSelectionInDataTree={this.handleNodeSelectionInTreeView}
                     isIndividual={this.props.isSkos ? false : true}
                     showListSwitchEnabled={true}
-                    individualViewChanger={this.switchView}                
+                    individualViewChanger={this.switchView}     
+                    handleResetTreeInParent={this.handleResetTreeEvent}           
                 />
             </div>          
         ];
@@ -233,12 +245,15 @@ class IndividualsList extends React.Component {
         document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                              
     }
 
-    componentDidUpdate(){        
-        let showDetailTable = typeof(this.props.iri) !== "undefined" ? true : false;   
-        if(this.props.iri !== this.state.selectedNodeIri){
+    componentDidUpdate(){   
+        let url = new URL(window.location);
+        let targetQueryParams = url.searchParams; 
+        let newIri = targetQueryParams.get('iri');    
+        let showDetailTable = newIri ? true : false;
+        if(newIri !== this.state.selectedNodeIri){
             this.setState({
                 showNodeDetailPage: showDetailTable,
-                selectedNodeIri: this.props.iri                
+                selectedNodeIri: newIri
             });
         }
         if(!this.state.isRendered){
@@ -264,11 +279,11 @@ class IndividualsList extends React.Component {
                     componentIdentity={this.props.componentIdentity}          
                    />
                    <div className='row tree-action-button-area'>
-                        <div className="col-sm-6"></div> 
-                        <div className="col-sm-5 text-center">
+                        {/* <div className="col-sm-6"></div>  */}
+                        <div className="col-sm-12 text-right">
                             {this.createActionButtonSection()}
                         </div>
-                        <div className="col-sm-1"></div>   
+                        {/* <div className="col-sm-1"></div>    */}
                    </div>                   
                     <div>                        
                         {this.state.listView && this.renderIndividualListSection()} 

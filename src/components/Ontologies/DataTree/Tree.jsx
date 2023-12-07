@@ -382,15 +382,14 @@ const Tree = (props) => {
                     </div>
                     <div className='row tree-action-btn-holder'>                                
                         <div className="col-sm-12">
-                        {props.showListSwitchEnabled &&
-                            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
-                                Show In List
-                            </button>
-                        }
+                            {props.showListSwitchEnabled &&
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
+                                    Show In List
+                                </button>
+                            }
                         </div>                            
                     </div> 
-                </div> 
-                <div className="col-sm-1"></div>               
+                </div>                             
             </div>                      
         ];
     }
