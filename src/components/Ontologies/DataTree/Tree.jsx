@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import { getNodeJsTree} from '../../../api/fetchData';
@@ -15,7 +15,8 @@ const Tree = (props) => {
     let url = new URL(window.location);
     let targetQueryParams = url.searchParams;
 
-    const [treeDomContent, setTreeDomContent] = useState('');    
+    const [treeDomContent, setTreeDomContent] = useState(''); 
+    const [componentLastHtmlContent, setComponentLastHtmlContent] = useState(null); 
     const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
     const [resetTreeFlag, setResetTreeFlag] = useState(false);
     const [siblingsVisible, setSiblingsVisible] = useState(false);
@@ -26,9 +27,38 @@ const Tree = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [noNodeExist, setNoNodeExist] = useState(false);    
     const [obsoletesShown, setObsoletesShown] = useState(targetQueryParams.get('obsoletes') === "true" ? true : false);
-    const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));    
+    const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler)); 
+    const [firstTimeLoad, setFirstTimeLoad] = useState(props.lastState ? false : false);
 
     const history = useHistory();    
+    const componentRef = useRef(null);
+
+
+    function saveComponentStateInParent(){
+        // Used when user changes the tabs to avoid component running on each tab change and load the last state.        
+        const states = JSON.stringify({            
+            childExtractName,
+            resetTreeFlag,
+            siblingsVisible,
+            siblingsButtonShow,
+            subOrFullTreeBtnShow,
+            subTreeMode,
+            reload,
+            isLoading,
+            noNodeExist,
+            obsoletesShown
+        });
+
+        // const componentHTML = document.getElementById('tree-ul-container').innerHTML;      
+        // console.info(componentRef.current.outerHTML)
+        const componentHTML = componentRef.current.innerHTML;      
+        if(props.componentIdentity !== "individuals"){
+            props.domStateKeeper({"_html_":componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
+        }        
+        return true;
+    }
+
+
     
     function setComponentData(){                      
         let extractName = props.componentIdentity;             
@@ -57,12 +87,12 @@ const Tree = (props) => {
         let childrenList = [];  
         let selectedItemId = "";
         let showNodeDetailPage = false;       
-
-        if(props.lastState && props.lastState.treeDomContent !== "" && !props.isIndividual){            
+        
+        if(firstTimeLoad && props.lastState && props.lastState.html && !props.isIndividual){            
             loadTheTreeLastState();            
             return true;
-        }        
-        else if (!target || resetTreeFlag){
+        }                
+        if (!target || resetTreeFlag){
             let result = [];
             if(props.isSkos && props.componentIdentity === "individuals"){
                 result = buildTheTreeFirstLayer(props.rootNodesForSkos);
@@ -117,25 +147,34 @@ const Tree = (props) => {
         setTreeDomContent(treeList);        
         setReload(false);              
         setSiblingsVisible(siblingsVisible);                      
-        keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
-        // props.domStateKeeper(treeList, this.state, this.props.componentIdentity);        
-        props.iriChangerFunction(target, props.componentIdentity); 
+        keyboardNavigationManager.updateSelectedNodeId(selectedItemId);        
+        props.iriChangerFunction(target, props.componentIdentity);         
     }
 
 
+   
+
+
     function loadTheTreeLastState(){
-        let stateObj = props.lastState;
-        // stateObj.isLoadingTheComponent = false;
-        // this.setState({...stateObj});        
-        // if(stateObj.selectedNodeIri !== ""){
-        //     let newUrl = Toolkit.setParamInUrl('iri', stateObj.selectedNodeIri)
-        //     this.props.history.push(newUrl);
-        //     this.props.iriChangerFunction(stateObj.selectedNodeIri, this.state.componentIdentity);
-        //     this.props.handleNodeSelectionInDataTree(stateObj.selectedNodeIri, true);
-        // }
-        // else{
-        //     this.props.handleNodeSelectionInDataTree("", false);
-        // }        
+        setComponentLastHtmlContent(props.lastState.html);
+        setChildExtractName(props.lastState.states.childExtractName);        
+        setSiblingsVisible(props.lastState.states.siblingsVisible);
+        setSiblingsButtonShow(props.lastState.states.siblingsButtonShow);
+        setSubOrFullTreeBtnShow(props.lastState.states.subOrFullTreeBtnShow);
+        setSubTreeMode(props.lastState.states.subTreeMode);  
+        setIsLoading(false);
+        setNoNodeExist(props.lastState.states.noNodeExist);
+        setObsoletesShown(props.lastState.states.obsoletesShown);
+        setFirstTimeLoad(false);
+        if(props.lastState.lastIri){
+            let newUrl = Toolkit.setParamInUrl('iri', props.lastState.lastIri);
+            history.push(newUrl);
+            props.iriChangerFunction(props.lastState.lastIri, props.componentIdentity);
+            props.handleNodeSelectionInDataTree(props.lastState.lastIri, true);
+            return true;
+        }
+        props.handleNodeSelectionInDataTree("", false);        
+        return true;       
     }
 
 
@@ -172,7 +211,7 @@ const Tree = (props) => {
 
     function resetTree(){        
         history.push(window.location.pathname);
-        // props.domStateKeeper("", this.state, this.props.componentIdentity);        
+        // saveComponentStateInParent();       
         props.handleResetTreeInParent();
         setResetTreeFlag(true);
         setTreeDomContent("");
@@ -200,13 +239,7 @@ const Tree = (props) => {
                 }
                 else{
                     await TreeHelper.showSiblings(targetNodes, props.ontologyId, childExtractName);
-                }
-                
-                // this.setState({siblingsVisible: true}, ()=>{ 
-                //     if(props.componentIdentity !== "individuals"){
-                //         // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                //     }
-                // });
+                }                                
             }
             else{
                 if(props.isSkos && props.componentIdentity === "individuals"){
@@ -219,16 +252,11 @@ const Tree = (props) => {
                 }
                 else{
                     TreeHelper.hideSiblings(targetNodes);
-                }
-                
-                // this.setState({siblingsVisible: false}, ()=>{
-                //     if(props.componentIdentity !== "individuals"){
-                //         // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                //     }
-                // });
+                }                                
             }
 
-            setSiblingsVisible(!siblingsVisible);
+            setSiblingsVisible(!siblingsVisible);   
+            saveComponentStateInParent();         
         }
         catch(e){
             // console.info(e);
@@ -239,8 +267,7 @@ const Tree = (props) => {
 
 
     function reduceTree(){                        
-        let showSubtreeFlag = subTreeMode;
-        // this.props.domStateKeeper("", this.state, this.props.componentIdentity);
+        let showSubtreeFlag = subTreeMode;        
         setSubTreeMode(!showSubtreeFlag);
         setSiblingsButtonShow(!showSubtreeFlag);
         setTreeDomContent("");
@@ -249,8 +276,7 @@ const Tree = (props) => {
     }
 
 
-    function showObsoletes(){        
-        // this.props.domStateKeeper("", this.state, this.props.componentIdentity);            
+    function showObsoletes(){                      
         let newUrl = Toolkit.setParamInUrl("obsoletes", !obsoletesShown);        
         history.push(newUrl);
         setReload(true);
@@ -299,17 +325,14 @@ const Tree = (props) => {
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
             // setSubTreeMode(false);            
-            keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
-            // if(this.state.componentIdentity !== "individuals"){
-                //         this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-                //     }
-                                 
+            keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);                                           
             let locationObject = window.location;
             const searchParams = new URLSearchParams(locationObject.search);
             searchParams.set('iri', clickedNodeIri);               
             searchParams.delete('noteId');        
             history.push(locationObject.pathname + "?" +  searchParams.toString());
             props.iriChangerFunction(clickedNodeIri, props.componentIdentity);
+            saveComponentStateInParent();
         }    
     }
 
@@ -317,11 +340,7 @@ const Tree = (props) => {
 
     async function expandNodeHandler(node){        
         await TreeHelper.expandNode(node, props.ontologyId, childExtractName, props.isSkos);
-        // .then((res) => {
-            // if(props.componentIdentity !== "individuals"){
-                // this.props.domStateKeeper({__html:document.getElementById("tree-root-ul").outerHTML}, this.state, this.props.componentIdentity);
-            // }
-        // });  
+        saveComponentStateInParent(); 
     }
 
 
@@ -391,44 +410,55 @@ const Tree = (props) => {
 
 
     useEffect(() => {       
-        setComponentData();                   
+        setComponentData();     
+        // saveComponentStateInParent();              
         if(props.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
         }    
-        document.addEventListener("keydown", handleKeyDown, false);  
+        document.addEventListener("keydown", handleKeyDown, false);          
 
         setTimeout(() => {
-            setIsLoading(false);  
+            setIsLoading(false);              
         }, 2000);
-
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown, false);
+        
+        return () => {            
+            document.removeEventListener("keydown", handleKeyDown, false);                        
         };        
     }, []);
 
 
     useEffect(() => {
         setComponentData();
-        buildTheTree();
+        buildTheTree();        
         setTimeout(() => {
             setIsLoading(false);  
-        }, 2000);
+            saveComponentStateInParent();
+        }, 2000);         
                
     }, [props.rootNodes,  resetTreeFlag, reload]);
 
 
+    // if(componentLastHtmlContent){
+    //     // console.log(componentLastHtmlContent)
+    //     return(            
+    //         <div 
+    //             className="col-sm-12" 
+    //             onClick={(e) => processClick(e)}                     
+    //             id="tree-ul-container" 
+    //             dangerouslySetInnerHTML={{ __html: componentLastHtmlContent._html_}}
+    //         >
+    //         </div>
+    //     );
+    // }
 
     return(
-        <div className="col-sm-12" onClick={(e) => processClick(e)}>
+        <div className="col-sm-12" onClick={(e) => processClick(e)} id="tree-ul-container" ref={componentRef}>
                 {isLoading && <div className="isLoading"></div>}
                 {noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
                 {!isLoading && !noNodeExist && createTreeActionButtons()}                
                 {!isLoading && !noNodeExist && 
                     <div className='row'>
-                        {!treeDomContent.__html 
-                        ? <div className='col-sm-12 tree'>{treeDomContent}</div> 
-                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: treeDomContent.__html}}></div>
-                        }                                                    
+                        <div className='col-sm-12 tree'>{treeDomContent}</div> 
                     </div>
                 }
         </div>

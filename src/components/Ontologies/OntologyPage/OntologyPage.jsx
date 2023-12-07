@@ -52,7 +52,7 @@ class OntologyPage extends React.Component {
       obsoleteProps: [],
       waiting: false,
       lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
-      lastTabsStates: {"terms": "", "props": "", "gitIssues": ""},
+      lastTabsStates: {"terms": null, "props": null, "gitIssues": ""},
       rootNodeNotExist: false,
       isSkosOntology: false,
       ontologyShowAll: false,
@@ -249,10 +249,9 @@ class OntologyPage extends React.Component {
   /**
    * Stores the last state in for tabs components to prevent reload on tab change
    */
-  tabsStateKeeper(domContent, stateObject, componentId){
-    typeof(domContent) !== "undefined" ? stateObject.treeDomContent = domContent : stateObject.treeDomContent = ""; 
-    let lastTabsStates = this.state.lastTabsStates;
-    lastTabsStates[componentId] = stateObject;
+  tabsStateKeeper(domContent, stateObject, componentId, iri){     
+    let lastTabsStates = this.state.lastTabsStates;    
+    lastTabsStates[componentId] = {"html": domContent, "states": stateObject, "lastIri": iri};
     this.setState({
       lastTabsStates: lastTabsStates
     });
