@@ -51,8 +51,8 @@ class OntologyPage extends React.Component {
       obsoleteTerms: [],
       obsoleteProps: [],
       waiting: false,
-      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
-      lastTabsStates: {"terms": null, "props": null, "gitIssues": ""},
+      lastIrisHistory: {"terms": "", "properties": "", "individuals": "", "termList": ""},
+      lastTabsStates: {"terms": null, "properties": null, "gitIssues": ""},
       rootNodeNotExist: false,
       isSkosOntology: false,
       ontologyShowAll: false,
@@ -249,7 +249,7 @@ class OntologyPage extends React.Component {
   /**
    * Stores the last state in for tabs components to prevent reload on tab change
    */
-  tabsStateKeeper(domContent, stateObject, componentId, iri){     
+  tabsStateKeeper(domContent, stateObject, componentId, iri){         
     let lastTabsStates = this.state.lastTabsStates;    
     lastTabsStates[componentId] = {"html": domContent, "states": stateObject, "lastIri": iri};
     this.setState({
@@ -313,12 +313,12 @@ class OntologyPage extends React.Component {
                                   obsoleteTerms={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
                                   componentIdentity={'properties'}
-                                  iri={this.state.lastIrisHistory['props']}
+                                  iri={this.state.lastIrisHistory['properties']}
                                   key={'propertyTreePage'}
                                   ontology={this.state.ontology}
                                   rootNodeNotExist={this.state.rootNodeNotExist}
                                   iriChangerFunction={this.changeInputIri}
-                                  lastState={this.state.lastTabsStates['props']}
+                                  lastState={this.state.lastTabsStates['properties']}
                                   domStateKeeper={this.tabsStateKeeper}
                                   isIndividuals={false}
                                 />

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import { getNodeJsTree} from '../../../api/fetchData';
@@ -15,8 +15,7 @@ const Tree = (props) => {
     let url = new URL(window.location);
     let targetQueryParams = url.searchParams;
 
-    const [treeDomContent, setTreeDomContent] = useState(''); 
-    const [componentLastHtmlContent, setComponentLastHtmlContent] = useState(null); 
+    const [treeDomContent, setTreeDomContent] = useState('');     
     const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
     const [resetTreeFlag, setResetTreeFlag] = useState(false);
     const [siblingsVisible, setSiblingsVisible] = useState(false);
@@ -28,10 +27,9 @@ const Tree = (props) => {
     const [noNodeExist, setNoNodeExist] = useState(false);    
     const [obsoletesShown, setObsoletesShown] = useState(targetQueryParams.get('obsoletes') === "true" ? true : false);
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler)); 
-    const [firstTimeLoad, setFirstTimeLoad] = useState(props.lastState ? false : false);
+    const [firstTimeLoad, setFirstTimeLoad] = useState(props.lastState ? true : false);    
 
-    const history = useHistory();    
-    const componentRef = useRef(null);
+    const history = useHistory();        
 
 
     function saveComponentStateInParent(){
@@ -49,10 +47,8 @@ const Tree = (props) => {
             obsoletesShown
         });
 
-        // const componentHTML = document.getElementById('tree-ul-container').innerHTML;      
-        // console.info(componentRef.current.outerHTML)
-        const componentHTML = componentRef.current.innerHTML;      
-        if(props.componentIdentity !== "individuals"){
+        const componentHTML = document.getElementById('tree-root-ul')?.innerHTML;        
+        if(props.componentIdentity !== "individuals" && componentHTML){           
             props.domStateKeeper({"_html_":componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
         }        
         return true;
@@ -155,20 +151,23 @@ const Tree = (props) => {
    
 
 
-    function loadTheTreeLastState(){
-        setComponentLastHtmlContent(props.lastState.html);
-        setChildExtractName(props.lastState.states.childExtractName);        
-        setSiblingsVisible(props.lastState.states.siblingsVisible);
-        setSiblingsButtonShow(props.lastState.states.siblingsButtonShow);
-        setSubOrFullTreeBtnShow(props.lastState.states.subOrFullTreeBtnShow);
-        setSubTreeMode(props.lastState.states.subTreeMode);  
+    function loadTheTreeLastState(){          
+        let lastStates =  JSON.parse(props.lastState.states);            
+        setTreeDomContent(props.lastState.html);
+        setChildExtractName(lastStates.childExtractName);        
+        setSiblingsVisible(lastStates.siblingsVisible);
+        setSiblingsButtonShow(lastStates.siblingsButtonShow);
+        setSubOrFullTreeBtnShow(lastStates.subOrFullTreeBtnShow);
+        setSubTreeMode(lastStates.subTreeMode);  
         setIsLoading(false);
-        setNoNodeExist(props.lastState.states.noNodeExist);
-        setObsoletesShown(props.lastState.states.obsoletesShown);
+        setNoNodeExist(lastStates.noNodeExist);
+        setObsoletesShown(lastStates.obsoletesShown);
         setFirstTimeLoad(false);
         if(props.lastState.lastIri){
-            let newUrl = Toolkit.setParamInUrl('iri', props.lastState.lastIri);
-            history.push(newUrl);
+            let url = new URLSearchParams();        
+            url.append('iri', props.lastState.lastIri);
+            url.append('obsoletes', lastStates.obsoletesShown);
+            history.push(window.location.pathname + "?" + url.toString())            
             props.iriChangerFunction(props.lastState.lastIri, props.componentIdentity);
             props.handleNodeSelectionInDataTree(props.lastState.lastIri, true);
             return true;
@@ -210,8 +209,7 @@ const Tree = (props) => {
 
 
     function resetTree(){        
-        history.push(window.location.pathname);
-        // saveComponentStateInParent();       
+        history.push(window.location.pathname);        
         props.handleResetTreeInParent();
         setResetTreeFlag(true);
         setTreeDomContent("");
@@ -219,7 +217,7 @@ const Tree = (props) => {
         setSiblingsButtonShow(false);
         setReload(true);
         setSubOrFullTreeBtnShow(false);
-        setSubTreeMode(false);        
+        setSubTreeMode(false);                
         keyboardNavigationManager.updateSelectedNodeId(null);
     }
 
@@ -255,8 +253,7 @@ const Tree = (props) => {
                 }                                
             }
 
-            setSiblingsVisible(!siblingsVisible);   
-            saveComponentStateInParent();         
+            setSiblingsVisible(!siblingsVisible);               
         }
         catch(e){
             // console.info(e);
@@ -321,18 +318,17 @@ const Tree = (props) => {
             clickedNodeIri = treeNode.getClickedNodeIri(target);
             clickedNodeId = treeNode.getClickedNodeId(target);            
             showNodeDetailPage = true;            
-            props.handleNodeSelectionInDataTree(clickedNodeIri, showNodeDetailPage)
+            props.handleNodeSelectionInDataTree(clickedNodeIri, showNodeDetailPage);            
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
-            // setSubTreeMode(false);            
+            setSubTreeMode(false);            
             keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);                                           
             let locationObject = window.location;
             const searchParams = new URLSearchParams(locationObject.search);
             searchParams.set('iri', clickedNodeIri);               
             searchParams.delete('noteId');        
             history.push(locationObject.pathname + "?" +  searchParams.toString());
-            props.iriChangerFunction(clickedNodeIri, props.componentIdentity);
-            saveComponentStateInParent();
+            props.iriChangerFunction(clickedNodeIri, props.componentIdentity);            
         }    
     }
 
@@ -438,28 +434,24 @@ const Tree = (props) => {
     }, [props.rootNodes,  resetTreeFlag, reload]);
 
 
-    // if(componentLastHtmlContent){
-    //     // console.log(componentLastHtmlContent)
-    //     return(            
-    //         <div 
-    //             className="col-sm-12" 
-    //             onClick={(e) => processClick(e)}                     
-    //             id="tree-ul-container" 
-    //             dangerouslySetInnerHTML={{ __html: componentLastHtmlContent._html_}}
-    //         >
-    //         </div>
-    //     );
-    // }
+    useEffect(() => {
+        saveComponentStateInParent();                           
+    }, [obsoletesShown, siblingsVisible, subTreeMode]);
+
 
     return(
-        <div className="col-sm-12" onClick={(e) => processClick(e)} id="tree-ul-container" ref={componentRef}>
+        <div className="col-sm-12" onClick={(e) => processClick(e)}>
                 {isLoading && <div className="isLoading"></div>}
                 {noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
                 {!isLoading && !noNodeExist && createTreeActionButtons()}                
                 {!isLoading && !noNodeExist && 
                     <div className='row'>
-                        <div className='col-sm-12 tree'>{treeDomContent}</div> 
+                        {!treeDomContent._html_ 
+                        ? <div className='col-sm-12 tree'>{treeDomContent}</div> 
+                        : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: treeDomContent._html_}}></div>
+                        }                                                    
                     </div>
+
                 }
         </div>
     );
