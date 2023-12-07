@@ -313,7 +313,7 @@ class OntologyPage extends React.Component {
                                   rootNodes={this.state.rootProps}
                                   obsoleteTerms={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
-                                  componentIdentity={'props'}
+                                  componentIdentity={'properties'}
                                   iri={this.state.lastIrisHistory['props']}
                                   key={'propertyTreePage'}
                                   ontology={this.state.ontology}

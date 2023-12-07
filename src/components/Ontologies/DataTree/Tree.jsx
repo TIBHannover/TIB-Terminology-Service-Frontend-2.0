@@ -16,7 +16,7 @@ const Tree = (props) => {
     let targetQueryParams = url.searchParams;
 
     const [treeDomContent, setTreeDomContent] = useState('');    
-    const [childExtractName, setChildExtractName] = useState(getExtractName());
+    const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
     const [resetTreeFlag, setResetTreeFlag] = useState(false);
     const [siblingsVisible, setSiblingsVisible] = useState(false);
     const [siblingsButtonShow, setSiblingsButtonShow] = useState(targetQueryParams.get('iri') ? true : false);
@@ -25,7 +25,7 @@ const Tree = (props) => {
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [noNodeExist, setNoNodeExist] = useState(false);    
-    const [obsoletesShown, setObsoletesShown] = useState(targetQueryParams.get('obsoletes') ? true : false);
+    const [obsoletesShown, setObsoletesShown] = useState(targetQueryParams.get('obsoletes') === "true" ? true : false);
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));    
 
     const history = useHistory();    
@@ -43,16 +43,6 @@ const Tree = (props) => {
             setNoNodeExist(true);            
         }        
     }
-
-
-
-    function getExtractName(){
-        if(props.componentIdentity === 'props'){                
-            return "properties";
-        }
-        return props.componentIdentity;
-    }
-
 
 
     async function buildTheTree(){        
