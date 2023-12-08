@@ -1,0 +1,21 @@
+.collection-ontologies-text{
+    word-wrap: break-word;
+}
+
+.ontologies-link-tag{
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.collection-card-row{
+    margin-bottom: 80px;
+}
+
+.collections-info-container{
+    padding-top: 25px;
+}
+
+.collection-logo-in-list{
+    width: 300px;
+    height: 200px;    
+}
