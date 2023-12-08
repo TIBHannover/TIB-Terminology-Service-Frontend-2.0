@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import './components/layout/common.css';
+import {useState, useEffect} from 'react';
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
@@ -32,6 +31,8 @@ import { AuthProvider } from "react-oidc-context";
 import RequireLoginRoute from './components/User/Login/RequireLoginRoute';
 
 import Sitemap from './components/Sitemap/Sitemap';
+
+import './components/layout/common.css';
 
 
 
