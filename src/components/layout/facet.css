@@ -1,0 +1,64 @@
+.facet-box{
+    background-color: white;
+    padding-right: 10px;
+    padding-top: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+.facet-result-count{ 
+    border-radius: 50px;
+    background-color: #2B3C46;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    font-weight: 700 !important;
+    font-size: 75% !important;
+    line-height: 1 !important;
+    float: right;
+}
+
+.facet-item-row{
+    margin-bottom: 10px;
+}
+
+.facet-item-row:hover{
+    background-color: rgba(119, 122, 121, 0.192);
+    border-radius: 15px;    
+}
+
+.facet-loading-effect{
+    width: 50px;
+    height: 50px;
+}
+
+.clear-filter-link-box{
+    margin-bottom: 40px;
+}
+
+.clear-filter-link-box > a{
+    text-decoration: underline !important;
+    cursor: pointer; 
+}
+
+.facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
+   border: 1px solid transparent;
+   border-radius: 10px;
+   display: inline-block;
+   padding: 0.375rem 0.75rem;
+   padding-right: 0.3rem;
+   background-color: white;
+   color: #5F6469;
+   font-weight: bold;
+   font-size: 16px;  
+}
+
+.facet-switch-holder{ 
+    text-align: center;
+    margin-bottom: 25px;
+    margin-top: 10px;
+}

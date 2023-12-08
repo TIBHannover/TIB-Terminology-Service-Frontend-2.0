@@ -58,11 +58,6 @@
     display: none !important; 
 }
 
-.fa-ellipsis-h{
-    border: none;
-    font-size: 20px;    
-}
-
 .note-dropdown-btn{
     background-color: #F7F7F7 !important;
     color: black !important;
