@@ -512,6 +512,10 @@ button{
     100% { transform: rotate(360deg); }
 }
 
+.user-profile-dropdown{
+    font-size: 12px;    
+}
+
 
 
 
