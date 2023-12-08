@@ -1,0 +1,49 @@
+.ontology-list-sorting{
+    margin-left: 5px;
+    background-color: white;
+    border-color: white;
+    color: #42484e;
+}
+
+
+.ontology-title-text-in-box{
+    text-decoration: none !important;
+    color: #42484e !important;
+}
+
+.ontology-card-description{
+    margin-top: 30px;
+}
+
+.ontology-list-facet-header{
+    margin-bottom: 25px;
+    margin-left: -7px;
+}
+
+.ontology-card-meta-data{
+    padding-left: 40px;
+}
+
+#ontologylist-search-grid{
+    padding-left: 0px;
+    margin-top: 30px;
+}
+
+.ontology-collection-name{
+    margin-left: 5px;
+}
+
+.ontology-list-facet-section-box{
+    margin-top: 30px;
+    width: 100% !important;
+}
+
+#lastUpdateRange{
+    margin-left: 10px;
+}
+
+.facet-switch-holder{ 
+    text-align: center;
+    margin-bottom: 25px;
+    margin-top: 10px;
+}
