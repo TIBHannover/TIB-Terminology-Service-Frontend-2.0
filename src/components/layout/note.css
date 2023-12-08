@@ -1,0 +1,119 @@
+.note-list-card{
+    margin-bottom: 10px;
+    border: 1px solid rgb(94, 93, 93) !important;   
+}
+
+.card-header{    
+    padding: 2px !important;    
+}
+
+.card-body{
+    padding: 5px !important;    
+}
+
+.note-list-title{
+    color: black;
+    font-weight: bold;    
+    width: 80%;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 0 5px;    
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}
+
+.note-comment-editor-warpper{
+    background-color: #e9e6e6;
+    height: 250px;
+}
+
+.note-comment-editor{
+    height: 190px !important;
+}
+
+.note-comment-submit-btn{    
+    margin-top: 2px;
+    float: right;
+}
+
+.note-comment-cancel-edit-btn{
+    margin-top: 2px;
+    float: right;
+    margin-right: 5px;
+    background-color: rgb(211, 208, 208) !important;
+    color: black !important;
+}
+
+.note-comment-card{
+    padding: 20px;
+    padding-left: 0;
+    border-left: 1px solid #ccc; 
+    margin-left: 20px; 
+}
+
+.note-dropdown-toggle::after {
+    display: none !important; 
+}
+
+.fa-ellipsis-h{
+    border: none;
+    font-size: 20px;    
+}
+
+.note-dropdown-btn{
+    background-color: #F7F7F7 !important;
+    color: black !important;
+    border: none !important;
+}
+
+.note-dropdown-menu .note-dropdown-item:hover {
+    background-color: transparent !important;
+    color: inherit !important;
+}
+  
+.note-dropdown-menu .note-dropdown-item:hover {
+    cursor: auto !important;
+}
+
+.btn-delete-note{
+    background-color: white !important;
+    border: none !important;
+    color: red;
+}
+.btn-delete-note:hover{
+    color: red;
+}
+
+.note-action-menu-btn{
+    border: none !important;
+    background-color: white !important;
+    color: black !important;
+}
+
+.note-action-menu-btn:hover{
+    color: black !important;    
+}
+
+.note-link-copy-message{
+    display: inline;
+    margin-left: 20px;
+    background-color: #3efa3e;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.pinned-message-icon{
+    margin-left: 10px;
+    background-color: #404040;
+    color: white;
+    border-radius: 15px;
+    width: 60px;
+    display: inline-block;
+    text-align: center;
+    font-size: 11px;
+}
