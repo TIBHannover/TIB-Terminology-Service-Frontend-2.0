@@ -8,7 +8,7 @@ import Login from '../../User/Login/TS/Login';
 function Header () {
   return (
     <div className='row header-wrapper header-collapseable-section'>
-      <div className='col-sm-9 site-header'>
+      <div className='col-sm-10 site-header'>
           <div className='row site-header-top-row float-right'>
             <div className='col-sm-12'>
               <Login isModal={true}></Login>            

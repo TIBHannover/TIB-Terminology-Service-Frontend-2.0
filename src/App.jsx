@@ -33,6 +33,7 @@ import RequireLoginRoute from './components/User/Login/RequireLoginRoute';
 import Sitemap from './components/Sitemap/Sitemap';
 
 import './components/layout/common.css';
+import './components/layout/mediaQueries.css';
 
 
 
@@ -81,7 +82,7 @@ function App() {
         <MatomoWrapper> 
         <div className='container-fluid'>
             <Header />
-            <div className='application-content'>
+            <div className='application-content'  id="application_content">
               {loading && <Skeleton count={2} wrapper={AppHelpers.InlineWrapperWithMargin} inline width={600} height={200} marginLeft={20} baseColor={'#f4f2f2'}/>}
               {!loading &&
                 <>            

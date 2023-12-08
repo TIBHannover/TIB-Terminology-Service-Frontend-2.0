@@ -282,7 +282,7 @@ button{
 .site-header-searchbox-holder{ 
     padding-left: 10%;
     padding-right: 10%;
-    margin-bottom: 40px;
+    margin-bottom: 40px;    
 }
 
 .site-header-top-row{        
@@ -532,4 +532,5 @@ button{
     height: auto;
     text-align: justify;
 }
+
 

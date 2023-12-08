@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom';
 import TIB_LOGO from '../../../assets/img/TIB_Logo_EN_WM_W.SVG';
 import DFG_LOGO from '../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_en.gif';

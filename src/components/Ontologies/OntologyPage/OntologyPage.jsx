@@ -10,6 +10,13 @@ import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSectio
 import Toolkit from '../../common/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
+import '../../layout/ontologyHomePage.css';
+import '../../layout/tree.css';
+import '../../layout/note.css';
+import '../../layout/githubPanel.css';
+import '../../layout/termList.css';
+import '../../layout/jumpTo.css';
+import '../../layout/reactAutoSuggestLib.css';
 
 
 
@@ -63,7 +70,8 @@ class OntologyPage extends React.Component {
     this.setTabOnLoad = this.setTabOnLoad.bind(this);
     this.setOntologyData = this.setOntologyData.bind(this);
     this.changeInputIri = this.changeInputIri.bind(this);
-    this.tabsStateKeeper = this.tabsStateKeeper.bind(this);    
+    this.tabsStateKeeper = this.tabsStateKeeper.bind(this);  
+    document.getElementById('application_content').style.width = '100%';  
   }
 
 
@@ -277,7 +285,7 @@ class OntologyPage extends React.Component {
       return <div>Loading...</div>
     } else {
       return (        
-        <div className='row justify-content-center'>
+        <div className='justify-content-center'>
             {Toolkit.createHelmet(this.state.ontology.ontologyId)}            
             {createOntologyPageHeadSection(this.state.ontology)}          
             <div className='col-sm-12'>
