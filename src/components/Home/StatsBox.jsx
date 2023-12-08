@@ -1,6 +1,6 @@
 export function createStatsBox(statsResult){
     let box = [
-        <div className="col-sm-8 stats-box">               
+        <div className="col-sm-10 stats-box">               
             <h3 className="font-weight-bold">Terminology Service Statistics</h3>
             <div className="row">
               <div className="col-lg-3 col-sm-6 pb-3 pt-3">

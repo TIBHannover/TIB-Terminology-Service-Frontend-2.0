@@ -108,11 +108,11 @@ function App() {
                       {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
                       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
                       <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>
-                  </Switch>            
-                  <Footer /> 
+                  </Switch>                   
                 </>   
               }
-            </div>                   
+            </div>
+            <Footer />                   
           </div>             
         </MatomoWrapper>
       </BrowserRouter>
