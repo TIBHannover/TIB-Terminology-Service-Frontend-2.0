@@ -79,51 +79,44 @@ function App() {
     <AuthProvider {...oidcConfig}>   
      <BrowserRouter>
         <MatomoWrapper> 
-          <Header />               
-          {loading ? (
-            <Skeleton
-                count={2}
-                wrapper={AppHelpers.InlineWrapperWithMargin}
-                inline
-                width={600}
-                height={200}
-                marginLeft={20}
-                baseColor={'#f4f2f2'}
-            />
-          ):(
-            <span>
-            <div className='container-fluid application-content'>
-              <span id="backend-is-down-message-span"></span>
-              <CookieBanner />
-              <Switch>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
-                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
-                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>
-                <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
-                {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyPage}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
-                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
-                <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
-                <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>
-            </Switch>
-          </div>
-          <Footer /> 
-          </span>         
-          )}              
+        <div className='container-fluid'>
+            <Header />
+            <div className='application-content'>
+              {loading && <Skeleton count={2} wrapper={AppHelpers.InlineWrapperWithMargin} inline width={600} height={200} marginLeft={20} baseColor={'#f4f2f2'}/>}
+              {!loading &&
+                <>            
+                  <span id="backend-is-down-message-span"></span>
+                  <CookieBanner />
+                  <Switch>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
+                      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={Login}/>    
+                      <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>
+                      <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
+                      {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>}
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyPage}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
+                      {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 
+                      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>}
+                      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>
+                  </Switch>            
+                  <Footer /> 
+                </>   
+              }
+            </div>                   
+          </div>             
         </MatomoWrapper>
       </BrowserRouter>
-      </AuthProvider>
+      </AuthProvider>    
     </div>
   );
 }

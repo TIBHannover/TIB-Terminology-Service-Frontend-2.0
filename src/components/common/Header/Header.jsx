@@ -7,12 +7,12 @@ import Login from '../../User/Login/TS/Login';
 
 function Header () {
   return (
-    <div className='header-wrapper header-collapseable-section'>
-      <div className='container site-header'>
-          <div className='row site-header-top-row'>
-            {/* <LoginForm onlyLoginButton={true}></LoginForm> */}
-            <Login isModal={true}></Login>
-            
+    <div className='row header-wrapper header-collapseable-section'>
+      <div className='col-sm-9 site-header'>
+          <div className='row site-header-top-row float-right'>
+            <div className='col-sm-12'>
+              <Login isModal={true}></Login>            
+            </div>                      
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>

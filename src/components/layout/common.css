@@ -268,7 +268,7 @@ button{
     margin-bottom: 10px;
  }
 
-.container.site-header{ 
+.site-header{ 
     text-align: center;
     margin: auto;
 }
@@ -285,9 +285,7 @@ button{
     margin-bottom: 40px;
 }
 
-.site-header-top-row{
-    text-align: right;
-    color: white;
+.site-header-top-row{        
     margin-bottom: 20px;
 }
  
