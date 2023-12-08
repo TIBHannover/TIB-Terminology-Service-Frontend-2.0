@@ -1,0 +1,32 @@
+.git-issue-card{
+    background-color: white !important;    
+    padding: 10px;
+    height: auto;
+    text-align: justify;
+    border: 1px solid #7AABAC;    
+}
+
+.git-issue-title{
+    color: black;
+    font-weight: bold;    
+}
+
+.git-issue-tag-link{
+
+    color: black;    
+}
+
+.git-issue-tag-link:hover{
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.git-issue-label-tag{
+    display: inline;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+

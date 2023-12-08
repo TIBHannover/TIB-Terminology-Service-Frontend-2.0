@@ -41,3 +41,25 @@
     border-color: white;
     color: #42484e;
 }
+
+.is-loading-term-list{    
+    margin-right: 50%;
+}
+
+.number-of-result-text-container{
+    padding-top: 8px;
+}
+
+.show-hidden-column{
+    background-color: #2E7A7B;
+    width: 180px;
+    color: white;
+    border-radius: 5px;
+    padding: 2px;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    display: none;
+    cursor: pointer;
+    margin-right: 5px;    
+}
