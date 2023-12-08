@@ -1,4 +1,5 @@
 import React from "react";
+import '../layout/home.css';
 import {createStatsBox} from './StatsBox';
 import {createHomePageContent} from './CollectionsCards';
 import {nfdi4chemHomePage} from './Nfdi4chem_home';
