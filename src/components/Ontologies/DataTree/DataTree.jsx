@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import NodePage from '../NodePage/NodePage';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
@@ -15,6 +16,9 @@ const DataTree = (props) => {
   const [isTermTree, setIsTermTree] = useState(false);
   const [isPropertyTree, setIsPropertyTree] = useState(false);
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
+  const [jumpToIri, setJumpToIri] = useState('');
+
+  const history = useHistory();
 
 
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable){
@@ -32,7 +36,12 @@ const DataTree = (props) => {
 
   function handleJumtoSelection(selectedTerm){
     if(selectedTerm){            
+      setJumpToIri(selectedTerm['iri']);
       setSelectedNodeIri(selectedTerm['iri']);
+      setShowDetailTable(true);
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set('iri', selectedTerm['iri']);  
+      history.push(window.location.pathname + "?" +  searchParams.toString());
     }   
   }
 
@@ -90,6 +99,7 @@ const DataTree = (props) => {
                 handleNodeSelectionInDataTree={handleTreeNodeSelection}
                 individualViewChanger={""}
                 handleResetTreeInParent={handleResetTreeEvent}
+                jumpToIri={jumpToIri}
               />
         </div>
       </div>

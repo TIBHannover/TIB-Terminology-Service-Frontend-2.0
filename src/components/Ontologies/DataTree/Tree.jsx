@@ -269,7 +269,7 @@ const Tree = (props) => {
         setSiblingsButtonShow(!showSubtreeFlag);
         setTreeDomContent("");
         setIsLoading(true);
-        setReload(true);        
+        setReload(true);
     }
 
 
@@ -416,7 +416,8 @@ const Tree = (props) => {
         setTimeout(() => {
             setIsLoading(false);              
         }, 2000);
-        
+
+                
         return () => {            
             document.removeEventListener("keydown", handleKeyDown, false);                        
         };        
@@ -429,9 +430,13 @@ const Tree = (props) => {
         setTimeout(() => {
             setIsLoading(false);  
             saveComponentStateInParent();
-        }, 2000);         
+        }, 2000);
+        
+        if(props.jumpToIri){
+            setSubTreeMode(true);
+        }
                
-    }, [props.rootNodes,  resetTreeFlag, reload]);
+    }, [props.rootNodes,  resetTreeFlag, reload, props.jumpToIri]);
 
 
     useEffect(() => {
