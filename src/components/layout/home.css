@@ -1,0 +1,43 @@
+.general-home-page-content{
+    padding-left: 15%;
+    padding-right: 15%;    
+}
+
+.collection-card{ 
+    background-color: white;
+    padding: 20px;
+}
+
+.trunc{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; 
+}
+
+.collection-logo{
+    width: 400px;
+    height: 200px;
+    padding: 20px;
+    margin-left: 100px;
+
+}
+
+.home-page-stats-container{
+    padding-top: 60px;
+    padding-bottom: 8%;    
+}
+
+.stats-box{
+    color: white;
+    background-color: #005C5F;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.show-more-text-link{ 
+    cursor: pointer;
+    font-size: 13px;
+}
