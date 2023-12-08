@@ -1,0 +1,72 @@
+#searchterm-wrapper{
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-top: 20px;
+    display: flex;
+}
+
+.searchresult-card-description{
+    margin-top: 30px;
+}
+
+.search-result-title{ 
+    color: #5F6469;
+    display: inline !important;
+}
+
+.search-result-title:hover{ 
+    color: #5F6469;
+    text-decoration: none;
+}
+
+.search-result-title > h4{
+    display: inline !important;
+}
+
+.also-in-design{ 
+    display: inline-block;
+}
+
+.also-in-ontologies{  
+    display: inline-block !important;
+    padding-bottom: 7px;
+}
+
+.search-dropdown{ 
+    margin-left: 600px;
+}
+
+.facet-btn{
+    /* 
+       design for facet buttons under search term
+    */
+   border: 1px solid transparent;
+   border-radius: 10px;
+   display: inline-block;
+   padding: 0.375rem 0.75rem;
+   padding-right: 0.3rem;
+   background-color: white;
+   color: #5F6469;
+   font-weight: bold;
+   font-size: 16px;  
+}
+
+.remove-btn{
+    padding: 2px;
+    margin-left: 15px;
+    border-radius: 20px;
+    font-size: 15px;
+}
+
+.dropdown-colour{    
+   background-color: white;
+}
+
+.form-check-inline-github-issue,.form-check-input-github-issue{
+    margin-top: 4px !important;
+    margin-left: 2px !important;
+}
+
+.show-more-btn{
+    cursor: pointer;
+}
