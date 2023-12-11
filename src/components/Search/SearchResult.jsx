@@ -489,7 +489,7 @@ createSearchResultList () {
 
   render(){
     return(
-      <div className='row justify-content-center' id="searchterm-wrapper">
+      <div className='row justify-content-center search-result-container' id="searchterm-wrapper">
         {Toolkit.createHelmet(this.state.enteredTerm)}        
         <div className='col-sm-11'>            
           <div className='row'>

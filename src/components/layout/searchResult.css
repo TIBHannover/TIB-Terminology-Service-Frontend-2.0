@@ -9,9 +9,9 @@
     margin-top: 30px;
 }
 
-.search-result-title{ 
+.search-result-container .search-result-title{ 
     color: #5F6469;
-    display: inline !important;
+    display: inline;
 }
 
 .search-result-title:hover{ 
@@ -19,16 +19,16 @@
     text-decoration: none;
 }
 
-.search-result-title > h4{
-    display: inline !important;
+.search-result-container .search-result-title > h4{
+    display: inline;
 }
 
 .also-in-design{ 
     display: inline-block;
 }
 
-.also-in-ontologies{  
-    display: inline-block !important;
+.search-result-container .also-in-ontologies{  
+    display: inline-block;
     padding-bottom: 7px;
 }
 
@@ -47,9 +47,10 @@
    background-color: white;
 }
 
-.form-check-inline-github-issue,.form-check-input-github-issue{
-    margin-top: 4px !important;
-    margin-left: 2px !important;
+.search-result-container .form-check-inline-github-issue,
+.search-result-container .form-check-input-github-issue{
+    margin-top: 4px;
+    margin-left: 2px;
 }
 
 .show-more-btn{

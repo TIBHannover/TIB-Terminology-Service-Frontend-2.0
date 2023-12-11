@@ -285,7 +285,7 @@ class OntologyPage extends React.Component {
       return <div>Loading...</div>
     } else {
       return (        
-        <div className='justify-content-center'>
+        <div className='justify-content-center ontology-page-container'>
             {Toolkit.createHelmet(this.state.ontology.ontologyId)}            
             {createOntologyPageHeadSection(this.state.ontology)}          
             <div className='col-sm-12'>

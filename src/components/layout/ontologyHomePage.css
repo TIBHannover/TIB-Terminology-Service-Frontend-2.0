@@ -7,9 +7,9 @@
     margin-top: -10px;
 }
 
-.header-collapse-btn{  
-    background-color: transparent !important;
-    color: black !important;    
+.ontology-page-container .header-collapse-btn{  
+    background-color: transparent;
+    color: black;    
     padding: 0px;    
     margin-bottom: 0;
     border-right: 20px solid transparent;
@@ -19,30 +19,31 @@
     text-align: center;    
 }
 
-.header-collpase-icon{   
+.ontology-page-container .header-collpase-icon{   
     font-size: 22px;
     border: none;
     position: relative;
     top: -20px;
 }
 
-.ont-info-bar{   
+.ontology-page-container .ont-info-bar{   
     background-color: white;
     padding: 5px;
     padding-bottom: 1px;    
     margin-bottom: 10px;
-    border-radius: 5px !important;    
+    border-radius: 5px;    
     margin-top: -30px;    
 }
 
-.ont-info-bar-title{   
+.ontology-page-container .ont-info-bar-title{   
     color: black;
     font-weight: bold;    
 }
 
-.ontology-detail-page-container, .tree-view-container{   
+.ontology-page-container .ontology-detail-page-container, 
+.ontology-page-container .tree-view-container{   
     background-color: white;    
-    margin-top: 0px !important;   
+    margin-top: 0px;   
     padding-top: 20px;
     padding-left: 10px;
     padding-right: 10px;    
@@ -66,22 +67,22 @@
     text-align: left;
 }
 
-.copy-link-btn{
-    margin-left: 20px !important;
-    font-size: 10px !important;
+.ontology-page-container .copy-link-btn{
+    margin-left: 20px;
+    font-size: 10px;
 }
 
-.copy-link-icon-btn{
-    margin-left: 10px !important;
-    font-size: 10px !important;
-    background-color: white !important;
-    color: black !important;
+.ontology-page-container .copy-link-icon-btn{
+    margin-left: 10px;
+    font-size: 10px;
+    background-color: white;
+    color: black;
     border: none;
 }
 
-.download-ontology-btn{ 
-    margin-right: 20px !important;
-    background-color: #404040 !important;
+.ontology-page-container .download-ontology-btn{ 
+    margin-right: 20px;
+    background-color: #404040;
     font-size: 14px;
 }
 
@@ -101,9 +102,9 @@
     margin-left: 0%;
 }
 
-.ontology-detail-navbar{
-    background-color: #ECF0F0 !important;
-    border-radius: 25px !important;
+.ontology-page-container .ontology-detail-navbar{
+    background-color: #ECF0F0;
+    border-radius: 25px;
     margin-bottom: 20px;
 }
 

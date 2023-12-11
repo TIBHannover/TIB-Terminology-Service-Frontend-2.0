@@ -21,8 +21,8 @@
     width: 100%;
 }
 
-.jump-autocomplete-container{
-    line-height: initial !important;
+.search-bar-container .jump-autocomplete-container{
+    line-height: initial;
     height: 50px;
 }
 
@@ -36,12 +36,12 @@
     border-right: 0;
 }
 
-.search-btn{ 
+.search-bar-container .search-btn{ 
     background-color: #23272B;
     color: white;   
 }
 
-.search-btn:hover{ 
+.search-bar-container .search-btn:hover{ 
     background-color: #23272B;
     color: white;
 }

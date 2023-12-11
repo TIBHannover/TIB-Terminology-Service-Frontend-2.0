@@ -6,9 +6,9 @@
 }
 
 
-.ontology-title-text-in-box{
-    text-decoration: none !important;
-    color: #42484e !important;
+.ontology-list-container .ontology-title-text-in-box{
+    text-decoration: none;
+    color: #42484e;
 }
 
 .ontology-card-description{
@@ -33,9 +33,9 @@
     margin-left: 5px;
 }
 
-.ontology-list-facet-section-box{
+.ontology-list-container .ontology-list-facet-section-box{
     margin-top: 30px;
-    width: 100% !important;
+    width: 100%;
 }
 
 #lastUpdateRange{

@@ -309,7 +309,7 @@ class SearchForm extends React.Component{
 
       render(){                    
           return(
-              <div className='col-sm-10'>
+              <div className='col-sm-10 search-bar-container'>
                 <div class="input-group input-group-lg">                              
                   <input 
                     type="text" 

@@ -1,5 +1,5 @@
-.tree-page-left-part{
-   padding-bottom: 500px !important;
+.tree-view-container .tree-page-left-part{
+   padding-bottom: 500px;
    background-color: white;
    width: 100%;
    float: left;
@@ -58,8 +58,8 @@
     display: flex;
 }
 
-.reset-tree-btn{
-    margin-bottom: 10px !important;
+.tree-view-container .reset-tree-btn{
+    margin-bottom: 10px;
 }
 
 .loading-sign-div{
@@ -77,17 +77,17 @@
     display: inline-block;
 }
 
-.node-metadata-label{
-    font-weight: bold !important;
-    font-size: 13.5px !important;
+.tree-view-container .node-metadata-label{
+    font-weight: bold;
+    font-size: 13.5px;
     text-align: left;
     word-wrap: break-word;
     padding-bottom: 10px;
     padding-top: 5px;
 }
 
-.node-metadata-value{
-    font-size: 15px !important;
+.tree-view-container .node-metadata-value{
+    font-size: 15px;
     padding-bottom: 10px;
     padding-top: 5px;
     overflow: hidden;    
@@ -98,14 +98,14 @@
 }
 
 
-.tree-node-li {
+.tree-view-container .tree-node-li {
     padding-left: 2em;
     margin-bottom: 5px;
     list-style: none;
     margin-left: 0;
     padding-left: 0;
     cursor: pointer;    
-    border-left: 1px dotted !important;
+    border-left: 1px dotted;
     border-left-color: gray;
     font-size: 13px;        
 }
@@ -155,10 +155,10 @@
     color: gray;
 }
 
-.tree-action-btn{ 
-    font-size: 10px !important;
-    margin-bottom: 5px !important;
-    width: 100px !important;    
+.tree-view-container .tree-action-btn{ 
+    font-size: 10px;
+    margin-bottom: 5px;
+    width: 100px;    
 }
 
 .node-tag{
@@ -173,12 +173,12 @@
     margin-top: 2px;
 }
 
-.list-node-li{
+.tree-view-container .list-node-li{
     padding-left: 2em;
     margin-bottom: 5px;    
     margin-left: 0;
     padding-left: 0;
     cursor: pointer;        
-    font-size: 13px !important;    
+    font-size: 13px;    
 }
 
