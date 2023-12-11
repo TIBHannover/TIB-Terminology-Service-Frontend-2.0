@@ -491,7 +491,7 @@ createSearchResultList () {
     return(
       <div className='row justify-content-center' id="searchterm-wrapper">
         {Toolkit.createHelmet(this.state.enteredTerm)}        
-        <div className='col-sm-8'>            
+        <div className='col-sm-11'>            
           <div className='row'>
             <div className='col-sm-4'>          
               {(this.state.searchResult.length > 0 || (this.state.searchResult.length === 0 && this.state.facetIsSelected)) &&
