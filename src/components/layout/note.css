@@ -1,14 +1,14 @@
-.note-list-card{
+body .note-list-card{
     margin-bottom: 10px;
-    border: 1px solid rgb(94, 93, 93) !important;   
+    border: 1px solid rgb(94, 93, 93);   
 }
 
-.card-header{    
-    padding: 2px !important;    
+body .card-header{    
+    padding: 2px;    
 }
 
-.card-body{
-    padding: 5px !important;    
+body .card-body{
+    padding: 5px;    
 }
 
 .note-list-title{
@@ -25,13 +25,13 @@
     white-space: nowrap; 
 }
 
-.note-comment-editor-warpper{
+.note-comment-container .note-comment-editor-warpper{
     background-color: #e9e6e6;
     height: 250px;
 }
 
-.note-comment-editor{
-    height: 190px !important;
+.note-comment-container .note-comment-editor{
+    height: 190px;
 }
 
 .note-comment-submit-btn{    
@@ -39,12 +39,12 @@
     float: right;
 }
 
-.note-comment-cancel-edit-btn{
+.note-comment-container .note-comment-cancel-edit-btn{
     margin-top: 2px;
     float: right;
     margin-right: 5px;
-    background-color: rgb(211, 208, 208) !important;
-    color: black !important;
+    background-color: rgb(211, 208, 208);
+    color: black;
 }
 
 .note-comment-card{
@@ -54,42 +54,43 @@
     margin-left: 20px; 
 }
 
-.note-dropdown-toggle::after {
-    display: none !important; 
+.note-header-container .note-dropdown-toggle::after {
+    display: none; 
 }
 
-.note-dropdown-btn{
+.note-header-container .note-dropdown-btn, 
+.note-header-container .note-dropdown-btn:hover, 
+.note-header-container .note-dropdown-btn:active,
+.note-header-container .note-dropdown-btn:focus{
     background-color: #F7F7F7 !important;
     color: black !important;
     border: none !important;
+    box-shadow: none !important;
 }
 
-.note-dropdown-menu .note-dropdown-item:hover {
-    background-color: transparent !important;
-    color: inherit !important;
+.note-header-container .note-header-container, .note-header-container .note-dropdown-item:hover {
+    background-color: transparent;
+    color: inherit;
 }
   
-.note-dropdown-menu .note-dropdown-item:hover {
-    cursor: auto !important;
+.note-header-container .note-dropdown-menu, .note-dropdown-item:hover {
+    cursor: auto;
 }
 
-.btn-delete-note{
-    background-color: white !important;
-    border: none !important;
-    color: red;
-}
-.btn-delete-note:hover{
+.note-header-container .btn-delete-note, .note-header-container .btn-delete-note:hover{
+    background-color: white;
+    border: none;
     color: red;
 }
 
-.note-action-menu-btn{
-    border: none !important;
-    background-color: white !important;
-    color: black !important;
+.note-header-container .note-action-menu-btn{
+    border: none;
+    background-color: white;
+    color: black;
 }
 
-.note-action-menu-btn:hover{
-    color: black !important;    
+.note-header-container .note-action-menu-btn:hover{
+    color: black;    
 }
 
 .note-link-copy-message{

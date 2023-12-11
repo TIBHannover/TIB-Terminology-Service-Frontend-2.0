@@ -22,11 +22,11 @@
 
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {       
     
-    .jumpto-wrapper{
-        width: 90% !important;
+    body .jumpto-wrapper{
+        width: 90%;
     }
-    .tree-action-button-area{
-        right: 30px !important;
+    body .tree-action-button-area{
+        right: 30px;
     }
     .collection-card{     
         padding: 10px;        
@@ -43,30 +43,30 @@
     body{
         font-size: 14px;
     }
-    h1,h2,h3,h4,h5,h6{
-        font-size: 1rem !important;
+    body h1,h2,h3,h4,h5,h6{
+        font-size: 1rem;
     }
-    button,.btn{
-        font-size: 10px !important;
+    body button,.btn{
+        font-size: 10px;
     }
-    .close{
-        font-size: 20px !important;
+    body .close{
+        font-size: 20px;
     }
-    input::-moz-placeholder {
-        font-size: 11px !important;
+    body input::-moz-placeholder {
+        font-size: 11px;
     } 
-    ::-webkit-input-placeholder {
-        font-size: 11px !important;
+    body ::-webkit-input-placeholder {
+        font-size: 11px;
      } 
     
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
     
-    .jumpto-wrapper{
-        width: 80% !important;        
+    body .jumpto-wrapper{
+        width: 80%;        
     }
-    .tree-action-button-area{
-        right: 40px !important;
+    body .tree-action-button-area{
+        right: 40px;
     }   
     .site-footer{
         font-size: 10px;        
@@ -75,8 +75,8 @@
         width: 200px;
         height: 50px;
     }
-    .navbar-item {
-       float: right !important;
+    body .navbar-item {
+       float: right;
       }
   
     .navbar-nav{    
@@ -106,26 +106,26 @@
      body{
         font-size: 13px;
     }
-    h1,h2,h3,h4,h5,h6{
-        font-size: 1rem !important;
+    body h1,h2,h3,h4,h5,h6{
+        font-size: 1rem;
     }
-    button,.btn{
-        font-size: 10px !important;
+    body button,.btn{
+        font-size: 10px;
     }
-    .close{
-        font-size: 20px !important;
+    body .close{
+        font-size: 20px;
     } 
-    input::-moz-placeholder {
-        font-size: 11px !important;
+    body input::-moz-placeholder {
+        font-size: 11px;
     } 
-    input::-webkit-input-placeholder {
-        font-size: 11px !important;
+    body input::-webkit-input-placeholder {
+        font-size: 11px;
      } 
 }
 
 @media only screen and (max-width: 900px) {
-    .navbar-item {      
-      float: right !important;
+    body .navbar-item {      
+      float: right;
      }
  
      .navbar-nav{     
@@ -156,20 +156,20 @@
     body{
         font-size: 10px;
     }
-    h1,h2,h3,h4,h5,h6{
-        font-size: 1rem !important;
+    body h1,h2,h3,h4,h5,h6{
+        font-size: 1rem;
     }
-    button,.btn{
-        font-size: 10px !important;
+    body button,.btn{
+        font-size: 10px;
     }   
-    .close{
-        font-size: 20px !important;
+    body .close{
+        font-size: 20px;
     }  
-    input::-moz-placeholder {
-        font-size: 10px !important;
+    body input::-moz-placeholder {
+        font-size: 10px;
     } 
-    ::-webkit-input-placeholder {
-        font-size: 10px !important;
+    body ::-webkit-input-placeholder {
+        font-size: 10px;
      } 
  }
 

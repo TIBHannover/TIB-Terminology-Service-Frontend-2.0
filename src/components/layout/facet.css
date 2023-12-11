@@ -1,4 +1,4 @@
-.facet-box{
+body .facet-box{
     background-color: white;
     padding-right: 10px;
     padding-top: 15px;
@@ -7,33 +7,33 @@
     padding-left: 10px;
 }
 
-.facet-result-count{ 
+body .facet-result-count{ 
     border-radius: 50px;
     background-color: #2B3C46;
     color: white;
     padding: 5px;
     text-align: center;
-    font-weight: 700 !important;
-    font-size: 75% !important;
-    line-height: 1 !important;
+    font-weight: 700;
+    font-size: 75%;
+    line-height: 1;
     float: right;
 }
 
-.facet-item-row{
+body .facet-item-row{
     margin-bottom: 10px;
 }
 
-.facet-item-row:hover{
+body .facet-item-row:hover{
     background-color: rgba(119, 122, 121, 0.192);
     border-radius: 15px;    
 }
 
-.facet-loading-effect{
+body .facet-loading-effect{
     width: 50px;
     height: 50px;
 }
 
-.clear-filter-link-box{
+body .clear-filter-link-box{
     margin-bottom: 40px;
 }
 
@@ -42,7 +42,7 @@
     cursor: pointer; 
 }
 
-.facet-btn{
+body .facet-btn{
     /* 
        design for facet buttons under search term
     */
@@ -57,7 +57,7 @@
    font-size: 16px;  
 }
 
-.facet-switch-holder{ 
+body .facet-switch-holder{ 
     text-align: center;
     margin-bottom: 25px;
     margin-top: 10px;

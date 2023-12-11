@@ -1,28 +1,27 @@
-.git-issue-card{
-    background-color: white !important;    
+body .git-issue-card{
+    background-color: white;    
     padding: 10px;
     height: auto;
     text-align: justify;
     border: 1px solid #7AABAC;    
 }
 
-.git-issue-title{
+body .git-issue-title{
     color: black;
     font-weight: bold;    
 }
 
-.git-issue-tag-link{
-
+body .git-issue-tag-link{
     color: black;    
 }
 
-.git-issue-tag-link:hover{
+body .git-issue-tag-link:hover{
     color: black;
     cursor: pointer;
     text-decoration: none;
 }
 
-.git-issue-label-tag{
+body .git-issue-label-tag{
     display: inline;
     border-radius: 15px;
     padding: 5px;
@@ -30,27 +29,27 @@
     margin-left: 10px;
 }
 
-.close-mark-btn{
-    background-color: white !important;
+body .close-mark-btn{
+    background-color: white;
 }
 
-.close-term-request-modal-btn{
-    background-color: red !important;
-    float: left !important;
+body .close-term-request-modal-btn{
+    background-color: red;
+    float: left;
 }
 
-.required_input::after{
+body .required_input::after{
     content: "*";
     color: red;
 }
 
-.rdw-editor-wrapper{
-    border: 1px solid rgb(218, 216, 216) !important;
+body .rdw-editor-wrapper{
+    border: 1px solid rgb(218, 216, 216);
     border-radius: 10px !important;
 }
 
-.rdw-editor-main{
-    height: 400px !important;
+body .rdw-editor-main{
+    height: 400px;
     padding: 10px ;
 }
 

@@ -129,7 +129,7 @@ export const NoteCardHeader = (props) => {
             </div>
             <div className="col-sm-3">
                 <div className="row">                    
-                    <div className="col-sm-12 text-right">
+                    <div className="col-sm-12 text-right note-header-container">
                         <div class="dropdown custom-dropdown">
                             <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-ellipsis-h"></i>
@@ -141,7 +141,7 @@ export const NoteCardHeader = (props) => {
                                 <div class="dropdown-item note-dropdown-item">
                                     <button 
                                         type="button" 
-                                        class="btn btn-danger btn-sm note-action-menu-btn borderless-btn"                                      
+                                        class="btn btn-sm note-action-menu-btn borderless-btn"                                      
                                         onClick={() => {
                                             let searchParams = new URLSearchParams(window.location.search);
                                             let locationObject = window.location;
@@ -249,7 +249,7 @@ export const CommentCardHeader = (props) =>{
             </div>
             <div className="col-sm-3">
                 <div className="row">                    
-                    <div className="col-sm-12 text-right">
+                    <div className="col-sm-12 text-right note-header-container">
                         <div class="dropdown custom-dropdown">
                             <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-ellipsis-h"></i>
@@ -258,7 +258,7 @@ export const CommentCardHeader = (props) =>{
                                 <div class="dropdown-item note-dropdown-item">
                                     <button 
                                         type="button" 
-                                        class="btn btn-danger btn-sm note-action-menu-btn borderless-btn"                                      
+                                        class="btn btn-sm note-action-menu-btn borderless-btn"                                      
                                         onClick={() => {
                                             let url = window.location.origin + Toolkit.setParamInUrl('comment', comment['id']);                                            
                                             navigator.clipboard.writeText(url);
@@ -277,7 +277,7 @@ export const CommentCardHeader = (props) =>{
                                         <div class="dropdown-item note-dropdown-item">
                                             <button 
                                                 type="button" 
-                                                class="btn btn-danger btn-sm note-action-menu-btn borderless-btn"
+                                                class="btn btn-sm note-action-menu-btn borderless-btn"
                                                 data-id={comment['id']}
                                                 data-content={comment['content']}
                                                 onClick={props.editHandlerFunc}
