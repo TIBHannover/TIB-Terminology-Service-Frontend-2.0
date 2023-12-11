@@ -266,10 +266,9 @@ body .header-wrapper{
     margin: auto;
 }
 
-body .site-header-nav-logo-holder{
-    padding-right: 10%;
+body .site-header-nav-logo-holder{    
     margin-bottom: 30px;
-    width: 120%;
+    margin-top: 60px;    
 }
  
 body .site-header-searchbox-holder{ 
@@ -516,6 +515,12 @@ body .github-login-btn, body .github-login-btn:hover, body .github-login-btn:foc
     color: white;
     width: 300px;
     border: 1px solid black;
+}
+
+body .login-btn-header,
+body .login-btn-header:hover{
+    color: white;
+    text-decoration: none;
 }
 
 body .orcid-login-btn, body .orcid-login-btn:hover, body .orcid-login-btn:focus{

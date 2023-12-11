@@ -10,7 +10,7 @@ function Help() {
           <span>
             {Toolkit.createHelmet("Help")}                             
             <div className='row justify-content-center doc-design'>            
-                  <div className='col-sm-8'>
+                  <div className='col-sm-12'>
                       {process.env.REACT_APP_PROJECT_ID === "general" && tibHelp()}
                       {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && nfdi4chemHelp()}
                       {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && nfdi4IngHelp()}

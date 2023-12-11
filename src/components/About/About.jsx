@@ -11,7 +11,7 @@ class About extends React.Component{
           <span>
             {Toolkit.createHelmet("About")}
             <div className='row justify-content-center doc-design'>              
-                <div className='col-sm-8'>
+                <div className='col-sm-12'>
                     {process.env.REACT_APP_PROJECT_ID === "general" && generalAbout()}
                     {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && nfdi4chemAbout()}
                     {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && nfdi4IngAbout()}
