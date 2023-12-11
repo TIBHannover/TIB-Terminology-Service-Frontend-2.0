@@ -108,6 +108,7 @@ const RenderNodePage = (props) => {
 
   return(
     <div className='row'>
+      <div className='col-sm-12'>
         <RenderNodePageTabs 
             componentIdentity={props.componentIdentity}
             tabChangeHandler={props.tabChangeHandler}
@@ -145,7 +146,8 @@ const RenderNodePage = (props) => {
             isIndividual={false}
           />
         }
-      </div>
+      </div>        
+    </div>
   );
 }
 

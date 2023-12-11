@@ -9,7 +9,7 @@
    overflow-x: hidden;   
 }
 
-.node-table-container{
+.tree-view-container .node-table-container{
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 30px;    
