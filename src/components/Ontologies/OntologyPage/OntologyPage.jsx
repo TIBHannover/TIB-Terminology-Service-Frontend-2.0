@@ -15,8 +15,8 @@ import '../../layout/tree.css';
 import '../../layout/note.css';
 import '../../layout/githubPanel.css';
 import '../../layout/termList.css';
-import '../../layout/jumpTo.css';
 import '../../layout/reactAutoSuggestLib.css';
+import '../../layout/jumpTo.css';
 
 
 

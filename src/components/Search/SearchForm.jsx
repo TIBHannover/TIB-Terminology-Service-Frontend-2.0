@@ -2,6 +2,8 @@ import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 import {apiHeaders} from '../../api/headers';
+import '../layout/jumpTo.css';
+import '../layout/searchBar.css';
 
 
 class SearchForm extends React.Component{

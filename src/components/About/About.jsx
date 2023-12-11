@@ -3,6 +3,7 @@ import {generalAbout} from './General_About';
 import {nfdi4chemAbout} from './NDFI4Chem_About';
 import {nfdi4IngAbout} from './NFDI4Ing_about';
 import Toolkit from '../common/Toolkit';
+import '../layout/documentationPage.css';
 
 class About extends React.Component{
     render(){

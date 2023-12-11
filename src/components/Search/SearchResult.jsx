@@ -7,6 +7,10 @@ import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, se
 import Toolkit from '../common/Toolkit';
 import { AlsoInHelpers } from "./AlsoInHelpers";
 import { apiHeaders } from '../../api/headers';
+import '../layout/searchResult.css';
+import '../layout/facet.css';
+
+
 
 class SearchResult extends React.Component{
     constructor(props){

@@ -3,6 +3,7 @@ import {tibDoc} from './TIB_doc';
 import {nfdi4chemDoc} from './Nfdi4chem_doc';
 import {nfdi4IngDoc} from './Nfdi4ing_doc';
 import Toolkit from '../common/Toolkit';
+import '../layout/documentationPage.css';
 
 
 class Documentation extends React.Component{
