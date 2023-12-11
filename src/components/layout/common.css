@@ -179,12 +179,12 @@ body .list-container{
 } 
 
 body .custom-radio-btn-input:checked{
-    background-color: #404040;
+    accent-color: #404040;
     color: #404040;
 }
 
-body .form-check-input:checked{
-    background-color: #404040;
+input[type="checkbox"]:checked{
+    accent-color: #404040;
     border-color: #404040;
 }
 
