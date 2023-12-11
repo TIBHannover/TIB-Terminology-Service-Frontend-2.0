@@ -31,49 +31,49 @@ body{
     margin: auto;
 }
 
-p{
+body p{
     text-align: justify;
 }
  
-a{
+body a{
     color: #0E6668;
     text-decoration: none;
 }
 
-a:hover{
+body a:hover{
     text-decoration: underline;
     color: #0E6668; 
  }
 
-button{
-    background-color: #404040 !important;
-    font-size: 14px;
-    border-color: #404040 !important;
-}
-
-.btn-secondary{
+body button{
     background-color: #404040;
     font-size: 14px;
     border-color: #404040;
 }
 
-.btn-danger{
-    background-color: red !important;
+body .btn-secondary{
+    background-color: #404040;
+    font-size: 14px;
+    border-color: #404040;
 }
 
-.close-btn-message-modal{
-    background-color: white !important;    
-    color: #404040 !important;
+body .btn-danger{
+    background-color: red;
 }
 
-.borderless-btn:active,
-.borderless-btn:focus {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
+body .close-btn-message-modal{
+    background-color: white;    
+    color: #404040;
 }
 
-.term-button{
+body .borderless-btn:active,
+body .borderless-btn:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+body .term-button{
     background-color: #0E6668;
     color: white;
     margin-left: 15px;
@@ -83,7 +83,7 @@ button{
     border-color:  #0E6668;
 }
 
-.synonyms-button{
+body .synonyms-button{
     background-color: #c2ba1c;
     color: white;
     margin-left: 15px;
@@ -93,13 +93,13 @@ button{
     border-color:  #0E6668;
 }
 
-.term-button:hover{
+body .term-button:hover{
     text-decoration: none;
     background-color: #1baeb1;
     color: white;
 }
 
-.ontology-button{
+body .ontology-button{
     background-color: #bbae9e;
     color: white;
     margin-top: -5px;
@@ -107,16 +107,16 @@ button{
     padding: 3px;
     margin-right: 10px;
     font-size: 12px;
-    border-color: #bbae9e !important;
+    border-color: #bbae9e;
 }
 
-.ontology-button:hover{ 
-    text-decoration: none !important;
-    background-color: #bbae9e !important;
+body .ontology-button:hover{ 
+    text-decoration: none;
+    background-color: #bbae9e;
     color: white;
 }
 
-.site-footer{
+body .site-footer{
     background: #2B3C46;
     margin-top: 75px;
     border-top: 1px #d1d3d9 solid;
@@ -124,88 +124,81 @@ button{
     color: white;
 }
 
-.footer-link{
+body .footer-link{
     color: white;
 }
 
-.footer-link:hover{
+body .footer-link:hover{
     color: white;
 }
 
-.footer-list{
+body .footer-list{
     list-style: none;
-    margin-left: -30px !important;
+    margin-left: -30px;
 }
 
-.footer-logo{
+body .footer-logo{
     width: 300px;
     height: 100px;
 }
 
-.footer-col{
+body .footer-col{
     text-align: center;
 }
 
-.site-dropdown-menu{
+body .site-dropdown-menu{
     border: none;
     padding: 5px;  
     margin-left: 10px;      
 }
 
-.white-dropdown{
+body .white-dropdown{
     background-color: white;
 }
 
-.zero-padding-col{
-    padding: 0 !important;
+body .zero-padding-col{
+    padding: 0;
 }
 
-.skeleton-loading-box{
+body .skeleton-loading-box{
     margin-bottom: 30px;
     margin-top: 30px;
     text-align: center;    
 }
 
-.backend-is-down-message{
+body .backend-is-down-message{
     display: none;
 }
 
-.modal-title{
+body .modal-title{
     color: black;
 }
 
-.fa-eye-slash, .fa-eye{
-    border: none !important;
-    font-size: 14px !important;
-    cursor: pointer !important;
-    margin-left: 5px !important;
-}
-
-.list-container{
-    padding: 20px !important;    
+body .list-container{
+    padding: 20px;    
 } 
 
-.custom-radio-btn-input:checked{
+body .custom-radio-btn-input:checked{
     background-color: #404040;
     color: #404040;
 }
 
-.form-check-input:checked{
+body .form-check-input:checked{
     background-color: #404040;
     border-color: #404040;
 }
 
-.cc_banner-wrapper{
+body .cc_banner-wrapper{
     z-index: 9001;
     position: absolute;
 }
 
-.cc_container {
-    background: #444 !important;
-    font-family: inherit !important;
+body .cc_container {
+    background: #444;
+    font-family: inherit;
   }
 
-.cc_container, .cc_message, .cc_btn {
+body .cc_container, .cc_message, .cc_btn {
     animation-duration: 4s;
     -webkit-animation-duration: 4s;
     -moz-animation-duration: 4s;
@@ -214,7 +207,7 @@ button{
     animation-name: slideUp;
 }
 
-.cc_container {
+body .cc_container {
     background: #222;
     color: #fff;
     font-size: 20px;
@@ -222,11 +215,11 @@ button{
     box-sizing: border-box;
 }
 
-.cc_container {
+body .cc_container {
     padding: 10px 50px 10px;
 }
 
-.cc_container {
+body .cc_container {
     position: fixed;
     left: 0;
     right: 0;
@@ -237,7 +230,7 @@ button{
     border-top: 1px solid #888;
 }
 
-.cc_container .cc_btn {
+body .cc_container .cc_btn {
     padding: 8px 10px;
     background-color: #c8c8c8;
     cursor: pointer;
@@ -253,13 +246,13 @@ button{
     max-width: 120px;
 }
 
-.cc_more_info{
+body .cc_more_info{
     color: white;
     text-decoration: underline;
 }
 
 
-.header-wrapper{
+body .header-wrapper{
     background-repeat: no-repeat;
     background-image: url('../../assets/img/background.png');
     background-position: right center;
@@ -268,45 +261,45 @@ button{
     margin-bottom: 10px;
  }
 
-.site-header{ 
+ body .site-header{ 
     text-align: center;
     margin: auto;
 }
 
-.site-header-nav-logo-holder{
+body .site-header-nav-logo-holder{
     padding-right: 10%;
     margin-bottom: 30px;
     width: 120%;
 }
  
-.site-header-searchbox-holder{ 
+body .site-header-searchbox-holder{ 
     padding-left: 10%;
     padding-right: 10%;
     margin-bottom: 40px;    
 }
 
-.site-header-top-row{        
+body .site-header-top-row{        
     margin-bottom: 20px;
 }
  
-.site-header-top-row > a{
+body .site-header-top-row > a{
     text-decoration: none;
     color: white;
 }
 
-.header {  
+body .header {  
     display: flex;
     flex: 1;
     flex-direction: column;
 }
   
-.header-top {  
+body .header-top {  
     display: flex;
     width: 100%;
     height: 250px;
 }
 
-.header-top__logo {
+body .header-top__logo {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -314,32 +307,32 @@ button{
     margin-left: 30px;
 }
 
-.main-title {   
+body .main-title {   
    color: #ffffff;
    text-decoration: none;
    margin-left: 10px;
    font-size: 18px;
 }
 
-.main-title:hover {  
+body .main-title:hover {  
    color: #ffffff;
    text-decoration: none;
 }
 
-.header-logo {   
+body .header-logo {   
     color: inherit;
     text-decoration: inherit;
     font-family: RobotoThin;
     font-size: 100px;
 }
   
-.header-top__navbar {    
+body .header-top__navbar {    
     display: flex;
     flex: 1;
     flex-direction: column;
 }
 
-.header-top__seperator { 
+body .header-top__seperator { 
     width: 100%;
     border: none;
     height: 2px;
@@ -347,7 +340,7 @@ button{
     background-color: black;
 }
   
-.header-top__navigation {  
+body .header-top__navigation {  
     display: flex;
     flex: 1;
     flex-direction: row;
@@ -355,7 +348,7 @@ button{
     margin-right: 55px;
 }
 
-.header-bottom {    
+body .header-bottom {    
     display: flex;
     flex: 1;
     justify-content: flex-end;
@@ -363,12 +356,12 @@ button{
     margin-top: 6px;
 }
 
-.site-navbar {
-    margin-top: -5px !important;
+body .site-navbar {
+    margin-top: -5px;
     width: 90%;
 }
   
-.navbar-item {
+body .navbar-item {
     margin-left: 30px;
     text-transform: uppercase;
     outline: none;
@@ -377,27 +370,27 @@ button{
     font-size: 18px;
 }
 
-.navbar-item:hover{
-    color: white !important;
-    text-decoration: underline !important;
+body .navbar-item:hover{
+    color: white;
+    text-decoration: underline;
 }
 
-.navbar-collapse-btn{
+body .navbar-collapse-btn{
     background-color: black;
     color: white;
-    margin-left: auto !important;
+    margin-left: auto;
 }
 
-.collpase-btn-content{
-    border: none !important;
+body .collpase-btn-content{
+    border: none;
 }
 
-.nav-clicked{  
+body .nav-clicked{  
     text-decoration: underline;
     font-weight: bold;    
 }
 
-.isLoading {
+body .isLoading {
     margin: auto;
     border: 16px solid #ffffff;
     border-radius: 50%;
@@ -419,65 +412,72 @@ button{
 }
 
 .fa{
-    display: inline !important;
+    display: inline;
     border: 1px solid;
     margin-right: 5px;    
     font-size: 10px;
 }
 
-.fa-download{
-    border: none !important;
+body .fa-download{
+    border: none;
 }
 
-.fa-check{
-    border: none !important;
+body .fa-check{
+    border: none;
     margin-left: 1px;
 }
 
-.fa-copy{  
-    font-size: 12px !important;
-    border: none !important;
+body .fa-copy{  
+    font-size: 12px;
+    border: none;
 }
 
-.fa-orcid{
+body .fa-orcid{
     font-size: 30px;
 }
 
-.fa-github{  
+body .fa-github{  
     border: none;
     font-size: 30px;
 }
 
-.fa-comment, .fa-question-circle{
+body .fa-comment, body .fa-question-circle{
     border: none;
     font-size: 16px;
 }
  
-.fa-eye{
+body .fa-eye{
     border: none;
     font-size: 16px;
     margin-right: 2px;
 }
 
-.fa-trash{
+body .fa-trash{
     border: none;
     font-size: 16px;
     margin-right: 2px;
     color: red;
 }
 
-.fa-edit{
+body .fa-edit{
     border: none;
     font-size: 13px;
     margin-right: 2px;    
 }
 
-.fa-ellipsis-h{
+body .fa-ellipsis-h{
     border: none;
     font-size: 20px;    
 }
 
-.overlay {
+body .fa-eye-slash, .fa-eye, .hidden-fa{
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+body .overlay {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -489,44 +489,44 @@ button{
     display: none;
 }
 
-.spinner-grow{
+body .spinner-grow{
     width: 300px;
     height: 300px;
 }
 
-.login-load-text{
+body .login-load-text{
     color: black;
 }
 
-.loginModal {
+body .loginModal {
     margin-top: 10%;
 }
 
-.login-modal-hint-text{
-    color: black !important;
+body .login-modal-hint-text{
+    color: black;
     text-align: justify;
 }
 
-.user-profile-dropdown{
+body .user-profile-dropdown{
     font-size: 12px;    
 }
 
-.github-login-btn, .github-login-btn:hover, .github-login-btn:focus{
+body .github-login-btn, body .github-login-btn:hover, body .github-login-btn:focus{
     background-color: black;
     color: white;
     width: 300px;
     border: 1px solid black;
 }
 
-.orcid-login-btn, .orcid-login-btn:hover, .orcid-login-btn:focus{
+body .orcid-login-btn, body .orcid-login-btn:hover, body .orcid-login-btn:focus{
     background-color: #A6CE39;
     color: white;
     width: 300px;
     border: 1px solid #A6CE39;
 }
 
-.result-card{
-    background-color: white !important;
+body .result-card{
+    background-color: white;
     margin-bottom: 10px;
     padding: 10px;
     height: auto;

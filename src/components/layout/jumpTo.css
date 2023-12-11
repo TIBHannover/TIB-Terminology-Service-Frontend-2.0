@@ -1,8 +1,8 @@
-.autosuggest-jumpto-container {
+body .autosuggest-jumpto-container {
     position: relative;
 }
 
-.autosuggest-jumpto-container label {
+body .autosuggest-jumpto-container label {
     position: absolute;    
     top: 50%;
     transform: translateY(-50%);
@@ -13,11 +13,11 @@
     background-color: rgb(214, 214, 214);
 }
   
-.autosuggest-jumpto-container input {
+body .autosuggest-jumpto-container input {
     padding-left: 80px; 
 }
 
-.jumpto-wrapper{     
+body .jumpto-wrapper{     
     margin-left: 30px;     
     position: sticky;
     top: 0;
@@ -28,7 +28,7 @@
     height: 80px;     
 }
 
-.jumpto-container{
+body .jumpto-container{
     height: fit-content;
     padding-right: 10px;
     padding-left: 10x;
@@ -38,7 +38,7 @@
     display: block;
 }
 
-.jumpto-search-container{
+body .jumpto-search-container{
     border: 0.5px solid black;    
     padding-bottom: 20px;
     padding-top: 10px;    
@@ -46,8 +46,8 @@
     width: 100%;        
 }
 
-.jumpto-tree-container{ 
-    top: auto !important;     
+body .jumpto-tree-container{ 
+    top: auto;     
     border: 0.1px solid black;    
     padding-bottom: 10px;    
     z-index: 1000;        
@@ -55,29 +55,29 @@
     margin-left: 85px;    
 }
 
-.jumpto-item-holder{   
+body .jumpto-item-holder{   
     margin-top: -15px;
     text-align: left;
 }
 
-.jumpto-result-text{
+body .jumpto-result-text{
     position:relative;
     margin-left: 10px;
     margin-bottom: -30px;
     padding: 7px;
 }
 
-.jumpto-result-link:hover{
-    text-decoration: none !important;
+body .jumpto-result-link:hover{
+    text-decoration: none;
 }
 
-.jumpto-result-text:hover{
+body .jumpto-result-text:hover{
     vertical-align: top;
     background-color: #dfdddd;
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
-.button-in-jumpto{
+body .button-in-jumpto{
     color: white;
     padding: 6px;
     float: right;
@@ -85,37 +85,37 @@
     margin-top: -5px;
 }
 
-.button-in-jumpto:hover{
-    text-decoration: none !important;
+body .button-in-jumpto:hover{
+    text-decoration: none;
     color: white;
 }
 
-.jmp-term-button{
+body .jmp-term-button{
     background-color: #0E6668;    
     margin-left: 15px;    
     border-color:  #0E6668;    
 }
 
-.jmp-ontology-button{
+body .jmp-ontology-button{
     background-color: #bbae9e;        
     margin-left: 10px;    
     margin-right: 10px;    
-    border-color: #bbae9e !important;    
+    border-color: #bbae9e;    
 }
 
-.jmp-term-button:hover{
+body .jmp-term-button:hover{
     text-decoration: none;
     background-color: #1baeb1;
     color: white;
  }
 
-.jmp-ontology-button:hover{
-    text-decoration: none !important;
-    background-color: #bbae9e !important;
+body .jmp-ontology-button:hover{
+    text-decoration: none;
+    background-color: #bbae9e;
     color: white;
 }
 
-.jumpto-search-box{
+body .jumpto-search-box{
     display: block;
     height: calc(2.25rem + 2px);
     padding: 0.375rem 0.75rem;
@@ -127,7 +127,7 @@
     border: 1px solid #ced4da;
 }
 
-.selected-by-arrow-key{
+body .selected-by-arrow-key{
     background-color: #dfdddd;    
 }
 
