@@ -24,14 +24,14 @@ body{
 }
 
 .application-content{
-    overflow-x: hidden;    
+    /* overflow-x: hidden;     */
     min-height: 500px;
     padding-top: 30px;
     width: 75%;
     margin: auto;
 }
 
-body p{
+p{
     text-align: justify;
 }
  
@@ -116,7 +116,7 @@ body .ontology-button:hover{
     color: white;
 }
 
-body .site-footer{
+.site-footer{
     background: #2B3C46;
     margin-top: 75px;
     border-top: 1px #d1d3d9 solid;
@@ -124,25 +124,25 @@ body .site-footer{
     color: white;
 }
 
-body .footer-link{
+.footer-link{
     color: white;
 }
 
-body .footer-link:hover{
+.footer-link:hover{
     color: white;
 }
 
-body .footer-list{
+.footer-list{
     list-style: none;
     margin-left: -30px;
 }
 
-body .footer-logo{
+.footer-logo{
     width: 300px;
     height: 100px;
 }
 
-body .footer-col{
+.footer-col{
     text-align: center;
 }
 
@@ -252,53 +252,53 @@ body .cc_more_info{
 }
 
 
-body .header-wrapper{
+.header-wrapper{
     background-repeat: no-repeat;
     background-image: url('../../assets/img/background.png');
     background-position: right center;
     background-color: #0E6668;
     padding: 10px;
     margin-bottom: 10px;
- }
+}
 
- body .site-header{ 
+.site-header{ 
     text-align: center;
     margin: auto;
 }
 
-body .site-header-nav-logo-holder{    
+.site-header-nav-logo-holder{    
     margin-bottom: 30px;
     margin-top: 60px;    
 }
  
-body .site-header-searchbox-holder{ 
+.site-header-searchbox-holder{ 
     padding-left: 10%;
     padding-right: 10%;
     margin-bottom: 40px;    
 }
 
-body .site-header-top-row{        
+.site-header-top-row{        
     margin-bottom: 20px;
 }
  
-body .site-header-top-row > a{
+.site-header-top-row > a{
     text-decoration: none;
     color: white;
 }
 
-body .header {  
+.header {  
     display: flex;
     flex: 1;
     flex-direction: column;
 }
   
-body .header-top {  
+.header-top {  
     display: flex;
     width: 100%;
     height: 250px;
 }
 
-body .header-top__logo {
+.header-top__logo {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -306,32 +306,32 @@ body .header-top__logo {
     margin-left: 30px;
 }
 
-body .main-title {   
+.main-title {   
    color: #ffffff;
    text-decoration: none;
    margin-left: 10px;
    font-size: 18px;
 }
 
-body .main-title:hover {  
+.main-title:hover {  
    color: #ffffff;
    text-decoration: none;
 }
 
-body .header-logo {   
+.header-logo {   
     color: inherit;
     text-decoration: inherit;
     font-family: RobotoThin;
     font-size: 100px;
 }
   
-body .header-top__navbar {    
+.header-top__navbar {    
     display: flex;
     flex: 1;
     flex-direction: column;
 }
 
-body .header-top__seperator { 
+.header-top__seperator { 
     width: 100%;
     border: none;
     height: 2px;
@@ -339,7 +339,7 @@ body .header-top__seperator {
     background-color: black;
 }
   
-body .header-top__navigation {  
+.header-top__navigation {  
     display: flex;
     flex: 1;
     flex-direction: row;
@@ -347,7 +347,7 @@ body .header-top__navigation {
     margin-right: 55px;
 }
 
-body .header-bottom {    
+.header-bottom {    
     display: flex;
     flex: 1;
     justify-content: flex-end;
@@ -355,12 +355,12 @@ body .header-bottom {
     margin-top: 6px;
 }
 
-body .site-navbar {
+.site-navbar {
     margin-top: -5px;
     width: 90%;
 }
   
-body .navbar-item {
+.navbar-item {
     margin-left: 30px;
     text-transform: uppercase;
     outline: none;
@@ -369,7 +369,7 @@ body .navbar-item {
     font-size: 18px;
 }
 
-body .navbar-item:hover{
+.navbar-item:hover{
     color: white;
     text-decoration: underline;
 }
@@ -536,6 +536,18 @@ body .result-card{
     padding: 10px;
     height: auto;
     text-align: justify;
+}
+
+.hidden-header{
+    /* display: none !important; */
+    max-height: 0 !important;
+    overflow: hidden !important;
+}
+
+.visible-header{ 
+    max-height: 1000px !important;
+    overflow: hidden !important;
+    transition: max-height 0.3s ease-in-out !important;
 }
 
 

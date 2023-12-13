@@ -57,7 +57,8 @@
     } 
     body ::-webkit-input-placeholder {
         font-size: 11px;
-     } 
+    }
+     
     
 }
 @media only screen and (max-width: 1299px) and (min-width: 901px) {       
@@ -79,8 +80,7 @@
        float: right;
       }
   
-    .navbar-nav{    
-        margin-top: 10px;
+    .navbar-nav{        
         margin-right: 40px;
     }
     .navbar-collapse-btn{      
@@ -120,19 +120,15 @@
     } 
     body input::-webkit-input-placeholder {
         font-size: 11px;
-     } 
+    }     
 }
 
 @media only screen and (max-width: 900px) {
     body .navbar-item {      
       float: right;
      }
- 
-     .navbar-nav{     
-       margin-top: 10px;
-     }
- 
-     .site-header-searchbox-holder{      
+
+    .site-header-searchbox-holder{      
        padding-left: 0px;
        padding-right: 0px;
        margin-bottom: 40px;

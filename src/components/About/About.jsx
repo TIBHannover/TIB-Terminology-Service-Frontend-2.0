@@ -12,9 +12,10 @@ class About extends React.Component{
             {Toolkit.createHelmet("About")}
             <div className='row justify-content-center doc-design'>              
                 <div className='col-sm-12'>
-                    {process.env.REACT_APP_PROJECT_ID === "general" && generalAbout()}
+                    {/* {process.env.REACT_APP_PROJECT_ID === "general" && generalAbout()}
                     {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && nfdi4chemAbout()}
-                    {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && nfdi4IngAbout()}
+                    {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && nfdi4IngAbout()} */}
+                    {nfdi4chemAbout()}
                 </div>                
             </div>
           </span>         

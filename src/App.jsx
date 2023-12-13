@@ -34,6 +34,7 @@ import Sitemap from './components/Sitemap/Sitemap';
 
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
+import './components/layout/custom.css';
 
 
 

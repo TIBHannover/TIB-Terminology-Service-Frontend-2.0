@@ -9,18 +9,19 @@ function Header () {
   return (
     <div className='row header-wrapper header-collapseable-section'>
       <div className='col-sm-10 site-header'>
-          <div className='row float-right'>
-            <div className='col-sm-12'>
+          <div className='row'>
+            <div className='col-sm-11 text-right'>
               <Login isModal={true}></Login>            
             </div>                      
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>
-              {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
-                <span>
+              <span>
                   <img src="/chem_small_logo.png" alt="nfdi4chem_logo" className='site-logo-image'/>
                   <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>TERMINOLOGY SERVICE</a>
-                </span>                 
+              </span> 
+              {/* {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" &&
+                                
               }
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <span>
@@ -32,7 +33,7 @@ function Header () {
                   <img src= {TIB_Logo} alt="tib logo" height={60} width={80} /> 
                   <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>TERMINOLOGY SERVICE</a>
                 </span>
-              }              
+              }               */}
             </div>
             <Navbar />
           </div>
