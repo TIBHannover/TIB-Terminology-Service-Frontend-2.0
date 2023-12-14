@@ -10,9 +10,9 @@ function Header () {
     <div className='header-wrapper header-collapseable-section'>
       <div className='container site-header'>
           <div className='row site-header-top-row'>
-            {/* <LoginForm onlyLoginButton={true}></LoginForm> */}
-            <Login isModal={true}></Login>
-            
+            <div className='col-sm-12'>
+              <Login isModal={true}></Login>            
+            </div>                          
           </div>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>

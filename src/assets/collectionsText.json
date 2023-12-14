@@ -98,5 +98,15 @@
         "ontology_list_url": "/ontologies?collection=NFDI4Energy&and=false&page=1",
         "project_homepage": "https://nfdi4energy.uol.de/",
         "domain_ts_link": ""
+    },
+    "DataPLANT":{
+        "id": "DataPLANT",
+        "html_id": "DataPLANT",
+        "name": "DataPLANT Project",
+        "text": "The DataPLANT ontology collection provides a selection of ontologies relevant for the fundamental plant sciences. This collection includes vocabulary to describe general information about scientific investigations, as well as plant-specific aspects such as plant traits, environmental conditions, experimental setups and chemicals or physiological properties.",
+        "logo": "/DataPLANT_logo.svg",
+        "ontology_list_url": "/ontologies?collection=DataPLANT&and=false&page=1",
+        "project_homepage": "https://nfdi4plants.org/",
+        "domain_ts_link": ""
     }
 }

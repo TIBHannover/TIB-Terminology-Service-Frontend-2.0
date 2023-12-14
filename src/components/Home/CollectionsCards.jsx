@@ -316,6 +316,39 @@ export function createHomePageContent() {
           </div>
         </div>
      </div>
+     <br></br>
+     <div className='row'>
+        <div className='col-sm-6'>
+          <div className="collection-card">
+              <a
+                  href={
+                      process.env.REACT_APP_PROJECT_SUB_PATH + collectionsInfoJson['DataPLANT']['ontology_list_url']
+                  }
+                  className="collection-image-anchor"
+              >
+                <img
+                    className="img-fluid collection-logo"
+                    alt="DataPLANT"
+                    src={collectionsInfoJson['DataPLANT']['logo']}
+                />
+              </a>
+              <div className="collection-card-text">
+                <p className="trunc">
+                  {collectionsInfoJson['DataPLANT']['text']}
+                </p>
+                <a
+                    href={
+                        process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' +
+                        collectionsInfoJson['DataPLANT']['html_id']
+                    }
+                    className="show-more-text-link"
+                >
+                  [Read More]
+                </a>
+              </div>
+          </div>
+        </div>
+     </div>
     </div>,
   ];
 
