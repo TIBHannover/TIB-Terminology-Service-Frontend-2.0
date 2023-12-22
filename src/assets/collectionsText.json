@@ -112,7 +112,7 @@
     "Educational Resources":{
         "id": "Educational Resources",
         "html_id": "Educational Resources",
-        "name": "Educational Resources Project",
+        "name": "Educational Resources",
         "text": "A short description will come later",
         "logo": "/educational_resources.svg",
         "ontology_list_url": "/ontologies?collection=Educational+Resources&and=false&page=1",
