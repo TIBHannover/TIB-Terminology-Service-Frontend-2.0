@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
 
-export function nfdi4ingHomePage() {
+export function homePageContent() {
   let content = [
     <div className="row justify-content-center">
       <div className="col-sm-8">
