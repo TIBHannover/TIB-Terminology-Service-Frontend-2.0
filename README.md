@@ -37,6 +37,7 @@ Open the browser and enter the URL of the application: http://localhost:3000/.
 The application can be customized to look different based on your needs. You can customize:
 - Styles (css)
 - Static contents: Homepage, Help, About, ... 
+- Application Env variables
 
 **Note**: You can customize the app in your config repository for deploying the application. The idea is to replace some default files and scripts with your custom content.
 
@@ -48,7 +49,7 @@ To cutomize the app look, you need to create a new css file named **custom.css**
 
 **Hint**: It is recommended to use **!important** for your css to make sure it overwrites the existing classes. (Including Bootstrap classes) 
 
-### Customize Static Contents
+### Customize Static Contents and Logos
 To customize the static content such as HomePage, you need to replace the corresponding JSX file that returns the content with yours.
 
 As a general pattern, the contents are return values for some functions. One need to overwrite the return values to change the static contents. 
@@ -65,8 +66,7 @@ As a general pattern, the contents are return values for some functions. One nee
 
 
 
-
-## Changing project environment
+### Changing project environment
 
 The default value in the [.env](https://git.tib.eu/terminology/tib-terminology-service-2.0/-/blob/master/.env) file is "general" to display TIB Terminology service. However, users can see other projects in the TIB environment collection by changing the project ID to their desired project ( eg. NFDI4Chem, NFDI4Ing). In order to fully transition to a new project view, users can also change the API endpoints, see selected project stats and project-filtered ontologies in the .env file.
 

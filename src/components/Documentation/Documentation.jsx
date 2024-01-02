@@ -1,7 +1,7 @@
 import React from 'react';
 import Toolkit from '../common/Toolkit';
 import '../layout/documentationPage.css';
-import { renderDocumentation } from './DocContentPage';
+import { renderDocumentation } from './DocPageContent';
 
 
 class Documentation extends React.Component{
