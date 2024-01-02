@@ -1,7 +1,7 @@
 import React from "react";
 import '../layout/home.css';
 import {createStatsBox} from './StatsBox';
-import { homePageContent } from "./homePageContent";
+import { renderHomePage } from "./HomePageContent";
 import {apiHeaders} from '../../api/headers';
 
 class Home extends React.Component{
@@ -34,7 +34,7 @@ class Home extends React.Component{
       return(
       <div className="row">
         <div className="col-sm-12">          
-          {homePageContent()}
+          {renderHomePage()}
           <div className="row justify-content-center home-page-stats-container">
               {createStatsBox(this.state.statsResult)}
           </div>

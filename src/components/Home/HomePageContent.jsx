@@ -1,6 +1,6 @@
 import collectionsInfoJson from '../../assets/collectionsText.json';
 
-export function homePageContent() {
+export function renderHomePage() {
   return ([
     <div className="general-home-page-content">
       <br />

@@ -55,7 +55,9 @@ As a general pattern, the contents are return values for some functions. One nee
 
 - Site Logo: Copy your site logo inside the *public* directory and name it **site_logo.png**
 
-- HomePage: Inside the *src/components/Home* directory, replace **homePageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **homePageContent()**
+- HomePage: Inside the *src/components/Home* directory, replace **HomePageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **renderHomePage()**
+
+- Help Page: Inside the *src/components/Help* directory, replace **HelpPageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **renderHelpPage()**
 
 
 
