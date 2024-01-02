@@ -582,6 +582,7 @@ p{
     text-align: right;
     color: white;
     margin-bottom: 20px;
+    margin-right: -40px;
  }
  
  .site-header-top-row > a{
@@ -1807,6 +1808,7 @@ p{
     */
 
     padding-top: 25px;
+    margin: auto;    
 }
 
 .collection-logo-in-list{

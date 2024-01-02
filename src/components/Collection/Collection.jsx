@@ -112,16 +112,20 @@ class Collections extends React.Component{
 
     render(){
         return(
-            <div className='container collections-info-container'> 
-              <HelmetProvider>
-                <div>
-                  <Helmet>
-                    <title>Collections</title>
-                  </Helmet>
+            <>
+                <HelmetProvider>
+                    <div>
+                        <Helmet>
+                        <title>Collections</title>
+                        </Helmet>
+                    </div>
+                </HelmetProvider>
+                <div className='row'> 
+                    <div className='col-sm-8 collections-info-container'>
+                        {this.createCollectionList()}
+                    </div>                                            
                 </div>
-               </HelmetProvider>              
-                {this.createCollectionList()}
-            </div>
+            </>
         );
     }
 }
