@@ -64,6 +64,7 @@ As a general pattern, the contents are return values for some functions. One nee
 
 - Documentation (API) Page: Inside the *src/components/Documentation* directory, replace **DocPageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **renderDocumentation()**
 
+- Footer Content: Inside the *src/components/common/Footer* directory, replace **Footer.js** with yours.
 
 
 ### Changing project environment
