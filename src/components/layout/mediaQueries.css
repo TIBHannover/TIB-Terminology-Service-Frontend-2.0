@@ -22,10 +22,10 @@
     body .tree-action-button-area{
         right: 30px;
     }
-    .collection-card{     
+    body .collection-card{     
         padding: 10px;        
     }
-    .collection-logo{      
+    body .collection-logo{      
         margin-left: 0px;
     }
     button{        
@@ -63,10 +63,10 @@
     body .tree-action-button-area{
         right: 40px;
     }   
-    .site-footer{
+    body .site-footer{
         font-size: 10px;        
     }
-    .footer-logo{
+    body .footer-logo{
         width: 200px;
         height: 50px;
     }
@@ -74,30 +74,30 @@
        float: right;
       }
   
-    .navbar-nav{        
+    body .navbar-nav{        
         margin-right: 40px;
     }
-    .navbar-collapse-btn{      
+    body .navbar-collapse-btn{      
         margin-right: 40px;
     }
-    .collection-card{     
+    body .collection-card{     
         padding: 10px;        
     }
-    .collection-logo{      
+    body .collection-logo{      
         margin-left: 0px;
     }
-    .general-home-page-content{
+    body .general-home-page-content{
         padding-left: 5%;
         padding-right: 5%;    
     }
-    .collection-logo-in-list{    
+    body .collection-logo-in-list{    
         width: 200px;
         height: 150px;
     }   
-    .pagination-holder{
+    body .pagination-holder{
         font-size: 12px;
     } 
-     body{
+    body{
         font-size: 13px;
     }
     body h1,h2,h3,h4,h5,h6{
@@ -122,24 +122,24 @@
       float: right;
      }
 
-    .site-header-searchbox-holder{      
+    body .site-header-searchbox-holder{      
        padding-left: 0px;
        padding-right: 0px;
        margin-bottom: 40px;
     }
-    .general-home-page-content{ 
+    body .general-home-page-content{ 
         padding-left: 5%;
         padding-right: 5%;    
     }
 
-    .collection-card{ 
+    body .collection-card{ 
         padding: 10px;        
     }
 
-    .collection-logo{
+    body .collection-logo{
         margin-left: 0px;
     }
-    .collection-logo-in-list{    
+    body .collection-logo-in-list{    
         width: 200px;
         height: 150px;
     }

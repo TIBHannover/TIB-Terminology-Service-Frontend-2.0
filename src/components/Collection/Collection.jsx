@@ -122,7 +122,7 @@ class Collections extends React.Component{
                     </div>
                 </HelmetProvider>
                 <div className='row'> 
-                    <div className='col-sm-8 collections-info-container'>
+                    <div className='col-sm-12 collections-info-container'>
                         {this.createCollectionList()}
                     </div>                                            
                 </div>
