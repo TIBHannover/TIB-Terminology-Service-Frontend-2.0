@@ -357,7 +357,8 @@ body .cc_more_info{
 
 .site-navbar {
     margin-top: -5px;
-    width: 90%;
+    width: 100%;
+    padding-right: 0px;    
 }
   
 .navbar-item {

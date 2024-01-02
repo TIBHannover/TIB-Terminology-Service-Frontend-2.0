@@ -1,9 +1,3 @@
-@media only screen and (min-width: 1200px) {
-    .header-wrapper{
-        max-height: 220px;
-     }
-}
-
 @media only screen and (max-width: 1025px) {
     .application-content{ 
         width: 95%;                

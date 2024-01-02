@@ -53,6 +53,8 @@ To customize the static content such as HomePage, you need to replace the corres
 
 As a general pattern, the contents are return values for some functions. One need to overwrite the return values to change the static contents. 
 
+- Site Logo: Copy your site logo inside the *public* directory and name it **site_logo.png**
+
 - HomePage: Inside the *src/components/Home* directory, replace **homePageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **homePageContent()**
 
 
