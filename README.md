@@ -59,6 +59,10 @@ As a general pattern, the contents are return values for some functions. One nee
 
 - Help Page: Inside the *src/components/Help* directory, replace **HelpPageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **renderHelpPage()**
 
+- About Page: Inside the *src/components/About* directory, replace **AboutPageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **renderAboutPage()**
+
+- Documentation (API) Page: Inside the *src/components/Documentation* directory, replace **DocPageContent.jsx** with yours. **Note**, do not change the namings, just change the return value for the function **renderDocumentation()**
+
 
 
 
