@@ -108,5 +108,15 @@
         "ontology_list_url": "/ontologies?collection=DataPLANT&and=false&page=1",
         "project_homepage": "https://nfdi4plants.org/",
         "domain_ts_link": ""
+    },
+    "Educational Resources":{
+        "id": "Educational Resources",
+        "html_id": "Educational Resources",
+        "name": "Educational Resources",
+        "text": "A short description will come later",
+        "logo": "/educational_resources.svg",
+        "ontology_list_url": "/ontologies?collection=Educational+Resources&and=false&page=1",
+        "project_homepage": "https://www.un.org/sustainabledevelopment/",
+        "domain_ts_link": ""
     }
 }
