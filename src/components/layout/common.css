@@ -538,16 +538,15 @@ body .result-card{
     text-align: justify;
 }
 
-.hidden-header{
-    /* display: none !important; */
-    max-height: 0 !important;
-    overflow: hidden !important;
+.hidden-header{    
+    opacity: 0; 
+    height: 0px;
+    transition: all 0.5s ease-out;
 }
 
 .visible-header{ 
-    max-height: 1000px !important;
-    overflow: hidden !important;
-    transition: max-height 0.3s ease-in-out !important;
+    opacity: 1;
+    transition: all 0.5s ease-out;
 }
 
 

@@ -78,9 +78,9 @@ function collpaseSiteHeader(){
     let collapseIcone = document.getElementsByClassName('header-collpase-icon')[0];    
     let ontologyBannerContainer = document.getElementsByClassName('ont-info-bar')[0];
     let collapseIconContainer = document.getElementsByClassName('collpase-button-container')[0];    
-    if(collapseIcone.classList.contains('fa-angle-double-up')){
-        siteHeader.classList.add('hidden-header');
+    if(collapseIcone.classList.contains('fa-angle-double-up')){        
         ontologyBannerContainer.classList.add('hidden-header');
+        siteHeader.classList.add('hidden-header');
         siteHeader.classList.remove('visible-header');
         ontologyBannerContainer.classList.remove('visible-header');        
         collapseIcone.classList.remove('fa-angle-double-up');
