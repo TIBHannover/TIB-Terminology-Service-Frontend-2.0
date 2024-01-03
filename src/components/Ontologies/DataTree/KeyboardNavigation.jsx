@@ -21,7 +21,7 @@ class KeyboardNavigator{
 
     run(event){            
         let treeNodeManager = new TreeNodeController();      
-        let jumtoItems = document.getElementsByClassName('jumpto-result-text');
+        let jumtoItems = document.getElementsByClassName('react-autosuggest__suggestions-container--open');        
         if(jumtoItems.length !== 0){
             // do not perform when Jumpto box is open
             return true;
