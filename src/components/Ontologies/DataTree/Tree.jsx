@@ -425,18 +425,25 @@ const Tree = (props) => {
 
 
     useEffect(() => {
-        setComponentData();
+        setComponentData();        
         buildTheTree();        
         setTimeout(() => {
             setIsLoading(false);  
             saveComponentStateInParent();
-        }, 2000);
-        
-        if(props.jumpToIri){
-            setSubTreeMode(true);
-        }
+        }, 2000);                                
                
-    }, [props.rootNodes,  resetTreeFlag, reload, props.jumpToIri]);
+    }, [props.rootNodes,  resetTreeFlag, reload]);
+
+
+    useEffect(() => {        
+        if(props.jumpToIri){            
+            setIsLoading(true)            
+            setSubTreeMode(true);
+            setSiblingsButtonShow(true);
+            setSubOrFullTreeBtnShow(true);
+            setReload(true);
+        }                                                  
+    }, [props.jumpToIri]);
 
 
     useEffect(() => {

@@ -16,7 +16,7 @@ const DataTree = (props) => {
   const [isTermTree, setIsTermTree] = useState(false);
   const [isPropertyTree, setIsPropertyTree] = useState(false);
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
-  const [jumpToIri, setJumpToIri] = useState('');
+  const [jumpToIri, setJumpToIri] = useState(null);
 
   const history = useHistory();
 
@@ -24,6 +24,7 @@ const DataTree = (props) => {
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable){
       setSelectedNodeIri(selectedNodeIri);
       setShowDetailTable(showDetailTable);
+      setJumpToIri(null);
   }
 
 
@@ -31,11 +32,12 @@ const DataTree = (props) => {
     paneResizeClass.resetTheWidthToOrignial();
     setSelectedNodeIri("");
     setShowDetailTable(false);
+    setJumpToIri(null);    
   }
 
 
-  function handleJumtoSelection(selectedTerm){
-    if(selectedTerm){            
+  function handleJumtoSelection(selectedTerm){    
+    if(selectedTerm){                 
       setJumpToIri(selectedTerm['iri']);
       setSelectedNodeIri(selectedTerm['iri']);
       setShowDetailTable(true);
