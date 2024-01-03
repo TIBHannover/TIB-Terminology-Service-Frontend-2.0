@@ -75,7 +75,7 @@ const DataTree = (props) => {
         <div className='row autosuggest-sticky'>
           <div className='col-sm-10'>
               <JumpTo
-                targetType={"term"}
+                targetType={props.componentIdentity}
                 ontologyId={props.ontology.ontologyId}
                 isSkos={props.isSkos} 
                 label={"Jump to"}
