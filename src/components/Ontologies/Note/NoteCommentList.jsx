@@ -25,7 +25,7 @@ const NoteCommentList = (props) => {
         let commentId = e.target.getAttribute('data-id');
         let commentContent = e.target.getAttribute('data-content');
         if(commentContent){
-            let content =  createTextEditorStateFromJson(commentContent);
+            let content =  createTextEditorStateFromJson(commentContent);            
             let editorBox = document.getElementsByClassName("note-comment-editor-warpper")[0];
             editorBox.scrollIntoView();            
             setCommentEditorState(content);

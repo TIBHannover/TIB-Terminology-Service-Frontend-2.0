@@ -1,7 +1,7 @@
 import collectionsInfoJson from '../../assets/collectionsText.json';
 
-export function createHomePageContent() {
-  let content = [
+export function renderHomePage() {
+  return ([
     <div className="general-home-page-content">
       <br />
       <div className="row">
@@ -295,7 +295,5 @@ export function createHomePageContent() {
         </div>
       </div>
     </div>,
-  ];
-
-  return content;
+  ]);
 }

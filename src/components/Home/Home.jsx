@@ -1,9 +1,8 @@
 import React from "react";
+import '../layout/home.css';
 import {createStatsBox} from './StatsBox';
-import {createHomePageContent} from './CollectionsCards';
-import {nfdi4chemHomePage} from './Nfdi4chem_home';
-import {nfdi4ingHomePage} from './Nfdi4ing_home';
-import {apiHeaders} from '../../api/headers'
+import { renderHomePage } from "./HomePageContent";
+import {apiHeaders} from '../../api/headers';
 
 class Home extends React.Component{
   constructor(props){
@@ -34,10 +33,8 @@ class Home extends React.Component{
   render(){
       return(
       <div className="row">
-        <div className="col-sm-12">
-          {process.env.REACT_APP_PROJECT_ID === "general" && createHomePageContent()}
-          {process.env.REACT_APP_PROJECT_ID === "nfdi4chem" && nfdi4chemHomePage()}
-          {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && nfdi4ingHomePage()}
+        <div className="col-sm-12">          
+          {renderHomePage()}
           <div className="row justify-content-center home-page-stats-container">
               {createStatsBox(this.state.statsResult)}
           </div>

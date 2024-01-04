@@ -1,4 +1,5 @@
 import React from 'react';
+import '../layout/collectionList.css';
 import {getCollectionOntologies} from '../../api/fetchData';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import queryString from 'query-string'; 
@@ -121,7 +122,7 @@ class Collections extends React.Component{
                     </div>
                 </HelmetProvider>
                 <div className='row'> 
-                    <div className='col-sm-8 collections-info-container'>
+                    <div className='col-sm-12 collections-info-container'>
                         {this.createCollectionList()}
                     </div>                                            
                 </div>

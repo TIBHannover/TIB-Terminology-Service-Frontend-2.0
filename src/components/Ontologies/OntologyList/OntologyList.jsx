@@ -1,4 +1,6 @@
 import {useState, useEffect} from 'react';
+import '../../layout/facet.css';
+import '../../layout/ontologyList.css';
 import { useHistory } from 'react-router';
 import { getAllOntologies, getCollectionOntologies, getAllCollectionsIds } from '../../../api/fetchData';
 import { OntologyListRender } from './OntologyListRender';
@@ -246,8 +248,8 @@ const OntologyList = (props) => {
     return (
       <>
         {Toolkit.createHelmet("Ontologies")}          
-        <div className='row justify-content-center' id="ontologyList-wrapper-div">
-          <div className='col-sm-8'>
+        <div className='row justify-content-center ontology-list-container' id="ontologyList-wrapper-div">
+          <div className='col-sm-11'>
           {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
            {isLoaded &&  
             <div className='row'>

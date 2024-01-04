@@ -1,4 +1,4 @@
-export function generalAbout(){
+export function renderAboutPage(){
     let content = [
         <div>                          
             <div>
