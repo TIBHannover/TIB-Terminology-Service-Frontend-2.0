@@ -1,71 +1,68 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import {getIndividualsList} from '../../../api/fetchData';
-import { withRouter } from 'react-router-dom';
 import NodePage from '../NodePage/NodePage';
-import {sortIndividuals} from './helpers';
 import Tree from "../DataTree/Tree";
-import JumpTo from "../JumpTo/Jumpto";
 import PaneResize from "../../common/PaneResize/PaneResize";
 import Toolkit from "../../common/Toolkit";
+import JumpTo from "../../common/JumpTo/JumpTo";
+import { RenderIndividualList } from "./RenderIndividualList";
 
 
 
 
-class IndividualsList extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = ({
-            individuals: [],
-            isLoaded: false,
-            ontology: "",
-            showNodeDetailPage: false,
-            selectedNodeIri: "",
-            listView: true,
-            isRendered: false            
-        });
-        this.paneResize = new PaneResize();
-        this.setComponentData = this.setComponentData.bind(this);
-        this.createIndividualList = this.createIndividualList.bind(this);
-        this.selectNode = this.selectNode.bind(this);
-        this.processClick = this.processClick.bind(this);
-        this.createIndividualTree = this.createIndividualTree.bind(this);
-        this.switchView = this.switchView.bind(this);
-        this.selectNodeOnLoad = this.selectNodeOnLoad.bind(this);
-        this.renderIndividualListSection = this.renderIndividualListSection.bind(this);
-        this.createActionButtonSection = this.createActionButtonSection.bind(this);
-        this.handleNodeSelectionInTreeView = this.handleNodeSelectionInTreeView.bind(this);
-        this.handleResetTreeEvent = this.handleResetTreeEvent.bind(this);
-    }
+const IndividualsList = (props) => {
 
+    const [individuals, setIndividuals] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);    
+    const [showNodeDetailPage, setShowNodeDetailPage] = useState(false);
+    const [selectedNodeIri, setSelectedNodeIri] = useState("");
+    const [listView, setListView] = useState(true);
+    const [JumpToOnLoad, setJumpToOnload] = useState(false);
+    const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
 
-    async setComponentData(){
-        let ontologyId = this.props.ontology.ontologyId;        
+    const history = useHistory();
+
+    
+    async function setComponentData(){           
         try{            
-            let indvList = await getIndividualsList(ontologyId);                        
-            this.setState({
-                isLoaded: true,
-                individuals: sortIndividuals(indvList),
-                ontology: this.props.ontology,
-                listView: !this.props.isSkos
-            });
-            if(this.props.iri !== " " && typeof(this.props.iri) !== "undefined"){
-                let newUrl = Toolkit.setParamInUrl('iri', this.props.iri)                
-                this.props.history.push(newUrl);
-                this.props.iriChangerFunction(this.props.iri, this.props.componentIdentity);              
-            }
+            let indvList = await getIndividualsList(props.ontology.ontologyId);                        
+            setIsLoaded(true);
+            setIndividuals(sortIndividuals(indvList));            
+            setListView(props.isSkos ? false : true);            
+            if(props.iri !== " " && typeof(props.iri) !== "undefined"){
+                let newUrl = Toolkit.setParamInUrl('iri', props.iri)                
+                history.push(newUrl);
+                setSelectedNodeIri(props.iri);
+                setJumpToOnload(true);               
+                props.iriChangerFunction(props.iri, props.componentIdentity);              
+            }            
         }
         catch(error){
-            this.setState({
-                isLoaded: true,
-                individuals: [],
-                ontology: this.props.ontology                
-            });
+            setIsLoaded(true);
+            setIndividuals(sortIndividuals([]));                   
         }
     }
 
-   
-    selectNode(target){ 
-        if(this.props.isSkos && !this.state.listView){
+
+
+    function selectNodeOnLoad(){
+        if(props.isSkos && !listView){
+            return true;
+        }                
+        let node = document.getElementById(selectedNodeIri);
+        if(node){            
+            node.classList.add('clicked');            
+            let position = document.getElementById(selectedNodeIri).offsetTop;
+            document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;   
+            setJumpToOnload(false);                     
+        }             
+    }
+
+
+
+    function selectNode(target){ 
+        if(props.isSkos && !listView){
             return true;
         }        
         let selectedElement = document.querySelectorAll(".clicked");
@@ -74,42 +71,24 @@ class IndividualsList extends React.Component {
         }
         if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){            
             target.classList.add("clicked");
-            this.setState({
-                showNodeDetailPage: true,
-                selectedNodeIri: target.dataset.iri,
-            });
+            setShowNodeDetailPage(true);
+            setSelectedNodeIri(target.dataset.iri);            
             let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
-            this.props.history.push(newUrl);
-            this.props.iriChangerFunction(target.dataset.iri, this.props.componentIdentity);    
+            history.push(newUrl);
+            props.iriChangerFunction(target.dataset.iri, props.componentIdentity);    
         }
         else{
             target.classList.remove("clicked");            
         }    
     }
 
-    
-    selectNodeOnLoad(){
-        if(this.props.isSkos && !this.state.listView){
-            return true;
-        }      
-        let node = document.getElementById(this.props.iri);
-        if(node){            
-            node.classList.add('clicked');            
-            let position = document.getElementById(this.props.iri).offsetTop;
-            document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;            
-            this.setState({
-                isRendered: true
-            });
-        }             
-    }
 
 
-    
-    processClick(e){        
-        if(this.props.isSkos && !this.state.listView){            
+    function processClick(e){        
+        if(props.isSkos && !listView){            
             return true;
         } 
-        if(!this.state.listView){
+        if(!listView){
             // select a class on the individual tree. Load the tree view for the class
             if(e.target.parentNode.parentNode.classList.contains("opened")){
                 let path = window.location.pathname;
@@ -119,85 +98,65 @@ class IndividualsList extends React.Component {
             }
         }        
         else if (e.target.tagName === "SPAN"){ 
-            this.selectNode(e.target);
+            selectNode(e.target);
         }       
     }
 
 
-    createIndividualList(){
-        let result = [];
-        let individuals = this.state.individuals;
-        for (let indv of individuals){
-            result.push(
-                <li className="list-node-li">
-                    <span className="tree-text-container" data-iri={indv["iri"]} id={indv["iri"]}>
-                        {indv["label"] !== "" ? indv["label"] : "N/A"}
-                    </span>
-                </li>
-            );
-        }
-        if (result.length === 0 && this.state.isLoaded){
-            result.push(
-                <div className="alert alert-success">
-                    This ontology has no individual.
-                </div>
-            );
-        }
-        return result;
-    }
-
-
-    handleNodeSelectionInTreeView(selectedNodeIri, ShowDetailTable){
-        if(this.props.isSkos){
-            this.setState({
-                selectedNodeIri: selectedNodeIri,
-                showNodeDetailPage: ShowDetailTable
-              });
+    function handleNodeSelectionInTreeView(selectedNodeIri, showDetailTable){
+        if(props.isSkos){
+            setSelectedNodeIri(selectedNodeIri);
+            setShowNodeDetailPage(showDetailTable);            
         }
     }
 
-    
-    switchView(){
-        let listview = this.state.listView;        
-        this.setState({
-            listView: !listview,
-            isRendered: false
-        });
-    }
 
 
-    handleResetTreeEvent(){    
-        this.paneResize.resetTheWidthToOrignial();
-        this.setState({
-            listView: false,
-            selectedNodeIri: "",
-            showNodeDetailPage: false
-        });
+    function switchView(){
+        setListView(!listView);        
     }
 
 
 
-    createIndividualTree(){
+    function handleResetTreeEvent(){    
+        paneResizeClass.resetTheWidthToOrignial();
+        setListView(false);
+        setSelectedNodeIri("");
+        setShowNodeDetailPage(false);        
+    }
+
+
+    function sortIndividuals (individuals) {
+        return individuals.sort(function (a, b) {
+          let x = a["label"]; 
+          let y = b["label"];      
+          return (x<y ? -1 : 1 )
+        })
+    }
+
+
+
+    function createIndividualTree(){
         let result = [
             <div className='tree-container'>
                 <Tree 
-                    rootNodes={this.props.rootNodes}
+                    rootNodes={props.rootNodes}
                     obsoleteTerms={[]}   
-                    rootNodesForSkos={this.props.rootNodesForSkos}
-                    componentIdentity={this.props.componentIdentity}
-                    selectedNodeIri={this.state.selectedNodeIri}
-                    key={this.props.key}
-                    ontologyId={this.props.ontology.ontologyId}
-                    rootNodeNotExist={this.props.isSkos ? this.props.rootNodesForSkos.length === 0 : this.props.rootNodes.length === 0}
-                    iriChangerFunction={this.props.iriChangerFunction}
-                    lastState={this.props.lastState}
-                    domStateKeeper={this.props.domStateKeeper}
-                    isSkos={this.props.isSkos}
-                    handleNodeSelectionInDataTree={this.handleNodeSelectionInTreeView}
-                    isIndividual={this.props.isSkos ? false : true}
+                    rootNodesForSkos={props.rootNodesForSkos}
+                    componentIdentity={props.componentIdentity}
+                    selectedNodeIri={selectedNodeIri}
+                    key={props.key}
+                    ontologyId={props.ontology.ontologyId}
+                    rootNodeNotExist={props.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
+                    iriChangerFunction={props.iriChangerFunction}
+                    lastState={props.lastState}
+                    domStateKeeper={props.domStateKeeper}
+                    isSkos={props.isSkos}
+                    handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
+                    isIndividual={props.isSkos ? false : true}
                     showListSwitchEnabled={true}
-                    individualViewChanger={this.switchView}     
-                    handleResetTreeInParent={this.handleResetTreeEvent}           
+                    individualViewChanger={switchView}     
+                    handleResetTreeInParent={handleResetTreeEvent}           
                 />
             </div>          
         ];
@@ -205,108 +164,93 @@ class IndividualsList extends React.Component {
     }
 
 
-    createActionButtonSection(){
-        return [
-            typeof(this.props.iri) !== "undefined" && this.props.iri !== " "  && this.state.individuals.length !== 0 &&
-                <div className="row tree-action-button-holder">                    
-                    <div className="col-sm-12">
-                        <button className='btn btn-secondary btn-sm tree-action-btn' onClick={this.switchView}>
-                            {this.state.listView ? "Show In Tree" : ""}
-                        </button>                                
-                    </div>                    
-                </div>                    
-                   
-        ];
+    function handleJumtoSelection(selectedTerm){    
+        if(selectedTerm){                 
+            setSelectedNodeIri(selectedTerm['iri']);           
+            setJumpToOnload(true);      
+            const searchParams = new URLSearchParams(window.location.search);
+            searchParams.set('iri', selectedTerm['iri']);  
+            history.push(window.location.pathname + "?" +  searchParams.toString());
+            let selectedElement = document.querySelectorAll(".clicked");
+            for(let i=0; i < selectedElement.length; i++){
+                    selectedElement[i].classList.remove("clicked");
+            }
+        }   
     }
 
 
-    renderIndividualListSection(){
-        return [
-            <div className="col-sm-12">
-                {!this.state.isLoaded && <div className="col-sm-12 isLoading"></div>}                    
-                <div className="row">
-                    <div className="col-sm-12">
-                        <ul>
-                            {this.createIndividualList()}
-                        </ul>
-                    </div>                    
-                </div>
-            </div>
-        ];
-    }
+    useEffect(() => {
+        setComponentData();           
+        paneResizeClass.setOriginalWidthForLeftPanes();        
+        document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
+        document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
+        document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);        
+    
+        return () => {
+          document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
+          document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
+          document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
+        };
+    }, []);
+    
 
-
-
-    componentDidMount(){
-        this.setComponentData();
-        this.paneResize.setOriginalWidthForLeftPanes();
-        document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
-        document.body.addEventListener("mousemove", this.paneResize.moveToResize);
-        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);                              
-    }
-
-    componentDidUpdate(){   
-        let url = new URL(window.location);
-        let targetQueryParams = url.searchParams; 
-        let newIri = targetQueryParams.get('iri');    
-        let showDetailTable = newIri ? true : false;
-        if(newIri !== this.state.selectedNodeIri){
-            this.setState({
-                showNodeDetailPage: showDetailTable,
-                selectedNodeIri: newIri
-            });
+    useEffect(() => {              
+        if(selectedNodeIri !== ""){
+            setShowNodeDetailPage(true);            
         }
-        if(!this.state.isRendered){
-            this.selectNodeOnLoad();
-        }        
-    }
+        if(JumpToOnLoad){
+            selectNodeOnLoad();
+        }    
+    }, [selectedNodeIri, JumpToOnLoad]);
 
-    componentWillUnmount(){  
-        document.body.addEventListener("mousedown", this.paneResize.onMouseDown);
-        document.body.addEventListener("mousemove", this.paneResize.moveToResize);
-        document.body.addEventListener("mouseup", this.paneResize.releaseMouseFromResize);
-      }
+    
 
-
-
-    render(){
-        return(
-            <div className="tree-view-container resizable-container" onClick={(e) =>  this.processClick(e)}>                                 
-                <div className="tree-page-left-part" id="page-left-pane">
-                  <JumpTo
-                    ontologyId={this.props.ontology.ontologyId}
-                    isSkos={this.props.isSkos}
-                    componentIdentity={this.props.componentIdentity}          
-                   />
-                   <div className='row tree-action-button-area'>
-                        {/* <div className="col-sm-6"></div>  */}
-                        <div className="col-sm-12 text-right">
-                            {this.createActionButtonSection()}
-                        </div>
-                        {/* <div className="col-sm-1"></div>    */}
-                   </div>                   
-                    <div>                        
-                        {this.state.listView && this.renderIndividualListSection()} 
-                        {!this.state.listView && this.createIndividualTree()}
-                    </div>                    
-                </div>
-                {this.state.showNodeDetailPage && this.paneResize.generateVerticalResizeLine()}                                
-                {this.state.showNodeDetailPage &&
-                    <div className="node-table-container" id="page-right-pane">                     
-                        <NodePage
-                            iri={this.state.selectedNodeIri}
-                            ontology={this.props.ontology}
-                            componentIdentity="individuals"
-                            extractKey="individuals"
-                            isSkos={this.state.isSkos}
-                            isIndividual={true}
-                            typeForNote="individual"
-                        />                    
+    return (
+        <div className="tree-view-container resizable-container" onClick={(e) =>  processClick(e)}>                                 
+            <div className="tree-page-left-part" id="page-left-pane">                  
+                <div className='row autosuggest-sticky'>
+                    <div className='col-sm-10'>
+                        <JumpTo
+                            targetType={props.componentIdentity}
+                            ontologyId={props.ontology.ontologyId}
+                            isSkos={props.isSkos} 
+                            label={"Jump to"}
+                            handleJumtoSelection={handleJumtoSelection}
+                            obsoletes={false}
+                        />    
                     </div>
-                }
+                </div>                                                               
+                <div>
+                    {listView && 
+                        <RenderIndividualList 
+                            individuals={individuals}
+                            isLoaded={isLoaded}
+                            iri={selectedNodeIri}
+                            listView={listView}
+                            switchViewFunction={switchView}                            
+                        />
+                    }                                            
+                    {!listView && createIndividualTree()}
+                </div>                    
             </div>
-        );        
-    }
+            {showNodeDetailPage && paneResizeClass.generateVerticalResizeLine()}                                
+            {showNodeDetailPage &&
+                <div className="node-table-container" id="page-right-pane">                     
+                    <NodePage
+                        iri={selectedNodeIri}
+                        ontology={props.ontology}
+                        componentIdentity="individuals"
+                        extractKey="individuals"
+                        isSkos={props.isSkos}
+                        isIndividual={true}
+                        typeForNote="individual"
+                    />                    
+                </div>
+            }
+        </div>
+    );
+
 }
 
-export default withRouter(IndividualsList);
+
+export default IndividualsList;
