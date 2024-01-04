@@ -27,8 +27,7 @@
 .tree-action-button-area{
     position: sticky;
     margin-top: -200px;    
-    top: 0;    
-    width: 40%;
+    top: 0;        
     float: right;
     z-index: 1000;
     background: white;    

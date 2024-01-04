@@ -19,9 +19,6 @@
     body .jumpto-wrapper{
         width: 90%;
     }
-    body .tree-action-button-area{
-        right: 30px;
-    }
     body .collection-card{     
         padding: 10px;        
     }
@@ -52,6 +49,12 @@
     body ::-webkit-input-placeholder {
         font-size: 11px;
     }
+    body .react-autosuggest__input, body .react-autosuggest__suggestions-container--open{
+        width: 90%;
+    }
+    body .tree-container{
+        margin-top: 150px;
+    }
      
     
 }
@@ -61,7 +64,7 @@
         width: 80%;        
     }
     body .tree-action-button-area{
-        right: 40px;
+        margin-top: -400px;
     }   
     body .site-footer{
         font-size: 10px;        
@@ -114,7 +117,13 @@
     } 
     body input::-webkit-input-placeholder {
         font-size: 11px;
-    }     
+    }
+    body .react-autosuggest__input, body .react-autosuggest__suggestions-container--open{
+        width: 90%;
+    }  
+    body .tree-container{
+        margin-top: 150px;
+    }
 }
 
 @media only screen and (max-width: 900px) {

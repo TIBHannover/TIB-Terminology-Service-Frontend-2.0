@@ -7,7 +7,7 @@ body .autosuggest-jumpto-container label {
     top: 50%;
     transform: translateY(-50%);
     background-color: white; 
-    padding: 2px 5px;
+    padding: 3px 5px;
     margin-left: 1px;    
     z-index: 1;
     background-color: rgb(214, 214, 214);
