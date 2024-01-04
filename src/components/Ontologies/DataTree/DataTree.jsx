@@ -56,7 +56,7 @@ const DataTree = (props) => {
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
     let termTree = (props.componentIdentity === "terms") ? true : false;         
-    setSelectedNodeIri(props.iri);
+    setSelectedNodeIri(targetQueryParams.get('iri') ? targetQueryParams.get('iri') : "");
     setIsTermTree(termTree);
     setIsPropertyTree(!termTree);
     setShowDetailTable(targetQueryParams.get('iri') ? true : false);
