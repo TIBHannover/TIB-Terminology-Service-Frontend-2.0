@@ -55,6 +55,9 @@
     body .tree-container{
         margin-top: 150px;
     }
+    body .small-jumpto-box{
+        width: 80%;
+    }
      
     
 }
@@ -123,6 +126,9 @@
     }  
     body .tree-container{
         margin-top: 150px;
+    }
+    body .small-jumpto-box{
+        width: 80%;
     }
 }
 

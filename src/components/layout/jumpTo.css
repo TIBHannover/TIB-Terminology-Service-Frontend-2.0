@@ -1,5 +1,9 @@
 body .autosuggest-jumpto-container {
-    position: relative;
+    position: relative;    
+}
+
+body .small-jumpto-box{
+    width: 80%;
 }
 
 body .autosuggest-jumpto-container label {
