@@ -113,7 +113,8 @@ const IndividualsList = (props) => {
 
 
     function switchView(){
-        setListView(!listView);        
+        setJumpToOnload(!listView);
+        setListView(!listView);                
     }
 
 
@@ -156,7 +157,8 @@ const IndividualsList = (props) => {
                     isIndividual={props.isSkos ? false : true}
                     showListSwitchEnabled={true}
                     individualViewChanger={switchView}     
-                    handleResetTreeInParent={handleResetTreeEvent}           
+                    handleResetTreeInParent={handleResetTreeEvent}
+                    jumpToIri={selectedNodeIri}           
                 />
             </div>          
         ];
@@ -194,14 +196,14 @@ const IndividualsList = (props) => {
     }, []);
     
 
-    useEffect(() => {              
+    useEffect(() => {                             
         if(selectedNodeIri !== ""){
             setShowNodeDetailPage(true);            
         }
         if(JumpToOnLoad){
             selectNodeOnLoad();
         }    
-    }, [selectedNodeIri, JumpToOnLoad]);
+    }, [selectedNodeIri, JumpToOnLoad, listView]);
 
     
 
@@ -219,19 +221,17 @@ const IndividualsList = (props) => {
                             obsoletes={false}
                         />    
                     </div>
-                </div>                                                               
-                <div>
-                    {listView && 
-                        <RenderIndividualList 
-                            individuals={individuals}
-                            isLoaded={isLoaded}
-                            iri={selectedNodeIri}
-                            listView={listView}
-                            switchViewFunction={switchView}                            
-                        />
-                    }                                            
-                    {!listView && createIndividualTree()}
-                </div>                    
+                </div>                
+                {listView && 
+                    <RenderIndividualList 
+                        individuals={individuals}
+                        isLoaded={isLoaded}
+                        iri={selectedNodeIri}
+                        listView={listView}
+                        switchViewFunction={switchView}                            
+                    />
+                }                                            
+                {!listView && createIndividualTree()}                       
             </div>
             {showNodeDetailPage && paneResizeClass.generateVerticalResizeLine()}                                
             {showNodeDetailPage &&

@@ -45,20 +45,22 @@ export const RenderIndividualList = (props) => {
     return (
         <>
             <div className='row tree-action-button-area'>                        
-                <div className="col-sm-12 text-right">
+                <div className="col-sm-12">
                     {createActionButtonSection()}
                 </div>                        
-            </div> 
-            <div className="col-sm-12">
-                {!props.isLoaded && <div className="col-sm-12 isLoading"></div>}                    
-                <div className="row">
-                    <div className="col-sm-12">
-                        <ul>
-                            {createIndividualList()}
-                        </ul>
-                    </div>                    
-                </div>
             </div>
+            <div className="row">
+                <div className="col-sm-12 individual-list-container">
+                    {!props.isLoaded && <div className="col-sm-12 isLoading"></div>}                    
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <ul>
+                                {createIndividualList()}
+                            </ul>
+                        </div>                    
+                    </div>
+                </div>
+            </div>             
         </>
     );
 

@@ -345,6 +345,15 @@ const Tree = (props) => {
         return [
             <div className='row tree-action-button-area'>                
                 <div className="col-sm-12 text-right">
+                    <div className='row tree-action-btn-holder'>                                
+                        <div className="col-sm-12">
+                            {props.showListSwitchEnabled &&
+                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
+                                    Show In List
+                                </button>
+                            }
+                        </div>                            
+                    </div> 
                     <div className='row tree-action-btn-holder'>
                         <div className="col-sm-12">
                             {!props.isIndividual && props.selectedNodeIri !== "" &&
@@ -384,16 +393,7 @@ const Tree = (props) => {
                                 </button>                
                             }
                         </div>                                                                       
-                    </div>
-                    <div className='row tree-action-btn-holder'>                                
-                        <div className="col-sm-12">
-                            {props.showListSwitchEnabled &&
-                                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
-                                    Show In List
-                                </button>
-                            }
-                        </div>                            
-                    </div> 
+                    </div>                   
                 </div>                             
             </div>                      
         ];

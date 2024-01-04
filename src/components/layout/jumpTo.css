@@ -2,6 +2,12 @@ body .autosuggest-jumpto-container {
     position: relative;    
 }
 
+body .autosuggest-sticky{
+    position: sticky !important;
+    top: 0;
+    z-index: 1000;
+}
+
 body .small-jumpto-box{
     width: 80%;
 }
