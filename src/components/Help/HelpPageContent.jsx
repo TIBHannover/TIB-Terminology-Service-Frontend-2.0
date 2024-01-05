@@ -1,4 +1,4 @@
-export function tibHelp(){
+export function renderHelpPage(){
     let content = [
         <div>
             <h3>Feedback and Suggestion</h3>

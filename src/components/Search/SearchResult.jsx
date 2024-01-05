@@ -7,6 +7,10 @@ import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, se
 import Toolkit from '../common/Toolkit';
 import { AlsoInHelpers } from "./AlsoInHelpers";
 import { apiHeaders } from '../../api/headers';
+import '../layout/searchResult.css';
+import '../layout/facet.css';
+
+
 
 class SearchResult extends React.Component{
     constructor(props){
@@ -521,9 +525,9 @@ createSearchResultList () {
 
   render(){
     return(
-      <div className='row justify-content-center' id="searchterm-wrapper">
+      <div className='row justify-content-center search-result-container' id="searchterm-wrapper">
         {Toolkit.createHelmet(this.state.enteredTerm)}        
-        <div className='col-sm-8'>            
+        <div className='col-sm-11'>            
           <div className='row'>
             <div className='col-sm-4'>          
               {(this.state.searchResult.length > 0 || (this.state.searchResult.length === 0 && this.state.facetIsSelected)) &&

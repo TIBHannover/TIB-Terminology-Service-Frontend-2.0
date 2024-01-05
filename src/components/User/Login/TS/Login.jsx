@@ -59,7 +59,7 @@ class Login extends React.Component{
                 {!userIsLoginByLocalStorage() && this.props.isModal &&
                     // render the modal. Used in the site header 
                     <span>
-                        <a type="button" data-toggle="modal" data-target="#loginModal">Login</a>
+                        <a  className="login-btn-header" type="button" data-toggle="modal" data-target="#loginModal">Login</a>
                         <div class="modal fade loginModal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">

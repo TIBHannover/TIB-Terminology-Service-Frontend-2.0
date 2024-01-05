@@ -1,5 +1,4 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import React from "react";
 
 
 class Toolkit{
@@ -26,13 +25,11 @@ class Toolkit{
                 return (x<y ? sortNumber : (-1 * sortNumber) )
               });
         }
-        else{
-            return objectList.sort(function (a, b) {
-                let x = typeof a[key] === "number" ? a[key]: a[key]?.toLowerCase(); 
-                let y = typeof b[key] === "number" ? b[key]: b[key]?.toLowerCase(); 
-                return (x<y ? sortNumber : (-1 * sortNumber) )
-              });
-        }        
+        return objectList.sort(function (a, b) {
+            let x = typeof a[key] === "number" ? a[key]: a[key]?.toLowerCase(); 
+            let y = typeof b[key] === "number" ? b[key]: b[key]?.toLowerCase(); 
+            return (x<y ? sortNumber : (-1 * sortNumber) )
+          });        
     }
 
     

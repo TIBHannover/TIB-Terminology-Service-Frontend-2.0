@@ -57,13 +57,6 @@ class NodeGraph extends React.Component{
         this.generateGraph();
     }
 
-    componentDidUpdate(){    
-      if(this.state.prevNode !== this.props.iri){
-        this.setComponentData();
-      }
-      this.generateGraph();
-    }
-
     render(){
         return(
             <div id="ontology_vis"/>     

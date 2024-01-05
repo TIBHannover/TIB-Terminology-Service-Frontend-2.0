@@ -2,7 +2,7 @@ function Navbar () {
 
   let urlPath = window.location.pathname;
   return (
-    <div className='col-lg-8 col-md-6'>
+    <div className='col-lg-7 col-md-6'>
          <nav class="navbar navbar-expand-xl site-navbar">   
          <button class="navbar-toggler navbar-collapse-btn" type="button" data-toggle="collapse" data-target="#siteMainNavbar">           
             <i class="fa fa-bars collpase-btn-content"></i>

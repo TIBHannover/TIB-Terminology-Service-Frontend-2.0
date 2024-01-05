@@ -45,7 +45,7 @@ export const NoteCommentListRender = (props) => {
         let cancelButton = props.editMode && <button type="button" class="btn btn-secondary note-comment-cancel-edit-btn" onClick={props.cancelEdit}>Cancel</button>;
 
     return (
-        <span>
+        <div className="note-comment-container">
             {!props.editMode &&
                 <RowWithSingleColumn 
                     content={commentListToRener}
@@ -73,7 +73,7 @@ export const NoteCommentListRender = (props) => {
                     />
                 ]                   
             }                
-        </span>
+        </div>
     );
 
 }

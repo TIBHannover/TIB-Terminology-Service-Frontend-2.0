@@ -75,32 +75,26 @@ export function createOntologyPageHeadSection(ontology){
 
 function collpaseSiteHeader(){
     let siteHeader = document.getElementsByClassName('header-wrapper')[0];    
-    let collpaseIcone = document.getElementsByClassName('header-collpase-icon')[0];    
+    let collapseIcone = document.getElementsByClassName('header-collpase-icon')[0];    
     let ontologyBannerContainer = document.getElementsByClassName('ont-info-bar')[0];
-    let applicationContent = document.getElementsByClassName('application-content')[0];
-    if(collpaseIcone.classList.contains('fa-angle-double-up')){
-        siteHeader.style.maxHeight = '0';
-        ontologyBannerContainer.style.maxHeight = '0';
-        collpaseIcone.classList.remove('fa-angle-double-up');
-        collpaseIcone.classList.add('fa-angle-double-down');
-        siteHeader.style.marginTop = '-10px';
-        applicationContent.style.minHeight = '800px';
-
-        siteHeader.style.overflow = 'hidden';
-        siteHeader.style.padding = '0';
-        ontologyBannerContainer.style.overflow = 'hidden';
+    let collapseIconContainer = document.getElementsByClassName('collpase-button-container')[0];    
+    if(collapseIcone.classList.contains('fa-angle-double-up')){        
+        ontologyBannerContainer.classList.add('hidden-header');
+        siteHeader.classList.add('hidden-header');
+        siteHeader.classList.remove('visible-header');
+        ontologyBannerContainer.classList.remove('visible-header');        
+        collapseIcone.classList.remove('fa-angle-double-up');
+        collapseIcone.classList.add('fa-angle-double-down'); 
+        collapseIconContainer.classList.add('show-header-arrow-down');                    
     }
     else{
-        siteHeader.style.maxHeight = (process.env.REACT_APP_PROJECT_ID === "nfdi4ing" ? '240px' : '220px');
-        ontologyBannerContainer.style.maxHeight = '200px';
-        collpaseIcone.classList.add('fa-angle-double-up');
-        collpaseIcone.classList.remove('fa-angle-double-down');        
-        applicationContent.style.minHeight = '500px';
-
-        siteHeader.style.overflow = '';
-        siteHeader.style.padding = '10px';
-        siteHeader.style.marginTop = '';
-        ontologyBannerContainer.style.overflow = '';
+        siteHeader.classList.remove('hidden-header');  
+        ontologyBannerContainer.classList.remove('hidden-header');
+        siteHeader.classList.add('visible-header');
+        ontologyBannerContainer.classList.add('visible-header');                  
+        collapseIcone.classList.add('fa-angle-double-up');
+        collapseIcone.classList.remove('fa-angle-double-down'); 
+        collapseIconContainer.classList.remove('show-header-arrow-down');        
     }
     
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../layout/collectionList.css';
 import {getCollectionOntologies} from '../../api/fetchData';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import queryString from 'query-string'; 
@@ -112,16 +113,20 @@ class Collections extends React.Component{
 
     render(){
         return(
-            <div className='container collections-info-container'> 
-              <HelmetProvider>
-                <div>
-                  <Helmet>
-                    <title>Collections</title>
-                  </Helmet>
+            <>
+                <HelmetProvider>
+                    <div>
+                        <Helmet>
+                        <title>Collections</title>
+                        </Helmet>
+                    </div>
+                </HelmetProvider>
+                <div className='row'> 
+                    <div className='col-sm-12 collections-info-container'>
+                        {this.createCollectionList()}
+                    </div>                                            
                 </div>
-               </HelmetProvider>              
-                {this.createCollectionList()}
-            </div>
+            </>
         );
     }
 }

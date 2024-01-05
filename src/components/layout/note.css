@@ -1,0 +1,115 @@
+body .note-list-card{
+    margin-bottom: 10px;
+    border: 1px solid rgb(94, 93, 93);   
+}
+
+body .card-header{    
+    padding: 2px;    
+}
+
+body .card-body{
+    padding: 5px;    
+}
+
+.note-list-title{
+    color: black;
+    font-weight: bold;    
+    width: 80%;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 0 5px;    
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}
+
+.note-comment-container .note-comment-editor-warpper{
+    background-color: #e9e6e6;
+    height: 250px;
+}
+
+.note-comment-container .note-comment-editor{
+    height: 190px;
+}
+
+.note-comment-submit-btn{    
+    margin-top: 2px;
+    float: right;
+}
+
+.note-comment-container .note-comment-cancel-edit-btn{
+    margin-top: 2px;
+    float: right;
+    margin-right: 5px;
+    background-color: rgb(211, 208, 208);
+    color: black;
+}
+
+.note-comment-card{
+    padding: 20px;
+    padding-left: 0;
+    border-left: 1px solid #ccc; 
+    margin-left: 20px; 
+}
+
+.note-header-container .note-dropdown-toggle::after {
+    display: none; 
+}
+
+.note-header-container .note-dropdown-btn, 
+.note-header-container .note-dropdown-btn:hover, 
+.note-header-container .note-dropdown-btn:active,
+.note-header-container .note-dropdown-btn:focus{
+    background-color: #F7F7F7 !important;
+    color: black !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.note-header-container .note-header-container, .note-header-container .note-dropdown-item:hover {
+    background-color: transparent;
+    color: inherit;
+}
+  
+.note-header-container .note-dropdown-menu, .note-dropdown-item:hover {
+    cursor: auto;
+}
+
+.note-header-container .btn-delete-note, .note-header-container .btn-delete-note:hover{
+    background-color: white;
+    border: none;
+    color: red;
+}
+
+.note-header-container .note-action-menu-btn{
+    border: none;
+    background-color: white;
+    color: black;
+}
+
+.note-header-container .note-action-menu-btn:hover{
+    color: black;    
+}
+
+.note-link-copy-message{
+    display: inline;
+    margin-left: 20px;
+    background-color: #3efa3e;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.pinned-message-icon{
+    margin-left: 10px;
+    background-color: #404040;
+    color: white;
+    border-radius: 15px;
+    width: 60px;
+    display: inline-block;
+    text-align: center;
+    font-size: 11px;
+}

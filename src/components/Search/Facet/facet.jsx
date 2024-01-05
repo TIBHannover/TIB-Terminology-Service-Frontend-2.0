@@ -342,14 +342,7 @@ class Facet extends React.Component{
 
     render(){
         return(
-            <div class="row" id="search-facet-container-box">
-                <h2>Filter Results</h2>
-                <div className="row">
-                    <div className="col-sm-12 clear-filter-link-box">
-                        <a onClick={this.clearFacet}>Clear All Filters</a>
-                        <br></br>
-                    </div>
-                </div>        
+            <div class="row" id="search-facet-container-box">                                   
                 {this.state.isLoading && 
                 <div class="d-flex justify-content-center">
                     <div class="spinner-grow text-info facet-loading-effect" role="status">
@@ -358,6 +351,13 @@ class Facet extends React.Component{
                 </div>}                
                 {!this.state.isLoading &&
                 <div class="col-sm-12">
+                    <h2>Filter Results</h2>    
+                    <div className="row">
+                        <div className="col-sm-12 clear-filter-link-box">
+                            <a onClick={this.clearFacet}>Clear All Filters</a>
+                            <br></br>
+                        </div>
+                    </div> 
                     <h4>{"Type"}</h4>
                      <div class="facet-box" id="facet-types-list">                                              
                         {this.createTypesCheckboxList()}

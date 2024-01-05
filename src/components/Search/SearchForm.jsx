@@ -2,6 +2,8 @@ import React from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
 import {apiHeaders} from '../../api/headers';
+import '../layout/jumpTo.css';
+import '../layout/searchBar.css';
 
 
 class SearchForm extends React.Component{
@@ -378,7 +380,7 @@ class SearchForm extends React.Component{
 
       render(){                    
           return(
-              <div className='col-sm-10'>
+              <div className='col-sm-10 search-bar-container'>
                 <div class="input-group input-group-lg">                              
                   <input 
                     type="text" 
