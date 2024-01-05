@@ -30,10 +30,8 @@ function Header () {
               }        
             </div>
             <Navbar />
-          </div>
-          <div className='row justify-content-center site-header-searchbox-holder'>
-            <SearchForm />
-          </div>
+          </div>      
+            <SearchForm />          
       </div>
     </div>
   )

@@ -259,7 +259,8 @@ body .cc_more_info{
     background-color: #0E6668;
     padding: 10px;
     margin-bottom: 10px;
-    max-height: 250px;
+    max-height: 280px;
+    color: white;
 }
 
 .site-header{ 
@@ -274,8 +275,7 @@ body .cc_more_info{
  
 .site-header-searchbox-holder{ 
     padding-left: 10%;
-    padding-right: 10%;
-    margin-bottom: 40px;    
+    padding-right: 10%;    
 }
 
 .site-header-top-row{        

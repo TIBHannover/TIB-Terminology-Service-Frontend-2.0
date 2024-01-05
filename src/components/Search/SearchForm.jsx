@@ -380,45 +380,53 @@ class SearchForm extends React.Component{
 
       render(){                    
           return(
-              <div className='col-sm-10 search-bar-container'>
-                <div class="input-group input-group-lg">                              
-                  <input 
-                    type="text" 
-                    class="form-control search-input" 
-                    placeholder={this.urlOnto()}
-                    aria-describedby="basic-addon2"
-                    onChange={this.handleChange}
-                    onKeyDown={this._handleKeyDown}
-                    id="s-field"                    
-                    ></input>
-                  <div class="input-group-append">
-                    <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
+            <>
+              <div className='row site-header-searchbox-holder'>
+                <div className='col-sm-12 search-bar-container'>
+                  <div class="input-group input-group-lg">                              
+                    <input 
+                      type="text" 
+                      class="form-control search-input" 
+                      placeholder={this.urlOnto()}
+                      aria-describedby="basic-addon2"
+                      onChange={this.handleChange}
+                      onKeyDown={this._handleKeyDown}
+                      id="s-field"                    
+                      ></input>
+                    <div class="input-group-append">
+                      <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
+                    </div>
                   </div>
-                </div>
-                                      
-                {this.state.result &&
-                <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
-                {this.state.result && !this.state.urlPath &&
-                <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>}
-                {this.state.result && !this.state.urlPath &&
-                <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
-                  <div>
-                    <h4>Jump To</h4>
-                    {this.createJumpResultList()}
-                  </div>
-                </div>}
+                                        
+                  {this.state.result &&
+                  <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
+                  {this.state.result && !this.state.urlPath &&
+                  <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>}
+                  {this.state.result && !this.state.urlPath &&
+                  <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
+                    <div>
+                      <h4>Jump To</h4>
+                      {this.createJumpResultList()}
+                    </div>
+                  </div>}                                    
 
-                <input type="checkbox" className='label-pos' id="exact-checkbox" value="exact match" onClick={this.exactHandler}/><label className="exact-label">Exact Match</label> 
-
-                <input type="checkbox" className='label-pos' id="obsoletes-checkbox" value="Obsolete results" onClick={this.obsoletesHandler}/><label className="exact-label">Include Obsolete terms</label>
-
-                {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                <p>
-                 <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
-                 <a class="example-link" href="search?q=agent">agent</a></span>
-               </p>
-                }
+                  {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+                  <p>
+                  <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
+                  <a class="example-link" href="search?q=agent">agent</a></span>
+                </p>
+                  }
               </div>
+            </div>
+            <div className='row site-header-search-filters-container'>
+                <div className='col-lg-2 col-sm-3'>
+                  <input type="checkbox" className='label-pos' id="exact-checkbox" value="exact match" onClick={this.exactHandler}/><label className="exact-label">Exact Match</label> 
+                </div>
+                <div className='col-lg-2 col-sm-3'>
+                  <input type="checkbox" className='label-pos' id="obsoletes-checkbox" value="Obsolete results" onClick={this.obsoletesHandler}/><label className="exact-label">Obsolete terms</label>
+                </div>
+            </div>
+            </>            
           )
       }
 

@@ -114,7 +114,13 @@
     } 
     body input::-webkit-input-placeholder {
         font-size: 11px;
-    }     
+    }
+    body .header-wrapper{
+        max-height: 350px;
+    }
+    .site-header-search-filters-container{
+        margin-left: 7%;
+    }   
 }
 
 @media only screen and (max-width: 900px) {
@@ -125,7 +131,7 @@
     body .site-header-searchbox-holder{      
        padding-left: 0px;
        padding-right: 0px;
-       margin-bottom: 40px;
+       margin-bottom: 5px;       
     }
     body .general-home-page-content{ 
         padding-left: 5%;
@@ -160,7 +166,13 @@
     } 
     body ::-webkit-input-placeholder {
         font-size: 10px;
-     } 
+    }
+    body .header-wrapper{
+        max-height: 600px;
+    } 
+    .site-header-search-filters-container{
+        margin-left: -6%;
+    } 
  }
 
 
