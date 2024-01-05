@@ -1,435 +1,329 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
-import {apiHeaders} from '../../api/headers';
+import { searchOls, getAutoCompleteResult } from '../../api/fetchData';
 import '../layout/jumpTo.css';
 import '../layout/searchBar.css';
 
 
-class SearchForm extends React.Component{
-    constructor (props) {
-        super(props)
-        this.state = ({
-          enteredTerm: "",
-          result: false,
-          clickInfo: false,
-          exact: false,
-          obsoletes: false,
-          searchResult: [],
-          ontoSearchResult: [],
-          jumpResult: [],
-          entry: [],
-          ontologyId: '',
-          urlPath: '',
-          url:'',
-          exact: false,
-          obsoletesCheck: false,
-          facetIsSelected: false,
-        })
-        this.handleChange = this.handleChange.bind(this);
-        this.createResultList = this.createResultList.bind(this);
-        this.createJumpResultList = this.createJumpResultList.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
-        this.submitJumpHandler = this.submitJumpHandler.bind(this);  
-        this.suggestionHandler = this.suggestionHandler.bind(this); 
-        this.autoRef = React.createRef(); 
-        this.handleClickOutside = this.handleClickOutside.bind(this);
-        this.urlOnto = this.urlOnto.bind(this);
-        this.setComponentData = this.setComponentData.bind(this);
-        this.exactHandler = this.exactHandler.bind(this);
-        this.obsoletesHandler = this.obsoletesHandler.bind(this);
+
+const SearchForm = (props) => {
+
+  let currentUrlParams = new URL(window.location).searchParams;
+  let obsoleteFlagInUrl = currentUrlParams.get('obsoletes') === "true" ? true : false; 
+  let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
+  
+  let currentUrlPath = window.location.pathname;
+  currentUrlPath = currentUrlPath.split('ontologies/');
+  let ontologyIdInUrl = null;
+  if(currentUrlPath.length === 2 && currentUrlPath[1] !== ""){
+    ontologyIdInUrl = currentUrlPath.includes('/') ? currentUrlPath.split('/')[0].trim() : currentUrlPath.trim();;
+  }
+
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
+  const [exact, setExact] = useState(exactFlagInUrl);
+  const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
+  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+  const [jumpToResult, setJumpToResult] = useState([]);
+
+
+
+  function setPlaceHolder(){    
+    if(ontologyId){
+      return ("Search in \n" + ontologyId);
+    }
+    return("Search for ontology, term, properties and individuals");    
+  }
+
+
+  async function handleSearchInputChange(e){
+    let searchQuery = e.target.value;
+
+
+
+    
+  }
+
+
+  function handleKeyDown(e){
+    if (e.key === 'Enter') {
+      this.submitHandler();
+    }
+  }
+
+
+  function submitHandler(){                      
+      let enteredTerm = document.getElementById('s-field').value;        
+      if(enteredTerm !== ""){
+        let url = new URL(window.location);    
+        url.searchParams.delete('q');
+        url.searchParams.delete('page');
+        url.searchParams.append('q', enteredTerm);
+        url.searchParams.append('page', 1);
+        url.pathname = "/ts/search";
+        window.location.replace(url);
       }
-
-      setComponentData(){
-        let urlPath = window.location.pathname
-        let url = window.location.search
-        let params = new URL(window.location);
-        let obs = params.searchParams.getAll("obsoletes");
-        let exc = params.searchParams.getAll("exact");
-        if(obs){
-          document.getElementById("obsoletes-checkbox").checked = false;
-        }  
-        if(exc){
-          document.getElementById("exact-checkbox").checked = false;
-        }
-        let ontologyId = urlPath.split('/'); 
-        ontologyId = ontologyId[3]            
-        urlPath = urlPath.includes("/ontologies/" + ontologyId)
-        this.setState({
-          ontologyId: ontologyId,
-          urlPath: urlPath,
-          url:url 
-        })
+      if(enteredTerm !== "" && ontologyId){
+        let url = new URL(window.location);    
+        url.searchParams.delete('q');
+        url.searchParams.delete('page');
+        url.searchParams.append('q', enteredTerm);
+        url.searchParams.append('ontology', (ontologyId).toUpperCase());
+        url.searchParams.append('page', 1);
+        url.pathname = "/ts/search";
+        window.location.replace(url);
       }
+  }
 
 
-      async handleChange(enteredTerm){
-        enteredTerm = enteredTerm.target.value               
-        if (enteredTerm.length > 0 && !this.state.urlPath){ 
-          let params = new URLSearchParams(document.location.search);
-          let selectedType = params.getAll("type");
-          selectedType = selectedType.map(onto => onto.toLowerCase());       
-          let selectedOntology = params.getAll("ontology")         
-          selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
-          let selectedCollection = params.getAll("collection") 
-          let obsoletes = params.get('obsoletes')           
-          if(process.env.REACT_APP_PROJECT_ID == "general"){
-            if(selectedOntology){
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`, {
-                mode: 'cors',
-                headers: apiHeaders(),
-              });
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(), 
-              });
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }
-            else if(selectedType || selectedOntology){
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&type=${selectedType}&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs']
-              this.setState({
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }
-            else if(selectedCollection){
-            let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            jumpResult = (await jumpResult.json())['response']['docs'];
-            this.setState({
-              searchResult: searchResult,
-              jumpResult: jumpResult,
-              result: true,
-              enteredTerm: enteredTerm
-            });
-            }
-            if(obsoletes){
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&obsoletes=true&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              console.info(jumpResult)
-              this.setState({
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
+  function renderAutoCompleteResult(){
+    let resultList = [];
+    let key = 0;
+    for(let result of autoCompleteResult){
+      let resultLink = process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(result['autosuggest']);
+      resultLink = (ontologyId) ? (resultLink + `&ontology=${(ontologyId).toUpperCase()}`) : resultLink;
+      resultList.push(
+        <a href={resultLink} key={key} className="container">   
+          <div className="autocomplete-item item-for-navigation">
+                {result['autosuggest']}
+          </div>
+        </a>             
+      )
+      key++;      
+    }
+    return resultList
+  }
 
-            }
-            else {
-            let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            searchResult =  (await searchResult.json())['response']['docs'];
-            let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5`,{
-              mode: 'cors',
-              headers: apiHeaders(),
-            })
-            jumpResult = (await jumpResult.json())['response']['docs'];
-            this.setState({
-              searchResult: searchResult,
-              jumpResult: jumpResult,
-              result: true,
-              enteredTerm: enteredTerm
-            });
 
-            }           
+  function renderJumpToResult(){
+    let resultList = []
+    for(let result of jumpToResult){
+      resultList.push(
+        <div className="jump-autocomplete-container">
+           {setJumpResultButtons(result)}
+        </div>          
+      )
+    }
+    return resultList;
+  }
+
+
+  function handleExactCheckboxClick(e){
+    return true;
+  }
+
+
+  function handleObsoletesCheckboxClick(e){
+    return true;
+  }
+
+
+
+
+  
+
+
+
+  return(
+    <>
+      <div className='row site-header-searchbox-holder'>
+        <div className='col-sm-12 search-bar-container'>
+          <div class="input-group input-group-lg">                              
+            <input 
+                type="text" 
+                class="form-control search-input" 
+                placeholder={setPlaceHolder()}
+                aria-describedby="basic-addon2"
+                onChange={handleSearchInputChange}
+                onKeyDown={handleKeyDown}
+                id="s-field"                    
+              />
+            <div class="input-group-append">
+              <button className='btn btn-outline-secondary search-btn' type='button' onClick={submitHandler}>Search </button>  
+            </div>
+          </div>
+                                
+          {autoCompleteResult.length !== 0 &&
+            <div id = "autocomplete-container" className="col-md-12">
+              {renderAutoCompleteResult()}
+            </div>
           }
-          else { 
-            let col = (process.env.REACT_APP_PROJECT_ID).toUpperCase();
-            if(selectedOntology){
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }
-            else {
-              let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              searchResult =  (await searchResult.json())['response']['docs'];
-              let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
-                mode: 'cors',
-                headers: apiHeaders(),
-              })
-              jumpResult = (await jumpResult.json())['response']['docs'];
-              this.setState({
-                searchResult: searchResult,
-                jumpResult: jumpResult,
-                result: true,
-                enteredTerm: enteredTerm
-              });
-            }            
-          }
-        }
-        else if(enteredTerm.length > 0 && this.state.urlPath){
-          let ontoSearchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`,{
-            mode: 'cors',
-            headers: apiHeaders(),
-          })
-          ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
-          this.setState({
-            searchResult: ontoSearchResult,
-            result: true 
-          });
-        }
-        else if (enteredTerm.length == 0){
-            this.setState({
-                result: false,
-                enteredTerm: ""
-            });          
-        }
-      }
-
-
-    submitHandler(){                      
-        let enteredTerm = document.getElementById('s-field').value;        
-        if(enteredTerm !== ""){
-          let url = new URL(window.location);    
-          url.searchParams.delete('q');
-          url.searchParams.delete('page');
-          url.searchParams.append('q', enteredTerm);
-          url.searchParams.append('page', 1);
-          url.pathname = "/ts/search";
-          window.location.replace(url);
-        }
-        if(enteredTerm !== "" && this.state.ontologyId){
-          let url = new URL(window.location);    
-          url.searchParams.delete('q');
-          url.searchParams.delete('page');
-          url.searchParams.append('q', enteredTerm);
-          url.searchParams.append('ontology', (this.state.ontologyId).toUpperCase());
-          url.searchParams.append('page', 1);
-          url.pathname = "/ts/search";
-          window.location.replace(url);
-        }
-    }
-
-    exactHandler(e){
-      let url = new URL(window.location);
-      if(e.target.checked){    
-        url.searchParams.delete('exact');  
-        url.searchParams.append('exact', true);
-        //window.localStorage.setItem("exact", true)
-        window.history.replaceState(null, null, url);
-        window.location.reload();
-      }
-      else {
-        url.searchParams.delete('exact');
-        //window.localStorage.setItem("exact", false)
-      }
-      window.history.replaceState(null, null, url);
-    }
-
-    obsoletesHandler(e){
-      let url = new URL(window.location);
-      if(e.target.checked){      
-        url.searchParams.append("obsoletes", true);
-        //window.localStorage.setItem("obsoletes", true);
-        window.history.replaceState(null, null, url);
-        window.location.reload();
-        this.setState({
-          obsoletesCheck: true
-        })
-      }
-      else{
-        url.searchParams.delete('obsoletes');
-        //window.localStorage.setItem("obsoletes", false);
-        this.setState({
-          obsoletesCheck: false
-        })
-      }
-      window.history.replaceState(null, null, url);
-    }
-
-    submitJumpHandler(e){
-      for(let item of this.state.jumpResult){
-      window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item['ontology_name'] + '/terms?iri=' + item['iri']);
-      }
-    }
-    
-    
-    async suggestionHandler(selectedTerm){
-        let selection = await fetch(process.env.REACT_APP_API_URL + `/search?q=${selectedTerm}`,{
-          mode: 'cors',
-          headers: apiHeaders(),
-        })
-        selection =  (await selection.json())['response']['docs'];
-        this.setState({
-            selection: selection,
-            result: true
-          });
-      }
-
-    
-      handleClickOutside(){
-        document.addEventListener("click", (event) =>{
-          if(this.autoRef.current){
-            if(!this.autoRef.current.contains(event.target))
-            this.setState({
-              result: false
-            });
-          }          
-        })       
-      }
-
-    
-    componentDidMount() {
-        document.addEventListener('click', this.handleClickOutside, true);
-        this.setComponentData();         
-        document.addEventListener("keydown", keyboardNavigationForJumpto, false);       
-    }
-    
-   
-    componentWillUnmount() {
-        document.removeEventListener('click', this.handleClickOutside, true);
-        document.removeEventListener("keydown", keyboardNavigationForJumpto, false);  
-     };
-
-
-      createResultList(){
-          const resultList = [];
-          for(let i=0; i < this.state.searchResult.length; i++){
-            if(this.state.urlPath){
-              resultList.push(
-                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest']) + `&ontology=${(this.state.ontologyId).toUpperCase()}`} key={i} className="container">   
-                  <div className="autocomplete-item item-for-navigation">
-                        {this.state.searchResult[i]['autosuggest']}
-                  </div>
-                </a>     
-              
-              )
-            }
-            else {
-              resultList.push(
-                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(this.state.searchResult[i]['autosuggest'])} key={i} className="container">   
-                  <div className="autocomplete-item item-for-navigation">
-                        {this.state.searchResult[i]['autosuggest']}
-                  </div>
-                </a>    
-              )
-            }    
-          }
-          return resultList
-      }
-
-      createJumpResultList(){
-        const jumpResultList = []
-        for(let item of this.state.jumpResult){
-          jumpResultList.push(
-            <div className="jump-autocomplete-container">
-               {setJumpResultButtons(item)}
-            </div>          
-          )
-        }
-        return jumpResultList
-      }
-
-      urlOnto(){
-        let placeholder= "";
-           if(this.state.ontologyId && this.state.urlPath){
-             placeholder = "Search in \n" + this.state.ontologyId;
-           }
-           else {
-            placeholder = "Search for ontology, term, properties and individuals"
-           }
-           return placeholder;       
-        }
-        
-
-
-      _handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-          this.submitHandler();
-        }
-      }
-
-      render(){                    
-          return(
-            <>
-              <div className='row site-header-searchbox-holder'>
-                <div className='col-sm-12 search-bar-container'>
-                  <div class="input-group input-group-lg">                              
-                    <input 
-                      type="text" 
-                      class="form-control search-input" 
-                      placeholder={this.urlOnto()}
-                      aria-describedby="basic-addon2"
-                      onChange={this.handleChange}
-                      onKeyDown={this._handleKeyDown}
-                      id="s-field"                    
-                      ></input>
-                    <div class="input-group-append">
-                      <button className='btn btn-outline-secondary search-btn' type='button' onClick={this.submitHandler}>Search </button>  
-                    </div>
-                  </div>
-                                        
-                  {this.state.result &&
-                  <div ref={this.autoRef} id = "autocomplete-container" className="col-md-12">{this.createResultList()}</div>}
-                  {this.state.result && !this.state.urlPath &&
-                  <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>}
-                  {this.state.result && !this.state.urlPath &&
-                  <div ref={this.autoRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
-                    <div>
-                      <h4>Jump To</h4>
-                      {this.createJumpResultList()}
-                    </div>
-                  </div>}                                    
-
-                  {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-                  <p>
-                  <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
-                  <a class="example-link" href="search?q=agent">agent</a></span>
-                </p>
-                  }
+          {/* {jumpToResult.length !== 0 && !this.state.urlPath &&
+            <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>
+          } */}
+          {jumpToResult.length !== 0 && !ontologyId &&
+            <div className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
+              <div>
+                <h4>Jump To</h4>
+                {renderJumpToResult()}
               </div>
             </div>
-            <div className='row site-header-search-filters-container'>
-                <div className='col-lg-2 col-sm-3'>
-                  <input type="checkbox" className='label-pos' id="exact-checkbox" value="exact match" onClick={this.exactHandler}/><label className="exact-label">Exact Match</label> 
-                </div>
-                <div className='col-lg-2 col-sm-3'>
-                  <input type="checkbox" className='label-pos' id="obsoletes-checkbox" value="Obsolete results" onClick={this.obsoletesHandler}/><label className="exact-label">Obsolete terms</label>
-                </div>
-            </div>
-            </>            
-          )
-      }
+          }                                    
 
+          {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
+            <p>
+              <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
+              <a class="example-link" href="search?q=agent">agent</a></span>
+            </p>
+          }
+        </div>
+      </div>
+      <div className='row site-header-search-filters-container'>
+          <div className='col-lg-2 col-sm-3'>
+            <input type="checkbox" className='label-pos' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
+          </div>
+          <div className='col-lg-2 col-sm-3'>
+            <input type="checkbox" className='label-pos' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick()}/><label className="exact-label">Obsolete terms</label>
+          </div>
+      </div>
+    </>            
+  )
 }
 
 export default SearchForm;
+  
+
+      // async handleChange(enteredTerm){
+      //   enteredTerm = enteredTerm.target.value               
+      //   if (enteredTerm.length > 0 && !this.state.urlPath){ 
+      //     let params = new URLSearchParams(document.location.search);
+      //     let selectedType = params.getAll("type");
+      //     selectedType = selectedType.map(onto => onto.toLowerCase());       
+      //     let selectedOntology = params.getAll("ontology")         
+      //     selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
+      //     let selectedCollection = params.getAll("collection") 
+      //     let obsoletes = params.get('obsoletes')           
+      //     if(process.env.REACT_APP_PROJECT_ID == "general"){                        
+      //       let searchResult =  await searchOls(enteredTerm, selectedOntology);
+      //       let jumpResult =  await getAutoCompleteResult(enteredTerm, selectedOntology, selectedType, obsoletes);
+      //       this.setState({
+      //         searchResult: searchResult,
+      //         jumpResult: jumpResult,
+      //         result: true,
+      //         enteredTerm: enteredTerm
+      //       });         
+      //       else if(selectedType || selectedOntology){
+      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&type=${selectedType}&ontology=${selectedOntology}`,{
+      //           mode: 'cors',
+      //           headers: apiHeaders(),
+      //         })
+      //         jumpResult = (await jumpResult.json())['response']['docs']
+      //         this.setState({
+      //           jumpResult: jumpResult,
+      //           result: true,
+      //           enteredTerm: enteredTerm
+      //         });
+      //       }
+      //       else if(selectedCollection){
+      //       let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
+      //         mode: 'cors',
+      //         headers: apiHeaders(),
+      //       })
+      //       searchResult =  (await searchResult.json())['response']['docs'];
+      //       let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
+      //         mode: 'cors',
+      //         headers: apiHeaders(),
+      //       })
+      //       jumpResult = (await jumpResult.json())['response']['docs'];
+      //       this.setState({
+      //         searchResult: searchResult,
+      //         jumpResult: jumpResult,
+      //         result: true,
+      //         enteredTerm: enteredTerm
+      //       });
+      //       }
+      //       if(obsoletes){
+      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&obsoletes=true&rows=5`,{
+      //           mode: 'cors',
+      //           headers: apiHeaders(),
+      //         })
+      //         jumpResult = (await jumpResult.json())['response']['docs'];
+      //         console.info(jumpResult)
+      //         this.setState({
+      //           jumpResult: jumpResult,
+      //           result: true,
+      //           enteredTerm: enteredTerm
+      //         });
+
+      //       }
+      //       else {
+      //       let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5`,{
+      //         mode: 'cors',
+      //         headers: apiHeaders(),
+      //       })
+      //       searchResult =  (await searchResult.json())['response']['docs'];
+      //       let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5`,{
+      //         mode: 'cors',
+      //         headers: apiHeaders(),
+      //       })
+      //       jumpResult = (await jumpResult.json())['response']['docs'];
+      //       this.setState({
+      //         searchResult: searchResult,
+      //         jumpResult: jumpResult,
+      //         result: true,
+      //         enteredTerm: enteredTerm
+      //       });
+
+      //       }           
+      //     }
+      //     else { 
+      //       let col = (process.env.REACT_APP_PROJECT_ID).toUpperCase();
+      //       if(selectedOntology){
+      //         let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
+      //           mode: 'cors',
+      //           headers: apiHeaders(),
+      //         })
+      //         searchResult =  (await searchResult.json())['response']['docs'];
+      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
+      //           mode: 'cors',
+      //           headers: apiHeaders(),
+      //         })
+      //         jumpResult = (await jumpResult.json())['response']['docs'];
+      //         this.setState({
+      //           searchResult: searchResult,
+      //           jumpResult: jumpResult,
+      //           result: true,
+      //           enteredTerm: enteredTerm
+      //         });
+      //       }
+      //       else {
+      //         let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
+      //           mode: 'cors',
+      //           headers: apiHeaders(),
+      //         })
+      //         searchResult =  (await searchResult.json())['response']['docs'];
+      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
+      //           mode: 'cors',
+      //           headers: apiHeaders(),
+      //         })
+      //         jumpResult = (await jumpResult.json())['response']['docs'];
+      //         this.setState({
+      //           searchResult: searchResult,
+      //           jumpResult: jumpResult,
+      //           result: true,
+      //           enteredTerm: enteredTerm
+      //         });
+      //       }            
+      //     }
+      //   }
+      //   else if(enteredTerm.length > 0 && this.state.urlPath){
+      //     let ontoSearchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`,{
+      //       mode: 'cors',
+      //       headers: apiHeaders(),
+      //     })
+      //     ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
+      //     this.setState({
+      //       searchResult: ontoSearchResult,
+      //       result: true 
+      //     });
+      //   }
+      //   else if (enteredTerm.length == 0){
+      //       this.setState({
+      //           result: false,
+      //           enteredTerm: ""
+      //       });          
+      //   }
+      // }

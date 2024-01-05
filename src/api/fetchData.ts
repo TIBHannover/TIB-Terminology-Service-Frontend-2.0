@@ -1,8 +1,7 @@
-const callHeader = {
-  'Accept': 'application/json',
-  'user-agent': process.env.REACT_APP_PROJECT_ID === 'general' ? 'TIBCENTRAL' : process.env.REACT_APP_PROJECT_ID === 'nfdi4chem' ? 'NFDI4CHEM' : process.env.REACT_APP_PROJECT_ID === 'nfdi4ing' ? 'NFDI4ING': 'TIBCENTRAL',
-};
-const getCallSetting:RequestInit = {method: 'GET',mode: 'cors', headers: callHeader};
+import { apiHeaders } from "./headers";
+
+
+const getCallSetting:RequestInit = {method: 'GET',mode: 'cors', headers: apiHeaders()};
 const size = 10000;
 
 
@@ -548,97 +547,22 @@ async function getPageCount(url: string){
   return Math.ceil(answer['page']['totalElements'] / size);
 }
 
-export function getClassName (classid: string) {
-  return fetch(
-    'https://service.tib.eu/ts4tib/api/ontologies/' +
-        encodeURIComponent(classid),
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return { classID: classid, prefLabel: s.config?.title }
-    })
-    .catch((s) => {
-      return { classID: classid, prefLabel: undefined }
-    })
-}
 
-
-export function fetchConceptById (id: string) {
-  return fetch(
-    'https://service.tib.eu/ts4tib/api/terms' +
-        encodeURIComponent(encodeURIComponent(id)),
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return { conceptId: id, concept: s?._embedded?.terms[0] }
-    })
-}
-
-
-export function autocompleteConcept (text: string, ontology:string|undefined) {
-  let quert = ''
-  if (ontology !== undefined) {
-    quert = '&ontology=' + ontology
+export async function searchOls(query:string, targetOntologyIds:string, targetTypes: string, targetCollectionIds:string){
+  try{
+    // let baseUrl =  
+    let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${query}&rows=5&ontology=${targetOntologyIds}`, getCallSetting);
+    searchResult =  (await searchResult.json())['response']['docs'];
+    return searchResult;
   }
-  return fetch(
-    'https://service.tib.eu/ts4tib/api/select?queryFields=label,synonym,short_form,obo_id&groupField=true&type=class&q=' + text + quert,
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return s?.response?.docs.map((p: any) => mapOlsToIriAndNameTuple(p))
-    })
-}
-
-
-function mapOlsToIriAndNameTuple (item: any) {
-  return { iri: item?.iri, label: item?.label }
-}
-
-
-export const fetch_data = (url: string) => {
-  return fetch(url, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
-    .then((res) => res.json())
-    .catch((err) => {
-      return []
-    })
-}
-
-export const fix_url = (url: string) => {
-  if (url.substr(0, 5) === 'http:') {
-    return url.replace('http', 'https')
-  } else {
-    return url
+  catch(e){
+    return [];
   }
 }
 
-export const get_url_prefix = (url: string | undefined) => {
-  if (url === undefined) return ''
-  return fix_url(url.substring(0, url.search('/terms') + 7))
-}
+
+
+
+
+
+
