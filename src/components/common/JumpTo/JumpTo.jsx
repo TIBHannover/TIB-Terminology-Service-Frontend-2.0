@@ -35,8 +35,13 @@ const JumpTo = (props) => {
         if(type !== "property" && type !== "individual"){
             type = props.isSkos ? "individual" : "class"; 
         }       
-        if (enteredTerm.length > 0){            
-            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, props.ontologyId, type, props.obsoletes);
+        if (enteredTerm.length > 0){
+            let inputForAutoComplete = {};    
+            inputForAutoComplete['searchQuery'] = value;
+            inputForAutoComplete['ontologyIds'] = props.ontologyId;
+            inputForAutoComplete['types'] = type;
+            inputForAutoComplete['obsoletes'] = props.obsoletes;
+            let autoCompleteResult = await getAutoCompleteResult(inputForAutoComplete);
             setResultList(autoCompleteResult);                                  
         }       
     }

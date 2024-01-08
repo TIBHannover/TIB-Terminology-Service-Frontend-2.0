@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
-import { searchOls, getAutoCompleteResult } from '../../api/fetchData';
+import { getAutoCompleteResult } from '../../api/fetchData';
 import '../layout/jumpTo.css';
 import '../layout/searchBar.css';
 
@@ -17,17 +17,18 @@ const SearchForm = (props) => {
   currentUrlPath = currentUrlPath.split('ontologies/');
   let ontologyIdInUrl = null;
   if(currentUrlPath.length === 2 && currentUrlPath[1] !== ""){
-    ontologyIdInUrl = currentUrlPath.includes('/') ? currentUrlPath.split('/')[0].trim() : currentUrlPath.trim();;
+    ontologyIdInUrl = currentUrlPath[1].includes('/') ? currentUrlPath[1].split('/')[0].trim() : currentUrlPath[1].trim();;
   }
 
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");  
   const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
   const [exact, setExact] = useState(exactFlagInUrl);
   const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);
+
+  const resultCount = 5;
 
 
 
@@ -40,17 +41,21 @@ const SearchForm = (props) => {
 
 
   async function handleSearchInputChange(e){
-    let searchQuery = e.target.value;
-
-
-
-    
+    let currentUrlParams = new URL(window.location).searchParams; 
+    let inputForAutoComplete = {};    
+    inputForAutoComplete['searchQuery'] = e.target.value;
+    inputForAutoComplete['ontologyIds'] = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
+    inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;
+    inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;    
+    let autoCompleteResult = await getAutoCompleteResult(inputForAutoComplete, resultCount);
+    setAutoCompleteResult(autoCompleteResult);
+    setSearchQuery(inputForAutoComplete['searchQuery']);
   }
 
 
   function handleKeyDown(e){
     if (e.key === 'Enter') {
-      this.submitHandler();
+      submitHandler();
     }
   }
 
@@ -150,10 +155,7 @@ const SearchForm = (props) => {
             <div id = "autocomplete-container" className="col-md-12">
               {renderAutoCompleteResult()}
             </div>
-          }
-          {/* {jumpToResult.length !== 0 && !this.state.urlPath &&
-            <div ref={this.autoRef} id = "jumpresult-container" className="col-md-12 justify-content-md-center"></div>
-          } */}
+          }         
           {jumpToResult.length !== 0 && !ontologyId &&
             <div className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
               <div>
@@ -184,146 +186,3 @@ const SearchForm = (props) => {
 }
 
 export default SearchForm;
-  
-
-      // async handleChange(enteredTerm){
-      //   enteredTerm = enteredTerm.target.value               
-      //   if (enteredTerm.length > 0 && !this.state.urlPath){ 
-      //     let params = new URLSearchParams(document.location.search);
-      //     let selectedType = params.getAll("type");
-      //     selectedType = selectedType.map(onto => onto.toLowerCase());       
-      //     let selectedOntology = params.getAll("ontology")         
-      //     selectedOntology = selectedOntology.map(onto => onto.toLowerCase());
-      //     let selectedCollection = params.getAll("collection") 
-      //     let obsoletes = params.get('obsoletes')           
-      //     if(process.env.REACT_APP_PROJECT_ID == "general"){                        
-      //       let searchResult =  await searchOls(enteredTerm, selectedOntology);
-      //       let jumpResult =  await getAutoCompleteResult(enteredTerm, selectedOntology, selectedType, obsoletes);
-      //       this.setState({
-      //         searchResult: searchResult,
-      //         jumpResult: jumpResult,
-      //         result: true,
-      //         enteredTerm: enteredTerm
-      //       });         
-      //       else if(selectedType || selectedOntology){
-      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&type=${selectedType}&ontology=${selectedOntology}`,{
-      //           mode: 'cors',
-      //           headers: apiHeaders(),
-      //         })
-      //         jumpResult = (await jumpResult.json())['response']['docs']
-      //         this.setState({
-      //           jumpResult: jumpResult,
-      //           result: true,
-      //           enteredTerm: enteredTerm
-      //         });
-      //       }
-      //       else if(selectedCollection){
-      //       let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
-      //         mode: 'cors',
-      //         headers: apiHeaders(),
-      //       })
-      //       searchResult =  (await searchResult.json())['response']['docs'];
-      //       let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${selectedCollection}&rows=5`,{
-      //         mode: 'cors',
-      //         headers: apiHeaders(),
-      //       })
-      //       jumpResult = (await jumpResult.json())['response']['docs'];
-      //       this.setState({
-      //         searchResult: searchResult,
-      //         jumpResult: jumpResult,
-      //         result: true,
-      //         enteredTerm: enteredTerm
-      //       });
-      //       }
-      //       if(obsoletes){
-      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&obsoletes=true&rows=5`,{
-      //           mode: 'cors',
-      //           headers: apiHeaders(),
-      //         })
-      //         jumpResult = (await jumpResult.json())['response']['docs'];
-      //         console.info(jumpResult)
-      //         this.setState({
-      //           jumpResult: jumpResult,
-      //           result: true,
-      //           enteredTerm: enteredTerm
-      //         });
-
-      //       }
-      //       else {
-      //       let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5`,{
-      //         mode: 'cors',
-      //         headers: apiHeaders(),
-      //       })
-      //       searchResult =  (await searchResult.json())['response']['docs'];
-      //       let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5`,{
-      //         mode: 'cors',
-      //         headers: apiHeaders(),
-      //       })
-      //       jumpResult = (await jumpResult.json())['response']['docs'];
-      //       this.setState({
-      //         searchResult: searchResult,
-      //         jumpResult: jumpResult,
-      //         result: true,
-      //         enteredTerm: enteredTerm
-      //       });
-
-      //       }           
-      //     }
-      //     else { 
-      //       let col = (process.env.REACT_APP_PROJECT_ID).toUpperCase();
-      //       if(selectedOntology){
-      //         let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-      //           mode: 'cors',
-      //           headers: apiHeaders(),
-      //         })
-      //         searchResult =  (await searchResult.json())['response']['docs'];
-      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&rows=5&ontology=${selectedOntology}`,{
-      //           mode: 'cors',
-      //           headers: apiHeaders(),
-      //         })
-      //         jumpResult = (await jumpResult.json())['response']['docs'];
-      //         this.setState({
-      //           searchResult: searchResult,
-      //           jumpResult: jumpResult,
-      //           result: true,
-      //           enteredTerm: enteredTerm
-      //         });
-      //       }
-      //       else {
-      //         let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
-      //           mode: 'cors',
-      //           headers: apiHeaders(),
-      //         })
-      //         searchResult =  (await searchResult.json())['response']['docs'];
-      //         let jumpResult = await fetch(process.env.REACT_APP_API_URL + `/select?q=${enteredTerm}&schema=collection&classification=${col}&rows=5`,{
-      //           mode: 'cors',
-      //           headers: apiHeaders(),
-      //         })
-      //         jumpResult = (await jumpResult.json())['response']['docs'];
-      //         this.setState({
-      //           searchResult: searchResult,
-      //           jumpResult: jumpResult,
-      //           result: true,
-      //           enteredTerm: enteredTerm
-      //         });
-      //       }            
-      //     }
-      //   }
-      //   else if(enteredTerm.length > 0 && this.state.urlPath){
-      //     let ontoSearchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${enteredTerm}&rows=5&ontology=${this.state.ontologyId}`,{
-      //       mode: 'cors',
-      //       headers: apiHeaders(),
-      //     })
-      //     ontoSearchResult = (await ontoSearchResult.json())['response']['docs'];
-      //     this.setState({
-      //       searchResult: ontoSearchResult,
-      //       result: true 
-      //     });
-      //   }
-      //   else if (enteredTerm.length == 0){
-      //       this.setState({
-      //           result: false,
-      //           enteredTerm: ""
-      //       });          
-      //   }
-      // }

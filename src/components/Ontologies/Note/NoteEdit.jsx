@@ -105,7 +105,11 @@ const NoteEdit = (props) => {
             type = props.isSkos ? "individual" : "class"; 
         }       
         if (enteredTerm.length > 0){
-            let autoCompleteResult = await getAutoCompleteResult(enteredTerm, props.note['ontology_id'], type);
+            let inputForAutoComplete = {}; 
+            inputForAutoComplete['searchQuery'] = value;
+            inputForAutoComplete['ontologyIds'] = props.note['ontology_id'];
+            inputForAutoComplete['types'] = type; 
+            let autoCompleteResult = await getAutoCompleteResult(inputForAutoComplete);
             setAutoCompleteSuggestionsList(autoCompleteResult);                                  
         }       
     }

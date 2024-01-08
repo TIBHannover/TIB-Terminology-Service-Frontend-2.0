@@ -488,14 +488,15 @@ export async function getIndividualInstancesForClass(ontologyId:string, classIri
 }
 
 
-export async function getAutoCompleteResult(enteredTerm:string, ontologyId:string, type:string, obsoletes:any = null){
+export async function getAutoCompleteResult(inputData:any, count:any=10){
   try{
     let autocompleteApiBaseUrl = <any> process.env.REACT_APP_SEARCH_URL;
     autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
-    let url = `${autocompleteApiBaseUrl}?q=${enteredTerm}&ontology=${ontologyId}&type=${type}&rows=10`;    
-    if(obsoletes){
-      url += "&obsoletes=true";
-    }    
+    let url = `${autocompleteApiBaseUrl}?q=${inputData['searchQuery']}&rows=${count}`;    
+    url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
+    url = inputData['types'] ? (url + `&type=${inputData['types']}`) : url;
+    url = inputData['obsoletes'] ? (url + "&obsoletes=true") : url;
+    url = inputData['collectionIds'] ? (url + `&schema=collection&classification=${inputData['collectionIds']}`) : url;    
     let result = await fetch(url, getCallSetting);
     result = await result.json();
     result = result['response']['docs'];
@@ -548,17 +549,17 @@ async function getPageCount(url: string){
 }
 
 
-export async function searchOls(query:string, targetOntologyIds:string, targetTypes: string, targetCollectionIds:string){
-  try{
-    // let baseUrl =  
-    let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${query}&rows=5&ontology=${targetOntologyIds}`, getCallSetting);
-    searchResult =  (await searchResult.json())['response']['docs'];
-    return searchResult;
-  }
-  catch(e){
-    return [];
-  }
-}
+// export async function getJumptoResult(query:string, targetOntologyIds:string, targetTypes: string, targetCollectionIds:string){
+//   try{
+//     // let baseUrl =  
+//     let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${query}&rows=5&ontology=${targetOntologyIds}`, getCallSetting);
+//     searchResult =  (await searchResult.json())['response']['docs'];
+//     return searchResult;
+//   }
+//   catch(e){
+//     return [];
+//   }
+// }
 
 
 
