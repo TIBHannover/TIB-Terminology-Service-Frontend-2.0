@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Autosuggest from 'react-autosuggest';
-import { getAutoCompleteResult } from "../../../api/fetchData";
+import { getJumpToResult } from "../../../api/fetchData";
 
 
 
@@ -41,7 +41,7 @@ const JumpTo = (props) => {
             inputForAutoComplete['ontologyIds'] = props.ontologyId;
             inputForAutoComplete['types'] = type;
             inputForAutoComplete['obsoletes'] = props.obsoletes;
-            let autoCompleteResult = await getAutoCompleteResult(inputForAutoComplete);
+            let autoCompleteResult = await getJumpToResult(inputForAutoComplete);
             setResultList(autoCompleteResult);                                  
         }       
     }

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {getAutoCompleteResult} from "../../../api/fetchData";
+import {getJumpToResult} from "../../../api/fetchData";
 import {getTextEditorContent, createTextEditorStateFromJson}  from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
@@ -109,7 +109,7 @@ const NoteEdit = (props) => {
             inputForAutoComplete['searchQuery'] = value;
             inputForAutoComplete['ontologyIds'] = props.note['ontology_id'];
             inputForAutoComplete['types'] = type; 
-            let autoCompleteResult = await getAutoCompleteResult(inputForAutoComplete);
+            let autoCompleteResult = await getJumpToResult(inputForAutoComplete);
             setAutoCompleteSuggestionsList(autoCompleteResult);                                  
         }       
     }

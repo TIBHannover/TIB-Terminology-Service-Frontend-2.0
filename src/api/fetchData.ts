@@ -488,7 +488,7 @@ export async function getIndividualInstancesForClass(ontologyId:string, classIri
 }
 
 
-export async function getAutoCompleteResult(inputData:any, count:any=10){
+export async function getJumpToResult(inputData:any, count:any=10){
   try{
     let autocompleteApiBaseUrl = <any> process.env.REACT_APP_SEARCH_URL;
     autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
@@ -549,17 +549,21 @@ async function getPageCount(url: string){
 }
 
 
-// export async function getJumptoResult(query:string, targetOntologyIds:string, targetTypes: string, targetCollectionIds:string){
-//   try{
-//     // let baseUrl =  
-//     let searchResult = await fetch(process.env.REACT_APP_API_URL + `/suggest?q=${query}&rows=5&ontology=${targetOntologyIds}`, getCallSetting);
-//     searchResult =  (await searchResult.json())['response']['docs'];
-//     return searchResult;
-//   }
-//   catch(e){
-//     return [];
-//   }
-// }
+export async function getAutoCompleteResult(inputData:any, count:any=5){
+  try{
+    let url =  process.env.REACT_APP_API_URL + `/suggest?q=${inputData['searchQuery']}&rows=${count}`;
+    url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
+    url = inputData['types'] ? (url + `&type=${inputData['types']}`) : url;
+    url = inputData['obsoletes'] ? (url + "&obsoletes=true") : url;
+    url = inputData['collectionIds'] ? (url + `&schema=collection&classification=${inputData['collectionIds']}`) : url;  
+    let searchResult = await fetch(url, getCallSetting);
+    searchResult =  (await searchResult.json())['response']['docs'];
+    return searchResult;
+  }
+  catch(e){
+    return [];
+  }
+}
 
 
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import {keyboardNavigationForJumpto} from '../Ontologies/JumpTo/KeyboardNavigation';
-import { getAutoCompleteResult } from '../../api/fetchData';
+import { getAutoCompleteResult, getJumpToResult } from '../../api/fetchData';
 import '../layout/jumpTo.css';
 import '../layout/searchBar.css';
 
@@ -47,7 +47,11 @@ const SearchForm = (props) => {
     inputForAutoComplete['ontologyIds'] = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
     inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;
     inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;    
-    let autoCompleteResult = await getAutoCompleteResult(inputForAutoComplete, resultCount);
+    let [autoCompleteResult, jumpToResult] = await Promise.all([
+      getAutoCompleteResult(inputForAutoComplete, resultCount),
+      getJumpToResult(inputForAutoComplete, resultCount)
+    ]);        
+    setJumpToResult(jumpToResult);
     setAutoCompleteResult(autoCompleteResult);
     setSearchQuery(inputForAutoComplete['searchQuery']);
   }
