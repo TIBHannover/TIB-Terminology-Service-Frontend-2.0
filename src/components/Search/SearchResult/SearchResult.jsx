@@ -1,14 +1,14 @@
 import React from 'react'
 import queryString from 'query-string';
-import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
-import Facet from './Facet/facet';
-import Pagination from "../common/Pagination/Pagination";
+import {getCollectionOntologies, getAllOntologies} from '../../../api/fetchData';
+import Facet from '../Facet/facet';
+import Pagination from "../../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
-import Toolkit from '../common/Toolkit';
+import Toolkit from '../../common/Toolkit';
 import { AlsoInHelpers } from "./AlsoInHelpers";
-import { apiHeaders } from '../../api/headers';
-import '../layout/searchResult.css';
-import '../layout/facet.css';
+import { apiHeaders } from '../../../api/headers';
+import '../../layout/searchResult.css';
+import '../../layout/facet.css';
 
 
 

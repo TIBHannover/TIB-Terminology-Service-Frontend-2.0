@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import OntologyList from "./components/Ontologies/OntologyList/OntologyList";
 import OntologyPage from './components/Ontologies/OntologyPage/OntologyPage';
 import Home from "./components/Home/Home";
-import SearchResult from "./components/Search/SearchResult";
+import SearchResult from './components/Search/SearchResult/SearchResult';
 import Documentation from "./components/Documentation/Documentation";
 import Collections from "./components/Collection/Collection";
 import Imprint from '../src/assets/static/imprint' 

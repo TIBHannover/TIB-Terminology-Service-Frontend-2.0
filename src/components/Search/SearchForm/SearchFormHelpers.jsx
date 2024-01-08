@@ -1,5 +1,4 @@
-import {getCollectionOntologies, getAllOntologies} from '../../api/fetchData';
-import { apiHeaders } from '../../api/headers';
+import { apiHeaders } from '../../../api/headers';
 
 
 export function setJumpResultButtons(resultItem){

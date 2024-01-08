@@ -37,12 +37,12 @@
 }
 
 .search-bar-container .search-btn{ 
-    background-color: #23272B;
+    background-color: #404040;
     color: white;   
 }
 
 .search-bar-container .search-btn:hover{ 
-    background-color: #23272B;
+    background-color: #404040;
     color: white;
 }
 
