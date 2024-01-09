@@ -56,8 +56,15 @@ const SearchForm = (props) => {
     inputForAutoComplete['obsoletes'] = obsoletes;
     inputForAutoComplete['ontologyIds'] = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
-    inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;
-    inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;    
+    inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;    
+    if(process.env.REACT_APP_PROJECT_NAME === "" ){
+      // check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM
+      inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;
+    }
+    else{
+      inputForAutoComplete['collectionIds'] = process.env.REACT_APP_PROJECT_NAME;
+    }
+    
     let [autoCompleteResult, jumpToResult] = await Promise.all([
       getAutoCompleteResult(inputForAutoComplete, resultCount),
       getJumpToResult(inputForAutoComplete, resultCount)
@@ -75,29 +82,36 @@ const SearchForm = (props) => {
   }
 
 
+  
+  function setSearchUrl(label){
+    let searchUrl = new URL(window.location);
+    searchUrl.pathname = "/ts/search";          
+    searchUrl.searchParams.set('q', label);
+    searchUrl.searchParams.set('page', 1);    
+    ontologyId && searchUrl.searchParams.set('ontology', ontologyId.toUpperCase()); 
+    obsoletes && searchUrl.searchParams.set('obsoletes', obsoletes);
+    exact && searchUrl.searchParams.set('exact', exact);
+    return searchUrl.toString();
+  }
+  
+  
+  
   function triggerSearch(){
     if(searchQuery.length === 0){
       return true;
     }
-    let searchUrl = new URL(window.location);
-    searchUrl.pathname = "/ts/search";          
-    searchUrl.searchParams.set('q', searchQuery);
-    searchUrl.searchParams.set('page', 1);    
-    ontologyId && searchUrl.searchParams.set('ontology', ontologyId.toUpperCase());       
+    let searchUrl = setSearchUrl(searchQuery);    
     setOntologyId(null);  
     window.location.replace(searchUrl);
   }
 
 
-
   function renderAutoCompleteResult(){
     let resultList = [];
     let key = 0;
-    for(let result of autoCompleteResult){
-      let resultLink = process.env.REACT_APP_PROJECT_SUB_PATH + '/search?q=' + encodeURIComponent(result['autosuggest']);
-      resultLink = (ontologyId) ? (resultLink + `&ontology=${(ontologyId).toUpperCase()}`) : resultLink;
+    for(let result of autoCompleteResult){      
       resultList.push(
-        <a href={''} key={key} className="container">   
+        <a href={setSearchUrl(result['autosuggest'])} key={key} className="container">   
           <div className="autocomplete-item item-for-navigation">
                 {result['autosuggest']}
           </div>
@@ -123,7 +137,10 @@ const SearchForm = (props) => {
 
 
   function handleExactCheckboxClick(e){
+    let searchUrl = new URL(window.location);
     setExact(e.target.checked);
+    searchUrl.searchParams.set('exact', e.target.checked); 
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});
   }
 
 
@@ -148,6 +165,7 @@ const SearchForm = (props) => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);
     if(obsoletes){ document.getElementById("obsoletes-checkbox").checked = true;}   
+    if(exact){ document.getElementById("exact-checkbox").checked = true;}   
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);

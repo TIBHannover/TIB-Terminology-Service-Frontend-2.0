@@ -1,4 +1,6 @@
 import React from 'react'
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import queryString from 'query-string';
 import {getCollectionOntologies, getAllOntologies} from '../../../api/fetchData';
 import Facet from '../Facet/facet';
@@ -12,214 +14,110 @@ import '../../layout/facet.css';
 
 
 
-class SearchResult extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = ({
-          enteredTerm: "",
-          newEnteredTerm: "",          
-          searchResult: [],
-          exactResult: [],
-          obsoletesResult: [],
-          originalSearchResult: [],
-          selectedOntologies: [],
-          selectedTypes: [],
-          selectedCollections: [],
-          facetFields: [],
-          pageNumber: 1,
-          pageSize: 10, 
-          isLoaded: false,
-          isFiltered: false,          
-          totalResults: [],
-          expandedResults: [],
-          totalResultsCount: [],
-          facetIsSelected: false,
-          exact: false,
-          obsoletes: false
-        })
-        this.createSearchResultList = this.createSearchResultList.bind(this);
-        this.handlePagination = this.handlePagination.bind(this);        
-        this.runSearch = this.runSearch.bind(this);                      
-        this.paginationHandler = this.paginationHandler.bind(this);
-        this.handleExact = this.handleExact.bind(this);
-        this.updateURL = this.updateURL.bind(this);
-        this.alsoInResult = this.alsoInResult.bind(this);
-        this.setComponentData = this.setComponentData.bind(this);
-        this.handleAlsoResult = this.handleAlsoResult.bind(this);
-        this.handlePageSizeDropDownChange = this.handlePageSizeDropDownChange.bind(this);
-        this.facetButton = this.facetButton.bind(this);
-        this.handleOntoDelete = this.handleOntoDelete.bind(this);
-        this.handleTypDelete = this.handleTypDelete.bind(this);
-        this.handleColDelete = this.handleColDelete.bind(this);
-        this.handleObsolete =  this.handleObsolete.bind(this);
-    }
+const SearchResult = (props) => {
+
+  let currentUrlParams = new URL(window.location).searchParams;
+  let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
+  let ontologiesInUrl = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology') : [];
+  let collectionsInUrl = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection') : [];
+  let typesInUrl = currentUrlParams.get('type') ? currentUrlParams.getAll('type') : [];
+  let obsoleteFlagInUrl = currentUrlParams.get('obsoletes') === "true" ? true : false; 
+  let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
+  let pageInUrl = currentUrlParams.get('page') ? currentUrlParams.get('page') : 1;
+  let sizeInUrl = currentUrlParams.get('size') ? currentUrlParams.get('size') : 10;
 
 
-  
-  setComponentData(){
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);  
-    let enteredTerm = targetQueryParams.q;  
-    let ontologies = targetQueryParams.ontology;
-    let obsoletes = targetQueryParams.obsoletes;
-    let exact = targetQueryParams.exact;
-    let page = targetQueryParams.page;
-    let types = targetQueryParams.type;
-    let collections = targetQueryParams.collection;
-    let facetSelected = false;
-    if(typeof(ontologies) === "string"){
-      ontologies = [ontologies];
-      facetSelected= true;
-    }
-    else if(typeof(ontologies) === "undefined"){
-      ontologies = [];
-    }
+  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);
+  const [searchResult, setSearchResult] = useState([]);
+  const [selectedOntologies, setSelectedOntologies] = useState(ontologiesInUrl);
+  const [selectedTypes, setSelectedTypes] = useState(typesInUrl);
+  const [selectedCollections, setSelectedCollections] = useState(collectionsInUrl);
+  const [facetFields, setFacetFields] = useState([]);
+  const [pageNumber, setPageNumber] = useState(parseInt(pageInUrl));
+  const [pageSize, setPageSize] = useState(parseInt(sizeInUrl));
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [expandedResults, setExpandedResults] = useState([]);
+  const [totalResultsCount, setTotalResultsCount] = useState([]);
+  const [facetIsSelected, setFacetIsSelected] = useState(false);
+  const [exact, setExact] = useState(exactFlagInUrl);
+  const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
 
-    if(typeof(types) === "string"){
-      types = [types];
-      facetSelected= true;
-    }
-    else if(typeof(types) === "undefined"){
-      types = [];
-    }
-
-    if(typeof(collections) === "string"){
-      collections = [collections];
-      facetSelected= true;
-    }
-    else if(typeof(collections) === "undefined"){
-      collections = [];
-    }
-
-    if(typeof(page) === "undefined"){
-      page = 1;
-    }
-
-    this.setState({
-      selectedCollections: collections,
-      selectedOntologies: ontologies,
-      selectedTypes: types,
-      obsoletes: obsoletes,
-      exact: exact,
-      pageNumber: parseInt(page),
-      facetIsSelected: facetSelected,
-      isLoaded: true,
-      enteredTerm: enteredTerm
-    }, () => {
-      this.runSearch(ontologies, types, collections,obsoletes,exact, "");
-    });
-  }
+  const history = useHistory();
 
 
 
- /**
-   * Runs the Search and facet filtering (combination of the old searching() and handleSelection() functions)
-   * @param {*} ontologies 
-   * @param {*} types 
-   * @param {*} collections 
-   * @param {*} triggerField : which facet fields triggers the function. Values: type, ontology, collection
-   */
- async runSearch(ontologies, types, collections, obsoletes,exact, triggerField){    
-  let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize
-  let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
-  let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}`;
-  let collectionOntologies = [];
-  let facetSelected = true;
-  let facetData = this.state.facetFields;
-  let ontologiesForFilter = [];
-  if(ontologies.length === 0 && types.length === 0 && collections.length === 0){
-    // no facet field selected
-    facetSelected = false;
-  }
-  if(process.env.REACT_APP_PROJECT_ID === "general"){
-     // TIB general
-    ontologiesForFilter = await setOntologyForFilter(ontologies, collections);
-    if(ontologiesForFilter[0].length === 0 && ontologiesForFilter[1] !== "all"){
-      // The result set has to be empty
-      let allOntologies = await getAllOntologies();          
-      let facetData = createEmptyFacetCounts(allOntologies);                              
-      this.setState({
-        searchResult: [],
-        selectedOntologies: ontologies,
-        selectedTypes: types,
-        selectedCollections: collections,
-        facetIsSelected: facetSelected,
-        totalResultsCount: 0,
-        facetFields: facetData
-        }, () => {
-          this.updateURL(ontologies, types, collections,obsoletes,exact);
-        });
-        return true;
-    }   
-    types.forEach(item => {
-        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
-    });
-     
-    ontologiesForFilter[0].forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-    });
-
-  }
-  else{    
-    /**
-     * NFDIs
-     * Search only in the target project ontologies (not general)
-     */    
-    ontologiesForFilter = await setOntologyForFilter(ontologies, [process.env.REACT_APP_PROJECT_NAME]);    
-    collections = [process.env.REACT_APP_PROJECT_NAME];
-    types.forEach(item => {
-        baseUrl = baseUrl + `&type=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&type=${item.toLowerCase()}`;
-    });
+  async function search(){    
+    let rangeStart = (pageNumber - 1) * this.state.pageSize
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + this.state.pageSize;
+    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.searchQuery}&groupField=iri`;    
     
-    ontologiesForFilter[0].forEach(item => {
-        baseUrl = baseUrl + `&ontology=${item.toLowerCase()}`;
-        totalResultBaseUrl += `&ontology=${item.toLowerCase()}`;
-    });
+
+    if(selectedOntologies.length !== 0){
+      baseUrl += `ontology=${selectedOntologies.join(',')}`
+    }
+    if(selectedTypes.length !== 0){
+      baseUrl += `type=${selectedTypes.join(',')}`
+    }
+    if(process.env.REACT_APP_PROJECT_NAME === "" && selectedCollections.length !== 0){
+      // If TIB General. Set collections if exist in filter
+      baseUrl += `&schema=collection&classification=${selectedCollections.join(',')}`;
+    }
+    if(process.env.REACT_APP_PROJECT_NAME !== ""){
+      // Projects such as NFDI$CHEM. pre-set the target collection on each search
+      baseUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
+    }
+
+    if(obsoletes){
+      baseUrl += "&obsoletes=true";
+    }
+ 
+    if(exact){
+      baseUrl += "&exact=true";
+    }
+
+
+    let searchResult = await (await fetch(baseUrl, {
+      mode: 'cors',
+      headers: apiHeaders(),
+    })).json();
+
+    let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
+
+    let totalSaerchResultsCount = totalSearch['response']['numFound'];
+    let filteredFacetFields = totalSearch['facet_counts'];
+
+    setSearchResult(searchResult);
+    setTotalResultsCount(totalSaerchResultsCount);
+    setFacetFields(filteredFacetFields);
   }
-  
-  if(obsoletes){
-     baseUrl  = baseUrl + "&obsoletes=true";
-   }
 
-  if(exact){
-     baseUrl = baseUrl + "&exact=true";
-   }
 
   
-  let filteredSearch = await (await fetch(baseUrl, {
-    mode: 'cors',
-    headers: apiHeaders(),
-  })).json();
-  let filteredSearchResults = filteredSearch['response']['docs'];
-  let expandedResults = await (await fetch(baseUrl,{mode: 'cors', headers: apiHeaders(),})).json();
-  expandedResults = expandedResults['expanded'];    
-  let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
-  let totalSaerchResultsCount = totalSearch['response']['numFound'];
-  let filteredFacetFields = totalSearch['facet_counts'];
-  filteredFacetFields = await setFacetCounts(triggerField, this.state.enteredTerm, filteredFacetFields, facetData, collections, types, ontologiesForFilter[0]);    
-  this.setState({
-    searchResult: filteredSearchResults,
-    selectedOntologies: ontologies,
-    selectedTypes: types,
-    selectedCollections: collections,
-    facetIsSelected: facetSelected,
-    totalResultsCount: totalSaerchResultsCount,
-    facetFields: filteredFacetFields,
-    expandedResults: expandedResults
-    }, () => {
-      this.updateURL(ontologies, types, collections,obsoletes,exact);
-    });
+
+
+
+
 }
+
+
+
+
+
+
+
+class SearchResult1 extends React.Component{
+  
+
+
 
 
 /**
  * Handle the exact search when chosen by the user (Exact match)
  */
 async handleExact(){
-  if(this.state.enteredTerm.length > 0){
-    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&exact=true&rows=" + this.state.pageSize; 
+  if(this.state.searchQuery.length > 0){
+    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.searchQuery}` + "&exact=true&rows=" + this.state.pageSize; 
     let exactResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
     exactResult = (await exactResult.json())['response']['docs'];
     this.setState({
@@ -233,8 +131,8 @@ async handleExact(){
  * Handle the obsolete search term when chosen by the user
  */
 async handleObsolete(){
-  if(this.state.enteredTerm.length > 0){
-    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + "&obsoletes=true&rows=" + this.state.pageSize;
+  if(this.state.searchQuery.length > 0){
+    let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.searchQuery}` + "&obsoletes=true&rows=" + this.state.pageSize;
     let obsoletesResult = await fetch(searchUrl, {mode: 'cors', headers: apiHeaders(),})
     obsoletesResult = (await obsoletesResult.json())['response']['docs'];
     this.setState({
@@ -345,7 +243,7 @@ createSearchResultList () {
     if(exact){
       currentUrlParams.set('exact', true);
     }
-    this.props.history.push(window.location.pathname + "?q=" + this.state.enteredTerm + "&" + currentUrlParams.toString());
+    this.props.history.push(window.location.pathname + "?q=" + this.state.searchQuery + "&" + currentUrlParams.toString());
 
    }
 
@@ -399,7 +297,7 @@ createSearchResultList () {
     let types = this.state.selectedTypes;
     let collections = this.state.selectedCollections;
     let rangeCount = (this.state.pageNumber - 1) * this.state.pageSize;
-    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.enteredTerm}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${this.state.searchQuery}` + `&start=${rangeCount}` + "&rows=" + this.state.pageSize;
     if(ontologies.length > 0 || types.length > 0 || collections.length > 0){
       // Add other selected filters 
         ontologies.forEach(item => {
@@ -526,7 +424,7 @@ createSearchResultList () {
   render(){
     return(
       <div className='row justify-content-center search-result-container' id="searchterm-wrapper">
-        {Toolkit.createHelmet(this.state.enteredTerm)}        
+        {Toolkit.createHelmet(this.state.searchQuery)}        
         <div className='col-sm-11'>            
           <div className='row'>
             <div className='col-sm-4'>          
@@ -541,7 +439,7 @@ createSearchResultList () {
               }              
             </div>
             <div className='col-sm-8' id="search-list-grid">
-              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.enteredTerm + '"'   }</h3>}
+              {this.state.searchResult.length > 0 && <h3 className="text-dark">{this.state.totalResultsCount + ' results found for "' + this.state.searchQuery + '"'   }</h3>}
                  <div className='row'>
                    {this.facetButton()} 
                   </div>  
@@ -568,7 +466,7 @@ createSearchResultList () {
                 />
               } 
 
-              {this.state.searchResult.length === 0 && <h3 className="text-dark">{'No search results for "' + this.state.enteredTerm + '"'   }</h3>} 
+              {this.state.searchResult.length === 0 && <h3 className="text-dark">{'No search results for "' + this.state.searchQuery + '"'   }</h3>} 
               </div>
             </div>
         </div>                

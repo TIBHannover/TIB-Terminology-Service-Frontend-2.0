@@ -1,48 +1,37 @@
 import React from "react";
+import { useState } from "react";
+import { useHistory } from "react-router";
 import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
-class Facet extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = ({
-            resultLoaded: false,
-            resultTypes: [],
-            ontologyFacetData: {},
-            collections: [],           
-            ontologyListShowAll: false,
-            countOfShownOntologies: 5,
-            showMoreLessOntologiesText: "+ Show More",
-            currentUrl: "",
-            isLoading: true
-        });
-        this.setComponentData = this.setComponentData.bind(this);
-        this.createOntologiesCheckboxList = this.createOntologiesCheckboxList.bind(this);
-        this.createTypesCheckboxList = this.createTypesCheckboxList.bind(this);
-        this.handleOntologyCheckBoxClick = this.handleOntologyCheckBoxClick.bind(this);
-        this.handleTypesCheckBoxClick = this.handleTypesCheckBoxClick.bind(this);
-        this.handleOntologyShowMoreClick = this.handleOntologyShowMoreClick.bind(this);
-        this.createCollectionsCheckBoxes = this.createCollectionsCheckBoxes.bind(this);
-        this.handleCollectionsCheckboxClick = this.handleCollectionsCheckboxClick.bind(this);
-        this.clearFacet = this.clearFacet.bind(this);
-    }
 
-    
-   async setComponentData(){        
-        let facetData = this.props.facetData;        
-        let currentUrl = window.location.href;    
+const Facet = (props) => {
 
-        if (facetData.length === 0 || typeof facetData["facet_fields"] === "undefined"){
-            this.setState({
-                resultLoaded: true,
-                resultTypes: {},
-                ontologyFacetData: {},
-                currentUrl: currentUrl,
-                isLoading: false          
-            });
+    const [resultLoaded, setResultLoaded] = useState(false);
+    const [resultTypes, setResultTypes] = useState([]);
+    const [ontologyFacetData, setOntologyFacetData] = useState([]);
+    const [collections, setCollections] = useState([]);
+    const [ontologyListShowAll, setOntologyListShowAll] = useState(false);
+    const [countOfShownOntologies, setCountOfShownOntologies] = useState(5);
+    const [showMoreLessOntologiesText, setShowMoreLessOntologiesText] = useState("+ Show More");
+    const [currentUrl, setCurrentUrl] = useState("");
+    const [isLoading, setIsLoading] = useState("");
+
+    const history = useHistory();
+
+
+
+    async function setComponentData(){        
+        let currentUrl = window.location.href;            
+        if (props.facetData.length === 0 || typeof props.facetData["facet_fields"] === "undefined"){
+            setResultLoaded(true);
+            setResultTypes({});
+            setOntologyFacetData({});
+            setCurrentUrl(currentUrl);
+            setIsLoading(false);            
         }
         else{            
-            facetData = facetData["facet_fields"];
+            let facetData = props.facetData["facet_fields"];
             let allTypes = facetData["type"];
             let allOntologies = facetData["ontology_name"];
             let ontologyFacetData = {};
@@ -60,29 +49,42 @@ class Facet extends React.Component{
             let allCollections = [];
             if(process.env.REACT_APP_PROJECT_ID === "general"){
                 allCollections = await getAllCollectionsIds();
-            }            
-            this.setState({
-                resultLoaded: true,
-                resultTypes: types,
-                ontologyFacetData: ontologyFacetData,
-                collections: allCollections,
-                currentUrl: currentUrl,
-                isLoading: false   
-            });
+            } 
+            setResultLoaded(true);
+            setResultTypes(types);
+            setOntologyFacetData(ontologyFacetData);
+            setCollections(allCollections);
+            setCurrentUrl(currentUrl);
+            setIsLoading(false);           
         }                    
     }
 
 
-    /**
-     * Create the list of types checkboxes
-     * @returns 
-     */
-    createTypesCheckboxList(){
-        let allTypes = this.state.resultTypes;
-        let selectedTypes = this.props.selectedTypes;
+    function  handleOntologyCheckBoxClick(e){
+        let searchUrl = new URL(window.location); 
+        
+        let selectedOntologies = this.props.selectedOntologies;
+        
+        if(e.target.checked){
+            searchUrl.searchParams.set('ontology', e.target.value.toUpperCase());
+        }
+        else{
+            // let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
+            // selectedOntologies.splice(index, 1);            
+            searchUrl.searchParams.delete('ontology', e.target.value.toUpperCase());
+        }
+        
+        history.replace({...history.location, search: searchUrl.searchParams.toString()});
+        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections, "ontology"); 
+        this.setState({isLoading: true});               
+    }
+
+
+
+    function createTypesCheckboxList(){        
         let result = [];
-        for(let type in allTypes){
-            if(allTypes[type] !== 0){
+        for(let type in resultTypes){
+            if(resultTypes[type] !== 0){
                 result.push(
                     <div class="row typeRow facet-item-row"  key={type}>
                         <div class="col-sm-9">
@@ -94,7 +96,7 @@ class Facet extends React.Component{
                                     id={"search-checkbox-" + type} 
                                     key={type}
                                     onClick={this.handleTypesCheckBoxClick}
-                                    data-isChecked={selectedTypes.includes(type)}
+                                    data-isChecked={props.selectedTypes.includes(type)}
                                 />                    
                                 <label class="form-check-label" for={"search-checkbox-" + type} >
                                 {type}
@@ -102,7 +104,7 @@ class Facet extends React.Component{
                             </div>         
                         </div>
                         <div class="col-sm-3">
-                            <div class="facet-result-count">{allTypes[type]}</div>
+                            <div class="facet-result-count">{resultTypes[type]}</div>
                         </div>                    
                     </div>
                 );
@@ -112,28 +114,24 @@ class Facet extends React.Component{
     }
 
 
-    /**
-     * Create the list of ontologies checkbox view
-     */
-    createOntologiesCheckboxList(){       
-        let ontologyFacetData = this.state.ontologyFacetData;
-        let selectedOntologies = this.props.selectedOntologies;
-        let lastIndex = 0;
+
+    function createOntologiesCheckboxList(){        
+        let lastSelectedOntologyIndex = 0;
         let counter = 1;
         for(let ontoId in ontologyFacetData){
-            if(selectedOntologies.includes(ontoId.toUpperCase())){
-                lastIndex = counter;
+            if(props.selectedOntologies.includes(ontoId.toUpperCase())){
+                lastSelectedOntologyIndex = counter;
             }
             counter += 1;
         }
-        if(lastIndex < this.state.countOfShownOntologies){
-            lastIndex = this.state.countOfShownOntologies;
+        if(lastSelectedOntologyIndex < countOfShownOntologies){
+            lastSelectedOntologyIndex = countOfShownOntologies;
         }
 
         let result = [];
         counter = 1;
         for(let ontologyId in ontologyFacetData){             
-            if (counter > lastIndex && !this.state.ontologyListShowAll){
+            if (counter > lastIndex && !ontologyListShowAll){
                 break;
             }
             if(ontologyFacetData[ontologyId] !== 0){
@@ -149,7 +147,7 @@ class Facet extends React.Component{
                                         id={"search-checkbox-" + ontologyId} 
                                         key={ontologyId}
                                         onClick={this.handleOntologyCheckBoxClick}
-                                        data-isChecked={selectedOntologies.includes(ontologyId.toUpperCase())}
+                                        data-isChecked={props.selectedOntologies.includes(ontologyId.toUpperCase())}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
                                     {ontologyId}
@@ -169,18 +167,12 @@ class Facet extends React.Component{
     }
 
 
-    /**
-     * Create the collection facet box     
-     * @returns 
-     */
-    createCollectionsCheckBoxes(){
-        let allCollections = this.state.collections;        
-        let selectedCollections = this.props.selectedCollections;
-        let selectedOntologies = this.props.selectedOntologies;
+
+    function createCollectionsCheckBoxes(){        
         let result = [];
-        for (let record of allCollections){
+        for (let record of collections){
             for(let ontoId of record['ontolgies']){
-                if(selectedOntologies.includes(ontoId) || selectedOntologies.length === 0){
+                if(props.selectedOntologies.includes(ontoId) || props.selectedOntologies.length === 0){
                     result.push(
                         <div className="row facet-item-row">
                             <div className='col-sm-9'>
@@ -192,7 +184,7 @@ class Facet extends React.Component{
                                         id={"search-checkbox-" + record['collection']} 
                                         key={record['collection']}
                                         onClick={this.handleCollectionsCheckboxClick}
-                                        data-isChecked={selectedCollections.includes(record['collection'])}
+                                        data-isChecked={props.selectedCollections.includes(record['collection'])}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
                                     {record['collection']}
@@ -203,29 +195,80 @@ class Facet extends React.Component{
                     );
                     break;
                 }
-            }
-            
-            
+            }                        
         }
         return result;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return(
+        <div class="row" id="search-facet-container-box">                                   
+            {isLoading && 
+            <div class="d-flex justify-content-center">
+                <div class="spinner-grow text-info facet-loading-effect" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>}                
+            {!isLoading &&
+            <div class="col-sm-12">
+                <h2>Filter Results</h2>    
+                <div className="row">
+                    <div className="col-sm-12 clear-filter-link-box">
+                        <a onClick={this.clearFacet}>Clear All Filters</a>
+                        <br></br>
+                    </div>
+                </div> 
+                <h4>{"Type"}</h4>
+                 <div class="facet-box" id="facet-types-list">                                              
+                    {this.createTypesCheckboxList()}
+                </div>
+                <h4>{"Ontologies"}</h4>
+                <div class="facet-box">                            
+                    {this.createOntologiesCheckboxList()}                                                
+                    <div className="text-center" id="search-facet-show-more-ontology-btn">
+                        <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                    </div>                        
+                </div>
+                {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
+                <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
+                        {this.createCollectionsCheckBoxes()}
+                    </div></>}
+            </div>}
+        </div>
+    );
+
+
+}
+
+
+
+
+class Facet1 extends React.Component{
+
+    
+   
+
+
 
     
     /**
      * Handle click on the ontologies checkboxes
      */
-    handleOntologyCheckBoxClick(e){
-        let selectedOntologies = this.props.selectedOntologies;
-        if(e.target.checked){
-            selectedOntologies.push(e.target.value.toUpperCase());            
-        }
-        else{
-            let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
-            selectedOntologies.splice(index, 1);            
-        }        
-        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections, "ontology"); 
-        this.setState({isLoading: true});               
-    }
+   
 
 
     /**
@@ -341,41 +384,7 @@ class Facet extends React.Component{
 
 
     render(){
-        return(
-            <div class="row" id="search-facet-container-box">                                   
-                {this.state.isLoading && 
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-grow text-info facet-loading-effect" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>}                
-                {!this.state.isLoading &&
-                <div class="col-sm-12">
-                    <h2>Filter Results</h2>    
-                    <div className="row">
-                        <div className="col-sm-12 clear-filter-link-box">
-                            <a onClick={this.clearFacet}>Clear All Filters</a>
-                            <br></br>
-                        </div>
-                    </div> 
-                    <h4>{"Type"}</h4>
-                     <div class="facet-box" id="facet-types-list">                                              
-                        {this.createTypesCheckboxList()}
-                    </div>
-                    <h4>{"Ontologies"}</h4>
-                    <div class="facet-box">                            
-                        {this.createOntologiesCheckboxList()}                                                
-                        <div className="text-center" id="search-facet-show-more-ontology-btn">
-                            <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
-                        </div>                        
-                    </div>
-                    {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
-                    <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
-                            {this.createCollectionsCheckBoxes()}
-                        </div></>}
-                </div>}
-            </div>
-        );
+       
     }
 }
 
