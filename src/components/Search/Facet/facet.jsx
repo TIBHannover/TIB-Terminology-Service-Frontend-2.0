@@ -122,7 +122,7 @@ const Facet = (props) => {
                                         id={"search-checkbox-" + ontologyId} 
                                         key={ontologyId}
                                         onClick={props.handleOntologyCheckBoxClick}
-                                        data-isChecked={props.selectedOntologies.includes(ontologyId.toUpperCase())}
+                                        data-isChecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
                                     {ontologyId}
@@ -190,19 +190,6 @@ const Facet = (props) => {
     }
 
 
-
-    function clearFacet(){        
-        props.handleChange([], [], []);
-        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
-        for(let checkbox of allFacetCheckBoxes){            
-            if(checkbox.dataset.ischecked !== "true"){
-                document.getElementById(checkbox.id).checked = false;
-            }
-            delete checkbox.dataset.ischecked;
-        }            
-    }
-
-
     useEffect(() => {
         setComponentData(); 
     }, []);
@@ -210,6 +197,7 @@ const Facet = (props) => {
 
 
     useEffect(() => {
+        setComponentData(); 
         let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
         for(let checkbox of allFacetCheckBoxes){                  
             if(checkbox.dataset.ischecked === "true"){                
@@ -234,11 +222,7 @@ const Facet = (props) => {
         else if(showMoreDiv){
             showMoreDiv.style.display = '';
             showMoreIsNeeded = true;
-        }
-        setComponentData();         
-        // if(currentUrl !== window.location.href){
-        //     setComponentData();          
-        // } 
+        }               
     }, [props.facetData, props.allCollections]);
 
 
@@ -256,7 +240,7 @@ const Facet = (props) => {
                 <h2>Filter Results</h2>    
                 <div className="row">
                     <div className="col-sm-12 clear-filter-link-box">
-                        <a onClick={clearFacet}>Clear All Filters</a>
+                        <a onClick={props.clearFacet}>Clear All Filters</a>
                         <br></br>
                     </div>
                 </div> 

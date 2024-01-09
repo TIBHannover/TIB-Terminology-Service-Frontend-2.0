@@ -238,6 +238,31 @@ const SearchResult = (props) => {
   }
 
 
+
+  function clearFilters(){            
+    let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
+    for(let checkbox of allFacetCheckBoxes){            
+        if(checkbox.dataset.ischecked !== "true"){
+            document.getElementById(checkbox.id).checked = false;
+        }
+        delete checkbox.dataset.ischecked;
+    }
+    let searchUrl = new URL(window.location);  
+    searchUrl.searchParams.delete('type');
+    searchUrl.searchParams.delete('ontology');
+    searchUrl.searchParams.delete('collection');
+    searchUrl.searchParams.set('page', 1);
+    searchUrl.searchParams.set('size', 10);
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
+    setSelectedTypes([]);
+    setSelectedOntologies([]);
+    setSelectedCollections([]);
+    setPageNumber(1);
+    setPageSize(10);   
+
+  } 
+
+
   function handleOntoDelete(){
     let ontologies = selectedOntologies
     let params = new URLSearchParams(window.location.search)
@@ -338,6 +363,7 @@ const SearchResult = (props) => {
                 handleOntologyCheckBoxClick={handleOntologyFacetSelection}
                 handleTypesCheckBoxClick={handleTypeFacetSelection}
                 handleCollectionsCheckboxClick={handleCollectionFacetSelection}
+                clearFacet={clearFilters}
               />
             }              
           </div>
