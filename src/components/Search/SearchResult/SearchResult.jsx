@@ -5,7 +5,7 @@ import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
 import Toolkit from '../../common/Toolkit';
-import { AlsoInHelpers } from "./AlsoInHelpers";
+import { makeAlsoInTag } from "./AlsoInHelpers";
 import { apiHeaders } from '../../../api/headers';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
@@ -59,72 +59,51 @@ const SearchResult = (props) => {
   async function search(){    
     let rangeStart = (pageNumber - 1) * pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;     
-    if(selectedOntologies.length !== 0){
-      baseUrl += `&ontology=${selectedOntologies.join(',')}`
-    }
-    if(selectedTypes.length !== 0){
-      baseUrl += `&type=${selectedTypes.join(',')}`
-    }
+    baseUrl = selectedOntologies.length !== 0 ? (baseUrl + `&ontology=${selectedOntologies.join(',')}`) : baseUrl;
+    baseUrl = selectedTypes.length !== 0 ? (baseUrl + `&type=${selectedTypes.join(',')}`) : baseUrl;
+    baseUrl = obsoletes ? (baseUrl + "&obsoletes=true") : baseUrl;
+    baseUrl = exact ? (baseUrl + "&exact=true") : baseUrl;
+    
     if(process.env.REACT_APP_PROJECT_NAME === "" && selectedCollections.length !== 0){
       // If TIB General. Set collections if exist in filter
       baseUrl += `&schema=collection&classification=${selectedCollections.join(',')}`;
     }
-    if(process.env.REACT_APP_PROJECT_NAME !== ""){
+    else if(process.env.REACT_APP_PROJECT_NAME !== ""){
       // Projects such as NFDI$CHEM. pre-set the target collection on each search
       baseUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
-    }
-
-    if(obsoletes){
-      baseUrl += "&obsoletes=true";
-    }
- 
-    if(exact){
-      baseUrl += "&exact=true";
     }
 
     let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();    
     setSearchResult(result['response']['docs']);
     setTotalResultsCount(result['response']['numFound']);
     setFacetFields(result['facet_counts']);
+    setExpandedResults(result['expanded'])
   }
 
 
-  function alsoInResult(iri){
-    let expanded = expandedResults;
+
+  function alsoInResult(iri){    
     let otherOntologies = [];
-    if(typeof(expanded) !== "undefined"){
-      for(let key in expanded){
-        if(key === iri){
-          let allTags = expanded[key]['docs']
-               for(let j=0; j < allTags.length; j++){              
-                 otherOntologies.push(
-                  <div className='also-in-ontologies'>
-                    {AlsoInHelpers(allTags[j])} 
-                  </div>                                             
-                 )
-               }            
-        }
-      }     
-    } 
+    if(expandedResults && expandedResults[iri]){
+      let allTags = expandedResults[iri]['docs'];
+      for(let tag of allTags){              
+        otherOntologies.push(
+          <div className='also-in-ontologies'>
+            {makeAlsoInTag(tag)} 
+          </div>                                             
+        );
+      }  
+    }
     return otherOntologies;
-  }
-
-
-  function handleAlsoResult(iri){
-    if((alsoInResult(iri)).length !== 0){
-      return true;
-    }
-    else{
-      return false
-    }
   }
 
 
 
   function createSearchResultList () {         
-      const SearchResultList = [];
+      let searchResultList = [];
       for (let i = 0; i < searchResult.length; i++) {
-        SearchResultList.push(
+        let alsoInList = alsoInResult(searchResult[i].iri);
+        searchResultList.push(
           <div className="row result-card" key={searchResult[i]['id']}>
             <div className='col-sm-10'>
               {setResultTitleAndLabel(searchResult[i])}                
@@ -141,16 +120,17 @@ const SearchResult = (props) => {
                 </a>
               </div>
               <br/>
-              {handleAlsoResult(searchResult[i].iri) &&
-              <div className = "also-in-design">
-                  <b>Also in:</b>
-                </div>}
-              {alsoInResult(searchResult[i].iri)}
+              {alsoInList.length !== 0 &&
+                <div className = "also-in-design">
+                    <b>Also in:</b> {alsoInList}
+                </div>
+              }
+              
             </div>            
           </div>   
-        )
+        );
       }       
-      return SearchResultList
+      return searchResultList;
   }
 
 
@@ -218,6 +198,7 @@ const SearchResult = (props) => {
     history.replace({...history.location, search: searchUrl.searchParams.toString()});    
     setSelectedOntologies(selectedOntologiesList);             
   }
+
 
 
   function handleCollectionFacetSelection(e){

@@ -1,4 +1,4 @@
-export function AlsoInHelpers(resultItem){
+export function makeAlsoInTag(resultItem){
     let content = [];
     let targetHref = "";
     if(resultItem["type"] === 'class'){
