@@ -70,7 +70,7 @@ const Facet = (props) => {
                                     value={type}
                                     id={"search-checkbox-" + type} 
                                     key={type}
-                                    onClick={handleTypesCheckBoxClick}
+                                    onClick={props.handleTypesCheckBoxClick}
                                     data-isChecked={props.selectedTypes.includes(type)}
                                 />                    
                                 <label class="form-check-label" for={"search-checkbox-" + type} >
@@ -158,7 +158,7 @@ const Facet = (props) => {
                                         value={record['collection']}
                                         id={"search-checkbox-" + record['collection']} 
                                         key={record['collection']}
-                                        onClick={handleCollectionsCheckboxClick}
+                                        onClick={props.handleCollectionsCheckboxClick}
                                         data-isChecked={props.selectedCollections.includes(record['collection'])}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
@@ -173,35 +173,6 @@ const Facet = (props) => {
             }                        
         }
         return result;
-    }
-
-
-    function handleTypesCheckBoxClick(e){
-        let selectedTypes = props.selectedTypes;
-        if(e.target.checked){
-            selectedTypes.push(e.target.value);            
-        }
-        else{
-            let index = selectedTypes.indexOf(e.target.value);
-            selectedTypes.splice(index, 1);            
-        }        
-        props.handleChange(props.selectedOntologies, selectedTypes, props.selectedCollections, "type");        
-        setIsLoading(true);
-    }
-
-
-    
-    function handleCollectionsCheckboxClick(e){       
-        let selectedCollections = props.selectedCollections;        
-        if(e.target.checked){
-            selectedCollections.push(e.target.value.trim());           
-        }
-        else{
-            let index = selectedCollections.indexOf(e.target.value.trim());
-            selectedCollections.splice(index, 1);            
-        }
-        props.handleChange(props.selectedOntologies, props.selectedTypes, selectedCollections, "collection");
-        setIsLoading(true);
     }
 
 

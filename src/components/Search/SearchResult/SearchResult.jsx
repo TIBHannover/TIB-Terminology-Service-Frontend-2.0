@@ -58,9 +58,7 @@ const SearchResult = (props) => {
 
   async function search(){    
     let rangeStart = (pageNumber - 1) * pageSize
-    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;
-    // let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}&groupField=iri`;    
-
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;     
     if(selectedOntologies.length !== 0){
       baseUrl += `&ontology=${selectedOntologies.join(',')}`
     }
@@ -85,10 +83,6 @@ const SearchResult = (props) => {
     }
 
     let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();    
-
-    // let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
-    // let totalSaerchResultsCount = totalSearch['response']['numFound'];
-    // let filteredFacetFields = totalSearch['facet_counts'];
     setSearchResult(result['response']['docs']);
     setTotalResultsCount(result['response']['numFound']);
     setFacetFields(result['facet_counts']);
@@ -189,6 +183,25 @@ const SearchResult = (props) => {
 
 
 
+  function handleTypeFacetSelection(e){
+    let targetType = e.target.value;   
+    let searchUrl = new URL(window.location); 
+    let selectedTypeList = [...selectedTypes];
+    if(e.target.checked){
+      searchUrl.searchParams.append('type', targetType);
+      selectedTypeList.push(targetType);            
+    }
+    else{
+        let index = selectedTypeList.indexOf(targetType);
+        selectedTypeList.splice(index, 1);    
+        searchUrl.searchParams.delete('type');        
+    }    
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});  
+    setSelectedTypes(selectedTypeList);
+  }
+  
+  
+  
   function  handleOntologyFacetSelection(e){
     let searchUrl = new URL(window.location);     
     let selectedOntologiesList = [...selectedOntologies];
@@ -206,6 +219,23 @@ const SearchResult = (props) => {
     setSelectedOntologies(selectedOntologiesList);             
   }
 
+
+  function handleCollectionFacetSelection(e){
+    let searchUrl = new URL(window.location);  
+    let selectedCollectionsList = [...selectedCollections];
+    let targetCollection =  e.target.value.trim();
+    if(e.target.checked){
+        selectedCollectionsList.push(targetCollection);
+        searchUrl.searchParams.append('collection', targetCollection);         
+    }
+    else{
+        let index = selectedCollectionsList.indexOf(targetCollection);
+        selectedCollectionsList.splice(index, 1); 
+        searchUrl.searchParams.delete('collection', targetCollection);           
+    }
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});
+    setSelectedCollections(selectedCollectionsList);
+  }
 
 
   function handleOntoDelete(){
@@ -287,7 +317,7 @@ const SearchResult = (props) => {
 
   useEffect(() => {
       search();
-  }, [pageNumber, pageSize, selectedOntologies]);
+  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections]);
 
 
 
@@ -306,6 +336,8 @@ const SearchResult = (props) => {
                 selectedTypes = {selectedTypes}
                 allCollections={allCollectionIds}
                 handleOntologyCheckBoxClick={handleOntologyFacetSelection}
+                handleTypesCheckBoxClick={handleTypeFacetSelection}
+                handleCollectionsCheckboxClick={handleCollectionFacetSelection}
               />
             }              
           </div>
