@@ -48,7 +48,7 @@ const SearchResult = (props) => {
   async function getAllCollectionIds(){
     // Fetch all collection Ids for TIB General to show in the facet.
     if(process.env.REACT_APP_PROJECT_ID === "general"){
-      let collectionIds = await getAllCollectionsIds();
+      let collectionIds = await getAllCollectionsIds(false);
       setAllCollectionIds(collectionIds);
       return true;
     }
@@ -59,13 +59,13 @@ const SearchResult = (props) => {
   async function search(){    
     let rangeStart = (pageNumber - 1) * pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;
-    let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}&groupField=iri`;    
+    // let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}&groupField=iri`;    
 
     if(selectedOntologies.length !== 0){
-      baseUrl += `ontology=${selectedOntologies.join(',')}`
+      baseUrl += `&ontology=${selectedOntologies.join(',')}`
     }
     if(selectedTypes.length !== 0){
-      baseUrl += `type=${selectedTypes.join(',')}`
+      baseUrl += `&type=${selectedTypes.join(',')}`
     }
     if(process.env.REACT_APP_PROJECT_NAME === "" && selectedCollections.length !== 0){
       // If TIB General. Set collections if exist in filter
@@ -160,6 +160,7 @@ const SearchResult = (props) => {
   }
 
 
+
   function handlePageSizeDropDownChange(e){
     let size = parseInt(e.target.value);
     setPageSize(size);  
@@ -167,6 +168,7 @@ const SearchResult = (props) => {
     searchUrl.searchParams.set('size', size); 
     history.replace({...history.location, search: searchUrl.searchParams.toString()});    
   }
+
 
 
   function  handlePagination (value) {
@@ -177,11 +179,31 @@ const SearchResult = (props) => {
   }
 
 
+
   function pageCount () {    
     if (isNaN(Math.ceil(totalResultsCount / pageSize))){
       return 0;
     }
     return (Math.ceil(totalResultsCount / pageSize))
+  }
+
+
+
+  function  handleOntologyFacetSelection(e){
+    let searchUrl = new URL(window.location);     
+    let selectedOntologiesList = [...selectedOntologies];
+    let targetOntologyId = e.target.value.toLowerCase();
+    if(e.target.checked){
+        searchUrl.searchParams.append('ontology', targetOntologyId);
+        selectedOntologiesList.push(targetOntologyId);
+    }
+    else{
+        let index = selectedOntologiesList.indexOf(targetOntologyId);
+        selectedOntologiesList.splice(index, 1);            
+        searchUrl.searchParams.delete('ontology', targetOntologyId);
+    }    
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
+    setSelectedOntologies(selectedOntologiesList);             
   }
 
 
@@ -220,12 +242,9 @@ const SearchResult = (props) => {
 
 
 
-  function facetButton(){
-    let ontologies = selectedOntologies;
-    let types = selectedTypes;
-    let collections = selectedCollections;
+  function facetButton(){    
     let facetRow = [];
-    for(let onto of ontologies){     
+    for(let onto of selectedOntologies){     
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{onto}
@@ -234,7 +253,7 @@ const SearchResult = (props) => {
           </div>
         )     
     }
-    for(let typ of types){    
+    for(let typ of selectedTypes){    
         facetRow.push(
           <div className='col-sm-2'>
             <a className='facet-btn' href>{typ}
@@ -244,7 +263,7 @@ const SearchResult = (props) => {
         )
       }
       if(process.env.REACT_APP_PROJECT_ID === "general"){
-        for(let col of collections){    
+        for(let col of selectedCollections){    
           facetRow.push(
             <div className='col-sm-2'>
               <a className='facet-btn' href>{col}
@@ -268,7 +287,7 @@ const SearchResult = (props) => {
 
   useEffect(() => {
       search();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, selectedOntologies]);
 
 
 
@@ -286,6 +305,7 @@ const SearchResult = (props) => {
                 selectedOntologies = {selectedOntologies}
                 selectedTypes = {selectedTypes}
                 allCollections={allCollectionIds}
+                handleOntologyCheckBoxClick={handleOntologyFacetSelection}
               />
             }              
           </div>

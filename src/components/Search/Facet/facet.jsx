@@ -55,26 +55,6 @@ const Facet = (props) => {
     }
 
 
-    function  handleOntologyCheckBoxClick(e){
-        let searchUrl = new URL(window.location); 
-        
-        let selectedOntologies = props.selectedOntologies;
-        
-        if(e.target.checked){
-            searchUrl.searchParams.set('ontology', e.target.value.toUpperCase());
-        }
-        else{
-            // let index = selectedOntologies.indexOf(e.target.value.toUpperCase());
-            // selectedOntologies.splice(index, 1);            
-            searchUrl.searchParams.delete('ontology', e.target.value.toUpperCase());
-        }
-        
-        history.replace({...history.location, search: searchUrl.searchParams.toString()});
-        props.handleChange(selectedOntologies, props.selectedTypes, props.selectedCollections, "ontology");         
-        setIsLoading(true);              
-    }
-
-
 
     function createTypesCheckboxList(){        
         let result = [];
@@ -141,7 +121,7 @@ const Facet = (props) => {
                                         value={ontologyId}
                                         id={"search-checkbox-" + ontologyId} 
                                         key={ontologyId}
-                                        onClick={handleOntologyCheckBoxClick}
+                                        onClick={props.handleOntologyCheckBoxClick}
                                         data-isChecked={props.selectedOntologies.includes(ontologyId.toUpperCase())}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + ontologyId} >

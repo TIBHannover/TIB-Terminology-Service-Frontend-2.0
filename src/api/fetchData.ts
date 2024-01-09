@@ -20,10 +20,8 @@ export async function getAllOntologies (){
 
 
 export async function getCollectionOntologies (collections, exclusive){
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
-  let answer = await fetch(OntologiesBaseServiceUrl, getCallSetting);
-  answer = await answer.json();
-  let ontologiesCount = answer['page']['totalElements'];
+  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let ontologiesCount = 100000;
   let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&exclusive=" + exclusive + "&";
   let urlPros = "";
   for(let col of collections){
@@ -382,26 +380,36 @@ export async function getRelations(nodeIri:string, ontologyId:string){
 
 
 
-export async function getAllCollectionsIds() {
-  let url = <any> process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
-  let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_URL;
-  let cols =  await fetch(url, getCallSetting);
-  cols = await cols.json();
-  let collections = cols['_embedded']["strings"];
-  let result: Array<any> = [];
-  for( let col of collections ){
-    let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
-    let statsResult = await fetch(statsUrl, getCallSetting);
-    statsResult = await statsResult.json();
-    let collectionOntologies = await getCollectionOntologies([col['content']], false);
-    let collectionOntologiesIds: Array<any> = [];
-    for(let onto of collectionOntologies){
-      collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
+export async function getAllCollectionsIds(withStats=true) {
+  try{
+    let url = <any> process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
+    let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_URL;
+    let cols =  await fetch(url, getCallSetting);
+    cols = await cols.json();
+    let collections = cols['_embedded']["strings"];
+    let result: Array<any> = [];
+    for( let col of collections ){
+      let ontologiesCountForCollection = 0;
+      if(withStats){
+        let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
+        let statsResult = await fetch(statsUrl, getCallSetting);
+        statsResult = await statsResult.json();
+        ontologiesCountForCollection = statsResult["numberOfOntologies"];
+      }
+      
+      let collectionOntologies = await getCollectionOntologies([col['content']], false);
+      let collectionOntologiesIds: Array<any> = [];
+      for(let onto of collectionOntologies){
+        collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
+      }
+      let record = {"collection": col['content'], "ontologiesCount": ontologiesCountForCollection, "ontolgies": collectionOntologiesIds};    
+      result.push(record);
     }
-    let record = {"collection": col['content'], "ontologiesCount": statsResult["numberOfOntologies"], "ontolgies": collectionOntologiesIds};
-    result.push(record);
+    return result;
   }
-  return result;
+  catch(e){
+    return [];
+  }  
 }
 
 
