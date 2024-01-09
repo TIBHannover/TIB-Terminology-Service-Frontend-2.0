@@ -165,7 +165,15 @@ const SearchForm = (props) => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);
     if(obsoletes){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}   
+    if(exact){ document.getElementById("exact-checkbox").checked = true;}
+    let cUrl = window.location.href;        
+    if(cUrl.includes("q=")){
+      cUrl = cUrl.split("q=")[1];
+      cUrl = cUrl.split("&")[0];
+      cUrl = decodeURIComponent(cUrl);
+      cUrl = cUrl.replaceAll("+", " ");
+      document.getElementById("s-field").value = cUrl;
+    }      
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);

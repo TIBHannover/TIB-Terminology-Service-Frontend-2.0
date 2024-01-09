@@ -50,7 +50,6 @@ const SearchResult = (props) => {
     let rangeStart = (pageNumber - 1) * pageSize
     let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;
     let totalResultBaseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}&groupField=iri`;    
-    
 
     if(selectedOntologies.length !== 0){
       baseUrl += `ontology=${selectedOntologies.join(',')}`
@@ -76,17 +75,15 @@ const SearchResult = (props) => {
     }
 
 
-    let searchResult = await (await fetch(baseUrl, {
-      mode: 'cors',
-      headers: apiHeaders(),
-    })).json();
+    let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
+    result = result['response']['docs'];        
 
     let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
 
     let totalSaerchResultsCount = totalSearch['response']['numFound'];
     let filteredFacetFields = totalSearch['facet_counts'];
-
-    setSearchResult(searchResult);
+    
+    setSearchResult(result);
     setTotalResultsCount(totalSaerchResultsCount);
     setFacetFields(filteredFacetFields);
   }
@@ -124,32 +121,31 @@ const SearchResult = (props) => {
 
 
 
-  function createSearchResultList () {   
-      let searchResultItem = searchResult;
+  function createSearchResultList () {         
       const SearchResultList = [];
-      for (let i = 0; i < searchResultItem.length; i++) {
+      for (let i = 0; i < searchResult.length; i++) {
         SearchResultList.push(
-          <div className="row result-card" key={searchResultItem[i]['id']}>
+          <div className="row result-card" key={searchResult[i]['id']}>
             <div className='col-sm-10'>
-              {setResultTitleAndLabel(searchResultItem[i])}                
+              {setResultTitleAndLabel(searchResult[i])}                
               <div className="searchresult-iri">
-                {searchResultItem[i].iri}
+                {searchResult[i].iri}
               </div>
               <div className="searchresult-card-description">
-                <p>{searchResultItem[i].description}</p>
+                <p>{searchResult[i].description}</p>
               </div>
               <div className="searchresult-ontology">
                 <span><b>Ontology: </b></span>
                 <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontology_name']} target="_blank">
-                  {searchResultItem[i].ontology_prefix}
+                  {searchResult[i].ontology_prefix}
                 </a>
               </div>
               <br/>
-              {handleAlsoResult(searchResultItem[i].iri) &&
+              {handleAlsoResult(searchResult[i].iri) &&
               <div className = "also-in-design">
                   <b>Also in:</b>
                 </div>}
-              {alsoInResult(searchResultItem[i].iri)}
+              {alsoInResult(searchResult[i].iri)}
             </div>            
           </div>   
         )
@@ -191,20 +187,19 @@ const SearchResult = (props) => {
   function handlePageSizeDropDownChange(e){
     let size = parseInt(e.target.value);
     let pageNumber = pageNumber + 1;
-    setState({
-      pageSize: size
-    });    
+    setPageSize(size);      
   }
 
 
   function  handlePagination (value) {
-    setState({
-      pageNumber: value,
-      paginationReset: false
-    }, () => {
-      updateURL(selectedOntologies,selectedTypes,selectedCollections)
-      paginationHandler()
-    })
+    setPageNumber(value);
+    // setState({
+    //   pageNumber: value,
+    //   paginationReset: false
+    // }, () => {
+    //   updateURL(selectedOntologies,selectedTypes,selectedCollections)
+    //   paginationHandler()
+    // })
   }
 
 
@@ -292,17 +287,11 @@ const SearchResult = (props) => {
 
 
   useEffect(() => {
-    if(!isLoaded && !isFiltered){            
-      let cUrl = window.location.href;        
-      if(cUrl.includes("q=")){
-        cUrl = cUrl.split("q=")[1];
-        cUrl = cUrl.split("&")[0];
-        cUrl = decodeURIComponent(cUrl);
-        cUrl = cUrl.replaceAll("+", " ");
-        document.getElementById("s-field").value = cUrl;
-      }       
-    } 
+    search();
   }, []);
+
+
+  useEffect(() => {}, []);
 
 
 
@@ -315,7 +304,7 @@ const SearchResult = (props) => {
             {(searchResult.length > 0 || (searchResult.length === 0 && facetIsSelected)) &&
               <Facet
                 facetData = {facetFields}
-                handleChange = {runSearch}             
+                handleChange = {search}             
                 selectedCollections = {selectedCollections}
                 selectedOntologies = {selectedOntologies}
                 selectedTypes = {selectedTypes}

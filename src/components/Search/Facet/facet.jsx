@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import {getAllCollectionsIds} from '../../../api/fetchData';
@@ -63,7 +63,7 @@ const Facet = (props) => {
     function  handleOntologyCheckBoxClick(e){
         let searchUrl = new URL(window.location); 
         
-        let selectedOntologies = this.props.selectedOntologies;
+        let selectedOntologies = props.selectedOntologies;
         
         if(e.target.checked){
             searchUrl.searchParams.set('ontology', e.target.value.toUpperCase());
@@ -75,8 +75,8 @@ const Facet = (props) => {
         }
         
         history.replace({...history.location, search: searchUrl.searchParams.toString()});
-        this.props.handleChange(selectedOntologies, this.props.selectedTypes, this.props.selectedCollections, "ontology"); 
-        this.setState({isLoading: true});               
+        props.handleChange(selectedOntologies, props.selectedTypes, props.selectedCollections, "ontology");         
+        setIsLoading(true);              
     }
 
 
@@ -95,7 +95,7 @@ const Facet = (props) => {
                                     value={type}
                                     id={"search-checkbox-" + type} 
                                     key={type}
-                                    onClick={this.handleTypesCheckBoxClick}
+                                    onClick={handleTypesCheckBoxClick}
                                     data-isChecked={props.selectedTypes.includes(type)}
                                 />                    
                                 <label class="form-check-label" for={"search-checkbox-" + type} >
@@ -131,7 +131,7 @@ const Facet = (props) => {
         let result = [];
         counter = 1;
         for(let ontologyId in ontologyFacetData){             
-            if (counter > lastIndex && !ontologyListShowAll){
+            if (counter > lastSelectedOntologyIndex && !ontologyListShowAll){
                 break;
             }
             if(ontologyFacetData[ontologyId] !== 0){
@@ -146,7 +146,7 @@ const Facet = (props) => {
                                         value={ontologyId}
                                         id={"search-checkbox-" + ontologyId} 
                                         key={ontologyId}
-                                        onClick={this.handleOntologyCheckBoxClick}
+                                        onClick={handleOntologyCheckBoxClick}
                                         data-isChecked={props.selectedOntologies.includes(ontologyId.toUpperCase())}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
@@ -183,7 +183,7 @@ const Facet = (props) => {
                                         value={record['collection']}
                                         id={"search-checkbox-" + record['collection']} 
                                         key={record['collection']}
-                                        onClick={this.handleCollectionsCheckboxClick}
+                                        onClick={handleCollectionsCheckboxClick}
                                         data-isChecked={props.selectedCollections.includes(record['collection'])}
                                     />                    
                                     <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
@@ -201,17 +201,94 @@ const Facet = (props) => {
     }
 
 
+    function handleTypesCheckBoxClick(e){
+        let selectedTypes = props.selectedTypes;
+        if(e.target.checked){
+            selectedTypes.push(e.target.value);            
+        }
+        else{
+            let index = selectedTypes.indexOf(e.target.value);
+            selectedTypes.splice(index, 1);            
+        }        
+        props.handleChange(props.selectedOntologies, selectedTypes, props.selectedCollections, "type");        
+        setIsLoading(true);
+    }
+
+
+    
+    function handleCollectionsCheckboxClick(e){       
+        let selectedCollections = props.selectedCollections;        
+        if(e.target.checked){
+            selectedCollections.push(e.target.value.trim());           
+        }
+        else{
+            let index = selectedCollections.indexOf(e.target.value.trim());
+            selectedCollections.splice(index, 1);            
+        }
+        props.handleChange(props.selectedOntologies, props.selectedTypes, selectedCollections, "collection");
+        setIsLoading(true);
+    }
 
 
 
+    function handleOntologyShowMoreClick(e){                        
+        if(ontologyListShowAll){
+            setShowMoreLessOntologiesText( "+ Show More");
+            setOntologyListShowAll(false);          
+        }
+        else{
+            setShowMoreLessOntologiesText( "- Show Less");
+            setOntologyListShowAll(true);            
+        }
+
+    }
 
 
 
+    function clearFacet(){        
+        props.handleChange([], [], []);
+        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
+        for(let checkbox of allFacetCheckBoxes){            
+            if(checkbox.dataset.ischecked !== "true"){
+                document.getElementById(checkbox.id).checked = false;
+            }
+            delete checkbox.dataset.ischecked;
+        }            
+    }
 
 
 
-
-
+    useEffect(() => {
+        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
+        for(let checkbox of allFacetCheckBoxes){                  
+            if(checkbox.dataset.ischecked === "true"){                
+                document.getElementById(checkbox.id).checked = true;
+            }
+            delete checkbox.dataset.ischecked;
+        }
+        // check show more button for ontologies is needed or not
+        let counter = 0;
+        let facetOntologies = ontologyFacetData;
+        for(let key in facetOntologies){
+            if(facetOntologies[key] !== 0){
+                counter ++;
+            }            
+        }
+        let showMoreIsNeeded = "";
+        let showMoreDiv = document.getElementById('search-facet-show-more-ontology-btn');
+        if(counter <= countOfShownOntologies && showMoreDiv){
+            showMoreDiv.style.display = 'none';
+            showMoreIsNeeded = false;
+        }
+        else if(showMoreDiv){
+            showMoreDiv.style.display = '';
+            showMoreIsNeeded = true;
+        }
+                        
+        if(currentUrl !== window.location.href){
+            setComponentData();          
+        } 
+    });
 
 
 
@@ -228,24 +305,24 @@ const Facet = (props) => {
                 <h2>Filter Results</h2>    
                 <div className="row">
                     <div className="col-sm-12 clear-filter-link-box">
-                        <a onClick={this.clearFacet}>Clear All Filters</a>
+                        <a onClick={clearFacet}>Clear All Filters</a>
                         <br></br>
                     </div>
                 </div> 
                 <h4>{"Type"}</h4>
                  <div class="facet-box" id="facet-types-list">                                              
-                    {this.createTypesCheckboxList()}
+                    {createTypesCheckboxList()}
                 </div>
                 <h4>{"Ontologies"}</h4>
                 <div class="facet-box">                            
-                    {this.createOntologiesCheckboxList()}                                                
+                    {createOntologiesCheckboxList()}                                                
                     <div className="text-center" id="search-facet-show-more-ontology-btn">
-                        <a className="show-more-btn"  onClick={this.handleOntologyShowMoreClick}>{this.state.showMoreLessOntologiesText}</a>
+                        <a className="show-more-btn"  onClick={handleOntologyShowMoreClick}>{showMoreLessOntologiesText}</a>
                     </div>                        
                 </div>
                 {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
                 <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
-                        {this.createCollectionsCheckBoxes()}
+                        {createCollectionsCheckBoxes()}
                     </div></>}
             </div>}
         </div>
@@ -253,140 +330,5 @@ const Facet = (props) => {
 
 
 }
-
-
-
-
-class Facet1 extends React.Component{
-
-    
-   
-
-
-
-    
-    /**
-     * Handle click on the ontologies checkboxes
-     */
-   
-
-
-    /**
-     * Handle click on the type checkboxes
-     */
-     handleTypesCheckBoxClick(e){
-        let selectedTypes = this.props.selectedTypes;
-        if(e.target.checked){
-            selectedTypes.push(e.target.value);            
-        }
-        else{
-            let index = selectedTypes.indexOf(e.target.value);
-            selectedTypes.splice(index, 1);            
-        }        
-        this.props.handleChange(this.props.selectedOntologies, selectedTypes, this.props.selectedCollections, "type");
-        this.setState({isLoading: true});
-    }
-
-
-    /**
-     * Handle the click on the collection checkbox in the facet
-     */
-    handleCollectionsCheckboxClick(e){       
-        let selectedCollections = this.props.selectedCollections;        
-        if(e.target.checked){
-            selectedCollections.push(e.target.value.trim());           
-        }
-        else{
-            let index = selectedCollections.indexOf(e.target.value.trim());
-            selectedCollections.splice(index, 1);            
-        }
-        this.props.handleChange(this.props.selectedOntologies, this.props.selectedTypes, selectedCollections, "collection");
-        this.setState({isLoading: true});
-    }
-
-
-    /**
-     * Handle the show more button in the ontology facet list
-     * @param {*} e 
-     */
-    handleOntologyShowMoreClick(e){                        
-        if(this.state.ontologyListShowAll){
-            this.setState({
-                showMoreLessOntologiesText: "+ Show More",
-                ontologyListShowAll: false
-            });
-        }
-        else{
-            this.setState({
-                showMoreLessOntologiesText: "- Show Less",
-                ontologyListShowAll: true
-            });
-        }
-
-    }
-
-
-    /**
-     * Reset facet
-     */
-    clearFacet(){        
-        this.props.handleChange([], [], []);
-        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
-        for(let checkbox of allFacetCheckBoxes){            
-            if(checkbox.dataset.ischecked !== "true"){
-                document.getElementById(checkbox.id).checked = false;
-            }
-            delete checkbox.dataset.ischecked;
-        }            
-    }
-
-
-    componentDidMount(){
-        // this.setState({isLoading: false});
-    }
-
-    
-    componentDidUpdate(){
-        // pre-select the facet fields if entered via url
-        
-        let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
-        for(let checkbox of allFacetCheckBoxes){                  
-            if(checkbox.dataset.ischecked === "true"){                
-                document.getElementById(checkbox.id).checked = true;
-            }
-            delete checkbox.dataset.ischecked;
-        }
-        // check show more button for ontologies is needed or not
-        let counter = 0;
-        let facetOntologies = this.state.ontologyFacetData;
-        for(let key in facetOntologies){
-            if(facetOntologies[key] !== 0){
-                counter ++;
-            }            
-        }
-        let showMoreIsNeeded = "";
-        let showMoreDiv = document.getElementById('search-facet-show-more-ontology-btn');
-        if(counter <= this.state.countOfShownOntologies && showMoreDiv){
-            showMoreDiv.style.display = 'none';
-            showMoreIsNeeded = false;
-        }
-        else if(showMoreDiv){
-            showMoreDiv.style.display = '';
-            showMoreIsNeeded = true;
-        }
-                
-        let currentUrl = this.state.currentUrl;
-        if(currentUrl !== window.location.href){
-            this.setComponentData();          
-        }    
-    }
-
-
-
-    render(){
-       
-    }
-}
-
 
 export default Facet;
