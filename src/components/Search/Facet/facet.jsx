@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import {getAllCollectionsIds} from '../../../api/fetchData';
 
 
 
@@ -46,14 +44,11 @@ const Facet = (props) => {
                     types[allTypes[i]] = allTypes[i + 1];                    
                 }
             }
-            let allCollections = [];
-            if(process.env.REACT_APP_PROJECT_ID === "general"){
-                allCollections = await getAllCollectionsIds();
-            } 
+                        
             setResultLoaded(true);
             setResultTypes(types);
             setOntologyFacetData(ontologyFacetData);
-            setCollections(allCollections);
+            setCollections(props.allCollections);
             setCurrentUrl(currentUrl);
             setIsLoading(false);           
         }                    
@@ -257,6 +252,11 @@ const Facet = (props) => {
     }
 
 
+    useEffect(() => {
+        setComponentData(); 
+    }, []);
+
+
 
     useEffect(() => {
         let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');                
@@ -284,11 +284,11 @@ const Facet = (props) => {
             showMoreDiv.style.display = '';
             showMoreIsNeeded = true;
         }
-                        
-        if(currentUrl !== window.location.href){
-            setComponentData();          
-        } 
-    });
+        setComponentData();         
+        // if(currentUrl !== window.location.href){
+        //     setComponentData();          
+        // } 
+    }, [props.facetData, props.allCollections]);
 
 
 

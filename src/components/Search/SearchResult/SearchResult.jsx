@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import queryString from 'query-string';
-import {getCollectionOntologies, getAllOntologies} from '../../../api/fetchData';
+import {getCollectionOntologies, getAllOntologies, getAllCollectionsIds} from '../../../api/fetchData';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
@@ -41,9 +40,20 @@ const SearchResult = (props) => {
   const [facetIsSelected, setFacetIsSelected] = useState(false);
   const [exact, setExact] = useState(exactFlagInUrl);
   const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
+  const [allCollectionIds, setAllCollectionIds] = useState([]);
 
   const history = useHistory();
 
+
+  async function getAllCollectionIds(){
+    // Fetch all collection Ids for TIB General to show in the facet.
+    if(process.env.REACT_APP_PROJECT_ID === "general"){
+      let collectionIds = await getAllCollectionsIds();
+      setAllCollectionIds(collectionIds);
+      return true;
+    }
+    return []; 
+  }
 
 
   async function search(){    
@@ -74,18 +84,14 @@ const SearchResult = (props) => {
       baseUrl += "&exact=true";
     }
 
+    let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();    
 
-    let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
-    result = result['response']['docs'];        
-
-    let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
-
-    let totalSaerchResultsCount = totalSearch['response']['numFound'];
-    let filteredFacetFields = totalSearch['facet_counts'];
-    
-    setSearchResult(result);
-    setTotalResultsCount(totalSaerchResultsCount);
-    setFacetFields(filteredFacetFields);
+    // let totalSearch = await (await fetch(totalResultBaseUrl, {mode: 'cors', headers: apiHeaders(),})).json();
+    // let totalSaerchResultsCount = totalSearch['response']['numFound'];
+    // let filteredFacetFields = totalSearch['facet_counts'];
+    setSearchResult(result['response']['docs']);
+    setTotalResultsCount(result['response']['numFound']);
+    setFacetFields(result['facet_counts']);
   }
 
 
@@ -154,52 +160,20 @@ const SearchResult = (props) => {
   }
 
 
-  function updateURL(ontologies, types, collections, obsoletes, exact){
-    let targetQueryParams = queryString.parse(props.location.search + props.location.hash);
-    let page = targetQueryParams.page;
-    props.history.push(window.location.pathname);
-    let currentUrlParams = new URLSearchParams();
-    for(let typ of types){
-      currentUrlParams.append('type', typ);
-    }
-  
-    for(let ontos of ontologies){
-      currentUrlParams.append('ontology', ontos);
-    }
-
-    for(let col of collections){
-      currentUrlParams.append('collection', col);
-    }
-    currentUrlParams.append('page', pageNumber);
-
-    if(obsoletes){
-      currentUrlParams.set('obsoletes', true);
-    }
-
-    if(exact){
-      currentUrlParams.set('exact', true);
-    }
-    props.history.push(window.location.pathname + "?q=" + searchQuery + "&" + currentUrlParams.toString());
-
-   }
-
-
   function handlePageSizeDropDownChange(e){
     let size = parseInt(e.target.value);
-    let pageNumber = pageNumber + 1;
-    setPageSize(size);      
+    setPageSize(size);  
+    let searchUrl = new URL(window.location);
+    searchUrl.searchParams.set('size', size); 
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
   }
 
 
   function  handlePagination (value) {
     setPageNumber(value);
-    // setState({
-    //   pageNumber: value,
-    //   paginationReset: false
-    // }, () => {
-    //   updateURL(selectedOntologies,selectedTypes,selectedCollections)
-    //   paginationHandler()
-    // })
+    let searchUrl = new URL(window.location);
+    searchUrl.searchParams.set('page', value); 
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
   }
 
 
@@ -288,10 +262,13 @@ const SearchResult = (props) => {
 
   useEffect(() => {
     search();
+    getAllCollectionIds();
   }, []);
 
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+      search();
+  }, [pageNumber, pageSize]);
 
 
 
@@ -308,6 +285,7 @@ const SearchResult = (props) => {
                 selectedCollections = {selectedCollections}
                 selectedOntologies = {selectedOntologies}
                 selectedTypes = {selectedTypes}
+                allCollections={allCollectionIds}
               />
             }              
           </div>
