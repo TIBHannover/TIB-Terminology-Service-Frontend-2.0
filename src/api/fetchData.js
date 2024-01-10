@@ -1,13 +1,9 @@
-import { apiHeaders } from "./headers";
-
-
-const getCallSetting:RequestInit = {method: 'GET',mode: 'cors', headers: apiHeaders()};
-const size = 10000;
+import { getCallSetting, size } from "./constants";
 
 
 
 export async function getAllOntologies (){
-  let OntologiesListUrl = <any> process.env.REACT_APP_API_ONTOLOGY_LIST;
+  let OntologiesListUrl = process.env.REACT_APP_API_ONTOLOGY_LIST;
   return fetch(OntologiesListUrl, getCallSetting)
     .then((s) => s.json())
     .then((s) => {
@@ -20,7 +16,7 @@ export async function getAllOntologies (){
 
 
 export async function getCollectionOntologies (collections, exclusive){
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;  
   let ontologiesCount = 100000;
   let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&exclusive=" + exclusive + "&";
   let urlPros = "";
@@ -41,8 +37,8 @@ export async function getCollectionOntologies (collections, exclusive){
 }
 
 
-export async function getOntologyDetail (ontologyid: string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+export async function getOntologyDetail (ontologyid) {
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   return fetch(
     OntologiesBaseServiceUrl + '/' + encodeURIComponent(ontologyid),
     getCallSetting
@@ -56,12 +52,12 @@ export async function getOntologyDetail (ontologyid: string) {
     })
 }
 
-export async function getOntologyRootTerms(ontologyId:string) {
+export async function getOntologyRootTerms(ontologyId) {
   try{
     let ontology = await getOntologyDetail(ontologyId);
     let termsLink = ontology['_links']['terms']['href'];
     let pageCount = await getPageCount(termsLink + '/roots');
-    let terms:Array<any> = [];    
+    let terms = [];    
     for(let page=0; page < pageCount; page++){
         let url = termsLink + "/roots?page=" + page + "&size=" + size;      
         let res =  await (await fetch(url, getCallSetting)).json();
@@ -83,9 +79,9 @@ export async function getOntologyRootTerms(ontologyId:string) {
 }
 
 
-export async function getListOfTerms(ontologyId:string, page:any, size:any) {
+export async function getListOfTerms(ontologyId, page, size) {
   try{
-    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
     let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/terms?page=" + page + "&size=" + size;
     let result = await (await fetch(url, getCallSetting)).json();    
     let totalTermsCount = result['page']['totalElements'];
@@ -107,8 +103,8 @@ export async function getListOfTerms(ontologyId:string, page:any, size:any) {
 }
 
 
-export async function getIndividualsList(ontologyId:string){
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+export async function getIndividualsList(ontologyId){
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=10000";
   let res = await fetch(url, getCallSetting);
   res = await res.json();
@@ -122,9 +118,9 @@ export async function getIndividualsList(ontologyId:string){
 }
 
 
-export async function getSkosOntologyRootConcepts(ontologyId:string) {
+export async function getSkosOntologyRootConcepts(ontologyId) {
   try{
-    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
     let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
     let results =  await (await fetch(url, getCallSetting)).json();
     return results;
@@ -135,12 +131,12 @@ export async function getSkosOntologyRootConcepts(ontologyId:string) {
 }
 
 
-export async function getOntologyRootProperties(ontologyId:string) {
+export async function getOntologyRootProperties(ontologyId) {
   try{
     let ontology = await getOntologyDetail(ontologyId);
     let propertiesLink = ontology['_links']['properties']['href'];
     let pageCount = await getPageCount(propertiesLink + '/roots');
-    let props:Array<any> = [];
+    let props = [];
     for(let page=0; page < pageCount; page++){
         let url = propertiesLink + "/roots?page=" + page + "&size=" + size;      
         let res =  await (await fetch(url, getCallSetting)).json();
@@ -162,7 +158,7 @@ export async function getOntologyRootProperties(ontologyId:string) {
   
 }
 
-export async function getNodeJsTree(ontologyId:string, targetNodeType:string, targetNodeIri:string, viewMode:any){
+export async function getNodeJsTree(ontologyId, targetNodeType, targetNodeIri, viewMode){
   try{
     let url = process.env.REACT_APP_API_BASE_URL + "/";
     url += ontologyId + "/" + targetNodeType + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree?viewMode=All&siblings=" + viewMode;
@@ -175,8 +171,8 @@ export async function getNodeJsTree(ontologyId:string, targetNodeType:string, ta
 }
 
 
-export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string, targetNodeId:string, extractName:string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+export async function getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, extractName) {
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/";
   url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
   let res =  await (await fetch(url, getCallSetting)).json();
@@ -184,8 +180,8 @@ export async function getChildrenJsTree(ontologyId:string, targetNodeIri:string,
 }
 
 
-export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:string){
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+export async function getChildrenSkosTree(ontologyId, targetNodeIri){
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
   let res =  await (await fetch(url, getCallSetting)).json();
   res = res['_embedded'];
@@ -198,8 +194,8 @@ export async function getChildrenSkosTree(ontologyId:string, targetNodeIri:strin
 }
 
 
-export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:string) {
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+export async function skosNodeHasChildren(ontologyId, targetNodeIri) {
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
   let res =  await (await fetch(url, getCallSetting)).json();
   res = res['_embedded'];  
@@ -209,7 +205,7 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
   else if(typeof(res['individuals']) === "undefined"){
     return false;
   }
-  else if(res['individuals']!.length === 0){
+  else if(res['individuals'] && res['individuals'].length === 0){
     return false;
   }  
   else{
@@ -218,14 +214,14 @@ export async function skosNodeHasChildren(ontologyId:string, targetNodeIri:strin
 }
 
 
-export async function getNodeByIri(ontology:string, nodeIri:string, mode:string, isIndividual=false) {
+export async function getNodeByIri(ontology, nodeIri, mode, isIndividual=false) {
   if(nodeIri === "%20"){
     // empty iri
     return false;
   }  
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL + "/";
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
   let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;  
-  let node = <any> "";  
+  let node =  "";  
   node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
 
   if (node.status === 404){
@@ -263,8 +259,8 @@ export async function getNodeByIri(ontology:string, nodeIri:string, mode:string,
 }
 
 
-export async function getSkosNodeByIri(ontology:string, nodeIri:string) {  
-  let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+export async function getSkosNodeByIri(ontology, nodeIri) {  
+  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontology +  "/individuals/" + encodeURIComponent(nodeIri);
   let res =  await (await fetch(url, getCallSetting)).json();  
   if(!res){
@@ -280,7 +276,7 @@ export async function getSkosNodeByIri(ontology:string, nodeIri:string) {
 
 
 export async function getSkosNodeParent(ontology, iri) {
-  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let baseUrl =  process.env.REACT_APP_API_BASE_URL;  
   let url = baseUrl +  "/" + ontology +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
   let res = await (await fetch(url, getCallSetting)).json();
   res = res['_embedded'];    
@@ -292,7 +288,7 @@ export async function getSkosNodeParent(ontology, iri) {
 
 
 export async function isSkosOntology(ontologyId) {
-  let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;  
+  let baseUrl =  process.env.REACT_APP_API_BASE_URL;  
   let url = baseUrl + "/" + ontologyId;
   let res = await (await fetch(url, getCallSetting)).json();
   res = res["config"];
@@ -304,14 +300,14 @@ export async function isSkosOntology(ontologyId) {
 
 
 
-export async function getEqAxiom(nodeIri:string, ontologyId:string){
-  let url = <string> "";
+export async function getEqAxiom(nodeIri, ontologyId){
+  let url =  "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
   let res = await fetch(url, getCallSetting);
   res = await res.json();  
   res = res["_embedded"];
   if (typeof(res) !== "undefined"){
-    let resultHtml = <string> "";
+    let resultHtml =  "";
     resultHtml += "<ul>";
     for(let item of res["strings"]){
       resultHtml += "<li>";
@@ -325,9 +321,9 @@ export async function getEqAxiom(nodeIri:string, ontologyId:string){
 }
 
 
-export async function getSubClassOf(nodeIri:string, ontologyId:string){
-  let url = <string> "";
-  let parentUrl = <string> "";
+export async function getSubClassOf(nodeIri, ontologyId){
+  let url =  "";
+  let parentUrl =  "";
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
   parentUrl = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/parents';
   let parentRes = await fetch(parentUrl, getCallSetting);
@@ -355,8 +351,8 @@ export async function getSubClassOf(nodeIri:string, ontologyId:string){
 }
 
 
-export async function getRelations(nodeIri:string, ontologyId:string){
-  let url = <string>""
+export async function getRelations(nodeIri, ontologyId){
+  let url = ""
   url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/relatedfroms';
   let res = await fetch(url, getCallSetting);
   res = await res.json();
@@ -382,12 +378,12 @@ export async function getRelations(nodeIri:string, ontologyId:string){
 
 export async function getAllCollectionsIds(withStats=true) {
   try{
-    let url = <any> process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
-    let StatsBaseUrl = <any> process.env.REACT_APP_STATS_API_URL;
+    let url =  process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
+    let StatsBaseUrl =  process.env.REACT_APP_STATS_API_URL;
     let cols =  await fetch(url, getCallSetting);
     cols = await cols.json();
     let collections = cols['_embedded']["strings"];
-    let result: Array<any> = [];
+    let result = [];
     for( let col of collections ){
       let ontologiesCountForCollection = 0;
       if(withStats){
@@ -398,7 +394,7 @@ export async function getAllCollectionsIds(withStats=true) {
       }
       
       let collectionOntologies = await getCollectionOntologies([col['content']], false);
-      let collectionOntologiesIds: Array<any> = [];
+      let collectionOntologiesIds = [];
       for(let onto of collectionOntologies){
         collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
       }
@@ -413,7 +409,7 @@ export async function getAllCollectionsIds(withStats=true) {
 }
 
 
-export async function getParents(node:any, mode:string) {
+export async function getParents(node, mode) {
   if(mode === "individuals"){
     return [];
   }
@@ -424,7 +420,7 @@ export async function getParents(node:any, mode:string) {
   let res = await fetch(url, getCallSetting);
   res = await res.json();
   let parents = res["_embedded"][mode];
-  let result:Array<any> = [];
+  let result = [];
   for(let p of parents){
     let temp = {"label":p.label, "iri": p.iri, "ontology": p.ontology_name};
     result.push(temp);
@@ -433,7 +429,7 @@ export async function getParents(node:any, mode:string) {
 }
 
 
-export async function getClassRelations(classNode:any, ontologyId:string) {
+export async function getClassRelations(classNode, ontologyId) {
   if(typeof(classNode['_links']['graph']) === "undefined"){
     return [];
   }
@@ -442,7 +438,7 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
   res = await res.json();
   let nodes = res['nodes'];
   let relations = res['edges'];
-  let result: { relation: string, relationUrl: string, target: string, targetUrl: string }[]  = [];
+  let result = [];
   for(let rel of relations){
     if(rel['label'] === "is a"){
       continue;
@@ -478,9 +474,9 @@ export async function getClassRelations(classNode:any, ontologyId:string) {
 }
 
 
-export async function getIndividualInstancesForClass(ontologyId:string, classIri:string){
+export async function getIndividualInstancesForClass(ontologyId, classIri){
   try{
-    let baseUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let baseUrl =  process.env.REACT_APP_API_BASE_URL;
     let callUrl = baseUrl + "/" + ontologyId + "/" + encodeURIComponent(encodeURIComponent(classIri)) + "/terminstances";
     let result = await fetch(callUrl, getCallSetting);
     result = await result.json();
@@ -496,9 +492,9 @@ export async function getIndividualInstancesForClass(ontologyId:string, classIri
 }
 
 
-export async function getJumpToResult(inputData:any, count:any=10){
+export async function getJumpToResult(inputData, count=10){
   try{
-    let autocompleteApiBaseUrl = <any> process.env.REACT_APP_SEARCH_URL;
+    let autocompleteApiBaseUrl =  process.env.REACT_APP_SEARCH_URL;
     autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
     let url = `${autocompleteApiBaseUrl}?q=${inputData['searchQuery']}&rows=${count}`;    
     url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
@@ -517,9 +513,9 @@ export async function getJumpToResult(inputData:any, count:any=10){
 
 }
 
-export async function getObsoleteTermsForTermList(ontologyId:string, termType:string, page:any, size:any) {
+export async function getObsoleteTermsForTermList(ontologyId, termType, page, size) {
   try{
-    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
     let url = OntologiesBaseServiceUrl + "/";  
     url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=" + size + "&page=" + page;    
     let res =  await (await fetch(url, getCallSetting)).json();
@@ -535,9 +531,9 @@ export async function getObsoleteTermsForTermList(ontologyId:string, termType:st
 
 
 
-export async function getObsoleteTerms(ontologyId:string, termType:string) {
+export async function getObsoleteTerms(ontologyId, termType) {
   try{
-    let OntologiesBaseServiceUrl = <any> process.env.REACT_APP_API_BASE_URL;
+    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
     let url = OntologiesBaseServiceUrl + "/";  
     url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=1000";
     let res =  await (await fetch(url, getCallSetting)).json();
@@ -550,14 +546,14 @@ export async function getObsoleteTerms(ontologyId:string, termType:string) {
 }
 
 
-async function getPageCount(url: string){
+async function getPageCount(url){
   let answer = await fetch(url, getCallSetting);
   answer = await answer.json();
   return Math.ceil(answer['page']['totalElements'] / size);
 }
 
 
-export async function getAutoCompleteResult(inputData:any, count:any=5){
+export async function getAutoCompleteResult(inputData, count=5){
   try{
     let url =  process.env.REACT_APP_API_URL + `/suggest?q=${inputData['searchQuery']}&rows=${count}`;
     url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
@@ -571,6 +567,33 @@ export async function getAutoCompleteResult(inputData:any, count:any=5){
   catch(e){
     return [];
   }
+}
+
+
+
+export async function olsSearch(searchQuery, page, size, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact) {
+    try{
+      let rangeStart = (page - 1) * size;
+      let searchUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}&start=${rangeStart}&groupField=iri&rows=${size}`;
+      searchUrl = selectedOntologies.length !== 0 ? (searchUrl + `&ontology=${selectedOntologies.join(',')}`) : searchUrl;
+      searchUrl = selectedTypes.length !== 0 ? (searchUrl + `&type=${selectedTypes.join(',')}`) : searchUrl;
+      searchUrl = obsoletes ? (searchUrl + "&obsoletes=true") : searchUrl;
+      searchUrl = exact ? (searchUrl + "&exact=true") : searchUrl;
+      if(process.env.REACT_APP_PROJECT_NAME === "" && selectedCollections.length !== 0){
+        // If TIB General. Set collections if exist in filter
+        searchUrl += `&schema=collection&classification=${selectedCollections.join(',')}`;
+      }
+      else if(process.env.REACT_APP_PROJECT_NAME !== ""){
+        // Projects such as NFDI4CHEM. pre-set the target collection on each search
+        searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
+      }
+      let result = await (await fetch(searchUrl, getCallSetting)).json(); 
+      return result;
+    }
+    catch(e){
+      throw e;
+      return [];
+    }
 }
 
 

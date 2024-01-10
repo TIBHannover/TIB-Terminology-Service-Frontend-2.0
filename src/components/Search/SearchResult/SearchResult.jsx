@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import {getCollectionOntologies, getAllOntologies, getAllCollectionsIds} from '../../../api/fetchData';
+import {getCollectionOntologies, getAllOntologies, getAllCollectionsIds, olsSearch} from '../../../api/fetchData';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter} from './SearchHelpers';
@@ -56,34 +56,23 @@ const SearchResult = (props) => {
   }
 
 
-  async function search(){    
-    let rangeStart = (pageNumber - 1) * pageSize
-    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;     
-    baseUrl = selectedOntologies.length !== 0 ? (baseUrl + `&ontology=${selectedOntologies.join(',')}`) : baseUrl;
-    baseUrl = selectedTypes.length !== 0 ? (baseUrl + `&type=${selectedTypes.join(',')}`) : baseUrl;
-    baseUrl = obsoletes ? (baseUrl + "&obsoletes=true") : baseUrl;
-    baseUrl = exact ? (baseUrl + "&exact=true") : baseUrl;
-    
-    if(process.env.REACT_APP_PROJECT_NAME === "" && selectedCollections.length !== 0){
-      // If TIB General. Set collections if exist in filter
-      baseUrl += `&schema=collection&classification=${selectedCollections.join(',')}`;
-    }
-    else if(process.env.REACT_APP_PROJECT_NAME !== ""){
-      // Projects such as NFDI$CHEM. pre-set the target collection on each search
-      baseUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
-    }
+  async function search(){      
+    let result = await olsSearch(pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact);
 
-  
-    let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();    
+    let rangeStart = (pageNumber - 1) * pageSize;
 
     let searchResultForFacetCount = [];    
-    baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;      
+    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;      
     baseUrl = selectedOntologies.length !== 0 ? (baseUrl + `&ontology=${selectedOntologies.join(',')}`) : baseUrl;
+    baseUrl = obsoletes ? (baseUrl + "&obsoletes=true") : baseUrl;
+    baseUrl = exact ? (baseUrl + "&exact=true") : baseUrl;
     searchResultForFacetCount = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
     result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
     searchResultForFacetCount = [];    
     baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;
     baseUrl = selectedTypes.length !== 0 ? (baseUrl + `&type=${selectedTypes.join(',')}`) : baseUrl;
+    baseUrl = obsoletes ? (baseUrl + "&obsoletes=true") : baseUrl;
+    baseUrl = exact ? (baseUrl + "&exact=true") : baseUrl;
     searchResultForFacetCount = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
     result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
 
