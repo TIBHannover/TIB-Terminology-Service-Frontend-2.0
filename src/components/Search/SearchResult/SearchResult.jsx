@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import {getCollectionOntologies, getAllOntologies, getAllCollectionsIds} from '../../../api/fetchData';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
-import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter, setFacetCounts} from './SearchHelpers';
+import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter} from './SearchHelpers';
 import Toolkit from '../../common/Toolkit';
 import { makeAlsoInTag } from "./AlsoInHelpers";
 import { apiHeaders } from '../../../api/headers';
@@ -40,7 +40,7 @@ const SearchResult = (props) => {
   const [facetIsSelected, setFacetIsSelected] = useState(false);
   const [exact, setExact] = useState(exactFlagInUrl);
   const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
-  const [allCollectionIds, setAllCollectionIds] = useState([]);
+  const [allCollectionIds, setAllCollectionIds] = useState([]);  
 
   const history = useHistory();
 
@@ -73,7 +73,20 @@ const SearchResult = (props) => {
       baseUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
     }
 
+  
     let result = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();    
+
+    let searchResultForFacetCount = [];    
+    baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;      
+    baseUrl = selectedOntologies.length !== 0 ? (baseUrl + `&ontology=${selectedOntologies.join(',')}`) : baseUrl;
+    searchResultForFacetCount = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
+    result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
+    searchResultForFacetCount = [];    
+    baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;
+    baseUrl = selectedTypes.length !== 0 ? (baseUrl + `&type=${selectedTypes.join(',')}`) : baseUrl;
+    searchResultForFacetCount = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
+    result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
+
     setSearchResult(result['response']['docs']);
     setTotalResultsCount(result['response']['numFound']);
     setFacetFields(result['facet_counts']);
@@ -177,7 +190,7 @@ const SearchResult = (props) => {
         searchUrl.searchParams.delete('type');        
     }    
     history.replace({...history.location, search: searchUrl.searchParams.toString()});  
-    setSelectedTypes(selectedTypeList);
+    setSelectedTypes(selectedTypeList);    
   }
   
   
@@ -196,7 +209,7 @@ const SearchResult = (props) => {
         searchUrl.searchParams.delete('ontology', targetOntologyId);
     }    
     history.replace({...history.location, search: searchUrl.searchParams.toString()});    
-    setSelectedOntologies(selectedOntologiesList);             
+    setSelectedOntologies(selectedOntologiesList);                 
   }
 
 
@@ -215,7 +228,7 @@ const SearchResult = (props) => {
         searchUrl.searchParams.delete('collection', targetCollection);           
     }
     history.replace({...history.location, search: searchUrl.searchParams.toString()});
-    setSelectedCollections(selectedCollectionsList);
+    setSelectedCollections(selectedCollectionsList);    
   }
 
 
@@ -239,8 +252,7 @@ const SearchResult = (props) => {
     setSelectedOntologies([]);
     setSelectedCollections([]);
     setPageNumber(1);
-    setPageSize(10);   
-
+    setPageSize(10);       
   } 
 
 
