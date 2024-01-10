@@ -12,34 +12,28 @@ import '../../layout/facet.css';
 
 
 
+
 const SearchResult = (props) => {
 
   let currentUrlParams = new URL(window.location).searchParams;
-  let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
-  let ontologiesInUrl = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology') : [];
-  let collectionsInUrl = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection') : [];
-  let typesInUrl = currentUrlParams.get('type') ? currentUrlParams.getAll('type') : [];
-  let obsoleteFlagInUrl = currentUrlParams.get('obsoletes') === "true" ? true : false; 
-  let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
-  let pageInUrl = currentUrlParams.get('page') ? currentUrlParams.get('page') : 1;
-  let sizeInUrl = currentUrlParams.get('size') ? currentUrlParams.get('size') : 10;
+  const DEFAULT_PAGE_NUMBER = 1;
+  const DEFAULT_PAGE_SIZE = 10;
 
-
-  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);
+  const [searchQuery, setSearchQuery] = useState(currentUrlParams.get('q') ? currentUrlParams.get('q') : "");
   const [searchResult, setSearchResult] = useState([]);
-  const [selectedOntologies, setSelectedOntologies] = useState(ontologiesInUrl);
-  const [selectedTypes, setSelectedTypes] = useState(typesInUrl);
-  const [selectedCollections, setSelectedCollections] = useState(collectionsInUrl);
+  const [selectedOntologies, setSelectedOntologies] = useState(currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology') : []);
+  const [selectedTypes, setSelectedTypes] = useState(currentUrlParams.get('type') ? currentUrlParams.getAll('type') : []);
+  const [selectedCollections, setSelectedCollections] = useState(currentUrlParams.get('collection') ? currentUrlParams.getAll('collection') : []);
   const [facetFields, setFacetFields] = useState([]);
-  const [pageNumber, setPageNumber] = useState(parseInt(pageInUrl));
-  const [pageSize, setPageSize] = useState(parseInt(sizeInUrl));
+  const [pageNumber, setPageNumber] = useState(parseInt(currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER));
+  const [pageSize, setPageSize] = useState(parseInt(currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE));
   const [isLoaded, setIsLoaded] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [expandedResults, setExpandedResults] = useState([]);
   const [totalResultsCount, setTotalResultsCount] = useState([]);
   const [facetIsSelected, setFacetIsSelected] = useState(false);
-  const [exact, setExact] = useState(exactFlagInUrl);
-  const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
+  const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);
+  const [obsoletes, setObsoletes] = useState(currentUrlParams.get('obsoletes') === "true" ? true : false);
   const [allCollectionIds, setAllCollectionIds] = useState([]);  
 
   const history = useHistory();
@@ -57,18 +51,27 @@ const SearchResult = (props) => {
 
 
   async function search(){      
-    let result = await olsSearch(pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact);
+    try{
+      let result = await olsSearch(searchQuery, pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact);    
     
-    let searchResultForFacetCount = await olsSearch(pageNumber, pageSize, selectedOntologies, [], [], obsoletes, exact);
-    result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
-    searchResultForFacetCount = await olsSearch(pageNumber, pageSize, [], selectedTypes, [], obsoletes, exact);
-    searchResultForFacetCount = [];
-    result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
+      // This part is for updating the facet counts. 
+      // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.
+      let searchResultForFacetCount = await olsSearch(searchQuery, pageNumber, pageSize, selectedOntologies, [], [], obsoletes, exact);
+      result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
+      searchResultForFacetCount = await olsSearch(searchQuery, pageNumber, pageSize, [], selectedTypes, [], obsoletes, exact);
+      result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
 
-    setSearchResult(result['response']['docs']);
-    setTotalResultsCount(result['response']['numFound']);
-    setFacetFields(result['facet_counts']);
-    setExpandedResults(result['expanded'])
+      setSearchResult(result['response']['docs']);
+      setTotalResultsCount(result['response']['numFound']);
+      setFacetFields(result['facet_counts']);
+      setExpandedResults(result['expanded'])
+    }
+    catch(e){
+      setSearchResult([]);
+      setTotalResultsCount(0);
+      setFacetFields([]);
+      setExpandedResults([]);
+    }    
   }
 
 
