@@ -1,6 +1,6 @@
 import React from "react";
 import {keyboardNavigationForJumpto} from './KeyboardNavigation';
-import { apiHeaders } from "../../../api/headers";
+import { getCallSetting } from "../../../api/constants";
 
 
 const TYPE_MAPPER  = {"terms": "class", "props": "property", "individuals": "individual"};
@@ -35,10 +35,7 @@ class JumpTo extends React.Component{
         }       
         if (enteredTerm.length > 0){
             let url = `${this.state.api_base_url}?q=${enteredTerm}&ontology=${this.props.ontologyId}&type=${type}&rows=10`;
-            let jumpResult = await fetch(url,{
-                mode: 'cors',
-                headers: apiHeaders(),
-            })
+            let jumpResult = await fetch(url, getCallSetting);
             jumpResult = (await jumpResult.json())['response']['docs'];
             this.setState({
                 jumpResult: jumpResult,

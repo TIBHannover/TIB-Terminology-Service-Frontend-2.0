@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import {getCollectionOntologies, getAllOntologies, getAllCollectionsIds, olsSearch} from '../../../api/fetchData';
+import {getCollectionOntologies, getAllOntologies, getAllCollectionsIds} from '../../../api/fetchData';
+import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
 import {setResultTitleAndLabel, createEmptyFacetCounts, setOntologyForFilter} from './SearchHelpers';
 import Toolkit from '../../common/Toolkit';
 import { makeAlsoInTag } from "./AlsoInHelpers";
-import { apiHeaders } from '../../../api/headers';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 
@@ -58,22 +58,11 @@ const SearchResult = (props) => {
 
   async function search(){      
     let result = await olsSearch(pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact);
-
-    let rangeStart = (pageNumber - 1) * pageSize;
-
-    let searchResultForFacetCount = [];    
-    let baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;      
-    baseUrl = selectedOntologies.length !== 0 ? (baseUrl + `&ontology=${selectedOntologies.join(',')}`) : baseUrl;
-    baseUrl = obsoletes ? (baseUrl + "&obsoletes=true") : baseUrl;
-    baseUrl = exact ? (baseUrl + "&exact=true") : baseUrl;
-    searchResultForFacetCount = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
+    
+    let searchResultForFacetCount = await olsSearch(pageNumber, pageSize, selectedOntologies, [], [], obsoletes, exact);
     result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
-    searchResultForFacetCount = [];    
-    baseUrl = process.env.REACT_APP_SEARCH_URL + `?q=${searchQuery}` + `&start=${rangeStart}` + `&groupField=iri` + "&rows=" + pageSize;
-    baseUrl = selectedTypes.length !== 0 ? (baseUrl + `&type=${selectedTypes.join(',')}`) : baseUrl;
-    baseUrl = obsoletes ? (baseUrl + "&obsoletes=true") : baseUrl;
-    baseUrl = exact ? (baseUrl + "&exact=true") : baseUrl;
-    searchResultForFacetCount = await (await fetch(baseUrl, {mode: 'cors', headers: apiHeaders()})).json();
+    searchResultForFacetCount = await olsSearch(pageNumber, pageSize, [], selectedTypes, [], obsoletes, exact);
+    searchResultForFacetCount = [];
     result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
 
     setSearchResult(result['response']['docs']);

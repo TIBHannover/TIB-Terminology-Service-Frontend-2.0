@@ -2,7 +2,7 @@ import React from "react";
 import '../layout/home.css';
 import {createStatsBox} from './StatsBox';
 import { renderHomePage } from "./HomePageContent";
-import {apiHeaders} from '../../api/headers';
+import { getCallSetting } from "../../api/constants";
 
 class Home extends React.Component{
   constructor(props){
@@ -14,11 +14,7 @@ class Home extends React.Component{
   }
 
   async Stats(){
-    let statsResult = await fetch(process.env.REACT_APP_STATS_API_URL, {
-      method: 'GET',
-      mode: 'cors',
-      headers: apiHeaders(),
-    })
+    let statsResult = await fetch(process.env.REACT_APP_STATS_API_URL, getCallSetting)
     statsResult = (await statsResult.json());
     this.setState({
       statsResult: statsResult
