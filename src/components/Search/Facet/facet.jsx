@@ -223,14 +223,24 @@ const Facet = (props) => {
 
 
 
-    useEffect(() => {
+    useEffect(() => {        
         setComponentData(); 
         updateCountOfShownOntologies();           
         createTypesCheckboxList();
         createOntologiesCheckboxList();
         createCollectionsCheckBoxes();
-        setIsLoading(false);              
-    }, [props.facetData, props.selectedTypes, props.selectedOntologies, props.selectedCollections]);
+        setIsLoading(false);
+    }, [props.facetData]);
+
+
+    useEffect(() => {                       
+        createTypesCheckboxList();
+    }, [resultTypes]);
+
+
+    useEffect(() => {                       
+        createOntologiesCheckboxList();
+    }, [ontologyFacetData]);
 
 
     useEffect(() => {                       
