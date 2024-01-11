@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 
 
 const Facet = (props) => {
-
-    const [resultLoaded, setResultLoaded] = useState(false);
+    
     const [resultTypes, setResultTypes] = useState([]);
     const [ontologyFacetData, setOntologyFacetData] = useState([]);    
     const [ontologyListShowAll, setOntologyListShowAll] = useState(false);
     const [countOfShownOntologies, setCountOfShownOntologies] = useState(5);
-    const [showMoreLessOntologiesText, setShowMoreLessOntologiesText] = useState("+ Show More");
-    const [currentUrl, setCurrentUrl] = useState("");
+    const [showMoreLessOntologiesText, setShowMoreLessOntologiesText] = useState("+ Show More");    
     const [isLoading, setIsLoading] = useState(true);
     const [typesCheckBoxesToRender, setTypesCheckBoxesToRender] = useState(null);
     const [ontologyCheckBoxesToRender, setOntologyCheckBoxesToRender] = useState(null);
@@ -17,13 +15,10 @@ const Facet = (props) => {
 
 
 
-    function setComponentData(){        
-        let currentUrl = window.location.href;            
-        if (props.facetData.length === 0 || typeof props.facetData["facet_fields"] === "undefined"){
-            setResultLoaded(true);
+    function setComponentData(){                 
+        if (props.facetData.length === 0 || typeof props.facetData["facet_fields"] === "undefined"){            
             setResultTypes({});
-            setOntologyFacetData({});
-            setCurrentUrl(currentUrl);
+            setOntologyFacetData({});            
             setIsLoading(false);            
         }
         else{            
@@ -41,12 +36,9 @@ const Facet = (props) => {
                 if(i % 2 == 0){                    
                     types[allTypes[i]] = allTypes[i + 1];                    
                 }
-            }
-                        
-            setResultLoaded(true);
+            }                                    
             setResultTypes(types);
-            setOntologyFacetData(ontologyFacetData);            
-            setCurrentUrl(currentUrl);                     
+            setOntologyFacetData(ontologyFacetData);                           
         }                    
     }
 
@@ -130,7 +122,7 @@ const Facet = (props) => {
         let result = [];
         for (let record of props.allCollections){
             for(let ontoId of record['ontolgies']){
-                if(props.selectedOntologies.includes(ontoId) || props.selectedOntologies.length === 0){
+                if(props.selectedOntologies.includes(ontoId.toLowerCase()) || props.selectedOntologies.length === 0){
                     result.push(
                         <div className="row facet-item-row">
                             <div className='col-sm-9'>
@@ -194,6 +186,12 @@ const Facet = (props) => {
     }, []);
 
 
+    useEffect(() => {        
+        createCollectionsCheckBoxes();
+        setIsLoading(false);
+    }, [props.allCollections]);
+
+
 
     useEffect(() => {
         setComponentData(); 
@@ -227,7 +225,7 @@ const Facet = (props) => {
         createOntologiesCheckboxList();
         createCollectionsCheckBoxes();
         setIsLoading(false);              
-    }, [resultTypes, ontologyFacetData, props.selectedTypes, props.selectedOntologies, props.selectedCollections, props.allCollections]);
+    }, [resultTypes, ontologyFacetData, props.selectedTypes, props.selectedOntologies, props.selectedCollections]);
 
 
 
@@ -259,10 +257,13 @@ const Facet = (props) => {
                         <a className="show-more-btn"  onClick={handleOntologyShowMoreClick}>{showMoreLessOntologiesText}</a>
                     </div>                        
                 </div>
-                {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
-                <><h4>{"Collections"}</h4><div class="facet-box" id="facet-collections-list">
-                        {collectionCheckBoxesToRender}
-                    </div></>}
+                {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" && 
+                    <>
+                        <h4>{"Collections"}</h4>
+                        <div class="facet-box" id="facet-collections-list">
+                            {collectionCheckBoxesToRender}
+                        </div>
+                    </>}
             </div>}
         </div>
     );
