@@ -32,7 +32,7 @@ const SearchResult = (props) => {
   const [totalResultsCount, setTotalResultsCount] = useState([]);
   const [facetIsSelected, setFacetIsSelected] = useState(false);
   const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);
-  const [obsoletes, setObsoletes] = useState(currentUrlParams.get('obsoletes') === "true" ? true : false);
+  const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue());
   const [allCollectionIds, setAllCollectionIds] = useState([]);  
 
   const history = useHistory();
@@ -99,7 +99,7 @@ const SearchResult = (props) => {
         searchResultList.push(
           <div className="row result-card" key={searchResult[i]['id']}>
             <div className='col-sm-10'>
-              {setResultTitleAndLabel(searchResult[i])}                
+              {setResultTitleAndLabel(searchResult[i], obsoletes)}                
               <div className="searchresult-iri">
                 {searchResult[i].iri}
               </div>
