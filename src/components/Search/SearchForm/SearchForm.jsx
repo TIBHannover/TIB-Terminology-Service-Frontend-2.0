@@ -5,13 +5,14 @@ import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNav
 import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
+import Toolkit from '../../common/Toolkit';
 
 
 
 const SearchForm = (props) => {
 
   let currentUrlParams = new URL(window.location).searchParams;
-  let obsoleteFlagInUrl = currentUrlParams.get('obsoletes') === "true" ? true : false; 
+  let obsoleteFlag = Toolkit.getObsoleteFlagValue();
   let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
   let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
   
@@ -24,7 +25,7 @@ const SearchForm = (props) => {
 
 
   const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);  
-  const [obsoletes, setObsoletes] = useState(obsoleteFlagInUrl);
+  const [obsoletes, setObsoletes] = useState(obsoleteFlag);
   const [exact, setExact] = useState(exactFlagInUrl);
   const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
@@ -149,6 +150,7 @@ const SearchForm = (props) => {
     setObsoletes(e.target.checked);
     searchUrl.searchParams.set('obsoletes', e.target.checked); 
     history.replace({...history.location, search: searchUrl.searchParams.toString()});
+    localStorage.setItem("obsoletes", e.target.checked);
   }
 
 

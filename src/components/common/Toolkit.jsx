@@ -92,6 +92,18 @@ class Toolkit{
     static getVarInLocalSrorageIfExist(varName, defaultValue){
         return localStorage.getItem(varName) ? localStorage.getItem(varName) : defaultValue;
     }
+
+
+    static getObsoleteFlagValue(){
+        let currentUrlParams = new URL(window.location).searchParams;
+        if(!currentUrlParams.get('obsoletes')){
+            let obsoleteValue = Toolkit.getVarInLocalSrorageIfExist("obsoletes", "false");
+            obsoleteValue = obsoleteValue === "true" ? true : false;
+            return Boolean(obsoleteValue);
+        }
+        let obsoleteValue =  currentUrlParams.get('obsoletes') === "true" ? true : false;
+        return obsoleteValue; 
+    }
 }
 
 export default Toolkit;
