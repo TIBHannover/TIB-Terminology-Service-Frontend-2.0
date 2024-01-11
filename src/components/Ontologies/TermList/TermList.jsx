@@ -13,12 +13,10 @@ const TermList = (props) => {
     let url = new URL(window.location);
     let pageNumberInUrl = url.searchParams.get('page');
     let sizeInUrl = url.searchParams.get('size');
-    let iriInUrl = url.searchParams.get('iri');        
-    let onlyObsoletes = url.searchParams.get('obsoletes');        
+    let iriInUrl = url.searchParams.get('iri');                
     pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
     let internalSize =  Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
-    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);    
-    onlyObsoletes = !onlyObsoletes ? false : (onlyObsoletes === "true");
+    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);        
 
     const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
     const [pageSize, setPageSize] = useState(sizeInUrl);
@@ -27,7 +25,7 @@ const TermList = (props) => {
     const [mode, setMode] = useState("terms");
     const [iri, setIri] = useState(iriInUrl);    
     const [tableIsLoading, setTableIsLoading] = useState(true);   
-    const [obsoletes, setObsoletes] = useState(onlyObsoletes); 
+    const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue()); 
     const history = useHistory();
 
 
