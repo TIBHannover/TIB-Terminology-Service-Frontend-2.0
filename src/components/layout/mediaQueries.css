@@ -28,6 +28,10 @@
     body .collection-logo{      
         margin-left: 0px;
     }
+    body .collection-logo-in-list{    
+        width: 200px;
+        height: 150px;
+    } 
     button{        
         font-size: 12px;        
      }    
@@ -52,10 +56,13 @@
     body ::-webkit-input-placeholder {
         font-size: 11px;
     }
+    body .user-profile-dropdown{
+        margin-right: -70px;
+    }
      
     
 }
-@media only screen and (max-width: 1299px) and (min-width: 901px) {       
+@media only screen and (max-width: 1299px) and (min-width: 1031px) {       
     
     body .jumpto-wrapper{
         width: 80%;        
@@ -121,7 +128,81 @@
     .site-header-search-filters-container{
         margin-left: 18%;        
     }   
+    body .user-profile-dropdown{
+        margin-right: -150px;
+    }
 }
+
+
+@media only screen and (max-width: 1030px) and (min-width: 901px){
+    body .jumpto-wrapper{
+        width: 80%;        
+    }
+    body .tree-action-button-area{
+        right: 40px;
+    }   
+    body .site-footer{
+        font-size: 10px;        
+    }
+    body .footer-logo{
+        width: 200px;
+        height: 50px;
+    }
+    body .navbar-item {
+       float: right;
+      }
+  
+    body .navbar-nav{        
+        margin-right: 40px;
+    }
+    body .navbar-collapse-btn{      
+        margin-right: 40px;
+    }
+    body .collection-card{     
+        padding: 10px;        
+    }
+    body .collection-logo{      
+        margin-left: 0px;
+    }
+    body .general-home-page-content{
+        padding-left: 5%;
+        padding-right: 5%;    
+    }
+    body .collection-logo-in-list{    
+        width: 200px;
+        height: 150px;
+    }   
+    body .pagination-holder{
+        font-size: 12px;
+    } 
+    body{
+        font-size: 13px;
+    }
+    body h1,h2,h3,h4,h5,h6{
+        font-size: 1rem;
+    }
+    body button,.btn{
+        font-size: 10px;
+    }
+    body .close{
+        font-size: 20px;
+    } 
+    body input::-moz-placeholder {
+        font-size: 11px;
+    } 
+    body input::-webkit-input-placeholder {
+        font-size: 11px;
+    }
+    body .header-wrapper{
+        max-height: 650px;
+    }
+    .site-header-search-filters-container{
+        margin-left: 18%;        
+    }   
+    body .user-profile-dropdown{
+        margin-right: 40px;
+    } 
+ }
 
 @media only screen and (max-width: 900px) {
     body .navbar-item {      
@@ -146,8 +227,8 @@
         margin-left: 0px;
     }
     body .collection-logo-in-list{    
-        width: 200px;
-        height: 150px;
+        width: 150px;
+        height: 100px;
     }
     body{
         font-size: 10px;
@@ -172,6 +253,15 @@
     } 
     .site-header-search-filters-container{
         margin-left: 7%;
+    }
+    body .user-profile-dropdown{
+        margin-right: -55px;
+    } 
+ }
+
+ @media only screen and (max-width: 600px){ 
+    body .user-profile-dropdown{
+        margin-right: 0px;
     } 
  }
 
