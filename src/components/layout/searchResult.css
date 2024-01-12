@@ -32,13 +32,6 @@
     padding-bottom: 7px;
 }
 
-.remove-btn{
-    padding: 2px;
-    margin-left: 15px;
-    border-radius: 20px;
-    font-size: 15px;
-}
-
 .dropdown-colour{    
    background-color: white;
 }
@@ -50,5 +43,22 @@
 }
 
 .show-more-btn{
+    cursor: pointer;
+}
+
+.search-filter-tags{
+    padding: 4px;
+    background-color: white;    
+    margin-right: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.remove-tag-icon{
+    margin-left: 2px;
+    border: none !important;
+    font-size: 15px !important;
     cursor: pointer;
 }

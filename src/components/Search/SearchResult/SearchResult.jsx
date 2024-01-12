@@ -33,7 +33,8 @@ const SearchResult = (props) => {
   const [facetIsSelected, setFacetIsSelected] = useState(false);
   const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);
   const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue());
-  const [allCollectionIds, setAllCollectionIds] = useState([]);  
+  const [allCollectionIds, setAllCollectionIds] = useState([]);
+  const [filterTags, setFilterTags] = useState("");  
 
   const history = useHistory();
 
@@ -164,15 +165,17 @@ const SearchResult = (props) => {
     let selectedTypeList = [...selectedTypes];
     if(e.target.checked){
       searchUrl.searchParams.append('type', targetType);
-      selectedTypeList.push(targetType);            
+      selectedTypeList.push(targetType);             
     }
     else{
         let index = selectedTypeList.indexOf(targetType);
         selectedTypeList.splice(index, 1);    
         searchUrl.searchParams.delete('type');        
-    }    
+    }
+    searchUrl.searchParams.set('page', 1);
     history.replace({...history.location, search: searchUrl.searchParams.toString()});  
-    setSelectedTypes(selectedTypeList);    
+    setSelectedTypes(selectedTypeList);
+    setPageNumber(1);          
   }
   
   
@@ -183,15 +186,17 @@ const SearchResult = (props) => {
     let targetOntologyId = e.target.value.toLowerCase();
     if(e.target.checked){
         searchUrl.searchParams.append('ontology', targetOntologyId);
-        selectedOntologiesList.push(targetOntologyId);
+        selectedOntologiesList.push(targetOntologyId);        
     }
     else{
         let index = selectedOntologiesList.indexOf(targetOntologyId);
         selectedOntologiesList.splice(index, 1);            
         searchUrl.searchParams.delete('ontology', targetOntologyId);
-    }    
+    }
+    searchUrl.searchParams.set('page', 1);
     history.replace({...history.location, search: searchUrl.searchParams.toString()});    
-    setSelectedOntologies(selectedOntologiesList);                 
+    setSelectedOntologies(selectedOntologiesList);  
+    setPageNumber(1);                  
   }
 
 
@@ -202,15 +207,17 @@ const SearchResult = (props) => {
     let targetCollection =  e.target.value.trim();
     if(e.target.checked){
         selectedCollectionsList.push(targetCollection);
-        searchUrl.searchParams.append('collection', targetCollection);         
+        searchUrl.searchParams.append('collection', targetCollection);               
     }
     else{
         let index = selectedCollectionsList.indexOf(targetCollection);
         selectedCollectionsList.splice(index, 1); 
         searchUrl.searchParams.delete('collection', targetCollection);           
     }
+    searchUrl.searchParams.set('page', 1);
     history.replace({...history.location, search: searchUrl.searchParams.toString()});
-    setSelectedCollections(selectedCollectionsList);    
+    setSelectedCollections(selectedCollectionsList);
+    setPageNumber(1);       
   }
 
 
@@ -235,77 +242,49 @@ const SearchResult = (props) => {
     setSelectedCollections([]);
     setPageNumber(1);
     setPageSize(10);       
+    setFilterTags("");
   } 
 
 
-  function handleOntoDelete(){
-    let ontologies = selectedOntologies
-    let params = new URLSearchParams(window.location.search)
-    for(let i=0; i< ontologies.length; i++){
-      params.delete('ontology', ontologies[i])
-    }
-    
-    window.location.replace(window.location.pathname + "?" + params.toString());
-  }
-
-  
-  function handleTypDelete(){
-    let types = selectedTypes;
-    let params = new URLSearchParams(window.location.search)
-    for(let i=0; i< types.length; i++){
-      params.delete('type', types[i])
-    }
-    
-    window.location.replace(window.location.pathname + "?" + params.toString());
-  }
-
-  
-  function handleColDelete(){
-    let collections = selectedCollections;
-    let params = new URLSearchParams(window.location.search)
-    for(let i=0; i< collections.length; i++){
-      params.delete('collection', collections[i])
-    }
-    
-    window.location.replace(window.location.pathname + "?" + params.toString());
-  }
-
-
-
-  function facetButton(){    
-    let facetRow = [];
-    for(let onto of selectedOntologies){     
-        facetRow.push(
-          <div className='col-sm-2'>
-            <a className='facet-btn' href>{onto}
-              <i onClick={handleOntoDelete} className="fa fa-remove remove-btn \n"></i>
-            </a>
-          </div>
-        )     
-    }
-    for(let typ of selectedTypes){    
-        facetRow.push(
-          <div className='col-sm-2'>
-            <a className='facet-btn' href>{typ}
-              <i onClick={handleTypDelete} className="fa fa-remove remove-btn \n"></i>
-            </a>
-          </div>
-        )
+  function handleRemoveTagClick(e){
+    try{
+      let tagType = e.target.dataset.type;
+      let tagValue = e.target.dataset.value;
+      e.target.checked = false;
+      e.target.value = tagValue;    
+      document.getElementById('search-checkbox-' + tagValue).checked = false;
+      if(tagType === "type"){      
+        handleTypeFacetSelection(e);      
       }
-      if(process.env.REACT_APP_PROJECT_ID === "general"){
-        for(let col of selectedCollections){    
-          facetRow.push(
-            <div className='col-sm-2'>
-              <a className='facet-btn' href>{col}
-                <i onClick={handleColDelete} className="fa fa-remove remove-btn \n"></i>
-              </a>
-            </div>
-          )
-        }
+      else if(tagType === "ontology"){      
+        handleOntologyFacetSelection(e);      
       }
-    
-    return facetRow;
+      else if(tagType === "collection"){      
+        handleCollectionFacetSelection(e);      
+      }
+    }
+    catch(e){
 
+    }
+  }
+
+
+
+  function createFilterTags(){
+    let tagsList = [];
+    for(let type of selectedTypes){
+      let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick} data-type={"type"} data-value={type} class="fa fa-close remove-tag-icon"></i></div>;
+      tagsList.push(newTag);
+    }
+    for(let ontologyId of selectedOntologies){
+      let newTag = <div className='search-filter-tags' key={ontologyId}>{ontologyId} <i onClick={handleRemoveTagClick} data-type={"ontology"} data-value={ontologyId} class="fa fa-close remove-tag-icon"></i></div>;
+      tagsList.push(newTag);
+    }
+    for(let collection of selectedCollections){
+      let newTag = <div className='search-filter-tags' key={collection}>{collection} <i onClick={handleRemoveTagClick} data-type={"collection"} data-value={collection} class="fa fa-close remove-tag-icon"></i></div>;
+      tagsList.push(newTag);
+    }    
+    setFilterTags(tagsList);
   }
 
 
@@ -317,6 +296,7 @@ const SearchResult = (props) => {
 
   useEffect(() => {
       search();
+      createFilterTags();
   }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections]);
 
 
@@ -343,10 +323,8 @@ const SearchResult = (props) => {
             }              
           </div>
           <div className='col-sm-8' id="search-list-grid">
-            {searchResult.length > 0 && <h3 className="text-dark">{totalResultsCount + ' results found for "' + searchQuery + '"'   }</h3>}
-               <div className='row'>
-                 {facetButton()} 
-                </div>  
+            {searchResult.length > 0 && <h3 className="text-dark">{`${totalResultsCount} results found for"${searchQuery}"`}</h3>}
+               <div className='row'>{filterTags}</div>  
                <div className='row'>                                     
                   <div className='col-sm-12 text-right zero-padding-col'>
                     <DropDown 

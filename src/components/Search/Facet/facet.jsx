@@ -96,7 +96,7 @@ const Facet = (props) => {
                                         class="form-check-input search-facet-checkbox ontology-facet-checkbox"
                                         type="checkbox" 
                                         value={ontologyId}
-                                        id={"search-checkbox-" + ontologyId} 
+                                        id={"search-checkbox-" + ontologyId.toLowerCase()} 
                                         key={ontologyId}
                                         onClick={props.handleOntologyCheckBoxClick}
                                         data-isChecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
