@@ -71,7 +71,7 @@ const SearchForm = (props) => {
       getAutoCompleteResult(inputForAutoComplete, resultCount),
       getJumpToResult(inputForAutoComplete, resultCount)
     ]);        
-    setJumpToResult(jumpToResult);
+    setJumpToResult(!ontologyId ? jumpToResult : []);
     setAutoCompleteResult(autoCompleteResult);
     setSearchQuery(inputForAutoComplete['searchQuery']);
   }
@@ -90,7 +90,7 @@ const SearchForm = (props) => {
     searchUrl.pathname = "/ts/search";          
     searchUrl.searchParams.set('q', label);
     searchUrl.searchParams.set('page', 1);    
-    ontologyId && searchUrl.searchParams.set('ontology', ontologyId.toUpperCase()); 
+    ontologyId && searchUrl.searchParams.set('ontology', ontologyId); 
     obsoletes && searchUrl.searchParams.set('obsoletes', obsoletes);
     exact && searchUrl.searchParams.set('exact', exact);
     return searchUrl.toString();
