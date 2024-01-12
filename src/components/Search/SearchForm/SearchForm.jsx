@@ -32,7 +32,8 @@ const SearchForm = (props) => {
   const [jumpToResult, setJumpToResult] = useState([]);
 
   const resultCount = 5;
-  const resultBoxesRef = useRef(null);
+  const autoCompleteRef = useRef(null);
+  const jumptToRef = useRef(null);
   const history = useHistory();
 
 
@@ -154,8 +155,8 @@ const SearchForm = (props) => {
   }
 
 
-  function closeResultBoxWhenClickedOutside(e){    
-    if(!resultBoxesRef.current?.contains(e.target)){
+  function closeResultBoxWhenClickedOutside(e){       
+    if(!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)){
       setAutoCompleteResult([]);
       setJumpToResult([]);
     }
@@ -205,12 +206,12 @@ const SearchForm = (props) => {
           </div>
                                 
           {autoCompleteResult.length !== 0 &&
-            <div id = "autocomplete-container" className="col-md-12" ref={resultBoxesRef}>
+            <div id = "autocomplete-container" className="col-md-12" ref={autoCompleteRef}>
               {renderAutoCompleteResult()}
             </div>
           }         
           {jumpToResult.length !== 0 && !ontologyId &&
-            <div ref={resultBoxesRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
+            <div ref={jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
               <div>
                 <h4>Jump To</h4>
                 {renderJumpToResult()}
