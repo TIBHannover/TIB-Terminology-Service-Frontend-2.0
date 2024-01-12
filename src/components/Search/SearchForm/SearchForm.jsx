@@ -87,7 +87,7 @@ const SearchForm = (props) => {
   
   function setSearchUrl(label){
     let searchUrl = new URL(window.location);
-    searchUrl.pathname = "/ts/search";          
+    searchUrl.pathname =  process.env.REACT_APP_PROJECT_SUB_PATH + "/search";          
     searchUrl.searchParams.set('q', label);
     searchUrl.searchParams.set('page', 1);    
     ontologyId && searchUrl.searchParams.set('ontology', ontologyId); 
