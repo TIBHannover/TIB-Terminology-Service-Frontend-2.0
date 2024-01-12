@@ -189,7 +189,7 @@ const SearchForm = (props) => {
   return(
     <>
       <div className='row site-header-searchbox-holder'>
-        <div className='col-sm-12 search-bar-container'>
+        <div className='col-sm-9 search-bar-container'>
           <div class="input-group input-group-lg">                              
             <input 
                 type="text" 

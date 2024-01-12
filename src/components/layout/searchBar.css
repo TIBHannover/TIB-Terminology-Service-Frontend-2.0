@@ -61,5 +61,9 @@
 }
 
 .site-header-search-filters-container{
-    margin-left: 6%;
+    margin-left: 17%;
+}
+
+.search-bar-container{
+    margin: auto;
 }
