@@ -37,6 +37,8 @@ const SearchResult = (props) => {
 
   const history = useHistory();
 
+  const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value:10}, {label: "20", value:20}, {label: "30", value:30}, {label: "40", value:40}];
+
 
   async function getAllCollectionIds(){
     // Fetch all collection Ids for TIB General to show in the facet.
@@ -345,17 +347,16 @@ const SearchResult = (props) => {
                <div className='row'>
                  {facetButton()} 
                 </div>  
-               <div className='row'>                                                      
-                  <div className='col-sm-4 search-dropdown'>     
-                    <div class="form-group">
-                      <label for="list-result-per-page" className='col-form-label'>Results Per Page</label>
-                        <select className='site-dropdown-menu list-result-per-page-dropdown-menu dropdown-colour' id="list-result-per-page" value={pageSize} onChange={handlePageSizeDropDownChange}>
-                          <option value={10} key="10">10</option>
-                          <option value={20} key="20">20</option>
-                          <option value={30} key="30">30</option>
-                          <option value={40} key="40">40</option>
-                        </select>  
-                     </div>
+               <div className='row'>                                     
+                  <div className='col-sm-12 text-right zero-padding-col'>
+                    <DropDown 
+                        options={PAGE_SIZES_FOR_DROPDOWN}
+                        dropDownId="list-result-per-page"                        
+                        dropDownTitle="Result Per Page"
+                        dropdownClassName={"white-dropdown"} 
+                        dropDownValue={pageSize}
+                        dropDownChangeHandler={handlePageSizeDropDownChange}                                
+                    />                   
                   </div> 
                 </div>
                
