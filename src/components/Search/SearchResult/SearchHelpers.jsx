@@ -1,5 +1,3 @@
-import {getCollectionOntologies, getAllOntologies} from '../../../api/fetchData';
-
 
 export function setResultTitleAndLabel(resultItem, obsoletes){
     let content = [];
@@ -29,35 +27,29 @@ export function setResultTitleAndLabel(resultItem, obsoletes){
 }
 
 
-/**
- * Set the ontology list  for filter based on the selected ontology and collections
- * @param {*} selectedOntologies 
- * @param {*} selectedCollections 
- */
-export async function setOntologyForFilter(selectedOntologies, selectedCollections){
-    let result = [];    
-    if(selectedOntologies.length === 0 && selectedCollections.length === 0){
-        return [[], "all"];
+
+export function makeAlsoInTag(resultItem){
+    let content = [];
+    let targetHref = "";
+    if(resultItem["type"] === 'class'){
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
     }
-    else if(selectedCollections.length === 0){
-        return [selectedOntologies, ""];
+    else if(resultItem["type"] === 'property'){
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/props?iri=' + encodeURIComponent(resultItem['iri']);        
     }
-    else if(selectedOntologies.length === 0){
-        let collectionOntologies = await getCollectionOntologies(selectedCollections, false);
-        for(let onto of collectionOntologies){
-            result.push(onto['ontologyId']);
-        }
-        return [result, ""];
+    else if(resultItem["type"] === 'individual'){
+        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/individuals?iri=' + encodeURIComponent(resultItem['iri']);
     }
-    else{
-        let collectionOntologies = await getCollectionOntologies(selectedCollections, false);
-        for(let onto of selectedOntologies){          
-            if(ontologyIsPartOfSelectedCollections(collectionOntologies, onto)){
-                result.push(onto);
-            }
-        }
-        return [result, ""];
-    }        
+    
+    content.push(
+        <div> 
+            <a href={targetHref} className="btn btn-default ontology-button " target="_blank">
+            {resultItem['ontology_prefix']}
+            </a>
+        </div>
+    ); 
+    
+    return content;
 }
 
 
@@ -74,20 +66,4 @@ export function ontologyIsPartOfSelectedCollections(collectionsOntologies, ontol
         }
     }    
     return false;
-}
-
-
-/**
- * Create an empty facet counts. Used when there is not search results
- */
-export function createEmptyFacetCounts(allOntologies){
-    let facetData = {};
-    facetData["facet_fields"] = {};    
-    facetData["facet_fields"]["type"] = ["class", 0, "property", 0, "individual", 0, "ontology", 0];
-    facetData["facet_fields"]["ontology_name"] = [];
-    for(let onto of allOntologies){
-        facetData["facet_fields"]["ontology_name"].push(onto["ontologyId"].toUpperCase());
-        facetData["facet_fields"]["ontology_name"].push(0);
-    }    
-    return facetData;
 }
