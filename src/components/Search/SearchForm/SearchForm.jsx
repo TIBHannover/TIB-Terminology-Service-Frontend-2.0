@@ -130,7 +130,7 @@ const SearchForm = (props) => {
     for(let result of jumpToResult){
       resultList.push(
         <div className="jump-autocomplete-container">
-           {setJumpResultButtons(result)}
+           {setJumpResultButtons(result, obsoletes)}
         </div>          
       )
     }

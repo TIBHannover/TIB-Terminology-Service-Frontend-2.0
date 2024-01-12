@@ -1,20 +1,18 @@
 import { getCallSetting } from '../../../api/constants';
 
 
-export function setJumpResultButtons(resultItem){
+export function setJumpResultButtons(resultItem, obsoletes){
     let content = [];
-    let targetHref = "";
+    let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);
+
     if(resultItem["type"] === 'class'){
-        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) + '/terms?iri=' + encodeURIComponent(resultItem['iri']);       
+        targetHref += '/terms?iri=' + encodeURIComponent(resultItem['iri']) + `&obsoletes=${obsoletes}`;       
     }
     else if(resultItem["type"] === 'property'){
-        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/props?iri=' + encodeURIComponent(resultItem['iri']);        
-    }
-    else if(resultItem["type"] === 'ontology'){
-        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);       
-    }
+        targetHref += '/props?iri=' + encodeURIComponent(resultItem['iri']) + `&obsoletes=${obsoletes}`;        
+    }   
     else if(resultItem["type"] === 'individual'){
-        targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']) +'/individuals?iri=' + encodeURIComponent(resultItem['iri']);
+        targetHref += '/individuals?iri=' + encodeURIComponent(resultItem['iri']) + `&obsoletes=${obsoletes}`;
     }
 
     if (process.env.REACT_APP_PROJECT_ID === "nfdi4ing"){
