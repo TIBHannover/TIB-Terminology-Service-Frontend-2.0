@@ -25,7 +25,7 @@ const Tree = (props) => {
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [noNodeExist, setNoNodeExist] = useState(false);    
-    const [obsoletesShown, setObsoletesShown] = useState(targetQueryParams.get('obsoletes') === "true" ? true : false);
+    const [obsoletesShown, setObsoletesShown] = useState(Toolkit.getObsoleteFlagValue());
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler)); 
     const [firstTimeLoad, setFirstTimeLoad] = useState(props.lastState ? true : false);    
 
@@ -43,8 +43,7 @@ const Tree = (props) => {
             subTreeMode,
             reload,
             isLoading,
-            noNodeExist,
-            obsoletesShown
+            noNodeExist            
         });
 
         const componentHTML = document.getElementById('tree-root-ul')?.innerHTML;        
@@ -160,13 +159,11 @@ const Tree = (props) => {
         setSubOrFullTreeBtnShow(lastStates.subOrFullTreeBtnShow);
         setSubTreeMode(lastStates.subTreeMode);  
         setIsLoading(false);
-        setNoNodeExist(lastStates.noNodeExist);
-        setObsoletesShown(lastStates.obsoletesShown);
+        setNoNodeExist(lastStates.noNodeExist);        
         setFirstTimeLoad(false);
         if(props.lastState.lastIri){
             let url = new URLSearchParams();        
-            url.append('iri', props.lastState.lastIri);
-            url.append('obsoletes', lastStates.obsoletesShown);
+            url.append('iri', props.lastState.lastIri);            
             history.push(window.location.pathname + "?" + url.toString())            
             props.iriChangerFunction(props.lastState.lastIri, props.componentIdentity);
             props.handleNodeSelectionInDataTree(props.lastState.lastIri, true);
@@ -274,7 +271,7 @@ const Tree = (props) => {
 
 
     function showObsoletes(){                      
-        let newUrl = Toolkit.setParamInUrl("obsoletes", !obsoletesShown);        
+        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);        
         history.push(newUrl);
         setReload(true);
         setIsLoading(true);

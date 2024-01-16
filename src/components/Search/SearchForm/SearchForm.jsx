@@ -11,8 +11,7 @@ import Toolkit from '../../common/Toolkit';
 
 const SearchForm = (props) => {
 
-  let currentUrlParams = new URL(window.location).searchParams;
-  let obsoleteFlag = Toolkit.getObsoleteFlagValue();
+  let currentUrlParams = new URL(window.location).searchParams;  
   let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
   let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
   
@@ -25,7 +24,6 @@ const SearchForm = (props) => {
 
 
   const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);  
-  const [obsoletes, setObsoletes] = useState(obsoleteFlag);
   const [exact, setExact] = useState(exactFlagInUrl);
   const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
@@ -55,7 +53,7 @@ const SearchForm = (props) => {
       return true;
     }
     inputForAutoComplete['searchQuery'] = searchQuery;    
-    inputForAutoComplete['obsoletes'] = obsoletes;
+    inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
     inputForAutoComplete['ontologyIds'] = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;    
@@ -87,11 +85,12 @@ const SearchForm = (props) => {
   
   function setSearchUrl(label){
     let searchUrl = new URL(window.location);
+    let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     searchUrl.pathname =  process.env.REACT_APP_PROJECT_SUB_PATH + "/search";          
     searchUrl.searchParams.set('q', label);
     searchUrl.searchParams.set('page', 1);    
     ontologyId && searchUrl.searchParams.set('ontology', ontologyId); 
-    obsoletes && searchUrl.searchParams.set('obsoletes', obsoletes);
+    obsoletesFlag && searchUrl.searchParams.set('obsoletes', obsoletesFlag);
     exact && searchUrl.searchParams.set('exact', exact);
     return searchUrl.toString();
   }
@@ -130,7 +129,7 @@ const SearchForm = (props) => {
     for(let result of jumpToResult){
       resultList.push(
         <div className="jump-autocomplete-container">
-           {setJumpResultButtons(result, obsoletes)}
+           {setJumpResultButtons(result, Toolkit.getObsoleteFlagValue())}
         </div>          
       )
     }
@@ -146,12 +145,9 @@ const SearchForm = (props) => {
   }
 
 
-  function handleObsoletesCheckboxClick(e){
-    let searchUrl = new URL(window.location);
-    setObsoletes(e.target.checked);
-    searchUrl.searchParams.set('obsoletes', e.target.checked); 
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});
-    localStorage.setItem("obsoletes", e.target.checked);
+  function handleObsoletesCheckboxClick(e){        
+    let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
+    history.replace({...history.location, search: newUrl.searchParams.toString()});    
   }
 
 
@@ -167,7 +163,7 @@ const SearchForm = (props) => {
   useEffect(() => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);
-    if(obsoletes){ document.getElementById("obsoletes-checkbox").checked = true;}   
+    if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
     if(exact){ document.getElementById("exact-checkbox").checked = true;}
     let cUrl = window.location.href;        
     if(cUrl.includes("q=")){

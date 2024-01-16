@@ -27,12 +27,10 @@ const SearchResult = (props) => {
   const [facetFields, setFacetFields] = useState([]);
   const [pageNumber, setPageNumber] = useState(parseInt(currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER));
   const [pageSize, setPageSize] = useState(parseInt(currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE));
-  const [isLoaded, setIsLoaded] = useState(false);  
   const [expandedResults, setExpandedResults] = useState([]);
   const [totalResultsCount, setTotalResultsCount] = useState([]);
   const [facetIsSelected, setFacetIsSelected] = useState(false);
-  const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);
-  const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue());
+  const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);  
   const [allCollectionIds, setAllCollectionIds] = useState([]);
   const [filterTags, setFilterTags] = useState("");  
 
@@ -54,6 +52,7 @@ const SearchResult = (props) => {
 
   async function search(){      
     try{
+      let obsoletes = Toolkit.getObsoleteFlagValue();
       let result = await olsSearch(searchQuery, pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact);    
     
       // This part is for updating the facet counts. 
@@ -102,7 +101,7 @@ const SearchResult = (props) => {
         searchResultList.push(
           <div className="row result-card" key={searchResult[i]['id']}>
             <div className='col-sm-10'>
-              {setResultTitleAndLabel(searchResult[i], obsoletes)}                
+              {setResultTitleAndLabel(searchResult[i], Toolkit.getObsoleteFlagValue())}                
               <div className="searchresult-iri">
                 {searchResult[i].iri}
               </div>

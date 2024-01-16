@@ -104,6 +104,15 @@ class Toolkit{
         let obsoleteValue =  currentUrlParams.get('obsoletes') === "true" ? true : false;
         return obsoleteValue; 
     }
+
+
+    static setObsoleteAndReturnNewUrl(obsoletesValue) {        
+        let url = new URL(window.location);        
+        url.searchParams.set('obsoletes', obsoletesValue);        
+        localStorage.setItem("obsoletes", obsoletesValue);
+        document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
+        return url;
+    }
 }
 
 export default Toolkit;

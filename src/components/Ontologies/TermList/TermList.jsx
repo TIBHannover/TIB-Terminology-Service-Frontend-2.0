@@ -122,7 +122,9 @@ const TermList = (props) => {
     }
 
 
-    function obsoletesCheckboxHandler(e){        
+    function obsoletesCheckboxHandler(e){ 
+        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
+        history.push(newUrl);
         setObsoletes(e.target.checked);
         setPageNumber(0);
     }
