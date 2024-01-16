@@ -17,6 +17,7 @@ const IndividualsList = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);    
     const [showNodeDetailPage, setShowNodeDetailPage] = useState(false);
     const [selectedNodeIri, setSelectedNodeIri] = useState("");
+    const [jumpToIri, setJumpToIri] = useState(null);
     const [listView, setListView] = useState(true);
     const [JumpToOnLoad, setJumpToOnload] = useState(false);
     const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
@@ -34,7 +35,8 @@ const IndividualsList = (props) => {
                 let newUrl = Toolkit.setParamInUrl('iri', props.iri)                
                 history.push(newUrl);
                 setSelectedNodeIri(props.iri);
-                setJumpToOnload(true);               
+                setJumpToOnload(true);    
+                setJumpToIri(props.iri);           
                 props.iriChangerFunction(props.iri, props.componentIdentity);              
             }            
         }
@@ -158,7 +160,7 @@ const IndividualsList = (props) => {
                     showListSwitchEnabled={true}
                     individualViewChanger={switchView}     
                     handleResetTreeInParent={handleResetTreeEvent}
-                    jumpToIri={selectedNodeIri}           
+                    jumpToIri={jumpToIri}           
                 />
             </div>          
         ];
@@ -168,7 +170,8 @@ const IndividualsList = (props) => {
 
     function handleJumtoSelection(selectedTerm){    
         if(selectedTerm){                 
-            setSelectedNodeIri(selectedTerm['iri']);           
+            setSelectedNodeIri(selectedTerm['iri']);
+            setJumpToIri(selectedTerm['iri']);
             setJumpToOnload(true);      
             const searchParams = new URLSearchParams(window.location.search);
             searchParams.set('iri', selectedTerm['iri']);  
