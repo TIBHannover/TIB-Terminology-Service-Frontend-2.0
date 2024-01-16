@@ -225,10 +225,10 @@ const SearchForm = (props) => {
       </div>
       <div className='row site-header-search-filters-container'>
           <div className='col-lg-2 col-sm-3'>
-            <input type="checkbox" className='label-pos' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
+            <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
           </div>
           <div className='col-lg-2 col-sm-3'>
-            <input type="checkbox" className='label-pos' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
+            <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
           </div>
       </div>
     </>            
