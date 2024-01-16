@@ -251,7 +251,7 @@ const SearchResult = (props) => {
       let tagValue = e.target.dataset.value;
       e.target.checked = false;
       e.target.value = tagValue;
-      if(searchResult.length !== 0){
+      if(document.getElementById('search-checkbox-' + tagValue)){
         document.getElementById('search-checkbox-' + tagValue).checked = false;
       }          
       if(tagType === "type"){      
