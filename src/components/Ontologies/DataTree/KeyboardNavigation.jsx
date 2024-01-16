@@ -19,7 +19,7 @@ class KeyboardNavigator{
     }
 
 
-    run(event){            
+    run(event){                            
         let treeNodeManager = new TreeNodeController();      
         let jumtoItems = document.getElementsByClassName('react-autosuggest__suggestions-container--open');        
         if(jumtoItems.length !== 0){
@@ -29,10 +29,10 @@ class KeyboardNavigator{
         if(NAVIGATION_KEYS.includes(event.code)){
             event.preventDefault();
         }
-        try{                  
+        try{                              
             if(!this.selectedNodeId && ["ArrowDown", "ArrowUp"].includes(event.key)){
                 // No term is selected yet. Pick the first one
-                this.node = treeNodeManager.getNodeLabelTextById("0");                
+                this.node = treeNodeManager.getFirstNodeInTree();                
                 this.afterRunEventFunction(this.node);
             }
             else if(this.selectedNodeId && event.key === "ArrowDown"){                
@@ -72,7 +72,7 @@ class KeyboardNavigator{
                     this.afterRunEventFunction(parentNode);                    
                     treeNodeManager.scrollToNode(this.selectedNodeId);
                 }                 
-            }
+            }             
         }
         catch(e){
             // console.info(e)

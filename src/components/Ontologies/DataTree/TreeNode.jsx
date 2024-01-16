@@ -151,6 +151,11 @@ class TreeNodeController{
         return document.getElementById(id).getElementsByClassName('tree-text-container')[0];
     }
 
+    getFirstNodeInTree(){
+        let treeRootUl = document.getElementById('tree-root-ul');
+        return treeRootUl.querySelector('li:first-child').getElementsByClassName('tree-text-container')[0];
+    }
+
     getFirstChildLabelText(id){
         return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0];
     }

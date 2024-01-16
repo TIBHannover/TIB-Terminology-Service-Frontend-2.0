@@ -306,7 +306,7 @@ const Tree = (props) => {
     function selectNode(target){                    
         if(props.isIndividual){
             return true;
-        }
+        }        
         let treeNode = new TreeNodeController();
         treeNode.unClickAllNodes();        
         let targetNodeDiv = treeNode.getClickedNodeDiv(target);
@@ -400,7 +400,7 @@ const Tree = (props) => {
     }
 
     
-    const handleKeyDown = (event) => {            
+    const handleKeyDown = (event) => {                   
         keyboardNavigationManager.run(event);
     };
 
