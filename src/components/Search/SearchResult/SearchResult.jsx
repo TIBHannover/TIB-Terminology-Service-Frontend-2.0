@@ -250,8 +250,10 @@ const SearchResult = (props) => {
       let tagType = e.target.dataset.type;
       let tagValue = e.target.dataset.value;
       e.target.checked = false;
-      e.target.value = tagValue;    
-      document.getElementById('search-checkbox-' + tagValue).checked = false;
+      e.target.value = tagValue;
+      if(searchResult.length !== 0){
+        document.getElementById('search-checkbox-' + tagValue).checked = false;
+      }          
       if(tagType === "type"){      
         handleTypeFacetSelection(e);      
       }
@@ -263,7 +265,7 @@ const SearchResult = (props) => {
       }
     }
     catch(e){
-
+      // console.info(e);
     }
   }
 
