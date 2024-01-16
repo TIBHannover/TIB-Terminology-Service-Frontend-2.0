@@ -71,7 +71,14 @@ class PaneResize{
         let currentWidthRight = parseInt(pageRightPane.offsetWidth);    
         pageLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
         pageRightPane.style.width = (currentWidthRight - addedWidth) + "px";
-        this.lastPagePositionX = event.clientX;        
+        this.lastPagePositionX = event.clientX;   
+        let jumpToBox = document.getElementsByClassName('react-autosuggest__input');
+        if(jumpToBox.length !== 0 && addedWidth < 0){
+            jumpToBox[0].classList.add('small-jumpto-box');
+        }
+        else if(jumpToBox.length !== 0 && addedWidth < 0){
+            jumpToBox[0].classList.remove('small-jumpto-box');
+        }
       } 
     
 
@@ -86,7 +93,7 @@ class PaneResize{
     resetTheWidthToOrignial(){
         let pageLeftPane = document.getElementById("page-left-pane");                    
         pageLeftPane.style.width = this.originalLeftPaneWidth + "px";        ;
-        this.lastPagePositionX = 0;
+        this.lastPagePositionX = 0;        
         this.isResizeOn = false;   
     }
 

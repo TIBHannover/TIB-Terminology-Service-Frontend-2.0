@@ -124,8 +124,7 @@ class TreeNodeController{
     }
 
     scrollToNextNode(id){
-        let position = document.getElementById(id).nextSibling.offsetTop;
-        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+        document.getElementsByClassName('tree-page-left-part')[0].getElementById(id).nextSibling.scrollIntoView();        
     }
 
     scrollToPreviousNode(id){
@@ -150,6 +149,11 @@ class TreeNodeController{
 
     getNodeLabelTextById(id){
         return document.getElementById(id).getElementsByClassName('tree-text-container')[0];
+    }
+
+    getFirstNodeInTree(){
+        let treeRootUl = document.getElementById('tree-root-ul');
+        return treeRootUl.querySelector('li:first-child').getElementsByClassName('tree-text-container')[0];
     }
 
     getFirstChildLabelText(id){

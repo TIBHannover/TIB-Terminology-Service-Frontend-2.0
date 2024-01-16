@@ -1,5 +1,15 @@
 body .autosuggest-jumpto-container {
-    position: relative;
+    position: relative;    
+}
+
+body .autosuggest-sticky{
+    position: sticky !important;
+    top: 0;
+    z-index: 1000;
+}
+
+body .small-jumpto-box{
+    width: 80%;
 }
 
 body .autosuggest-jumpto-container label {
@@ -7,7 +17,7 @@ body .autosuggest-jumpto-container label {
     top: 50%;
     transform: translateY(-50%);
     background-color: white; 
-    padding: 2px 5px;
+    padding: 3px 5px;
     margin-left: 1px;    
     z-index: 1;
     background-color: rgb(214, 214, 214);

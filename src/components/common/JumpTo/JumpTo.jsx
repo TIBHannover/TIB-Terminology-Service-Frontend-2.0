@@ -4,6 +4,9 @@ import { getJumpToResult } from "../../../api/fetchData";
 
 
 
+const TYPE_MAPP = {"terms": "class", "properties": "property", "individuals": "individual"};
+
+
 const JumpTo = (props) => {
     const [enteredTerm, setEnteredTerm] = useState("");
     const [resultList, setResultList] = useState([]);
@@ -31,9 +34,9 @@ const JumpTo = (props) => {
 
     async function onAutoCompleteChange({value}){   
         let enteredTerm = value;                  
-        let type = props.targetType;        
-        if(type !== "property" && type !== "individual"){
-            type = props.isSkos ? "individual" : "class"; 
+        let type = TYPE_MAPP[props.targetType];        
+        if(type === "class" && props.isSkos){
+            type = "individual"; 
         }       
         if (enteredTerm.length > 0){
             let inputForAutoComplete = {};    

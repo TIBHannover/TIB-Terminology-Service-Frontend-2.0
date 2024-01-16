@@ -1,5 +1,5 @@
 import React from 'react';
-import DataTreePage from '../DataTree/DataTreePage';
+import DataTree from '../DataTree/DataTree';
 import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -58,8 +58,8 @@ class OntologyPage extends React.Component {
       obsoleteTerms: [],
       obsoleteProps: [],
       waiting: false,
-      lastIrisHistory: {"terms": "", "props": "", "individuals": "", "termList": ""},
-      lastTabsStates: {"terms": "", "props": "", "gitIssues": ""},
+      lastIrisHistory: {"terms": "", "properties": "", "individuals": "", "termList": ""},
+      lastTabsStates: {"terms": null, "properties": null, "gitIssues": ""},
       rootNodeNotExist: false,
       isSkosOntology: false,
       ontologyShowAll: false,
@@ -80,10 +80,12 @@ class OntologyPage extends React.Component {
    */
   async getOntology (ontologyId) {
     let theOntology = await getOntologyDetail(ontologyId);
+    let isSkos = theOntology['config']?.['skos'];
     if (typeof theOntology != undefined){
       this.setState({
         isLoaded: true,
-        ontology: theOntology
+        ontology: theOntology,
+        isSkosOntology: isSkos
       });
     }
     else{
@@ -157,8 +159,7 @@ class OntologyPage extends React.Component {
           isRootTermsLoaded: true,
           rootTerms: rootTerms,
           skosRootIndividuals: skosRootIndividuals,
-          rootNodeNotExist: false,
-          isSkosOntology: isSkos,
+          rootNodeNotExist: false,          
           obsoleteTerms: obsoleteTerms          
         });
       }
@@ -256,10 +257,9 @@ class OntologyPage extends React.Component {
   /**
    * Stores the last state in for tabs components to prevent reload on tab change
    */
-  tabsStateKeeper(domContent, stateObject, componentId){
-    typeof(domContent) !== "undefined" ? stateObject.treeDomContent = domContent : stateObject.treeDomContent = ""; 
-    let lastTabsStates = this.state.lastTabsStates;
-    lastTabsStates[componentId] = stateObject;
+  tabsStateKeeper(domContent, stateObject, componentId, iri){         
+    let lastTabsStates = this.state.lastTabsStates;    
+    lastTabsStates[componentId] = {"html": domContent, "states": stateObject, "lastIri": iri};
     this.setState({
       lastTabsStates: lastTabsStates
     });
@@ -298,7 +298,7 @@ class OntologyPage extends React.Component {
                                 />
                 }
                 {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
-                                <DataTreePage
+                                <DataTree
                                   rootNodes={this.state.rootTerms}
                                   obsoleteTerms={this.state.obsoleteTerms}
                                   rootNodesForSkos={this.state.skosRootIndividuals}
@@ -316,17 +316,17 @@ class OntologyPage extends React.Component {
                 }
 
                 {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
-                                <DataTreePage
+                                <DataTree
                                   rootNodes={this.state.rootProps}
                                   obsoleteTerms={this.state.obsoleteProps}
                                   rootNodesForSkos={[]}
-                                  componentIdentity={'props'}
-                                  iri={this.state.lastIrisHistory['props']}
+                                  componentIdentity={'properties'}
+                                  iri={this.state.lastIrisHistory['properties']}
                                   key={'propertyTreePage'}
                                   ontology={this.state.ontology}
                                   rootNodeNotExist={this.state.rootNodeNotExist}
                                   iriChangerFunction={this.changeInputIri}
-                                  lastState={this.state.lastTabsStates['props']}
+                                  lastState={this.state.lastTabsStates['properties']}
                                   domStateKeeper={this.tabsStateKeeper}
                                   isIndividuals={false}
                                 />
