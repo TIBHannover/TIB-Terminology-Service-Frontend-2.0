@@ -1,9 +1,7 @@
 import {useEffect, useState} from 'react';
-import { useLocation } from 'react-router-dom';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import NodeDetail from './NodeDetail/NodeDetail';
-import queryString from 'query-string'; 
-import NodeGraph from './NodeGraph/NodeGraph';
+import { TermGraph } from './TermGraph/TermGraph';
 import NoteList from '../Note/NoteList';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
 import { Link } from 'react-router-dom';
@@ -23,8 +21,7 @@ const TermDetailTable = (props) => {
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
-  const [targetTerm, setTargetTerm] = useState({"iri": null} );
-  const location = useLocation();
+  const [targetTerm, setTargetTerm] = useState({"iri": null} );  
 
 
   async function fetchTheTargetTerm(){
@@ -39,9 +36,9 @@ const TermDetailTable = (props) => {
   }
 
 
-  function setTabOnLoad(){
-      let targetQueryParams = queryString.parse(location.search + location.hash);
-      let requestedTab = targetQueryParams.subtab;      
+  function setTabOnLoad(){      
+      let url = new URL(window.location);
+      let requestedTab = url.searchParams.get("subtab");      
       let activeTabId = activeTab;            
       if (requestedTab !== lastRequestedTab && requestedTab === 'notes'){
         activeTabId = NOTES_TAB_ID;
@@ -96,8 +93,6 @@ const TermDetailTable = (props) => {
         tabChangeHandler={tabChangeHandler}
     />
   );
-
-
 }
 
 
@@ -135,7 +130,7 @@ const RenderTermDetailTable = (props) => {
           />
         }
         {!props.waiting && (props.activeTab === GRAPH_TAB_ID) &&
-          <NodeGraph
+          <TermGraph
             iri={props.iri}
             ontology={props.ontology.ontologyId}
             componentIdentity={props.componentIdentity}
