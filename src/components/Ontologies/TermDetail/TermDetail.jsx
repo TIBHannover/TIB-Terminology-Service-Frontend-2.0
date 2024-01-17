@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import NodePageTabConfig from './listOfComponentsTabs.json';
-import NodeDetail from './NodeDetail/NodeDetail';
+import { TermDetailTable } from './TermDetailTable/TermDetailTable';
 import { TermGraph } from './TermGraph/TermGraph';
 import NoteList from '../Note/NoteList';
 import {getNodeByIri, getSkosNodeByIri} from '../../../api/fetchData';
@@ -16,7 +16,7 @@ const GRAPH_TAB_ID = 2;
 
 
 
-const TermDetailTable = (props) => {
+const TermDetail = (props) => {
   
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
@@ -80,7 +80,7 @@ const TermDetailTable = (props) => {
 
 
   return (
-    <RenderTermDetailTable 
+    <RenderTermDetail
         waiting={waiting}
         activeTab={activeTab}
         iri={props.iri}
@@ -97,7 +97,7 @@ const TermDetailTable = (props) => {
 
 
 
-const RenderTermDetailTable = (props) => {
+const RenderTermDetail = (props) => {
 
   return(
     <div className='row'>
@@ -108,7 +108,7 @@ const RenderTermDetailTable = (props) => {
             activeTab={props.activeTab}
         />
         {!props.waiting && (props.activeTab === DETAIL_TAB_ID) &&
-          <NodeDetail
+          <TermDetailTable
             iri={props.iri}
             ontology={props.ontology.ontologyId}
             componentIdentity={props.componentIdentity}
@@ -182,4 +182,4 @@ const RenderTermDetailTab = (props) => {
   );
 }
 
-export default TermDetailTable;
+export default TermDetail;
