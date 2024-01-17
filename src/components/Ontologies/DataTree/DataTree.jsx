@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
-import NodePage from '../NodePage/NodePage';
+import TermDetailTable from '../TermDetailTable/TermDetailTable';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../../common/JumpTo/JumpTo';
@@ -110,7 +110,7 @@ const DataTree = (props) => {
         <div className="node-table-container" id="page-right-pane">
           {isTermTree &&
               <MatomoWrapper>
-              <NodePage
+              <TermDetailTable
                 iri={selectedNodeIri}
                 ontology={props.ontology}
                 componentIdentity="terms"
@@ -123,7 +123,7 @@ const DataTree = (props) => {
           }
           {isPropertyTree &&           
             <MatomoWrapper>
-            <NodePage
+            <TermDetailTable
                 iri={selectedNodeIri}
                 ontology={props.ontology}
                 componentIdentity="props"

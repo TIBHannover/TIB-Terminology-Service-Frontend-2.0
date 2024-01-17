@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import PaneResize from "../../common/PaneResize/PaneResize";
 import DropDown from "../../common/DropDown/DropDown";
 import { getObsoleteTerms, getNodeByIri } from "../../../api/fetchData";
-import NodePage from "../NodePage/NodePage";
+import TermDetailTable from "../TermDetailTable/TermDetailTable";
 import Toolkit from "../../common/Toolkit";
 import Pagination from "../../common/Pagination/Pagination";
 import AlertBox from "../../common/Alerts/Alerts";
@@ -79,7 +79,7 @@ const ObsoleteTerms = (props) => {
             {paneResize.generateVerticalResizeLine()} 
             {termIsSelected  && 
                 <div className="node-table-container" id="page-right-pane">
-                    <NodePage
+                    <TermDetailTable
                         iri={selectedIri}
                         ontology={props.ontology}
                         componentIdentity={selectedComponentId}

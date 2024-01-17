@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import {getIndividualsList} from '../../../api/fetchData';
-import NodePage from '../NodePage/NodePage';
+import TermDetailTable from "../TermDetailTable/TermDetailTable";
 import Tree from "../DataTree/Tree";
 import PaneResize from "../../common/PaneResize/PaneResize";
 import Toolkit from "../../common/Toolkit";
@@ -239,7 +239,7 @@ const IndividualsList = (props) => {
             {showNodeDetailPage && paneResizeClass.generateVerticalResizeLine()}                                
             {showNodeDetailPage &&
                 <div className="node-table-container" id="page-right-pane">                     
-                    <NodePage
+                    <TermDetailTable
                         iri={selectedNodeIri}
                         ontology={props.ontology}
                         componentIdentity="individuals"

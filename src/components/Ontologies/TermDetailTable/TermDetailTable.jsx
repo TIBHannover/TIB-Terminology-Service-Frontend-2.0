@@ -18,8 +18,8 @@ const GRAPH_TAB_ID = 2;
 
 
 
-const NodePage = (props) => {
-  const [prevNodeIri, setPrevNodeIri] = useState("");
+const TermDetailTable = (props) => {
+  
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
@@ -35,8 +35,7 @@ const NodePage = (props) => {
       else{      
         term = await getNodeByIri(props.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);      
       }
-      setTargetTerm(term);
-      setPrevNodeIri(props.iri);     
+      setTargetTerm(term);       
   }
 
 
@@ -77,15 +76,14 @@ const NodePage = (props) => {
 
   useEffect(() =>{
     setTabOnLoad();
-    fetchTheTargetTerm();
-    setPrevNodeIri(props.iri);    
+    fetchTheTargetTerm();    
   }, [props.iri, activeTab]);
 
 
 
 
   return (
-    <RenderNodePage 
+    <RenderTermDetailTable 
         waiting={waiting}
         activeTab={activeTab}
         iri={props.iri}
@@ -104,12 +102,12 @@ const NodePage = (props) => {
 
 
 
-const RenderNodePage = (props) => {
+const RenderTermDetailTable = (props) => {
 
   return(
     <div className='row'>
       <div className='col-sm-12'>
-        <RenderNodePageTabs 
+        <RenderTermDetailTab 
             componentIdentity={props.componentIdentity}
             tabChangeHandler={props.tabChangeHandler}
             activeTab={props.activeTab}
@@ -153,7 +151,7 @@ const RenderNodePage = (props) => {
 
 
 
-const RenderNodePageTabs = (props) => {
+const RenderTermDetailTab = (props) => {
 
   function  createTabs(){
       let result = [];         
@@ -189,4 +187,4 @@ const RenderNodePageTabs = (props) => {
   );
 }
 
-export default NodePage;
+export default TermDetailTable;
