@@ -54,9 +54,8 @@ import Toolkit from "../../common/Toolkit";
       }    
     }
     
-    if(object.type && object.isIndividual){
-      metadata['Type'] = [];
-      let typeMtadataValue = [];
+    if(object.type && object.isIndividual){     
+      let typeMtadataValue = [];      
       for(let type of object.type){
         typeMtadataValue.push(
           <span>
@@ -66,7 +65,7 @@ import Toolkit from "../../common/Toolkit";
             <br></br>
           </span>        
         );
-      }
+      }      
       metadata['Type'] = [typeMtadataValue, false];
     }
 
@@ -113,24 +112,24 @@ export function propertyMetaData(object){
 }
 
 
-export function formatText (tableLabel, text, isLink = false) {
+export function formatText (tableLabel, text, isLink = false) {  
   if (text === null || text === '' || typeof(text) === "undefined") {
     return 'N/A'
   }  
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
-  else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(tableLabel)){
+  else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(tableLabel)){    
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }  
   else if (tableLabel === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
-  else if (tableLabel === "Description"){
+  else if (["Type", "Description"].includes(tableLabel)){
     return text;
   }
   // return text;
-  let formatedText = Toolkit.transformLinksInStringToAnchor(text);  
+  let formatedText = Toolkit.transformLinksInStringToAnchor(text);    
   return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
 }
 

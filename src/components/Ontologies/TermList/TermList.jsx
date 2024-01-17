@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import { useHistory } from "react-router";
-import {getListOfTerms, getNodeByIri, getObsoleteTermsForTermList} from '../../../api/fetchData';
+import {getListOfTerms, getObsoleteTermsForTermList} from '../../../api/fetchData';
+import TermApi from "../../../api/term";
 import Toolkit from "../../common/Toolkit";
 import { RenderTermList } from "./RenderTermList";
 
@@ -39,7 +40,9 @@ const TermList = (props) => {
             listOfTermsAndStats = await getObsoleteTermsForTermList(ontologyId, mode, pageNumber, pageSize);            
         }
         else{
-            listOfTermsAndStats["results"] = [await getNodeByIri(ontologyId, encodeURIComponent(iri), mode)];
+            let termApi = new TermApi(ontologyId, encodeURIComponent(iri), mode);
+            await termApi.fetchTerm();
+            listOfTermsAndStats["results"] = [termApi.term];
             listOfTermsAndStats["totalTermsCount"] = 1;            
         }
         

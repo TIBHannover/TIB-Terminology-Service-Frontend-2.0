@@ -12,7 +12,7 @@ export const TermDetailTable = (props) => {
   const [showDataAsJsonBtnHref, setShowDataAsJsonBtnHref] = useState("");
 
 
-  async function setComponentData(){ 
+  function setComponentData(){ 
     let showDataAsJsonBtnHref = "";
     if(props.isSkos && props.componentIdentity === "individual"){          
       showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + props.node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(props.node.iri);
@@ -40,7 +40,7 @@ export const TermDetailTable = (props) => {
 
 
 
-  function createRowInTable(metadataLabel, metadataValue, isLink){
+  function createRowInTable(metadataLabel, metadataValue, isLink){    
     let row = [
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
           <div className='row'>

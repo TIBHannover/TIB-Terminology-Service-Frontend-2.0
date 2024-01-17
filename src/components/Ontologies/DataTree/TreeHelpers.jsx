@@ -1,5 +1,6 @@
 import React from 'react';
-import {getNodeByIri, getChildrenJsTree, getChildrenSkosTree} from '../../../api/fetchData';
+import {getChildrenJsTree, getChildrenSkosTree} from '../../../api/fetchData';
+import TermApi from '../../../api/term';
 import TreeNodeController from './TreeNode';
 import Toolkit from "../../common/Toolkit";
 import SkosHelper from './SkosHelpers';
@@ -169,36 +170,32 @@ export default class TreeHelper{
 
    
   static async nodeHasChildren(ontology, nodeIri, mode){
-      let node = "";
+      let termType = "";      
       if(mode === 'terms'){
-        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
+          termType = "terms";
       }
       else if(mode === "property"){
-        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
+          termType = "properties";
       }
       else{
         return false;
       }
-      return node.has_children;
-      
+      let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
+      await termApi.fetchTerm();
+      return termApi.term.has_children;      
   }
 
 
   static async nodeIsRoot(ontology, nodeIri, mode){
-      let node = "";
-      if(mode === 'terms'){
-        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "terms");
-      }
-      else{
-        node = await getNodeByIri(ontology, encodeURIComponent(nodeIri), "properties");
-      }
-      return node.is_root;
-      
-    }
+      let termType = mode === 'terms' ? "terms" : "properties";
+      let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
+      await termApi.fetchTerm();
+      return termApi.term.is_root; 
+  }
   
 
 
-    static setIsExpandedAndHasChildren(nodeObject){
+  static setIsExpandedAndHasChildren(nodeObject){
       let hasChildren = false;
       let isExpanded = false;
       if (nodeObject.childrenList.length === 0 && !nodeObject.children && !nodeObject.opened){

@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
+import TermApi from "../../../api/term";
 import Pagination from "../../common/Pagination/Pagination";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
@@ -23,9 +24,10 @@ export const RenderTermList = (props) => {
         let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
+            let termApi = new TermApi(term['ontology_name'], encodeURIComponent(term['iri']), "terms");            
             let [subclassOfText, equivalentToText] = await Promise.all([
-                getSubClassOf(term['iri'], term['ontology_name']),
-                getEqAxiom(term['iri'], term['ontology_name'])
+                termApi.getSubClassOf(),
+                termApi.getEqAxiom()
             ]);
             let tableBodyContent = !props.isObsolete 
                                     ? createTableBody(term, termTreeUrl, subclassOfText, equivalentToText)

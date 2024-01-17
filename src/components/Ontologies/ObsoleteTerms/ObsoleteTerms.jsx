@@ -2,7 +2,8 @@ import {useEffect, useState} from "react";
 import { useHistory } from 'react-router-dom';
 import PaneResize from "../../common/PaneResize/PaneResize";
 import DropDown from "../../common/DropDown/DropDown";
-import { getObsoleteTerms, getNodeByIri } from "../../../api/fetchData";
+import { getObsoleteTerms } from "../../../api/fetchData";
+import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
 import Toolkit from "../../common/Toolkit";
 import Pagination from "../../common/Pagination/Pagination";
@@ -125,10 +126,11 @@ const ObsoleteTermsList = (props) => {
             }
             let iri = searchParams.get('iri') ? searchParams.get('iri') : false;            
             let getNodeKeyMode = (type === "class") ? "terms" : "properties";                     
-            if(iri){                                
-                let selectedTerm = await getNodeByIri(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
+            if(iri){                
+                let termApi = new TermApi(props.ontologyId, encodeURIComponent(iri), getNodeKeyMode);
+                await termApi.fetchTerm();                                
                 let list = {getNodeKeyMode: []};
-                list[getNodeKeyMode] = [selectedTerm];                                        
+                list[getNodeKeyMode] = [termApi.term];                                        
                 setTermsList(list);                         
                 setTotalCountOfPages(1); 
                 document.getElementsByClassName("tree-text-container")[0].classList.add('clicked');

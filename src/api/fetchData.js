@@ -214,50 +214,6 @@ export async function skosNodeHasChildren(ontologyId, targetNodeIri) {
 }
 
 
-export async function getNodeByIri(ontology, nodeIri, mode, isIndividual=false) {
-  if(nodeIri === "%20"){
-    // empty iri
-    return false;
-  }  
-  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
-  let baseUrl = OntologiesBaseServiceUrl + ontology + "/" + mode;  
-  let node =  "";  
-  node =  await fetch(baseUrl + "/" + encodeURIComponent(nodeIri) , getCallSetting);
-
-  if (node.status === 404){
-    return false;
-  }
-  node = await node.json();
-  if(isIndividual){
-    node['isIndividual'] = true;
-    node['relations'] = 'N/A';
-    node['eqAxiom'] = 'N/A';
-    node['subClassOf'] = 'N/A';
-    return node;
-  }
- 
-  let parents = await getParents(node, mode);
-  if(mode === "terms"){
-    // let rels = await getClassRelations(node, ontology);
-    let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
-      getRelations(node['iri'], ontology),
-      getEqAxiom(node['iri'], ontology),
-      getSubClassOf(node['iri'], ontology),
-      getIndividualInstancesForClass(ontology, node['iri'])
-
-    ]);
-    node['relations'] = relations;
-    node['eqAxiom'] = eqAxiom;
-    node['subClassOf'] = subClassOf; 
-    node['instancesList'] = instancesList;
-  }
-  else{
-    node['relations'] = [];
-  }
-  node['parents'] = parents;  
-  return node;
-}
-
 
 export async function getSkosNodeByIri(ontology, nodeIri) {  
   let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
@@ -300,82 +256,6 @@ export async function isSkosOntology(ontologyId) {
 
 
 
-export async function getEqAxiom(nodeIri, ontologyId){
-  let url =  "";
-  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/equivalentclassdescription';
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();  
-  res = res["_embedded"];
-  if (typeof(res) !== "undefined"){
-    let resultHtml =  "";
-    resultHtml += "<ul>";
-    for(let item of res["strings"]){
-      resultHtml += "<li>";
-      resultHtml += item["content"];
-      resultHtml += "</li>";
-    }
-    resultHtml += "<ul>";
-    return resultHtml;
-  }
-  return "N/A";
-}
-
-
-export async function getSubClassOf(nodeIri, ontologyId){
-  let url =  "";
-  let parentUrl =  "";
-  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/superclassdescription';
-  parentUrl = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/parents';
-  let parentRes = await fetch(parentUrl, getCallSetting);
-  parentRes = await parentRes.json();
-  parentRes = parentRes["_embedded"];
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();
-  res = res["_embedded"];
-  let result= "";
-  if(!parentRes){
-    return result;
-  }
-  result += "<ul>"
-  for(let i=0; i < parentRes["terms"].length; i++){
-    result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(parentRes["terms"][i]["iri"]) + '>' + parentRes["terms"][i]["label"] + '</a>'+ '</li>';
-  }
-  if (typeof(res) !== "undefined"){
-    for(let i=0; i < res["strings"].length; i++){
-    result += '<li>'+ res["strings"][i]["content"] +'</li>';     
-  }
-  result += "<ul>"
-  
-}
-  return result; 
-}
-
-
-export async function getRelations(nodeIri, ontologyId){
-  let url = ""
-  url = process.env.REACT_APP_API_BASE_URL + '/' + ontologyId + '/terms/' + encodeURIComponent(encodeURIComponent(nodeIri)) + '/relatedfroms';
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();
-  if (typeof(res) !== "undefined"){
-    let entries = Object.entries(res)
-    let result = "";
-    
-    for(let [k,v] of entries){               
-      result += k 
-      result += "<ul>"            
-      for(let item of v){
-        result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontologyId + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>'+ '</li>';
-      }
-      result += "</ul>"      
-    }     
-    return result
-  } 
-  return "N/A"; 
-      
-}
-
-
-
 export async function getAllCollectionsIds(withStats=true) {
   try{
     let url =  process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
@@ -406,26 +286,6 @@ export async function getAllCollectionsIds(withStats=true) {
   catch(e){
     return [];
   }  
-}
-
-
-export async function getParents(node, mode) {
-  if(mode === "individuals"){
-    return [];
-  }
-  if(typeof(node['_links']['hierarchicalParents']) === "undefined"){
-    return [];
-  }
-  let url = node['_links']['hierarchicalParents']['href'];
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();
-  let parents = res["_embedded"][mode];
-  let result = [];
-  for(let p of parents){
-    let temp = {"label":p.label, "iri": p.iri, "ontology": p.ontology_name};
-    result.push(temp);
-  }
-  return result;
 }
 
 
@@ -473,23 +333,6 @@ export async function getClassRelations(classNode, ontologyId) {
 
 }
 
-
-export async function getIndividualInstancesForClass(ontologyId, classIri){
-  try{
-    let baseUrl =  process.env.REACT_APP_API_BASE_URL;
-    let callUrl = baseUrl + "/" + ontologyId + "/" + encodeURIComponent(encodeURIComponent(classIri)) + "/terminstances";
-    let result = await fetch(callUrl, getCallSetting);
-    result = await result.json();
-    result = result['_embedded'];
-    if(!result || typeof(result['individuals']) === "undefined"){
-      return [];
-    }
-    return result['individuals'];
-  }
-  catch(e){
-    return [];
-  }
-}
 
 
 export async function getJumpToResult(inputData, count=10){
