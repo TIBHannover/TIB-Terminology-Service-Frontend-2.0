@@ -133,8 +133,7 @@ const NoteEdit = (props) => {
     }
 
 
-    function closeModal(reloadPage=false){   
-        console.log(reloadPage)             
+    function closeModal(reloadPage=false){                  
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
         document.body.classList.remove('modal-open');
         if(modalBackDrop.length === 1){

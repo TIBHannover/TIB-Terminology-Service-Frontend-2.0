@@ -223,22 +223,22 @@ class TermApi{
 
     async fetchListOfTerms(page=DEFAULT_PAGE_NUMBER, size=DEFAULT_PAGE_SIZE) {
         try{          
-          let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}?page=${page}&size=${size}`;
-          let result = await (await fetch(url, getCallSetting)).json();    
+          let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}?page=${page}&size=${size}`;          
+          let result = await (await fetch(url, getCallSetting)).json();              
           let totalTermsCount = result['page']['totalElements'];
           result = result['_embedded'];
           if(!result){
             return [];
-          }
+          }          
           if(typeof(result[this.termType]) === "undefined"){
             return [];
-          }          
+          }                   
           return {"results": result[this.termType], "totalTermsCount":totalTermsCount };
         }
         catch(e){
-          return [];
+            return [];
         }      
-      }
+    }
 
 
     async replaceExternalIrisWithInternal(textWithExternalIris){

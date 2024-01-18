@@ -79,21 +79,6 @@ export async function getOntologyRootTerms(ontologyId) {
 }
 
 
-export async function getIndividualsList(ontologyId){
-  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=10000";
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();
-  res = res["_embedded"];
-  if (!res || res["individuals"] === "undefined"){
-    return [];
-  }
-  else{
-    return res["individuals"];
-  }
-}
-
-
 export async function getSkosOntologyRootConcepts(ontologyId) {
   try{
     let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
@@ -128,7 +113,7 @@ export async function getOntologyRootProperties(ontologyId) {
 
   }
   catch(e){
-    console.info(e);
+    // console.info(e);
     return undefined
   }
   

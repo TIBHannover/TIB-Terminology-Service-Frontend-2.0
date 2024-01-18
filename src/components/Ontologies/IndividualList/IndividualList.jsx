@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
-import {getIndividualsList} from '../../../api/fetchData';
+import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
 import Tree from "../DataTree/Tree";
 import PaneResize from "../../common/PaneResize/PaneResize";
@@ -26,8 +26,10 @@ const IndividualsList = (props) => {
 
     
     async function setComponentData(){           
-        try{            
-            let indvList = await getIndividualsList(props.ontology.ontologyId);                        
+        try{                           
+            let termApi = new TermApi(props.ontology.ontologyId, null, props.componentIdentity);
+            let indvList = await termApi.fetchListOfTerms(0, 10000);   
+            indvList = indvList["results"];                
             setIsLoaded(true);
             setIndividuals(sortIndividuals(indvList));            
             setListView(props.isSkos ? false : true);            
