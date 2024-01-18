@@ -289,51 +289,6 @@ export async function getAllCollectionsIds(withStats=true) {
 }
 
 
-export async function getClassRelations(classNode, ontologyId) {
-  if(typeof(classNode['_links']['graph']) === "undefined"){
-    return [];
-  }
-  let url = classNode['_links']['graph']['href'];
-  let res = await fetch(url, getCallSetting);
-  res = await res.json();
-  let nodes = res['nodes'];
-  let relations = res['edges'];
-  let result = [];
-  for(let rel of relations){
-    if(rel['label'] === "is a"){
-      continue;
-    }
-    if(rel['label'] === "has proper occurrent part"){
-      continue;
-    }
-    let targetNode = "";
-    let targetNodeUrl = "";
-    if(rel['source'] === classNode['iri']){
-      targetNodeUrl = rel['target'];
-    }
-    else{
-      targetNodeUrl = rel['source'];
-    }
-    for(let n of nodes){
-      if(n['iri'] === targetNodeUrl){
-        targetNode = n['label'];
-        break;
-      }
-    }
-    result.push({
-      "relation": rel['label'],
-      "relationUrl": rel['uri'],
-      "target": targetNode,
-      "targetUrl": targetNodeUrl
-    });
-
-  }
-
-  return result;
-
-}
-
-
 
 export async function getJumpToResult(inputData, count=10){
   try{

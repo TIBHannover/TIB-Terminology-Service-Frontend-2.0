@@ -1,4 +1,5 @@
 import { getCallSetting} from "./constants";
+import Toolkit from "../components/common/Toolkit";
 
 
 class TermApi{
@@ -16,29 +17,29 @@ class TermApi{
                 // empty iri
                 this.term = false;
                 return true;
-              }  
-              let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
-              let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
-              let callResult =  await fetch(baseUrl + "/" + encodeURIComponent(this.iri) , getCallSetting);
-            
-              if (callResult.status === 404){
-                  this.term = false;
-                  return true;
-              }
-              this.term = await callResult.json();              
-              this.term['relations'] = 'N/A';
-              this.term['eqAxiom'] = 'N/A';
-              this.term['subClassOf'] = 'N/A';
-              this.term['relations'] = [];              
-              this.term['isIndividual'] = (this.termType === "individuals");
-                   
-              if(this.termType === "terms"){
+            }  
+            let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
+            let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
+            let callResult =  await fetch(baseUrl + "/" + encodeURIComponent(this.iri) , getCallSetting);
+        
+            if (callResult.status === 404){
+                this.term = false;
+                return true;
+            }
+            this.term = await callResult.json();              
+            this.term['relations'] = 'N/A';
+            this.term['eqAxiom'] = 'N/A';
+            this.term['subClassOf'] = 'N/A';
+            this.term['relations'] = [];              
+            this.term['isIndividual'] = (this.termType === "individuals");
+                
+            if(this.termType === "terms"){
                 let parents = await this.getParents();
                 this.term['parents'] = parents;
                 await this.fetchClassRelations();
-              }       
-              
-              return true;
+            }       
+            
+            return true;
         }
         catch(e){
             this.term = {};            
@@ -126,11 +127,10 @@ class TermApi{
                 let resultHtml =  "";
                 resultHtml += "<ul>";
                 for(let item of res["strings"]){
-                    resultHtml += "<li>";
-                    resultHtml += item["content"];
-                    resultHtml += "</li>";
+                    let eqTextWithInternalUrls =  await this.replaceExternalIrisWithInternal(item["content"]);
+                    resultHtml += `<li>${eqTextWithInternalUrls}</li>`;
                 }
-                resultHtml += "<ul>";
+                resultHtml += "</ul>";
                 return resultHtml;
             }
             return "N/A";
@@ -153,17 +153,19 @@ class TermApi{
             }
             let result = "<ul>";
             for(let parent of parents){
-                result += `<li><a href=${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontology}/terms?iri=${encodeURIComponent(parent["iri"])}>${parent["label"]}</a></li>`;
+                let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontology}/terms?iri=${encodeURIComponent(parent["iri"])}`;                
+                result += `<li><a href=${parentUrl}>${parent["label"]}</a></li>`;
             }
-            if (typeof(subClassRelations) !== "undefined"){
-                for(let i=0; i < subClassRelations["strings"].length; i++){
-                    result += '<li>'+ subClassRelations["strings"][i]["content"] +'</li>';     
+            if (typeof(subClassRelations) !== "undefined"){                
+                for(let subClassString of subClassRelations["strings"]){                    
+                    let subClassStringWithInternalIris =  await this.replaceExternalIrisWithInternal(subClassString["content"]);
+                    result += `<li>${subClassStringWithInternalIris}</li>`;
                 }
             }
             result += "</ul>";
             return result; 
         }
-        catch(e){
+        catch(e){            
             return "";
         }        
     }
@@ -184,8 +186,27 @@ class TermApi{
         catch(e){
           return [];
         }
-      }
+    }
 
+
+    async replaceExternalIrisWithInternal(textWithExternalIris){
+        let urlRegex = /<a\s+([^>]*href=["']([^"']+)["'][^>]*)>/gi;
+        let match;
+        let modifiedText = textWithExternalIris;
+
+        while ((match = urlRegex.exec(textWithExternalIris)) !== null) {
+            let [, attributes, href] = match;
+            let targetIriType = "terms";
+            let termApi = new TermApi(this.ontology, encodeURIComponent(href), targetIriType);
+            await termApi.fetchTerm();
+            if (!termApi.term) {
+                targetIriType = "props";
+            }
+            let internalUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontology}/${targetIriType}?iri=${href}`;
+            modifiedText = modifiedText.replace(match[0], `<a ${attributes.replace(href, internalUrl)}">`);
+        }
+        return modifiedText;
+    }
 
 }
 

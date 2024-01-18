@@ -50,6 +50,7 @@ class Toolkit{
     }
 
 
+
     static buildHierarchicalArrayFromFlat(flatList, idKeyName, parentKeyName){
         let map = {}; 
         let node = "";
