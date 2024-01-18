@@ -221,6 +221,30 @@ class TermApi{
     }
 
 
+    async getNodeJsTree(viewMode){
+        try{
+          let url = process.env.REACT_APP_API_BASE_URL + "/";
+          url += this.ontology + "/" + this.termType + "/" + encodeURIComponent(encodeURIComponent(this.iri)) + "/jstree?viewMode=All&siblings=" + viewMode;
+          let listOfNodes =  await (await fetch(url, getCallSetting)).json();
+          return listOfNodes;
+        }
+        catch(e){
+          return [];
+        }
+    }
+      
+
+      
+    async getChildrenJsTree(targetNodeId) {
+        let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
+        let url = OntologiesBaseServiceUrl + "/";
+        url += this.ontology + "/" + this.termType + "/" + encodeURIComponent(encodeURIComponent(this.iri)) + "/jstree/children/" + targetNodeId;
+        let res =  await (await fetch(url, getCallSetting)).json();
+        return res;
+    }
+
+
+
     async fetchListOfTerms(page=DEFAULT_PAGE_NUMBER, size=DEFAULT_PAGE_SIZE) {
         try{          
           let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}?page=${page}&size=${size}`;          

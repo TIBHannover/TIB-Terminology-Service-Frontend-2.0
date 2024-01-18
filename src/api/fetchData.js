@@ -119,27 +119,6 @@ export async function getOntologyRootProperties(ontologyId) {
   
 }
 
-export async function getNodeJsTree(ontologyId, targetNodeType, targetNodeIri, viewMode){
-  try{
-    let url = process.env.REACT_APP_API_BASE_URL + "/";
-    url += ontologyId + "/" + targetNodeType + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree?viewMode=All&siblings=" + viewMode;
-    let listOfNodes =  await (await fetch(url, getCallSetting)).json();
-    return listOfNodes;
-  }
-  catch(e){
-    return [];
-  }
-}
-
-
-export async function getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, extractName) {
-  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/";
-  url += ontologyId + "/" + extractName + "/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/jstree/children/" + targetNodeId;
-  let res =  await (await fetch(url, getCallSetting)).json();
-  return res;
-}
-
 
 export async function getChildrenSkosTree(ontologyId, targetNodeIri){
   let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
-import { getNodeJsTree} from '../../../api/fetchData';
+import TermApi from "../../../api/term";
 import TreeNodeController from "./TreeNode";
 import Toolkit from "../../common/Toolkit";
 import TreeHelper from "./TreeHelpers";
@@ -105,8 +105,9 @@ const Tree = (props) => {
                 treeList = await SkosHelper.buildSkosTree(props.ontologyId, target, treeFullView);                                              
             }
             else{                
-                targetHasChildren = await TreeHelper.nodeHasChildren(props.ontologyId, target, props.componentIdentity);                
-                listOfNodes =  await getNodeJsTree(props.ontologyId, childExtractName, target, treeFullView);
+                targetHasChildren = await TreeHelper.nodeHasChildren(props.ontologyId, target, props.componentIdentity);
+                let termApi = new TermApi(props.ontologyId, target, childExtractName);                                
+                listOfNodes =  await termApi.getNodeJsTree(treeFullView);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
                 if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
                     // the target node is a root node
@@ -229,7 +230,8 @@ const Tree = (props) => {
                 }
                 else if(!props.isSkos && await TreeHelper.nodeIsRoot(props.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
                     // Target node is a root node            
-                    let res = await getNodeJsTree(props.ontologyId, childExtractName, targetNodes[0].parentNode.dataset.iri, 'true');
+                    let termApi = new TermApi(props.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);  
+                    let res = await termApi.getNodeJsTree('true');
                     TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
                 }
                 else{

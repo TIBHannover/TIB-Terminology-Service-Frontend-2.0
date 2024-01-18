@@ -1,5 +1,5 @@
 import React from 'react';
-import {getChildrenJsTree, getChildrenSkosTree} from '../../../api/fetchData';
+import {getChildrenSkosTree} from '../../../api/fetchData';
 import TermApi from '../../../api/term';
 import TreeNodeController from './TreeNode';
 import Toolkit from "../../common/Toolkit";
@@ -72,8 +72,9 @@ export default class TreeHelper{
         if(isSkos && childExtractName !== "terms"){
           res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
         }
-        else{        
-          res =  await getChildrenJsTree(ontologyId, targetNodeIri, targetNodeId, childExtractName); 
+        else{
+          let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName);        
+          res =  await termApi.getChildrenJsTree(targetNodeId); 
         }
         let sortKey = TreeHelper.getTheNodeSortKey(res);
         if(sortKey){
@@ -128,7 +129,8 @@ export default class TreeHelper{
           let parentId = parentUl.id.split("children_for_")[1];                    
           let Iri = document.getElementById(parentId);                    
           Iri = Iri.dataset.iri;
-          let res =  await getChildrenJsTree(ontologyId, Iri, parentId, childExtractName);
+          let termApi = new TermApi(ontologyId, Iri, childExtractName);        
+          let res =  await termApi.getChildrenJsTree(parentId);           
           let sortKey = TreeHelper.getTheNodeSortKey(res);
           if(sortKey){
               res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
