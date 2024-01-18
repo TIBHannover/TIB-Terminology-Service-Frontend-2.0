@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import { useHistory } from "react-router";
-import {getListOfTerms, getObsoleteTermsForTermList} from '../../../api/fetchData';
+import {getObsoleteTermsForTermList} from '../../../api/fetchData';
 import TermApi from "../../../api/term";
 import Toolkit from "../../common/Toolkit";
 import { RenderTermList } from "./RenderTermList";
@@ -8,6 +8,7 @@ import { RenderTermList } from "./RenderTermList";
 
 
 const DEFAULT_PAGE_SIZE = 20;
+const DEFAULT_PAGE_NUMBER = 1;
 
 
 const TermList = (props) => {    
@@ -15,7 +16,7 @@ const TermList = (props) => {
     let pageNumberInUrl = url.searchParams.get('page');
     let sizeInUrl = url.searchParams.get('size');
     let iriInUrl = url.searchParams.get('iri');                
-    pageNumberInUrl = !pageNumberInUrl ? 1 : parseInt(pageNumberInUrl);
+    pageNumberInUrl = !pageNumberInUrl ? DEFAULT_PAGE_NUMBER : parseInt(pageNumberInUrl);
     let internalSize =  Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
     sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);        
 
@@ -33,14 +34,14 @@ const TermList = (props) => {
     async function loadComponent(){                        
         let ontologyId = props.ontology;
         let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };         
-        if(!iri && !obsoletes){
-            listOfTermsAndStats = await getListOfTerms(ontologyId, pageNumber, pageSize);            
+        let termApi = new TermApi(ontologyId, iri, mode);
+        if(!iri && !obsoletes){            
+            listOfTermsAndStats = await termApi.fetchListOfTerms(pageNumber, pageSize);                       
         }
         else if (!iri && obsoletes){
             listOfTermsAndStats = await getObsoleteTermsForTermList(ontologyId, mode, pageNumber, pageSize);            
         }
-        else{
-            let termApi = new TermApi(ontologyId, encodeURIComponent(iri), mode);
+        else{            
             await termApi.fetchTerm();
             listOfTermsAndStats["results"] = [termApi.term];
             listOfTermsAndStats["totalTermsCount"] = 1;            
@@ -135,6 +136,7 @@ const TermList = (props) => {
 
     useEffect(() => {               
         hideHiddenColumnsOnLoad();
+        loadComponent();
         if(obsoletes){
             document.getElementById("obsolte_check_term_list").checked = true;
         }        

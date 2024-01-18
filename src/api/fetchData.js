@@ -79,30 +79,6 @@ export async function getOntologyRootTerms(ontologyId) {
 }
 
 
-export async function getListOfTerms(ontologyId, page, size) {
-  try{
-    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-    let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/terms?page=" + page + "&size=" + size;
-    let result = await (await fetch(url, getCallSetting)).json();    
-    let totalTermsCount = result['page']['totalElements'];
-    result = result['_embedded'];
-    if(!result){
-      return [];
-    }
-    if(typeof(result['terms']) === "undefined"){
-      return [];
-    }
-    return {"results": result['terms'], "totalTermsCount":totalTermsCount };
-
-    
-  }
-  catch(e){
-    return [];
-  }
-
-}
-
-
 export async function getIndividualsList(ontologyId){
   let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
   let url = OntologiesBaseServiceUrl + "/" + ontologyId + "/individuals?size=10000";

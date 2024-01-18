@@ -1,5 +1,8 @@
 import { getCallSetting} from "./constants";
-import Toolkit from "../components/common/Toolkit";
+
+
+const DEFAULT_PAGE_SIZE = 20;
+const DEFAULT_PAGE_NUMBER = 1;
 
 
 class TermApi{
@@ -39,6 +42,31 @@ class TermApi{
                 await this.fetchClassRelations();
             }       
             
+            return true;
+        }
+        catch(e){
+            this.term = {};            
+        }
+        
+    }
+
+
+    async fetchTermWithoutRelations() {
+        try{
+            if(this.iri === "%20"){
+                // empty iri
+                this.term = false;
+                return true;
+            }  
+            let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
+            let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
+            let callResult =  await fetch(baseUrl + "/" + encodeURIComponent(this.iri) , getCallSetting);
+        
+            if (callResult.status === 404){
+                this.term = false;
+                return true;
+            }
+            this.term = await callResult.json();            
             return true;
         }
         catch(e){
@@ -146,6 +174,9 @@ class TermApi{
             let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + encodeURIComponent(this.iri) + '/superclassdescription';        
             let parents = await this.getParents();
             let subClassRelations = await fetch(url, getCallSetting);
+            if(subClassRelations.status === 404){
+                return "";
+            }
             subClassRelations = await subClassRelations.json();
             subClassRelations = subClassRelations["_embedded"];        
             if(parents.length === 0 && typeof(subClassRelations) === "undefined"){
@@ -165,7 +196,8 @@ class TermApi{
             result += "</ul>";
             return result; 
         }
-        catch(e){            
+        catch(e){    
+            // throw(e)        
             return "";
         }        
     }
@@ -189,6 +221,26 @@ class TermApi{
     }
 
 
+    async fetchListOfTerms(page=DEFAULT_PAGE_NUMBER, size=DEFAULT_PAGE_SIZE) {
+        try{          
+          let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}?page=${page}&size=${size}`;
+          let result = await (await fetch(url, getCallSetting)).json();    
+          let totalTermsCount = result['page']['totalElements'];
+          result = result['_embedded'];
+          if(!result){
+            return [];
+          }
+          if(typeof(result[this.termType]) === "undefined"){
+            return [];
+          }          
+          return {"results": result[this.termType], "totalTermsCount":totalTermsCount };
+        }
+        catch(e){
+          return [];
+        }      
+      }
+
+
     async replaceExternalIrisWithInternal(textWithExternalIris){
         let urlRegex = /<a\s+([^>]*href=["']([^"']+)["'][^>]*)>/gi;
         let match;
@@ -198,7 +250,7 @@ class TermApi{
             let [, attributes, href] = match;
             let targetIriType = "terms";
             let termApi = new TermApi(this.ontology, encodeURIComponent(href), targetIriType);
-            await termApi.fetchTerm();
+            await termApi.fetchTermWithoutRelations();
             if (!termApi.term) {
                 targetIriType = "props";
             }

@@ -36,7 +36,7 @@ export const RenderTermList = (props) => {
             result.push(tableBodyContent);
         }
         setTableBodyContent(result); 
-        props.setTableIsLoading(false);         
+        props.setTableIsLoading(false);
     }
 
 
