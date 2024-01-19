@@ -156,23 +156,25 @@ const RenderTermDetailTab = (props) => {
       for(let configItemKey in NodePageTabConfig){
           let configObject = NodePageTabConfig[configItemKey];                 
           let linkUrl = Toolkit.setParamInUrl('subtab', NodePageTabConfig[configItemKey]['urlEndPoint'])
-          if(props.componentIdentity === "terms" || configObject['id'] !== 'graph'){
-            if(process.env.REACT_APP_NOTE_FEATURE !== "true" && configItemKey === "Notes"){
-              continue;
-            }
-            result.push(
-              <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
-                  <Link 
-                      onClick={props.tabChangeHandler} 
-                      data-value={configObject['tabId']} 
-                      className={(props.activeTab === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}
-                      to={linkUrl}           
-                      >              
-                      {configObject['tabTitle']}
-                  </Link>
-              </li>
-            );
-          }      
+          if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
+            continue;
+          }
+          if(configItemKey === "GraphView" && ["props", "individuals"].includes(props.componentIdentity)){
+            continue;
+          }
+                    
+          result.push(
+            <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
+                <Link 
+                    onClick={props.tabChangeHandler} 
+                    data-value={configObject['tabId']} 
+                    className={(props.activeTab === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}
+                    to={linkUrl}           
+                >              
+                    {configObject['tabTitle']}
+                </Link>
+            </li>
+          );          
         }
 
     return result;
