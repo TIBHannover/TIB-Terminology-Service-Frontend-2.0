@@ -16,7 +16,7 @@ import OntologyLib from '../../../Libs/OntologyLib';
       metadata['Imported From'] = [OntologyLib.createOntologyTag(object.originalOntology), false];
     }
 
-    if(object.alsoIn){
+    if(object.alsoIn && object.alsoIn.length !== 0){
       let alsoInList = [];
       for (let ontologyId of object.alsoIn){
         if(object.originalOntology !== ontologyId){
@@ -103,15 +103,31 @@ import OntologyLib from '../../../Libs/OntologyLib';
  * The boolean in each value indicates that the metadata is a link or not.
  */
 export function propertyMetaData(object){    
-  let metadata = {
-    "Label": [object.label, false],
-    "Synonyms": [object.synonyms, false],
-    "CURIE":  [object.obo_id, false],
-    "Term ID":  [object.short_form, false],
-    "Description": [object.description, false],    
-    "fullIRI": [object.iri, true],
-    "Ontology": [object.ontology_name, false] 
-  };
+  let metadata = {};
+
+  metadata['Label'] = [object.label, false];
+
+  if(object.originalOntology){
+    metadata['Imported From'] = [OntologyLib.createOntologyTag(object.originalOntology), false];
+  }
+
+  if(object.alsoIn && object.alsoIn.length !== 0){
+    let alsoInList = [];
+    for (let ontologyId of object.alsoIn){
+      if(object.originalOntology !== ontologyId){
+        alsoInList.push(OntologyLib.createOntologyTag(ontologyId));
+      }        
+    }
+    metadata['Also In'] = [alsoInList, false];
+  }
+
+  metadata['Synonyms'] = [object.synonyms, false];
+  metadata['CURIE'] = [object.obo_id, false];
+  metadata['Term ID'] = [object.short_form, false];
+  metadata['Description'] = [object.description, false];
+  metadata['fullIRI'] = [object.iri, true];
+  metadata['Ontology'] = [object.ontology_name, false];
+
 
   if(object.annotation){
     for(let key in object.annotation){

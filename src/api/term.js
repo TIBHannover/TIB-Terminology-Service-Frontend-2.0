@@ -35,11 +35,12 @@ class TermApi{
             this.term['subClassOf'] = 'N/A';
             this.term['relations'] = [];              
             this.term['isIndividual'] = (this.termType === "individuals");
+            await this.fetchImportedAndAlsoInOntologies();
                 
             if(this.termType === "terms"){
                 let parents = await this.getParents();
                 this.term['parents'] = parents;
-                await this.fetchClassRelations();
+                await this.fetchClassRelations();                
             }       
             
             return true;
@@ -117,6 +118,20 @@ class TermApi{
           this.term['alsoIn'] = alsoIn;
           return true;
     }
+
+
+
+    async fetchImportedAndAlsoInOntologies(){        
+        let [originalOntology, alsoIn] = await Promise.all([            
+            this.getClassOriginalOntology(),
+            this.getClassAllOntologies()
+      
+          ]);          
+          this.term['originalOntology'] = originalOntology;
+          this.term['alsoIn'] = alsoIn;
+          return true;
+    }
+
 
 
 
