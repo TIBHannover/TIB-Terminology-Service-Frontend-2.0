@@ -5,7 +5,7 @@ import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
 import {setResultTitleAndLabel, makeAlsoInTag} from './SearchHelpers';
-import Toolkit from '../../common/Toolkit';
+import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';

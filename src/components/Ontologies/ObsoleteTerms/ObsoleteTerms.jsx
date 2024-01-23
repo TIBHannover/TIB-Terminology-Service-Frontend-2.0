@@ -5,7 +5,7 @@ import DropDown from "../../common/DropDown/DropDown";
 import { getObsoleteTerms } from "../../../api/fetchData";
 import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
-import Toolkit from "../../common/Toolkit";
+import Toolkit from "../../../Libs/Toolkit";
 import Pagination from "../../common/Pagination/Pagination";
 import AlertBox from "../../common/Alerts/Alerts";
 

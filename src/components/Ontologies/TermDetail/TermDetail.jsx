@@ -6,7 +6,7 @@ import NoteList from '../Note/NoteList';
 import {getSkosNodeByIri} from '../../../api/fetchData';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
-import Toolkit from '../../common/Toolkit';
+import Toolkit from '../../../Libs/Toolkit';
 
 
 

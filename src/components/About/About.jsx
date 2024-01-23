@@ -1,5 +1,5 @@
 import React from 'react'
-import Toolkit from '../common/Toolkit';
+import Toolkit from '../../Libs/Toolkit';
 import '../layout/documentationPage.css';
 import { renderAboutPage } from './AboutPageContent';
 

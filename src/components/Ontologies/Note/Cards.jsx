@@ -1,6 +1,6 @@
-import {React, useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
-import Toolkit from "../../common/Toolkit";
+import Toolkit from "../../../Libs/Toolkit";
 import { Link } from 'react-router-dom';
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";

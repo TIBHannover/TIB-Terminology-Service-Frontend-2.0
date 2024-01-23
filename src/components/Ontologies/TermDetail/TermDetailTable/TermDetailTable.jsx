@@ -3,7 +3,7 @@ import {classMetaData, propertyMetaData, formatText} from '../helpers';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
-import Toolkit from '../../../common/Toolkit';
+import Toolkit from '../../../../Libs/Toolkit';
 
 
 

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { getAllOntologies, getCollectionOntologies, getAllCollectionsIds } from '../../../api/fetchData';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
-import Toolkit from '../../common/Toolkit';
+import Toolkit from '../../../Libs/Toolkit';
 
 
 

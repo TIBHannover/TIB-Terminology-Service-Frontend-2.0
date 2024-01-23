@@ -2,7 +2,7 @@ import React from 'react';
 import {getChildrenSkosTree} from '../../../api/fetchData';
 import TermApi from '../../../api/term';
 import TreeNodeController from './TreeNode';
-import Toolkit from "../../common/Toolkit";
+import Toolkit from '../../../Libs/Toolkit';
 import SkosHelper from './SkosHelpers';
 
 

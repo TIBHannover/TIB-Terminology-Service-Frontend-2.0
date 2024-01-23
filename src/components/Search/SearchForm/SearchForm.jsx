@@ -3,9 +3,10 @@ import { useHistory } from 'react-router';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
 import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
+import Toolkit from '../../../Libs/Toolkit';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
-import Toolkit from '../../common/Toolkit';
+
 
 
 

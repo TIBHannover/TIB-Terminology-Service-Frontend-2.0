@@ -7,7 +7,7 @@ import queryString from 'query-string';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
-import Toolkit from '../../common/Toolkit';
+import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
 import '../../layout/ontologyHomePage.css';

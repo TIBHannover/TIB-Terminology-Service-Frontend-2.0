@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import TermApi from "../../../api/term";
 import TreeNodeController from "./TreeNode";
-import Toolkit from "../../common/Toolkit";
+import Toolkit from "../../../Libs/Toolkit";
 import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
 import KeyboardNavigator from "./KeyboardNavigation";

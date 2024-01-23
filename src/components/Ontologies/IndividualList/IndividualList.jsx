@@ -4,7 +4,7 @@ import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
 import Tree from "../DataTree/Tree";
 import PaneResize from "../../common/PaneResize/PaneResize";
-import Toolkit from "../../common/Toolkit";
+import Toolkit from "../../../Libs/Toolkit";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import { RenderIndividualList } from "./RenderIndividualList";
 

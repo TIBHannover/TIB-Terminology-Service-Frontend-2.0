@@ -1,4 +1,4 @@
-import Toolkit from '../common/Toolkit';
+import Toolkit from '../../Libs/Toolkit';
 import '../layout/documentationPage.css';
 import { renderHelpPage } from './HelpPageContent';
 
