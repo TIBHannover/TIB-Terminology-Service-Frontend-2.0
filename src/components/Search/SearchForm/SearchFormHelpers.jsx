@@ -1,6 +1,3 @@
-import { getCallSetting } from '../../../api/constants';
-
-
 export function setJumpResultButtons(resultItem, obsoletes){
     let content = [];
     let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);
@@ -68,34 +65,4 @@ export function setJumpResultButtons(resultItem, obsoletes){
     }
  
     return content;    
-}
-
-/**
- * Check if an ontology is part of a set of collections. Used in the facet filter
- * @param {*} collectionsOntologies 
- * @param {*} ontologyId 
- */
-export function ontologyIsPartOfSelectedCollections(collectionsOntologies, ontologyId){    
-    for(let onto of collectionsOntologies){        
-        if(onto["ontologyId"] === ontologyId.toLowerCase()){
-            return true;
-        }
-    }    
-    return false;
-}
-
-
-/**
- * Set the autosuggest based on the Collection project
- */
-
-export async function ontologyForAutosuggest(){
-    let result = [];
-    let ontologiesForCollection = await fetch(`${this.state.api_base_url}/ontologies/filterby?schema=collection&classification=NFDI4CHEM&exclusive=false`, getCallSetting);
-    ontologiesForCollection = (await ontologiesForCollection.json())['_embedded']['ontologies']
-    for(let onto of ontologiesForCollection){
-        result.push(onto['ontologyId']);
-      }
-    return result;
-
 }

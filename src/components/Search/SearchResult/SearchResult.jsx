@@ -4,7 +4,8 @@ import {getAllCollectionsIds} from '../../../api/fetchData';
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
-import {setResultTitleAndLabel, makeAlsoInTag} from './SearchHelpers';
+import {setResultTitleAndLabel} from './SearchHelpers';
+import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import '../../layout/searchResult.css';
@@ -81,10 +82,10 @@ const SearchResult = (props) => {
     let otherOntologies = [];
     if(expandedResults && expandedResults[iri]){
       let allTags = expandedResults[iri]['docs'];
-      for(let tag of allTags){              
+      for(let term of allTags){              
         otherOntologies.push(
           <div className='also-in-ontologies'>
-            {makeAlsoInTag(tag)} 
+            {TermLib.createOntologyTagWithTermURL(term['ontology_name'], term['iri'], term['type'])} 
           </div>                                             
         );
       }  

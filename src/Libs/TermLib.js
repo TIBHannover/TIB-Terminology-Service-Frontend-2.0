@@ -4,10 +4,9 @@ class TermLib{
 
     static createOntologyTagWithTermURL(ontology_name, termIri, type){
         /* 
-            We need the ontology_name as the input since the function is used for
-            making tag from "imported from" or "Also In". This is not necessary equivalent with
+            We need the ontology_name as the input since the function is also used for
+            making tag from "imported from" or "Also In". The ontology_name is not necessary equivalent with
             the term ontology_name metadata.
-            We need type since the term type is not mentioned in a term json metadata.
         */  
         if(!ontology_name){
             return "";
