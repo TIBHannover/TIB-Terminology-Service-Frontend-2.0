@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {classMetaData, propertyMetaData, formatText} from '../helpers';
+import {classMetaData, propertyMetaData} from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
@@ -40,7 +40,32 @@ export const TermDetailTable = (props) => {
 
 
 
-  function createRowInTable(metadataLabel, metadataValue, isLink){    
+  function createTable(){    
+    let metadataToRender = "";
+    if(props.componentIdentity === "terms"){
+      metadataToRender =  classMetaData(props.node, "class");
+    }
+    else if(props.componentIdentity === "individuals"){
+      metadataToRender =  classMetaData(props.node, "individual");
+    }
+    else{
+      metadataToRender = propertyMetaData(props.node);
+    }
+
+    let result = [];
+    for(let key of Object.keys(metadataToRender)){
+      if (!metadataToRender[key].value || typeof(metadataToRender[key].value) === "undefined" || metadataToRender[key].value === '') {
+        continue;
+      }    
+      let row = createRowInTable(key, metadataToRender[key].value, metadataToRender[key].isLink);
+      result.push(row);
+    }
+    return result;
+  }
+
+
+
+  function createRowInTable(metadataLabel, metadataValue, isLink){   
     let row = [
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
           <div className='row'>
@@ -66,24 +91,20 @@ export const TermDetailTable = (props) => {
   }
 
 
-  function createTable(){    
-    let metadataToRender = "";
-    if(props.componentIdentity === "terms"){
-      metadataToRender =  classMetaData(props.node, "class");
-    }
-    else if(props.componentIdentity === "individuals"){
-      metadataToRender =  classMetaData(props.node, "individual");
-    }
-    else{
-      metadataToRender = propertyMetaData(props.node);
-    }
 
-    let result = [];
-    for(let key of Object.keys(metadataToRender)){    
-      let row = createRowInTable(key, metadataToRender[key].value, metadataToRender[key].isLink);
-      result.push(row);
+  function formatText (metadataLabel, metadataValue, isLink = false) {     
+    if (isLink) {
+      return (<a href={metadataValue} target='_blank' rel="noreferrer">{metadataValue}</a>)
     }
-    return result;
+    else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(metadataLabel)){        
+      return (<span  dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
+    }    
+    else if (["Type", "Description", "Imported From", "Also In", "Instances"].includes(metadataLabel)){
+      return metadataValue;
+    }
+    
+    let formatedText = Toolkit.transformLinksInStringToAnchor(metadataValue);    
+    return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
   }
 
 

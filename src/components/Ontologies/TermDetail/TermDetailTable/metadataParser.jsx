@@ -1,6 +1,4 @@
-import _ from 'lodash';
-import Toolkit from '../../../Libs/Toolkit';
-import TermLib from '../../../Libs/TermLib';
+import TermLib from "../../../../Libs/TermLib";
 
 
 /**
@@ -66,26 +64,6 @@ export function propertyMetaData(term){
   }
 
   return metadata;
-}
-
-
-
-export function formatText (tableLabel, text, isLink = false) {    
-  if (text === null || text === '' || typeof(text) === "undefined") {
-    return 'N/A'
-  }  
-  else if (isLink) {
-    return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
-  }
-  else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(tableLabel)){        
-    return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
-  }    
-  else if (["Type", "Description", "Imported From", "Also In", "Instances"].includes(tableLabel)){
-    return text;
-  }
-  
-  let formatedText = Toolkit.transformLinksInStringToAnchor(text);    
-  return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
 }
 
 
