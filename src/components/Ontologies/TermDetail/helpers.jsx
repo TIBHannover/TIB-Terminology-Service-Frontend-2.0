@@ -16,6 +16,16 @@ import OntologyLib from '../../../Libs/OntologyLib';
       metadata['Imported From'] = [OntologyLib.createOntologyTag(object.originalOntology), false];
     }
 
+    if(object.alsoIn){
+      let alsoInList = [];
+      for (let ontologyId of object.alsoIn){
+        if(object.originalOntology !== ontologyId){
+          alsoInList.push(OntologyLib.createOntologyTag(ontologyId));
+        }        
+      }
+      metadata['Also In'] = [alsoInList, false];
+    }
+
     metadata['Synonyms'] = [object.synonyms ? (object.synonyms).join(',\n') : "", false];
     metadata['CURIE'] = [object.obo_id, false];
     metadata['Term ID'] = [object.short_form, false];    
@@ -131,7 +141,7 @@ export function formatText (tableLabel, text, isLink = false) {
   else if (tableLabel === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
-  else if (["Type", "Description", "Imported From"].includes(tableLabel)){
+  else if (["Type", "Description", "Imported From", "Also In"].includes(tableLabel)){
     return text;
   }
   

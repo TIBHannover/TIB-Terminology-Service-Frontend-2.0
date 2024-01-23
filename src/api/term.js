@@ -100,12 +100,13 @@ class TermApi{
 
 
     async fetchClassRelations(){        
-        let [relations, eqAxiom, subClassOf, instancesList, originalOntology] = await Promise.all([
+        let [relations, eqAxiom, subClassOf, instancesList, originalOntology, alsoIn] = await Promise.all([
             this.getRelations(),
             this.getEqAxiom(),
             this.getSubClassOf(),
             this.getIndividualInstancesForClass(),
-            this.getClassOriginalOntologyViaShortForm(this.term['short_form'])
+            this.getClassOriginalOntology(),
+            this.getClassAllOntologies()
       
           ]);
           this.term['relations'] = relations;
@@ -113,6 +114,7 @@ class TermApi{
           this.term['subClassOf'] = subClassOf; 
           this.term['instancesList'] = instancesList;
           this.term['originalOntology'] = originalOntology;
+          this.term['alsoIn'] = alsoIn;
           return true;
     }
 
@@ -287,17 +289,37 @@ class TermApi{
     }
 
 
-    async getClassOriginalOntologyViaShortForm(shortForm){
+
+    async getClassOriginalOntology(){
         try{
-            let url = `${process.env.REACT_APP_API_URL}/terms/findByIdAndIsDefiningOntology?short_form=${shortForm}`;
+            let url = `${process.env.REACT_APP_API_URL}/${this.termType}/findByIdAndIsDefiningOntology?iri=${this.iri}`;
             let result = await (await fetch(url, getCallSetting)).json();
-            result = result['_embedded']['terms'][0]; 
-            console.log(this.ontology)
-            console.log(result['ontology_name'])
+            result = result['_embedded'][this.termType][0];             
             if(this.ontology === result['ontology_name']){
                 return null;
             }           
             return result['ontology_name'];
+        }
+        catch(e){
+            return null;
+        }
+        
+    }
+
+
+
+    async getClassAllOntologies(){
+        try{
+            let url = `${process.env.REACT_APP_API_URL}/${this.termType}?iri=${this.iri}`;
+            let result = await (await fetch(url, getCallSetting)).json();
+            result = result['_embedded'][this.termType];             
+            let ontologies = [];
+            for(let term of result){
+                if(this.ontology !== term['ontology_name']){
+                    ontologies.push(term['ontology_name']);
+                }  
+            }
+            return ontologies;
         }
         catch(e){
             return null;
