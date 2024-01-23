@@ -30,10 +30,9 @@ class TermApi{
                 return true;
             }
             this.term = await callResult.json();              
-            this.term['relations'] = 'N/A';
-            this.term['eqAxiom'] = 'N/A';
-            this.term['subClassOf'] = 'N/A';
-            this.term['relations'] = [];              
+            this.term['relations'] = null;
+            this.term['eqAxiom'] = null;
+            this.term['subClassOf'] = null;                          
             this.term['isIndividual'] = (this.termType === "individuals");
             await this.fetchImportedAndAlsoInOntologies();
                 
@@ -155,10 +154,10 @@ class TermApi{
                 return result
             }
 
-            return "N/A";    
+            return null;    
         }
         catch(e){
-            return "N/A";
+            return null;
         }                 
     }
 
@@ -180,10 +179,10 @@ class TermApi{
                 resultHtml += "</ul>";
                 return resultHtml;
             }
-            return "N/A";
+            return null;
         }
         catch(e){
-            return "N/A";
+            return null;
         }        
     }
 
@@ -194,12 +193,12 @@ class TermApi{
             let parents = await this.getParents();
             let subClassRelations = await fetch(url, getCallSetting);
             if(subClassRelations.status === 404){
-                return "";
+                return null;
             }
             subClassRelations = await subClassRelations.json();
             subClassRelations = subClassRelations["_embedded"];        
             if(parents.length === 0 && typeof(subClassRelations) === "undefined"){
-                return "";
+                return null;
             }
             let result = "<ul>";
             for(let parent of parents){
@@ -217,7 +216,7 @@ class TermApi{
         }
         catch(e){    
             // throw(e)        
-            return "";
+            return null;
         }        
     }
 
@@ -230,12 +229,12 @@ class TermApi{
           result = await result.json();
           result = result['_embedded'];
           if(!result || typeof(result['individuals']) === "undefined"){
-            return [];
+            return null;
           }
           return result['individuals'];
         }
         catch(e){
-          return [];
+          return null;
         }
     }
 

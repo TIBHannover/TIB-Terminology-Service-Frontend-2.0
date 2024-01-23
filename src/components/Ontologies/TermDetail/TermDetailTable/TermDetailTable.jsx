@@ -57,6 +57,7 @@ export const TermDetailTable = (props) => {
       if (!metadataToRender[key].value || typeof(metadataToRender[key].value) === "undefined" || metadataToRender[key].value === '') {
         continue;
       }    
+      
       let row = createRowInTable(key, metadataToRender[key].value, metadataToRender[key].isLink);
       result.push(row);
     }
