@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Toolkit from '../../../Libs/Toolkit';
+import OntologyLib from '../../../Libs/OntologyLib';
 
 
 /**
@@ -9,7 +10,7 @@ import Toolkit from '../../../Libs/Toolkit';
  export function classMetaData(object){
     let metadata = {
       "Label": [object.label, false],
-      "Imported From": [object.originalOntology, false],
+      "Imported From": [OntologyLib.createOntologyTag(object.originalOntology), false],
       "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
@@ -114,22 +115,24 @@ export function propertyMetaData(object){
 
 
 export function formatText (tableLabel, text, isLink = false) {  
+  console.log(tableLabel)
+  console.log(text)
   if (text === null || text === '' || typeof(text) === "undefined") {
     return 'N/A'
   }  
   else if (isLink) {
     return (<a href={text} target='_blank' rel="noreferrer">{text}</a>)
   }
-  else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(tableLabel)){    
+  else if (["Used in axiom", "Equivalent to", "SubClass Of"].includes(tableLabel)){        
     return (<span  dangerouslySetInnerHTML={{ __html: text }}></span>)
   }  
   else if (tableLabel === "Instances"){    
     return <ul>{createInstancesList(text)}</ul>;
   }
-  else if (["Type", "Description"].includes(tableLabel)){
+  else if (["Type", "Description", "Imported From"].includes(tableLabel)){
     return text;
   }
-  // return text;
+  
   let formatedText = Toolkit.transformLinksInStringToAnchor(text);    
   return (<span  dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
 }
