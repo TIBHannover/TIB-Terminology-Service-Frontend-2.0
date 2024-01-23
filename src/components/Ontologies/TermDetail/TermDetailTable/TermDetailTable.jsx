@@ -80,7 +80,7 @@ export const TermDetailTable = (props) => {
 
     let result = [];
     for(let key of Object.keys(metadataToRender)){    
-      let row = createRowInTable(key, metadataToRender[key][0], metadataToRender[key][1]);
+      let row = createRowInTable(key, metadataToRender[key].value, metadataToRender[key].isLink);
       result.push(row);
     }
     return result;
