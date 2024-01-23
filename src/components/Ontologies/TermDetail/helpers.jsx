@@ -1,26 +1,26 @@
 import _ from 'lodash';
 import Toolkit from '../../../Libs/Toolkit';
-import OntologyLib from '../../../Libs/OntologyLib';
+import TermLib from '../../../Libs/TermLib';
 
 
 /**
  * Create the metadata for a class detail table
  * The boolean in each value indicates that the metadata is a link or not.
  */
- export function classMetaData(object){
+ export function classMetaData(object, termType){
     let metadata = {}
 
     metadata['Label'] = [object.label, false];
 
     if(object.originalOntology){
-      metadata['Imported From'] = [OntologyLib.createOntologyTag(object.originalOntology), false];
+      metadata['Imported From'] = [TermLib.createOntologyTagWithTermURL(object.originalOntology, object.iri, termType), false];
     }
 
     if(object.alsoIn && object.alsoIn.length !== 0){
       let alsoInList = [];
       for (let ontologyId of object.alsoIn){
         if(object.originalOntology !== ontologyId){
-          alsoInList.push(OntologyLib.createOntologyTag(ontologyId));
+          alsoInList.push(TermLib.createOntologyTagWithTermURL(ontologyId, object.iri, termType));
         }        
       }
       metadata['Also In'] = [alsoInList, false];
@@ -108,14 +108,14 @@ export function propertyMetaData(object){
   metadata['Label'] = [object.label, false];
 
   if(object.originalOntology){
-    metadata['Imported From'] = [OntologyLib.createOntologyTag(object.originalOntology), false];
+    metadata['Imported From'] = [TermLib.createOntologyTagWithTermURL(object.originalOntology, object.iri, "property"), false];
   }
 
   if(object.alsoIn && object.alsoIn.length !== 0){
     let alsoInList = [];
     for (let ontologyId of object.alsoIn){
       if(object.originalOntology !== ontologyId){
-        alsoInList.push(OntologyLib.createOntologyTag(ontologyId));
+        alsoInList.push(TermLib.createOntologyTagWithTermURL(ontologyId, object.iri, "property"));
       }        
     }
     metadata['Also In'] = [alsoInList, false];

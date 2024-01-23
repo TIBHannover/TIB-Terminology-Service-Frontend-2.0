@@ -68,8 +68,11 @@ export const TermDetailTable = (props) => {
 
   function createTable(){    
     let metadataToRender = "";
-    if(props.componentIdentity === "terms" || props.componentIdentity === "individuals"){
-      metadataToRender =  classMetaData(props.node);
+    if(props.componentIdentity === "terms"){
+      metadataToRender =  classMetaData(props.node, "class");
+    }
+    else if(props.componentIdentity === "individuals"){
+      metadataToRender =  classMetaData(props.node, "individual");
     }
     else{
       metadataToRender = propertyMetaData(props.node);
