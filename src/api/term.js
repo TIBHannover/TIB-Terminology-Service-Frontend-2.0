@@ -100,17 +100,19 @@ class TermApi{
 
 
     async fetchClassRelations(){        
-        let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
+        let [relations, eqAxiom, subClassOf, instancesList, originalOntology] = await Promise.all([
             this.getRelations(),
             this.getEqAxiom(),
             this.getSubClassOf(),
-            this.getIndividualInstancesForClass()
+            this.getIndividualInstancesForClass(),
+            this.getClassOriginalOntologyViaShortForm(this.term['short_form'])
       
           ]);
           this.term['relations'] = relations;
           this.term['eqAxiom'] = eqAxiom;
           this.term['subClassOf'] = subClassOf; 
           this.term['instancesList'] = instancesList;
+          this.term['originalOntology'] = originalOntology;
           return true;
     }
 
@@ -282,6 +284,20 @@ class TermApi{
             modifiedText = modifiedText.replace(match[0], `<a ${attributes.replace(href, internalUrl)}">`);
         }
         return modifiedText;
+    }
+
+
+    async getClassOriginalOntologyViaShortForm(shortForm){
+        try{
+            let url = `${process.env.REACT_APP_API_URL}/terms/findByIdAndIsDefiningOntology?short_form=${shortForm}`;
+            let result = await (await fetch(url, getCallSetting)).json();
+            result = result['_embedded']['terms'][0];            
+            return result['ontology_name'];
+        }
+        catch(e){
+            return null;
+        }
+        
     }
 
 }

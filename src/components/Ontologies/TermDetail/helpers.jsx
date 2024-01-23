@@ -9,6 +9,7 @@ import Toolkit from "../../common/Toolkit";
  export function classMetaData(object){
     let metadata = {
       "Label": [object.label, false],
+      "Imported From": [object.originalOntology, false],
       "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
       "CURIE":  [object.obo_id, false],
       "Term ID":  [object.short_form, false],
