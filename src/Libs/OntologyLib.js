@@ -2,7 +2,7 @@
 class OntologyLib{
     
 
-    static createOntologyTag(ontology_name){        
+    static createOntologyTag(ontology_name, termIri){        
         if(!ontology_name){
             return "";
         }

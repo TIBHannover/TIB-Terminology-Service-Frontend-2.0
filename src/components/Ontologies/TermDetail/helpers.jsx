@@ -8,16 +8,20 @@ import OntologyLib from '../../../Libs/OntologyLib';
  * The boolean in each value indicates that the metadata is a link or not.
  */
  export function classMetaData(object){
-    let metadata = {
-      "Label": [object.label, false],
-      "Imported From": [OntologyLib.createOntologyTag(object.originalOntology), false],
-      "Synonyms": [object.synonyms ? (object.synonyms).join(',\n') : "", false],
-      "CURIE":  [object.obo_id, false],
-      "Term ID":  [object.short_form, false],
-      "Description": [object.description  ? object.description[0] : "", false],
-      "fullIRI": [object.iri, true], 
-      "SubClass Of": [object.subClassOf, false]    
+    let metadata = {}
+
+    metadata['Label'] = [object.label, false];
+
+    if(object.originalOntology){
+      metadata['Imported From'] = [OntologyLib.createOntologyTag(object.originalOntology), false];
     }
+
+    metadata['Synonyms'] = [object.synonyms ? (object.synonyms).join(',\n') : "", false];
+    metadata['CURIE'] = [object.obo_id, false];
+    metadata['Term ID'] = [object.short_form, false];    
+    metadata['Description'] = [object.description ? object.description[0] : "", false];
+    metadata['fullIRI'] = [object.iri, true];
+    metadata['SubClass Of'] = [object.subClassOf, false];
     
     if(object.eqAxiom !== "N/A"){
       metadata['Equivalent to'] = [object.eqAxiom, false];
@@ -114,9 +118,7 @@ export function propertyMetaData(object){
 }
 
 
-export function formatText (tableLabel, text, isLink = false) {  
-  console.log(tableLabel)
-  console.log(text)
+export function formatText (tableLabel, text, isLink = false) {    
   if (text === null || text === '' || typeof(text) === "undefined") {
     return 'N/A'
   }  

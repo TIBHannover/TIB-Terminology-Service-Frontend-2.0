@@ -291,7 +291,12 @@ class TermApi{
         try{
             let url = `${process.env.REACT_APP_API_URL}/terms/findByIdAndIsDefiningOntology?short_form=${shortForm}`;
             let result = await (await fetch(url, getCallSetting)).json();
-            result = result['_embedded']['terms'][0];            
+            result = result['_embedded']['terms'][0]; 
+            console.log(this.ontology)
+            console.log(result['ontology_name'])
+            if(this.ontology === result['ontology_name']){
+                return null;
+            }           
             return result['ontology_name'];
         }
         catch(e){
