@@ -308,13 +308,17 @@ class TermApi{
         try{
             let url = `${process.env.REACT_APP_API_URL}/${this.termType}/findByIdAndIsDefiningOntology?iri=${this.iri}`;
             let result = await (await fetch(url, getCallSetting)).json();
-            result = result['_embedded'][this.termType][0];             
-            if(this.ontology === result['ontology_name']){
-                return null;
-            }           
-            return result['ontology_name'];
+            result = result['_embedded'][this.termType];
+            let originalOntology = null;
+            for(let res of result){
+                if(res['ontology_name'].toLowerCase() !== "vibso" && this.ontology !== res['ontology_name']){
+                    originalOntology = res['ontology_name'];
+                }
+            }                     
+            return originalOntology;
         }
         catch(e){
+            // throw e
             return null;
         }
         
