@@ -42,7 +42,7 @@ const TermList = (props) => {
             listOfTermsAndStats = await getObsoleteTermsForTermList(ontologyId, mode, pageNumber, pageSize);            
         }
         else{            
-            await termApi.fetchTerm();
+            await termApi.fetchTerm();            
             listOfTermsAndStats["results"] = [termApi.term];
             listOfTermsAndStats["totalTermsCount"] = 1;            
         }

@@ -21,7 +21,7 @@ export const RenderTermList = (props) => {
     async function createList(){
         let result = [];
         let listOfterms = props.listOfTerms;
-        let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
+        let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';        
         for (let term of listOfterms){
             let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
             let termApi = new TermApi(term['ontology_name'], encodeURIComponent(term['iri']), "terms");            

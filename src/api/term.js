@@ -1,4 +1,5 @@
 import { getCallSetting} from "./constants";
+import Toolkit from "../Libs/Toolkit";
 
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -7,8 +8,8 @@ const DEFAULT_PAGE_NUMBER = 1;
 
 class TermApi{
     constructor(ontology, iri, termType){
-        this.ontology = ontology;
-        this.iri = iri;
+        this.ontology = ontology;        
+        this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
         this.termType = termType;
         this.term = {};
     }
@@ -23,7 +24,7 @@ class TermApi{
             }  
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
             let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
-            let callResult =  await fetch(baseUrl + "/" + encodeURIComponent(this.iri) , getCallSetting);
+            let callResult =  await fetch(baseUrl + "/" + this.iri , getCallSetting);
         
             if (callResult.status === 404){
                 this.term = false;
@@ -44,7 +45,7 @@ class TermApi{
             
             return true;
         }
-        catch(e){
+        catch(e){            
             this.term = {};            
         }
         
@@ -60,7 +61,7 @@ class TermApi{
             }  
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
             let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
-            let callResult =  await fetch(baseUrl + "/" + encodeURIComponent(this.iri) , getCallSetting);
+            let callResult =  await fetch(baseUrl + "/" + this.iri , getCallSetting);
         
             if (callResult.status === 404){
                 this.term = false;
@@ -82,7 +83,7 @@ class TermApi{
                 return [];
               }
       
-              let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}/${encodeURIComponent(this.iri)}/hierarchicalParents`;         
+              let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}/${this.iri}/hierarchicalParents`;         
               let res = await fetch(url, getCallSetting);
               res = await res.json();
               let parents = res["_embedded"][this.termType];
@@ -136,7 +137,7 @@ class TermApi{
 
     async getRelations(){
         try{
-            let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + encodeURIComponent(this.iri) + '/relatedfroms';
+            let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + this.iri + '/relatedfroms';
             let res = await fetch(url, getCallSetting);
             res = await res.json();
             if (typeof(res) !== "undefined"){
@@ -165,7 +166,7 @@ class TermApi{
 
     async getEqAxiom(){
         try{
-            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + encodeURIComponent(this.iri) + '/equivalentclassdescription';
+            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + this.iri + '/equivalentclassdescription';
             let res = await fetch(url, getCallSetting);
             res = await res.json();  
             res = res["_embedded"];
@@ -189,7 +190,7 @@ class TermApi{
 
     async getSubClassOf(){
         try{
-            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + encodeURIComponent(this.iri) + '/superclassdescription';        
+            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + this.iri + '/superclassdescription';        
             let parents = await this.getParents();
             let subClassRelations = await fetch(url, getCallSetting);
             if(subClassRelations.status === 404){
@@ -224,7 +225,7 @@ class TermApi{
     async getIndividualInstancesForClass(){     
         try{
           let baseUrl =  process.env.REACT_APP_API_BASE_URL;
-          let callUrl = baseUrl + "/" + this.ontology + "/" + encodeURIComponent(this.iri) + "/terminstances";
+          let callUrl = baseUrl + "/" + this.ontology + "/" + this.iri + "/terminstances";
           let result = await fetch(callUrl, getCallSetting);
           result = await result.json();
           result = result['_embedded'];
@@ -242,7 +243,7 @@ class TermApi{
     async getNodeJsTree(viewMode){
         try{
           let url = process.env.REACT_APP_API_BASE_URL + "/";
-          url += this.ontology + "/" + this.termType + "/" + encodeURIComponent(encodeURIComponent(this.iri)) + "/jstree?viewMode=All&siblings=" + viewMode;
+          url += this.ontology + "/" + this.termType + "/" + this.iri + "/jstree?viewMode=All&siblings=" + viewMode;
           let listOfNodes =  await (await fetch(url, getCallSetting)).json();
           return listOfNodes;
         }
@@ -256,7 +257,7 @@ class TermApi{
     async getChildrenJsTree(targetNodeId) {
         let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
         let url = OntologiesBaseServiceUrl + "/";
-        url += this.ontology + "/" + this.termType + "/" + encodeURIComponent(encodeURIComponent(this.iri)) + "/jstree/children/" + targetNodeId;
+        url += this.ontology + "/" + this.termType + "/" + this.iri + "/jstree/children/" + targetNodeId;
         let res =  await (await fetch(url, getCallSetting)).json();
         return res;
     }
@@ -278,6 +279,7 @@ class TermApi{
           return {"results": result[this.termType], "totalTermsCount":totalTermsCount };
         }
         catch(e){
+            throw(e)
             return [];
         }      
     }

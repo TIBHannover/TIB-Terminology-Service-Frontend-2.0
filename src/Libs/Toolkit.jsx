@@ -114,6 +114,18 @@ class Toolkit{
         document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
         return url;
     }
+
+
+    static urlNotEncoded(url) {
+        try {          
+          const decodedUrl = decodeURIComponent(url);                
+          return decodedUrl === url;
+        } 
+        catch (error) {          
+          return false;
+        }
+      }
+      
 }
 
 export default Toolkit;
