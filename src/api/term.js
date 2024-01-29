@@ -101,21 +101,17 @@ class TermApi{
 
 
     async fetchClassRelations(){        
-        let [relations, eqAxiom, subClassOf, instancesList, originalOntology, alsoIn] = await Promise.all([
+        let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
             this.getRelations(),
             this.getEqAxiom(),
             this.getSubClassOf(),
-            this.getIndividualInstancesForClass(),
-            this.getClassOriginalOntology(),
-            this.getClassAllOntologies()
+            this.getIndividualInstancesForClass()            
       
           ]);
           this.term['relations'] = relations;
           this.term['eqAxiom'] = eqAxiom;
           this.term['subClassOf'] = subClassOf; 
-          this.term['instancesList'] = instancesList;
-          this.term['originalOntology'] = originalOntology;
-          this.term['alsoIn'] = alsoIn;
+          this.term['instancesList'] = instancesList;          
           return true;
     }
 
@@ -307,8 +303,12 @@ class TermApi{
 
 
     async getClassOriginalOntology(){
+        /**
+         * This API endpoint expect a raw Iri (Not encoded)
+         */
         try{
-            let url = `${process.env.REACT_APP_API_URL}/${this.termType}/findByIdAndIsDefiningOntology?iri=${this.iri}`;
+            let iri = decodeURIComponent(this.iri);
+            let url = `${process.env.REACT_APP_API_URL}/${this.termType}/findByIdAndIsDefiningOntology?iri=${iri}`;
             let result = await (await fetch(url, getCallSetting)).json();
             result = result['_embedded'][this.termType];
             let originalOntology = null;
@@ -319,8 +319,7 @@ class TermApi{
             }                     
             return originalOntology;
         }
-        catch(e){
-            // throw e
+        catch(e){            
             return null;
         }
         
@@ -330,7 +329,11 @@ class TermApi{
 
     async getClassAllOntologies(){
         try{
-            let url = `${process.env.REACT_APP_API_URL}/${this.termType}?iri=${this.iri}`;
+            /**
+            * This API endpoint expect a raw Iri (Not encoded)
+            */
+            let iri = decodeURIComponent(this.iri);
+            let url = `${process.env.REACT_APP_API_URL}/${this.termType}?iri=${iri}`;
             let result = await (await fetch(url, getCallSetting)).json();
             result = result['_embedded'][this.termType];             
             let ontologies = [];
