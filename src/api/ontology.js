@@ -11,6 +11,8 @@ class OntologyApi{
         this.ontology = null;
         this.rootClasses = [];
         this.rootProperties = [];
+        this.obsoleteClasses = [];
+        this.obsoleteProperties = [];
     }
 
 
@@ -36,8 +38,10 @@ class OntologyApi{
         result = await result.json();
         this.ontology = result;
         await Promise.all([
-          this.getOntologyRootTerms(),
-          this.getOntologyRootProperties()
+          this.fetchRootCalsses(),
+          this.fetchRootProperties(),
+          this.fetchObsoleteClasses(),
+          this.fetchObsoleteProperties()
         ]);
         return true; 
 
@@ -50,7 +54,7 @@ class OntologyApi{
 
 
 
-    async getOntologyRootTerms() {
+    async fetchRootCalsses() {
       try{
         if(!this.ontology){
           this.rootClasses = [];
@@ -82,7 +86,7 @@ class OntologyApi{
   }
 
 
-  async  getOntologyRootProperties() {
+  async  fetchRootProperties() {
     try{
       if(!this.ontology){
         this.rootProperties = [];
@@ -109,10 +113,36 @@ class OntologyApi{
     catch(e){      
       this.rootProperties = [];
       return true;
-    }
-    
+    }    
   }
 
+
+  async fetchObsoleteClasses() {
+    try{      
+      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontology + "/terms/roots?includeObsoletes=true&size=1000";      
+      let res =  await (await fetch(url, getCallSetting)).json();
+      this.obsoleteClasses = res['_embedded']["terms"];
+      return true;
+    }
+    catch(e){
+      this.obsoleteClasses = [];
+      return true;
+    }    
+  }
+
+
+  async fetchObsoleteProperties() {
+    try{      
+      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontology + "/properties/roots?includeObsoletes=true&size=1000";      
+      let res =  await (await fetch(url, getCallSetting)).json();
+      this.ObsoleteProperties = res['_embedded']["properties"];
+      return true;
+    }
+    catch(e){
+      this.ObsoleteProperties = [];
+      return true;
+    }    
+  }
 
 }
 

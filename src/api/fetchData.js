@@ -1,4 +1,4 @@
-import { getCallSetting, size } from "./constants";
+import { getCallSetting} from "./constants";
 
 
 
@@ -187,23 +187,6 @@ export async function getObsoleteTermsForTermList(ontologyId, termType, page, si
   }
   
 }
-
-
-
-export async function getObsoleteTerms(ontologyId, termType) {
-  try{
-    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-    let url = OntologiesBaseServiceUrl + "/";  
-    url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=1000";
-    let res =  await (await fetch(url, getCallSetting)).json();
-    return res['_embedded'][termType];
-  }
-  catch(e){
-    return [];
-  }
-  
-}
-
 
 
 export async function getAutoCompleteResult(inputData, count=5){
