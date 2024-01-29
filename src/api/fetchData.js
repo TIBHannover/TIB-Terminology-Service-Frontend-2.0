@@ -25,20 +25,6 @@ export async function getCollectionOntologies (collections, exclusive){
 }
 
 
-export async function getOntologyDetail (ontologyid) {
-  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-  return fetch(
-    OntologiesBaseServiceUrl + '/' + encodeURIComponent(ontologyid),
-    getCallSetting
-  )
-    .then((s) => s.json())
-    .then((s) => {
-      return s;
-    })
-    .catch((e) => {
-      return undefined
-    })
-}
 
 export async function getOntologyRootTerms(ontologyId) {
   try{

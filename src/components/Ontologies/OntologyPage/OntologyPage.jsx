@@ -1,6 +1,7 @@
 import React from 'react';
 import DataTree from '../DataTree/DataTree';
-import {getOntologyDetail, getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
+import {getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
+import OntologyApi from '../../../api/ontology';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import queryString from 'query-string'; 
@@ -79,13 +80,13 @@ class OntologyPage extends React.Component {
    * Get the ontology detail from the backend
    */
   async getOntology (ontologyId) {
-    let theOntology = await getOntologyDetail(ontologyId);
-    let isSkos = theOntology['config']?.['skos'];
-    if (typeof theOntology != undefined){
+    let ontologyApi = new OntologyApi({ontologyId:ontologyId});
+    await ontologyApi.fetchOntology();    
+    if (ontologyApi.ontology){
       this.setState({
         isLoaded: true,
-        ontology: theOntology,
-        isSkosOntology: isSkos
+        ontology: ontologyApi.ontology,
+        isSkosOntology: ontologyApi.ontology['config']?.['skos']
       });
     }
     else{
