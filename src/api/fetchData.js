@@ -2,18 +2,6 @@ import { getCallSetting, size } from "./constants";
 
 
 
-export async function getAllOntologies (){
-  let OntologiesListUrl = process.env.REACT_APP_API_ONTOLOGY_LIST;
-  return fetch(OntologiesListUrl, getCallSetting)
-    .then((s) => s.json())
-    .then((s) => {
-      return s['_embedded']['ontologies'];
-    })
-    .catch((s) => {
-      return [];
-    })
-}
-
 
 export async function getCollectionOntologies (collections, exclusive){
   let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;  

@@ -2,7 +2,8 @@ import {useState, useEffect} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
 import { useHistory } from 'react-router';
-import { getAllOntologies, getCollectionOntologies, getAllCollectionsIds } from '../../../api/fetchData';
+import {getCollectionOntologies, getAllCollectionsIds } from '../../../api/fetchData';
+import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
@@ -34,11 +35,12 @@ const OntologyList = (props) => {
 
   async function setComponentData (){    
     try{      
-      let allOntologies = await getAllOntologies();
+      let ontologyApi = new OntologyApi();
+      await ontologyApi.fetchOntologyList();      
       let allCollections = await getAllCollectionsIds();      
-      allOntologies = sortArrayOfOntologiesBasedOnKey(allOntologies, sortField);                 
-      setOntologies(allOntologies);
-      setUnFilteredOntologies(allOntologies);      
+      let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
+      setOntologies(sortedOntologies);
+      setUnFilteredOntologies(sortedOntologies);      
       setAllCollections(allCollections);      
       setIsLoaded(true);
     }
