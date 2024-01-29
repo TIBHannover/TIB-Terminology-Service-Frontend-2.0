@@ -35,8 +35,8 @@ const OntologyList = (props) => {
 
   async function setComponentData (){    
     try{      
-      let ontologyApi = new OntologyApi();
-      await ontologyApi.fetchOntologyList();      
+      let ontologyApi = new OntologyApi({});
+      await ontologyApi.fetchOntologyList();            
       let allCollections = await getAllCollectionsIds();      
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
       setOntologies(sortedOntologies);
@@ -45,6 +45,7 @@ const OntologyList = (props) => {
       setIsLoaded(true);
     }
     catch(error){      
+      throw(error)
       setIsLoaded(true);
       setError(error);        
     }

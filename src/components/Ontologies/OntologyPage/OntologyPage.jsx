@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTree from '../DataTree/DataTree';
-import {getOntologyRootTerms, getOntologyRootProperties, getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
+import {getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
 import OntologyApi from '../../../api/ontology';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -86,7 +86,9 @@ class OntologyPage extends React.Component {
       this.setState({
         isLoaded: true,
         ontology: ontologyApi.ontology,
-        isSkosOntology: ontologyApi.ontology['config']?.['skos']
+        isSkosOntology: ontologyApi.ontology['config']?.['skos'],
+        rootTerms: ontologyApi.rootClasses,
+        rootProps: ontologyApi.rootProperties
       });
     }
     else{
@@ -152,7 +154,7 @@ class OntologyPage extends React.Component {
       skosRootIndividuals = await getSkosOntologyRootConcepts(ontologyId);
       skosRootIndividuals = await shapeSkosConcepts(skosRootIndividuals);
     }
-    rootTerms = await getOntologyRootTerms(ontologyId);
+    rootTerms = this.state.rootTerms;
     let obsoleteTerms = await getObsoleteTerms(ontologyId, "terms"); 
     if (typeof(rootTerms) != undefined){
       if (rootTerms.length !== 0){
@@ -193,7 +195,7 @@ class OntologyPage extends React.Component {
      * Get the ontology root properties from the backend
      */
   async getRootProps (ontologyId) {
-    let rootProps = await getOntologyRootProperties(ontologyId);
+    let rootProps = this.state.rootProps;
     let obsoleteProps = await getObsoleteTerms(ontologyId, "properties"); 
     if (typeof rootProps != undefined){
       if(rootProps.length !== 0){

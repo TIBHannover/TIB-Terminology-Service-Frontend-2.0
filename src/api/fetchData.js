@@ -26,32 +26,6 @@ export async function getCollectionOntologies (collections, exclusive){
 
 
 
-export async function getOntologyRootTerms(ontologyId) {
-  try{
-    let ontology = await getOntologyDetail(ontologyId);
-    let termsLink = ontology['_links']['terms']['href'];
-    let pageCount = await getPageCount(termsLink + '/roots');
-    let terms = [];    
-    for(let page=0; page < pageCount; page++){
-        let url = termsLink + "/roots?page=" + page + "&size=" + size;      
-        let res =  await (await fetch(url, getCallSetting)).json();
-        if(page == 0){
-            terms = res['_embedded']['terms'];
-        }
-        else{
-            terms = terms.concat(res['_embedded']['terms']);
-        }      
-    }
-    
-    return terms;
-  
-  }
-  catch(e){
-    return undefined
-  }
-  
-}
-
 
 export async function getSkosOntologyRootConcepts(ontologyId) {
   try{
@@ -65,33 +39,6 @@ export async function getSkosOntologyRootConcepts(ontologyId) {
   }  
 }
 
-
-export async function getOntologyRootProperties(ontologyId) {
-  try{
-    let ontology = await getOntologyDetail(ontologyId);
-    let propertiesLink = ontology['_links']['properties']['href'];
-    let pageCount = await getPageCount(propertiesLink + '/roots');
-    let props = [];
-    for(let page=0; page < pageCount; page++){
-        let url = propertiesLink + "/roots?page=" + page + "&size=" + size;      
-        let res =  await (await fetch(url, getCallSetting)).json();
-        if(page == 0){
-          props = res['_embedded']['properties'];
-        }
-        else{
-          props = props.concat(res['_embedded']['properties']);
-        }      
-    }
-    
-    return props;
-
-  }
-  catch(e){
-    // console.info(e);
-    return undefined
-  }
-  
-}
 
 
 export async function getChildrenSkosTree(ontologyId, targetNodeIri){
@@ -257,12 +204,6 @@ export async function getObsoleteTerms(ontologyId, termType) {
   
 }
 
-
-async function getPageCount(url){
-  let answer = await fetch(url, getCallSetting);
-  answer = await answer.json();
-  return Math.ceil(answer['page']['totalElements'] / size);
-}
 
 
 export async function getAutoCompleteResult(inputData, count=5){
