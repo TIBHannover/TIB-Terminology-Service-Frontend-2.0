@@ -1,10 +1,9 @@
 import {useState, useEffect} from 'react';
 import DataTree from '../DataTree/DataTree';
-import {getSkosOntologyRootConcepts, isSkosOntology, getObsoleteTerms} from '../../../api/fetchData';
+import {getSkosOntologyRootConcepts} from '../../../api/fetchData';
 import OntologyApi from '../../../api/ontology';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
-import queryString from 'query-string'; 
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
@@ -69,7 +68,7 @@ const OntologyPage = (props) => {
 
 
   async function loadOntologyData(){
-    let ontologyId = this.props.match.params.ontologyId;
+    let ontologyId = props.match.params.ontologyId;
     let ontologyApi = new OntologyApi({ontologyId:ontologyId});
     await ontologyApi.fetchOntology();
     if(!ontologyApi.ontology){
@@ -100,68 +99,58 @@ const OntologyPage = (props) => {
 
 
   function setTabOnLoad(){
-    let requestedTab = this.props.match.params.tab;    
-    let lastRequestedTab = this.state.lastRequestedTab;
+    let requestedTab = props.match.params.tab;    
     if (requestedTab === lastRequestedTab){
       return true;
     }
 
     let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;   
-    let irisHistory = this.state.lastIrisHistory;
-    let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-    irisHistory[requestedTab] = targetQueryParams.iri;  
+    let irisHistory = {...lastIrisHistory};    
+    let urlParams = new URLSearchParams(window.location.search);
+    irisHistory[requestedTab] = urlParams.get("iri");  
 
-    this.setState({        
-      activeTab: activeTabId,
-      waiting: false,
-      lastRequestedTab: requestedTab,
-      lastIrisHistory: irisHistory
-    });
+    setActiveTab(activeTabId);
+    setWaiting(false);
+    setLastRequestedTab(requestedTab);
+    setLastIrisHistory(irisHistory);    
   }
+
 
 
   function tabChange(e, v){
     try{
       let selectedTabId = e.target.dataset.value;         
-      this.setState({
-        waiting: true
-      });
-  
-      this.setState({
-        activeTab: parseInt(selectedTabId),
-        waiting: false
-      });
+      setWaiting(true);
+      setActiveTab(parseInt(selectedTabId));
+      setWaiting(false);
     } 
     catch(e){
-      this.setState({
-        activeTab: OVERVIEW_TAB_ID,
-        waiting: false
-      });
+      setActiveTab(OVERVIEW_TAB_ID);
+      setWaiting(false);     
     }      
   }
 
 
 
 
-  function changeInputIri(iri, componentId){   
-    let irisHistory = this.state.lastIrisHistory;
+  function changeInputIri(iri, componentId){  
+    /**
+     * Store the last input iri for tabs
+     */ 
+    let irisHistory = {...lastIrisHistory};
     irisHistory[componentId] = iri;
-    this.setState({
-      lastIrisHistory: irisHistory
-    });
+    setLastIrisHistory(irisHistory);    
   }
 
 
-  
-  /**
-   * Stores the last state in for tabs components to prevent reload on tab change
-   */
+
   function tabsStateKeeper(domContent, stateObject, componentId, iri){         
-    let lastTabsStates = this.state.lastTabsStates;    
-    lastTabsStates[componentId] = {"html": domContent, "states": stateObject, "lastIri": iri};
-    this.setState({
-      lastTabsStates: lastTabsStates
-    });
+    /**
+    * Stores the last state in for tabs components to prevent reload on tab change
+    */
+    let tabsStates = {...lastTabsStates};    
+    tabsStates[componentId] = {"html": domContent, "states": stateObject, "lastIri": iri};
+    setLastTabsStates(tabsStates);    
   }
 
   
@@ -171,110 +160,111 @@ const OntologyPage = (props) => {
   }, []);
 
 
-  // function componentDidUpdate(){
-  //   this.setOntologyData();
-  //   this.setTabOnLoad();
-  // }
+  useEffect(() => {
+    loadOntologyData();
+    setTabOnLoad();
+  }, [isLoaded]);
 
 
 
-  if (this.state.error) {
-    return <div>Error: {this.state.error.message}</div>
-  } else if (!this.state.isLoaded) {
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+  else if (!isLoaded) {
     return <div>Loading...</div>
-  } else {
+  } 
+  else {
     return (        
       <div className='justify-content-center ontology-page-container'>
-          {Toolkit.createHelmet(this.state.ontology.ontologyId)}            
-          {createOntologyPageHeadSection(this.state.ontology)}          
+          {Toolkit.createHelmet(ontology.ontologyId)}            
+          {createOntologyPageHeadSection(ontology)}          
           <div className='col-sm-12'>
               <ul className="nav nav-tabs">
-                  {renderOntologyPageTabs(ontologyPageTabConfig, this.tabChange, this.state.ontologyId, this.state.activeTab)}
+                  {renderOntologyPageTabs(ontologyPageTabConfig, tabChange, ontology.ontologyId, activeTab)}
               </ul>
-              {!this.state.waiting && (this.state.activeTab === OVERVIEW_TAB_ID) &&
+              {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
                               <OntologyOverview 
-                                  ontology={this.state.ontology}
+                                  ontology={ontology}
                               />
               }
-              {!this.state.waiting && (this.state.activeTab === TERM_TREE_TAB_ID) &&
+              {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
                               <DataTree
-                                rootNodes={this.state.rootTerms}
-                                obsoleteTerms={this.state.obsoleteTerms}
-                                rootNodesForSkos={this.state.skosRootIndividuals}
+                                rootNodes={rootTerms}
+                                obsoleteTerms={obsoleteTerms}
+                                rootNodesForSkos={skosRootIndividuals}
                                 componentIdentity={'terms'}
-                                iri={this.state.lastIrisHistory['terms']}
+                                iri={lastIrisHistory['terms']}
                                 key={'termTreePage'}                    
-                                ontology={this.state.ontology}
-                                rootNodeNotExist={this.state.rootNodeNotExist}
-                                iriChangerFunction={this.changeInputIri}
-                                lastState={this.state.lastTabsStates['terms']}
-                                domStateKeeper={this.tabsStateKeeper}
-                                isSkos={this.state.isSkosOntology}
+                                ontology={ontology}
+                                rootNodeNotExist={rootNodeNotExist}
+                                iriChangerFunction={changeInputIri}
+                                lastState={lastTabsStates['terms']}
+                                domStateKeeper={tabsStateKeeper}
+                                isSkos={isSkosOntology}
                                 isIndividuals={false}
                               />
               }
 
-              {!this.state.waiting && (this.state.activeTab === PROPERTY_TREE_TAB_ID) &&
+              {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
                               <DataTree
-                                rootNodes={this.state.rootProps}
-                                obsoleteTerms={this.state.obsoleteProps}
+                                rootNodes={rootProps}
+                                obsoleteTerms={obsoleteProps}
                                 rootNodesForSkos={[]}
                                 componentIdentity={'properties'}
-                                iri={this.state.lastIrisHistory['properties']}
+                                iri={lastIrisHistory['properties']}
                                 key={'propertyTreePage'}
-                                ontology={this.state.ontology}
-                                rootNodeNotExist={this.state.rootNodeNotExist}
-                                iriChangerFunction={this.changeInputIri}
-                                lastState={this.state.lastTabsStates['properties']}
-                                domStateKeeper={this.tabsStateKeeper}
+                                ontology={ontology}
+                                rootNodeNotExist={rootNodeNotExist}
+                                iriChangerFunction={changeInputIri}
+                                lastState={lastTabsStates['properties']}
+                                domStateKeeper={tabsStateKeeper}
                                 isIndividuals={false}
                               />
               }
-              {!this.state.waiting && (this.state.activeTab === INDIVIDUAL_LIST_TAB_ID) &&
+              {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                               <IndividualsList
-                                rootNodes={this.state.rootTerms}
-                                rootNodesForSkos={this.state.skosRootIndividuals}                                                    
-                                iri={this.state.lastIrisHistory['individuals']}
+                                rootNodes={rootTerms}
+                                rootNodesForSkos={skosRootIndividuals}                                                    
+                                iri={lastIrisHistory['individuals']}
                                 componentIdentity={'individuals'}
                                 key={'individualsTreePage'}
-                                ontology={this.state.ontology}                              
-                                iriChangerFunction={this.changeInputIri}
+                                ontology={ontology}                              
+                                iriChangerFunction={changeInputIri}
                                 lastState={""}
-                                domStateKeeper={this.tabsStateKeeper}
-                                isSkos={this.state.isSkosOntology}
-                                individualTabChanged={this.state.individualTabChanged}                                
+                                domStateKeeper={tabsStateKeeper}
+                                isSkos={isSkosOntology}                                                               
                               />
               }
-              {!this.state.waiting && (this.state.activeTab === TERM_LIST_TAB_ID) &&
+              {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
                               <TermList                              
-                                iri={this.state.lastIrisHistory['termList']}
+                                iri={lastIrisHistory['termList']}
                                 componentIdentity={'termList'}
                                 key={'termListPage'}
-                                ontology={this.state.ontologyId}                              
-                                iriChangerFunction={this.changeInputIri}                              
-                                isSkos={this.state.isSkosOntology}                              
+                                ontology={ontology.ontologyId}                              
+                                iriChangerFunction={changeInputIri}                              
+                                isSkos={isSkosOntology}                              
                               />
               }             
-              {!this.state.waiting && (this.state.activeTab === NOTES_TAB_ID) &&
+              {!waiting && (activeTab === NOTES_TAB_ID) &&
                               <NoteList                  
                                 componentIdentity={'notes'}
                                 key={'notesPage'}
-                                ontology={this.state.ontology}
+                                ontology={ontology}
                                 isGeneric={true}                                  
                               />
               }                                      
-              {!this.state.waiting && (this.state.activeTab === GIT_ISSUE_LIST_ID) &&                            
+              {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            
                               <IssueList                                                           
                                 componentIdentity={'gitIssues'}
                                 key={'gitIssueList'}
-                                ontology={this.state.ontology}                              
-                                isSkos={this.state.isSkosOntology}
-                                lastState={this.state.lastTabsStates['gitIssues']}                                  
-                                storeListOfGitIssuesState={this.tabsStateKeeper}
+                                ontology={ontology}                              
+                                isSkos={isSkosOntology}
+                                lastState={lastTabsStates['gitIssues']}                                  
+                                storeListOfGitIssuesState={tabsStateKeeper}
                               />
               } 
 
-              {this.state.waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
+              {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
           </div>                    
       </div>
 
