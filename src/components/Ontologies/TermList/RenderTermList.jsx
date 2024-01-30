@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import {getSubClassOf, getEqAxiom} from '../../../api/fetchData';
 import TermApi from "../../../api/term";
 import Pagination from "../../common/Pagination/Pagination";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
 import AlertBox from "../../common/Alerts/Alerts";
+import '../../layout/termList.css';
 
 
 

@@ -63,7 +63,7 @@ const Tree = (props) => {
             setReload(false);
             setNoNodeExist(false);            
         }
-        else if((props.rootNodes.length === 0 || props.rootNodesForSkos.length === 0) && !noNodeExist && props.rootNodeNotExist && props.componentIdentity !== "individuals"){
+        else if((props.rootNodes.length === 0 || props.rootNodesForSkos.length === 0) && !noNodeExist && props.componentIdentity !== "individuals"){
             setIsLoading(false);
             setNoNodeExist(true);            
         }        

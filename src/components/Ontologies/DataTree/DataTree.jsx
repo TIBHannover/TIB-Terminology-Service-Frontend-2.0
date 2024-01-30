@@ -6,6 +6,7 @@ import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
+import '../../layout/tree.css';
 
 
 
@@ -92,8 +93,7 @@ const DataTree = (props) => {
                 componentIdentity={props.componentIdentity}
                 selectedNodeIri={selectedNodeIri}
                 key={props.key}                    
-                ontologyId={props.ontology.ontologyId}
-                rootNodeNotExist={props.rootNodeNotExist}
+                ontologyId={props.ontology.ontologyId}                
                 iriChangerFunction={props.iriChangerFunction}
                 lastState={props.lastState}
                 domStateKeeper={props.domStateKeeper}

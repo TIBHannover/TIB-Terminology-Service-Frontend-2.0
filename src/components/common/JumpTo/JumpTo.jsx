@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Autosuggest from 'react-autosuggest';
 import { getJumpToResult } from "../../../api/fetchData";
+import '../../layout/jumpTo.css';
+import '../../layout/reactAutoSuggestLib.css';
 
 
 

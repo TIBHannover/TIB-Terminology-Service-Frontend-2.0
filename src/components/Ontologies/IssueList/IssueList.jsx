@@ -8,6 +8,7 @@ import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
 import DropDown from "../../common/DropDown/DropDown";
 import TermRequest from '../TermRequest/TermRequest';
 import RenderIfLogin from '../../User/Login/RequireLogin';
+import '../../layout/githubPanel.css';
 
 
 

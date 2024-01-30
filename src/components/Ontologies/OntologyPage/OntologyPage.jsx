@@ -11,12 +11,7 @@ import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
 import '../../layout/ontologyHomePage.css';
-import '../../layout/tree.css';
 import '../../layout/note.css';
-import '../../layout/githubPanel.css';
-import '../../layout/termList.css';
-import '../../layout/reactAutoSuggestLib.css';
-import '../../layout/jumpTo.css';
 
 
 
@@ -46,10 +41,7 @@ const OntologyPage = (props) => {
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [ontology, setOntology] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isRootTermsLoaded, setIsRootTermsLoaded] = useState(false);
-  const [errorRootTerms, setErrorRootTerms] = useState(null);
+  const [error, setError] = useState(null);  
   const [activeTab, setActiveTab] = useState(OVERVIEW_TAB_ID);
   const [rootTerms, setRootTerms] = useState([]);
   const [skosRootIndividuals, setSkosRootIndividuals] = useState([]);
@@ -58,11 +50,8 @@ const OntologyPage = (props) => {
   const [obsoleteProps, setObsoleteProps] = useState([]);
   const [waiting, setWaiting] = useState(false);
   const [lastIrisHistory, setLastIrisHistory] = useState({"terms": "", "properties": "", "individuals": "", "termList": ""});
-  const [lastTabsStates, setLastTabsStates] = useState({"terms": null, "properties": null, "gitIssues": ""});
-  const [rootNodeNotExist, setRootNodeNotExist] = useState(false);
-  const [isSkosOntology, setIsSkosOntology] = useState(false);
-  const [ontologyShowAll, setOntologyShowAll] = useState(false);
-  const [showMoreLessOntologiesText, setShowMoreLessOntologiesText] = useState("+ Show More");
+  const [lastTabsStates, setLastTabsStates] = useState({"terms": null, "properties": null, "gitIssues": ""});  
+  const [isSkosOntology, setIsSkosOntology] = useState(false);  
   
 
 
@@ -71,8 +60,7 @@ const OntologyPage = (props) => {
     let ontologyId = props.match.params.ontologyId;
     let ontologyApi = new OntologyApi({ontologyId:ontologyId});
     await ontologyApi.fetchOntology();    
-    if(!ontologyApi.ontology){
-      setIsLoaded(true);
+    if(!ontologyApi.ontology){      
       setError("Can not load this ontology");   
       return true;
     }
@@ -82,18 +70,14 @@ const OntologyPage = (props) => {
       skosIndividuals = await getSkosOntologyRootConcepts(ontologyId);
       skosIndividuals = await shapeSkosConcepts(skosIndividuals);
     }
-
-    setIsLoaded(true);
+    
     setOntology(ontologyApi.ontology);
     setIsSkosOntology(isSkos);
     setRootTerms(ontologyApi.rootClasses);
     setRootProps(ontologyApi.rootProperties);   
     setObsoleteTerms(ontologyApi.obsoleteClasses);
     setObsoleteProps(ontologyApi.obsoleteProperties); 
-    setSkosRootIndividuals(skosIndividuals);
-    setRootNodeNotExist(ontologyApi.rootClasses.length === 0);  
-    setIsRootTermsLoaded(true);
-   
+    setSkosRootIndividuals(skosIndividuals);    
   }
 
 
@@ -160,20 +144,15 @@ const OntologyPage = (props) => {
   }, []);
 
 
-  useEffect(() => {
-    loadOntologyData();
-    setTabOnLoad();
-  }, [isLoaded]);
-
 
 
   if (error) {
     return <div>Error: {error.message}</div>
   }
-  else if (!isLoaded || !ontology) {
+  else if (!ontology) {
     return <div>Loading...</div>
   } 
-  else if(ontology) {
+  else{
     return (        
       <div className='justify-content-center ontology-page-container'>
           {Toolkit.createHelmet(ontology.ontologyId)}            
@@ -195,8 +174,7 @@ const OntologyPage = (props) => {
                                 componentIdentity={'terms'}
                                 iri={lastIrisHistory['terms']}
                                 key={'termTreePage'}                    
-                                ontology={ontology}
-                                rootNodeNotExist={rootNodeNotExist}
+                                ontology={ontology}                                
                                 iriChangerFunction={changeInputIri}
                                 lastState={lastTabsStates['terms']}
                                 domStateKeeper={tabsStateKeeper}
@@ -213,8 +191,7 @@ const OntologyPage = (props) => {
                                 componentIdentity={'properties'}
                                 iri={lastIrisHistory['properties']}
                                 key={'propertyTreePage'}
-                                ontology={ontology}
-                                rootNodeNotExist={rootNodeNotExist}
+                                ontology={ontology}                               
                                 iriChangerFunction={changeInputIri}
                                 lastState={lastTabsStates['properties']}
                                 domStateKeeper={tabsStateKeeper}
