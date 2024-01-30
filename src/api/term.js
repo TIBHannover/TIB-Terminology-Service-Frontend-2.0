@@ -59,6 +59,7 @@ class TermApi{
                 this.term = false;
                 return true;
             }  
+            console.clear();
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
             let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
             let callResult =  await fetch(baseUrl + "/" + this.iri , getCallSetting);
