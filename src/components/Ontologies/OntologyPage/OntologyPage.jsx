@@ -70,7 +70,7 @@ const OntologyPage = (props) => {
   async function loadOntologyData(){
     let ontologyId = props.match.params.ontologyId;
     let ontologyApi = new OntologyApi({ontologyId:ontologyId});
-    await ontologyApi.fetchOntology();
+    await ontologyApi.fetchOntology();    
     if(!ontologyApi.ontology){
       setIsLoaded(true);
       setError("Can not load this ontology");   
@@ -170,10 +170,10 @@ const OntologyPage = (props) => {
   if (error) {
     return <div>Error: {error.message}</div>
   }
-  else if (!isLoaded) {
+  else if (!isLoaded || !ontology) {
     return <div>Loading...</div>
   } 
-  else {
+  else if(ontology) {
     return (        
       <div className='justify-content-center ontology-page-container'>
           {Toolkit.createHelmet(ontology.ontologyId)}            
