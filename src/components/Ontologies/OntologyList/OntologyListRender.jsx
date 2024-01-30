@@ -92,8 +92,8 @@ export const OntologyListRender = (props) =>{
         <div className='row'>           
             <div className='col-sm-12'>                                                                                                                                                                                         
                 <div className='row'>
-                    <div className='col-sm-4'>                    
-                        <h3 className='h-headers'>Browse Ontologies</h3>                   
+                    <div className='col-sm-6'>                    
+                        <h3 className='h-headers'>Browse Ontologies ({props.ontologies.length})</h3>                   
                     </div>                 
                 </div>
                 <div className='row'>                    
