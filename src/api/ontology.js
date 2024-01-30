@@ -17,16 +17,17 @@ class OntologyApi{
 
 
     async fetchOntologyList (){
+      try{
         let OntologiesListUrl = process.env.REACT_APP_API_ONTOLOGY_LIST;
-        fetch(OntologiesListUrl, getCallSetting)
-          .then((result) => result.json())
-          .then((result) => {
-            this.list = result['_embedded']['ontologies'];                        
-          })
-          .catch((e) => {
-            this.list = [];
-          })
+        let result = await fetch(OntologiesListUrl, getCallSetting);
+        result = await result.json();
+        this.list = result['_embedded']['ontologies'];         
         return true;
+      } 
+      catch(e){
+        this.list = [];
+        return true;
+      }       
     }
 
 

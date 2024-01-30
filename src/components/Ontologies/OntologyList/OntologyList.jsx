@@ -41,13 +41,13 @@ const OntologyList = (props) => {
       if(process.env.REACT_APP_PROJECT_NAME === ""){
         // If TIB General, fetch all the collections. Otherwise not needed.
         allCollections = await getAllCollectionsIds();
-      }           
+      }                 
       
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
       setOntologies(sortedOntologies);
       setUnFilteredOntologies(sortedOntologies);      
       setAllCollections(allCollections);      
-      setIsLoaded(true);
+      setIsLoaded(true);      
     }
     catch(error){            
       setIsLoaded(true);
@@ -201,7 +201,7 @@ const OntologyList = (props) => {
       ontologiesList = collectionFilteredOntologies;  
     }
   
-    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);        
+    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);           
     setOntologies(ontologiesList);        
   }
 
