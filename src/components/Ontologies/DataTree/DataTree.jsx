@@ -49,18 +49,28 @@ const DataTree = (props) => {
   }
 
 
-  useEffect(() => {
+  useEffect(() => {    
     let url = new URL(window.location);
     let targetQueryParams = url.searchParams;    
     paneResizeClass.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
-    let termTree = (props.componentIdentity === "terms") ? true : false;         
-    setSelectedNodeIri(targetQueryParams.get('iri') ? targetQueryParams.get('iri') : "");
+    let termTree = (props.componentIdentity === "terms") ? true : false; 
+    let iriInUrl =  targetQueryParams.get('iri');
+    if(iriInUrl){
+      setSelectedNodeIri(iriInUrl);
+      setShowDetailTable(true);
+    }
+    else if(props.iri && props.iri !== ""){
+      setSelectedNodeIri(props.iri);
+      setShowDetailTable(true);
+      targetQueryParams.set("iri", props.iri);
+      history.push(window.location.pathname + "?" +  targetQueryParams.toString());
+    }
+    
     setIsTermTree(termTree);
     setIsPropertyTree(!termTree);
-    setShowDetailTable(targetQueryParams.get('iri') ? true : false);
 
     return () => {
       document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
