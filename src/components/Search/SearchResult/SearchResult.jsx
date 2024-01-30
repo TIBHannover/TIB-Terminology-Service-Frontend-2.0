@@ -33,7 +33,8 @@ const SearchResult = (props) => {
   const [facetIsSelected, setFacetIsSelected] = useState(false);
   const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);  
   const [allCollectionIds, setAllCollectionIds] = useState([]);
-  const [filterTags, setFilterTags] = useState("");  
+  const [filterTags, setFilterTags] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
@@ -67,12 +68,14 @@ const SearchResult = (props) => {
       setTotalResultsCount(result['response']['numFound']);
       setFacetFields(result['facet_counts']);
       setExpandedResults(result['expanded'])
+      setLoading(false);
     }
     catch(e){
       setSearchResult([]);
       setTotalResultsCount(0);
       setFacetFields([]);
       setExpandedResults([]);
+      setLoading(false);
     }    
   }
 
@@ -297,6 +300,8 @@ const SearchResult = (props) => {
 
 
   useEffect(() => {
+      setLoading(true);
+      setSearchResult([]);
       search();
       createFilterTags();
   }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections]);
@@ -309,7 +314,7 @@ const SearchResult = (props) => {
       <div className='col-sm-11'>            
         <div className='row'>
           <div className='col-sm-4'>          
-            {(searchResult.length > 0 || (searchResult.length === 0 && facetIsSelected)) &&
+            {searchResult.length > 0  && !loading &&
               <Facet
                 facetData = {facetFields}
                 handleChange = {search}             
@@ -347,10 +352,12 @@ const SearchResult = (props) => {
                 count={pageCount()}
                 initialPageNumber={pageNumber}          
               />
-            } 
-
-            {searchResult.length === 0 && <h3 className="text-dark">{'No search results for "' + searchQuery + '"'   }</h3>} 
+            }             
+            {!loading && searchResult.length === 0 && <h3 className="text-dark">{'No search results for "' + searchQuery + '"'   }</h3>} 
             </div>
+          </div>
+          <div className='row text-center'>
+            {loading && <div className="is-loading-term-list isLoading"></div>}
           </div>
       </div>                
     </div>
