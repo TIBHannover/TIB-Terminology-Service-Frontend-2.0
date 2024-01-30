@@ -36,16 +36,20 @@ const OntologyList = (props) => {
   async function setComponentData (){    
     try{      
       let ontologyApi = new OntologyApi({});
-      await ontologyApi.fetchOntologyList();            
-      let allCollections = await getAllCollectionsIds();      
+      await ontologyApi.fetchOntologyList(); 
+      let allCollections = [];
+      if(process.env.REACT_APP_PROJECT_NAME === ""){
+        // If TIB General, fetch all the collections. Otherwise not needed.
+        allCollections = await getAllCollectionsIds();
+      }           
+      
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
       setOntologies(sortedOntologies);
       setUnFilteredOntologies(sortedOntologies);      
       setAllCollections(allCollections);      
       setIsLoaded(true);
     }
-    catch(error){      
-      throw(error)
+    catch(error){            
       setIsLoaded(true);
       setError(error);        
     }
