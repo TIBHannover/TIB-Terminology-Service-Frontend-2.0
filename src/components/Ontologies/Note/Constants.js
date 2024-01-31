@@ -3,6 +3,7 @@ export const CLASS_COMPONENT_ID = 2;
 export const PROPERTY_COMPONENT_ID = 3;
 export const INDIVIDUAL_COMPONENT_ID = 4;
 export const NOTE_COMPONENT_VALUES = ['', 'ontology', 'class', 'property', 'individual']
+export const TERM_TYPES = ['', 'ontology', 'terms', 'properties', 'individuals']
 
 export const VISIBILITY_ONLY_ME = 1;
 export const VISIBILITY_TS_USRES = 2;
@@ -22,11 +23,3 @@ export const VISIBILITY_FOR_DROPDOWN = [
     {label: "Internal", value:VISIBILITY_TS_USRES},
     {label: "Public", value:VISIBILITY_PUBLIC}
 ];
-
-
-export const getAutoCompleteValue = suggestion => suggestion.label;
-export const rendetAutoCompleteItem = suggestion => (
-    <div>
-      {suggestion.label}
-    </div>
-);

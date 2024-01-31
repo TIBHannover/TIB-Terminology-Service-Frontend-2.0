@@ -1,6 +1,6 @@
 import DropDown from "../../../common/DropDown/DropDown";
-import Autosuggest from 'react-autosuggest';
 import TextEditor from "../../../common/TextEditor/TextEditor";
+import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
 
 
@@ -75,21 +75,40 @@ export const NoteCreationRender = (props) => {
                                     {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <div>
                                             <label className="required_input" for="noteIri">About</label>                                            
-                                            <Autosuggest
-                                                suggestions={props.autoCompleteSuggestionsList}
-                                                onSuggestionsFetchRequested={props.onAutoCompleteChange}
-                                                onSuggestionsClearRequested={props.clearAutoComplete}
-                                                getSuggestionValue={constantsVars.getAutoCompleteValue}
-                                                renderSuggestion={constantsVars.rendetAutoCompleteItem}
-                                                onSuggestionSelected={props.onAutoCompleteSelecteion}
-                                                inputProps={inputPropsAutoSuggest}
+                                            <JumpTo
+                                                targetType={props.componentIdentity}
+                                                ontologyId={props.ontologyId}
+                                                isSkos={false} 
+                                                label={false}
+                                                handleJumtoSelection={props.handleJumtoSelection}
+                                                obsoletes={false}                                                                                           
                                             />
                                             <br></br>
                                         </div>
                                     } 
                                 </div>
                             </div>  
-                            <br></br>                          
+                            <br></br>
+                            {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                <>
+                                <div className="row">
+                                    <div className="col-sm-10">
+                                        <div class="form-group form-check">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="form-check-input" 
+                                                    id="publish_note_to_parent_checkbox" 
+                                                    // onChange={props.obsoletesCheckboxHandler}                                         
+                                                />
+                                            <label class="form-check-label" for="publish_note_to_parent_checkbox">
+                                                Publish this note also for the parent ontology. 
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>  
+                                <br></br>
+                                </>
+                            }
                             <div className="row">                                
                                 <div className="col-sm-10">                                                              
                                     <label className="required_input" for={"noteTitle" + props.targetNoteId}>Title</label>

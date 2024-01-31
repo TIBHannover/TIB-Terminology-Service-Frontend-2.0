@@ -1,5 +1,4 @@
 import {useState} from "react";
-import {getJumpToResult} from "../../../api/fetchData";
 import {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
@@ -13,8 +12,7 @@ const NoteCreation = (props) => {
     targetArtifactType = targetArtifactType !== -1 ? targetArtifactType : 1;    
     const [targetArtifact, setTargetArtifact] = useState(targetArtifactType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
-    const [editorState, setEditorState] = useState(null);
-    const [autoCompleteSuggestionsList, setAutoCompleteSuggestionsList] = useState([]);
+    const [editorState, setEditorState] = useState(null);    
     const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState(props.targetArtifactLabel);
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
     const [noteTitle, setNoteTitle] = useState("");
@@ -35,8 +33,7 @@ const NoteCreation = (props) => {
 
 
     function changeArtifactType(e){                   
-        setTargetArtifact(e.target.value);
-        setAutoCompleteSuggestionsList([]);
+        setTargetArtifact(e.target.value);        
         setEnteredTermInAutoComplete("");       
     }
 
@@ -53,8 +50,7 @@ const NoteCreation = (props) => {
             modalBackDrop[0].remove();
         }
         setEditorState(null);
-        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);
-        setAutoCompleteSuggestionsList([]);
+        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);        
         setEnteredTermInAutoComplete("");
         setSelectedTermFromAutoComplete({"iri": null, "label": null});            
     }
@@ -118,41 +114,10 @@ const NoteCreation = (props) => {
     }
 
 
-    async function onAutoCompleteChange({value}){   
-        let enteredTerm = value;                  
-        let type = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];        
-        if(type !== "property" && type !== "individual"){
-            type = props.isSkos ? "individual" : "class"; 
-        }       
-        if (enteredTerm.length > 0){
-            let inputForAutoComplete = {}; 
-            inputForAutoComplete['searchQuery'] = value;
-            inputForAutoComplete['ontologyIds'] = props.ontologyId;
-            inputForAutoComplete['types'] = type;            
-            let autoCompleteResult = await getJumpToResult(inputForAutoComplete);
-            setAutoCompleteSuggestionsList(autoCompleteResult);                                  
-        }       
-    }
-
-
-    function clearAutoComplete(){
-        document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
-        setAutoCompleteSuggestionsList([]);        
-    }
-
-
-    function onAutoCompleteTextBoxChange (event, { newValue }){
-        document.getElementsByClassName('react-autosuggest__input')[0].style.border = '';
-        setEnteredTermInAutoComplete(newValue);        
-    }
-    
-
-    
-    function onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
-            let autoCompleteSelectedTerm = selectedTermFromAutoComplete;
-            autoCompleteSelectedTerm['iri'] = autoCompleteSuggestionsList[suggestionIndex]['iri'];
-            autoCompleteSelectedTerm['label'] = autoCompleteSuggestionsList[suggestionIndex]['label'];
-            setSelectedTermFromAutoComplete(autoCompleteSelectedTerm);        
+    function handleJumtoSelection(selectedTerm){ 
+        if(selectedTerm){
+            setSelectedTermFromAutoComplete(selectedTerm);
+        }                       
     }
 
 
@@ -165,19 +130,14 @@ const NoteCreation = (props) => {
 
     return (
         <NoteCreationRender 
-            enteredTermInAutoComplete={enteredTermInAutoComplete}
-            onAutoCompleteTextBoxChange={onAutoCompleteTextBoxChange}            
+            enteredTermInAutoComplete={enteredTermInAutoComplete}                  
             closeModal={closeModal}
             isGeneric={props.isGeneric}
             targetArtifact={targetArtifact}
             changeArtifactType={changeArtifactType}
             visibility={visibility}
             changeVisibility={changeVisibility}
-            ontologyId={props.ontologyId}
-            autoCompleteSuggestionsList={autoCompleteSuggestionsList}
-            onAutoCompleteChange={onAutoCompleteChange}
-            clearAutoComplete={clearAutoComplete}
-            onAutoCompleteSelecteion={onAutoCompleteSelecteion}
+            ontologyId={props.ontologyId}                                           
             targetArtifactLabel={props.targetArtifactLabel}
             noteTitle={noteTitle}
             onTextInputChange={onTextInputChange}
@@ -187,6 +147,8 @@ const NoteCreation = (props) => {
             targetNoteId={noteIdForRender}
             mode={"newNote"}
             isGeneric={props.isGeneric}
+            handleJumtoSelection={handleJumtoSelection}
+            componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
         />
     );
 

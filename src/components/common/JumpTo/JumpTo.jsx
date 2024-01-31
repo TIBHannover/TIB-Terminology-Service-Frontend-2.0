@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Autosuggest from 'react-autosuggest';
 import { getJumpToResult } from "../../../api/fetchData";
 import '../../layout/jumpTo.css';
@@ -67,11 +67,20 @@ const JumpTo = (props) => {
     }
 
 
+    useEffect(() => {
+        let inputField = document.querySelector('.autosuggest-jumpto-container input');
+        console.log(props.label)
+        if (inputField && !props.label) {            
+            inputField.style.padding = '5px';
+        }
+    }, []);
+
+
 
     return(
         <div className="row">
             <div className="col-sm-12 autosuggest-jumpto-container">
-                <label for="jumpto-autosuggest-box">{props.label}</label>                                            
+                {props.label && <label for="jumpto-autosuggest-box">{props.label}</label>}
                 <Autosuggest
                     suggestions={resultList}
                     onSuggestionsFetchRequested={onAutoCompleteChange}
