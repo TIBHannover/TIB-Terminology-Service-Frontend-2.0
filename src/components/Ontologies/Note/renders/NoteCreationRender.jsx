@@ -15,7 +15,7 @@ export const NoteCreationRender = (props) => {
     };
 
     return(
-        <span>            
+        <>            
             {props.mode === "newNote" && 
                 <div className="row float-right">
                     <div className="col-sm-12">
@@ -40,25 +40,35 @@ export const NoteCreationRender = (props) => {
                             <button onClick={() => {props.closeModal()}} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                         </div>
                         <br></br>                                                
-                        <div class="modal-body">                                    
-                            <div className="row">                                
+                        <div class="modal-body"> 
+                            <div className="row">
                                 <div className="col-sm-8">
                                     {props.isGeneric && 
-                                        <DropDown 
-                                            options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
-                                            dropDownId="note-artifact-types"
-                                            dropDownTitle="Target Artifact"
-                                            dropDownValue={props.targetArtifact}
-                                            dropDownChangeHandler={props.changeArtifactType}
-                                        /> 
+                                            <DropDown 
+                                                options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
+                                                dropDownId="note-artifact-types"
+                                                dropDownTitle="Target Artifact"
+                                                dropDownValue={props.targetArtifact}
+                                                dropDownChangeHandler={props.changeArtifactType}
+                                            /> 
                                     }
+                                </div>
+                            </div>
+                            <br></br>
+                            <div className="row">
+                                <div className="col-sm-8">
                                     <DropDown 
                                         options={constantsVars.VISIBILITY_FOR_DROPDOWN}
                                         dropDownId="note_visibility_dropdown"
                                         dropDownTitle="Visibility"
                                         dropDownValue={props.visibility}
                                         dropDownChangeHandler={props.changeVisibility}
-                                    />                                     
+                                    />  
+                                </div>
+                            </div>
+                            <br></br>
+                            <div className="row">
+                                <div className="col-sm-8">
                                     {parseInt(props.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <p>About: <b>{props.ontologyId}</b></p>
                                     }
@@ -76,7 +86,12 @@ export const NoteCreationRender = (props) => {
                                             />
                                             <br></br>
                                         </div>
-                                    }                                     
+                                    } 
+                                </div>
+                            </div>  
+                            <br></br>                          
+                            <div className="row">                                
+                                <div className="col-sm-10">                                                              
                                     <label className="required_input" for={"noteTitle" + props.targetNoteId}>Title</label>
                                     <input 
                                         type="text" 
@@ -101,7 +116,6 @@ export const NoteCreationRender = (props) => {
                                     />                                         
                                 </div>
                             </div>
-
                         </div>                        
                         <div class="modal-footer">                                
                             <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={props.submit}>Submit</button>
@@ -109,7 +123,7 @@ export const NoteCreationRender = (props) => {
                     </div>
                 </div>
             </div>                
-        </span>
+        </>
     );
 
 }
