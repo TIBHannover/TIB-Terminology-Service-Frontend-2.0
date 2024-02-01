@@ -215,6 +215,7 @@ export const NoteCardHeader = (props) => {
                 note={note}
                 modalId={note['id']}
                 callHeaders={callHeader}
+                key={"pinnModal" + note['id']}
             />
         </div> 
     ];
@@ -281,13 +282,15 @@ export const CommentCardHeader = (props) =>{
                                                 data-id={comment['id']}
                                                 data-content={comment['content']}
                                                 onClick={props.editHandlerFunc}
+                                                key={"commentEdit" + comment['id']}
                                                 >
                                                 Edit
                                             </button>
                                         </div>
                                         <div class="dropdown-item note-dropdown-item">
                                             <DeleteModalBtn
-                                                modalId={"_comment-" + comment['id']}                                                
+                                                modalId={"_comment-" + comment['id']} 
+                                                key={"commentDel" + comment['id']}                                               
                                              />
                                         </div>
                                     </span>                                    
@@ -304,6 +307,7 @@ export const CommentCardHeader = (props) =>{
                 callHeaders={callHeader}
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
+                key={"commentDelModal" + comment['id']}
             />            
         </div> 
     ];

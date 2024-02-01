@@ -145,7 +145,8 @@ const NoteEdit = (props) => {
     }
 
     return (
-        <NoteCreationRender                              
+        <NoteCreationRender           
+            key={"note-edit-render-" + props.note['id']}                   
             closeModal={closeModal}
             isGeneric={props.isGeneric}
             targetArtifact={targetArtifact}

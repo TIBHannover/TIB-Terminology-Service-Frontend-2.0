@@ -143,7 +143,8 @@ const NoteCreation = (props) => {
     }
 
     return (
-        <NoteCreationRender                      
+        <NoteCreationRender          
+            key={"note-creation-render"}            
             closeModal={closeModal}
             isGeneric={props.isGeneric}
             targetArtifact={targetArtifact}

@@ -10,7 +10,7 @@ import TermLib from "../../../../Libs/TermLib";
 export const NoteCreationRender = (props) => { 
     
     useEffect(() => {
-        if(props.parentOntology && props.mode !== "newNote"){
+        if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
             document.getElementById("publish_note_to_parent_checkbox").checked = true;
         }
     }, []);
@@ -54,6 +54,14 @@ export const NoteCreationRender = (props) => {
                                             dropDownChangeHandler={props.changeArtifactType}
                                         /> 
                                     }
+                                    {/* {!props.isGeneric && props.targetArtifact > 0 &&                                        
+                                        <>
+                                        <span>{"Target Artifact: "}</span>
+                                        <b>
+                                            {constantsVars.COMPONENT_TYPES_FOR_DROPDOWN[parseInt(props.targetArtifact) - 1]['label']}
+                                        </b>
+                                        </>
+                                    } */}
                                 </div>
                             </div>
                             <br></br>
@@ -84,7 +92,7 @@ export const NoteCreationRender = (props) => {
                                                 label={false}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}
-                                                initialInput={props.selectedTerm['label']}                                                                               
+                                                initialInput={props.selectedTerm ? props.selectedTerm['label'] : false}                                                                               
                                             />
                                             <br></br>
                                         </div>
