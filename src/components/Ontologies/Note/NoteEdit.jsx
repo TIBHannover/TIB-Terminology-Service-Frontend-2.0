@@ -1,20 +1,20 @@
 import {useState} from "react";
-import {getJumpToResult} from "../../../api/fetchData";
 import {getTextEditorContent, createTextEditorStateFromJson}  from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
+import TermApi from "../../../api/term";
 
 
 
 const NoteEdit = (props) => {    
     const [targetArtifact, setTargetArtifact] = useState(constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.note['semantic_component_type']));
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_VALUES.indexOf(props.note['visibility']));
-    const [editorState, setEditorState] = useState(createTextEditorStateFromJson(props.note['content']));
-    const [autoCompleteSuggestionsList, setAutoCompleteSuggestionsList] = useState([]);
-    const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState(props.note['semantic_component_label']);
+    const [editorState, setEditorState] = useState(createTextEditorStateFromJson(props.note['content']));        
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label']});    
     const [noteTitle, setNoteTitle] = useState(props.note['title']);
+    const [parentOntology, setParentOntology] = useState(null);
+    const [publishToParent, setPublishToParent] = useState(false); 
 
        
     function onTextInputChange(e){        
@@ -30,9 +30,7 @@ const NoteEdit = (props) => {
 
 
     function changeArtifactType(e){                   
-        setTargetArtifact( e.target.value);
-        setAutoCompleteSuggestionsList([]);
-        setEnteredTermInAutoComplete("");       
+        setTargetArtifact( e.target.value);                
     }
 
     
@@ -93,43 +91,13 @@ const NoteEdit = (props) => {
         data.append("ontology_id", props.note['ontology_id']);
         data.append("semantic_component_type", targetArtifactType);
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
+        if(publishToParent && parentOntology){
+            data.append("parentOntology", parentOntology);
+        }
+        else{
+            data.append("parentOntology", null);
+        }
         submitNote(data, true).then((updatedNoteId) => {closeModal(true);});
-    }
-
-
-    async function onAutoCompleteChange({value}){   
-        
-        let enteredTerm = value;                  
-        let type = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];        
-        if(type !== "property" && type !== "individual"){
-            type = props.isSkos ? "individual" : "class"; 
-        }       
-        if (enteredTerm.length > 0){
-            let inputForAutoComplete = {}; 
-            inputForAutoComplete['searchQuery'] = value;
-            inputForAutoComplete['ontologyIds'] = props.note['ontology_id'];
-            inputForAutoComplete['types'] = type; 
-            let autoCompleteResult = await getJumpToResult(inputForAutoComplete);
-            setAutoCompleteSuggestionsList(autoCompleteResult);                                  
-        }       
-    }
-
-
-    function clearAutoComplete(){        
-        setAutoCompleteSuggestionsList([]);        
-    }
-
-
-    function onAutoCompleteTextBoxChange (event, { newValue }){       
-        setEnteredTermInAutoComplete(newValue);        
-    }
-
-
-    function onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
-        let autoCompleteSelectedTerm = selectedTermFromAutoComplete;
-        autoCompleteSelectedTerm['iri'] = autoCompleteSuggestionsList[suggestionIndex]['iri'];
-        autoCompleteSelectedTerm['label'] = autoCompleteSuggestionsList[suggestionIndex]['label'];
-        setSelectedTermFromAutoComplete(autoCompleteSelectedTerm);        
     }
 
 
@@ -140,15 +108,27 @@ const NoteEdit = (props) => {
             modalBackDrop[0].remove();
         }
         setEditorState(null);
-        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);
-        setAutoCompleteSuggestionsList([]);
-        setEnteredTermInAutoComplete("");
+        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);                
         setSelectedTermFromAutoComplete({"iri": null, "label": null});     
         if(reloadPage){
             let searchParams = new URLSearchParams(window.location.search);
             let locationObject = window.location;        
             window.location.replace(locationObject.pathname + "?" +  searchParams.toString());
         }
+    }
+
+    async function handleJumtoSelection(selectedTerm){ 
+        if(selectedTerm){
+            let termApi = new TermApi(props.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
+            let parentOnto = await termApi.getClassOriginalOntology();
+            setSelectedTermFromAutoComplete(selectedTerm);
+            setParentOntology(parentOnto);
+        }                       
+    }
+
+
+    function handlePublishToParentCheckbox(e){
+        setPublishToParent(e.target.checked);
     }
 
 
@@ -160,20 +140,14 @@ const NoteEdit = (props) => {
     }
 
     return (
-        <NoteCreationRender 
-            enteredTermInAutoComplete={enteredTermInAutoComplete}
-            onAutoCompleteTextBoxChange={onAutoCompleteTextBoxChange}            
+        <NoteCreationRender                              
             closeModal={closeModal}
             isGeneric={props.isGeneric}
             targetArtifact={targetArtifact}
             changeArtifactType={changeArtifactType}
             visibility={visibility}
             changeVisibility={changeVisibility}
-            ontologyId={props.note['ontology_id']}
-            autoCompleteSuggestionsList={autoCompleteSuggestionsList}
-            onAutoCompleteChange={onAutoCompleteChange}
-            clearAutoComplete={clearAutoComplete}
-            onAutoCompleteSelecteion={onAutoCompleteSelecteion}
+            ontologyId={props.note['ontology_id']}                     
             targetArtifactLabel={props.targetArtifactLabel}
             noteTitle={noteTitle}
             onTextInputChange={onTextInputChange}
@@ -181,6 +155,11 @@ const NoteEdit = (props) => {
             onTextAreaChange={onTextAreaChange}
             submit={edit}
             targetNoteId={props.note['id']}
+            handleJumtoSelection={handleJumtoSelection}
+            componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
+            parentOntology={parentOntology}
+            selectedTerm={selectedTermFromAutoComplete}
+            handlePublishToParentCheckbox={handlePublishToParentCheckbox}
         />
     );
 }

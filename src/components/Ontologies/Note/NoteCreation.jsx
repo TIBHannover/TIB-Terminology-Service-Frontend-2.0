@@ -13,8 +13,7 @@ const NoteCreation = (props) => {
     targetArtifactType = targetArtifactType !== -1 ? targetArtifactType : 1;    
     const [targetArtifact, setTargetArtifact] = useState(targetArtifactType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
-    const [editorState, setEditorState] = useState(null);    
-    const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState(props.targetArtifactLabel);
+    const [editorState, setEditorState] = useState(null);        
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
     const [parentOntology, setParentOntology] = useState(null);
     const [publishToParent, setPublishToParent] = useState(false);    
@@ -36,11 +35,9 @@ const NoteCreation = (props) => {
 
 
     function changeArtifactType(e){                   
-        setTargetArtifact(e.target.value);        
-        setEnteredTermInAutoComplete("");   
+        setTargetArtifact(e.target.value);                
         setParentOntology(null);
-        setSelectedTermFromAutoComplete(null);
-        setEnteredTermInAutoComplete(null);    
+        setSelectedTermFromAutoComplete(null);        
     }
 
 
@@ -56,8 +53,7 @@ const NoteCreation = (props) => {
             modalBackDrop[0].remove();
         }
         setEditorState(null);
-        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);        
-        setEnteredTermInAutoComplete("");
+        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);                
         setSelectedTermFromAutoComplete({"iri": null, "label": null});   
         setParentOntology(null);         
     }
@@ -147,8 +143,7 @@ const NoteCreation = (props) => {
     }
 
     return (
-        <NoteCreationRender 
-            enteredTermInAutoComplete={enteredTermInAutoComplete}                  
+        <NoteCreationRender                      
             closeModal={closeModal}
             isGeneric={props.isGeneric}
             targetArtifact={targetArtifact}
