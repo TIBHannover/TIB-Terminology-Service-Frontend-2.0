@@ -127,7 +127,8 @@ const NoteList = (props) => {
     function setNoteCreationResultStatus(newNoteId=false){           
         let success = false;
         if(newNoteId){            
-            let newUrl = Toolkit.setParamInUrl('noteId', newNoteId);            
+            let newUrl = Toolkit.setParamInUrl('noteId', newNoteId);
+            setSelectedNoteId(newNoteId);            
             history.push(newUrl);
             success = true;
         }
@@ -167,7 +168,7 @@ const NoteList = (props) => {
         updateURL();
         loadComponent();        
         
-    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmitSeccuess, noteSubmited, props.targetArtifactIri]);
+    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, props.targetArtifactIri]);
 
 
 

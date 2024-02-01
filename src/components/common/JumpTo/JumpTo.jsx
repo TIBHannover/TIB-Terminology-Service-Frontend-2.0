@@ -68,8 +68,7 @@ const JumpTo = (props) => {
 
 
     useEffect(() => {
-        let inputField = document.querySelector('.autosuggest-jumpto-container input');
-        console.log(props.label)
+        let inputField = document.querySelector('.autosuggest-jumpto-container input');        
         if (inputField && !props.label) {            
             inputField.style.padding = '5px';
         }
