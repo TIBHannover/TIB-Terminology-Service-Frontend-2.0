@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import DropDown from "../../../common/DropDown/DropDown";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import JumpTo from "../../../common/JumpTo/JumpTo";
@@ -6,7 +7,13 @@ import TermLib from "../../../../Libs/TermLib";
 
 
 
-export const NoteCreationRender = (props) => {
+export const NoteCreationRender = (props) => { 
+    
+    useEffect(() => {
+        if(props.parentOntology && props.mode !== "newNote"){
+            document.getElementById("publish_note_to_parent_checkbox").checked = true;
+        }
+    }, []);
 
    
     return(
@@ -76,7 +83,8 @@ export const NoteCreationRender = (props) => {
                                                 isSkos={false} 
                                                 label={false}
                                                 handleJumtoSelection={props.handleJumtoSelection}
-                                                obsoletes={false}                                                                                           
+                                                obsoletes={false}
+                                                initialInput={props.selectedTerm['label']}                                                                               
                                             />
                                             <br></br>
                                         </div>

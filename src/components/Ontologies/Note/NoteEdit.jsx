@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getTextEditorContent, createTextEditorStateFromJson}  from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
@@ -13,9 +13,9 @@ const NoteEdit = (props) => {
     const [editorState, setEditorState] = useState(createTextEditorStateFromJson(props.note['content']));        
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label']});    
     const [noteTitle, setNoteTitle] = useState(props.note['title']);
-    const [parentOntology, setParentOntology] = useState(null);
+    const [parentOntology, setParentOntology] = useState(props.note['parent_ontology'] ? props.note['parent_ontology'] : null);
     const [publishToParent, setPublishToParent] = useState(false); 
-
+    
        
     function onTextInputChange(e){        
         document.getElementById("noteTitle" + props.note['id']).style.borderColor = '';
@@ -93,12 +93,10 @@ const NoteEdit = (props) => {
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
         if(publishToParent && parentOntology){
             data.append("parentOntology", parentOntology);
-        }
-        else{
-            data.append("parentOntology", null);
-        }
+        }       
         submitNote(data, true).then((updatedNoteId) => {closeModal(true);});
     }
+
 
 
     function closeModal(reloadPage=false){                  
@@ -130,6 +128,13 @@ const NoteEdit = (props) => {
     function handlePublishToParentCheckbox(e){
         setPublishToParent(e.target.checked);
     }
+
+
+    useEffect(async() => {
+        let termApi = new TermApi(props.note['ontology_id'], props.note['semantic_component_iri'], constantsVars.TERM_TYPES[targetArtifact]);
+        let parentOnto = await termApi.getClassOriginalOntology();        
+        setParentOntology(parentOnto);
+    }, []);
 
 
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            

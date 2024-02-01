@@ -10,7 +10,7 @@ const TYPE_MAPP = {"terms": "class", "properties": "property", "individuals": "i
 
 
 const JumpTo = (props) => {
-    const [enteredTerm, setEnteredTerm] = useState("");
+    const [enteredTerm, setEnteredTerm] = useState(props.initialInput ? props.initialInput : "");
     const [resultList, setResultList] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState( {"iri": null, "label": null});
 
