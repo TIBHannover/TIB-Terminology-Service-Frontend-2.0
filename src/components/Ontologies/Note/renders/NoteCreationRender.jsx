@@ -2,6 +2,7 @@ import DropDown from "../../../common/DropDown/DropDown";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
+import TermLib from "../../../../Libs/TermLib";
 
 
 
@@ -95,7 +96,14 @@ export const NoteCreationRender = (props) => {
                                                     // onChange={props.obsoletesCheckboxHandler}                                         
                                                 />
                                             <label class="form-check-label" for="publish_note_to_parent_checkbox">
-                                                Publish this note also for the parent ontology. {props.parentOntology}
+                                                {"Publish this note also for  "} 
+                                                {TermLib.createTermUrlWithOntologyPrefix({
+                                                    ontology_name:props.parentOntology,
+                                                    termIri: props.selectedTerm['iri'],
+                                                    termLabel: props.selectedTerm['label'],
+                                                    type: props.componentIdentity
+                                                })}
+                                                {"  (parent ontology)"}
                                             </label>
                                         </div>
                                     </div>

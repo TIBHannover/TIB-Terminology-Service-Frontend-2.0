@@ -158,6 +158,7 @@ const NoteCreation = (props) => {
             handleJumtoSelection={handleJumtoSelection}
             componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
             parentOntology={parentOntology}
+            selectedTerm={selectedTermFromAutoComplete}
         />
     );
 
