@@ -124,7 +124,9 @@ export const NoteCardHeader = (props) => {
                 <small>
                     {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
-                {note['pinned'] && <div className="pinned-message-icon">Pinned</div>}
+                {note['pinned'] && window.location.href.includes('/' + note['ontology_id'])  && 
+                    <div className="pinned-message-icon">Pinned</div>
+                }
                 {linkCopied && <CopiedSuccessAlert message="link copied" />}                
             </div>
             <div className="col-sm-3">
