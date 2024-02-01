@@ -17,6 +17,7 @@ const NoteCreation = (props) => {
     const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState(props.targetArtifactLabel);
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
     const [parentOntology, setParentOntology] = useState(null);
+    const [publishToParent, setPublishToParent] = useState(false);    
     const [noteTitle, setNoteTitle] = useState("");
     const noteIdForRender = "-add-note";
 
@@ -66,7 +67,7 @@ const NoteCreation = (props) => {
         let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle' + noteIdForRender).value;
         let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
-        let noteContent = "";        
+        let noteContent = "";                     
         if(!editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
             formIsValid = false;
@@ -113,6 +114,9 @@ const NoteCreation = (props) => {
         data.append("ontology_id", props.ontologyId);        
         data.append("semantic_component_type", targetArtifactType);
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
+        if(publishToParent && parentOntology){
+            data.append("parentOntology", parentOntology);
+        }
         submitNote(data).then((newNoteId) => {
             props.noteListSubmitStatusHandler(newNoteId);
             closeModal(newNoteId);
@@ -127,6 +131,11 @@ const NoteCreation = (props) => {
             setSelectedTermFromAutoComplete(selectedTerm);
             setParentOntology(parentOnto);
         }                       
+    }
+
+
+    function handlePublishToParentCheckbox(e){
+        setPublishToParent(e.target.checked);
     }
 
 
@@ -159,6 +168,7 @@ const NoteCreation = (props) => {
             componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
             parentOntology={parentOntology}
             selectedTerm={selectedTermFromAutoComplete}
+            handlePublishToParentCheckbox={handlePublishToParentCheckbox}
         />
     );
 

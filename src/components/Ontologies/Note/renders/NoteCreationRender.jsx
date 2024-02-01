@@ -93,7 +93,7 @@ export const NoteCreationRender = (props) => {
                                                     type="checkbox" 
                                                     class="form-check-input" 
                                                     id="publish_note_to_parent_checkbox" 
-                                                    // onChange={props.obsoletesCheckboxHandler}                                         
+                                                    onChange={props.handlePublishToParentCheckbox}                                         
                                                 />
                                             <label class="form-check-label" for="publish_note_to_parent_checkbox">
                                                 {"Publish this note also for  "} 
