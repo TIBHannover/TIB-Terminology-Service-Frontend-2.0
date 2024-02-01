@@ -3,6 +3,7 @@ import {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
+import TermApi from "../../../api/term";
 
 
 
@@ -15,6 +16,7 @@ const NoteCreation = (props) => {
     const [editorState, setEditorState] = useState(null);    
     const [enteredTermInAutoComplete, setEnteredTermInAutoComplete] = useState(props.targetArtifactLabel);
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
+    const [parentOntology, setParentOntology] = useState(null);
     const [noteTitle, setNoteTitle] = useState("");
     const noteIdForRender = "-add-note";
 
@@ -34,7 +36,10 @@ const NoteCreation = (props) => {
 
     function changeArtifactType(e){                   
         setTargetArtifact(e.target.value);        
-        setEnteredTermInAutoComplete("");       
+        setEnteredTermInAutoComplete("");   
+        setParentOntology(null);
+        setSelectedTermFromAutoComplete(null);
+        setEnteredTermInAutoComplete(null);    
     }
 
 
@@ -52,7 +57,8 @@ const NoteCreation = (props) => {
         setEditorState(null);
         setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);        
         setEnteredTermInAutoComplete("");
-        setSelectedTermFromAutoComplete({"iri": null, "label": null});            
+        setSelectedTermFromAutoComplete({"iri": null, "label": null});   
+        setParentOntology(null);         
     }
 
 
@@ -114,9 +120,12 @@ const NoteCreation = (props) => {
     }
 
 
-    function handleJumtoSelection(selectedTerm){ 
+    async function handleJumtoSelection(selectedTerm){ 
         if(selectedTerm){
+            let termApi = new TermApi(props.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
+            let parentOnto = await termApi.getClassOriginalOntology();
             setSelectedTermFromAutoComplete(selectedTerm);
+            setParentOntology(parentOnto);
         }                       
     }
 
@@ -145,10 +154,10 @@ const NoteCreation = (props) => {
             onTextAreaChange={onTextAreaChange}
             submit={submit}
             targetNoteId={noteIdForRender}
-            mode={"newNote"}
-            isGeneric={props.isGeneric}
+            mode={"newNote"}            
             handleJumtoSelection={handleJumtoSelection}
             componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
+            parentOntology={parentOntology}
         />
     );
 

@@ -7,13 +7,7 @@ import * as constantsVars from '../Constants';
 
 export const NoteCreationRender = (props) => {
 
-    const value = props.enteredTermInAutoComplete ? props.enteredTermInAutoComplete : "";     
-    const inputPropsAutoSuggest = {
-        placeholder: 'Type your target term',
-        value,
-        onChange: props.onAutoCompleteTextBoxChange
-    };
-
+   
     return(
         <>            
             {props.mode === "newNote" && 
@@ -44,13 +38,13 @@ export const NoteCreationRender = (props) => {
                             <div className="row">
                                 <div className="col-sm-8">
                                     {props.isGeneric && 
-                                            <DropDown 
-                                                options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
-                                                dropDownId="note-artifact-types"
-                                                dropDownTitle="Target Artifact"
-                                                dropDownValue={props.targetArtifact}
-                                                dropDownChangeHandler={props.changeArtifactType}
-                                            /> 
+                                        <DropDown 
+                                            options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
+                                            dropDownId="note-artifact-types"
+                                            dropDownTitle="Target Artifact"
+                                            dropDownValue={props.targetArtifact}
+                                            dropDownChangeHandler={props.changeArtifactType}
+                                        /> 
                                     }
                                 </div>
                             </div>
@@ -89,7 +83,7 @@ export const NoteCreationRender = (props) => {
                                 </div>
                             </div>  
                             <br></br>
-                            {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
+                            {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
                                 <>
                                 <div className="row">
                                     <div className="col-sm-10">
@@ -101,7 +95,7 @@ export const NoteCreationRender = (props) => {
                                                     // onChange={props.obsoletesCheckboxHandler}                                         
                                                 />
                                             <label class="form-check-label" for="publish_note_to_parent_checkbox">
-                                                Publish this note also for the parent ontology. 
+                                                Publish this note also for the parent ontology. {props.parentOntology}
                                             </label>
                                         </div>
                                     </div>
