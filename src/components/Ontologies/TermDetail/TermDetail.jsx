@@ -81,36 +81,15 @@ const TermDetail = (props) => {
 
 
 
-
-  return (
-    <RenderTermDetail
-        waiting={waiting}
-        activeTab={activeTab}
-        iri={props.iri}
-        ontology={props.ontology}
-        componentIdentity={props.componentIdentity}
-        extractKey={props.extractKey}
-        isSkos={props.isSkos}
-        node={targetTerm}
-        typeForNote={props.typeForNote}
-        tabChangeHandler={tabChangeHandler}
-    />
-  );
-}
-
-
-
-const RenderTermDetail = (props) => {
-
   return(
     <div className='row'>
       <div className='col-sm-12'>
         <RenderTermDetailTab 
             componentIdentity={props.componentIdentity}
-            tabChangeHandler={props.tabChangeHandler}
-            activeTab={props.activeTab}
+            tabChangeHandler={tabChangeHandler}
+            activeTab={activeTab}
         />
-        {!props.waiting && (props.activeTab === DETAIL_TAB_ID) &&
+        {!waiting && (activeTab === DETAIL_TAB_ID) &&
           <TermDetailTable
             iri={props.iri}
             ontology={props.ontology.ontologyId}
@@ -118,21 +97,18 @@ const RenderTermDetail = (props) => {
             extractKey={props.extractKey}
             isSkos={props.isSkos}
             isIndividual={false}
-            node={props.node}
+            node={targetTerm}
           />
         }
-        {!props.waiting && (props.activeTab === NOTES_TAB_ID) &&
-          <NoteList                                                              
-            componentIdentity={'notes'}
+        {!waiting && (activeTab === NOTES_TAB_ID) &&
+          <NoteList            
             key={'notesPage'}
-            ontology={props.ontology}
-            targetArtifactIri={props.iri}
-            targetArtifactType={props.typeForNote}
-            targetArtifactLabel={props.node.label}
-            isGeneric={false}                                                                   
+            ontology={props.ontology}          
+            term={targetTerm}    
+            termType={props.typeForNote}                                                                 
           />
         }
-        {!props.waiting && (props.activeTab === GRAPH_TAB_ID) &&
+        {!waiting && (activeTab === GRAPH_TAB_ID) &&
           <TermGraph
             iri={props.iri}
             ontology={props.ontology.ontologyId}
@@ -146,6 +122,7 @@ const RenderTermDetail = (props) => {
     </div>
   );
 }
+
 
 
 

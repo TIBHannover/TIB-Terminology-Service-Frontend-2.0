@@ -223,11 +223,9 @@ const OntologyPage = (props) => {
                               />
               }             
               {!waiting && (activeTab === NOTES_TAB_ID) &&
-                              <NoteList                  
-                                componentIdentity={'notes'}
+                              <NoteList                                
                                 key={'notesPage'}
-                                ontology={ontology}
-                                isGeneric={true}                                  
+                                ontology={ontology}                                                                
                               />
               }                                      
               {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            

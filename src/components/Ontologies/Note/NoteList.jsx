@@ -18,11 +18,15 @@ const DEFAULT_PAGE_SIZE = 10
 const NoteList = (props) => {
     let currentUrlParams = new URL(window.location).searchParams;                      
     let page = currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER;
-    let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE; 
-    let selectedType = currentUrlParams.get('type') ? currentUrlParams.get('type') : ALL_TYPE;
+    let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE;     
+    let selectedType = TYPES_VALUES.indexOf(props.termType);
+    if(selectedType < 0){
+        selectedType = currentUrlParams.get('type') ? TYPES_VALUES.indexOf(currentUrlParams.get('type')) : ALL_TYPE
+    }        
+        
     let inputNoteIdFromUrl = currentUrlParams.get('noteId'); 
     inputNoteIdFromUrl = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
-    selectedType = TYPES_VALUES.indexOf(selectedType) !== -1 ? TYPES_VALUES.indexOf(selectedType) : ALL_TYPE; 
+
 
     const [noteList, setNoteList] = useState([]);
     const [showNoteDetailPage, setShowNoteDetailPage] = useState(false);
@@ -166,7 +170,8 @@ const NoteList = (props) => {
     useEffect(() => {      
         setComponentIsLoading(true);   
         updateURL();
-        loadComponent();        
+        loadComponent();      
+        console.info(selectedArtifactType)  
         
     }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, props.targetArtifactIri]);
 
