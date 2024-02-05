@@ -134,6 +134,7 @@ const NoteEdit = (props) => {
         let termApi = new TermApi(props.note['ontology_id'], props.note['semantic_component_iri'], constantsVars.TERM_TYPES[targetArtifact]);
         let parentOnto = await termApi.getClassOriginalOntology();        
         setParentOntology(parentOnto);
+        setSelectedTermFromAutoComplete({"iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label']});
     }, []);
 
 
@@ -147,14 +148,13 @@ const NoteEdit = (props) => {
     return (
         <NoteCreationRender           
             key={"note-edit-render-" + props.note['id']}                   
-            closeModal={closeModal}
-            isGeneric={props.isGeneric}
+            closeModal={closeModal}            
             targetArtifact={targetArtifact}
+            term={{"iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label']}}
             changeArtifactType={changeArtifactType}
             visibility={visibility}
             changeVisibility={changeVisibility}
-            ontologyId={props.note['ontology_id']}                     
-            targetArtifactLabel={props.targetArtifactLabel}
+            ontologyId={props.note['ontology_id']}                                 
             noteTitle={noteTitle}
             onTextInputChange={onTextInputChange}
             editorState={editorState}

@@ -202,8 +202,7 @@ export const NoteCardHeader = (props) => {
             </div>
             <NoteEdit 
                 note={note}
-                key={"editNode" + note['id']}
-                noteListSubmitStatusHandler={props.noteEditAfterSubmitHandler}
+                key={"editNode" + note['id']}                
             />
             <DeleteModal
                 modalId={note['id']}
