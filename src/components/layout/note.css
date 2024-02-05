@@ -113,3 +113,15 @@ body .card-body{
     text-align: center;
     font-size: 11px;
 }
+
+.note-imported-message-icon{
+    margin-left: 10px;
+    background-color: #0E6668;
+    color: white;
+    border-radius: 15px;    
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    text-align: center;
+    font-size: 11px;
+}

@@ -125,7 +125,12 @@ export const NoteCardHeader = (props) => {
                     {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
                 {note['pinned'] && window.location.href.includes('/' + note['ontology_id'])  && 
+                    // Pinned Imported notes from child should not be pinned in parent
                     <div className="pinned-message-icon">Pinned</div>
+                }
+                {!window.location.href.includes('/' + note['ontology_id']) && window.location.href.includes('/' + note['parent_ontology']) &&
+                    // if the current ontology is not equal to the note ontology, then the note is imported.
+                    <div className="note-imported-message-icon">Imported from {note['ontology_id']}</div>
                 }
                 {linkCopied && <CopiedSuccessAlert message="link copied" />}                
             </div>
