@@ -106,7 +106,7 @@ const NoteEdit = (props) => {
             modalBackDrop[0].remove();
         }
         setEditorState(null);
-        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);                
+        // setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);                
         setSelectedTermFromAutoComplete({"iri": null, "label": null});     
         if(reloadPage){
             let searchParams = new URLSearchParams(window.location.search);

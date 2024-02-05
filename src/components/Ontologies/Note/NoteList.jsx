@@ -37,8 +37,7 @@ const NoteList = (props) => {
     const [noteTotalPageCount, setNoteTotalPageCount] = useState(0);
     const [selectedNoteId, setSelectedNoteId] = useState(inputNoteIdFromUrl);
     const [componentIsLoading, setComponentIsLoading] = useState(true);
-    const [noteExist, setNoteExist] = useState(true);
-    const [targetArtifactIri, setTargetArtifactIri] = useState(null);
+    const [noteExist, setNoteExist] = useState(true);    
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
     const [isAdminForOntology, setIsAdminForOntology] = useState(false);
     const [numberOfPinned, setNumberOfPinned] = useState(0);
@@ -66,8 +65,8 @@ const NoteList = (props) => {
         
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
         url += ('&page=' + pageNumber + '&size=' + pageSize)
-        if(props.targetArtifactIri){
-            url += ('&artifact_iri=' + props.targetArtifactIri)
+        if(props.term){
+            url += ('&artifact_iri=' + props.term['iri'])
         }
         if(type !== TYPES_VALUES[ALL_TYPE]){
             url += ('&artifact_type=' + type);
@@ -80,8 +79,7 @@ const NoteList = (props) => {
             setNoteList(allNotes);
             setShowNoteDetailPage(false);
             setNoteTotalPageCount(noteStats['totalPageCount']);     
-            setNumberOfPinned(noteStats['number_of_pinned']);
-            setTargetArtifactIri(props.targetArtifactIri)
+            setNumberOfPinned(noteStats['number_of_pinned']);            
             setComponentIsLoading(false);            
         })        
     }
@@ -173,7 +171,7 @@ const NoteList = (props) => {
         loadComponent();      
         console.info(selectedArtifactType)  
         
-    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, props.targetArtifactIri]);
+    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited]);
 
 
 
@@ -187,11 +185,9 @@ const NoteList = (props) => {
                 noteSubmitSeccuess={noteSubmitSeccuess}
                 noteDetailPage={showNoteDetailPage}
                 componentIsLoading={componentIsLoading}
-                targetArtifactType={props.targetArtifactType}
-                targetArtifactLabel={props.targetArtifactLabel}
-                targetArtifactIri={props.targetArtifactIri}
-                ontologyId={props.ontology.ontologyId}
-                isGeneric={props.isGeneric}
+                targetArtifactType={props.termType}
+                term={props.term}                
+                ontologyId={props.ontology.ontologyId}                
                 selectedArtifactType={selectedArtifactType}
                 noteExist={noteExist}
                 noteTotalPageCount={noteTotalPageCount}

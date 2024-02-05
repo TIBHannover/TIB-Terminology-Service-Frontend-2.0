@@ -111,13 +111,11 @@ export const NoteListRender = (props) => {
                                     }
                                 </div>
                                 <div className="col-sm-2">
-                                    <NoteCreation 
-                                        targetArtifactLabel={props.targetArtifactLabel}  
-                                        targetArtifactType={props.targetArtifactType}
-                                        targetArtifactIri={props.targetArtifactIri}
+                                    <NoteCreation                                         
+                                        targetArtifactType={props.targetArtifactType}  
+                                        term={props.term}                                      
                                         ontologyId={props.ontologyId}                                
-                                        noteListSubmitStatusHandler={props.setNoteCreationResultStatus} 
-                                        isGeneric={props.isGeneric}       
+                                        noteListSubmitStatusHandler={props.setNoteCreationResultStatus}                                         
                                         key={"note-creation-btn"}                                                                                         
                                     />
                                 </div>

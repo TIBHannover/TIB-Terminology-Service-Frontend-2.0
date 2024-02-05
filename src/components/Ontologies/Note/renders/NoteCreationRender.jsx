@@ -45,12 +45,12 @@ export const NoteCreationRender = (props) => {
                         <div class="modal-body"> 
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {props.isGeneric && 
+                                    {!props.term && 
                                         <DropDown 
                                             options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types"
                                             dropDownTitle="Target Artifact"
-                                            dropDownValue={props.targetArtifact}
+                                            dropDownValue={props.targetArtifactType}
                                             dropDownChangeHandler={props.changeArtifactType}
                                         /> 
                                     }
@@ -79,10 +79,10 @@ export const NoteCreationRender = (props) => {
                             <br></br>
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {parseInt(props.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(props.targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <p>About: <b>{props.ontologyId}</b></p>
                                     }
-                                    {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <div>
                                             <label className="required_input" for="noteIri">About</label>                                            
                                             <JumpTo
@@ -92,7 +92,7 @@ export const NoteCreationRender = (props) => {
                                                 label={false}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}
-                                                initialInput={props.selectedTerm ? props.selectedTerm['label'] : false}                                                                               
+                                                initialInput={props.term ? props.term['label'] : false}                                                                               
                                             />
                                             <br></br>
                                         </div>
@@ -100,7 +100,7 @@ export const NoteCreationRender = (props) => {
                                 </div>
                             </div>  
                             <br></br>
-                            {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
+                            {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
                                 <>
                                 <div className="row">
                                     <div className="col-sm-10">

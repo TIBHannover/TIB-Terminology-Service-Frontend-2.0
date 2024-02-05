@@ -9,9 +9,9 @@ import TermApi from "../../../api/term";
 
 
 const NoteCreation = (props) => {
-    let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
-    targetArtifactType = targetArtifactType !== -1 ? targetArtifactType : 1;    
-    const [targetArtifact, setTargetArtifact] = useState(targetArtifactType);
+    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
+    targetType = targetType !== -1 ? targetType : 1;    
+    const [targetArtifactType, setTargetArtifactType] = useState(targetType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
     const [editorState, setEditorState] = useState(null);        
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
@@ -35,7 +35,7 @@ const NoteCreation = (props) => {
 
 
     function changeArtifactType(e){                   
-        setTargetArtifact(e.target.value);                
+        setTargetArtifactType(e.target.value);                
         setParentOntology(null);
         setSelectedTermFromAutoComplete(null);        
     }
@@ -52,8 +52,8 @@ const NoteCreation = (props) => {
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
-        setEditorState(null);
-        setTargetArtifact(constantsVars.ONTOLOGY_COMPONENT_ID);                
+        setEditorState(null);        
+        // setTargetArtifactType(!props.term constantsVars.ONTOLOGY_COMPONENT_ID);                
         setSelectedTermFromAutoComplete({"iri": null, "label": null});   
         setParentOntology(null);         
     }
@@ -82,7 +82,7 @@ const NoteCreation = (props) => {
             formIsValid = false;
         }
 
-        if(parseInt(targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
+        if(parseInt(targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
             document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
             formIsValid = false;
         }
@@ -91,16 +91,17 @@ const NoteCreation = (props) => {
             return;
         }
 
-        if(parseInt(targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID){
+        if(parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = props.ontologyId;
         }
 
         
-        let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];
+        let targetType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifactType];
         
-        if(props.targetArtifactType){
-            selectedTargetTermIri = props.targetArtifactIri;
-            targetArtifactType = props.targetArtifactType;
+        if(props.term){
+            // Note creation fro an specific term in from term detail tabel
+            selectedTargetTermIri = props.term['iri'];
+            targetType = props.targetArtifactType;
         }
                 
         let data = new FormData();
@@ -108,7 +109,7 @@ const NoteCreation = (props) => {
         data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
         data.append("ontology_id", props.ontologyId);        
-        data.append("semantic_component_type", targetArtifactType);
+        data.append("semantic_component_type", targetType);
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
         if(publishToParent && parentOntology){
             data.append("parentOntology", parentOntology);
@@ -122,7 +123,7 @@ const NoteCreation = (props) => {
 
     async function handleJumtoSelection(selectedTerm){ 
         if(selectedTerm){
-            let termApi = new TermApi(props.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
+            let termApi = new TermApi(props.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
             let parentOnto = await termApi.getClassOriginalOntology();
             setSelectedTermFromAutoComplete(selectedTerm);
             setParentOntology(parentOnto);
@@ -145,14 +146,13 @@ const NoteCreation = (props) => {
     return (
         <NoteCreationRender          
             key={"note-creation-render"}            
-            closeModal={closeModal}
-            isGeneric={props.isGeneric}
-            targetArtifact={targetArtifact}
+            closeModal={closeModal}            
+            targetArtifactType={targetArtifactType}
             changeArtifactType={changeArtifactType}
+            term={props.term}
             visibility={visibility}
             changeVisibility={changeVisibility}
-            ontologyId={props.ontologyId}                                           
-            targetArtifactLabel={props.targetArtifactLabel}
+            ontologyId={props.ontologyId}            
             noteTitle={noteTitle}
             onTextInputChange={onTextInputChange}
             editorState={editorState}
@@ -161,7 +161,7 @@ const NoteCreation = (props) => {
             targetNoteId={noteIdForRender}
             mode={"newNote"}            
             handleJumtoSelection={handleJumtoSelection}
-            componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
+            componentIdentity={constantsVars.TERM_TYPES[targetArtifactType]}
             parentOntology={parentOntology}
             selectedTerm={selectedTermFromAutoComplete}
             handlePublishToParentCheckbox={handlePublishToParentCheckbox}

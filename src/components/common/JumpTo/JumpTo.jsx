@@ -68,10 +68,16 @@ const JumpTo = (props) => {
 
 
     useEffect(() => {
-        let inputField = document.querySelector('.autosuggest-jumpto-container input');                
-        if (inputField && !props.label) {            
-            inputField.style.padding = '5px';
-        }
+        // let inputField = document.querySelector('.autosuggest-jumpto-container input');                
+        // if (inputField && !props.label) {            
+        //     inputField.style.padding = '5px';
+        // }
+        // return (() => {
+        //     let inputField = document.querySelector('.autosuggest-jumpto-container input');                
+        //     if (inputField && !props.label) {            
+        //         inputField.style.padding = '80px';
+        //     }
+        // });
     }, []);
 
 
