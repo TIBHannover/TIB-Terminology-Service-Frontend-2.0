@@ -18,7 +18,8 @@ const DEFAULT_PAGE_SIZE = 10
 const NoteList = (props) => {
     let currentUrlParams = new URL(window.location).searchParams;                      
     let page = currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER;
-    let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE;     
+    let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE;
+    let originalNotes = currentUrlParams.get('originalNotes') === "true" ? true : false;     
     let selectedType = TYPES_VALUES.indexOf(props.termType);
     if(selectedType < 0){
         selectedType = currentUrlParams.get('type') ? TYPES_VALUES.indexOf(currentUrlParams.get('type')) : ALL_TYPE
@@ -41,6 +42,7 @@ const NoteList = (props) => {
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
     const [isAdminForOntology, setIsAdminForOntology] = useState(false);
     const [numberOfPinned, setNumberOfPinned] = useState(0);
+    const [onlyOntologyOriginalNotes, setOnlyOntologyOriginalNotes] = useState(originalNotes);
 
     const history = useHistory();
 
@@ -70,6 +72,10 @@ const NoteList = (props) => {
         }
         if(type !== TYPES_VALUES[ALL_TYPE]){
             url += ('&artifact_type=' + type);
+        }
+
+        if(onlyOntologyOriginalNotes){
+            url += '&onlyOriginalNotes=true';
         }
                 
         fetch(url, {headers:headers}).then((resp) => resp.json())
@@ -150,11 +156,17 @@ const NoteList = (props) => {
     }
 
 
+    function handleOntologyOriginalNotesCheckbox(e){          
+        setOnlyOntologyOriginalNotes(e.target.checked);
+    }
+
+
     function updateURL(){
         let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.set('type', TYPES_VALUES[selectedArtifactType]);
         currentUrlParams.set('page', pageNumber);
         currentUrlParams.set('size', pageSize);
+        currentUrlParams.set('originalNotes', onlyOntologyOriginalNotes);
         history.push(window.location.pathname + "?" + currentUrlParams.toString());                
     }
 
@@ -168,10 +180,9 @@ const NoteList = (props) => {
     useEffect(() => {      
         setComponentIsLoading(true);   
         updateURL();
-        loadComponent();      
-        console.info(selectedArtifactType)  
+        loadComponent();              
         
-    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited]);
+    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, onlyOntologyOriginalNotes]);
 
 
 
@@ -185,6 +196,7 @@ const NoteList = (props) => {
                 noteSubmitSeccuess={noteSubmitSeccuess}
                 noteDetailPage={showNoteDetailPage}
                 componentIsLoading={componentIsLoading}
+                onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}
                 targetArtifactType={props.termType}
                 term={props.term}                
                 ontologyId={props.ontology.ontologyId}                
@@ -202,6 +214,7 @@ const NoteList = (props) => {
                 setNoteExistState={setNoteExist}
                 isAdminForOntology={isAdminForOntology}
                 numberOfpinned={numberOfPinned}
+                handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
             />
         );
     }

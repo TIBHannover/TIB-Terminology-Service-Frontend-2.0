@@ -63,7 +63,6 @@ export const NoteListRender = (props) => {
     }
 
 
-
     useEffect(() => {
         createNotesList();
     }, [props.notesList]);
@@ -90,7 +89,7 @@ export const NoteListRender = (props) => {
                     <div className="row">                    
                         <div className="col-sm-12">
                             <div className="row">
-                                <div className="col-sm-6">
+                                <div className="col-sm-3">
                                     {typeof(props.targetArtifactType) === 'undefined' && 
                                         <DropDown 
                                             options={COMPONENT_TYPES_FOR_DROPDOWN}
@@ -100,6 +99,20 @@ export const NoteListRender = (props) => {
                                             dropDownChangeHandler={props.artifactDropDownHandler}
                                         /> 
                                     }
+                                </div>
+                                <div className="col-sm-3 pt-2">
+                                    <div class="form-group form-check">
+                                        <input 
+                                            type="checkbox" 
+                                            class="form-check-input" 
+                                            id="note_list_sho_imported_notes_checkbox" 
+                                            checked={props.onlyOntologyOriginalNotes}
+                                            onChange={props.handleOntologyOriginalNotesCheckbox}                                         
+                                        />
+                                        <label class="form-check-label" for="note_list_sho_imported_notes_checkbox">
+                                            Without Imported Notes.
+                                        </label>
+                                    </div>
                                 </div>
                                 <div className="col-sm-4">
                                     {props.noteExist &&  
