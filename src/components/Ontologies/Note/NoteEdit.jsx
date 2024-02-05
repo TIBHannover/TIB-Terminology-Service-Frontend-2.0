@@ -14,7 +14,7 @@ const NoteEdit = (props) => {
     const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label']});    
     const [noteTitle, setNoteTitle] = useState(props.note['title']);
     const [parentOntology, setParentOntology] = useState(props.note['parent_ontology'] ? props.note['parent_ontology'] : null);
-    const [publishToParent, setPublishToParent] = useState(false); 
+    const [publishToParent, setPublishToParent] = useState(props.note['parent_ontology'] ? true : false); 
     
        
     function onTextInputChange(e){        
@@ -77,11 +77,6 @@ const NoteEdit = (props) => {
 
         
         let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];
-        
-        if(props.targetArtifactType){
-            selectedTargetTermIri = props.targetArtifactIri;
-            targetArtifactType = props.targetArtifactType;
-        }
                 
         let data = new FormData();
         data.append("noteId", props.note['id']);
