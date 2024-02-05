@@ -182,7 +182,7 @@ const NoteList = (props) => {
         updateURL();
         loadComponent();              
         
-    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, onlyOntologyOriginalNotes]);
+    }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, onlyOntologyOriginalNotes, props.term]);
 
 
 
