@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
@@ -10,7 +10,7 @@ import TermApi from "../../../api/term";
 
 const NoteCreation = (props) => {
     let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
-    targetType = targetType !== -1 ? targetType : 1;    
+    targetType = targetType !== -1 ? targetType : 1;
     const [targetArtifactType, setTargetArtifactType] = useState(targetType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
     const [editorState, setEditorState] = useState(null);        
@@ -134,6 +134,15 @@ const NoteCreation = (props) => {
     function handlePublishToParentCheckbox(e){
         setPublishToParent(e.target.checked);
     }
+
+
+    useEffect(async() => {
+        if(props.term){
+            let termApi = new TermApi(props.ontologyId, props.term['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
+            let parentOnto = await termApi.getClassOriginalOntology();            
+            setParentOntology(parentOnto);
+        }           
+    }, [props.term]);
 
 
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
