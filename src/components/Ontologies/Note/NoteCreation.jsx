@@ -11,10 +11,11 @@ import TermApi from "../../../api/term";
 const NoteCreation = (props) => {
     let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
     targetType = targetType !== -1 ? targetType : 1;
+    let selectedTerm = props.term ? {"iri": props.term['iri'], "label": props.term['label']} : {"iri": null, "label": null};
     const [targetArtifactType, setTargetArtifactType] = useState(targetType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
     const [editorState, setEditorState] = useState(null);        
-    const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({"iri": null, "label": null});    
+    const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState(selectedTerm);    
     const [parentOntology, setParentOntology] = useState(null);
     const [publishToParent, setPublishToParent] = useState(false);    
     const [noteTitle, setNoteTitle] = useState("");
@@ -37,7 +38,7 @@ const NoteCreation = (props) => {
     function changeArtifactType(e){                   
         setTargetArtifactType(e.target.value);                
         setParentOntology(null);
-        setSelectedTermFromAutoComplete(null);        
+        setSelectedTermFromAutoComplete({"iri": null, "label": null});        
     }
 
 
@@ -82,8 +83,8 @@ const NoteCreation = (props) => {
             formIsValid = false;
         }
 
-        if(parseInt(targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
-            document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
+        if(parseInt(targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){                        
+            document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
             formIsValid = false;
         }
         
@@ -123,11 +124,12 @@ const NoteCreation = (props) => {
 
     async function handleJumtoSelection(selectedTerm){ 
         if(selectedTerm){
+            document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '';
             let termApi = new TermApi(props.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
             let parentOnto = await termApi.getClassOriginalOntology();
             setSelectedTermFromAutoComplete(selectedTerm);
             setParentOntology(parentOnto);
-        }                       
+        }        
     }
 
 

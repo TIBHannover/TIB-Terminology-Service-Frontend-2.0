@@ -67,20 +67,6 @@ const JumpTo = (props) => {
     }
 
 
-    useEffect(() => {
-        // let inputField = document.querySelector('.autosuggest-jumpto-container input');                
-        // if (inputField && !props.label) {            
-        //     inputField.style.padding = '5px';
-        // }
-        // return (() => {
-        //     let inputField = document.querySelector('.autosuggest-jumpto-container input');                
-        //     if (inputField && !props.label) {            
-        //         inputField.style.padding = '80px';
-        //     }
-        // });
-    }, []);
-
-
 
     return(
         <div className="row">
@@ -94,7 +80,7 @@ const JumpTo = (props) => {
                     renderSuggestion={rendetAutoCompleteItem}
                     onSuggestionSelected={onAutoCompleteSelecteion}
                     inputProps={inputPropsAutoSuggest}
-                    id="jumpto-autosuggest-box"
+                    id={props.id ? props.id : "jumpto_auto_suggest"}
                 />
             </div>
         </div>

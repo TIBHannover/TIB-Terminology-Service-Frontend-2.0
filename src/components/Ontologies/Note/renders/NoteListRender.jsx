@@ -100,7 +100,7 @@ export const NoteListRender = (props) => {
                                         /> 
                                     }
                                 </div>
-                                <div className="col-sm-3 pt-2">
+                                <div className="col-sm-4 pt-2">
                                     <div class="form-group form-check">
                                         <input 
                                             type="checkbox" 
@@ -114,7 +114,7 @@ export const NoteListRender = (props) => {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="col-sm-4">
+                                <div className="col-sm-3">
                                     {props.noteExist &&  
                                         <Pagination 
                                             clickHandler={props.handlePagination} 

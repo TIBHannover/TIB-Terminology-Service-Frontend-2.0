@@ -13,6 +13,18 @@ export const NoteCreationRender = (props) => {
         if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
             document.getElementById("publish_note_to_parent_checkbox").checked = true;
         }
+
+        // let autoCompleteInputBox = document.querySelector('.autosuggest-jumpto-container input');       
+        // const isModalOpen = document.querySelector('.modal.show');
+        // console.log(isModalOpen)
+        // if (autoCompleteInputBox && isModalOpen){        
+        //     autoCompleteInputBox.style.padding = '10px';
+        // }
+
+        // return() => {
+        //     autoCompleteInputBox.style.padding = '80px';
+        // };
+
     }, []);
 
    
@@ -83,16 +95,16 @@ export const NoteCreationRender = (props) => {
                                         <p>About: <b>{props.ontologyId}</b></p>
                                     }
                                     {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
-                                        <div>
-                                            <label className="required_input" for="noteIri">About</label>                                            
+                                        <div>                                           
                                             <JumpTo
                                                 targetType={props.componentIdentity}
                                                 ontologyId={props.ontologyId}
                                                 isSkos={false} 
-                                                label={false}
+                                                label={"About *"}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}
-                                                initialInput={props.term ? props.term['label'] : false}                                                                               
+                                                initialInput={props.term ? props.term['label'] : false}
+                                                id="note_creation_auto_suggest"                                                
                                             />
                                             <br></br>
                                         </div>
