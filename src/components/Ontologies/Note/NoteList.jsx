@@ -95,7 +95,7 @@ const NoteList = (props) => {
         let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
-        formData.append("ontology", props.ontology.ontologyId);
+        formData.append("ontologyId", props.ontology.ontologyId);
         let postConfig = {method: 'POST',  headers:callHeaders, body: formData};        
         try{
             let result = await fetch(url, postConfig);
