@@ -77,7 +77,7 @@ export async function getNoteDetail({noteId, ontologyId}){
 
 
 
-export async function getNoteList(ontologyId, type, pageNumber, pageSize, targetTerm=null, onlyOntologyOriginalNotes){
+export async function getNoteList({ontologyId, type, pageNumber, pageSize, targetTerm=null, onlyOntologyOriginalNotes}){
     try{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});                        
         
@@ -96,9 +96,9 @@ export async function getNoteList(ontologyId, type, pageNumber, pageSize, target
 
         let notes = await fetch(url, {headers:headers});
         notes = await notes.json();
-        return notes;
+        return notes['_result'];
     }
-    catch (e){
+    catch (e){        
         return {}
     }
 }

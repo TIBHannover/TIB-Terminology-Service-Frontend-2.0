@@ -7,6 +7,7 @@ import {getSkosNodeByIri} from '../../../api/fetchData';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
 import Toolkit from '../../../Libs/Toolkit';
+import { getNoteList } from '../../../api/tsMicroBackendCalls';
 
 
 
@@ -23,6 +24,7 @@ const TermDetail = (props) => {
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
   const [targetTerm, setTargetTerm] = useState({"iri": null} );  
+  const [notesCount, setNotesCount] = useState("")  
 
 
   async function fetchTheTargetTerm(){
@@ -35,7 +37,12 @@ const TermDetail = (props) => {
         await termApi.fetchTerm();      
         term = termApi.term;
       }
-      setTargetTerm(term);       
+
+      let countOfNotes = await getNoteList({ontologyId:props.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:term, onlyOntologyOriginalNotes:false});    
+      countOfNotes = countOfNotes['stats']['total_number_of_records'];
+
+      setTargetTerm(term);   
+      setNotesCount(countOfNotes);    
   }
 
 
@@ -88,6 +95,7 @@ const TermDetail = (props) => {
             componentIdentity={props.componentIdentity}
             tabChangeHandler={tabChangeHandler}
             activeTab={activeTab}
+            noteCounts={notesCount}
         />
         {!waiting && (activeTab === DETAIL_TAB_ID) &&
           <TermDetailTable
@@ -149,6 +157,7 @@ const RenderTermDetailTab = (props) => {
                     to={linkUrl}           
                 >              
                     {configObject['tabTitle']}
+                    {configItemKey === "Notes" ? ` (${props.noteCounts})` : ""}
                 </Link>
             </li>
           );          

@@ -7,6 +7,7 @@ import TermList from '../TermList/TermList';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
+import { getNoteList } from '../../../api/tsMicroBackendCalls';
 import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
@@ -51,7 +52,8 @@ const OntologyPage = (props) => {
   const [waiting, setWaiting] = useState(false);
   const [lastIrisHistory, setLastIrisHistory] = useState({"terms": "", "properties": "", "individuals": "", "termList": ""});
   const [lastTabsStates, setLastTabsStates] = useState({"terms": null, "properties": null, "gitIssues": ""});  
-  const [isSkosOntology, setIsSkosOntology] = useState(false);  
+  const [isSkosOntology, setIsSkosOntology] = useState(false);
+  const [notesCount, setNotesCount] = useState("")  
   
 
 
@@ -70,7 +72,10 @@ const OntologyPage = (props) => {
       skosIndividuals = await getSkosOntologyRootConcepts(ontologyId);
       skosIndividuals = await shapeSkosConcepts(skosIndividuals);
     }
-    
+
+    let countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+    countOfNotes = countOfNotes['stats']['total_number_of_records'];
+
     setOntology(ontologyApi.ontology);
     setIsSkosOntology(isSkos);
     setRootTerms(ontologyApi.rootClasses);
@@ -78,6 +83,7 @@ const OntologyPage = (props) => {
     setObsoleteTerms(ontologyApi.obsoleteClasses);
     setObsoleteProps(ontologyApi.obsoleteProperties); 
     setSkosRootIndividuals(skosIndividuals);    
+    setNotesCount(countOfNotes);
   }
 
 
@@ -159,7 +165,7 @@ const OntologyPage = (props) => {
           {createOntologyPageHeadSection(ontology)}          
           <div className='col-sm-12'>
               <ul className="nav nav-tabs">
-                  {renderOntologyPageTabs(ontologyPageTabConfig, tabChange, ontology.ontologyId, activeTab)}
+                  {renderOntologyPageTabs({tabMetadataJson:ontologyPageTabConfig, tabChangeHandler:tabChange, ontologyId:ontology.ontologyId, activeTabId:activeTab, noteCounts:notesCount})}
               </ul>
               {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
                               <OntologyOverview 

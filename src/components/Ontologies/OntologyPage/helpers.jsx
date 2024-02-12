@@ -20,7 +20,7 @@ export async function shapeSkosConcepts(skosConcepts){
 }
 
 
-export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontologyId, activeTabId){
+export function renderOntologyPageTabs({tabMetadataJson, tabChangeHandler, ontologyId, activeTabId, noteCounts}){
     let result = [];
     for(let configItemKey in tabMetadataJson){
         let configObject = tabMetadataJson[configItemKey];
@@ -39,6 +39,7 @@ export function renderOntologyPageTabs(tabMetadataJson, tabChangeHandler, ontolo
                     to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyId + configObject['urlEndPoint']}
                     >                
                     {configObject['tabTitle']}
+                    {configItemKey === "Notes" ? ` (${noteCounts})` : ""}
                 </Link>
             </li>
         );

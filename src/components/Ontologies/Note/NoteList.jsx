@@ -69,10 +69,10 @@ const NoteList = (props) => {
             type = null;
         }
 
-        getNoteList(ontologyId, type, pageNumber, pageSize, props.term, onlyOntologyOriginalNotes)
+        getNoteList({ontologyId:ontologyId, type:type, pageNumber:pageNumber, pageSize:pageSize, targetTerm:props.term, onlyOntologyOriginalNotes:onlyOntologyOriginalNotes})
         .then((notes) => {
-            let allNotes = notes['_result']['notes'];
-            let noteStats = notes['_result']['stats'];                                  
+            let allNotes = notes['notes'];
+            let noteStats = notes['stats'];                                  
             setNoteList(allNotes);
             setShowNoteDetailPage(false);
             setNoteTotalPageCount(noteStats['totalPageCount']);     
