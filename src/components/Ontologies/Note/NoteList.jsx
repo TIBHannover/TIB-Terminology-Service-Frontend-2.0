@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import AuthTool from "../../User/Login/authTools";
 import Toolkit from "../../../Libs/Toolkit";
 import { NoteListRender } from "./renders/NoteListRender";
+import { getNoteList } from "../../../api/tsMicroBackendCalls";
 
 
 
@@ -60,34 +61,25 @@ const NoteList = (props) => {
     }
 
 
-    function loadNoteList(){
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
+    function loadNoteList(){             
         let ontologyId = props.ontology.ontologyId;
         let type = TYPES_VALUES[selectedArtifactType];
-        
-        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
-        url += ('&page=' + pageNumber + '&size=' + pageSize)
-        if(props.term){
-            url += ('&artifact_iri=' + props.term['iri'])
-        }
-        if(type !== TYPES_VALUES[ALL_TYPE]){
-            url += ('&artifact_type=' + type);
+                        
+        if(type === TYPES_VALUES[ALL_TYPE]){
+            type = null;
         }
 
-        if(onlyOntologyOriginalNotes){
-            url += '&onlyOriginalNotes=true';
-        }
-                
-        fetch(url, {headers:headers}).then((resp) => resp.json())
-        .then((data) => {            
-            let allNotes = data['_result']['notes'];
-            let noteStats = data['_result']['stats'];                                  
+        getNoteList(ontologyId, type, pageNumber, pageSize, props.term, onlyOntologyOriginalNotes)
+        .then((notes) => {
+            let allNotes = notes['_result']['notes'];
+            let noteStats = notes['_result']['stats'];                                  
             setNoteList(allNotes);
             setShowNoteDetailPage(false);
             setNoteTotalPageCount(noteStats['totalPageCount']);     
             setNumberOfPinned(noteStats['number_of_pinned']);            
-            setComponentIsLoading(false);            
-        })        
+            setComponentIsLoading(false);  
+        });
+
     }
 
 

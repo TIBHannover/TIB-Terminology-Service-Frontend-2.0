@@ -76,6 +76,35 @@ export async function getNoteDetail({noteId, ontologyId}){
 }
 
 
+
+export async function getNoteList(ontologyId, type, pageNumber, pageSize, targetTerm=null, onlyOntologyOriginalNotes){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});                        
+        
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
+        url += ('&page=' + pageNumber + '&size=' + pageSize)
+        if(targetTerm){
+            url += ('&artifact_iri=' + targetTerm['iri'])
+        }
+        if(type){
+            url += ('&artifact_type=' + type);
+        }
+
+        if(onlyOntologyOriginalNotes){
+            url += '&onlyOriginalNotes=true';
+        }
+
+        let notes = await fetch(url, {headers:headers});
+        notes = await notes.json();
+        return notes;
+    }
+    catch (e){
+        return {}
+    }
+}
+
+
+
 export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueState, issueType, resultCountPerPage=10, pageNumber=1){
     try{ 
         let urlPath = ontologyIssueTrackerUrl.split("https://github.com/")[1];        
