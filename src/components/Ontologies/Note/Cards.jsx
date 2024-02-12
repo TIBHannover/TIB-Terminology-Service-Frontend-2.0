@@ -167,7 +167,7 @@ export const NoteCardHeader = (props) => {
                                         <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
                                 </div>
-                                {note['can_edit'] &&
+                                {note['can_edit'] && !note['imported'] && 
                                     <span>
                                         <div class="dropdown-divider"></div>
                                         <div class="dropdown-item note-dropdown-item">
