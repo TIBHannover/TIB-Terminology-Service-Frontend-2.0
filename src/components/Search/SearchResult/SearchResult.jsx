@@ -29,8 +29,7 @@ const SearchResult = (props) => {
   const [pageNumber, setPageNumber] = useState(parseInt(currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER));
   const [pageSize, setPageSize] = useState(parseInt(currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE));
   const [expandedResults, setExpandedResults] = useState([]);
-  const [totalResultsCount, setTotalResultsCount] = useState([]);
-  const [facetIsSelected, setFacetIsSelected] = useState(false);
+  const [totalResultsCount, setTotalResultsCount] = useState([]);  
   const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);  
   const [allCollectionIds, setAllCollectionIds] = useState([]);
   const [filterTags, setFilterTags] = useState("");

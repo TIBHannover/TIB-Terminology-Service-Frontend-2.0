@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import RenderSearchForm from './RenderSearchForm';
 import { useHistory } from 'react-router';
-import {setJumpResultButtons} from './SearchFormHelpers';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
 import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
 import Toolkit from '../../../Libs/Toolkit';
@@ -36,13 +36,6 @@ const SearchForm = (props) => {
   const history = useHistory();
 
 
-  function setPlaceHolder(){    
-    if(ontologyId){
-      return ("Search in \n" + ontologyId);
-    }
-    return("Search for ontology, term, properties and individuals");    
-  }
-
 
   async function handleSearchInputChange(e){
     let currentUrlParams = new URL(window.location).searchParams; 
@@ -75,6 +68,7 @@ const SearchForm = (props) => {
     setSearchQuery(inputForAutoComplete['searchQuery']);
   }
 
+  
 
   function handleKeyDown(e){
     if (e.key === 'Enter') {
@@ -107,35 +101,6 @@ const SearchForm = (props) => {
     window.location.replace(searchUrl);
   }
 
-
-  function renderAutoCompleteResult(){
-    let resultList = [];
-    let key = 0;
-    for(let result of autoCompleteResult){      
-      resultList.push(
-        <a href={setSearchUrl(result['autosuggest'])} key={key} className="container">   
-          <div className="autocomplete-item item-for-navigation">
-                {result['autosuggest']}
-          </div>
-        </a>             
-      )
-      key++;      
-    }
-    return resultList
-  }
-
-
-  function renderJumpToResult(){
-    let resultList = []
-    for(let result of jumpToResult){
-      resultList.push(
-        <div className="jump-autocomplete-container">
-           {setJumpResultButtons(result, Toolkit.getObsoleteFlagValue())}
-        </div>          
-      )
-    }
-    return resultList;
-  }
 
 
   function handleExactCheckboxClick(e){
@@ -181,59 +146,23 @@ const SearchForm = (props) => {
   }, []);
 
 
-
-
   return(
-    <>
-      <div className='row site-header-searchbox-holder'>
-        <div className='col-sm-9 search-bar-container'>
-          <div class="input-group input-group-lg">                              
-            <input 
-                type="text" 
-                class="form-control search-input" 
-                placeholder={setPlaceHolder()}
-                aria-describedby="basic-addon2"
-                onChange={handleSearchInputChange}
-                onKeyDown={handleKeyDown}
-                id="s-field"                    
-              />
-            <div class="input-group-append">
-              <button className='btn btn-outline-secondary search-btn' type='button' onClick={triggerSearch}>Search </button>  
-            </div>
-          </div>
-                                
-          {autoCompleteResult.length !== 0 &&
-            <div id = "autocomplete-container" className="col-md-12" ref={autoCompleteRef}>
-              {renderAutoCompleteResult()}
-            </div>
-          }         
-          {jumpToResult.length !== 0 && !ontologyId &&
-            <div ref={jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
-              <div>
-                <h4>Jump To</h4>
-                {renderJumpToResult()}
-              </div>
-            </div>
-          }                                    
+    <RenderSearchForm 
+      ontologyId={ontologyId}
+      handleSearchInputChange={handleSearchInputChange}
+      handleKeyDown={handleKeyDown}
+      triggerSearch={triggerSearch}
+      autoCompleteResult={autoCompleteResult}
+      autoCompleteRef={autoCompleteRef}
+      setSearchUrl={setSearchUrl}
+      jumpToResult={jumpToResult}
+      jumptToRef={jumptToRef}
+      handleExactCheckboxClick={handleExactCheckboxClick}
+      handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
+    />
+  );
 
-          {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-            <p>
-              <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
-              <a class="example-link" href="search?q=agent">agent</a></span>
-            </p>
-          }
-        </div>
-      </div>
-      <div className='row site-header-search-filters-container'>
-          <div className='col-lg-2 col-sm-3'>
-            <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
-          </div>
-          <div className='col-lg-2 col-sm-3'>
-            <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
-          </div>
-      </div>
-    </>            
-  )
+  
 }
 
 export default SearchForm;
