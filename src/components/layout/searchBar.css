@@ -74,3 +74,16 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+.adv-search-container{
+    text-align: left; 
+    margin-left: 19%;    
+}
+
+.optionListContainer{
+    color: black;
+}
+
+.searchWrapper{
+    background-color: white;
+}

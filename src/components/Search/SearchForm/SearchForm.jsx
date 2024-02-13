@@ -170,9 +170,13 @@ const SearchForm = (props) => {
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         handleAdvancedSearchShowHide={handleAdvancedSearchShowHide}
         showAdvancedSearch={showAdvancedSearch}
-      />      
-      {showAdvancedSearch && 
-        <AdvancedSearch />
+      />            
+      {showAdvancedSearch &&
+        <div className='row adv-search-container'>
+          <div className='col-sm-12'>
+            <AdvancedSearch />
+          </div>
+        </div>                     
       }      
     </>     
   );

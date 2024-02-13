@@ -259,7 +259,7 @@ body .cc_more_info{
     background-color: #0E6668;
     padding: 10px;
     margin-bottom: 10px;
-    max-height: 280px;
+    /* max-height: 280px; */
     color: white;
 }
 
