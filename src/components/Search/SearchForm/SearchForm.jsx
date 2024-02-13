@@ -173,7 +173,7 @@ const SearchForm = (props) => {
       />            
       {showAdvancedSearch &&
         <div className='row adv-search-container'>
-          <div className='col-sm-12'>
+          <div className='col-sm-10'>
             <AdvancedSearch />
           </div>
         </div>                     
