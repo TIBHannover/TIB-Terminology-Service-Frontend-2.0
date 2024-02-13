@@ -107,7 +107,7 @@ body .ontology-button{
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e;
-    margin-top: 2px;
+    margin-top: -5px;
 }
 
 body .ontology-button:hover{ 

@@ -68,7 +68,7 @@ const SearchForm = (props) => {
     setSearchQuery(inputForAutoComplete['searchQuery']);
   }
 
-  
+
 
   function handleKeyDown(e){
     if (e.key === 'Enter') {
@@ -161,8 +161,6 @@ const SearchForm = (props) => {
       handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
     />
   );
-
-  
 }
 
 export default SearchForm;
