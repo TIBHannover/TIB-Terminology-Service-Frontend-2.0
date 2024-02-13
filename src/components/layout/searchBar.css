@@ -67,3 +67,10 @@
 .search-bar-container{
     margin: auto;
 }
+
+.site-header-search-filters-container .adv-search-btn{
+    font-size: 13px;    
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}

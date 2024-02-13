@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import RenderSearchForm from './RenderSearchForm';
+import AdvancedSearch from './AdvancedSearch';
 import { useHistory } from 'react-router';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
 import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
@@ -29,6 +30,7 @@ const SearchForm = (props) => {
   const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
@@ -126,6 +128,12 @@ const SearchForm = (props) => {
 
 
 
+  function handleAdvancedSearchShowHide(){
+    setShowAdvancedSearch(!showAdvancedSearch);
+  }
+
+
+
   useEffect(() => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);
@@ -147,19 +155,26 @@ const SearchForm = (props) => {
 
 
   return(
-    <RenderSearchForm 
-      ontologyId={ontologyId}
-      handleSearchInputChange={handleSearchInputChange}
-      handleKeyDown={handleKeyDown}
-      triggerSearch={triggerSearch}
-      autoCompleteResult={autoCompleteResult}
-      autoCompleteRef={autoCompleteRef}
-      setSearchUrl={setSearchUrl}
-      jumpToResult={jumpToResult}
-      jumptToRef={jumptToRef}
-      handleExactCheckboxClick={handleExactCheckboxClick}
-      handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
-    />
+    <>
+      <RenderSearchForm 
+        ontologyId={ontologyId}
+        handleSearchInputChange={handleSearchInputChange}
+        handleKeyDown={handleKeyDown}
+        triggerSearch={triggerSearch}
+        autoCompleteResult={autoCompleteResult}
+        autoCompleteRef={autoCompleteRef}
+        setSearchUrl={setSearchUrl}
+        jumpToResult={jumpToResult}
+        jumptToRef={jumptToRef}
+        handleExactCheckboxClick={handleExactCheckboxClick}
+        handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
+        handleAdvancedSearchShowHide={handleAdvancedSearchShowHide}
+        showAdvancedSearch={showAdvancedSearch}
+      />      
+      {showAdvancedSearch && 
+        <AdvancedSearch />
+      }      
+    </>     
   );
 }
 
