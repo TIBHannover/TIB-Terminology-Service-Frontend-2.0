@@ -99,7 +99,7 @@ export async function getNoteList({ontologyId, type, pageNumber, pageSize, targe
         return notes['_result'];
     }
     catch (e){        
-        return {}
+        return null;
     }
 }
 

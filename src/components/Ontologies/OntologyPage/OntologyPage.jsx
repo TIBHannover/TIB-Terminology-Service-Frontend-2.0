@@ -73,8 +73,12 @@ const OntologyPage = (props) => {
       skosIndividuals = await shapeSkosConcepts(skosIndividuals);
     }
 
-    let countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
-    countOfNotes = countOfNotes['stats']['total_number_of_records'];
+    let countOfNotes = 0;
+    if(process.env.REACT_APP_NOTE_FEATURE === "true"){
+      countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+      countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+    }
+    
 
     setOntology(ontologyApi.ontology);
     setIsSkosOntology(isSkos);

@@ -38,8 +38,11 @@ const TermDetail = (props) => {
         term = termApi.term;
       }
 
-      let countOfNotes = await getNoteList({ontologyId:props.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:term, onlyOntologyOriginalNotes:false});    
-      countOfNotes = countOfNotes['stats']['total_number_of_records'];
+      let countOfNotes = 0;
+      if(process.env.REACT_APP_NOTE_FEATURE === "true"){
+        countOfNotes = await getNoteList({ontologyId:props.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+        countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+      }
 
       setTargetTerm(term);   
       setNotesCount(countOfNotes);    
