@@ -26,8 +26,15 @@ const AdvancedSearch = (props) => {
             return true;
         }
         let inputQuery = {"searchQuery": query, "types": "class,property"};
-        let terms = await getJumpToResult(inputQuery, 20);           
-        setTermListForSelection(terms);
+        let terms = await getJumpToResult(inputQuery, 20); 
+        let options = [];
+        for (let term of terms){
+            let opt = {};
+            opt['text'] = term['ontology_prefix'] + ":" + term['label'];
+            opt['iri'] = term['iri'];
+            options.push(opt);
+        }          
+        setTermListForSelection(options);
     }
 
 
@@ -68,11 +75,11 @@ const AdvancedSearch = (props) => {
                         onSelect={handleTermSelection}
                         onRemove={handleTermSelection}    
                         onSearch={loadTermsForSelection}
-                        displayValue={"label"}
+                        displayValue={"text"}
                         avoidHighlightFirstOption={true}                        
                         closeIcon={"cancel"}
                         id="adv-s-search-under-term"
-                        placeholder="class, property, ..."
+                        placeholder="class, property, ..."                        
                     />
                 </div>
             </div>
