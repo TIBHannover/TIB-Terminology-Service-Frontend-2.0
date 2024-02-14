@@ -7,8 +7,9 @@ import { getJumpToResult } from '../../../api/fetchData';
 const AdvancedSearch = (props) => {
 
     const [searchInSelectValue, setSearchInSelectValue] = useState([]);
-    const [selectedTerms, setSelectedTerms] = useState([]);
-    const [termListForSelection, setTermListForSelection] = useState([]);
+    const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState([]);
+    const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
+    const [searchUnderLoading, setSearchUnderLoading] = useState(true);
 
 
     const searchInMetaDataOptions = ['label', 'description', 'synonym', 'short_form',  'obo_id', 'annotations', 'iri'];
@@ -20,9 +21,10 @@ const AdvancedSearch = (props) => {
     }
 
 
-    async function loadTermsForSelection(query){            
+    async function loadTermsForSelection(query){   
+        setSearchUnderLoading(true);         
         if(query === ""){
-            setTermListForSelection([]);
+            setTermListForSearchUnder([]);
             return true;
         }
         let inputQuery = {"searchQuery": query, "types": "class,property"};
@@ -30,16 +32,17 @@ const AdvancedSearch = (props) => {
         let options = [];
         for (let term of terms){
             let opt = {};
-            opt['text'] = term['ontology_prefix'] + ":" + term['label'];
+            opt['text'] = `${term['ontology_prefix']}:${term['label']} (${term['type']})`;
             opt['iri'] = term['iri'];
             options.push(opt);
-        }          
-        setTermListForSelection(options);
+        }
+        setSearchUnderLoading(false);
+        setTermListForSearchUnder(options);
     }
 
 
     function handleTermSelection(selectedList, selectedItem){
-        setSelectedTerms(selectedList);
+        setSearchUnderselectedTerms(selectedList);
     }
 
 
@@ -58,7 +61,7 @@ const AdvancedSearch = (props) => {
                         selectedValues={searchInSelectValue}                       
                         onSelect={handleSearchInMultiSelect}
                         onRemove={handleSearchInMultiSelect}                        
-                        avoidHighlightFirstOption={true}
+                        avoidHighlightFirstOption={true}                        
                         closeIcon={"cancel"}
                         id="adv-s-search-in-select"
                         placeholder="label, description, ..."
@@ -70,13 +73,14 @@ const AdvancedSearch = (props) => {
                     <label for='adv-s-search-under-term'>Search Under</label>
                     <Multiselect
                         isObject={true}
-                        options={termListForSelection}  
-                        selectedValues={selectedTerms}                       
+                        options={termListForSearchUnder}  
+                        selectedValues={searchUnderselectedTerms}                       
                         onSelect={handleTermSelection}
                         onRemove={handleTermSelection}    
                         onSearch={loadTermsForSelection}
                         displayValue={"text"}
-                        avoidHighlightFirstOption={true}                        
+                        avoidHighlightFirstOption={true}       
+                        loading={searchUnderLoading}                 
                         closeIcon={"cancel"}
                         id="adv-s-search-under-term"
                         placeholder="class, property, ..."                        
