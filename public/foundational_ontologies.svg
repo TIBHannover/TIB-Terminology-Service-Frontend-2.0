@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="master-artboard" viewBox="0 0 346.3851623535156 349.7218933105469" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" style="enable-background:new 0 0 1400 980;" width="346.3851623535156px" height="349.7218933105469px"><rect id="ee-background" x="0" y="0" width="346.3851623535156" height="349.7218933105469" style="fill: white; fill-opacity: 0; pointer-events: none;"/><defs><filter id="filter_2">
+			<feGaussianBlur stdDeviation="2"/>
+		</filter></defs><g transform="matrix(1.646295189857483, 0, 0, 1.646295189857483, -548.6949157714844, -326.6941375732422)"><g>
+		
+		<title>Zeichenblatt-1</title>
+		
+		<g id="shape1-1" transform="translate(347.244,-198.425)">
+			<title>Kreis</title>
+			
+			<g id="shadow1-2" transform="matrix(1,0,0,1,0.345598,1.97279)" class="st1" style="visibility: visible;">
+				<path d="M0 503.15 A92.126 92.126 0 0 1 184.25 503.15 A92.126 92.126 0 1 1 0 503.15 Z" class="st2" style="fill: rgb(91, 155, 213); fill-opacity: 0.22; filter: url('#filter_2'); stroke: rgb(91, 155, 213); stroke-opacity: 0.22;"/>
+			</g>
+			<path d="M0 503.15 A92.126 92.126 0 0 1 184.25 503.15 A92.126 92.126 0 1 1 0 503.15 Z" class="st3" style="fill: rgb(168, 208, 141); stroke: rgb(199, 200, 200); stroke-width: 0.25;"/>
+		</g>
+		<g id="shape2-6" transform="translate(401.102,-250.866)">
+			<title>Kreis.2</title>
+			
+			<g id="shadow2-7" transform="matrix(1,0,0,1,0.345598,1.97279)" class="st1" style="visibility: visible;">
+				<path d="M0 557.01 A38.2677 38.2677 0 1 1 76.54 557.01 A38.2677 38.2677 0 0 1 0 557.01 Z" class="st2" style="fill: rgb(91, 155, 213); fill-opacity: 0.22; filter: url('#filter_2'); stroke: rgb(91, 155, 213); stroke-opacity: 0.22;"/>
+			</g>
+			<path d="M0 557.01 A38.2677 38.2677 0 1 1 76.54 557.01 A38.2677 38.2677 0 0 1 0 557.01 Z" class="st4" style="fill: rgb(255, 255, 255); stroke: rgb(199, 200, 200); stroke-width: 0.25;"/>
+		</g>
+	</g></g></svg>
