@@ -14,8 +14,7 @@ export function renderAboutPage(){
             <h3>Roadmap</h3>
             <p>TIB Terminology Service is still under development. In the future, more contents and functionality will be added, e.g.</p>
             <ul>
-                <li>further general-purpose and domain terminologies,</li>
-                <li>reliable storage for newly developed terminologies,</li>
+                <li>further general-purpose and domain terminologies,</li>                
                 <li>tools for the collaborative creation of terminologies (e.g. versioning system, online editor)</li>
                 <li>a help-desk to assist the user community in the curation of terminologies.</li>
             </ul>
