@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/fetchData';
+import SearchLib from '../../../Libs/searchLib';
 
 
 
@@ -10,7 +11,7 @@ const AdvancedSearch = (props) => {
     let currentUrlParams = new URL(window.location).searchParams;
 
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
-    const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(currentUrlParams.get('searchunder') ? currentUrlParams.getAll('searchunder') : []);
+    const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [searchUnderLoading, setSearchUnderLoading] = useState(true);
 
