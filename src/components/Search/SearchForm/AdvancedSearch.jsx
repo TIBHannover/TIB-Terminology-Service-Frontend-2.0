@@ -7,8 +7,10 @@ import { getJumpToResult } from '../../../api/fetchData';
 
 const AdvancedSearch = (props) => {
 
-    const [searchInSelectValue, setSearchInSelectValue] = useState([]);
-    const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState([]);
+    let currentUrlParams = new URL(window.location).searchParams;
+
+    const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
+    const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(currentUrlParams.get('searchunder') ? currentUrlParams.getAll('searchunder') : []);
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [searchUnderLoading, setSearchUnderLoading] = useState(true);
 
@@ -20,7 +22,13 @@ const AdvancedSearch = (props) => {
 
 
     function handleSearchInMultiSelect(selectedList, selectedItem){        
-        setSearchInSelectValue(selectedList)
+        setSearchInSelectValue(selectedList);
+        let currentUrlParams = new URLSearchParams(window.location.search);  
+        currentUrlParams.delete('searchin');
+        for(let val of selectedList){
+            currentUrlParams.append('searchin', val);
+        }        
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
     }
 
 
@@ -44,23 +52,16 @@ const AdvancedSearch = (props) => {
     }
 
 
-    function handleTermSelection(selectedList, selectedItem){
+    function handleTermSelection(selectedList, selectedItem){        
         setSearchUnderselectedTerms(selectedList);
-    }
-
-
-    useEffect(() => {
-        let currentUrlParams = new URLSearchParams(window.location.search);  
-        currentUrlParams.delete('searchin');
-        currentUrlParams.delete('searchunder');
-        for(let val of searchInSelectValue){
-            currentUrlParams.append('searchin', val);
-        }
-        for(let term of searchUnderselectedTerms){
-            currentUrlParams.append('searchunder', encodeURIComponent(term['iri']));
+        let currentUrlParams = new URLSearchParams(window.location.search);          
+        currentUrlParams.delete('searchunder');        
+        for(let term of selectedList){
+            currentUrlParams.append('searchunder', encodeURIComponent(JSON.stringify(term)));            
         }  
         history.push(window.location.pathname + "?" + currentUrlParams.toString());    
-    }, [searchInSelectValue, searchUnderselectedTerms]);
+    }
+
 
 
 

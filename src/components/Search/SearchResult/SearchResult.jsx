@@ -8,6 +8,7 @@ import {setResultTitleAndLabel} from './SearchHelpers';
 import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
+import SearchLib from '../../../Libs/searchLib';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 
@@ -35,7 +36,7 @@ const SearchResult = (props) => {
   const [filterTags, setFilterTags] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchInValues, setSearchInValues] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
-  const [searchUnderIris, setSearchUnderIris] = useState(currentUrlParams.get('searchunder') ? currentUrlParams.getAll('searchunder') : []);
+  const [searchUnderIris, setSearchUnderIris] = useState(SearchLib.extractSearchUnderIrisFromUrl());  
 
   const history = useHistory();
 
