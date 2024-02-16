@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/fetchData';
 
@@ -10,6 +11,8 @@ const AdvancedSearch = (props) => {
     const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState([]);
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [searchUnderLoading, setSearchUnderLoading] = useState(true);
+
+    const history = useHistory();
 
 
     const searchInMetaDataOptions = ['label', 'description', 'synonym', 'short_form',  'obo_id', 'annotations', 'iri'];
@@ -44,6 +47,20 @@ const AdvancedSearch = (props) => {
     function handleTermSelection(selectedList, selectedItem){
         setSearchUnderselectedTerms(selectedList);
     }
+
+
+    useEffect(() => {
+        let currentUrlParams = new URLSearchParams(window.location.search);  
+        currentUrlParams.delete('searchin');
+        currentUrlParams.delete('searchunder');
+        for(let val of searchInSelectValue){
+            currentUrlParams.append('searchin', val);
+        }
+        for(let term of searchUnderselectedTerms){
+            currentUrlParams.append('searchunder', encodeURIComponent(term['iri']));
+        }  
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+    }, [searchInSelectValue, searchUnderselectedTerms]);
 
 
 
