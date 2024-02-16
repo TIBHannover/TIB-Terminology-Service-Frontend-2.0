@@ -53,7 +53,7 @@ const AdvancedSearch = (props) => {
     }
 
 
-    function handleTermSelection(selectedList, selectedItem){        
+    function handleTermSelection(selectedList, selectedItem){                
         setSearchUnderselectedTerms(selectedList);
         let currentUrlParams = new URLSearchParams(window.location.search);          
         currentUrlParams.delete('searchunder');        

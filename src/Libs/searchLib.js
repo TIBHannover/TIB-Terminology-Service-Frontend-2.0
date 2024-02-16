@@ -1,7 +1,6 @@
 
 
 class SearchLib{
-
     
     static getSearchUnderTermsFromUrl(){
         try{

@@ -43,7 +43,7 @@ const RenderSearchForm = (props) => {
         }
         return resultList;
     }
-
+    
 
 
     function setJumpResultButtons(resultItem){
