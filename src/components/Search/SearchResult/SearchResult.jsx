@@ -34,6 +34,8 @@ const SearchResult = (props) => {
   const [allCollectionIds, setAllCollectionIds] = useState([]);
   const [filterTags, setFilterTags] = useState("");
   const [loading, setLoading] = useState(true);
+  const [searchInValues, setSearchInValues] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
+  const [searchUnderIris, setSearchUnderIris] = useState(currentUrlParams.get('searchunder') ? currentUrlParams.getAll('searchunder') : []);
 
   const history = useHistory();
 
@@ -53,14 +55,48 @@ const SearchResult = (props) => {
 
   async function search(){      
     try{
-      let obsoletes = Toolkit.getObsoleteFlagValue();
-      let result = await olsSearch(searchQuery, pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, obsoletes, exact);    
+      let obsoletes = Toolkit.getObsoleteFlagValue();      
+      let result = await olsSearch({
+        searchQuery: searchQuery,
+        page:pageNumber,
+        size: pageSize,
+        selectedOntologies: selectedOntologies,
+        selectedTypes: selectedTypes,
+        selectedCollections: selectedCollections,
+        obsoletes: obsoletes,
+        exact: exact,
+        searchInValues: searchInValues,
+        searchUnderIris: searchUnderIris
+      });
     
       // This part is for updating the facet counts. 
-      // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.
-      let searchResultForFacetCount = await olsSearch(searchQuery, pageNumber, pageSize, selectedOntologies, [], selectedCollections, obsoletes, exact);
+      // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.          
+      let searchResultForFacetCount = await olsSearch({
+        searchQuery: searchQuery,
+        page:pageNumber,
+        size: pageSize,
+        selectedOntologies: selectedOntologies,
+        selectedTypes: [],
+        selectedCollections: selectedCollections,
+        obsoletes: obsoletes,
+        exact: exact,
+        searchInValues: searchInValues,
+        searchUnderIris: searchUnderIris
+      });
       result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
-      searchResultForFacetCount = await olsSearch(searchQuery, pageNumber, pageSize, [], selectedTypes, selectedCollections, obsoletes, exact);
+      
+      searchResultForFacetCount = await olsSearch({
+        searchQuery: searchQuery,
+        page:pageNumber,
+        size: pageSize,
+        selectedOntologies: [],
+        selectedTypes: selectedTypes,
+        selectedCollections: selectedCollections,
+        obsoletes: obsoletes,
+        exact: exact,
+        searchInValues: searchInValues,
+        searchUnderIris: searchUnderIris
+      });
       result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
 
       setSearchResult(result['response']['docs']);
