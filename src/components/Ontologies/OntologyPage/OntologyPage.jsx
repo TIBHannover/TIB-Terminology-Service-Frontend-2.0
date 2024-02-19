@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import DataTree from '../DataTree/DataTree';
-import {getSkosOntologyRootConcepts} from '../../../api/fetchData';
+import SkosApi from '../../../api/skos';
 import OntologyApi from '../../../api/ontology';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
@@ -69,7 +69,9 @@ const OntologyPage = (props) => {
     let isSkos = ontologyApi.ontology['config']?.['skos'];
     let skosIndividuals = [];
     if(isSkos){
-      skosIndividuals = await getSkosOntologyRootConcepts(ontologyId);
+      let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
+      await skosApi.fetchRootConcepts();              
+      skosIndividuals = skosApi.rootConcepts;
       skosIndividuals = await shapeSkosConcepts(skosIndividuals);
     }
 

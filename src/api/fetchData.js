@@ -27,17 +27,7 @@ export async function getCollectionOntologies (collections, exclusive){
 
 
 
-export async function getSkosOntologyRootConcepts(ontologyId) {
-  try{
-    let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-    let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/skos/tree?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
-    let results =  await (await fetch(url, getCallSetting)).json();
-    return results;
-  }
-  catch(e){
-    return [];
-  }  
-}
+
 
 
 

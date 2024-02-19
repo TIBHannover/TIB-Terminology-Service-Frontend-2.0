@@ -1,5 +1,6 @@
 import React from 'react';
-import {getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent, getSkosOntologyRootConcepts} from '../../../api/fetchData';
+import {getChildrenSkosTree, skosNodeHasChildren, getSkosNodeByIri, getSkosNodeParent} from '../../../api/fetchData';
+import SkosApi from '../../../api/skos';
 import TreeNodeController from './TreeNode';
 
 
@@ -86,7 +87,9 @@ export default class SkosHelper{
 
     static async buildSkosFullTree(skosOntologyId, excludedRootNodeIri=null, exludedRootNodeSubtreeContent=null){
       let listOfNodes = [];
-      let rootNodes = await getSkosOntologyRootConcepts(skosOntologyId);
+      let skosApi = new SkosApi({ontologyId:skosOntologyId, iri:""});
+      await skosApi.fetchRootConcepts();
+      let rootNodes = skosApi.rootConcepts;
       for(let i=0; i < rootNodes.length; i++){
         let node = await SkosHelper.shapeSkosMetadata(rootNodes[i], true);      
         if(node.iri !== excludedRootNodeIri){
@@ -122,7 +125,10 @@ export default class SkosHelper{
       let siblingsNodes = [];
       let nodesToRender = [];      
       if(!parentNode){
-        siblingsNodes = await getSkosOntologyRootConcepts(ontologyId);
+        // node is root. We fetch other roots.
+        let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
+        await skosApi.fetchRootConcepts();        
+        siblingsNodes = skosApi.rootConcepts;
       }
       else{
         siblingsNodes = await getChildrenSkosTree(ontologyId, parentNode.iri);
@@ -152,7 +158,9 @@ export default class SkosHelper{
           // Show the siblings    
           if(!parent){
             // Node is a root
-            siblingsNodes = await getSkosOntologyRootConcepts(ontologyId);      
+            let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
+            await skosApi.fetchRootConcepts();        
+            siblingsNodes = skosApi.rootConcepts;            
             targetUl = document.getElementById("tree-root-ul");      
           }
           else{
