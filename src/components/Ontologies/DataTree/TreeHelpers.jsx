@@ -86,7 +86,7 @@ export default class TreeHelper{
         ul.setAttribute("id", "children_for_" + Id);
         ul.classList.add("tree-node-ul");
         for(let i=0; i < res.length; i++){
-          let node = (isSkos  && childExtractName !== "terms") ? await SkosLib.shapeSkosMetadata(res[i]) : res[i];        
+          let node = (isSkos  && childExtractName !== "terms") ? SkosLib.shapeSkosMetadata(res[i]) : res[i];                   
           let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
           ul.appendChild(listItem);      
         }

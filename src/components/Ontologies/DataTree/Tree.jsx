@@ -89,7 +89,7 @@ const Tree = (props) => {
         }                
         if (!target || resetTreeFlag){
             let result = [];
-            if(props.isSkos && props.componentIdentity === "individuals"){
+            if(props.isSkos && props.componentIdentity === "individuals"){                
                 result = buildTheTreeFirstLayer(props.rootNodesForSkos);
             }
             else{                
@@ -177,7 +177,7 @@ const Tree = (props) => {
 
     function buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
-        let selectedItemId = 0;
+        let selectedItemId = 0;        
         let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
         if(sortKey){
             rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
@@ -191,8 +191,7 @@ const Tree = (props) => {
             }  
             let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
             childrenList.push(node);
-        }
-        
+        }        
         if(obsoletesShown){            
            [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
         }
@@ -423,7 +422,7 @@ const Tree = (props) => {
     }, []);
 
 
-    useEffect(() => {
+    useEffect(() => {        
         setComponentData();        
         buildTheTree();        
         setTimeout(() => {
@@ -431,7 +430,7 @@ const Tree = (props) => {
             saveComponentStateInParent();
         }, 2000);                                
                
-    }, [props.rootNodes,  resetTreeFlag, reload]);
+    }, [props.rootNodes, props.rootNodesForSkos,  resetTreeFlag, reload]);
 
 
     useEffect(() => {        
@@ -456,14 +455,14 @@ const Tree = (props) => {
                 {noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
                 {!isLoading && !noNodeExist && createTreeActionButtons()}                
                 {!isLoading && !noNodeExist && 
-                    <div className='row'>
+                    <div className='row'>                    
                         {!treeDomContent._html_ 
                         ? <div className='col-sm-12 tree'>{treeDomContent}</div> 
                         : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: treeDomContent._html_}}></div>
                         }                                                    
                     </div>
 
-                }
+                }                
         </div>
     );
 }

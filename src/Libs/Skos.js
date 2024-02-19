@@ -5,16 +5,16 @@ class SkosLib{
 
 
     static skosTermHasChildren(skosTerm) {        
-        try{            
+        try{                                                
             if(!skosTerm['annotation']['narrower']){
                 return false;
             }   
             if(skosTerm['annotation']['narrower'].length === 0){
                 return false;
-            }
+            }            
             return true;
         }
-        catch(e){
+        catch(e){          
             return false;
         }        
     }
@@ -25,13 +25,13 @@ class SkosLib{
         // map the skos metadata in format of class/properties
         if(isRootNode){
           skosNode = skosNode.data;
-        }
+        }        
         let result = {};
         result["id"] = skosNode.iri;
         result["text"] = skosNode.label;
         result["iri"] = skosNode.iri;        
         result["a_attr"] = {"class" : ""};           
-        result['has_children'] =  SkosLib.skosTermHasChildren(result);  
+        result['has_children'] =  SkosLib.skosTermHasChildren(skosNode);  
         return result;
     }
 

@@ -42,8 +42,7 @@ export default class SkosHelper{
         }  
         let nodeInTree = "";
         let childNode = "";
-        let ul = "";  
-        // console.info(treeNodes)
+        let ul = "";          
         for(let i=0; i < treeNodes.length; i++){
           let node = treeNodes[i];    
           let leafClass = i !==0 ? " opened" : " closed";
