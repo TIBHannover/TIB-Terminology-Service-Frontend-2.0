@@ -36,12 +36,16 @@ export default class SkosHelper{
           if(!res){
             break;
           }
+          let isRoot = res['annotation']['broader'] ? false : true;         
+          // console.info(isRoot) 
+          res = await SkosLib.shapeSkosMetadata(res['ontology_name'], isRoot)          
           treeNodes.push(res);
           skosApi.setIri(res['iri']);
         }  
         let nodeInTree = "";
         let childNode = "";
         let ul = "";  
+        // console.info(treeNodes)
         for(let i=0; i < treeNodes.length; i++){
           let node = treeNodes[i];    
           let leafClass = i !==0 ? " opened" : " closed";

@@ -94,6 +94,7 @@ class SkosApi{
             if(!res || !res['individuals']){
                 return false;
             }
+            
             return res['individuals'][0];
         }
         catch(e){

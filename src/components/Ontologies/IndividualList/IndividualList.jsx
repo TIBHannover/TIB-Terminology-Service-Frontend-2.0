@@ -31,8 +31,7 @@ const IndividualsList = (props) => {
             let indvList = await termApi.fetchListOfTerms(0, 10000);   
             indvList = indvList["results"];                
             setIsLoaded(true);
-            setIndividuals(sortIndividuals(indvList));            
-            setListView(props.isSkos ? false : true);            
+            setIndividuals(sortIndividuals(indvList));                                          
             if(props.iri !== " " && typeof(props.iri) !== "undefined"){
                 let newUrl = Toolkit.setParamInUrl('iri', props.iri)                
                 history.push(newUrl);
@@ -186,7 +185,7 @@ const IndividualsList = (props) => {
     }
 
 
-    useEffect(() => {
+    useEffect(() => {        
         setComponentData();           
         paneResizeClass.setOriginalWidthForLeftPanes();        
         document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
@@ -210,7 +209,13 @@ const IndividualsList = (props) => {
         }    
     }, [selectedNodeIri, JumpToOnLoad, listView]);
 
-    
+
+
+    useEffect(() => {                                     
+        setListView(props.isSkos ? false : true);
+    }, [props.isSkos]);
+
+
 
     return (
         <div className="tree-view-container resizable-container" onClick={(e) =>  processClick(e)}>                                 
