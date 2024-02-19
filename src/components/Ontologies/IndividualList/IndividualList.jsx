@@ -32,7 +32,7 @@ const IndividualsList = (props) => {
             indvList = indvList["results"];                
             setIsLoaded(true);
             setIndividuals(sortIndividuals(indvList));                                          
-            if(props.iri !== " " && typeof(props.iri) !== "undefined"){
+            if(props.iri && props.iri !== " " && typeof(props.iri) !== "undefined"){
                 let newUrl = Toolkit.setParamInUrl('iri', props.iri)                
                 history.push(newUrl);
                 setSelectedNodeIri(props.iri);

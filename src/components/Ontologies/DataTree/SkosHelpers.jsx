@@ -35,10 +35,8 @@ export default class SkosHelper{
           let res = await skosApi.fetchSkosTermParent();    
           if(!res){
             break;
-          }
-          let isRoot = res['annotation']['broader'] ? false : true;         
-          // console.info(isRoot) 
-          res = await SkosLib.shapeSkosMetadata(res['ontology_name'], isRoot)          
+          }                       
+          res['has_children'] = skosApi.skosTermHasChildren(res);                
           treeNodes.push(res);
           skosApi.setIri(res['iri']);
         }  

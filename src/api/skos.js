@@ -72,7 +72,7 @@ class SkosApi{
                 return true;
             }  
             else{    
-                res['has_children'] = await this.skosTermHasChildren(); 
+                res['has_children'] = this.skosTermHasChildren(res); 
                 this.skosTerm = res;
                 return true;
             }
@@ -104,23 +104,19 @@ class SkosApi{
 
 
 
-    async skosTermHasChildren() {
-        let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-        let url = OntologiesBaseServiceUrl + "/" + this.ontologyId +  "/skos/" + this.iri + "/relations?relation_type=narrower&page=0&size=1000";
-        let res =  await (await fetch(url, getCallSetting)).json();
-        res = res['_embedded'];  
-        if(!res){
-          return false;
+    skosTermHasChildren(skosTerm) {        
+        try{            
+            if(!skosTerm['annotation']['narrower']){
+                return false;
+            }   
+            if(skosTerm['annotation']['narrower'].length === 0){
+                return false;
+            }
+            return true;
         }
-        else if(typeof(res['individuals']) === "undefined"){
-          return false;
-        }
-        else if(res['individuals'] && res['individuals'].length === 0){
-          return false;
-        }  
-        else{
-          return true;
-        }
+        catch(e){
+            return false;
+        }        
     }
 
 }

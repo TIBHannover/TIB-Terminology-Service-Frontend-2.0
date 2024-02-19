@@ -14,7 +14,7 @@ class SkosLib{
         result["iri"] = skosNode.iri;        
         result["a_attr"] = {"class" : ""};   
         let skosApi = new SkosApi({ontologyId:skosNode.ontology_name, iri:skosNode.iri});
-        result['has_children'] = await skosApi.skosTermHasChildren();  
+        result['has_children'] =  skosApi.skosTermHasChildren(result);  
         return result;
     }
 
@@ -28,7 +28,7 @@ class SkosLib{
             cons["label"] = cons["data"]["label"];
             skosApi.ontologyId = cons['data']['ontology_name'];
             skosApi.setIri(cons["data"]["iri"]);                  
-            cons["has_children"] = await skosApi.skosTermHasChildren();
+            cons["has_children"] =  skosApi.skosTermHasChildren(cons['data']);
             cons["iri"] = cons["data"]["iri"];            
         }            
         return true;    
