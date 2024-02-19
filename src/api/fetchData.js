@@ -30,7 +30,7 @@ export async function getCollectionOntologies (collections, exclusive){
 export async function getSkosOntologyRootConcepts(ontologyId) {
   try{
     let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-    let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/concepthierarchy?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
+    let url = OntologiesBaseServiceUrl + "/" + ontologyId  + "/skos/tree?find_roots=SCHEMA&narrower=false&with_children=false&page_size=1000";
     let results =  await (await fetch(url, getCallSetting)).json();
     return results;
   }
@@ -43,7 +43,7 @@ export async function getSkosOntologyRootConcepts(ontologyId) {
 
 export async function getChildrenSkosTree(ontologyId, targetNodeIri){
   let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/skos/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/relations?relation_type=narrower&page=0&size=1000";
   let res =  await (await fetch(url, getCallSetting)).json();
   res = res['_embedded'];
   if(typeof(res['individuals']) !== "undefined"){
@@ -57,7 +57,7 @@ export async function getChildrenSkosTree(ontologyId, targetNodeIri){
 
 export async function skosNodeHasChildren(ontologyId, targetNodeIri) {
   let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
-  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "?relation_type=narrower&page=0&size=1000";
+  let url = OntologiesBaseServiceUrl + "/" + ontologyId +  "/skos/" + encodeURIComponent(encodeURIComponent(targetNodeIri)) + "/relations?relation_type=narrower&page=0&size=1000";
   let res =  await (await fetch(url, getCallSetting)).json();
   res = res['_embedded'];  
   if(!res){
@@ -94,7 +94,7 @@ export async function getSkosNodeByIri(ontology, nodeIri) {
 
 export async function getSkosNodeParent(ontology, iri) {
   let baseUrl =  process.env.REACT_APP_API_BASE_URL;  
-  let url = baseUrl +  "/" + ontology +  "/conceptrelations/" + encodeURIComponent(encodeURIComponent(iri)) + "?relation_type=broader";
+  let url = baseUrl +  "/" + ontology +  "/skos/" + encodeURIComponent(encodeURIComponent(iri)) + "/relations?relation_type=broader";
   let res = await (await fetch(url, getCallSetting)).json();
   res = res['_embedded'];    
   if(!res || !res['individuals']){
