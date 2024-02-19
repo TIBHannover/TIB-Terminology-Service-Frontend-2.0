@@ -36,7 +36,7 @@ export default class SkosHelper{
           if(!res){
             break;
           }                       
-          res['has_children'] = skosApi.skosTermHasChildren(res);                
+          res['has_children'] = SkosLib.skosTermHasChildren(res);                
           treeNodes.push(res);
           skosApi.setIri(res['iri']);
         }  

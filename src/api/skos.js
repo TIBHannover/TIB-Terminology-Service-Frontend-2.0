@@ -1,5 +1,6 @@
 import Toolkit from "../Libs/Toolkit";
 import { getCallSetting} from "./constants";
+import SkosLib from "../Libs/Skos";
 
 
 
@@ -72,7 +73,7 @@ class SkosApi{
                 return true;
             }  
             else{    
-                res['has_children'] = this.skosTermHasChildren(res); 
+                res['has_children'] = SkosLib.skosTermHasChildren(res); 
                 this.skosTerm = res;
                 return true;
             }
@@ -96,23 +97,6 @@ class SkosApi{
             }
             
             return res['individuals'][0];
-        }
-        catch(e){
-            return false;
-        }        
-    }
-
-
-
-    skosTermHasChildren(skosTerm) {        
-        try{            
-            if(!skosTerm['annotation']['narrower']){
-                return false;
-            }   
-            if(skosTerm['annotation']['narrower'].length === 0){
-                return false;
-            }
-            return true;
         }
         catch(e){
             return false;
