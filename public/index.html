@@ -32,8 +32,8 @@
     <script src="%PUBLIC_URL%/legacy/jquery.min.js"></script>
     <script src="%PUBLIC_URL%/legacy/ols-graphview.js"></script>
     <script type="text/javascript">
-       function initLegacyGraphView(endpointPrefix, termiri) {
-           var tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:true}}
+       function initLegacyGraphView(endpointPrefix, termiri, olsMode) {
+           var tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:olsMode}}
            var term = termiri
            var visoptions = {
             physics: {
@@ -47,7 +47,9 @@
            
           var app = require("ols-graphview");
           var instance = new app();
-
+          if(document.getElementById('ontology_vis')){
+            document.getElementById('ontology_vis').innerHTML = '';
+          }
           instance.visstart("ontology_vis", term, tmpnetworkOptions, {}, visoptions)
         }
     </script>   
