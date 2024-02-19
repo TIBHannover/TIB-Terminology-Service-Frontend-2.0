@@ -3,7 +3,7 @@ import NodePageTabConfig from './listOfComponentsTabs.json';
 import { TermDetailTable } from './TermDetailTable/TermDetailTable';
 import { TermGraph } from './TermGraph/TermGraph';
 import NoteList from '../Note/NoteList';
-import {getSkosNodeByIri} from '../../../api/fetchData';
+import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
 import Toolkit from '../../../Libs/Toolkit';
@@ -30,7 +30,9 @@ const TermDetail = (props) => {
   async function fetchTheTargetTerm(){
       let term = null
       if(props.isSkos && props.componentIdentity === "individual"){
-        term = await getSkosNodeByIri(props.ontology.ontologyId, encodeURIComponent(props.iri));      
+        let skosApi = new SkosApi({ontologyId:props.ontology.ontologyId, iri:props.iri})
+        await skosApi.fetchSkosTerm();
+        term = skosApi.skosTerm;      
       }
       else{
         let termApi = new TermApi(props.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);

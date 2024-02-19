@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react';
 import DataTree from '../DataTree/DataTree';
 import SkosApi from '../../../api/skos';
+import SkosLib from '../../../Libs/Skos';
 import OntologyApi from '../../../api/ontology';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
-import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
+import {renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
 import { getNoteList } from '../../../api/tsMicroBackendCalls';
 import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
@@ -70,9 +71,9 @@ const OntologyPage = (props) => {
     let skosIndividuals = [];
     if(isSkos){
       let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
-      await skosApi.fetchRootConcepts();              
+      await skosApi.fetchRootConcepts();                    
+      await SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
       skosIndividuals = skosApi.rootConcepts;
-      skosIndividuals = await shapeSkosConcepts(skosIndividuals);
     }
 
     let countOfNotes = 0;
