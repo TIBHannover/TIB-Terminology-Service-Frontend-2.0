@@ -1,29 +1,48 @@
 import { useEffect} from 'react';
+import 'ols-graphview/css/OLS-graphview.css';
 
 
 
 export const TermGraph = (props) => {
 
+  const graphApp = require("ols-graphview");
+  const graph = new graphApp();
 
-    function initLegacyGraphView(endpointPrefix, termiri, olsMode) {
-      let tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:olsMode}}
-      let term = termiri
-      let visoptions = {
-        physics: {
-          enabled:false
-        },
-        hierarchical: {
-          enabled:false,
-          edgeMinimization: true,
-        },
-      }
-      
-    let app = require("ols-graphview");
-    let instance = new app();
+
+  const visoptions = {
+    physics: {
+      enabled:false
+    },
+    hierarchical: {
+      enabled:false,
+      edgeMinimization: true,
+    },
+  }
+  
+
+
+
+  function initLegacyGraphView(endpointPrefix, termiri, olsMode) {
+    let tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:olsMode}, callbacks: {
+      onDoubleClick:dbClick,
+    }}
+    
     if(document.getElementById('ontology_vis')){
       document.getElementById('ontology_vis').innerHTML = '';
     }
-    instance.visstart("ontology_vis", term, tmpnetworkOptions, {}, visoptions);
+    graph.visstart("ontology_vis", termiri, tmpnetworkOptions, {}, visoptions);
+}
+
+
+
+  function dbClick(params){
+    let iri = params.nodes[0];
+    let url = `${process.env.REACT_APP_API_BASE_URL}/${props.ontology}/skos/${encodeURIComponent(encodeURIComponent(iri))}/graph`;
+    // graph.visstart("ontology_vis", "", tmpnetworkOptions, {}, visoptions);
+    let x=graph.getGraphDataset();
+    // console.log(x)
+    graph.fetchNewGraphData(url);
+
   }
 
 
