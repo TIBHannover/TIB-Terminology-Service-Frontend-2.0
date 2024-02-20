@@ -8,6 +8,7 @@ import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
 import Toolkit from '../../../Libs/Toolkit';
 import { getNoteList } from '../../../api/tsMicroBackendCalls';
+import Graph from '../../common/Graph/Graph';
 
 
 
@@ -121,15 +122,8 @@ const TermDetail = (props) => {
             termType={props.typeForNote}                                                                 
           />
         }
-        {!waiting && (activeTab === GRAPH_TAB_ID) &&
-          <TermGraph
-            iri={props.iri}
-            ontology={props.ontology.ontologyId}
-            componentIdentity={props.componentIdentity}
-            extractKey={props.extractKey}
-            isSkos={props.isSkos}
-            isIndividual={false}
-          />
+        {!waiting && (activeTab === GRAPH_TAB_ID) &&        
+          <Graph />
         }
       </div>        
     </div>

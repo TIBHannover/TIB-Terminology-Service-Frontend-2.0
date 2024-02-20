@@ -12652,6 +12652,16 @@
     "unist-util-stringify-position" "^3.0.0"
     "vfile-message" "^3.0.0"
 
+"vis-data@^7.1.9":
+  "integrity" "sha512-COQsxlVrmcRIbZMMTYwD+C2bxYCFDNQ2EHESklPiInbD/Pk3JZ6qNL84Bp9wWjYjAzXfSlsNaFtRk+hO9yBPWA=="
+  "resolved" "https://registry.npmjs.org/vis-data/-/vis-data-7.1.9.tgz"
+  "version" "7.1.9"
+
+"vis-network@^9.1.9":
+  "integrity" "sha512-Ft+hLBVyiLstVYSb69Q1OIQeh3FeUxHJn0WdFcq+BFPqs+Vq1ibMi2sb//cxgq1CP7PH4yOXnHxEH/B2VzpZYA=="
+  "resolved" "https://registry.npmjs.org/vis-network/-/vis-network-9.1.9.tgz"
+  "version" "9.1.9"
+
 "vis@^4.16.1":
   "integrity" "sha512-jonDXTGm2mFU/X6Kg9pvkZEQtXh2J6+NlDJD1tDP7TDCFy+qNeKlsTcXKQtv4nAtUIiKo6sphCt4kbRlEKw75A=="
   "resolved" "https://registry.npmjs.org/vis/-/vis-4.21.0.tgz"
