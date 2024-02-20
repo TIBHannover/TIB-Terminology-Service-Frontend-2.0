@@ -1,34 +1,49 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Network } from 'vis-network';
+import TermApi from '../../../api/term';
+
 
 const Graph = (props) => {
-  const container = useRef(null);
 
-  const nodes = [
-    { id: 1, label: 'Node 1' },
-    { id: 2, label: 'Node 2' },
-    { id: 3, label: 'Node 3' },
-    { id: 4, label: 'Node 4' },
-    { id: 5, label: 'Node 5' }
-  ];
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
 
-  const edges = [
-    { from: 1, to: 3 },
-    { from: 1, to: 2 },
-    { from: 2, to: 4 },
-    { from: 2, to: 5 },
-    { from: 3, to: 3 }
-  ];
 
-  const options = {};
+    const container = useRef(null);
+    const options = {};
 
-  useEffect(() => {
-    const network =
-      container.current &&
-      new Network(container.current, { nodes, edges }, options);
-  }, [container, nodes, edges]);
 
-  return <div ref={container} style={{ height: '500px', width: '800px' }} />;
+
+    async function fetchGraphData(){
+        let termApi = new TermApi(props.ontologyId, props.termIri, "class");
+        let graphData = await termApi.fetchGraphData();
+        let graphNodes = [];
+        let graphEdges = [];
+        if(graphData){
+            for (let node of graphData['nodes']){
+                graphNodes.push({id: node['iri'], label:node['label']})
+            }
+            for (let edge of graphData['edges']){
+                graphEdges.push({from: edge['source'], to:edge['target']})
+            }
+        }
+        setNodes(graphNodes);
+        setEdges(graphEdges);
+    }
+        
+
+    
+    useEffect(() => {
+        fetchGraphData();
+    }, []);
+
+
+
+    useEffect(() => {
+        const network = container.current && new Network(container.current, { nodes, edges }, options);
+    }, [container, nodes, edges]);
+
+    return <div ref={container} style={{ height: '500px', width: '800px' }} />;
 };
 
 export default Graph;

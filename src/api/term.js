@@ -351,6 +351,19 @@ class TermApi{
         
     }
 
+
+    async fetchGraphData(){
+        try{
+            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontology}/terms/${this.iri}/graph`;
+            let graphData = await fetch(url, getCallSetting);
+            graphData = await graphData.json();
+            return graphData;
+        }
+        catch(e){
+            return null;
+        }
+    }
+
 }
 
 

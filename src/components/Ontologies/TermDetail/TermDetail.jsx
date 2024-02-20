@@ -123,7 +123,10 @@ const TermDetail = (props) => {
           />
         }
         {!waiting && (activeTab === GRAPH_TAB_ID) &&        
-          <Graph />
+          <Graph 
+            ontologyId={props.ontology.ontologyId}
+            termIri={props.iri}
+          />
         }
       </div>        
     </div>
