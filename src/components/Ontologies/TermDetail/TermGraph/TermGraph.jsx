@@ -3,6 +3,7 @@ import 'ols-graphview/css/OLS-graphview.css';
 
 
 
+
 export const TermGraph = (props) => {
 
   const graphApp = require("ols-graphview");
@@ -23,9 +24,7 @@ export const TermGraph = (props) => {
 
 
   function initLegacyGraphView(endpointPrefix, termiri, olsMode) {
-    let tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:olsMode}, callbacks: {
-      onDoubleClick:dbClick,
-    }}
+    let tmpnetworkOptions={ webservice : {URL: endpointPrefix, OLSschema:olsMode}}
     
     if(document.getElementById('ontology_vis')){
       document.getElementById('ontology_vis').innerHTML = '';
@@ -35,23 +34,9 @@ export const TermGraph = (props) => {
 
 
 
-  function dbClick(params){
-    let iri = params.nodes[0];
-    let url = `${process.env.REACT_APP_API_BASE_URL}/${props.ontology}/skos/${encodeURIComponent(encodeURIComponent(iri))}/graph`;
-    // graph.visstart("ontology_vis", "", tmpnetworkOptions, {}, visoptions);
-    let x=graph.getGraphDataset();
-    // console.log(x)
-    graph.fetchNewGraphData(url);
-
-  }
-
 
   function generateGraph(){
-    if(props.isSkos){      
-      let termFetchUrl = `${process.env.REACT_APP_API_BASE_URL}/${props.ontology}/skos/${encodeURIComponent(encodeURIComponent(props.iri))}/graph`;
-      initLegacyGraphView(termFetchUrl, "", false);
-    }
-    else if(props.iri){
+   if(props.iri){
       let termType = "terms";      
       let termFetchUrl = `${process.env.REACT_APP_API_BASE_URL}/${props.ontology}/${termType}?iri=`;
       initLegacyGraphView(termFetchUrl, props.iri, true);

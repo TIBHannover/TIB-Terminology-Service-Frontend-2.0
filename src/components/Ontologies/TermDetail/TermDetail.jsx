@@ -149,13 +149,10 @@ const RenderTermDetailTab = (props) => {
           if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
             continue;
           }
-          // if(configItemKey === "GraphView" && ["props", "individuals"].includes(props.componentIdentity)){
-          //   continue;
-          // }
-          if(configItemKey === "GraphView" && ["props"].includes(props.componentIdentity)){
+          if(configItemKey === "GraphView" && ["props", "individuals"].includes(props.componentIdentity)){
             continue;
           }
-                    
+                              
           result.push(
             <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
                 <Link 
