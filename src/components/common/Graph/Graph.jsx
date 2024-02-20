@@ -24,7 +24,14 @@ const Graph = (props) => {
                 graphNodes.push({id: node['iri'], label:node['label']})
             }
             for (let edge of graphData['edges']){
-                graphEdges.push({from: edge['source'], to:edge['target']})
+                graphEdges.push(
+                    {
+                        from: edge['source'],
+                        to:edge['target'],
+                        label:edge['label'],
+                        arrows:{to:true}
+                    }
+                )
             }
         }
         setNodes(graphNodes);
