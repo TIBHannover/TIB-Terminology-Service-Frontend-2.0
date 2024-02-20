@@ -65,6 +65,10 @@
     body .small-jumpto-box{
         width: 80%;
     }
+    .graph-container{
+        height: 500px;
+        width: 600px;     
+    }
      
     
 }
@@ -145,6 +149,10 @@
     }
     body .small-jumpto-box{
         width: 80%;
+    }
+    .graph-container{
+        height: 400px;
+        width: 500px;     
     }
 }
 

@@ -24,6 +24,18 @@ const Graph = (props) => {
             randomSeed: 1,
             improvedLayout:true,
             clusterThreshold: 150,           
+        },
+        physics: {
+            enabled: true,
+            barnesHut: {
+              gravitationalConstant: -20000,
+              centralGravity: 0.3,
+              springLength: 10, // Increase this value to make edges longer
+              springConstant: 0.04,
+              damping: 0.09,
+              avoidOverlap: 0,
+              stabilization: false
+            }
         }
     };
 
@@ -81,7 +93,7 @@ const Graph = (props) => {
 
 
     return (
-        <div ref={container} style={{ height: '700px', width: '800px' }} />
+        <div ref={container} className='graph-container' />
     );
 };
 
