@@ -1,5 +1,6 @@
 class GraphEdge{
     constructor({edge}){
+        this.id = edge['source'] + edge['target'];
         this.from = edge['source'];
         this.to = edge['target'];
         this.label = edge['label'];

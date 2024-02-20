@@ -3,6 +3,7 @@ import { Network } from 'vis-network';
 import TermApi from '../../../api/term';
 import GraphNode from './Node';
 import GraphEdge from './Edge';
+import Toolkit from '../../../Libs/Toolkit';
 
 
 
@@ -28,19 +29,23 @@ const Graph = (props) => {
 
 
 
-    async function fetchGraphData(){
-        let termApi = new TermApi(props.ontologyId, props.termIri, "class");
+    async function fetchGraphData(ontologyId, targetIri){
+        let termApi = new TermApi(ontologyId, targetIri, "class");
         let graphData = await termApi.fetchGraphData();
-        let graphNodes = [];
-        let graphEdges = [];
+        let graphNodes = [...nodes];
+        let graphEdges = [...edges];
         if(graphData){
             for (let node of graphData['nodes']){
                 let gNode = new GraphNode({node:node});
-                graphNodes.push(gNode);
+                if(!Toolkit.objectExistInList(graphNodes, "id", gNode.id)){
+                    graphNodes.push(gNode);
+                }                
             }
-            for (let edge of graphData['edges']){
+            for (let edge of graphData['edges']){                
                 let gEdge = new GraphEdge({edge:edge});
-                graphEdges.push(gEdge);
+                if(!Toolkit.objectExistInList(graphEdges, "id", gEdge.id)){
+                    graphEdges.push(gEdge);
+                }                
             }
         }
         setNodes(graphNodes);
@@ -49,7 +54,7 @@ const Graph = (props) => {
 
     
     useEffect(() => {
-        fetchGraphData();
+        fetchGraphData(props.ontologyId, props.termIri);
     }, []);
 
 
@@ -66,14 +71,18 @@ const Graph = (props) => {
         if(graphNetwork){            
             graphNetwork.on("doubleClick", function (params) {        
                 if (params.nodes.length > 0) {
-                    let nodeIri = params.nodes[0];                              
+                    let nodeIri = params.nodes[0];
+                    fetchGraphData(props.ontologyId, nodeIri);                     
                 }
             });
         }
     }, [graphNetwork]);
 
 
-    return <div ref={container} style={{ height: '700px', width: '800px' }} />;
+
+    return (
+        <div ref={container} style={{ height: '700px', width: '800px' }} />
+    );
 };
 
 export default Graph;
