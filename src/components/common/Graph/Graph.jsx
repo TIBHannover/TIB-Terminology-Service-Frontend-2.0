@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Network } from 'vis-network';
+import { DataSet } from 'vis-data';
 import TermApi from '../../../api/term';
 import GraphNode from './Node';
 import GraphEdge from './Edge';
@@ -8,13 +9,16 @@ import Toolkit from '../../../Libs/Toolkit';
 
 
 const Graph = (props) => {
+    
+    const [selectedNodes, setSelectedNodes] = useState([]);
+    const [selectedEdges, setSelectedEdges] = useState([]);
+    
 
-    const [graphNetwork, setGraphNetwork] = useState(null);
-    const [nodes, setNodes] = useState([]);
-    const [edges, setEdges] = useState([]);
-
-
+    const nodes = useRef(new DataSet([]));
+    const edges = useRef(new DataSet([]));
+    const graphNetwork = useRef({});
     const container = useRef(null);
+
     const options = {
         autoResize: true,
         height: '100%',
@@ -33,8 +37,7 @@ const Graph = (props) => {
               springLength: 10, 
               springConstant: 0.04,
               damping: 0.09,
-              avoidOverlap: 0,
-              stabilization: false
+              avoidOverlap: 0,            
             }
         }
     };
@@ -43,29 +46,26 @@ const Graph = (props) => {
 
     async function fetchGraphData(ontologyId, targetIri, reset=false){
         let termApi = new TermApi(ontologyId, targetIri, "class");
-        let graphData = await termApi.fetchGraphData();
-        let graphNodes = [...nodes];
-        let graphEdges = [...edges];
+        let graphData = await termApi.fetchGraphData();        
         if(reset){
-            graphNodes = [];
-            graphEdges = [];
+            nodes.current.clear();
+            edges.current.clear();
+            return true;
         }
         if(graphData){
             for (let node of graphData['nodes']){
-                let gNode = new GraphNode({node:node});
-                if(!Toolkit.objectExistInList(graphNodes, "id", gNode.id)){
-                    graphNodes.push(gNode);
+                let gNode = new GraphNode({node:node});                
+                if(!nodes.current.get(gNode.id)){
+                    nodes.current.add(gNode);
                 }                
             }
             for (let edge of graphData['edges']){                
-                let gEdge = new GraphEdge({edge:edge});
-                if(!Toolkit.objectExistInList(graphEdges, "id", gEdge.id)){
-                    graphEdges.push(gEdge);
+                let gEdge = new GraphEdge({edge:edge});                
+                if(!edges.current.get(gEdge.id)){
+                    edges.current.add(gEdge);
                 }                
             }
         }
-        setNodes(graphNodes);
-        setEdges(graphEdges);
     }
 
 
@@ -74,29 +74,41 @@ const Graph = (props) => {
         fetchGraphData(props.ontologyId, props.termIri, true);
     }
 
+
+
+    function removeFromGraph(){        
+        for (let id of selectedNodes){                        
+            nodes.current.remove({id: id});        
+        }
+        for (let id of selectedEdges){                        
+            edges.current.remove({id: id});           
+        }     
+    }
+
     
-    useEffect(() => {
+    useEffect(() => {       
+        let data = {nodes: nodes.current, edges: edges.current}; 
+        graphNetwork.current = new Network(container.current, data, options);        
         fetchGraphData(props.ontologyId, props.termIri);
     }, []);
 
 
-
     useEffect(() => {        
-        if(container.current){
-            setGraphNetwork(new Network(container.current, { nodes, edges }, options));            
-        }
-    }, [container, nodes, edges]);
-
-
-
-    useEffect(() => {        
-        if(graphNetwork){            
-            graphNetwork.on("doubleClick", function (params) {        
+        if(graphNetwork.current){                        
+            graphNetwork.current.on("doubleClick", function (params) {        
                 if (params.nodes.length > 0) {
                     let nodeIri = params.nodes[0];
                     fetchGraphData(props.ontologyId, nodeIri);                     
                 }
             });
+    
+            graphNetwork.current.on("click", function (params) {        
+                if(params.event.tapCount === 1){
+                    // single click. Needed to differentiate it from double click
+                    setSelectedNodes(params.nodes);
+                    setSelectedEdges(params.edges);
+                }
+            });        
         }
     }, [graphNetwork]);
 
@@ -107,7 +119,7 @@ const Graph = (props) => {
             <br></br>
             <div className='graph-control-panel'>
                 <button className='btn btn-sm btn-secondary graph-ctl-btn' onClick={resetGraph}>Reset</button>
-                <button className='btn btn-sm btn-secondary graph-ctl-btn'>Remove</button>
+                <button className='btn btn-sm btn-secondary graph-ctl-btn' onClick={removeFromGraph}>Remove</button>
                 <button className='btn btn-sm btn-secondary graph-ctl-btn'>Visit</button>
             </div>
             <div ref={container} className='graph-container' />

@@ -124,7 +124,12 @@ class Toolkit{
         catch (error) {          
           return false;
         }
-      }
+    }
+
+
+    static removeObjectFromListById(list, objectIdToRemove){
+        return list.filter(obj => obj.id !== objectIdToRemove);
+    }
       
 }
 
