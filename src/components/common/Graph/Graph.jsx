@@ -144,6 +144,12 @@ const Graph = (props) => {
     }, []);
 
 
+
+    useEffect(() => {       
+        resetGraph();
+    }, [props.termIri]);
+
+
     useEffect(() => {        
         if(graphNetwork.current){                        
             graphNetwork.current.on("doubleClick", function (params) {        
