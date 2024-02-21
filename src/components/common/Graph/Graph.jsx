@@ -4,7 +4,6 @@ import { DataSet } from 'vis-data';
 import TermApi from '../../../api/term';
 import GraphNode from './Node';
 import GraphEdge from './Edge';
-import Toolkit from '../../../Libs/Toolkit';
 
 
 
@@ -49,8 +48,7 @@ const Graph = (props) => {
         let graphData = await termApi.fetchGraphData();        
         if(reset){
             nodes.current.clear();
-            edges.current.clear();
-            return true;
+            edges.current.clear();           
         }
         if(graphData){
             for (let node of graphData['nodes']){
@@ -83,6 +81,30 @@ const Graph = (props) => {
         for (let id of selectedEdges){                        
             edges.current.remove({id: id});           
         }     
+    }
+
+
+
+    function visitNodeInGraph(){
+        let termLink = document.createElement('a'); 
+        termLink.target = '_blank';
+
+        if(selectedNodes.length === 1){                  
+            termLink.href = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${props.ontologyId}/terms?iri=${encodeURIComponent(selectedNodes[0])}`;            
+            document.body.appendChild(termLink);        
+            termLink.click();
+            document.body.removeChild(termLink);
+            return true;  
+        }
+        else if(selectedEdges.length === 1){
+            let edgeUri = selectedEdges[0].split('&uri=')[1]; // have a look at Edge Class Id format
+            termLink.href = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${props.ontologyId}/props?iri=${encodeURIComponent(edgeUri)}`;
+            document.body.appendChild(termLink);        
+            termLink.click();
+            document.body.removeChild(termLink);
+            return true;  
+        }        
+        return true;                        
     }
 
     
@@ -120,7 +142,7 @@ const Graph = (props) => {
             <div className='graph-control-panel'>
                 <button className='btn btn-sm btn-secondary graph-ctl-btn' onClick={resetGraph}>Reset</button>
                 <button className='btn btn-sm btn-secondary graph-ctl-btn' onClick={removeFromGraph}>Remove</button>
-                <button className='btn btn-sm btn-secondary graph-ctl-btn'>Visit</button>
+                <button className='btn btn-sm btn-secondary graph-ctl-btn' onClick={visitNodeInGraph}>Visit</button>
             </div>
             <div ref={container} className='graph-container' />
         </div>
