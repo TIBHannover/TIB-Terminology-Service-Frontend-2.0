@@ -102,6 +102,7 @@ const TermDetail = (props) => {
             tabChangeHandler={tabChangeHandler}
             activeTab={activeTab}
             noteCounts={notesCount}
+            isSkos={props.isSkos}
         />
         {!waiting && (activeTab === DETAIL_TAB_ID) &&
           <TermDetailTable
@@ -148,7 +149,7 @@ const RenderTermDetailTab = (props) => {
           if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
             continue;
           }
-          if(configItemKey === "GraphView" && ["props"].includes(props.componentIdentity)){
+          if(configItemKey === "GraphView" && (props.componentIdentity === "props" || (props.componentIdentity === "individuals" && !props.isSkos)) ){
             continue;
           }
                               
