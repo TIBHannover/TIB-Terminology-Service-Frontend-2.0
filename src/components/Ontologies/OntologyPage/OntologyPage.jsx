@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react';
 import DataTree from '../DataTree/DataTree';
-import {getSkosOntologyRootConcepts} from '../../../api/fetchData';
+import SkosApi from '../../../api/skos';
+import SkosLib from '../../../Libs/Skos';
 import OntologyApi from '../../../api/ontology';
 import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
-import { shapeSkosConcepts, renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
+import {renderOntologyPageTabs, createOntologyPageHeadSection } from './helpers';
 import { getNoteList } from '../../../api/tsMicroBackendCalls';
 import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
@@ -69,12 +70,18 @@ const OntologyPage = (props) => {
     let isSkos = ontologyApi.ontology['config']?.['skos'];
     let skosIndividuals = [];
     if(isSkos){
-      skosIndividuals = await getSkosOntologyRootConcepts(ontologyId);
-      skosIndividuals = await shapeSkosConcepts(skosIndividuals);
+      let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
+      await skosApi.fetchRootConcepts();                    
+      await SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
+      skosIndividuals = skosApi.rootConcepts;
     }
 
-    let countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
-    countOfNotes = countOfNotes['stats']['total_number_of_records'];
+    let countOfNotes = 0;
+    if(process.env.REACT_APP_NOTE_FEATURE === "true"){
+      countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+      countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+    }
+    
 
     setOntology(ontologyApi.ontology);
     setIsSkosOntology(isSkos);

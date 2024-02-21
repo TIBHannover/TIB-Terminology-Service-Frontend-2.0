@@ -3,7 +3,7 @@ import NodePageTabConfig from './listOfComponentsTabs.json';
 import { TermDetailTable } from './TermDetailTable/TermDetailTable';
 import { TermGraph } from './TermGraph/TermGraph';
 import NoteList from '../Note/NoteList';
-import {getSkosNodeByIri} from '../../../api/fetchData';
+import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
 import Toolkit from '../../../Libs/Toolkit';
@@ -30,7 +30,9 @@ const TermDetail = (props) => {
   async function fetchTheTargetTerm(){
       let term = null
       if(props.isSkos && props.componentIdentity === "individual"){
-        term = await getSkosNodeByIri(props.ontology.ontologyId, encodeURIComponent(props.iri));      
+        let skosApi = new SkosApi({ontologyId:props.ontology.ontologyId, iri:props.iri})
+        await skosApi.fetchSkosTerm();
+        term = skosApi.skosTerm;      
       }
       else{
         let termApi = new TermApi(props.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);
@@ -38,8 +40,11 @@ const TermDetail = (props) => {
         term = termApi.term;
       }
 
-      let countOfNotes = await getNoteList({ontologyId:props.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:term, onlyOntologyOriginalNotes:false});    
-      countOfNotes = countOfNotes['stats']['total_number_of_records'];
+      let countOfNotes = 0;
+      if(process.env.REACT_APP_NOTE_FEATURE === "true"){
+        countOfNotes = await getNoteList({ontologyId:props.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+        countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+      }
 
       setTargetTerm(term);   
       setNotesCount(countOfNotes);    
@@ -147,7 +152,7 @@ const RenderTermDetailTab = (props) => {
           if(configItemKey === "GraphView" && ["props", "individuals"].includes(props.componentIdentity)){
             continue;
           }
-                    
+                              
           result.push(
             <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
                 <Link 
