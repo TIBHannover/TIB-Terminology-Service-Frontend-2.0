@@ -126,6 +126,8 @@ const TermDetail = (props) => {
           <Graph 
             ontologyId={props.ontology.ontologyId}
             termIri={props.iri}
+            isSkos={props.isSkos}
+            componentIdentity={props.componentIdentity}
           />
         }
       </div>        
@@ -146,7 +148,7 @@ const RenderTermDetailTab = (props) => {
           if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
             continue;
           }
-          if(configItemKey === "GraphView" && ["props", "individuals"].includes(props.componentIdentity)){
+          if(configItemKey === "GraphView" && ["props"].includes(props.componentIdentity)){
             continue;
           }
                               

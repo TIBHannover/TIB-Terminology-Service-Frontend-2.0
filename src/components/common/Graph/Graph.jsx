@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 import TermApi from '../../../api/term';
+import SkosApi from '../../../api/skos';
 import GraphNode from './Node';
 import GraphEdge from './Edge';
-import AlertBox from '../Alerts/Alerts';
 
 
 
@@ -46,8 +46,16 @@ const Graph = (props) => {
 
 
     async function fetchGraphData(ontologyId, targetIri, reset=false){
-        let termApi = new TermApi(ontologyId, targetIri, "class");
-        let graphData = await termApi.fetchGraphData();        
+        let graphData = null;
+        if(props.componentIdentity === "terms"){
+            let termApi = new TermApi(ontologyId, targetIri, "class");
+            graphData = await termApi.fetchGraphData(); 
+        }
+        else if(props.componentIdentity === "individuals" && props.isSkos){
+            let skosApi = new SkosApi({ontologyId:ontologyId, iri:targetIri});
+            graphData = await skosApi.fetchGraphData(); 
+        }
+               
         if(reset){
             nodes.current.clear();
             edges.current.clear();           
@@ -100,8 +108,8 @@ const Graph = (props) => {
         let termLink = document.createElement('a'); 
         termLink.target = '_blank';
 
-        if(selectedNodes.length === 1){                  
-            termLink.href = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${props.ontologyId}/terms?iri=${encodeURIComponent(selectedNodes[0])}`;            
+        if(selectedNodes.length === 1){                          
+            termLink.href = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${props.ontologyId}/${props.componentIdentity}?iri=${encodeURIComponent(selectedNodes[0])}`;            
             document.body.appendChild(termLink);        
             termLink.click();
             document.body.removeChild(termLink);

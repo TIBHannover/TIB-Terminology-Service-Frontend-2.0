@@ -103,6 +103,19 @@ class SkosApi{
         }        
     }
 
+
+    async fetchGraphData(){
+        try{
+            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/skos/${this.iri}/graph`;
+            let graphData = await fetch(url, getCallSetting);
+            graphData = await graphData.json();
+            return graphData;
+        }
+        catch(e){
+            return null;
+        }
+    }
+
 }
 
 export default SkosApi;
