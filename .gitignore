@@ -31,3 +31,6 @@ yarn-error.log*
 sonarqube/extensions
 sonarqube/data
 sonarqube/logs
+
+yarn.lock
+package-lock.json
