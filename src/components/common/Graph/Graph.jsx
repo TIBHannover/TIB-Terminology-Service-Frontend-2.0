@@ -30,7 +30,7 @@ const Graph = (props) => {
             barnesHut: {
               gravitationalConstant: -20000,
               centralGravity: 0.3,
-              springLength: 10, // Increase this value to make edges longer
+              springLength: 10, 
               springConstant: 0.04,
               damping: 0.09,
               avoidOverlap: 0,
@@ -41,11 +41,15 @@ const Graph = (props) => {
 
 
 
-    async function fetchGraphData(ontologyId, targetIri){
+    async function fetchGraphData(ontologyId, targetIri, reset=false){
         let termApi = new TermApi(ontologyId, targetIri, "class");
         let graphData = await termApi.fetchGraphData();
         let graphNodes = [...nodes];
         let graphEdges = [...edges];
+        if(reset){
+            graphNodes = [];
+            graphEdges = [];
+        }
         if(graphData){
             for (let node of graphData['nodes']){
                 let gNode = new GraphNode({node:node});
@@ -62,6 +66,12 @@ const Graph = (props) => {
         }
         setNodes(graphNodes);
         setEdges(graphEdges);
+    }
+
+
+
+    function resetGraph(){
+        fetchGraphData(props.ontologyId, props.termIri, true);
     }
 
     
@@ -93,7 +103,15 @@ const Graph = (props) => {
 
 
     return (
-        <div ref={container} className='graph-container' />
+        <div className='graph-section'>
+            <br></br>
+            <div className='graph-control-panel'>
+                <button className='btn btn-sm btn-secondary graph-ctl-btn' onClick={resetGraph}>Reset</button>
+                <button className='btn btn-sm btn-secondary graph-ctl-btn'>Remove</button>
+                <button className='btn btn-sm btn-secondary graph-ctl-btn'>Visit</button>
+            </div>
+            <div ref={container} className='graph-container' />
+        </div>
     );
 };
 

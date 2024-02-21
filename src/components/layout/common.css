@@ -557,4 +557,7 @@ body .result-card{
     border: 1px solid black;
 }
 
-
+.graph-section .graph-ctl-btn{
+    font-size: 10px;
+    margin-right: 2px;
+}
