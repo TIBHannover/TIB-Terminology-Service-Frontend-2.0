@@ -38,8 +38,8 @@ class InfoAnnotations extends React.Component{
         if(ontology.config.classifications[1] !== undefined){
         let answer = []
         let value = []
-        for(let i=0; i< ontology.config.classifications[1].Subject.length; i++){
-          value.push(ontology.config.classifications[1].Subject[i])
+        for(let i=0; i< ontology.config.classifications[1].subject.length; i++){
+          value.push(ontology.config.classifications[1].subject[i])
         }
         answer = value.join(',\n')
         return answer
