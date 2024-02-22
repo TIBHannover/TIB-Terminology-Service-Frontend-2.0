@@ -1,4 +1,4 @@
-import InfoAnnotations from './widgets/infoAnnotations';
+import OntologyInfoTable from './widgets/OntologyInfo';
 import OntologyStatsBox from './widgets/stats';
 import { useContext } from 'react';
 import { OntologyContext } from '../../../context/OntologyPageContext';
@@ -14,7 +14,7 @@ const OntologyOverview = () => {
   return(
       <div  key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">        
         <div className='col-sm-9'>
-          <InfoAnnotations ontology={ontology} />
+          <OntologyInfoTable />
         </div>
         <div className='col-sm-3'>
           <OntologyStatsBox ontology={ontology} />
