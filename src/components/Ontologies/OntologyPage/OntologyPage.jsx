@@ -180,9 +180,9 @@ const OntologyPage = (props) => {
                     noteCounts={notesCount}
                   />                                  
                   {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
-                                  <OntologyOverview 
-                                      ontology={ontology}
-                                  />
+                        <OntologyOverview 
+                            ontology={ontology}
+                        />
                   }
                   {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
                                   <DataTree
