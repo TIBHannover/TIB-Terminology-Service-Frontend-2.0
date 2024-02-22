@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import { TermDetailTable } from './TermDetailTable/TermDetailTable';
-import { TermGraph } from './TermGraph/TermGraph';
 import NoteList from '../Note/NoteList';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
