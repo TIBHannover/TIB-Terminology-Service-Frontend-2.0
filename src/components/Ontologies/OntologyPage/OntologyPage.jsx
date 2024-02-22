@@ -14,7 +14,7 @@ import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';
 import '../../layout/ontologyHomePage.css';
 import '../../layout/note.css';
-import { OntologyContext } from '../../../context/OntologyPageContext';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 
 
@@ -170,7 +170,7 @@ const OntologyPage = (props) => {
     return (        
       <div className='justify-content-center ontology-page-container'>          
             {Toolkit.createHelmet(ontology.ontologyId)}
-            <OntologyContext.Provider  value={ontology}>
+            <OntologyPageContext.Provider  value={{ontology:ontology}}>
               <OntologyPageHeadSection />          
               <div className='col-sm-12'>                  
                   <OntologyPageTabs 
@@ -180,9 +180,7 @@ const OntologyPage = (props) => {
                     noteCounts={notesCount}
                   />                                  
                   {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
-                        <OntologyOverview 
-                            ontology={ontology}
-                        />
+                        <OntologyOverview />
                   }
                   {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
                                   <DataTree
@@ -259,7 +257,7 @@ const OntologyPage = (props) => {
 
                   {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
               </div>
-          </OntologyContext.Provider>                    
+          </OntologyPageContext.Provider>                    
       </div>
 
     )

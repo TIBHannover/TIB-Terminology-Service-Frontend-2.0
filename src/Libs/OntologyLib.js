@@ -23,10 +23,6 @@ class OntologyLib{
         return "";      
     }
 
-
-
-
-
 }
 
 export default OntologyLib;

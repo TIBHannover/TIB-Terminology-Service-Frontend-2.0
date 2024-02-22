@@ -1,4 +1,10 @@
 import { createContext } from "react";
 
 
-export const OntologyContext = createContext({});
+const blueprint = {
+    ontology: {},
+
+}
+
+
+export const OntologyPageContext = createContext(blueprint);

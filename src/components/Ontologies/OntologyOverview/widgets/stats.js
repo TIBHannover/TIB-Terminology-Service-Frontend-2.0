@@ -1,7 +1,14 @@
-function OntologyStatsBox (props) {
-  const ontology = props.ontology
+import { OntologyPageContext } from "../../../../context/OntologyPageContext"
+import { useContext } from "react"
+
+
+
+const OntologyStatsBox = () => {
+  const currentContext = useContext(OntologyPageContext);
+  const ontology = currentContext.ontology;
+
   if (!ontology || ontology === null) {
-    return false
+    return ""
   }
 
   return (

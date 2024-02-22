@@ -1,6 +1,6 @@
 import {useContext, useState, useEffect} from 'react';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
-import { OntologyContext } from '../../../../context/OntologyPageContext';
+import { OntologyPageContext } from '../../../../context/OntologyPageContext';
 import OntologyLib from '../../../../Libs/OntologyLib';
 
 
@@ -8,19 +8,14 @@ import OntologyLib from '../../../../Libs/OntologyLib';
 
 const OntologyInfoTable = () => {
 
-  const ontology = useContext(OntologyContext); 
+  const currentContext = useContext(OntologyPageContext); 
+  const ontology = currentContext.ontology;
 
   const [showExtraAnotation, setShowExtraAnotation] = useState(false);
   const [showExtraAnotationBtnText, setShowExtraAnotationBtnText] = useState("+ Show more information");
 
 
-
-  function alphabeticSort(item){
-    return item.sort();
-  }
-
-
-
+  
   function handleOntologyShowMoreClick(e){                        
     if(showExtraAnotation){
       setShowExtraAnotationBtnText("+ Show more information");

@@ -1,14 +1,14 @@
 import OntologyInfoTable from './widgets/OntologyInfo';
 import OntologyStatsBox from './widgets/stats';
 import { useContext } from 'react';
-import { OntologyContext } from '../../../context/OntologyPageContext';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 
 
 
 const OntologyOverview = () => {
 
-  const ontology = useContext(OntologyContext);
+  const currentContext = useContext(OntologyPageContext);
 
 
   return(
@@ -17,12 +17,12 @@ const OntologyOverview = () => {
           <OntologyInfoTable />
         </div>
         <div className='col-sm-3'>
-          <OntologyStatsBox ontology={ontology} />
+          <OntologyStatsBox />
           <br></br>          
           <div className='row'>
               <div className='col-sm-12 node-metadata-value'>
                 <a 
-                  href={process.env.REACT_APP_API_BASE_URL + "/" + ontology.ontologyId} 
+                  href={process.env.REACT_APP_API_BASE_URL + "/" + currentContext.ontology.ontologyId} 
                   target='_blank' 
                   rel="noreferrer"
                   className='btn btn-secondary btn-dark download-ontology-btn'

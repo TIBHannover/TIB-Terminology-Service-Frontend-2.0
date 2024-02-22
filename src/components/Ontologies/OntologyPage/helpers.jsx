@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { OntologyContext } from '../../../context/OntologyPageContext';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import { useContext } from 'react';
 
 
 
 export const OntologyPageTabs = (props) => {
-    const ontology = useContext(OntologyContext);
+    const currentContext = useContext(OntologyPageContext);
     let result = [];
     for(let configItemKey in props.tabMetadataJson){
         let configObject = props.tabMetadataJson[configItemKey];
@@ -21,7 +21,7 @@ export const OntologyPageTabs = (props) => {
                     onClick={props.tabChangeHandler} 
                     data-value={configObject['tabId']} 
                     className={(props.activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
-                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId + configObject['urlEndPoint']}
+                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + currentContext.ontology.ontologyId + configObject['urlEndPoint']}
                     >                
                     {configObject['tabTitle']}
                     {configItemKey === "Notes" ? ` (${props.noteCounts})` : ""}
@@ -37,16 +37,16 @@ export const OntologyPageTabs = (props) => {
 
 
 export const OntologyPageHeadSection = () => {
-    const ontology = useContext(OntologyContext);
+    const currentContext = useContext(OntologyPageContext);
     return [
         <div className='span'>
             <div className='row ont-info-bar header-collapseable-section'>
                 <div className= "col-sm-12">
                     <div>
-                        <h2><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h2>
+                        <h2><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + currentContext.ontology.ontologyId}>{currentContext.ontology.config.title}</Link></h2>
                     </div>
                     <div>
-                        <a href={ontology.config.id}>{ontology.config.id}</a>
+                        <a href={currentContext.ontology.config.id}>{currentContext.ontology.config.id}</a>
                     </div>
                 </div>
             </div>

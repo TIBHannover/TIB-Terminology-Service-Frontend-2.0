@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
