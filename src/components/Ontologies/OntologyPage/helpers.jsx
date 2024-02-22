@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
+import { OntologyContext } from '../../../context/OntologyPageContext';
+import { useContext } from 'react';
 
 
 
-export function renderOntologyPageTabs({tabMetadataJson, tabChangeHandler, ontologyId, activeTabId, noteCounts}){
+export const OntologyPageTabs = (props) => {
+    const ontology = useContext(OntologyContext);
     let result = [];
-    for(let configItemKey in tabMetadataJson){
-        let configObject = tabMetadataJson[configItemKey];
+    for(let configItemKey in props.tabMetadataJson){
+        let configObject = props.tabMetadataJson[configItemKey];
         if(process.env.REACT_APP_NOTE_FEATURE !== "true" && configItemKey === "Notes"){
             continue;
         }
@@ -15,23 +18,26 @@ export function renderOntologyPageTabs({tabMetadataJson, tabChangeHandler, ontol
         result.push(
             <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
                 <Link 
-                    onClick={tabChangeHandler} 
+                    onClick={props.tabChangeHandler} 
                     data-value={configObject['tabId']} 
-                    className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
-                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyId + configObject['urlEndPoint']}
+                    className={(props.activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
+                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId + configObject['urlEndPoint']}
                     >                
                     {configObject['tabTitle']}
-                    {configItemKey === "Notes" ? ` (${noteCounts})` : ""}
+                    {configItemKey === "Notes" ? ` (${props.noteCounts})` : ""}
                 </Link>
             </li>
         );
     }
 
-    return result;
+    return <ul className="nav nav-tabs">{result}</ul>;
 }
 
 
-export function createOntologyPageHeadSection(ontology){
+
+
+export const OntologyPageHeadSection = () => {
+    const ontology = useContext(OntologyContext);
     return [
         <div className='span'>
             <div className='row ont-info-bar header-collapseable-section'>

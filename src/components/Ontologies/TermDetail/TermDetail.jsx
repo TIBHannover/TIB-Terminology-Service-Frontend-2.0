@@ -23,8 +23,8 @@ const TermDetail = (props) => {
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
-  const [targetTerm, setTargetTerm] = useState({"iri": null} );  
-  const [notesCount, setNotesCount] = useState("")  
+  const [targetTerm, setTargetTerm] = useState({"iri": null});  
+  const [notesCount, setNotesCount] = useState("");
 
 
   async function fetchTheTargetTerm(){
