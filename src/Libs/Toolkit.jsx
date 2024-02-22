@@ -112,7 +112,7 @@ class Toolkit{
         url.searchParams.set('obsoletes', obsoletesValue);        
         localStorage.setItem("obsoletes", obsoletesValue);
         document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
-        return url;
+        return window.location.pathname + "?" +  url.searchParams.toString();
     }
 
 

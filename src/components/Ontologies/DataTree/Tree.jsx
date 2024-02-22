@@ -272,7 +272,7 @@ const Tree = (props) => {
 
 
     function showObsoletes(){                      
-        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);        
+        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);                
         history.push(newUrl);
         setReload(true);
         setIsLoading(true);
@@ -405,6 +405,7 @@ const Tree = (props) => {
 
     useEffect(() => {       
         setComponentData();     
+        buildTheTree();   
         // saveComponentStateInParent();              
         if(props.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
@@ -423,14 +424,14 @@ const Tree = (props) => {
 
 
     useEffect(() => {        
-        setComponentData();        
-        buildTheTree();        
+        // setComponentData();        
+        buildTheTree();  
         setTimeout(() => {
             setIsLoading(false);  
             saveComponentStateInParent();
         }, 2000);                                
                
-    }, [props.rootNodes, props.rootNodesForSkos,  resetTreeFlag, reload]);
+    }, [resetTreeFlag, reload]);
 
 
     useEffect(() => {        
@@ -451,8 +452,7 @@ const Tree = (props) => {
 
     return(
         <div className="col-sm-12" onClick={(e) => processClick(e)}>
-                {isLoading && <div className="isLoading"></div>}
-                {noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
+                {isLoading && <div className="isLoading"></div>}                
                 {!isLoading && !noNodeExist && createTreeActionButtons()}                
                 {!isLoading && !noNodeExist && 
                     <div className='row'>                    
