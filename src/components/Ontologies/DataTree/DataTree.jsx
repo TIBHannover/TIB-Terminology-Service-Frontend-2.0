@@ -95,22 +95,25 @@ const DataTree = (props) => {
           </div>
         </div>          
         <div className='tree-container'>
-              <Tree
-                rootNodes={props.rootNodes}
-                obsoleteTerms={props.obsoleteTerms}                               
-                rootNodesForSkos={props.rootNodesForSkos}
-                componentIdentity={props.componentIdentity}
-                selectedNodeIri={selectedNodeIri}
-                key={props.key}                                                 
-                iriChangerFunction={props.iriChangerFunction}
-                lastState={props.lastState}
-                domStateKeeper={props.domStateKeeper}
-                isSkos={props.isSkos}
-                handleNodeSelectionInDataTree={handleTreeNodeSelection}
-                individualViewChanger={""}
-                handleResetTreeInParent={handleResetTreeEvent}
-                jumpToIri={jumpToIri}
-              />
+              {(props.rootNodes.length !== 0 || (props.isSkos && props.rootNodesForSkos.length !== 0)) ?
+                <Tree
+                  rootNodes={props.rootNodes}
+                  obsoleteTerms={props.obsoleteTerms}                               
+                  rootNodesForSkos={props.rootNodesForSkos}
+                  componentIdentity={props.componentIdentity}
+                  selectedNodeIri={selectedNodeIri}
+                  key={props.key}                                                
+                  iriChangerFunction={props.iriChangerFunction}
+                  lastState={props.lastState}
+                  domStateKeeper={props.domStateKeeper}
+                  isSkos={props.isSkos}
+                  handleNodeSelectionInDataTree={handleTreeNodeSelection}
+                  individualViewChanger={""}
+                  handleResetTreeInParent={handleResetTreeEvent}
+                  jumpToIri={jumpToIri}
+                />
+                : <div className="no-node">It is currently not possible to load this tree. Please try later.</div>
+              }
         </div>
       </div>
       {showDetailTable && paneResizeClass.generateVerticalResizeLine()}
