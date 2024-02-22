@@ -37,9 +37,9 @@ const JumpTo = (props) => {
     async function onAutoCompleteChange({value}){   
         let enteredTerm = value;                  
         let type = TYPE_MAPP[props.targetType];        
-        if(type === "class" && props.isSkos){
-            type = "individual"; 
-        }       
+        // if(type === "class" && props.isSkos){
+        //     type = "individual"; 
+        // }       
         if (enteredTerm.length > 0){
             let inputForAutoComplete = {};    
             inputForAutoComplete['searchQuery'] = value;
