@@ -84,11 +84,11 @@ const OntologyPage = (props) => {
     
 
     setOntology(ontologyApi.ontology);
-    setIsSkosOntology(isSkos);
-    setRootTerms(ontologyApi.rootClasses);
-    setRootProps(ontologyApi.rootProperties);   
+    setIsSkosOntology(isSkos);       
     setObsoleteTerms(ontologyApi.obsoleteClasses);
     setObsoleteProps(ontologyApi.obsoleteProperties); 
+    setRootTerms(ontologyApi.rootClasses);
+    setRootProps(ontologyApi.rootProperties);
     setSkosRootIndividuals(skosIndividuals);    
     setNotesCount(countOfNotes);
   }

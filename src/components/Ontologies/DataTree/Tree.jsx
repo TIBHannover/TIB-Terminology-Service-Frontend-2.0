@@ -129,7 +129,7 @@ const Tree = (props) => {
                         let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
                         childrenList.push(node);
                     }
-
+                    
                     if(obsoletesShown){            
                         [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
                      }
