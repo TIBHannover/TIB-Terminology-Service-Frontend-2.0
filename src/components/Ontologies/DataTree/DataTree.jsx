@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
@@ -86,8 +86,7 @@ const DataTree = (props) => {
         <div className='row autosuggest-sticky'>
           <div className='col-sm-10'>
               <JumpTo
-                targetType={props.componentIdentity}
-                ontologyId={props.ontology.ontologyId}
+                targetType={props.componentIdentity}                
                 isSkos={props.isSkos} 
                 label={"Jump to"}
                 handleJumtoSelection={handleJumtoSelection}
@@ -102,8 +101,7 @@ const DataTree = (props) => {
                 rootNodesForSkos={props.rootNodesForSkos}
                 componentIdentity={props.componentIdentity}
                 selectedNodeIri={selectedNodeIri}
-                key={props.key}                    
-                ontologyId={props.ontology.ontologyId}                
+                key={props.key}                                                 
                 iriChangerFunction={props.iriChangerFunction}
                 lastState={props.lastState}
                 domStateKeeper={props.domStateKeeper}
@@ -121,8 +119,7 @@ const DataTree = (props) => {
           {isTermTree &&
               <MatomoWrapper>
               <TermDetail
-                iri={selectedNodeIri}
-                ontology={props.ontology}
+                iri={selectedNodeIri}                
                 componentIdentity="terms"
                 extractKey="terms"
                 isSkos={props.isSkos}
@@ -134,8 +131,7 @@ const DataTree = (props) => {
           {isPropertyTree &&           
             <MatomoWrapper>
             <TermDetail
-                iri={selectedNodeIri}
-                ontology={props.ontology}
+                iri={selectedNodeIri}                
                 componentIdentity="props"
                 extractKey="properties"
                 isIndividual={false}

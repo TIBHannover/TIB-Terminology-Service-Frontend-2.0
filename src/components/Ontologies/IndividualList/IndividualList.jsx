@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
@@ -7,11 +7,14 @@ import PaneResize from "../../common/PaneResize/PaneResize";
 import Toolkit from "../../../Libs/Toolkit";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import { RenderIndividualList } from "./RenderIndividualList";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
 
 const IndividualsList = (props) => {
+
+    const currentContext = useContext(OntologyPageContext);
 
     const [individuals, setIndividuals] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);    
@@ -27,7 +30,7 @@ const IndividualsList = (props) => {
     
     async function setComponentData(){           
         try{                           
-            let termApi = new TermApi(props.ontology.ontologyId, null, props.componentIdentity);
+            let termApi = new TermApi(currentContext.ontology.ontologyId, null, props.componentIdentity);
             let indvList = await termApi.fetchListOfTerms(0, 10000);   
             indvList = indvList["results"];                
             setIsLoaded(true);
@@ -149,8 +152,7 @@ const IndividualsList = (props) => {
                     rootNodesForSkos={props.rootNodesForSkos}
                     componentIdentity={props.componentIdentity}
                     selectedNodeIri={selectedNodeIri}
-                    key={props.key}
-                    ontologyId={props.ontology.ontologyId}
+                    key={props.key}                    
                     rootNodeNotExist={props.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
                     iriChangerFunction={props.iriChangerFunction}
                     lastState={props.lastState}
@@ -223,8 +225,7 @@ const IndividualsList = (props) => {
                 <div className='row autosuggest-sticky'>
                     <div className='col-sm-10'>
                         <JumpTo
-                            targetType={props.componentIdentity}
-                            ontologyId={props.ontology.ontologyId}
+                            targetType={props.componentIdentity}                            
                             isSkos={props.isSkos} 
                             label={"Jump to"}
                             handleJumtoSelection={handleJumtoSelection}
@@ -247,8 +248,7 @@ const IndividualsList = (props) => {
             {showNodeDetailPage &&
                 <div className="node-table-container" id="page-right-pane">                     
                     <TermDetail
-                        iri={selectedNodeIri}
-                        ontology={props.ontology}
+                        iri={selectedNodeIri}                        
                         componentIdentity="individuals"
                         extractKey="individuals"
                         isSkos={props.isSkos}

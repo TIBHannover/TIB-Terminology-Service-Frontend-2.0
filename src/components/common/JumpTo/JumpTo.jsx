@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import Autosuggest from 'react-autosuggest';
 import { getJumpToResult } from "../../../api/fetchData";
 import '../../layout/jumpTo.css';
@@ -10,6 +11,9 @@ const TYPE_MAPP = {"terms": "class", "properties": "property", "individuals": "i
 
 
 const JumpTo = (props) => {
+
+    const currentContext = useContext(OntologyPageContext);    
+
     const [enteredTerm, setEnteredTerm] = useState(props.initialInput ? props.initialInput : "");
     const [resultList, setResultList] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState( {"iri": null, "label": null});
@@ -43,7 +47,7 @@ const JumpTo = (props) => {
         if (enteredTerm.length > 0){
             let inputForAutoComplete = {};    
             inputForAutoComplete['searchQuery'] = value;
-            inputForAutoComplete['ontologyIds'] = props.ontologyId;
+            inputForAutoComplete['ontologyIds'] = currentContext.ontology.ontologyId;
             inputForAutoComplete['types'] = type;
             inputForAutoComplete['obsoletes'] = props.obsoletes;
             let autoCompleteResult = await getJumpToResult(inputForAutoComplete);

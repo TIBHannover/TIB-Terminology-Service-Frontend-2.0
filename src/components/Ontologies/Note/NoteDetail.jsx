@@ -1,13 +1,17 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import { useHistory } from "react-router";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
 import { NoteDetailRender } from "./renders/NoteDetailRender";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
 const NoteDetail = (props) => {
+
+    const currentContext = useContext(OntologyPageContext);
+
     const [note, setNote] = useState({});
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
     const [noteNotFound, setNoteNotFound] = useState(false);
@@ -19,7 +23,7 @@ const NoteDetail = (props) => {
 
     function getTheNote(){
         let noteId = props.noteId;        
-        getNoteDetail({noteId: noteId, ontologyId:props.ontologyId}).then((result) => {
+        getNoteDetail({noteId: noteId, ontologyId:currentContext.ontology.ontologyId}).then((result) => {
             if(result === '404'){
                 setNoteNotFound(true);                
             }            

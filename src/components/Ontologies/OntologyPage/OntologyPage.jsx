@@ -189,8 +189,7 @@ const OntologyPage = (props) => {
                                     rootNodesForSkos={skosRootIndividuals}
                                     componentIdentity={'terms'}
                                     iri={lastIrisHistory['terms']}
-                                    key={'termTreePage'}                    
-                                    ontology={ontology}                                
+                                    key={'termTreePage'}                                                                                
                                     iriChangerFunction={changeInputIri}
                                     lastState={lastTabsStates['terms']}
                                     domStateKeeper={tabsStateKeeper}
@@ -206,8 +205,7 @@ const OntologyPage = (props) => {
                                     rootNodesForSkos={[]}
                                     componentIdentity={'properties'}
                                     iri={lastIrisHistory['properties']}
-                                    key={'propertyTreePage'}
-                                    ontology={ontology}                               
+                                    key={'propertyTreePage'}                                                             
                                     iriChangerFunction={changeInputIri}
                                     lastState={lastTabsStates['properties']}
                                     domStateKeeper={tabsStateKeeper}
@@ -220,8 +218,7 @@ const OntologyPage = (props) => {
                                     rootNodesForSkos={skosRootIndividuals}                                                    
                                     iri={lastIrisHistory['individuals']}
                                     componentIdentity={'individuals'}
-                                    key={'individualsTreePage'}
-                                    ontology={ontology}                              
+                                    key={'individualsTreePage'}                                                              
                                     iriChangerFunction={changeInputIri}
                                     lastState={""}
                                     domStateKeeper={tabsStateKeeper}
@@ -232,16 +229,14 @@ const OntologyPage = (props) => {
                                   <TermList                              
                                     iri={lastIrisHistory['termList']}
                                     componentIdentity={'termList'}
-                                    key={'termListPage'}
-                                    ontology={ontology.ontologyId}                              
+                                    key={'termListPage'}                                                      
                                     iriChangerFunction={changeInputIri}                              
                                     isSkos={isSkosOntology}                              
                                   />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&
                                   <NoteList                                
-                                    key={'notesPage'}
-                                    ontology={ontology}                                                                
+                                    key={'notesPage'}                                                                                                  
                                   />
                   }                                      
                   {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            

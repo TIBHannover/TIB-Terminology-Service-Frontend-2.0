@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import DropDown from "../../../common/DropDown/DropDown";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
 import TermLib from "../../../../Libs/TermLib";
+import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 
 
 
-export const NoteCreationRender = (props) => { 
+export const NoteCreationRender = (props) => {
+    
+    const currentContext = useContext(OntologyPageContext); 
     
     useEffect(() => {
         if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
@@ -92,13 +95,12 @@ export const NoteCreationRender = (props) => {
                             <div className="row">
                                 <div className="col-sm-8">
                                     {parseInt(props.targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID &&
-                                        <p>About: <b>{props.ontologyId}</b></p>
+                                        <p>About: <b>{currentContext.ontology.ontologyId}</b></p>
                                     }
                                     {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <div>                                           
                                             <JumpTo
-                                                targetType={props.componentIdentity}
-                                                ontologyId={props.ontologyId}
+                                                targetType={props.componentIdentity}                                                
                                                 isSkos={false} 
                                                 label={"About *"}
                                                 handleJumtoSelection={props.handleJumtoSelection}

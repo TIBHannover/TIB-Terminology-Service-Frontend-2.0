@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import { TermDetailTable } from './TermDetailTable/TermDetailTable';
 import NoteList from '../Note/NoteList';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import Toolkit from '../../../Libs/Toolkit';
 import { getNoteList } from '../../../api/tsMicroBackendCalls';
 import Graph from '../../common/Graph/Graph';
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
@@ -19,6 +20,8 @@ const GRAPH_TAB_ID = 2;
 
 
 const TermDetail = (props) => {
+
+  const currentContext = useContext(OntologyPageContext);
   
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
@@ -30,19 +33,19 @@ const TermDetail = (props) => {
   async function fetchTheTargetTerm(){
       let term = null
       if(props.isSkos && props.componentIdentity === "individual"){
-        let skosApi = new SkosApi({ontologyId:props.ontology.ontologyId, iri:props.iri})
+        let skosApi = new SkosApi({ontologyId:currentContext.ontology.ontologyId, iri:props.iri})
         await skosApi.fetchSkosTerm();
         term = skosApi.skosTerm;      
       }
       else{
-        let termApi = new TermApi(props.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);
+        let termApi = new TermApi(currentContext.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);
         await termApi.fetchTerm();      
         term = termApi.term;
       }
 
       let countOfNotes = 0;
       if(process.env.REACT_APP_NOTE_FEATURE === "true"){
-        countOfNotes = await getNoteList({ontologyId:props.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+        countOfNotes = await getNoteList({ontologyId:currentContext.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
         countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
       }
 
@@ -105,8 +108,7 @@ const TermDetail = (props) => {
         />
         {!waiting && (activeTab === DETAIL_TAB_ID) &&
           <TermDetailTable
-            iri={props.iri}
-            ontology={props.ontology.ontologyId}
+            iri={props.iri}            
             componentIdentity={props.componentIdentity}
             extractKey={props.extractKey}
             isSkos={props.isSkos}
@@ -116,15 +118,14 @@ const TermDetail = (props) => {
         }
         {!waiting && (activeTab === NOTES_TAB_ID) &&
           <NoteList            
-            key={'notesPage'}
-            ontology={props.ontology}          
+            key={'notesPage'}                    
             term={targetTerm}    
             termType={props.typeForNote}                                                                 
           />
         }
         {!waiting && (activeTab === GRAPH_TAB_ID) &&        
           <Graph 
-            ontologyId={props.ontology.ontologyId}
+            ontologyId={currentContext.ontology.ontologyId}
             termIri={props.iri}
             isSkos={props.isSkos}
             componentIdentity={props.componentIdentity}
