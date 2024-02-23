@@ -40,6 +40,18 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT = {
 
 const OntologyPage = (props) => {
 
+  /* 
+    This component holds the entire ontology page.
+
+      - Fetches Ontology data including its root terms (classes), properties, individuals, and obsoletes
+      - Renders Tabs (Each Tab is a child component)
+      - Stores the last state and iri for each tab --> used when a user changes tabs.
+    
+    Context:
+      The component provides its Context for the children. Look at src/context/OntologyPageContext.js
+  
+  */
+
   document.getElementById('application_content').style.width = '100%';  
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
@@ -191,48 +203,48 @@ const OntologyPage = (props) => {
                         <OntologyOverview />
                   }
                   {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
-                                  <DataTree
-                                    rootNodes={rootTerms}
-                                    obsoleteTerms={obsoleteTerms}                                    
-                                    componentIdentity={'terms'}                                    
-                                    key={'termTreePage'}                                                                      
-                                  />
+                        <DataTree
+                          rootNodes={rootTerms}
+                          obsoleteTerms={obsoleteTerms}                                    
+                          componentIdentity={'terms'}                                    
+                          key={'termTreePage'}                                                                      
+                        />                                  
                   }
 
                   {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
-                                  <DataTree
-                                    rootNodes={rootProps}
-                                    obsoleteTerms={obsoleteProps}                                    
-                                    componentIdentity={'properties'}                                    
-                                    key={'propertyTreePage'}                                                                
-                                  />
+                        <DataTree
+                          rootNodes={rootProps}
+                          obsoleteTerms={obsoleteProps}                                    
+                          componentIdentity={'properties'}                                    
+                          key={'propertyTreePage'}                                                                
+                        />
                   }
                   {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
-                                  <IndividualsList
-                                    rootNodes={rootTerms}
-                                    rootNodesForSkos={skosRootIndividuals}                                    
-                                    componentIdentity={'individuals'}
-                                    key={'individualsTreePage'}                                                                                                                                                           
-                                  />
+                        <IndividualsList
+                          rootNodes={rootTerms}
+                          rootNodesForSkos={skosRootIndividuals}                                    
+                          componentIdentity={'individuals'}
+                          key={'individualsTreePage'}                                                                                                                                                           
+                        />
                   }
                   {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-                                  <TermList                                    
-                                    componentIdentity={'termList'}
-                                    key={'termListPage'}                                                                                             
-                                  />
+                        <TermList                                    
+                          componentIdentity={'termList'}
+                          key={'termListPage'}                                                                                             
+                        />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&
-                                  <NoteList key={'notesPage'}/>
+                          <NoteList key={'notesPage'}/>
                   }                                      
                   {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            
-                                  <IssueList                                                           
-                                    componentIdentity={'gitIssues'}
-                                    key={'gitIssueList'}
-                                    ontology={ontology}                              
-                                    isSkos={isSkosOntology}
-                                    lastState={lastTabsStates['gitIssues']}                                  
-                                    storeListOfGitIssuesState={tabsStateKeeper}
-                                  />
+                          <IssueList                                                           
+                            componentIdentity={'gitIssues'}
+                            key={'gitIssueList'}
+                            ontology={ontology}                              
+                            isSkos={isSkosOntology}
+                            lastState={lastTabsStates['gitIssues']}                                  
+                            storeListOfGitIssuesState={tabsStateKeeper}
+                          />
                   } 
 
                   {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}

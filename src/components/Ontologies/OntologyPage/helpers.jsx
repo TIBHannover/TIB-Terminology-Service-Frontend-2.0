@@ -5,6 +5,11 @@ import { useContext } from 'react';
 
 
 export const OntologyPageTabs = (props) => {
+    /* 
+        Renders tabs for the Ontology page.
+        The tab metadata comes from listOfComponentsAsTabs.json
+    */
+   
     const ontologyPageContext = useContext(OntologyPageContext);
     let result = [];
     for(let configItemKey in props.tabMetadataJson){

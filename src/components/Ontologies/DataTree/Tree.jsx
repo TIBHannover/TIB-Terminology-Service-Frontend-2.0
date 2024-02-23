@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
+import PropTypes from 'prop-types';
 import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import TermApi from "../../../api/term";
@@ -13,6 +14,23 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 const Tree = (props) => {    
+    /* 
+        Renders the Tree view. 
+        The component builds tree in this way ( function buildTheTree() )
+            - If Last state exist, do not build the tree and load the last state. Used on Tab change in Ontology Page
+            - If there is No input iri, build the tree first layer using root nodes.
+            - If there is an iri, then loads the subtree and build the tree recursively. 
+        
+        Note that SKOS tree requires different approach compare to classes/properties. The reason the API response format is 
+        different. (for instance Narrower/Broader instead of parent/child)
+
+        The tree supports Keyboard Navigation. Look at: KeyboardNavigation.jsx
+
+        Context:
+            The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
+    */
+
+
     let url = new URL(window.location);
     let targetQueryParams = url.searchParams;
 
@@ -350,6 +368,7 @@ const Tree = (props) => {
                     <div className='row tree-action-btn-holder'>                                
                         <div className="col-sm-12">
                             {props.showListSwitchEnabled &&
+                                // Used for individuals
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
                                     Show In List
                                 </button>
@@ -470,5 +489,22 @@ const Tree = (props) => {
         </div>
     );
 }
+
+
+Tree.propTypes = {
+    rootNodes: PropTypes.array.isRequired,
+    obsoleteTerms: PropTypes.array,
+    rootNodesForSkos: PropTypes.array,
+    componentIdentity: PropTypes.string.isRequired,
+    selectedNodeIri: PropTypes.string,
+    handleNodeSelectionInDataTree: PropTypes.func.isRequired,
+    individualViewChanger: PropTypes.func.isRequired,
+    handleResetTreeInParent: PropTypes.func.isRequired,
+    jumpToIri: PropTypes.string,
+    rootNodeNotExist: PropTypes.bool,
+    isIndividual: PropTypes.bool,
+    showListSwitchEnabled: PropTypes.bool,
+};
+
 
 export default Tree;

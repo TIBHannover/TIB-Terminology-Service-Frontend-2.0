@@ -154,8 +154,7 @@ const IndividualsList = (props) => {
                     componentIdentity={props.componentIdentity}
                     selectedNodeIri={selectedNodeIri}
                     key={props.key}                    
-                    rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}                    
-                    lastState={props.lastState}                                
+                    rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}                                                                      
                     handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
                     isIndividual={ontologyPageContext.isSkos ? false : true}
                     showListSwitchEnabled={true}

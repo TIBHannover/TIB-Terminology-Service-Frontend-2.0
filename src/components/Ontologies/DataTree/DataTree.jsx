@@ -1,4 +1,5 @@
 import {useState, useEffect, useContext} from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
@@ -12,6 +13,17 @@ import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 
 const DataTree = (props) => {
+  /* 
+    The tree view holder components. It is a warpper for:
+      - Tree 
+      - Term Detail view
+      - Jump To
+      - Pane resize
+    
+    Context:
+      The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
+  
+  */
 
   const ontologyPageContext = useContext(OntologyPageContext);
 
@@ -143,6 +155,14 @@ const DataTree = (props) => {
     </div>  
   );
 }
+
+
+DataTree.propTypes = {
+  rootNodes: PropTypes.array.isRequired,
+  obsoleteTerms: PropTypes.array,
+  componentIdentity: PropTypes.string.isRequired,
+};
+
 
 export default DataTree;
 
