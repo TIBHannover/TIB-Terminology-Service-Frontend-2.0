@@ -3,7 +3,9 @@ import { createContext } from "react";
 
 const blueprint = {
     ontology: {},
-    isSkos: false
+    isSkos: false,
+    storeIriForComponent: function itStoresIriInOntologyPageComponentForEachTab(){},
+    storeState: function saveTabStatesToPreventReloadOnTabChange(){}
 }
 
 

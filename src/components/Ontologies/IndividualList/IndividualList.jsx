@@ -41,7 +41,7 @@ const IndividualsList = (props) => {
                 setSelectedNodeIri(props.iri);
                 setJumpToOnload(true);    
                 setJumpToIri(props.iri);           
-                props.iriChangerFunction(props.iri, props.componentIdentity);              
+                ontologyPageContext.storeIriForComponent(props.iri, props.componentIdentity);              
             }            
         }
         catch(error){
@@ -81,7 +81,7 @@ const IndividualsList = (props) => {
             setSelectedNodeIri(target.dataset.iri);            
             let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
             history.push(newUrl);
-            props.iriChangerFunction(target.dataset.iri, props.componentIdentity);    
+            ontologyPageContext.storeIriForComponent(target.dataset.iri, props.componentIdentity);    
         }
         else{
             target.classList.remove("clicked");            
@@ -153,10 +153,8 @@ const IndividualsList = (props) => {
                     componentIdentity={props.componentIdentity}
                     selectedNodeIri={selectedNodeIri}
                     key={props.key}                    
-                    rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
-                    iriChangerFunction={props.iriChangerFunction}
-                    lastState={props.lastState}
-                    domStateKeeper={props.domStateKeeper}                    
+                    rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}                    
+                    lastState={props.lastState}                                
                     handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
                     isIndividual={ontologyPageContext.isSkos ? false : true}
                     showListSwitchEnabled={true}

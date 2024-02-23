@@ -51,7 +51,7 @@ const Tree = (props) => {
 
         const componentHTML = document.getElementById('tree-root-ul')?.innerHTML;        
         if(props.componentIdentity !== "individuals" && componentHTML){           
-            props.domStateKeeper({"_html_":componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
+            ontologyPageContext.storeState({"_html_":componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
         }        
         return true;
     }
@@ -147,7 +147,7 @@ const Tree = (props) => {
         setReload(false);              
         setSiblingsVisible(siblingsVisible);                      
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);        
-        props.iriChangerFunction(target, props.componentIdentity);         
+        ontologyPageContext.storeIriForComponent(target, props.componentIdentity);         
     }
 
 
@@ -169,7 +169,7 @@ const Tree = (props) => {
             let url = new URLSearchParams();        
             url.append('iri', props.lastState.lastIri);            
             history.push(window.location.pathname + "?" + url.toString())            
-            props.iriChangerFunction(props.lastState.lastIri, props.componentIdentity);
+            ontologyPageContext.storeIriForComponent(props.lastState.lastIri, props.componentIdentity);
             props.handleNodeSelectionInDataTree(props.lastState.lastIri, true);
             return true;
         }
@@ -329,7 +329,7 @@ const Tree = (props) => {
             searchParams.set('iri', clickedNodeIri);               
             searchParams.delete('noteId');        
             history.push(locationObject.pathname + "?" +  searchParams.toString());
-            props.iriChangerFunction(clickedNodeIri, props.componentIdentity);            
+            ontologyPageContext.storeIriForComponent(clickedNodeIri, props.componentIdentity);            
         }    
     }
 

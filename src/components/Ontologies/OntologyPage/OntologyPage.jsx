@@ -131,7 +131,7 @@ const OntologyPage = (props) => {
 
 
 
-  function changeInputIri(iri, componentId){  
+  function storeIriForComponent(iri, componentId){  
     /**
      * Store the last input iri for tabs
      */ 
@@ -167,10 +167,16 @@ const OntologyPage = (props) => {
     return <div>Loading...</div>
   } 
   else{
+    const contextData = {
+      ontology:ontology, 
+      isSkos:isSkosOntology, 
+      storeIriForComponent:storeIriForComponent,
+      storeState: tabsStateKeeper
+    };
     return (        
       <div className='justify-content-center ontology-page-container'>          
             {Toolkit.createHelmet(ontology.ontologyId)}
-            <OntologyPageContext.Provider  value={{ontology:ontology, isSkos:isSkosOntology}}>
+            <OntologyPageContext.Provider  value={contextData}>
               <OntologyPageHeadSection />          
               <div className='col-sm-12'>                  
                   <OntologyPageTabs 
@@ -189,10 +195,8 @@ const OntologyPage = (props) => {
                                     rootNodesForSkos={skosRootIndividuals}
                                     componentIdentity={'terms'}
                                     iri={lastIrisHistory['terms']}
-                                    key={'termTreePage'}                                                                                
-                                    iriChangerFunction={changeInputIri}
-                                    lastState={lastTabsStates['terms']}
-                                    domStateKeeper={tabsStateKeeper}                                    
+                                    key={'termTreePage'}                                                                                                                    
+                                    lastState={lastTabsStates['terms']}                                                                
                                     isIndividuals={false}
                                   />
                   }
@@ -204,10 +208,8 @@ const OntologyPage = (props) => {
                                     rootNodesForSkos={[]}
                                     componentIdentity={'properties'}
                                     iri={lastIrisHistory['properties']}
-                                    key={'propertyTreePage'}                                                             
-                                    iriChangerFunction={changeInputIri}
-                                    lastState={lastTabsStates['properties']}
-                                    domStateKeeper={tabsStateKeeper}
+                                    key={'propertyTreePage'}                                    
+                                    lastState={lastTabsStates['properties']}                                    
                                     isIndividuals={false}
                                   />
                   }
@@ -217,18 +219,15 @@ const OntologyPage = (props) => {
                                     rootNodesForSkos={skosRootIndividuals}                                                    
                                     iri={lastIrisHistory['individuals']}
                                     componentIdentity={'individuals'}
-                                    key={'individualsTreePage'}                                                              
-                                    iriChangerFunction={changeInputIri}
-                                    lastState={""}
-                                    domStateKeeper={tabsStateKeeper}                                                                                                
+                                    key={'individualsTreePage'}                                    
+                                    lastState={""}                                                                                                                                 
                                   />
                   }
                   {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
                                   <TermList                              
                                     iri={lastIrisHistory['termList']}
                                     componentIdentity={'termList'}
-                                    key={'termListPage'}                                                      
-                                    iriChangerFunction={changeInputIri}                                                               
+                                    key={'termListPage'}                                                                                             
                                   />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&

@@ -104,10 +104,8 @@ const DataTree = (props) => {
                   rootNodesForSkos={props.rootNodesForSkos}
                   componentIdentity={props.componentIdentity}
                   selectedNodeIri={selectedNodeIri}
-                  key={props.key}                                                
-                  iriChangerFunction={props.iriChangerFunction}
-                  lastState={props.lastState}
-                  domStateKeeper={props.domStateKeeper}                  
+                  key={props.key}                                                                  
+                  lastState={props.lastState}                                
                   handleNodeSelectionInDataTree={handleTreeNodeSelection}
                   individualViewChanger={""}
                   handleResetTreeInParent={handleResetTreeEvent}
