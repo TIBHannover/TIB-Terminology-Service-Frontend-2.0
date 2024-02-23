@@ -65,10 +65,10 @@ const DataTree = (props) => {
       setSelectedNodeIri(iriInUrl);
       setShowDetailTable(true);
     }
-    else if(props.iri && props.iri !== ""){
-      setSelectedNodeIri(props.iri);
+    else if(ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== ""){
+      setSelectedNodeIri(ontologyPageContext.lastVisitedIri[props.componentIdentity]);
       setShowDetailTable(true);
-      targetQueryParams.set("iri", props.iri);
+      targetQueryParams.set("iri", ontologyPageContext.lastVisitedIri[props.componentIdentity]);
       history.push(window.location.pathname + "?" +  targetQueryParams.toString());
     }
     
@@ -104,8 +104,7 @@ const DataTree = (props) => {
                   rootNodesForSkos={props.rootNodesForSkos}
                   componentIdentity={props.componentIdentity}
                   selectedNodeIri={selectedNodeIri}
-                  key={props.key}                                                                  
-                  lastState={props.lastState}                                
+                  key={props.key}                                                
                   handleNodeSelectionInDataTree={handleTreeNodeSelection}
                   individualViewChanger={""}
                   handleResetTreeInParent={handleResetTreeEvent}

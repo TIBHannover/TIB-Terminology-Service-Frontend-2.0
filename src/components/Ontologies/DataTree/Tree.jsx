@@ -17,6 +17,7 @@ const Tree = (props) => {
     let targetQueryParams = url.searchParams;
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    const lastState = ontologyPageContext.tabLastStates[props.componentIdentity];
 
     const [treeDomContent, setTreeDomContent] = useState('');     
     const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
@@ -30,7 +31,7 @@ const Tree = (props) => {
     const [noNodeExist, setNoNodeExist] = useState(false);    
     const [obsoletesShown, setObsoletesShown] = useState(Toolkit.getObsoleteFlagValue());
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler)); 
-    const [firstTimeLoad, setFirstTimeLoad] = useState(props.lastState ? true : false);    
+    const [firstTimeLoad, setFirstTimeLoad] = useState(lastState ? true : false);    
 
     const history = useHistory();        
 
@@ -86,7 +87,7 @@ const Tree = (props) => {
         let selectedItemId = "";
         let showNodeDetailPage = false;       
         
-        if(firstTimeLoad && props.lastState && props.lastState.html && !props.isIndividual){            
+        if(firstTimeLoad && lastState && lastState.html && !props.isIndividual){            
             loadTheTreeLastState();            
             return true;
         }                
@@ -155,8 +156,8 @@ const Tree = (props) => {
 
 
     function loadTheTreeLastState(){          
-        let lastStates =  JSON.parse(props.lastState.states);            
-        setTreeDomContent(props.lastState.html);
+        let lastStates =  JSON.parse(lastState.states);            
+        setTreeDomContent(lastState.html);
         setChildExtractName(lastStates.childExtractName);        
         setSiblingsVisible(lastStates.siblingsVisible);
         setSiblingsButtonShow(lastStates.siblingsButtonShow);
@@ -165,12 +166,12 @@ const Tree = (props) => {
         setIsLoading(false);
         setNoNodeExist(lastStates.noNodeExist);        
         setFirstTimeLoad(false);
-        if(props.lastState.lastIri){
+        if(lastState.lastIri){
             let url = new URLSearchParams();        
-            url.append('iri', props.lastState.lastIri);            
+            url.append('iri', lastState.lastIri);            
             history.push(window.location.pathname + "?" + url.toString())            
-            ontologyPageContext.storeIriForComponent(props.lastState.lastIri, props.componentIdentity);
-            props.handleNodeSelectionInDataTree(props.lastState.lastIri, true);
+            ontologyPageContext.storeIriForComponent(lastState.lastIri, props.componentIdentity);
+            props.handleNodeSelectionInDataTree(lastState.lastIri, true);
             return true;
         }
         props.handleNodeSelectionInDataTree("", false);        

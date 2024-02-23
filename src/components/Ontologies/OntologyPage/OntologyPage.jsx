@@ -171,7 +171,9 @@ const OntologyPage = (props) => {
       ontology:ontology, 
       isSkos:isSkosOntology, 
       storeIriForComponent:storeIriForComponent,
-      storeState: tabsStateKeeper
+      storeState: tabsStateKeeper,
+      tabLastStates: lastTabsStates,
+      lastVisitedIri: lastIrisHistory
     };
     return (        
       <div className='justify-content-center ontology-page-container'>          
@@ -191,49 +193,36 @@ const OntologyPage = (props) => {
                   {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
                                   <DataTree
                                     rootNodes={rootTerms}
-                                    obsoleteTerms={obsoleteTerms}
-                                    rootNodesForSkos={skosRootIndividuals}
-                                    componentIdentity={'terms'}
-                                    iri={lastIrisHistory['terms']}
-                                    key={'termTreePage'}                                                                                                                    
-                                    lastState={lastTabsStates['terms']}                                                                
-                                    isIndividuals={false}
+                                    obsoleteTerms={obsoleteTerms}                                    
+                                    componentIdentity={'terms'}                                    
+                                    key={'termTreePage'}                                                                      
                                   />
                   }
 
                   {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
                                   <DataTree
                                     rootNodes={rootProps}
-                                    obsoleteTerms={obsoleteProps}
-                                    rootNodesForSkos={[]}
-                                    componentIdentity={'properties'}
-                                    iri={lastIrisHistory['properties']}
-                                    key={'propertyTreePage'}                                    
-                                    lastState={lastTabsStates['properties']}                                    
-                                    isIndividuals={false}
+                                    obsoleteTerms={obsoleteProps}                                    
+                                    componentIdentity={'properties'}                                    
+                                    key={'propertyTreePage'}                                                                
                                   />
                   }
                   {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
                                   <IndividualsList
                                     rootNodes={rootTerms}
-                                    rootNodesForSkos={skosRootIndividuals}                                                    
-                                    iri={lastIrisHistory['individuals']}
+                                    rootNodesForSkos={skosRootIndividuals}                                    
                                     componentIdentity={'individuals'}
-                                    key={'individualsTreePage'}                                    
-                                    lastState={""}                                                                                                                                 
+                                    key={'individualsTreePage'}                                                                                                                                                           
                                   />
                   }
                   {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-                                  <TermList                              
-                                    iri={lastIrisHistory['termList']}
+                                  <TermList                                    
                                     componentIdentity={'termList'}
                                     key={'termListPage'}                                                                                             
                                   />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&
-                                  <NoteList                                
-                                    key={'notesPage'}                                                                                                  
-                                  />
+                                  <NoteList key={'notesPage'}/>
                   }                                      
                   {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            
                                   <IssueList                                                           

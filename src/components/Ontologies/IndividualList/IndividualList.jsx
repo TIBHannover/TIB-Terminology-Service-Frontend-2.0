@@ -15,6 +15,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 const IndividualsList = (props) => {
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    const lastVisitedIri = ontologyPageContext.lastVisitedIri[props.componentIdentity];
 
     const [individuals, setIndividuals] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);    
@@ -35,13 +36,13 @@ const IndividualsList = (props) => {
             indvList = indvList["results"];                
             setIsLoaded(true);
             setIndividuals(sortIndividuals(indvList));                                          
-            if(props.iri && props.iri !== " " && typeof(props.iri) !== "undefined"){
-                let newUrl = Toolkit.setParamInUrl('iri', props.iri)                
+            if(lastVisitedIri && lastVisitedIri !== " " && typeof(lastVisitedIri) !== "undefined"){
+                let newUrl = Toolkit.setParamInUrl('iri', lastVisitedIri)                
                 history.push(newUrl);
-                setSelectedNodeIri(props.iri);
+                setSelectedNodeIri(lastVisitedIri);
                 setJumpToOnload(true);    
-                setJumpToIri(props.iri);           
-                ontologyPageContext.storeIriForComponent(props.iri, props.componentIdentity);              
+                setJumpToIri(lastVisitedIri);           
+                ontologyPageContext.storeIriForComponent(lastVisitedIri, props.componentIdentity);              
             }            
         }
         catch(error){
