@@ -21,7 +21,7 @@ const GRAPH_TAB_ID = 2;
 
 const TermDetail = (props) => {
 
-  const currentContext = useContext(OntologyPageContext);
+  const ontologyPageContext = useContext(OntologyPageContext);
   
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
@@ -32,20 +32,20 @@ const TermDetail = (props) => {
 
   async function fetchTheTargetTerm(){
       let term = null
-      if(props.isSkos && props.componentIdentity === "individual"){
-        let skosApi = new SkosApi({ontologyId:currentContext.ontology.ontologyId, iri:props.iri})
+      if(ontologyPageContext.isSkos && props.componentIdentity === "individual"){
+        let skosApi = new SkosApi({ontologyId:ontologyPageContext.ontology.ontologyId, iri:props.iri})
         await skosApi.fetchSkosTerm();
         term = skosApi.skosTerm;      
       }
       else{
-        let termApi = new TermApi(currentContext.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);
+        let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);
         await termApi.fetchTerm();      
         term = termApi.term;
       }
 
       let countOfNotes = 0;
       if(process.env.REACT_APP_NOTE_FEATURE === "true"){
-        countOfNotes = await getNoteList({ontologyId:currentContext.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+        countOfNotes = await getNoteList({ontologyId:ontologyPageContext.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
         countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
       }
 
@@ -103,15 +103,13 @@ const TermDetail = (props) => {
             componentIdentity={props.componentIdentity}
             tabChangeHandler={tabChangeHandler}
             activeTab={activeTab}
-            noteCounts={notesCount}
-            isSkos={props.isSkos}
+            noteCounts={notesCount}            
         />
         {!waiting && (activeTab === DETAIL_TAB_ID) &&
           <TermDetailTable
             iri={props.iri}            
             componentIdentity={props.componentIdentity}
-            extractKey={props.extractKey}
-            isSkos={props.isSkos}
+            extractKey={props.extractKey}            
             isIndividual={false}
             node={targetTerm}
           />
@@ -125,9 +123,9 @@ const TermDetail = (props) => {
         }
         {!waiting && (activeTab === GRAPH_TAB_ID) &&        
           <Graph 
-            ontologyId={currentContext.ontology.ontologyId}
+            ontologyId={ontologyPageContext.ontology.ontologyId}
             termIri={props.iri}
-            isSkos={props.isSkos}
+            isSkos={ontologyPageContext.isSkos}
             componentIdentity={props.componentIdentity}
           />
         }
@@ -141,6 +139,8 @@ const TermDetail = (props) => {
 
 const RenderTermDetailTab = (props) => {
 
+  const ontologyPageContext = useContext(OntologyPageContext);
+
   function  createTabs(){
       let result = [];         
       for(let configItemKey in NodePageTabConfig){
@@ -149,7 +149,7 @@ const RenderTermDetailTab = (props) => {
           if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
             continue;
           }
-          if(configItemKey === "GraphView" && (props.componentIdentity === "props" || (props.componentIdentity === "individuals" && !props.isSkos)) ){
+          if(configItemKey === "GraphView" && (props.componentIdentity === "props" || (props.componentIdentity === "individuals" && !ontologyPageContext.isSkos)) ){
             continue;
           }
                               

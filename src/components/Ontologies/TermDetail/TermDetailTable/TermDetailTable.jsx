@@ -1,20 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {classMetaData, propertyMetaData} from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
+import { OntologyPageContext } from '../../../../context/OntologyPageContext';
 
 
 
 export const TermDetailTable = (props) => {
+
+  const ontologyPageContext = useContext(OntologyPageContext);
 
   const [showDataAsJsonBtnHref, setShowDataAsJsonBtnHref] = useState("");
 
 
   function setComponentData(){ 
     let showDataAsJsonBtnHref = "";
-    if(props.isSkos && props.componentIdentity === "individual"){          
+    if(ontologyPageContext.isSkos && props.componentIdentity === "individual"){          
       showDataAsJsonBtnHref = process.env.REACT_APP_API_BASE_URL + "/" + props.node.ontology_name + "/individuals" + "?iri=" + encodeURIComponent(props.node.iri);
     }
     else{           

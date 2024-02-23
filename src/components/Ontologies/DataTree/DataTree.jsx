@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
@@ -7,10 +7,13 @@ import Tree from './Tree';
 import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 
 
 const DataTree = (props) => {
+
+  const ontologyPageContext = useContext(OntologyPageContext);
 
   const [selectedNodeIri, setSelectedNodeIri] = useState('');
   const [showDetailTable, setShowDetailTable] = useState(false);
@@ -87,7 +90,6 @@ const DataTree = (props) => {
           <div className='col-sm-10'>
               <JumpTo
                 targetType={props.componentIdentity}                
-                isSkos={props.isSkos} 
                 label={"Jump to"}
                 handleJumtoSelection={handleJumtoSelection}
                 obsoletes={false}
@@ -95,7 +97,7 @@ const DataTree = (props) => {
           </div>
         </div>          
         <div className='tree-container'>
-              {(props.rootNodes.length !== 0 || (props.isSkos && props.rootNodesForSkos.length !== 0)) ?
+              {(props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0)) ?
                 <Tree
                   rootNodes={props.rootNodes}
                   obsoleteTerms={props.obsoleteTerms}                               
@@ -105,8 +107,7 @@ const DataTree = (props) => {
                   key={props.key}                                                
                   iriChangerFunction={props.iriChangerFunction}
                   lastState={props.lastState}
-                  domStateKeeper={props.domStateKeeper}
-                  isSkos={props.isSkos}
+                  domStateKeeper={props.domStateKeeper}                  
                   handleNodeSelectionInDataTree={handleTreeNodeSelection}
                   individualViewChanger={""}
                   handleResetTreeInParent={handleResetTreeEvent}
@@ -124,8 +125,7 @@ const DataTree = (props) => {
               <TermDetail
                 iri={selectedNodeIri}                
                 componentIdentity="terms"
-                extractKey="terms"
-                isSkos={props.isSkos}
+                extractKey="terms"                
                 isIndividual={false}
                 typeForNote="class"
               />

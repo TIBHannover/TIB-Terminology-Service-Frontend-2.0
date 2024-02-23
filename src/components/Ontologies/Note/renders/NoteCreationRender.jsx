@@ -10,7 +10,7 @@ import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 
 export const NoteCreationRender = (props) => {
     
-    const currentContext = useContext(OntologyPageContext); 
+    const ontologyPageContext = useContext(OntologyPageContext); 
     
     useEffect(() => {
         if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
@@ -95,13 +95,12 @@ export const NoteCreationRender = (props) => {
                             <div className="row">
                                 <div className="col-sm-8">
                                     {parseInt(props.targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID &&
-                                        <p>About: <b>{currentContext.ontology.ontologyId}</b></p>
+                                        <p>About: <b>{ontologyPageContext.ontology.ontologyId}</b></p>
                                     }
                                     {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <div>                                           
                                             <JumpTo
                                                 targetType={props.componentIdentity}                                                
-                                                isSkos={false} 
                                                 label={"About *"}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}

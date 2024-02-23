@@ -14,7 +14,7 @@ const NoteCreation = (props) => {
     targetType = targetType !== -1 ? targetType : 1;
     let selectedTerm = props.term ? {"iri": props.term['iri'], "label": props.term['label']} : {"iri": null, "label": null};
 
-    const currentContext = useContext(OntologyPageContext);    
+    const ontologyPageContext = useContext(OntologyPageContext);    
 
     const [targetArtifactType, setTargetArtifactType] = useState(targetType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
@@ -97,7 +97,7 @@ const NoteCreation = (props) => {
         }
 
         if(parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID){
-            selectedTargetTermIri = currentContext.ontology.ontologyId;
+            selectedTargetTermIri = ontologyPageContext.ontology.ontologyId;
         }
 
         
@@ -113,7 +113,7 @@ const NoteCreation = (props) => {
         data.append("title", noteTitle);
         data.append("semantic_component_iri", selectedTargetTermIri);
         data.append("content", noteContent);
-        data.append("ontology_id", currentContext.ontology.ontologyId);        
+        data.append("ontology_id", ontologyPageContext.ontology.ontologyId);        
         data.append("semantic_component_type", targetType);
         data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
         if(publishToParent && parentOntology){
@@ -129,7 +129,7 @@ const NoteCreation = (props) => {
     async function handleJumtoSelection(selectedTerm){ 
         if(selectedTerm){
             document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '';
-            let termApi = new TermApi(currentContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
             let parentOnto = await termApi.getClassOriginalOntology();
             setSelectedTermFromAutoComplete(selectedTerm);
             setParentOntology(parentOnto);
@@ -144,7 +144,7 @@ const NoteCreation = (props) => {
 
     useEffect(async() => {
         if(props.term){
-            let termApi = new TermApi(currentContext.ontology.ontologyId, props.term['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, props.term['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
             let parentOnto = await termApi.getClassOriginalOntology();            
             setParentOntology(parentOnto);
         }           

@@ -4,8 +4,8 @@ import { useContext } from "react"
 
 
 const OntologyStatsBox = () => {
-  const currentContext = useContext(OntologyPageContext);
-  const ontology = currentContext.ontology;
+  const ontologyPageContext = useContext(OntologyPageContext);
+  const ontology = ontologyPageContext.ontology;
 
   if (!ontology || ontology === null) {
     return ""

@@ -8,7 +8,7 @@ import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 const OntologyOverview = () => {
 
-  const currentContext = useContext(OntologyPageContext);
+  const ontologyPageContext = useContext(OntologyPageContext);
 
 
   return(
@@ -22,7 +22,7 @@ const OntologyOverview = () => {
           <div className='row'>
               <div className='col-sm-12 node-metadata-value'>
                 <a 
-                  href={process.env.REACT_APP_API_BASE_URL + "/" + currentContext.ontology.ontologyId} 
+                  href={process.env.REACT_APP_API_BASE_URL + "/" + ontologyPageContext.ontology.ontologyId} 
                   target='_blank' 
                   rel="noreferrer"
                   className='btn btn-secondary btn-dark download-ontology-btn'

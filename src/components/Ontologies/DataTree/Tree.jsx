@@ -16,7 +16,7 @@ const Tree = (props) => {
     let url = new URL(window.location);
     let targetQueryParams = url.searchParams;
 
-    const currentContext = useContext(OntologyPageContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [treeDomContent, setTreeDomContent] = useState('');     
     const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
@@ -92,7 +92,7 @@ const Tree = (props) => {
         }                
         if (!target || resetTreeFlag){
             let result = [];
-            if(props.isSkos && props.componentIdentity === "individuals"){                
+            if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){                
                 result = buildTheTreeFirstLayer(props.rootNodesForSkos);
             }
             else{                
@@ -104,12 +104,12 @@ const Tree = (props) => {
         }                    
         else if(target != undefined || reload){            
             showNodeDetailPage = true;                             
-            if(props.isSkos && props.componentIdentity === "individuals"){                                
-                treeList = await SkosHelper.buildSkosTree(currentContext.ontology.ontologyId, target, treeFullView);                                              
+            if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){                                
+                treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView);                                              
             }
             else{                
-                targetHasChildren = await TreeHelper.nodeHasChildren(currentContext.ontology.ontologyId, target, props.componentIdentity);
-                let termApi = new TermApi(currentContext.ontology.ontologyId, target, childExtractName);                                
+                targetHasChildren = await TreeHelper.nodeHasChildren(ontologyPageContext.ontology.ontologyId, target, props.componentIdentity);
+                let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName);                                
                 listOfNodes =  await termApi.getNodeJsTree(treeFullView);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
                 if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
@@ -227,25 +227,25 @@ const Tree = (props) => {
         try{    
             let targetNodes = document.getElementsByClassName("targetNodeByIri");        
             if(!siblingsVisible){
-                if(props.isSkos && props.componentIdentity === "individuals"){
-                    SkosHelper.showHidesiblingsForSkos(true, currentContext.ontology.ontologyId, props.selectedNodeIri);
+                if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
+                    SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
                 }
-                else if(!props.isSkos && await TreeHelper.nodeIsRoot(currentContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
+                else if(!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
                     // Target node is a root node            
-                    let termApi = new TermApi(currentContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);  
+                    let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);  
                     let res = await termApi.getNodeJsTree('true');
                     TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
                 }
                 else{
-                    await TreeHelper.showSiblings(targetNodes, currentContext.ontology.ontologyId, childExtractName);
+                    await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
                 }                                
             }
             else{
-                if(props.isSkos && props.componentIdentity === "individuals"){
-                    SkosHelper.showHidesiblingsForSkos(false, currentContext.ontology.ontologyId, props.selectedNodeIri);
+                if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
+                    SkosHelper.showHidesiblingsForSkos(false, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
                 } 
         
-                if(!props.isSkos && await TreeHelper.nodeIsRoot(currentContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
+                if(!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
                     // Target node is a root node
                     TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
                 }
@@ -336,7 +336,7 @@ const Tree = (props) => {
 
 
     async function expandNodeHandler(node){        
-        await TreeHelper.expandNode(node, currentContext.ontology.ontologyId, childExtractName, props.isSkos);
+        await TreeHelper.expandNode(node, ontologyPageContext.ontology.ontologyId, childExtractName, ontologyPageContext.isSkos);
         saveComponentStateInParent(); 
     }
 
@@ -410,7 +410,7 @@ const Tree = (props) => {
         setComponentData();     
         buildTheTree();   
         // saveComponentStateInParent();              
-        if(props.isSkos && props.componentIdentity === "individuals"){
+        if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
         }    
         document.addEventListener("keydown", handleKeyDown, false);          

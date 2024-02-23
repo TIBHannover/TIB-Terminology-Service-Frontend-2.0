@@ -12,7 +12,7 @@ const TYPE_MAPP = {"terms": "class", "properties": "property", "individuals": "i
 
 const JumpTo = (props) => {
 
-    const currentContext = useContext(OntologyPageContext);    
+    const ontologyPageContext = useContext(OntologyPageContext);    
 
     const [enteredTerm, setEnteredTerm] = useState(props.initialInput ? props.initialInput : "");
     const [resultList, setResultList] = useState([]);
@@ -47,7 +47,7 @@ const JumpTo = (props) => {
         if (enteredTerm.length > 0){
             let inputForAutoComplete = {};    
             inputForAutoComplete['searchQuery'] = value;
-            inputForAutoComplete['ontologyIds'] = currentContext.ontology.ontologyId;
+            inputForAutoComplete['ontologyIds'] = ontologyPageContext.ontology.ontologyId;
             inputForAutoComplete['types'] = type;
             inputForAutoComplete['obsoletes'] = props.obsoletes;
             let autoCompleteResult = await getJumpToResult(inputForAutoComplete);

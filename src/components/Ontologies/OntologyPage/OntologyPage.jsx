@@ -170,7 +170,7 @@ const OntologyPage = (props) => {
     return (        
       <div className='justify-content-center ontology-page-container'>          
             {Toolkit.createHelmet(ontology.ontologyId)}
-            <OntologyPageContext.Provider  value={{ontology:ontology}}>
+            <OntologyPageContext.Provider  value={{ontology:ontology, isSkos:isSkosOntology}}>
               <OntologyPageHeadSection />          
               <div className='col-sm-12'>                  
                   <OntologyPageTabs 
@@ -192,8 +192,7 @@ const OntologyPage = (props) => {
                                     key={'termTreePage'}                                                                                
                                     iriChangerFunction={changeInputIri}
                                     lastState={lastTabsStates['terms']}
-                                    domStateKeeper={tabsStateKeeper}
-                                    isSkos={isSkosOntology}
+                                    domStateKeeper={tabsStateKeeper}                                    
                                     isIndividuals={false}
                                   />
                   }
@@ -221,8 +220,7 @@ const OntologyPage = (props) => {
                                     key={'individualsTreePage'}                                                              
                                     iriChangerFunction={changeInputIri}
                                     lastState={""}
-                                    domStateKeeper={tabsStateKeeper}
-                                    isSkos={isSkosOntology}                                                               
+                                    domStateKeeper={tabsStateKeeper}                                                                                                
                                   />
                   }
                   {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
@@ -230,8 +228,7 @@ const OntologyPage = (props) => {
                                     iri={lastIrisHistory['termList']}
                                     componentIdentity={'termList'}
                                     key={'termListPage'}                                                      
-                                    iriChangerFunction={changeInputIri}                              
-                                    isSkos={isSkosOntology}                              
+                                    iriChangerFunction={changeInputIri}                                                               
                                   />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&

@@ -14,7 +14,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 const IndividualsList = (props) => {
 
-    const currentContext = useContext(OntologyPageContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [individuals, setIndividuals] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);    
@@ -30,7 +30,7 @@ const IndividualsList = (props) => {
     
     async function setComponentData(){           
         try{                           
-            let termApi = new TermApi(currentContext.ontology.ontologyId, null, props.componentIdentity);
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, null, props.componentIdentity);
             let indvList = await termApi.fetchListOfTerms(0, 10000);   
             indvList = indvList["results"];                
             setIsLoaded(true);
@@ -53,7 +53,7 @@ const IndividualsList = (props) => {
 
 
     function selectNodeOnLoad(){
-        if(props.isSkos && !listView){
+        if(ontologyPageContext.isSkos && !listView){
             return true;
         }                
         let node = document.getElementById(selectedNodeIri);
@@ -68,7 +68,7 @@ const IndividualsList = (props) => {
 
 
     function selectNode(target){ 
-        if(props.isSkos && !listView){
+        if(ontologyPageContext.isSkos && !listView){
             return true;
         }        
         let selectedElement = document.querySelectorAll(".clicked");
@@ -91,7 +91,7 @@ const IndividualsList = (props) => {
 
 
     function processClick(e){        
-        if(props.isSkos && !listView){            
+        if(ontologyPageContext.isSkos && !listView){            
             return true;
         } 
         if(!listView){
@@ -110,7 +110,7 @@ const IndividualsList = (props) => {
 
 
     function handleNodeSelectionInTreeView(selectedNodeIri, showDetailTable){
-        if(props.isSkos){
+        if(ontologyPageContext.isSkos){
             setSelectedNodeIri(selectedNodeIri);
             setShowNodeDetailPage(showDetailTable);            
         }
@@ -153,13 +153,12 @@ const IndividualsList = (props) => {
                     componentIdentity={props.componentIdentity}
                     selectedNodeIri={selectedNodeIri}
                     key={props.key}                    
-                    rootNodeNotExist={props.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
+                    rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
                     iriChangerFunction={props.iriChangerFunction}
                     lastState={props.lastState}
-                    domStateKeeper={props.domStateKeeper}
-                    isSkos={props.isSkos}
+                    domStateKeeper={props.domStateKeeper}                    
                     handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
-                    isIndividual={props.isSkos ? false : true}
+                    isIndividual={ontologyPageContext.isSkos ? false : true}
                     showListSwitchEnabled={true}
                     individualViewChanger={switchView}     
                     handleResetTreeInParent={handleResetTreeEvent}
@@ -214,8 +213,8 @@ const IndividualsList = (props) => {
 
 
     useEffect(() => {                                     
-        setListView(props.isSkos ? false : true);
-    }, [props.isSkos]);
+        setListView(ontologyPageContext.isSkos ? false : true);
+    }, [ontologyPageContext.isSkos]);
 
 
 
@@ -226,7 +225,6 @@ const IndividualsList = (props) => {
                     <div className='col-sm-10'>
                         <JumpTo
                             targetType={props.componentIdentity}                            
-                            isSkos={props.isSkos} 
                             label={"Jump to"}
                             handleJumtoSelection={handleJumtoSelection}
                             obsoletes={false}
@@ -250,8 +248,7 @@ const IndividualsList = (props) => {
                     <TermDetail
                         iri={selectedNodeIri}                        
                         componentIdentity="individuals"
-                        extractKey="individuals"
-                        isSkos={props.isSkos}
+                        extractKey="individuals"                        
                         isIndividual={true}
                         typeForNote="individual"
                     />                    

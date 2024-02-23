@@ -21,7 +21,7 @@ const TermList = (props) => {
     let internalSize =  Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
     sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);    
     
-    const currentContext = useContext(OntologyPageContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
     const [pageSize, setPageSize] = useState(sizeInUrl);
@@ -35,7 +35,7 @@ const TermList = (props) => {
 
 
     async function loadComponent(){                        
-        let ontologyId = currentContext.ontology.ontologyId;
+        let ontologyId = ontologyPageContext.ontology.ontologyId;
         let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };         
         let termApi = new TermApi(ontologyId, iri, mode);
         if(!iri && !obsoletes){            
@@ -159,8 +159,7 @@ const TermList = (props) => {
 
 
     return (
-        <RenderTermList             
-            isSkos={props.isSkos}
+        <RenderTermList                         
             componentIdentity={props.componentIdentity}
             iri={iri}
             pageSize={pageSize}

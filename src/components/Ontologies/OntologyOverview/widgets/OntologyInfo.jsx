@@ -8,8 +8,8 @@ import OntologyLib from '../../../../Libs/OntologyLib';
 
 const OntologyInfoTable = () => {
 
-  const currentContext = useContext(OntologyPageContext); 
-  const ontology = currentContext.ontology;
+  const ontologyPageContext = useContext(OntologyPageContext); 
+  const ontology = ontologyPageContext.ontology;
 
   const [showExtraAnotation, setShowExtraAnotation] = useState(false);
   const [showExtraAnotationBtnText, setShowExtraAnotationBtnText] = useState("+ Show more information");

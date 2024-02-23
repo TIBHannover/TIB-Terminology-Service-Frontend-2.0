@@ -31,7 +31,7 @@ const NoteList = (props) => {
     inputNoteIdFromUrl = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
 
 
-    const currentContext = useContext(OntologyPageContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [noteList, setNoteList] = useState([]);
     const [showNoteDetailPage, setShowNoteDetailPage] = useState(false);
@@ -65,7 +65,7 @@ const NoteList = (props) => {
 
 
     function loadNoteList(){             
-        let ontologyId = currentContext.ontology.ontologyId;
+        let ontologyId = ontologyPageContext.ontology.ontologyId;
         let type = TYPES_VALUES[selectedArtifactType];
                         
         if(type === TYPES_VALUES[ALL_TYPE]){
@@ -90,7 +90,7 @@ const NoteList = (props) => {
         let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
-        formData.append("ontologyId", currentContext.ontology.ontologyId);
+        formData.append("ontologyId", ontologyPageContext.ontology.ontologyId);
         let postConfig = {method: 'POST',  headers:callHeaders, body: formData};        
         try{
             let result = await fetch(url, postConfig);

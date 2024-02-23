@@ -10,7 +10,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 const NoteDetail = (props) => {
 
-    const currentContext = useContext(OntologyPageContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [note, setNote] = useState({});
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
@@ -23,7 +23,7 @@ const NoteDetail = (props) => {
 
     function getTheNote(){
         let noteId = props.noteId;        
-        getNoteDetail({noteId: noteId, ontologyId:currentContext.ontology.ontologyId}).then((result) => {
+        getNoteDetail({noteId: noteId, ontologyId:ontologyPageContext.ontology.ontologyId}).then((result) => {
             if(result === '404'){
                 setNoteNotFound(true);                
             }            
