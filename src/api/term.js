@@ -281,7 +281,7 @@ class TermApi{
           return {"results": result[this.termType], "totalTermsCount":totalTermsCount };
         }
         catch(e){
-            throw(e)
+            // throw(e)
             return [];
         }      
     }
