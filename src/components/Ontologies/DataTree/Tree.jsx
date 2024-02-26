@@ -131,7 +131,7 @@ const Tree = (props) => {
                 let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName);                                
                 listOfNodes =  await termApi.getNodeJsTree(treeFullView);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
-                if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
+                if(Toolkit.getObjectInListIfExist(rootNodesWithChildren, 'iri', target)){                    
                     // the target node is a root node
                     let result = buildTheTreeFirstLayer(rootNodesWithChildren, target);
                     treeList = result.treeDomContent;
