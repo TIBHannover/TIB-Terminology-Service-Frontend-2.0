@@ -46,7 +46,7 @@ const TermDetail = (props) => {
 
       let countOfNotes = 0;
       if(process.env.REACT_APP_NOTE_FEATURE === "true"){
-        let countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:term, onlyOntologyOriginalNotes:false});
+        countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:term, onlyOntologyOriginalNotes:false});
         countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
       }
 
