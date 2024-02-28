@@ -126,8 +126,7 @@ export const NoteListRender = (props) => {
                                 <div className="col-sm-2">
                                     <NoteCreation                                         
                                         targetArtifactType={props.targetArtifactType}  
-                                        term={props.term}                                      
-                                        ontologyId={props.ontologyId}                                
+                                        term={props.term}                                                                                                         
                                         noteListSubmitStatusHandler={props.setNoteCreationResultStatus}                                         
                                         key={"note-creation-btn"}                                                                                         
                                     />
@@ -158,8 +157,7 @@ export const NoteListRender = (props) => {
                         </div>
                         <br></br>
                         <NoteDetail 
-                            noteId={props.selectedNoteId} 
-                            ontologyId={props.ontologyId} 
+                            noteId={props.selectedNoteId}                             
                             isAdminForOntology={props.isAdminForOntology}    
                             numberOfpinned={props.numberOfpinned}
                         />

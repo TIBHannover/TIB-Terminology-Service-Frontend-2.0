@@ -1,9 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import { useHistory } from "react-router";
 import {getObsoleteTermsForTermList} from '../../../api/fetchData';
 import TermApi from "../../../api/term";
 import Toolkit from "../../../Libs/Toolkit";
 import { RenderTermList } from "./RenderTermList";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
@@ -18,7 +19,9 @@ const TermList = (props) => {
     let iriInUrl = url.searchParams.get('iri');                
     pageNumberInUrl = !pageNumberInUrl ? DEFAULT_PAGE_NUMBER : parseInt(pageNumberInUrl);
     let internalSize =  Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
-    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);        
+    sizeInUrl = !sizeInUrl ? internalSize : parseInt(sizeInUrl);    
+    
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
     const [pageSize, setPageSize] = useState(sizeInUrl);
@@ -32,7 +35,7 @@ const TermList = (props) => {
 
 
     async function loadComponent(){                        
-        let ontologyId = props.ontology;
+        let ontologyId = ontologyPageContext.ontology.ontologyId;
         let listOfTermsAndStats = {"results": [], "totalTermsCount":0 };         
         let termApi = new TermApi(ontologyId, iri, mode);
         if(!iri && !obsoletes){            
@@ -156,9 +159,7 @@ const TermList = (props) => {
 
 
     return (
-        <RenderTermList 
-            ontologyId={props.ontology}
-            isSkos={props.isSkos}
+        <RenderTermList                         
             componentIdentity={props.componentIdentity}
             iri={iri}
             pageSize={pageSize}

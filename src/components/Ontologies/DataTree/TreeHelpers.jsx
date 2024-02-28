@@ -1,9 +1,9 @@
 import React from 'react';
-import {getChildrenSkosTree} from '../../../api/fetchData';
+import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import TreeNodeController from './TreeNode';
 import Toolkit from '../../../Libs/Toolkit';
-import SkosHelper from './SkosHelpers';
+import SkosLib from '../../../Libs/Skos';
 
 
 
@@ -70,7 +70,9 @@ export default class TreeHelper{
         // expand node
         let res = [];      
         if(isSkos && childExtractName !== "terms"){
-          res = await getChildrenSkosTree(ontologyId, targetNodeIri);        
+          let skosApi = new SkosApi({ontologyId:ontologyId, iri:targetNodeIri});
+          await skosApi.fetchChildrenForSkosTerm();          
+          res = skosApi.childrenForSkosTerm;        
         }
         else{
           let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName);        
@@ -84,7 +86,7 @@ export default class TreeHelper{
         ul.setAttribute("id", "children_for_" + Id);
         ul.classList.add("tree-node-ul");
         for(let i=0; i < res.length; i++){
-          let node = (isSkos  && childExtractName !== "terms") ? await SkosHelper.shapeSkosMetadata(res[i]) : res[i];        
+          let node = (isSkos  && childExtractName !== "terms") ? SkosLib.shapeSkosMetadata(res[i]) : res[i];                   
           let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
           ul.appendChild(listItem);      
         }

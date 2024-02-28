@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
+import PropTypes from 'prop-types';
 import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import TermApi from "../../../api/term";
@@ -7,13 +8,34 @@ import Toolkit from "../../../Libs/Toolkit";
 import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
 import KeyboardNavigator from "./KeyboardNavigation";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
 
 const Tree = (props) => {    
+    /* 
+        Renders the Tree view. 
+        The component builds tree in this way ( function buildTheTree() )
+            - If Last state exist, do not build the tree and load the last state. Used on Tab change in Ontology Page
+            - If there is No input iri, build the tree first layer using root nodes.
+            - If there is an iri, then loads the subtree and build the tree recursively. 
+        
+        Note that SKOS tree requires different approach compare to classes/properties. The reason the API response format is 
+        different. (for instance Narrower/Broader instead of parent/child)
+
+        The tree supports Keyboard Navigation. Look at: KeyboardNavigation.jsx
+
+        Context:
+            The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
+    */
+
+
     let url = new URL(window.location);
     let targetQueryParams = url.searchParams;
+
+    const ontologyPageContext = useContext(OntologyPageContext);
+    const lastState = ontologyPageContext.tabLastStates[props.componentIdentity];
 
     const [treeDomContent, setTreeDomContent] = useState('');     
     const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
@@ -27,7 +49,7 @@ const Tree = (props) => {
     const [noNodeExist, setNoNodeExist] = useState(false);    
     const [obsoletesShown, setObsoletesShown] = useState(Toolkit.getObsoleteFlagValue());
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler)); 
-    const [firstTimeLoad, setFirstTimeLoad] = useState(props.lastState ? true : false);    
+    const [firstTimeLoad, setFirstTimeLoad] = useState(lastState ? true : false);    
 
     const history = useHistory();        
 
@@ -48,7 +70,7 @@ const Tree = (props) => {
 
         const componentHTML = document.getElementById('tree-root-ul')?.innerHTML;        
         if(props.componentIdentity !== "individuals" && componentHTML){           
-            props.domStateKeeper({"_html_":componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
+            ontologyPageContext.storeState({"_html_":componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
         }        
         return true;
     }
@@ -83,13 +105,13 @@ const Tree = (props) => {
         let selectedItemId = "";
         let showNodeDetailPage = false;       
         
-        if(firstTimeLoad && props.lastState && props.lastState.html && !props.isIndividual){            
+        if(firstTimeLoad && lastState && lastState.html && !props.isIndividual){            
             loadTheTreeLastState();            
             return true;
         }                
         if (!target || resetTreeFlag){
             let result = [];
-            if(props.isSkos && props.componentIdentity === "individuals"){
+            if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){                
                 result = buildTheTreeFirstLayer(props.rootNodesForSkos);
             }
             else{                
@@ -101,12 +123,12 @@ const Tree = (props) => {
         }                    
         else if(target != undefined || reload){            
             showNodeDetailPage = true;                             
-            if(props.isSkos && props.componentIdentity === "individuals"){                                
-                treeList = await SkosHelper.buildSkosTree(props.ontologyId, target, treeFullView);                                              
+            if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){                                
+                treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView);                                              
             }
             else{                
-                targetHasChildren = await TreeHelper.nodeHasChildren(props.ontologyId, target, props.componentIdentity);
-                let termApi = new TermApi(props.ontologyId, target, childExtractName);                                
+                targetHasChildren = await TreeHelper.nodeHasChildren(ontologyPageContext.ontology.ontologyId, target, props.componentIdentity);
+                let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName);                                
                 listOfNodes =  await termApi.getNodeJsTree(treeFullView);
                 rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');                           
                 if(Toolkit.objectExistInList(rootNodesWithChildren, 'iri', target)){                    
@@ -129,7 +151,7 @@ const Tree = (props) => {
                         let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
                         childrenList.push(node);
                     }
-
+                    
                     if(obsoletesShown){            
                         [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
                      }
@@ -144,7 +166,7 @@ const Tree = (props) => {
         setReload(false);              
         setSiblingsVisible(siblingsVisible);                      
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);        
-        props.iriChangerFunction(target, props.componentIdentity);         
+        ontologyPageContext.storeIriForComponent(target, props.componentIdentity);         
     }
 
 
@@ -152,8 +174,8 @@ const Tree = (props) => {
 
 
     function loadTheTreeLastState(){          
-        let lastStates =  JSON.parse(props.lastState.states);            
-        setTreeDomContent(props.lastState.html);
+        let lastStates =  JSON.parse(lastState.states);            
+        setTreeDomContent(lastState.html);
         setChildExtractName(lastStates.childExtractName);        
         setSiblingsVisible(lastStates.siblingsVisible);
         setSiblingsButtonShow(lastStates.siblingsButtonShow);
@@ -162,12 +184,12 @@ const Tree = (props) => {
         setIsLoading(false);
         setNoNodeExist(lastStates.noNodeExist);        
         setFirstTimeLoad(false);
-        if(props.lastState.lastIri){
+        if(lastState.lastIri){
             let url = new URLSearchParams();        
-            url.append('iri', props.lastState.lastIri);            
+            url.append('iri', lastState.lastIri);            
             history.push(window.location.pathname + "?" + url.toString())            
-            props.iriChangerFunction(props.lastState.lastIri, props.componentIdentity);
-            props.handleNodeSelectionInDataTree(props.lastState.lastIri, true);
+            ontologyPageContext.storeIriForComponent(lastState.lastIri, props.componentIdentity);
+            props.handleNodeSelectionInDataTree(lastState.lastIri, true);
             return true;
         }
         props.handleNodeSelectionInDataTree("", false);        
@@ -177,7 +199,7 @@ const Tree = (props) => {
 
     function buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri=false){        
         let childrenList = [];
-        let selectedItemId = 0;
+        let selectedItemId = 0;        
         let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
         if(sortKey){
             rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
@@ -191,8 +213,7 @@ const Tree = (props) => {
             }  
             let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
             childrenList.push(node);
-        }
-        
+        }        
         if(obsoletesShown){            
            [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
         }
@@ -225,25 +246,25 @@ const Tree = (props) => {
         try{    
             let targetNodes = document.getElementsByClassName("targetNodeByIri");        
             if(!siblingsVisible){
-                if(props.isSkos && props.componentIdentity === "individuals"){
-                    SkosHelper.showHidesiblingsForSkos(true, props.ontologyId, props.selectedNodeIri);
+                if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
+                    SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
                 }
-                else if(!props.isSkos && await TreeHelper.nodeIsRoot(props.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
+                else if(!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
                     // Target node is a root node            
-                    let termApi = new TermApi(props.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);  
+                    let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);  
                     let res = await termApi.getNodeJsTree('true');
                     TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
                 }
                 else{
-                    await TreeHelper.showSiblings(targetNodes, props.ontologyId, childExtractName);
+                    await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
                 }                                
             }
             else{
-                if(props.isSkos && props.componentIdentity === "individuals"){
-                    SkosHelper.showHidesiblingsForSkos(false, props.ontologyId, props.selectedNodeIri);
+                if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
+                    SkosHelper.showHidesiblingsForSkos(false, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
                 } 
         
-                if(!props.isSkos && await TreeHelper.nodeIsRoot(props.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
+                if(!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
                     // Target node is a root node
                     TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
                 }
@@ -273,7 +294,7 @@ const Tree = (props) => {
 
 
     function showObsoletes(){                      
-        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);        
+        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);                
         history.push(newUrl);
         setReload(true);
         setIsLoading(true);
@@ -327,14 +348,14 @@ const Tree = (props) => {
             searchParams.set('iri', clickedNodeIri);               
             searchParams.delete('noteId');        
             history.push(locationObject.pathname + "?" +  searchParams.toString());
-            props.iriChangerFunction(clickedNodeIri, props.componentIdentity);            
+            ontologyPageContext.storeIriForComponent(clickedNodeIri, props.componentIdentity);            
         }    
     }
 
 
 
     async function expandNodeHandler(node){        
-        await TreeHelper.expandNode(node, props.ontologyId, childExtractName, props.isSkos);
+        await TreeHelper.expandNode(node, ontologyPageContext.ontology.ontologyId, childExtractName, ontologyPageContext.isSkos);
         saveComponentStateInParent(); 
     }
 
@@ -347,6 +368,7 @@ const Tree = (props) => {
                     <div className='row tree-action-btn-holder'>                                
                         <div className="col-sm-12">
                             {props.showListSwitchEnabled &&
+                                // Used for individuals
                                 <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
                                     Show In List
                                 </button>
@@ -406,8 +428,9 @@ const Tree = (props) => {
 
     useEffect(() => {       
         setComponentData();     
+        buildTheTree();   
         // saveComponentStateInParent();              
-        if(props.isSkos && props.componentIdentity === "individuals"){
+        if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
         }    
         document.addEventListener("keydown", handleKeyDown, false);          
@@ -423,15 +446,15 @@ const Tree = (props) => {
     }, []);
 
 
-    useEffect(() => {
-        setComponentData();        
-        buildTheTree();        
+    useEffect(() => {        
+        // setComponentData();        
+        buildTheTree();  
         setTimeout(() => {
             setIsLoading(false);  
             saveComponentStateInParent();
         }, 2000);                                
                
-    }, [props.rootNodes,  resetTreeFlag, reload]);
+    }, [resetTreeFlag, reload]);
 
 
     useEffect(() => {        
@@ -452,20 +475,36 @@ const Tree = (props) => {
 
     return(
         <div className="col-sm-12" onClick={(e) => processClick(e)}>
-                {isLoading && <div className="isLoading"></div>}
-                {noNodeExist && <div className="no-node">It is currently not possible to load this tree. Please try later.</div>}
+                {isLoading && <div className="isLoading"></div>}                
                 {!isLoading && !noNodeExist && createTreeActionButtons()}                
                 {!isLoading && !noNodeExist && 
-                    <div className='row'>
+                    <div className='row'>                    
                         {!treeDomContent._html_ 
                         ? <div className='col-sm-12 tree'>{treeDomContent}</div> 
                         : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: treeDomContent._html_}}></div>
                         }                                                    
                     </div>
 
-                }
+                }                
         </div>
     );
 }
+
+
+Tree.propTypes = {
+    rootNodes: PropTypes.array.isRequired,
+    obsoleteTerms: PropTypes.array,
+    rootNodesForSkos: PropTypes.array,
+    componentIdentity: PropTypes.string.isRequired,
+    selectedNodeIri: PropTypes.string,
+    handleNodeSelectionInDataTree: PropTypes.func.isRequired,
+    individualViewChanger: PropTypes.func.isRequired,
+    handleResetTreeInParent: PropTypes.func.isRequired,
+    jumpToIri: PropTypes.string,
+    rootNodeNotExist: PropTypes.bool,
+    isIndividual: PropTypes.bool,
+    showListSwitchEnabled: PropTypes.bool,
+};
+
 
 export default Tree;

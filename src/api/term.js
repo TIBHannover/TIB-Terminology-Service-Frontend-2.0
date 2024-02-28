@@ -59,7 +59,7 @@ class TermApi{
                 this.term = false;
                 return true;
             }  
-            console.clear();
+            // console.clear();
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
             let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
             let callResult =  await fetch(baseUrl + "/" + this.iri , getCallSetting);
@@ -349,6 +349,19 @@ class TermApi{
             return null;
         }
         
+    }
+
+
+    async fetchGraphData(){
+        try{
+            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontology}/terms/${this.iri}/graph`;
+            let graphData = await fetch(url, getCallSetting);
+            graphData = await graphData.json();
+            return graphData;
+        }
+        catch(e){
+            return null;
+        }
     }
 
 }

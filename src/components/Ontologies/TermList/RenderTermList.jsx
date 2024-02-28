@@ -56,9 +56,7 @@ export const RenderTermList = (props) => {
                  <div className="row">
                     <div className="col-sm-12">                       
                         <JumpTo 
-                            targetType={"terms"}
-                            isSkos={props.isSkos}
-                            ontologyId={props.ontologyId}
+                            targetType={"terms"}                                                     
                             label={"Jump to"}
                             handleJumtoSelection={props.handleJumtoSelection}
                             obsoletes={props.isObsolete}

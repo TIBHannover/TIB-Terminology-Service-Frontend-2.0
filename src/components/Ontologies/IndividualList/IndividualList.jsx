@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
@@ -7,11 +7,15 @@ import PaneResize from "../../common/PaneResize/PaneResize";
 import Toolkit from "../../../Libs/Toolkit";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import { RenderIndividualList } from "./RenderIndividualList";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
 
 const IndividualsList = (props) => {
+
+    const ontologyPageContext = useContext(OntologyPageContext);
+    const lastVisitedIri = ontologyPageContext.lastVisitedIri[props.componentIdentity];
 
     const [individuals, setIndividuals] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);    
@@ -27,19 +31,18 @@ const IndividualsList = (props) => {
     
     async function setComponentData(){           
         try{                           
-            let termApi = new TermApi(props.ontology.ontologyId, null, props.componentIdentity);
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, null, props.componentIdentity);
             let indvList = await termApi.fetchListOfTerms(0, 10000);   
             indvList = indvList["results"];                
             setIsLoaded(true);
-            setIndividuals(sortIndividuals(indvList));            
-            setListView(props.isSkos ? false : true);            
-            if(props.iri !== " " && typeof(props.iri) !== "undefined"){
-                let newUrl = Toolkit.setParamInUrl('iri', props.iri)                
+            setIndividuals(sortIndividuals(indvList));                                          
+            if(lastVisitedIri && lastVisitedIri !== " " && typeof(lastVisitedIri) !== "undefined"){
+                let newUrl = Toolkit.setParamInUrl('iri', lastVisitedIri)                
                 history.push(newUrl);
-                setSelectedNodeIri(props.iri);
+                setSelectedNodeIri(lastVisitedIri);
                 setJumpToOnload(true);    
-                setJumpToIri(props.iri);           
-                props.iriChangerFunction(props.iri, props.componentIdentity);              
+                setJumpToIri(lastVisitedIri);           
+                ontologyPageContext.storeIriForComponent(lastVisitedIri, props.componentIdentity);              
             }            
         }
         catch(error){
@@ -51,7 +54,7 @@ const IndividualsList = (props) => {
 
 
     function selectNodeOnLoad(){
-        if(props.isSkos && !listView){
+        if(ontologyPageContext.isSkos && !listView){
             return true;
         }                
         let node = document.getElementById(selectedNodeIri);
@@ -66,7 +69,7 @@ const IndividualsList = (props) => {
 
 
     function selectNode(target){ 
-        if(props.isSkos && !listView){
+        if(ontologyPageContext.isSkos && !listView){
             return true;
         }        
         let selectedElement = document.querySelectorAll(".clicked");
@@ -79,7 +82,7 @@ const IndividualsList = (props) => {
             setSelectedNodeIri(target.dataset.iri);            
             let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
             history.push(newUrl);
-            props.iriChangerFunction(target.dataset.iri, props.componentIdentity);    
+            ontologyPageContext.storeIriForComponent(target.dataset.iri, props.componentIdentity);    
         }
         else{
             target.classList.remove("clicked");            
@@ -89,7 +92,7 @@ const IndividualsList = (props) => {
 
 
     function processClick(e){        
-        if(props.isSkos && !listView){            
+        if(ontologyPageContext.isSkos && !listView){            
             return true;
         } 
         if(!listView){
@@ -108,7 +111,7 @@ const IndividualsList = (props) => {
 
 
     function handleNodeSelectionInTreeView(selectedNodeIri, showDetailTable){
-        if(props.isSkos){
+        if(ontologyPageContext.isSkos){
             setSelectedNodeIri(selectedNodeIri);
             setShowNodeDetailPage(showDetailTable);            
         }
@@ -150,15 +153,10 @@ const IndividualsList = (props) => {
                     rootNodesForSkos={props.rootNodesForSkos}
                     componentIdentity={props.componentIdentity}
                     selectedNodeIri={selectedNodeIri}
-                    key={props.key}
-                    ontologyId={props.ontology.ontologyId}
-                    rootNodeNotExist={props.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
-                    iriChangerFunction={props.iriChangerFunction}
-                    lastState={props.lastState}
-                    domStateKeeper={props.domStateKeeper}
-                    isSkos={props.isSkos}
+                    key={props.key}                    
+                    rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}                                                                      
                     handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
-                    isIndividual={props.isSkos ? false : true}
+                    isIndividual={ontologyPageContext.isSkos ? false : true}
                     showListSwitchEnabled={true}
                     individualViewChanger={switchView}     
                     handleResetTreeInParent={handleResetTreeEvent}
@@ -186,7 +184,7 @@ const IndividualsList = (props) => {
     }
 
 
-    useEffect(() => {
+    useEffect(() => {        
         setComponentData();           
         paneResizeClass.setOriginalWidthForLeftPanes();        
         document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
@@ -210,7 +208,13 @@ const IndividualsList = (props) => {
         }    
     }, [selectedNodeIri, JumpToOnLoad, listView]);
 
-    
+
+
+    useEffect(() => {                                     
+        setListView(ontologyPageContext.isSkos ? false : true);
+    }, [ontologyPageContext.isSkos]);
+
+
 
     return (
         <div className="tree-view-container resizable-container" onClick={(e) =>  processClick(e)}>                                 
@@ -218,9 +222,7 @@ const IndividualsList = (props) => {
                 <div className='row autosuggest-sticky'>
                     <div className='col-sm-10'>
                         <JumpTo
-                            targetType={props.componentIdentity}
-                            ontologyId={props.ontology.ontologyId}
-                            isSkos={props.isSkos} 
+                            targetType={props.componentIdentity}                            
                             label={"Jump to"}
                             handleJumtoSelection={handleJumtoSelection}
                             obsoletes={false}
@@ -242,11 +244,9 @@ const IndividualsList = (props) => {
             {showNodeDetailPage &&
                 <div className="node-table-container" id="page-right-pane">                     
                     <TermDetail
-                        iri={selectedNodeIri}
-                        ontology={props.ontology}
+                        iri={selectedNodeIri}                        
                         componentIdentity="individuals"
-                        extractKey="individuals"
-                        isSkos={props.isSkos}
+                        extractKey="individuals"                        
                         isIndividual={true}
                         typeForNote="individual"
                     />                    

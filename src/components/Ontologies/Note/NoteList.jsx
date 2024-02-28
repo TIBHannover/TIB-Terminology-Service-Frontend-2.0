@@ -1,9 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import { useHistory } from "react-router";
 import AuthTool from "../../User/Login/authTools";
 import Toolkit from "../../../Libs/Toolkit";
 import { NoteListRender } from "./renders/NoteListRender";
 import { getNoteList } from "../../../api/tsMicroBackendCalls";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
@@ -29,6 +30,8 @@ const NoteList = (props) => {
     let inputNoteIdFromUrl = currentUrlParams.get('noteId'); 
     inputNoteIdFromUrl = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
 
+
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [noteList, setNoteList] = useState([]);
     const [showNoteDetailPage, setShowNoteDetailPage] = useState(false);
@@ -62,7 +65,7 @@ const NoteList = (props) => {
 
 
     function loadNoteList(){             
-        let ontologyId = props.ontology.ontologyId;
+        let ontologyId = ontologyPageContext.ontology.ontologyId;
         let type = TYPES_VALUES[selectedArtifactType];
                         
         if(type === TYPES_VALUES[ALL_TYPE]){
@@ -87,7 +90,7 @@ const NoteList = (props) => {
         let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
-        formData.append("ontologyId", props.ontology.ontologyId);
+        formData.append("ontologyId", ontologyPageContext.ontology.ontologyId);
         let postConfig = {method: 'POST',  headers:callHeaders, body: formData};        
         try{
             let result = await fetch(url, postConfig);
@@ -190,8 +193,7 @@ const NoteList = (props) => {
                 componentIsLoading={componentIsLoading}
                 onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}
                 targetArtifactType={props.termType}
-                term={props.term}                
-                ontologyId={props.ontology.ontologyId}                
+                term={props.term}                                              
                 selectedArtifactType={selectedArtifactType}
                 noteExist={noteExist}
                 noteTotalPageCount={noteTotalPageCount}

@@ -551,4 +551,25 @@ body .result-card{
     transition: all 0.5s ease-out;
 }
 
+.graph-container{
+    height: 700px;
+    width: 800px;
+    border: 1px solid black;
+}
 
+.graph-control-panel{
+    margin-bottom: 5px;
+}
+
+.graph-section .graph-ctl-btn{
+    font-size: 10px;
+    margin-right: 2px;
+}
+
+.graph-message-box{
+    background-color: #D1ECF1;
+    width: 800px;
+    display: inline;
+    margin-left: 10px;
+    padding: 5px;
+}

@@ -1,29 +1,19 @@
 import { Link } from 'react-router-dom';
-import {skosNodeHasChildren} from '../../../api/fetchData';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import { useContext } from 'react';
 
 
 
-/**
- * Shape the skos concepts obtained from API to be in a format that data tree can render it like other term trees.
- * @param {*} skosConcepts 
- */
-export async function shapeSkosConcepts(skosConcepts){
-    let concepts = [];
-    for(let cons of skosConcepts){
-        let res = {};
-        res["label"] = cons["data"]["label"];        
-        res["has_children"] = await skosNodeHasChildren(cons['data']['ontology_name'], cons["data"]["iri"]);
-        res["iri"] = cons["data"]["iri"];
-        concepts.push(res);
-    }    
-    return concepts    
-}
-
-
-export function renderOntologyPageTabs({tabMetadataJson, tabChangeHandler, ontologyId, activeTabId, noteCounts}){
+export const OntologyPageTabs = (props) => {
+    /* 
+        Renders tabs for the Ontology page.
+        The tab metadata comes from listOfComponentsAsTabs.json
+    */
+   
+    const ontologyPageContext = useContext(OntologyPageContext);
     let result = [];
-    for(let configItemKey in tabMetadataJson){
-        let configObject = tabMetadataJson[configItemKey];
+    for(let configItemKey in props.tabMetadataJson){
+        let configObject = props.tabMetadataJson[configItemKey];
         if(process.env.REACT_APP_NOTE_FEATURE !== "true" && configItemKey === "Notes"){
             continue;
         }
@@ -33,32 +23,35 @@ export function renderOntologyPageTabs({tabMetadataJson, tabChangeHandler, ontol
         result.push(
             <li className="nav-item ontology-detail-nav-item" key={configObject['keyForRenderAsTabItem']}>
                 <Link 
-                    onClick={tabChangeHandler} 
+                    onClick={props.tabChangeHandler} 
                     data-value={configObject['tabId']} 
-                    className={(activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
-                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyId + configObject['urlEndPoint']}
+                    className={(props.activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"} 
+                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId + configObject['urlEndPoint']}
                     >                
                     {configObject['tabTitle']}
-                    {configItemKey === "Notes" ? ` (${noteCounts})` : ""}
+                    {configItemKey === "Notes" ? ` (${props.noteCounts})` : ""}
                 </Link>
             </li>
         );
     }
 
-    return result;
+    return <ul className="nav nav-tabs">{result}</ul>;
 }
 
 
-export function createOntologyPageHeadSection(ontology){
+
+
+export const OntologyPageHeadSection = () => {
+    const ontologyPageContext = useContext(OntologyPageContext);
     return [
         <div className='span'>
             <div className='row ont-info-bar header-collapseable-section'>
                 <div className= "col-sm-12">
                     <div>
-                        <h2><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontology.ontologyId}>{ontology.config.title}</Link></h2>
+                        <h2><Link className={"ont-info-bar-title"} to = {process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId}>{ontologyPageContext.ontology.config.title}</Link></h2>
                     </div>
                     <div>
-                        <a href={ontology.config.id}>{ontology.config.id}</a>
+                        <a href={ontologyPageContext.ontology.config.id}>{ontologyPageContext.ontology.config.id}</a>
                     </div>
                 </div>
             </div>

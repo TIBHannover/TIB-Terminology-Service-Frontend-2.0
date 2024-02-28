@@ -1,4 +1,5 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
@@ -7,10 +8,24 @@ import Tree from './Tree';
 import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 
 
 const DataTree = (props) => {
+  /* 
+    The tree view holder components. It is a warpper for:
+      - Tree 
+      - Term Detail view
+      - Jump To
+      - Pane resize
+    
+    Context:
+      The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
+  
+  */
+
+  const ontologyPageContext = useContext(OntologyPageContext);
 
   const [selectedNodeIri, setSelectedNodeIri] = useState('');
   const [showDetailTable, setShowDetailTable] = useState(false);
@@ -62,10 +77,10 @@ const DataTree = (props) => {
       setSelectedNodeIri(iriInUrl);
       setShowDetailTable(true);
     }
-    else if(props.iri && props.iri !== ""){
-      setSelectedNodeIri(props.iri);
+    else if(ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== ""){
+      setSelectedNodeIri(ontologyPageContext.lastVisitedIri[props.componentIdentity]);
       setShowDetailTable(true);
-      targetQueryParams.set("iri", props.iri);
+      targetQueryParams.set("iri", ontologyPageContext.lastVisitedIri[props.componentIdentity]);
       history.push(window.location.pathname + "?" +  targetQueryParams.toString());
     }
     
@@ -86,9 +101,7 @@ const DataTree = (props) => {
         <div className='row autosuggest-sticky'>
           <div className='col-sm-10'>
               <JumpTo
-                targetType={props.componentIdentity}
-                ontologyId={props.ontology.ontologyId}
-                isSkos={props.isSkos} 
+                targetType={props.componentIdentity}                
                 label={"Jump to"}
                 handleJumtoSelection={handleJumtoSelection}
                 obsoletes={false}
@@ -96,23 +109,21 @@ const DataTree = (props) => {
           </div>
         </div>          
         <div className='tree-container'>
-              <Tree
-                rootNodes={props.rootNodes}
-                obsoleteTerms={props.obsoleteTerms}                               
-                rootNodesForSkos={props.rootNodesForSkos}
-                componentIdentity={props.componentIdentity}
-                selectedNodeIri={selectedNodeIri}
-                key={props.key}                    
-                ontologyId={props.ontology.ontologyId}                
-                iriChangerFunction={props.iriChangerFunction}
-                lastState={props.lastState}
-                domStateKeeper={props.domStateKeeper}
-                isSkos={props.isSkos}
-                handleNodeSelectionInDataTree={handleTreeNodeSelection}
-                individualViewChanger={""}
-                handleResetTreeInParent={handleResetTreeEvent}
-                jumpToIri={jumpToIri}
-              />
+              {(props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0)) ?
+                <Tree
+                  rootNodes={props.rootNodes}
+                  obsoleteTerms={props.obsoleteTerms}                               
+                  rootNodesForSkos={props.rootNodesForSkos}
+                  componentIdentity={props.componentIdentity}
+                  selectedNodeIri={selectedNodeIri}
+                  key={props.key}                                                
+                  handleNodeSelectionInDataTree={handleTreeNodeSelection}
+                  individualViewChanger={""}
+                  handleResetTreeInParent={handleResetTreeEvent}
+                  jumpToIri={jumpToIri}
+                />
+                : <div className="no-node">It is currently not possible to load this tree. Please try later.</div>
+              }
         </div>
       </div>
       {showDetailTable && paneResizeClass.generateVerticalResizeLine()}
@@ -121,11 +132,9 @@ const DataTree = (props) => {
           {isTermTree &&
               <MatomoWrapper>
               <TermDetail
-                iri={selectedNodeIri}
-                ontology={props.ontology}
+                iri={selectedNodeIri}                
                 componentIdentity="terms"
-                extractKey="terms"
-                isSkos={props.isSkos}
+                extractKey="terms"                
                 isIndividual={false}
                 typeForNote="class"
               />
@@ -134,8 +143,7 @@ const DataTree = (props) => {
           {isPropertyTree &&           
             <MatomoWrapper>
             <TermDetail
-                iri={selectedNodeIri}
-                ontology={props.ontology}
+                iri={selectedNodeIri}                
                 componentIdentity="props"
                 extractKey="properties"
                 isIndividual={false}
@@ -147,6 +155,14 @@ const DataTree = (props) => {
     </div>  
   );
 }
+
+
+DataTree.propTypes = {
+  rootNodes: PropTypes.array.isRequired,
+  obsoleteTerms: PropTypes.array,
+  componentIdentity: PropTypes.string.isRequired,
+};
+
 
 export default DataTree;
 

@@ -113,10 +113,20 @@
         "id": "Educational Resources",
         "html_id": "Educational Resources",
         "name": "Educational Resources",
-        "text": "A short description will come later",
+        "text": "This collection contains ontologies for quality education. This collection thus provides a structured framework that defines the fundamental concepts, relationships and principles that are essential for promoting comprehensive learning experiences that are conducive to personal, academic and social development.",
         "logo": "/educational_resources.svg",
         "ontology_list_url": "/ontologies?collection=Educational+Resources&and=false&page=1",
-        "project_homepage": "https://www.un.org/sustainabledevelopment/",
+        "project_homepage": "",
+        "domain_ts_link": ""
+    },
+    "Foundational Ontologies":{
+        "id": "Foundational Ontologies",
+        "html_id": "Foundational Ontologies",
+        "name": "Foundational Ontologies",
+        "text": "Foundational ontologies provide a basic framework of abstract concepts and relationships that serve as a common vocabulary for describing and organising knowledge in different domains.",
+        "logo": "/foundational_ontologies.svg",
+        "ontology_list_url": "/ontologies?collection=Foundational+Ontologies&and=false&page=1",
+        "project_homepage": "",
         "domain_ts_link": ""
     }
 }
