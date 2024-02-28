@@ -37,7 +37,6 @@
     "multiselect-react-dropdown": "^2.0.25",
     "oidc-client-ts": "^2.2.3",
     "ols-graphview": "^0.1.95",
-    "oidc-client-ts": "^2.2.3",    
     "query-string": "^7.1.1",
     "react": "^17.0.0",
     "react-autosuggest": "^10.1.0",
@@ -89,7 +88,8 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
-    "eslint": "^8.16.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-flowtype": "^8.0.3",
     "msw": "^1.2.1",
     "sonarqube-scanner": "^3.1.0"
   }

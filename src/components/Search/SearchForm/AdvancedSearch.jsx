@@ -73,7 +73,10 @@ const AdvancedSearch = (props) => {
             <h5  className='text-center'><b>Advanced Search Options</b></h5>
             <div className="row">
                 <div className="col-sm-11">
-                    <label for='adv-s-search-in-select'>Search In (Metadata)</label>
+                    <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
+                        Search In (Metadata)
+                        <div className='tooltip-questionmark'>?</div>
+                    </label>                    
                     <Multiselect
                         isObject={false}
                         options={searchInMetaDataOptions}  
@@ -87,9 +90,13 @@ const AdvancedSearch = (props) => {
                     />
                 </div>
             </div>
+            <br></br>
             <div className="row">
                 <div className="col-sm-11">
-                    <label for='adv-s-search-under-term'>Search Under</label>
+                    <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for.'>
+                        Search Under
+                        <div className='tooltip-questionmark'>?</div>
+                    </label>
                     <Multiselect
                         isObject={true}
                         options={termListForSearchUnder}  
