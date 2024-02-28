@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/fetchData';
 import SearchLib from '../../../Libs/searchLib';
+import OntologyApi from '../../../api/ontology';
 
 
 
@@ -13,8 +14,10 @@ const AdvancedSearch = (props) => {
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
     const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
     const [searchUnderAllselectedTerms, setSearchUnderAllselectedTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
+    const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getOntologIdsFromUrl());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
-    const [searchUnderLoading, setSearchUnderLoading] = useState(true);
+    const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
+    const [loadingResult, setLoadingResult] = useState(true);
 
     const history = useHistory();
 
@@ -23,19 +26,8 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleSearchInMultiSelect(selectedList, selectedItem){        
-        setSearchInSelectValue(selectedList);
-        let currentUrlParams = new URLSearchParams(window.location.search);  
-        currentUrlParams.delete('searchin');
-        for(let val of selectedList){
-            currentUrlParams.append('searchin', val);
-        }        
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
-    }
-
-
     async function loadTermsForSelection(query){   
-        setSearchUnderLoading(true);         
+        setLoadingResult(true);         
         if(query === ""){
             setTermListForSearchUnder([]);
             return true;
@@ -49,9 +41,37 @@ const AdvancedSearch = (props) => {
             opt['iri'] = term['iri'];
             options.push(opt);
         }
-        setSearchUnderLoading(false);
+        setLoadingResult(false);
         setTermListForSearchUnder(options);
     }
+
+
+
+    async function loadOntologiesForSelection(query){
+        let ontologyApi = new OntologyApi({});
+        await ontologyApi.fetchOntologyList();
+        let ontologyList = [];
+        for (let ontology of ontologyApi.list){
+            let opt = {};
+            opt['text'] = ontology['ontologyId'];
+            opt['id'] = ontology['ontologyId'];
+            ontologyList.push(opt);
+        }
+        setOntologiesListForSelection(ontologyList);
+    }
+
+
+
+    function handleSearchInMultiSelect(selectedList, selectedItem){        
+        setSearchInSelectValue(selectedList);
+        let currentUrlParams = new URLSearchParams(window.location.search);  
+        currentUrlParams.delete('searchin');
+        for(let val of selectedList){
+            currentUrlParams.append('searchin', val);
+        }        
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+    }
+
 
 
     function handleTermSelectionSearchUnder(selectedList, selectedItem){                
@@ -76,6 +96,23 @@ const AdvancedSearch = (props) => {
         history.push(window.location.pathname + "?" + currentUrlParams.toString());    
     }
 
+
+
+    function handleOntologySelection(selectedList, selectedItem){                        
+        setSelectedOntologies(selectedList);
+        let currentUrlParams = new URLSearchParams(window.location.search);          
+        currentUrlParams.delete('ontology');        
+        for(let ontology of selectedList){
+            currentUrlParams.append('ontology', ontology['id']);            
+        }  
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+    }
+
+
+
+    useEffect(() => {
+        loadOntologiesForSelection();
+    }, []);
 
 
 
@@ -119,7 +156,7 @@ const AdvancedSearch = (props) => {
                         onSearch={loadTermsForSelection}
                         displayValue={"text"}
                         avoidHighlightFirstOption={true}       
-                        loading={searchUnderLoading}                 
+                        loading={loadingResult}                 
                         closeIcon={"cancel"}
                         id="adv-s-search-under-term"
                         placeholder="class, property, ..."                        
@@ -142,11 +179,33 @@ const AdvancedSearch = (props) => {
                         onSearch={loadTermsForSelection}
                         displayValue={"text"}
                         avoidHighlightFirstOption={true}       
-                        loading={searchUnderLoading}                 
+                        loading={loadingResult}                 
                         closeIcon={"cancel"}
                         id="adv-s-search-under-all-term"
                         placeholder="class, property, ..."                        
                     />
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-11">
+                    <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
+                        Search In Ontology
+                        <div className='tooltip-questionmark'>?</div>
+                    </label>
+                    {ontologiesListForSelection.length !== 0 &&
+                        <Multiselect
+                        isObject={true}
+                        options={ontologiesListForSelection}  
+                        selectedValues={selectedOntologies}                       
+                        onSelect={handleOntologySelection}
+                        onRemove={handleOntologySelection}                            
+                        displayValue={"text"}
+                        avoidHighlightFirstOption={true}                                        
+                        closeIcon={"cancel"}
+                        id="adv-s-search-in-ontologies"
+                        placeholder="Enter Ontology name ..."                        
+                    />}
                 </div>
             </div>
         </>

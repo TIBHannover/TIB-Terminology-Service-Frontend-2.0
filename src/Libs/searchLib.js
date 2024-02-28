@@ -33,6 +33,26 @@ class SearchLib{
             return [];
         }
     }
+
+
+
+    static getOntologIdsFromUrl(){
+        try{
+            let currentUrlParams = new URL(window.location).searchParams;
+            let ontologyIds = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology') : [];
+            let ontologyList = [];
+            for(let id of ontologyIds){
+                let opt = {};
+                opt['text'] = id;
+                opt['id'] = id;
+                ontologyList.push(opt);
+            }
+            return ontologyList;
+        }
+        catch(e){            
+            return [];
+        }
+    }
     
     
     
