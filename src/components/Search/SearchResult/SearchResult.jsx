@@ -37,6 +37,7 @@ const SearchResult = (props) => {
   const [loading, setLoading] = useState(true);
   const [searchInValues, setSearchInValues] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
   const [searchUnderIris, setSearchUnderIris] = useState(SearchLib.extractSearchUnderIrisFromUrl());  
+  const [searchUnderAllIris, setSearchUnderAllIris] = useState(SearchLib.extractSearchUnderAllIrisFromUrl());  
 
   const history = useHistory();
 
@@ -67,7 +68,8 @@ const SearchResult = (props) => {
         obsoletes: obsoletes,
         exact: exact,
         searchInValues: searchInValues,
-        searchUnderIris: searchUnderIris
+        searchUnderIris: searchUnderIris,
+        searchUnderAllIris: searchUnderAllIris,
       });
     
       // This part is for updating the facet counts. 
@@ -82,7 +84,8 @@ const SearchResult = (props) => {
         obsoletes: obsoletes,
         exact: exact,
         searchInValues: searchInValues,
-        searchUnderIris: searchUnderIris
+        searchUnderIris: searchUnderIris,
+        searchUnderAllIris: searchUnderAllIris,
       });
       result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
       
@@ -96,7 +99,8 @@ const SearchResult = (props) => {
         obsoletes: obsoletes,
         exact: exact,
         searchInValues: searchInValues,
-        searchUnderIris: searchUnderIris
+        searchUnderIris: searchUnderIris,
+        searchUnderAllIris: searchUnderAllIris,
       });
       result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
 

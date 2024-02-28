@@ -12,6 +12,7 @@ const AdvancedSearch = (props) => {
 
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
     const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
+    const [searchUnderAllselectedTerms, setSearchUnderAllselectedTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [searchUnderLoading, setSearchUnderLoading] = useState(true);
 
@@ -53,12 +54,24 @@ const AdvancedSearch = (props) => {
     }
 
 
-    function handleTermSelection(selectedList, selectedItem){                
+    function handleTermSelectionSearchUnder(selectedList, selectedItem){                
         setSearchUnderselectedTerms(selectedList);
         let currentUrlParams = new URLSearchParams(window.location.search);          
         currentUrlParams.delete('searchunder');        
         for(let term of selectedList){
             currentUrlParams.append('searchunder', encodeURIComponent(JSON.stringify(term)));            
+        }  
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+    }
+
+
+
+    function handleTermSelectionSearchUnderAll(selectedList, selectedItem){                
+        setSearchUnderAllselectedTerms(selectedList);
+        let currentUrlParams = new URLSearchParams(window.location.search);          
+        currentUrlParams.delete('searchunderall');        
+        for(let term of selectedList){
+            currentUrlParams.append('searchunderall', encodeURIComponent(JSON.stringify(term)));            
         }  
         history.push(window.location.pathname + "?" + currentUrlParams.toString());    
     }
@@ -93,7 +106,7 @@ const AdvancedSearch = (props) => {
             <br></br>
             <div className="row">
                 <div className="col-sm-11">
-                    <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for.'>
+                    <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
                         Search Under
                         <div className='tooltip-questionmark'>?</div>
                     </label>
@@ -101,14 +114,37 @@ const AdvancedSearch = (props) => {
                         isObject={true}
                         options={termListForSearchUnder}  
                         selectedValues={searchUnderselectedTerms}                       
-                        onSelect={handleTermSelection}
-                        onRemove={handleTermSelection}    
+                        onSelect={handleTermSelectionSearchUnder}
+                        onRemove={handleTermSelectionSearchUnder}    
                         onSearch={loadTermsForSelection}
                         displayValue={"text"}
                         avoidHighlightFirstOption={true}       
                         loading={searchUnderLoading}                 
                         closeIcon={"cancel"}
                         id="adv-s-search-under-term"
+                        placeholder="class, property, ..."                        
+                    />
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-11">
+                    <label for='adv-s-search-under-term' title='You can restrict a search to all children of a given term, meaning to search under (subclassOf/is-a plus any hierarchical/transitive properties like ‘part of’ or ‘develops from’)'>
+                        Search Under All
+                        <div className='tooltip-questionmark'>?</div>
+                    </label>
+                    <Multiselect
+                        isObject={true}
+                        options={termListForSearchUnder}  
+                        selectedValues={searchUnderAllselectedTerms}                       
+                        onSelect={handleTermSelectionSearchUnderAll}
+                        onRemove={handleTermSelectionSearchUnderAll}    
+                        onSearch={loadTermsForSelection}
+                        displayValue={"text"}
+                        avoidHighlightFirstOption={true}       
+                        loading={searchUnderLoading}                 
+                        closeIcon={"cancel"}
+                        id="adv-s-search-under-all-term"
                         placeholder="class, property, ..."                        
                     />
                 </div>

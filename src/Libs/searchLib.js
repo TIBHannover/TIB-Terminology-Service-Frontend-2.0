@@ -16,12 +16,46 @@ class SearchLib{
             return [];
         }
     }
+
+
+
+    static getSearchUnderAllTermsFromUrl(){
+        try{
+            let currentUrlParams = new URL(window.location).searchParams;
+            if(!currentUrlParams.get('searchunderall')){
+                return [];
+            }                        
+            let terms = currentUrlParams.getAll('searchunderall'); 
+            terms = terms.map(term => JSON.parse(decodeURIComponent(term)));                  
+            return terms;
+        }
+        catch(e){            
+            return [];
+        }
+    }
     
     
     
     static extractSearchUnderIrisFromUrl(){
         try{
             let terms = SearchLib.getSearchUnderTermsFromUrl();
+            let iris = [];
+            for (let term of terms){               
+                iris.push(term['iri'])
+            }            
+            return iris;
+        }
+        catch(e){
+            // throw e
+            return [];
+        }
+    }
+
+
+
+    static extractSearchUnderAllIrisFromUrl(){
+        try{
+            let terms = SearchLib.getSearchUnderAllTermsFromUrl();
             let iris = [];
             for (let term of terms){               
                 iris.push(term['iri'])
