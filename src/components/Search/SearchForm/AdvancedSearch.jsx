@@ -30,7 +30,9 @@ const AdvancedSearch = (props) => {
     const searchInMetaDataOptions = ['label', 'description', 'synonym', 'short_form',  'obo_id', 'annotations', 'iri'];
     
     // The check to see whether we are on an ontology page or not.
-    const ontologyId = OntologyLib.getCurrentOntologyIdFromUrlPath();
+    const ontologyPageId = OntologyLib.getCurrentOntologyIdFromUrlPath();
+    
+    const ontologyIdsInUrl = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
 
 
 
@@ -40,10 +42,10 @@ const AdvancedSearch = (props) => {
             setTermListForSearchUnder([]);
             return true;
         }
-        let inputQuery = {"searchQuery": query, "types": "class,property"};
-        if(ontologyId){
+        let inputQuery = {"searchQuery": query, "types": "class,property", "ontologyIds": ontologyIdsInUrl};
+        if(ontologyPageId){
             // restrict the term search to the current opened ontology
-            inputQuery['ontologyIds'] = [ontologyId];
+            inputQuery['ontologyIds'] = [ontologyPageId];
         }
         let terms = await getJumpToResult(inputQuery, 20); 
         let options = [];
@@ -152,7 +154,7 @@ const AdvancedSearch = (props) => {
 
 
     useEffect(() => {
-        if(!ontologyId){
+        if(!ontologyPageId){
             // Only load the list when we are NOT on an ontology page.
             loadOntologiesForSelection();
         }        
@@ -253,7 +255,7 @@ const AdvancedSearch = (props) => {
                             />
                         </div>
                     </div>
-                    {!ontologyId &&
+                    {!ontologyPageId &&
                         // We do not want to show the ontology selection when the user is on an ontology page already
                         <>
                         <br></br>
