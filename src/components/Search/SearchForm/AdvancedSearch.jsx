@@ -41,6 +41,10 @@ const AdvancedSearch = (props) => {
             return true;
         }
         let inputQuery = {"searchQuery": query, "types": "class,property"};
+        if(ontologyId){
+            // restrict the term search to the current opened ontology
+            inputQuery['ontologyIds'] = [ontologyId];
+        }
         let terms = await getJumpToResult(inputQuery, 20); 
         let options = [];
         for (let term of terms){
@@ -148,7 +152,10 @@ const AdvancedSearch = (props) => {
 
 
     useEffect(() => {
-        loadOntologiesForSelection();
+        if(!ontologyId){
+            // Only load the list when we are NOT on an ontology page.
+            loadOntologiesForSelection();
+        }        
         if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
         if(exact){ document.getElementById("exact-checkbox").checked = true;}
         if(isLeaf){ document.getElementById("isLeaf-checkbox").checked = true;}
