@@ -29,8 +29,7 @@ const SearchForm = (props) => {
   const [exact, setExact] = useState(exactFlagInUrl);
   const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const [jumpToResult, setJumpToResult] = useState([]);
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const [jumpToResult, setJumpToResult] = useState([]);  
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
@@ -104,21 +103,6 @@ const SearchForm = (props) => {
   }
 
 
-
-  function handleExactCheckboxClick(e){
-    let searchUrl = new URL(window.location);
-    setExact(e.target.checked);
-    searchUrl.searchParams.set('exact', e.target.checked); 
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});
-  }
-
-
-  function handleObsoletesCheckboxClick(e){        
-    let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
-    history.replace({...history.location, search: newUrl.searchParams.toString()});    
-  }
-
-
   function closeResultBoxWhenClickedOutside(e){       
     if(!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)){
       setAutoCompleteResult([]);
@@ -128,17 +112,9 @@ const SearchForm = (props) => {
 
 
 
-  function handleAdvancedSearchShowHide(){
-    setShowAdvancedSearch(!showAdvancedSearch);
-  }
-
-
-
   useEffect(() => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
-    document.addEventListener("keydown", keyboardNavigationForJumpto, false);
-    if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}
+    document.addEventListener("keydown", keyboardNavigationForJumpto, false);    
     let cUrl = window.location.href;        
     if(cUrl.includes("q=")){
       cUrl = cUrl.split("q=")[1];
@@ -166,18 +142,8 @@ const SearchForm = (props) => {
         setSearchUrl={setSearchUrl}
         jumpToResult={jumpToResult}
         jumptToRef={jumptToRef}
-        handleExactCheckboxClick={handleExactCheckboxClick}
-        handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
-        handleAdvancedSearchShowHide={handleAdvancedSearchShowHide}
-        showAdvancedSearch={showAdvancedSearch}
-      />            
-      {showAdvancedSearch &&
-        <div className='row adv-search-container'>
-          <div className='col-sm-10'>
-            <AdvancedSearch />
-          </div>
-        </div>                     
-      }      
+      />
+      <AdvancedSearch />                    
     </>     
   );
 }
