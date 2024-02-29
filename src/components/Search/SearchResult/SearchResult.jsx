@@ -20,8 +20,7 @@ const SearchResult = (props) => {
   let currentUrlParams = new URL(window.location).searchParams;
   const DEFAULT_PAGE_NUMBER = 1;
   const DEFAULT_PAGE_SIZE = 10;
-
-  const [searchQuery, setSearchQuery] = useState(currentUrlParams.get('q') ? currentUrlParams.get('q') : "");
+  
   const [searchResult, setSearchResult] = useState([]);
   const [selectedOntologies, setSelectedOntologies] = useState(currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology') : []);
   const [selectedTypes, setSelectedTypes] = useState(currentUrlParams.get('type') ? currentUrlParams.getAll('type') : []);
@@ -30,19 +29,20 @@ const SearchResult = (props) => {
   const [pageNumber, setPageNumber] = useState(parseInt(currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER));
   const [pageSize, setPageSize] = useState(parseInt(currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE));
   const [expandedResults, setExpandedResults] = useState([]);
-  const [totalResultsCount, setTotalResultsCount] = useState([]);  
-  const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);  
+  const [totalResultsCount, setTotalResultsCount] = useState([]);    
   const [allCollectionIds, setAllCollectionIds] = useState([]);
   const [filterTags, setFilterTags] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [searchInValues, setSearchInValues] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
-  const [searchUnderIris, setSearchUnderIris] = useState(SearchLib.extractSearchUnderIrisFromUrl());  
-  const [searchUnderAllIris, setSearchUnderAllIris] = useState(SearchLib.extractSearchUnderAllIrisFromUrl());  
-  const [isLeaf, setIsLeaf] = useState(currentUrlParams.get('isleaf') === "true" ? true : false);
+  const [loading, setLoading] = useState(true);        
 
   const history = useHistory();
 
   const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value:10}, {label: "20", value:20}, {label: "30", value:30}, {label: "40", value:40}];
+  const searchQuery = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
+  const exact = currentUrlParams.get('exact') === "true" ? true : false;
+  const isLeaf = currentUrlParams.get('isleaf') === "true" ? true : false;
+  const searchInValues = currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : [];
+  const searchUnderIris = SearchLib.extractSearchUnderIrisFromUrl();
+  const searchUnderAllIris = SearchLib.extractSearchUnderAllIrisFromUrl();
 
 
   async function getAllCollectionIds(){

@@ -5,6 +5,7 @@ import { getJumpToResult } from '../../../api/fetchData';
 import SearchLib from '../../../Libs/searchLib';
 import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
+import OntologyLib from '../../../Libs/OntologyLib';
 
 
 
@@ -27,6 +28,9 @@ const AdvancedSearch = (props) => {
 
 
     const searchInMetaDataOptions = ['label', 'description', 'synonym', 'short_form',  'obo_id', 'annotations', 'iri'];
+    
+    // The check to see whether we are on an ontology page or not.
+    const ontologyId = OntologyLib.getCurrentOntologyIdFromUrlPath();
 
 
 
@@ -242,28 +246,34 @@ const AdvancedSearch = (props) => {
                             />
                         </div>
                     </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-11">
-                            <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
-                                Search In Ontology
-                                <div className='tooltip-questionmark'>?</div>
-                            </label>
-                            {ontologiesListForSelection.length !== 0 &&
-                                <Multiselect
-                                isObject={true}
-                                options={ontologiesListForSelection}  
-                                selectedValues={selectedOntologies}                       
-                                onSelect={handleOntologySelection}
-                                onRemove={handleOntologySelection}                            
-                                displayValue={"text"}
-                                avoidHighlightFirstOption={true}                                        
-                                closeIcon={"cancel"}
-                                id="adv-s-search-in-ontologies"
-                                placeholder="Enter Ontology name ..."                        
-                            />}
+                    {!ontologyId &&
+                        // We do not want to show the ontology selection when the user is on an ontology page already
+                        <>
+                        <br></br>
+                        <div className="row">
+                            <div className="col-sm-11">
+                                <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
+                                    Search In Ontology
+                                    <div className='tooltip-questionmark'>?</div>
+                                </label>
+                                {ontologiesListForSelection.length !== 0 &&                                    
+                                    <Multiselect
+                                        isObject={true}
+                                        options={ontologiesListForSelection}  
+                                        selectedValues={selectedOntologies}                       
+                                        onSelect={handleOntologySelection}
+                                        onRemove={handleOntologySelection}                            
+                                        displayValue={"text"}
+                                        avoidHighlightFirstOption={true}                                        
+                                        closeIcon={"cancel"}
+                                        id="adv-s-search-in-ontologies"
+                                        placeholder="Enter Ontology name ..."                        
+                                    />
+                                }
+                            </div>
                         </div>
-                    </div>
+                        </>
+                    }
                 </div>
                 </div>                     
             }                

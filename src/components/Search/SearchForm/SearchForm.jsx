@@ -4,6 +4,7 @@ import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
 import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
 import Toolkit from '../../../Libs/Toolkit';
+import OntologyLib from '../../../Libs/OntologyLib';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
 
@@ -15,16 +16,11 @@ const SearchForm = (props) => {
   let currentUrlParams = new URL(window.location).searchParams;    
   let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
   
-  let currentUrlPath = window.location.pathname;
-  currentUrlPath = currentUrlPath.split('ontologies/');
-  let ontologyIdInUrl = null;
-  if(currentUrlPath.length === 2 && currentUrlPath[1] !== ""){
-    ontologyIdInUrl = currentUrlPath[1].includes('/') ? currentUrlPath[1].split('/')[0].trim() : currentUrlPath[1].trim();;
-  }
+  
 
 
   const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);    
-  const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
+  const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);  
 
