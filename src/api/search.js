@@ -10,7 +10,8 @@ export async function olsSearch({
         selectedTypes, 
         selectedCollections, 
         obsoletes, 
-        exact, 
+        exact,
+        isLeaf, 
         searchInValues, 
         searchUnderIris,
         searchUnderAllIris
@@ -26,6 +27,7 @@ export async function olsSearch({
         searchUrl = searchUnderAllIris.length !== 0 ? (searchUrl + `&allChildrenOf=${searchUnderAllIris.join(',')}`) : searchUrl;
         searchUrl = obsoletes ? (searchUrl + "&obsoletes=true") : searchUrl;
         searchUrl = exact ? (searchUrl + "&exact=true") : searchUrl;
+        searchUrl = isLeaf ? (searchUrl + "&isLeaf=true") : searchUrl;
         if(process.env.REACT_APP_PROJECT_NAME === "" && selectedCollections.length !== 0){
             // If TIB General. Set collections if exist in filter
             searchUrl += `&schema=collection&classification=${selectedCollections.join(',')}`;

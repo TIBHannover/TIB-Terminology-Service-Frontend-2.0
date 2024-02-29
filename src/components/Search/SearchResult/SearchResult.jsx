@@ -38,6 +38,7 @@ const SearchResult = (props) => {
   const [searchInValues, setSearchInValues] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
   const [searchUnderIris, setSearchUnderIris] = useState(SearchLib.extractSearchUnderIrisFromUrl());  
   const [searchUnderAllIris, setSearchUnderAllIris] = useState(SearchLib.extractSearchUnderAllIrisFromUrl());  
+  const [isLeaf, setIsLeaf] = useState(currentUrlParams.get('isleaf') === "true" ? true : false);
 
   const history = useHistory();
 
@@ -67,6 +68,7 @@ const SearchResult = (props) => {
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
         exact: exact,
+        isLeaf: isLeaf,
         searchInValues: searchInValues,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,

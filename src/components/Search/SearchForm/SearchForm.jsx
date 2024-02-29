@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
-import { useHistory } from 'react-router';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
 import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
 import Toolkit from '../../../Libs/Toolkit';
@@ -13,8 +12,7 @@ import '../../layout/searchBar.css';
 
 const SearchForm = (props) => {
 
-  let currentUrlParams = new URL(window.location).searchParams;  
-  let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
+  let currentUrlParams = new URL(window.location).searchParams;    
   let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
   
   let currentUrlPath = window.location.pathname;
@@ -25,8 +23,7 @@ const SearchForm = (props) => {
   }
 
 
-  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);  
-  const [exact, setExact] = useState(exactFlagInUrl);
+  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);    
   const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);  
@@ -34,7 +31,7 @@ const SearchForm = (props) => {
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
-  const history = useHistory();
+  const exact = currentUrlParams.get('exact') === "true" ? true : false;
 
 
 

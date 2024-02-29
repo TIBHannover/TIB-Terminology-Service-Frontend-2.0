@@ -11,10 +11,10 @@ import Toolkit from '../../../Libs/Toolkit';
 const AdvancedSearch = (props) => {
 
     let currentUrlParams = new URL(window.location).searchParams;
-    let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
 
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
-    const [exact, setExact] = useState(exactFlagInUrl);
+    const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);
+    const [isLeaf, setIsLeaf] = useState(currentUrlParams.get('isleaf') === "true" ? true : false);
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
     const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
     const [searchUnderAllselectedTerms, setSearchUnderAllselectedTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
@@ -124,8 +124,16 @@ const AdvancedSearch = (props) => {
     
     
     function handleObsoletesCheckboxClick(e){        
-        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
-        history.replace({...history.location, search: newUrl.searchParams.toString()});    
+        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);                
+        history.push(newUrl);
+    }
+
+
+    function handleIsLeafCheckboxClick(e){
+        let searchUrl = new URL(window.location);
+        setIsLeaf(e.target.checked);
+        searchUrl.searchParams.set('isleaf', e.target.checked); 
+        history.replace({...history.location, search: searchUrl.searchParams.toString()});
     }
 
 
@@ -139,6 +147,7 @@ const AdvancedSearch = (props) => {
         loadOntologiesForSelection();
         if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
         if(exact){ document.getElementById("exact-checkbox").checked = true;}
+        if(isLeaf){ document.getElementById("isLeaf-checkbox").checked = true;}
     }, []);
 
 
@@ -153,7 +162,7 @@ const AdvancedSearch = (props) => {
                 <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
               </div>
               <div className='col-lg-2 col-sm-3'>
-                <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" /><label className="exact-label">Only Leafs</label>
+                <input type="checkbox" className='form-check-input' id="isLeaf-checkbox" value="Obsolete results" onClick={handleIsLeafCheckboxClick} /><label className="exact-label">Only Leafs</label>
               </div>
               <div className="col-lg-4 col-sm-3">
                 <a onClick={handleAdvancedSearchShowHide}>
