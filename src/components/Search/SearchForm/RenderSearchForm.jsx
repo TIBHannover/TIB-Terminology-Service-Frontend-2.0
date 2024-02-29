@@ -94,20 +94,27 @@ const RenderSearchForm = (props) => {
                   <button className='btn btn-outline-secondary search-btn' type='button' onClick={props.triggerSearch}>Search </button>  
                 </div>
               </div>
-                                    
-              {props.autoCompleteResult.length !== 0 &&
-                <div id = "autocomplete-container" className="col-md-12" ref={props.autoCompleteRef}>
-                  {renderAutoCompleteResult()}
-                </div>
-              }         
-              {props.jumpToResult.length !== 0 && !props.ontologyId &&
-                <div ref={props.jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
-                  <div>
-                    <h4>Jump To</h4>
-                    {renderJumpToResult()}
+              <div className="row search-overlay-box">
+                <div className="col-md-12">
+                  <div className="row">
+                  {props.autoCompleteResult.length !== 0 &&
+                  <div id = "autocomplete-container" className="col-md-12" ref={props.autoCompleteRef}>
+                    {renderAutoCompleteResult()}
                   </div>
-                </div>
-              }                                    
+                }  
+                  </div>
+                  <div className="row"> 
+                  {props.jumpToResult.length !== 0 && !props.ontologyId &&
+                  <div ref={props.jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
+                    <div>
+                      <h4>Jump To</h4>
+                      {renderJumpToResult()}
+                    </div>
+                  </div>
+                }
+                  </div>  
+                </div>                                       
+              </div>                                    
     
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>

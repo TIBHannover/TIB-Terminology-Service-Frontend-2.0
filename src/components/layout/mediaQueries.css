@@ -65,6 +65,9 @@
     body .small-jumpto-box{
         width: 80%;
     }
+    body .search-overlay-box{       
+        width: 96%;        
+    }
     .graph-container{
         height: 500px;
         width: 600px;     
@@ -150,6 +153,9 @@
     body .small-jumpto-box{
         width: 80%;
     }
+    body .search-overlay-box{       
+        width: 95%;        
+    }
     .graph-container{
         height: 400px;
         width: 500px;     
@@ -224,6 +230,9 @@
     }   
     body .user-profile-dropdown{
         margin-right: 40px;
+    }
+    body .search-overlay-box{       
+        width: 93%;        
     } 
  }
 
@@ -279,6 +288,9 @@
     }
     body .user-profile-dropdown{
         margin-right: -55px;
+    }
+    body .search-overlay-box{       
+        width: 93%;        
     } 
  }
 
