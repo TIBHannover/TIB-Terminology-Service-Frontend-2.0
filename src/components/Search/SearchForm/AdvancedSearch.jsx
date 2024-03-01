@@ -42,7 +42,12 @@ const AdvancedSearch = (props) => {
             setTermListForSearchUnder([]);
             return true;
         }
-        let inputQuery = {"searchQuery": query, "types": "class,property", "ontologyIds": ontologyIdsInUrl};
+        let inputQuery = {
+            "searchQuery": query, 
+            "types": "class,property", 
+            "ontologyIds": ontologyIdsInUrl,
+            "obsoletes": Toolkit.getObsoleteFlagValue()
+        };
         if(ontologyPageId){
             // restrict the term search to the current opened ontology
             inputQuery['ontologyIds'] = [ontologyPageId];
@@ -186,104 +191,102 @@ const AdvancedSearch = (props) => {
             </div>
             {showAdvancedSearch &&
                 <div className='row adv-search-container'>
-                <div className='col-sm-10'>
-                <br></br>
-                    <br></br>
-                    <h5  className='text-center'><b>Advanced Search Options</b></h5>
-                    <div className="row">
-                        <div className="col-sm-11">
-                            <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
-                                Search In (Metadata)
-                                <div className='tooltip-questionmark'>?</div>
-                            </label>                    
-                            <Multiselect
-                                isObject={false}
-                                options={searchInMetaDataOptions}  
-                                selectedValues={searchInSelectValue}                       
-                                onSelect={handleSearchInMultiSelect}
-                                onRemove={handleSearchInMultiSelect}                        
-                                avoidHighlightFirstOption={true}                        
-                                closeIcon={"cancel"}
-                                id="adv-s-search-in-select"
-                                placeholder="label, description, ..."
-                            />
+                    <div className='col-sm-10'>
+                        <br></br>                    
+                        <div className="row">
+                            <div className="col-sm-11">
+                                <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
+                                    Search In (Metadata)
+                                    <div className='tooltip-questionmark'>?</div>
+                                </label>                    
+                                <Multiselect
+                                    isObject={false}
+                                    options={searchInMetaDataOptions}  
+                                    selectedValues={searchInSelectValue}                       
+                                    onSelect={handleSearchInMultiSelect}
+                                    onRemove={handleSearchInMultiSelect}                        
+                                    avoidHighlightFirstOption={true}                        
+                                    closeIcon={"cancel"}
+                                    id="adv-s-search-in-select"
+                                    placeholder="label, description, ..."
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-11">
-                            <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
-                                Search Under
-                                <div className='tooltip-questionmark'>?</div>
-                            </label>
-                            <Multiselect
-                                isObject={true}
-                                options={termListForSearchUnder}  
-                                selectedValues={searchUnderselectedTerms}                       
-                                onSelect={handleTermSelectionSearchUnder}
-                                onRemove={handleTermSelectionSearchUnder}    
-                                onSearch={loadTermsForSelection}
-                                displayValue={"text"}
-                                avoidHighlightFirstOption={true}       
-                                loading={loadingResult}                 
-                                closeIcon={"cancel"}
-                                id="adv-s-search-under-term"
-                                placeholder="class, property, ..."                        
-                            />
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-11">
-                            <label for='adv-s-search-under-term' title='You can restrict a search to all children of a given term, meaning to search under (subclassOf/is-a plus any hierarchical/transitive properties like ‘part of’ or ‘develops from’)'>
-                                Search Under All
-                                <div className='tooltip-questionmark'>?</div>
-                            </label>
-                            <Multiselect
-                                isObject={true}
-                                options={termListForSearchUnder}  
-                                selectedValues={searchUnderAllselectedTerms}                       
-                                onSelect={handleTermSelectionSearchUnderAll}
-                                onRemove={handleTermSelectionSearchUnderAll}    
-                                onSearch={loadTermsForSelection}
-                                displayValue={"text"}
-                                avoidHighlightFirstOption={true}       
-                                loading={loadingResult}                 
-                                closeIcon={"cancel"}
-                                id="adv-s-search-under-all-term"
-                                placeholder="class, property, ..."                        
-                            />
-                        </div>
-                    </div>
-                    {!ontologyPageId &&
-                        // We do not want to show the ontology selection when the user is on an ontology page already
-                        <>
                         <br></br>
                         <div className="row">
                             <div className="col-sm-11">
-                                <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
-                                    Search In Ontology
+                                <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
+                                    Search Under
                                     <div className='tooltip-questionmark'>?</div>
                                 </label>
-                                {ontologiesListForSelection.length !== 0 &&                                    
-                                    <Multiselect
-                                        isObject={true}
-                                        options={ontologiesListForSelection}  
-                                        selectedValues={selectedOntologies}                       
-                                        onSelect={handleOntologySelection}
-                                        onRemove={handleOntologySelection}                            
-                                        displayValue={"text"}
-                                        avoidHighlightFirstOption={true}                                        
-                                        closeIcon={"cancel"}
-                                        id="adv-s-search-in-ontologies"
-                                        placeholder="Enter Ontology name ..."                        
-                                    />
-                                }
+                                <Multiselect
+                                    isObject={true}
+                                    options={termListForSearchUnder}  
+                                    selectedValues={searchUnderselectedTerms}                       
+                                    onSelect={handleTermSelectionSearchUnder}
+                                    onRemove={handleTermSelectionSearchUnder}    
+                                    onSearch={loadTermsForSelection}
+                                    displayValue={"text"}
+                                    avoidHighlightFirstOption={true}       
+                                    loading={loadingResult}                 
+                                    closeIcon={"cancel"}
+                                    id="adv-s-search-under-term"
+                                    placeholder="class, property, ..."                        
+                                />
                             </div>
                         </div>
-                        </>
-                    }
-                </div>
+                        <br></br>
+                        <div className="row">
+                            <div className="col-sm-11">
+                                <label for='adv-s-search-under-term' title='You can restrict a search to all children of a given term, meaning to search under (subclassOf/is-a plus any hierarchical/transitive properties like ‘part of’ or ‘develops from’)'>
+                                    Search Under All
+                                    <div className='tooltip-questionmark'>?</div>
+                                </label>
+                                <Multiselect
+                                    isObject={true}
+                                    options={termListForSearchUnder}  
+                                    selectedValues={searchUnderAllselectedTerms}                       
+                                    onSelect={handleTermSelectionSearchUnderAll}
+                                    onRemove={handleTermSelectionSearchUnderAll}    
+                                    onSearch={loadTermsForSelection}
+                                    displayValue={"text"}
+                                    avoidHighlightFirstOption={true}       
+                                    loading={loadingResult}                 
+                                    closeIcon={"cancel"}
+                                    id="adv-s-search-under-all-term"
+                                    placeholder="class, property, ..."                        
+                                />
+                            </div>
+                        </div>
+                        {!ontologyPageId &&
+                            // We do not want to show the ontology selection when the user is on an ontology page already
+                            <>
+                            <br></br>
+                            <div className="row">
+                                <div className="col-sm-11">
+                                    <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
+                                        Search In Ontology
+                                        <div className='tooltip-questionmark'>?</div>
+                                    </label>
+                                    {ontologiesListForSelection.length !== 0 &&                                    
+                                        <Multiselect
+                                            isObject={true}
+                                            options={ontologiesListForSelection}  
+                                            selectedValues={selectedOntologies}                       
+                                            onSelect={handleOntologySelection}
+                                            onRemove={handleOntologySelection}                            
+                                            displayValue={"text"}
+                                            avoidHighlightFirstOption={true}                                        
+                                            closeIcon={"cancel"}
+                                            id="adv-s-search-in-ontologies"
+                                            placeholder="Enter Ontology name ..."                        
+                                        />
+                                    }
+                                </div>
+                            </div>
+                            </>
+                        }
+                    </div>
                 </div>                     
             }                
         </>
