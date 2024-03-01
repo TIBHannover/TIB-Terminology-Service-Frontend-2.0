@@ -1,9 +1,6 @@
 import React from "react";
-// import LoginForm from "../Login/Keycloak/Login";
-import Login from "../Login/TS/Login";
-import { withAuth } from "react-oidc-context";
 import { userIsLoginByLocalStorage } from "../Login/TS/Auth";
-import {buildProfileByTsBackend, buildProfileByKecloak} from './ProfileFields';
+import {buildProfileByTsBackend} from './ProfileFields';
 
 
 class UserProfile extends React.Component{
@@ -14,11 +11,10 @@ class UserProfile extends React.Component{
         }
         return [
             <div className="row">
-                 {!this.props.auth.isAuthenticated && userIsLoginByLocalStorage && buildProfileByTsBackend()}
-                {this.props.auth.isAuthenticated && buildProfileByKecloak()}        
+                 {userIsLoginByLocalStorage && buildProfileByTsBackend()}                       
             </div>                    
         ];
     }
 }
 
-export default withAuth(UserProfile);
+export default UserProfile;

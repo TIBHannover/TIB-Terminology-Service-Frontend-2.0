@@ -10,6 +10,7 @@ class AppHelpers{
           </div>    
         ];
     }
+    
 
     static setSiteTitleAndFavIcon(){
         let link = document.querySelector("link[rel~='icon']");
