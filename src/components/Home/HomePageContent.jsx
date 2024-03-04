@@ -22,64 +22,58 @@ export function renderHomePage() {
       </div>
       <br></br>
       <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard  collectionId={'NFDI4Ing'} />
         </div>
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard collectionId={'NFDI4Chem'} />
         </div>
-      </div>
-      <br></br>
-      <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard collectionId={'NFDI4Culture'} />
         </div>
-        <div className="col-sm-6">
-          <CollectionCard collectionId={'CoyPu'} />
-        </div>
       </div>
       <br></br>
       <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
+          <CollectionCard collectionId={'CoyPu'} />
+        </div>
+        <div className="col-sm-4">
           <CollectionCard collectionId={'FID Move'} />
         </div>
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard  collectionId={'FID Baudigital'} />
         </div>
       </div>
       <br></br>
       <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard collectionId={'FAIR Data Spaces'}  />
         </div>
-        <div className="col-sm-6">
-          <CollectionCard collectionId={'NFDI4Cat'} />
-        </div>
-      </div>
-      <br />
-      <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard  collectionId={'ESS'} />
         </div>
-        <div className="col-sm-6">
-          <CollectionCard collectionId={'NFDI4ENERGY'} />
+        <div className="col-sm-4">
+          <CollectionCard collectionId={'NFDI4Cat'} />
         </div>
       </div>
       <br></br>
       <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
+          <CollectionCard collectionId={'NFDI4ENERGY'} />
+        </div>
+        <div className="col-sm-4">
           <CollectionCard collectionId={'DataPLANT'}  />
         </div>
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard collectionId={'Educational Resources'}  />
         </div>
       </div>
       <br />
       <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-4">
           <CollectionCard collectionId={'Foundational Ontologies'} />
-        </div>
-      </div>
+        </div>        
+      </div>           
     </div>,
   ];
 }
