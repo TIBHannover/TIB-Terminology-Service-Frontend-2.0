@@ -97,3 +97,7 @@
 .searchBox{
     width: 100%;
 }
+
+.site-header-search-filters-container .fa-angle-double-down{
+    font-size: 16px;
+}

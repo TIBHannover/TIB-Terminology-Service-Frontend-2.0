@@ -6,6 +6,7 @@ import SearchLib from '../../../Libs/searchLib';
 import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
+import { ToggleButton } from '../../common/ToggleButton/ToggleButton';
 
 
 
@@ -13,6 +14,7 @@ const AdvancedSearch = (props) => {
 
     let currentUrlParams = new URL(window.location).searchParams;
 
+    const [advSearchEnabled, setAdvSearchEnabled] = useState(false);
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
     const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);    
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
@@ -199,18 +201,24 @@ const AdvancedSearch = (props) => {
     return(
         <>
             <div className='row site-header-search-filters-container'>
-              <div className='col-lg-2 col-sm-3'>
+              <div className='col-lg-2 col-sm-4'>
                 <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
               </div>
-              <div className='col-lg-2 col-sm-3'>
+              <div className='col-lg-2 col-sm-4'>
                 <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
               </div>              
-              <div className="col-lg-4 col-sm-3">
-                <a onClick={handleAdvancedSearchShowHide}>
-                  {!showAdvancedSearch && <i className='fa fa-angle-double-down adv-search-btn'>More Search Options</i>}
-                  {showAdvancedSearch && <i className='fa fa-angle-double-up adv-search-btn'>Hide Search Options</i>}
-                </a>
-              </div>
+              <div className="col-lg-8 col-sm-4">                
+                <div className='row'>
+                    <div className='col-sm-12'>
+                        <a onClick={handleAdvancedSearchShowHide}>
+                            {!showAdvancedSearch && <i className='fa fa-angle-double-down adv-search-btn'></i>}
+                            {showAdvancedSearch && <i className='fa fa-angle-double-up adv-search-btn'></i>}
+                        </a>
+                        Advanced Search 
+                        <ToggleButton on={advSearchEnabled}  onClickCallback={() => {setAdvSearchEnabled(!advSearchEnabled)}}/>
+                    </div>                    
+                </div>                                
+              </div>                
             </div>
             {showAdvancedSearch &&
                 <div className='row adv-search-container'>

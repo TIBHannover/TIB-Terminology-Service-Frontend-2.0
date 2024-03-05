@@ -1,0 +1,87 @@
+.toggleButtonLabel {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    margin-bottom: 0;
+    margin-left: 5px;
+    margin-bottom: -5px;        
+    margin-right: 15px;
+}
+  
+.toggleButtonLabel input {
+    display:none;
+}
+  
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ca2222;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 24px;
+    left: 35px;
+    top: 0px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+input:checked + .slider {
+    background-color: #2ab934;
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+  
+input:checked + .slider:before {
+    -webkit-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-35px);
+}
+  
+.toggleButton-on{
+    display: none;
+    left: 60%;
+}
+
+.toggleButton-off{
+    left: 25%;
+}
+  
+.toggleButton-on, .toggleButton-off{
+    color: white;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;    
+    font-size: 12px;
+    font-family: Verdana, sans-serif;
+}
+  
+input:checked + .slider .toggleButton-on{
+    display: block;
+}
+  
+input:checked + .slider .toggleButton-off{
+    display: none;
+}
+  
+.slider.round {
+    border-radius: 34px;
+}
+  
+.slider.round:before {
+    border-radius: 50%;
+}
