@@ -93,3 +93,7 @@
 .searchWrapper{
     background-color: white;
 }
+
+.searchBox{
+    width: 100%;
+}

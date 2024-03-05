@@ -22,6 +22,7 @@ const AdvancedSearch = (props) => {
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
     const [loadingResult, setLoadingResult] = useState(true);
+    const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder(selectedOntologies));
 
     const history = useHistory();
 
@@ -116,13 +117,14 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleOntologySelection(selectedList, selectedItem){                        
-        setSelectedOntologies(selectedList);
+    function handleOntologySelection(selectedList, selectedItem){        
         let currentUrlParams = new URLSearchParams(window.location.search);          
         currentUrlParams.delete('ontology');        
         for(let ontology of selectedList){
-            currentUrlParams.append('ontology', ontology['id']);            
-        }  
+            currentUrlParams.append('ontology', ontology['id']);                        
+        }       
+        setSelectedOntologies(selectedList);  
+        setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));
         history.push(window.location.pathname + "?" + currentUrlParams.toString());    
     }
 
@@ -145,6 +147,18 @@ const AdvancedSearch = (props) => {
 
     function handleAdvancedSearchShowHide(){
         setShowAdvancedSearch(!showAdvancedSearch);
+    }
+
+
+    function createOntologyListForPlaceholder(ontologyList){
+        let selectedOntologyIdsText = (ontologyList.length !== 0 ? "in " : "");
+        for(let ontology of ontologyList){                      
+            selectedOntologyIdsText += (ontology['id'] + ",")
+        }
+        if(selectedOntologyIdsText !== ""){
+            selectedOntologyIdsText = selectedOntologyIdsText.slice(0, -1);
+        }
+        return selectedOntologyIdsText;       
     }
 
 
@@ -179,6 +193,34 @@ const AdvancedSearch = (props) => {
             {showAdvancedSearch &&
                 <div className='row adv-search-container'>
                     <div className='col-sm-10'>
+                    {!ontologyPageId &&
+                            // We do not want to show the ontology selection when the user is on an ontology page already
+                            <>
+                            <br></br>
+                            <div className="row">
+                                <div className="col-sm-11">
+                                    <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
+                                        Search In Ontology
+                                        <div className='tooltip-questionmark'>?</div>
+                                    </label>
+                                    {ontologiesListForSelection.length !== 0 &&                                    
+                                        <Multiselect
+                                            isObject={true}
+                                            options={ontologiesListForSelection}  
+                                            selectedValues={selectedOntologies}                       
+                                            onSelect={handleOntologySelection}
+                                            onRemove={handleOntologySelection}                            
+                                            displayValue={"text"}
+                                            avoidHighlightFirstOption={true}                                        
+                                            closeIcon={"cancel"}
+                                            id="adv-s-search-in-ontologies"
+                                            placeholder="Enter Ontology name ..."                        
+                                        />
+                                    }
+                                </div>
+                            </div>
+                            </>
+                        }
                         <br></br>                    
                         <div className="row">
                             <div className="col-sm-11">
@@ -218,7 +260,7 @@ const AdvancedSearch = (props) => {
                                     loading={loadingResult}                 
                                     closeIcon={"cancel"}
                                     id="adv-s-search-under-term"
-                                    placeholder="class, property, ..."                        
+                                    placeholder={"class, property " + placeHolderExtraText}
                                 />
                             </div>
                         </div>
@@ -241,38 +283,10 @@ const AdvancedSearch = (props) => {
                                     loading={loadingResult}                 
                                     closeIcon={"cancel"}
                                     id="adv-s-search-under-all-term"
-                                    placeholder="class, property, ..."                        
+                                    placeholder={"class, property " + placeHolderExtraText}
                                 />
                             </div>
-                        </div>
-                        {!ontologyPageId &&
-                            // We do not want to show the ontology selection when the user is on an ontology page already
-                            <>
-                            <br></br>
-                            <div className="row">
-                                <div className="col-sm-11">
-                                    <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
-                                        Search In Ontology
-                                        <div className='tooltip-questionmark'>?</div>
-                                    </label>
-                                    {ontologiesListForSelection.length !== 0 &&                                    
-                                        <Multiselect
-                                            isObject={true}
-                                            options={ontologiesListForSelection}  
-                                            selectedValues={selectedOntologies}                       
-                                            onSelect={handleOntologySelection}
-                                            onRemove={handleOntologySelection}                            
-                                            displayValue={"text"}
-                                            avoidHighlightFirstOption={true}                                        
-                                            closeIcon={"cancel"}
-                                            id="adv-s-search-in-ontologies"
-                                            placeholder="Enter Ontology name ..."                        
-                                        />
-                                    }
-                                </div>
-                            </div>
-                            </>
-                        }
+                        </div>                     
                     </div>
                 </div>                     
             }                
