@@ -20,7 +20,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ca2222;
+    background-color: #ECF0F0;    
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -36,10 +36,14 @@
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
-  }
+}
+
+.slider-off::before{
+    background-color: black;
+}
   
 input:checked + .slider {
-    background-color: #2ab934;
+    background-color: #404040;
 }
   
 input:focus + .slider {
@@ -55,14 +59,15 @@ input:checked + .slider:before {
 .toggleButton-on{
     display: none;
     left: 60%;
+    color: white;
 }
 
 .toggleButton-off{
-    left: 25%;
+    left: 25%;    
+    color: black;
 }
   
-.toggleButton-on, .toggleButton-off{
-    color: white;
+.toggleButton-on, .toggleButton-off{    
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;    
