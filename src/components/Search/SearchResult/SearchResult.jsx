@@ -38,8 +38,7 @@ const SearchResult = (props) => {
 
   const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value:10}, {label: "20", value:20}, {label: "30", value:30}, {label: "40", value:40}];
   const searchQuery = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
-  const exact = currentUrlParams.get('exact') === "true" ? true : false;
-  const isLeaf = currentUrlParams.get('isleaf') === "true" ? true : false;
+  const exact = currentUrlParams.get('exact') === "true" ? true : false;  
   const searchInValues = currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : [];
   const searchUnderIris = SearchLib.extractSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.extractSearchUnderAllIrisFromUrl();
@@ -67,8 +66,7 @@ const SearchResult = (props) => {
         selectedTypes: selectedTypes,
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
-        exact: exact,
-        isLeaf: isLeaf,
+        exact: exact,        
         searchInValues: searchInValues,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,
