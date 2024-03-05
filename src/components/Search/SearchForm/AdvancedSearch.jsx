@@ -267,7 +267,7 @@ const AdvancedSearch = (props) => {
                         <div className="row">
                             <div className="col-sm-11">
                                 <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
-                                    Search Under
+                                    Search under parent  
                                     <div className='tooltip-questionmark'>?</div>
                                 </label>
                                 <Multiselect
@@ -289,8 +289,8 @@ const AdvancedSearch = (props) => {
                         <br></br>
                         <div className="row">
                             <div className="col-sm-11">
-                                <label for='adv-s-search-under-term' title='You can restrict a search to all children of a given term, meaning to search under (subclassOf/is-a plus any hierarchical/transitive properties like ‘part of’ or ‘develops from’)'>
-                                    Search Under All
+                                <label for='adv-s-search-under-term' title='Includes is-a, part-of, and develops-from relations.'>
+                                    Search under all transitive parent
                                     <div className='tooltip-questionmark'>?</div>
                                 </label>
                                 <Multiselect
