@@ -162,6 +162,28 @@ const AdvancedSearch = (props) => {
     }
 
 
+    function reset(){
+        setSearchInSelectValue([]);
+        setSearchUnderselectedTerms([]);
+        setSearchUnderAllselectedTerms([]);
+        setSelectedOntologies([]);
+        setExact(false);
+        setPlaceHolderExtraText("");
+        let currentUrlParams = new URLSearchParams(window.location.search);
+        currentUrlParams.delete('searchin');
+        currentUrlParams.delete('searchunder');
+        currentUrlParams.delete('searchunderall');
+        currentUrlParams.delete('ontology');
+        currentUrlParams.delete('obsoletes');
+        currentUrlParams.delete('exact');
+        history.push(window.location.pathname + "?" + currentUrlParams.toString()); 
+        localStorage.setItem("obsoletes", false);
+        document.getElementById("obsoletes-checkbox").checked = false;
+        document.getElementById("exact-checkbox").checked = false;   
+             
+    }
+
+
 
     useEffect(() => {
         if(!ontologyPageId){
@@ -286,7 +308,13 @@ const AdvancedSearch = (props) => {
                                     placeholder={"class, property " + placeHolderExtraText}
                                 />
                             </div>
-                        </div>                     
+                        </div>
+                        <br></br>                     
+                        <div className='row'>
+                            <div className='col-sm-12'>
+                                <button className='btn btn-secondary' onClick={reset} >Reset</button>
+                            </div>
+                        </div>
                     </div>
                 </div>                     
             }                
