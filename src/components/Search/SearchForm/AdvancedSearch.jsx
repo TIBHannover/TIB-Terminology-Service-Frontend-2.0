@@ -14,8 +14,8 @@ const AdvancedSearch = (props) => {
 
     let currentUrlParams = new URL(window.location).searchParams;
 
-    const [advSearchEnabled, setAdvSearchEnabled] = useState(false);
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+    const [advSearchEnabled, setAdvSearchEnabled] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);
+    const [showAdvancedSearch, setShowAdvancedSearch] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);
     const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);    
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
     const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
@@ -187,6 +187,17 @@ const AdvancedSearch = (props) => {
 
 
 
+    function handleAdvancedSearchToggle(){
+        let currentUrlParams = new URLSearchParams(window.location.search);
+        currentUrlParams.set('advsearch', !advSearchEnabled);
+        history.push(window.location.pathname + "?" + currentUrlParams.toString()); 
+        !advSearchEnabled && setShowAdvancedSearch(true);
+        setAdvSearchEnabled(!advSearchEnabled);
+        
+    }
+
+
+
     useEffect(() => {
         if(!ontologyPageId){
             // Only load the list when we are NOT on an ontology page.
@@ -215,7 +226,7 @@ const AdvancedSearch = (props) => {
                             {showAdvancedSearch && <i className='fa fa-angle-double-up adv-search-btn'></i>}
                         </a>
                         Advanced Search 
-                        <ToggleButton on={advSearchEnabled}  onClickCallback={() => {setAdvSearchEnabled(!advSearchEnabled)}}/>
+                        <ToggleButton on={advSearchEnabled}  onClickCallback={handleAdvancedSearchToggle}/>
                     </div>                    
                 </div>                                
               </div>                
