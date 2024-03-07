@@ -97,21 +97,21 @@ const RenderSearchForm = (props) => {
               <div className="row search-overlay-box">
                 <div className="col-md-12">
                   <div className="row">
-                  {props.autoCompleteResult.length !== 0 &&
-                  <div id = "autocomplete-container" className="col-md-12" ref={props.autoCompleteRef}>
-                    {renderAutoCompleteResult()}
-                  </div>
-                }  
+                  {props.autoCompleteResult.length !== 0 && !props.advSearchEnabled && 
+                    <div id = "autocomplete-container" className="col-md-12" ref={props.autoCompleteRef}>
+                      {renderAutoCompleteResult()}
+                    </div>
+                  }  
                   </div>
                   <div className="row"> 
                   {props.jumpToResult.length !== 0 && !props.ontologyId &&
-                  <div ref={props.jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
-                    <div>
-                      <h4>Jump To</h4>
-                      {renderJumpToResult()}
+                    <div ref={props.jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
+                      <div>
+                        <h4>Jump To</h4>
+                        {renderJumpToResult()}
+                      </div>
                     </div>
-                  </div>
-                }
+                  }
                   </div>  
                 </div>                                       
               </div>                                    
