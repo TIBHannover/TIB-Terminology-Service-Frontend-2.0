@@ -13,9 +13,9 @@ const AdvancedSearch = (props) => {
 
     let currentUrlParams = new URL(window.location).searchParams;
     
-    const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
-    const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
-    const [searchUnderAllselectedTerms, setSearchUnderAllselectedTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
+    const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
+    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
+    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
     const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getOntologIdsFromUrl());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
@@ -80,50 +80,26 @@ const AdvancedSearch = (props) => {
 
 
     function handleSearchInMultiSelect(selectedList, selectedItem){        
-        setSearchInSelectValue(selectedList);
-        let currentUrlParams = new URLSearchParams(window.location.search);  
-        currentUrlParams.delete('searchin');
-        for(let val of selectedList){
-            currentUrlParams.append('searchin', val);
-        }        
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+        setSelectedMetaData(selectedList);        
     }
 
 
 
     function handleTermSelectionSearchUnder(selectedList, selectedItem){                
-        setSearchUnderselectedTerms(selectedList);
-        let currentUrlParams = new URLSearchParams(window.location.search);          
-        currentUrlParams.delete('searchunder');        
-        for(let term of selectedList){
-            currentUrlParams.append('searchunder', encodeURIComponent(JSON.stringify(term)));            
-        }  
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+        setSelectedSearchUnderTerms(selectedList); 
     }
 
 
 
     function handleTermSelectionSearchUnderAll(selectedList, selectedItem){                
-        setSearchUnderAllselectedTerms(selectedList);
-        let currentUrlParams = new URLSearchParams(window.location.search);          
-        currentUrlParams.delete('searchunderall');        
-        for(let term of selectedList){
-            currentUrlParams.append('searchunderall', encodeURIComponent(JSON.stringify(term)));            
-        }  
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+        setSelectedSearchUnderAllTerms(selectedList);          
     }
 
 
 
     function handleOntologySelection(selectedList, selectedItem){        
-        let currentUrlParams = new URLSearchParams(window.location.search);          
-        currentUrlParams.delete('ontology');        
-        for(let ontology of selectedList){
-            currentUrlParams.append('ontology', ontology['id']);                        
-        }       
         setSelectedOntologies(selectedList);  
-        setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+        setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
     }
 
 
@@ -141,9 +117,9 @@ const AdvancedSearch = (props) => {
 
 
     function reset(){
-        setSearchInSelectValue([]);
-        setSearchUnderselectedTerms([]);
-        setSearchUnderAllselectedTerms([]);
+        setSelectedMetaData([]);
+        setSelectedSearchUnderTerms([]);
+        setSelectedSearchUnderAllTerms([]);
         setSelectedOntologies([]);        
         setPlaceHolderExtraText("");
         let currentUrlParams = new URLSearchParams(window.location.search);
@@ -152,7 +128,46 @@ const AdvancedSearch = (props) => {
         currentUrlParams.delete('searchunderall');
         currentUrlParams.delete('ontology');       
         history.push(window.location.pathname + "?" + currentUrlParams.toString());                            
-    }    
+    }
+
+
+
+    function updateUrl(){
+        let currentUrlParams = new URLSearchParams(window.location.search);  
+        currentUrlParams.delete('searchin');
+        currentUrlParams.delete('searchunder'); 
+        currentUrlParams.delete('searchunderall');
+        currentUrlParams.delete('ontology');       
+        for(let meta of selectedMetaData){
+            currentUrlParams.append('searchin', meta);
+        }                  
+        
+        for(let term of selectedSearchUnderTerms){
+            currentUrlParams.append('searchunder', encodeURIComponent(JSON.stringify(term)));            
+        }  
+                        
+        for(let term of selectedSearchUnderAllTerms){
+            currentUrlParams.append('searchunderall', encodeURIComponent(JSON.stringify(term)));            
+        }
+                
+        for(let ontology of selectedOntologies){
+            currentUrlParams.append('ontology', ontology['id']);                        
+        }               
+
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());  
+    }
+    
+    
+    function storeStateInLocalStorage(){
+        const states = JSON.stringify({
+            selectedMetaData,
+            selectedSearchUnderTerms,
+            selectedSearchUnderAllTerms,
+            selectedOntologies
+        });
+        
+        localStorage.setItem("advancedSearchStates", states);
+    }
 
 
 
@@ -175,7 +190,16 @@ const AdvancedSearch = (props) => {
             currentUrlParams.delete('exact');
             history.push(window.location.pathname + "?" + currentUrlParams.toString());             
         }
+        else{
+            updateUrl();
+        }
     }, [props.advSearchEnabled]);
+
+
+    useEffect(() => {
+        storeStateInLocalStorage();
+        props.advSearchEnabled && updateUrl();
+    }, [selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms, selectedOntologies]);
 
 
 
@@ -222,7 +246,7 @@ const AdvancedSearch = (props) => {
                                 <Multiselect
                                     isObject={false}
                                     options={searchInMetaDataOptions}  
-                                    selectedValues={searchInSelectValue}                       
+                                    selectedValues={selectedMetaData}                       
                                     onSelect={handleSearchInMultiSelect}
                                     onRemove={handleSearchInMultiSelect}                        
                                     avoidHighlightFirstOption={true}                        
@@ -242,7 +266,7 @@ const AdvancedSearch = (props) => {
                                 <Multiselect
                                     isObject={true}
                                     options={termListForSearchUnder}  
-                                    selectedValues={searchUnderselectedTerms}                       
+                                    selectedValues={selectedSearchUnderTerms}                       
                                     onSelect={handleTermSelectionSearchUnder}
                                     onRemove={handleTermSelectionSearchUnder}    
                                     onSearch={loadTermsForSelection}
@@ -265,7 +289,7 @@ const AdvancedSearch = (props) => {
                                 <Multiselect
                                     isObject={true}
                                     options={termListForSearchUnder}  
-                                    selectedValues={searchUnderAllselectedTerms}                       
+                                    selectedValues={selectedSearchUnderAllTerms}                       
                                     onSelect={handleTermSelectionSearchUnderAll}
                                     onRemove={handleTermSelectionSearchUnderAll}    
                                     onSearch={loadTermsForSelection}
