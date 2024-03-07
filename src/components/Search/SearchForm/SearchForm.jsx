@@ -148,7 +148,7 @@ const SearchForm = (props) => {
 
   function handleObsoletesCheckboxClick(e){        
     let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
-    history.replace({...history.location, search: newUrl.searchParams.toString()});    
+    history.replace(newUrl);    
   }
 
 
