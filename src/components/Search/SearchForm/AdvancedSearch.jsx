@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
-import { getJumpToResult } from '../../../api/fetchData';
+import { getJumpToResult } from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
 import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
-import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
+import { getJumpToResult, getAutoCompleteResult } from '../../../api/search';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import '../../layout/jumpTo.css';
@@ -114,8 +114,8 @@ const SearchForm = () => {
 
 
   function handleObsoletesCheckboxClick(e){        
-      let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);                
-      history.push(newUrl);
+    let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
+    history.replace(newUrl);    
   }
 
 
