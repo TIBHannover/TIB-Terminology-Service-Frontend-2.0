@@ -6,17 +6,13 @@ import SearchLib from '../../../Libs/searchLib';
 import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
-import { ToggleButton } from '../../common/ToggleButton/ToggleButton';
 
 
 
 const AdvancedSearch = (props) => {
 
     let currentUrlParams = new URL(window.location).searchParams;
-
-    const [advSearchEnabled, setAdvSearchEnabled] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);
-    const [exact, setExact] = useState(currentUrlParams.get('exact') === "true" ? true : false);    
+    
     const [searchInSelectValue, setSearchInSelectValue] = useState(currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : []);
     const [searchUnderselectedTerms, setSearchUnderselectedTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
     const [searchUnderAllselectedTerms, setSearchUnderAllselectedTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
@@ -132,26 +128,6 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleExactCheckboxClick(e){
-        let searchUrl = new URL(window.location);
-        setExact(e.target.checked);
-        searchUrl.searchParams.set('exact', e.target.checked); 
-        history.replace({...history.location, search: searchUrl.searchParams.toString()});
-    }
-    
-    
-    
-    function handleObsoletesCheckboxClick(e){        
-        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);                
-        history.push(newUrl);
-    }
-
-
-    function handleAdvancedSearchShowHide(){
-        setShowAdvancedSearch(!showAdvancedSearch);
-    }
-
-
     function createOntologyListForPlaceholder(ontologyList){
         let selectedOntologyIdsText = (ontologyList.length !== 0 ? "in " : "");
         for(let ontology of ontologyList){                      
@@ -168,33 +144,15 @@ const AdvancedSearch = (props) => {
         setSearchInSelectValue([]);
         setSearchUnderselectedTerms([]);
         setSearchUnderAllselectedTerms([]);
-        setSelectedOntologies([]);
-        setExact(false);
+        setSelectedOntologies([]);        
         setPlaceHolderExtraText("");
         let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.delete('searchin');
         currentUrlParams.delete('searchunder');
         currentUrlParams.delete('searchunderall');
-        currentUrlParams.delete('ontology');
-        currentUrlParams.delete('obsoletes');
-        currentUrlParams.delete('exact');
-        history.push(window.location.pathname + "?" + currentUrlParams.toString()); 
-        localStorage.setItem("obsoletes", false);
-        document.getElementById("obsoletes-checkbox").checked = false;
-        document.getElementById("exact-checkbox").checked = false;   
-             
-    }
-
-
-
-    function handleAdvancedSearchToggle(){
-        let currentUrlParams = new URLSearchParams(window.location.search);
-        currentUrlParams.set('advsearch', !advSearchEnabled);
-        history.push(window.location.pathname + "?" + currentUrlParams.toString()); 
-        !advSearchEnabled && setShowAdvancedSearch(true);
-        setAdvSearchEnabled(!advSearchEnabled);
-        
-    }
+        currentUrlParams.delete('ontology');       
+        history.push(window.location.pathname + "?" + currentUrlParams.toString());                            
+    }    
 
 
 
@@ -202,36 +160,28 @@ const AdvancedSearch = (props) => {
         if(!ontologyPageId){
             // Only load the list when we are NOT on an ontology page.
             loadOntologiesForSelection();
-        }        
-        if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-        if(exact){ document.getElementById("exact-checkbox").checked = true;}        
+        }                       
     }, []);
+
+
+    useEffect(() => {
+        if(!props.advSearchEnabled){
+            let currentUrlParams = new URLSearchParams(window.location.search);
+            currentUrlParams.delete('searchin');
+            currentUrlParams.delete('searchunder');
+            currentUrlParams.delete('searchunderall');
+            currentUrlParams.delete('ontology');
+            currentUrlParams.delete('obsoletes');
+            currentUrlParams.delete('exact');
+            history.push(window.location.pathname + "?" + currentUrlParams.toString());             
+        }
+    }, [props.advSearchEnabled]);
 
 
 
     return(
-        <>
-            <div className='row site-header-search-filters-container'>
-              <div className='col-lg-2 col-sm-4'>
-                <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
-              </div>
-              <div className='col-lg-2 col-sm-4'>
-                <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
-              </div>              
-              <div className="col-lg-8 col-sm-4">                
-                <div className='row'>
-                    <div className='col-sm-12'>
-                        <a onClick={handleAdvancedSearchShowHide}>
-                            {!showAdvancedSearch && <i className='fa fa-angle-double-down adv-search-btn'></i>}
-                            {showAdvancedSearch && <i className='fa fa-angle-double-up adv-search-btn'></i>}
-                        </a>
-                        Advanced Search 
-                        <ToggleButton on={advSearchEnabled}  onClickCallback={handleAdvancedSearchToggle}/>
-                    </div>                    
-                </div>                                
-              </div>                
-            </div>
-            {showAdvancedSearch &&
+        <>            
+            {props.advSearchEnabled &&
                 <div className='row adv-search-container'>
                     <div className='col-sm-10'>
                     {!ontologyPageId &&

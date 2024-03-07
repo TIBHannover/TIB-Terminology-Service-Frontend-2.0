@@ -1,12 +1,12 @@
 .toggleButtonLabel {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 20px;
+    width: 45px;
+    height: 15px;
     margin-bottom: 0;
-    margin-left: 5px;
-    margin-bottom: -5px;        
-    margin-right: 15px;
+    margin-left: 14px;
+    margin-bottom: -2px;        
+    /* margin-right: 15px; */
 }
   
 .toggleButtonLabel input {
@@ -28,11 +28,11 @@
 .slider:before {
     position: absolute;
     content: "";
-    height: 20px;
-    width: 24px;
-    left: 35px;
-    top: 0px;
-    bottom: 4px;
+    height: 19px;
+    width: 22px;
+    left: 23px;
+    top: -1px;
+    bottom: 0px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -71,7 +71,7 @@ input:checked + .slider:before {
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;    
-    font-size: 12px;
+    font-size: 10px;
     font-family: Verdana, sans-serif;
 }
   
@@ -84,7 +84,7 @@ input:checked + .slider .toggleButton-off{
 }
   
 .slider.round {
-    border-radius: 34px;
+    border-radius: 20px;
 }
   
 .slider.round:before {

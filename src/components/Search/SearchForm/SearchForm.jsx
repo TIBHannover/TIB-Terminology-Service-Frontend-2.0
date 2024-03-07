@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router';
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
@@ -11,23 +12,23 @@ import '../../layout/searchBar.css';
 
 
 
-const SearchForm = (props) => {
+const SearchForm = () => {
 
   let currentUrlParams = new URL(window.location).searchParams;    
   let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
-  
-  
-
 
   const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);    
   const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);  
+  const [advSearchEnabled, setAdvSearchEnabled] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);  
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
   const exact = currentUrlParams.get('exact') === "true" ? true : false;
+
+  const history = useHistory();
 
 
 
@@ -104,6 +105,28 @@ const SearchForm = (props) => {
   }
 
 
+  function handleExactCheckboxClick(e){
+    let searchUrl = new URL(window.location);    
+    searchUrl.searchParams.set('exact', e.target.checked); 
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});
+  }
+
+
+
+  function handleObsoletesCheckboxClick(e){        
+      let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);                
+      history.push(newUrl);
+  }
+
+
+  function handleAdvancedSearchToggle(){
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.set('advsearch', !advSearchEnabled);
+    history.push(window.location.pathname + "?" + currentUrlParams.toString());     
+    setAdvSearchEnabled(!advSearchEnabled);
+}
+
+
 
   useEffect(() => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
@@ -115,7 +138,9 @@ const SearchForm = (props) => {
       cUrl = decodeURIComponent(cUrl);
       cUrl = cUrl.replaceAll("+", " ");
       document.getElementById("s-field").value = cUrl;
-    }      
+    }
+    if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
+    if(exact){ document.getElementById("exact-checkbox").checked = true;};      
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
@@ -135,8 +160,12 @@ const SearchForm = (props) => {
         setSearchUrl={setSearchUrl}
         jumpToResult={jumpToResult}
         jumptToRef={jumptToRef}
+        handleExactCheckboxClick={handleExactCheckboxClick}
+        handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
+        advSearchEnabled={advSearchEnabled}
+        handleAdvancedSearchToggle={handleAdvancedSearchToggle}
       />
-      <AdvancedSearch />                    
+      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />                    
     </>     
   );
 }

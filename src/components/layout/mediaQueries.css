@@ -134,13 +134,7 @@
     } 
     body input::-webkit-input-placeholder {
         font-size: 11px;
-    }
-    body .header-wrapper{
-        max-height: 350px;
-    }
-    .site-header-search-filters-container{
-        margin-left: 18%;        
-    }   
+    }        
     body .user-profile-dropdown{
         margin-right: -150px;
     }
@@ -221,13 +215,7 @@
     } 
     body input::-webkit-input-placeholder {
         font-size: 11px;
-    }
-    body .header-wrapper{
-        max-height: 650px;
-    }
-    .site-header-search-filters-container{
-        margin-left: 18%;        
-    }   
+    }     
     body .user-profile-dropdown{
         margin-right: 40px;
     }
@@ -279,13 +267,7 @@
     } 
     body ::-webkit-input-placeholder {
         font-size: 10px;
-    }
-    body .header-wrapper{
-        max-height: 600px;
-    } 
-    .site-header-search-filters-container{
-        margin-left: 7%;
-    }
+    }      
     body .user-profile-dropdown{
         margin-right: -55px;
     }

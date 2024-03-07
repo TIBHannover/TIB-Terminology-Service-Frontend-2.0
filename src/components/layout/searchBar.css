@@ -66,19 +66,20 @@
     text-decoration: underline;
 }
 
-.site-header-search-filters-container{
-    margin-left: 18%;
+.search-forn-checkbox-holders{
+    text-align: left;
 }
 
 .search-bar-container{
     margin: auto;
 }
 
-.site-header-search-filters-container .adv-search-btn{
-    font-size: 13px;    
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
+.site-header-search-filters-container{
+    margin-left: 1%;
+}
+
+.site-header-search-filters-container .adv-search-title-holder{
+    text-align: right;
 }
 
 .adv-search-container{
@@ -98,6 +99,4 @@
     width: 100%;
 }
 
-.site-header-search-filters-container .fa-angle-double-down{
-    font-size: 16px;
-}
+

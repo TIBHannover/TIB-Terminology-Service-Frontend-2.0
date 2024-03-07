@@ -1,5 +1,5 @@
 import Toolkit from "../../../Libs/Toolkit";
-
+import { ToggleButton } from "../../common/ToggleButton/ToggleButton";
 
 
 const RenderSearchForm = (props) => {
@@ -122,6 +122,27 @@ const RenderSearchForm = (props) => {
                   <a class="example-link" href="search?q=agent">agent</a></span>
                 </p>
               }
+
+              <div className='row site-header-search-filters-container'>
+                <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders'>
+                  <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={props.handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
+                </div>
+                <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders'>
+                  <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={props.handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
+                </div>              
+                <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
+                  <div className='row'>
+                      <div className='col-sm-12'>
+                          {/* <a onClick={handleAdvancedSearchShowHide}>
+                              {!showAdvancedSearch && <i className='fa fa-angle-double-down adv-search-btn'></i>}
+                              {showAdvancedSearch && <i className='fa fa-angle-double-up adv-search-btn'></i>}
+                          </a> */}
+                          Advanced Search 
+                          <ToggleButton on={props.advSearchEnabled}  onClickCallback={props.handleAdvancedSearchToggle}/>
+                      </div>                    
+                  </div>                                
+                </div>                
+              </div>
             </div>
           </div>          
         </>            
