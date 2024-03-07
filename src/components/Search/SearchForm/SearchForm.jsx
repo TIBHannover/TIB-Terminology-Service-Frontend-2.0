@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
-import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
+import { getJumpToResult, getAutoCompleteResult } from '../../../api/search';
 import Toolkit from '../../../Libs/Toolkit';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
@@ -148,7 +148,7 @@ const SearchForm = (props) => {
 
   function handleObsoletesCheckboxClick(e){        
     let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
-    history.replace({...history.location, search: newUrl.searchParams.toString()});    
+    history.replace(newUrl);    
   }
 
 
