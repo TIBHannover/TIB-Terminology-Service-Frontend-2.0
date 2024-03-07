@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import {setJumpResultButtons} from './SearchFormHelpers';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
-import { getAutoCompleteResult, getJumpToResult } from '../../../api/fetchData';
+import { getJumpToResult, getAutoCompleteResult } from '../../../api/search';
 import Toolkit from '../../../Libs/Toolkit';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';

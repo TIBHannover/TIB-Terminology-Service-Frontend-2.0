@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import Autosuggest from 'react-autosuggest';
-import { getJumpToResult } from "../../../api/fetchData";
+import { getJumpToResult } from "../../../api/search";
 import '../../layout/jumpTo.css';
 import '../../layout/reactAutoSuggestLib.css';
 
