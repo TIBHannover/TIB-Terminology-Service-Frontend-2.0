@@ -3,63 +3,6 @@ import { getCallSetting} from "./constants";
 
 
 
-export async function getCollectionOntologies (collections, exclusive){
-  let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;  
-  let ontologiesCount = 100000;
-  let targetUrl = OntologiesBaseServiceUrl + "/filterby?schema=collection&page=0&size=" + ontologiesCount + "&exclusive=" + exclusive + "&";
-  let urlPros = "";
-  for(let col of collections){
-    if (col !== ""){
-      urlPros += ("classification=" + encodeURIComponent(col) + "&");
-    }
-  }
-  targetUrl += urlPros;
-  return fetch(targetUrl, getCallSetting)
-    .then((s) => s.json())
-    .then((s) => {
-      return s['_embedded']['ontologies'];
-    })
-    .catch((s) => {
-      return [];
-    })
-}
-
-
-
-export async function getAllCollectionsIds(withStats=true) {
-  try{
-    let url =  process.env.REACT_APP_COLLECTION_IDS_BASE_URL;
-    let StatsBaseUrl =  process.env.REACT_APP_STATS_API_URL;
-    let cols =  await fetch(url, getCallSetting);
-    cols = await cols.json();
-    let collections = cols['_embedded']["strings"];
-    let result = [];
-    for( let col of collections ){
-      let ontologiesCountForCollection = 0;
-      if(withStats){
-        let statsUrl = StatsBaseUrl + "byclassification?schema=collection&" + "classification=" + col['content'];
-        let statsResult = await fetch(statsUrl, getCallSetting);
-        statsResult = await statsResult.json();
-        ontologiesCountForCollection = statsResult["numberOfOntologies"];
-      }
-      
-      let collectionOntologies = await getCollectionOntologies([col['content']], false);
-      let collectionOntologiesIds = [];
-      for(let onto of collectionOntologies){
-        collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
-      }
-      let record = {"collection": col['content'], "ontologiesCount": ontologiesCountForCollection, "ontolgies": collectionOntologiesIds};    
-      result.push(record);
-    }
-    return result;
-  }
-  catch(e){
-    return [];
-  }  
-}
-
-
-
 export async function getJumpToResult(inputData, count=10){
   try{
     let autocompleteApiBaseUrl =  process.env.REACT_APP_SEARCH_URL;
@@ -78,8 +21,9 @@ export async function getJumpToResult(inputData, count=10){
     // throw e
     return [];
   }
-
 }
+
+
 
 export async function getObsoleteTermsForTermList(ontologyId, termType, page, size) {
   try{

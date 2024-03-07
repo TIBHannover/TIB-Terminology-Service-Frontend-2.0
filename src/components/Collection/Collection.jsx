@@ -1,6 +1,6 @@
 import React from 'react';
 import '../layout/collectionList.css';
-import {getCollectionOntologies} from '../../api/fetchData';
+import CollectionApi from '../../api/collection';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import queryString from 'query-string'; 
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -20,9 +20,10 @@ class Collections extends React.Component{
 
     
     async setComponentData(){
+        let collectionApi = new CollectionApi();
         let collectionOntologies = {};
         for (let col in collectionsInfoJson){            
-            let ontologies = await getCollectionOntologies([collectionsInfoJson[col]["id"]], false);            
+            let ontologies = await collectionApi.fetchOntologyListForCollections([collectionsInfoJson[col]["id"]], false);            
             collectionOntologies[col] = [];
             for (let onto of ontologies){
                 collectionOntologies[col].push(
