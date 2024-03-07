@@ -214,24 +214,34 @@ const AdvancedSearch = (props) => {
                             <br></br>
                             <div className="row">
                                 <div className="col-sm-11">
-                                    <label for='adv-s-search-under-term' title='You can restrict the search to one or multiple ontologies.'>
-                                        Search In Ontology
-                                        <div className='tooltip-questionmark'>?</div>
-                                    </label>
-                                    {ontologiesListForSelection.length !== 0 &&                                    
-                                        <Multiselect
-                                            isObject={true}
-                                            options={ontologiesListForSelection}  
-                                            selectedValues={selectedOntologies}                       
-                                            onSelect={handleOntologySelection}
-                                            onRemove={handleOntologySelection}                            
-                                            displayValue={"text"}
-                                            avoidHighlightFirstOption={true}                                        
-                                            closeIcon={"cancel"}
-                                            id="adv-s-search-in-ontologies"
-                                            placeholder="Enter Ontology name ..."                        
-                                        />
-                                    }
+                                    <div className='row'>
+                                        <div className='col-sm-3 adv-search-label-holder'>
+                                            <label 
+                                                for='adv-s-search-under-term' 
+                                                title='You can restrict the search to one or multiple ontologies.'                                        
+                                                >
+                                                Search In Ontology
+                                                <div className='tooltip-questionmark'>?</div>
+                                            </label>
+                                        </div>
+                                        <div className='col-sm-9 adv-search-input-holder'>
+                                            {ontologiesListForSelection.length !== 0 &&                                    
+                                                <Multiselect
+                                                    isObject={true}
+                                                    options={ontologiesListForSelection}  
+                                                    selectedValues={selectedOntologies}                       
+                                                    onSelect={handleOntologySelection}
+                                                    onRemove={handleOntologySelection}                            
+                                                    displayValue={"text"}
+                                                    avoidHighlightFirstOption={true}                                        
+                                                    closeIcon={"cancel"}
+                                                    id="adv-s-search-in-ontologies"
+                                                    placeholder="Enter Ontology name ..."   
+                                                    className='multiselect-container'                     
+                                                />
+                                            }
+                                        </div>
+                                    </div>                                                                        
                                 </div>
                             </div>
                             </>
@@ -239,67 +249,85 @@ const AdvancedSearch = (props) => {
                         <br></br>                    
                         <div className="row">
                             <div className="col-sm-11">
-                                <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
-                                    Search In (Metadata)
-                                    <div className='tooltip-questionmark'>?</div>
-                                </label>                    
-                                <Multiselect
-                                    isObject={false}
-                                    options={searchInMetaDataOptions}  
-                                    selectedValues={selectedMetaData}                       
-                                    onSelect={handleSearchInMultiSelect}
-                                    onRemove={handleSearchInMultiSelect}                        
-                                    avoidHighlightFirstOption={true}                        
-                                    closeIcon={"cancel"}
-                                    id="adv-s-search-in-select"
-                                    placeholder="label, description, ..."
-                                />
+                                <div className='row'>
+                                    <div className='col-sm-3 adv-search-label-holder'>
+                                        <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
+                                            Search In Metadata
+                                            <div className='tooltip-questionmark'>?</div>
+                                        </label>   
+                                    </div>
+                                    <div className='col-sm-9 adv-search-input-holder'>
+                                        <Multiselect
+                                            isObject={false}
+                                            options={searchInMetaDataOptions}  
+                                            selectedValues={selectedMetaData}                       
+                                            onSelect={handleSearchInMultiSelect}
+                                            onRemove={handleSearchInMultiSelect}                        
+                                            avoidHighlightFirstOption={true}                        
+                                            closeIcon={"cancel"}
+                                            id="adv-s-search-in-select"
+                                            placeholder="label, description, ..."
+                                        />
+                                    </div>
+                                </div>                                                                                
                             </div>
                         </div>
                         <br></br>
                         <div className="row">
                             <div className="col-sm-11">
-                                <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
-                                    Search under parent  
-                                    <div className='tooltip-questionmark'>?</div>
-                                </label>
-                                <Multiselect
-                                    isObject={true}
-                                    options={termListForSearchUnder}  
-                                    selectedValues={selectedSearchUnderTerms}                       
-                                    onSelect={handleTermSelectionSearchUnder}
-                                    onRemove={handleTermSelectionSearchUnder}    
-                                    onSearch={loadTermsForSelection}
-                                    displayValue={"text"}
-                                    avoidHighlightFirstOption={true}       
-                                    loading={loadingResult}                 
-                                    closeIcon={"cancel"}
-                                    id="adv-s-search-under-term"
-                                    placeholder={"class, property " + placeHolderExtraText}
-                                />
+                                <div className='row'>
+                                    <div className='col-sm-3 adv-search-label-holder'>
+                                        <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
+                                            Search under parent  
+                                            <div className='tooltip-questionmark'>?</div>
+                                        </label>
+                                    </div>
+                                    <div className='col-sm-9 adv-search-input-holder'>
+                                        <Multiselect
+                                            isObject={true}
+                                            options={termListForSearchUnder}  
+                                            selectedValues={selectedSearchUnderTerms}                       
+                                            onSelect={handleTermSelectionSearchUnder}
+                                            onRemove={handleTermSelectionSearchUnder}    
+                                            onSearch={loadTermsForSelection}
+                                            displayValue={"text"}
+                                            avoidHighlightFirstOption={true}       
+                                            loading={loadingResult}                 
+                                            closeIcon={"cancel"}
+                                            id="adv-s-search-under-term"
+                                            placeholder={"class, property " + placeHolderExtraText}
+                                        />
+                                    </div>
+                                </div>                                                                
                             </div>
                         </div>
                         <br></br>
                         <div className="row">
                             <div className="col-sm-11">
-                                <label for='adv-s-search-under-term' title='Includes is-a, part-of, and develops-from relations.'>
-                                    Search under all transitive parent
-                                    <div className='tooltip-questionmark'>?</div>
-                                </label>
-                                <Multiselect
-                                    isObject={true}
-                                    options={termListForSearchUnder}  
-                                    selectedValues={selectedSearchUnderAllTerms}                       
-                                    onSelect={handleTermSelectionSearchUnderAll}
-                                    onRemove={handleTermSelectionSearchUnderAll}    
-                                    onSearch={loadTermsForSelection}
-                                    displayValue={"text"}
-                                    avoidHighlightFirstOption={true}       
-                                    loading={loadingResult}                 
-                                    closeIcon={"cancel"}
-                                    id="adv-s-search-under-all-term"
-                                    placeholder={"class, property " + placeHolderExtraText}
-                                />
+                                <div className='row'>
+                                    <div className='col-sm-3 adv-search-label-holder'>
+                                        <label for='adv-s-search-under-term' title='Includes is-a, part-of, and develops-from relations.'>
+                                            Search under all transitive parent
+                                            <div className='tooltip-questionmark'>?</div>
+                                        </label>
+                                    </div>
+                                    <div className='col-sm-9 adv-search-input-holder'>
+                                        <Multiselect
+                                            isObject={true}
+                                            options={termListForSearchUnder}  
+                                            selectedValues={selectedSearchUnderAllTerms}                       
+                                            onSelect={handleTermSelectionSearchUnderAll}
+                                            onRemove={handleTermSelectionSearchUnderAll}    
+                                            onSearch={loadTermsForSelection}
+                                            displayValue={"text"}
+                                            avoidHighlightFirstOption={true}       
+                                            loading={loadingResult}                 
+                                            closeIcon={"cancel"}
+                                            id="adv-s-search-under-all-term"
+                                            placeholder={"class, property " + placeHolderExtraText}
+                                        />
+                                    </div>
+                                </div>                                                                
                             </div>
                         </div>
                         <br></br>                     

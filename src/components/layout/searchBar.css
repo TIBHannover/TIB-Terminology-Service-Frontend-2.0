@@ -92,11 +92,24 @@
 }
 
 .searchWrapper{
-    background-color: white;
+    background-color: white;            
 }
 
 .searchBox{
-    width: 100%;
+    width: 100%; 
+    white-space: nowrap;
+    overflow-x: auto;       
 }
+
+.adv-search-input-holder{
+    padding-left: 0 !important;
+    margin-left: -2% !important;    
+}
+
+.adv-search-label-holder{    
+    padding-top: 1% !important;
+    text-align: left;
+}
+
 
 
