@@ -14,9 +14,9 @@ const AdvancedSearch = (props) => {
     let currentUrlParams = new URL(window.location).searchParams;
     
     const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
-    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
-    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
-    const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getOntologIdsFromUrl());
+    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrlOrStorage());
+    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());
+    const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getAdvancedOntologIdsFromUrlOrStorage());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
     const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
     const [loadingResult, setLoadingResult] = useState(true);
@@ -137,7 +137,7 @@ const AdvancedSearch = (props) => {
         currentUrlParams.delete('searchin');
         currentUrlParams.delete('searchunder'); 
         currentUrlParams.delete('searchunderall');
-        currentUrlParams.delete('ontology');       
+        currentUrlParams.delete('advontology');       
         for(let meta of selectedMetaData){
             currentUrlParams.append('searchin', meta);
         }                  
@@ -151,7 +151,7 @@ const AdvancedSearch = (props) => {
         }
                 
         for(let ontology of selectedOntologies){
-            currentUrlParams.append('ontology', ontology['id']);                        
+            currentUrlParams.append('advontology', ontology['id']);                        
         }               
 
         history.push(window.location.pathname + "?" + currentUrlParams.toString());  
@@ -185,7 +185,7 @@ const AdvancedSearch = (props) => {
             currentUrlParams.delete('searchin');
             currentUrlParams.delete('searchunder');
             currentUrlParams.delete('searchunderall');
-            currentUrlParams.delete('ontology');
+            currentUrlParams.delete('advontology');
             currentUrlParams.delete('obsoletes');
             currentUrlParams.delete('exact');
             history.push(window.location.pathname + "?" + currentUrlParams.toString());             

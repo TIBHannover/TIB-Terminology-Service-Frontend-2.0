@@ -22,7 +22,7 @@ const SearchResult = (props) => {
   const DEFAULT_PAGE_SIZE = 10;
   
   const [searchResult, setSearchResult] = useState([]);
-  const [selectedOntologies, setSelectedOntologies] = useState(currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology') : []);
+  const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getFilterAndAdvancedOntologyIdsFromUrl());
   const [selectedTypes, setSelectedTypes] = useState(currentUrlParams.get('type') ? currentUrlParams.getAll('type') : []);
   const [selectedCollections, setSelectedCollections] = useState(currentUrlParams.get('collection') ? currentUrlParams.getAll('collection') : []);
   const [facetFields, setFacetFields] = useState([]);
@@ -40,8 +40,8 @@ const SearchResult = (props) => {
   const searchQuery = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
   const exact = currentUrlParams.get('exact') === "true" ? true : false;  
   const searchInValues = currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : [];
-  const searchUnderIris = SearchLib.extractSearchUnderIrisFromUrl();
-  const searchUnderAllIris = SearchLib.extractSearchUnderAllIrisFromUrl();
+  const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
+  const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
 
   async function getAllCollectionIds(){

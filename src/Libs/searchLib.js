@@ -22,7 +22,7 @@ class SearchLib{
     
     
     
-    static getSearchUnderTermsFromUrl(){
+    static getSearchUnderTermsFromUrlOrStorage(){
         try{
             let currentUrlParams = new URL(window.location).searchParams;
             if(currentUrlParams.get('searchunder')){
@@ -46,7 +46,7 @@ class SearchLib{
 
 
 
-    static getSearchUnderAllTermsFromUrl(){
+    static getSearchUnderAllTermsFromUrlOrStorage(){
         try{
             let currentUrlParams = new URL(window.location).searchParams;
             if(currentUrlParams.get('searchunderall')){
@@ -71,11 +71,11 @@ class SearchLib{
 
 
 
-    static getOntologIdsFromUrl(){
+    static getAdvancedOntologIdsFromUrlOrStorage(){
         try{
             let currentUrlParams = new URL(window.location).searchParams;
-            if(currentUrlParams.get('ontology')){
-                let ontologyIds = currentUrlParams.getAll('ontology');
+            if(currentUrlParams.get('advontology')){
+                let ontologyIds = currentUrlParams.getAll('advontology');
                 let ontologyList = [];
                 for(let id of ontologyIds){
                     let opt = {};
@@ -102,7 +102,7 @@ class SearchLib{
     
     
     
-    static extractSearchUnderIrisFromUrl(){
+    static decodeSearchUnderIrisFromUrl(){
         try{
             let currentUrlParams = new URL(window.location).searchParams;
             if(!currentUrlParams.get('searchunder')){
@@ -124,7 +124,7 @@ class SearchLib{
 
 
 
-    static extractSearchUnderAllIrisFromUrl(){
+    static decodeSearchUnderAllIrisFromUrl(){
         try{
             let currentUrlParams = new URL(window.location).searchParams;
             if(!currentUrlParams.get('searchunderall')){                              
@@ -142,6 +142,19 @@ class SearchLib{
             // throw e
             return [];
         }
+    }
+
+
+
+    static getFilterAndAdvancedOntologyIdsFromUrl(){
+        try{
+            let currentUrlParams = new URL(window.location).searchParams;
+            console.log([...currentUrlParams.getAll('ontology'), ...currentUrlParams.getAll('advontology')])                            
+            return [...currentUrlParams.getAll('ontology'), ...currentUrlParams.getAll('advontology')];
+        }   
+        catch(e){            
+            return [];
+        }        
     }
 
 
