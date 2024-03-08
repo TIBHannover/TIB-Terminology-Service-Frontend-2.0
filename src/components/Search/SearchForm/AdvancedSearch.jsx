@@ -30,7 +30,7 @@ const AdvancedSearch = (props) => {
     // The check to see whether we are on an ontology page or not.
     const ontologyPageId = OntologyLib.getCurrentOntologyIdFromUrlPath();
     
-    const ontologyIdsInUrl = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
+    const ontologyIdsInUrl = SearchLib.getFilterAndAdvancedOntologyIdsFromUrl();
 
 
 
