@@ -1,4 +1,3 @@
-import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { convertToRaw, EditorState, convertFromRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -7,28 +6,44 @@ import DOMPurify from 'dompurify';
 
 
 const TextEditor = (props) =>{
+
+    function onModalClick(e){
+        setTimeout(() => {
+            /*  Auto focus on the insert link part when link option is open in toolbar.
+                Time out is needed since it takes abit to load the link view after clicking.
+            */
+            if(document.getElementById('linkTarget')){
+                document.getElementById('linkTarget').focus();
+            }
+        }, 500);        
+    }
+
+
+
     return (
-        <Editor
-            editorState={props.editorState}
-            onEditorStateChange={props.textChangeHandlerFunction}
-            wrapperClassName={props.wrapperClassName}
-            editorClassName={props.editorClassName}
-            placeholder={props.placeholder}          
-            toolbar={{
-                    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
-                    inline: {
-                        options: ['bold', 'italic', 'underline', 'strikethrough'],
-                    },
-                    blockType: {
-                        inDropdown: true,
-                        options: props.textSizeOptions,
-                    },
-                    list: {
-                        inDropdown: true,
-                        options: ['unordered', 'ordered'],
-                    },
-            }}
-        />
+        <div onClick={onModalClick}>
+            <Editor
+                editorState={props.editorState}
+                onEditorStateChange={props.textChangeHandlerFunction}
+                wrapperClassName={props.wrapperClassName}
+                editorClassName={props.editorClassName}
+                placeholder={props.placeholder}                          
+                toolbar={{
+                        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
+                        inline: {
+                            options: ['bold', 'italic', 'underline', 'strikethrough'],
+                        },
+                        blockType: {
+                            inDropdown: true,
+                            options: props.textSizeOptions,
+                        },
+                        list: {
+                            inDropdown: true,
+                            options: ['unordered', 'ordered'],
+                        },
+                }}
+            />
+        </div>
     );
 }
 
