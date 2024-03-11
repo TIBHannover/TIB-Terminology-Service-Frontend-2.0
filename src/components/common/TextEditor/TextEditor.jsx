@@ -15,7 +15,7 @@ const TextEditor = (props) =>{
             if(document.getElementById('linkTarget')){
                 document.getElementById('linkTarget').focus();
             }
-        }, 500);        
+        }, 200);        
     }
 
 
