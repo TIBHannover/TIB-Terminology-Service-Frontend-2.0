@@ -70,11 +70,11 @@ export const OntologyListFacet = (props) => {
                     <div className='row ontology-list-facet-section-box'>
                         <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
                         <div  className="col-sm-12 facet-box" >
-                            <div className='facet-switch-holder'>
-                                <div className="custom-control custom-switch">                                
-                                    <input type="checkbox" className="custom-control-input" id="facet-switch" onChange={props.onSwitchChange} />
-                                    <label className="custom-control-label" for="facet-switch">Intersection</label>
-                                </div>                           
+                            <div className='facet-switch-holder'>                                
+                                <div class="form-check form-switch">                            
+                                    <input class="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch" onChange={props.onSwitchChange} />                            
+                                    <label class="form-check-label" for="facet-switch">Intersection</label>
+                                </div>                          
                             </div>
                             <div>
                                 {collectionBoxes}   

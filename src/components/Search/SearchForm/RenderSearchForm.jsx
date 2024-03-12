@@ -1,5 +1,4 @@
 import Toolkit from "../../../Libs/Toolkit";
-import { ToggleButton } from "../../common/ToggleButton/ToggleButton";
 
 
 const RenderSearchForm = (props) => {
@@ -132,9 +131,11 @@ const RenderSearchForm = (props) => {
                 </div>              
                 <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
                   <div className='row'>
-                      <div className='col-sm-12'>                          
-                          Advanced Search 
-                          <ToggleButton on={props.advSearchEnabled}  onClickCallback={props.handleAdvancedSearchToggle}/>
+                      <div className='col-sm-12'>                           
+                          <div class="form-check form-switch">                            
+                            <input class="form-check-input toggle-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onClickCallback={props.handleAdvancedSearchToggle} />                            
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Advanced Search</label>
+                          </div>
                       </div>                    
                   </div>                                
                 </div>                

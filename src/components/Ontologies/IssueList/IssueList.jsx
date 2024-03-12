@@ -206,17 +206,13 @@ class IssueList extends React.Component{
                             /> 
                         </div>
                         <div className="col-sm-3">                                    
-                            <div class="form-check-inline form-check-inline-github-issue">
-                                <label class="form-check-label">
-                                    <input type="radio" id="issue_radio" class="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"issue"} onChange={this.handleTypeChange}/>
-                                    Issue
-                                </label>
+                            <div class="form-check-inline form-check-inline-github-issue">                                
+                                <input type="radio" id="issue_radio" class="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"issue"} onChange={this.handleTypeChange}/>
+                                <label class="form-check-label">Issue</label>
                             </div>
                             <div class="form-check-inline form-check-inline-github-issue">
-                                <label class="form-check-label">
-                                    <input type="radio" id="pr_radio" class="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"pr"} onChange={this.handleTypeChange}/>
-                                    Pull Request
-                                </label>
+                                <input type="radio" id="pr_radio" class="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"pr"} onChange={this.handleTypeChange}/>
+                                <label class="form-check-label">Pull Request</label>
                             </div>                                                                
                         </div> 
                         <div className="col-sm-3">

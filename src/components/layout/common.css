@@ -188,6 +188,33 @@ input[type="checkbox"]:checked{
     border-color: #404040;
 }
 
+.form-check-input{
+    margin-top: 3px !important;
+}
+
+.form-check-input:checked{
+    accent-color: #404040;
+    border-color: #404040;
+    background-color: #404040;
+}
+
+.toggle-input{
+    background-color: white;
+    color: #404040;
+    border-color: #404040;
+}
+
+.toggle-input:checked{
+    background-color: #404040;
+    color: white;
+    border-color: white;
+}
+
+.toggle-input:focus{
+    border-color: white;
+    color: #404040;
+}
+
 body .cc_banner-wrapper{
     z-index: 9001;
     position: absolute;
