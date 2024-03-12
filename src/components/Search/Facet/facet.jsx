@@ -179,16 +179,13 @@ const Facet = (props) => {
                 ontologiesInFacetLength += 1;
             }
             counter += 1;
-        }        
-        let numberOfShownOntologies = DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES;        
+        }     
+        
+        let numberOfShownOntologies = DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES;         
         if(lastSelectedOntologyIndex > countOfShownOntologies){
             setCountOfShownOntologies(lastSelectedOntologyIndex);
             numberOfShownOntologies = lastSelectedOntologyIndex;           
         }
-        else{
-            setCountOfShownOntologies(DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES);                      
-        }
-
 
         if(ontologiesInFacetLength > numberOfShownOntologies){
             setShowMoreIsNeededForOntologies(true);
