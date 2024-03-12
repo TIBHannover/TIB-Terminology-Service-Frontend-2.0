@@ -205,7 +205,7 @@ const AdvancedSearch = (props) => {
         <>            
             {props.advSearchEnabled &&
                 <div className='row adv-search-container'>
-                    <div className='col-sm-10'>
+                    <div className='col-sm-9'>
                     <br></br>
                     {/* {!ontologyPageId &&
                             // We do not want to show the ontology selection when the user is on an ontology page already
@@ -247,15 +247,17 @@ const AdvancedSearch = (props) => {
                         }
                         <br></br>                     */}
                         <div className="row">
-                            <div className="col-sm-11">
+                            <div className="col-sm-12">                            
                                 <div className='row'>
-                                    <div className='col-sm-3 adv-search-label-holder'>
+                                    <div className='col-sm-11 adv-search-label-holder'>
                                         <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
                                             Search In Metadata
                                             <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                                         </label>   
-                                    </div>
-                                    <div className='col-sm-9 adv-search-input-holder'>
+                                    </div>                                    
+                                </div>
+                                <div className='row'>
+                                    <div className='col-sm-12 adv-search-input-holder'>
                                         <Multiselect
                                             isObject={false}
                                             options={searchInMetaDataOptions}  
@@ -273,15 +275,17 @@ const AdvancedSearch = (props) => {
                         </div>
                         <br></br>
                         <div className="row">
-                            <div className="col-sm-11">
+                            <div className="col-sm-12">
                                 <div className='row'>
-                                    <div className='col-sm-3 adv-search-label-holder'>
+                                    <div className='col-sm-12 adv-search-label-holder'>
                                         <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
                                             Search under parent  
                                             <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                                         </label>
-                                    </div>
-                                    <div className='col-sm-9 adv-search-input-holder'>
+                                    </div>                                    
+                                </div>
+                                <div className='row'>
+                                    <div className='col-sm-12 adv-search-input-holder'>
                                         <Multiselect
                                             isObject={true}
                                             options={termListForSearchUnder}  
@@ -302,15 +306,17 @@ const AdvancedSearch = (props) => {
                         </div>
                         <br></br>
                         <div className="row">
-                            <div className="col-sm-11">
+                            <div className="col-sm-12">
                                 <div className='row'>
-                                    <div className='col-sm-3 adv-search-label-holder'>
+                                    <div className='col-sm-12 adv-search-label-holder'>
                                         <label for='adv-s-search-under-term' title='Includes is-a, part-of, and develops-from relations.'>
                                             Search under all transitive parent                                         
                                             <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>                                                                                       
                                         </label>
-                                    </div>
-                                    <div className='col-sm-9 adv-search-input-holder'>
+                                    </div>                                    
+                                </div>    
+                                <div className='row'>
+                                    <div className='col-sm-12 adv-search-input-holder'>
                                         <Multiselect
                                             isObject={true}
                                             options={termListForSearchUnder}  
@@ -326,7 +332,7 @@ const AdvancedSearch = (props) => {
                                             placeholder={"class, property " + placeHolderExtraText}
                                         />
                                     </div>
-                                </div>                                                                
+                                </div>                                                            
                             </div>
                         </div>
                         <br></br>                     

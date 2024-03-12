@@ -133,8 +133,15 @@ const RenderSearchForm = (props) => {
                   <div className='row'>
                       <div className='col-sm-12'>                           
                           <div class="form-check form-switch">                            
-                            <input class="form-check-input toggle-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onClickCallback={props.handleAdvancedSearchToggle} />                            
-                            <label class="form-check-label" for="flexSwitchCheckChecked">Advanced Search</label>
+                            <input 
+                              class="form-check-input toggle-input" 
+                              type="checkbox" 
+                              role="switch" 
+                              id="adv-search-toggle" 
+                              onClick={props.handleAdvancedSearchToggle} 
+                              checked={props.advSearchEnabled}
+                              />                            
+                            <label class="form-check-label" for="adv-search-toggle">Advanced Search</label>
                           </div>
                       </div>                    
                   </div>                                
