@@ -351,7 +351,7 @@ const SearchResult = (props) => {
             }              
           </div>
           <div className='col-sm-8' id="search-list-grid">
-            {searchResult.length > 0 && <h3 className="text-dark">{`${totalResultsCount} results found for"${searchQuery}"`}</h3>}
+            {searchResult.length > 0 && <h3 className="text-dark">{`${totalResultsCount} results found for "${searchQuery}"`}</h3>}
                <div className='row'>{filterTags}</div>  
                <div className='row'>                                     
                   <div className='col-sm-12 text-right zero-padding-col'>
