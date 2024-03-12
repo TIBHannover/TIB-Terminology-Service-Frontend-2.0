@@ -115,7 +115,7 @@ const RenderSearchForm = (props) => {
                   </div>  
                 </div>                                       
               </div>                                    
-    
+                
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <p>
                   <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
@@ -132,11 +132,7 @@ const RenderSearchForm = (props) => {
                 </div>              
                 <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
                   <div className='row'>
-                      <div className='col-sm-12'>
-                          {/* <a onClick={handleAdvancedSearchShowHide}>
-                              {!showAdvancedSearch && <i className='fa fa-angle-double-down adv-search-btn'></i>}
-                              {showAdvancedSearch && <i className='fa fa-angle-double-up adv-search-btn'></i>}
-                          </a> */}
+                      <div className='col-sm-12'>                          
                           Advanced Search 
                           <ToggleButton on={props.advSearchEnabled}  onClickCallback={props.handleAdvancedSearchToggle}/>
                       </div>                    

@@ -148,8 +148,7 @@ class SearchLib{
 
     static getFilterAndAdvancedOntologyIdsFromUrl(){
         try{
-            let currentUrlParams = new URL(window.location).searchParams;
-            console.log([...currentUrlParams.getAll('ontology'), ...currentUrlParams.getAll('advontology')])                            
+            let currentUrlParams = new URL(window.location).searchParams;                                     
             return [...currentUrlParams.getAll('ontology'), ...currentUrlParams.getAll('advontology')];
         }   
         catch(e){            

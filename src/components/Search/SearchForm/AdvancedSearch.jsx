@@ -252,7 +252,7 @@ const AdvancedSearch = (props) => {
                                     <div className='col-sm-3 adv-search-label-holder'>
                                         <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
                                             Search In Metadata
-                                            <div className='tooltip-questionmark'>?</div>
+                                            <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                                         </label>   
                                     </div>
                                     <div className='col-sm-9 adv-search-input-holder'>
@@ -278,7 +278,7 @@ const AdvancedSearch = (props) => {
                                     <div className='col-sm-3 adv-search-label-holder'>
                                         <label for='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
                                             Search under parent  
-                                            <div className='tooltip-questionmark'>?</div>
+                                            <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                                         </label>
                                     </div>
                                     <div className='col-sm-9 adv-search-input-holder'>
@@ -306,8 +306,8 @@ const AdvancedSearch = (props) => {
                                 <div className='row'>
                                     <div className='col-sm-3 adv-search-label-holder'>
                                         <label for='adv-s-search-under-term' title='Includes is-a, part-of, and develops-from relations.'>
-                                            Search under all transitive parent
-                                            <div className='tooltip-questionmark'>?</div>
+                                            Search under all transitive parent                                         
+                                            <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>                                                                                       
                                         </label>
                                     </div>
                                     <div className='col-sm-9 adv-search-input-holder'>
