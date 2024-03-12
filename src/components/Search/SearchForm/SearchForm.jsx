@@ -77,6 +77,8 @@ const SearchForm = () => {
     let searchUrl = new URL(window.location);
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     searchUrl.pathname =  process.env.REACT_APP_PROJECT_SUB_PATH + "/search";          
+    searchUrl.searchParams.delete('iri');
+    searchUrl.searchParams.delete('issueType');
     searchUrl.searchParams.set('q', label);
     searchUrl.searchParams.set('page', 1);    
     ontologyId && searchUrl.searchParams.set('ontology', ontologyId); 
