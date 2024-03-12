@@ -31,21 +31,22 @@ const TermDetail = (props) => {
 
 
   async function fetchTheTargetTerm(){
-      let term = null
+      let term = null;
+      let ontologyId = ontologyPageContext.ontology.ontologyId;
       if(ontologyPageContext.isSkos && props.componentIdentity === "individual"){
-        let skosApi = new SkosApi({ontologyId:ontologyPageContext.ontology.ontologyId, iri:props.iri})
+        let skosApi = new SkosApi({ontologyId:ontologyId, iri:props.iri})
         await skosApi.fetchSkosTerm();
         term = skosApi.skosTerm;      
       }
       else{
-        let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, encodeURIComponent(props.iri), props.extractKey);
+        let termApi = new TermApi(ontologyId, encodeURIComponent(props.iri), props.extractKey);
         await termApi.fetchTerm();      
         term = termApi.term;
       }
 
       let countOfNotes = 0;
       if(process.env.REACT_APP_NOTE_FEATURE === "true"){
-        countOfNotes = await getNoteList({ontologyId:ontologyPageContext.ontology.ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+        countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:term, onlyOntologyOriginalNotes:false});
         countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
       }
 

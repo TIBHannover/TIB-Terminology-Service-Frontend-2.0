@@ -79,7 +79,7 @@ const Facet = (props) => {
     }
 
 
-    function createOntologiesCheckboxList(){
+    function createOntologiesCheckboxList(){        
         let result = [];
         let counter = 1;        
         for(let ontologyId in ontologyFacetData){                         
@@ -170,7 +170,7 @@ const Facet = (props) => {
     function updateCountOfShownOntologies(){
         let lastSelectedOntologyIndex = 0;
         let counter = 1;
-        let ontologiesInFacetLength = 0;
+        let ontologiesInFacetLength = 0;        
         for(let ontoId in ontologyFacetData){
             if(props.selectedOntologies.includes(ontoId.toLowerCase())){
                 lastSelectedOntologyIndex = counter;
@@ -188,6 +188,7 @@ const Facet = (props) => {
         else{
             setCountOfShownOntologies(DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES);                      
         }
+
 
         if(ontologiesInFacetLength > numberOfShownOntologies){
             setShowMoreIsNeededForOntologies(true);
@@ -224,8 +225,7 @@ const Facet = (props) => {
 
 
     useEffect(() => {        
-        setComponentData(); 
-        updateCountOfShownOntologies();           
+        setComponentData();              
         createTypesCheckboxList();
         createOntologiesCheckboxList();
         createCollectionsCheckBoxes();
@@ -240,6 +240,7 @@ const Facet = (props) => {
 
     useEffect(() => {                       
         createOntologiesCheckboxList();
+        updateCountOfShownOntologies();     
     }, [ontologyFacetData]);
 
 

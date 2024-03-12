@@ -187,6 +187,7 @@ const OntologyPage = (props) => {
       tabLastStates: lastTabsStates,
       lastVisitedIri: lastIrisHistory
     };
+    
     return (        
       <div className='justify-content-center ontology-page-container'>          
             {Toolkit.createHelmet(ontology.ontologyId)}

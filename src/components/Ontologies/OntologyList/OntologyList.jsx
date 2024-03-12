@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
 import { useHistory } from 'react-router';
-import {getCollectionOntologies, getAllCollectionsIds } from '../../../api/fetchData';
+import CollectionApi from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
@@ -36,11 +36,13 @@ const OntologyList = (props) => {
   async function setComponentData (){    
     try{      
       let ontologyApi = new OntologyApi({});
+      let collectionApi = new CollectionApi();
       await ontologyApi.fetchOntologyList(); 
       let allCollections = [];
       if(process.env.REACT_APP_PROJECT_NAME === ""){
         // If TIB General, fetch all the collections. Otherwise not needed.
-        allCollections = await getAllCollectionsIds();
+        await collectionApi.fetchCollectionsWithStats();       
+        allCollections =  collectionApi.collectionsList;
       }                 
       
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
@@ -179,6 +181,7 @@ const OntologyList = (props) => {
 
 
   async function runFilter(){     
+    let collectionApi = new CollectionApi();
     let ontologiesList = [...unFilteredOntologies];
     let keywordOntologies = [];          
     if(keywordFilterString !== ""){                   
@@ -191,7 +194,7 @@ const OntologyList = (props) => {
       ontologiesList = keywordOntologies;    
     }
     if(selectedCollections.length !== 0){      
-      let collectionOntologies = await getCollectionOntologies(selectedCollections, exclusiveCollections);
+      let collectionOntologies = await collectionApi.fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
       let collectionFilteredOntologies = [];
       for (let onto of collectionOntologies){
         if(typeof(ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){

@@ -5,7 +5,8 @@
 
 .collection-card{ 
     background-color: white;
-    padding: 20px;
+    padding: 10px;
+    font-size: 12px;
 }
 
 .trunc{
@@ -17,11 +18,9 @@
 }
 
 .collection-logo{
-    width: 400px;
+    width: 300px;
     height: 200px;
-    padding: 20px;
-    margin-left: 100px;
-
+    padding: 20px;    
 }
 
 .home-page-stats-container{
@@ -40,4 +39,8 @@
 .show-more-text-link{ 
     cursor: pointer;
     font-size: 13px;
+}
+
+.stats-box-text{
+    text-align: center;
 }
