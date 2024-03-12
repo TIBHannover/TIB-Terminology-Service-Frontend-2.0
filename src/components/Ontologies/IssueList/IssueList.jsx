@@ -141,7 +141,7 @@ class IssueList extends React.Component{
         let currentUrlParams = new URLSearchParams();
         currentUrlParams.append('page', pageNumber);
         currentUrlParams.append('stateId', stateId);      
-        currentUrlParams.append('type', type);              
+        currentUrlParams.append('issuetype', type);              
         this.props.history.push(window.location.pathname + "?" + currentUrlParams.toString());
         this.setComponentData(true);
     }

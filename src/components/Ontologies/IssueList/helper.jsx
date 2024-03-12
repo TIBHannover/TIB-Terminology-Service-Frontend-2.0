@@ -41,7 +41,7 @@ export function loadUrlParameter(){
     let result = [];     
     result['selectedStateId'] = url.searchParams.get('stateId');
     result['pageNumber'] = url.searchParams.get('page');
-    result['selectedType'] = url.searchParams.get('type');
+    result['selectedType'] = url.searchParams.get('issuetype');
     return result;    
 }
 
