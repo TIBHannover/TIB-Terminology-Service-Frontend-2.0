@@ -124,10 +124,12 @@ const RenderSearchForm = (props) => {
 
               <div className='row site-header-search-filters-container'>
                 <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders'>
-                  <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={props.handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
+                  <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={props.handleExactCheckboxClick}/>
+                  <label class="form-check-label" for="exact-checkbox">Exact Match</label>
                 </div>
                 <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders'>
-                  <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={props.handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
+                  <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={props.handleObsoletesCheckboxClick}/>
+                  <label class="form-check-label" for="obsoletes-checkbox">Obsolete terms</label>
                 </div>              
                 <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
                   <div className='row'>

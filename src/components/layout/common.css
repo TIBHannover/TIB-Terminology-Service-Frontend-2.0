@@ -190,12 +190,17 @@ input[type="checkbox"]:checked{
 
 .form-check-input{
     margin-top: 3px !important;
+    cursor: pointer;
 }
 
 .form-check-input:checked{
     accent-color: #404040;
     border-color: #404040;
     background-color: #404040;
+}
+
+.form-check-label{
+    cursor: pointer;
 }
 
 .toggle-input{

@@ -208,11 +208,11 @@ class IssueList extends React.Component{
                         <div className="col-sm-3">                                    
                             <div class="form-check-inline form-check-inline-github-issue">                                
                                 <input type="radio" id="issue_radio" class="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"issue"} onChange={this.handleTypeChange}/>
-                                <label class="form-check-label">Issue</label>
+                                <label class="form-check-label" for="issue_radio">Issue</label>
                             </div>
                             <div class="form-check-inline form-check-inline-github-issue">
                                 <input type="radio" id="pr_radio" class="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"pr"} onChange={this.handleTypeChange}/>
-                                <label class="form-check-label">Pull Request</label>
+                                <label class="form-check-label" for="pr_radio">Pull Request</label>
                             </div>                                                                
                         </div> 
                         <div className="col-sm-3">
