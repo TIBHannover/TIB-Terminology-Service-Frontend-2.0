@@ -34,10 +34,14 @@ class TermApi{
             this.term['relations'] = null;
             this.term['eqAxiom'] = null;
             this.term['subClassOf'] = null;                          
-            this.term['isIndividual'] = (this.termType === "individuals");
+            this.term['isIndividual'] = (this.termType === "individuals");            
             await this.fetchImportedAndAlsoInOntologies();
                 
             if(this.termType === "terms"){
+                let curationStatus = await this.createHasCurationStatus();
+                if(curationStatus){
+                    this.term['curationStatus'] = curationStatus;
+                }
                 let parents = await this.getParents();
                 this.term['parents'] = parents;
                 await this.fetchClassRelations();                
@@ -106,13 +110,14 @@ class TermApi{
             this.getRelations(),
             this.getEqAxiom(),
             this.getSubClassOf(),
-            this.getIndividualInstancesForClass()            
+            this.getIndividualInstancesForClass(),
+            this.createHasCurationStatus()            
       
           ]);
           this.term['relations'] = relations;
           this.term['eqAxiom'] = eqAxiom;
           this.term['subClassOf'] = subClassOf; 
-          this.term['instancesList'] = instancesList;          
+          this.term['instancesList'] = instancesList;         
           return true;
     }
 
@@ -276,7 +281,7 @@ class TermApi{
           return {"results": result[this.termType], "totalTermsCount":totalTermsCount };
         }
         catch(e){
-            throw(e)
+            // throw(e)
             return [];
         }      
     }
@@ -358,6 +363,28 @@ class TermApi{
             let graphData = await fetch(url, getCallSetting);
             graphData = await graphData.json();
             return graphData;
+        }
+        catch(e){
+            return null;
+        }
+    }
+
+
+    async createHasCurationStatus(){
+        // has_curation_status is an individual instance in the class instances list.
+        try{
+            let curationStatusLinks = this.term.annotation['has curation status'];
+            if(!curationStatusLinks){
+                return null;
+            }                      
+            let result = [];            
+            for(let csLink of curationStatusLinks){  
+                let termApi = new TermApi(this.ontology, csLink, 'individuals');
+                await termApi.fetchTermWithoutRelations();
+                let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + termApi.term['ontology_name'] + "/individuals?iri=" + encodeURIComponent(termApi.term['iri']);                                        
+                result.push(`<a href="${individualUrl}" target='_blank'>${termApi.term['label']}</a>`);
+            }
+            return result;
         }
         catch(e){
             return null;
