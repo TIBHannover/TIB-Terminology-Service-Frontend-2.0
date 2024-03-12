@@ -1,4 +1,5 @@
 import Toolkit from "./Toolkit";
+import TermApi from "../api/term";
 
 
 
@@ -112,7 +113,7 @@ class TermLib{
             return null;
         }        
         let result = [];  
-        for(let instance of term.instancesList){
+        for(let instance of term.instancesList){            
           let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + instance['ontology_name'] + "/individuals?iri=" + encodeURIComponent(instance['iri']);
           result.push(
             <li>        

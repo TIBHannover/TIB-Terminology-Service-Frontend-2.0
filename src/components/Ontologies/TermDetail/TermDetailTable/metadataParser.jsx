@@ -18,18 +18,22 @@ import TermLib from "../../../../Libs/TermLib";
     metadata['Equivalent to'] = {"value": term.eqAxiom, "isLink": false};
     metadata['Used in axiom'] = {"value": term.relations, "isLink": false};
     metadata['Instances'] = {"value": TermLib.createInstancesListForClass(term), "isLink": false};
+    metadata['has curation status'] = {"value": term.curationStatus, "isLink": false};
     
     if(term.annotation){
       // add custom annotation fields. Metadata key can be anything
       for(let key in term.annotation){
+        if(key === 'has curation status'){          
+          continue;
+        }     
         metadata[key] = [];
-        let value = [];
-        for(let annot of term.annotation[key]){
-          value.push(annot);
-        }
-        metadata[key] = {"value": value.join(',\n'), "isLink": false};
+        let value = [];        
+        for(let annotValue of term.annotation[key]){               
+          value.push(annotValue);
+        }        
+        metadata[key] = {"value": value.join(',\n'), "isLink": false};        
       }    
-    }
+    }    
     
   return metadata;
 }
@@ -56,8 +60,8 @@ export function propertyMetaData(term){
     for(let key in term.annotation){
       metadata[key] = [];
       let value = [];
-      for(let annot of term.annotation[key]){
-        value.push(annot);
+      for(let annotValue of term.annotation[key]){
+        value.push(annotValue);
       }
       metadata[key] = {"value": value.join(',\n'), "isLink": false};
     }

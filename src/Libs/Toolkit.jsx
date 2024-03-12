@@ -72,10 +72,10 @@ class Toolkit{
     }
 
  
-    static objectExistInList(list, searchKey, searchValue){
+    static getObjectInListIfExist(list, searchKey, searchValue){
         for(let item of list){
             if (item[searchKey] === searchValue){
-                return true
+                return item;
             }
         }
         return false;
