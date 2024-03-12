@@ -3,24 +3,22 @@ import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
-import OntologyApi from '../../../api/ontology';
+// import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 
 
 
 const AdvancedSearch = (props) => {
-
-    let currentUrlParams = new URL(window.location).searchParams;
-    
+        
     const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
     const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrlOrStorage());
     const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());
-    const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getAdvancedOntologIdsFromUrlOrStorage());
+    // const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getAdvancedOntologIdsFromUrlOrStorage());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
-    const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
+    // const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
     const [loadingResult, setLoadingResult] = useState(true);
-    const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder(selectedOntologies));
+    const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
 
     const history = useHistory();
 
@@ -64,18 +62,18 @@ const AdvancedSearch = (props) => {
 
 
 
-    async function loadOntologiesForSelection(query){
-        let ontologyApi = new OntologyApi({});
-        await ontologyApi.fetchOntologyList();
-        let ontologyList = [];
-        for (let ontology of ontologyApi.list){
-            let opt = {};
-            opt['text'] = ontology['ontologyId'];
-            opt['id'] = ontology['ontologyId'];
-            ontologyList.push(opt);
-        }
-        setOntologiesListForSelection(ontologyList);
-    }
+    // async function loadOntologiesForSelection(query){
+    //     let ontologyApi = new OntologyApi({});
+    //     await ontologyApi.fetchOntologyList();
+    //     let ontologyList = [];
+    //     for (let ontology of ontologyApi.list){
+    //         let opt = {};
+    //         opt['text'] = ontology['ontologyId'];
+    //         opt['id'] = ontology['ontologyId'];
+    //         ontologyList.push(opt);
+    //     }
+    //     setOntologiesListForSelection(ontologyList);
+    // }
 
 
 
@@ -97,10 +95,10 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleOntologySelection(selectedList, selectedItem){        
-        setSelectedOntologies(selectedList);  
-        setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
-    }
+    // function handleOntologySelection(selectedList, selectedItem){        
+    //     setSelectedOntologies(selectedList);  
+    //     setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
+    // }
 
 
 
@@ -120,7 +118,7 @@ const AdvancedSearch = (props) => {
         setSelectedMetaData([]);
         setSelectedSearchUnderTerms([]);
         setSelectedSearchUnderAllTerms([]);
-        setSelectedOntologies([]);        
+        // setSelectedOntologies([]);        
         setPlaceHolderExtraText("");
         let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.delete('searchin');
@@ -150,9 +148,9 @@ const AdvancedSearch = (props) => {
             currentUrlParams.append('searchunderall', encodeURIComponent(JSON.stringify(term)));            
         }
                 
-        for(let ontology of selectedOntologies){
-            currentUrlParams.append('advontology', ontology['id']);                        
-        }               
+        // for(let ontology of selectedOntologies){
+        //     currentUrlParams.append('advontology', ontology['id']);                        
+        // }               
 
         history.push(window.location.pathname + "?" + currentUrlParams.toString());  
     }
@@ -163,7 +161,7 @@ const AdvancedSearch = (props) => {
             selectedMetaData,
             selectedSearchUnderTerms,
             selectedSearchUnderAllTerms,
-            selectedOntologies
+            // selectedOntologies
         });
         
         localStorage.setItem("advancedSearchStates", states);
@@ -171,12 +169,12 @@ const AdvancedSearch = (props) => {
 
 
 
-    useEffect(() => {
-        if(!ontologyPageId){
-            // Only load the list when we are NOT on an ontology page.
-            loadOntologiesForSelection();
-        }                       
-    }, []);
+    // useEffect(() => {
+    //     if(!ontologyPageId){
+    //         // Only load the list when we are NOT on an ontology page.
+    //         loadOntologiesForSelection();
+    //     }                       
+    // }, []);
 
 
     useEffect(() => {
@@ -199,7 +197,7 @@ const AdvancedSearch = (props) => {
     useEffect(() => {
         storeStateInLocalStorage();
         props.advSearchEnabled && updateUrl();
-    }, [selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms, selectedOntologies]);
+    }, [selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms]);
 
 
 
@@ -208,7 +206,8 @@ const AdvancedSearch = (props) => {
             {props.advSearchEnabled &&
                 <div className='row adv-search-container'>
                     <div className='col-sm-10'>
-                    {!ontologyPageId &&
+                    <br></br>
+                    {/* {!ontologyPageId &&
                             // We do not want to show the ontology selection when the user is on an ontology page already
                             <>
                             <br></br>
@@ -246,7 +245,7 @@ const AdvancedSearch = (props) => {
                             </div>
                             </>
                         }
-                        <br></br>                    
+                        <br></br>                     */}
                         <div className="row">
                             <div className="col-sm-11">
                                 <div className='row'>
