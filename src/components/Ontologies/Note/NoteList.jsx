@@ -5,6 +5,7 @@ import Toolkit from "../../../Libs/Toolkit";
 import { NoteListRender } from "./renders/NoteListRender";
 import { getNoteList } from "../../../api/tsMicroBackendCalls";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { NoteContext } from "../../../context/NoteContext";
 
 
 
@@ -185,31 +186,36 @@ const NoteList = (props) => {
         return null;
     }
     else{
+        const noteContextData = {
+            isAdminForOntology: isAdminForOntology
+        };
+
         return(
-            <NoteListRender 
-                noteSubmited={noteSubmited}
-                noteSubmitSeccuess={noteSubmitSeccuess}
-                noteDetailPage={showNoteDetailPage}
-                componentIsLoading={componentIsLoading}
-                onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}
-                targetArtifactType={props.termType}
-                term={props.term}                                              
-                selectedArtifactType={selectedArtifactType}
-                noteExist={noteExist}
-                noteTotalPageCount={noteTotalPageCount}
-                noteListPage={pageNumber}
-                selectedNoteId={selectedNoteId}
-                notesList={noteList}
-                noteSelectHandler={selectNote}
-                artifactDropDownHandler={artifactDropDownHandler}
-                handlePagination={handlePagination}
-                setNoteCreationResultStatus={setNoteCreationResultStatus}
-                backToListHandler={backToListClick}
-                setNoteExistState={setNoteExist}
-                isAdminForOntology={isAdminForOntology}
-                numberOfpinned={numberOfPinned}
-                handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
-            />
+            <NoteContext.Provider value={noteContextData}>
+                <NoteListRender 
+                    noteSubmited={noteSubmited}
+                    noteSubmitSeccuess={noteSubmitSeccuess}
+                    noteDetailPage={showNoteDetailPage}
+                    componentIsLoading={componentIsLoading}
+                    onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}
+                    targetArtifactType={props.termType}
+                    term={props.term}                                              
+                    selectedArtifactType={selectedArtifactType}
+                    noteExist={noteExist}
+                    noteTotalPageCount={noteTotalPageCount}
+                    noteListPage={pageNumber}
+                    selectedNoteId={selectedNoteId}
+                    notesList={noteList}
+                    noteSelectHandler={selectNote}
+                    artifactDropDownHandler={artifactDropDownHandler}
+                    handlePagination={handlePagination}
+                    setNoteCreationResultStatus={setNoteCreationResultStatus}
+                    backToListHandler={backToListClick}
+                    setNoteExistState={setNoteExist}                    
+                    numberOfpinned={numberOfPinned}
+                    handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
+                />
+            </NoteContext.Provider>
         );
     }
 }

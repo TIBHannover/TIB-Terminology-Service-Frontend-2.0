@@ -68,8 +68,7 @@ const NoteDetail = (props) => {
         <NoteDetailRender 
             note={note}
             noteContent={noteContent}
-            reloadNoteDetail={reloadNoteDetail}
-            isAdminForOntology={props.isAdminForOntology} 
+            reloadNoteDetail={reloadNoteDetail}            
             numberOfpinned={numberOfpinned}
         />
     );

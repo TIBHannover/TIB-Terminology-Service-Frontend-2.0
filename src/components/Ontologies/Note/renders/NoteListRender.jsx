@@ -37,8 +37,7 @@ export const NoteListRender = (props) => {
             result.push(
                 <NoteCard 
                     note={note}  
-                    noteSelectionHandler={props.noteSelectHandler} 
-                    isAdminForOntology={props.isAdminForOntology}
+                    noteSelectionHandler={props.noteSelectHandler}                     
                     numberOfpinned={props.numberOfpinned}
                 />
             );
@@ -157,8 +156,7 @@ export const NoteListRender = (props) => {
                         </div>
                         <br></br>
                         <NoteDetail 
-                            noteId={props.selectedNoteId}                             
-                            isAdminForOntology={props.isAdminForOntology}    
+                            noteId={props.selectedNoteId}                            
                             numberOfpinned={props.numberOfpinned}
                         />
                     </span>                    

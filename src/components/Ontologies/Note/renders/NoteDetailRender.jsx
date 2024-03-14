@@ -14,8 +14,7 @@ export const NoteDetailRender = (props) => {
                     <div className="card">
                         <div className="card-header">
                             <NoteCardHeader 
-                                note={props.note} 
-                                isAdminForOntology={props.isAdminForOntology} 
+                                note={props.note}                                 
                                 numberOfpinned={props.numberOfpinned}
                             />              
                         </div>

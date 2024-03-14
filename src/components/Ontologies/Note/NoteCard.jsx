@@ -1,10 +1,11 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
 import { Link } from 'react-router-dom';
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import NoteEdit from "./NoteEdit";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
+import { NoteContext } from "../../../context/NoteContext";
 
 
 
@@ -22,6 +23,7 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 export const NoteCard = (props) => {
+
     
     let searchParams = new URLSearchParams(window.location.search);        
     searchParams.set('noteId', props.note['id']);
@@ -36,8 +38,7 @@ export const NoteCard = (props) => {
                 <div className="card note-list-card">
                     <div class="card-header">
                         <NoteCardHeader 
-                            note={props.note} 
-                            isAdminForOntology={props.isAdminForOntology}
+                            note={props.note}                         
                             numberOfpinned={props.numberOfpinned}
                         /> 
                     </div>
@@ -118,8 +119,7 @@ export const NoteCardHeader = (props) => {
                 <div className="row">                    
                     <div className="col-sm-12 text-right note-header-container">
                         <NoteActionDropDown 
-                            note={note}
-                            isAdminForOntology={props.isAdminForOntology}
+                            note={note}                            
                             numberOfpinned={props.numberOfpinned}
                             setLinkCopied={setLinkCopied}
                         />
@@ -151,7 +151,9 @@ export const NoteCardHeader = (props) => {
 
 
 
-const NoteActionDropDown = ({note, isAdminForOntology, numberOfpinned, setLinkCopied}) => {
+const NoteActionDropDown = ({note, numberOfpinned, setLinkCopied}) => {
+
+    const noteContext = useContext(NoteContext);
 
     return(
         <div class="dropdown custom-dropdown">
@@ -193,7 +195,7 @@ const NoteActionDropDown = ({note, isAdminForOntology, numberOfpinned, setLinkCo
                                 key={"pinBtnNode" + note['id']} 
                                 note={note}    
                                 callHeaders={callHeader}
-                                isAdminForOntology={isAdminForOntology}
+                                isAdminForOntology={noteContext.isAdminForOntology}
                                 numberOfpinned={numberOfpinned}                                      
                                 />
                         </div>
