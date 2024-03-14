@@ -3,6 +3,7 @@ import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
 import { Link } from 'react-router-dom';
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
+import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import NoteEdit from "./NoteEdit";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import { NoteContext } from "../../../context/NoteContext";
@@ -16,6 +17,7 @@ const VISIBILITY_HELP = {
 }
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
+const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
 const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
@@ -87,6 +89,11 @@ export const NoteCardHeader = (props) => {
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
     deleteFormData.append("ontology_id", props.ontologyId);
+    
+    let reportFormData = new FormData();
+    reportFormData.append("objectId", note['id']);
+    reportFormData.append("objectType", 'note');
+    
     let redirectAfterDeleteEndpoint = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;
@@ -141,6 +148,13 @@ export const NoteCardHeader = (props) => {
                 modalId={note['id']}
                 callHeaders={callHeader}
                 key={"pinnModal" + note['id']}
+            />
+            <ReportModal
+                modalId={note['id']}
+                formData={reportFormData}
+                callHeaders={callHeader}
+                reportEndpoint={reportEndpoint}                
+                key={"reportNote" + note['id']}
             />
         </div> 
     ];
@@ -208,6 +222,12 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                                 >
                                 Edit
                             </button>
+                        </div>
+                        <div class="dropdown-item note-dropdown-item">
+                            <ReportModalBtn 
+                                modalId={note['id']}  
+                                key={"deleteBtnNode" + note['id']} 
+                            />
                         </div>
                         <div class="dropdown-item note-dropdown-item">
                             <DeleteModalBtn
