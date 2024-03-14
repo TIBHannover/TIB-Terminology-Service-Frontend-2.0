@@ -32,8 +32,9 @@ export async function olsSearch({
             // If TIB General. Set collections if exist in filter
             searchUrl += `&schema=collection&classification=${selectedCollections.join(',')}`;
         }
-        else if(process.env.REACT_APP_PROJECT_NAME !== ""){
+        else if(selectedOntologies.length === 0 && process.env.REACT_APP_PROJECT_NAME !== ""){
             // Projects such as NFDI4CHEM. pre-set the target collection on each search
+            // This should NOT be included when ontologies are selected.
             searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
         }
         let result = await (await fetch(searchUrl, getCallSetting)).json(); 

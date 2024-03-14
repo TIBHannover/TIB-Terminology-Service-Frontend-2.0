@@ -47,10 +47,14 @@ const SearchForm = () => {
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;    
     if(process.env.REACT_APP_PROJECT_NAME === "" ){
-      // check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM
+      /* check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM.        
+      */
       inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;
     }
-    else{
+    else if(!ontologyId){
+      /* 
+        If ontologyId exist, it means the user is doing the search from an ontology page and collection is NOT needed.
+      */
       inputForAutoComplete['collectionIds'] = process.env.REACT_APP_PROJECT_NAME;
     }
     
