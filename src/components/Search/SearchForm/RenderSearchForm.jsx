@@ -131,23 +131,25 @@ const RenderSearchForm = (props) => {
                   <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={props.handleObsoletesCheckboxClick}/>
                   <label class="form-check-label" for="obsoletes-checkbox">Obsolete terms</label>
                 </div>              
-                <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
-                  <div className='row'>
-                      <div className='col-sm-12'>                           
-                          <div class="form-check form-switch">                            
-                            <input 
-                              class="form-check-input toggle-input" 
-                              type="checkbox" 
-                              role="switch" 
-                              id="adv-search-toggle" 
-                              onClick={props.handleAdvancedSearchToggle} 
-                              checked={props.advSearchEnabled}
-                              />                            
-                            <label class="form-check-label" for="adv-search-toggle">Advanced Search</label>
-                          </div>
-                      </div>                    
-                  </div>                                
-                </div>                
+                {process.env.REACT_APP_ADVANCED_SEARCH !== "true" &&
+                  <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
+                    <div className='row'>
+                        <div className='col-sm-12'>                           
+                            <div class="form-check form-switch">                            
+                              <input 
+                                class="form-check-input toggle-input" 
+                                type="checkbox" 
+                                role="switch" 
+                                id="adv-search-toggle" 
+                                onClick={props.handleAdvancedSearchToggle} 
+                                checked={props.advSearchEnabled}
+                                />                            
+                              <label class="form-check-label" for="adv-search-toggle">Advanced Search</label>
+                            </div>
+                        </div>                    
+                    </div>                                
+                  </div>
+                }                
               </div>
             </div>
           </div>          

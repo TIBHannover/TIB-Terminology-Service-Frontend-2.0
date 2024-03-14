@@ -167,8 +167,8 @@ const SearchForm = () => {
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         advSearchEnabled={advSearchEnabled}
         handleAdvancedSearchToggle={handleAdvancedSearchToggle}
-      />
-      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />                    
+      />      
+      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />            
     </>     
   );
 }

@@ -201,6 +201,10 @@ const AdvancedSearch = (props) => {
 
 
 
+    if(process.env.REACT_APP_ADVANCED_SEARCH !== "true"){
+        return "";
+    }
+
     return(
         <>            
             {props.advSearchEnabled &&
