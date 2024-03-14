@@ -88,37 +88,12 @@ body .jumpto-result-text:hover{
     text-decoration: none;
 }
 
-body .button-in-jumpto{
-    color: white;
-    padding: 6px;
-    float: right;
-    font-size: 12px;
-    margin-top: -5px;
-}
 
 body .button-in-jumpto:hover{
     text-decoration: none;
     color: white;
 }
 
-body .jmp-term-button{
-    background-color: #0E6668;    
-    margin-left: 15px;    
-    border-color:  #0E6668;    
-}
-
-body .jmp-ontology-button{
-    background-color: #bbae9e;        
-    margin-left: 10px;    
-    margin-right: 10px;    
-    border-color: #bbae9e;    
-}
-
-body .jmp-term-button:hover{
-    text-decoration: none;
-    background-color: #1baeb1;
-    color: white;
- }
 
 body .jmp-ontology-button:hover{
     text-decoration: none;

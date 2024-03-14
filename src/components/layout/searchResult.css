@@ -54,6 +54,8 @@
     font-size: 14px;
     margin-bottom: 5px;
     margin-top: 10px;
+    width: fit-content;
+    display: inline-block;
 }
 
 .remove-tag-icon{

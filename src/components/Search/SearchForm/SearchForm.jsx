@@ -1,47 +1,35 @@
 import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
-import {setJumpResultButtons} from './SearchFormHelpers';
+import RenderSearchForm from './RenderSearchForm';
+import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from '../../Ontologies/JumpTo/KeyboardNavigation';
 import { getJumpToResult, getAutoCompleteResult } from '../../../api/search';
 import Toolkit from '../../../Libs/Toolkit';
+import OntologyLib from '../../../Libs/OntologyLib';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
 
 
 
 
-const SearchForm = (props) => {
+const SearchForm = () => {
 
-  let currentUrlParams = new URL(window.location).searchParams;  
-  let exactFlagInUrl = currentUrlParams.get('exact') === "true" ? true : false;
+  let currentUrlParams = new URL(window.location).searchParams;    
   let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
-  
-  let currentUrlPath = window.location.pathname;
-  currentUrlPath = currentUrlPath.split('ontologies/');
-  let ontologyIdInUrl = null;
-  if(currentUrlPath.length === 2 && currentUrlPath[1] !== ""){
-    ontologyIdInUrl = currentUrlPath[1].includes('/') ? currentUrlPath[1].split('/')[0].trim() : currentUrlPath[1].trim();;
-  }
 
-
-  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);  
-  const [exact, setExact] = useState(exactFlagInUrl);
-  const [ontologyId, setOntologyId] = useState(ontologyIdInUrl);
+  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);    
+  const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const [jumpToResult, setJumpToResult] = useState([]);
+  const [jumpToResult, setJumpToResult] = useState([]);  
+  const [advSearchEnabled, setAdvSearchEnabled] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);  
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
+  const exact = currentUrlParams.get('exact') === "true" ? true : false;
+
   const history = useHistory();
 
-
-  function setPlaceHolder(){    
-    if(ontologyId){
-      return ("Search in \n" + ontologyId);
-    }
-    return("Search for ontology, term, properties and individuals");    
-  }
 
 
   async function handleSearchInputChange(e){
@@ -59,10 +47,14 @@ const SearchForm = (props) => {
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;    
     if(process.env.REACT_APP_PROJECT_NAME === "" ){
-      // check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM
+      /* check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM.        
+      */
       inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;
     }
-    else{
+    else if(!ontologyId){
+      /* 
+        If ontologyId exist, it means the user is doing the search from an ontology page and collection is NOT needed.
+      */
       inputForAutoComplete['collectionIds'] = process.env.REACT_APP_PROJECT_NAME;
     }
     
@@ -74,6 +66,7 @@ const SearchForm = (props) => {
     setAutoCompleteResult(autoCompleteResult);
     setSearchQuery(inputForAutoComplete['searchQuery']);
   }
+
 
 
   function handleKeyDown(e){
@@ -88,6 +81,8 @@ const SearchForm = (props) => {
     let searchUrl = new URL(window.location);
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     searchUrl.pathname =  process.env.REACT_APP_PROJECT_SUB_PATH + "/search";          
+    searchUrl.searchParams.delete('iri');
+    searchUrl.searchParams.delete('issueType');
     searchUrl.searchParams.set('q', label);
     searchUrl.searchParams.set('page', 1);    
     ontologyId && searchUrl.searchParams.set('ontology', ontologyId); 
@@ -108,50 +103,6 @@ const SearchForm = (props) => {
   }
 
 
-  function renderAutoCompleteResult(){
-    let resultList = [];
-    let key = 0;
-    for(let result of autoCompleteResult){      
-      resultList.push(
-        <a href={setSearchUrl(result['autosuggest'])} key={key} className="container">   
-          <div className="autocomplete-item item-for-navigation">
-                {result['autosuggest']}
-          </div>
-        </a>             
-      )
-      key++;      
-    }
-    return resultList
-  }
-
-
-  function renderJumpToResult(){
-    let resultList = []
-    for(let result of jumpToResult){
-      resultList.push(
-        <div className="jump-autocomplete-container">
-           {setJumpResultButtons(result, Toolkit.getObsoleteFlagValue())}
-        </div>          
-      )
-    }
-    return resultList;
-  }
-
-
-  function handleExactCheckboxClick(e){
-    let searchUrl = new URL(window.location);
-    setExact(e.target.checked);
-    searchUrl.searchParams.set('exact', e.target.checked); 
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});
-  }
-
-
-  function handleObsoletesCheckboxClick(e){        
-    let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
-    history.replace(newUrl);    
-  }
-
-
   function closeResultBoxWhenClickedOutside(e){       
     if(!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)){
       setAutoCompleteResult([]);
@@ -160,12 +111,32 @@ const SearchForm = (props) => {
   }
 
 
+  function handleExactCheckboxClick(e){
+    let searchUrl = new URL(window.location);    
+    searchUrl.searchParams.set('exact', e.target.checked); 
+    history.replace({...history.location, search: searchUrl.searchParams.toString()});
+  }
+
+
+
+  function handleObsoletesCheckboxClick(e){        
+    let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
+    history.replace(newUrl);    
+  }
+
+
+  function handleAdvancedSearchToggle(){
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.set('advsearch', !advSearchEnabled);
+    history.push(window.location.pathname + "?" + currentUrlParams.toString());     
+    setAdvSearchEnabled(!advSearchEnabled);
+}
+
+
 
   useEffect(() => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
-    document.addEventListener("keydown", keyboardNavigationForJumpto, false);
-    if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}
+    document.addEventListener("keydown", keyboardNavigationForJumpto, false);    
     let cUrl = window.location.href;        
     if(cUrl.includes("q=")){
       cUrl = cUrl.split("q=")[1];
@@ -173,7 +144,10 @@ const SearchForm = (props) => {
       cUrl = decodeURIComponent(cUrl);
       cUrl = cUrl.replaceAll("+", " ");
       document.getElementById("s-field").value = cUrl;
-    }      
+    }
+    if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
+    if(exact){ document.getElementById("exact-checkbox").checked = true;}
+    // if(advSearchEnabled){document.getElementById("adv-search-toggle").checked = true}      
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
@@ -181,59 +155,26 @@ const SearchForm = (props) => {
   }, []);
 
 
-
-
   return(
     <>
-      <div className='row site-header-searchbox-holder'>
-        <div className='col-sm-9 search-bar-container'>
-          <div class="input-group input-group-lg">                              
-            <input 
-                type="text" 
-                class="form-control search-input" 
-                placeholder={setPlaceHolder()}
-                aria-describedby="basic-addon2"
-                onChange={handleSearchInputChange}
-                onKeyDown={handleKeyDown}
-                id="s-field"                    
-              />
-            <div class="input-group-append">
-              <button className='btn btn-outline-secondary search-btn' type='button' onClick={triggerSearch}>Search </button>  
-            </div>
-          </div>
-                                
-          {autoCompleteResult.length !== 0 &&
-            <div id = "autocomplete-container" className="col-md-12" ref={autoCompleteRef}>
-              {renderAutoCompleteResult()}
-            </div>
-          }         
-          {jumpToResult.length !== 0 && !ontologyId &&
-            <div ref={jumptToRef} className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container" id="jumpresult-container" >
-              <div>
-                <h4>Jump To</h4>
-                {renderJumpToResult()}
-              </div>
-            </div>
-          }                                    
-
-          {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-            <p>
-              <span class="examples" >Examples: <a class="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
-              <a class="example-link" href="search?q=agent">agent</a></span>
-            </p>
-          }
-        </div>
-      </div>
-      <div className='row site-header-search-filters-container'>
-          <div className='col-lg-2 col-sm-3'>
-            <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={handleExactCheckboxClick}/><label className="exact-label">Exact Match</label> 
-          </div>
-          <div className='col-lg-2 col-sm-3'>
-            <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={handleObsoletesCheckboxClick}/><label className="exact-label">Obsolete terms</label>
-          </div>
-      </div>
-    </>            
-  )
+      <RenderSearchForm 
+        ontologyId={ontologyId}
+        handleSearchInputChange={handleSearchInputChange}
+        handleKeyDown={handleKeyDown}
+        triggerSearch={triggerSearch}
+        autoCompleteResult={autoCompleteResult}
+        autoCompleteRef={autoCompleteRef}
+        setSearchUrl={setSearchUrl}
+        jumpToResult={jumpToResult}
+        jumptToRef={jumptToRef}
+        handleExactCheckboxClick={handleExactCheckboxClick}
+        handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
+        advSearchEnabled={advSearchEnabled}
+        handleAdvancedSearchToggle={handleAdvancedSearchToggle}
+      />      
+      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />            
+    </>     
+  );
 }
 
 export default SearchForm;

@@ -1,13 +1,19 @@
+.search-overlay-box{
+    position: absolute;
+    width: 97%;
+    margin: auto;
+    z-index: 2147483647;
+}
+
 #autocomplete-container{  
     height: fit-content;
     border: 0.5px solid black;
-    padding-bottom: 10px;
-    z-index: 2147483647;
+    padding-bottom: 10px;    
     padding-left: 10x;
     padding-right: 10px;
     background-color: white;
     width: 100%;
-    text-align: left;
+    text-align: left;    
 }
 
 .autocomplete-item{ 
@@ -23,7 +29,7 @@
 
 .search-bar-container .jump-autocomplete-container{
     line-height: initial;
-    height: 50px;
+    height: 50px;    
 }
 
 .jump-autocomplete-item{   
@@ -60,10 +66,47 @@
     text-decoration: underline;
 }
 
-.site-header-search-filters-container{
-    margin-left: 18%;
+.search-forn-checkbox-holders{
+    text-align: left;
 }
 
 .search-bar-container{
     margin: auto;
 }
+
+.site-header-search-filters-container{
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+.site-header-search-filters-container .adv-search-title-holder{
+    text-align: right;
+}
+
+.adv-search-container{
+    text-align: left; 
+    margin-left: 19%;    
+}
+
+.optionListContainer{
+    color: black;
+}
+
+.searchWrapper{
+    background-color: white;            
+}
+
+.searchBox{
+    width: 100%; 
+    white-space: nowrap;
+    overflow-x: auto;       
+}
+
+
+.adv-search-label-holder{        
+    text-align: left;
+}
+
+
+
+
