@@ -5,7 +5,7 @@ import NoteDetail from "../NoteDetail";
 import NoteCreation from "../NoteCreation";
 import { Link } from 'react-router-dom';
 import AlertBox from "../../../common/Alerts/Alerts";
-import NoteCard from "../Cards";
+import NoteCard from "../NoteCard";
 
 
 const ALL_TYPE = 0

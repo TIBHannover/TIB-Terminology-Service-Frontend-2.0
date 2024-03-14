@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import { RowWithSingleColumn } from "../../../common/Grid/BootstrapGrid";
-import { CommentCard } from "../Cards";
+import CommentCard from "../CommentCard";
 
 
 

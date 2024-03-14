@@ -1,5 +1,5 @@
 import NoteCommentList from "../NoteCommentList";
-import { NoteCardHeader } from "../Cards";
+import { NoteCardHeader } from "../NoteCard";
 import { buildNoteAboutPart } from "../helpers";
 
 
