@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import DropDown from "../../../common/DropDown/DropDown";
 import Pagination from "../../../common/Pagination/Pagination";
 import NoteDetail from "../NoteDetail";
@@ -6,6 +6,7 @@ import NoteCreation from "../NoteCreation";
 import { Link } from 'react-router-dom';
 import AlertBox from "../../../common/Alerts/Alerts";
 import NoteCard from "../NoteCard";
+import { NoteContext } from "../../../../context/NoteContext";
 
 
 const ALL_TYPE = 0
@@ -26,6 +27,8 @@ const COMPONENT_TYPES_FOR_DROPDOWN = [
 
 export const NoteListRender = (props) => {
 
+    const noteContext = useContext(NoteContext);
+
     const [renderContent, setRenderContent] = useState("");
 
 
@@ -37,8 +40,7 @@ export const NoteListRender = (props) => {
             result.push(
                 <NoteCard 
                     note={note}  
-                    noteSelectionHandler={props.noteSelectHandler}                     
-                    numberOfpinned={props.numberOfpinned}
+                    noteSelectionHandler={props.noteSelectHandler}                    
                 />
             );
         }
@@ -89,7 +91,7 @@ export const NoteListRender = (props) => {
                         <div className="col-sm-12">
                             <div className="row">
                                 <div className="col-sm-3">
-                                    {typeof(props.targetArtifactType) === 'undefined' && 
+                                    {typeof(noteContext.targetArtifactType) === 'undefined' && 
                                         <DropDown 
                                             options={COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types-in-list"
@@ -123,8 +125,7 @@ export const NoteListRender = (props) => {
                                     }
                                 </div>
                                 <div className="col-sm-2">
-                                    <NoteCreation                                         
-                                        targetArtifactType={props.targetArtifactType}  
+                                    <NoteCreation                                        
                                         term={props.term}                                                                                                         
                                         noteListSubmitStatusHandler={props.setNoteCreationResultStatus}                                         
                                         key={"note-creation-btn"}                                                                                         
@@ -155,10 +156,7 @@ export const NoteListRender = (props) => {
                             </div>
                         </div>
                         <br></br>
-                        <NoteDetail 
-                            noteId={props.selectedNoteId}                            
-                            numberOfpinned={props.numberOfpinned}
-                        />
+                        <NoteDetail noteId={props.selectedNoteId} />
                     </span>                    
                 }                
             </div>

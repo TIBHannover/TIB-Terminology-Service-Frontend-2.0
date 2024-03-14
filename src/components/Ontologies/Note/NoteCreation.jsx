@@ -5,12 +5,16 @@ import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { NoteContext } from "../../../context/NoteContext";
 
 
 
 
 const NoteCreation = (props) => {
-    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
+
+    const noteContext = useContext(NoteContext);
+
+    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.targetArtifactType);
     targetType = targetType !== -1 ? targetType : 1;
     let selectedTerm = props.term ? {"iri": props.term['iri'], "label": props.term['label']} : {"iri": null, "label": null};
 

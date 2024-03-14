@@ -38,8 +38,7 @@ export const NoteCard = (props) => {
                 <div className="card note-list-card">
                     <div class="card-header">
                         <NoteCardHeader 
-                            note={props.note}                         
-                            numberOfpinned={props.numberOfpinned}
+                            note={props.note}                            
                         /> 
                     </div>
                     <div className="card-body">
@@ -120,7 +119,6 @@ export const NoteCardHeader = (props) => {
                     <div className="col-sm-12 text-right note-header-container">
                         <NoteActionDropDown 
                             note={note}                            
-                            numberOfpinned={props.numberOfpinned}
                             setLinkCopied={setLinkCopied}
                         />
                     </div>
@@ -151,7 +149,7 @@ export const NoteCardHeader = (props) => {
 
 
 
-const NoteActionDropDown = ({note, numberOfpinned, setLinkCopied}) => {
+const NoteActionDropDown = ({note, setLinkCopied}) => {
 
     const noteContext = useContext(NoteContext);
 
@@ -196,7 +194,7 @@ const NoteActionDropDown = ({note, numberOfpinned, setLinkCopied}) => {
                                 note={note}    
                                 callHeaders={callHeader}
                                 isAdminForOntology={noteContext.isAdminForOntology}
-                                numberOfpinned={numberOfpinned}                                      
+                                numberOfpinned={noteContext.numberOfPinned}                                      
                                 />
                         </div>
                         <div class="dropdown-item note-dropdown-item">

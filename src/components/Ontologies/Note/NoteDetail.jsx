@@ -5,18 +5,19 @@ import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
 import { NoteDetailRender } from "./renders/NoteDetailRender";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { NoteContext } from "../../../context/NoteContext";
 
 
 
 const NoteDetail = (props) => {
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    const noteContext = useContext(NoteContext);
 
     const [note, setNote] = useState({});
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
     const [noteNotFound, setNoteNotFound] = useState(false);
-    const [currentUrl, setCurrentUrl] = useState(window.location.href);
-    const [numberOfpinned, setNumberOfpinned] = useState(0);
+    const [currentUrl, setCurrentUrl] = useState(window.location.href);    
 
     const history = useHistory();
 
@@ -29,8 +30,8 @@ const NoteDetail = (props) => {
             }            
             else{    
                 setNote(result['note']);
-                setNoteContent(createHtmlFromEditorJson(result['note']['content']));
-                setNumberOfpinned(result['number_of_pinned']);
+                setNoteContent(createHtmlFromEditorJson(result['note']['content']));                
+                noteContext.setNumberOfPinned(result['number_of_pinned']);
                 setNoteNotFound(false);                
             }
         });
@@ -68,8 +69,7 @@ const NoteDetail = (props) => {
         <NoteDetailRender 
             note={note}
             noteContent={noteContent}
-            reloadNoteDetail={reloadNoteDetail}            
-            numberOfpinned={numberOfpinned}
+            reloadNoteDetail={reloadNoteDetail}                        
         />
     );
 }

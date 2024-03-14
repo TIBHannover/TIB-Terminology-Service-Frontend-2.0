@@ -1,7 +1,10 @@
 import { createContext } from "react";
 
 const blueprint = {
-    isAdminForOntology: false
+    isAdminForOntology: false,
+    numberOfPinned: 0,
+    setNumberOfPinned: function setTheNUmberOfPinnedNotesForAnOntology(){/* set numberOfPinned */},
+    targetArtifactType: ""
 };
 
 

@@ -13,10 +13,7 @@ export const NoteDetailRender = (props) => {
                 <div className="col-sm-12">
                     <div className="card">
                         <div className="card-header">
-                            <NoteCardHeader 
-                                note={props.note}                                 
-                                numberOfpinned={props.numberOfpinned}
-                            />              
+                            <NoteCardHeader note={props.note} />              
                         </div>
                         <div class="card-body">
                             <h4 className="card-title note-list-title">{props.note['title']}</h4>

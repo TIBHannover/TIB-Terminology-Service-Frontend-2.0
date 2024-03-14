@@ -187,7 +187,10 @@ const NoteList = (props) => {
     }
     else{
         const noteContextData = {
-            isAdminForOntology: isAdminForOntology
+            isAdminForOntology: isAdminForOntology,
+            numberOfPinned: numberOfPinned,
+            setNumberOfPinned: setNumberOfPinned,
+            targetArtifactType: props.termType
         };
 
         return(
@@ -197,8 +200,7 @@ const NoteList = (props) => {
                     noteSubmitSeccuess={noteSubmitSeccuess}
                     noteDetailPage={showNoteDetailPage}
                     componentIsLoading={componentIsLoading}
-                    onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}
-                    targetArtifactType={props.termType}
+                    onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}                    
                     term={props.term}                                              
                     selectedArtifactType={selectedArtifactType}
                     noteExist={noteExist}
@@ -212,7 +214,6 @@ const NoteList = (props) => {
                     setNoteCreationResultStatus={setNoteCreationResultStatus}
                     backToListHandler={backToListClick}
                     setNoteExistState={setNoteExist}                    
-                    numberOfpinned={numberOfPinned}
                     handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
                 />
             </NoteContext.Provider>
