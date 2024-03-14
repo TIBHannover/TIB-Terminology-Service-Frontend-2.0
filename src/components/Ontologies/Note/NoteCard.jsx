@@ -117,71 +117,12 @@ export const NoteCardHeader = (props) => {
             <div className="col-sm-3">
                 <div className="row">                    
                     <div className="col-sm-12 text-right note-header-container">
-                        <div class="dropdown custom-dropdown">
-                            <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </button>
-                            <div class="dropdown-menu note-dropdown-menu" aria-labelledby="dropdownMenu2">                                
-                                <div class="dropdown-item note-dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
-                                    <small><i class="fa fa-solid fa-eye"></i>{note['visibility']}</small>
-                                </div>
-                                <div class="dropdown-item note-dropdown-item">
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-sm note-action-menu-btn borderless-btn"                                      
-                                        onClick={() => {
-                                            let searchParams = new URLSearchParams(window.location.search);
-                                            let locationObject = window.location;
-                                            searchParams.delete('comment');
-                                            searchParams.delete('page');
-                                            searchParams.delete('size');
-                                            searchParams.delete('type');
-                                            searchParams.set('noteId', note['id']);                                             
-                                            navigator.clipboard.writeText(locationObject.origin + locationObject.pathname + "?" +  searchParams.toString());
-                                            setLinkCopied(true);
-                                            setTimeout(() => {
-                                                setLinkCopied(false);
-                                            }, 2000); 
-                                        }}
-                                        >
-                                        <i class="fa fa-solid fa-copy"></i> Link
-                                    </button>
-                                </div>
-                                {note['can_edit'] && !note['imported'] && 
-                                    <span>
-                                        <div class="dropdown-divider"></div>
-                                        <div class="dropdown-item note-dropdown-item">
-                                            <PinnModalBtn
-                                                modalId={note['id']}  
-                                                key={"pinBtnNode" + note['id']} 
-                                                note={note}    
-                                                callHeaders={callHeader}
-                                                isAdminForOntology={props.isAdminForOntology}
-                                                numberOfpinned={props.numberOfpinned}                                      
-                                             />
-                                        </div>
-                                        <div class="dropdown-item note-dropdown-item">
-                                            <button type="button" 
-                                                class="btn btn-sm borderless-btn note-action-menu-btn" 
-                                                data-toggle="modal" 
-                                                data-target={"#edit-note-modal" + note['id']}
-                                                data-backdrop="static"
-                                                data-keyboard="false"
-                                                key={"editNode" + note['id']}                      
-                                                >
-                                                Edit
-                                            </button>
-                                        </div>
-                                        <div class="dropdown-item note-dropdown-item">
-                                            <DeleteModalBtn
-                                                modalId={note['id']}  
-                                                key={"deleteBtnNode" + note['id']}                                              
-                                             />
-                                        </div>
-                                    </span>                                    
-                                }
-                            </div>
-                        </div>
+                        <NoteActionDropDown 
+                            note={note}
+                            isAdminForOntology={props.isAdminForOntology}
+                            numberOfpinned={props.numberOfpinned}
+                            setLinkCopied={setLinkCopied}
+                        />
                     </div>
                 </div>                                                      
             </div>
@@ -205,6 +146,80 @@ export const NoteCardHeader = (props) => {
             />
         </div> 
     ];
+}
+
+
+
+
+const NoteActionDropDown = ({note, isAdminForOntology, numberOfpinned, setLinkCopied}) => {
+
+    return(
+        <div class="dropdown custom-dropdown">
+            <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-ellipsis-h"></i>
+            </button>
+            <div class="dropdown-menu note-dropdown-menu" aria-labelledby="dropdownMenu2">                                
+                <div class="dropdown-item note-dropdown-item" data-toggle="tooltip"  data-placement="top" title={VISIBILITY_HELP[note['visibility']]}>
+                    <small><i class="fa fa-solid fa-eye"></i>{note['visibility']}</small>
+                </div>
+                <div class="dropdown-item note-dropdown-item">
+                    <button 
+                        type="button" 
+                        class="btn btn-sm note-action-menu-btn borderless-btn"                                      
+                        onClick={() => {
+                            let searchParams = new URLSearchParams(window.location.search);
+                            let locationObject = window.location;
+                            searchParams.delete('comment');
+                            searchParams.delete('page');
+                            searchParams.delete('size');
+                            searchParams.delete('type');
+                            searchParams.set('noteId', note['id']);                                             
+                            navigator.clipboard.writeText(locationObject.origin + locationObject.pathname + "?" +  searchParams.toString());
+                            setLinkCopied(true);
+                            setTimeout(() => {
+                                setLinkCopied(false);
+                            }, 2000); 
+                        }}
+                        >
+                        <i class="fa fa-solid fa-copy"></i> Link
+                    </button>
+                </div>
+                {note['can_edit'] && !note['imported'] && 
+                    <span>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item note-dropdown-item">
+                            <PinnModalBtn
+                                modalId={note['id']}  
+                                key={"pinBtnNode" + note['id']} 
+                                note={note}    
+                                callHeaders={callHeader}
+                                isAdminForOntology={isAdminForOntology}
+                                numberOfpinned={numberOfpinned}                                      
+                                />
+                        </div>
+                        <div class="dropdown-item note-dropdown-item">
+                            <button type="button" 
+                                class="btn btn-sm borderless-btn note-action-menu-btn" 
+                                data-toggle="modal" 
+                                data-target={"#edit-note-modal" + note['id']}
+                                data-backdrop="static"
+                                data-keyboard="false"
+                                key={"editNode" + note['id']}                      
+                                >
+                                Edit
+                            </button>
+                        </div>
+                        <div class="dropdown-item note-dropdown-item">
+                            <DeleteModalBtn
+                                modalId={note['id']}  
+                                key={"deleteBtnNode" + note['id']}                                              
+                                />
+                        </div>
+                    </span>                                    
+                }
+            </div>
+        </div>
+    );
 }
 
 
