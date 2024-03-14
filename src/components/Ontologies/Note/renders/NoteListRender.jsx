@@ -125,8 +125,7 @@ export const NoteListRender = (props) => {
                                     }
                                 </div>
                                 <div className="col-sm-2">
-                                    <NoteCreation                                        
-                                        term={props.term}                                                                                                         
+                                    <NoteCreation                                                                                                                                              
                                         noteListSubmitStatusHandler={props.setNoteCreationResultStatus}                                         
                                         key={"note-creation-btn"}                                                                                         
                                     />

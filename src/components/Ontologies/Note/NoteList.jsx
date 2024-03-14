@@ -190,7 +190,8 @@ const NoteList = (props) => {
             isAdminForOntology: isAdminForOntology,
             numberOfPinned: numberOfPinned,
             setNumberOfPinned: setNumberOfPinned,
-            targetArtifactType: props.termType
+            targetArtifactType: props.termType,
+            selectedTermInTree: props.term
         };
 
         return(
@@ -200,8 +201,7 @@ const NoteList = (props) => {
                     noteSubmitSeccuess={noteSubmitSeccuess}
                     noteDetailPage={showNoteDetailPage}
                     componentIsLoading={componentIsLoading}
-                    onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}                    
-                    term={props.term}                                              
+                    onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}                                                              
                     selectedArtifactType={selectedArtifactType}
                     noteExist={noteExist}
                     noteTotalPageCount={noteTotalPageCount}

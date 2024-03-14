@@ -5,12 +5,14 @@ import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
 import TermLib from "../../../../Libs/TermLib";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
+import { NoteContext } from "../../../../context/NoteContext";
 
 
 
 export const NoteCreationRender = (props) => {
     
     const ontologyPageContext = useContext(OntologyPageContext); 
+    const noteContext = useContext(NoteContext);
     
     useEffect(() => {
         if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
@@ -60,7 +62,7 @@ export const NoteCreationRender = (props) => {
                         <div class="modal-body"> 
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {!props.term && 
+                                    {!noteContext.selectedTermInTree && 
                                         <DropDown 
                                             options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types"
@@ -104,7 +106,7 @@ export const NoteCreationRender = (props) => {
                                                 label={"About *"}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}
-                                                initialInput={props.term ? props.term['label'] : false}
+                                                initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'] : false}
                                                 id="note_creation_auto_suggest"                                                
                                             />
                                             <br></br>

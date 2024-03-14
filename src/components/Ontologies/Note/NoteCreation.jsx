@@ -16,7 +16,9 @@ const NoteCreation = (props) => {
 
     let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.targetArtifactType);
     targetType = targetType !== -1 ? targetType : 1;
-    let selectedTerm = props.term ? {"iri": props.term['iri'], "label": props.term['label']} : {"iri": null, "label": null};
+    let selectedTerm = noteContext.selectedTermInTree 
+        ? {"iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label']} 
+        : {"iri": null, "label": null};
 
     const ontologyPageContext = useContext(OntologyPageContext);    
 
@@ -61,8 +63,7 @@ const NoteCreation = (props) => {
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
-        setEditorState(null);        
-        // setTargetArtifactType(!props.term constantsVars.ONTOLOGY_COMPONENT_ID);                
+        setEditorState(null);                           
         setSelectedTermFromAutoComplete({"iri": null, "label": null});   
         setParentOntology(null);         
     }
@@ -107,9 +108,9 @@ const NoteCreation = (props) => {
         
         let targetType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifactType];
         
-        if(props.term){
-            // Note creation fro an specific term in from term detail tabel
-            selectedTargetTermIri = props.term['iri'];
+        if(noteContext.selectedTermInTree){
+            // Note creation for an specific term in from term detail tabel
+            selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
             targetType = props.targetArtifactType;
         }
                 
@@ -147,12 +148,12 @@ const NoteCreation = (props) => {
 
 
     useEffect(async() => {
-        if(props.term){
-            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, props.term['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
+        if(noteContext.selectedTermInTree){
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
             let parentOnto = await termApi.getClassOriginalOntology();            
             setParentOntology(parentOnto);
         }           
-    }, [props.term]);
+    }, [noteContext.selectedTermInTree]);
 
 
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
@@ -167,8 +168,7 @@ const NoteCreation = (props) => {
             key={"note-creation-render"}            
             closeModal={closeModal}            
             targetArtifactType={targetArtifactType}
-            changeArtifactType={changeArtifactType}
-            term={props.term}
+            changeArtifactType={changeArtifactType}            
             visibility={visibility}
             changeVisibility={changeVisibility}              
             noteTitle={noteTitle}
