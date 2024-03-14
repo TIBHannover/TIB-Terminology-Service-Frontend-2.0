@@ -198,6 +198,14 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                         <i class="fa fa-solid fa-copy"></i> Link
                     </button>
                 </div>
+                {localStorage.getItem('isLoginInTs') === "true" &&
+                    <div class="dropdown-item note-dropdown-item">
+                        <ReportModalBtn 
+                            modalId={note['id']}  
+                            key={"deleteBtnNode" + note['id']} 
+                        />
+                    </div>
+                }
                 {note['can_edit'] && !note['imported'] && 
                     <span>
                         <div class="dropdown-divider"></div>
@@ -222,13 +230,7 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                                 >
                                 Edit
                             </button>
-                        </div>
-                        <div class="dropdown-item note-dropdown-item">
-                            <ReportModalBtn 
-                                modalId={note['id']}  
-                                key={"deleteBtnNode" + note['id']} 
-                            />
-                        </div>
+                        </div>                        
                         <div class="dropdown-item note-dropdown-item">
                             <DeleteModalBtn
                                 modalId={note['id']}  
