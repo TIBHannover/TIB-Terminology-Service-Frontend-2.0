@@ -21,9 +21,9 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
-
 export const NoteCard = (props) => {
 
+    const noteContext = useContext(NoteContext);
     
     let searchParams = new URLSearchParams(window.location.search);        
     searchParams.set('noteId', props.note['id']);
@@ -48,7 +48,7 @@ export const NoteCard = (props) => {
                                     <Link to={noteUrl} 
                                         className="note-list-title custom-truncate" 
                                         value={props.note['id']} 
-                                        onClick={props.noteSelectionHandler}
+                                        onClick={noteContext.noteSelectHandler}
                                         >
                                         {props.note['title']}
                                     </Link>

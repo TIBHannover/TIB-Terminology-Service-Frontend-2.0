@@ -4,8 +4,11 @@ const blueprint = {
     isAdminForOntology: false,
     numberOfPinned: 0,
     setNumberOfPinned: function setTheNUmberOfPinnedNotesForAnOntology(){/* set numberOfPinned */},
-    targetArtifactType: "",
-    selectedTermInTree: null
+    selectedTermTypeInTree: "",
+    selectedTermInTree: null,
+    noteSelectHandler: function handleNoteSelectionInList(){},
+    setNoteCreationResultStatus: function setNoteCreationResultStatusInNoteList(){},
+    selectedNoteId: null
 };
 
 

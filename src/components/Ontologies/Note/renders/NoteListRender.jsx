@@ -38,10 +38,7 @@ export const NoteListRender = (props) => {
         let result = [];
         for(let note of notes){            
             result.push(
-                <NoteCard 
-                    note={note}  
-                    noteSelectionHandler={props.noteSelectHandler}                    
-                />
+                <NoteCard  note={note} />
             );
         }
 
@@ -91,7 +88,7 @@ export const NoteListRender = (props) => {
                         <div className="col-sm-12">
                             <div className="row">
                                 <div className="col-sm-3">
-                                    {typeof(noteContext.targetArtifactType) === 'undefined' && 
+                                    {typeof(noteContext.selectedTermTypeInTree) === 'undefined' && 
                                         <DropDown 
                                             options={COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types-in-list"
@@ -125,10 +122,7 @@ export const NoteListRender = (props) => {
                                     }
                                 </div>
                                 <div className="col-sm-2">
-                                    <NoteCreation                                                                                                                                              
-                                        noteListSubmitStatusHandler={props.setNoteCreationResultStatus}                                         
-                                        key={"note-creation-btn"}                                                                                         
-                                    />
+                                    <NoteCreation  key={"note-creation-btn"}  />
                                 </div>
                             </div>
                             <div className="row">
@@ -155,7 +149,7 @@ export const NoteListRender = (props) => {
                             </div>
                         </div>
                         <br></br>
-                        <NoteDetail noteId={props.selectedNoteId} />
+                        <NoteDetail  />
                     </span>                    
                 }                
             </div>

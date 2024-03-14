@@ -23,7 +23,7 @@ const NoteDetail = (props) => {
 
 
     function getTheNote(){
-        let noteId = props.noteId;        
+        let noteId = noteContext.selectedNoteId;        
         getNoteDetail({noteId: noteId, ontologyId:ontologyPageContext.ontology.ontologyId}).then((result) => {
             if(result === '404'){
                 setNoteNotFound(true);                
@@ -48,14 +48,14 @@ const NoteDetail = (props) => {
 
 
     useEffect(() => {
-        if(props.noteId){
+        if(noteContext.selectedNoteId){
             getTheNote();
         }  
     }, []);
 
     useEffect(() => {        
         getTheNote();        
-    }, [props.noteId, currentUrl]);
+    }, [noteContext.selectedNoteId, currentUrl]);
 
 
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            

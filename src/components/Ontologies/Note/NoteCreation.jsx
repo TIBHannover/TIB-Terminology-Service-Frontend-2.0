@@ -14,7 +14,7 @@ const NoteCreation = (props) => {
 
     const noteContext = useContext(NoteContext);
 
-    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.targetArtifactType);
+    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
     targetType = targetType !== -1 ? targetType : 1;
     let selectedTerm = noteContext.selectedTermInTree 
         ? {"iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label']} 
@@ -125,7 +125,7 @@ const NoteCreation = (props) => {
             data.append("parentOntology", parentOntology);
         }
         submitNote(data).then((newNoteId) => {
-            props.noteListSubmitStatusHandler(newNoteId);
+            noteContext.setNoteCreationResultStatus(newNoteId);
             closeModal(newNoteId);
         });
     }

@@ -190,8 +190,11 @@ const NoteList = (props) => {
             isAdminForOntology: isAdminForOntology,
             numberOfPinned: numberOfPinned,
             setNumberOfPinned: setNumberOfPinned,
-            targetArtifactType: props.termType,
-            selectedTermInTree: props.term
+            selectedTermTypeInTree: props.termType,
+            selectedTermInTree: props.term,
+            noteSelectHandler: selectNote,
+            setNoteCreationResultStatus: setNoteCreationResultStatus,
+            selectedNoteId: selectedNoteId
         };
 
         return(
@@ -205,13 +208,10 @@ const NoteList = (props) => {
                     selectedArtifactType={selectedArtifactType}
                     noteExist={noteExist}
                     noteTotalPageCount={noteTotalPageCount}
-                    noteListPage={pageNumber}
-                    selectedNoteId={selectedNoteId}
-                    notesList={noteList}
-                    noteSelectHandler={selectNote}
+                    noteListPage={pageNumber}                    
+                    notesList={noteList}                    
                     artifactDropDownHandler={artifactDropDownHandler}
-                    handlePagination={handlePagination}
-                    setNoteCreationResultStatus={setNoteCreationResultStatus}
+                    handlePagination={handlePagination}                    
                     backToListHandler={backToListClick}
                     setNoteExistState={setNoteExist}                    
                     handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
