@@ -131,7 +131,7 @@ const RenderSearchForm = (props) => {
                   <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={props.handleObsoletesCheckboxClick}/>
                   <label class="form-check-label" for="obsoletes-checkbox">Obsolete terms</label>
                 </div>              
-                {process.env.REACT_APP_ADVANCED_SEARCH !== "true" &&
+                {process.env.REACT_APP_ADVANCED_SEARCH === "true" &&
                   <div className="col-lg-6 col-sm-4 adv-search-title-holder">                
                     <div className='row'>
                         <div className='col-sm-12'>                           
