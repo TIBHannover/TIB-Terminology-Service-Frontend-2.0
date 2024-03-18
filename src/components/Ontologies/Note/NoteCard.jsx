@@ -7,6 +7,7 @@ import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModa
 import NoteEdit from "./NoteEdit";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import { NoteContext } from "../../../context/NoteContext";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
@@ -25,7 +26,7 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 export const NoteCard = (props) => {
 
-    const noteContext = useContext(NoteContext);
+    const noteContext = useContext(NoteContext);    
     
     let searchParams = new URLSearchParams(window.location.search);        
     searchParams.set('noteId', props.note['id']);
@@ -76,6 +77,9 @@ export const NoteCard = (props) => {
 
 
 export const NoteCardHeader = (props) => {
+
+    const ontologyPageContext = useContext(OntologyPageContext);
+
     const [note, setNote] = useState({});
     const [linkCopied, setLinkCopied] = useState(false);
 
@@ -93,6 +97,7 @@ export const NoteCardHeader = (props) => {
     let reportFormData = new FormData();
     reportFormData.append("objectId", note['id']);
     reportFormData.append("objectType", 'note');
+    reportFormData.append("ontology", ontologyPageContext.ontology);
     
     let redirectAfterDeleteEndpoint = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
