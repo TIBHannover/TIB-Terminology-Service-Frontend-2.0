@@ -97,7 +97,7 @@ export const NoteCardHeader = (props) => {
     let reportFormData = new FormData();
     reportFormData.append("objectId", note['id']);
     reportFormData.append("objectType", 'note');
-    reportFormData.append("ontology", ontologyPageContext.ontology);
+    reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
     
     let redirectAfterDeleteEndpoint = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
