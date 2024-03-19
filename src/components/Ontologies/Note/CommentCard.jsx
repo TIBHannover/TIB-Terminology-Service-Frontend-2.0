@@ -1,13 +1,16 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import Toolkit from "../../../Libs/Toolkit";
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
+import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
+const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
 const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
@@ -33,6 +36,9 @@ export const CommentCard = (props) =>{
 
 
 export const CommentCardHeader = (props) =>{
+
+    const ontologyPageContext = useContext(OntologyPageContext);
+
     const [comment, setComment] = useState({});
     const [linkCopied, setLinkCopied] = useState(false);
 
@@ -43,7 +49,13 @@ export const CommentCardHeader = (props) =>{
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", comment['id']);
     deleteFormData.append("objectType", 'comment');   
-    deleteFormData.append("ontology_id", props.ontologyId);     
+    deleteFormData.append("ontology_id", props.ontologyId);
+    
+    let reportFormData = new FormData();
+    reportFormData.append("objectId", comment['id']);
+    reportFormData.append("objectType", 'comment');
+    reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
+
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;
     searchParams.delete('comment');    
@@ -81,21 +93,29 @@ export const CommentCardHeader = (props) =>{
                                         <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
                                 </div>
+                                {localStorage.getItem('isLoginInTs') === "true" &&
+                                    <div class="dropdown-item note-dropdown-item">
+                                        <ReportModalBtn 
+                                            modalId={comment['id']}  
+                                            key={"reportBtnComment" + comment['id']} 
+                                        />
+                                    </div>
+                                }
                                 {comment['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
-                                        <div class="dropdown-item note-dropdown-item">
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-sm note-action-menu-btn borderless-btn"
-                                                data-id={comment['id']}
-                                                data-content={comment['content']}
-                                                onClick={props.editHandlerFunc}
-                                                key={"commentEdit" + comment['id']}
-                                                >
-                                                Edit
-                                            </button>
-                                        </div>
+                                            <div class="dropdown-item note-dropdown-item">
+                                                <button 
+                                                    type="button" 
+                                                    class="btn btn-sm note-action-menu-btn borderless-btn"
+                                                    data-id={comment['id']}
+                                                    data-content={comment['content']}
+                                                    onClick={props.editHandlerFunc}
+                                                    key={"commentEdit" + comment['id']}
+                                                    >
+                                                    Edit
+                                                </button>
+                                            </div>
                                         <div class="dropdown-item note-dropdown-item">
                                             <DeleteModalBtn
                                                 modalId={"_comment-" + comment['id']} 
@@ -117,6 +137,13 @@ export const CommentCardHeader = (props) =>{
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
                 key={"commentDelModal" + comment['id']}
+            />
+            <ReportModal
+                modalId={comment['id']}
+                formData={reportFormData}
+                callHeaders={callHeader}
+                reportEndpoint={reportEndpoint}                
+                key={"reportComment" + comment['id']}
             />            
         </div> 
     ];
