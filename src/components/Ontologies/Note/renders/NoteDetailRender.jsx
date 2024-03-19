@@ -1,6 +1,7 @@
 import NoteCommentList from "../NoteCommentList";
 import { NoteCardHeader } from "../NoteCard";
 import { buildNoteAboutPart } from "../helpers";
+import ResolveReportActionsForAdmins from "../../../common/ResolveReportActions/ResolveReportAction";
 
 
 
@@ -17,6 +18,7 @@ export const NoteDetailRender = (props) => {
                         </div>
                         <div class="card-body">
                             <h4 className="card-title note-list-title">{props.note['title']}</h4>
+                            <ResolveReportActionsForAdmins />
                             <small>
                                 <ul className="">
                                     <li>type: {props.note['semantic_component_type']}</li>

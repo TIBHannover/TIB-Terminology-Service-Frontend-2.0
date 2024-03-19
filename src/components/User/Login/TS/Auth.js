@@ -55,6 +55,23 @@ export async function isLogin(){
 }
 
 
+
+export async function checkIsSystemAdmin(){               
+    let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});    
+    let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_system_admin', {method: "POST", headers:headers});    
+    if (result.status !== 200){
+        return false;
+    }
+    result = await result.json();
+    result = result["_result"];
+    if(result && result["is_system_admin"] === true){        
+        return true
+    }    
+    return false;
+}
+
+
+
 export function userIsLoginByLocalStorage(){
     if(localStorage.getItem('isLoginInTs') && localStorage.getItem('isLoginInTs') === "true"){
         return true;

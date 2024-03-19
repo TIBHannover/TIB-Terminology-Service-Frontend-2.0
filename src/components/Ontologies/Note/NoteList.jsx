@@ -87,7 +87,7 @@ const NoteList = (props) => {
     }
 
 
-    async function checkIsAdmin(){        
+    async function checkIsOntologyAdmin(){        
         let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
@@ -103,7 +103,6 @@ const NoteList = (props) => {
             setIsAdminForOntology(false);
         }
     }
-
 
 
 
@@ -169,7 +168,7 @@ const NoteList = (props) => {
 
     useEffect(() => {
         loadComponent();
-        checkIsAdmin();
+        checkIsOntologyAdmin();        
     }, []);
 
 
