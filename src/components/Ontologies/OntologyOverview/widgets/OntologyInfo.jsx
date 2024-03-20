@@ -151,7 +151,7 @@ const OntologyInfoTable = () => {
                        <td className="ontology-overview-table-id-column"><b>Download</b></td>
                        <td>                     
                          <a                
-                           href={"https://service.tib.eu/ts4tib/ontologies/" + ontology.ontologyId + "/download"}
+                           href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
                            className='btn btn-secondary btn-dark download-ontology-btn'
                            target="_blank"                               
                           >
