@@ -21,6 +21,7 @@ export const NoteDetailRender = (props) => {
                             <ResolveReportActionsForAdmins 
                                 objectType="note"
                                 objectId={props.note['id']}
+                                reportStatus={props.note['is_reported']}
                             />
                             <small>
                                 <ul className="">

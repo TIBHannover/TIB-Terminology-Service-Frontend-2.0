@@ -33,7 +33,7 @@ const ResolveReportActionsForAdmins = (props) => {
 
 
 
-    if(!appContext.isUserSystemAdmin){
+    if(!appContext.isUserSystemAdmin || !props.reportStatus){
         return "";
     }
 
@@ -50,6 +50,7 @@ const ResolveReportActionsForAdmins = (props) => {
                     <button className="btn btn-success" value="none" onClick={sendResolveCommand}>False Report</button>
                 </div>            
             </div>
+            <br></br>
         </>
     );
 
