@@ -126,3 +126,25 @@ export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueS
         return [];
     }        
 }
+
+
+
+export async function sendResolveRequest({objectType, objectId, action}){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
+        let formData = new FormData();
+        formData.append('objectType', objectType);
+        formData.append('objectId', objectId);
+        formData.append('action', action);
+        let resolveUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/resolve_report';
+        let result = await fetch(resolveUrl, {method:'POST', headers:headers, body:formData});
+        if (result.status !== 200){
+            return false;
+        }
+        result = await result.json();
+        return result['_result']['resolved'];
+    }
+    catch(e){
+        return false;
+    }
+}

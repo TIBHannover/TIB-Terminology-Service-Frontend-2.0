@@ -18,7 +18,10 @@ export const NoteDetailRender = (props) => {
                         </div>
                         <div class="card-body">
                             <h4 className="card-title note-list-title">{props.note['title']}</h4>
-                            <ResolveReportActionsForAdmins />
+                            <ResolveReportActionsForAdmins 
+                                objectType="note"
+                                objectId={props.note['id']}
+                            />
                             <small>
                                 <ul className="">
                                     <li>type: {props.note['semantic_component_type']}</li>

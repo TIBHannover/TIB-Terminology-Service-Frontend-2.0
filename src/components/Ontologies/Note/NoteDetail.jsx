@@ -9,7 +9,7 @@ import { NoteContext } from "../../../context/NoteContext";
 
 
 
-const NoteDetail = (props) => {
+const NoteDetail = () => {
 
     const ontologyPageContext = useContext(OntologyPageContext);
     const noteContext = useContext(NoteContext);
