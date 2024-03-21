@@ -28,6 +28,7 @@ export const CommentCard = (props) =>{
                 objectType="comment"
                 objectId={props.comment['id']}
                 reportStatus={props.comment['is_reported']}
+                creatorUsername={props.comment['created_by']}
             />
             <div class="card-body">                        
                 <p className="card-text">                    

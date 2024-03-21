@@ -22,6 +22,7 @@ export const NoteDetailRender = (props) => {
                                 objectType="note"
                                 objectId={props.note['id']}
                                 reportStatus={props.note['is_reported']}
+                                creatorUsername={props.note['created_by']}
                             />
                             <small>
                                 <ul className="">

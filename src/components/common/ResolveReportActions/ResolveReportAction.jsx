@@ -23,7 +23,8 @@ const ResolveReportActionsForAdmins = (props) => {
         let resolveStatus = await sendResolveRequest({
             objectType: props.objectType,
             objectId: props.objectId,
-            action: resolveAction
+            action: resolveAction,
+            creatorUsername: props.creatorUsername
         });
         if(resolveStatus){
             window.location.replace(redirectAfterDeleteEndpoint);

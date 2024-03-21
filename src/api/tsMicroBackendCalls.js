@@ -129,13 +129,14 @@ export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueS
 
 
 
-export async function sendResolveRequest({objectType, objectId, action}){
+export async function sendResolveRequest({objectType, objectId, action, creatorUsername}){
     try{
         let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
         let formData = new FormData();
         formData.append('objectType', objectType);
         formData.append('objectId', objectId);
         formData.append('action', action);
+        formData.append('creatorUsername', creatorUsername);
         let resolveUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/resolve_report';
         let result = await fetch(resolveUrl, {method:'POST', headers:headers, body:formData});
         if (result.status !== 200){
