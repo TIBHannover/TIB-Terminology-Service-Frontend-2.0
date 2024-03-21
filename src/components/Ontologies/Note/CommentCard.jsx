@@ -6,6 +6,7 @@ import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
 import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 
 
 
@@ -23,6 +24,11 @@ export const CommentCard = (props) =>{
             <div className="card-header">
                 <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler}  ontologyId={props.ontologyId}/>                        
             </div>
+            <ResolveReportActionsForAdmins 
+                objectType="comment"
+                objectId={props.comment['id']}
+                reportStatus={props.comment['is_reported']}
+            />
             <div class="card-body">                        
                 <p className="card-text">                    
                     <div dangerouslySetInnerHTML={{ __html: commnetContent}}></div>  
