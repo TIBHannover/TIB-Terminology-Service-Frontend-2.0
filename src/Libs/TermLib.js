@@ -99,7 +99,11 @@ class TermLib{
             return result;           
         }
         else if(term.description ){
-            return term.description[0];
+            let result = [];     
+            for(let desc of term.description){
+              result.push(<p>{desc}</p>);
+            }
+            return result;            
         }
 
         return null;
