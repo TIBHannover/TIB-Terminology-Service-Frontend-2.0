@@ -108,12 +108,12 @@
 }
 
 .multiSelectContainer li:hover{
-    background-color: #DFDDDD;
-    color: black;
+    background-color: #DFDDDD !important;
+    color: black !important;
 }
 
 .multiselect-container .chip{
-    background-color: #404040;
+    background-color: #404040 !important;
 }
 
 
