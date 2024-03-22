@@ -51,11 +51,14 @@ body button{
     border-color: #404040;
 }
 
-body .btn-secondary{
+body .btn-secondary, 
+.btn-secondary:hover
+{
     background-color: #404040;
     font-size: 14px;
     border-color: #404040;
 }
+
 
 body .btn-danger{
     background-color: red;
@@ -95,7 +98,7 @@ body .synonyms-button{
 
 body .term-button:hover{
     text-decoration: none;
-    background-color: #1baeb1;
+    background-color: #0E6668;
     color: white;
 }
 
@@ -107,13 +110,13 @@ body .ontology-button{
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e;
-    margin-top: -5px;
+    margin-top: -5px;    
 }
 
 body .ontology-button:hover{ 
     text-decoration: none;
     background-color: #bbae9e;
-    color: white;
+    color: white;    
 }
 
 .site-footer{

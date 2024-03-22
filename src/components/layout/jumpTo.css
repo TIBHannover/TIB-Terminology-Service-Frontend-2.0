@@ -1,3 +1,7 @@
+.jumto-result-link{
+    text-decoration: none !important;
+}
+
 body .autosuggest-jumpto-container {
     position: relative;    
 }
