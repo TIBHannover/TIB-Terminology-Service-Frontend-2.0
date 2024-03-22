@@ -54,8 +54,7 @@ body button{
 body .btn-secondary, 
 .btn-secondary:hover
 {
-    background-color: #404040;
-    font-size: 14px;
+    background-color: #404040;    
     border-color: #404040;
 }
 

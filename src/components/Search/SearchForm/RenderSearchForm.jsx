@@ -125,7 +125,7 @@ const RenderSearchForm = (props) => {
               <div className='row site-header-search-filters-container'>
                 <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders'>
                   <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match" onClick={props.handleExactCheckboxClick}/>
-                  <label class="form-check-label" for="exact-checkbox">Exact Match</label>
+                  <label class="form-check-label" for="exact-checkbox">Exact match</label>
                 </div>
                 <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders'>
                   <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results" onClick={props.handleObsoletesCheckboxClick}/>
@@ -144,7 +144,7 @@ const RenderSearchForm = (props) => {
                                 onClick={props.handleAdvancedSearchToggle} 
                                 checked={props.advSearchEnabled}
                                 />                            
-                              <label class="form-check-label" for="adv-search-toggle">Advanced Search</label>
+                              <label class="form-check-label" for="adv-search-toggle">Advanced search</label>
                             </div>
                         </div>                    
                     </div>                                

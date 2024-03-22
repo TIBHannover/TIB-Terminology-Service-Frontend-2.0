@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
-// import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 
@@ -13,10 +12,8 @@ const AdvancedSearch = (props) => {
         
     const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
     const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrlOrStorage());
-    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());
-    // const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getAdvancedOntologIdsFromUrlOrStorage());
-    const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
-    // const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
+    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());    
+    const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);    
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
 
@@ -29,6 +26,9 @@ const AdvancedSearch = (props) => {
     const ontologyPageId = OntologyLib.getCurrentOntologyIdFromUrlPath();
     
     const ontologyIdsInUrl = SearchLib.getFilterAndAdvancedOntologyIdsFromUrl();
+
+    const searchUnderRef = useRef(null);
+    const searchUnderAllRef = useRef(null);
 
 
 
@@ -62,21 +62,6 @@ const AdvancedSearch = (props) => {
 
 
 
-    // async function loadOntologiesForSelection(query){
-    //     let ontologyApi = new OntologyApi({});
-    //     await ontologyApi.fetchOntologyList();
-    //     let ontologyList = [];
-    //     for (let ontology of ontologyApi.list){
-    //         let opt = {};
-    //         opt['text'] = ontology['ontologyId'];
-    //         opt['id'] = ontology['ontologyId'];
-    //         ontologyList.push(opt);
-    //     }
-    //     setOntologiesListForSelection(ontologyList);
-    // }
-
-
-
     function handleSearchInMultiSelect(selectedList, selectedItem){        
         setSelectedMetaData(selectedList);        
     }
@@ -84,21 +69,18 @@ const AdvancedSearch = (props) => {
 
 
     function handleTermSelectionSearchUnder(selectedList, selectedItem){                
-        setSelectedSearchUnderTerms(selectedList); 
+        setSelectedSearchUnderTerms(selectedList);
+        setLoadingResult(true);
+        setTermListForSearchUnder([]); 
     }
 
 
 
     function handleTermSelectionSearchUnderAll(selectedList, selectedItem){                
-        setSelectedSearchUnderAllTerms(selectedList);          
+        setSelectedSearchUnderAllTerms(selectedList);
+        setLoadingResult(true);
+        setTermListForSearchUnder([]);           
     }
-
-
-
-    // function handleOntologySelection(selectedList, selectedItem){        
-    //     setSelectedOntologies(selectedList);  
-    //     setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
-    // }
 
 
 
@@ -117,8 +99,7 @@ const AdvancedSearch = (props) => {
     function reset(){
         setSelectedMetaData([]);
         setSelectedSearchUnderTerms([]);
-        setSelectedSearchUnderAllTerms([]);
-        // setSelectedOntologies([]);        
+        setSelectedSearchUnderAllTerms([]);        
         setPlaceHolderExtraText("");
         let currentUrlParams = new URLSearchParams(window.location.search);
         currentUrlParams.delete('searchin');
@@ -147,11 +128,7 @@ const AdvancedSearch = (props) => {
         for(let term of selectedSearchUnderAllTerms){
             currentUrlParams.append('searchunderall', encodeURIComponent(JSON.stringify(term)));            
         }
-                
-        // for(let ontology of selectedOntologies){
-        //     currentUrlParams.append('advontology', ontology['id']);                        
-        // }               
-
+                                  
         history.push(window.location.pathname + "?" + currentUrlParams.toString());  
     }
     
@@ -160,12 +137,31 @@ const AdvancedSearch = (props) => {
         const states = JSON.stringify({
             selectedMetaData,
             selectedSearchUnderTerms,
-            selectedSearchUnderAllTerms,
-            // selectedOntologies
+            selectedSearchUnderAllTerms            
         });
         
         localStorage.setItem("advancedSearchStates", states);
     }
+
+
+
+    function handleClickOutsideSelectionBox(e){     
+        let advSearchUnderBox = document.getElementById("adv-s-search-under-term");
+        let advSearchUnderAllBox = document.getElementById("adv-s-search-under-all-term");   
+        if(!advSearchUnderBox?.contains(e.target) && !advSearchUnderAllBox?.contains(e.target)){
+            setTermListForSearchUnder([]);
+            setLoadingResult(true);            
+        }
+    }
+
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutsideSelectionBox, true);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideSelectionBox, true);
+        }
+    }, []);
 
 
     useEffect(() => {
@@ -207,7 +203,7 @@ const AdvancedSearch = (props) => {
                                 <div className='row'>
                                     <div className='col-sm-11 adv-search-label-holder'>
                                         <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
-                                            Search In Metadata
+                                            Search in metadata
                                             <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                                         </label>   
                                     </div>                                    
@@ -255,6 +251,7 @@ const AdvancedSearch = (props) => {
                                             closeIcon={"cancel"}
                                             id="adv-s-search-under-term"
                                             placeholder={"class, property " + placeHolderExtraText}
+                                            ref={searchUnderRef}
                                         />
                                     </div>
                                 </div>                                                                
@@ -286,6 +283,7 @@ const AdvancedSearch = (props) => {
                                             closeIcon={"cancel"}
                                             id="adv-s-search-under-all-term"
                                             placeholder={"class, property " + placeHolderExtraText}
+                                            ref={searchUnderAllRef}
                                         />
                                     </div>
                                 </div>                                                            

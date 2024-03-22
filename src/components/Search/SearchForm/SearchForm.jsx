@@ -146,8 +146,7 @@ const SearchForm = () => {
       document.getElementById("s-field").value = cUrl;
     }
     if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}
-    // if(advSearchEnabled){document.getElementById("adv-search-toggle").checked = true}      
+    if(exact){ document.getElementById("exact-checkbox").checked = true;}        
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
