@@ -14,7 +14,6 @@ import { AppContext } from './context/AppContext';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
-import AuthTool from './components/User/Login/authTools';
 
 
 

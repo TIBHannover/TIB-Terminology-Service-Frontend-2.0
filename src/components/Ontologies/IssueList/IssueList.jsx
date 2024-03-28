@@ -232,12 +232,16 @@ class IssueList extends React.Component{
                             
                             <div className="col-sm-3">
                                 <AppContext.Consumer>
-                                    {user => (
+                                    {appContext => (        
                                         <>
-                                        <TermRequest ontology={this.props.ontology} reportType={"general"} />
-                                        <br></br>
-                                        <TermRequest ontology={this.props.ontology} reportType={"termRequest"} />
-                                        </>
+                                        {appContext.user && 
+                                            <>
+                                            <TermRequest ontology={this.props.ontology} reportType={"general"} />
+                                            <br></br>
+                                            <TermRequest ontology={this.props.ontology} reportType={"termRequest"} />
+                                            </>
+                                        }   
+                                        </>                                     
                                     )}                                                                         
                                 </AppContext.Consumer>
                             </div>

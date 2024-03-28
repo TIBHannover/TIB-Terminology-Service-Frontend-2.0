@@ -14,10 +14,7 @@ export function auth(){
                 if(resp["_result"]){                                                            
                     let userData = AuthTool.createUserDataObjectFromAuthResponse(resp["_result"]);
                     localStorage.setItem('user', JSON.stringify(userData)); 
-                    const currentUrl = new URL(window.location.href);                    
-                    currentUrl.searchParams.delete('code');                    
-                    window.history.pushState({ path: currentUrl.href }, '', currentUrl.href);
-                    AuthTool.disableLoginAnimation();                   
+                    window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH);                    
                     return true;
                 }
                 AuthTool.disableLoginAnimation();                
