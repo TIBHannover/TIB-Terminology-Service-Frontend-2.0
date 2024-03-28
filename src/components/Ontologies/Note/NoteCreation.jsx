@@ -5,6 +5,7 @@ import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
 
 
@@ -13,6 +14,7 @@ import { NoteContext } from "../../../context/NoteContext";
 const NoteCreation = (props) => {
 
     const noteContext = useContext(NoteContext);
+    const appContext = useContext(AppContext);
 
     let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
     targetType = targetType !== -1 ? targetType : 1;
@@ -159,7 +161,7 @@ const NoteCreation = (props) => {
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
         return null;
     }
-    if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
+    if(!appContext.user){
         return "";
     }
 

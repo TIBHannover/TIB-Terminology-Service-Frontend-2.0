@@ -7,31 +7,36 @@ import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
-import { isLogin, checkIsSystemAdmin } from './components/User/Login/TS/Auth';
+import { isLogin, checkIsSystemAdmin, auth } from './components/User/Login/TS/Auth';
 import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
+import AuthTool from './components/User/Login/authTools';
 
 
 
 const App = () => {
 
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   
   
   useEffect(() => {
     AppHelpers.setSiteTitleAndFavIcon();
-    AppHelpers.checkBackendStatus();  
+    AppHelpers.checkBackendStatus();
     
-    if(process.env.REACT_APP_AUTH_FEATURE === "true"){
-      // set login status
-      isLogin().then((resp) => {
-        localStorage.setItem('isLoginInTs', resp);
-      });
+    if(process.env.REACT_APP_AUTH_FEATURE === "true"){   
+      let cUrl = window.location.href;
+      if(cUrl.includes("code=")){
+        auth();        
+      }
+      
+      isLogin().then((resp) => {setUser(resp);});
+      
       checkIsSystemAdmin().then((resp) => {        
         setIsSystemAdmin(resp);
       });
@@ -45,6 +50,7 @@ const App = () => {
 
 
   const appContextData = {
+    user: user,
     isUserSystemAdmin: isSystemAdmin
   };
 

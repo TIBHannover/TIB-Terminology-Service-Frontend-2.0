@@ -1,13 +1,17 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {getTextEditorContent, createTextEditorStateFromJson}  from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
+import { AppContext } from "../../../context/AppContext";
 
 
 
-const NoteEdit = (props) => {    
+const NoteEdit = (props) => {
+    
+    const appContext = useContext(AppContext);
+
     const [targetArtifact, setTargetArtifact] = useState(constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.note['semantic_component_type']));
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_VALUES.indexOf(props.note['visibility']));
     const [editorState, setEditorState] = useState(createTextEditorStateFromJson(props.note['content']));        
@@ -136,7 +140,7 @@ const NoteEdit = (props) => {
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
         return null;
     }    
-    if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
+    if(!appContext.user){
         return "";
     }
 

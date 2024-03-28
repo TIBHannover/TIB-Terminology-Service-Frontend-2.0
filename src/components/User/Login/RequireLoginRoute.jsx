@@ -4,11 +4,12 @@ import {Route} from 'react-router-dom';
 import Login from "./TS/Login";
 
 
-function RequireLoginRoute({component: Component, ...rest}){
+const RequireLoginRoute = ({component: Component, ...rest}) => {    
+
     const [loginStatus, setLoginStatus] = useState(null);    
     const [loginProcessFinished, setLoginProcessFinished] = useState(false);    
     isLogin().then((resp) => {
-        setLoginStatus(resp);
+        setLoginStatus(resp ? true : false);
         setLoginProcessFinished(true);
     });
 

@@ -6,6 +6,7 @@ import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
 import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { AppContext } from "../../../context/AppContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 
 
@@ -45,6 +46,7 @@ export const CommentCard = (props) =>{
 export const CommentCardHeader = (props) =>{
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    const appContext = useContext(AppContext);
 
     const [comment, setComment] = useState({});
     const [linkCopied, setLinkCopied] = useState(false);
@@ -100,7 +102,7 @@ export const CommentCardHeader = (props) =>{
                                         <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
                                 </div>
-                                {localStorage.getItem('isLoginInTs') === "true" &&
+                                {appContext.user &&
                                     <div class="dropdown-item note-dropdown-item">
                                         <ReportModalBtn 
                                             modalId={comment['id']}  

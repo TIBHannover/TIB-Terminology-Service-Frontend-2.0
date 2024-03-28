@@ -1,38 +1,45 @@
+import UserModel from "../../../models/user";
 
 
 class AuthTool{
 
-    static setHeaderForTsMicroBackend(withAccessToken=false) {
+    static setHeaderForTsMicroBackend(withAccessToken=false) { 
+        let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;                    
         let header = {};
         header["X-TS-Frontend-Id"] = process.env.REACT_APP_PROJECT_ID;
         header["X-TS-Frontend-Token"] = process.env.REACT_APP_MICRO_BACKEND_TOKEN;
         header["X-TS-Auth-Provider"] = localStorage.getItem('authProvider');
-        header['X-TS-Orcid-Id'] = localStorage.getItem("orcid_id");
-        header["X-TS-User-Name"] = localStorage.getItem("ts_username");
+        header['X-TS-Orcid-Id'] = user?.orcidId;
+        header["X-TS-User-Name"] = user?.username;
          
         if (withAccessToken){
-            header["Authorization"] = localStorage.getItem("token");
-            header["X-TS-User-Token"] = localStorage.getItem("ts_user_token");
+            header["Authorization"] = user?.token;
+            header["X-TS-User-Token"] = user?.userToken;
         }
         return header;
     }
 
 
-    static setAuthResponseInLocalStorage(response){
-        let authProvider = localStorage.getItem('authProvider');
-        localStorage.setItem("token", response["token"]);
-        localStorage.setItem("ts_username", response["ts_username"]);
-        localStorage.setItem("ts_user_token", response["ts_user_token"]);
-        localStorage.setItem("isLoginInTs", 'true');
-        if(authProvider === 'github'){            
-            localStorage.setItem("name", response["name"]);
-            localStorage.setItem("company", response["company"]);
-            localStorage.setItem("github_home", response["github_home"]);                                
+    static createUserDataObjectFromAuthResponse(response){
+        try{
+            let authProvider = localStorage.getItem('authProvider');
+            let user = new UserModel();
+            user.setToken(response["token"]);
+            user.setFullName(response["name"]);
+            user.setUsername(response["ts_username"]);
+            user.setUserToken(response["ts_user_token"]);
+            user.setAuthProvider(authProvider);        
+            if(authProvider === 'github'){            
+                user.setGithubInfo({company: response["company"], homeUrl: response["github_home"]});            
+            }
+            else if(authProvider === "orcid"){
+                user.setOrcidInfo({orcidId:response["orcid_id"]});                        
+            }
+            return user;
         }
-        else if(authProvider === "orcid"){
-            localStorage.setItem("name", response["name"]);            
-            localStorage.setItem("orcid_id", response["orcid_id"]);            
-        }
+        catch(e){
+            return null;
+        }        
     }
 
 

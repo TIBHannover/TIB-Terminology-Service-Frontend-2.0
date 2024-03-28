@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import { RowWithSingleColumn } from "../../../common/Grid/BootstrapGrid";
 import CommentCard from "../CommentCard";
+import { AppContext } from "../../../../context/AppContext";
 
 
 
 export const NoteCommentListRender = (props) => {
+
+    const appContext = useContext(AppContext);
 
     const [commentListToRener, setCommentListToRener] = useState("");
 
@@ -54,7 +57,7 @@ export const NoteCommentListRender = (props) => {
                 />
             }
             <hr></hr>                
-            {localStorage.getItem('isLoginInTs') === 'true' && 
+            {appContext.user && 
                 [
                     <RowWithSingleColumn 
                         content={editor}

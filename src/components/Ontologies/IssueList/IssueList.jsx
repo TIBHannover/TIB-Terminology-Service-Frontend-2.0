@@ -7,7 +7,7 @@ import {createLabelTags,
 import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
 import DropDown from "../../common/DropDown/DropDown";
 import TermRequest from '../TermRequest/TermRequest';
-import RenderIfLogin from '../../User/Login/RequireLogin';
+import { AppContext } from "../../../context/AppContext";
 import '../../layout/githubPanel.css';
 
 
@@ -231,9 +231,15 @@ class IssueList extends React.Component{
                             </div>
                             
                             <div className="col-sm-3">
-                                <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"general"} />} />
-                                <br></br>
-                                <RenderIfLogin component={<TermRequest ontology={this.props.ontology} reportType={"termRequest"} />} />
+                                <AppContext.Consumer>
+                                    {user => (
+                                        <>
+                                        <TermRequest ontology={this.props.ontology} reportType={"general"} />
+                                        <br></br>
+                                        <TermRequest ontology={this.props.ontology} reportType={"termRequest"} />
+                                        </>
+                                    )}                                                                         
+                                </AppContext.Consumer>
                             </div>
                         </div>                                                         
                 </div>

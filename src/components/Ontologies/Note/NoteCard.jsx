@@ -7,6 +7,7 @@ import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModa
 import NoteEdit from "./NoteEdit";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import { NoteContext } from "../../../context/NoteContext";
+import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
@@ -171,6 +172,7 @@ export const NoteCardHeader = (props) => {
 const NoteActionDropDown = ({note, setLinkCopied}) => {
 
     const noteContext = useContext(NoteContext);
+    const appContext = useContext(AppContext);
 
     return(
         <div class="dropdown custom-dropdown">
@@ -203,7 +205,7 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                         <i class="fa fa-solid fa-copy"></i> Link
                     </button>
                 </div>
-                {localStorage.getItem('isLoginInTs') === "true" &&
+                {appContext.user &&
                     <div class="dropdown-item note-dropdown-item">
                         <ReportModalBtn 
                             modalId={note['id']}  
