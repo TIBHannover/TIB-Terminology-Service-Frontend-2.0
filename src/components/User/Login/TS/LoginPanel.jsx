@@ -4,7 +4,7 @@ import {Logout} from "./Auth";
 
 
 
-const Login = (props) => {
+const LoginPanel = (props) => {
 
     const appContext = useContext(AppContext);
 
@@ -101,8 +101,9 @@ const Login = (props) => {
                         <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
                         {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&
                             <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</a>
-                        } 
-                        <a class="dropdown-item" href="#" onClick={() => {Logout();}}>Logout</a>                            
+                        }
+                        <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</a> 
+                        <a class="dropdown-item" href="#" onClick={() => {Logout();}}>Logout</a>
                     </div>                        
                 </div>
             }
@@ -112,4 +113,4 @@ const Login = (props) => {
 
 
 
-export default Login;
+export default LoginPanel;

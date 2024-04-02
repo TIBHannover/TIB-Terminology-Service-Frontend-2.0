@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { isLogin } from "./TS/Auth";
 import {Route} from 'react-router-dom';
-import Login from "./TS/Login";
+import LoginPanel from "./TS/LoginPanel";
 
 
 const RequireLoginRoute = ({component: Component, ...rest}) => {    
@@ -18,7 +18,7 @@ const RequireLoginRoute = ({component: Component, ...rest}) => {
     }
 
     else if (!loginStatus && loginProcessFinished) {           
-        return <Login isModal={false}></Login>;
+        return <LoginPanel isModal={false}></LoginPanel>;
     }
         
     return (<Route component={Component} {...rest}/> )

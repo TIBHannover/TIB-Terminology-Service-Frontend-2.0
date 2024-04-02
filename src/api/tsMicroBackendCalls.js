@@ -149,3 +149,21 @@ export async function sendResolveRequest({objectType, objectId, action, creatorU
         return false;
     }
 }
+
+
+
+export async function getReportList(){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});         
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/report_list';
+        let result = await fetch(url, {method:'GET', headers:headers});
+        if (result.status !== 200){
+            return [];
+        }
+        result = await result.json();
+        return result['_result']['reports'];
+    }
+    catch(e){
+        return [];
+    }
+}

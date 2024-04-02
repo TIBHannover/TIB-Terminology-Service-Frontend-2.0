@@ -11,6 +11,7 @@ import { isLogin, checkIsSystemAdmin, auth } from './components/User/Login/TS/Au
 import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
+import { getReportList } from './api/tsMicroBackendCalls';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -22,6 +23,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
+  const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
   
   
   useEffect(() => {
@@ -39,6 +41,10 @@ const App = () => {
       checkIsSystemAdmin().then((resp) => {        
         setIsSystemAdmin(resp);
       });
+
+      getReportList().then((reports) => {
+        setReportsListForAdmin(reports);
+      });
     }
 
     setTimeout( () => {
@@ -50,7 +56,8 @@ const App = () => {
 
   const appContextData = {
     user: user,
-    isUserSystemAdmin: isSystemAdmin
+    isUserSystemAdmin: isSystemAdmin,
+    reportsListForAdmin: reportsListForAdmin
   };
 
   return (
