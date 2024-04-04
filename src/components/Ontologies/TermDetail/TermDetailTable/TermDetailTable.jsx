@@ -122,10 +122,13 @@ export const TermDetailTable = (props) => {
   }, [props.node]);
 
 
+  if(!props.node.iri){
+    return <div className="is-loading-term-list isLoading-small"></div>;
+  }
 
   return(
     <div>
-      {Toolkit.createHelmet(`${props.node.ontology_name}:${props.node.short_form}`)}      
+      {Toolkit.createHelmet(`${props.node.ontology_name}:${props.node.short_form}`)}     
       {props.node.is_obsolete &&
         <AlertBox  
           type="danger"
