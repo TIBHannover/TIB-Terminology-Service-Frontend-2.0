@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import { useHistory } from 'react-router';
 import CollectionApi from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
@@ -29,8 +28,6 @@ const OntologyList = (props) => {
   const [allCollections, setAllCollections] = useState([]);  
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
-
-  const history = useHistory();
 
 
 
@@ -212,7 +209,7 @@ const OntologyList = (props) => {
 
   function updateUrl(){     
     let ontologyListUrl = new OntologyListUrlFactory();
-    let updatedUrl = ontologyListUrl.update({
+    ontologyListUrl.update({
       keywordFilter: keywordFilterString,
       collections: selectedCollections,
       sortedBy: sortField,
@@ -221,7 +218,7 @@ const OntologyList = (props) => {
       andOpValue: exclusiveCollections
     });
     
-    history.push(updatedUrl);    
+    // history.push(updatedUrl);    
   }
 
 

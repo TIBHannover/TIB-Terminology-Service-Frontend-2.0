@@ -35,7 +35,7 @@ const DataTree = (props) => {
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
   const [jumpToIri, setJumpToIri] = useState(null);
 
-  const history = useHistory();
+  const urlFacory = new CommonUrlFactory();     
 
 
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable){
@@ -57,16 +57,13 @@ const DataTree = (props) => {
     if(selectedTerm){                 
       setJumpToIri(selectedTerm['iri']);
       setSelectedNodeIri(selectedTerm['iri']);
-      setShowDetailTable(true);
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set('iri', selectedTerm['iri']);  
-      history.push(window.location.pathname + "?" +  searchParams.toString());
+      setShowDetailTable(true);      
+      urlFacory.setIri({newIri:selectedTerm['iri']});        
     }   
   }
 
 
-  useEffect(() => {    
-    let urlFacory = new CommonUrlFactory();           
+  useEffect(() => {              
     paneResizeClass.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
@@ -80,8 +77,7 @@ const DataTree = (props) => {
     else if(ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== ""){
       setSelectedNodeIri(ontologyPageContext.lastVisitedIri[props.componentIdentity]);
       setShowDetailTable(true);      
-      let updatedUrl = urlFacory.setIri({newIri:  ontologyPageContext.lastVisitedIri[props.componentIdentity]})
-      history.push(updatedUrl);
+      urlFacory.setIri({newIri:  ontologyPageContext.lastVisitedIri[props.componentIdentity]})      
     }
     
     setIsTermTree(termTree);

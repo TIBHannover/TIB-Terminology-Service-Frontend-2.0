@@ -1,3 +1,5 @@
+import { createBrowserHistory } from "history";
+
 
 class OntologyListUrlFactory{
     constructor(){
@@ -7,7 +9,8 @@ class OntologyListUrlFactory{
         this.page = url.searchParams.get('page');
         this.size =  url.searchParams.get('size');
         this.keywordFilter = url.searchParams.get('keyword');
-        this.baseUrl = window.location.pathname;        
+        this.baseUrl = window.location.pathname;
+        this.history = createBrowserHistory();        
     }
 
 
@@ -27,7 +30,7 @@ class OntologyListUrlFactory{
         currentUrlParams.set('sorting', sortedBy);
         currentUrlParams.set('page', page);  
         currentUrlParams.set('size', size);
-        return  this.baseUrl + "?" + currentUrlParams.toString();           
+        this.history.push(this.baseUrl + "?" + currentUrlParams.toString());           
     }
 }
 
