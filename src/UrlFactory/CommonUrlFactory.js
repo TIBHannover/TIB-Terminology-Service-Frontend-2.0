@@ -1,4 +1,5 @@
 import { createBrowserHistory } from "history";
+import * as SiteUrlParamNames from './UrlParamNames';
 
 
 class CommonUrlFactory{
@@ -23,21 +24,21 @@ class CommonUrlFactory{
     getIri(){
         let url = new URL(window.location);
         let currentParams = url.searchParams;
-        return currentParams.get('iri');
+        return currentParams.get(SiteUrlParamNames.Iri);
     }
 
 
     setIri({newIri}){
         let url = new URL(window.location);
         let currentParams = url.searchParams;
-        currentParams.set('iri', newIri);
+        currentParams.set(SiteUrlParamNames.Iri, newIri);
         this.history.push(this.baseUrl + "?" + currentParams.toString());
     }
 
 
     setObsoletes({value}){
         let url = new URL(window.location);        
-        url.searchParams.set('obsoletes', value);        
+        url.searchParams.set(SiteUrlParamNames.Obsoletes, value);        
         this.history.push(this.baseUrl + "?" + url.searchParams.toString());
     }
 }

@@ -1,14 +1,20 @@
 import { createBrowserHistory } from "history";
+import * as SiteUrlParamNames from './UrlParamNames';
+
+
+const KeywordFilterUrlParamName = 'keyword';
+const AndOptUrlParamName = 'and';
+
 
 
 class OntologyListUrlFactory{
     constructor(){
         let url = new URL(window.location); 
-        this.collections = url.searchParams.getAll('collection');
-        this.sortedBy = url.searchParams.get('sorting');
-        this.page = url.searchParams.get('page');
-        this.size =  url.searchParams.get('size');
-        this.keywordFilter = url.searchParams.get('keyword');
+        this.collections = url.searchParams.getAll(SiteUrlParamNames.Collection);
+        this.sortedBy = url.searchParams.get(SiteUrlParamNames.SortBy);
+        this.page = url.searchParams.get(SiteUrlParamNames.Page);
+        this.size =  url.searchParams.get(SiteUrlParamNames.Size);
+        this.keywordFilter = url.searchParams.get(KeywordFilterUrlParamName);
         this.baseUrl = window.location.pathname;
         this.history = createBrowserHistory();        
     }
@@ -16,20 +22,20 @@ class OntologyListUrlFactory{
 
     update({keywordFilter, collections, sortedBy, page, size, andOpValue}){
         let currentUrlParams = new URLSearchParams(window.location.search);  
-        currentUrlParams.delete('keyword');
+        currentUrlParams.delete(KeywordFilterUrlParamName);
 
         if(keywordFilter !== ""){
-            currentUrlParams.set('keyword', keywordFilter);
+            currentUrlParams.set(KeywordFilterUrlParamName, keywordFilter);
         }
         
-        currentUrlParams.delete('collection');
+        currentUrlParams.delete(SiteUrlParamNames.Collection);
         for(let col of collections){      
-            currentUrlParams.append('collection', col);        
+            currentUrlParams.append(SiteUrlParamNames.Collection, col);        
         }
-        currentUrlParams.set('and', andOpValue);
-        currentUrlParams.set('sorting', sortedBy);
-        currentUrlParams.set('page', page);  
-        currentUrlParams.set('size', size);
+        currentUrlParams.set(AndOptUrlParamName, andOpValue);
+        currentUrlParams.set(SiteUrlParamNames.SortBy, sortedBy);
+        currentUrlParams.set(SiteUrlParamNames.Page, page);  
+        currentUrlParams.set(SiteUrlParamNames.Size, size);
         this.history.push(this.baseUrl + "?" + currentUrlParams.toString());           
     }
 }
