@@ -7,7 +7,7 @@ import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
-import OntologyListUrlProfile from '../../../UrlProfiles/OntologyListUrlProfile';
+import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 
 
 
@@ -61,12 +61,12 @@ const OntologyList = (props) => {
 
 
   function setStateBasedOnUrlParams(){
-    let ontologyListProfile = new OntologyListUrlProfile();    
-    let collectionsInUrl = ontologyListProfile.collections
-    let sortByInUrl = ontologyListProfile.sortedBy;
-    let pageInUrl = ontologyListProfile.page;
-    let sizeInUrl = ontologyListProfile.size;
-    let keywordFilterInUrl = ontologyListProfile.keywordFilter;
+    let ontologyList = new OntologyListUrlFactory();    
+    let collectionsInUrl = ontologyList.collections
+    let sortByInUrl = ontologyList.sortedBy;
+    let pageInUrl = ontologyList.page;
+    let sizeInUrl = ontologyList.size;
+    let keywordFilterInUrl = ontologyList.keywordFilter;
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
@@ -211,8 +211,8 @@ const OntologyList = (props) => {
 
 
   function updateUrl(){     
-    let ontologyListUrlProfile = new OntologyListUrlProfile();
-    let updatedUrl = ontologyListUrlProfile.update({
+    let ontologyListUrl = new OntologyListUrlFactory();
+    let updatedUrl = ontologyListUrl.update({
       keywordFilter: keywordFilterString,
       collections: selectedCollections,
       sortedBy: sortField,

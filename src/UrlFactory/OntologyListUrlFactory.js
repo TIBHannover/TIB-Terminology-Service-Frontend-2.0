@@ -1,12 +1,13 @@
 
-class OntologyListUrlProfile{
+class OntologyListUrlFactory{
     constructor(){
         let url = new URL(window.location); 
         this.collections = url.searchParams.getAll('collection');
         this.sortedBy = url.searchParams.get('sorting');
         this.page = url.searchParams.get('page');
         this.size =  url.searchParams.get('size');
-        this.keywordFilter = url.searchParams.get('keyword');        
+        this.keywordFilter = url.searchParams.get('keyword');
+        this.baseUrl = window.location.pathname;        
     }
 
 
@@ -26,9 +27,9 @@ class OntologyListUrlProfile{
         currentUrlParams.set('sorting', sortedBy);
         currentUrlParams.set('page', page);  
         currentUrlParams.set('size', size);
-        return window.location.pathname + "?" + currentUrlParams.toString();           
+        return  this.baseUrl + "?" + currentUrlParams.toString();           
     }
 }
 
 
-export default OntologyListUrlProfile;
+export default OntologyListUrlFactory;

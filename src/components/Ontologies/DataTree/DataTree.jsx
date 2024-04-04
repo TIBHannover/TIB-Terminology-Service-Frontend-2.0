@@ -9,6 +9,7 @@ import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 
 
 
@@ -65,23 +66,22 @@ const DataTree = (props) => {
 
 
   useEffect(() => {    
-    let url = new URL(window.location);
-    let targetQueryParams = url.searchParams;    
+    let urlFacory = new CommonUrlFactory();           
     paneResizeClass.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
     let termTree = (props.componentIdentity === "terms") ? true : false; 
-    let iriInUrl =  targetQueryParams.get('iri');
+    let iriInUrl =  urlFacory.getIri();
     if(iriInUrl){
       setSelectedNodeIri(iriInUrl);
       setShowDetailTable(true);
     }
     else if(ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== ""){
       setSelectedNodeIri(ontologyPageContext.lastVisitedIri[props.componentIdentity]);
-      setShowDetailTable(true);
-      targetQueryParams.set("iri", ontologyPageContext.lastVisitedIri[props.componentIdentity]);
-      history.push(window.location.pathname + "?" +  targetQueryParams.toString());
+      setShowDetailTable(true);      
+      let updatedUrl = urlFacory.setIri({newIri:  ontologyPageContext.lastVisitedIri[props.componentIdentity]})
+      history.push(updatedUrl);
     }
     
     setIsTermTree(termTree);
