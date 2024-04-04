@@ -23,8 +23,8 @@ const DataTree = (props) => {
     
     Context:
       The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
-  
   */
+ 
 
   const ontologyPageContext = useContext(OntologyPageContext);
 

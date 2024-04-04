@@ -77,8 +77,7 @@ const Tree = (props) => {
     function setComponentData(){                      
         let extractName = props.componentIdentity;             
         if (props.rootNodes.length != 0 || resetTreeFlag || reload){                                                
-            setChildExtractName(extractName);
-            setResetTreeFlag(false);
+            setChildExtractName(extractName);           
             setReload(false);
             setNoNodeExist(false);            
         }
@@ -90,7 +89,7 @@ const Tree = (props) => {
 
 
     async function buildTheTree(){        
-        let target = props.selectedNodeIri;
+        let target = props.selectedNodeIri;        
         target =  target ? target.trim() : null;        
         let siblingsVisible = false;
         let treeFullView = !subTreeMode;        
@@ -106,7 +105,7 @@ const Tree = (props) => {
             loadTheTreeLastState();            
             return true;
         }                
-        if (!target || resetTreeFlag){
+        if (!target || resetTreeFlag){            
             let result = [];
             if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){                
                 result = buildTheTreeFirstLayer(props.rootNodesForSkos);
@@ -161,7 +160,8 @@ const Tree = (props) => {
         
         setTreeDomContent(treeList);        
         setReload(false);              
-        setSiblingsVisible(siblingsVisible);                      
+        setSiblingsVisible(siblingsVisible);  
+        setResetTreeFlag(false);                    
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);        
         ontologyPageContext.storeIriForComponent(target, props.componentIdentity);         
     }
@@ -444,8 +444,8 @@ const Tree = (props) => {
 
 
     useEffect(() => {        
-        if(props.jumpToIri){            
-            setIsLoading(true)            
+        if(props.jumpToIri){                   
+            setIsLoading(true);            
             setSubTreeMode(true);
             setSiblingsButtonShow(true);
             setSubOrFullTreeBtnShow(true);
