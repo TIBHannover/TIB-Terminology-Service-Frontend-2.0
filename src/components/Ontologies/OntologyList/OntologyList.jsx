@@ -7,6 +7,7 @@ import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
+import OntologyListUrlProfile from '../../../UrlProfiles/OntologyListUrlProfile';
 
 
 
@@ -60,12 +61,12 @@ const OntologyList = (props) => {
 
 
   function setStateBasedOnUrlParams(){
-    let url = new URL(window.location);   
-    let collectionsInUrl = url.searchParams.getAll('collection');      
-    let sortByInUrl = url.searchParams.get('sorting');
-    let pageInUrl = url.searchParams.get('page');
-    let sizeInUrl = url.searchParams.get('size');
-    let keywordFilterInUrl = url.searchParams.get('keyword');
+    let ontologyListProfile = new OntologyListUrlProfile();    
+    let collectionsInUrl = ontologyListProfile.collections
+    let sortByInUrl = ontologyListProfile.sortedBy;
+    let pageInUrl = ontologyListProfile.page;
+    let sizeInUrl = ontologyListProfile.size;
+    let keywordFilterInUrl = ontologyListProfile.keywordFilter;
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
@@ -209,23 +210,18 @@ const OntologyList = (props) => {
 
 
 
-  function updateUrl(){         
-    let currentUrlParams = new URLSearchParams(window.location.search);  
-    currentUrlParams.delete('keyword');
-
-    if(keywordFilterString !== ""){
-      currentUrlParams.set('keyword', keywordFilterString);
-    }
+  function updateUrl(){     
+    let ontologyListUrlProfile = new OntologyListUrlProfile();
+    let updatedUrl = ontologyListUrlProfile.update({
+      keywordFilter: keywordFilterString,
+      collections: selectedCollections,
+      sortedBy: sortField,
+      page: pageNumber,
+      size: pageSize,
+      andOpValue: exclusiveCollections
+    });
     
-    currentUrlParams.delete('collection');
-    for(let col of selectedCollections){      
-      currentUrlParams.append('collection', col);        
-    }
-    currentUrlParams.set('and', exclusiveCollections);
-    currentUrlParams.set('sorting', sortField);
-    currentUrlParams.set('page', pageNumber);  
-    currentUrlParams.set('size', pageSize);            
-    history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+    history.push(updatedUrl);    
   }
 
 
