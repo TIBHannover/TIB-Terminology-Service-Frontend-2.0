@@ -35,27 +35,26 @@ const OntologyList = (props) => {
 
   async function setComponentData (){    
     try{      
-      let ontologyApi = new OntologyApi({});
-      let collectionApi = new CollectionApi();
-      await ontologyApi.fetchOntologyList(); 
-      let allCollections = [];
-      if(process.env.REACT_APP_PROJECT_NAME === ""){
-        // If TIB General, fetch all the collections. Otherwise not needed.
-        await collectionApi.fetchCollectionsWithStats();       
-        allCollections =  collectionApi.collectionsList;
-      }                 
-      
+      let ontologyApi = new OntologyApi({});      
+      await ontologyApi.fetchOntologyList();                          
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
       setOntologies(sortedOntologies);
-      setUnFilteredOntologies(sortedOntologies);      
-      setAllCollections(allCollections);      
+      setUnFilteredOntologies(sortedOntologies);              
       setIsLoaded(true);      
     }
     catch(error){            
       setIsLoaded(true);
       setError(error);        
     }
-  
+  }
+
+
+  async function setCollectionData(){
+    let collectionApi = new CollectionApi();
+    let allCollections = [];          
+    await collectionApi.fetchCollectionsWithStats();       
+    allCollections =  collectionApi.collectionsList;    
+    setAllCollections(allCollections);        
   }
 
 
@@ -232,7 +231,11 @@ const OntologyList = (props) => {
 
 
   useEffect(() => {
-    setComponentData();    
+    setComponentData();
+    if(process.env.REACT_APP_PROJECT_NAME === ""){
+      // If TIB General, fetch all the collections. Otherwise not needed.
+      setCollectionData();
+    }    
     setStateBasedOnUrlParams();      
   }, []);
 
