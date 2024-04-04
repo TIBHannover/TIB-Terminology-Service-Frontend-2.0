@@ -428,16 +428,11 @@ const Tree = (props) => {
 
     useEffect(() => {       
         setComponentData();     
-        buildTheTree();   
-        // saveComponentStateInParent();              
+        buildTheTree();                         
         if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
         }    
         document.addEventListener("keydown", handleKeyDown, false);          
-
-        setTimeout(() => {
-            setIsLoading(false);              
-        }, 2000);
 
                 
         return () => {            
@@ -446,11 +441,10 @@ const Tree = (props) => {
     }, []);
 
 
-    useEffect(() => {        
-        // setComponentData();        
+    useEffect(() => {                
         buildTheTree();  
-        setTimeout(() => {
-            setIsLoading(false);  
+        setIsLoading(false); 
+        setTimeout(() => {             
             saveComponentStateInParent();
         }, 2000);                                
                
