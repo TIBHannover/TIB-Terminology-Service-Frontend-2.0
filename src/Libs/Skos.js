@@ -1,6 +1,3 @@
-import SkosApi from "../api/skos";
-
-
 class SkosLib{
 
 
