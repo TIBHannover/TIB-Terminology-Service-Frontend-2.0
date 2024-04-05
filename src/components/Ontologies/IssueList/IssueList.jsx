@@ -1,5 +1,4 @@
 import React from "react";
-import { withAuth } from "react-oidc-context";
 import { withRouter } from 'react-router-dom';
 import {createLabelTags, 
     createIssueDescription, 
@@ -256,4 +255,4 @@ class IssueList extends React.Component{
 
 }
 
-export default withAuth(withRouter(IssueList));
+export default withRouter(IssueList);
