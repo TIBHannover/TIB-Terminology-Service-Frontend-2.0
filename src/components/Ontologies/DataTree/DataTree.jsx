@@ -1,6 +1,5 @@
 import {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';

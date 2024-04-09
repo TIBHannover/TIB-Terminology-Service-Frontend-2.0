@@ -2,6 +2,7 @@ import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from './UrlParamNames';
 
 
+
 class CommonUrlFactory{
     constructor(){
         this.baseUrl = window.location.pathname;
