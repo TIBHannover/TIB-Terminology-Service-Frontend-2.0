@@ -1,7 +1,3 @@
-
-const OPEN_ISSUE_ID = 1;
-
-
 export function createIssueTitle(issue){
     return [
         <a href={issue['html_url']} className="git-issue-title" target={"_blank"}>{issue['title']}</a>
@@ -34,16 +30,6 @@ export function createIssueDescription(issue){
     ];
 }
 
-
-
-export function loadUrlParameter(){        
-    let url = new URL(window.location);
-    let result = [];     
-    result['selectedStateId'] = url.searchParams.get('stateId');
-    result['pageNumber'] = url.searchParams.get('page');
-    result['selectedType'] = url.searchParams.get('issuetype');
-    return result;    
-}
 
 
 export function setTypeRadioBtn(selectedType){
