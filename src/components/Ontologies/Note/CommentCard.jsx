@@ -1,5 +1,4 @@
 import {useState, useEffect, useContext} from "react";
-import Toolkit from "../../../Libs/Toolkit";
 import AuthTool from "../../User/Login/authTools";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
@@ -8,6 +7,8 @@ import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModa
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 
 
 
@@ -18,6 +19,7 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 export const CommentCard = (props) =>{
+
     let commnetContent = createHtmlFromEditorJson(props.comment['content']);
     
     return (
@@ -48,6 +50,9 @@ export const CommentCardHeader = (props) =>{
     const ontologyPageContext = useContext(OntologyPageContext);
     const appContext = useContext(AppContext);
 
+    const noteUrlFactory = new NoteUrlFactory();
+    const UrlFactory = new CommonUrlFactory();
+
     const [comment, setComment] = useState({});
     const [linkCopied, setLinkCopied] = useState(false);
 
@@ -64,11 +69,8 @@ export const CommentCardHeader = (props) =>{
     reportFormData.append("objectId", comment['id']);
     reportFormData.append("objectType", 'comment');
     reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
-
-    let searchParams = new URLSearchParams(window.location.search);
-    let locationObject = window.location;
-    searchParams.delete('comment');    
-    let redirectAfterDeleteEndpoint = locationObject.pathname + "?" +  searchParams.toString();  
+           
+    let redirectAfterDeleteEndpoint = UrlFactory.getCommentDeleteRedirectLink();
 
     return [
         <div className="row" key={"c-" + comment['id']}>        
@@ -91,7 +93,7 @@ export const CommentCardHeader = (props) =>{
                                         type="button" 
                                         class="btn btn-sm note-action-menu-btn borderless-btn"                                      
                                         onClick={() => {
-                                            let url = window.location.origin + Toolkit.setParamInUrl('comment', comment['id']);                                            
+                                            let url = noteUrlFactory.getCommentLink({commentId: comment['id']});
                                             navigator.clipboard.writeText(url);
                                             setLinkCopied(true);
                                             setTimeout(() => {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router";
 import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendCalls";
 import {getTextEditorContent, createTextEditorEmptyText, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
 import { NoteCommentListRender } from "./renders/NoteCommentListRender";
+import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 
 
@@ -11,8 +12,9 @@ const NoteCommentList = (props) => {
     const [noteId, setNoteId] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [editCommentId, setEditCommentId] = useState(-1);
-
-    const history = useHistory();
+    
+    const noteUrlFactory = new NoteUrlFactory();
+    const commonUrlFactory = new CommonUrlFactory();
 
 
     function onTextAreaChange (newEditorState){
@@ -99,19 +101,16 @@ const NoteCommentList = (props) => {
     }
 
 
-    function cancelEdit(){
-        let searchParams = new URLSearchParams(window.location.search);     
-        searchParams.delete('comment');        
-        history.push(window.location.pathname + "?" +  searchParams.toString());
+    function cancelEdit(){        
+        commonUrlFactory.deleteParam({name: 'comment'});
         setCommentEditorState(null);
         setEditCommentId(-1);
         setEditMode(false);    
     }
 
 
-    function jumpToCommentIfExist(){
-        let searchParams = new URLSearchParams(window.location.search);     
-        let commentId = searchParams.get('comment');
+    function jumpToCommentIfExist(){        
+        let commentId = noteUrlFactory.commentId
         let commentBox = document.getElementById("comment-card-" + commentId);
         if(commentBox){            
             commentBox.style.border = '2px solid red';            

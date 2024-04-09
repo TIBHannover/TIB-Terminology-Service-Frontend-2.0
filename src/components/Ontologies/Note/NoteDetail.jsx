@@ -1,11 +1,11 @@
 import {useState, useEffect, useContext} from "react";
-import { useHistory } from "react-router";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
 import { NoteDetailRender } from "./renders/NoteDetailRender";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 
 
@@ -18,8 +18,8 @@ const NoteDetail = () => {
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
     const [noteNotFound, setNoteNotFound] = useState(false);
     const [currentUrl, setCurrentUrl] = useState(window.location.href);    
-
-    const history = useHistory();
+    
+    const commonUrlFactory = new CommonUrlFactory();
 
 
     function getTheNote(){
@@ -38,12 +38,10 @@ const NoteDetail = () => {
     }
 
 
-    function reloadNoteDetail(){
-        let searchParams = new URLSearchParams(window.location.search);     
-        searchParams.delete('comment');        
-        history.push(window.location.pathname + "?" +  searchParams.toString());
+    function reloadNoteDetail(){        
+        commonUrlFactory.deleteParam({name: 'comment'});
         setNote({});
-        setCurrentUrl(window.location.pathname + "?" +  searchParams.toString()); 
+        setCurrentUrl(commonUrlFactory.getCurrentUrl()); 
     }
 
 

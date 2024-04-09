@@ -4,16 +4,13 @@ import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from './UrlParamNames';
 
 
-const IssueStateUrlParamName = "stateId";
-const IssueTypeUrlParamName = "issuetype";
-
 
 class IssueListUrlFactory {
    constructor(){
         let url = new URL(window.location); 
-        this.selectedStateId = url.searchParams.get(IssueStateUrlParamName);
+        this.selectedStateId = url.searchParams.get(SiteUrlParamNames.IssueState);
         this.pageNumber = url.searchParams.get(SiteUrlParamNames.Page);
-        this.selectedType = url.searchParams.get(IssueTypeUrlParamName);
+        this.selectedType = url.searchParams.get(SiteUrlParamNames.IssueType);
         this.history = createBrowserHistory();
         this.baseUrl = window.location.pathname;        
    }
@@ -23,9 +20,8 @@ class IssueListUrlFactory {
    update({pageNumber, stateId, issueType}){
         let currentUrlParams = new URLSearchParams();
         currentUrlParams.set(SiteUrlParamNames.Page, pageNumber);
-        currentUrlParams.set(IssueStateUrlParamName, stateId);      
-        currentUrlParams.set(IssueTypeUrlParamName, issueType);              
-        window.history.pushState({}, '', window.location.pathname + "?" + currentUrlParams.toString());
+        currentUrlParams.set(SiteUrlParamNames.IssueState, stateId);      
+        currentUrlParams.set(SiteUrlParamNames.IssueType, issueType);                      
         this.history.push(this.baseUrl + "?" + currentUrlParams.toString());     
    }
 

@@ -10,6 +10,12 @@ class CommonUrlFactory{
     }
 
 
+    getCurrentUrl(){
+        let searchParams = new URLSearchParams(window.location.search);           
+        return window.location.pathname + "?" +  searchParams.toString();
+    }
+
+
     resetUrl(){
         this.history.push(this.baseUrl);
     }

@@ -1,11 +1,10 @@
 import {useEffect, useState, useContext} from "react";
-import { useHistory } from "react-router";
 import AuthTool from "../../User/Login/authTools";
-import Toolkit from "../../../Libs/Toolkit";
 import { NoteListRender } from "./renders/NoteListRender";
 import { getNoteList } from "../../../api/tsMicroBackendCalls";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
+import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 
 
 
@@ -19,37 +18,31 @@ const DEFAULT_PAGE_SIZE = 10
 
 
 const NoteList = (props) => {
-    let currentUrlParams = new URL(window.location).searchParams;                      
-    let page = currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER;
-    let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE;
-    let originalNotes = currentUrlParams.get('originalNotes') === "true" ? true : false;     
+    const ontologyPageContext = useContext(OntologyPageContext);
+    
+    const noteUrlFactory = new NoteUrlFactory();                
+        
     let selectedType = TYPES_VALUES.indexOf(props.termType);
     if(selectedType < 0){
-        selectedType = currentUrlParams.get('type') ? TYPES_VALUES.indexOf(currentUrlParams.get('type')) : ALL_TYPE
+        selectedType = noteUrlFactory.noteType ? TYPES_VALUES.indexOf(noteUrlFactory.noteType) : ALL_TYPE
     }        
-        
-    let inputNoteIdFromUrl = currentUrlParams.get('noteId'); 
-    inputNoteIdFromUrl = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
-
-
-    const ontologyPageContext = useContext(OntologyPageContext);
+            
 
     const [noteList, setNoteList] = useState([]);
     const [showNoteDetailPage, setShowNoteDetailPage] = useState(false);
     const [noteSubmited, setNoteSubmited] = useState(false);
     const [noteSubmitSeccuess, setNoteSubmitSeccuess] = useState(false);
-    const [pageNumber, setPageNumber] = useState(parseInt(page));
-    const [pageSize, setPageSize] = useState(size);
+    const [pageNumber, setPageNumber] = useState(parseInt(noteUrlFactory.page ? noteUrlFactory.page : DEFAULT_PAGE_NUMBER));
+    const [pageSize, setPageSize] = useState(noteUrlFactory.size ? noteUrlFactory.size : DEFAULT_PAGE_SIZE);
     const [noteTotalPageCount, setNoteTotalPageCount] = useState(0);
-    const [selectedNoteId, setSelectedNoteId] = useState(inputNoteIdFromUrl);
+    const [selectedNoteId, setSelectedNoteId] = useState(!noteUrlFactory.noteId ? -1 : parseInt(noteUrlFactory.noteId));
     const [componentIsLoading, setComponentIsLoading] = useState(true);
     const [noteExist, setNoteExist] = useState(true);    
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
     const [isAdminForOntology, setIsAdminForOntology] = useState(false);
     const [numberOfPinned, setNumberOfPinned] = useState(0);
-    const [onlyOntologyOriginalNotes, setOnlyOntologyOriginalNotes] = useState(originalNotes);
-
-    const history = useHistory();
+    const [onlyOntologyOriginalNotes, setOnlyOntologyOriginalNotes] = useState(noteUrlFactory.originalNotes === "true" ? true : false);
+        
 
 
     function loadComponent(){                        
@@ -129,10 +122,9 @@ const NoteList = (props) => {
 
     function setNoteCreationResultStatus(newNoteId=false){           
         let success = false;
-        if(newNoteId){            
-            let newUrl = Toolkit.setParamInUrl('noteId', newNoteId);
-            setSelectedNoteId(newNoteId);            
-            history.push(newUrl);
+        if(newNoteId){                               
+            setSelectedNoteId(newNoteId);                        
+            noteUrlFactory.setNoteId({noteId:newNoteId}); 
             success = true;
         }
 
@@ -156,15 +148,6 @@ const NoteList = (props) => {
     }
 
 
-    function updateURL(){
-        let currentUrlParams = new URLSearchParams(window.location.search);
-        currentUrlParams.set('type', TYPES_VALUES[selectedArtifactType]);
-        currentUrlParams.set('page', pageNumber);
-        currentUrlParams.set('size', pageSize);
-        currentUrlParams.set('originalNotes', onlyOntologyOriginalNotes);
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());                
-    }
-
 
     useEffect(() => {
         loadComponent();
@@ -174,7 +157,12 @@ const NoteList = (props) => {
 
     useEffect(() => {      
         setComponentIsLoading(true);   
-        updateURL();
+        noteUrlFactory.update({
+            page:pageNumber, 
+            size:pageSize, 
+            originalNotes:onlyOntologyOriginalNotes, 
+            noteType:TYPES_VALUES[selectedArtifactType]
+        });
         loadComponent();              
         
     }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, onlyOntologyOriginalNotes, props.term]);

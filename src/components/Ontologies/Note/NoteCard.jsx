@@ -9,6 +9,7 @@ import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import { NoteContext } from "../../../context/NoteContext";
 import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 
 
 
@@ -28,13 +29,10 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 export const NoteCard = (props) => {
 
     const noteContext = useContext(NoteContext);    
-    
-    let searchParams = new URLSearchParams(window.location.search);        
-    searchParams.set('noteId', props.note['id']);
-    searchParams.delete('page');
-    searchParams.delete('size');
-    searchParams.delete('type');
-    let noteUrl = window.location.pathname + "?" +  searchParams.toString();
+
+    const noteUrlFactory = new NoteUrlFactory();
+        
+    let noteUrl = noteUrlFactory.getCurrentNoteLink({noteId: props.note['id']});
 
     return(
         <div className="row" key={props.note['id']}>
@@ -81,6 +79,8 @@ export const NoteCardHeader = (props) => {
 
     const ontologyPageContext = useContext(OntologyPageContext);
 
+    const noteUrlFactory = new NoteUrlFactory();
+
     const [note, setNote] = useState({});
     const [linkCopied, setLinkCopied] = useState(false);
 
@@ -100,16 +100,7 @@ export const NoteCardHeader = (props) => {
     reportFormData.append("objectType", 'note');
     reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
     
-    let redirectAfterDeleteEndpoint = window.location.href;
-    let searchParams = new URLSearchParams(window.location.search);
-    let locationObject = window.location;
-    searchParams.set('page', 1);
-    searchParams.set('size', 10);   
-    if (redirectAfterDeleteEndpoint.includes("noteId=")){
-        // we are on the note page                
-        searchParams.delete('noteId');                 
-    }
-    redirectAfterDeleteEndpoint = locationObject.pathname + "?" +  searchParams.toString();
+    let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({page:1, size:10});
 
     return [
         <div className="row" key={"note-" + note['id']}>        
@@ -174,6 +165,8 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
     const noteContext = useContext(NoteContext);
     const appContext = useContext(AppContext);
 
+    const noteUrlFactory = new NoteUrlFactory();
+
     return(
         <div class="dropdown custom-dropdown">
             <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -187,15 +180,9 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                     <button 
                         type="button" 
                         class="btn btn-sm note-action-menu-btn borderless-btn"                                      
-                        onClick={() => {
-                            let searchParams = new URLSearchParams(window.location.search);
-                            let locationObject = window.location;
-                            searchParams.delete('comment');
-                            searchParams.delete('page');
-                            searchParams.delete('size');
-                            searchParams.delete('type');
-                            searchParams.set('noteId', note['id']);                                             
-                            navigator.clipboard.writeText(locationObject.origin + locationObject.pathname + "?" +  searchParams.toString());
+                        onClick={() => {                             
+                            let noteLink = noteUrlFactory.getCurrentNoteLink({noteId: note['id'], fullLink:true});                                          
+                            navigator.clipboard.writeText(noteLink);
                             setLinkCopied(true);
                             setTimeout(() => {
                                 setLinkCopied(false);
