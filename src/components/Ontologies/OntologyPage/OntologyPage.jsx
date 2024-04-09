@@ -237,23 +237,13 @@ const OntologyPage = (props) => {
                         />
                   }
                   {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-                        <TermList                                    
-                          componentIdentity={'termList'}
-                          key={'termListPage'}                                                                                             
-                        />
+                        <TermList componentIdentity={'termList'}  key={'termListPage'} />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&
                           <NoteList key={'notesPage'}/>
                   }                                      
                   {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            
-                          <IssueList                                                           
-                            componentIdentity={'gitIssues'}
-                            key={'gitIssueList'}
-                            ontology={ontology}                              
-                            isSkos={isSkosOntology}
-                            lastState={lastTabsStates['gitIssues']}                                  
-                            storeListOfGitIssuesState={tabsStateKeeper}
-                          />
+                          <IssueList  componentIdentity={'gitIssues'}  key={'gitIssueList'} />
                   } 
 
                   {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
