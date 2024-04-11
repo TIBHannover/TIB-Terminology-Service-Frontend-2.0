@@ -88,10 +88,10 @@ export const NoteCreationRender = (props) => {
                             <br></br>
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {parseInt(props.targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(props.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <p>About: <b>{ontologyPageContext.ontology.ontologyId}</b></p>
                                     }
-                                    {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <div>                                           
                                             <JumpTo
                                                 targetType={props.componentIdentity}                                                
@@ -107,7 +107,7 @@ export const NoteCreationRender = (props) => {
                                 </div>
                             </div>  
                             <br></br>
-                            {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
+                            {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
                                 <>
                                 <div className="row">
                                     <div className="col-sm-10">

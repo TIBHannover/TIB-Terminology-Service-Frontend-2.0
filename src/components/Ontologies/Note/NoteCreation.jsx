@@ -176,7 +176,7 @@ const NoteCreation = (props) => {
         <NoteCreationRender          
             key={"note-creation-render"}            
             closeModal={closeModal}            
-            targetArtifactType={targetArtifactType}
+            targetArtifact={targetArtifactType}
             changeArtifactType={changeArtifactType}            
             visibility={visibility}
             changeVisibility={changeVisibility}              
