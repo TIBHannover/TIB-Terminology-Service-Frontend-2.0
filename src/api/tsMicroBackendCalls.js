@@ -167,3 +167,24 @@ export async function getReportList(){
         return [];
     }
 }
+
+
+
+export async function getGitRepoTemplates({repoUrl, gitUsername}){
+    try{
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});         
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates';
+        let formData = new FormData();
+        formData.append("repo_url", repoUrl);
+        formData.append("username", gitUsername);
+        let result = await fetch(url, {method:'POST', headers:headers, body:formData});
+        if (result.status !== 200){
+            return false;
+        }
+        result = await result.json();
+        return result['_result']['templates'];
+    }
+    catch(e){        
+        return false;
+    }
+}
