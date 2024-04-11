@@ -111,7 +111,7 @@ class Toolkit{
     }
 
 
-    static setObsoleteAndReturnNewUrl(obsoletesValue) {                   
+    static setObsoleteInStorageAndUrl(obsoletesValue) {                   
         localStorage.setItem("obsoletes", obsoletesValue);
         document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
         urlFacory.setObsoletes({value:obsoletesValue});

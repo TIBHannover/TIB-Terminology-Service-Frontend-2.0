@@ -4,6 +4,7 @@ export const Page = 'page';
 export const Size = 'size';
 export const Collection = 'collection';
 export const SortBy = 'sortedBy';
+export const SubTabInTermTable = 'subtab';
 
 // Note related
 export const OriginalNotes = 'originalNotes';

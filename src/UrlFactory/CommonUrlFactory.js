@@ -21,11 +21,23 @@ class CommonUrlFactory{
     }
 
 
+    setParam({name, value, updateUrl=true}){
+        let searchParams = new URLSearchParams(window.location.search);        
+        searchParams.set(name, value);        
+        let newUrl = this.baseUrl + "?" +  searchParams.toString();
+        if(updateUrl){
+            this.history.push(newUrl);            
+        }
+        return newUrl;
+    }
+    
+    
     deleteParam({name}){
         let searchParams = new URLSearchParams(window.location.search);                   
         searchParams.delete(name);        
         this.history.push(this.baseUrl + "?" +  searchParams.toString());
     }
+
 
 
     getIri(){

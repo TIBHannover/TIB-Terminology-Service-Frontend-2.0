@@ -15,6 +15,7 @@ import NoteList from '../Note/NoteList';
 import '../../layout/ontologyHomePage.css';
 import '../../layout/note.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 
 
 
@@ -67,9 +68,10 @@ const OntologyPage = (props) => {
   const [lastIrisHistory, setLastIrisHistory] = useState({"terms": "", "properties": "", "individuals": "", "termList": ""});
   const [lastTabsStates, setLastTabsStates] = useState({"terms": null, "properties": null, "gitIssues": ""});  
   const [isSkosOntology, setIsSkosOntology] = useState(false);
-  const [notesCount, setNotesCount] = useState("")  
-  
+  const [notesCount, setNotesCount] = useState("");
 
+  const UrlFactory = new CommonUrlFactory();
+  
 
 
   async function loadOntologyData(){
@@ -122,9 +124,8 @@ const OntologyPage = (props) => {
     }
 
     let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;   
-    let irisHistory = {...lastIrisHistory};    
-    let urlParams = new URLSearchParams(window.location.search);
-    irisHistory[requestedTab] = urlParams.get("iri");  
+    let irisHistory = {...lastIrisHistory};        
+    irisHistory[requestedTab] = UrlFactory.getIri();
 
     setActiveTab(activeTabId);
     setWaiting(false);

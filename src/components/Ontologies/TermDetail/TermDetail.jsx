@@ -5,10 +5,11 @@ import NoteList from '../Note/NoteList';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
-import Toolkit from '../../../Libs/Toolkit';
 import { getNoteList } from '../../../api/tsMicroBackendCalls';
 import Graph from '../../common/Graph/Graph';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 
 
 
@@ -141,12 +142,13 @@ const TermDetail = (props) => {
 const RenderTermDetailTab = (props) => {
 
   const ontologyPageContext = useContext(OntologyPageContext);
+  const UrlFactory = new CommonUrlFactory();
 
   function  createTabs(){
       let result = [];         
       for(let configItemKey in NodePageTabConfig){
-          let configObject = NodePageTabConfig[configItemKey];                 
-          let linkUrl = Toolkit.setParamInUrl('subtab', NodePageTabConfig[configItemKey]['urlEndPoint'])
+          let configObject = NodePageTabConfig[configItemKey];                           
+          let linkUrl = UrlFactory.setParam({name: SiteUrlParamNames.SubTabInTermTable, value: NodePageTabConfig[configItemKey]['urlEndPoint'], updateUrl:false});
           if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
             continue;
           }

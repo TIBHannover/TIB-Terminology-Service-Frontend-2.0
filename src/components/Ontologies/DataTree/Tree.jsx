@@ -288,7 +288,7 @@ const Tree = (props) => {
 
 
     function showObsoletes(){                      
-        Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);
+        Toolkit.setObsoleteInStorageAndUrl(!obsoletesShown);
         setReload(true);
         setIsLoading(true);
         setTreeDomContent("");

@@ -175,7 +175,7 @@ function createClassListTableHeaderForObsoletes(){
 }
 
 
-function createTableBody(term, termTreeUrl, subclassOfText, equivalentToText){
+function createTableBody(term, termTreeUrl, subclassOfText, equivalentToText){    
     return (
         <tr>
             <td className="label-col text-break">

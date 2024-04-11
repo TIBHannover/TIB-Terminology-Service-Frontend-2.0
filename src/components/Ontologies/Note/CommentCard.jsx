@@ -70,7 +70,7 @@ export const CommentCardHeader = (props) =>{
     reportFormData.append("objectType", 'comment');
     reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
            
-    let redirectAfterDeleteEndpoint = UrlFactory.getCommentDeleteRedirectLink();
+    let redirectAfterDeleteEndpoint = noteUrlFactory.getCommentDeleteRedirectLink();
 
     return [
         <div className="row" key={"c-" + comment['id']}>        

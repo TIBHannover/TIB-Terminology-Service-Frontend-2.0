@@ -120,8 +120,7 @@ const SearchForm = () => {
 
 
   function handleObsoletesCheckboxClick(e){        
-    let newUrl = Toolkit.setObsoleteAndReturnNewUrl(e.target.checked);
-    history.replace(newUrl);    
+    Toolkit.setObsoleteInStorageAndUrl(e.target.checked);    
   }
 
 

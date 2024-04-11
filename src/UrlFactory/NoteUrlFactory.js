@@ -26,7 +26,7 @@ class NoteUrlFactory {
 
 
   update({page, size, originalNotes, noteType}){
-    let currentUrlParams = new URLSearchParams();
+    let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.set(SiteUrlParamNames.Page, page);
     currentUrlParams.set(SiteUrlParamNames.Size, size);
     currentUrlParams.set(SiteUrlParamNames.OriginalNotes, originalNotes);
