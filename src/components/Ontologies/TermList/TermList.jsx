@@ -6,6 +6,7 @@ import { RenderTermList } from "./RenderTermList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import TermListUrlFactory from "../../../UrlFactory/TermListUrlFactory";
 import PropTypes from 'prop-types';
+import '../../layout/termList.css';
 
 
 
@@ -29,12 +30,13 @@ const TermList = (props) => {
 
     const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
     const [pageSize, setPageSize] = useState(sizeInUrl);
-    const [listOfTerms, setListOfTerms] = useState([]);
+    const [listOfTerms, setListOfTerms] = useState(['loading']);
     const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);    
     const [mode, setMode] = useState("terms");
     const [iri, setIri] = useState(iriInUrl);    
     const [tableIsLoading, setTableIsLoading] = useState(true);   
     const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue()); 
+
 
 
     async function loadComponent(){                        
@@ -53,10 +55,23 @@ const TermList = (props) => {
             listOfTermsAndStats["totalTermsCount"] = 1;            
         }
         
-        setListOfTerms(listOfTermsAndStats['results']);
+        let termList = [];
+        for(let term of listOfTermsAndStats['results']){            
+            let termApi = new TermApi(term['ontology_name'], encodeURIComponent(term['iri']), "terms");            
+            let [subclassOfText, equivalentToText] = await Promise.all([
+                termApi.getSubClassOf(),
+                termApi.getEqAxiom()
+            ]);
+            term['subclassOfText'] = subclassOfText;
+            term['equivalentToText'] = equivalentToText;
+            termList.push(term);
+        }
+        
+        setListOfTerms(termList);
         setTotalNumberOfTerms(listOfTermsAndStats['totalTermsCount']);                    
         storePageSizeInLocalStorage(pageSize);        
     }
+
 
 
     function storePageSizeInLocalStorage(size){
@@ -137,7 +152,7 @@ const TermList = (props) => {
 
     useEffect(() => {
         setTableIsLoading(true);
-        setListOfTerms([]);   
+        setListOfTerms(['loading']);   
         loadComponent();
         hideHiddenColumnsOnLoad();
         if(obsoletes && document.getElementById("obsolte_check_term_list")){
