@@ -5,6 +5,7 @@ import Toolkit from "../../../Libs/Toolkit";
 import { RenderTermList } from "./RenderTermList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import TermListUrlFactory from "../../../UrlFactory/TermListUrlFactory";
+import PropTypes from 'prop-types';
 
 
 
@@ -13,6 +14,10 @@ const DEFAULT_PAGE_NUMBER = 1;
 
 
 const TermList = (props) => {    
+    /* 
+        This component is responsible for rendering the list of terms in the ontology.
+        It requires the ontologyPageContext to be available.
+    */
 
     const ontologyPageContext = useContext(OntologyPageContext);
     const termListUrlFactory = new TermListUrlFactory();
@@ -162,6 +167,10 @@ const TermList = (props) => {
         />
     );
 
+}
+
+TermList.propTypes = {
+    componentIdentity: PropTypes.string.isRequired
 }
 
 

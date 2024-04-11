@@ -1,6 +1,6 @@
 import {useEffect, useState, useContext} from 'react';
 import NodePageTabConfig from './listOfComponentsTabs.json';
-import { TermDetailTable } from './TermDetailTable/TermDetailTable';
+import TermDetailTable from './TermDetailTable/TermDetailTable';
 import NoteList from '../Note/NoteList';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
@@ -10,6 +10,7 @@ import Graph from '../../common/Graph/Graph';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
+import PropTypes from 'prop-types';
 
 
 
@@ -21,6 +22,12 @@ const GRAPH_TAB_ID = 2;
 
 
 const TermDetail = (props) => {
+  /*
+    This component is responsible for rendering the detail page of a term.
+    It contains the term detail table, notes, and graph view.
+    It also contains the tab navigation for switching between these components.
+    It requires the ontologyPageContext to be available.
+  */
 
   const ontologyPageContext = useContext(OntologyPageContext);
   
@@ -179,6 +186,14 @@ const RenderTermDetailTab = (props) => {
           {createTabs()}
     </ul>
   );
+}
+
+
+TermDetail.propTypes = {
+  iri: PropTypes.string.isRequired,
+  componentIdentity: PropTypes.string.isRequired,
+  extractKey: PropTypes.string.isRequired,
+  typeForNote: PropTypes.string.isRequired
 }
 
 export default TermDetail;

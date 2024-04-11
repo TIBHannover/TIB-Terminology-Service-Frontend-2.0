@@ -16,6 +16,10 @@ const TITLE_SORT_KEY = "title";
 
 const OntologyList = (props) => {
 
+  /* 
+    This component is responsible for rendering the list of ontologies.
+  */
+
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [ontologies, setOntologies] = useState([]);

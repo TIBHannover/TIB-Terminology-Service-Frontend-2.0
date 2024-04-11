@@ -7,6 +7,9 @@ import { OntologyPageContext } from '../../../context/OntologyPageContext';
 
 
 const OntologyOverview = () => {
+  /*
+    This component is responsible for rendering the overview page of an ontology.
+  */
 
   const ontologyPageContext = useContext(OntologyPageContext);
 

@@ -1,4 +1,4 @@
-import {useContext, useState, useEffect} from 'react';
+import {useContext, useState} from 'react';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { OntologyPageContext } from '../../../../context/OntologyPageContext';
 import OntologyLib from '../../../../Libs/OntologyLib';
