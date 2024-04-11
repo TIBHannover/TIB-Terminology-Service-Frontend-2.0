@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
@@ -6,10 +6,22 @@ import draftToMarkdown from 'draftjs-to-markdown';
 import templatePath from './termRequestTemplate.md';
 import TextEditor from "../../common/TextEditor/TextEditor";
 import { getGitRepoTemplates, submitGitIssue } from "../../../api/tsMicroBackendCalls";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 
 
 const TermRequest = (props) => {
+
+    /* 
+        The Term Request component is used to create a new issue or term request in the ontology repository.
+        The component is only available for users who are logged in with their GitHub account.
+        Renders term request or general issue based on an input props named reportType.
+        reportType can be either 
+            - "termRequest"
+            - "general"
+    */
+
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [editorState, setEditorState] = useState(null);
     const [submitFinished, setSubmitFinished] = useState(false);
@@ -42,7 +54,7 @@ const TermRequest = (props) => {
 
     
     function loadTemplates(){                
-        getGitRepoTemplates({repoUrl:props.ontology.config.repoUrl, gitUsername: localStorage.getItem('ts_username')})
+        getGitRepoTemplates({repoUrl:ontologyPageContext.ontology.config.repoUrl, gitUsername: localStorage.getItem('ts_username')})
         .then((templates) => {
             setIssueTemplates(templates);
         });        
@@ -120,12 +132,12 @@ const TermRequest = (props) => {
         }
                                 
         submitGitIssue({
-            repoUrl:props.ontology.config.repoUrl, 
+            repoUrl:ontologyPageContext.ontology.config.repoUrl, 
             gitUsername: localStorage.getItem('ts_username'), 
             issueTitle:issueTitle, 
             issueBody:issueContent, 
             issueType:props.reportType, 
-            ontologyId:props.ontology.ontologyId
+            ontologyId:ontologyPageContext.ontology.ontologyId
         }).then((createdIssueUrl) => {
             if(createdIssueUrl){
                 setErrorInSubmit(false);
@@ -204,7 +216,7 @@ const TermRequest = (props) => {
                     <div class="modal-header">
                         <h4 class="modal-title">
                             File {props.reportType === "termRequest" ? "a Term Request for " : "a General Issue for "} 
-                            {props.ontology.ontologyId}
+                            {ontologyPageContext.ontology.ontologyId}
                         </h4>
                         <button onClick={closeModal} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
                     </div>
@@ -297,6 +309,11 @@ const TermRequest = (props) => {
         </>
     );
 }
+
+
+TermRequest.propTypes = {
+    reportType: PropTypes.string.isRequired
+  };
 
 
 

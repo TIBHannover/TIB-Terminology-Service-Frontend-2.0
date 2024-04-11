@@ -178,9 +178,9 @@ const IssueList = (props) => {
                         <div className="col-sm-3">                           
                             {appContext.user &&                              
                                 <>
-                                <TermRequest ontology={ontologyPageContext.ontology} reportType={"general"} />
+                                <TermRequest reportType={"general"} />
                                 <br></br>
-                                <TermRequest ontology={ontologyPageContext.ontology} reportType={"termRequest"} />
+                                <TermRequest reportType={"termRequest"} />
                                 </>                                                                  
                             } 
                         </div>
