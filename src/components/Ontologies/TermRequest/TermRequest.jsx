@@ -3,10 +3,9 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 import draftToMarkdown from 'draftjs-to-markdown';
-import AuthTool from "../../User/Login/authTools";
 import templatePath from './termRequestTemplate.md';
 import TextEditor from "../../common/TextEditor/TextEditor";
-import { getGitRepoTemplates } from "../../../api/tsMicroBackendCalls";
+import { getGitRepoTemplates, submitGitIssue } from "../../../api/tsMicroBackendCalls";
 
 
 
@@ -119,35 +118,26 @@ const TermRequest = (props) => {
         if(!formIsValid){
             return;
         }
-                        
-        let data = new FormData();
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
-        data.append("ontology_id", props.ontology.ontologyId);
-        data.append("username", localStorage.getItem("ts_username"));        
-        data.append("title", issueTitle);
-        data.append("content", issueContent);        
-        data.append("issueType", props.reportType);
-        data.append("repo_url", props.ontology.config.repoUrl);
-        
-        fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue', {method: 'POST', headers:headers, body: data})
-            .then((response) => response.json())
-            .then((data) => {
-                if(data['_result']){
-                    setErrorInSubmit(false);
-                    setSubmitFinished(true);
-                    setNewIssueUrl(data['_result']['new_issue_url']);                    
-                }
-                else{
-                    setErrorInSubmit(true);
-                    setSubmitFinished(true);
-                    setNewIssueUrl("");                    
-                }
-            })
-            .catch((error) => {
+                                
+        submitGitIssue({
+            repoUrl:props.ontology.config.repoUrl, 
+            gitUsername: localStorage.getItem('ts_username'), 
+            issueTitle:issueTitle, 
+            issueBody:issueContent, 
+            issueType:props.reportType, 
+            ontologyId:props.ontology.ontologyId
+        }).then((createdIssueUrl) => {
+            if(createdIssueUrl){
+                setErrorInSubmit(false);
+                setSubmitFinished(true);
+                setNewIssueUrl(createdIssueUrl);                
+            }
+            else{
                 setErrorInSubmit(true);
                 setSubmitFinished(true);
                 setNewIssueUrl("");                
-            });
+            }
+        });
     }
 
 
@@ -287,8 +277,7 @@ const TermRequest = (props) => {
                         }
                     </span>                        
                     
-                    <div class="modal-footer">                            
-                        {/* <button type="button" class="btn btn-secondary close-term-request-modal-btn mr-auto" data-dismiss="modal">Close</button> */}
+                    <div class="modal-footer">                       
                         {submitFinished && errorInSubmit &&
                             <div class="container-fluid">
                                 <div className="row">

@@ -188,3 +188,28 @@ export async function getGitRepoTemplates({repoUrl, gitUsername}){
         return false;
     }
 }
+
+
+
+export async function submitGitIssue({repoUrl, gitUsername, issueTitle, issueBody, issueType, ontologyId}){
+    try{
+        let data = new FormData();
+        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        data.append("ontology_id", ontologyId);
+        data.append("username", gitUsername);        
+        data.append("title", issueTitle);
+        data.append("content", issueBody);        
+        data.append("issueType", issueType);
+        data.append("repo_url", repoUrl);
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue';
+        let result = await fetch(url, {method:'POST', headers:headers, body:data});
+        if (result.status !== 200){
+            return false;
+        }
+        result = await result.json();
+        return result['_result']['new_issue_url'];
+    }
+    catch(e){
+        return false;
+    }
+}
