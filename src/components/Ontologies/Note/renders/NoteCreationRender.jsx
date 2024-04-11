@@ -67,18 +67,10 @@ export const NoteCreationRender = (props) => {
                                             options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types"
                                             dropDownTitle="Target Artifact"
-                                            dropDownValue={props.targetArtifactType}
+                                            dropDownValue={props.targetArtifact}
                                             dropDownChangeHandler={props.changeArtifactType}
                                         /> 
-                                    }
-                                    {/* {!props.isGeneric && props.targetArtifact > 0 &&                                        
-                                        <>
-                                        <span>{"Target Artifact: "}</span>
-                                        <b>
-                                            {constantsVars.COMPONENT_TYPES_FOR_DROPDOWN[parseInt(props.targetArtifact) - 1]['label']}
-                                        </b>
-                                        </>
-                                    } */}
+                                    }                                   
                                 </div>
                             </div>
                             <br></br>
@@ -106,7 +98,7 @@ export const NoteCreationRender = (props) => {
                                                 label={"About *"}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}
-                                                initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'] : false}
+                                                initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'] : props.selectedTerm['label']}
                                                 id="note_creation_auto_suggest"                                                
                                             />
                                             <br></br>
