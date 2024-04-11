@@ -19,13 +19,19 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 export const CommentCard = (props) =>{
+    /*
+        This component is responsible for rendering the comment card.
+        It uses the OntologyPageContext to get the ontology information.
+        It uses the AppContext to get the user information.        
+        It uses the ResolveReportActionsForAdmins component to render the report actions for the admins.        
+    */
 
     let commnetContent = createHtmlFromEditorJson(props.comment['content']);
     
     return (
         <div className="card" id={"comment-card-" + props.comment['id']}>
             <div className="card-header">
-                <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler}  ontologyId={props.ontologyId}/>                        
+                <CommentCardHeader comment={props.comment}  editHandlerFunc={props.commentEditHandler}/> 
             </div>
             <ResolveReportActionsForAdmins 
                 objectType="comment"
@@ -63,7 +69,7 @@ export const CommentCardHeader = (props) =>{
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", comment['id']);
     deleteFormData.append("objectType", 'comment');   
-    deleteFormData.append("ontology_id", props.ontologyId);
+    deleteFormData.append("ontology_id", ontologyPageContext.ontology.ontologyId);
     
     let reportFormData = new FormData();
     reportFormData.append("objectId", comment['id']);

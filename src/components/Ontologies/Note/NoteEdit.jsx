@@ -5,12 +5,22 @@ import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { AppContext } from "../../../context/AppContext";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import PropTypes from 'prop-types';
 
 
 
 const NoteEdit = (props) => {
+
+    /* 
+        This component is responsible for rendering the note edit form.
+        It uses the AppContext to get the user information.
+        It uses the OntologyPageContext to get the ontology information.
+        It uses the submitNote function to submit the note to the backend.
+    */
     
     const appContext = useContext(AppContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     const [targetArtifact, setTargetArtifact] = useState(constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.note['semantic_component_type']));
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_VALUES.indexOf(props.note['visibility']));
@@ -116,7 +126,7 @@ const NoteEdit = (props) => {
 
     async function handleJumtoSelection(selectedTerm){ 
         if(selectedTerm){
-            let termApi = new TermApi(props.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
             let parentOnto = await termApi.getClassOriginalOntology();
             setSelectedTermFromAutoComplete(selectedTerm);
             setParentOntology(parentOnto);
@@ -168,6 +178,11 @@ const NoteEdit = (props) => {
         />
     );
 }
+
+NoteEdit.propTypes = {
+    note: PropTypes.object.isRequired,
+    term: PropTypes.string.isRequired
+};
 
 
 export default NoteEdit;

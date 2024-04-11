@@ -7,11 +7,18 @@ import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
+import PropTypes from 'prop-types';
 
 
 
 
 const NoteCreation = (props) => {
+    /* 
+        This component is responsible for rendering the note creation form.
+        It uses the AppContext to get the user information.
+        It uses the NoteContext.
+
+    */
 
     const noteContext = useContext(NoteContext);
     const appContext = useContext(AppContext);
@@ -190,5 +197,9 @@ const NoteCreation = (props) => {
 
 }
 
+
+NoteCreation.propTypes = {
+    targetArtifactType: PropTypes.string,
+}
 
 export default NoteCreation;

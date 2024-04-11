@@ -1,13 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendCalls";
 import {getTextEditorContent, createTextEditorEmptyText, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
 import { NoteCommentListRender } from "./renders/NoteCommentListRender";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import PropTypes from 'prop-types';
 
 
 
 const NoteCommentList = (props) => {
+    /* 
+        This component is responsible for rendering the list of comments for the note.
+        It uses the OntologyPageContext to get the ontology information.
+        It uses the submitNoteComment function to submit the note comment to the backend.
+        It uses the editNoteComment function to edit the note comment in the backend.
+    */
+
+    const ontologyPageContext = useContext(OntologyPageContext);
+
     const [commentEditorState, setCommentEditorState] = useState(createTextEditorEmptyText());    
     const [noteId, setNoteId] = useState(null);
     const [editMode, setEditMode] = useState(false);
@@ -88,7 +99,7 @@ const NoteCommentList = (props) => {
             return;
         }
 
-        let data = {'commentId': editCommentId, 'content': commentContent, 'ontologyId': props.ontologyId};
+        let data = {'commentId': editCommentId, 'content': commentContent, 'ontologyId': ontologyPageContext.ontology.ontologyId};
         editNoteComment(data).then((result) => {
             if(result){                
                 setNoteId(null);
@@ -148,8 +159,12 @@ const NoteCommentList = (props) => {
             cancelEdit={cancelEdit}
         />
     );
+}
 
 
+NoteCommentList.propsTypes = {
+    note: PropTypes.object.isRequired,
+    noteDetailReloader: PropTypes.func.isRequired
 }
 
 

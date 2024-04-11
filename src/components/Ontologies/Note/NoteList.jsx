@@ -5,6 +5,7 @@ import { getNoteList } from "../../../api/tsMicroBackendCalls";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import PropTypes from 'prop-types';
 
 
 
@@ -18,6 +19,13 @@ const DEFAULT_PAGE_SIZE = 10
 
 
 const NoteList = (props) => {
+    /* 
+        This component is responsible for rendering the list of notes for the ontology.
+        It uses the NoteUrlFactory to get the selected note type, page number and note id from the url.
+        It requires the ontologyPageContext to get the ontology information.
+        It uses the NoteContext to pass the note information to the child components.        
+    */
+
     const ontologyPageContext = useContext(OntologyPageContext);
     
     const noteUrlFactory = new NoteUrlFactory();                
@@ -206,6 +214,12 @@ const NoteList = (props) => {
             </NoteContext.Provider>
         );
     }
+}
+
+
+NoteList.propTypes = {
+    term: PropTypes.string.isRequired,
+    termType: PropTypes.string.isRequired
 }
 
 

@@ -7,11 +7,18 @@ import JumpTo from "../../common/JumpTo/JumpTo";
 import { RenderIndividualList } from "./RenderIndividualList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import PropTypes from 'prop-types';
 
 
 
 
 const IndividualsList = (props) => {
+
+    /* 
+        This component is responsible for rendering the list of individuals for the ontology.
+        It uses the TermApi to get the list of individuals for the ontology.
+        It requires the ontologyPageContext to get the ontology information.
+    */
 
     const ontologyPageContext = useContext(OntologyPageContext);
     const lastVisitedIri = ontologyPageContext.lastVisitedIri[props.componentIdentity];
@@ -250,6 +257,13 @@ const IndividualsList = (props) => {
         </div>
     );
 
+}
+
+IndividualsList.propTypes = {
+    rootNodes: PropTypes.array,
+    rootNodesForSkos: PropTypes.array,
+    componentIdentity: PropTypes.string,
+    key: PropTypes.string
 }
 
 

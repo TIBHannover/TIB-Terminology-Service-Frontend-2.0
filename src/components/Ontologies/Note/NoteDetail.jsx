@@ -11,6 +11,13 @@ import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 const NoteDetail = () => {
 
+    /* 
+        This component is responsible for rendering the note detail page.
+        It uses the NoteContext to get the selected note id.
+        It uses the OntologyPageContext to get the ontology information.
+        It uses the getNoteDetail function to get the note detail from the backend.
+    */
+
     const ontologyPageContext = useContext(OntologyPageContext);
     const noteContext = useContext(NoteContext);
 

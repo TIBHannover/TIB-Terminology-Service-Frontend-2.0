@@ -27,6 +27,9 @@ const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 export const NoteCard = (props) => {
+    /*
+        This component is responsible for rendering the note card.        
+    */
 
     const noteContext = useContext(NoteContext);    
 
@@ -76,6 +79,9 @@ export const NoteCard = (props) => {
 
 
 export const NoteCardHeader = (props) => {
+    /*
+        This component is responsible for rendering the note card header.        
+    */
 
     const ontologyPageContext = useContext(OntologyPageContext);
 
@@ -93,7 +99,7 @@ export const NoteCardHeader = (props) => {
     let deleteFormData = new FormData();
     deleteFormData.append("objectId", note['id']);
     deleteFormData.append("objectType", 'note');
-    deleteFormData.append("ontology_id", props.ontologyId);
+    deleteFormData.append("ontology_id", ontologyPageContext.ontology.ontologyId);
     
     let reportFormData = new FormData();
     reportFormData.append("objectId", note['id']);

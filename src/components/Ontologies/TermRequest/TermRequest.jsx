@@ -7,6 +7,7 @@ import templatePath from './termRequestTemplate.md';
 import TextEditor from "../../common/TextEditor/TextEditor";
 import { getGitRepoTemplates, submitGitIssue } from "../../../api/tsMicroBackendCalls";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import PropTypes from 'prop-types';
 
 
 
@@ -19,6 +20,8 @@ const TermRequest = (props) => {
         reportType can be either 
             - "termRequest"
             - "general"
+        
+        The component uses the OntologyPageContext to get the ontology information.
     */
 
     const ontologyPageContext = useContext(OntologyPageContext);

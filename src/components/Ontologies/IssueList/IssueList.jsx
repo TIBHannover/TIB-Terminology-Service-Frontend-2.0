@@ -26,6 +26,12 @@ const resultCountPerPage = 10;
 
 const IssueList = (props) => {
 
+    /* 
+        This component is responsible for rendering the list of issues for the ontology.
+        It uses the IssueListUrlFactory to get the selected state id, page number and issue type from the url.
+        It requires the ontologyPageContext and AppConetext to get the ontology and user information.
+    */
+
     const ontologyPageContext = useContext(OntologyPageContext);
     const appContext = useContext(AppContext);
 
