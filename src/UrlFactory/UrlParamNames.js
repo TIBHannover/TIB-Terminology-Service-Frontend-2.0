@@ -15,6 +15,7 @@ export const TermType = 'type';
 export const SearchUnder = 'searchunder';
 export const SearchUnderAll = 'searchunderall';
 export const SearchIn = 'searchin';
+export const AdvOntology = 'advontology';
 
 
 // Note related

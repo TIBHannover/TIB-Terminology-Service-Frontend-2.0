@@ -19,6 +19,7 @@ class SearchUrlFactory {
     this.searchIn = url.searchParams.getAll(SiteUrlParamNames.SearchIn);
     this.searchUnder = url.searchParams.getAll(SiteUrlParamNames.SearchUnder);
     this.searchUnderAll = url.searchParams.getAll(SiteUrlParamNames.SearchUnderAll);
+    this.advOntologies = url.searchParams.getAll(SiteUrlParamNames.AdvOntology);
   }
 
 
