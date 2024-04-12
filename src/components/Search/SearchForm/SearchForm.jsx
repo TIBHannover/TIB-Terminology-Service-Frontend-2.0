@@ -8,32 +8,31 @@ import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
+import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 
 
 
 
 const SearchForm = () => {
 
-  let currentUrlParams = new URL(window.location).searchParams;    
-  let searchQueryInUrl = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
+  const searchUrlFactory = new SearchUrlFactory();
 
-  const [searchQuery, setSearchQuery] = useState(searchQueryInUrl);    
+  const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");    
   const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);  
-  const [advSearchEnabled, setAdvSearchEnabled] = useState(currentUrlParams.get('advsearch') === "true" ? true : false);  
+  const [advSearchEnabled, setAdvSearchEnabled] = useState(searchUrlFactory.advancedSearchEnabled === "true" ? true : false);  
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
-  const exact = currentUrlParams.get('exact') === "true" ? true : false;
+  const exact = searchUrlFactory.exact === "true" ? true : false;
 
   const history = useHistory();
 
 
 
-  async function handleSearchInputChange(e){
-    let currentUrlParams = new URL(window.location).searchParams; 
+  async function handleSearchInputChange(e){    
     let inputForAutoComplete = {};    
     let searchQuery = e.target.value;    
     if(searchQuery.length === 0){      
@@ -43,13 +42,13 @@ const SearchForm = () => {
     }
     inputForAutoComplete['searchQuery'] = searchQuery;    
     inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
-    inputForAutoComplete['ontologyIds'] = currentUrlParams.get('ontology') ? currentUrlParams.getAll('ontology').join(',') : null;
+    inputForAutoComplete['ontologyIds'] = searchUrlFactory.ontologies.length !== 0 ? searchUrlFactory.ontologies.join(',') : null;
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
-    inputForAutoComplete['types'] = currentUrlParams.get('type') ? currentUrlParams.getAll('type').join(',') : null;    
+    inputForAutoComplete['types'] = searchUrlFactory.types.length !== 0 ? searchUrlFactory.types.join(',') : null;    
     if(process.env.REACT_APP_PROJECT_NAME === "" ){
       /* check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM.        
       */
-      inputForAutoComplete['collectionIds'] = currentUrlParams.get('collection') ? currentUrlParams.getAll('collection').join(',') : null;
+      inputForAutoComplete['collectionIds'] = searchUrlFactory.collections.length !== 0 ? searchUrlFactory.collections.join(',') : null;
     }
     else if(!ontologyId){
       /* 
@@ -77,18 +76,14 @@ const SearchForm = () => {
 
 
   
-  function setSearchUrl(label){
-    let searchUrl = new URL(window.location);
+  function setSearchUrl(label){    
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
-    searchUrl.pathname =  process.env.REACT_APP_PROJECT_SUB_PATH + "/search";          
-    searchUrl.searchParams.delete('iri');
-    searchUrl.searchParams.delete('issueType');
-    searchUrl.searchParams.set('q', label);
-    searchUrl.searchParams.set('page', 1);    
-    ontologyId && searchUrl.searchParams.set('ontology', ontologyId); 
-    obsoletesFlag && searchUrl.searchParams.set('obsoletes', obsoletesFlag);
-    exact && searchUrl.searchParams.set('exact', exact);
-    return searchUrl.toString();
+    return searchUrlFactory.createSearchUrlForAutoSuggestItem({
+      label:label, 
+      ontologyId:ontologyId, 
+      obsoleteFlag: obsoletesFlag, 
+      exact: exact
+    });
   }
   
   
@@ -111,10 +106,8 @@ const SearchForm = () => {
   }
 
 
-  function handleExactCheckboxClick(e){
-    let searchUrl = new URL(window.location);    
-    searchUrl.searchParams.set('exact', e.target.checked); 
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});
+  function handleExactCheckboxClick(e){    
+    searchUrlFactory.setExact({exact: e.target.checked});
   }
 
 
@@ -124,29 +117,19 @@ const SearchForm = () => {
   }
 
 
-  function handleAdvancedSearchToggle(){
-    let currentUrlParams = new URLSearchParams(window.location.search);
-    currentUrlParams.set('advsearch', !advSearchEnabled);
-    history.push(window.location.pathname + "?" + currentUrlParams.toString());     
+  function handleAdvancedSearchToggle(){           
+    searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
     setAdvSearchEnabled(!advSearchEnabled);
 }
 
 
 
   useEffect(() => {
+    document.getElementById("s-field").value = searchUrlFactory.decodeSearchQuery();
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
-    document.addEventListener("keydown", keyboardNavigationForJumpto, false);    
-    let cUrl = window.location.href;        
-    if(cUrl.includes("q=")){
-      cUrl = cUrl.split("q=")[1];
-      cUrl = cUrl.split("&")[0];
-      cUrl = decodeURIComponent(cUrl);
-      cUrl = cUrl.replaceAll("+", " ");
-      document.getElementById("s-field").value = cUrl;
-    }
+    document.addEventListener("keydown", keyboardNavigationForJumpto, false);           
     if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}
-    // if(advSearchEnabled){document.getElementById("adv-search-toggle").checked = true}      
+    if(exact){ document.getElementById("exact-checkbox").checked = true;}    
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);

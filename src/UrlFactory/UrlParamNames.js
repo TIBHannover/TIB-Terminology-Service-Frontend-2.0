@@ -6,6 +6,14 @@ export const Collection = 'collection';
 export const SortBy = 'sortedBy';
 export const SubTabInTermTable = 'subtab';
 
+// Search related
+export const SearchQuery = 'q';
+export const AdvancedSearchEnabled = 'advsearch';
+export const Exact = 'exact';
+export const Ontology = 'ontology';
+export const TermType = 'type';
+
+
 // Note related
 export const OriginalNotes = 'originalNotes';
 export const NoteType = 'type';
