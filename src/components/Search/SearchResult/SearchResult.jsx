@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
@@ -11,35 +10,38 @@ import SearchLib from '../../../Libs/searchLib';
 import CollectionApi from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
+import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
 
 
 const SearchResult = (props) => {
 
-  let currentUrlParams = new URL(window.location).searchParams;
+  const searchUrlFactory = new SearchUrlFactory();
+  const commonUrlFactory = new CommonUrlFactory();
+  
   const DEFAULT_PAGE_NUMBER = 1;
   const DEFAULT_PAGE_SIZE = 10;
   
   const [searchResult, setSearchResult] = useState([]);
   const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getFilterAndAdvancedOntologyIdsFromUrl());
-  const [selectedTypes, setSelectedTypes] = useState(currentUrlParams.get('type') ? currentUrlParams.getAll('type') : []);
-  const [selectedCollections, setSelectedCollections] = useState(currentUrlParams.get('collection') ? currentUrlParams.getAll('collection') : []);
+  const [selectedTypes, setSelectedTypes] = useState(searchUrlFactory.types);
+  const [selectedCollections, setSelectedCollections] = useState(searchUrlFactory.collections);
   const [facetFields, setFacetFields] = useState([]);
-  const [pageNumber, setPageNumber] = useState(parseInt(currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER));
-  const [pageSize, setPageSize] = useState(parseInt(currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE));
+  const [pageNumber, setPageNumber] = useState(parseInt(searchUrlFactory.page ? searchUrlFactory.page : DEFAULT_PAGE_NUMBER));
+  const [pageSize, setPageSize] = useState(parseInt(searchUrlFactory.size ? searchUrlFactory.size : DEFAULT_PAGE_SIZE));
   const [expandedResults, setExpandedResults] = useState([]);
   const [totalResultsCount, setTotalResultsCount] = useState([]);  
   const [allCollectionIds, setAllCollectionIds] = useState([]);
   const [filterTags, setFilterTags] = useState("");
   const [loading, setLoading] = useState(true);        
 
-  const history = useHistory();
 
   const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value:10}, {label: "20", value:20}, {label: "30", value:30}, {label: "40", value:40}];
-  const searchQuery = currentUrlParams.get('q') ? currentUrlParams.get('q') : "";
-  const exact = currentUrlParams.get('exact') === "true" ? true : false;  
-  const searchInValues = currentUrlParams.get('searchin') ? currentUrlParams.getAll('searchin') : [];
+  const searchQuery = searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "";
+  const exact = searchUrlFactory.exact === "true" ? true : false;    
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
@@ -68,7 +70,7 @@ const SearchResult = (props) => {
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
         exact: exact,        
-        searchInValues: searchInValues,
+        searchInValues: searchUrlFactory.searchIn,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,
       };
@@ -157,19 +159,15 @@ const SearchResult = (props) => {
 
   function handlePageSizeDropDownChange(e){
     let size = parseInt(e.target.value);
-    setPageSize(size);  
-    let searchUrl = new URL(window.location);
-    searchUrl.searchParams.set('size', size); 
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
+    setPageSize(size);          
+    commonUrlFactory.setParam({name: SiteUrlParamNames.Size, value: size});
   }
 
 
 
   function  handlePagination (value) {
-    setPageNumber(value);
-    let searchUrl = new URL(window.location);
-    searchUrl.searchParams.set('page', value); 
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
+    setPageNumber(value);    
+    commonUrlFactory.setParam({name: SiteUrlParamNames.Page, value: value});   
   }
 
 
@@ -184,62 +182,56 @@ const SearchResult = (props) => {
 
 
   function handleTypeFacetSelection(e){
-    let targetType = e.target.value;   
-    let searchUrl = new URL(window.location); 
+    let targetType = e.target.value;       
     let selectedTypeList = [...selectedTypes];
-    if(e.target.checked){
-      searchUrl.searchParams.append('type', targetType);
+    if(e.target.checked){      
+      searchUrlFactory.updateUrlForFacetSelection({fieldNameInUrl: SiteUrlParamNames.TermType, action: "add", value: targetType});
       selectedTypeList.push(targetType);             
     }
     else{
         let index = selectedTypeList.indexOf(targetType);
-        selectedTypeList.splice(index, 1);    
-        searchUrl.searchParams.delete('type');        
+        selectedTypeList.splice(index, 1);            
+        searchUrlFactory.updateUrlForFacetSelection({fieldNameInUrl: SiteUrlParamNames.TermType, action: "remove", value: targetType});        
     }
-    searchUrl.searchParams.set('page', 1);
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});  
+    
     setSelectedTypes(selectedTypeList);
     setPageNumber(1);          
   }
   
   
   
-  function  handleOntologyFacetSelection(e){
-    let searchUrl = new URL(window.location);     
+  function  handleOntologyFacetSelection(e){    
     let selectedOntologiesList = [...selectedOntologies];
     let targetOntologyId = e.target.value.toLowerCase();
-    if(e.target.checked){
-        searchUrl.searchParams.append('ontology', targetOntologyId);
+    if(e.target.checked){        
+        searchUrlFactory.updateUrlForFacetSelection({fieldNameInUrl: SiteUrlParamNames.Ontology, action: "add", value: targetOntologyId});
         selectedOntologiesList.push(targetOntologyId);        
     }
     else{
         let index = selectedOntologiesList.indexOf(targetOntologyId);
-        selectedOntologiesList.splice(index, 1);            
-        searchUrl.searchParams.delete('ontology', targetOntologyId);
+        selectedOntologiesList.splice(index, 1);                    
+        searchUrlFactory.updateUrlForFacetSelection({fieldNameInUrl: SiteUrlParamNames.Ontology, action: "remove", value: targetOntologyId});
     }
-    searchUrl.searchParams.set('page', 1);
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
+    
     setSelectedOntologies(selectedOntologiesList);  
     setPageNumber(1);                  
   }
 
 
 
-  function handleCollectionFacetSelection(e){
-    let searchUrl = new URL(window.location);  
+  function handleCollectionFacetSelection(e){    
     let selectedCollectionsList = [...selectedCollections];
     let targetCollection =  e.target.value.trim();
     if(e.target.checked){
-        selectedCollectionsList.push(targetCollection);
-        searchUrl.searchParams.append('collection', targetCollection);               
+        selectedCollectionsList.push(targetCollection);        
+        searchUrlFactory.updateUrlForFacetSelection({fieldNameInUrl: SiteUrlParamNames.Collection, action: "add", value: targetCollection});
     }
     else{
         let index = selectedCollectionsList.indexOf(targetCollection);
-        selectedCollectionsList.splice(index, 1); 
-        searchUrl.searchParams.delete('collection', targetCollection);           
+        selectedCollectionsList.splice(index, 1);         
+        searchUrlFactory.updateUrlForFacetSelection({fieldNameInUrl: SiteUrlParamNames.Collection, action: "remove", value: targetCollection});           
     }
-    searchUrl.searchParams.set('page', 1);
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});
+    
     setSelectedCollections(selectedCollectionsList);
     setPageNumber(1);       
   }
@@ -254,13 +246,7 @@ const SearchResult = (props) => {
         }
         delete checkbox.dataset.ischecked;
     }
-    let searchUrl = new URL(window.location);  
-    searchUrl.searchParams.delete('type');
-    searchUrl.searchParams.delete('ontology');
-    searchUrl.searchParams.delete('collection');
-    searchUrl.searchParams.set('page', 1);
-    searchUrl.searchParams.set('size', 10);
-    history.replace({...history.location, search: searchUrl.searchParams.toString()});    
+    searchUrlFactory.clearFacetUrlParams();    
     setSelectedTypes([]);
     setSelectedOntologies([]);
     setSelectedCollections([]);

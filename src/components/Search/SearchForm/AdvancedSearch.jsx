@@ -138,7 +138,7 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         if(!props.advSearchEnabled){
-            searchUrlFactory.disableAdvancedSearchUrlParams();        
+            searchUrlFactory.resetAdvancedSearchUrlParams();        
         }
         else{
             searchUrlFactory.updateAdvancedSearchUrl({

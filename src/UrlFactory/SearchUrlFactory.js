@@ -14,6 +14,11 @@ class SearchUrlFactory {
     this.ontologies = url.searchParams.getAll(SiteUrlParamNames.Ontology);
     this.types = url.searchParams.getAll(SiteUrlParamNames.TermType);
     this.collections = url.searchParams.getAll(SiteUrlParamNames.Collection);
+    this.page = url.searchParams.get(SiteUrlParamNames.Page);
+    this.size = url.searchParams.get(SiteUrlParamNames.Size);
+    this.searchIn = url.searchParams.getAll(SiteUrlParamNames.SearchIn);
+    this.searchUnder = url.searchParams.getAll(SiteUrlParamNames.SearchUnder);
+    this.searchUnderAll = url.searchParams.getAll(SiteUrlParamNames.SearchUnderAll);
   }
 
 
@@ -67,17 +72,6 @@ class SearchUrlFactory {
     currentUrlParams.delete(SiteUrlParamNames.SearchUnderAll);    
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   } 
-
-
-  disableAdvancedSearchUrlParams(){
-    let currentUrlParams = new URLSearchParams(window.location.search);
-    currentUrlParams.delete(SiteUrlParamNames.SearchIn);
-    currentUrlParams.delete(SiteUrlParamNames.SearchUnder);
-    currentUrlParams.delete(SiteUrlParamNames.SearchUnderAll);    
-    currentUrlParams.delete(SiteUrlParamNames.Obsoletes);    
-    currentUrlParams.delete(SiteUrlParamNames.Exact);    
-    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
-  } 
   
   
   
@@ -103,6 +97,31 @@ class SearchUrlFactory {
     currentParams.set(SiteUrlParamNames.AdvancedSearchEnabled, enabled);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
+
+
+  updateUrlForFacetSelection({fieldNameInUrl, action, value}){
+    let url = new URL(window.location);
+    let currentParams = url.searchParams;
+    if(action === "add"){
+        currentParams.append(fieldNameInUrl, value);
+    }
+    else if(action === "remove"){
+        currentParams.delete(fieldNameInUrl, value);
+    }
+    currentParams.set(SiteUrlParamNames.Page, 1);
+    this.history.push(this.baseUrl + "?" + currentParams.toString());
+  }
+
+
+  clearFacetUrlParams(){
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.delete(SiteUrlParamNames.TermType);
+    currentUrlParams.delete(SiteUrlParamNames.Ontology);
+    currentUrlParams.delete(SiteUrlParamNames.Collection);    
+    currentUrlParams.set(SiteUrlParamNames.Page, 1);
+    currentUrlParams.set(SiteUrlParamNames.Size, 10);
+    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
+  } 
 
  
 }
