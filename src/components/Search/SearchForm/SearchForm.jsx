@@ -125,7 +125,7 @@ const SearchForm = () => {
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);           
     if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}    
+    if(exact){ document.getElementById("exact-checkbox").checked = true;}               
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);

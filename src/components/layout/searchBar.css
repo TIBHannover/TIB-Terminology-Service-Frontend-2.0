@@ -107,6 +107,15 @@
     text-align: left;
 }
 
+.multiSelectContainer li:hover{
+    background-color: #DFDDDD !important;
+    color: black !important;
+}
+
+.multiselect-container .chip{
+    background-color: #404040 !important;
+}
+
 
 
 

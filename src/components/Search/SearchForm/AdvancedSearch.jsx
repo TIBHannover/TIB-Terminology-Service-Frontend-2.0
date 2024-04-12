@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
-// import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
@@ -13,10 +12,8 @@ const AdvancedSearch = (props) => {
         
     const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
     const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrlOrStorage());
-    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());
-    // const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getAdvancedOntologIdsFromUrlOrStorage());
-    const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);
-    // const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
+    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());    
+    const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);    
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
 
@@ -28,6 +25,9 @@ const AdvancedSearch = (props) => {
     const ontologyPageId = OntologyLib.getCurrentOntologyIdFromUrlPath();
     
     const ontologyIdsInUrl = SearchLib.getFilterAndAdvancedOntologyIdsFromUrl();
+
+    const searchUnderRef = useRef(null);
+    const searchUnderAllRef = useRef(null);
 
 
 
@@ -61,21 +61,6 @@ const AdvancedSearch = (props) => {
 
 
 
-    // async function loadOntologiesForSelection(query){
-    //     let ontologyApi = new OntologyApi({});
-    //     await ontologyApi.fetchOntologyList();
-    //     let ontologyList = [];
-    //     for (let ontology of ontologyApi.list){
-    //         let opt = {};
-    //         opt['text'] = ontology['ontologyId'];
-    //         opt['id'] = ontology['ontologyId'];
-    //         ontologyList.push(opt);
-    //     }
-    //     setOntologiesListForSelection(ontologyList);
-    // }
-
-
-
     function handleSearchInMultiSelect(selectedList, selectedItem){        
         setSelectedMetaData(selectedList);        
     }
@@ -83,21 +68,18 @@ const AdvancedSearch = (props) => {
 
 
     function handleTermSelectionSearchUnder(selectedList, selectedItem){                
-        setSelectedSearchUnderTerms(selectedList); 
+        setSelectedSearchUnderTerms(selectedList);
+        setLoadingResult(true);
+        setTermListForSearchUnder([]); 
     }
 
 
 
     function handleTermSelectionSearchUnderAll(selectedList, selectedItem){                
-        setSelectedSearchUnderAllTerms(selectedList);          
+        setSelectedSearchUnderAllTerms(selectedList);
+        setLoadingResult(true);
+        setTermListForSearchUnder([]);           
     }
-
-
-
-    // function handleOntologySelection(selectedList, selectedItem){        
-    //     setSelectedOntologies(selectedList);  
-    //     setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
-    // }
 
 
 
@@ -116,8 +98,7 @@ const AdvancedSearch = (props) => {
     function reset(){
         setSelectedMetaData([]);
         setSelectedSearchUnderTerms([]);
-        setSelectedSearchUnderAllTerms([]);
-        // setSelectedOntologies([]);        
+        setSelectedSearchUnderAllTerms([]);        
         setPlaceHolderExtraText("");
         searchUrlFactory.resetAdvancedSearchUrlParams();                          
     }
@@ -128,8 +109,7 @@ const AdvancedSearch = (props) => {
         const states = JSON.stringify({
             selectedMetaData,
             selectedSearchUnderTerms,
-            selectedSearchUnderAllTerms,
-            // selectedOntologies
+            selectedSearchUnderAllTerms            
         });
         
         localStorage.setItem("advancedSearchStates", states);
@@ -137,12 +117,23 @@ const AdvancedSearch = (props) => {
 
 
 
-    // useEffect(() => {
-    //     if(!ontologyPageId){
-    //         // Only load the list when we are NOT on an ontology page.
-    //         loadOntologiesForSelection();
-    //     }                       
-    // }, []);
+    function handleClickOutsideSelectionBox(e){     
+        let advSearchUnderBox = document.getElementById("adv-s-search-under-term");
+        let advSearchUnderAllBox = document.getElementById("adv-s-search-under-all-term");   
+        if(!advSearchUnderBox?.contains(e.target) && !advSearchUnderAllBox?.contains(e.target)){
+            setTermListForSearchUnder([]);
+            setLoadingResult(true);            
+        }
+    }
+
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutsideSelectionBox, true);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideSelectionBox, true);
+        }
+    }, []);
 
 
     useEffect(() => {
@@ -170,61 +161,22 @@ const AdvancedSearch = (props) => {
 
 
 
-    if(process.env.REACT_APP_ADVANCED_SEARCH === "true"){
+    if(process.env.REACT_APP_ADVANCED_SEARCH !== "true"){
         return "";
     }
-
+    
     return(
-        <>            
+        <>
             {props.advSearchEnabled &&
                 <div className='row adv-search-container'>
                     <div className='col-sm-9'>
-                    <br></br>
-                    {/* {!ontologyPageId &&
-                            // We do not want to show the ontology selection when the user is on an ontology page already
-                            <>
-                            <br></br>
-                            <div className="row">
-                                <div className="col-sm-11">
-                                    <div className='row'>
-                                        <div className='col-sm-3 adv-search-label-holder'>
-                                            <label 
-                                                for='adv-s-search-under-term' 
-                                                title='You can restrict the search to one or multiple ontologies.'                                        
-                                                >
-                                                Search In Ontology
-                                                <div className='tooltip-questionmark'>?</div>
-                                            </label>
-                                        </div>
-                                        <div className='col-sm-9 adv-search-input-holder'>
-                                            {ontologiesListForSelection.length !== 0 &&                                    
-                                                <Multiselect
-                                                    isObject={true}
-                                                    options={ontologiesListForSelection}  
-                                                    selectedValues={selectedOntologies}                       
-                                                    onSelect={handleOntologySelection}
-                                                    onRemove={handleOntologySelection}                            
-                                                    displayValue={"text"}
-                                                    avoidHighlightFirstOption={true}                                        
-                                                    closeIcon={"cancel"}
-                                                    id="adv-s-search-in-ontologies"
-                                                    placeholder="Enter Ontology name ..."   
-                                                    className='multiselect-container'                     
-                                                />
-                                            }
-                                        </div>
-                                    </div>                                                                        
-                                </div>
-                            </div>
-                            </>
-                        }
-                        <br></br>                     */}
+                    <br></br>                  
                         <div className="row">
                             <div className="col-sm-12">                            
                                 <div className='row'>
                                     <div className='col-sm-11 adv-search-label-holder'>
                                         <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
-                                            Search In Metadata
+                                            Search in metadata
                                             <i class="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                                         </label>   
                                     </div>                                    
@@ -272,6 +224,7 @@ const AdvancedSearch = (props) => {
                                             closeIcon={"cancel"}
                                             id="adv-s-search-under-term"
                                             placeholder={"class, property " + placeHolderExtraText}
+                                            ref={searchUnderRef}
                                         />
                                     </div>
                                 </div>                                                                
@@ -303,6 +256,7 @@ const AdvancedSearch = (props) => {
                                             closeIcon={"cancel"}
                                             id="adv-s-search-under-all-term"
                                             placeholder={"class, property " + placeHolderExtraText}
+                                            ref={searchUnderAllRef}
                                         />
                                     </div>
                                 </div>                                                            
