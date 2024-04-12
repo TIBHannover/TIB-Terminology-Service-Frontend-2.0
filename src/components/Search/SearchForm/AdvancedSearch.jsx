@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
 // import OntologyApi from '../../../api/ontology';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
+import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 
 
 
@@ -20,8 +20,7 @@ const AdvancedSearch = (props) => {
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
 
-    const history = useHistory();
-
+    const searchUrlFactory = new SearchUrlFactory();
 
     const searchInMetaDataOptions = ['label', 'description', 'synonym', 'short_form',  'obo_id', 'annotations', 'iri'];
     
@@ -120,40 +119,9 @@ const AdvancedSearch = (props) => {
         setSelectedSearchUnderAllTerms([]);
         // setSelectedOntologies([]);        
         setPlaceHolderExtraText("");
-        let currentUrlParams = new URLSearchParams(window.location.search);
-        currentUrlParams.delete('searchin');
-        currentUrlParams.delete('searchunder');
-        currentUrlParams.delete('searchunderall');
-        currentUrlParams.delete('ontology');       
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());                            
+        searchUrlFactory.resetAdvancedSearchUrlParams();                          
     }
 
-
-
-    function updateUrl(){
-        let currentUrlParams = new URLSearchParams(window.location.search);  
-        currentUrlParams.delete('searchin');
-        currentUrlParams.delete('searchunder'); 
-        currentUrlParams.delete('searchunderall');
-        currentUrlParams.delete('advontology');       
-        for(let meta of selectedMetaData){
-            currentUrlParams.append('searchin', meta);
-        }                  
-        
-        for(let term of selectedSearchUnderTerms){
-            currentUrlParams.append('searchunder', encodeURIComponent(JSON.stringify(term)));            
-        }  
-                        
-        for(let term of selectedSearchUnderAllTerms){
-            currentUrlParams.append('searchunderall', encodeURIComponent(JSON.stringify(term)));            
-        }
-                
-        // for(let ontology of selectedOntologies){
-        //     currentUrlParams.append('advontology', ontology['id']);                        
-        // }               
-
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());  
-    }
     
     
     function storeStateInLocalStorage(){
@@ -179,24 +147,25 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         if(!props.advSearchEnabled){
-            let currentUrlParams = new URLSearchParams(window.location.search);
-            currentUrlParams.delete('searchin');
-            currentUrlParams.delete('searchunder');
-            currentUrlParams.delete('searchunderall');
-            currentUrlParams.delete('advontology');
-            currentUrlParams.delete('obsoletes');
-            currentUrlParams.delete('exact');
-            history.push(window.location.pathname + "?" + currentUrlParams.toString());             
+            searchUrlFactory.disableAdvancedSearchUrlParams();        
         }
         else{
-            updateUrl();
+            searchUrlFactory.updateAdvancedSearchUrl({
+                searchInValues: selectedMetaData,
+                searchUnderTerms: selectedSearchUnderTerms,
+                searchUnderAllTerms: selectedSearchUnderAllTerms
+            });
         }
     }, [props.advSearchEnabled]);
 
 
     useEffect(() => {
         storeStateInLocalStorage();
-        props.advSearchEnabled && updateUrl();
+        props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
+            searchInValues: selectedMetaData,
+            searchUnderTerms: selectedSearchUnderTerms,
+            searchUnderAllTerms: selectedSearchUnderAllTerms
+        });
     }, [selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms]);
 
 

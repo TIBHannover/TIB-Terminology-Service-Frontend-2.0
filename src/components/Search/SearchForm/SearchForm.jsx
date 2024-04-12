@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router';
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from './KeyboardNavigation';
@@ -27,9 +26,6 @@ const SearchForm = () => {
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
   const exact = searchUrlFactory.exact === "true" ? true : false;
-
-  const history = useHistory();
-
 
 
   async function handleSearchInputChange(e){    

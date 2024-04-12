@@ -17,6 +17,7 @@ class SearchUrlFactory {
   }
 
 
+
   createSearchUrlForAutoSuggestItem({label, ontologyId, obsoleteFlag, exact}){
     let searchUrl = new URL(window.location);    
     searchUrl.pathname =  process.env.REACT_APP_PROJECT_SUB_PATH + "/search";          
@@ -31,6 +32,55 @@ class SearchUrlFactory {
   }
 
 
+
+  updateAdvancedSearchUrl({searchInValues, searchUnderTerms, searchUnderAllTerms}){
+    let currentUrlParams = new URLSearchParams(window.location.search);  
+    currentUrlParams.delete(SiteUrlParamNames.SearchIn);
+    currentUrlParams.delete(SiteUrlParamNames.SearchUnder); 
+    currentUrlParams.delete(SiteUrlParamNames.SearchUnderAll);
+    // currentUrlParams.delete('advontology');       
+    for(let meta of searchInValues){
+        currentUrlParams.append(SiteUrlParamNames.SearchIn, meta);
+    }                  
+    
+    for(let term of searchUnderTerms){
+        currentUrlParams.append(SiteUrlParamNames.SearchUnder, encodeURIComponent(JSON.stringify(term)));            
+    }  
+                    
+    for(let term of searchUnderAllTerms){
+        currentUrlParams.append(SiteUrlParamNames.SearchUnderAll, encodeURIComponent(JSON.stringify(term)));            
+    }
+            
+    // for(let ontology of selectedOntologies){
+    //     currentUrlParams.append('advontology', ontology['id']);                        
+    // }               
+
+    this.history.push(this.baseUrl + "?" + currentUrlParams.toString()); 
+  }
+
+
+
+  resetAdvancedSearchUrlParams(){
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.delete(SiteUrlParamNames.SearchIn);
+    currentUrlParams.delete(SiteUrlParamNames.SearchUnder);
+    currentUrlParams.delete(SiteUrlParamNames.SearchUnderAll);    
+    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
+  } 
+
+
+  disableAdvancedSearchUrlParams(){
+    let currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.delete(SiteUrlParamNames.SearchIn);
+    currentUrlParams.delete(SiteUrlParamNames.SearchUnder);
+    currentUrlParams.delete(SiteUrlParamNames.SearchUnderAll);    
+    currentUrlParams.delete(SiteUrlParamNames.Obsoletes);    
+    currentUrlParams.delete(SiteUrlParamNames.Exact);    
+    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
+  } 
+  
+  
+  
   decodeSearchQuery(){
     if(this.searchQuery){
         return decodeURIComponent(this.searchQuery);        

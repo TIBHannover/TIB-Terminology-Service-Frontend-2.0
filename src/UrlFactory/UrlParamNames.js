@@ -12,6 +12,9 @@ export const AdvancedSearchEnabled = 'advsearch';
 export const Exact = 'exact';
 export const Ontology = 'ontology';
 export const TermType = 'type';
+export const SearchUnder = 'searchunder';
+export const SearchUnderAll = 'searchunderall';
+export const SearchIn = 'searchin';
 
 
 // Note related
