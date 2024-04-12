@@ -5,14 +5,29 @@ import { submitNote } from "../../../api/tsMicroBackendCalls";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { AppContext } from "../../../context/AppContext";
+import { NoteContext } from "../../../context/NoteContext";
+import PropTypes from 'prop-types';
 
 
 
 
 const NoteCreation = (props) => {
-    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.targetArtifactType);
+    /* 
+        This component is responsible for rendering the note creation form.
+        It uses the AppContext to get the user information.
+        It uses the NoteContext.
+
+    */
+
+    const noteContext = useContext(NoteContext);
+    const appContext = useContext(AppContext);
+
+    let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
     targetType = targetType !== -1 ? targetType : 1;
-    let selectedTerm = props.term ? {"iri": props.term['iri'], "label": props.term['label']} : {"iri": null, "label": null};
+    let selectedTerm = noteContext.selectedTermInTree 
+        ? {"iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label']} 
+        : {"iri": null, "label": null};
 
     const ontologyPageContext = useContext(OntologyPageContext);    
 
@@ -57,8 +72,7 @@ const NoteCreation = (props) => {
         if(modalBackDrop.length === 1){
             modalBackDrop[0].remove();
         }
-        setEditorState(null);        
-        // setTargetArtifactType(!props.term constantsVars.ONTOLOGY_COMPONENT_ID);                
+        setEditorState(null);                           
         setSelectedTermFromAutoComplete({"iri": null, "label": null});   
         setParentOntology(null);         
     }
@@ -103,9 +117,9 @@ const NoteCreation = (props) => {
         
         let targetType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifactType];
         
-        if(props.term){
-            // Note creation fro an specific term in from term detail tabel
-            selectedTargetTermIri = props.term['iri'];
+        if(noteContext.selectedTermInTree){
+            // Note creation for an specific term in from term detail tabel
+            selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
             targetType = props.targetArtifactType;
         }
                 
@@ -120,7 +134,7 @@ const NoteCreation = (props) => {
             data.append("parentOntology", parentOntology);
         }
         submitNote(data).then((newNoteId) => {
-            props.noteListSubmitStatusHandler(newNoteId);
+            noteContext.setNoteCreationResultStatus(newNoteId);
             closeModal(newNoteId);
         });
     }
@@ -143,18 +157,18 @@ const NoteCreation = (props) => {
 
 
     useEffect(async() => {
-        if(props.term){
-            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, props.term['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
+        if(noteContext.selectedTermInTree){
+            let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
             let parentOnto = await termApi.getClassOriginalOntology();            
             setParentOntology(parentOnto);
         }           
-    }, [props.term]);
+    }, [noteContext.selectedTermInTree]);
 
 
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
         return null;
     }
-    if(!localStorage.getItem('isLoginInTs') || localStorage.getItem('isLoginInTs') !== "true"){
+    if(!appContext.user){
         return "";
     }
 
@@ -162,9 +176,8 @@ const NoteCreation = (props) => {
         <NoteCreationRender          
             key={"note-creation-render"}            
             closeModal={closeModal}            
-            targetArtifactType={targetArtifactType}
-            changeArtifactType={changeArtifactType}
-            term={props.term}
+            targetArtifact={targetArtifactType}
+            changeArtifactType={changeArtifactType}            
             visibility={visibility}
             changeVisibility={changeVisibility}              
             noteTitle={noteTitle}
@@ -184,5 +197,9 @@ const NoteCreation = (props) => {
 
 }
 
+
+NoteCreation.propTypes = {
+    targetArtifactType: PropTypes.string,
+}
 
 export default NoteCreation;

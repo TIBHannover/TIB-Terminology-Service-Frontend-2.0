@@ -15,6 +15,7 @@ import NoteList from '../Note/NoteList';
 import '../../layout/ontologyHomePage.css';
 import '../../layout/note.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 
 
 
@@ -67,9 +68,10 @@ const OntologyPage = (props) => {
   const [lastIrisHistory, setLastIrisHistory] = useState({"terms": "", "properties": "", "individuals": "", "termList": ""});
   const [lastTabsStates, setLastTabsStates] = useState({"terms": null, "properties": null, "gitIssues": ""});  
   const [isSkosOntology, setIsSkosOntology] = useState(false);
-  const [notesCount, setNotesCount] = useState("")  
-  
+  const [notesCount, setNotesCount] = useState("");
 
+  const UrlFactory = new CommonUrlFactory();
+  
 
 
   async function loadOntologyData(){
@@ -85,15 +87,11 @@ const OntologyPage = (props) => {
     if(isSkos){
       let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
       await skosApi.fetchRootConcepts();                    
-      await SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
+      SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
       skosIndividuals = skosApi.rootConcepts;
     }
 
-    let countOfNotes = 0;
-    if(process.env.REACT_APP_NOTE_FEATURE === "true"){
-      countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
-      countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
-    }
+    
     
 
     setOntology(ontologyApi.ontology);
@@ -102,7 +100,18 @@ const OntologyPage = (props) => {
     setObsoleteProps(ontologyApi.obsoleteProperties); 
     setRootTerms(ontologyApi.rootClasses);
     setRootProps(ontologyApi.rootProperties);
-    setSkosRootIndividuals(skosIndividuals);    
+    setSkosRootIndividuals(skosIndividuals);        
+  }
+
+
+
+  async function setCountOfNotes(){
+    let countOfNotes = 0;
+    let ontologyId = props.match.params.ontologyId;
+    if(process.env.REACT_APP_NOTE_FEATURE === "true"){
+      countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+      countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+    }
     setNotesCount(countOfNotes);
   }
 
@@ -115,9 +124,8 @@ const OntologyPage = (props) => {
     }
 
     let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;   
-    let irisHistory = {...lastIrisHistory};    
-    let urlParams = new URLSearchParams(window.location.search);
-    irisHistory[requestedTab] = urlParams.get("iri");  
+    let irisHistory = {...lastIrisHistory};        
+    irisHistory[requestedTab] = UrlFactory.getIri();
 
     setActiveTab(activeTabId);
     setWaiting(false);
@@ -166,6 +174,7 @@ const OntologyPage = (props) => {
   
   useEffect(() => {
     loadOntologyData();
+    setCountOfNotes();
     setTabOnLoad();
   }, []);
 
@@ -173,10 +182,10 @@ const OntologyPage = (props) => {
 
 
   if (error) {
-    return <div>Error: {error.message}</div>
+    return <div>Something went wrong. Please try later.</div>
   }
   else if (!ontology) {
-    return <div>Loading...</div>
+    return <div className="is-loading-term-list isLoading"></div>
   } 
   else{
     const contextData = {
@@ -229,23 +238,13 @@ const OntologyPage = (props) => {
                         />
                   }
                   {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-                        <TermList                                    
-                          componentIdentity={'termList'}
-                          key={'termListPage'}                                                                                             
-                        />
+                        <TermList componentIdentity={'termList'}  key={'termListPage'} />
                   }             
                   {!waiting && (activeTab === NOTES_TAB_ID) &&
                           <NoteList key={'notesPage'}/>
                   }                                      
                   {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            
-                          <IssueList                                                           
-                            componentIdentity={'gitIssues'}
-                            key={'gitIssueList'}
-                            ontology={ontology}                              
-                            isSkos={isSkosOntology}
-                            lastState={lastTabsStates['gitIssues']}                                  
-                            storeListOfGitIssuesState={tabsStateKeeper}
-                          />
+                          <IssueList  componentIdentity={'gitIssues'}  key={'gitIssueList'} />
                   } 
 
                   {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}

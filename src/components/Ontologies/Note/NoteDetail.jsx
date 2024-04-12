@@ -1,60 +1,66 @@
 import {useState, useEffect, useContext} from "react";
-import { useHistory } from "react-router";
 import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
 import { NoteDetailRender } from "./renders/NoteDetailRender";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { NoteContext } from "../../../context/NoteContext";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 
 
-const NoteDetail = (props) => {
+const NoteDetail = () => {
+
+    /* 
+        This component is responsible for rendering the note detail page.
+        It uses the NoteContext to get the selected note id.
+        It uses the OntologyPageContext to get the ontology information.
+        It uses the getNoteDetail function to get the note detail from the backend.
+    */
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    const noteContext = useContext(NoteContext);
 
     const [note, setNote] = useState({});
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
     const [noteNotFound, setNoteNotFound] = useState(false);
-    const [currentUrl, setCurrentUrl] = useState(window.location.href);
-    const [numberOfpinned, setNumberOfpinned] = useState(0);
-
-    const history = useHistory();
+    const [currentUrl, setCurrentUrl] = useState(window.location.href);    
+    
+    const commonUrlFactory = new CommonUrlFactory();
 
 
     function getTheNote(){
-        let noteId = props.noteId;        
+        let noteId = noteContext.selectedNoteId;        
         getNoteDetail({noteId: noteId, ontologyId:ontologyPageContext.ontology.ontologyId}).then((result) => {
             if(result === '404'){
                 setNoteNotFound(true);                
             }            
             else{    
                 setNote(result['note']);
-                setNoteContent(createHtmlFromEditorJson(result['note']['content']));
-                setNumberOfpinned(result['number_of_pinned']);
+                setNoteContent(createHtmlFromEditorJson(result['note']['content']));                
+                noteContext.setNumberOfPinned(result['number_of_pinned']);
                 setNoteNotFound(false);                
             }
         });
     }
 
 
-    function reloadNoteDetail(){
-        let searchParams = new URLSearchParams(window.location.search);     
-        searchParams.delete('comment');        
-        history.push(window.location.pathname + "?" +  searchParams.toString());
+    function reloadNoteDetail(){        
+        commonUrlFactory.deleteParam({name: 'comment'});
         setNote({});
-        setCurrentUrl(window.location.pathname + "?" +  searchParams.toString()); 
+        setCurrentUrl(commonUrlFactory.getCurrentUrl()); 
     }
 
 
     useEffect(() => {
-        if(props.noteId){
+        if(noteContext.selectedNoteId){
             getTheNote();
         }  
     }, []);
 
     useEffect(() => {        
         getTheNote();        
-    }, [props.noteId, currentUrl]);
+    }, [noteContext.selectedNoteId, currentUrl]);
 
 
     if(process.env.REACT_APP_NOTE_FEATURE !== "true"){            
@@ -68,9 +74,7 @@ const NoteDetail = (props) => {
         <NoteDetailRender 
             note={note}
             noteContent={noteContent}
-            reloadNoteDetail={reloadNoteDetail}
-            isAdminForOntology={props.isAdminForOntology} 
-            numberOfpinned={numberOfpinned}
+            reloadNoteDetail={reloadNoteDetail}                        
         />
     );
 }

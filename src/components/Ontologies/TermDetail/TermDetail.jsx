@@ -1,14 +1,16 @@
 import {useEffect, useState, useContext} from 'react';
 import NodePageTabConfig from './listOfComponentsTabs.json';
-import { TermDetailTable } from './TermDetailTable/TermDetailTable';
+import TermDetailTable from './TermDetailTable/TermDetailTable';
 import NoteList from '../Note/NoteList';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
-import Toolkit from '../../../Libs/Toolkit';
 import { getNoteList } from '../../../api/tsMicroBackendCalls';
 import Graph from '../../common/Graph/Graph';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
+import PropTypes from 'prop-types';
 
 
 
@@ -20,6 +22,12 @@ const GRAPH_TAB_ID = 2;
 
 
 const TermDetail = (props) => {
+  /*
+    This component is responsible for rendering the detail page of a term.
+    It contains the term detail table, notes, and graph view.
+    It also contains the tab navigation for switching between these components.
+    It requires the ontologyPageContext to be available.
+  */
 
   const ontologyPageContext = useContext(OntologyPageContext);
   
@@ -141,12 +149,13 @@ const TermDetail = (props) => {
 const RenderTermDetailTab = (props) => {
 
   const ontologyPageContext = useContext(OntologyPageContext);
+  const UrlFactory = new CommonUrlFactory();
 
   function  createTabs(){
       let result = [];         
       for(let configItemKey in NodePageTabConfig){
-          let configObject = NodePageTabConfig[configItemKey];                 
-          let linkUrl = Toolkit.setParamInUrl('subtab', NodePageTabConfig[configItemKey]['urlEndPoint'])
+          let configObject = NodePageTabConfig[configItemKey];                           
+          let linkUrl = UrlFactory.setParam({name: SiteUrlParamNames.SubTabInTermTable, value: NodePageTabConfig[configItemKey]['urlEndPoint'], updateUrl:false});
           if(configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true"){
             continue;
           }
@@ -177,6 +186,14 @@ const RenderTermDetailTab = (props) => {
           {createTabs()}
     </ul>
   );
+}
+
+
+TermDetail.propTypes = {
+  iri: PropTypes.string.isRequired,
+  componentIdentity: PropTypes.string.isRequired,
+  extractKey: PropTypes.string.isRequired,
+  typeForNote: PropTypes.string.isRequired
 }
 
 export default TermDetail;

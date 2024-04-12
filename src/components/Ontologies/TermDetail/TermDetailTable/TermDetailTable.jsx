@@ -5,10 +5,15 @@ import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
 import { OntologyPageContext } from '../../../../context/OntologyPageContext';
+import PropTypes from 'prop-types';
 
 
 
-export const TermDetailTable = (props) => {
+const TermDetailTable = (props) => {
+  /*
+    This component is responsible for rendering the detail table of a term.
+    It requires the ontologyPageContext to be available.
+  */
 
   const ontologyPageContext = useContext(OntologyPageContext);
 
@@ -122,10 +127,13 @@ export const TermDetailTable = (props) => {
   }, [props.node]);
 
 
+  if(!props.node.iri){
+    return <div className="is-loading-term-list isLoading-small"></div>;
+  }
 
   return(
     <div>
-      {Toolkit.createHelmet(`${props.node.ontology_name}:${props.node.short_form}`)}      
+      {Toolkit.createHelmet(`${props.node.ontology_name}:${props.node.short_form}`)}     
       {props.node.is_obsolete &&
         <AlertBox  
           type="danger"
@@ -151,3 +159,15 @@ export const TermDetailTable = (props) => {
     </div>
   )
 }
+
+
+TermDetailTable.propTypes = {
+  iri: PropTypes.string.isRequired,
+  componentIdentity: PropTypes.string.isRequired,
+  extractKey: PropTypes.string.isRequired,
+  isIndividual: PropTypes.bool.isRequired,
+  node: PropTypes.object.isRequired
+}
+
+
+export default TermDetailTable;

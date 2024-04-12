@@ -2,52 +2,48 @@ import {useState} from "react";
 import AlertBox from "../Alerts/Alerts";
 
 
-export const DeleteModalBtn = (props) => {
+export const ReportModalBtn = (props) => {
     return (
         <button type="button" 
-                class="btn btn-danger btn-sm btn-delete-note borderless-btn" 
+                class="btn btn-sm borderless-btn note-action-menu-btn" 
                 data-toggle="modal" 
-                data-target={"#deleteModal" + props.modalId}
+                data-target={"#reportModal" + props.modalId}
                 data-backdrop="static"
                 >
-                Delete
+                Report
         </button>
     );
 }
 
 
 
-export const DeleteModal = (props) => {
+export const ReportModal = (props) => {
+
     const [submited, setSubmited] = useState(false);
-    const [deleteSuccess, setDeleteSuccess] = useState(false);       
+    const [reportSuccess, setReportSuccess] = useState(false);       
     
-    const deleteResource = async () => {
+    const report = async () => {        
         try{
+            props.formData.append('content', document.getElementById("reportReason" + props.modalId).value);
             let postConfig = {method: 'POST',  headers:props.callHeaders, body: props.formData};                        
-            let result = await fetch(props.deleteEndpoint, postConfig);
+            let result = await fetch(props.reportEndpoint, postConfig);
             setSubmited(true);
-            setDeleteSuccess(result.ok)
+            setReportSuccess(result.ok)
         }
         catch(e){
             setSubmited(true);
-            setDeleteSuccess(false);
+            setReportSuccess(false);
         }
     }
-
-
-    const redirectAfterDelete = () => {
-        window.location.replace(props.afterDeleteRedirectUrl);
-    }
-
-
+    
 
     return (
         <div>            
-            <div class="modal fade" id={"deleteModal" + props.modalId} tabindex="-1" role="dialog" aria-labelledby={"deleteModalLabel" + props.modalId} aria-hidden="true">
+            <div class="modal fade" id={"reportModal" + props.modalId} tabindex="-1" role="dialog" aria-labelledby={"reportModalLabel" + props.modalId} aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id={"deleteModalLabel" + props.modalId}>Confirmation</h5>
+                            <h5 class="modal-title" id={"reportModalLabel" + props.modalId}>Report Content</h5>
                             {!submited && 
                                 <button type="button" class="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -56,20 +52,19 @@ export const DeleteModal = (props) => {
                         </div>
                         <div class="modal-body">
                             {!submited && 
-                                <span>
-                                    Are you sure you want to delete this item? 
-                                    <br></br>
-                                    <strong>This action is not reversible.</strong>
-                                </span>                                
+                                <div class="mb-3">
+                                    <label for={"reportReason" + props.modalId} class="form-label">Please describe briefly the reason for this report</label>
+                                    <textarea class="form-control" id={"reportReason" + props.modalId} rows="3"></textarea>
+                                </div>                                
                             }
-                            {submited && deleteSuccess &&
+                            {submited && reportSuccess &&
                                 <AlertBox 
                                     type="success"
-                                    message="Deleted successfully!"
+                                    message="Thank you for the Report! We will examine it as soon as possible."
                                     alertColumnClass="col-sm-12"                                    
                                 />                                
                             }
-                            {submited && !deleteSuccess &&
+                            {submited && !reportSuccess &&
                                 <AlertBox
                                     type="danger" 
                                     message="Something went wrong. Please try again!"
@@ -78,14 +73,18 @@ export const DeleteModal = (props) => {
                             }
                         </div>
                         <div class="modal-footer justify-content-center">                            
-                            {!submited && <button type="button" class="btn btn-secondary" onClick={deleteResource}>Delete</button>}
-                            {submited && <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={redirectAfterDelete}>Close</button>}
+                            {!submited && <button type="button" class="btn btn-secondary" onClick={report}>Submit</button>}
+                            {submited && <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     );
+
 }
 
-export default DeleteModalBtn;
+
+export default ReportModalBtn;
+
+

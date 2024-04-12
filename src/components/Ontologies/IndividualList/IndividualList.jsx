@@ -1,18 +1,24 @@
 import { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router";
 import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
 import Tree from "../DataTree/Tree";
 import PaneResize from "../../common/PaneResize/PaneResize";
-import Toolkit from "../../../Libs/Toolkit";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import { RenderIndividualList } from "./RenderIndividualList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import PropTypes from 'prop-types';
 
 
 
 
 const IndividualsList = (props) => {
+
+    /* 
+        This component is responsible for rendering the list of individuals for the ontology.
+        It uses the TermApi to get the list of individuals for the ontology.
+        It requires the ontologyPageContext to get the ontology information.
+    */
 
     const ontologyPageContext = useContext(OntologyPageContext);
     const lastVisitedIri = ontologyPageContext.lastVisitedIri[props.componentIdentity];
@@ -25,8 +31,8 @@ const IndividualsList = (props) => {
     const [listView, setListView] = useState(true);
     const [JumpToOnLoad, setJumpToOnload] = useState(false);
     const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
-
-    const history = useHistory();
+    
+    const urlFactory = new CommonUrlFactory();
 
     
     async function setComponentData(){           
@@ -36,9 +42,8 @@ const IndividualsList = (props) => {
             indvList = indvList["results"];                
             setIsLoaded(true);
             setIndividuals(sortIndividuals(indvList));                                          
-            if(lastVisitedIri && lastVisitedIri !== " " && typeof(lastVisitedIri) !== "undefined"){
-                let newUrl = Toolkit.setParamInUrl('iri', lastVisitedIri)                
-                history.push(newUrl);
+            if(lastVisitedIri && lastVisitedIri !== " " && typeof(lastVisitedIri) !== "undefined"){                
+                urlFactory.setIri({newIri: lastVisitedIri});
                 setSelectedNodeIri(lastVisitedIri);
                 setJumpToOnload(true);    
                 setJumpToIri(lastVisitedIri);           
@@ -79,9 +84,8 @@ const IndividualsList = (props) => {
         if(!target.classList.contains("clicked")  && target.tagName === "SPAN"){            
             target.classList.add("clicked");
             setShowNodeDetailPage(true);
-            setSelectedNodeIri(target.dataset.iri);            
-            let newUrl = Toolkit.setParamInUrl('iri', target.dataset.iri)            
-            history.push(newUrl);
+            setSelectedNodeIri(target.dataset.iri);                        
+            urlFactory.setIri({newIri: target.dataset.iri});
             ontologyPageContext.storeIriForComponent(target.dataset.iri, props.componentIdentity);    
         }
         else{
@@ -172,10 +176,8 @@ const IndividualsList = (props) => {
         if(selectedTerm){                 
             setSelectedNodeIri(selectedTerm['iri']);
             setJumpToIri(selectedTerm['iri']);
-            setJumpToOnload(true);      
-            const searchParams = new URLSearchParams(window.location.search);
-            searchParams.set('iri', selectedTerm['iri']);  
-            history.push(window.location.pathname + "?" +  searchParams.toString());
+            setJumpToOnload(true);                              
+            urlFactory.setIri({newIri: selectedTerm['iri']});
             let selectedElement = document.querySelectorAll(".clicked");
             for(let i=0; i < selectedElement.length; i++){
                     selectedElement[i].classList.remove("clicked");
@@ -255,6 +257,13 @@ const IndividualsList = (props) => {
         </div>
     );
 
+}
+
+IndividualsList.propTypes = {
+    rootNodes: PropTypes.array,
+    rootNodesForSkos: PropTypes.array,
+    componentIdentity: PropTypes.string,
+    key: PropTypes.string
 }
 
 

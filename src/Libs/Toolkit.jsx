@@ -1,4 +1,8 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import CommonUrlFactory from '../UrlFactory/CommonUrlFactory';
+
+
+const urlFacory = new CommonUrlFactory();
 
 
 class Toolkit{
@@ -107,12 +111,11 @@ class Toolkit{
     }
 
 
-    static setObsoleteAndReturnNewUrl(obsoletesValue) {        
-        let url = new URL(window.location);        
-        url.searchParams.set('obsoletes', obsoletesValue);        
+    static setObsoleteInStorageAndUrl(obsoletesValue) {                   
         localStorage.setItem("obsoletes", obsoletesValue);
         document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
-        return window.location.pathname + "?" +  url.searchParams.toString();
+        urlFacory.setObsoletes({value:obsoletesValue});
+        return true;
     }
 
 

@@ -1,10 +1,11 @@
 import {useEffect, useState, useContext} from "react";
-import { useHistory } from "react-router";
 import AuthTool from "../../User/Login/authTools";
-import Toolkit from "../../../Libs/Toolkit";
 import { NoteListRender } from "./renders/NoteListRender";
 import { getNoteList } from "../../../api/tsMicroBackendCalls";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { NoteContext } from "../../../context/NoteContext";
+import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import PropTypes from 'prop-types';
 
 
 
@@ -18,37 +19,38 @@ const DEFAULT_PAGE_SIZE = 10
 
 
 const NoteList = (props) => {
-    let currentUrlParams = new URL(window.location).searchParams;                      
-    let page = currentUrlParams.get('page') ? currentUrlParams.get('page') : DEFAULT_PAGE_NUMBER;
-    let size = currentUrlParams.get('size') ? currentUrlParams.get('size') : DEFAULT_PAGE_SIZE;
-    let originalNotes = currentUrlParams.get('originalNotes') === "true" ? true : false;     
-    let selectedType = TYPES_VALUES.indexOf(props.termType);
-    if(selectedType < 0){
-        selectedType = currentUrlParams.get('type') ? TYPES_VALUES.indexOf(currentUrlParams.get('type')) : ALL_TYPE
-    }        
-        
-    let inputNoteIdFromUrl = currentUrlParams.get('noteId'); 
-    inputNoteIdFromUrl = !inputNoteIdFromUrl ? -1 : parseInt(inputNoteIdFromUrl);
-
+    /* 
+        This component is responsible for rendering the list of notes for the ontology.
+        It uses the NoteUrlFactory to get the selected note type, page number and note id from the url.
+        It requires the ontologyPageContext to get the ontology information.
+        It uses the NoteContext to pass the note information to the child components.        
+    */
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    
+    const noteUrlFactory = new NoteUrlFactory();                
+        
+    let selectedType = TYPES_VALUES.indexOf(props.termType);
+    if(selectedType < 0){
+        selectedType = noteUrlFactory.noteType ? TYPES_VALUES.indexOf(noteUrlFactory.noteType) : ALL_TYPE
+    }        
+            
 
     const [noteList, setNoteList] = useState([]);
     const [showNoteDetailPage, setShowNoteDetailPage] = useState(false);
     const [noteSubmited, setNoteSubmited] = useState(false);
     const [noteSubmitSeccuess, setNoteSubmitSeccuess] = useState(false);
-    const [pageNumber, setPageNumber] = useState(parseInt(page));
-    const [pageSize, setPageSize] = useState(size);
+    const [pageNumber, setPageNumber] = useState(parseInt(noteUrlFactory.page ? noteUrlFactory.page : DEFAULT_PAGE_NUMBER));
+    const [pageSize, setPageSize] = useState(noteUrlFactory.size ? noteUrlFactory.size : DEFAULT_PAGE_SIZE);
     const [noteTotalPageCount, setNoteTotalPageCount] = useState(0);
-    const [selectedNoteId, setSelectedNoteId] = useState(inputNoteIdFromUrl);
+    const [selectedNoteId, setSelectedNoteId] = useState(!noteUrlFactory.noteId ? -1 : parseInt(noteUrlFactory.noteId));
     const [componentIsLoading, setComponentIsLoading] = useState(true);
     const [noteExist, setNoteExist] = useState(true);    
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
     const [isAdminForOntology, setIsAdminForOntology] = useState(false);
     const [numberOfPinned, setNumberOfPinned] = useState(0);
-    const [onlyOntologyOriginalNotes, setOnlyOntologyOriginalNotes] = useState(originalNotes);
-
-    const history = useHistory();
+    const [onlyOntologyOriginalNotes, setOnlyOntologyOriginalNotes] = useState(noteUrlFactory.originalNotes === "true" ? true : false);
+        
 
 
     function loadComponent(){                        
@@ -86,7 +88,7 @@ const NoteList = (props) => {
     }
 
 
-    async function checkIsAdmin(){        
+    async function checkIsOntologyAdmin(){        
         let callHeaders = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
@@ -102,7 +104,6 @@ const NoteList = (props) => {
             setIsAdminForOntology(false);
         }
     }
-
 
 
 
@@ -129,10 +130,9 @@ const NoteList = (props) => {
 
     function setNoteCreationResultStatus(newNoteId=false){           
         let success = false;
-        if(newNoteId){            
-            let newUrl = Toolkit.setParamInUrl('noteId', newNoteId);
-            setSelectedNoteId(newNoteId);            
-            history.push(newUrl);
+        if(newNoteId){                               
+            setSelectedNoteId(newNoteId);                        
+            noteUrlFactory.setNoteId({noteId:newNoteId}); 
             success = true;
         }
 
@@ -156,25 +156,21 @@ const NoteList = (props) => {
     }
 
 
-    function updateURL(){
-        let currentUrlParams = new URLSearchParams(window.location.search);
-        currentUrlParams.set('type', TYPES_VALUES[selectedArtifactType]);
-        currentUrlParams.set('page', pageNumber);
-        currentUrlParams.set('size', pageSize);
-        currentUrlParams.set('originalNotes', onlyOntologyOriginalNotes);
-        history.push(window.location.pathname + "?" + currentUrlParams.toString());                
-    }
-
 
     useEffect(() => {
         loadComponent();
-        checkIsAdmin();
+        checkIsOntologyAdmin();        
     }, []);
 
 
     useEffect(() => {      
         setComponentIsLoading(true);   
-        updateURL();
+        noteUrlFactory.update({
+            page:pageNumber, 
+            size:pageSize, 
+            originalNotes:onlyOntologyOriginalNotes, 
+            noteType:TYPES_VALUES[selectedArtifactType]
+        });
         loadComponent();              
         
     }, [pageNumber, pageSize, selectedArtifactType, showNoteDetailPage, noteSubmited, onlyOntologyOriginalNotes, props.term]);
@@ -185,33 +181,45 @@ const NoteList = (props) => {
         return null;
     }
     else{
+        const noteContextData = {
+            isAdminForOntology: isAdminForOntology,
+            numberOfPinned: numberOfPinned,
+            setNumberOfPinned: setNumberOfPinned,
+            selectedTermTypeInTree: props.termType,
+            selectedTermInTree: props.term,
+            noteSelectHandler: selectNote,
+            setNoteCreationResultStatus: setNoteCreationResultStatus,
+            selectedNoteId: selectedNoteId
+        };
+
         return(
-            <NoteListRender 
-                noteSubmited={noteSubmited}
-                noteSubmitSeccuess={noteSubmitSeccuess}
-                noteDetailPage={showNoteDetailPage}
-                componentIsLoading={componentIsLoading}
-                onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}
-                targetArtifactType={props.termType}
-                term={props.term}                                              
-                selectedArtifactType={selectedArtifactType}
-                noteExist={noteExist}
-                noteTotalPageCount={noteTotalPageCount}
-                noteListPage={pageNumber}
-                selectedNoteId={selectedNoteId}
-                notesList={noteList}
-                noteSelectHandler={selectNote}
-                artifactDropDownHandler={artifactDropDownHandler}
-                handlePagination={handlePagination}
-                setNoteCreationResultStatus={setNoteCreationResultStatus}
-                backToListHandler={backToListClick}
-                setNoteExistState={setNoteExist}
-                isAdminForOntology={isAdminForOntology}
-                numberOfpinned={numberOfPinned}
-                handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
-            />
+            <NoteContext.Provider value={noteContextData}>
+                <NoteListRender 
+                    noteSubmited={noteSubmited}
+                    noteSubmitSeccuess={noteSubmitSeccuess}
+                    noteDetailPage={showNoteDetailPage}
+                    componentIsLoading={componentIsLoading}
+                    onlyOntologyOriginalNotes={onlyOntologyOriginalNotes}                                                              
+                    selectedArtifactType={selectedArtifactType}
+                    noteExist={noteExist}
+                    noteTotalPageCount={noteTotalPageCount}
+                    noteListPage={pageNumber}                    
+                    notesList={noteList}                    
+                    artifactDropDownHandler={artifactDropDownHandler}
+                    handlePagination={handlePagination}                    
+                    backToListHandler={backToListClick}
+                    setNoteExistState={setNoteExist}                    
+                    handleOntologyOriginalNotesCheckbox={handleOntologyOriginalNotesCheckbox}
+                />
+            </NoteContext.Provider>
         );
     }
+}
+
+
+NoteList.propTypes = {
+    term: PropTypes.string.isRequired,
+    termType: PropTypes.string.isRequired
 }
 
 

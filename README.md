@@ -36,8 +36,8 @@ Open the browser and enter the URL of the application: http://localhost:3000/.
 
 The application can be customized to look different based on your needs. You can customize:
 - Styles (css)
-- Static contents: Homepage, Help, About, ... 
-- Application Env variables
+- Static contents: Homepage, Help, About, etc. 
+- Application Env variables.
 
 **Note**: You can customize the app in your config repository for deploying the application. The idea is to replace some default files and scripts with your custom content.
 

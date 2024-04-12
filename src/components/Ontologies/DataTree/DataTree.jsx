@@ -1,6 +1,5 @@
 import {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
@@ -9,6 +8,7 @@ import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 
 
 
@@ -22,8 +22,8 @@ const DataTree = (props) => {
     
     Context:
       The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
-  
   */
+ 
 
   const ontologyPageContext = useContext(OntologyPageContext);
 
@@ -34,7 +34,7 @@ const DataTree = (props) => {
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
   const [jumpToIri, setJumpToIri] = useState(null);
 
-  const history = useHistory();
+  const urlFacory = new CommonUrlFactory();     
 
 
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable){
@@ -56,32 +56,27 @@ const DataTree = (props) => {
     if(selectedTerm){                 
       setJumpToIri(selectedTerm['iri']);
       setSelectedNodeIri(selectedTerm['iri']);
-      setShowDetailTable(true);
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set('iri', selectedTerm['iri']);  
-      history.push(window.location.pathname + "?" +  searchParams.toString());
+      setShowDetailTable(true);      
+      urlFacory.setIri({newIri:selectedTerm['iri']});        
     }   
   }
 
 
-  useEffect(() => {    
-    let url = new URL(window.location);
-    let targetQueryParams = url.searchParams;    
+  useEffect(() => {              
     paneResizeClass.setOriginalWidthForLeftPanes();        
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
     let termTree = (props.componentIdentity === "terms") ? true : false; 
-    let iriInUrl =  targetQueryParams.get('iri');
+    let iriInUrl =  urlFacory.getIri();
     if(iriInUrl){
       setSelectedNodeIri(iriInUrl);
       setShowDetailTable(true);
     }
     else if(ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== ""){
       setSelectedNodeIri(ontologyPageContext.lastVisitedIri[props.componentIdentity]);
-      setShowDetailTable(true);
-      targetQueryParams.set("iri", ontologyPageContext.lastVisitedIri[props.componentIdentity]);
-      history.push(window.location.pathname + "?" +  targetQueryParams.toString());
+      setShowDetailTable(true);      
+      urlFacory.setIri({newIri:  ontologyPageContext.lastVisitedIri[props.componentIdentity]})      
     }
     
     setIsTermTree(termTree);

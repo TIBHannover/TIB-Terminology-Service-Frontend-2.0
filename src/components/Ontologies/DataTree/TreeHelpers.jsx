@@ -132,7 +132,7 @@ export default class TreeHelper{
           let Iri = document.getElementById(parentId);                    
           Iri = Iri.dataset.iri;
           let termApi = new TermApi(ontologyId, Iri, childExtractName);        
-          let res =  await termApi.getChildrenJsTree(parentId);           
+          let res =  await termApi.getChildrenJsTree(parentId);                    
           let sortKey = TreeHelper.getTheNodeSortKey(res);
           if(sortKey){
               res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { isLogin } from "./TS/Auth";
 import {Route} from 'react-router-dom';
-import Login from "./TS/Login";
+import LoginPanel from "./TS/LoginPanel";
 
 
-function RequireLoginRoute({component: Component, ...rest}){
+const RequireLoginRoute = ({component: Component, ...rest}) => {    
+
     const [loginStatus, setLoginStatus] = useState(null);    
     const [loginProcessFinished, setLoginProcessFinished] = useState(false);    
     isLogin().then((resp) => {
-        setLoginStatus(resp);
+        setLoginStatus(resp ? true : false);
         setLoginProcessFinished(true);
     });
 
@@ -17,7 +18,7 @@ function RequireLoginRoute({component: Component, ...rest}){
     }
 
     else if (!loginStatus && loginProcessFinished) {           
-        return <Login isModal={false}></Login>;
+        return <LoginPanel isModal={false}></LoginPanel>;
     }
         
     return (<Route component={Component} {...rest}/> )

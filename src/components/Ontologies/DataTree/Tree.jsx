@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
 import PropTypes from 'prop-types';
-import { useHistory } from "react-router";
 import 'font-awesome/css/font-awesome.min.css';
 import TermApi from "../../../api/term";
 import TreeNodeController from "./TreeNode";
@@ -9,6 +8,7 @@ import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
 import KeyboardNavigator from "./KeyboardNavigation";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 
 
@@ -31,27 +31,23 @@ const Tree = (props) => {
     */
 
 
-    let url = new URL(window.location);
-    let targetQueryParams = url.searchParams;
-
     const ontologyPageContext = useContext(OntologyPageContext);
     const lastState = ontologyPageContext.tabLastStates[props.componentIdentity];
+    const urlFacory = new CommonUrlFactory(); 
 
     const [treeDomContent, setTreeDomContent] = useState('');     
     const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
     const [resetTreeFlag, setResetTreeFlag] = useState(false);
     const [siblingsVisible, setSiblingsVisible] = useState(false);
-    const [siblingsButtonShow, setSiblingsButtonShow] = useState(targetQueryParams.get('iri') ? true : false);
-    const [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(targetQueryParams.get('iri') ? true : false);
-    const [subTreeMode, setSubTreeMode] = useState(targetQueryParams.get('iri') ? true : false);
+    const [siblingsButtonShow, setSiblingsButtonShow] = useState(urlFacory.getIri() ? true : false);
+    const [subOrFullTreeBtnShow, setSubOrFullTreeBtnShow] = useState(urlFacory.getIri() ? true : false);
+    const [subTreeMode, setSubTreeMode] = useState(urlFacory.getIri() ? true : false);
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [noNodeExist, setNoNodeExist] = useState(false);    
     const [obsoletesShown, setObsoletesShown] = useState(Toolkit.getObsoleteFlagValue());
     const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler)); 
-    const [firstTimeLoad, setFirstTimeLoad] = useState(lastState ? true : false);    
-
-    const history = useHistory();        
+    const [firstTimeLoad, setFirstTimeLoad] = useState(lastState ? true : false);        
 
 
     function saveComponentStateInParent(){
@@ -80,8 +76,7 @@ const Tree = (props) => {
     function setComponentData(){                      
         let extractName = props.componentIdentity;             
         if (props.rootNodes.length != 0 || resetTreeFlag || reload){                                                
-            setChildExtractName(extractName);
-            setResetTreeFlag(false);
+            setChildExtractName(extractName);           
             setReload(false);
             setNoNodeExist(false);            
         }
@@ -93,7 +88,7 @@ const Tree = (props) => {
 
 
     async function buildTheTree(){        
-        let target = props.selectedNodeIri;
+        let target = props.selectedNodeIri;        
         target =  target ? target.trim() : null;        
         let siblingsVisible = false;
         let treeFullView = !subTreeMode;        
@@ -109,7 +104,7 @@ const Tree = (props) => {
             loadTheTreeLastState();            
             return true;
         }                
-        if (!target || resetTreeFlag){
+        if (!target || resetTreeFlag){            
             let result = [];
             if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){                
                 result = buildTheTreeFirstLayer(props.rootNodesForSkos);
@@ -164,7 +159,8 @@ const Tree = (props) => {
         
         setTreeDomContent(treeList);        
         setReload(false);              
-        setSiblingsVisible(siblingsVisible);                      
+        setSiblingsVisible(siblingsVisible);  
+        setResetTreeFlag(false);                    
         keyboardNavigationManager.updateSelectedNodeId(selectedItemId);        
         ontologyPageContext.storeIriForComponent(target, props.componentIdentity);         
     }
@@ -184,10 +180,8 @@ const Tree = (props) => {
         setIsLoading(false);
         setNoNodeExist(lastStates.noNodeExist);        
         setFirstTimeLoad(false);
-        if(lastState.lastIri){
-            let url = new URLSearchParams();        
-            url.append('iri', lastState.lastIri);            
-            history.push(window.location.pathname + "?" + url.toString())            
+        if(lastState.lastIri){                        
+            urlFacory.setIri({newIri:lastState.lastIri});            
             ontologyPageContext.storeIriForComponent(lastState.lastIri, props.componentIdentity);
             props.handleNodeSelectionInDataTree(lastState.lastIri, true);
             return true;
@@ -228,7 +222,7 @@ const Tree = (props) => {
 
 
     function resetTree(){        
-        history.push(window.location.pathname);        
+        urlFacory.resetUrl();    
         props.handleResetTreeInParent();
         setResetTreeFlag(true);
         setTreeDomContent("");
@@ -294,8 +288,7 @@ const Tree = (props) => {
 
 
     function showObsoletes(){                      
-        let newUrl = Toolkit.setObsoleteAndReturnNewUrl(!obsoletesShown);                
-        history.push(newUrl);
+        Toolkit.setObsoleteInStorageAndUrl(!obsoletesShown);
         setReload(true);
         setIsLoading(true);
         setTreeDomContent("");
@@ -342,12 +335,10 @@ const Tree = (props) => {
             setSiblingsButtonShow(false);
             setSubOrFullTreeBtnShow(true);
             setSubTreeMode(false);            
-            keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);                                           
-            let locationObject = window.location;
-            const searchParams = new URLSearchParams(locationObject.search);
-            searchParams.set('iri', clickedNodeIri);               
-            searchParams.delete('noteId');        
-            history.push(locationObject.pathname + "?" +  searchParams.toString());
+            keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);                                    
+            urlFacory.setIri({newIri:clickedNodeIri});
+            urlFacory.deleteParam({name: 'noteId'});
+            urlFacory.deleteParam({name: 'subtab'});
             ontologyPageContext.storeIriForComponent(clickedNodeIri, props.componentIdentity);            
         }    
     }
@@ -428,16 +419,11 @@ const Tree = (props) => {
 
     useEffect(() => {       
         setComponentData();     
-        buildTheTree();   
-        // saveComponentStateInParent();              
+        buildTheTree();                         
         if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
             document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';            
         }    
         document.addEventListener("keydown", handleKeyDown, false);          
-
-        setTimeout(() => {
-            setIsLoading(false);              
-        }, 2000);
 
                 
         return () => {            
@@ -446,11 +432,10 @@ const Tree = (props) => {
     }, []);
 
 
-    useEffect(() => {        
-        // setComponentData();        
+    useEffect(() => {                
         buildTheTree();  
-        setTimeout(() => {
-            setIsLoading(false);  
+        setIsLoading(false); 
+        setTimeout(() => {             
             saveComponentStateInParent();
         }, 2000);                                
                
@@ -458,8 +443,8 @@ const Tree = (props) => {
 
 
     useEffect(() => {        
-        if(props.jumpToIri){            
-            setIsLoading(true)            
+        if(props.jumpToIri){                   
+            setIsLoading(true);            
             setSubTreeMode(true);
             setSiblingsButtonShow(true);
             setSubOrFullTreeBtnShow(true);

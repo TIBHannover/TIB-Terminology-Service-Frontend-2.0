@@ -1,12 +1,12 @@
 import {useState, useEffect} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import { useHistory } from 'react-router';
 import CollectionApi from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
+import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 
 
 
@@ -15,6 +15,10 @@ const TITLE_SORT_KEY = "title";
 
 
 const OntologyList = (props) => {
+
+  /* 
+    This component is responsible for rendering the list of ontologies.
+  */
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -29,44 +33,41 @@ const OntologyList = (props) => {
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
-  const history = useHistory();
-
 
 
   async function setComponentData (){    
     try{      
-      let ontologyApi = new OntologyApi({});
-      let collectionApi = new CollectionApi();
-      await ontologyApi.fetchOntologyList(); 
-      let allCollections = [];
-      if(process.env.REACT_APP_PROJECT_NAME === ""){
-        // If TIB General, fetch all the collections. Otherwise not needed.
-        await collectionApi.fetchCollectionsWithStats();       
-        allCollections =  collectionApi.collectionsList;
-      }                 
-      
+      let ontologyApi = new OntologyApi({});      
+      await ontologyApi.fetchOntologyList();                          
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
       setOntologies(sortedOntologies);
-      setUnFilteredOntologies(sortedOntologies);      
-      setAllCollections(allCollections);      
+      setUnFilteredOntologies(sortedOntologies);              
       setIsLoaded(true);      
     }
     catch(error){            
       setIsLoaded(true);
       setError(error);        
     }
-  
+  }
+
+
+  async function setCollectionData(){
+    let collectionApi = new CollectionApi();
+    let allCollections = [];          
+    await collectionApi.fetchCollectionsWithStats();       
+    allCollections =  collectionApi.collectionsList;    
+    setAllCollections(allCollections);        
   }
 
 
 
   function setStateBasedOnUrlParams(){
-    let url = new URL(window.location);   
-    let collectionsInUrl = url.searchParams.getAll('collection');      
-    let sortByInUrl = url.searchParams.get('sorting');
-    let pageInUrl = url.searchParams.get('page');
-    let sizeInUrl = url.searchParams.get('size');
-    let keywordFilterInUrl = url.searchParams.get('keyword');
+    let ontologyList = new OntologyListUrlFactory();    
+    let collectionsInUrl = ontologyList.collections
+    let sortByInUrl = ontologyList.sortedBy;
+    let pageInUrl = ontologyList.page;
+    let sizeInUrl = ontologyList.size;
+    let keywordFilterInUrl = ontologyList.keywordFilter;
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
@@ -210,29 +211,28 @@ const OntologyList = (props) => {
 
 
 
-  function updateUrl(){         
-    let currentUrlParams = new URLSearchParams(window.location.search);  
-    currentUrlParams.delete('keyword');
-
-    if(keywordFilterString !== ""){
-      currentUrlParams.set('keyword', keywordFilterString);
-    }
+  function updateUrl(){     
+    let ontologyListUrl = new OntologyListUrlFactory();
+    ontologyListUrl.update({
+      keywordFilter: keywordFilterString,
+      collections: selectedCollections,
+      sortedBy: sortField,
+      page: pageNumber,
+      size: pageSize,
+      andOpValue: exclusiveCollections
+    });
     
-    currentUrlParams.delete('collection');
-    for(let col of selectedCollections){      
-      currentUrlParams.append('collection', col);        
-    }
-    currentUrlParams.set('and', exclusiveCollections);
-    currentUrlParams.set('sorting', sortField);
-    currentUrlParams.set('page', pageNumber);  
-    currentUrlParams.set('size', pageSize);            
-    history.push(window.location.pathname + "?" + currentUrlParams.toString());    
+    // history.push(updatedUrl);    
   }
 
 
 
   useEffect(() => {
-    setComponentData();    
+    setComponentData();
+    if(process.env.REACT_APP_PROJECT_NAME === ""){
+      // If TIB General, fetch all the collections. Otherwise not needed.
+      setCollectionData();
+    }    
     setStateBasedOnUrlParams();      
   }, []);
 

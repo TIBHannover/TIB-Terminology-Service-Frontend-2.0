@@ -5,12 +5,14 @@ import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
 import TermLib from "../../../../Libs/TermLib";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
+import { NoteContext } from "../../../../context/NoteContext";
 
 
 
 export const NoteCreationRender = (props) => {
     
     const ontologyPageContext = useContext(OntologyPageContext); 
+    const noteContext = useContext(NoteContext);
     
     useEffect(() => {
         if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
@@ -60,23 +62,15 @@ export const NoteCreationRender = (props) => {
                         <div class="modal-body"> 
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {!props.term && 
+                                    {!noteContext.selectedTermInTree && 
                                         <DropDown 
                                             options={constantsVars.COMPONENT_TYPES_FOR_DROPDOWN}
                                             dropDownId="note-artifact-types"
                                             dropDownTitle="Target Artifact"
-                                            dropDownValue={props.targetArtifactType}
+                                            dropDownValue={props.targetArtifact}
                                             dropDownChangeHandler={props.changeArtifactType}
                                         /> 
-                                    }
-                                    {/* {!props.isGeneric && props.targetArtifact > 0 &&                                        
-                                        <>
-                                        <span>{"Target Artifact: "}</span>
-                                        <b>
-                                            {constantsVars.COMPONENT_TYPES_FOR_DROPDOWN[parseInt(props.targetArtifact) - 1]['label']}
-                                        </b>
-                                        </>
-                                    } */}
+                                    }                                   
                                 </div>
                             </div>
                             <br></br>
@@ -94,17 +88,17 @@ export const NoteCreationRender = (props) => {
                             <br></br>
                             <div className="row">
                                 <div className="col-sm-8">
-                                    {parseInt(props.targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(props.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <p>About: <b>{ontologyPageContext.ontology.ontologyId}</b></p>
                                     }
-                                    {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
+                                    {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                                         <div>                                           
                                             <JumpTo
                                                 targetType={props.componentIdentity}                                                
                                                 label={"About *"}
                                                 handleJumtoSelection={props.handleJumtoSelection}
                                                 obsoletes={false}
-                                                initialInput={props.term ? props.term['label'] : false}
+                                                initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'] : props.selectedTerm['label']}
                                                 id="note_creation_auto_suggest"                                                
                                             />
                                             <br></br>
@@ -113,7 +107,7 @@ export const NoteCreationRender = (props) => {
                                 </div>
                             </div>  
                             <br></br>
-                            {parseInt(props.targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
+                            {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
                                 <>
                                 <div className="row">
                                     <div className="col-sm-10">
