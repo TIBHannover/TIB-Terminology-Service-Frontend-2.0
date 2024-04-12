@@ -7,7 +7,6 @@ import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModa
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
-import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 
 
@@ -56,8 +55,7 @@ export const CommentCardHeader = (props) =>{
     const ontologyPageContext = useContext(OntologyPageContext);
     const appContext = useContext(AppContext);
 
-    const noteUrlFactory = new NoteUrlFactory();
-    const UrlFactory = new CommonUrlFactory();
+    const noteUrlFactory = new NoteUrlFactory();    
 
     const [comment, setComment] = useState({});
     const [linkCopied, setLinkCopied] = useState(false);

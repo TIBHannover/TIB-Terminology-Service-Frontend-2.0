@@ -62,12 +62,12 @@ const OntologyList = (props) => {
 
 
   function setStateBasedOnUrlParams(){
-    let ontologyList = new OntologyListUrlFactory();    
-    let collectionsInUrl = ontologyList.collections
-    let sortByInUrl = ontologyList.sortedBy;
-    let pageInUrl = ontologyList.page;
-    let sizeInUrl = ontologyList.size;
-    let keywordFilterInUrl = ontologyList.keywordFilter;
+    let ontologyListUrlFactory = new OntologyListUrlFactory();    
+    let collectionsInUrl = ontologyListUrlFactory.collections
+    let sortByInUrl = ontologyListUrlFactory.sortedBy;
+    let pageInUrl = ontologyListUrlFactory.page;
+    let sizeInUrl = ontologyListUrlFactory.size;
+    let keywordFilterInUrl = ontologyListUrlFactory.keywordFilter;
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;

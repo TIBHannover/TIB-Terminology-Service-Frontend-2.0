@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import AlertBox from "../../../common/Alerts/Alerts";
 import NoteCard from "../NoteCard";
 import { NoteContext } from "../../../../context/NoteContext";
+import NoteUrlFactory from "../../../../UrlFactory/NoteUrlFactory";
+
 
 
 const ALL_TYPE = 0
@@ -30,6 +32,8 @@ export const NoteListRender = (props) => {
     const noteContext = useContext(NoteContext);
 
     const [renderContent, setRenderContent] = useState("");
+
+    const noteUrlFactory = new NoteUrlFactory();
 
 
     function createNotesList(){
@@ -141,7 +145,7 @@ export const NoteListRender = (props) => {
                         <div className="row">
                             <div className="col-sm-12">
                                 <Link 
-                                    to={generateBackButton()} 
+                                    to={noteUrlFactory.getBAckToListLink()} 
                                     onClick={props.backToListHandler} 
                                     className="btn btn-secondary">
                                     Back to Note List
@@ -155,12 +159,4 @@ export const NoteListRender = (props) => {
             </div>
     );
 
-}
-
-
-function generateBackButton(){
-    const searchParams = new URLSearchParams(window.location.search);        
-    searchParams.delete('noteId');
-    searchParams.delete('comment');  
-    return window.location.pathname + "?" +  searchParams.toString();
 }

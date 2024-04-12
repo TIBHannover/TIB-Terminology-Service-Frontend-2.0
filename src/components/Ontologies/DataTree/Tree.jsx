@@ -9,6 +9,7 @@ import SkosHelper from "./SkosHelpers";
 import KeyboardNavigator from "./KeyboardNavigation";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -337,8 +338,8 @@ const Tree = (props) => {
             setSubTreeMode(false);            
             keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);                                    
             urlFacory.setIri({newIri:clickedNodeIri});
-            urlFacory.deleteParam({name: 'noteId'});
-            urlFacory.deleteParam({name: 'subtab'});
+            urlFacory.deleteParam({name: SiteUrlParamNames.NoteId});
+            urlFacory.deleteParam({name: SiteUrlParamNames.SubTabInTermTable});
             ontologyPageContext.storeIriForComponent(clickedNodeIri, props.componentIdentity);            
         }    
     }

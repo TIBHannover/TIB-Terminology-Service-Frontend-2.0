@@ -6,6 +6,7 @@ import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import PropTypes from 'prop-types';
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -113,7 +114,7 @@ const NoteCommentList = (props) => {
 
 
     function cancelEdit(){        
-        commonUrlFactory.deleteParam({name: 'comment'});
+        commonUrlFactory.deleteParam({name: SiteUrlParamNames.CommentId});
         setCommentEditorState(null);
         setEditCommentId(-1);
         setEditMode(false);    

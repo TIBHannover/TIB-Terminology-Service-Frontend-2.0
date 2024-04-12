@@ -18,18 +18,6 @@ export const NoteCreationRender = (props) => {
         if(props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")){
             document.getElementById("publish_note_to_parent_checkbox").checked = true;
         }
-
-        // let autoCompleteInputBox = document.querySelector('.autosuggest-jumpto-container input');       
-        // const isModalOpen = document.querySelector('.modal.show');
-        // console.log(isModalOpen)
-        // if (autoCompleteInputBox && isModalOpen){        
-        //     autoCompleteInputBox.style.padding = '10px';
-        // }
-
-        // return() => {
-        //     autoCompleteInputBox.style.padding = '80px';
-        // };
-
     }, []);
 
    

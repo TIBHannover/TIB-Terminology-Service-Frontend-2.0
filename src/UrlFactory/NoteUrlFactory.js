@@ -80,6 +80,12 @@ class NoteUrlFactory {
   }
 
 
+  getBAckToListLink(){
+    let searchParams = new URLSearchParams(window.location.search);   
+    searchParams.delete(SiteUrlParamNames.NoteId);     
+    searchParams.delete(SiteUrlParamNames.CommentId);           
+    return window.location.pathname + "?" +  searchParams.toString();
+  }
 
 
 

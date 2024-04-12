@@ -6,6 +6,7 @@ import { NoteDetailRender } from "./renders/NoteDetailRender";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -46,7 +47,7 @@ const NoteDetail = () => {
 
 
     function reloadNoteDetail(){        
-        commonUrlFactory.deleteParam({name: 'comment'});
+        commonUrlFactory.deleteParam({name: SiteUrlParamNames.CommentId});
         setNote({});
         setCurrentUrl(commonUrlFactory.getCurrentUrl()); 
     }
