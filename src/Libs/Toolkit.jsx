@@ -86,13 +86,6 @@ class Toolkit{
     }
 
 
-    static setParamInUrl(param, newValue){
-        let locationObject = window.location;
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.set(param, newValue);          
-        return locationObject.pathname + "?" +  searchParams.toString();
-    }
-
 
     static getVarInLocalSrorageIfExist(varName, defaultValue){
         return localStorage.getItem(varName) ? localStorage.getItem(varName) : defaultValue;
@@ -127,11 +120,6 @@ class Toolkit{
         catch (error) {          
           return false;
         }
-    }
-
-
-    static removeObjectFromListById(list, objectIdToRemove){
-        return list.filter(obj => obj.id !== objectIdToRemove);
     }
       
 }

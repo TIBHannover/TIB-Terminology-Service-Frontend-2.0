@@ -14,6 +14,13 @@ import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 
 const SearchForm = () => {
 
+  /* 
+    The search form component is used to render the search form and handle the search input. 
+    It also handles the search input change, search input keydown, search trigger, 
+    exact checkbox click, obsoletes checkbox click, advanced search toggle, 
+    and search url creation.
+  */
+
   const searchUrlFactory = new SearchUrlFactory();
 
   const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");    

@@ -19,6 +19,10 @@ import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 const SearchResult = (props) => {
 
+  /*
+    This component is responsible for rendering the search results and facet.
+  */
+
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
   
