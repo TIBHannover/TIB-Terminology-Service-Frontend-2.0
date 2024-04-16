@@ -51,7 +51,8 @@
     padding: 10px 20px;
 }
   
-.react-autosuggest__suggestion--highlighted {
+.react-autosuggest__suggestion--highlighted, .highlightOption {
     background-color: #ddd;
+    color: black;
 }
 
