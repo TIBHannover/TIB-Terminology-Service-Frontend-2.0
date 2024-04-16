@@ -8,7 +8,7 @@ class Imprint extends React.Component{
                 <div className='col-sm-8'>
                 <h2>Imprint</h2>
                 <p>
-                    Imprint for this website &#8208; also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)
+                    Imprint for this website &#8208; also serves as provider identification according to &sect; Digitale Dienste Gesetz (DDG)
                 </p> 
                 <br/>      
                 <h3>Provider:</h3>
