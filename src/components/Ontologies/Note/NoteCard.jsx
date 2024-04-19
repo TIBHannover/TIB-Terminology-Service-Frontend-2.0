@@ -198,7 +198,7 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                         <i class="fa fa-solid fa-copy"></i> Link
                     </button>
                 </div>
-                {appContext.user &&
+                {appContext.user && note['visibility'] !== 'me' &&
                     <div class="dropdown-item note-dropdown-item">
                         <ReportModalBtn 
                             modalId={note['id']}  

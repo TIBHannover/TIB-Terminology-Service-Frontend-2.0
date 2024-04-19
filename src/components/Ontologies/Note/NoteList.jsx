@@ -44,6 +44,7 @@ const NoteList = (props) => {
     const [pageSize, setPageSize] = useState(noteUrlFactory.size ? noteUrlFactory.size : DEFAULT_PAGE_SIZE);
     const [noteTotalPageCount, setNoteTotalPageCount] = useState(0);
     const [selectedNoteId, setSelectedNoteId] = useState(!noteUrlFactory.noteId ? -1 : parseInt(noteUrlFactory.noteId));
+    const [selectedNote, setSelectedNote] = useState({});
     const [componentIsLoading, setComponentIsLoading] = useState(true);
     const [noteExist, setNoteExist] = useState(true);    
     const [selectedArtifactType, setSelectedArtifactType] = useState(selectedType);
@@ -189,7 +190,9 @@ const NoteList = (props) => {
             selectedTermInTree: props.term,
             noteSelectHandler: selectNote,
             setNoteCreationResultStatus: setNoteCreationResultStatus,
-            selectedNoteId: selectedNoteId
+            selectedNoteId: selectedNoteId,
+            selectedNote: selectedNote,
+            setSelectedNote: setSelectedNote
         };
 
         return(

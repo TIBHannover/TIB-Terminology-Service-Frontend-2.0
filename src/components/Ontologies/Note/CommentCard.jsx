@@ -6,6 +6,7 @@ import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
 import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
+import { NoteContext } from "../../../context/NoteContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 
@@ -54,6 +55,7 @@ export const CommentCardHeader = (props) =>{
 
     const ontologyPageContext = useContext(OntologyPageContext);
     const appContext = useContext(AppContext);
+    const noteContext = useContext(NoteContext);
 
     const noteUrlFactory = new NoteUrlFactory();    
 
@@ -62,6 +64,7 @@ export const CommentCardHeader = (props) =>{
 
     useEffect(() => {
         setComment(props.comment);
+        console.log("CommentCardHeader: ", props.comment);
     },[props.comment]);
     
     let deleteFormData = new FormData();
@@ -108,7 +111,7 @@ export const CommentCardHeader = (props) =>{
                                         <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
                                 </div>
-                                {appContext.user &&
+                                {appContext.user && noteContext.selectedNote['visibility'] !== "me" &&
                                     <div class="dropdown-item note-dropdown-item">
                                         <ReportModalBtn 
                                             modalId={comment['id']}  
