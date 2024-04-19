@@ -23,6 +23,7 @@ const LoginPanel = (props) => {
         
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
         localStorage.setItem("authProvider", authProvider);
+        localStorage.setItem("redirectUrl", window.location.href);
         window.location.replace(loginUrl);
     }
 

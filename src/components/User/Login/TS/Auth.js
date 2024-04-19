@@ -14,7 +14,8 @@ export function auth(){
                 if(resp["_result"]){                                                            
                     let userData = AuthTool.createUserDataObjectFromAuthResponse(resp["_result"]);
                     localStorage.setItem('user', JSON.stringify(userData)); 
-                    window.location.replace(process.env.REACT_APP_PROJECT_SUB_PATH);                    
+                    let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
+                    window.location.replace(redirectUrl);                    
                     return true;
                 }
                 AuthTool.disableLoginAnimation();                
