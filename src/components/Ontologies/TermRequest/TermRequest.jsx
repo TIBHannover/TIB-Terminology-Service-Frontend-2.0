@@ -8,6 +8,8 @@ import TextEditor from "../../common/TextEditor/TextEditor";
 import { getGitRepoTemplates, submitGitIssue } from "../../../api/tsMicroBackendCalls";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import PropTypes from 'prop-types';
+import { AppContext } from "../../../context/AppContext";
+import Login from "../../User/Login/TS/Login";
 
 
 
@@ -25,6 +27,7 @@ const TermRequest = (props) => {
     */
 
     const ontologyPageContext = useContext(OntologyPageContext);
+    const appContext = useContext(AppContext);
 
     const [editorState, setEditorState] = useState(null);
     const [submitFinished, setSubmitFinished] = useState(false);
@@ -192,11 +195,24 @@ const TermRequest = (props) => {
     },[]);
 
 
-    if(process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true"){            
-        return null;
-    }
-    if(localStorage.getItem('authProvider') !== 'github'){
+    if(process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true" || localStorage.getItem('authProvider') !== 'github'){            
         return "";
+    }
+    
+    if(!appContext.user){
+        const loginModalId = "loginModal" + props.reportType;
+        const loginBtn =  <button type="button" 
+                            class="btn btn-secondary issue-report-btn" 
+                            data-toggle="modal" 
+                            data-target={"#" + loginModalId}
+                            data-backdrop="static"
+                            data-keyboard="false"                                    
+                            >
+                            File {props.reportType === "termRequest" ? "a Term Request" : "a General Issue"}
+                        </button>                                 
+        return (            
+            <Login isModal={true}  customLoginBtn={loginBtn} customModalId={loginModalId} />
+        );
     }
 
     return(

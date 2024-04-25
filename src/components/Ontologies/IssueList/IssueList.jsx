@@ -182,13 +182,11 @@ const IssueList = (props) => {
                         </div>
                         
                         <div className="col-sm-3">                           
-                            {appContext.user &&                              
-                                <>
-                                <TermRequest reportType={"general"} />
-                                <br></br>
-                                <TermRequest reportType={"termRequest"} />
-                                </>                                                                  
-                            } 
+                            <>
+                            <TermRequest reportType={"general"} />
+                            <br></br>
+                            <TermRequest reportType={"termRequest"} />
+                            </> 
                         </div>
                     </div>                                                         
             </div>
