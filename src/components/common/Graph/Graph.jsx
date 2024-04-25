@@ -20,6 +20,8 @@ const Graph = (props) => {
     const graphNetwork = useRef({});
     const container = useRef(null);
 
+    const subClassRelationUri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+
     const options = {
         autoResize: true,
         height: '100%',
@@ -117,7 +119,7 @@ const Graph = (props) => {
         }
         else if(selectedEdges.length === 1){
             let edgeUri = selectedEdges[0].split('&uri=')[1]; // have a look at Edge Class Id format
-            if(edgeUri === "http://www.w3.org/2000/01/rdf-schema#subClassOf"){
+            if(edgeUri === subClassRelationUri){
                 setMessage("'Is a' property is not visible.");
                 return true;
             }
