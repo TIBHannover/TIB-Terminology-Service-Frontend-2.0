@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "../../../../context/AppContext";
-import {Logout} from "./Auth";
+import AuthFactory from "../AuthFactory";
 
 
 
@@ -106,7 +106,7 @@ const LoginPanel = (props) => {
                         {appContext.isUserSystemAdmin &&
                             <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</a> 
                         }                        
-                        <a class="dropdown-item" href="#" onClick={() => {Logout();}}>Logout</a>
+                        <a class="dropdown-item" href="#" onClick={() => {AuthFactory.runLogout();}}>Logout</a>
                     </div>                        
                 </div>
             }
