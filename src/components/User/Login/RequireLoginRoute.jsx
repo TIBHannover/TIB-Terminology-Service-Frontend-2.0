@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AuthFactory from "./AuthFactory";
 import {Route} from 'react-router-dom';
-import LoginPanel from "./TS/LoginPanel";
+import UserPanel from "./UserPanel";
 
 
 const RequireLoginRoute = ({component: Component, ...rest}) => {    
@@ -18,7 +18,7 @@ const RequireLoginRoute = ({component: Component, ...rest}) => {
     }
 
     else if (!loginStatus && loginProcessFinished) {           
-        return <LoginPanel isModal={false}></LoginPanel>;
+        return <UserPanel isModal={false}></UserPanel>;
     }
         
     return (<Route component={Component} {...rest}/> )

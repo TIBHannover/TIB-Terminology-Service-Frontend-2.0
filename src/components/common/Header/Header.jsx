@@ -1,8 +1,7 @@
 import Navbar from '../Navbar/Navbar';
 import TIB_Logo from '../../../assets/img/TIB_Logo_W_W.SVG';
 import SearchForm from '../../Search/SearchForm/SearchForm';
-// import LoginForm from '../../User/Login/Login';
-import LoginPanel from '../../User/Login/TS/LoginPanel';
+import UserPanel from '../../User/Login/UserPanel';
 
 
 function Header () {
@@ -11,7 +10,7 @@ function Header () {
       <div className='col-sm-10 site-header'>
           <div className='row'>
             <div className='col-sm-11 text-right'>
-              <LoginPanel isModal={true}></LoginPanel>            
+              <UserPanel isModal={true}></UserPanel>            
             </div>                      
           </div>
           <div className='row site-header-nav-logo-holder'>
