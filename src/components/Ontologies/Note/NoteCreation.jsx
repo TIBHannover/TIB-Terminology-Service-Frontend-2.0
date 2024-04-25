@@ -176,7 +176,7 @@ const NoteCreation = (props) => {
                                     <button type="button" 
                                         class="btn btn-secondary" 
                                         data-toggle="modal" 
-                                        data-target="#loginModalAddNote"
+                                        data-target={"#" + loginModalId}
                                         data-backdrop="static"
                                         data-keyboard="false"                                    
                                         >

@@ -195,7 +195,7 @@ const TermRequest = (props) => {
     },[]);
 
 
-    if(process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true" || localStorage.getItem('authProvider') !== 'github'){            
+    if(process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true"){            
         return "";
     }
     
@@ -213,6 +213,10 @@ const TermRequest = (props) => {
         return (            
             <Login isModal={true}  customLoginBtn={loginBtn} customModalId={loginModalId} />
         );
+    }
+
+    if(appContext.user && localStorage.getItem('authProvider') !== 'github'){
+        return "";
     }
 
     return(
