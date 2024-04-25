@@ -1,5 +1,5 @@
 import {useState, useEffect, useContext} from "react";
-import AuthTool from "../../User/Login/authTools";
+import AuthLib from "../../../Libs/AuthLib";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
@@ -13,7 +13,7 @@ import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
-const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+const callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
@@ -80,7 +80,7 @@ export const CommentCardHeader = (props) =>{
         <div className="row" key={"c-" + comment['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + comment['created_at'] + " by "} <b>{AuthTool.getUserName(comment['created_by'])}</b> 
+                    {"Opened on " + comment['created_at'] + " by "} <b>{AuthLib.getUserName(comment['created_by'])}</b> 
                 </small>
                 {linkCopied && <CopiedSuccessAlert message="link copied" />}
             </div>

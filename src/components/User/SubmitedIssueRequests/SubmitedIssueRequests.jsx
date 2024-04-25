@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AuthTool from "../Login/authTools";
+import AuthLib from "../../../Libs/AuthLib";
 
 
 const ISSUE_TYPE = {"general": "Generel", "termRequest": "Term Request"}
@@ -45,7 +45,7 @@ export default function SubmitedIssueRequests(){
 
 
 async function getIssueList(){    
-    let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});    
+    let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});    
     let issueList = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_submited_issues', {method: 'GET', headers:headers});
     issueList = await issueList.json();
     issueList = issueList['_result'];

@@ -1,28 +1,28 @@
-import AuthTool from "../authTools";
+import AuthLib from "../../../../Libs/AuthLib";
 
 
 export function auth(){
     let cUrl = window.location.href;
     if(cUrl.includes("code=")){
-        AuthTool.enableLoginAnimation();
+        AuthLib.enableLoginAnimation();
         let code = cUrl.split("code=")[1];        
-        let headers = AuthTool.setHeaderForTsMicroBackend();
+        let headers = AuthLib.setHeaderForTsMicroBackend();
         headers["X-TS-Auth-APP-Code"] = code;                       
         fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", headers:headers})
             .then((resp) => resp.json())
             .then((resp) => {                
                 if(resp["_result"]){                                                            
-                    let userData = AuthTool.createUserDataObjectFromAuthResponse(resp["_result"]);
+                    let userData = AuthLib.createUserDataObjectFromAuthResponse(resp["_result"]);
                     localStorage.setItem('user', JSON.stringify(userData)); 
                     let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
                     window.location.replace(redirectUrl);                    
                     return true;
                 }
-                AuthTool.disableLoginAnimation();                
+                AuthLib.disableLoginAnimation();                
                 return false;
             })
             .catch((e) => {
-                AuthTool.disableLoginAnimation();                
+                AuthLib.disableLoginAnimation();                
                 return false;
             })
     }
@@ -40,7 +40,7 @@ export async function isLogin(){
     let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;     
     if(user && user.token){        
         let data = new FormData();             
-        let headers = AuthTool.setHeaderForTsMicroBackend(true);
+        let headers = AuthLib.setHeaderForTsMicroBackend(true);
         data.append("username", user.username);
         let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", headers:headers, body: data});
         if (result.status !== 200){            
@@ -61,7 +61,7 @@ export async function isLogin(){
 
 
 export async function checkIsSystemAdmin(){               
-    let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});    
+    let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});    
     let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_system_admin', {method: "POST", headers:headers});    
     if (result.status !== 200){
         return false;

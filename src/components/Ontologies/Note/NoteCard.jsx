@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from "react";
 import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
 import { Link } from 'react-router-dom';
-import AuthTool from "../../User/Login/authTools";
+import AuthLib from "../../../Libs/AuthLib";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import NoteEdit from "./NoteEdit";
@@ -21,7 +21,7 @@ const VISIBILITY_HELP = {
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
-const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+const callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
@@ -112,7 +112,7 @@ export const NoteCardHeader = (props) => {
         <div className="row" key={"note-" + note['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                    {"Opened on " + note['created_at'] + " by "} <b>{AuthLib.getUserName(note['created_by'])}</b> 
                 </small>
                 {note['pinned'] && !note['imported']  && 
                     // Pinned Imported notes from child should not be pinned in parent
