@@ -7,6 +7,7 @@ import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
+import Login from "../../User/Login/TS/Login";
 import PropTypes from 'prop-types';
 
 
@@ -169,7 +170,23 @@ const NoteCreation = (props) => {
         return null;
     }
     if(!appContext.user){
-        return "";
+        const loginModalId = "loginModalAddNote";
+        const addNoteBtn = <div className="row float-right">
+                                <div className="col-sm-12">
+                                    <button type="button" 
+                                        class="btn btn-secondary" 
+                                        data-toggle="modal" 
+                                        data-target="#loginModalAddNote"
+                                        data-backdrop="static"
+                                        data-keyboard="false"                                    
+                                        >
+                                        Add Note
+                                    </button>
+                                </div>
+                            </div>   
+        return (            
+            <Login isModal={true}  customLoginBtn={addNoteBtn} customModalId={loginModalId} />
+        );
     }
 
     return (

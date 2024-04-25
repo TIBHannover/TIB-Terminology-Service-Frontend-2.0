@@ -4,7 +4,7 @@
 const Login = (props) => {    
 
 
-    function authProviderUrl(e){
+    function getAuthenticationCode(e){
         let authProvider = e.target.getAttribute("authProvider");
         let loginUrl = "";
         if(authProvider === "github"){
@@ -28,13 +28,13 @@ const Login = (props) => {
         return [
             <span>
                 <div className="row justify-content-center">
-                    <a onClick={authProviderUrl}  authProvider="github" className="btn btn-secondary github-login-btn">
+                    <a onClick={getAuthenticationCode}  authProvider="github" className="btn btn-secondary github-login-btn">
                         <i className="fa fa-github"></i> Sign in with GitHub
                     </a>
                 </div>
                 <br></br>
                 <div className="row justify-content-center">
-                    <a onClick={authProviderUrl} authProvider="orcid" className="btn btn-secondary orcid-login-btn">
+                    <a onClick={getAuthenticationCode} authProvider="orcid" className="btn btn-secondary orcid-login-btn">
                     <i class="fa-brands fa-orcid"></i> Sign in with ORCID
                     </a>
                 </div>   
@@ -47,13 +47,18 @@ const Login = (props) => {
         return null;
     }
 
+    const modalId = props.customModalId ? props.customModalId : "loginModal";
+
     return(
         <>
         {props.isModal &&
             // render the modal. Used in the site header 
             <span>
-                <a  className="login-btn-header" type="button" data-toggle="modal" data-target="#loginModal">Login</a>
-                <div class="modal fade loginModal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+                {props.customLoginBtn 
+                    ? props.customLoginBtn
+                    : <a className="login-btn-header" type="button" data-toggle="modal" data-target={"#" + modalId}>Login</a>
+                }
+                <div class="modal fade loginModal" id={modalId} tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -61,6 +66,16 @@ const Login = (props) => {
                                 <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
                             </div>
                             <div class="modal-body">
+                                {props.customLoginBtn && 
+                                    <>
+                                    <div className="row">
+                                        <div className="col-sm-12">
+                                            <h5>You need to login for accessing this function.</h5>
+                                        </div>
+                                    </div>                                    
+                                    <br></br>
+                                    </>
+                                }
                                 <div className="login-modal-hint-text">  
                                     <strong>Attention:</strong> Some of the features, such as term request, are only available if you 
                                                 authenticate with Github. 
