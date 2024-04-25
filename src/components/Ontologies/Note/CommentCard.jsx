@@ -8,6 +8,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import Login from "../../User/Login/TS/Login";
 
 
 
@@ -107,15 +108,13 @@ export const CommentCardHeader = (props) =>{
                                         >
                                         <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
-                                </div>
-                                {appContext.user &&
-                                    <div class="dropdown-item note-dropdown-item">
-                                        <ReportModalBtn 
-                                            modalId={comment['id']}  
-                                            key={"reportBtnComment" + comment['id']} 
-                                        />
-                                    </div>
-                                }
+                                </div>                                
+                                <div class="dropdown-item note-dropdown-item">
+                                    <ReportModalBtn 
+                                        modalId={comment['id']}  
+                                        key={"reportBtnComment" + comment['id']} 
+                                    />
+                                </div>                                
                                 {comment['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
@@ -159,7 +158,8 @@ export const CommentCardHeader = (props) =>{
                 callHeaders={callHeader}
                 reportEndpoint={reportEndpoint}                
                 key={"reportComment" + comment['id']}
-            />            
+            /> 
+            <Login isModal={true} customModalId="loginModalReport" withoutButton={true} />          
         </div> 
     ];
 }

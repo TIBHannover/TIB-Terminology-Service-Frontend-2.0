@@ -10,6 +10,7 @@ import { NoteContext } from "../../../context/NoteContext";
 import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import Login from "../../User/Login/TS/Login";
 
 
 
@@ -159,6 +160,7 @@ export const NoteCardHeader = (props) => {
                 reportEndpoint={reportEndpoint}                
                 key={"reportNote" + note['id']}
             />
+            <Login isModal={true} customModalId="loginModalReport" withoutButton={true} />
         </div> 
     ];
 }
@@ -197,15 +199,13 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                         >
                         <i class="fa fa-solid fa-copy"></i> Link
                     </button>
-                </div>
-                {appContext.user &&
-                    <div class="dropdown-item note-dropdown-item">
-                        <ReportModalBtn 
-                            modalId={note['id']}  
-                            key={"reportBtnNote" + note['id']} 
-                        />
-                    </div>
-                }
+                </div>                
+                <div class="dropdown-item note-dropdown-item">
+                    <ReportModalBtn 
+                        modalId={note['id']}  
+                        key={"reportBtnNote" + note['id']} 
+                    />
+                </div>                
                 {note['can_edit'] && !note['imported'] && 
                     <span>
                         <div class="dropdown-divider"></div>

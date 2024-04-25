@@ -1,8 +1,25 @@
-import {useState} from "react";
+import {useState, useContext} from "react";
 import AlertBox from "../Alerts/Alerts";
+import { AppContext } from "../../../context/AppContext";
+import Login from "../../User/Login/TS/Login";
 
 
 export const ReportModalBtn = (props) => {
+
+    const appContext = useContext(AppContext);
+
+    if(!appContext.user){
+        const loginModalId = "loginModalReport";
+        return <button type="button" 
+                    class="btn btn-sm borderless-btn note-action-menu-btn" 
+                    data-toggle="modal" 
+                    data-target={"#" + loginModalId}
+                    data-backdrop="static"                                                         
+                    >
+                    Report
+                </button>        
+    }
+
     return (
         <button type="button" 
                 class="btn btn-sm borderless-btn note-action-menu-btn" 

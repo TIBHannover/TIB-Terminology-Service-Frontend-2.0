@@ -43,6 +43,19 @@ const Login = (props) => {
     }
 
 
+
+    function createLoginButton(){
+        if(props.withoutButton){
+            return "";
+        }
+        if(props.customLoginBtn){
+            return props.customLoginBtn;
+        }
+        return <a className="login-btn-header" type="button" data-toggle="modal" data-target="#loginModal">Login</a>;
+    }
+
+
+
     if(process.env.REACT_APP_AUTH_FEATURE !== "true"){            
         return null;
     }
@@ -54,10 +67,7 @@ const Login = (props) => {
         {props.isModal &&
             // render the modal. Used in the site header 
             <span>
-                {props.customLoginBtn 
-                    ? props.customLoginBtn
-                    : <a className="login-btn-header" type="button" data-toggle="modal" data-target={"#" + modalId}>Login</a>
-                }
+                {createLoginButton()}
                 <div class="modal fade loginModal" id={modalId} tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -66,7 +76,7 @@ const Login = (props) => {
                                 <a type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
                             </div>
                             <div class="modal-body">
-                                {props.customLoginBtn && 
+                                {(props.customLoginBtn || props.withoutButton) && 
                                     <>
                                     <div className="row">
                                         <div className="col-sm-12">
