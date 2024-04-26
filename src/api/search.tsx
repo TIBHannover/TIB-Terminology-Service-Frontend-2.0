@@ -1,27 +1,15 @@
 import { getCallSetting } from "./constants";
-
-
-
-type SearchApiInput = {
-  searchQuery: string,
-  page: number,
-  size: number,
-  selectedOntologies: string[],
-  selectedTypes: string[],
-  selectedCollections: string[],
-  obsoletes: boolean,
-  exact: boolean,
-  isLeaf: boolean,
-  searchInValues: string[],
-  searchUnderIris: string[],
-  searchUnderAllIris: string[]
-};
+import { SearchApiInput, 
+  SuggestAndSelectApiInput,
+  SearchApiResponse,
+  BaseSearchSingleResult,
+  AutoSuggestSingleResult
+} from "./types/searchApiTypes";
 
 
 
 
-export async function olsSearch(inputData: SearchApiInput) 
-    {
+export async function olsSearch(inputData: SearchApiInput):Promise<SearchApiResponse|[]>{
     try{        
         let rangeStart:number = (inputData.page - 1) * inputData.size;
         let searchUrl:string = process.env.REACT_APP_SEARCH_URL + `?q=${inputData.searchQuery}&start=${rangeStart}&groupField=iri&rows=${inputData.size}`;
@@ -52,17 +40,8 @@ export async function olsSearch(inputData: SearchApiInput)
 
 
 
-type SuggestAndSelectApiInput = {
-  searchQuery: string,
-  ontologyIds: string[],
-  types: string[],
-  obsoletes: boolean,
-  collectionIds: string[]
-};
 
-
-
-export async function getJumpToResult(inputData:SuggestAndSelectApiInput, count:number=10){
+export async function getJumpToResult(inputData:SuggestAndSelectApiInput, count:number=10):Promise<BaseSearchSingleResult[]>{
     try{
       let autocompleteApiBaseUrl:string =  process.env.REACT_APP_SEARCH_URL || '';
       autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
@@ -84,7 +63,7 @@ export async function getJumpToResult(inputData:SuggestAndSelectApiInput, count:
 
 
 
-export async function getAutoCompleteResult(inputData:SuggestAndSelectApiInput, count:number=5){
+export async function getAutoCompleteResult(inputData:SuggestAndSelectApiInput, count:number=5):Promise<AutoSuggestSingleResult[]>{
     try{
       let url:string =  process.env.REACT_APP_API_URL + `/suggest?q=${inputData['searchQuery']}&rows=${count}`;
       url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
