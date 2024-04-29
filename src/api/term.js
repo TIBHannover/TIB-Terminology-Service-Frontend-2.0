@@ -36,12 +36,11 @@ class TermApi{
             this.term['subClassOf'] = null;                          
             this.term['isIndividual'] = (this.termType === "individuals");            
             await this.fetchImportedAndAlsoInOntologies();
-                
-            if(this.termType === "terms"){
-                let curationStatus = await this.createHasCurationStatus();
-                if(curationStatus){
-                    this.term['curationStatus'] = curationStatus;
-                }
+            let curationStatus = await this.createHasCurationStatus();
+            if(curationStatus){
+                this.term['curationStatus'] = curationStatus;
+            }               
+            if(this.termType === "terms"){                
                 let parents = await this.getParents();
                 this.term['parents'] = parents;
                 await this.fetchClassRelations();                

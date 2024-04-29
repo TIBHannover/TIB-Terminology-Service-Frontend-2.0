@@ -9,6 +9,7 @@ import { AppContext } from "../../../context/AppContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
+import Toolkit from "../../../Libs/Toolkit";
 
 
 
@@ -81,7 +82,7 @@ export const CommentCardHeader = (props) =>{
         <div className="row" key={"c-" + comment['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + comment['created_at'] + " by "} <b>{AuthLib.getUserName(comment['created_by'])}</b> 
+                    {"Opened on " + Toolkit.formatDateTime(comment['created_at']) + " by "} <b>{AuthTool.getUserName(comment['created_by'])}</b> 
                 </small>
                 {linkCopied && <CopiedSuccessAlert message="link copied" />}
             </div>
