@@ -10,8 +10,24 @@ class TermApi{
     constructor(ontology, iri, termType){
         this.ontology = ontology;        
         this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
-        this.termType = termType;
+        this.setTtermType(termType);
         this.term = {};
+    }
+
+
+    setTtermType(termType){
+        if(termType === "class"){
+            this.termType = "terms";
+        }
+        else if(termType === "property"){
+            this.termType = "properties";
+        }
+        else if(termType === "individual"){
+            this.termType = "individuals";
+        }
+        else{
+            this.termType = termType;
+        }
     }
 
 

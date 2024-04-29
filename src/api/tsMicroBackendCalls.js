@@ -1,4 +1,5 @@
 import AuthLib from "../Libs/AuthLib";
+import TermApi from "./term";
 
 
 
@@ -68,7 +69,14 @@ export async function getNoteDetail({noteId, ontologyId}){
         }
         result = await result.json();        
         result['_result']['note']['comments_count'] = result['_result']['note']['comments'].length;
-        return result['_result'];
+        let note = result['_result'];
+        if(!note['note']['semantic_component_label']){
+            let termApi = new TermApi(note['note']['ontology_id'], note['note']['semantic_component_iri'], note['note']['semantic_component_type']);
+            await termApi.fetchTermWithoutRelations();
+            note['note']['semantic_component_label'] = termApi.term['label'];
+        }
+        return note;
+
     }
     catch(e){        
         return {}
@@ -96,7 +104,15 @@ export async function getNoteList({ontologyId, type, pageNumber, pageSize, targe
 
         let notes = await fetch(url, {headers:headers});
         notes = await notes.json();
-        return notes['_result'];
+        notes = notes['_result'];
+        for(let note of notes['notes']){
+            if(!note['semantic_component_label']){
+                let termApi = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
+                await termApi.fetchTermWithoutRelations();
+                note['semantic_component_label'] = termApi.term['label'];
+            }
+        }
+        return notes;
     }
     catch (e){        
         return null;
