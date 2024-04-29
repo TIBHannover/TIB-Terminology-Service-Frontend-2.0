@@ -10,6 +10,7 @@ import { NoteContext } from "../../../context/NoteContext";
 import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import Toolkit from "../../../Libs/Toolkit";
 
 
 
@@ -112,7 +113,7 @@ export const NoteCardHeader = (props) => {
         <div className="row" key={"note-" + note['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                    {"Opened on " + Toolkit.formatDateTime(note['created_at']) + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
                 </small>
                 {note['pinned'] && !note['imported']  && 
                     // Pinned Imported notes from child should not be pinned in parent

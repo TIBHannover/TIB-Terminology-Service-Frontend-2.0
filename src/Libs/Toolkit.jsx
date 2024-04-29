@@ -121,6 +121,16 @@ class Toolkit{
           return false;
         }
     }
+
+
+    static formatDateTime(datetime){
+        // if the time is 00:00:00, then remove it
+        if(datetime && typeof(datetime) !== "undefined" && datetime.includes("00:00:00")){
+            let date = datetime.split("00:00:00")[0];            
+            return date;
+        }
+        return datetime;
+    }
       
 }
 
