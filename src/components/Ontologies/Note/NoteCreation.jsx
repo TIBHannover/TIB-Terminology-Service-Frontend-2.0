@@ -81,7 +81,8 @@ const NoteCreation = (props) => {
     function submit(){
         let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle' + noteIdForRender).value;
-        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
+        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];     
+        let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];        
         let noteContent = "";                     
         if(!editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
@@ -112,6 +113,7 @@ const NoteCreation = (props) => {
 
         if(parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = ontologyPageContext.ontology.ontologyId;
+            selectedTargetTermLabel = ontologyPageContext.ontology.ontology_name;
         }
 
         
@@ -120,12 +122,14 @@ const NoteCreation = (props) => {
         if(noteContext.selectedTermInTree){
             // Note creation for an specific term in from term detail tabel
             selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
-            targetType = props.targetArtifactType;
+            selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
+            targetType = noteContext.selectedTermTypeInTree;
         }
                 
         let data = new FormData();
         data.append("title", noteTitle);
         data.append("semantic_component_iri", selectedTargetTermIri);
+        data.append("semantic_component_label", selectedTargetTermLabel);
         data.append("content", noteContent);
         data.append("ontology_id", ontologyPageContext.ontology.ontologyId);        
         data.append("semantic_component_type", targetType);
