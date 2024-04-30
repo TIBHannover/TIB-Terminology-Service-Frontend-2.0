@@ -10,8 +10,24 @@ class TermApi{
     constructor(ontology, iri, termType){
         this.ontology = ontology;        
         this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
-        this.termType = termType;
+        this.setTtermType(termType);
         this.term = {};
+    }
+
+
+    setTtermType(termType){
+        if(termType === "class"){
+            this.termType = "terms";
+        }
+        else if(termType === "property"){
+            this.termType = "properties";
+        }
+        else if(termType === "individual"){
+            this.termType = "individuals";
+        }
+        else{
+            this.termType = termType;
+        }
     }
 
 
@@ -36,12 +52,11 @@ class TermApi{
             this.term['subClassOf'] = null;                          
             this.term['isIndividual'] = (this.termType === "individuals");            
             await this.fetchImportedAndAlsoInOntologies();
-                
-            if(this.termType === "terms"){
-                let curationStatus = await this.createHasCurationStatus();
-                if(curationStatus){
-                    this.term['curationStatus'] = curationStatus;
-                }
+            let curationStatus = await this.createHasCurationStatus();
+            if(curationStatus){
+                this.term['curationStatus'] = curationStatus;
+            }               
+            if(this.termType === "terms"){                
                 let parents = await this.getParents();
                 this.term['parents'] = parents;
                 await this.fetchClassRelations();                

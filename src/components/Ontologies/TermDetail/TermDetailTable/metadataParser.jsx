@@ -55,9 +55,13 @@ export function propertyMetaData(term){
   metadata['Description'] = {"value": term.description, "isLink": false};
   metadata['fullIRI'] = {"value": term.iri, "isLink": true};
   metadata['Ontology'] = {"value": term.ontology_name, "isLink": false};
+  metadata['has curation status'] = {"value": term.curationStatus, "isLink": false};
 
   if(term.annotation){
     for(let key in term.annotation){
+      if(key === 'has curation status'){          
+        continue;
+      }
       metadata[key] = [];
       let value = [];
       for(let annotValue of term.annotation[key]){

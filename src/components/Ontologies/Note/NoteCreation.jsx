@@ -7,6 +7,7 @@ import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
+import Login from "../../User/Login/TS/Login";
 import PropTypes from 'prop-types';
 
 
@@ -81,7 +82,8 @@ const NoteCreation = (props) => {
     function submit(){
         let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle' + noteIdForRender).value;
-        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
+        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];     
+        let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];        
         let noteContent = "";                     
         if(!editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
@@ -112,6 +114,7 @@ const NoteCreation = (props) => {
 
         if(parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = ontologyPageContext.ontology.ontologyId;
+            selectedTargetTermLabel = ontologyPageContext.ontology.ontology_name;
         }
 
         
@@ -120,12 +123,14 @@ const NoteCreation = (props) => {
         if(noteContext.selectedTermInTree){
             // Note creation for an specific term in from term detail tabel
             selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
-            targetType = props.targetArtifactType;
+            selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
+            targetType = noteContext.selectedTermTypeInTree;
         }
                 
         let data = new FormData();
         data.append("title", noteTitle);
         data.append("semantic_component_iri", selectedTargetTermIri);
+        data.append("semantic_component_label", selectedTargetTermLabel);
         data.append("content", noteContent);
         data.append("ontology_id", ontologyPageContext.ontology.ontologyId);        
         data.append("semantic_component_type", targetType);
@@ -169,7 +174,23 @@ const NoteCreation = (props) => {
         return null;
     }
     if(!appContext.user){
-        return "";
+        const loginModalId = "loginModalAddNote";
+        const addNoteBtn = <div className="row float-right">
+                                <div className="col-sm-12">
+                                    <button type="button" 
+                                        class="btn btn-secondary" 
+                                        data-toggle="modal" 
+                                        data-target={"#" + loginModalId}
+                                        data-backdrop="static"
+                                        data-keyboard="false"                                    
+                                        >
+                                        Add Note
+                                    </button>
+                                </div>
+                            </div>   
+        return (            
+            <Login isModal={true}  customLoginBtn={addNoteBtn} customModalId={loginModalId} />
+        );
     }
 
     return (

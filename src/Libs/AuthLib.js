@@ -1,7 +1,7 @@
-import UserModel from "../../../models/user";
+import UserModel from "../models/user";
 
 
-class AuthTool{
+class AuthLib{
 
     static setHeaderForTsMicroBackend(withAccessToken=false) { 
         let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;                    
@@ -70,4 +70,4 @@ class AuthTool{
 
 }
 
-export default AuthTool;
+export default AuthLib;

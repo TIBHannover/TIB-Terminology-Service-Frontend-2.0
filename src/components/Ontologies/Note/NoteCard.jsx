@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from "react";
 import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
 import { Link } from 'react-router-dom';
-import AuthTool from "../../User/Login/authTools";
+import AuthLib from "../../../Libs/AuthLib";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import NoteEdit from "./NoteEdit";
@@ -10,6 +10,8 @@ import { NoteContext } from "../../../context/NoteContext";
 import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import Login from "../../User/Login/TS/Login";
+import Toolkit from "../../../Libs/Toolkit";
 
 
 
@@ -21,7 +23,7 @@ const VISIBILITY_HELP = {
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
-const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+const callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
@@ -112,7 +114,7 @@ export const NoteCardHeader = (props) => {
         <div className="row" key={"note-" + note['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + note['created_at'] + " by "} <b>{AuthTool.getUserName(note['created_by'])}</b> 
+                    {"Opened on " + Toolkit.formatDateTime(note['created_at']) + " by "} <b>{AuthLib.getUserName(note['created_by'])}</b> 
                 </small>
                 {note['pinned'] && !note['imported']  && 
                     // Pinned Imported notes from child should not be pinned in parent
@@ -159,6 +161,7 @@ export const NoteCardHeader = (props) => {
                 reportEndpoint={reportEndpoint}                
                 key={"reportNote" + note['id']}
             />
+            <Login isModal={true} customModalId="loginModalReport" withoutButton={true} />
         </div> 
     ];
 }
@@ -197,15 +200,13 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                         >
                         <i class="fa fa-solid fa-copy"></i> Link
                     </button>
-                </div>
-                {appContext.user &&
-                    <div class="dropdown-item note-dropdown-item">
-                        <ReportModalBtn 
-                            modalId={note['id']}  
-                            key={"reportBtnNote" + note['id']} 
-                        />
-                    </div>
-                }
+                </div>                
+                <div class="dropdown-item note-dropdown-item">
+                    <ReportModalBtn 
+                        modalId={note['id']}  
+                        key={"reportBtnNote" + note['id']} 
+                    />
+                </div>                
                 {note['can_edit'] && !note['imported'] && 
                     <span>
                         <div class="dropdown-divider"></div>

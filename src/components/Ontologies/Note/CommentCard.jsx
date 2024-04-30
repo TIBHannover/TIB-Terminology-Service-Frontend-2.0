@@ -1,5 +1,5 @@
 import {useState, useEffect, useContext} from "react";
-import AuthTool from "../../User/Login/authTools";
+import AuthLib from "../../../Libs/AuthLib";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
@@ -8,12 +8,14 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
+import Login from "../../User/Login/TS/Login";
+import Toolkit from "../../../Libs/Toolkit";
 
 
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
-const callHeader = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+const callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
@@ -80,7 +82,7 @@ export const CommentCardHeader = (props) =>{
         <div className="row" key={"c-" + comment['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + comment['created_at'] + " by "} <b>{AuthTool.getUserName(comment['created_by'])}</b> 
+                    {"Opened on " + Toolkit.formatDateTime(comment['created_at']) + " by "} <b>{AuthLib.getUserName(comment['created_by'])}</b> 
                 </small>
                 {linkCopied && <CopiedSuccessAlert message="link copied" />}
             </div>
@@ -107,15 +109,13 @@ export const CommentCardHeader = (props) =>{
                                         >
                                         <i class="fa fa-solid fa-copy"></i> Link
                                     </button>
-                                </div>
-                                {appContext.user &&
-                                    <div class="dropdown-item note-dropdown-item">
-                                        <ReportModalBtn 
-                                            modalId={comment['id']}  
-                                            key={"reportBtnComment" + comment['id']} 
-                                        />
-                                    </div>
-                                }
+                                </div>                                
+                                <div class="dropdown-item note-dropdown-item">
+                                    <ReportModalBtn 
+                                        modalId={comment['id']}  
+                                        key={"reportBtnComment" + comment['id']} 
+                                    />
+                                </div>                                
                                 {comment['can_edit'] &&
                                     <span>
                                         <div class="dropdown-divider"></div>
@@ -159,7 +159,8 @@ export const CommentCardHeader = (props) =>{
                 callHeaders={callHeader}
                 reportEndpoint={reportEndpoint}                
                 key={"reportComment" + comment['id']}
-            />            
+            /> 
+            <Login isModal={true} customModalId="loginModalReport" withoutButton={true} />          
         </div> 
     ];
 }

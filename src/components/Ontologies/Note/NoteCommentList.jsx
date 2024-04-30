@@ -134,10 +134,6 @@ const NoteCommentList = (props) => {
     }
 
 
-    // useEffect(() => {
-
-    // }, []);
-
     useEffect(() => {
         jumpToCommentIfExist();
     }, [props.note]);

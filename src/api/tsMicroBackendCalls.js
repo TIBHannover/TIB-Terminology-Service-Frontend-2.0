@@ -1,10 +1,11 @@
-import AuthTool from "../components/User/Login/authTools";
+import AuthLib from "../Libs/AuthLib";
+import TermApi from "./term";
 
 
 
 export async function submitNote(noteDataForm, editMode=false){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});        
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});        
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
         let path = !editMode ?  '/note/create_note' : '/note/update_note';
         let extractKey = !editMode ? 'note_created' : 'note_updated';
@@ -22,7 +23,7 @@ export async function submitNote(noteDataForm, editMode=false){
 
 export async function submitNoteComment({noteId, content}){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
         data.append("noteId", noteId);
         data.append("content", content);
@@ -41,7 +42,7 @@ export async function submitNoteComment({noteId, content}){
 
 export async function editNoteComment({commentId, content, ontologyId}){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});       
         let data = new FormData();
         data.append("comment_id", commentId);
         data.append("content", content);
@@ -60,7 +61,7 @@ export async function editNoteComment({commentId, content, ontologyId}){
 
 export async function getNoteDetail({noteId, ontologyId}){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
         let url =  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/note?id=' + noteId + '&withComments=True&ontology=' + ontologyId;
         let result = await fetch(url, {headers:headers});
         if (result.status === 404){
@@ -68,7 +69,14 @@ export async function getNoteDetail({noteId, ontologyId}){
         }
         result = await result.json();        
         result['_result']['note']['comments_count'] = result['_result']['note']['comments'].length;
-        return result['_result'];
+        let note = result['_result'];
+        if(!note['note']['semantic_component_label']){
+            let termApi = new TermApi(note['note']['ontology_id'], note['note']['semantic_component_iri'], note['note']['semantic_component_type']);
+            await termApi.fetchTermWithoutRelations();
+            note['note']['semantic_component_label'] = termApi.term['label'];
+        }
+        return note;
+
     }
     catch(e){        
         return {}
@@ -79,7 +87,7 @@ export async function getNoteDetail({noteId, ontologyId}){
 
 export async function getNoteList({ontologyId, type, pageNumber, pageSize, targetTerm=null, onlyOntologyOriginalNotes}){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});                        
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});                        
         
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/notes_list?ontology=' + ontologyId;
         url += ('&page=' + pageNumber + '&size=' + pageSize)
@@ -96,7 +104,15 @@ export async function getNoteList({ontologyId, type, pageNumber, pageSize, targe
 
         let notes = await fetch(url, {headers:headers});
         notes = await notes.json();
-        return notes['_result'];
+        notes = notes['_result'];
+        for(let note of notes['notes']){
+            if(!note['semantic_component_label']){
+                let termApi = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
+                await termApi.fetchTermWithoutRelations();
+                note['semantic_component_label'] = termApi.term['label'];
+            }
+        }
+        return notes;
     }
     catch (e){        
         return null;
@@ -131,7 +147,7 @@ export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueS
 
 export async function sendResolveRequest({objectType, objectId, action, creatorUsername}){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});  
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});  
         let formData = new FormData();
         formData.append('objectType', objectType);
         formData.append('objectId', objectId);
@@ -154,7 +170,7 @@ export async function sendResolveRequest({objectType, objectId, action, creatorU
 
 export async function getReportList(){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});         
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});         
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/report_list';
         let result = await fetch(url, {method:'GET', headers:headers});
         if (result.status !== 200){
@@ -172,7 +188,7 @@ export async function getReportList(){
 
 export async function getGitRepoTemplates({repoUrl, gitUsername}){
     try{
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});         
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});         
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates';
         let formData = new FormData();
         formData.append("repo_url", repoUrl);
@@ -194,7 +210,7 @@ export async function getGitRepoTemplates({repoUrl, gitUsername}){
 export async function submitGitIssue({repoUrl, gitUsername, issueTitle, issueBody, issueType, ontologyId}){
     try{
         let data = new FormData();
-        let headers = AuthTool.setHeaderForTsMicroBackend({withAccessToken:true});       
+        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});       
         data.append("ontology_id", ontologyId);
         data.append("username", gitUsername);        
         data.append("title", issueTitle);

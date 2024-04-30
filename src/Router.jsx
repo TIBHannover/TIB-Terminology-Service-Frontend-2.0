@@ -14,7 +14,7 @@ import UsagePage from './components/Usage/Usage';
 import SubmitedIssueRequests from './components/User/SubmitedIssueRequests/SubmitedIssueRequests';
 import UserProfile from './components/User/Profile/Profile';
 import RequireLoginRoute from './components/User/Login/RequireLoginRoute';
-import LoginPanel from "./components/User/Login/TS/LoginPanel";
+import UserPanel from "./components/User/Login/UserPanel";
 import ReportPanel from "./components/User/Admin/ReportPanel";
 import Sitemap from './components/Sitemap/Sitemap';
 import {Route, Switch} from 'react-router-dom';
@@ -27,7 +27,7 @@ const AppRouter = () => {
     return (
         <Switch>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
-            <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={LoginPanel}/>    
+            <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={UserPanel}/>    
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests}/>
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel}/>
