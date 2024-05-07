@@ -1,14 +1,18 @@
 import AuthLib from "../Libs/AuthLib";
+import { LoginResponse } from "./types/userTypes";
 
 
 
-export async function runLogin(authCode:string):Promise<any|[]>{
+export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
     try{
         let headers:any = AuthLib.setHeaderForTsMicroBackend();
         headers["X-TS-Auth-APP-Code"] = authCode;
         let result:any = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/user/login", {method: "POST", headers:headers});
         result = await result.json();
-        result = result['_result'];        
+        result = result['_result'];
+        if(result && result["issue"]){
+            return [];
+        }        
         return result;
     }
     catch(e){

@@ -4,6 +4,7 @@ import OntologyApi from "../../../api/ontology";
 
 
 
+
 const AddCollection = () => {
 
     const [selectedOntologies, setSelectedOntologies] = useState([]);
@@ -53,9 +54,7 @@ const AddCollection = () => {
                                 <div className="col-sm-12">
                                     <label className="required_input" for="collectionTitle">Name</label>
                                     <input 
-                                        type="text" 
-                                        // value={props.noteTitle} 
-                                        // onChange={() => {props.onTextInputChange()}}                                                 
+                                        type="text"                                                                                       
                                         class="form-control" 
                                         id="collectionTitle"
                                         placeholder="Enter a Name">
@@ -87,9 +86,7 @@ const AddCollection = () => {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <label for="collectionDescription">Description (optional)</label>
-                                    <textarea 
-                                        // value={props.noteContent} 
-                                        // onChange={() => {props.onTextInputChange()}} 
+                                    <textarea                                         
                                         class="form-control" 
                                         id="collectionDescription"
                                         rows="5"
