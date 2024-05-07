@@ -11,7 +11,7 @@ const baseUrl:string|undefined = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
 
 export async function saveCollection(collectionData:CollectionData):Promise<CollectionDataResponse|null>{
     try{
-        let headers:any = AuthLib.setHeaderForTsMicroBackend();
+        let headers:any = AuthLib.setHeaderForTsMicroBackend(true);
         headers["Content-Type"] = "application/json";        
         let result:any = await fetch(baseUrl + "/collection/create", {method: "POST", headers:headers, body: JSON.stringify(collectionData)});
         result = await result.json();

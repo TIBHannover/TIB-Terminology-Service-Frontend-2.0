@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import OntologyApi from "../../../api/ontology";
+import { saveCollection } from "../../../api/userCollection";
 
 
 
@@ -28,6 +29,25 @@ const AddCollection = () => {
     function handleOntologySelection(selectedList, selectedItem){        
         setSelectedOntologies(selectedList);  
         // setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
+    }
+
+
+    async function saveNewCollection(){
+        let collectionTitle = document.getElementById('collectionTitle').value;
+        let collectionDescription = document.getElementById('collectionDescription').value;
+        let ontologyIds = [];
+        for (let ontology of selectedOntologies){
+            ontologyIds.push(ontology['id']);
+        }
+        let collectionData = {
+            'title': collectionTitle,
+            'description': collectionDescription,
+            'ontology_ids': ontologyIds
+        };
+        let response = await saveCollection(collectionData);
+        if(response){
+            console.log(response)
+        }
     }
 
 
@@ -99,7 +119,7 @@ const AddCollection = () => {
                             <div className="col-auto mr-auto">
                                 <button type="button" class="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                             </div>                             
-                            <button type="button" class="btn btn-secondary">Save</button>
+                            <button type="button" class="btn btn-secondary" onClick={saveNewCollection}>Save</button>
                         </div>
                     </div>
                 </div>
