@@ -24,24 +24,23 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
-  
-  
+
+
   useEffect(() => {
     AppHelpers.setSiteTitleAndFavIcon();
     AppHelpers.checkBackendStatus();
-    
+
     if(process.env.REACT_APP_AUTH_FEATURE === "true"){   
       let cUrl = window.location.href;
       if(cUrl.includes("code=")){
         AuthFactory.runAuthentication();        
       }
-      
-      AuthFactory.userIsLogin().then((resp) => {setUser(resp);});
-      
-      AuthFactory.userIsSysAdmin().then((resp) => {        
-        setIsSystemAdmin(resp);
-      });
 
+      AuthFactory.userIsLogin().then((resp) => {
+        setUser(resp);
+        setIsSystemAdmin(resp?.systemAdmin);
+      });
+      
       getReportList().then((reports) => {
         setReportsListForAdmin(reports);
       });

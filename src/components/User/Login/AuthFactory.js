@@ -1,4 +1,6 @@
 import AuthLib from "../../../Libs/AuthLib";
+import { runLogin, isLogin } from "../../../api/user";
+
 
 
 class AuthFactory{
@@ -8,25 +10,17 @@ class AuthFactory{
         if(cUrl.includes("code=")){
             AuthLib.enableLoginAnimation();
             let code = cUrl.split("code=")[1];        
-            let headers = AuthLib.setHeaderForTsMicroBackend();
-            headers["X-TS-Auth-APP-Code"] = code;                       
-            fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/login', {method: "POST", headers:headers})
-                .then((resp) => resp.json())
-                .then((resp) => {                
-                    if(resp["_result"]){                                                            
-                        let userData = AuthLib.createUserDataObjectFromAuthResponse(resp["_result"]);
-                        localStorage.setItem('user', JSON.stringify(userData)); 
-                        let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
-                        window.location.replace(redirectUrl);                    
-                        return true;
-                    }
-                    AuthLib.disableLoginAnimation();                
-                    return false;
-                })
-                .catch((e) => {
-                    AuthLib.disableLoginAnimation();                
-                    return false;
-                })
+            runLogin(code).then((resp) => {
+                if(resp){                    
+                    let userData = AuthLib.createUserDataObjectFromAuthResponse(resp);
+                    localStorage.setItem('user', JSON.stringify(userData)); 
+                    let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
+                    window.location.replace(redirectUrl);                    
+                    return true;
+                }
+                AuthLib.disableLoginAnimation();                
+                return false;
+            });                                   
         }
         else{
             return false;
@@ -41,19 +35,13 @@ class AuthFactory{
         } 
         let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;     
         if(user && user.token){        
-            let data = new FormData();             
-            let headers = AuthLib.setHeaderForTsMicroBackend(true);
-            data.append("username", user.username);
-            let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/auth/validate_login', {method: "POST", headers:headers, body: data});
-            if (result.status !== 200){            
-                return false;
-            }
-            result = await result.json()
-            result = result["_result"]
-            if(result && result["valid"] === true){            
+            let validation = await isLogin(user.username);                        
+            if(validation){
                 return user;
-            }        
-            return null;
+            }
+            else{
+                return null;
+            }
         }
         else{        
             return null;

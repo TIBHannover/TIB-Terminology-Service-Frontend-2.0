@@ -8,6 +8,7 @@ class UserModel{
         this.company = "";
         this.githubHomeUrl = "";
         this.orcidId = "";
+        this.systemAdmin = false;
     }
 
     
@@ -39,6 +40,10 @@ class UserModel{
 
     setOrcidInfo({orcidId}){
         this.orcidId = orcidId;
+    }
+
+    setSystemAdmin(isAdmin){
+        this.systemAdmin = isAdmin;
     }
 }
 
