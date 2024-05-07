@@ -26,6 +26,7 @@ const UserPanel = (props) => {
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userProfileDropdown">
                         <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
+                        <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}>My Ontology Collection</a>
                         {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&
                             <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</a>
                         }

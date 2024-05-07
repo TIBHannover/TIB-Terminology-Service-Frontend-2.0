@@ -18,6 +18,7 @@ import UserPanel from "./components/User/Login/UserPanel";
 import ReportPanel from "./components/User/Admin/ReportPanel";
 import Sitemap from './components/Sitemap/Sitemap';
 import {Route, Switch} from 'react-router-dom';
+import UserCollection from "./components/User/Collection/Collection";
 
 
 
@@ -31,6 +32,7 @@ const AppRouter = () => {
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests}/>
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel}/>
+            <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyPage}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
