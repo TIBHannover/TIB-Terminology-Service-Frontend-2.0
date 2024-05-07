@@ -21,24 +21,22 @@ export default function SubmitedIssueRequests(){
     }
    
     return [
-        <span>
-            <h5><b>Here you can check the issue and Term requests that were submited by you.</b></h5>
-            <div className="row">
-                <div className="col-sm-12">
-                    <table class="table table-striped">                    
-                        <tbody>
-                            <tr>
-                                <th scope="col" class="col-6">Issue</th>
-                                <th scope="col" class="col-2">Issue Type</th>
-                                <th scope="col" class="col-2">ontology</th>
-                                <th scope="col" class="col-2">Created at</th>                            
-                            </tr>
-                            {renderIssueTableRows(issuesList)}
-                        </tbody>
-                    </table>        
-                </div>                         
-            </div> 
-        </span>       
+        <div className="row user-info-panel">
+            <div className="col-sm-12">
+                <h5><b>Here you can check the issue and Term requests that were submited by you.</b></h5>
+                <table class="table table-striped">                    
+                    <tbody>
+                        <tr>
+                            <th scope="col" class="col-6">Issue</th>
+                            <th scope="col" class="col-2">Issue Type</th>
+                            <th scope="col" class="col-2">ontology</th>
+                            <th scope="col" class="col-2">Created at</th>                            
+                        </tr>
+                        {renderIssueTableRows(issuesList)}
+                    </tbody>
+                </table>        
+            </div>                         
+        </div>        
     ];
 
 }
