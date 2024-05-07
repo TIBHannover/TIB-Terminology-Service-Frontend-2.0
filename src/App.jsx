@@ -24,6 +24,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
+  const [activeUserCollection, setActiveUserCollection] = useState({"titile": "", "ontology_ids": []});
 
 
   useEffect(() => {
@@ -56,7 +57,9 @@ const App = () => {
   const appContextData = {
     user: user,
     isUserSystemAdmin: isSystemAdmin,
-    reportsListForAdmin: reportsListForAdmin
+    reportsListForAdmin: reportsListForAdmin,
+    activeUserCollection: activeUserCollection,
+    setActiveUserCollection: setActiveUserCollection
   };
 
   return (

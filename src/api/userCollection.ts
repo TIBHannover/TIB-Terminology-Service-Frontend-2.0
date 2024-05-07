@@ -22,3 +22,18 @@ export async function saveCollection(collectionData:CollectionData):Promise<Coll
         return null;
     }
 }
+
+
+
+export async function fetchCollectionList():Promise<Array<CollectionDataResponse>|[]>{
+    try{
+        let headers:any = AuthLib.setHeaderForTsMicroBackend(true);
+        let result:any = await fetch(baseUrl + "/collection/get_list", {method: "GET", headers:headers});
+        result = await result.json();
+        result = result['_result']['collections'];        
+        return result;
+    }
+    catch(e){
+        return [];
+    }
+}

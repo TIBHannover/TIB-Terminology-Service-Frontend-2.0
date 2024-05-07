@@ -27,8 +27,7 @@ const AddCollection = () => {
 
 
     function handleOntologySelection(selectedList, selectedItem){        
-        setSelectedOntologies(selectedList);  
-        // setPlaceHolderExtraText(createOntologyListForPlaceholder(selectedList));          
+        setSelectedOntologies(selectedList);                   
     }
 
 
@@ -46,7 +45,7 @@ const AddCollection = () => {
         };
         let response = await saveCollection(collectionData);
         if(response){
-            console.log(response)
+            window.location.reload();
         }
     }
 

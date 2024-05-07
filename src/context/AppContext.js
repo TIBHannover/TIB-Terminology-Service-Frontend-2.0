@@ -3,7 +3,9 @@ import { createContext } from "react";
 const blueprint = {
     user: null,
     isUserSystemAdmin: false,
-    reportsListForAdmin: []
+    reportsListForAdmin: [],
+    activeUserCollection: {"titile": "", "ontology_ids": []},
+    setActiveUserCollection: () => {/* set activeUserCollection */}
 };
 
 
