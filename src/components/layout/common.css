@@ -63,7 +63,8 @@ body .btn-danger{
     background-color: red;
 }
 
-body .close-btn-message-modal{
+body .close-btn-message-modal, 
+.close-btn-message-modal:hover{
     background-color: white;    
     color: #404040;
 }
