@@ -24,7 +24,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #a1a1a1;    
+    background-color: #292828;    
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -37,17 +37,17 @@
     left: 78px;
     top: 0px;
     bottom: 0px;
-    background-color: rgb(19, 18, 18);
+    background-color: rgb(139, 136, 136);
     -webkit-transition: .4s;
     transition: .4s;
 }
 
 .toggle-slider-off::before{
-    background-color: rgb(107, 106, 106);
+    background-color: #292828;
 }
   
 input:checked + .toggle-slider {
-    background-color: #494747;
+    background-color: #c4bebe;
 }
   
 input:checked + .toggle-slider:before {
@@ -56,15 +56,14 @@ input:checked + .toggle-slider:before {
     transform: translateX(-78px); /* how much the slider shif to left */
 }
   
-.toggleButton-on{
-    display: none;
+.toggleButton-on{    
     left: 60%;
     color: white;
 }
 
 .toggleButton-off{
     left: 60%;    
-    color: black;
+    color: white;
 }
   
 .toggleButton-on, .toggleButton-off{    
@@ -80,7 +79,7 @@ input:checked + .toggle-slider .toggleButton-on{
 }
   
 input:checked + .toggle-slider .toggleButton-off{
-    display: none;
+    /* display: none; */
 }
   
 .toggle-slider.round {

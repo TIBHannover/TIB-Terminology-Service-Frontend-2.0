@@ -4,7 +4,7 @@ const blueprint = {
     user: null,
     isUserSystemAdmin: false,
     reportsListForAdmin: [],
-    activeUserCollection: {"titile": "", "ontology_ids": []},
+    activeUserCollection: {"title": "", "ontology_ids": []},
     setActiveUserCollection: () => {/* set activeUserCollection */},
     userCollectionEnabled: false,
     setUserCollectionEnabled: () => {/* set userCollectionEnabled */},

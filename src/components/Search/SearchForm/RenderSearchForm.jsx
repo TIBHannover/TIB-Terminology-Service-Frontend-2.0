@@ -84,18 +84,37 @@ const RenderSearchForm = (props) => {
         appContext.setUserCollectionEnabled(!appContext.userCollectionEnabled);
     }
 
+
+    function createUserCollectionToggleTooltopText(){
+      if(appContext.user){
+        let text = `Restrict your search to your collection "${appContext.activeUserCollection.title}". Included ontologies are: `;
+        if(appContext.userCollectionEnabled){
+          text = `Disable collection "${appContext.activeUserCollection.title}" and search all ontologies. Included ontologies are:`;
+        }
+        
+        for(let ontologyId of appContext.activeUserCollection['ontology_ids']){
+          text += ontologyId + ", ";
+        }
+        return text;
+      }
+      return "";  
+    }
+
     
     return(
         <>
           <div className='row site-header-searchbox-holder'>
             <div className='col-sm-9 search-bar-container'>
               <div class="input-group input-group-lg">
+                {appContext.user && appContext.activeUserCollection.title !== "" &&
                 <ToggleButton 
                   on={appContext.userCollectionEnabled} 
                   onClickCallback={handleUserCollectionToggle}
                   onLabel={appContext.activeUserCollection['title']}
                   offLabel={appContext.activeUserCollection['title']}
-                  />                               
+                  tooltipText={createUserCollectionToggleTooltopText()}
+                  /> 
+                }                              
                 <input 
                     type="text" 
                     class="form-control search-input" 
