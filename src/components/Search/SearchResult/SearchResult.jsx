@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
@@ -13,6 +13,7 @@ import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import { AppContext } from '../../../context/AppContext';
 
 
 
@@ -22,6 +23,8 @@ const SearchResult = (props) => {
   /*
     This component is responsible for rendering the search results and facet.
   */
+
+  const appContext = useContext(AppContext);
 
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
@@ -62,14 +65,21 @@ const SearchResult = (props) => {
   }
 
 
-  async function search(){      
+  async function search(){  
+
+    let ontologies = [...selectedOntologies];
+    
+    if(appContext.userCollectionEnabled){
+      ontologies = [...appContext.activeUserCollection.ontology_ids];
+    }
+
     try{
       let obsoletes = Toolkit.getObsoleteFlagValue();    
       let searchParams = {
         searchQuery: searchQuery,
         page:pageNumber,
         size: pageSize,
-        selectedOntologies: selectedOntologies,
+        selectedOntologies: ontologies,
         selectedTypes: selectedTypes,
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,

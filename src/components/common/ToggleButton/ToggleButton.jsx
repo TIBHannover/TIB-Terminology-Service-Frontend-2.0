@@ -11,7 +11,7 @@ export const ToggleButton = ({on, onClickCallback, onLabel, offLabel, tooltipTex
     
     return(
         <label class="toggleButtonLabel" >
-            <input type="checkbox" id="toggleBtn" onClick={onClickCallback} />
+            <input type="checkbox" id="toggleBtn" onClick={onClickCallback} checked={on}/>
             <div class={"toggle-slider round " + (!on ? "toggle-slider-off" : "")} title={tooltipText}>                        
                 {on 
                     ? <span class="toggleButton-on truncate-toggleButtonLabel">{onLabel}</span>

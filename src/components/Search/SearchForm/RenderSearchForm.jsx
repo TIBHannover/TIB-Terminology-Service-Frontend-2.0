@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Toolkit from "../../../Libs/Toolkit";
 import { ToggleButton } from "../../common/ToggleButton/ToggleButton";
 import { AppContext } from "../../../context/AppContext";
+import { storeUserSettings } from "../../../api/user";
 
 
 const RenderSearchForm = (props) => {
@@ -80,8 +81,10 @@ const RenderSearchForm = (props) => {
 
 
 
-    function handleUserCollectionToggle(){
+    async function handleUserCollectionToggle(){
         appContext.setUserCollectionEnabled(!appContext.userCollectionEnabled);
+        let userSttings = {"userCollectionEnabled": !appContext.userCollectionEnabled, "activeCollection": appContext.activeUserCollection};
+        await storeUserSettings(userSttings);
     }
 
 

@@ -24,36 +24,38 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #292828;    
+    background-color: #c4bebe;    
     -webkit-transition: .4s;
     transition: .4s;
 }
   
 .toggle-slider:before {
+    /* The slider button */
     position: absolute;
     content: "";
     height: 49px;
     width: 22px;
-    left: 78px;
+    left: 0px;
     top: 0px;
     bottom: 0px;
-    background-color: rgb(139, 136, 136);
+    background-color: #404040;
     -webkit-transition: .4s;
     transition: .4s;
 }
 
-.toggle-slider-off::before{
-    background-color: #292828;
-}
   
 input:checked + .toggle-slider {
+    background-color: #404040;
+}
+
+input:checked + .toggle-slider::before {
     background-color: #c4bebe;
 }
   
 input:checked + .toggle-slider:before {
-    -webkit-transform: translateX(-78px);
-    -ms-transform: translateX(-78px);
-    transform: translateX(-78px); /* how much the slider shif to left */
+    transform: translateX(78px); /* how much the slider shifts to left */
+    -webkit-transform: translateX(78px);
+    -ms-transform: translateX(78px);    
 }
   
 .toggleButton-on{    
@@ -76,20 +78,4 @@ input:checked + .toggle-slider:before {
   
 input:checked + .toggle-slider .toggleButton-on{
     display: block;
-}
-  
-input:checked + .toggle-slider .toggleButton-off{
-    /* display: none; */
-}
-  
-.toggle-slider.round {
-    /* border-radius: 20px; */
-}
-  
-.toggle-slider.round:before {
-    /* border-radius: 50%; */
-}
-
-input:focus + .toggle-slider {
-    /* box-shadow: 0 0 1px #2196F3; */
 }
