@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import '../../layout/toggleButton.css';
 
 
-export const ToggleButton = ({on, onClickCallback}) => { 
+export const ToggleButton = ({on, onClickCallback, onLabel, offLabel}) => { 
     
     useEffect(() => {
         document.getElementById("toggleBtn").checked = on;
@@ -14,8 +14,8 @@ export const ToggleButton = ({on, onClickCallback}) => {
             <input type="checkbox" id="toggleBtn" onClick={onClickCallback} />
             <div class={"toggle-slider round " + (!on ? "toggle-slider-off" : "")}>                        
                 {on 
-                    ? <span class="toggleButton-on">ON</span>
-                    : <span class="toggleButton-off">OFF</span>
+                    ? <span class="toggleButton-on truncate-toggleButtonLabel">{onLabel}</span>
+                    : <span class="toggleButton-off truncate-toggleButtonLabel">{offLabel}</span>
                 }                
             </div>
         </label>

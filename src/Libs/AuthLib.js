@@ -29,6 +29,7 @@ class AuthLib{
             user.setUsername(response["ts_username"]);
             user.setUserToken(response["ts_user_token"]);
             user.setSystemAdmin(response["system_admin"]);
+            user.setSettings(response["settings"]);
             user.setAuthProvider(authProvider);        
             if(authProvider === 'github'){            
                 user.setGithubInfo({company: response["company"], homeUrl: response["github_home"]});            

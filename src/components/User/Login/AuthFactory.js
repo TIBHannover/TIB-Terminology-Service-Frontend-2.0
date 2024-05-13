@@ -35,7 +35,7 @@ class AuthFactory{
         } 
         let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;     
         if(user && user.token){        
-            let validation = await isLogin(user.username);                        
+            let validation = await isLogin();                        
             if(validation){
                 return user;
             }

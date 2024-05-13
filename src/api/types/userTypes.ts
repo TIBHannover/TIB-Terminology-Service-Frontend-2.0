@@ -1,4 +1,3 @@
-
 export type LoginResponse ={
     name:string,
     token:string,
@@ -9,4 +8,16 @@ export type LoginResponse ={
     github_home:string,
     login:string,
     orcid_id:string,
+}
+
+
+export type UserSettings = {
+    userCollectionEnabled:boolean|undefined,
+    activeCollection:UserCollection|undefined,
+}
+
+
+type UserCollection = {
+    title:string,
+    ontology_ids:string[]
 }

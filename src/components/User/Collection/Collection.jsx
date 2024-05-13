@@ -3,6 +3,7 @@ import AddCollection from "./AddCollection";
 import { fetchCollectionList } from "../../../api/userCollection";
 import Toolkit from "../../../Libs/Toolkit";
 import { AppContext } from "../../../context/AppContext";
+import { storeUserSettings } from "../../../api/user";
 
 
 
@@ -21,17 +22,24 @@ const UserCollection = () => {
     }
 
 
-    function handleCollectionCheckboxChange(event) {
+    async function handleCollectionCheckboxChange(event) {
         let targetId = event.target.dataset.id;
         let isChecked = event.target.checked;
         let selectedCollection = Toolkit.getObjectInListIfExist(collections, 'id', parseInt(targetId));
         let contextObject = {"title": selectedCollection['title'], "ontology_ids": selectedCollection['ontology_ids']};
+        let userSttings = {};
         if(isChecked){
             appContext.setActiveUserCollection(contextObject);
+            appContext.setUserCollectionEnabled(true);
+            userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
         }
         else{
             appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
-        }        
+            appContext.setUserCollectionEnabled(false);
+            userSttings = {"userCollectionEnabled": false, "activeCollection": {"title": "", "ontology_ids": []}}
+        }    
+
+        await storeUserSettings(userSttings);   
     }
 
 
