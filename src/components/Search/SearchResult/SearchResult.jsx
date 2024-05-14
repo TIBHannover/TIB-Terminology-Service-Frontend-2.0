@@ -299,15 +299,15 @@ const SearchResult = (props) => {
   function createFilterTags(){
     let tagsList = [];
     for(let type of selectedTypes){
-      let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick} data-type={"type"} data-value={type} class="fa fa-close remove-tag-icon"></i></div>;
+      let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick} data-type={"type"} data-value={type} className="fa fa-close remove-tag-icon"></i></div>;
       tagsList.push(newTag);
     }
     for(let ontologyId of selectedOntologies){
-      let newTag = <div className='search-filter-tags' key={ontologyId}>{ontologyId} <i onClick={handleRemoveTagClick} data-type={"ontology"} data-value={ontologyId} class="fa fa-close remove-tag-icon"></i></div>;
+      let newTag = <div className='search-filter-tags' key={ontologyId}>{ontologyId} <i onClick={handleRemoveTagClick} data-type={"ontology"} data-value={ontologyId} className="fa fa-close remove-tag-icon"></i></div>;
       tagsList.push(newTag);
     }
     for(let collection of selectedCollections){
-      let newTag = <div className='search-filter-tags' key={collection}>{collection} <i onClick={handleRemoveTagClick} data-type={"collection"} data-value={collection} class="fa fa-close remove-tag-icon"></i></div>;
+      let newTag = <div className='search-filter-tags' key={collection}>{collection} <i onClick={handleRemoveTagClick} data-type={"collection"} data-value={collection} className="fa fa-close remove-tag-icon"></i></div>;
       tagsList.push(newTag);
     }    
     setFilterTags(tagsList);

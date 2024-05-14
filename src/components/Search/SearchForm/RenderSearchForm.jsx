@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import Toolkit from "../../../Libs/Toolkit";
-import { ToggleButton } from "../../common/ToggleButton/ToggleButton";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
 
@@ -110,13 +109,20 @@ const RenderSearchForm = (props) => {
             <div className='col-sm-9 search-bar-container'>
               <div class="input-group input-group-lg">
                 {appContext.user && appContext.activeUserCollection.title !== "" &&
-                <ToggleButton 
-                  on={appContext.userCollectionEnabled} 
-                  onClickCallback={handleUserCollectionToggle}
-                  onLabel={appContext.activeUserCollection['title']}
-                  offLabel={appContext.activeUserCollection['title']}
-                  tooltipText={createUserCollectionToggleTooltopText()}
-                  /> 
+                  <div 
+                    className="custom-collection-btn"                  
+                    onClickCallback={handleUserCollectionToggle}                  
+                    title={createUserCollectionToggleTooltopText()}
+                    >
+                    <div>
+                      <i className="fa fa-close"></i>
+                      {appContext.activeUserCollection.title}
+                    </div>
+                    
+                    {/* <div className="col-sm-3 custom-collection-btn-close"></div>      */}
+                    {/* <div className="col-sm-9 custom-collection-btn-text">
+                    </div> */}
+                  </div> 
                 }                              
                 <input 
                     type="text" 
