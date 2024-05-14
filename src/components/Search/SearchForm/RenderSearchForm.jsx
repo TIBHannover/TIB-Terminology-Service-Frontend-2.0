@@ -80,9 +80,10 @@ const RenderSearchForm = (props) => {
 
 
 
-    async function handleUserCollectionToggle(){
+    async function handleUserCollectionClose(){
         appContext.setUserCollectionEnabled(!appContext.userCollectionEnabled);
-        let userSttings = {"userCollectionEnabled": !appContext.userCollectionEnabled, "activeCollection": appContext.activeUserCollection};
+        appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
+        let userSttings = {"userCollectionEnabled": !appContext.userCollectionEnabled, "activeCollection": {"title": "", "ontology_ids": []}};
         await storeUserSettings(userSttings);
     }
 
@@ -109,19 +110,11 @@ const RenderSearchForm = (props) => {
             <div className='col-sm-9 search-bar-container'>
               <div class="input-group input-group-lg">
                 {appContext.user && appContext.activeUserCollection.title !== "" &&
-                  <div 
-                    className="custom-collection-btn"                  
-                    onClickCallback={handleUserCollectionToggle}                  
-                    title={createUserCollectionToggleTooltopText()}
-                    >
+                  <div className="custom-collection-btn"  title={createUserCollectionToggleTooltopText()}>
                     <div>
-                      <i className="fa fa-close"></i>
+                      <i className="fa fa-close" onClick={handleUserCollectionClose}></i>
                       {appContext.activeUserCollection.title}
-                    </div>
-                    
-                    {/* <div className="col-sm-3 custom-collection-btn-close"></div>      */}
-                    {/* <div className="col-sm-9 custom-collection-btn-text">
-                    </div> */}
+                    </div>                   
                   </div> 
                 }                              
                 <input 
