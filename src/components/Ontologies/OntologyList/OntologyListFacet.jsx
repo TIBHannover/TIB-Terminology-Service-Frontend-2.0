@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
 
 
 export const OntologyListFacet = (props) => {
 
+    const appContext = useContext(AppContext);
     const [collectionBoxes, setCollectionBoxes] = useState('');
 
     
@@ -70,16 +72,32 @@ export const OntologyListFacet = (props) => {
                     <div className='row ontology-list-facet-section-box'>
                         <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
                         <div  className="col-sm-12 facet-box" >
-                            <div className='facet-switch-holder'>                                
-                                <div class="form-check form-switch">                            
-                                    <input class="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch" onChange={props.onSwitchChange} />                            
-                                    <label class="form-check-label" for="facet-switch">Intersection</label>
-                                </div>                          
-                            </div>
-                            <div>
-                                {collectionBoxes}   
-                            </div>               
+                            {!appContext.userCollectionEnabled &&
+                                <>
+                                <div className='facet-switch-holder'>                                
+                                    <div class="form-check form-switch">                            
+                                        <input class="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch" onChange={props.onSwitchChange} />                            
+                                        <label class="form-check-label" for="facet-switch">Intersection</label>
+                                    </div>                          
+                                </div>
+                                <div>
+                                    {collectionBoxes}   
+                                </div>    
+                                </>                                       
+                            }
+                            {appContext.userCollectionEnabled && 
+                                <>
+                                <p>
+                                    Your collection named "{appContext.activeUserCollection.title}" is enabled. 
+                                </p>
+                                <p>
+                                    Disable it by clicking <i className="fa fa-close"></i> 
+                                    in case you wish to see the full list of collections and ontologies.
+                                </p>
+                                </>
+                            }
                         </div>
+                        
                     </div>
                 }            
             </div>

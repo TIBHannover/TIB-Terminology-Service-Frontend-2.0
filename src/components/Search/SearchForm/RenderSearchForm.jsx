@@ -85,6 +85,7 @@ const RenderSearchForm = (props) => {
         appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
         let userSttings = {"userCollectionEnabled": !appContext.userCollectionEnabled, "activeCollection": {"title": "", "ontology_ids": []}};
         await storeUserSettings(userSttings);
+        window.location.reload();
     }
 
 
