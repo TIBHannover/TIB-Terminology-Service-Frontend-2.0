@@ -43,6 +43,15 @@ const UserCollection = () => {
     }
 
 
+
+    function collectionCheckboxIsChecked(collectionTitle){
+        if(appContext.activeUserCollection['title'] === collectionTitle){
+            return true;
+        }
+        return false;
+    }
+
+
     function renderCollections() {
         let list = [];
         for(let collection of collections){            
@@ -56,6 +65,7 @@ const UserCollection = () => {
                         id={"collectionCheckbox" + collection['id']}
                         data-id={collection['id']} 
                         onChange={handleCollectionCheckboxChange}
+                        checked={collectionCheckboxIsChecked(collection['title'])}
                     />
                     <label class="form-check-label" for={"collectionCheckbox" + collection['id']}>
                         {collection['title']}&nbsp;
