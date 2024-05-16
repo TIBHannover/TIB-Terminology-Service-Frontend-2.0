@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import OntologyApi from "../../../api/ontology";
 import { saveCollection, updateCollection } from "../../../api/userCollection";
+import { storeUserSettings } from "../../../api/user";
 
 
 
@@ -69,14 +70,19 @@ const AddCollection = (props) => {
         let response = null;
         if(!editMode){
             response = await saveCollection(collectionData);
+            response && window.location.reload();
         }
         else{
             response = await updateCollection(collectionToEdit['id'], collectionData);
-        }
-        
-        if(response){
+            if(!response){
+                return;
+            }
+            let contextObject = {"title": collectionTitle, "ontology_ids": ontologyIds};
+            let userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
+            await storeUserSettings(userSttings);
             window.location.reload();
         }
+        
     }
 
 
