@@ -223,8 +223,10 @@ const Facet = (props) => {
 
 
     useEffect(() => {        
-        createCollectionsCheckBoxes();
-        setIsLoading(false);
+        if(!appContext.userCollectionEnabled){
+            createCollectionsCheckBoxes();
+            setIsLoading(false);
+        }        
     }, [props.allCollections]);
 
 
@@ -233,7 +235,7 @@ const Facet = (props) => {
         setComponentData();              
         createTypesCheckboxList();
         createOntologiesCheckboxList();
-        createCollectionsCheckBoxes();
+        !appContext.userCollectionEnabled && createCollectionsCheckBoxes();
         setIsLoading(false);
     }, [props.facetData]);
 
@@ -295,7 +297,18 @@ const Facet = (props) => {
                     <>
                         <h4>{"Collections"}</h4>
                         <div class="facet-box" id="facet-collections-list">
-                            {collectionCheckBoxesToRender}
+                            {!appContext.userCollectionEnabled && collectionCheckBoxesToRender}
+                            {appContext.userCollectionEnabled && 
+                                <>
+                                <p>
+                                    Your collection named "{appContext.activeUserCollection.title}" is enabled. 
+                                </p>
+                                <p>
+                                    Disable it by clicking <i className="fa fa-close"></i> 
+                                    in case you wish to see the full list of collections and ontologies.
+                                </p>
+                                </>
+                            }
                         </div>
                     </>}
             </div>}
