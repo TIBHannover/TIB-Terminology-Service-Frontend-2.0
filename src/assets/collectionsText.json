@@ -17,7 +17,8 @@
         "logo": "/NFDI4CHEM_LOGO.svg",
         "ontology_list_url": "/ontologies?collection=NFDI4CHEM&and=false&page=1",
         "project_homepage":"https://www.nfdi4chem.de/",
-        "domain_ts_link": "https://terminology.nfdi4chem.de/ts/"
+        "domain_ts_link": "https://terminology.nfdi4chem.de/ts/",
+        "selection_criteria": "<ul><li>The ontology should provide terms and relations to describe research activities and research data in chemistry. We although considered terminologies, taxonomies and controlled vocabularies, as it might not be necessary to make full use of description logic to semantically describe research data depending on the involved stakeholders</li><li>The ontology should have been developed by or in cooperation with domain experts to ensure chemistry knowledge is codified accurately</li><li>The ontology should adhere to best practices in ontology development</li><li>The ontology should be FAIR (Findable, Accessible, Interoperable Reusable), i.e. indexed in a prominent registry, accessible via a permanent URL and provided with a documentation. The ontology must provide a machine-readable license information-. The ontology should be aligned with compatible upper ontologies and should be reusable in a modular way</li><li>The  ontology should be actively and openly maintained</li><li>The ontology should be used in prominent applications</li></ul>"
     },
     "NFDI4Culture":{
         "id":"NFDI4CULTURE",

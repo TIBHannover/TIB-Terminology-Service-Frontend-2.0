@@ -81,6 +81,12 @@ class Collections extends React.Component{
                     </div>  
                     <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
+                            <b>Ontology Selection Criteria:</b>
+                            <div dangerouslySetInnerHTML={{__html: collectionJson["selection_criteria"]}} ></div>
+                        </div>
+                    </div> 
+                    <div className='row' key={collectionId + "_ontoList"}>
+                        <div className='col-sm-12 collection-ontologies-text'>
                             <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies[collectionId] : ""}
                         </div>
                     </div>           
