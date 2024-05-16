@@ -90,15 +90,9 @@ const RenderSearchForm = (props) => {
 
 
     function createUserCollectionToggleTooltopText(){
-      if(appContext.user){
-        let text = `Restrict your search to your collection "${appContext.activeUserCollection.title}". Included ontologies are: `;
-        if(appContext.userCollectionEnabled){
-          text = `Disable collection "${appContext.activeUserCollection.title}" and search all ontologies. Included ontologies are:`;
-        }
-        
-        for(let ontologyId of appContext.activeUserCollection['ontology_ids']){
-          text += ontologyId + ", ";
-        }
+      if(appContext.user && appContext.userCollectionEnabled){
+        let text = `Collection "${appContext.activeUserCollection.title}". Included ontologies: `; 
+        text += appContext.activeUserCollection['ontology_ids'].join(", ");         
         return text;
       }
       return "";  
