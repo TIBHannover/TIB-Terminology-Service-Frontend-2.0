@@ -37,18 +37,3 @@ export async function fetchCollectionList():Promise<Array<CollectionDataResponse
         return [];
     }
 }
-
-
-export async function deleteCollection(collectionId:string):Promise<boolean>{
-    try{
-        let headers:any = AuthLib.setHeaderForTsMicroBackend(true);
-        headers["Content-Type"] = "application/json";
-        let result:any = await fetch(baseUrl + "/collection/delete/" + collectionId, {method: "POST", headers:headers});
-        result = await result.json();
-        result = result['_result']['deleted'];        
-        return result;
-    }
-    catch(e){
-        return false;
-    }
-}

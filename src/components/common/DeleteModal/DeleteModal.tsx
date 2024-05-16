@@ -2,33 +2,54 @@ import {useState} from "react";
 import AlertBox from "../Alerts/Alerts";
 
 
-export const DeleteModalBtn = (props) => {
+type DeleteModalButtonProps = {
+    btnText?: string,
+    btnClass?: string,
+    modalId: string
+}
+
+
+export const DeleteModalBtn = (props:DeleteModalButtonProps) => {
+    const {btnClass, modalId, btnText} = props;
     return (
         <button type="button" 
-                className={"btn btn-danger btn-sm btn-delete-note borderless-btn " + props.btnClass}
+                className={"btn btn-danger btn-sm btn-delete-note borderless-btn " + btnClass}
                 data-toggle="modal" 
-                data-target={"#deleteModal" + props.modalId}
+                data-target={"#deleteModal" + modalId}
                 data-backdrop="static"
                 >
-                {props.btnText ? props.btnText : "Delete"}
+                {btnText ? btnText : "Delete"}
         </button>
     );
 }
 
 
 
-export const DeleteModal = (props) => {
+
+type DeleteModalProps = {
+    modalId: string,
+    deleteEndpoint: string,
+    formData: any,
+    callHeaders: HeadersInit,
+    afterDeleteProcess?: Function,
+    objectToDelete?: object,
+    afterDeleteRedirectUrl: string
+
+}
+
+export const DeleteModal = (props:DeleteModalProps) => {
+    const { modalId, deleteEndpoint, formData, callHeaders, afterDeleteProcess, afterDeleteRedirectUrl, objectToDelete } = props;
     const [submited, setSubmited] = useState(false);
     const [deleteSuccess, setDeleteSuccess] = useState(false);       
     
     const deleteResource = async () => {
         try{
-            let postConfig = {method: 'POST',  headers:props.callHeaders, body: props.formData};                        
-            let result = await fetch(props.deleteEndpoint, postConfig);
+            let postConfig:RequestInit = {method: 'POST',  headers:callHeaders, body: formData};                        
+            let result = await fetch(deleteEndpoint, postConfig);
             setSubmited(true);
             setDeleteSuccess(result.ok)
-            if(props.afterDeleteProcess && props.objectToDelete){
-                props.afterDeleteProcess(props.objectToDelete);
+            if(afterDeleteProcess && objectToDelete){
+                afterDeleteProcess(objectToDelete);
             } 
         }
         catch(e){
@@ -39,18 +60,18 @@ export const DeleteModal = (props) => {
 
 
     const redirectAfterDelete = () => {              
-        window.location.replace(props.afterDeleteRedirectUrl);
+        window.location.replace(afterDeleteRedirectUrl);
     }
 
 
 
     return (
         <div>            
-            <div className="modal fade" id={"deleteModal" + props.modalId} tabindex="-1" role="dialog" aria-labelledby={"deleteModalLabel" + props.modalId} aria-hidden="true">
+            <div className="modal fade" id={"deleteModal" + modalId} tabIndex={-1} role="dialog" aria-labelledby={"deleteModalLabel" + modalId} aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id={"deleteModalLabel" + props.modalId}>Confirmation</h5>
+                            <h5 className="modal-title" id={"deleteModalLabel" + modalId}>Confirmation</h5>
                             {!submited && 
                                 <button type="button" className="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
