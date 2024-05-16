@@ -26,13 +26,33 @@ const AddCollection = () => {
     }
 
 
-    function handleOntologySelection(selectedList, selectedItem){        
+    function handleOntologySelection(selectedList, selectedItem){      
+        document.getElementById('collection-ontologies').style.border = '';  
         setSelectedOntologies(selectedList);                   
+    }
+
+
+    function onTextInputChange(e){
+        e.target.style.border = '';
+        document.getElementById('max-char-message').style.color = 'black';
     }
 
 
     async function saveNewCollection(){
         let collectionTitle = document.getElementById('collectionTitle').value;
+        let formIsValid = true;
+        if(!collectionTitle || collectionTitle === ''){
+            document.getElementById('collectionTitle').style.border = '1px solid red';
+            formIsValid = false;
+        }
+        if(collectionTitle.length > 20){
+            document.getElementById('max-char-message').style.color = 'red';
+            formIsValid = false;
+        }
+        if(selectedOntologies.length === 0){
+            document.getElementById('collection-ontologies').style.border = '1px solid red';
+            formIsValid = false;
+        }
         let collectionDescription = document.getElementById('collectionDescription').value;
         let ontologyIds = [];
         for (let ontology of selectedOntologies){
@@ -76,9 +96,12 @@ const AddCollection = () => {
                                         type="text"                                                                                       
                                         class="form-control" 
                                         id="collectionTitle"
-                                        placeholder="Enter a Name">
+                                        placeholder="Enter a Name"
+                                        onChange={onTextInputChange}
+                                        >
                                     </input>  
                                 </div>
+                                <small id="max-char-message">Max 20 characters</small>
                             </div>
                             <br></br>                            
                             <div className='row'>                
@@ -90,7 +113,7 @@ const AddCollection = () => {
                                             options={ontologiesListForSelection}  
                                             selectedValues={selectedOntologies}                       
                                             onSelect={handleOntologySelection}
-                                            onRemove={handleOntologySelection}                            
+                                            onRemove={handleOntologySelection}                                                                        
                                             displayValue={"text"}
                                             avoidHighlightFirstOption={true}                                        
                                             closeIcon={"cancel"}
