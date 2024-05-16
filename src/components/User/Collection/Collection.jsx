@@ -105,6 +105,12 @@ const UserCollection = () => {
                         btnText={<i className="fa fa-close"></i>}
                         btnClass="extra-sm-btn ml-2"
                     />
+                    <AddCollection 
+                        editMode={true}
+                        editBtnText={<i className="fa fa-edit"></i>}
+                        collectionToEdit={collection}
+                        btnClass="extra-sm-btn ml-2"
+                    />
                 </div>
                 <DeleteModal
                     modalId={collection['id']}                    

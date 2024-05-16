@@ -1,23 +1,26 @@
 import { useState, useEffect } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import OntologyApi from "../../../api/ontology";
-import { saveCollection } from "../../../api/userCollection";
+import { saveCollection, updateCollection } from "../../../api/userCollection";
 
 
 
 
-const AddCollection = () => {
+const AddCollection = (props) => {
+    const {editMode, collectionToEdit, editBtnText, btnClass} = props;
 
     const [selectedOntologies, setSelectedOntologies] = useState([]);
     const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
 
+    const idPostfix = editMode ? collectionToEdit['id'] : '';
+
     
-    async function loadOntologiesForSelection(query){
+    async function loadOntologiesForSelection(){
         let ontologyApi = new OntologyApi({});
         await ontologyApi.fetchOntologyList();
         let ontologyList = [];
         for (let ontology of ontologyApi.list){
-            let opt = {};
+            let opt = {'text': '', 'id': ''};
             opt['text'] = ontology['ontologyId'];
             opt['id'] = ontology['ontologyId'];
             ontologyList.push(opt);
@@ -27,7 +30,7 @@ const AddCollection = () => {
 
 
     function handleOntologySelection(selectedList, selectedItem){      
-        document.getElementById('collection-ontologies').style.border = '';  
+        document.getElementById('collection-ontologies' + idPostfix).style.border = '';          
         setSelectedOntologies(selectedList);                   
     }
 
@@ -39,10 +42,10 @@ const AddCollection = () => {
 
 
     async function saveNewCollection(){
-        let collectionTitle = document.getElementById('collectionTitle').value;
+        let collectionTitle = document.getElementById('collectionTitle' + idPostfix).value;
         let formIsValid = true;
         if(!collectionTitle || collectionTitle === ''){
-            document.getElementById('collectionTitle').style.border = '1px solid red';
+            document.getElementById('collectionTitle' + idPostfix).style.border = '1px solid red';
             formIsValid = false;
         }
         if(collectionTitle.length > 20){
@@ -50,10 +53,10 @@ const AddCollection = () => {
             formIsValid = false;
         }
         if(selectedOntologies.length === 0){
-            document.getElementById('collection-ontologies').style.border = '1px solid red';
+            document.getElementById('collection-ontologies' + idPostfix).style.border = '1px solid red';
             formIsValid = false;
         }
-        let collectionDescription = document.getElementById('collectionDescription').value;
+        let collectionDescription = document.getElementById('collectionDescription' + idPostfix).value;
         let ontologyIds = [];
         for (let ontology of selectedOntologies){
             ontologyIds.push(ontology['id']);
@@ -63,7 +66,14 @@ const AddCollection = () => {
             'description': collectionDescription,
             'ontology_ids': ontologyIds
         };
-        let response = await saveCollection(collectionData);
+        let response = null;
+        if(!editMode){
+            response = await saveCollection(collectionData);
+        }
+        else{
+            response = await updateCollection(collectionToEdit['id'], collectionData);
+        }
+        
         if(response){
             window.location.reload();
         }
@@ -72,32 +82,50 @@ const AddCollection = () => {
 
 
     useEffect(() => {
-        loadOntologiesForSelection();                       
+        loadOntologiesForSelection();  
+        if(editMode){
+            let collectionOntologies = [];
+            for (let ontologyId of collectionToEdit['ontology_ids']){
+                let opt = {'text': '', 'id': ''};
+                opt['text'] = ontologyId;
+                opt['id'] = ontologyId;
+                collectionOntologies.push(opt);
+            }            
+            setSelectedOntologies(collectionOntologies);
+            document.getElementById('collectionTitle' + idPostfix).value = collectionToEdit['title'];
+        }                     
     }, []);
 
 
+    const modalId = editMode ? 'editCollectionModal' + idPostfix : 'newCollectionModal';
     return(
         <>
-            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#newCollectionModal" data-backdrop="static">
-                    New Collection
+            <button 
+                type="button" 
+                className={"btn btn-secondary " + btnClass}
+                data-toggle="modal" 
+                data-target={"#" + modalId} 
+                data-backdrop="static"
+                >
+                {!editMode ? "New Collection" : editBtnText}
             </button>
 
-            <div class="modal fade" id="newCollectionModal" tabindex="-1" role="dialog" aria-labelledby="newCollectionModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="newCollectionModalLabel">New Collection</h5>                            
+            <div className="modal fade" id={modalId} tabindex="-1" role="dialog" aria-labelledby={modalId + "Label"} aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id={modalId + "Label"}>{!editMode ? "New Collection" : "Edit Collection"}</h5>                            
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <label className="required_input" for="collectionTitle">Name</label>
+                                    <label className="required_input" for={"collectionTitle" + idPostfix}>Name</label>
                                     <input 
                                         type="text"                                                                                       
-                                        class="form-control" 
-                                        id="collectionTitle"
+                                        className="form-control" 
+                                        id={"collectionTitle" + idPostfix}
                                         placeholder="Enter a Name"
-                                        onChange={onTextInputChange}
+                                        onChange={onTextInputChange}                                        
                                         >
                                     </input>  
                                 </div>
@@ -106,7 +134,7 @@ const AddCollection = () => {
                             <br></br>                            
                             <div className='row'>                
                                 <div className='col-sm-12'>
-                                    <label className="required_input" for='collection-ontologies'>Ontologies</label>
+                                    <label className="required_input" for={'collection-ontologies' + idPostfix}>Ontologies</label>
                                     {ontologiesListForSelection.length !== 0 &&                                    
                                         <Multiselect
                                             isObject={true}
@@ -117,7 +145,7 @@ const AddCollection = () => {
                                             displayValue={"text"}
                                             avoidHighlightFirstOption={true}                                        
                                             closeIcon={"cancel"}
-                                            id="collection-ontologies"
+                                            id={"collection-ontologies" + idPostfix}
                                             placeholder="Enter Ontology name ..."   
                                             className='multiselect-container'                     
                                         />
@@ -127,21 +155,21 @@ const AddCollection = () => {
                             <br></br>  
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <label for="collectionDescription">Description (optional)</label>
+                                    <label for={"collectionDescription" + idPostfix}>Description (optional)</label>
                                     <textarea                                         
-                                        class="form-control" 
-                                        id="collectionDescription"
+                                        className="form-control" 
+                                        id={"collectionDescription" + idPostfix}
                                         rows="5"
                                         placeholder="Enter a Description">
                                     </textarea>  
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div className="modal-footer">
                             <div className="col-auto mr-auto">
-                                <button type="button" class="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                             </div>                             
-                            <button type="button" class="btn btn-secondary" onClick={saveNewCollection}>Save</button>
+                            <button type="button" className="btn btn-secondary" onClick={saveNewCollection}>Save</button>
                         </div>
                     </div>
                 </div>

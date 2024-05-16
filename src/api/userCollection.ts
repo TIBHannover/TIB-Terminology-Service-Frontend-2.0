@@ -24,6 +24,21 @@ export async function saveCollection(collectionData:CollectionData):Promise<Coll
 }
 
 
+export async function updateCollection(collectionId:string|number, collectionData:CollectionData):Promise<CollectionDataResponse|null>{
+    try{
+        let headers:any = AuthLib.setHeaderForTsMicroBackend(true);
+        headers["Content-Type"] = "application/json";        
+        let result:any = await fetch(baseUrl + "/collection/update/" + collectionId, {method: "POST", headers:headers, body: JSON.stringify(collectionData)});
+        result = await result.json();
+        result = result['_result']['collection'];        
+        return result;
+    }
+    catch(e){
+        return null;
+    }
+}
+
+
 
 export async function fetchCollectionList():Promise<Array<CollectionDataResponse>|[]>{
     try{
