@@ -124,10 +124,7 @@
 }
 
 .custom-collection-btn .fa{
-    border: none;
-    font-size: 12px;
-    margin-left: 5px;    
-    cursor: pointer;
+    font-size: 12px;    
 }
 
 .custom-collection-btn div{

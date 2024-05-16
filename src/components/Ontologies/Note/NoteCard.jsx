@@ -236,7 +236,7 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                             <DeleteModalBtn
                                 modalId={note['id']}  
                                 key={"deleteBtnNode" + note['id']}                                              
-                                />
+                            />
                         </div>
                     </span>                                    
                 }

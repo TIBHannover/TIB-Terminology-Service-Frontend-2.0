@@ -517,6 +517,12 @@ body .fa-ellipsis-h{
     font-size: 20px;    
 }
 
+body .fa{
+    border: none;    
+    margin-left: 5px;    
+    cursor: pointer;
+}
+
 body .fa-eye-slash, .fa-eye, .hidden-fa{
     border: none;
     font-size: 14px;
@@ -624,4 +630,10 @@ body .result-card{
     display: inline;
     margin-left: 10px;
     padding: 5px;
+}
+
+
+body .extra-sm-btn{
+    font-size: 2px;
+    padding: 1px;
 }

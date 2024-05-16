@@ -4,6 +4,9 @@ import { fetchCollectionList } from "../../../api/userCollection";
 import Toolkit from "../../../Libs/Toolkit";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
+import DeleteModalBtn from "../../common/DeleteModal/DeleteModal";
+import { DeleteModal } from "../../common/DeleteModal/DeleteModal";
+import AuthLib from "../../../Libs/AuthLib";
 
 
 
@@ -51,6 +54,17 @@ const UserCollection = () => {
 
 
 
+    async function disableTheDeletedCollection(collection){        
+        if(appContext.activeUserCollection['title'] === collection['title']){
+            appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
+            appContext.setUserCollectionEnabled(false);
+            let userSttings = {"userCollectionEnabled": false, "activeCollection": {"title": "", "ontology_ids": []}}
+            await storeUserSettings(userSttings);   
+        }
+    }
+
+
+
     function collectionCheckboxIsChecked(collectionTitle){
         if(appContext.activeUserCollection['title'] === collectionTitle){
             return true;
@@ -61,6 +75,10 @@ const UserCollection = () => {
 
     function renderCollections() {
         let list = [];
+        let callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
+        callHeader['Content-Type'] = 'application/json';
+        let redirectAfterDeleteEndpoint = process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections";
+        let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/collection/delete/";
         for(let collection of collections){            
             list.push(
                 <>
@@ -81,7 +99,22 @@ const UserCollection = () => {
                             <small>{": " + collection['description']}</small>
                         }                        
                     </label>
-                </div>                
+                    <DeleteModalBtn 
+                        modalId={collection['id']}   
+                        key={"deleteBtnUserCollection" + collection['id']}
+                        btnText={<i className="fa fa-close"></i>}
+                        btnClass="extra-sm-btn ml-2"
+                    />
+                </div>
+                <DeleteModal
+                    modalId={collection['id']}                    
+                    callHeaders={callHeader}
+                    deleteEndpoint={deleteEndpoint + collection['id']}
+                    afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
+                    key={"deleteCollection" + collection['id']}
+                    afterDeleteProcess={disableTheDeletedCollection}
+                    objectToDelete={collection}
+                />                                
                 </>
             );
         }        

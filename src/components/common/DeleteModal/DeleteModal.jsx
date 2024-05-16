@@ -5,12 +5,12 @@ import AlertBox from "../Alerts/Alerts";
 export const DeleteModalBtn = (props) => {
     return (
         <button type="button" 
-                class="btn btn-danger btn-sm btn-delete-note borderless-btn" 
+                className={"btn btn-danger btn-sm btn-delete-note borderless-btn " + props.btnClass}
                 data-toggle="modal" 
                 data-target={"#deleteModal" + props.modalId}
                 data-backdrop="static"
                 >
-                Delete
+                {props.btnText ? props.btnText : "Delete"}
         </button>
     );
 }
@@ -27,6 +27,9 @@ export const DeleteModal = (props) => {
             let result = await fetch(props.deleteEndpoint, postConfig);
             setSubmited(true);
             setDeleteSuccess(result.ok)
+            if(props.afterDeleteProcess && props.objectToDelete){
+                props.afterDeleteProcess(props.objectToDelete);
+            } 
         }
         catch(e){
             setSubmited(true);
@@ -35,7 +38,7 @@ export const DeleteModal = (props) => {
     }
 
 
-    const redirectAfterDelete = () => {
+    const redirectAfterDelete = () => {              
         window.location.replace(props.afterDeleteRedirectUrl);
     }
 
@@ -43,18 +46,18 @@ export const DeleteModal = (props) => {
 
     return (
         <div>            
-            <div class="modal fade" id={"deleteModal" + props.modalId} tabindex="-1" role="dialog" aria-labelledby={"deleteModalLabel" + props.modalId} aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id={"deleteModalLabel" + props.modalId}>Confirmation</h5>
+            <div className="modal fade" id={"deleteModal" + props.modalId} tabindex="-1" role="dialog" aria-labelledby={"deleteModalLabel" + props.modalId} aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id={"deleteModalLabel" + props.modalId}>Confirmation</h5>
                             {!submited && 
-                                <button type="button" class="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
+                                <button type="button" className="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             }
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             {!submited && 
                                 <span>
                                     Are you sure you want to delete this item? 
@@ -77,9 +80,9 @@ export const DeleteModal = (props) => {
                                 />                                 
                             }
                         </div>
-                        <div class="modal-footer justify-content-center">                            
-                            {!submited && <button type="button" class="btn btn-secondary" onClick={deleteResource}>Delete</button>}
-                            {submited && <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={redirectAfterDelete}>Close</button>}
+                        <div className="modal-footer justify-content-center">                            
+                            {!submited && <button type="button" className="btn btn-secondary" onClick={deleteResource}>Delete</button>}
+                            {submited && <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={redirectAfterDelete}>Close</button>}
                         </div>
                     </div>
                 </div>
