@@ -29,6 +29,13 @@ const UserCollection = () => {
         let contextObject = {"title": selectedCollection['title'], "ontology_ids": selectedCollection['ontology_ids']};
         let userSttings = {};
         if(isChecked){
+            let allCollectionCheckboxes = document.getElementsByClassName('user-collection-checkbox');
+            for(let checkbox of allCollectionCheckboxes){
+                if(checkbox.dataset.id !== targetId){
+                    checkbox.checked = false;
+                }
+            }
+            
             appContext.setActiveUserCollection(contextObject);
             appContext.setUserCollectionEnabled(true);
             userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
@@ -59,7 +66,7 @@ const UserCollection = () => {
                 <>
                 <div class="form-check form-switch">
                     <input 
-                        class="form-check-input" 
+                        class="form-check-input user-collection-checkbox" 
                         type="checkbox" 
                         role="switch" 
                         id={"collectionCheckbox" + collection['id']}
