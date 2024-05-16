@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import OntologyApi from "../../../api/ontology";
 import { saveCollection, updateCollection } from "../../../api/userCollection";
 import { storeUserSettings } from "../../../api/user";
+import { AppContext } from "../../../context/AppContext";
 
 
 
 
 const AddCollection = (props) => {
     const {editMode, collectionToEdit, editBtnText, btnClass} = props;
+
+    const appContext = useContext(AppContext);
 
     const [selectedOntologies, setSelectedOntologies] = useState([]);
     const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
@@ -74,12 +77,11 @@ const AddCollection = (props) => {
         }
         else{
             response = await updateCollection(collectionToEdit['id'], collectionData);
-            if(!response){
-                return;
-            }
-            let contextObject = {"title": collectionTitle, "ontology_ids": ontologyIds};
-            let userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
-            await storeUserSettings(userSttings);
+            if(response && appContext.activeUserCollection['title'] === collectionToEdit['title']){
+                let contextObject = {"title": collectionTitle, "ontology_ids": ontologyIds};
+                let userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
+                await storeUserSettings(userSttings);
+            }            
             window.location.reload();
         }
         
