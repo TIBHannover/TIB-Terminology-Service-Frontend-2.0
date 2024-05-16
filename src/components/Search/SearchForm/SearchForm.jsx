@@ -101,8 +101,7 @@ const SearchForm = () => {
     if(searchQuery.length === 0){
       return true;
     }
-    let searchUrl = setSearchUrl(searchQuery);    
-    setOntologyId(null);  
+    let searchUrl = setSearchUrl(searchQuery);        
     window.location.replace(searchUrl);
   }
 
@@ -129,7 +128,7 @@ const SearchForm = () => {
   function handleAdvancedSearchToggle(){           
     searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
     setAdvSearchEnabled(!advSearchEnabled);
-}
+  }
 
 
 

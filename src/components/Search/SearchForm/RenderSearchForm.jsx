@@ -104,7 +104,7 @@ const RenderSearchForm = (props) => {
           <div className='row site-header-searchbox-holder'>
             <div className='col-sm-9 search-bar-container'>
               <div class="input-group input-group-lg">
-                {appContext.user && appContext.activeUserCollection.title !== "" &&
+                {appContext.user && appContext.activeUserCollection.title !== "" && !props.ontologyId &&
                   <div className="custom-collection-btn"  title={createUserCollectionToggleTooltopText()}>
                     <div>
                       <i className="fa fa-close" onClick={handleUserCollectionClose}></i>
