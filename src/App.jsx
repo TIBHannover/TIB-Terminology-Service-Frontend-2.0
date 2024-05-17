@@ -24,7 +24,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
-  const [activeUserCollection, setActiveUserCollection] = useState({"titile": "", "ontology_ids": []});
+  const [activeUserCollection, setActiveUserCollection] = useState({"title": "", "ontology_ids": []});
   const [userCollectionEnabled, setUserCollectionEnabled] = useState(false);
 
 
