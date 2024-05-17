@@ -517,8 +517,7 @@ body .fa-ellipsis-h{
     font-size: 20px;    
 }
 
-body .fa{
-    border: none;    
+body .fa{    
     margin-left: 5px;    
     cursor: pointer;
 }
@@ -528,6 +527,12 @@ body .fa-eye-slash, .fa-eye, .hidden-fa{
     font-size: 14px;
     cursor: pointer;
     margin-left: 5px;
+}
+
+body .fa-borderless{
+    border: none;    
+    margin-left: 5px;    
+    cursor: pointer;
 }
 
 body .overlay {

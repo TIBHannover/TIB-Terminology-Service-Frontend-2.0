@@ -102,12 +102,12 @@ const UserCollection = () => {
                     <DeleteModalBtn 
                         modalId={collection['id']}   
                         key={"deleteBtnUserCollection" + collection['id']}
-                        btnText={<i className="fa fa-close"></i>}
+                        btnText={<i className="fa fa-close fa-borderless"></i>}
                         btnClass="extra-sm-btn ml-2"
                     />
                     <AddCollection 
                         editMode={true}
-                        editBtnText={<i className="fa fa-edit"></i>}
+                        editBtnText={<i className="fa fa-edit fa-borderless"></i>}
                         collectionToEdit={collection}
                         btnClass="extra-sm-btn ml-2"
                     />
