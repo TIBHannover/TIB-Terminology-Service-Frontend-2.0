@@ -43,7 +43,7 @@ const AddCollection = (props) => {
 
     function onTextInputChange(e){
         e.target.style.border = '';
-        document.getElementById('max-char-message').style.color = 'black';
+        document.getElementById('max-char-message' + idPostfix).style.color = 'black';
         setShowAlert(false);
     }
 
@@ -74,7 +74,7 @@ const AddCollection = (props) => {
             return false;
         }
         if(collectionTitle.length > 20){
-            document.getElementById('max-char-message').style.color = 'red';
+            document.getElementById('max-char-message' + idPostfix).style.color = 'red';
             return false;
         }
 
@@ -178,7 +178,7 @@ const AddCollection = (props) => {
                                         >
                                     </input>  
                                 </div>
-                                <small id="max-char-message">Max 20 characters</small>
+                                <small id={"max-char-message" + idPostfix}>Max 20 characters</small>
                             </div>
                             <br></br>                            
                             <div className='row'>                
