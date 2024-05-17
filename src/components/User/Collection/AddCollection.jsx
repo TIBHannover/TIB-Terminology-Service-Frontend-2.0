@@ -4,17 +4,19 @@ import OntologyApi from "../../../api/ontology";
 import { saveCollection, updateCollection } from "../../../api/userCollection";
 import { storeUserSettings } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 
 
 const AddCollection = (props) => {
-    const {editMode, collectionToEdit, editBtnText, btnClass} = props;
+    const {editMode, collectionToEdit, editBtnText, btnClass, exstingCollectionList} = props;
 
     const appContext = useContext(AppContext);
 
     const [selectedOntologies, setSelectedOntologies] = useState([]);
     const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
 
     const idPostfix = editMode ? collectionToEdit['id'] : '';
 
@@ -42,24 +44,57 @@ const AddCollection = (props) => {
     function onTextInputChange(e){
         e.target.style.border = '';
         document.getElementById('max-char-message').style.color = 'black';
+        setShowAlert(false);
     }
 
 
-    async function saveNewCollection(){
+    function returnCollectionTitleIfValid(){
         let collectionTitle = document.getElementById('collectionTitle' + idPostfix).value;
-        let formIsValid = true;
+
+        if(!editMode){
+            for (let collection of exstingCollectionList){
+                if(collection['title'] === collectionTitle){
+                    setShowAlert(true);
+                    return false;
+                }
+            }
+        }
+
+        if(editMode){
+            for (let collection of exstingCollectionList){
+                if(collection['title'] === collectionTitle && collection['id'] !== collectionToEdit['id']){
+                    setShowAlert(true);
+                    return false;
+                }
+            }
+        }
+        
         if(!collectionTitle || collectionTitle === ''){
             document.getElementById('collectionTitle' + idPostfix).style.border = '1px solid red';
-            formIsValid = false;
+            return false;
         }
         if(collectionTitle.length > 20){
             document.getElementById('max-char-message').style.color = 'red';
-            formIsValid = false;
+            return false;
         }
+
+        return collectionTitle;
+    }
+
+
+
+    async function saveNewCollection(){
+        let collectionTitle = returnCollectionTitleIfValid();
+        let formIsValid = collectionTitle ? true : false;
+        
         if(selectedOntologies.length === 0){
             document.getElementById('collection-ontologies' + idPostfix).style.border = '1px solid red';
             formIsValid = false;
         }
+        if(!formIsValid){
+            return;
+        }
+        setShowAlert(false);
         let collectionDescription = document.getElementById('collectionDescription' + idPostfix).value;
         let ontologyIds = [];
         for (let ontology of selectedOntologies){
@@ -125,6 +160,12 @@ const AddCollection = (props) => {
                             <h5 className="modal-title" id={modalId + "Label"}>{!editMode ? "New Collection" : "Edit Collection"}</h5>                            
                         </div>
                         <div className="modal-body">
+                            {showAlert &&
+                                <AlertBox 
+                                    type="danger"
+                                    message="Collection name already exists."
+                                />
+                            }
                             <div className="row">
                                 <div className="col-sm-12">
                                     <label className="required_input" for={"collectionTitle" + idPostfix}>Name</label>

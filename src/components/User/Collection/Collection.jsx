@@ -99,18 +99,19 @@ const UserCollection = () => {
                             <small>{": " + collection['description']}</small>
                         }                        
                     </label>
-                    <DeleteModalBtn 
-                        modalId={collection['id']}   
-                        key={"deleteBtnUserCollection" + collection['id']}
-                        btnText={<i className="fa fa-close fa-borderless"></i>}
-                        btnClass="extra-sm-btn ml-2"
-                    />
                     <AddCollection 
                         editMode={true}
                         editBtnText={<i className="fa fa-edit fa-borderless"></i>}
                         collectionToEdit={collection}
                         btnClass="extra-sm-btn ml-2"
+                        exstingCollectionList={collections}
                     />
+                    <DeleteModalBtn 
+                        modalId={collection['id']}   
+                        key={"deleteBtnUserCollection" + collection['id']}
+                        btnText={<i className="fa fa-close fa-borderless"></i>}
+                        btnClass="extra-sm-btn ml-2"
+                    />                    
                 </div>
                 <DeleteModal
                     modalId={collection['id']}                    
@@ -145,7 +146,7 @@ const UserCollection = () => {
                 </div>
             </div> 
             <div className="col-sm-2">
-                <AddCollection />
+                <AddCollection exstingCollectionList={collections} />
             </div>           
         </div>
     );
