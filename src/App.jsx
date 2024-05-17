@@ -42,7 +42,9 @@ const App = () => {
         setUser(user);
         setIsSystemAdmin(user?.systemAdmin);
         setUserCollectionEnabled(user?.settings?.userCollectionEnabled);
-        setActiveUserCollection(user?.settings?.activeCollection);
+        if(user?.settings?.activeCollection){
+          setActiveUserCollection(user?.settings?.activeCollection);
+        }        
       });
       
       getReportList().then((reports) => {
