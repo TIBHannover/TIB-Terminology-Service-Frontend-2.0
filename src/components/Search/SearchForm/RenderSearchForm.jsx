@@ -107,8 +107,8 @@ const RenderSearchForm = (props) => {
                 {appContext.user && appContext.activeUserCollection.title !== "" && !props.ontologyId &&
                   <div className="custom-collection-btn"  title={createUserCollectionToggleTooltopText()}>
                     <div>
-                      <i className="fa fa-close fa-borderless" onClick={handleUserCollectionClose}></i>
                       {appContext.activeUserCollection.title}
+                      <i className="fa fa-close fa-borderless" onClick={handleUserCollectionClose}></i>                      
                     </div>                   
                   </div> 
                 }                              
