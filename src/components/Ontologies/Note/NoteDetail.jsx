@@ -1,5 +1,5 @@
 import {useState, useEffect, useContext} from "react";
-import { getNoteDetail } from "../../../api/tsMicroBackendCalls";
+import { getNoteDetail } from "../../../api/note";
 import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
 import {createHtmlFromEditorJson, createTextEditorEmptyText}  from "../../common/TextEditor/TextEditor";
 import { NoteDetailRender } from "./renders/NoteDetailRender";

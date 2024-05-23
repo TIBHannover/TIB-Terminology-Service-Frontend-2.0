@@ -1,5 +1,6 @@
 import AuthLib from "../../../Libs/AuthLib";
 import { runLogin, isLogin } from "../../../api/user";
+import { getTsPluginHeaders } from "../../../api/header";
 
 
 
@@ -51,7 +52,7 @@ class AuthFactory{
 
 
     static async userIsSysAdmin(){               
-        let headers = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});    
+        let headers = getTsPluginHeaders({withAccessToken: true});
         let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_system_admin', {method: "POST", headers:headers});    
         if (result.status !== 200){
             return false;

@@ -5,7 +5,7 @@ import NoteList from '../Note/NoteList';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
-import { getNoteList } from '../../../api/tsMicroBackendCalls';
+import { getNoteList } from '../../../api/note';
 import Graph from '../../common/Graph/Graph';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';

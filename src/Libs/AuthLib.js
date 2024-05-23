@@ -3,22 +3,6 @@ import UserModel from "../models/user";
 
 class AuthLib{
 
-    static setHeaderForTsMicroBackend(withAccessToken=false) { 
-        let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;                    
-        let header = {};
-        header["X-TS-Frontend-Id"] = process.env.REACT_APP_PROJECT_ID;
-        header["X-TS-Frontend-Token"] = process.env.REACT_APP_MICRO_BACKEND_TOKEN;
-        header["X-TS-Auth-Provider"] = localStorage.getItem('authProvider');
-        header['X-TS-Orcid-Id'] = user?.orcidId;
-        header["X-TS-User-Name"] = user?.username;
-         
-        if (withAccessToken){
-            header["Authorization"] = user?.token;
-            header["X-TS-User-Token"] = user?.userToken;
-        }
-        return header;
-    }
-
 
     static createUserDataObjectFromAuthResponse(response){
         try{

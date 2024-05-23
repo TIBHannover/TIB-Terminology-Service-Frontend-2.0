@@ -17,6 +17,20 @@ export type UserSettings = {
 }
 
 
+export type UserModelType = {
+    token?: string,
+    fullName?: string,
+    username?: string,
+    userToken?: string,
+    authProvider?: string,
+    company?: string,
+    githubHomeUrl?: string,
+    orcidId?: string,
+    systemAdmin?: boolean,
+    settings?: UserSettings,
+}
+
+
 type UserCollection = {
     title:string,
     ontology_ids:string[]

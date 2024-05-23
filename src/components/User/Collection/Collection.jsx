@@ -6,7 +6,7 @@ import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
 import DeleteModalBtn from "../../common/DeleteModal/DeleteModal";
 import { DeleteModal } from "../../common/DeleteModal/DeleteModal";
-import AuthLib from "../../../Libs/AuthLib";
+import { getTsPluginHeaders } from "../../../api/header";
 
 
 
@@ -75,7 +75,7 @@ const UserCollection = () => {
 
     function renderCollections() {
         let list = [];
-        let callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
+        let callHeader = getTsPluginHeaders({withAccessToken: true});
         callHeader['Content-Type'] = 'application/json';
         let redirectAfterDeleteEndpoint = process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections";
         let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/collection/delete/";

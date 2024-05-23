@@ -1,7 +1,7 @@
 import {useEffect, useState, useContext} from "react";
 import {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
-import { submitNote } from "../../../api/tsMicroBackendCalls";
+import { submitNote } from "../../../api/note";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
@@ -23,14 +23,14 @@ const NoteCreation = (props) => {
 
     const noteContext = useContext(NoteContext);
     const appContext = useContext(AppContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
     targetType = targetType !== -1 ? targetType : 1;
     let selectedTerm = noteContext.selectedTermInTree 
         ? {"iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label']} 
         : {"iri": null, "label": null};
-
-    const ontologyPageContext = useContext(OntologyPageContext);    
+    
 
     const [targetArtifactType, setTargetArtifactType] = useState(targetType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
@@ -111,10 +111,10 @@ const NoteCreation = (props) => {
         if(!formIsValid){
             return;
         }
-
+        
         if(parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = ontologyPageContext.ontology.ontologyId;
-            selectedTargetTermLabel = ontologyPageContext.ontology.ontology_name;
+            selectedTargetTermLabel = ontologyPageContext.ontology.ontologyId;
         }
 
         
@@ -125,18 +125,17 @@ const NoteCreation = (props) => {
             selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
             selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
             targetType = noteContext.selectedTermTypeInTree;
-        }
-                
-        let data = new FormData();
-        data.append("title", noteTitle);
-        data.append("semantic_component_iri", selectedTargetTermIri);
-        data.append("semantic_component_label", selectedTargetTermLabel);
-        data.append("content", noteContent);
-        data.append("ontology_id", ontologyPageContext.ontology.ontologyId);        
-        data.append("semantic_component_type", targetType);
-        data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
+        }        
+        let data = {};
+        data["title"] = noteTitle;
+        data["semantic_component_iri"] = selectedTargetTermIri;
+        data["semantic_component_label"] = selectedTargetTermLabel;
+        data["content"] = noteContent;
+        data["ontology_id"] = ontologyPageContext.ontology.ontologyId;
+        data["semantic_component_type"] = targetType;
+        data["visibility"] = constantsVars.VISIBILITY_VALUES[visibility];
         if(publishToParent && parentOntology){
-            data.append("parentOntology", parentOntology);
+            data["parentOntology"] = parentOntology;
         }
         submitNote(data).then((newNoteId) => {
             noteContext.setNoteCreationResultStatus(newNoteId);

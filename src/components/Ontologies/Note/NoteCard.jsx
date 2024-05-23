@@ -12,7 +12,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
-
+import { getTsPluginHeaders } from "../../../api/header";
 
 
 const VISIBILITY_HELP = {
@@ -23,7 +23,6 @@ const VISIBILITY_HELP = {
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
-const callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
@@ -98,10 +97,10 @@ export const NoteCardHeader = (props) => {
     , [props.note]);
 
 
-    let deleteFormData = new FormData();
-    deleteFormData.append("objectId", note['id']);
-    deleteFormData.append("objectType", 'note');
-    deleteFormData.append("ontology_id", ontologyPageContext.ontology.ontologyId);
+    let deleteFormData = {};
+    deleteFormData["objectId"] = note['id'];
+    deleteFormData["objectType"] = 'note';
+    deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
     
     let reportFormData = new FormData();
     reportFormData.append("objectId", note['id']);
@@ -142,8 +141,8 @@ export const NoteCardHeader = (props) => {
             />
             <DeleteModal
                 modalId={note['id']}
-                formData={deleteFormData}
-                callHeaders={callHeader}
+                formData={JSON.stringify(deleteFormData)}
+                callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
                 key={"deleteNode" + note['id']}
@@ -151,13 +150,13 @@ export const NoteCardHeader = (props) => {
             <PinnModal 
                 note={note}
                 modalId={note['id']}
-                callHeaders={callHeader}
+                callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
                 key={"pinnModal" + note['id']}
             />
             <ReportModal
                 modalId={note['id']}
                 formData={reportFormData}
-                callHeaders={callHeader}
+                callHeaders={getTsPluginHeaders({withAccessToken: true})}
                 reportEndpoint={reportEndpoint}                
                 key={"reportNote" + note['id']}
             />
@@ -214,8 +213,7 @@ const NoteActionDropDown = ({note, setLinkCopied}) => {
                             <PinnModalBtn
                                 modalId={note['id']}  
                                 key={"pinBtnNode" + note['id']} 
-                                note={note}    
-                                callHeaders={callHeader}
+                                note={note}                                    
                                 isAdminForOntology={noteContext.isAdminForOntology}
                                 numberOfpinned={noteContext.numberOfPinned}                                      
                                 />

@@ -1,11 +1,11 @@
 import {useEffect, useState, useContext} from "react";
-import AuthLib from "../../../Libs/AuthLib";
 import { NoteListRender } from "./renders/NoteListRender";
-import { getNoteList } from "../../../api/tsMicroBackendCalls";
+import { getNoteList } from "../../../api/note";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import PropTypes from 'prop-types';
+import { getTsPluginHeaders } from "../../../api/header";
 
 
 
@@ -89,7 +89,7 @@ const NoteList = (props) => {
 
 
     async function checkIsOntologyAdmin(){        
-        let callHeaders = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});  
+        let callHeaders = getTsPluginHeaders({withAccessToken: true});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin'; 
         let formData = new FormData();
         formData.append("ontologyId", ontologyPageContext.ontology.ontologyId);

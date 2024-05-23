@@ -10,12 +10,12 @@ import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/Res
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
+import { getTsPluginHeaders } from "../../../api/header";
 
 
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
-const callHeader = AuthLib.setHeaderForTsMicroBackend({withAccessToken:true});
 
 
 
@@ -66,10 +66,10 @@ export const CommentCardHeader = (props) =>{
         setComment(props.comment);
     },[props.comment]);
     
-    let deleteFormData = new FormData();
-    deleteFormData.append("objectId", comment['id']);
-    deleteFormData.append("objectType", 'comment');   
-    deleteFormData.append("ontology_id", ontologyPageContext.ontology.ontologyId);
+    let deleteFormData = {};
+    deleteFormData["objectId"] = comment['id'];
+    deleteFormData["objectType"] = 'comment';   
+    deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
     
     let reportFormData = new FormData();
     reportFormData.append("objectId", comment['id']);
@@ -147,8 +147,8 @@ export const CommentCardHeader = (props) =>{
             
             <DeleteModal
                 modalId={"_comment-" + comment['id']}
-                formData={deleteFormData}
-                callHeaders={callHeader}
+                formData={JSON.stringify(deleteFormData)}
+                callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
                 deleteEndpoint={deleteEndpoint}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
                 key={"commentDelModal" + comment['id']}
@@ -156,7 +156,7 @@ export const CommentCardHeader = (props) =>{
             <ReportModal
                 modalId={comment['id']}
                 formData={reportFormData}
-                callHeaders={callHeader}
+                callHeaders={getTsPluginHeaders({withAccessToken: true})}
                 reportEndpoint={reportEndpoint}                
                 key={"reportComment" + comment['id']}
             /> 

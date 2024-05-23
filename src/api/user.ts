@@ -1,7 +1,9 @@
-import AuthLib from "../Libs/AuthLib";
 import { LoginResponse
     , UserSettings
  } from "./types/userTypes";
+ import { TsPluginHeader } from "./types/headerTypes";
+ import { getTsPluginHeaders } from "./header";
+
 
 
 const baseUrl:string|undefined = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
@@ -9,7 +11,7 @@ const baseUrl:string|undefined = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
 
 export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
     try{
-        let headers:any = AuthLib.setHeaderForTsMicroBackend();
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: false});
         headers["X-TS-Auth-APP-Code"] = authCode;
         let result:any = await fetch(baseUrl + "/user/login", {method: "POST", headers:headers});
         result = await result.json();
@@ -29,7 +31,7 @@ export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
 
 export async function isLogin():Promise<boolean>{
     try{        
-        let headers:any = AuthLib.setHeaderForTsMicroBackend(true);        
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});
         let result:any = await fetch(baseUrl + '/user/validate_login', {method: "POST", headers:headers});
         if (result.status !== 200){            
             return false;
@@ -50,8 +52,7 @@ export async function isLogin():Promise<boolean>{
 
 export async function storeUserSettings(settings:UserSettings):Promise<boolean>{
     try{
-        let headers:any = AuthLib.setHeaderForTsMicroBackend(true);
-        headers["Content-Type"] = "application/json";        
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});        
         let result:any = await fetch(baseUrl + "/user/save_settings", {method: "POST", headers:headers, body: JSON.stringify(settings)});
         result = await result.json();
         result = result['_result']['saved'];
