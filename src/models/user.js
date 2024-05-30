@@ -9,7 +9,10 @@ class UserModel{
         this.githubHomeUrl = "";
         this.orcidId = "";
         this.systemAdmin = false;
-        this.settings = {};
+        this.settings = {
+            userCollectionEnabled: false,
+            activeCollection: {"title": "", "ontology_ids": []}
+        };
     }
 
     

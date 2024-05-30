@@ -53,7 +53,7 @@ export async function isLogin():Promise<boolean>{
 export async function storeUserSettings(settings:UserSettings):Promise<boolean>{
     try{
         let headers:TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});        
-        let result:any = await fetch(baseUrl + "/user/save_settings", {method: "POST", headers:headers, body: JSON.stringify(settings)});
+        let result:any = await fetch(baseUrl + "/user/settings", {method: "POST", headers:headers, body: JSON.stringify(settings)});
         result = await result.json();
         result = result['_result']['saved'];
         if(result || result === "true"){
