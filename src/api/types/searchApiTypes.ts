@@ -1,3 +1,8 @@
+import { A } from "msw/lib/glossary-de6278a9";
+import { TermMultiSelectOption } from "./common";
+
+
+
 export type SearchApiInput = {
     searchQuery: string,
     page: number,
@@ -64,4 +69,11 @@ interface SearchSingleResult extends BaseSearchSingleResult{
     obo_id: string,
     description: string[],
     is_defining_ontology: boolean
+}
+
+
+export type SearchSetting = {
+    selectedMetaData: Array<string>|[],
+    selectedSearchUnderTerms: Array<TermMultiSelectOption>|[],
+    selectedSearchUnderAllTerms: Array<TermMultiSelectOption>|[],
 }

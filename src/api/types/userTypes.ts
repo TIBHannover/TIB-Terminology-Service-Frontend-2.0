@@ -1,3 +1,6 @@
+import { SearchSetting } from "./searchApiTypes"
+
+
 export type LoginResponse ={
     name:string,
     token:string,
@@ -28,6 +31,13 @@ export type UserModelType = {
     orcidId?: string,
     systemAdmin?: boolean,
     settings?: UserSettings,
+}
+
+
+export type SearchSettingPayload ={
+    title:string,
+    description?:string,
+    settings:SearchSetting
 }
 
 

@@ -68,13 +68,13 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleSearchInMultiSelect(selectedList, selectedItem){        
+    function handleSearchInMultiSelect(selectedList, selectedItem){                
         setSelectedMetaData(selectedList);        
     }
 
 
 
-    function handleTermSelectionSearchUnder(selectedList, selectedItem){                
+    function handleTermSelectionSearchUnder(selectedList, selectedItem){                   
         setSelectedSearchUnderTerms(selectedList);
         setLoadingResult(true);
         setTermListForSearchUnder([]); 
@@ -275,7 +275,14 @@ const AdvancedSearch = (props) => {
                             <div className='col-sm-12'>
                                 <button className='btn btn-secondary' onClick={reset} >Reset</button>
                                 <button className='btn btn-secondary ml-2' onClick={reset} >Load</button>
-                                <StoreSearchSettings />
+                                <StoreSearchSettings 
+                                    settings={{
+                                        selectedMetaData,
+                                        selectedSearchUnderTerms,
+                                        selectedSearchUnderAllTerms
+                                    
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>

@@ -1,37 +1,55 @@
 import { useState } from "react";
+import { storeSearchSettings } from "../../../api/user";
 
 
 
 const StoreSearchSettings = (props) => {
 
+    const {settings} = props;
+
     const [showAlert, setShowAlert] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(true);
 
 
 
     function returnSettingTitleIfValid(){
-        let title = document.getElementById('searchSettingTitle').value;
+        let title = document.getElementById('searchSettingTitle').value;        
         if(!title || title === ''){
             document.getElementById('searchSettingTitle').style.border = '1px solid red';
             return false;
         }
+        return title;
     }
 
 
-    async function store(){
-        let settingTitle = returnSettingTitleIfValid();
-        let formIsValid = settingTitle ? true : false;
+    async function store(){        
+        let settingTitle = returnSettingTitleIfValid();        
         
-        if(!formIsValid){
+        if(!settingTitle){
             return;
-        }
+        }        
         setShowAlert(false);
         let description = document.getElementById('searchSettingDescription').value;              
         let settingData = {
             'title': settingTitle,
             'description': description,
-            'setting': {}
-        };
-        let response = null;
+            'setting': settings 
+        };        
+        let response = await storeSearchSettings(settingData);
+        if(response){
+            closeModal();
+        }
+    }
+
+
+
+    function closeModal(newNoteId=true){                
+        let modalBackDrop = document.getElementsByClassName('modal-backdrop');
+        document.body.classList.remove('modal-open');
+        if(modalBackDrop.length === 1){
+            modalBackDrop[0].remove();
+        }
+        setModalIsOpen(false);;         
     }
 
 
@@ -47,7 +65,7 @@ const StoreSearchSettings = (props) => {
                 >
                 Save
             </button>
-
+            {modalIsOpen &&
             <div className="modal fade" id={'storeSearchSettingModal'} tabindex="-1" role="dialog" aria-labelledby={"storeSearchSettingModalLabel"} aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -90,13 +108,14 @@ const StoreSearchSettings = (props) => {
                         </div>
                         <div className="modal-footer">
                             <div className="col-auto mr-auto">
-                                <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
+                                <button id="modalCloseBtn" type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                             </div>                             
                             <button type="button" className="btn btn-secondary" onClick={store}>Save</button>
                         </div>
                     </div>
                 </div>
             </div>
+            }
         </>
     );
 

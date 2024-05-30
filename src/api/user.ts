@@ -1,5 +1,6 @@
 import { LoginResponse
-    , UserSettings
+    , UserSettings,
+    SearchSettingPayload
  } from "./types/userTypes";
  import { TsPluginHeader } from "./types/headerTypes";
  import { getTsPluginHeaders } from "./header";
@@ -66,6 +67,24 @@ export async function storeUserSettings(settings:UserSettings):Promise<boolean>{
             }            
         }        
         return result;
+    }
+    catch(e){
+        return false;
+    }
+}
+
+
+
+export async function storeSearchSettings(settingData:SearchSettingPayload):Promise<boolean>{
+    try{
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});        
+        let result:any = await fetch(baseUrl + "/user/search_setting", {method: "POST", headers:headers, body: JSON.stringify(settingData)});
+        result = await result.json();
+        result = result['_result']['saved'];
+        if(result){
+            return true;        
+        }        
+        return false;
     }
     catch(e){
         return false;
