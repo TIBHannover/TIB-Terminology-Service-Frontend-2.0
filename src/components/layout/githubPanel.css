@@ -40,7 +40,7 @@ body .close-term-request-modal-btn{
 
 body .required_input::after{
     content: "*";
-    color: red;
+    color: red;    
 }
 
 body .rdw-editor-wrapper{

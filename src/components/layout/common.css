@@ -640,3 +640,7 @@ body .extra-sm-btn{
     font-size: 2px;
     padding: 1px;
 }
+
+body .modal{
+    color: black;
+}
