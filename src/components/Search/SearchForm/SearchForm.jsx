@@ -128,6 +128,9 @@ const SearchForm = () => {
   function handleAdvancedSearchToggle(){           
     searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
     setAdvSearchEnabled(!advSearchEnabled);
+    let userSettings = {...appContext.userSettings};
+    userSettings.advancedSearchEnabled = !advSearchEnabled;
+    appContext.setUserSettings(userSettings);
   }
 
 
@@ -161,8 +164,8 @@ const SearchForm = () => {
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         advSearchEnabled={advSearchEnabled}
         handleAdvancedSearchToggle={handleAdvancedSearchToggle}
-      />      
-      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />            
+      />            
+      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />      
     </>     
   );
 }

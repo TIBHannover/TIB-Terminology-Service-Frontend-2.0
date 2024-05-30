@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { fetchSearchSettings } from "../../../api/user";
 
 
 
-const SettingsList = (props) => {
+const LoadSetting = (props) => {
     const {loadFunc} = props;
 
     const [settingsList, setSettingsList] = useState([]);
@@ -90,4 +90,4 @@ const SettingsList = (props) => {
 
 }
 
-export default SettingsList;
+export default LoadSetting;

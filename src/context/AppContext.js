@@ -8,7 +8,19 @@ const blueprint = {
         activeCollection: {"title": "", "ontology_ids": []},
         userCollectionEnabled: false,
         advancedSearchEnabled: false,
-        activeSearchSetting: {}
+        activeSearchSetting: {
+            "id": "",
+            "title": "",
+            "user_id": "",
+            "setting": {
+                "selectedMetaData": [],
+                "selectedSearchUnderTerms": [],
+                "selectedSearchUnderAllTerms": []            
+            },
+            "description": "",
+            "created_at": "",
+            "updated_at": ""
+        }
     },
     setUserSettings: () => {/* set userSettings */}       
 };

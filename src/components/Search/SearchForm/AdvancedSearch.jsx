@@ -7,17 +7,22 @@ import OntologyLib from '../../../Libs/OntologyLib';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import { AppContext } from '../../../context/AppContext';
 import StoreSearchSettings from './StoreSettings';
-import SettingsList from './SettingsList';
+import LoadSetting from './LoadSetting';
+import { storeUserSettings } from '../../../api/user';
 
 
 
 const AdvancedSearch = (props) => {
 
     const appContext = useContext(AppContext);
-        
-    const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
-    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrlOrStorage());
-    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrlOrStorage());    
+
+    let selectedMetaDataInit = SearchLib.getSearchInMetadataFieldsFromUrl() ? SearchLib.getSearchInMetadataFieldsFromUrl() : appContext.userSettings.activeSearchSetting?.setting?.selectedMetaData;        
+    let selectedSearchUnderTermsInit = SearchLib.getSearchUnderTermsFromUrl() ? SearchLib.getSearchUnderTermsFromUrl() : appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderTerms;
+    let selectedSearchUnderAllTermsInit = SearchLib.getSearchUnderAllTermsFromUrl() ? SearchLib.getSearchUnderAllTermsFromUrl() : appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderAllTerms;
+    
+    const [selectedMetaData, setSelectedMetaData] = useState(selectedMetaDataInit ? selectedMetaDataInit : []);
+    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(selectedSearchUnderTermsInit ? selectedSearchUnderTermsInit : []);
+    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(selectedSearchUnderAllTermsInit ? selectedSearchUnderAllTermsInit : []);    
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);    
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
@@ -104,25 +109,17 @@ const AdvancedSearch = (props) => {
     }
 
 
-    function reset(){
+    async function reset(){
         setSelectedMetaData([]);
         setSelectedSearchUnderTerms([]);
         setSelectedSearchUnderAllTerms([]);        
         setPlaceHolderExtraText("");
         searchUrlFactory.resetAdvancedSearchUrlParams();  
-        setLoadedSettingName(false);                        
-    }
-
-    
-    
-    function storeStateInLocalStorage(){
-        const states = JSON.stringify({
-            selectedMetaData,
-            selectedSearchUnderTerms,
-            selectedSearchUnderAllTerms            
-        });
-        
-        localStorage.setItem("advancedSearchStates", states);
+        setLoadedSettingName(false);      
+        let userSettings = {...appContext.userSettings};
+        userSettings.activeSearchSetting = {};
+        appContext.setUserSettings(userSettings); 
+        await storeUserSettings(userSettings);                 
     }
 
 
@@ -137,13 +134,17 @@ const AdvancedSearch = (props) => {
     }
 
 
-    function loadSettings(setting){
+    async function loadSettings(setting){
         let {selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms} = setting['setting'];
         let loadedSettingName = setting['title'];
         setSelectedMetaData(selectedMetaData);
         setSelectedSearchUnderTerms(selectedSearchUnderTerms);
         setSelectedSearchUnderAllTerms(selectedSearchUnderAllTerms);
         setLoadedSettingName(loadedSettingName);
+        let userSettings = {...appContext.userSettings};
+        userSettings.activeSearchSetting = setting;        
+        appContext.setUserSettings(userSettings);
+        await storeUserSettings(userSettings);
     }
 
 
@@ -171,15 +172,24 @@ const AdvancedSearch = (props) => {
     }, [props.advSearchEnabled]);
 
 
-    useEffect(() => {
-        // storeStateInLocalStorage();
-        
+    useEffect(() => {  
+        console.info(selectedMetaData)                      
         props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
             searchInValues: selectedMetaData,
             searchUnderTerms: selectedSearchUnderTerms,
             searchUnderAllTerms: selectedSearchUnderAllTerms
         });
     }, [selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms]);
+
+
+    useEffect(() => {
+        if(appContext.userSettings.activeSearchSetting.setting !== undefined){
+            setSelectedMetaData(appContext.userSettings.activeSearchSetting?.setting?.selectedMetaData);
+            setSelectedSearchUnderTerms(appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderTerms);
+            setSelectedSearchUnderAllTerms(appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderAllTerms);  
+            setLoadedSettingName(appContext.userSettings.activeSearchSetting.title);      
+        }        
+    }, [appContext.userSettings.activeSearchSetting]);
 
 
 
@@ -198,7 +208,7 @@ const AdvancedSearch = (props) => {
                                 <div className='row'>
                                     <div className='col-sm-12 adv-search-label-holder'>
                                         {loadedSettingName && 
-                                            "Loaded Setting: " + loadedSettingName
+                                            <h5>Loaded Setting: {loadedSettingName}</h5>                                            
                                         }
                                     </div>
                                 </div> 
@@ -296,7 +306,7 @@ const AdvancedSearch = (props) => {
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <button className='btn btn-secondary' onClick={reset} >Reset</button>
-                                <SettingsList loadFunc={loadSettings} />
+                                <LoadSetting loadFunc={loadSettings} />
                                 <StoreSearchSettings 
                                     settings={{
                                         selectedMetaData,

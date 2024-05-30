@@ -14,7 +14,7 @@ class AuthFactory{
             runLogin(code).then((resp) => {
                 if(resp){                    
                     let userData = AuthLib.createUserDataObjectFromAuthResponse(resp);
-                    localStorage.setItem('user', JSON.stringify(userData)); 
+                    localStorage.setItem('user', JSON.stringify(userData));                     
                     let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
                     window.location.replace(redirectUrl);                    
                     return true;

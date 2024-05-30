@@ -7,13 +7,13 @@ class AuthLib{
     static createUserDataObjectFromAuthResponse(response){
         try{
             let authProvider = localStorage.getItem('authProvider');
-            let user = new UserModel();
+            let user = new UserModel();            
             user.setToken(response["token"]);
             user.setFullName(response["name"]);
             user.setUsername(response["ts_username"]);
             user.setUserToken(response["ts_user_token"]);
             user.setSystemAdmin(response["system_admin"]);
-            user.setSettings(response["settings"]);
+            user.setSettings(response["settings"]);            
             user.setAuthProvider(authProvider);        
             if(authProvider === 'github'){            
                 user.setGithubInfo({company: response["company"], homeUrl: response["github_home"]});            
