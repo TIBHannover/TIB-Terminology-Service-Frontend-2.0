@@ -40,6 +40,16 @@ export type SearchSettingPayload ={
     settings:SearchSetting
 }
 
+export type SearchSettingApiResponse = {
+    id: string|number,
+    title: string,
+    user_id: string|number,
+    setting: SearchSetting,
+    description?: string,
+    created_at: string,
+    updated_at?: string
+}
+
 
 type UserCollection = {
     title:string,

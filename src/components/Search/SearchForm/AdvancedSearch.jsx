@@ -7,6 +7,7 @@ import OntologyLib from '../../../Libs/OntologyLib';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import { AppContext } from '../../../context/AppContext';
 import StoreSearchSettings from './StoreSettings';
+import SettingsList from './SettingsList';
 
 
 
@@ -134,6 +135,13 @@ const AdvancedSearch = (props) => {
     }
 
 
+    function loadSettings({selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms}){
+        setSelectedMetaData(selectedMetaData);
+        setSelectedSearchUnderTerms(selectedSearchUnderTerms);
+        setSelectedSearchUnderAllTerms(selectedSearchUnderAllTerms);
+    }
+
+
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutsideSelectionBox, true);
@@ -160,6 +168,7 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         // storeStateInLocalStorage();
+        
         props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
             searchInValues: selectedMetaData,
             searchUnderTerms: selectedSearchUnderTerms,
@@ -274,7 +283,7 @@ const AdvancedSearch = (props) => {
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <button className='btn btn-secondary' onClick={reset} >Reset</button>
-                                <button className='btn btn-secondary ml-2' onClick={reset} >Load</button>
+                                <SettingsList loadFunc={loadSettings} />
                                 <StoreSearchSettings 
                                     settings={{
                                         selectedMetaData,

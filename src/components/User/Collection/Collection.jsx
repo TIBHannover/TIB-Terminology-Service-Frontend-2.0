@@ -84,7 +84,7 @@ const UserCollection = () => {
                 <>
                 <div class="form-check form-switch">
                     <input 
-                        class="form-check-input user-collection-checkbox" 
+                        className="form-check-input user-collection-checkbox" 
                         type="checkbox" 
                         role="switch" 
                         id={"collectionCheckbox" + collection['id']}

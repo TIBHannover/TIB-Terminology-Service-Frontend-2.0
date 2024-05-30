@@ -1,6 +1,7 @@
 import { LoginResponse
     , UserSettings,
-    SearchSettingPayload
+    SearchSettingPayload,
+    SearchSettingApiResponse
  } from "./types/userTypes";
  import { TsPluginHeader } from "./types/headerTypes";
  import { getTsPluginHeaders } from "./header";
@@ -88,5 +89,23 @@ export async function storeSearchSettings(settingData:SearchSettingPayload):Prom
     }
     catch(e){
         return false;
+    }
+}
+
+
+
+export async function fetchSearchSettings():Promise<Array<SearchSettingApiResponse>|[]>{
+    try{
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});        
+        let result:any = await fetch(baseUrl + "/user/search_settings", {method: "GET", headers:headers});
+        result = await result.json();
+        result = result['_result']['settings'];
+        if(result){
+            return result;
+        }        
+        return [];
+    }
+    catch(e){
+        return [];
     }
 }
