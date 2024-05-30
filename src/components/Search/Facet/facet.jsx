@@ -35,7 +35,7 @@ const Facet = (props) => {
             let types = {};                        
             for(let i=0; i < allOntologies.length; i++){               
                 if(i % 2 == 0){
-                    if(appContext.userCollectionEnabled && !appContext.activeUserCollection['ontology_ids'].includes(allOntologies[i].toLowerCase())){                        
+                    if(appContext.userSettings.userCollectionEnabled && !appContext.userSettings.activeCollection['ontology_ids'].includes(allOntologies[i].toLowerCase())){                        
                         continue;
                     }
                     ontologyFacetData[allOntologies[i].toUpperCase()] = allOntologies[i + 1];
@@ -223,7 +223,7 @@ const Facet = (props) => {
 
 
     useEffect(() => {        
-        if(!appContext.userCollectionEnabled){
+        if(!appContext.userSettings.userCollectionEnabled){
             createCollectionsCheckBoxes();
             setIsLoading(false);
         }        
@@ -235,7 +235,7 @@ const Facet = (props) => {
         setComponentData();              
         createTypesCheckboxList();
         createOntologiesCheckboxList();
-        !appContext.userCollectionEnabled && createCollectionsCheckBoxes();
+        !appContext.userSettings.userCollectionEnabled && createCollectionsCheckBoxes();
         setIsLoading(false);
     }, [props.facetData]);
 
@@ -297,11 +297,11 @@ const Facet = (props) => {
                     <>
                         <h4>{"Collections"}</h4>
                         <div class="facet-box" id="facet-collections-list">
-                            {!appContext.userCollectionEnabled && collectionCheckBoxesToRender}
-                            {appContext.userCollectionEnabled && 
+                            {!appContext.userSettings.userCollectionEnabled && collectionCheckBoxesToRender}
+                            {appContext.userSettings.userCollectionEnabled && 
                                 <>
                                 <p>
-                                    Your collection named "{appContext.activeUserCollection.title}" is enabled. 
+                                    Your collection named "{appContext.userSettings.activeCollection.title}" is enabled. 
                                 </p>
                                 <p>
                                     Disable it by clicking <i className="fa fa-close"></i> 

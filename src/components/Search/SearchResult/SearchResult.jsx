@@ -69,8 +69,8 @@ const SearchResult = (props) => {
 
     let ontologies = [...selectedOntologies];
     
-    if(appContext.userCollectionEnabled && ontologies.length === 0){
-      ontologies = [...appContext.activeUserCollection.ontology_ids];
+    if(appContext.userSettings.userCollectionEnabled && ontologies.length === 0){
+      ontologies = [...appContext.userSettings.activeCollection.ontology_ids];
     }
 
     try{

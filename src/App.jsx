@@ -24,8 +24,11 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
-  const [activeUserCollection, setActiveUserCollection] = useState({"title": "", "ontology_ids": []});
-  const [userCollectionEnabled, setUserCollectionEnabled] = useState(false);
+  const [userSettings, setUserSettings] = useState({
+    "activeCollection": {"title": "", "ontology_ids": []}, 
+    "userCollectionEnabled": false, 
+    "advancedSearchEnabled": false, 
+    "activeSearchSetting": {}} );
 
 
   useEffect(() => {
@@ -41,10 +44,16 @@ const App = () => {
       AuthFactory.userIsLogin().then((user) => {
         setUser(user);
         setIsSystemAdmin(user?.systemAdmin);
-        setUserCollectionEnabled(user?.settings?.userCollectionEnabled);
+        let settings = {...userSettings};
+        settings.userCollectionEnabled = user?.settings?.userCollectionEnabled;
+        settings.advancedSearchEnabled = user?.settings?.advancedSearchEnabled;        
         if(user?.settings?.activeCollection){
-          setActiveUserCollection(user?.settings?.activeCollection);
-        }        
+          settings.activeCollection = user?.settings?.activeCollection;          
+        }
+        if(user?.settings?.activeSearchSetting){
+          settings.activeSearchSetting = user?.settings?.activeSearchSetting;          
+        }   
+        setUserSettings(settings);     
       });
       
       getReportList().then((reports) => {
@@ -63,10 +72,8 @@ const App = () => {
     user: user,
     isUserSystemAdmin: isSystemAdmin,
     reportsListForAdmin: reportsListForAdmin,
-    activeUserCollection: activeUserCollection,
-    setActiveUserCollection: setActiveUserCollection,
-    userCollectionEnabled: userCollectionEnabled,
-    setUserCollectionEnabled: setUserCollectionEnabled
+    userSettings: userSettings,
+    setUserSettings: setUserSettings,
   };
 
   return (

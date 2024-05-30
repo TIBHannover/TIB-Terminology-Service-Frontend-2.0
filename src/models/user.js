@@ -11,7 +11,9 @@ class UserModel{
         this.systemAdmin = false;
         this.settings = {
             userCollectionEnabled: false,
-            activeCollection: {"title": "", "ontology_ids": []}
+            activeCollection: {"title": "", "ontology_ids": []},
+            advancedSearchEnabled: false,
+            activeSearchSetting: null
         };
     }
 

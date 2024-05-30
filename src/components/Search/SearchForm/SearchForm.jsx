@@ -48,8 +48,8 @@ const SearchForm = () => {
     }
     inputForAutoComplete['searchQuery'] = searchQuery;    
     inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
-    if(appContext.userCollectionEnabled){
-      inputForAutoComplete['ontologyIds'] = appContext.activeUserCollection.ontology_ids.join(',');    
+    if(appContext.userSettings.userCollectionEnabled){
+      inputForAutoComplete['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');    
     }
     inputForAutoComplete['ontologyIds'] = searchUrlFactory.ontologies.length !== 0 ? searchUrlFactory.ontologies.join(',') : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];

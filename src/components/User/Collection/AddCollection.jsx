@@ -112,9 +112,12 @@ const AddCollection = (props) => {
         }
         else{
             response = await updateCollection(collectionToEdit['id'], collectionData);
-            if(response && appContext.activeUserCollection['title'] === collectionToEdit['title']){
-                let contextObject = {"title": collectionTitle, "ontology_ids": ontologyIds};
-                let userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
+            if(response && appContext.userSettings.activeCollection['title'] === collectionToEdit['title']){
+                let contextObject = {"title": collectionTitle, "ontology_ids": ontologyIds};                
+                let userSttings = {...appContext.userSettings};
+                userSttings.userCollectionEnabled = true;
+                userSttings.activeCollection = contextObject;
+                appContext.setUserSettings(userSttings);
                 await storeUserSettings(userSttings);
             }            
             window.location.reload();

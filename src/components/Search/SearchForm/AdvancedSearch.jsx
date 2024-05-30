@@ -21,6 +21,7 @@ const AdvancedSearch = (props) => {
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);    
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
+    const [loadedSettingName, setLoadedSettingName] = useState(false);
 
     const searchUrlFactory = new SearchUrlFactory();
 
@@ -48,8 +49,8 @@ const AdvancedSearch = (props) => {
             "ontologyIds": ontologyIdsInUrl,
             "obsoletes": Toolkit.getObsoleteFlagValue()
         };
-        if(appContext.userCollectionEnabled){
-            inputQuery['ontologyIds'] = appContext.activeUserCollection.ontology_ids.join(',');
+        if(appContext.userSettings.userCollectionEnabled){
+            inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
         }
         if(ontologyPageId){
             // restrict the term search to the current opened ontology
@@ -108,7 +109,8 @@ const AdvancedSearch = (props) => {
         setSelectedSearchUnderTerms([]);
         setSelectedSearchUnderAllTerms([]);        
         setPlaceHolderExtraText("");
-        searchUrlFactory.resetAdvancedSearchUrlParams();                          
+        searchUrlFactory.resetAdvancedSearchUrlParams();  
+        setLoadedSettingName(false);                        
     }
 
     
@@ -135,10 +137,13 @@ const AdvancedSearch = (props) => {
     }
 
 
-    function loadSettings({selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms}){
+    function loadSettings(setting){
+        let {selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms} = setting['setting'];
+        let loadedSettingName = setting['title'];
         setSelectedMetaData(selectedMetaData);
         setSelectedSearchUnderTerms(selectedSearchUnderTerms);
         setSelectedSearchUnderAllTerms(selectedSearchUnderAllTerms);
+        setLoadedSettingName(loadedSettingName);
     }
 
 
@@ -187,9 +192,17 @@ const AdvancedSearch = (props) => {
             {props.advSearchEnabled &&
                 <div className='row adv-search-container'>
                     <div className='col-sm-9'>
-                    <br></br>                  
+                        <br></br>                  
                         <div className="row">
-                            <div className="col-sm-12">                            
+                            <div className="col-sm-12">  
+                                <div className='row'>
+                                    <div className='col-sm-12 adv-search-label-holder'>
+                                        {loadedSettingName && 
+                                            "Loaded Setting: " + loadedSettingName
+                                        }
+                                    </div>
+                                </div> 
+                                <br></br>                         
                                 <div className='row'>
                                     <div className='col-sm-11 adv-search-label-holder'>
                                         <label for='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>

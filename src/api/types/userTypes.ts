@@ -17,6 +17,8 @@ export type LoginResponse ={
 export type UserSettings = {
     userCollectionEnabled:boolean|undefined,
     activeCollection:UserCollection|undefined,
+    advancedSearchEnabled:boolean|undefined,
+    activeSearchSetting:SearchSettingApiResponse|undefined,
 }
 
 

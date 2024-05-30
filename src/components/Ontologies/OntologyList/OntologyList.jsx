@@ -43,9 +43,9 @@ const OntologyList = (props) => {
       let ontologyApi = new OntologyApi({});      
       await ontologyApi.fetchOntologyList();
       let ontologiesList = [];
-      if(appContext.userCollectionEnabled && appContext.activeUserCollection.ontology_ids.length > 0){
+      if(appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0){
         for(let onto of ontologyApi.list){
-          if(appContext.activeUserCollection.ontology_ids.includes(onto.ontologyId)){
+          if(appContext.userSettings.activeCollection.ontology_ids.includes(onto.ontologyId)){
             ontologiesList.push(onto);
           }
         }

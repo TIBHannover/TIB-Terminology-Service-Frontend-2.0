@@ -80,34 +80,35 @@ const RenderSearchForm = (props) => {
 
 
 
-    async function handleUserCollectionClose(){
-        appContext.setUserCollectionEnabled(!appContext.userCollectionEnabled);
-        appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
-        let userSttings = {"userCollectionEnabled": !appContext.userCollectionEnabled, "activeCollection": {"title": "", "ontology_ids": []}};
+    async function handleUserCollectionClose(){        
+        let userSttings = {...appContext.userSettings};
+        userSttings.userCollectionEnabled = !appContext.userSettings.userCollectionEnabled;
+        userSttings.activeCollection = {"title": "", "ontology_ids": []};
+        appContext.setUserSettings(userSttings);      
         await storeUserSettings(userSttings);
         window.location.reload();
     }
 
 
     function createUserCollectionToggleTooltopText(){
-      if(appContext.user && appContext.userCollectionEnabled){
-        let text = `Collection "${appContext.activeUserCollection.title}". Included ontologies: `; 
-        text += appContext.activeUserCollection['ontology_ids'].join(", ");         
+      if(appContext.user && appContext.userSettings.userCollectionEnabled){
+        let text = `Collection "${appContext.userSettings?.activeCollection.title}". Included ontologies: `; 
+        text += appContext.userSettings.activeCollection['ontology_ids'].join(", ");         
         return text;
       }
       return "";  
     }
 
     
-    return(
+    return(      
         <>
           <div className='row site-header-searchbox-holder'>
             <div className='col-sm-9 search-bar-container'>
               <div class="input-group input-group-lg">
-                {appContext.user && appContext.activeUserCollection.title !== "" && !props.ontologyId &&
+                {appContext.user && appContext.userSettings.activeCollection.title !== "" && !props.ontologyId &&
                   <div className="custom-collection-btn"  title={createUserCollectionToggleTooltopText()}>
                     <div>
-                      {appContext.activeUserCollection.title}
+                      {appContext.userSettings.activeCollection.title}
                       <i className="fa fa-close fa-borderless" onClick={handleUserCollectionClose}></i>                      
                     </div>                   
                   </div> 

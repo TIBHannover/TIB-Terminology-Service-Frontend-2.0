@@ -38,16 +38,16 @@ const SettingsList = (props) => {
     function loadSetting(){
         let settingId = document.querySelector('input[name="settingsList"]:checked').value;
         let setting = settingsList.find(setting => setting['id'] == settingId);        
-        loadFunc(setting['setting']);
+        loadFunc(setting);
     }
 
 
-
-    useEffect(() => {
+    function fetchSettingList(){
         fetchSearchSettings().then((settingsList) => {
             setSettingsList(settingsList);
         });
-    }, []);
+    }
+
 
     
     return(
@@ -58,6 +58,7 @@ const SettingsList = (props) => {
                 data-toggle="modal" 
                 data-target={"#SearchSettingListModal"} 
                 data-backdrop="static"
+                onClick={fetchSettingList}
                 >
                 Load
             </button>            

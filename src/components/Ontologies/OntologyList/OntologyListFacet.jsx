@@ -72,7 +72,7 @@ export const OntologyListFacet = (props) => {
                     <div className='row ontology-list-facet-section-box'>
                         <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
                         <div  className="col-sm-12 facet-box" >
-                            {!appContext.userCollectionEnabled &&
+                            {!appContext.userSettings.userCollectionEnabled &&
                                 <>
                                 <div className='facet-switch-holder'>                                
                                     <div class="form-check form-switch">                            
@@ -85,10 +85,10 @@ export const OntologyListFacet = (props) => {
                                 </div>    
                                 </>                                       
                             }
-                            {appContext.userCollectionEnabled && 
+                            {appContext.userSettings.userCollectionEnabled && 
                                 <>
                                 <p>
-                                    Your collection named "{appContext.activeUserCollection.title}" is enabled. 
+                                    Your collection named "{appContext.userSettings.activeCollection.title}" is enabled. 
                                 </p>
                                 <p>
                                     Disable it by clicking <i className="fa fa-close"></i> 

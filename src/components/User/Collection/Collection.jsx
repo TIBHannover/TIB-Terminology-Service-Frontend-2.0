@@ -30,35 +30,35 @@ const UserCollection = () => {
         let isChecked = event.target.checked;
         let selectedCollection = Toolkit.getObjectInListIfExist(collections, 'id', parseInt(targetId));
         let contextObject = {"title": selectedCollection['title'], "ontology_ids": selectedCollection['ontology_ids']};
-        let userSttings = {};
+        let userSttings = {...appContext.userSettings};
         if(isChecked){
             let allCollectionCheckboxes = document.getElementsByClassName('user-collection-checkbox');
             for(let checkbox of allCollectionCheckboxes){
                 if(checkbox.dataset.id !== targetId){
                     checkbox.checked = false;
                 }
-            }
-            
-            appContext.setActiveUserCollection(contextObject);
-            appContext.setUserCollectionEnabled(true);
-            userSttings = {"userCollectionEnabled": true, "activeCollection": contextObject}
+            }            
+
+            userSttings.activeCollection = contextObject;
+            userSttings.userCollectionEnabled = true;            
         }
-        else{
-            appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
-            appContext.setUserCollectionEnabled(false);
-            userSttings = {"userCollectionEnabled": false, "activeCollection": {"title": "", "ontology_ids": []}}
+        else{                        
+            userSttings.activeCollection = {"title": "", "ontology_ids": []};
+            userSttings.userCollectionEnabled = false;            
         }    
 
+        appContext.setUserSettings(userSttings);
         await storeUserSettings(userSttings);   
     }
 
 
 
     async function disableTheDeletedCollection(collection){        
-        if(appContext.activeUserCollection['title'] === collection['title']){
-            appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
-            appContext.setUserCollectionEnabled(false);
-            let userSttings = {"userCollectionEnabled": false, "activeCollection": {"title": "", "ontology_ids": []}}
+        if(appContext.userSettings.activeCollection['title'] === collection['title']){            
+            let userSttings = {...appContext.userSettings};
+            userSttings.activeCollection = {"title": "", "ontology_ids": []};
+            userSttings.userCollectionEnabled = false;
+            appContext.setUserSettings(userSttings);
             await storeUserSettings(userSttings);   
         }
     }
@@ -66,7 +66,7 @@ const UserCollection = () => {
 
 
     function collectionCheckboxIsChecked(collectionTitle){
-        if(appContext.activeUserCollection['title'] === collectionTitle){
+        if(appContext.userSettings.activeCollection['title'] === collectionTitle){
             return true;
         }
         return false;
