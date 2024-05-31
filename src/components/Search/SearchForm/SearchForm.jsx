@@ -9,6 +9,7 @@ import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import { AppContext } from '../../../context/AppContext';
+import { storeUserSettings } from '../../../api/user';
 
 
 
@@ -26,11 +27,14 @@ const SearchForm = () => {
 
   const searchUrlFactory = new SearchUrlFactory();
 
+  let advSearchEnabledLoad = searchUrlFactory.advancedSearchEnabled === "true" ? true : appContext.userSettings.advancedSearchEnabled;    
+  advSearchEnabledLoad = advSearchEnabledLoad ? true : false;  
+
   const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");    
   const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);  
-  const [advSearchEnabled, setAdvSearchEnabled] = useState(searchUrlFactory.advancedSearchEnabled === "true" ? true : false);  
+  const [advSearchEnabled, setAdvSearchEnabled] = useState(advSearchEnabledLoad);  
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
@@ -125,12 +129,13 @@ const SearchForm = () => {
   }
 
 
-  function handleAdvancedSearchToggle(){           
+  async function handleAdvancedSearchToggle(){           
     searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
     setAdvSearchEnabled(!advSearchEnabled);
     let userSettings = {...appContext.userSettings};
     userSettings.advancedSearchEnabled = !advSearchEnabled;
     appContext.setUserSettings(userSettings);
+    await storeUserSettings(userSettings);
   }
 
 
@@ -146,6 +151,10 @@ const SearchForm = () => {
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
     }
   }, []);
+
+  useEffect(() => {
+    setAdvSearchEnabled(appContext.userSettings.advancedSearchEnabled);
+  },[appContext.userSettings.advancedSearchEnabled]);
 
 
   return(

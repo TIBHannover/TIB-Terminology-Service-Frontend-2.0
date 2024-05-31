@@ -172,8 +172,7 @@ const AdvancedSearch = (props) => {
     }, [props.advSearchEnabled]);
 
 
-    useEffect(() => {  
-        console.info(selectedMetaData)                      
+    useEffect(() => {                            
         props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
             searchInValues: selectedMetaData,
             searchUnderTerms: selectedSearchUnderTerms,
@@ -307,14 +306,17 @@ const AdvancedSearch = (props) => {
                             <div className='col-sm-12'>
                                 <button className='btn btn-secondary' onClick={reset} >Reset</button>
                                 <LoadSetting loadFunc={loadSettings} />
-                                <StoreSearchSettings 
-                                    settings={{
-                                        selectedMetaData,
-                                        selectedSearchUnderTerms,
-                                        selectedSearchUnderAllTerms
-                                    
-                                    }}
-                                />
+                                {appContext.userSettings.activeSearchSetting.setting === undefined                                 
+                                    ?<StoreSearchSettings 
+                                        settings={{
+                                            selectedMetaData,
+                                            selectedSearchUnderTerms,
+                                            selectedSearchUnderAllTerms
+                                        
+                                        }}
+                                    />
+                                    : <button className='btn btn-secondary ml-2' onClick={reset} >Update</button>
+                                }
                             </div>
                         </div>
                     </div>
