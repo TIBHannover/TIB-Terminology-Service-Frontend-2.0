@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { storeSearchSettings, updateSearchSettings } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
@@ -6,19 +6,20 @@ import { storeUserSettings } from "../../../api/user";
 
 
 const StoreSearchSettings = (props) => {
-    const {settings, setSearchSettingIsModified} = props;
+    const {settings, setSearchSettingIsModified, editMode, setLoadedSettingName} = props;
 
     const appContext = useContext(AppContext);
 
     const [showAlert, setShowAlert] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(true);
+    const editIdPostFix = editMode ? 'Edit' : '';
 
 
 
     function returnSettingTitleIfValid(){
-        let title = document.getElementById('searchSettingTitle').value;        
+        let title = document.getElementById('searchSettingTitle' + editIdPostFix).value;        
         if(!title || title === ''){
-            document.getElementById('searchSettingTitle').style.border = '1px solid red';
+            document.getElementById('searchSettingTitle' + editIdPostFix).style.border = '1px solid red';
             return false;
         }
         return title;
@@ -26,7 +27,7 @@ const StoreSearchSettings = (props) => {
 
 
     async function store(){        
-        let settingTitle = returnSettingTitleIfValid();        
+        let settingTitle = returnSettingTitleIfValid();          
         
         if(!settingTitle){
             return;
@@ -58,8 +59,33 @@ const StoreSearchSettings = (props) => {
         userSettings.activeSearchSettingIsModified = false;
         appContext.setUserSettings(userSettings);
         setSearchSettingIsModified(false);
-        await storeUserSettings(userSettings);
+        await storeUserSettings(userSettings);      
         return true;
+    }
+
+
+    async function updateTitleAndDescription(){        
+        let settingTitle = returnSettingTitleIfValid();                        
+        if(!settingTitle){
+            return;
+        }        
+        setShowAlert(false);
+        let userSettings = {...appContext.userSettings};
+        let description = document.getElementById('searchSettingDescription' + editIdPostFix).value;              
+        let settingData = {
+            'title': settingTitle,
+            'description': description,
+            'setting': settings 
+        };        
+        let response = await updateSearchSettings(appContext.userSettings.activeSearchSetting.id, settingData);        
+        if(response){
+            userSettings.activeSearchSetting.title = settingTitle;
+            userSettings.activeSearchSetting.description = description;
+            appContext.setUserSettings(userSettings);
+            await storeUserSettings(userSettings);
+            setLoadedSettingName(settingTitle);
+            closeModal();
+        }
     }
 
 
@@ -74,13 +100,29 @@ const StoreSearchSettings = (props) => {
     }
 
 
+    useEffect(() => {        
+        if(editMode){            
+            document.getElementById('searchSettingTitle' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.title;
+            document.getElementById('searchSettingDescription' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.description;
+        }                     
+    }, []);
 
+
+    useEffect(() => {        
+        if(editMode && modalIsOpen){            
+            document.getElementById('searchSettingTitle' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.title;
+            document.getElementById('searchSettingDescription' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.description;
+        }                     
+    }, [modalIsOpen]);
+
+
+    
     return(
         <>
-            {appContext.userSettings.activeSearchSetting.setting !== undefined  &&
+            {!editMode && appContext.userSettings.activeSearchSetting.setting !== undefined  &&
                 <button className="btn btn-secondary ml-2" onClick={update}>Update</button>
             }
-            {appContext.userSettings.activeSearchSetting.setting === undefined  &&
+            {!editMode && appContext.userSettings.activeSearchSetting.setting === undefined  &&
                 <button 
                     type="button" 
                     className={"btn btn-secondary ml-2"}
@@ -91,12 +133,23 @@ const StoreSearchSettings = (props) => {
                     Save
                 </button>
             }           
+            {editMode &&
+                <button 
+                    type="button" 
+                    className={"btn btn-secondary ml-2 extra-sm-btn"}
+                    data-toggle="modal" 
+                    data-target={"#storeSearchSettingModal" + editIdPostFix} 
+                    data-backdrop="static"
+                    >
+                    <i className="fa fa-edit"></i>
+                </button>
+            }
             {modalIsOpen &&
-            <div className="modal fade" id={'storeSearchSettingModal'} tabindex="-1" role="dialog" aria-labelledby={"storeSearchSettingModalLabel"} aria-hidden="true">
+            <div className="modal fade" id={'storeSearchSettingModal' + editIdPostFix} tabindex="-1" role="dialog" aria-labelledby={"storeSearchSettingModalLabel" + editIdPostFix} aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id={"storeSearchSettingModalLabel"}>{"Store search settings"}</h5>                            
+                            <h5 className="modal-title" id={"storeSearchSettingModalLabel" + editIdPostFix}>{"Store search settings"}</h5>                            
                         </div>
                         <div className="modal-body">
                             {/* {showAlert &&
@@ -107,13 +160,14 @@ const StoreSearchSettings = (props) => {
                             } */}
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <label className="required_input" for={"searchSettingTitle"}>Name</label>
+                                    <label className="required_input" for={"searchSettingTitle" + editIdPostFix}>Name</label>
                                     <input 
                                         type="text"                                                                                       
                                         className="form-control" 
-                                        id={"searchSettingTitle"}
+                                        id={"searchSettingTitle" + editIdPostFix}
                                         placeholder="Enter a Name"
-                                        // onChange={onTextInputChange}                                        
+                                        // onChange={onTextInputChange}  
+
                                         >
                                     </input>  
                                 </div>
@@ -122,10 +176,10 @@ const StoreSearchSettings = (props) => {
                             <br></br> 
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <label for={"searchSettingDescription"}>Description (optional)</label>
+                                    <label for={"searchSettingDescription" + editIdPostFix}>Description (optional)</label>
                                     <textarea                                         
                                         className="form-control" 
-                                        id={"searchSettingDescription"}
+                                        id={"searchSettingDescription" + editIdPostFix}
                                         rows="5"
                                         placeholder="Enter a Description">
                                     </textarea>  
@@ -134,9 +188,10 @@ const StoreSearchSettings = (props) => {
                         </div>
                         <div className="modal-footer">
                             <div className="col-auto mr-auto">
-                                <button id="modalCloseBtn" type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                             </div>                             
-                            <button type="button" className="btn btn-secondary" onClick={store}>Save</button>
+                            {!editMode && <button type="button" className="btn btn-secondary" onClick={store}>Save</button>}
+                            {editMode && <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>}
                         </div>
                     </div>
                 </div>
