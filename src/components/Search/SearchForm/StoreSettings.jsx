@@ -42,6 +42,11 @@ const StoreSearchSettings = (props) => {
         };        
         let response = await storeSearchSettings(settingData);
         if(response){
+            let userSettings = {...appContext.userSettings};
+            userSettings.activeSearchSetting = response;
+            userSettings.activeSearchSettingIsModified = false;
+            appContext.setUserSettings(userSettings);
+            await storeUserSettings(userSettings);
             closeModal();
         }
     }
@@ -83,7 +88,7 @@ const StoreSearchSettings = (props) => {
             userSettings.activeSearchSetting.title = settingTitle;
             userSettings.activeSearchSetting.description = description;
             appContext.setUserSettings(userSettings);
-            await storeUserSettings(userSettings);
+            storeUserSettings(userSettings);
             setLoadedSettingName && setLoadedSettingName(settingTitle);
             closeModal();
         }
@@ -146,6 +151,7 @@ const StoreSearchSettings = (props) => {
                     data-toggle="modal" 
                     data-target={"#storeSearchSettingModal"} 
                     data-backdrop="static"
+                    onClick={()=> {setModalIsOpen(true)}}
                     >
                     Save
                 </button>
@@ -157,6 +163,7 @@ const StoreSearchSettings = (props) => {
                     data-toggle="modal" 
                     data-target={"#storeSearchSettingModal" + editIdPostFix} 
                     data-backdrop="static"
+                    onClick={()=> {setModalIsOpen(true)}}
                     >
                     <i className="fa fa-edit"></i>
                 </button>
@@ -205,9 +212,9 @@ const StoreSearchSettings = (props) => {
                         </div>
                         <div className="modal-footer">
                             <div className="col-auto mr-auto">
-                                <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal" onClick={()=> {setModalIsOpen(false)}}>Close</button>
                             </div>                             
-                            {!editMode && <button type="button" className="btn btn-secondary" onClick={store}>Save</button>}
+                            {!editMode && <button type="button" className="btn btn-secondary" onClick={store}>Save </button>}
                             {editMode && <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>}
                         </div>
                     </div>

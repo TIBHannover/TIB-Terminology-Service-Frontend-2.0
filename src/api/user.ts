@@ -76,14 +76,14 @@ export async function storeUserSettings(settings:UserSettings):Promise<boolean>{
 
 
 
-export async function storeSearchSettings(settingData:SearchSettingPayload):Promise<boolean>{
+export async function storeSearchSettings(settingData:SearchSettingPayload):Promise<SearchSettingApiResponse|boolean>{
     try{
         let headers:TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});        
         let result:any = await fetch(baseUrl + "/user/search_setting", {method: "POST", headers:headers, body: JSON.stringify(settingData)});
         result = await result.json();
-        result = result['_result']['saved'];
+        result = result['_result']?.['saved'];
         if(result){
-            return true;        
+            return result;        
         }        
         return false;
     }
