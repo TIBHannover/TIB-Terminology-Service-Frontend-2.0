@@ -153,7 +153,9 @@ const SearchForm = () => {
   }, []);
 
   useEffect(() => {
-    setAdvSearchEnabled(appContext.userSettings.advancedSearchEnabled);
+    if(appContext.userSettings.advancedSearchEnabled){
+      setAdvSearchEnabled(appContext.userSettings.advancedSearchEnabled);
+    }    
   },[appContext.userSettings.advancedSearchEnabled]);
 
 

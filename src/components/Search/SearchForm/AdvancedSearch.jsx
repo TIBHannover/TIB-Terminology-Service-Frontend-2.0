@@ -15,14 +15,10 @@ import { storeUserSettings } from '../../../api/user';
 const AdvancedSearch = (props) => {
 
     const appContext = useContext(AppContext);
-
-    let selectedMetaDataInit = SearchLib.getSearchInMetadataFieldsFromUrl() ? SearchLib.getSearchInMetadataFieldsFromUrl() : appContext.userSettings.activeSearchSetting?.setting?.selectedMetaData;        
-    let selectedSearchUnderTermsInit = SearchLib.getSearchUnderTermsFromUrl() ? SearchLib.getSearchUnderTermsFromUrl() : appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderTerms;
-    let selectedSearchUnderAllTermsInit = SearchLib.getSearchUnderAllTermsFromUrl() ? SearchLib.getSearchUnderAllTermsFromUrl() : appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderAllTerms;
-    
-    const [selectedMetaData, setSelectedMetaData] = useState(selectedMetaDataInit ? selectedMetaDataInit : []);
-    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(selectedSearchUnderTermsInit ? selectedSearchUnderTermsInit : []);
-    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(selectedSearchUnderAllTermsInit ? selectedSearchUnderAllTermsInit : []);    
+        
+    const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrl());
+    const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
+    const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
     const [termListForSearchUnder, setTermListForSearchUnder] = useState([]);    
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
@@ -305,18 +301,16 @@ const AdvancedSearch = (props) => {
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <button className='btn btn-secondary' onClick={reset} >Reset</button>
-                                <LoadSetting loadFunc={loadSettings} />
-                                {appContext.userSettings.activeSearchSetting.setting === undefined                                 
-                                    ?<StoreSearchSettings 
-                                        settings={{
-                                            selectedMetaData,
-                                            selectedSearchUnderTerms,
-                                            selectedSearchUnderAllTerms
-                                        
-                                        }}
-                                    />
-                                    : <button className='btn btn-secondary ml-2' onClick={reset} >Update</button>
-                                }
+                                <LoadSetting loadFunc={loadSettings} />                                
+                                <StoreSearchSettings 
+                                    settings={{
+                                        selectedMetaData,
+                                        selectedSearchUnderTerms,
+                                        selectedSearchUnderAllTerms
+                                    
+                                    }}
+                                />                                    
+                                
                             </div>
                         </div>
                     </div>

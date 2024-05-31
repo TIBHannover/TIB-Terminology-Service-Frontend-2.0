@@ -109,3 +109,21 @@ export async function fetchSearchSettings():Promise<Array<SearchSettingApiRespon
         return [];
     }
 }
+
+
+
+export async function updateSearchSettings(settingId:string|number, settingData:SearchSettingPayload):Promise<boolean>{
+    try{
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});        
+        let result:any = await fetch(baseUrl + "/user/search_setting/" + settingId, {method: "PUT", headers:headers, body: JSON.stringify(settingData)});
+        result = await result.json();
+        result = result['_result']['updated'];
+        if(result){
+            return true;        
+        }        
+        return false;
+    }
+    catch(e){
+        return false;
+    }
+}

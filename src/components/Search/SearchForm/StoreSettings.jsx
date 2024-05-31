@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { storeSearchSettings } from "../../../api/user";
+import { useState, useContext } from "react";
+import { storeSearchSettings, updateSearchSettings } from "../../../api/user";
+import { AppContext } from "../../../context/AppContext";
+import { storeUserSettings } from "../../../api/user";
 
 
 
 const StoreSearchSettings = (props) => {
-
     const {settings} = props;
+
+    const appContext = useContext(AppContext);
 
     const [showAlert, setShowAlert] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(true);
@@ -42,6 +45,22 @@ const StoreSearchSettings = (props) => {
     }
 
 
+    async function update(){
+        let searchSettingDataInStore = appContext.userSettings.activeSearchSetting;
+        let settingData = {
+            'title': searchSettingDataInStore.title,
+            'description': searchSettingDataInStore.description,
+            'setting': settings 
+        };
+        let response = await updateSearchSettings(searchSettingDataInStore.id, settingData);
+        let userSettings = {...appContext.userSettings};
+        userSettings.activeSearchSetting.setting = settings;
+        appContext.setUserSettings(userSettings);
+        await storeUserSettings(userSettings);
+        return true;
+    }
+
+
 
     function closeModal(newNoteId=true){                
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
@@ -56,15 +75,20 @@ const StoreSearchSettings = (props) => {
 
     return(
         <>
-            <button 
-                type="button" 
-                className={"btn btn-secondary ml-2"}
-                data-toggle="modal" 
-                data-target={"#storeSearchSettingModal"} 
-                data-backdrop="static"
-                >
-                Save
-            </button>
+            {appContext.userSettings.activeSearchSetting.setting !== undefined  &&
+                <button className="btn btn-secondary ml-2" onClick={update}>Update</button>
+            }
+            {appContext.userSettings.activeSearchSetting.setting === undefined  &&
+                <button 
+                    type="button" 
+                    className={"btn btn-secondary ml-2"}
+                    data-toggle="modal" 
+                    data-target={"#storeSearchSettingModal"} 
+                    data-backdrop="static"
+                    >
+                    Save
+                </button>
+            }           
             {modalIsOpen &&
             <div className="modal fade" id={'storeSearchSettingModal'} tabindex="-1" role="dialog" aria-labelledby={"storeSearchSettingModalLabel"} aria-hidden="true">
                 <div className="modal-dialog" role="document">

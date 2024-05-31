@@ -10,11 +10,11 @@ class SearchLib{
             if(searchUrlFactory.searchIn.length > 0){                                
                 return searchUrlFactory.searchIn;
             }
-            return false;            
+            return [];            
             
         }
         catch(e){            
-            return false;
+            return [];
         }
     }
     
@@ -28,10 +28,10 @@ class SearchLib{
                 terms = terms.map(term => JSON.parse(decodeURIComponent(term)));                  
                 return terms;
             }
-            return false;                            
+            return [];                            
         }
         catch(e){            
-            return false;    
+            return [];    
         }
     }
 
@@ -45,11 +45,11 @@ class SearchLib{
                 terms = terms.map(term => JSON.parse(decodeURIComponent(term)));                  
                 return terms;
             }   
-            return false;    
+            return [];    
             
         }
         catch(e){            
-            return false;    
+            return [];    
         }
     }
 
