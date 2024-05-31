@@ -29,7 +29,9 @@ const App = () => {
     "activeCollection": {"title": "", "ontology_ids": []}, 
     "userCollectionEnabled": false, 
     "advancedSearchEnabled": false, 
-    "activeSearchSetting": {}} );
+    "activeSearchSetting": {},
+    "activeSearchSettingIsModified": false
+  } );
   
     const [showLoadingPage, setShowLoadingPage] = useState(true);
 
@@ -49,7 +51,8 @@ const App = () => {
         setIsSystemAdmin(user?.systemAdmin);
         let settings = {...userSettings};
         settings.userCollectionEnabled = user?.settings?.userCollectionEnabled;
-        settings.advancedSearchEnabled = user?.settings?.advancedSearchEnabled;        
+        settings.advancedSearchEnabled = user?.settings?.advancedSearchEnabled; 
+        settings.activeSearchSettingIsModified = user?.settings?.activeSearchSettingIsModified;       
         if(user?.settings?.activeCollection){
           settings.activeCollection = user?.settings?.activeCollection;          
         }

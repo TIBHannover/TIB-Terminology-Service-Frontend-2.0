@@ -23,6 +23,7 @@ const AdvancedSearch = (props) => {
     const [loadingResult, setLoadingResult] = useState(true);
     const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
     const [loadedSettingName, setLoadedSettingName] = useState(false);
+    const [searchSettingIsModified, setSearchSettingIsModified] = useState(false);
 
     const searchUrlFactory = new SearchUrlFactory();
 
@@ -71,13 +72,19 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleSearchInMultiSelect(selectedList, selectedItem){                
-        setSelectedMetaData(selectedList);        
+    function handleSearchInMultiSelect(selectedList, selectedItem){ 
+        if(appContext.userSettings.activeSearchSetting.setting !== undefined){
+            changeSearchSettingIsModified(true, {selectedMetaData: selectedList, selectedSearchUnderTerms, selectedSearchUnderAllTerms});
+        }  
+        setSelectedMetaData(selectedList);
     }
 
 
 
-    function handleTermSelectionSearchUnder(selectedList, selectedItem){                   
+    function handleTermSelectionSearchUnder(selectedList, selectedItem){ 
+        if(appContext.userSettings.activeSearchSetting.setting !== undefined){
+            changeSearchSettingIsModified(true, {selectedMetaData, selectedSearchUnderTerms: selectedList, selectedSearchUnderAllTerms});
+        }                       
         setSelectedSearchUnderTerms(selectedList);
         setLoadingResult(true);
         setTermListForSearchUnder([]); 
@@ -85,7 +92,10 @@ const AdvancedSearch = (props) => {
 
 
 
-    function handleTermSelectionSearchUnderAll(selectedList, selectedItem){                
+    function handleTermSelectionSearchUnderAll(selectedList, selectedItem){
+        if(appContext.userSettings.activeSearchSetting.setting !== undefined){
+            changeSearchSettingIsModified(true, {selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms: selectedList});
+        }          
         setSelectedSearchUnderAllTerms(selectedList);
         setLoadingResult(true);
         setTermListForSearchUnder([]);           
@@ -114,6 +124,7 @@ const AdvancedSearch = (props) => {
         setLoadedSettingName(false);      
         let userSettings = {...appContext.userSettings};
         userSettings.activeSearchSetting = {};
+        userSettings.activeSearchSettingIsModified = false;
         appContext.setUserSettings(userSettings); 
         await storeUserSettings(userSettings);                 
     }
@@ -138,8 +149,21 @@ const AdvancedSearch = (props) => {
         setSelectedSearchUnderAllTerms(selectedSearchUnderAllTerms);
         setLoadedSettingName(loadedSettingName);
         let userSettings = {...appContext.userSettings};
-        userSettings.activeSearchSetting = setting;        
+        userSettings.activeSearchSetting = setting;     
+        userSettings.activeSearchSettingIsModified = false;   
         appContext.setUserSettings(userSettings);
+        await storeUserSettings(userSettings);
+    }
+
+
+
+    async function changeSearchSettingIsModified(isModified, setting){
+        // setting has changed. The user did not update the current setting yet. We need to track this to inform the user.
+        let userSettings = {...appContext.userSettings};
+        userSettings.activeSearchSettingIsModified = isModified;
+        userSettings.activeSearchSetting.setting = setting;
+        appContext.setUserSettings(userSettings);
+        setSearchSettingIsModified(isModified);
         await storeUserSettings(userSettings);
     }
 
@@ -168,7 +192,7 @@ const AdvancedSearch = (props) => {
     }, [props.advSearchEnabled]);
 
 
-    useEffect(() => {                            
+    useEffect(() => {                                  
         props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
             searchInValues: selectedMetaData,
             searchUnderTerms: selectedSearchUnderTerms,
@@ -178,11 +202,12 @@ const AdvancedSearch = (props) => {
 
 
     useEffect(() => {
-        if(appContext.userSettings.activeSearchSetting.setting !== undefined){
+        if(appContext.user && appContext.userSettings.activeSearchSetting.setting !== undefined){
             setSelectedMetaData(appContext.userSettings.activeSearchSetting?.setting?.selectedMetaData);
             setSelectedSearchUnderTerms(appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderTerms);
             setSelectedSearchUnderAllTerms(appContext.userSettings.activeSearchSetting?.setting?.selectedSearchUnderAllTerms);  
-            setLoadedSettingName(appContext.userSettings.activeSearchSetting.title);      
+            setLoadedSettingName(appContext.userSettings.activeSearchSetting.title);   
+            setSearchSettingIsModified(appContext.userSettings.activeSearchSettingIsModified);   
         }        
     }, [appContext.userSettings.activeSearchSetting]);
 
@@ -201,10 +226,13 @@ const AdvancedSearch = (props) => {
                         <div className="row">
                             <div className="col-sm-12">  
                                 <div className='row'>
-                                    <div className='col-sm-12 adv-search-label-holder'>
+                                    <div className={'col-sm-12 adv-search-label-holder ' + (searchSettingIsModified && "warning-text")}>
                                         {loadedSettingName && 
-                                            <h5>Loaded Setting: {loadedSettingName}</h5>                                            
-                                        }
+                                            <h5>
+                                                Loaded Setting: {loadedSettingName + (searchSettingIsModified ? " *" : "")}
+                                                <small>{searchSettingIsModified && "Setting is modified but not saved."}</small>                                            
+                                            </h5>
+                                        }                                        
                                     </div>
                                 </div> 
                                 <br></br>                         
@@ -309,6 +337,7 @@ const AdvancedSearch = (props) => {
                                         selectedSearchUnderAllTerms
                                     
                                     }}
+                                    setSearchSettingIsModified={setSearchSettingIsModified}
                                 />                                    
                                 
                             </div>

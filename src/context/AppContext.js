@@ -20,7 +20,8 @@ const blueprint = {
             "description": "",
             "created_at": "",
             "updated_at": ""
-        }
+        },
+        activeSearchSettingIsModified: false
     },
     setUserSettings: () => {/* set userSettings */}       
 };

@@ -6,7 +6,7 @@ import { storeUserSettings } from "../../../api/user";
 
 
 const StoreSearchSettings = (props) => {
-    const {settings} = props;
+    const {settings, setSearchSettingIsModified} = props;
 
     const appContext = useContext(AppContext);
 
@@ -55,7 +55,9 @@ const StoreSearchSettings = (props) => {
         let response = await updateSearchSettings(searchSettingDataInStore.id, settingData);
         let userSettings = {...appContext.userSettings};
         userSettings.activeSearchSetting.setting = settings;
+        userSettings.activeSearchSettingIsModified = false;
         appContext.setUserSettings(userSettings);
+        setSearchSettingIsModified(false);
         await storeUserSettings(userSettings);
         return true;
     }

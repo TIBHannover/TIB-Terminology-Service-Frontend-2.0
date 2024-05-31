@@ -19,6 +19,7 @@ export type UserSettings = {
     activeCollection:UserCollection|undefined,
     advancedSearchEnabled:boolean|undefined,
     activeSearchSetting:SearchSettingApiResponse|undefined,
+    activeSearchSettingIsModified:boolean|undefined,
 }
 
 

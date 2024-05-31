@@ -656,3 +656,7 @@ body .modal{
     font-size: 120px;
     color: #0E6668;    
 }
+
+.warning-text{
+    color: rgb(253, 237, 9) !important;
+}

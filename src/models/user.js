@@ -13,7 +13,8 @@ class UserModel{
             userCollectionEnabled: false,
             activeCollection: {"title": "", "ontology_ids": []},
             advancedSearchEnabled: false,
-            activeSearchSetting: {}
+            activeSearchSetting: {},
+            activeSearchSettingIsModified: false
         };
     }
 
