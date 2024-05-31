@@ -33,23 +33,31 @@ type DeleteModalProps = {
     callHeaders: HeadersInit,
     afterDeleteProcess?: Function,
     objectToDelete?: object,
-    afterDeleteRedirectUrl: string
+    afterDeleteRedirectUrl: string,
+    method?: string
 
 }
 
 export const DeleteModal = (props:DeleteModalProps) => {
-    const { modalId, deleteEndpoint, formData, callHeaders, afterDeleteProcess, afterDeleteRedirectUrl, objectToDelete } = props;
+    const { modalId, deleteEndpoint, formData, callHeaders, afterDeleteProcess, afterDeleteRedirectUrl, objectToDelete, method } = props;
     const [submited, setSubmited] = useState(false);
     const [deleteSuccess, setDeleteSuccess] = useState(false);       
     
     const deleteResource = async () => {
         try{
-            let postConfig:RequestInit = {method: 'POST',  headers:callHeaders, body: formData};                        
+            let postConfig:RequestInit = {method: 'POST',  headers:callHeaders, body: formData};
+            if(method === "DELETE"){
+                postConfig = {method: 'DELETE',  headers:callHeaders};
+            }
+            
             let result = await fetch(deleteEndpoint, postConfig);
-            setSubmited(true);
+            setSubmited(true);            
             setDeleteSuccess(result.ok)
             if(afterDeleteProcess && objectToDelete){
                 afterDeleteProcess(objectToDelete);
+            } 
+            else if(afterDeleteProcess){
+                afterDeleteProcess();
             } 
         }
         catch(e){

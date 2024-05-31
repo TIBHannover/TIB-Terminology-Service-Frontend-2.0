@@ -9,6 +9,9 @@ import { AppContext } from '../../../context/AppContext';
 import StoreSearchSettings from './StoreSettings';
 import LoadSetting from './LoadSetting';
 import { storeUserSettings } from '../../../api/user';
+import { getTsPluginHeaders } from '../../../api/header';
+import DeleteModalBtn from '../../common/DeleteModal/DeleteModal';
+import { DeleteModal } from '../../common/DeleteModal/DeleteModal';
 
 
 
@@ -168,6 +171,17 @@ const AdvancedSearch = (props) => {
     }
 
 
+    async function removeSearchSettingFromUserSettings(){
+        let userSettings = {...appContext.userSettings};
+        userSettings.activeSearchSetting = {};
+        userSettings.activeSearchSettingIsModified = false;
+        appContext.setUserSettings(userSettings);
+        await storeUserSettings(userSettings);
+        reset();
+        window.location.replace(window.location.href);
+    }
+
+
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutsideSelectionBox, true);
@@ -216,6 +230,12 @@ const AdvancedSearch = (props) => {
     if(process.env.REACT_APP_ADVANCED_SEARCH !== "true"){
         return "";
     }
+
+    let callHeader = getTsPluginHeaders({withAccessToken: true});
+    callHeader['Content-Type'] = 'application/json';
+    let redirectAfterDeleteEndpoint = window.location.href;
+    let settingId = appContext.userSettings.activeSearchSetting.id;
+    let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/user/search_setting/" + settingId;
     
     return(
         <>
@@ -241,6 +261,21 @@ const AdvancedSearch = (props) => {
                                                     }}                                                    
                                                     setLoadedSettingName={setLoadedSettingName}
                                                 />
+                                                <DeleteModalBtn 
+                                                    modalId={settingId}   
+                                                    key={"deleteBtnUserSetting" + settingId}
+                                                    btnText={<i className="fa fa-close fa-borderless"></i>}
+                                                    btnClass="extra-sm-btn ml-2"
+                                                />
+                                                <DeleteModal
+                                                    modalId={settingId}                    
+                                                    callHeaders={callHeader}
+                                                    deleteEndpoint={deleteEndpoint}
+                                                    afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
+                                                    key={"deleteSetting" + settingId}
+                                                    afterDeleteProcess={removeSearchSettingFromUserSettings}      
+                                                    method='DELETE'                                              
+                                                /> 
                                             </h5>
                                         }                                        
                                     </div>
