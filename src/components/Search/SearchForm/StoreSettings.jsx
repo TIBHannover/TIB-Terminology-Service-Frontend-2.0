@@ -3,6 +3,7 @@ import { storeSearchSettings, updateSearchSettings } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
 import Login from "../../User/Login/TS/Login";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 
@@ -41,6 +42,10 @@ const StoreSearchSettings = (props) => {
             'setting': settings 
         };        
         let response = await storeSearchSettings(settingData);
+        if(response === "Title already exists"){
+            setShowAlert(true);
+            return;
+        }
         if(response){
             let userSettings = {...appContext.userSettings};
             userSettings.activeSearchSetting = response;
@@ -59,7 +64,7 @@ const StoreSearchSettings = (props) => {
             'description': searchSettingDataInStore.description,
             'setting': settings 
         };
-        let response = await updateSearchSettings(searchSettingDataInStore.id, settingData);
+        let response = await updateSearchSettings(searchSettingDataInStore.id, settingData);        
         let userSettings = {...appContext.userSettings};
         userSettings.activeSearchSetting.setting = settings;
         userSettings.activeSearchSettingIsModified = false;
@@ -83,7 +88,11 @@ const StoreSearchSettings = (props) => {
             'description': description,
             'setting': settings 
         };        
-        let response = await updateSearchSettings(appContext.userSettings.activeSearchSetting.id, settingData);        
+        let response = await updateSearchSettings(appContext.userSettings.activeSearchSetting.id, settingData);   
+        if(response === "Title already exists"){
+            setShowAlert(true);
+            return;
+        }     
         if(response){
             userSettings.activeSearchSetting.title = settingTitle;
             userSettings.activeSearchSetting.description = description;
@@ -176,12 +185,12 @@ const StoreSearchSettings = (props) => {
                             <h5 className="modal-title" id={"storeSearchSettingModalLabel" + editIdPostFix}>{"Store search settings"}</h5>                            
                         </div>
                         <div className="modal-body">
-                            {/* {showAlert &&
+                            {showAlert &&
                                 <AlertBox 
                                     type="danger"
-                                    message="Collection name already exists."
+                                    message="Setting name already exists."
                                 />
-                            } */}
+                            }
                             <div className="row">
                                 <div className="col-sm-12">
                                     <label className="required_input" for={"searchSettingTitle" + editIdPostFix}>Name</label>
