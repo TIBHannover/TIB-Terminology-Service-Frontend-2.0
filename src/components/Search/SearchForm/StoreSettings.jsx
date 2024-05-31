@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { storeSearchSettings, updateSearchSettings } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
+import Login from "../../User/Login/TS/Login";
 
 
 
@@ -83,7 +84,7 @@ const StoreSearchSettings = (props) => {
             userSettings.activeSearchSetting.description = description;
             appContext.setUserSettings(userSettings);
             await storeUserSettings(userSettings);
-            setLoadedSettingName(settingTitle);
+            setLoadedSettingName && setLoadedSettingName(settingTitle);
             closeModal();
         }
     }
@@ -116,6 +117,22 @@ const StoreSearchSettings = (props) => {
     }, [modalIsOpen]);
 
 
+
+    if(!appContext.user){
+        const loginModalId = "loginModalSaveAdvSearchSetting";
+        const saveBtn = <button type="button" 
+                            class="btn btn-secondary ml-2" 
+                            data-toggle="modal" 
+                            data-target={"#" + loginModalId}
+                            data-backdrop="static"
+                            data-keyboard="false"                                    
+                            >
+                            Save
+                        </button>;
+        return (            
+            <Login isModal={true}  customLoginBtn={saveBtn} customModalId={loginModalId} />
+        );
+    }
     
     return(
         <>

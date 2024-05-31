@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { fetchSearchSettings } from "../../../api/user";
+import Login from "../../User/Login/TS/Login";
+import { AppContext } from "../../../context/AppContext";
 
 
 
 const LoadSetting = (props) => {
     const {loadFunc} = props;
+
+    const appContext = useContext(AppContext);
 
     const [settingsList, setSettingsList] = useState([]);
 
@@ -48,6 +52,22 @@ const LoadSetting = (props) => {
         });
     }
 
+
+    if(!appContext.user){
+        const loginModalId = "loginModalLoadAdvSearchSetting";
+        const loadBtn = <button type="button" 
+                            class="btn btn-secondary ml-2" 
+                            data-toggle="modal" 
+                            data-target={"#" + loginModalId}
+                            data-backdrop="static"
+                            data-keyboard="false"                                    
+                            >
+                            Load
+                        </button>;
+        return (            
+            <Login isModal={true}  customLoginBtn={loadBtn} customModalId={loginModalId} />
+        );
+    }
 
     
     return(

@@ -228,9 +228,9 @@ const AdvancedSearch = (props) => {
                                 <div className='row'>
                                     <div className={'col-sm-12 adv-search-label-holder ' + (searchSettingIsModified && "warning-text")}>
                                         {loadedSettingName && 
-                                            <h5>
-                                                Loaded Setting: {loadedSettingName + (searchSettingIsModified ? " *" : "")}
-                                                <small>{searchSettingIsModified && "Setting is modified but not saved."}</small>
+                                            <h5>                                                                                                   
+                                                Loaded: {loadedSettingName + (searchSettingIsModified ? " *" : "")}
+                                                <small>{searchSettingIsModified && "Setting is modified but not updated."}</small>
                                                 <StoreSearchSettings 
                                                     editMode={true} 
                                                     settings={{
@@ -238,10 +238,9 @@ const AdvancedSearch = (props) => {
                                                         selectedSearchUnderTerms,
                                                         selectedSearchUnderAllTerms
                                                     
-                                                    }}
-                                                    setSearchSettingIsModified={setSearchSettingIsModified}
+                                                    }}                                                    
                                                     setLoadedSettingName={setLoadedSettingName}
-                                                />                                            
+                                                />
                                             </h5>
                                         }                                        
                                     </div>
