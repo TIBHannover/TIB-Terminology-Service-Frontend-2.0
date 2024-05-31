@@ -644,3 +644,15 @@ body .extra-sm-btn{
 body .modal{
     color: black;
 }
+
+@keyframes fadeInOut {
+    0% {opacity: 0;}
+    50% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.app-page-loading-spinner {
+    animation: fadeInOut 2s infinite;
+    font-size: 120px;
+    color: #0E6668;    
+}

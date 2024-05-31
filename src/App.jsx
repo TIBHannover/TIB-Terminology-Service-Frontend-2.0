@@ -12,6 +12,7 @@ import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
 import { getReportList } from './api/tsMicroBackendCalls';
+import LoadingPage from './LoadingPage';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -29,6 +30,8 @@ const App = () => {
     "userCollectionEnabled": false, 
     "advancedSearchEnabled": false, 
     "activeSearchSetting": {}} );
+  
+    const [showLoadingPage, setShowLoadingPage] = useState(true);
 
 
   useEffect(() => {
@@ -53,7 +56,8 @@ const App = () => {
         if(user?.settings?.activeSearchSetting){
           settings.activeSearchSetting = user?.settings?.activeSearchSetting;          
         }   
-        setUserSettings(settings);     
+        setUserSettings(settings); 
+        setShowLoadingPage(false);    
       });
       
       getReportList().then((reports) => {
@@ -83,26 +87,31 @@ const App = () => {
         <MatomoWrapper> 
         <div className='container-fluid'>
             <AppContext.Provider  value={appContextData}>
-              <Header />
-              <div className='application-content'  id="application_content">
-                {loading && 
-                  <Skeleton 
-                    count={2} 
-                    wrapper={AppHelpers.InlineWrapperWithMargin} 
-                    inline width={600} 
-                    height={200} 
-                    marginLeft={20} 
-                    baseColor={'#f4f2f2'}/>
-                }
-                {!loading &&
-                  <>            
-                    <span id="backend-is-down-message-span"></span>
-                    <CookieBanner />
-                    <AppRouter />        
-                  </>   
-                }
-              </div>
-              <Footer /> 
+              {showLoadingPage && <LoadingPage /> }
+              {!showLoadingPage &&
+                <>
+                <Header />
+                <div className='application-content'  id="application_content">
+                  {loading && 
+                    <Skeleton 
+                      count={2} 
+                      wrapper={AppHelpers.InlineWrapperWithMargin} 
+                      inline width={600} 
+                      height={200} 
+                      marginLeft={20} 
+                      baseColor={'#f4f2f2'}/>
+                  }
+                  {!loading &&
+                    <>            
+                      <span id="backend-is-down-message-span"></span>
+                      <CookieBanner />
+                      <AppRouter />        
+                    </>   
+                  }
+                </div>
+                <Footer />
+                </>
+              }
             </AppContext.Provider>                  
           </div>             
         </MatomoWrapper>
