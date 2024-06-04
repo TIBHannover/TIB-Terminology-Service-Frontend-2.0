@@ -39,6 +39,7 @@ const AdvancedSearch = (props) => {
 
     const searchUnderRef = useRef(null);
     const searchUnderAllRef = useRef(null);
+    const searchInMetadataSelectRef = useRef(null);
 
 
 
@@ -120,6 +121,7 @@ const AdvancedSearch = (props) => {
 
     async function reset(){
         setSelectedMetaData([]);
+        searchInMetadataSelectRef.current.resetSelectedValues();
         setSelectedSearchUnderTerms([]);
         setSelectedSearchUnderAllTerms([]);        
         setPlaceHolderExtraText("");
@@ -297,7 +299,8 @@ const AdvancedSearch = (props) => {
                                             selectedValues={selectedMetaData}                       
                                             onSelect={handleSearchInMultiSelect}
                                             onRemove={handleSearchInMultiSelect}                        
-                                            avoidHighlightFirstOption={true}                        
+                                            avoidHighlightFirstOption={true}      
+                                            ref={searchInMetadataSelectRef}                  
                                             closeIcon={"cancel"}
                                             id="adv-s-search-in-select"
                                             placeholder="label, description, ..."
