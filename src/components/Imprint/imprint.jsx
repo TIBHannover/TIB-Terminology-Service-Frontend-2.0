@@ -1,8 +1,5 @@
-import React from 'react'
 
-
-class Imprint extends React.Component{
-    render(){
+const Imprint = () => {    
         return(
             <div className='row justify-content-center doc-design'>
                 <div className='col-sm-8'>
@@ -83,9 +80,7 @@ class Imprint extends React.Component{
                 </p>
                 </div> 
             </div>
-        )
-    }
-
+        );
 }
 
 export default Imprint

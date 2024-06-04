@@ -4,10 +4,9 @@ import Home from "../Home/Home";
 import SearchResult from '../Search/SearchResult/SearchResult';
 import Documentation from "../Documentation/Documentation";
 import Collections from "../Collection/Collection";
-import Imprint from '../../assets/static/imprint';
-import PrivacyPolicy from '../../assets/static/PrivacyPolicy';
-import TermsOfUse from '../../assets/static/TermsOfUse';
-import AboutApi from '../../assets/static/AboutApi';
+import Imprint from '../Imprint/imprint';
+import PrivacyPolicy from '../PrivacyPolicy/PrivacyPolicy';
+import TermsOfUse from '../TermsOfUse/TermsOfUse';
 import About from "../About/About";
 import Help from "../Help/Help";
 import UsagePage from '../Usage/Usage';
@@ -26,8 +25,7 @@ const includeRoutes = () => (
     <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
     <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
     <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
-    <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
-    <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/AboutApi"} component={AboutApi} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
+    <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse} sitemapIndex={true} changefreq={"yearly"} priority={1}/>   
     <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
     <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help} sitemapIndex={true} changefreq={"yearly"} priority={1}/>
     {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" && 

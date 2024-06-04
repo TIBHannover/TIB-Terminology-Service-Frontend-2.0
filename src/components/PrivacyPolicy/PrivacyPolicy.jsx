@@ -1,8 +1,5 @@
-import React from 'react'
 
-
-class PrivacyPolicy extends React.Component{
-    render(){
+const PrivacyPolicy = () => {    
       return(
             <div className='row justify-content-center'>
              <div className='col-sm-8'>
@@ -94,8 +91,7 @@ class PrivacyPolicy extends React.Component{
             </div>
           </div>
             
-      )
-    }
+      );
 }
 
 export default PrivacyPolicy
