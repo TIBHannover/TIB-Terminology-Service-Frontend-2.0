@@ -13,7 +13,7 @@ export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
     try{
         let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: false});
         headers["X-TS-Auth-APP-Code"] = authCode;
-        let result:any = await fetch(baseUrl + "/user/login", {method: "GET", headers:headers});
+        let result:any = await fetch(baseUrl + "/user/login", {method: "POST", headers:headers});
         result = await result.json();
         result = result['_result'];
         if(result && result["issue"]){
@@ -32,7 +32,7 @@ export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
 export async function isLogin():Promise<boolean>{
     try{        
         let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});
-        let result:any = await fetch(baseUrl + '/user/validate_login', {method: "GET", headers:headers});
+        let result:any = await fetch(baseUrl + '/user/validate_login', {method: "POST", headers:headers});
         if (result.status !== 200){            
             return false;
         }
