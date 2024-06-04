@@ -1,7 +1,12 @@
+import { useContext } from "react";
 import Toolkit from "../../../Libs/Toolkit";
+import { AppContext } from "../../../context/AppContext";
+import { storeUserSettings } from "../../../api/user";
 
 
 const RenderSearchForm = (props) => {
+
+    const appContext = useContext(AppContext);
 
 
     function setPlaceHolder(){    
@@ -75,11 +80,38 @@ const RenderSearchForm = (props) => {
 
 
 
+    async function handleUserCollectionClose(){
+        appContext.setUserCollectionEnabled(!appContext.userCollectionEnabled);
+        appContext.setActiveUserCollection({"title": "", "ontology_ids": []});
+        let userSttings = {"userCollectionEnabled": !appContext.userCollectionEnabled, "activeCollection": {"title": "", "ontology_ids": []}};
+        await storeUserSettings(userSttings);
+        window.location.reload();
+    }
+
+
+    function createUserCollectionToggleTooltopText(){
+      if(appContext.user && appContext.userCollectionEnabled){
+        let text = `Collection "${appContext.activeUserCollection.title}". Included ontologies: `; 
+        text += appContext.activeUserCollection['ontology_ids'].join(", ");         
+        return text;
+      }
+      return "";  
+    }
+
+    
     return(
         <>
           <div className='row site-header-searchbox-holder'>
             <div className='col-sm-9 search-bar-container'>
-              <div class="input-group input-group-lg">                              
+              <div class="input-group input-group-lg">
+                {appContext.user && appContext.activeUserCollection.title !== "" && !props.ontologyId &&
+                  <div className="custom-collection-btn"  title={createUserCollectionToggleTooltopText()}>
+                    <div>
+                      {appContext.activeUserCollection.title}
+                      <i className="fa fa-close fa-borderless" onClick={handleUserCollectionClose}></i>                      
+                    </div>                   
+                  </div> 
+                }                              
                 <input 
                     type="text" 
                     class="form-control search-input" 

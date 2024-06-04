@@ -3,6 +3,7 @@ import TextEditor from "../../../common/TextEditor/TextEditor";
 import { RowWithSingleColumn } from "../../../common/Grid/BootstrapGrid";
 import CommentCard from "../CommentCard";
 import { AppContext } from "../../../../context/AppContext";
+import Login from "../../../User/Login/TS/Login";
 
 
 
@@ -34,7 +35,7 @@ export const NoteCommentListRender = (props) => {
     }
 
 
-    let editor = <TextEditor 
+    const editor = <TextEditor 
                         editorState={props.commentEditorState} 
                         textChangeHandlerFunction={props.onTextAreaChange}
                         wrapperClassName="note-comment-editor-warpper"
@@ -43,9 +44,23 @@ export const NoteCommentListRender = (props) => {
                         textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
                     />
 
-        let submitButton = !props.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={props.submitComment}>Comment</button>;
-        let editButton = props.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={props.edit}>Edit</button>;
-        let cancelButton = props.editMode && <button type="button" class="btn btn-secondary note-comment-cancel-edit-btn" onClick={props.cancelEdit}>Cancel</button>;
+    const submitButton = !props.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={props.submitComment}>Comment</button>;
+    const editButton = props.editMode && <button type="button" class="btn btn-secondary note-comment-submit-btn" onClick={props.edit}>Edit</button>;
+    const cancelButton = props.editMode && <button type="button" class="btn btn-secondary note-comment-cancel-edit-btn" onClick={props.cancelEdit}>Cancel</button>;
+    const loginModalId = "joinConversationModal";
+    const loginBtn = <div className="row text-center">
+                            <div className="col-sm-12">
+                                <button type="button" 
+                                    class="btn btn-secondary" 
+                                    data-toggle="modal" 
+                                    data-target={"#" + loginModalId}
+                                    data-backdrop="static"
+                                    data-keyboard="false"                                    
+                                    >
+                                    Join this conversation
+                                </button>
+                            </div>
+                        </div>  
 
     return (
         <div className="note-comment-container">
@@ -75,6 +90,13 @@ export const NoteCommentListRender = (props) => {
                         rowClass=""
                     />
                 ]                   
+            }
+            {!appContext.user &&
+                <div className="row">
+                    <div className="col-sm-12">
+                        <Login isModal={true}  customLoginBtn={loginBtn} customModalId={loginModalId} />                        
+                    </div>
+                </div>
             }                
         </div>
     );

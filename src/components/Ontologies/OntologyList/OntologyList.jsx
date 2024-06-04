@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
 import CollectionApi from '../../../api/collection';
@@ -7,6 +7,7 @@ import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
+import { AppContext } from '../../../context/AppContext';
 
 
 
@@ -19,6 +20,8 @@ const OntologyList = (props) => {
   /* 
     This component is responsible for rendering the list of ontologies.
   */
+
+  const appContext = useContext(AppContext);
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -38,8 +41,19 @@ const OntologyList = (props) => {
   async function setComponentData (){    
     try{      
       let ontologyApi = new OntologyApi({});      
-      await ontologyApi.fetchOntologyList();                          
-      let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologyApi.list, sortField);                 
+      await ontologyApi.fetchOntologyList();
+      let ontologiesList = [];
+      if(appContext.userCollectionEnabled && appContext.activeUserCollection.ontology_ids.length > 0){
+        for(let onto of ontologyApi.list){
+          if(appContext.activeUserCollection.ontology_ids.includes(onto.ontologyId)){
+            ontologiesList.push(onto);
+          }
+        }
+      }
+      else{
+        ontologiesList = ontologyApi.list;
+      }
+      let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);                 
       setOntologies(sortedOntologies);
       setUnFilteredOntologies(sortedOntologies);              
       setIsLoaded(true);      

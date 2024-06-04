@@ -8,7 +8,7 @@ import TermList from '../TermList/TermList';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
 import {OntologyPageTabs, OntologyPageHeadSection } from './helpers';
-import { getNoteList } from '../../../api/tsMicroBackendCalls';
+import { getNoteList } from '../../../api/note';
 import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
 import NoteList from '../Note/NoteList';

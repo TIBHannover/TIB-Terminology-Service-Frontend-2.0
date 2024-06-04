@@ -7,8 +7,8 @@ class GraphEdge{
         this.arrows = {to:true};
         this.width = 2;          
         this.color = {
-            color: '#3bba54',
-            highlight:'#218284'
+            color: 'gray',
+            highlight:'#00617C'
         };
         this.font = {
             size:16

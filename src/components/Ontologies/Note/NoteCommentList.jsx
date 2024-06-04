@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { submitNoteComment, editNoteComment } from "../../../api/tsMicroBackendCalls";
+import { submitNoteComment, editNoteComment } from "../../../api/note";
 import {getTextEditorContent, createTextEditorEmptyText, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
 import { NoteCommentListRender } from "./renders/NoteCommentListRender";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
@@ -100,7 +100,7 @@ const NoteCommentList = (props) => {
             return;
         }
 
-        let data = {'commentId': editCommentId, 'content': commentContent, 'ontologyId': ontologyPageContext.ontology.ontologyId};
+        let data = {'comment_id': editCommentId, 'content': commentContent, 'ontology_id': ontologyPageContext.ontology.ontologyId};
         editNoteComment(data).then((result) => {
             if(result){                
                 setNoteId(null);
@@ -133,10 +133,6 @@ const NoteCommentList = (props) => {
         }
     }
 
-
-    // useEffect(() => {
-
-    // }, []);
 
     useEffect(() => {
         jumpToCommentIfExist();

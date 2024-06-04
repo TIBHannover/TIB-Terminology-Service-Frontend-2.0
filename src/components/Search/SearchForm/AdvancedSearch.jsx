@@ -1,14 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import Multiselect from 'multiselect-react-dropdown';
 import { getJumpToResult } from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
+import { AppContext } from '../../../context/AppContext';
 
 
 
 const AdvancedSearch = (props) => {
+
+    const appContext = useContext(AppContext);
         
     const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrlOrStorage());
     const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrlOrStorage());
@@ -43,6 +46,9 @@ const AdvancedSearch = (props) => {
             "ontologyIds": ontologyIdsInUrl,
             "obsoletes": Toolkit.getObsoleteFlagValue()
         };
+        if(appContext.userCollectionEnabled){
+            inputQuery['ontologyIds'] = appContext.activeUserCollection.ontology_ids.join(',');
+        }
         if(ontologyPageId){
             // restrict the term search to the current opened ontology
             inputQuery['ontologyIds'] = [ontologyPageId];

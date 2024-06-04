@@ -47,7 +47,7 @@ const UserProfile = () =>{
     }
     return (
         <div className="row">                
-                <div className="col-sm-6 user-profile-container">
+                <div className="col-sm-6 user-info-panel user-profile-container">
                     <table class="table table-striped">                    
                         {localStorage.getItem("authProvider") === "github" ? buildGithubProfile() : buildOrcidProfile()}
                     </table>         

@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
+import { a } from "react-spring";
 
 
 const Facet = (props) => {
+
+    const appContext = useContext(AppContext);
 
     const DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES = 5;
     
@@ -29,8 +33,11 @@ const Facet = (props) => {
             let allOntologies = facetData["ontology_name"];
             let ontologyFacetData = {};
             let types = {};                        
-            for(let i=0; i < allOntologies.length; i++){
+            for(let i=0; i < allOntologies.length; i++){               
                 if(i % 2 == 0){
+                    if(appContext.userCollectionEnabled && !appContext.activeUserCollection['ontology_ids'].includes(allOntologies[i].toLowerCase())){                        
+                        continue;
+                    }
                     ontologyFacetData[allOntologies[i].toUpperCase()] = allOntologies[i + 1];
                 }
             }
@@ -81,7 +88,8 @@ const Facet = (props) => {
 
     function createOntologiesCheckboxList(){        
         let result = [];
-        let counter = 1;        
+        let counter = 1;  
+      
         for(let ontologyId in ontologyFacetData){                         
             if (counter > countOfShownOntologies && !ontologyListShowAll){
                 break;
@@ -215,8 +223,10 @@ const Facet = (props) => {
 
 
     useEffect(() => {        
-        createCollectionsCheckBoxes();
-        setIsLoading(false);
+        if(!appContext.userCollectionEnabled){
+            createCollectionsCheckBoxes();
+            setIsLoading(false);
+        }        
     }, [props.allCollections]);
 
 
@@ -225,7 +235,7 @@ const Facet = (props) => {
         setComponentData();              
         createTypesCheckboxList();
         createOntologiesCheckboxList();
-        createCollectionsCheckBoxes();
+        !appContext.userCollectionEnabled && createCollectionsCheckBoxes();
         setIsLoading(false);
     }, [props.facetData]);
 
@@ -287,7 +297,18 @@ const Facet = (props) => {
                     <>
                         <h4>{"Collections"}</h4>
                         <div class="facet-box" id="facet-collections-list">
-                            {collectionCheckBoxesToRender}
+                            {!appContext.userCollectionEnabled && collectionCheckBoxesToRender}
+                            {appContext.userCollectionEnabled && 
+                                <>
+                                <p>
+                                    Your collection named "{appContext.activeUserCollection.title}" is enabled. 
+                                </p>
+                                <p>
+                                    Disable it by clicking <i className="fa fa-close"></i> 
+                                    in case you wish to see the full list of collections and ontologies.
+                                </p>
+                                </>
+                            }
                         </div>
                     </>}
             </div>}

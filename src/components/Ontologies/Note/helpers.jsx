@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { pinnNote } from "../../../api/note";
 
 
 
@@ -60,36 +61,22 @@ export const PinnModalBtn = (props) => {
 
 export const PinnModal = (props) => {
     const [submited, setSubmited] = useState(false);
-    const [pinnedSuccess, setPinnedSuccess] = useState(false);
 
-    let formData = new FormData();
-    formData.append("ontology", props.note['ontology_id']);
-    formData.append("note_id", props.note['id']);
-    formData.append("pinned", !Boolean(props.note['pinned']));    
+    let data = {};
+    data["ontology"] = props.note['ontology_id'];
+    data["note_id"] = props.note['id'];
+    data["pinned"] = `${!Boolean(props.note['pinned'])}`;    
     
-    let pinnUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_pin';  
     
     async function pinNote(){
-        try{
-            let postConfig = {method: 'POST',  headers:props.callHeaders, body: formData};                        
-            let result = await fetch(pinnUrl, postConfig);
-            setSubmited(true);
-            setPinnedSuccess(result.ok)
-            redirectAfterPin();
-        }
-        catch(e){
-            setSubmited(true);
-            setPinnedSuccess(false);
-            redirectAfterPin();
-        }
+        await pinnNote(data);            
+        setSubmited(true);            
+        redirectAfterPin();
     }
-
 
     const redirectAfterPin = () => {
         window.location.replace(window.location.href);
     }
-
-
 
     return (
         <div>            
@@ -114,8 +101,7 @@ export const PinnModal = (props) => {
                         <div class="modal-footer justify-content-center">                            
                             {!submited && <button type="button" class="btn btn-secondary" onClick={pinNote}>
                                 {props.note['pinned'] ? "Unpin" : "Pin"}
-                            </button>}
-                            {/* {submited && <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={redirectAfterDelete}>Close</button>} */}
+                            </button>}                            
                         </div>
                     </div>
                 </div>

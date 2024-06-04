@@ -63,7 +63,8 @@ body .btn-danger{
     background-color: red;
 }
 
-body .close-btn-message-modal{
+body .close-btn-message-modal, 
+.close-btn-message-modal:hover{
     background-color: white;    
     color: #404040;
 }
@@ -506,8 +507,7 @@ body .fa-trash{
 }
 
 body .fa-edit{
-    border: none;
-    font-size: 13px;
+    border: none;    
     margin-right: 2px;    
 }
 
@@ -516,11 +516,22 @@ body .fa-ellipsis-h{
     font-size: 20px;    
 }
 
+body .fa{    
+    margin-left: 5px;    
+    cursor: pointer;
+}
+
 body .fa-eye-slash, .fa-eye, .hidden-fa{
     border: none;
     font-size: 14px;
     cursor: pointer;
     margin-left: 5px;
+}
+
+body .fa-borderless{
+    border: none;    
+    margin-left: 5px;    
+    cursor: pointer;
 }
 
 body .overlay {
@@ -623,4 +634,9 @@ body .result-card{
     display: inline;
     margin-left: 10px;
     padding: 5px;
+}
+
+body .extra-sm-btn{
+    font-size: 2px;
+    padding: 1px;
 }

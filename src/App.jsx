@@ -7,7 +7,7 @@ import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import AppHelpers from './AppHelpers';
-import { isLogin, checkIsSystemAdmin, auth } from './components/User/Login/TS/Auth';
+import AuthFactory from './components/User/Login/AuthFactory';
 import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
@@ -24,24 +24,29 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
-  
-  
+  const [activeUserCollection, setActiveUserCollection] = useState({"title": "", "ontology_ids": []});
+  const [userCollectionEnabled, setUserCollectionEnabled] = useState(false);
+
+
   useEffect(() => {
     AppHelpers.setSiteTitleAndFavIcon();
     AppHelpers.checkBackendStatus();
-    
+
     if(process.env.REACT_APP_AUTH_FEATURE === "true"){   
       let cUrl = window.location.href;
       if(cUrl.includes("code=")){
-        auth();        
+        AuthFactory.runAuthentication();        
       }
-      
-      isLogin().then((resp) => {setUser(resp);});
-      
-      checkIsSystemAdmin().then((resp) => {        
-        setIsSystemAdmin(resp);
-      });
 
+      AuthFactory.userIsLogin().then((user) => {
+        setUser(user);
+        setIsSystemAdmin(user?.systemAdmin);
+        setUserCollectionEnabled(user?.settings?.userCollectionEnabled);
+        if(user?.settings?.activeCollection){
+          setActiveUserCollection(user?.settings?.activeCollection);
+        }        
+      });
+      
       getReportList().then((reports) => {
         setReportsListForAdmin(reports);
       });
@@ -57,7 +62,11 @@ const App = () => {
   const appContextData = {
     user: user,
     isUserSystemAdmin: isSystemAdmin,
-    reportsListForAdmin: reportsListForAdmin
+    reportsListForAdmin: reportsListForAdmin,
+    activeUserCollection: activeUserCollection,
+    setActiveUserCollection: setActiveUserCollection,
+    userCollectionEnabled: userCollectionEnabled,
+    setUserCollectionEnabled: setUserCollectionEnabled
   };
 
   return (

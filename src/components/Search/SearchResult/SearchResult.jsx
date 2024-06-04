@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
@@ -13,6 +13,7 @@ import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import { AppContext } from '../../../context/AppContext';
 
 
 
@@ -22,6 +23,8 @@ const SearchResult = (props) => {
   /*
     This component is responsible for rendering the search results and facet.
   */
+
+  const appContext = useContext(AppContext);
 
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
@@ -62,14 +65,21 @@ const SearchResult = (props) => {
   }
 
 
-  async function search(){      
+  async function search(){  
+
+    let ontologies = [...selectedOntologies];
+    
+    if(appContext.userCollectionEnabled && ontologies.length === 0){
+      ontologies = [...appContext.activeUserCollection.ontology_ids];
+    }
+
     try{
       let obsoletes = Toolkit.getObsoleteFlagValue();    
       let searchParams = {
         searchQuery: searchQuery,
         page:pageNumber,
         size: pageSize,
-        selectedOntologies: selectedOntologies,
+        selectedOntologies: ontologies,
         selectedTypes: selectedTypes,
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
@@ -289,15 +299,15 @@ const SearchResult = (props) => {
   function createFilterTags(){
     let tagsList = [];
     for(let type of selectedTypes){
-      let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick} data-type={"type"} data-value={type} class="fa fa-close remove-tag-icon"></i></div>;
+      let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick} data-type={"type"} data-value={type} className="fa fa-close remove-tag-icon"></i></div>;
       tagsList.push(newTag);
     }
     for(let ontologyId of selectedOntologies){
-      let newTag = <div className='search-filter-tags' key={ontologyId}>{ontologyId} <i onClick={handleRemoveTagClick} data-type={"ontology"} data-value={ontologyId} class="fa fa-close remove-tag-icon"></i></div>;
+      let newTag = <div className='search-filter-tags' key={ontologyId}>{ontologyId} <i onClick={handleRemoveTagClick} data-type={"ontology"} data-value={ontologyId} className="fa fa-close remove-tag-icon"></i></div>;
       tagsList.push(newTag);
     }
     for(let collection of selectedCollections){
-      let newTag = <div className='search-filter-tags' key={collection}>{collection} <i onClick={handleRemoveTagClick} data-type={"collection"} data-value={collection} class="fa fa-close remove-tag-icon"></i></div>;
+      let newTag = <div className='search-filter-tags' key={collection}>{collection} <i onClick={handleRemoveTagClick} data-type={"collection"} data-value={collection} className="fa fa-close remove-tag-icon"></i></div>;
       tagsList.push(newTag);
     }    
     setFilterTags(tagsList);

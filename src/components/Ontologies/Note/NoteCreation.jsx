@@ -1,12 +1,13 @@
 import {useEffect, useState, useContext} from "react";
 import {getTextEditorContent} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
-import { submitNote } from "../../../api/tsMicroBackendCalls";
+import { submitNote } from "../../../api/note";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
+import Login from "../../User/Login/TS/Login";
 import PropTypes from 'prop-types';
 
 
@@ -22,14 +23,14 @@ const NoteCreation = (props) => {
 
     const noteContext = useContext(NoteContext);
     const appContext = useContext(AppContext);
+    const ontologyPageContext = useContext(OntologyPageContext);
 
     let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
     targetType = targetType !== -1 ? targetType : 1;
     let selectedTerm = noteContext.selectedTermInTree 
         ? {"iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label']} 
         : {"iri": null, "label": null};
-
-    const ontologyPageContext = useContext(OntologyPageContext);    
+    
 
     const [targetArtifactType, setTargetArtifactType] = useState(targetType);
     const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
@@ -81,7 +82,8 @@ const NoteCreation = (props) => {
     function submit(){
         let formIsValid = true;
         let noteTitle = document.getElementById('noteTitle' + noteIdForRender).value;
-        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
+        let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];     
+        let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];        
         let noteContent = "";                     
         if(!editorState){            
             document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
@@ -109,9 +111,10 @@ const NoteCreation = (props) => {
         if(!formIsValid){
             return;
         }
-
+        
         if(parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID){
             selectedTargetTermIri = ontologyPageContext.ontology.ontologyId;
+            selectedTargetTermLabel = ontologyPageContext.ontology.ontologyId;
         }
 
         
@@ -120,18 +123,19 @@ const NoteCreation = (props) => {
         if(noteContext.selectedTermInTree){
             // Note creation for an specific term in from term detail tabel
             selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
-            targetType = props.targetArtifactType;
-        }
-                
-        let data = new FormData();
-        data.append("title", noteTitle);
-        data.append("semantic_component_iri", selectedTargetTermIri);
-        data.append("content", noteContent);
-        data.append("ontology_id", ontologyPageContext.ontology.ontologyId);        
-        data.append("semantic_component_type", targetType);
-        data.append("visibility",  constantsVars.VISIBILITY_VALUES[visibility]);
+            selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
+            targetType = noteContext.selectedTermTypeInTree;
+        }        
+        let data = {};
+        data["title"] = noteTitle;
+        data["semantic_component_iri"] = selectedTargetTermIri;
+        data["semantic_component_label"] = selectedTargetTermLabel;
+        data["content"] = noteContent;
+        data["ontology_id"] = ontologyPageContext.ontology.ontologyId;
+        data["semantic_component_type"] = targetType;
+        data["visibility"] = constantsVars.VISIBILITY_VALUES[visibility];
         if(publishToParent && parentOntology){
-            data.append("parentOntology", parentOntology);
+            data["parentOntology"] = parentOntology;
         }
         submitNote(data).then((newNoteId) => {
             noteContext.setNoteCreationResultStatus(newNoteId);
@@ -169,7 +173,23 @@ const NoteCreation = (props) => {
         return null;
     }
     if(!appContext.user){
-        return "";
+        const loginModalId = "loginModalAddNote";
+        const addNoteBtn = <div className="row float-right">
+                                <div className="col-sm-12">
+                                    <button type="button" 
+                                        class="btn btn-secondary" 
+                                        data-toggle="modal" 
+                                        data-target={"#" + loginModalId}
+                                        data-backdrop="static"
+                                        data-keyboard="false"                                    
+                                        >
+                                        Add Note
+                                    </button>
+                                </div>
+                            </div>   
+        return (            
+            <Login isModal={true}  customLoginBtn={addNoteBtn} customModalId={loginModalId} />
+        );
     }
 
     return (

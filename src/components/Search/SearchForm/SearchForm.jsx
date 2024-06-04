@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from './KeyboardNavigation';
@@ -8,6 +8,7 @@ import OntologyLib from '../../../Libs/OntologyLib';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
+import { AppContext } from '../../../context/AppContext';
 
 
 
@@ -20,6 +21,8 @@ const SearchForm = () => {
     exact checkbox click, obsoletes checkbox click, advanced search toggle, 
     and search url creation.
   */
+
+  const appContext = useContext(AppContext);
 
   const searchUrlFactory = new SearchUrlFactory();
 
@@ -45,7 +48,10 @@ const SearchForm = () => {
     }
     inputForAutoComplete['searchQuery'] = searchQuery;    
     inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
-    inputForAutoComplete['ontologyIds'] = searchUrlFactory.ontologies.length !== 0 ? searchUrlFactory.ontologies.join(',') : null;
+    if(appContext.userCollectionEnabled){
+      inputForAutoComplete['ontologyIds'] = appContext.activeUserCollection.ontology_ids.join(',');    
+    }
+    inputForAutoComplete['ontologyIds'] = searchUrlFactory.ontologies.length !== 0 ? searchUrlFactory.ontologies.join(',') : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['types'] = searchUrlFactory.types.length !== 0 ? searchUrlFactory.types.join(',') : null;    
     if(process.env.REACT_APP_PROJECT_NAME === "" ){
@@ -95,8 +101,7 @@ const SearchForm = () => {
     if(searchQuery.length === 0){
       return true;
     }
-    let searchUrl = setSearchUrl(searchQuery);    
-    setOntologyId(null);  
+    let searchUrl = setSearchUrl(searchQuery);        
     window.location.replace(searchUrl);
   }
 
@@ -123,7 +128,7 @@ const SearchForm = () => {
   function handleAdvancedSearchToggle(){           
     searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
     setAdvSearchEnabled(!advSearchEnabled);
-}
+  }
 
 
 
