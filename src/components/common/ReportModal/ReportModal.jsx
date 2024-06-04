@@ -74,7 +74,7 @@ export const ReportModal = (props) => {
                                     <label for={"reportReason" + props.modalId} class="form-label">Please describe briefly the reason for this report</label>
                                     <textarea class="form-control" id={"reportReason" + props.modalId} rows="3"></textarea>
                                 </div>
-                                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} target="_blank">Term of Use</a>
+                                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse?section=3"} target="_blank">Terms of Use</a>
                                 </>
                             }
                             {submited && reportSuccess &&
