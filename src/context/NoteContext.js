@@ -8,7 +8,9 @@ const blueprint = {
     selectedTermInTree: null,
     noteSelectHandler: function handleNoteSelectionInList(){},
     setNoteCreationResultStatus: function setNoteCreationResultStatusInNoteList(){},
-    selectedNoteId: null
+    selectedNoteId: null,
+    selectedNote: {},
+    setSelectedNote: function setSelectedNoteInNoteDetail(){},
 };
 
 

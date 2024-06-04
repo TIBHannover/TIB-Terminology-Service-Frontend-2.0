@@ -38,6 +38,7 @@ const NoteDetail = () => {
             }            
             else{    
                 setNote(result['note']);
+                noteContext.setSelectedNote(result['note']);
                 setNoteContent(createHtmlFromEditorJson(result['note']['content']));                
                 noteContext.setNumberOfPinned(result['number_of_pinned']);
                 setNoteNotFound(false);                
