@@ -62,7 +62,7 @@ const LoadSetting = (props) => {
                             data-backdrop="static"
                             data-keyboard="false"                                    
                             >
-                            Load
+                            My search settings
                         </button>;
         return (            
             <Login isModal={true}  customLoginBtn={loadBtn} customModalId={loginModalId} />
@@ -80,7 +80,7 @@ const LoadSetting = (props) => {
                 data-backdrop="static"
                 onClick={fetchSettingList}
                 >
-                Load
+                My search settings
             </button>            
             <div className="modal fade" id={'SearchSettingListModal'} tabindex="-1" role="dialog" aria-labelledby={"SearchSettingListModalLabel"} aria-hidden="true">
                 <div className="modal-dialog" role="document">
