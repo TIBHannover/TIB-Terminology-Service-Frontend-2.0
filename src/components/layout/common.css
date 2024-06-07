@@ -25,7 +25,7 @@ body{
 
 .application-content{
     /* overflow-x: hidden;     */
-    min-height: 500px;
+    min-height: 600px;
     padding-top: 30px;
     width: 75%;
     margin: auto;
@@ -659,4 +659,6 @@ body .modal{
 
 .warning-text{
     color: rgb(253, 237, 9) !important;
+    font-size: 5px;
+    padding: 2px;
 }
