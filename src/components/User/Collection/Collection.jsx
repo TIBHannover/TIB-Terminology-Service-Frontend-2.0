@@ -94,10 +94,7 @@ const UserCollection = () => {
                     />
                     <label class="form-check-label" for={"collectionCheckbox" + collection['id']}>
                         {collection['title']}&nbsp;
-                        (<small>{collection['ontology_ids'].join(', ')}</small>)
-                        {collection['description'] &&
-                            <small>{": " + collection['description']}</small>
-                        }                        
+                        (<small>{collection['ontology_ids'].join(', ')}</small>)                                             
                     </label>
                     <AddCollection 
                         editMode={true}
@@ -111,7 +108,12 @@ const UserCollection = () => {
                         key={"deleteBtnUserCollection" + collection['id']}
                         btnText={<i className="fa fa-close fa-borderless"></i>}
                         btnClass="extra-sm-btn ml-2"
-                    />                    
+                    />
+                    <p>
+                    {collection['description'] &&
+                        <small>{collection['description']}</small>
+                    }   
+                    </p>                    
                 </div>
                 <DeleteModal
                     modalId={collection['id']}                    
