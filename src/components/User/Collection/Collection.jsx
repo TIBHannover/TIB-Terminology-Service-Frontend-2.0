@@ -20,8 +20,8 @@ const UserCollection = () => {
 
 
     async function fetchCollections() {
-        const collections = await fetchCollectionList();
-        setCollections(collections);
+        const collections = await fetchCollectionList();        
+        setCollections(Toolkit.sortListOfObjectsByKey(collections, 'created_at'));
     }
 
 

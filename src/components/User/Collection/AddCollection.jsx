@@ -136,6 +136,7 @@ const AddCollection = (props) => {
             }            
             setSelectedOntologies(collectionOntologies);
             document.getElementById('collectionTitle' + idPostfix).value = collectionToEdit['title'];
+            document.getElementById('collectionDescription' + idPostfix).value = collectionToEdit['description'];
         }                     
     }, []);
 
