@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import Multiselect from "multiselect-react-dropdown";
-import OntologyApi from "../../../api/ontology";
 import { saveCollection, updateCollection } from "../../../api/userCollection";
 import { storeUserSettings } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
@@ -10,29 +9,17 @@ import AlertBox from "../../common/Alerts/Alerts";
 
 
 const AddCollection = (props) => {
-    const {editMode, collectionToEdit, editBtnText, btnClass, exstingCollectionList} = props;
+    const {editMode, collectionToEdit, editBtnText, btnClass, exstingCollectionList, ontologiesListForSelection} = props;
 
     const appContext = useContext(AppContext);
 
-    const [selectedOntologies, setSelectedOntologies] = useState([]);
-    const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
+    const [selectedOntologies, setSelectedOntologies] = useState([]);    
     const [showAlert, setShowAlert] = useState(false);
 
     const idPostfix = editMode ? collectionToEdit['id'] : '';
 
     
-    async function loadOntologiesForSelection(){
-        let ontologyApi = new OntologyApi({});
-        await ontologyApi.fetchOntologyList();
-        let ontologyList = [];
-        for (let ontology of ontologyApi.list){
-            let opt = {'text': '', 'id': ''};
-            opt['text'] = ontology['ontologyId'];
-            opt['id'] = ontology['ontologyId'];
-            ontologyList.push(opt);
-        }
-        setOntologiesListForSelection(ontologyList);
-    }
+    
 
 
     function handleOntologySelection(selectedList, selectedItem){      
@@ -124,8 +111,7 @@ const AddCollection = (props) => {
 
 
 
-    useEffect(() => {
-        loadOntologiesForSelection();  
+    useEffect(() => {        
         if(editMode){
             let collectionOntologies = [];
             for (let ontologyId of collectionToEdit['ontology_ids']){
@@ -185,7 +171,7 @@ const AddCollection = (props) => {
                             <div className='row'>                
                                 <div className='col-sm-12'>
                                     <label className="required_input" for={'collection-ontologies' + idPostfix}>Ontologies</label>
-                                    {ontologiesListForSelection.length !== 0 &&                                    
+                                    {ontologiesListForSelection && ontologiesListForSelection.length !== 0 &&                                    
                                         <Multiselect
                                             isObject={true}
                                             options={ontologiesListForSelection}  

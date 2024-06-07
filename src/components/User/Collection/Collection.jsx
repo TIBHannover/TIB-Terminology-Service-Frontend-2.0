@@ -7,6 +7,7 @@ import { storeUserSettings } from "../../../api/user";
 import DeleteModalBtn from "../../common/DeleteModal/DeleteModal";
 import { DeleteModal } from "../../common/DeleteModal/DeleteModal";
 import { getTsPluginHeaders } from "../../../api/header";
+import OntologyApi from "../../../api/ontology";
 
 
 
@@ -16,12 +17,28 @@ const UserCollection = () => {
     const appContext = useContext(AppContext);
 
     const [collections, setCollections] = useState([]);
+    const [ontologiesListForSelection, setOntologiesListForSelection] = useState([]);
 
 
 
     async function fetchCollections() {
         const collections = await fetchCollectionList();        
         setCollections(Toolkit.sortListOfObjectsByKey(collections, 'created_at'));
+    }
+
+
+
+    async function loadOntologiesForSelection(){
+        let ontologyApi = new OntologyApi({});
+        await ontologyApi.fetchOntologyList();
+        let ontologyList = [];
+        for (let ontology of ontologyApi.list){
+            let opt = {'text': '', 'id': ''};
+            opt['text'] = ontology['ontologyId'];
+            opt['id'] = ontology['ontologyId'];
+            ontologyList.push(opt);
+        }
+        setOntologiesListForSelection(ontologyList);
     }
 
 
@@ -102,6 +119,7 @@ const UserCollection = () => {
                         collectionToEdit={collection}
                         btnClass="extra-sm-btn ml-2"
                         exstingCollectionList={collections}
+                        ontologiesListForSelection={ontologiesListForSelection}
                     />
                     <DeleteModalBtn 
                         modalId={collection['id']}   
@@ -133,6 +151,7 @@ const UserCollection = () => {
 
     useEffect(() => {
         fetchCollections();
+        loadOntologiesForSelection();
     }, []);
 
 
@@ -148,7 +167,10 @@ const UserCollection = () => {
                 </div>
             </div> 
             <div className="col-sm-2">
-                <AddCollection exstingCollectionList={collections} />
+                <AddCollection 
+                    exstingCollectionList={collections} 
+                    ontologiesListForSelection={ontologiesListForSelection}
+                />
             </div>           
         </div>
     );
