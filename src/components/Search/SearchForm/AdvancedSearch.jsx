@@ -10,8 +10,7 @@ import StoreSearchSettings from './StoreSettings';
 import LoadSetting from './LoadSetting';
 import { storeUserSettings } from '../../../api/user';
 import { getTsPluginHeaders } from '../../../api/header';
-import DeleteModalBtn from '../../common/DeleteModal/DeleteModal';
-import { DeleteModal } from '../../common/DeleteModal/DeleteModal';
+
 
 
 
@@ -256,7 +255,7 @@ const AdvancedSearch = (props) => {
                                             <h5>                                                                                                   
                                                 Loaded: {loadedSettingName + (searchSettingIsModified ? " *" : "")}
                                                 <small>{searchSettingIsModified && "Setting is modified but not updated."}</small>
-                                                <StoreSearchSettings 
+                                                {/* <StoreSearchSettings 
                                                     editMode={true} 
                                                     settings={{
                                                         selectedMetaData,
@@ -265,22 +264,7 @@ const AdvancedSearch = (props) => {
                                                     
                                                     }}                                                    
                                                     setLoadedSettingName={setLoadedSettingName}
-                                                />
-                                                <DeleteModalBtn 
-                                                    modalId={settingId}   
-                                                    key={"deleteBtnUserSetting" + settingId}
-                                                    btnText={<i className="fa fa-close fa-borderless"></i>}
-                                                    btnClass="extra-sm-btn ml-2"
-                                                />
-                                                <DeleteModal
-                                                    modalId={settingId}                    
-                                                    callHeaders={callHeader}
-                                                    deleteEndpoint={deleteEndpoint}
-                                                    afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
-                                                    key={"deleteSetting" + settingId}
-                                                    afterDeleteProcess={removeSearchSettingFromUserSettings}      
-                                                    method='DELETE'                                              
-                                                /> 
+                                                />                                                                                                 */}
                                             </h5>
                                         }                                        
                                     </div>
