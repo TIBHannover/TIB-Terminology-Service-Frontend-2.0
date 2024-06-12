@@ -8,6 +8,7 @@ import DeleteModalBtn from "../../common/DeleteModal/DeleteModal";
 import { DeleteModal } from "../../common/DeleteModal/DeleteModal";
 import { getTsPluginHeaders } from "../../../api/header";
 import OntologyApi from "../../../api/ontology";
+import SwitchButton from "../../common/SwitchButton/SwitchButton";
 
 
 
@@ -45,25 +46,17 @@ const UserCollection = () => {
     async function handleCollectionCheckboxChange(event) {
         let targetId = event.target.dataset.id;
         let isChecked = event.target.checked;
-        let selectedCollection = Toolkit.getObjectInListIfExist(collections, 'id', parseInt(targetId));
+        let selectedCollection = Toolkit.getObjectInListIfExist(collections, 'id', parseInt(targetId));        
         let contextObject = {"title": selectedCollection['title'], "ontology_ids": selectedCollection['ontology_ids']};
         let userSttings = {...appContext.userSettings};
         if(isChecked){
-            let allCollectionCheckboxes = document.getElementsByClassName('user-collection-checkbox');
-            for(let checkbox of allCollectionCheckboxes){
-                if(checkbox.dataset.id !== targetId){
-                    checkbox.checked = false;
-                }
-            }            
-
             userSttings.activeCollection = contextObject;
             userSttings.userCollectionEnabled = true;            
         }
         else{                        
             userSttings.activeCollection = {"title": "", "ontology_ids": []};
             userSttings.userCollectionEnabled = false;            
-        }    
-
+        }            
         appContext.setUserSettings(userSttings);
         await storeUserSettings(userSttings);   
     }
@@ -98,41 +91,36 @@ const UserCollection = () => {
         let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/collection/delete/";
         for(let collection of collections){            
             list.push(
-                <>
-                <div class="form-check form-switch">
-                    <input 
-                        className="form-check-input user-collection-checkbox" 
-                        type="checkbox" 
-                        role="switch" 
-                        id={"collectionCheckbox" + collection['id']}
-                        data-id={collection['id']} 
-                        onChange={handleCollectionCheckboxChange}
-                        checked={collectionCheckboxIsChecked(collection['title'])}
-                    />
-                    <label class="form-check-label" for={"collectionCheckbox" + collection['id']}>
-                        {collection['title']}&nbsp;
-                        (<small>{collection['ontology_ids'].join(', ')}</small>)                                             
-                    </label>
-                    <AddCollection 
-                        editMode={true}
-                        editBtnText={<i className="fa fa-edit fa-borderless"></i>}
-                        collectionToEdit={collection}
-                        btnClass="extra-sm-btn ml-2"
-                        exstingCollectionList={collections}
-                        ontologiesListForSelection={ontologiesListForSelection}
-                    />
-                    <DeleteModalBtn 
-                        modalId={collection['id']}   
-                        key={"deleteBtnUserCollection" + collection['id']}
-                        btnText={<i className="fa fa-close fa-borderless"></i>}
-                        btnClass="extra-sm-btn ml-2"
-                    />
-                    <p>
-                    {collection['description'] &&
-                        <small>{collection['description']}</small>
-                    }   
-                    </p>                    
-                </div>
+                <>               
+                <SwitchButton 
+                    id={"collectionCheckbox" + collection['id']}
+                    dataId={collection['id']}
+                    label={collection['title']}
+                    smallText={collection['ontology_ids'].join(', ')}
+                    className="user-collection-checkbox"
+                    inLine={true}
+                    onChange={handleCollectionCheckboxChange}
+                    checked={collectionCheckboxIsChecked(collection['title'])}
+                />
+                <AddCollection 
+                    editMode={true}
+                    editBtnText={<i className="fa fa-edit fa-borderless"></i>}
+                    collectionToEdit={collection}
+                    btnClass="extra-sm-btn ml-2"
+                    exstingCollectionList={collections}
+                    ontologiesListForSelection={ontologiesListForSelection}
+                />
+                <DeleteModalBtn 
+                    modalId={collection['id']}   
+                    key={"deleteBtnUserCollection" + collection['id']}
+                    btnText={<i className="fa fa-close fa-borderless"></i>}
+                    btnClass="extra-sm-btn ml-2"
+                />
+                <p>
+                {collection['description'] &&
+                    <small>{collection['description']}</small>
+                }   
+                </p>                                    
                 <DeleteModal
                     modalId={collection['id']}                    
                     callHeaders={callHeader}

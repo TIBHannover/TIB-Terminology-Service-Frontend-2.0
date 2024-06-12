@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { fetchSearchSettings } from "../../../api/user";
 import Login from "../../User/Login/TS/Login";
 import { AppContext } from "../../../context/AppContext";
+import SwitchButton from "../../common/SwitchButton/SwitchButton";
 
 
 
@@ -17,21 +18,16 @@ const LoadSetting = (props) => {
         let result = [];
         for(let setting of settingsList){
             result.push(
-                <div className="form-check" key={setting['id']}>
-                    <input 
-                        className="form-check-input" 
-                        type="radio"                         
-                        name="settingsList" 
-                        id={"searchSettingSwitch" + setting['id']} 
-                        value={setting['id']}                             
-                    />
-                    <label class="form-check-label" for={"searchSettingSwitch" + setting['id']}>
-                        {setting['title']}&nbsp;                        
-                        {setting['description'] &&
-                            <small>{": " + setting['description']}</small>
-                        }                        
-                    </label>
-                </div>
+                <SwitchButton                     
+                    id={"searchSettingSwitch" + setting['id']}
+                    dataId={setting['id']}
+                    label={setting['title']}
+                    smallText={setting['description']}
+                    className="search-setting-checkbox"
+                    inLine={false}
+                    // onChange={handleCollectionCheckboxChange}
+                    // checked={collectionCheckboxIsChecked(collection['title'])}
+                />                
             )
         }
         return result;

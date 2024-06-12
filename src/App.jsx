@@ -49,11 +49,11 @@ const App = () => {
       AuthFactory.userIsLogin().then((user) => {
         setUser(user);
         setIsSystemAdmin(user?.systemAdmin);
-        let settings = {...userSettings};
+        let settings = {...userSettings};                
         settings.userCollectionEnabled = user?.settings?.userCollectionEnabled;
         settings.advancedSearchEnabled = user?.settings?.advancedSearchEnabled; 
         settings.activeSearchSettingIsModified = user?.settings?.activeSearchSettingIsModified;       
-        if(user?.settings?.activeCollection){
+        if(user?.settings?.activeCollection?.title){
           settings.activeCollection = user?.settings?.activeCollection;          
         }
         if(user?.settings?.activeSearchSetting){
