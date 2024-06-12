@@ -147,6 +147,9 @@ const AdvancedSearch = (props) => {
 
 
     async function loadSettings(setting){
+        if(setting === undefined){
+            return;
+        }
         let {selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms} = setting['setting'];
         let loadedSettingName = setting['title'];
         setSelectedMetaData(selectedMetaData);

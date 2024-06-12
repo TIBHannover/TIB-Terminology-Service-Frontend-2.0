@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { fetchSearchSettings } from "../../../api/user";
 import Login from "../../User/Login/TS/Login";
 import { AppContext } from "../../../context/AppContext";
@@ -16,7 +16,7 @@ const LoadSetting = (props) => {
     
     function renderSettingsList(){
         let result = [];
-        for(let setting of settingsList){
+        for(let setting of settingsList){           
             result.push(
                 <SwitchButton                     
                     id={"searchSettingSwitch" + setting['id']}
@@ -24,9 +24,7 @@ const LoadSetting = (props) => {
                     label={setting['title']}
                     smallText={setting['description']}
                     className="search-setting-checkbox"
-                    inLine={false}
-                    // onChange={handleCollectionCheckboxChange}
-                    // checked={collectionCheckboxIsChecked(collection['title'])}
+                    inLine={false}                    
                 />                
             )
         }
@@ -36,7 +34,7 @@ const LoadSetting = (props) => {
 
 
     function loadSetting(){
-        let settingId = document.querySelector('input[name="settingsList"]:checked').value;
+        let settingId = document.querySelector('.search-setting-checkbox:checked')?.dataset?.id;
         let setting = settingsList.find(setting => setting['id'] == settingId);        
         loadFunc(setting);
     }
@@ -45,8 +43,18 @@ const LoadSetting = (props) => {
     function fetchSettingList(){
         fetchSearchSettings().then((settingsList) => {
             setSettingsList(settingsList);
+            let userSettings = appContext.userSettings;
+            if(userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']){
+                let activeCheckbox = document.getElementById("searchSettingSwitch" + userSettings.activeSearchSetting['id']);
+                if(activeCheckbox){
+                    activeCheckbox.checked = true;
+                }
+            }
         });
     }
+
+
+
 
 
     if(!appContext.user){
