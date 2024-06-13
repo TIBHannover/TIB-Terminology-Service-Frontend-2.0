@@ -7,12 +7,13 @@ import AlertBox from "../../common/Alerts/Alerts";
 import { deleteSearchSetting, storeUserSettings } from "../../../api/user";
 import { SearchSettingForm } from "./StoreSettings";
 import { updateSearchSettings } from "../../../api/user";
+import Toolkit from "../../../Libs/Toolkit";
 
 
 
 
 const LoadSetting = (props) => {
-    const {loadFunc, resetAdvancedSearch} = props;
+    const {loadFunc, resetAdvancedSearch, loadedSettingNameSetter} = props;
 
     const appContext = useContext(AppContext);
 
@@ -122,7 +123,8 @@ const LoadSetting = (props) => {
                 userSettings.activeSearchSetting.title = settingTitle;
                 userSettings.activeSearchSetting.description = description;
                 appContext.setUserSettings(userSettings);
-                storeUserSettings(userSettings);                
+                storeUserSettings(userSettings);
+                loadedSettingNameSetter(settingTitle);                
             }  
             return true;                
         }
@@ -139,7 +141,7 @@ const LoadSetting = (props) => {
         setEditSuccess(null);
         setEditTitleError(false);
         fetchSearchSettings().then((settingsList) => {
-            setSettingsList(settingsList);
+            setSettingsList(Toolkit.sortListOfObjectsByKey(settingsList, 'created_at'));
             let userSettings = appContext.userSettings;
             if(userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']){
                 let activeCheckbox = document.getElementById("searchSettingSwitch" + userSettings.activeSearchSetting['id']);
@@ -198,7 +200,15 @@ const LoadSetting = (props) => {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"My search settings"}</h5>                            
+                            {!editMode && !deleteMode && 
+                                <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"My search settings"}</h5>
+                            }
+                            {deleteMode && !editMode &&
+                                <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"Delete: " + settingToDelete['title']}</h5>
+                            }
+                            {editMode && !deleteMode &&
+                                <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"Edit: " + settingToEdit['title']}</h5>
+                            }
                         </div>
                         <div className="modal-body">                            
                             <div className="row">

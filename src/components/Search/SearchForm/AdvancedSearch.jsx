@@ -351,6 +351,7 @@ const AdvancedSearch = (props) => {
                                 <LoadSetting 
                                     loadFunc={loadSettings} 
                                     resetAdvancedSearch={reset}
+                                    loadedSettingNameSetter={setLoadedSettingName}
                                 />                                
                                 <StoreUpdateSearchSetting 
                                     settings={{
