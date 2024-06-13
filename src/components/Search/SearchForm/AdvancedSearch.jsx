@@ -210,6 +210,7 @@ const AdvancedSearch = (props) => {
     }, [props.advSearchEnabled]);
 
 
+
     useEffect(() => {                                  
         props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
             searchInValues: selectedMetaData,
@@ -235,11 +236,6 @@ const AdvancedSearch = (props) => {
         return "";
     }
 
-    let callHeader = getTsPluginHeaders({withAccessToken: true});
-    callHeader['Content-Type'] = 'application/json';
-    let redirectAfterDeleteEndpoint = window.location.href;
-    let settingId = appContext.userSettings.activeSearchSetting.id;
-    let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/user/search_setting/" + settingId;
     
     return(
         <>
@@ -364,7 +360,10 @@ const AdvancedSearch = (props) => {
                         <div className='row'>
                             <div className='col-sm-12'>
                                 <button className='btn btn-secondary' onClick={reset} >Reset</button>
-                                <LoadSetting loadFunc={loadSettings} />                                
+                                <LoadSetting 
+                                    loadFunc={loadSettings} 
+                                    resetAdvancedSearch={reset}
+                                />                                
                                 <StoreSearchSettings 
                                     settings={{
                                         selectedMetaData,

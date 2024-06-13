@@ -1,21 +1,23 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { fetchSearchSettings } from "../../../api/user";
 import Login from "../../User/Login/TS/Login";
 import { AppContext } from "../../../context/AppContext";
 import SwitchButton from "../../common/SwitchButton/SwitchButton";
 import AlertBox from "../../common/Alerts/Alerts";
+import { deleteSearchSetting, storeUserSettings } from "../../../api/user";
 
 
 
 
 const LoadSetting = (props) => {
-    const {loadFunc} = props;
+    const {loadFunc, resetAdvancedSearch} = props;
 
     const appContext = useContext(AppContext);
 
     const [settingsList, setSettingsList] = useState([]);
     const [deleteMode, setDeleteMode] = useState(false);
     const [settingToDelete, setSettingToDelete] = useState(null);
+    const [deleteSuccess, setDeleteSuccess] = useState(null);
     const [settingToEdit, setSettingToEdit] = useState(null);
     const [editMode, setEditMode] = useState(false);
 
@@ -64,11 +66,17 @@ const LoadSetting = (props) => {
     }
 
 
-    function deleteSetting(){
-        setDeleteMode(true);
-        // let settingId = document.querySelector('.search-setting-checkbox:checked')?.dataset?.id;
-        // let setting = settingsList.find(setting => setting['id'] == settingId);        
-        // loadFunc(setting);
+    async function deleteSetting(){
+        let deleted = await deleteSearchSetting(settingToDelete['id']);        
+        if(deleted){
+            setDeleteSuccess(true);
+            if(appContext.userSettings.activeSearchSetting['id'] == settingToDelete['id']){
+                resetAdvancedSearch();
+            }
+            return true;            
+        }
+        setDeleteSuccess(false);
+        return;
     }
 
 
@@ -76,6 +84,7 @@ const LoadSetting = (props) => {
     function fetchSettingList(){
         setDeleteMode(false);
         setEditMode(false);
+        setDeleteSuccess(null);
         fetchSearchSettings().then((settingsList) => {
             setSettingsList(settingsList);
             let userSettings = appContext.userSettings;
@@ -89,6 +98,17 @@ const LoadSetting = (props) => {
     }
 
 
+
+
+    useEffect(() => {
+        let userSettings = appContext.userSettings;
+        if(userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']){
+            let activeCheckbox = document.getElementById("searchSettingSwitch" + userSettings.activeSearchSetting['id']);
+            if(activeCheckbox){
+                activeCheckbox.checked = true;
+            }
+        }
+    }, [editMode, deleteMode]);
 
 
 
@@ -129,15 +149,29 @@ const LoadSetting = (props) => {
                         </div>
                         <div className="modal-body">                            
                             <div className="row">
-                                <div className="col-sm-12">
+                                <div className="col-sm-12">                                    
                                    {!deleteMode && !editMode && renderSettingsList()}
-                                   {deleteMode && !editMode &&
+                                   {deleteMode && !editMode && deleteSuccess === null &&
                                         <AlertBox 
                                             type="danger" 
                                             message="Are you sure you want to delete this setting? This action is irreversible."
                                             alertColumnClass="col-sm-12"
                                         />
                                    }
+                                   {deleteMode && !editMode && deleteSuccess === true && 
+                                        <AlertBox
+                                            type="success"
+                                            message="Setting deleted successfully."
+                                            alertColumnClass="col-sm-12"
+                                        />
+                                    }
+                                    {deleteMode && !editMode && deleteSuccess === false && 
+                                        <AlertBox
+                                            type="danger"
+                                            message="Setting could not be deleted. Please try again later."
+                                            alertColumnClass="col-sm-12"
+                                        />
+                                    }
                                 </div>                                
                             </div>                                                   
                             <br></br>                            
@@ -148,14 +182,18 @@ const LoadSetting = (props) => {
                                     <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                                 }
                                 {(deleteMode || editMode) && 
-                                    <button type="button" className="btn btn-secondary close-btn-message-modal float-right" onClick={() => {
-                                        setDeleteMode(false);
-                                        setEditMode(false);
-                                    
-                                    }}>Back</button>
+                                    <button type="button" className="btn btn-secondary close-btn-message-modal float-right" onClick={fetchSettingList}>Back</button>
                                 }
                             </div>                             
-                            <button type="button" className="btn btn-secondary" onClick={loadSetting} data-dismiss="modal">Load</button>
+                            {!deleteMode && !editMode && 
+                                <button type="button" className="btn btn-secondary" onClick={loadSetting} data-dismiss="modal">Load</button>
+                            }
+                            {deleteMode && !editMode && 
+                                <button type="button" className="btn btn-secondary" onClick={deleteSetting}>Delete</button>
+                            }
+                            {!deleteMode && editMode && 
+                                <button type="button" className="btn btn-secondary">Save</button>
+                            }
                         </div>
                     </div>
                 </div>
