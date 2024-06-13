@@ -5,6 +5,8 @@ import { AppContext } from "../../../context/AppContext";
 import SwitchButton from "../../common/SwitchButton/SwitchButton";
 import AlertBox from "../../common/Alerts/Alerts";
 import { deleteSearchSetting, storeUserSettings } from "../../../api/user";
+import { SearchSettingForm } from "./StoreSettings";
+import { updateSearchSettings } from "../../../api/user";
 
 
 
@@ -18,6 +20,8 @@ const LoadSetting = (props) => {
     const [deleteMode, setDeleteMode] = useState(false);
     const [settingToDelete, setSettingToDelete] = useState(null);
     const [deleteSuccess, setDeleteSuccess] = useState(null);
+    const [editSuccess, setEditSuccess] = useState(null);
+    const [editTitleError, setEditTitleError] = useState(false);
     const [settingToEdit, setSettingToEdit] = useState(null);
     const [editMode, setEditMode] = useState(false);
 
@@ -36,7 +40,11 @@ const LoadSetting = (props) => {
                     />
                     <button
                         type="button"
-                        className="btn btn-secondary ml-2 extra-sm-btn"                        
+                        className="btn btn-secondary ml-2 extra-sm-btn"
+                        onClick={() => {
+                            setSettingToEdit(setting);
+                            setEditMode(true);                        
+                        }}                        
                         >
                         <i className="fa fa-edit"></i>
                     </button>             
@@ -80,11 +88,56 @@ const LoadSetting = (props) => {
     }
 
 
+    function returnSettingTitleIfValid(){
+        let title = document.getElementById('searchSettingTitle').value;        
+        if(!title || title === ''){
+            document.getElementById('searchSettingTitle').style.border = '1px solid red';
+            return false;
+        }
+        return title;
+    }
+
+
+
+    async function updateTitleAndDescription(){        
+        let settingTitle = returnSettingTitleIfValid();                        
+        if(!settingTitle){
+            return;
+        }                
+        let userSettings = {...appContext.userSettings};
+        let description = document.getElementById('searchSettingDescription').value;              
+        let settingData = {
+            'title': settingTitle,
+            'description': description,
+            'setting': settingToEdit['setting'] 
+        };        
+        let response = await updateSearchSettings(settingToEdit['id'], settingData);   
+        if(response === "Title already exists"){
+            setEditTitleError(true);
+            return;
+        }     
+        if(response){
+            setEditSuccess(true);
+            if(appContext.userSettings.activeSearchSetting['id'] == settingToEdit['id']){
+                userSettings.activeSearchSetting.title = settingTitle;
+                userSettings.activeSearchSetting.description = description;
+                appContext.setUserSettings(userSettings);
+                storeUserSettings(userSettings);                
+            }  
+            return true;                
+        }
+        setEditSuccess(false);
+        return true;
+    }
+
+
 
     function fetchSettingList(){
         setDeleteMode(false);
         setEditMode(false);
         setDeleteSuccess(null);
+        setEditSuccess(null);
+        setEditTitleError(false);
         fetchSearchSettings().then((settingsList) => {
             setSettingsList(settingsList);
             let userSettings = appContext.userSettings;
@@ -172,6 +225,33 @@ const LoadSetting = (props) => {
                                             alertColumnClass="col-sm-12"
                                         />
                                     }
+                                    {editMode && !deleteMode && editTitleError &&
+                                        <AlertBox
+                                            type="danger"
+                                            message="Title already exists. Please choose a different title."
+                                            alertColumnClass="col-sm-12"
+                                        />
+                                    }
+                                    {editMode && !deleteMode && editSuccess === null &&
+                                        <SearchSettingForm 
+                                            editMode={true}
+                                            settingToEdit={settingToEdit}
+                                        />
+                                    }
+                                    {editMode && !deleteMode && editSuccess === true &&
+                                        <AlertBox
+                                            type="success"
+                                            message="Setting updated successfully."
+                                            alertColumnClass="col-sm-12"
+                                        />
+                                    }
+                                    {editMode && !deleteMode && editSuccess === false &&
+                                        <AlertBox
+                                            type="danger"
+                                            message="Setting could not be updated. Please try again later."
+                                            alertColumnClass="col-sm-12"
+                                        />
+                                    }
                                 </div>                                
                             </div>                                                   
                             <br></br>                            
@@ -192,7 +272,7 @@ const LoadSetting = (props) => {
                                 <button type="button" className="btn btn-secondary" onClick={deleteSetting}>Delete</button>
                             }
                             {!deleteMode && editMode && 
-                                <button type="button" className="btn btn-secondary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>
                             }
                         </div>
                     </div>

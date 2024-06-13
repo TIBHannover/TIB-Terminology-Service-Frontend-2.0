@@ -7,26 +7,25 @@ import AlertBox from "../../common/Alerts/Alerts";
 
 
 
-const StoreSearchSettings = (props) => {
-    const {settings, setSearchSettingIsModified, editMode, setLoadedSettingName} = props;
+const StoreUpdateSearchSetting = (props) => {
+    const {settings, setSearchSettingIsModified, setLoadedSettingName} = props;
 
     const appContext = useContext(AppContext);
 
-    const [showAlert, setShowAlert] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(true);
-    const editIdPostFix = editMode ? 'Edit' : '';
-
-
-
+    const [showAlert, setShowAlert] = useState(false);
+    
+    
     function returnSettingTitleIfValid(){
-        let title = document.getElementById('searchSettingTitle' + editIdPostFix).value;        
+        let title = document.getElementById('searchSettingTitle').value;        
         if(!title || title === ''){
-            document.getElementById('searchSettingTitle' + editIdPostFix).style.border = '1px solid red';
+            document.getElementById('searchSettingTitle').style.border = '1px solid red';
             return false;
         }
         return title;
     }
-
+    
+    
 
     async function store(){        
         let settingTitle = returnSettingTitleIfValid();          
@@ -75,35 +74,7 @@ const StoreSearchSettings = (props) => {
     }
 
 
-    async function updateTitleAndDescription(){        
-        let settingTitle = returnSettingTitleIfValid();                        
-        if(!settingTitle){
-            return;
-        }        
-        setShowAlert(false);
-        let userSettings = {...appContext.userSettings};
-        let description = document.getElementById('searchSettingDescription' + editIdPostFix).value;              
-        let settingData = {
-            'title': settingTitle,
-            'description': description,
-            'setting': settings 
-        };        
-        let response = await updateSearchSettings(appContext.userSettings.activeSearchSetting.id, settingData);   
-        if(response === "Title already exists"){
-            setShowAlert(true);
-            return;
-        }     
-        if(response){
-            userSettings.activeSearchSetting.title = settingTitle;
-            userSettings.activeSearchSetting.description = description;
-            appContext.setUserSettings(userSettings);
-            storeUserSettings(userSettings);
-            setLoadedSettingName && setLoadedSettingName(settingTitle);
-            closeModal();
-        }
-    }
-
-
+    
 
     function closeModal(newNoteId=true){                
         let modalBackDrop = document.getElementsByClassName('modal-backdrop');
@@ -113,22 +84,6 @@ const StoreSearchSettings = (props) => {
         }
         setModalIsOpen(false);;         
     }
-
-
-    useEffect(() => {        
-        if(editMode){            
-            document.getElementById('searchSettingTitle' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.title;
-            document.getElementById('searchSettingDescription' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.description;
-        }                     
-    }, []);
-
-
-    useEffect(() => {        
-        if(editMode && modalIsOpen){            
-            document.getElementById('searchSettingTitle' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.title;
-            document.getElementById('searchSettingDescription' + editIdPostFix).value = appContext.userSettings.activeSearchSetting.description;
-        }                     
-    }, [modalIsOpen]);
 
 
 
@@ -150,10 +105,10 @@ const StoreSearchSettings = (props) => {
     
     return(
         <>
-            {!editMode && appContext.userSettings.activeSearchSetting.setting !== undefined  &&
+            {appContext.userSettings.activeSearchSetting.setting !== undefined  &&
                 <button className="btn btn-secondary ml-2" onClick={update}>Update</button>
             }
-            {!editMode && appContext.userSettings.activeSearchSetting.setting === undefined  &&
+            {appContext.userSettings.activeSearchSetting.setting === undefined  &&
                 <button 
                     type="button" 
                     className={"btn btn-secondary ml-2"}
@@ -164,25 +119,13 @@ const StoreSearchSettings = (props) => {
                     >
                     Save
                 </button>
-            }           
-            {editMode &&
-                <button 
-                    type="button" 
-                    className={"btn btn-secondary ml-2 extra-sm-btn"}
-                    data-toggle="modal" 
-                    data-target={"#storeSearchSettingModal" + editIdPostFix} 
-                    data-backdrop="static"
-                    onClick={()=> {setModalIsOpen(true)}}
-                    >
-                    <i className="fa fa-edit"></i>
-                </button>
-            }
+            }                 
             {modalIsOpen &&
-            <div className="modal fade" id={'storeSearchSettingModal' + editIdPostFix} tabindex="-1" role="dialog" aria-labelledby={"storeSearchSettingModalLabel" + editIdPostFix} aria-hidden="true">
+            <div className="modal fade" id={'storeSearchSettingModal'} tabindex="-1" role="dialog" aria-labelledby={"storeSearchSettingModalLabel"} aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id={"storeSearchSettingModalLabel" + editIdPostFix}>{"Store search settings"}</h5>                            
+                            <h5 className="modal-title" id={"storeSearchSettingModalLabel"}>{"Store search settings"}</h5>                            
                         </div>
                         <div className="modal-body">
                             {showAlert &&
@@ -191,40 +134,15 @@ const StoreSearchSettings = (props) => {
                                     message="Setting name already exists."
                                 />
                             }
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <label className="required_input" for={"searchSettingTitle" + editIdPostFix}>Name</label>
-                                    <input 
-                                        type="text"                                                                                       
-                                        className="form-control" 
-                                        id={"searchSettingTitle" + editIdPostFix}
-                                        placeholder="Enter a Name"
-                                        // onChange={onTextInputChange}  
-
-                                        >
-                                    </input>  
-                                </div>
-                                {/* <small id={"max-char-message" + idPostfix}>Max 20 characters</small> */}
-                            </div>                                                   
-                            <br></br> 
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <label for={"searchSettingDescription" + editIdPostFix}>Description (optional)</label>
-                                    <textarea                                         
-                                        className="form-control" 
-                                        id={"searchSettingDescription" + editIdPostFix}
-                                        rows="5"
-                                        placeholder="Enter a Description">
-                                    </textarea>  
-                                </div>
-                            </div>
+                            <SearchSettingForm 
+                                editMode={false}
+                            />                          
                         </div>
                         <div className="modal-footer">
                             <div className="col-auto mr-auto">
                                 <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal" onClick={()=> {setModalIsOpen(false)}}>Close</button>
                             </div>                             
-                            {!editMode && <button type="button" className="btn btn-secondary" onClick={store}>Save </button>}
-                            {editMode && <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>}
+                            <button type="button" className="btn btn-secondary" onClick={store}>Save </button>
                         </div>
                     </div>
                 </div>
@@ -235,4 +153,58 @@ const StoreSearchSettings = (props) => {
 
 }
 
-export default StoreSearchSettings;
+
+
+
+export const SearchSettingForm = (props) => {
+    const {editMode, settingToEdit} = props;    
+
+    useEffect(() => {        
+        if(editMode && settingToEdit){            
+            document.getElementById('searchSettingTitle').value = settingToEdit['title'];
+            document.getElementById('searchSettingDescription').value = settingToEdit['description'];
+        }                     
+    }, []);
+
+    
+    return (
+        <>            
+            <div className="row">
+                <div className="col-sm-12">
+                    <label className="required_input" for={"searchSettingTitle"}>Name</label>
+                    <input 
+                        type="text"                                                                                       
+                        className="form-control" 
+                        id={"searchSettingTitle"}
+                        placeholder="Enter a Name"
+                        // onChange={onTextInputChange}  
+
+                        >
+                    </input>  
+                </div>
+                {/* <small id={"max-char-message" + idPostfix}>Max 20 characters</small> */}
+            </div>                                                   
+            <br></br> 
+            <div className="row">
+                <div className="col-sm-12">
+                    <label for={"searchSettingDescription"}>Description (optional)</label>
+                    <textarea                                         
+                        className="form-control" 
+                        id={"searchSettingDescription"}
+                        rows="5"
+                        placeholder="Enter a Description">
+                    </textarea>  
+                </div>
+            </div>
+        </>
+    );
+
+
+}
+
+
+
+
+
+
+export default StoreUpdateSearchSetting;

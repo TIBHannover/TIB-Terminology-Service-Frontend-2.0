@@ -6,10 +6,9 @@ import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import { AppContext } from '../../../context/AppContext';
-import StoreSearchSettings from './StoreSettings';
+import StoreUpdateSearchSetting from './StoreSettings';
 import LoadSetting from './LoadSetting';
 import { storeUserSettings } from '../../../api/user';
-import { getTsPluginHeaders } from '../../../api/header';
 
 
 
@@ -172,17 +171,6 @@ const AdvancedSearch = (props) => {
         appContext.setUserSettings(userSettings);
         setSearchSettingIsModified(isModified);
         await storeUserSettings(userSettings);
-    }
-
-
-    async function removeSearchSettingFromUserSettings(){
-        let userSettings = {...appContext.userSettings};
-        userSettings.activeSearchSetting = {};
-        userSettings.activeSearchSettingIsModified = false;
-        appContext.setUserSettings(userSettings);
-        await storeUserSettings(userSettings);
-        reset();
-        window.location.replace(window.location.href);
     }
 
 
@@ -364,7 +352,7 @@ const AdvancedSearch = (props) => {
                                     loadFunc={loadSettings} 
                                     resetAdvancedSearch={reset}
                                 />                                
-                                <StoreSearchSettings 
+                                <StoreUpdateSearchSetting 
                                     settings={{
                                         selectedMetaData,
                                         selectedSearchUnderTerms,
