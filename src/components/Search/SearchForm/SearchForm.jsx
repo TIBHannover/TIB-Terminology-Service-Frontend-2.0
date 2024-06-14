@@ -46,6 +46,7 @@ const SearchForm = () => {
       setAutoCompleteResult([]);
       return true;
     }
+    setSearchQuery(searchQuery);
     inputForAutoComplete['searchQuery'] = searchQuery;    
     inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
     if(appContext.userCollectionEnabled){
@@ -71,8 +72,7 @@ const SearchForm = () => {
       getJumpToResult(inputForAutoComplete, resultCount)
     ]);        
     setJumpToResult(!ontologyId ? jumpToResult : []);
-    setAutoCompleteResult(autoCompleteResult);
-    setSearchQuery(inputForAutoComplete['searchQuery']);
+    setAutoCompleteResult(autoCompleteResult);    
   }
 
 

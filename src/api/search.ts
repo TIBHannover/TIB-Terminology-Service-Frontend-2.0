@@ -52,7 +52,7 @@ export async function getJumpToResult(inputData:SuggestAndSelectApiInput, count:
       url = inputData['collectionIds'] ? (url + `&schema=collection&classification=${inputData['collectionIds']}`) : url;    
       let result:any = await fetch(url, getCallSetting);
       result = await result.json();
-      result = result['response']['docs'];
+      result = result['response']['docs'];         
       return result;
     }
     catch(e){
@@ -71,7 +71,7 @@ export async function getAutoCompleteResult(inputData:SuggestAndSelectApiInput, 
       url = inputData['obsoletes'] ? (url + "&obsoletes=true") : url;
       url = inputData['collectionIds'] ? (url + `&schema=collection&classification=${inputData['collectionIds']}`) : url;  
       let searchResult:any = await fetch(url, getCallSetting);
-      searchResult =  (await searchResult.json())['response']['docs'];
+      searchResult =  (await searchResult.json())['response']['docs'];      
       return searchResult;
     }
     catch(e){
