@@ -1,9 +1,19 @@
 import { getCallSetting, size } from "./constants";
 import { getPageCount } from "./helper";
+import { OntologyData, OntologyTermData } from "./types/ontologyTypes";
+
 
 
 
 class OntologyApi{
+
+    ontologyId: string|null = "";
+    list: Array<OntologyData> = [];
+    ontology: OntologyData|null = {"ontologyId":""};
+    rootClasses: Array<OntologyTermData> = [];
+    rootProperties: Array<OntologyTermData> = [];
+    obsoleteClasses: Array<OntologyTermData> = [];
+    obsoleteProperties: Array<OntologyTermData> = [];
     
     constructor({ontologyId=null}){
         this.ontologyId = ontologyId;
@@ -16,11 +26,17 @@ class OntologyApi{
     }
 
 
-    async fetchOntologyList (){
+    async fetchOntologyList ():Promise<boolean>{
+      type TempResult = {
+        _embedded:{
+          ontologies: Array<OntologyData>
+        }
+      }
+
       try{
-        let OntologiesListUrl = process.env.REACT_APP_API_ONTOLOGY_LIST;
-        let result = await fetch(OntologiesListUrl, getCallSetting);
-        result = await result.json();
+        let OntologiesListUrl = `${process.env.REACT_APP_API_ONTOLOGY_LIST}`;
+        let resp = await fetch(OntologiesListUrl, getCallSetting);
+        let result:TempResult = await resp.json();
         this.list = result['_embedded']['ontologies'];         
         return true;
       } 
@@ -32,11 +48,11 @@ class OntologyApi{
 
 
 
-    async fetchOntology() {
+    async fetchOntology():Promise<boolean> {
       try{
-        let url =  process.env.REACT_APP_API_BASE_URL + '/' + encodeURIComponent(this.ontologyId);
-        let result = await fetch(url, getCallSetting);
-        result = await result.json();
+        let url =  process.env.REACT_APP_API_BASE_URL + '/' + encodeURIComponent(this.ontologyId ? this.ontologyId : "");
+        let resp = await fetch(url, getCallSetting);
+        let result:OntologyData = await resp.json();
         this.ontology = result;
         await Promise.all([
           this.fetchRootCalsses(),
@@ -55,15 +71,15 @@ class OntologyApi{
 
 
 
-    async fetchRootCalsses() {
+    async fetchRootCalsses():Promise<boolean> {
       try{
         if(!this.ontology){
           this.rootClasses = [];
           return true;
         } 
-        let termsLink = this.ontology['_links']['terms']['href'];
+        let termsLink = this.ontology?.['_links']?.['terms']?.['href'];
         let pageCount = await getPageCount(termsLink + '/roots');
-        let terms = [];    
+        let terms:Array<OntologyTermData> = [];    
         for(let page=0; page < pageCount; page++){
             let url = termsLink + "/roots?page=" + page + "&size=" + size;      
             let res =  await (await fetch(url, getCallSetting)).json();
@@ -87,15 +103,15 @@ class OntologyApi{
   }
 
 
-  async  fetchRootProperties() {
+  async  fetchRootProperties():Promise<boolean> {
     try{
       if(!this.ontology){
         this.rootProperties = [];
         return true;
       } 
-      let propertiesLink = this.ontology['_links']['properties']['href'];
+      let propertiesLink = this.ontology?.['_links']?.['properties']?.['href'];
       let pageCount = await getPageCount(propertiesLink + '/roots');
-      let props = [];
+      let props:Array<OntologyTermData> = [];
       for(let page=0; page < pageCount; page++){
           let url = propertiesLink + "/roots?page=" + page + "&size=" + size;      
           let res =  await (await fetch(url, getCallSetting)).json();
@@ -118,7 +134,7 @@ class OntologyApi{
   }
 
 
-  async fetchObsoleteClasses() {
+  async fetchObsoleteClasses():Promise<boolean> {
     try{      
       let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/terms/roots?includeObsoletes=true&size=1000";      
       let res =  await (await fetch(url, getCallSetting)).json();
@@ -132,15 +148,21 @@ class OntologyApi{
   }
 
 
-  async fetchObsoleteProperties() {
+  async fetchObsoleteProperties():Promise<boolean> {
+    type TempResult = {
+      _embedded:{
+        properties: Array<OntologyTermData>
+      }
+    }
+
     try{      
       let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/properties/roots?includeObsoletes=true&size=1000";      
-      let res =  await (await fetch(url, getCallSetting)).json();
-      this.ObsoleteProperties = res['_embedded']["properties"];
+      let res:TempResult =  await (await fetch(url, getCallSetting)).json();
+      this.obsoleteProperties = res['_embedded']["properties"];
       return true;
     }
     catch(e){
-      this.ObsoleteProperties = [];
+      this.obsoleteProperties = [];
       return true;
     }    
   }
