@@ -64,9 +64,10 @@ const SearchForm = () => {
       */
       inputForAutoComplete['collectionIds'] = searchUrlFactory.collections.length !== 0 ? searchUrlFactory.collections.join(',') : null;
     }
-    else if(!ontologyId){
+    else if(!ontologyId || !appContext.userSettings.userCollectionEnabled){
       /* 
         If ontologyId exist, it means the user is doing the search from an ontology page and collection is NOT needed.
+        If userCollectionEnabled is true, it means the user is doing the search from the user collection page and collection is NOT needed.
       */
       inputForAutoComplete['collectionIds'] = process.env.REACT_APP_PROJECT_NAME;
     }
