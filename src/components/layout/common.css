@@ -483,7 +483,7 @@ body .fa-orcid{
     font-size: 30px;
 }
 
-body .fa-github{  
+body .fa-github, .fa-gitlab{  
     border: none;
     font-size: 30px;
 }
@@ -573,6 +573,13 @@ body .github-login-btn, body .github-login-btn:hover, body .github-login-btn:foc
     color: white;
     width: 300px;
     border: 1px solid black;
+}
+
+body .gitlab-login-btn, body .gitlab-login-btn:hover, body .gitlab-login-btn:focus{
+    background-color: #CB4E18;
+    color: white;
+    width: 300px;
+    border: 1px solid #CB4E18;
 }
 
 body .login-btn-header,

@@ -15,8 +15,8 @@ class AuthLib{
             user.setSystemAdmin(response["system_admin"]);
             user.setSettings(response["settings"]);            
             user.setAuthProvider(authProvider);        
-            if(authProvider === 'github'){            
-                user.setGithubInfo({company: response["company"], homeUrl: response["github_home"]});            
+            if(authProvider === 'github' || authProvider === 'gitlab'){            
+                user.setGitInfo({company: response["company"], homeUrl: response["github_home"]});            
             }
             else if(authProvider === "orcid"){
                 user.setOrcidInfo({orcidId:response["orcid_id"]});                        
@@ -50,6 +50,9 @@ class AuthLib{
         }
         else if (internalUserName.includes("orcid")){
             return internalUserName.split("orcid_")[1];
+        }
+        else if (internalUserName.includes("gitlab")){
+            return internalUserName.split("gitlab_")[1];
         }
         return internalUserName;
     }

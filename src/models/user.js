@@ -6,7 +6,7 @@ class UserModel{
         this.userToken = "";
         this.authProvider = "";
         this.company = "";
-        this.githubHomeUrl = "";
+        this.gitHomeUrl = "";
         this.orcidId = "";
         this.systemAdmin = false;
         this.settings = {
@@ -40,9 +40,9 @@ class UserModel{
         this.fullName = fullName;
     }
 
-    setGithubInfo({company, homeUrl}){
+    setGitInfo({company, homeUrl}){
         this.company = company;
-        this.githubHomeUrl = homeUrl;
+        this.gitHomeUrl = homeUrl;
     }
 
     setOrcidInfo({orcidId}){

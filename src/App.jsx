@@ -58,14 +58,17 @@ const App = () => {
         }
         if(user?.settings?.activeSearchSetting){
           settings.activeSearchSetting = user?.settings?.activeSearchSetting;          
-        }   
+        }
+        
+        if(user?.systemAdmin){
+          getReportList().then((reports) => {
+            setReportsListForAdmin(reports);
+          });
+        }        
+
         setUserSettings(settings); 
         setShowLoadingPage(false);    
-      });
-      
-      getReportList().then((reports) => {
-        setReportsListForAdmin(reports);
-      });
+      });      
     }
 
     setTimeout( () => {

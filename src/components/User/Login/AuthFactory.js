@@ -10,7 +10,10 @@ class AuthFactory{
         let cUrl = window.location.href;
         if(cUrl.includes("code=")){
             AuthLib.enableLoginAnimation();
-            let code = cUrl.split("code=")[1];        
+            let code = cUrl.split("code=")[1];
+            if (code.includes("&")) {
+                code = code.split("&")[0];
+            }        
             runLogin(code).then((resp) => {
                 if(resp){                    
                     let userData = AuthLib.createUserDataObjectFromAuthResponse(resp);
