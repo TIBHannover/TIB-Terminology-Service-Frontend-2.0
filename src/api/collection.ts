@@ -1,24 +1,33 @@
 import { getCallSetting } from "./constants";
+import { OntologyData } from "./types/ontologyTypes";
 
 
 class CollectionApi{
+
+    collectionsList: Array<object>;
 
     constructor(){
         this.collectionsList = [];        
     }
 
 
-    async fetchCollectionsWithStats(){
+    async fetchCollectionsWithStats():Promise<void>{
+        type CollectionStatsResponseType = {
+            [key: string]: {
+                numberOfOntologies: number
+            }
+        }
+
         try{
           let ontologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;  
           let url = ontologiesBaseServiceUrl + '/getstatisticsbyschema?schema=collection';
           let result = await fetch(url, getCallSetting);
-          result = await result.json();
+          let colStats:Array<CollectionStatsResponseType> = await result.json();
           let collections = [];
-          for(let colMultiKey in result){      
+          for(let colMultiKey in colStats){      
             let record = {
-              "collection": colMultiKey.split(',')[1].split(']')[0].trim(), // ket format example: MultiKey[collection, NFDI4Energy]
-              "ontologiesCount": result[colMultiKey]['numberOfOntologies']
+              "collection": colMultiKey.split(',')[1].split(']')[0].trim(), // format example: MultiKey[collection, NFDI4Energy]
+              "ontologiesCount": colStats[colMultiKey]['numberOfOntologies']
             };    
             collections.push(record)    
           }
@@ -31,11 +40,20 @@ class CollectionApi{
     }
 
 
-    async fetchAllCollectionWithOntologyList() {
+
+    async fetchAllCollectionWithOntologyList():Promise<void> {
+        type CollectionIdsResponseType = {
+            _embedded: {
+                strings: Array<{
+                    content: string
+                }>
+            }
+        }
+
         try{
-          let url =  process.env.REACT_APP_COLLECTION_IDS_BASE_URL;          
-          let cols =  await fetch(url, getCallSetting);
-          cols = await cols.json();
+          let url = `${process.env.REACT_APP_COLLECTION_IDS_BASE_URL}`;          
+          let resp = await fetch(url, getCallSetting);
+          let cols:CollectionIdsResponseType = await resp.json();
           let collections = cols['_embedded']["strings"];
           let result = [];
           for( let col of collections ){                      
@@ -56,12 +74,18 @@ class CollectionApi{
 
 
 
-    async fetchOntologyListForCollections (collectionsIds, exclusive){
+    async fetchOntologyListForCollections (collectionsIds:Array<string>, exclusive:boolean):Promise<Array<OntologyData>>{
         /*
             Fetch ontology list for a given list of collections Ids. 
             Can be used to get ontology list based on collection filter
             or get the ontology list for one collection 
         */
+
+        type CollectionOntologiesResponseType = {
+            _embedded: {
+                ontologies: Array<OntologyData>
+            }
+        }
 
         try{
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;  
@@ -75,8 +99,9 @@ class CollectionApi{
             }
             targetUrl += urlPros;
             let result = await fetch(targetUrl, getCallSetting);
-            result = await result.json();
-            return result['_embedded']['ontologies'];        
+            let collectionOntologiesList:CollectionOntologiesResponseType = await result.json();
+            console.log(collectionOntologiesList);
+            return collectionOntologiesList['_embedded']['ontologies'];        
         }
         catch(e){
             return [];
