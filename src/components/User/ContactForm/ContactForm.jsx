@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DropDown from "../../common/DropDown/DropDown";
 import TextEditor from "../../common/TextEditor/TextEditor";
-import { getTextEditorContent } from "../../common/TextEditor/TextEditor";
+import { createHtmlFromEditorJson, getTextEditorContent } from "../../common/TextEditor/TextEditor";
 import { sendContactFrom } from "../../../api/user";
 import AlertBox from "../../common/Alerts/Alerts";
 
@@ -48,7 +48,8 @@ const ContactForm = () => {
             formIsValid = false;
         }
         else{
-            content = getTextEditorContent(editorState);
+            content = getTextEditorContent(editorState);            
+            content = createHtmlFromEditorJson(content);            
         }
         if(!title || title.trim() === ""){
             document.getElementById('contact-form-title').style.borderColor = 'red';
