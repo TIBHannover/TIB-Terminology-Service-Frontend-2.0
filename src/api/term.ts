@@ -1,5 +1,11 @@
 import { getCallSetting} from "./constants";
 import Toolkit from "../Libs/Toolkit";
+import { OntologyTermData,
+    ParentNode,
+    TermListData
+ } from "./types/ontologyTypes";
+ import { Ols3ApiResponse } from "./types/common";
+
 
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -7,15 +13,23 @@ const DEFAULT_PAGE_NUMBER = 1;
 
 
 class TermApi{
-    constructor(ontology, iri, termType){
-        this.ontology = ontology;        
+
+    ontologyId:string = "";
+    iri:string = "";
+    term:OntologyTermData = {};
+    termType:string = ""; 
+
+
+    constructor(ontologyId?:string, iri?:string, termType?:string){
+        this.ontologyId = ontologyId ? ontologyId : "";
+        iri = iri ? iri : "";        
         this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
-        this.setTtermType(termType);
+        this.setTermType(termType);
         this.term = {};
     }
 
 
-    setTtermType(termType){
+    setTermType(termType?:string):void{
         if(termType === "class"){
             this.termType = "terms";
         }
@@ -26,30 +40,30 @@ class TermApi{
             this.termType = "individuals";
         }
         else{
-            this.termType = termType;
+            this.termType = termType ? termType : "";
         }
     }
 
 
-    async fetchTerm() {
+    async fetchTerm():Promise<boolean> {
         try{
             if(this.iri === "%20"){
                 // empty iri
-                this.term = false;
+                this.term = {};
                 return true;
             }  
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
-            let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
+            let baseUrl = OntologiesBaseServiceUrl + this.ontologyId + "/" + this.termType;          
             let callResult =  await fetch(baseUrl + "/" + this.iri , getCallSetting);
         
             if (callResult.status === 404){
-                this.term = false;
+                this.term = {};
                 return true;
             }
             this.term = await callResult.json();              
-            this.term['relations'] = null;
-            this.term['eqAxiom'] = null;
-            this.term['subClassOf'] = null;                          
+            this.term['relations'] = undefined;
+            this.term['eqAxiom'] = undefined;
+            this.term['subClassOf'] = undefined;                          
             this.term['isIndividual'] = (this.termType === "individuals");            
             await this.fetchImportedAndAlsoInOntologies();
             let curationStatus = await this.createHasCurationStatus();
@@ -65,51 +79,54 @@ class TermApi{
             return true;
         }
         catch(e){            
-            this.term = {};            
+            this.term = {};
+            return false;            
         }
         
     }
 
 
-    async fetchTermWithoutRelations() {
+    async fetchTermWithoutRelations():Promise<boolean>{
         try{
             if(this.iri === "%20"){
                 // empty iri
-                this.term = false;
+                this.term = {};
                 return true;
             }  
             // console.clear();
             let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL + "/";
-            let baseUrl = OntologiesBaseServiceUrl + this.ontology + "/" + this.termType;          
+            let baseUrl = OntologiesBaseServiceUrl + this.ontologyId + "/" + this.termType;          
             let callResult =  await fetch(baseUrl + "/" + this.iri , getCallSetting);
         
             if (callResult.status === 404){
-                this.term = false;
+                this.term = {};
                 return true;
             }
             this.term = await callResult.json();            
             return true;
         }
         catch(e){
-            this.term = {};            
+            this.term = {};
+            return false; 
         }
         
     }
 
 
-    async getParents() {
+    async getParents():Promise<Array<ParentNode>|[]> {
+        
         try{
             if(this.termType === "individuals"){
                 return [];
               }
       
-              let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}/${this.iri}/hierarchicalParents`;         
+              let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/${this.termType}/${this.iri}/hierarchicalParents`;         
               let res = await fetch(url, getCallSetting);
-              res = await res.json();
-              let parents = res["_embedded"][this.termType];
+              let apiRes = await res.json();
+              let parents:Array<OntologyTermData> = apiRes["_embedded"][this.termType];
               let result = [];
               for(let p of parents){
-                let temp = {"label":p.label, "iri": p.iri, "ontology": p.ontology_name};
+                let temp:ParentNode = {"label":p.label, "iri": p.iri, "ontology": p.ontology_name};
                 result.push(temp);
               }
               return result;
@@ -120,7 +137,7 @@ class TermApi{
     }
 
 
-    async fetchClassRelations(){        
+    async fetchClassRelations():Promise<boolean>{        
         let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
             this.getRelations(),
             this.getEqAxiom(),
@@ -152,9 +169,9 @@ class TermApi{
 
 
 
-    async getRelations(){
+    async getRelations():Promise<string|null>{
         try{
-            let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + this.iri + '/relatedfroms';
+            let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/relatedfroms';
             let res = await fetch(url, getCallSetting);
             res = await res.json();
             if (typeof(res) !== "undefined"){
@@ -165,7 +182,7 @@ class TermApi{
                     result += k 
                     result += "<ul>"            
                     for(let item of v){
-                        result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.ontology + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>'+ '</li>';
+                        result += '<li>'+ '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.ontologyId + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>'+ '</li>';
                     }
                     result += "</ul>"      
                 }     
@@ -181,16 +198,16 @@ class TermApi{
 
 
 
-    async getEqAxiom(){
+    async getEqAxiom():Promise<string|null>{
         try{
-            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + this.iri + '/equivalentclassdescription';
+            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/equivalentclassdescription';
             let res = await fetch(url, getCallSetting);
-            res = await res.json();  
-            res = res["_embedded"];
-            if (typeof(res) !== "undefined"){
+            let apiRes:Ols3ApiResponse = await res.json();  
+            let eqAxioms = apiRes["_embedded"];
+            if (typeof(eqAxioms) !== "undefined"){
                 let resultHtml =  "";
                 resultHtml += "<ul>";
-                for(let item of res["strings"]){
+                for(let item of eqAxioms["strings"]){
                     let eqTextWithInternalUrls =  await this.replaceExternalIrisWithInternal(item["content"]);
                     resultHtml += `<li>${eqTextWithInternalUrls}</li>`;
                 }
@@ -205,22 +222,22 @@ class TermApi{
     }
 
 
-    async getSubClassOf(){
+    async getSubClassOf():Promise<string|null>{
         try{
-            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontology + '/terms/' + this.iri + '/superclassdescription';        
+            let url =  process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/superclassdescription';        
             let parents = await this.getParents();
-            let subClassRelations = await fetch(url, getCallSetting);
-            if(subClassRelations.status === 404){
+            let res = await fetch(url, getCallSetting);
+            if(res.status === 404){
                 return null;
             }
-            subClassRelations = await subClassRelations.json();
-            subClassRelations = subClassRelations["_embedded"];        
+            let apiRes:Ols3ApiResponse = await res.json();
+            let subClassRelations = apiRes["_embedded"];        
             if(parents.length === 0 && typeof(subClassRelations) === "undefined"){
                 return null;
             }
             let result = "<ul>";
             for(let parent of parents){
-                let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontology}/terms?iri=${encodeURIComponent(parent["iri"])}`;                
+                let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parent["iri"]?parent["iri"]:"")}`;                
                 result += `<li><a href=${parentUrl}>${parent["label"]}</a></li>`;
             }
             if (typeof(subClassRelations) !== "undefined"){                
@@ -239,17 +256,17 @@ class TermApi{
     }
 
 
-    async getIndividualInstancesForClass(){     
+    async getIndividualInstancesForClass():Promise<any>{     
         try{
           let baseUrl =  process.env.REACT_APP_API_BASE_URL;
-          let callUrl = baseUrl + "/" + this.ontology + "/" + this.iri + "/terminstances";
+          let callUrl = baseUrl + "/" + this.ontologyId + "/" + this.iri + "/terminstances";
           let result = await fetch(callUrl, getCallSetting);
-          result = await result.json();
-          result = result['_embedded'];
-          if(!result || typeof(result['individuals']) === "undefined"){
+          let apiResult:Ols3ApiResponse = await result.json();
+          let indvResult = apiResult['_embedded'];
+          if(!indvResult || typeof(indvResult['individuals']) === "undefined"){
             return null;
           }
-          return result['individuals'];
+          return indvResult['individuals'];
         }
         catch(e){
           return null;
@@ -257,10 +274,10 @@ class TermApi{
     }
 
 
-    async getNodeJsTree(viewMode){
+    async getNodeJsTree(viewMode:string):Promise<any>{
         try{
           let url = process.env.REACT_APP_API_BASE_URL + "/";
-          url += this.ontology + "/" + this.termType + "/" + this.iri + "/jstree?viewMode=All&siblings=" + viewMode;
+          url += this.ontologyId + "/" + this.termType + "/" + this.iri + "/jstree?viewMode=All&siblings=" + viewMode;
           let listOfNodes =  await (await fetch(url, getCallSetting)).json();
           return listOfNodes;
         }
@@ -271,19 +288,19 @@ class TermApi{
       
 
       
-    async getChildrenJsTree(targetNodeId) {
+    async getChildrenJsTree(targetNodeId:string):Promise<any> {
         let OntologiesBaseServiceUrl =  process.env.REACT_APP_API_BASE_URL;
         let url = OntologiesBaseServiceUrl + "/";
-        url += this.ontology + "/" + this.termType + "/" + this.iri + "/jstree/children/" + targetNodeId;
+        url += this.ontologyId + "/" + this.termType + "/" + this.iri + "/jstree/children/" + targetNodeId;
         let res =  await (await fetch(url, getCallSetting)).json();
         return res;
     }
 
 
 
-    async fetchListOfTerms(page=DEFAULT_PAGE_NUMBER, size=DEFAULT_PAGE_SIZE) {
+    async fetchListOfTerms(page:number|string=DEFAULT_PAGE_NUMBER, size:number|string=DEFAULT_PAGE_SIZE):Promise<TermListData|[]> {
         try{          
-          let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontology}/${this.termType}?page=${page}&size=${size}`;          
+          let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/${this.termType}?page=${page}&size=${size}`;          
           let result = await (await fetch(url, getCallSetting)).json();              
           let totalTermsCount = result['page']['totalElements'];
           result = result['_embedded'];
@@ -302,7 +319,7 @@ class TermApi{
     }
 
 
-    async replaceExternalIrisWithInternal(textWithExternalIris){
+    async replaceExternalIrisWithInternal(textWithExternalIris:string):Promise<string>{
         let urlRegex = /<a\s+([^>]*href=["']([^"']+)["'][^>]*)>/gi;
         let match;
         let modifiedText = textWithExternalIris;
@@ -310,12 +327,12 @@ class TermApi{
         while ((match = urlRegex.exec(textWithExternalIris)) !== null) {
             let [, attributes, href] = match;
             let targetIriType = "terms";
-            let termApi = new TermApi(this.ontology, encodeURIComponent(href), targetIriType);
+            let termApi = new TermApi(this.ontologyId, encodeURIComponent(href), targetIriType);
             await termApi.fetchTermWithoutRelations();
             if (!termApi.term) {
                 targetIriType = "props";
             }
-            let internalUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontology}/${targetIriType}?iri=${href}`;
+            let internalUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/${targetIriType}?iri=${href}`;
             modifiedText = modifiedText.replace(match[0], `<a ${attributes.replace(href, internalUrl)}">`);
         }
         return modifiedText;
@@ -323,7 +340,7 @@ class TermApi{
 
 
 
-    async getClassOriginalOntology(){
+    async getClassOriginalOntology():Promise<string|null>{
         /**
          * This API endpoint expect a raw Iri (Not encoded)
          */
@@ -334,7 +351,7 @@ class TermApi{
             result = result['_embedded'][this.termType];
             let originalOntology = null;
             for(let res of result){
-                if(res['ontology_name'].toLowerCase() !== "vibso" && this.ontology !== res['ontology_name']){
+                if(res['ontology_name'].toLowerCase() !== "vibso" && this.ontologyId !== res['ontology_name']){
                     originalOntology = res['ontology_name'];
                 }
             }                     
@@ -348,7 +365,7 @@ class TermApi{
 
 
 
-    async getClassAllOntologies(){
+    async getClassAllOntologies():Promise<Array<string>|null>{
         try{
             /**
             * This API endpoint expect a raw Iri (Not encoded)
@@ -359,7 +376,7 @@ class TermApi{
             result = result['_embedded'][this.termType];             
             let ontologies = [];
             for(let term of result){
-                if(this.ontology !== term['ontology_name']){
+                if(this.ontologyId !== term['ontology_name']){
                     ontologies.push(term['ontology_name']);
                 }  
             }
@@ -372,9 +389,9 @@ class TermApi{
     }
 
 
-    async fetchGraphData(){
+    async fetchGraphData():Promise<any>{
         try{
-            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontology}/terms/${this.iri}/graph`;
+            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/terms/${this.iri}/graph`;
             let graphData = await fetch(url, getCallSetting);
             graphData = await graphData.json();
             return graphData;
@@ -385,7 +402,7 @@ class TermApi{
     }
 
 
-    async createHasCurationStatus(){
+    async createHasCurationStatus():Promise<Array<string>|null>{
         // has_curation_status is an individual instance in the class instances list.
         try{
             let curationStatusLinks = this.term.annotation['has curation status'];
@@ -394,9 +411,9 @@ class TermApi{
             }                      
             let result = [];            
             for(let csLink of curationStatusLinks){  
-                let termApi = new TermApi(this.ontology, csLink, 'individuals');
+                let termApi = new TermApi(this.ontologyId, csLink, 'individuals');
                 await termApi.fetchTermWithoutRelations();
-                let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + termApi.term['ontology_name'] + "/individuals?iri=" + encodeURIComponent(termApi.term['iri']);                                        
+                let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + termApi.term['ontology_name'] + "/individuals?iri=" + encodeURIComponent(termApi.term['iri']?termApi.term['iri']:"");
                 result.push(`<a href="${individualUrl}" target='_blank'>${termApi.term['label']}</a>`);
             }
             return result;
