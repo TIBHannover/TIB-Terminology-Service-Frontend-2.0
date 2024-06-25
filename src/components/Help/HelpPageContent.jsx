@@ -2,7 +2,11 @@ export function renderHelpPage(){
     let content = [
         <div>
             <h3>Feedback and Suggestion</h3>
-            <p>For feedback, enquiries or suggestion about TIB Terminology Service or to request a new terminology please visit <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a></b> (requires sign-in)</p>
+            {/* <p>For feedback, enquiries or suggestion about TIB Terminology Service or to request a new terminology please visit <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a></b> (requires sign-in)</p> */}
+            <p>
+                For feedback, enquiries or suggestion about TIB Terminology Service or to request a new terminology please 
+                <a className="btn btn-sm btn-secondary ml-2" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>Contact us</a>
+            </p> 
             <br/>
             <h3>Frequently Asked Questions (FAQ)</h3>
             <br/>
