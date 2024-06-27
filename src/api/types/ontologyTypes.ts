@@ -29,27 +29,36 @@ export type OntologyData = {
 
 
 export type OntologyTermData = {
-    iri: string,
-    label: string,
+    iri?: string,
+    label?: string,
     description?: Array<string>,
-    annotations?: any,
+    annotation?: any,
     synonyms?: string,
-    ontology_name: string,
-    ontology_prefix: string,
-    ontology_iri: string,
-    is_obsolete: boolean,
+    ontology_name?: string,
+    ontology_prefix?: string,
+    ontology_iri?: string,
+    is_obsolete?: boolean,
     term_replaced_by?: string,
-    is_defining_ontology: boolean,
-    has_children: boolean,
-    is_root: boolean,
-    short_form: string,
+    is_defining_ontology?: boolean,
+    has_children?: boolean,
+    is_root?: boolean,
+    short_form?: string,
     obo_id?: string,
     in_subset?: boolean,
     obo_definition_citation?: string,
     obo_xref?: string,
     obo_synonym?: string,
     is_preferred_root?: boolean,
-    _links: {
+    relations?: string|null,
+    eqAxiom?: string|null,
+    subClassOf?: string|null,
+    isIndividual?: boolean,
+    curationStatus?: Array<string> | null,
+    parents?: Array<ParentNode>,
+    instancesList?: any,
+    originalOntology?: string|null,
+    alsoIn?: Array<string>|null,
+    _links?: {
         self: {
             href: string
         },        
@@ -72,4 +81,16 @@ export type OntologyTermData = {
             href: string
         }
     }
+}
+
+
+export type ParentNode = {
+    label?: string,
+    iri?: string,
+    ontology?: string
+}
+
+export type TermListData = {
+    results?: Array<OntologyTermData>,
+    totalTermsCount?: number|string
 }
