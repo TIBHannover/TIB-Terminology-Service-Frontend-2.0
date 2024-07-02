@@ -4,6 +4,7 @@ import TextEditor from "../../common/TextEditor/TextEditor";
 import { createHtmlFromEditorJson, getTextEditorContent } from "../../common/TextEditor/TextEditor";
 import { sendContactFrom } from "../../../api/user";
 import AlertBox from "../../common/Alerts/Alerts";
+import FormLib from "../../../Libs/FormLib";
 
 
 const ContactForm = () => {
@@ -38,41 +39,12 @@ const ContactForm = () => {
 
     function submit(){
         let formIsValid = true;
-        let title = document.getElementById('contact-form-title').value;
-        let username = document.getElementById('contact-form-username').value;
-        let email = document.getElementById('contact-form-email').value;
-        let safeAnswer = document.getElementById('contact-form-safe-q').value;
-        let content = "";                     
-        if(!editorState){            
-            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            formIsValid = false;
-        }
-        else{
-            content = getTextEditorContent(editorState);            
-            content = createHtmlFromEditorJson(content);            
-        }
-        if(!title || title.trim() === ""){
-            document.getElementById('contact-form-title').style.borderColor = 'red';
-            formIsValid = false;
-        }
-        if(!username || username.trim() === ""){
-            document.getElementById('contact-form-username').style.borderColor = 'red';
-            formIsValid = false;
-        }
-        if(!email || email.trim() === ""){
-            document.getElementById('contact-form-email').style.borderColor = 'red';
-            formIsValid = false;
-        }
-        if(!safeAnswer || safeAnswer.trim() === ""){
-            document.getElementById('contact-form-safe-q').style.borderColor = 'red';
-            formIsValid = false;
-        }
-        
-        if(!content || content.trim() === ""){
-            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            formIsValid = false;
-        }
-
+        let title = FormLib.getFieldByIdIfValid('contact-form-title');
+        let username = FormLib.getFieldByIdIfValid('contact-form-username');
+        let email =  FormLib.getFieldByIdIfValid('contact-form-email');
+        let safeAnswer = FormLib.getFieldByIdIfValid('contact-form-safe-q');
+        let content = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');                     
+        formIsValid = title && username && email && safeAnswer && content;                
         if(parseInt(contactType) === 0){
             setTypeHintTextShow(true);
             formIsValid = false;
@@ -81,7 +53,8 @@ const ContactForm = () => {
         if(!formIsValid){
             return;
         }
-
+        
+        content = createHtmlFromEditorJson(content);
         let data = {
             title: title,
             description: content,
@@ -170,6 +143,7 @@ const ContactForm = () => {
                                 editorClassName=""
                                 placeholder="Enter your query here"
                                 textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
+                                warpperId="contact-form-text-editor"
                             />  
                         </div>
                     </div>
