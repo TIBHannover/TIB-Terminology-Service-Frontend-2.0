@@ -7,6 +7,7 @@ import TermApi from "../../../api/term";
 import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import PropTypes from 'prop-types';
+import FormLib from "../../../Libs/FormLib";
 
 
 
@@ -55,27 +56,11 @@ const NoteEdit = (props) => {
 
     function edit(){
         let formIsValid = true;
-        let noteTitle = document.getElementById("noteTitle" + props.note['id']).value;
+        let noteTitle = FormLib.getFieldByIdIfValid("noteTitle" + props.note['id']);
         let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
         let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];        
-        let noteContent = "";        
-        if(!editorState){            
-            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            formIsValid = false;
-        }
-        else{
-            noteContent = getTextEditorContent(editorState);             
-        }
-
-        if(!noteTitle || noteTitle === ""){
-            document.getElementById("noteTitle" + props.note['id']).style.borderColor = 'red';
-            formIsValid = false;
-        }
-        
-        if(!noteContent || noteContent.trim() === ""){
-            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            formIsValid = false;
-        }
+        let noteContent = FormLib.getTextEditorValueIfValid(editorState, props.note['id']);                    
+        formIsValid = noteTitle && noteContent;           
 
         if(parseInt(targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){
             document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';

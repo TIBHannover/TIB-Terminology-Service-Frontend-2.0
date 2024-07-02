@@ -145,6 +145,7 @@ export const NoteCreationRender = (props) => {
                                         editorClassName=""
                                         placeholder="Note Content"
                                         textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
+                                        wrapperId={"noteContent" + props.targetNoteId}
                                     />                                         
                                 </div>
                             </div>
