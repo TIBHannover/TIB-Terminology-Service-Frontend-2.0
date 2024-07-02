@@ -11,6 +11,12 @@ const OntologySuggestion = (props) => {
     const [editorState, setEditorState] = useState(null);
     const [randomNum1, setRandomNum1] = useState(Toolkit.getRandomInt(0, 11));
     const [randomNum2, setRandomNum2] = useState(Toolkit.getRandomInt(0, 11));
+    const [selectedFile, setSelectedFile] = useState(null);
+
+
+    function handleFileChange(event){
+        setSelectedFile(event.target.files[0]);
+    };
 
 
 
@@ -42,6 +48,16 @@ const OntologySuggestion = (props) => {
                 }
                 {!formSubmitted && 
                     <>
+                    <div className="row">
+                        <div className="col-sm-8">
+                            <label className="custom-file-upload" for="onto-suggest-file">
+                            <i className="fa fa-upload"></i>
+                            ontology config YAML
+                            </label>
+                            <input type="file" id="onto-suggest-file" onChange={handleFileChange} />  
+                        </div>
+                    </div>
+                    <br></br>                                      
                     <div className="row">
                         <div className="col-sm-8">
                             <label className="required_input" for="onto-suggest-username">Your name</label>
