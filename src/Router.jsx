@@ -19,6 +19,7 @@ import Sitemap from './components/Sitemap/Sitemap';
 import {Route, Switch} from 'react-router-dom';
 import UserCollection from "./components/User/Collection/Collection";
 import ContactForm from "./components/User/ContactForm/ContactForm";
+import OntologySuggestion from "./components/Ontologies/OntologySuggestion/OntologySuggestion";
 
 
 
@@ -44,6 +45,7 @@ const AppRouter = () => {
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"} component={ContactForm}/>
+            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"} component={OntologySuggestion}/>
             <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>
