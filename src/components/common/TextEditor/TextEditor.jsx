@@ -27,7 +27,8 @@ const TextEditor = (props) =>{
                 onEditorStateChange={props.textChangeHandlerFunction}
                 wrapperClassName={props.wrapperClassName}
                 editorClassName={props.editorClassName}
-                placeholder={props.placeholder}                          
+                placeholder={props.placeholder}
+                wrapperId={props.wrapperId}                          
                 toolbar={{
                         options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link'],
                         inline: {

@@ -9,6 +9,7 @@ import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
 import Login from "../../User/Login/TS/Login";
 import PropTypes from 'prop-types';
+import FormLib from "../../../Libs/FormLib";
 
 
 
@@ -81,28 +82,12 @@ const NoteCreation = (props) => {
 
     function submit(){
         let formIsValid = true;
-        let noteTitle = document.getElementById('noteTitle' + noteIdForRender).value;
+        let noteTitle = FormLib.getFieldByIdIfValid('noteTitle' + noteIdForRender);
         let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];     
         let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];        
-        let noteContent = "";                     
-        if(!editorState){            
-            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            formIsValid = false;
-        }
-        else{
-            noteContent = getTextEditorContent(editorState);
-        }
-
-        if(!noteTitle || noteTitle === ""){
-            document.getElementById('noteTitle' + noteIdForRender).style.borderColor = 'red';
-            formIsValid = false;
-        }
+        let noteContent = FormLib.getTextEditorValueIfValid(editorState, noteIdForRender);
+        formIsValid = noteTitle && noteContent;
         
-        if(!noteContent || noteContent.trim() === ""){
-            document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
-            formIsValid = false;
-        }
-
         if(parseInt(targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){                        
             document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
             formIsValid = false;
