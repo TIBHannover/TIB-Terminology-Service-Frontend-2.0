@@ -12,6 +12,9 @@ const OntologySuggestion = (props) => {
     const [randomNum1, setRandomNum1] = useState(Toolkit.getRandomInt(0, 11));
     const [randomNum2, setRandomNum2] = useState(Toolkit.getRandomInt(0, 11));
     const [selectedFile, setSelectedFile] = useState(null);
+    const [withUpload, setWithUpload] = useState(false);
+    const [progressStep, setProgressStep] = useState(0);
+    const [progressBarValue, setProgressBarValue] = useState(1);
 
 
     function handleFileChange(event){
@@ -24,9 +27,10 @@ const OntologySuggestion = (props) => {
     return (
         <div className="row">
             <div className="col-sm-12 user-info-panel">
-                <h4><b>Suggest your Ontology</b></h4>
-                <p>Do you have an ontology that you would like to suggest to be included in the Ontology Library? 
-                Please fill out the form below and we will review your suggestion.</p>
+                <h4><b>Suggest your Ontology</b></h4>    
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style={{width: progressBarValue + "%"}} aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
+                </div>            
                 <br></br>
                 {formSubmitted && formSubmitSuccess &&
                     <>
@@ -46,7 +50,11 @@ const OntologySuggestion = (props) => {
                     <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH +  "/ontologysuggestion"}>New suggestion</a>
                     </>
                 }
-                {!formSubmitted && 
+                {progressStep === 0 && !formSubmitted &&
+                    <p>Do you have an ontology that you would like to suggest to be included in the Ontology Library? 
+                    Please fill out the form below and we will review your suggestion.</p>
+                }
+                {progressStep === 1 && !formSubmitted && 
                     <>
                     <div className="row">
                         <div className="col-sm-8">
@@ -83,7 +91,10 @@ const OntologySuggestion = (props) => {
                             </input>
                         </div>
                     </div>
-                    <br></br>
+                    </>   
+                }
+                {progressStep === 2 && !formSubmitted &&
+                    <>
                     <div className="row">
                         <div className="col-sm-8">
                             <label className="required_input" for="onto-suggest-name">Ontology name</label>
@@ -124,7 +135,10 @@ const OntologySuggestion = (props) => {
                             />  
                         </div>
                     </div>
-                    <br></br>
+                    </>
+                }
+                {progressStep === 3 && !formSubmitted &&
+                    <>
                     <div className="row">
                         <div className="col-sm-8">
                             <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
@@ -233,7 +247,10 @@ const OntologySuggestion = (props) => {
                             </input>
                         </div>
                     </div>
-                    <br></br>
+                    </>
+                }
+                {progressStep === 4 && !formSubmitted &&
+                    <>
                     <div className="row">
                         <div className="col-sm-6">
                             <label className="required_input" for="onto-suggest-safe-q">What is {randomNum1 + " + " + randomNum2}</label>
@@ -245,17 +262,42 @@ const OntologySuggestion = (props) => {
                             </input>
                         </div>
                     </div>        
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <button type="button" class="btn btn-secondary">Submit</button>
-                        </div>
-                    </div>
+                    <br></br>                    
                     </>
+                }    
+                <br></br>            
+                {progressStep !== 0 && !formSubmitted &&
+                    <button type="button" class="btn btn-secondary mr-3" onClick={() => {
+                        let nextStep = progressStep - 1;
+                        setProgressBarValue(progressBarValue - 20);
+                        setProgressStep(nextStep)
+                        }}
+                        >
+                        Previous
+                    </button>
                 }
+                {progressStep === 4 && !formSubmitted &&
+                    <button type="button" class="btn btn-secondary">Submit</button>
+                }
+                {progressStep !== 4 && !formSubmitted &&
+                    <>                                        
+                    <button type="button" class="btn btn-secondary" onClick={() => {
+                        let nextStep = progressStep + 1;
+                        setProgressBarValue(progressBarValue + 20);
+                        setProgressStep(nextStep)
+                        }}
+                        >
+                        Next
+                    </button>                        
+                    </>
+                }                                 
             </div>            
         </div>
     );
 }
+
+
+
+
 
 export default OntologySuggestion;
