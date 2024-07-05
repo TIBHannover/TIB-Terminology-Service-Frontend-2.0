@@ -16,6 +16,25 @@ const OntologySuggestion = (props) => {
     const [withUpload, setWithUpload] = useState(false);
     const [progressStep, setProgressStep] = useState(0);
     const [progressBarValue, setProgressBarValue] = useState(1);
+    const [form, setForm] = useState({
+        "username": "",
+        "email": "",
+        "reason": "",
+        "safeQestion": "",
+        "safeAnswer": "",
+        "name": "",
+        "purl": "",
+        "preferredPrefix": "",
+        "uri": "",
+        "licenseUrl": "",
+        "licenseLabel": "",
+        "title": "",
+        "description": "",
+        "creator": "",
+        "homepage": "",
+        "tracker": "",
+        "ontologyFile": ""
+    });
 
 
     function handleFileChange(event){
@@ -25,6 +44,8 @@ const OntologySuggestion = (props) => {
 
     const contextData = {
         editorState: editorState,
+        form: form,
+        setForm: setForm
     }
 
     return (
@@ -119,6 +140,7 @@ const OntologySuggestion = (props) => {
 
 
 const UserForm = () => {    
+    const componentContext = useContext(OntologySuggestionContext);
     return (
         <>
             {/* <div className="row">
@@ -136,10 +158,17 @@ const UserForm = () => {
                     <label className="required_input" for="onto-suggest-username">Your name</label>
                     <input 
                         type="text"
-                        onChange={() => {document.getElementById('onto-suggest-username').style.borderColor = '';}}                                                 
+                        onChange={(e) => {
+                            e.target.style.borderColor = '';
+                            let form = componentContext.form;
+                            form.username = e.target.value;
+                            componentContext.setForm(form);
+                        }}                                                         
                         class="form-control" 
                         id="onto-suggest-username"
-                        placeholder="Enter your fullname">
+                        placeholder="Enter your fullname"  
+                        defaultValue={componentContext.form.username}                        
+                        >
                     </input>
                 </div>
             </div>
@@ -149,10 +178,17 @@ const UserForm = () => {
                     <label className="required_input" for="onto-suggest-email">Email</label>
                     <input 
                         type="text"
-                        onChange={() => {document.getElementById('onto-suggest-email').style.borderColor = '';}}                                                 
+                        onChange={(e) => {
+                            e.target.style.borderColor = '';
+                            let form = componentContext.form;
+                            form.email = e.target.value;
+                            componentContext.setForm(form);
+                        }}                                                 
                         class="form-control" 
                         id="onto-suggest-email"
-                        placeholder="Enter your email">
+                        placeholder="Enter your email"
+                        defaultValue={componentContext.form.email}
+                        >
                     </input>
                 </div>
             </div>
@@ -171,10 +207,17 @@ const OntologyMainMetaDataForm = () => {
                 <label className="required_input" for="onto-suggest-name">Ontology name</label>
                 <input 
                     type="text"
-                    onChange={() => {document.getElementById('onto-suggest-name').style.borderColor = '';}}                                                 
+                    onChange={(e) => {
+                        e.style.borderColor = '';
+                        let form = componentContext.form;
+                        form.name = e.target.value;
+                        componentContext.setForm(form);
+                    }}                                                 
                     class="form-control" 
                     id="onto-suggest-name"
-                    placeholder="Enter the ontology's name">
+                    placeholder="Enter the ontology's name"
+                    defaultValue={componentContext.form.name}
+                    >
                 </input>
             </div>
         </div>
@@ -184,10 +227,17 @@ const OntologyMainMetaDataForm = () => {
                 <label className="required_input" for="onto-suggest-purl">Ontology purl</label>
                 <input 
                     type="text"
-                    onChange={() => {document.getElementById('onto-suggest-purl').style.borderColor = '';}}                                                 
+                    onChange={(e) => {
+                        e.style.borderColor = '';
+                        let form = componentContext.form;
+                        form.purl = e.target.value;
+                        componentContext.setForm(form);
+                    }}                                                 
                     class="form-control" 
                     id="onto-suggest-purl"
-                    placeholder="Enter the ontology's PURL">
+                    placeholder="Enter the ontology's PURL"
+                    defaultValue={componentContext.form.purl}
+                    >
                 </input>
             </div>
         </div>
@@ -213,6 +263,8 @@ const OntologyMainMetaDataForm = () => {
 
 
 const OntologyExtraMetadataForm = () => {
+    const componentContext = useContext(OntologySuggestionContext);
+
     return (
         <>
              <div className="row">
@@ -222,7 +274,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-pprefix"
-                        placeholder="Enter the ontology's preferred prefix">
+                        placeholder="Enter the ontology's preferred prefix"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.preferredPrefix = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.preferredPrefix}
+                        >
                     </input>
                 </div>
             </div>
@@ -234,7 +293,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-uri"
-                        placeholder="Enter the ontology's URI">
+                        placeholder="Enter the ontology's URI"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.uri = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.uri}
+                        >
                     </input>
                 </div>
             </div>
@@ -246,7 +312,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-licenseUrl"
-                        placeholder="Enter the ontology's License URL">
+                        placeholder="Enter the ontology's License URL"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.licenseUrl = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.licenseUrl}
+                        >
                     </input>
                 </div>
             </div>
@@ -258,7 +331,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-licenseName"
-                        placeholder="Enter the ontology's License Label">
+                        placeholder="Enter the ontology's License Label"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.licenseLabel = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.licenseLabel}
+                        >
                     </input>
                 </div>
             </div>
@@ -270,7 +350,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-title"
-                        placeholder="Enter the ontology's title">
+                        placeholder="Enter the ontology's title"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.title = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.title}
+                        >
                     </input>
                 </div>
             </div>
@@ -283,7 +370,14 @@ const OntologyExtraMetadataForm = () => {
                         cols={20}                         
                         class="form-control" 
                         id="onto-suggest-discription"
-                        placeholder="Enter the ontology's description">
+                        placeholder="Enter the ontology's description"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.description = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.description}
+                        >
                     </textarea>
                 </div>
             </div>
@@ -295,7 +389,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-creators"
-                        placeholder="Name1,Name2,...">
+                        placeholder="Name1,Name2,..."
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.creator = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.creator}
+                        >
                     </input>
                 </div>
             </div>
@@ -307,7 +408,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-homepage"
-                        placeholder="Enter the ontology's homepage URL">
+                        placeholder="Enter the ontology's homepage URL"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.homepage = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.homepage}
+                        >
                     </input>
                 </div>
             </div>
@@ -319,7 +427,14 @@ const OntologyExtraMetadataForm = () => {
                         type="text"                                
                         class="form-control" 
                         id="onto-suggest-tracker"
-                        placeholder="Enter the ontology's issue tracker URL">
+                        placeholder="Enter the ontology's issue tracker URL"
+                        onChange={(e) => {                            
+                            let form = componentContext.form;
+                            form.tracker = e.target.value;
+                            componentContext.setForm(form);
+                        }}
+                        defaultValue={componentContext.form.tracker}
+                        >
                     </input>
                 </div>
             </div>
