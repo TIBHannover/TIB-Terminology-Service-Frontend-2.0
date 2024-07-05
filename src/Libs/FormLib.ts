@@ -24,7 +24,7 @@ class FormLib{
             react-draft-wysiwyg lib editor content validation.
         */
 
-        let textEditorWrapper = document.getElementById('rdw-wrapper-noteContent' + id) as HTMLElement;
+        let textEditorWrapper = document.getElementById('rdw-wrapper-' + id) as HTMLElement;
         let textEditorTextBox = textEditorWrapper.getElementsByClassName('rdw-editor-main')[0] as HTMLElement;        
         if(!textEditorTextBox || !editorState){            
             textEditorTextBox.style.border = '1px solid red';

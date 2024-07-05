@@ -22,6 +22,7 @@ const blueprint = {
         "ontologyFile": ""
     },
     setForm: () => {},
+    onTextEditorChange: () => {},
 }
 
 

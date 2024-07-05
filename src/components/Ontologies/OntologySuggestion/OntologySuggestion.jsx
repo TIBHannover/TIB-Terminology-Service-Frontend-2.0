@@ -3,6 +3,7 @@ import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
+import FormLib from "../../../Libs/FormLib";
 
 
 
@@ -42,10 +43,50 @@ const OntologySuggestion = (props) => {
     };
 
 
+    function onTextEditorChange (newEditorState){
+        document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+        setEditorState(newEditorState);                
+    };
+
+
+    function onNextClick(){
+        if (progressStep === 1){
+            let username = FormLib.getFieldByIdIfValid('onto-suggest-username');
+            let email = FormLib.getFieldByIdIfValid('onto-suggest-email');
+            if (!username || !email){
+                return;
+            }
+        }
+        if (progressStep === 2){
+            let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
+            let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
+            let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
+            if (!name || !purl || !reason){
+                return;
+            }
+        }       
+        
+        let nextStep = progressStep + 1;
+        setProgressBarValue(progressBarValue + 20);
+        setProgressStep(nextStep);
+    }
+
+
+
+    function submit(){
+        let safeQ = FormLib.getFieldByIdIfValid('onto-suggest-safe-q');
+        if (!safeQ){
+            return;
+        }
+    }
+
+
+
     const contextData = {
         editorState: editorState,
         form: form,
-        setForm: setForm
+        setForm: setForm,
+        onTextEditorChange: onTextEditorChange
     }
 
     return (
@@ -83,7 +124,7 @@ const OntologySuggestion = (props) => {
                     <UserForm />     
                 }
                 {progressStep === 2 && !formSubmitted &&
-                <OntologyMainMetaDataForm />
+                    <OntologyMainMetaDataForm />
                 }
                 {progressStep === 3 && !formSubmitted &&
                     <OntologyExtraMetadataForm />
@@ -116,15 +157,11 @@ const OntologySuggestion = (props) => {
                     </button>
                 }
                 {progressStep === 4 && !formSubmitted &&
-                    <button type="button" class="btn btn-secondary">Submit</button>
+                    <button type="button" class="btn btn-secondary" onClick={submit}>Submit</button>
                 }
                 {progressStep !== 4 && !formSubmitted &&
                     <>                                        
-                    <button type="button" class="btn btn-secondary" onClick={() => {
-                        let nextStep = progressStep + 1;
-                        setProgressBarValue(progressBarValue + 20);
-                        setProgressStep(nextStep)
-                        }}
+                    <button type="button" class="btn btn-secondary" onClick={onNextClick}
                         >
                         Next
                     </button>                        
@@ -208,7 +245,7 @@ const OntologyMainMetaDataForm = () => {
                 <input 
                     type="text"
                     onChange={(e) => {
-                        e.style.borderColor = '';
+                        e.target.style.borderColor = '';
                         let form = componentContext.form;
                         form.name = e.target.value;
                         componentContext.setForm(form);
@@ -228,7 +265,7 @@ const OntologyMainMetaDataForm = () => {
                 <input 
                     type="text"
                     onChange={(e) => {
-                        e.style.borderColor = '';
+                        e.target.style.borderColor = '';
                         let form = componentContext.form;
                         form.purl = e.target.value;
                         componentContext.setForm(form);
@@ -247,12 +284,12 @@ const OntologyMainMetaDataForm = () => {
                 <label className="required_input">Reason</label>
                 <TextEditor 
                     editorState={componentContext.editorState} 
-                    // textChangeHandlerFunction={onTextAreaChange}
+                    textChangeHandlerFunction={componentContext.onTextEditorChange}
                     wrapperClassName=""
                     editorClassName=""
                     placeholder="Please briefly describe the ontology and its purpose."
                     textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
-                    warpperId="contact-form-text-editor"
+                    wrapperId="contact-form-text-editor"
                 />  
             </div>
         </div>
