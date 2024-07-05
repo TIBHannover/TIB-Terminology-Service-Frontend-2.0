@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState , useContext} from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
+import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 
 
 
@@ -22,9 +23,12 @@ const OntologySuggestion = (props) => {
     };
 
 
-
+    const contextData = {
+        editorState: editorState,
+    }
 
     return (
+        <OntologySuggestionContext.Provider value={contextData}>
         <div className="row">
             <div className="col-sm-12 user-info-panel">
                 <h4><b>Suggest your Ontology</b></h4>    
@@ -55,199 +59,13 @@ const OntologySuggestion = (props) => {
                     Please fill out the form below and we will review your suggestion.</p>
                 }
                 {progressStep === 1 && !formSubmitted && 
-                    <>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label className="custom-file-upload" for="onto-suggest-file">
-                            <i className="fa fa-upload"></i>
-                            ontology config YAML
-                            </label>
-                            <input type="file" id="onto-suggest-file" onChange={handleFileChange} />  
-                        </div>
-                    </div>
-                    <br></br>                                      
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label className="required_input" for="onto-suggest-username">Your name</label>
-                            <input 
-                                type="text"
-                                onChange={() => {document.getElementById('onto-suggest-username').style.borderColor = '';}}                                                 
-                                class="form-control" 
-                                id="onto-suggest-username"
-                                placeholder="Enter your fullname">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label className="required_input" for="onto-suggest-email">Email</label>
-                            <input 
-                                type="text"
-                                onChange={() => {document.getElementById('onto-suggest-email').style.borderColor = '';}}                                                 
-                                class="form-control" 
-                                id="onto-suggest-email"
-                                placeholder="Enter your email">
-                            </input>
-                        </div>
-                    </div>
-                    </>   
+                    <UserForm />     
                 }
                 {progressStep === 2 && !formSubmitted &&
-                    <>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label className="required_input" for="onto-suggest-name">Ontology name</label>
-                            <input 
-                                type="text"
-                                onChange={() => {document.getElementById('onto-suggest-name').style.borderColor = '';}}                                                 
-                                class="form-control" 
-                                id="onto-suggest-name"
-                                placeholder="Enter the ontology's name">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label className="required_input" for="onto-suggest-purl">Ontology purl</label>
-                            <input 
-                                type="text"
-                                onChange={() => {document.getElementById('onto-suggest-purl').style.borderColor = '';}}                                                 
-                                class="form-control" 
-                                id="onto-suggest-purl"
-                                placeholder="Enter the ontology's PURL">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label className="required_input">Reason</label>
-                            <TextEditor 
-                                editorState={editorState} 
-                                // textChangeHandlerFunction={onTextAreaChange}
-                                wrapperClassName=""
-                                editorClassName=""
-                                placeholder="Please briefly describe the ontology and its purpose."
-                                textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
-                                warpperId="contact-form-text-editor"
-                            />  
-                        </div>
-                    </div>
-                    </>
+                <OntologyMainMetaDataForm />
                 }
                 {progressStep === 3 && !formSubmitted &&
-                    <>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-pprefix"
-                                placeholder="Enter the ontology's preferred prefix">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-uri">Ontology URI</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-uri"
-                                placeholder="Enter the ontology's URI">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-licenseUrl">Ontology License URL</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-licenseUrl"
-                                placeholder="Enter the ontology's License URL">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-licenseName">Ontology License Name</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-licenseName"
-                                placeholder="Enter the ontology's License Label">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-title">Ontology title</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-title"
-                                placeholder="Enter the ontology's title">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-discription">Ontology Description</label>
-                            <textarea 
-                                rows={5}
-                                cols={20}                         
-                                class="form-control" 
-                                id="onto-suggest-discription"
-                                placeholder="Enter the ontology's description">
-                            </textarea>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-creators">Ontology Creators (comma separated)</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-creators"
-                                placeholder="Name1,Name2,...">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-homepage">Ontology HomePage URL</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-homepage"
-                                placeholder="Enter the ontology's homepage URL">
-                            </input>
-                        </div>
-                    </div>
-                    <br></br>
-                    <div className="row">
-                        <div className="col-sm-8">
-                            <label for="onto-suggest-tracker">Ontology issue tracker URL (Example: GitHub issues list)</label>
-                            <input 
-                                type="text"                                
-                                class="form-control" 
-                                id="onto-suggest-tracker"
-                                placeholder="Enter the ontology's issue tracker URL">
-                            </input>
-                        </div>
-                    </div>
-                    </>
+                    <OntologyExtraMetadataForm />
                 }
                 {progressStep === 4 && !formSubmitted &&
                     <>
@@ -293,6 +111,219 @@ const OntologySuggestion = (props) => {
                 }                                 
             </div>            
         </div>
+        </OntologySuggestionContext.Provider>
+    );
+}
+
+
+
+
+const UserForm = () => {    
+    return (
+        <>
+            {/* <div className="row">
+                <div className="col-sm-8">
+                    <label className="custom-file-upload" for="onto-suggest-file">
+                    <i className="fa fa-upload"></i>
+                    ontology config YAML
+                    </label>
+                    <input type="file" id="onto-suggest-file" onChange={handleFileChange} />  
+                </div>
+            </div>
+            <br></br>                                       */}
+            <div className="row">
+                <div className="col-sm-8">
+                    <label className="required_input" for="onto-suggest-username">Your name</label>
+                    <input 
+                        type="text"
+                        onChange={() => {document.getElementById('onto-suggest-username').style.borderColor = '';}}                                                 
+                        class="form-control" 
+                        id="onto-suggest-username"
+                        placeholder="Enter your fullname">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label className="required_input" for="onto-suggest-email">Email</label>
+                    <input 
+                        type="text"
+                        onChange={() => {document.getElementById('onto-suggest-email').style.borderColor = '';}}                                                 
+                        class="form-control" 
+                        id="onto-suggest-email"
+                        placeholder="Enter your email">
+                    </input>
+                </div>
+            </div>
+        </>
+    );
+}
+
+
+
+const OntologyMainMetaDataForm = () => {
+    const componentContext = useContext(OntologySuggestionContext);
+    return(
+        <>
+        <div className="row">
+            <div className="col-sm-8">
+                <label className="required_input" for="onto-suggest-name">Ontology name</label>
+                <input 
+                    type="text"
+                    onChange={() => {document.getElementById('onto-suggest-name').style.borderColor = '';}}                                                 
+                    class="form-control" 
+                    id="onto-suggest-name"
+                    placeholder="Enter the ontology's name">
+                </input>
+            </div>
+        </div>
+        <br></br>
+        <div className="row">
+            <div className="col-sm-8">
+                <label className="required_input" for="onto-suggest-purl">Ontology purl</label>
+                <input 
+                    type="text"
+                    onChange={() => {document.getElementById('onto-suggest-purl').style.borderColor = '';}}                                                 
+                    class="form-control" 
+                    id="onto-suggest-purl"
+                    placeholder="Enter the ontology's PURL">
+                </input>
+            </div>
+        </div>
+        <br></br>
+        <div className="row">
+            <div className="col-sm-8">
+                <label className="required_input">Reason</label>
+                <TextEditor 
+                    editorState={componentContext.editorState} 
+                    // textChangeHandlerFunction={onTextAreaChange}
+                    wrapperClassName=""
+                    editorClassName=""
+                    placeholder="Please briefly describe the ontology and its purpose."
+                    textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
+                    warpperId="contact-form-text-editor"
+                />  
+            </div>
+        </div>
+        </>
+    );
+}   
+
+
+
+const OntologyExtraMetadataForm = () => {
+    return (
+        <>
+             <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-pprefix"
+                        placeholder="Enter the ontology's preferred prefix">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-uri">Ontology URI</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-uri"
+                        placeholder="Enter the ontology's URI">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-licenseUrl">Ontology License URL</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-licenseUrl"
+                        placeholder="Enter the ontology's License URL">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-licenseName">Ontology License Name</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-licenseName"
+                        placeholder="Enter the ontology's License Label">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-title">Ontology title</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-title"
+                        placeholder="Enter the ontology's title">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-discription">Ontology Description</label>
+                    <textarea 
+                        rows={5}
+                        cols={20}                         
+                        class="form-control" 
+                        id="onto-suggest-discription"
+                        placeholder="Enter the ontology's description">
+                    </textarea>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-creators">Ontology Creators (comma separated)</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-creators"
+                        placeholder="Name1,Name2,...">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-homepage">Ontology HomePage URL</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-homepage"
+                        placeholder="Enter the ontology's homepage URL">
+                    </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label for="onto-suggest-tracker">Ontology issue tracker URL (Example: GitHub issues list)</label>
+                    <input 
+                        type="text"                                
+                        class="form-control" 
+                        id="onto-suggest-tracker"
+                        placeholder="Enter the ontology's issue tracker URL">
+                    </input>
+                </div>
+            </div>
+        </>
     );
 }
 
