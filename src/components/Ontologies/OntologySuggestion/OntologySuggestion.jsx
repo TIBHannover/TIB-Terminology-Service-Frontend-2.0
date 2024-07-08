@@ -4,6 +4,9 @@ import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
+import { submitOntologySuggestion } from "../../../api/user";
+import draftToMarkdown from 'draftjs-to-markdown';
+import {convertToRaw } from 'draft-js';
 
 
 
@@ -64,6 +67,11 @@ const OntologySuggestion = (props) => {
             if (!name || !purl || !reason){
                 return;
             }
+            let formData = form;
+            reason = editorState.getCurrentContent();        
+            reason = draftToMarkdown(convertToRaw(reason));
+            formData.reason = reason;
+            setForm(formData);
         }       
         
         let nextStep = progressStep + 1;
@@ -78,6 +86,15 @@ const OntologySuggestion = (props) => {
         if (!safeQ){
             return;
         }
+        submitOntologySuggestion(form).then((success) => {
+            if (success){
+                setFormSubmitted(true);
+                setFormSubmitSuccess(true);
+            } else {
+                setFormSubmitted(true);
+                setFormSubmitSuccess(false);
+            }
+        });
     }
 
 
@@ -136,7 +153,13 @@ const OntologySuggestion = (props) => {
                             <label className="required_input" for="onto-suggest-safe-q">What is {randomNum1 + " + " + randomNum2}</label>
                             <input 
                                 type="text"                             
-                                onChange={() => {document.getElementById('onto-suggest-safe-q').style.borderColor = '';}}                                                 
+                                onChange={(e) => {
+                                    e.target.style.borderColor = '';
+                                    let formData = form;
+                                    formData.safeAnswer = e.target.value;
+                                    formData.safeQestion = `${randomNum1}+${randomNum2}`;
+                                    setForm(formData);
+                                }}
                                 class="form-control" 
                                 id="onto-suggest-safe-q">
                             </input>

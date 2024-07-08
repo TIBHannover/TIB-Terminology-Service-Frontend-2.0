@@ -1,6 +1,4 @@
 import { getTsPluginHeaders } from "./header";
-import { OntologySuggestionData } from "./types/ontologyTypes";
-import { TsPluginHeader } from "./types/headerTypes";
 
 
 
@@ -114,19 +112,3 @@ export async function submitGitIssue({repoUrl, gitUsername, issueTitle, issueBod
     }
 }
 
-
-
-export function submitOntologySuggestion(formData: OntologySuggestionData): Promise<boolean>{
-    try{
-        let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});        
-        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/contact/suggestontology';
-        let result:any = fetch(url, {method:'POST', headers:headers, data:formData});
-        if result.status === 200{
-            return true;
-        }
-        return false;
-    }
-    catch(e){
-        return false;
-    }
-}
