@@ -100,7 +100,7 @@ export type OntologySuggestionData = {
     username: string,
     email: string, 
     reason: string,
-    safeQestion: string,
+    safeQuestion: string,
     safeAnswer: string,
     name: string,
     purl: string,

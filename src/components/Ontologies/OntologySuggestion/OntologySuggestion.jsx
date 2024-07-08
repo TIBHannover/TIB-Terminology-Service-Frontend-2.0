@@ -24,7 +24,7 @@ const OntologySuggestion = (props) => {
         "username": "",
         "email": "",
         "reason": "",
-        "safeQestion": "",
+        "safeQuestion": "",
         "safeAnswer": "",
         "name": "",
         "purl": "",
@@ -157,7 +157,7 @@ const OntologySuggestion = (props) => {
                                     e.target.style.borderColor = '';
                                     let formData = form;
                                     formData.safeAnswer = e.target.value;
-                                    formData.safeQestion = `${randomNum1}+${randomNum2}`;
+                                    formData.safeQuestion = `${randomNum1}+${randomNum2}`;
                                     setForm(formData);
                                 }}
                                 class="form-control" 
