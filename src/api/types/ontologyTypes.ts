@@ -94,3 +94,24 @@ export type TermListData = {
     results?: Array<OntologyTermData>,
     totalTermsCount?: number|string
 }
+
+
+export type OntologySuggestionData = {
+    username: string,
+    email: string, 
+    reason: string,
+    safeQestion: string,
+    safeAnswer: string,
+    name: string,
+    purl: string,
+    preferredPrefix?: string,
+    uri?: string,
+    description?: string,
+    homepage?: string,
+    licenseUrl?: string,
+    licenseLabel?: string,
+    title?: string,
+    creator?: string,
+    tracker?: string,
+    ontologyFile?: string
+}
