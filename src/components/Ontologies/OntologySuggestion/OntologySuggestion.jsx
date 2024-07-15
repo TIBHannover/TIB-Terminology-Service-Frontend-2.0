@@ -134,8 +134,24 @@ const OntologySuggestion = (props) => {
                     </>
                 }
                 {progressStep === 0 && !formSubmitted &&
-                    <p>Do you have an ontology that you would like to suggest to be included in the Ontology Library? 
-                    Please fill out the form below and we will review your suggestion.</p>
+                    <>
+                    <p>Before starting, please make sure you prepaired these information:</p>
+                    <ul>
+                        <li>Your name and email</li>
+                        <li>Ontology name and PURL</li>
+                        <li>Reason for suggesting the ontology (short text)</li>
+                    </ul>
+                    <br></br>
+                    <p>
+                        <b>Attention</b>
+                        <br></br>
+                        Your ontology shape gets evaluated based on: 
+                        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1">
+                            https://www.purl.org/ontologymetadata/shape/20240502
+                        </a>                    
+                    </p>
+                    <p>Click next to start</p>
+                    </>
                 }
                 {progressStep === 1 && !formSubmitted && 
                     <UserForm />     
