@@ -7,6 +7,7 @@ import FormLib from "../../../Libs/FormLib";
 import { submitOntologySuggestion } from "../../../api/user";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
+import OntologyShapeTest from "./OntologyShapeTest";
 
 
 
@@ -75,7 +76,7 @@ const OntologySuggestion = (props) => {
         }       
         
         let nextStep = progressStep + 1;
-        setProgressBarValue(progressBarValue + 20);
+        setProgressBarValue(progressBarValue + 15);
         setProgressStep(nextStep);
     }
 
@@ -160,9 +161,12 @@ const OntologySuggestion = (props) => {
                     <OntologyMainMetaDataForm />
                 }
                 {progressStep === 3 && !formSubmitted &&
-                    <OntologyExtraMetadataForm />
+                    <OntologyShapeTest purl={form.purl} />
                 }
                 {progressStep === 4 && !formSubmitted &&
+                    <OntologyExtraMetadataForm />
+                }
+                {progressStep === 5 && !formSubmitted &&
                     <>
                     <div className="row">
                         <div className="col-sm-6">
@@ -195,10 +199,10 @@ const OntologySuggestion = (props) => {
                         Previous
                     </button>
                 }
-                {progressStep === 4 && !formSubmitted &&
+                {progressStep === 5 && !formSubmitted &&
                     <button type="button" class="btn btn-secondary" onClick={submit}>Submit</button>
                 }
-                {progressStep !== 4 && !formSubmitted &&
+                {progressStep !== 5 && !formSubmitted &&
                     <>                                        
                     <button type="button" class="btn btn-secondary" onClick={onNextClick}
                         >
@@ -343,7 +347,11 @@ const OntologyExtraMetadataForm = () => {
 
     return (
         <>
-             <div className="row">
+            <p>
+                These fields are not mandatory and can be skipped. 
+                However, providing these information will help us to evaluate your ontology better.
+            </p>
+            <div className="row">
                 <div className="col-sm-8">
                     <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
                     <input 
