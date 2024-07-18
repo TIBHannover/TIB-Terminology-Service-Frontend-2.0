@@ -7,6 +7,7 @@ import FormLib from "../../../Libs/FormLib";
 import { submitOntologySuggestion } from "../../../api/user";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
+import { jsPDF } from "jspdf";
 
 
 
@@ -112,6 +113,67 @@ const OntologySuggestion = (props) => {
 
 
 
+    function exportReportAsPdf() {
+        let doc = new jsPDF('p', 'pt', 'a4');        
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 20;
+        const lineHeight = 20;
+        const contentWidth = pageWidth - (margin * 2);
+    
+        doc.setFont("times", "bold");
+        doc.text("Shape test result", pageWidth / 2, 80, { align: 'center' });
+    
+        let currentY = 100; 
+            
+        function insertTextToPdf(text, index, type) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            let currentTextPosition = margin;
+            const lines = doc.splitTextToSize(`[${index + 1}, ${type}] ${text}`, contentWidth);            
+            lines.forEach(line => {                
+                if (currentY + lineHeight > pageHeight) {
+                    doc.addPage();
+                    currentY = margin;
+                }
+        
+                let startIndex = 0;
+                let match;
+                                                
+                while ((match = urlRegex.exec(line)) !== null) {
+                    const url = match[0];                    
+                    const urlIndex = line.indexOf(url, startIndex);
+                           
+                    const textBeforeUrl = line.substring(startIndex, urlIndex);
+                    doc.text(textBeforeUrl, currentTextPosition, currentY);
+                    currentTextPosition += doc.getStringUnitWidth(textBeforeUrl) * doc.internal.getFontSize();
+                
+                    doc.setTextColor(0, 0, 255); 
+                    doc.textWithLink(url, currentTextPosition, currentY, { url: url });
+                    currentTextPosition += doc.getStringUnitWidth(url) * doc.internal.getFontSize();
+                    doc.setTextColor(0); 
+        
+                    startIndex = urlIndex + url.length;
+                }
+                        
+                if (startIndex < line.length) {
+                    const remainingText = line.substring(startIndex);
+                    doc.text(remainingText, currentTextPosition, currentY);
+                }
+        
+                currentY += lineHeight;
+                currentTextPosition = margin;
+            });
+        }
+            
+        doc.setFont("times", "normal");
+        shapeValidationError.error.map((e, index) => insertTextToPdf(e, index, "Error"));
+        shapeValidationError.info.map((i, index) => insertTextToPdf(i, index, "Info"));
+            
+        doc.save("shape-test-result.pdf");
+    }
+
+
+
     const contextData = {
         editorState: editorState,
         form: form,
@@ -127,7 +189,7 @@ const OntologySuggestion = (props) => {
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" style={{width: progressBarValue + "%"}} aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>            
-                <br></br>
+                <br></br>                
                 {submitWait &&
                     <div className="row">
                         <div className="col-12 text-center">                
@@ -161,6 +223,8 @@ const OntologySuggestion = (props) => {
                         message="Sorry! Your ontology shape is not valid."
                     />
                     <br></br>
+                    {/* <button type="button" class="btn btn-sm btn-secondary float-right" onClick={exportReportAsPdf}>Export report as PDF</button>
+                    <br></br> */}
                     <h5><b>Issues found</b></h5>
                     <br></br>                                        
                     {shapeValidationError.error.map((e) =>{
