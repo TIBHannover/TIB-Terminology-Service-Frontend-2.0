@@ -156,10 +156,15 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
             form.append(key, formDataAny[key]);
         }
         let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});                      
-        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/contact/suggestontology';
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create';
         let result:any = await fetch(url, {method:'POST', headers:headers, body:form});
         if (result.status === 200){
-            return true;
+            result = await result.json();
+            result = result['_result'];
+            if(result['response'] && !result['response']['error']){
+                return true;
+            }                        
+            return result['response'];
         }
         return false;
     }

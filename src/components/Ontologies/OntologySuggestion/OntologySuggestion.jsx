@@ -7,13 +7,14 @@ import FormLib from "../../../Libs/FormLib";
 import { submitOntologySuggestion } from "../../../api/user";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
-import OntologyShapeTest from "./OntologyShapeTest";
+
 
 
 
 const OntologySuggestion = (props) => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
+    const [submitWait, setSubmitWait] = useState(false);
     const [editorState, setEditorState] = useState(null);
     const [randomNum1, setRandomNum1] = useState(Toolkit.getRandomInt(0, 11));
     const [randomNum2, setRandomNum2] = useState(Toolkit.getRandomInt(0, 11));
@@ -21,6 +22,7 @@ const OntologySuggestion = (props) => {
     const [withUpload, setWithUpload] = useState(false);
     const [progressStep, setProgressStep] = useState(0);
     const [progressBarValue, setProgressBarValue] = useState(1);
+    const [shapeValidationError, setShapeValidationError] = useState({"error": [], "info": []});
     const [form, setForm] = useState({
         "username": "",
         "email": "",
@@ -76,24 +78,34 @@ const OntologySuggestion = (props) => {
         }       
         
         let nextStep = progressStep + 1;
-        setProgressBarValue(progressBarValue + 15);
+        setProgressBarValue(progressBarValue + 20);
         setProgressStep(nextStep);
     }
 
 
 
     function submit(){
+        setSubmitWait(true);
         let safeQ = FormLib.getFieldByIdIfValid('onto-suggest-safe-q');
         if (!safeQ){
             return;
         }
-        submitOntologySuggestion(form).then((success) => {
-            if (success){
+        submitOntologySuggestion(form).then((result) => {
+            if (result === true){
                 setFormSubmitted(true);
                 setFormSubmitSuccess(true);
-            } else {
+                setShapeValidationError({"error":[], "info":[]});
+                setSubmitWait(false);
+            } else if (result === false){
                 setFormSubmitted(true);
                 setFormSubmitSuccess(false);
+                setShapeValidationError({"error":[], "info":[]});
+                setSubmitWait(false);
+            }else{
+                setFormSubmitted(true);
+                setFormSubmitSuccess(false);                
+                setSubmitWait(false);                             
+                setShapeValidationError(result);
             }
         });
     }
@@ -116,25 +128,59 @@ const OntologySuggestion = (props) => {
                     <div class="progress-bar" role="progressbar" style={{width: progressBarValue + "%"}} aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>            
                 <br></br>
-                {formSubmitted && formSubmitSuccess &&
+                {submitWait &&
+                    <div className="row">
+                        <div className="col-12 text-center">                
+                            <div class="spinner-border text-dark" role="status">
+                                <span class="visually-hidden"></span>                            
+                            </div>
+                            <div className="">Checking ontology shape ...</div>
+                        </div>
+                    </div>
+                }
+                {formSubmitted && formSubmitSuccess && !submitWait &&
                     <>
                     <AlertBox
                         type="success"
                         message="Thank you! Your query has been submitted successfully."
-                    />
-                    <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
+                    />                    
                     </>
                 }
-                {formSubmitted && !formSubmitSuccess &&
+                {formSubmitted && !formSubmitSuccess && !submitWait && shapeValidationError.error.length === 0 &&
                     <>
                     <AlertBox
                         type="danger"
                         message="Sorry! Something went wrong. Please try again later."
-                    />
-                    <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH +  "/ontologysuggestion"}>New suggestion</a>
+                    />                    
                     </>
                 }
-                {progressStep === 0 && !formSubmitted &&
+                {shapeValidationError.error.length > 0 && !submitWait &&
+                    <>
+                    <AlertBox
+                        type="danger"
+                        message="Sorry! Your ontology shape is not valid."
+                    />
+                    <br></br>
+                    <h5><b>Issues found</b></h5>
+                    <br></br>                                        
+                    {shapeValidationError.error.map((e) =>{
+                        let errorContent = Toolkit.transformLinksInStringToAnchor(e);
+                        return (<><div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div><br></br></>)
+                    })
+                    }
+                    <br></br>
+                    <h5><b>Warnings. These are Not preventing the validation but would be nice to address them.</b></h5>
+                    {shapeValidationError.info.map((i) =>{
+                        let infoContent = Toolkit.transformLinksInStringToAnchor(i);
+                        return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
+                    })
+                    }
+                    </>
+                }
+                {formSubmitted && !submitWait &&
+                    <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
+                }
+                {progressStep === 0 && !formSubmitted && !submitWait &&
                     <>
                     <p>Before starting, please make sure you prepaired these information:</p>
                     <ul>
@@ -154,19 +200,16 @@ const OntologySuggestion = (props) => {
                     <p>Click next to start</p>
                     </>
                 }
-                {progressStep === 1 && !formSubmitted && 
+                {progressStep === 1 && !formSubmitted && !submitWait &&
                     <UserForm />     
                 }
-                {progressStep === 2 && !formSubmitted &&
+                {progressStep === 2 && !formSubmitted && !submitWait &&
                     <OntologyMainMetaDataForm />
-                }
-                {progressStep === 3 && !formSubmitted &&
-                    <OntologyShapeTest purl={form.purl} />
-                }
-                {progressStep === 4 && !formSubmitted &&
+                }                
+                {progressStep === 3 && !formSubmitted && !submitWait &&
                     <OntologyExtraMetadataForm />
                 }
-                {progressStep === 5 && !formSubmitted &&
+                {progressStep === 4 && !formSubmitted && !submitWait &&
                     <>
                     <div className="row">
                         <div className="col-sm-6">
@@ -189,7 +232,7 @@ const OntologySuggestion = (props) => {
                     </>
                 }    
                 <br></br>            
-                {progressStep !== 0 && !formSubmitted &&
+                {progressStep !== 0 && !formSubmitted && !submitWait &&
                     <button type="button" class="btn btn-secondary mr-3" onClick={() => {
                         let nextStep = progressStep - 1;
                         setProgressBarValue(progressBarValue - 20);
@@ -199,10 +242,10 @@ const OntologySuggestion = (props) => {
                         Previous
                     </button>
                 }
-                {progressStep === 5 && !formSubmitted &&
+                {progressStep === 4 && !formSubmitted && !submitWait &&
                     <button type="button" class="btn btn-secondary" onClick={submit}>Submit</button>
                 }
-                {progressStep !== 5 && !formSubmitted &&
+                {progressStep !== 4 && !formSubmitted && !submitWait &&
                     <>                                        
                     <button type="button" class="btn btn-secondary" onClick={onNextClick}
                         >
