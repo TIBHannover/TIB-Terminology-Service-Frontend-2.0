@@ -90,12 +90,19 @@ export const OntologyListRender = (props) =>{
 
     return(                    
         <div className='row'>           
-            <div className='col-sm-12'>                                                                                                                                                                                         
+            <div className='col-sm-12'>                                                                 
                 <div className='row'>
                     <div className='col-sm-6'>                    
                         <h3 className='h-headers'>Browse Ontologies ({props.ontologies.length})</h3>                   
                     </div>                 
                 </div>
+                <div className='row'>
+                    <div className='col-sm-12'>
+                    Not able to find what you are looking for? You can suggest your ontology to be added to the list.
+                    <a className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>suggest</a>
+                    </div>  
+                </div>
+                <br></br>
                 <div className='row'>                    
                     <div className='col-sm-6 text-right zero-padding-col'>                                
                         <DropDown 
