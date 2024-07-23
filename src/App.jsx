@@ -67,6 +67,9 @@ const App = () => {
         setReportsListForAdmin(reports);
       });
     }
+    else{
+      setShowLoadingPage(false); 
+    }
 
     setTimeout( () => {
       setLoading(false);
