@@ -115,3 +115,12 @@ export type OntologySuggestionData = {
     tracker?: string,
     ontologyFile?: string
 }
+
+
+export type OntologyShapeTestResult = {
+    error: Array<{
+        text: string,
+        about: string
+    }>,
+    info: Array<string>
+}

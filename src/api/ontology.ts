@@ -1,6 +1,7 @@
 import { getCallSetting, size } from "./constants";
 import { getPageCount } from "./helper";
-import { OntologyData, OntologyTermData } from "./types/ontologyTypes";
+import { OntologyData, OntologyTermData, OntologyShapeTestResult } from "./types/ontologyTypes";
+import { getTsPluginHeaders } from "./header";
 
 
 
@@ -166,7 +167,24 @@ class OntologyApi{
       return true;
     }    
   }
-
 }
+
+
+export async function runShapeTest(ontologyPurl:string): Promise<OntologyShapeTestResult|boolean>{
+  try{
+    let headers = getTsPluginHeaders({withAccessToken:true, isJson:false});         
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/testshape?purl=' + ontologyPurl;
+    let result = await fetch(url, {method:'GET', headers:headers});
+    if (result.status !== 200){
+      return false;
+    }
+    let data = await result.json();
+    return data['_result']['response'];
+  }
+  catch(e){
+    return false;
+  }
+}
+
 
 export default OntologyApi;

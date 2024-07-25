@@ -5,49 +5,36 @@ import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
 import { submitOntologySuggestion } from "../../../api/user";
+import { runShapeTest } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
-import { jsPDF } from "jspdf";
+
+
+const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
+const ONTOLOGY_MAIN_METADATA_SETP = 1;
+const ONTOLOGY_EXTRA_METADATA_STEP = 2;
+const USER_FORM_STEP = 3;
+const PROGRESS_BAR_INCREMENT_PERCENTAGE = 20;
 
 
 
-
-const OntologySuggestion = (props) => {
+const OntologySuggestion = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
     const [submitWait, setSubmitWait] = useState(false);
-    const [editorState, setEditorState] = useState(null);
-    const [randomNum1, setRandomNum1] = useState(Toolkit.getRandomInt(0, 11));
-    const [randomNum2, setRandomNum2] = useState(Toolkit.getRandomInt(0, 11));
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [withUpload, setWithUpload] = useState(false);
-    const [progressStep, setProgressStep] = useState(0);
+    const [runningTest, setRunningTest] = useState(false);
+    const [testFailed, setTestFailed] = useState(false);  
+    const [editorState, setEditorState] = useState(null);    
+    const [progressStep, setProgressStep] = useState(ONTOLOGY_SUGGESTION_INTRO_STEP);
     const [progressBarValue, setProgressBarValue] = useState(1);
     const [shapeValidationError, setShapeValidationError] = useState({"error": [], "info": []});
     const [form, setForm] = useState({
         "username": "",
         "email": "",
-        "reason": "",
-        "safeQuestion": "",
-        "safeAnswer": "",
+        "reason": "",        
         "name": "",
-        "purl": "",
-        "preferredPrefix": "",
-        "uri": "",
-        "licenseUrl": "",
-        "licenseLabel": "",
-        "title": "",
-        "description": "",
-        "creator": "",
-        "homepage": "",
-        "tracker": "",
-        "ontologyFile": ""
+        "purl": ""        
     });
-
-
-    function handleFileChange(event){
-        setSelectedFile(event.target.files[0]);
-    };
 
 
     function onTextEditorChange (newEditorState){
@@ -56,42 +43,56 @@ const OntologySuggestion = (props) => {
     };
 
 
-    function onNextClick(){
-        if (progressStep === 1){
-            let username = FormLib.getFieldByIdIfValid('onto-suggest-username');
-            let email = FormLib.getFieldByIdIfValid('onto-suggest-email');
-            if (!username || !email){
-                return;
-            }
-        }
-        if (progressStep === 2){
+    async function onNextClick(){
+        if(progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP){
+            setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
+            setProgressStep(ONTOLOGY_MAIN_METADATA_SETP);
+        }else if (progressStep === ONTOLOGY_MAIN_METADATA_SETP){
+            setRunningTest(true);
             let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
             let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
-            let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
-            if (!name || !purl || !reason){
+            if (!name || !purl){
                 return;
             }
-            let formData = form;
-            reason = editorState.getCurrentContent();        
-            reason = draftToMarkdown(convertToRaw(reason));
-            formData.reason = reason;
-            setForm(formData);
+            let validationResult = await runShapeTest(purl);
+            if (!validationResult){
+                setTestFailed(true);
+                setRunningTest(false);
+                return;
+            }
+            if (validationResult.error.length === 0){
+                setShapeValidationError({"error":[], "info":[]});                
+                setProgressBarValue(progressBarValue + 2*PROGRESS_BAR_INCREMENT_PERCENTAGE);
+                setProgressStep(USER_FORM_STEP);
+                setRunningTest(false);
+                return;
+            }
+            setShapeValidationError(validationResult);
+            setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
+            setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);
+            setRunningTest(false);
+        }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){            
+            setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
+            setProgressStep(USER_FORM_STEP);            
         }       
-        
-        let nextStep = progressStep + 1;
-        setProgressBarValue(progressBarValue + 20);
-        setProgressStep(nextStep);
     }
 
 
 
     function submit(){
         setSubmitWait(true);
-        let safeQ = FormLib.getFieldByIdIfValid('onto-suggest-safe-q');
-        if (!safeQ){
+        let username = FormLib.getFieldByIdIfValid('onto-suggest-username');
+        let email = FormLib.getFieldByIdIfValid('onto-suggest-email');
+        let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
+        if (!username || !email || !reason){
             return;
-        }
-        submitOntologySuggestion(form).then((result) => {
+        }          
+        let formData = form;
+        reason = editorState.getCurrentContent();        
+        reason = draftToMarkdown(convertToRaw(reason));
+        formData.reason = reason;
+
+        submitOntologySuggestion(formData).then((result) => {
             if (result === true){
                 setFormSubmitted(true);
                 setFormSubmitSuccess(true);
@@ -112,64 +113,8 @@ const OntologySuggestion = (props) => {
     }
 
 
-
-    function exportReportAsPdf() {
-        let doc = new jsPDF('p', 'pt', 'a4');        
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 20;
-        const lineHeight = 20;
-        const contentWidth = pageWidth - (margin * 2);
-    
-        doc.setFont("times", "bold");
-        doc.text("Shape test result", pageWidth / 2, 80, { align: 'center' });
-    
-        let currentY = 100; 
-            
-        function insertTextToPdf(text, index, type) {
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
-            let currentTextPosition = margin;
-            const lines = doc.splitTextToSize(`[${index + 1}, ${type}] ${text}`, contentWidth);            
-            lines.forEach(line => {                
-                if (currentY + lineHeight > pageHeight) {
-                    doc.addPage();
-                    currentY = margin;
-                }
-        
-                let startIndex = 0;
-                let match;
-                                                
-                while ((match = urlRegex.exec(line)) !== null) {
-                    const url = match[0];                    
-                    const urlIndex = line.indexOf(url, startIndex);
-                           
-                    const textBeforeUrl = line.substring(startIndex, urlIndex);
-                    doc.text(textBeforeUrl, currentTextPosition, currentY);
-                    currentTextPosition += doc.getStringUnitWidth(textBeforeUrl) * doc.internal.getFontSize();
-                
-                    doc.setTextColor(0, 0, 255); 
-                    doc.textWithLink(url, currentTextPosition, currentY, { url: url });
-                    currentTextPosition += doc.getStringUnitWidth(url) * doc.internal.getFontSize();
-                    doc.setTextColor(0); 
-        
-                    startIndex = urlIndex + url.length;
-                }
-                        
-                if (startIndex < line.length) {
-                    const remainingText = line.substring(startIndex);
-                    doc.text(remainingText, currentTextPosition, currentY);
-                }
-        
-                currentY += lineHeight;
-                currentTextPosition = margin;
-            });
-        }
-            
-        doc.setFont("times", "normal");
-        shapeValidationError.error.map((e, index) => insertTextToPdf(e, index, "Error"));
-        shapeValidationError.info.map((i, index) => insertTextToPdf(i, index, "Info"));
-            
-        doc.save("shape-test-result.pdf");
+    function noErrorsAndLoading(){
+        return !formSubmitted && !submitWait && !runningTest && !testFailed;
     }
 
 
@@ -178,8 +123,12 @@ const OntologySuggestion = (props) => {
         editorState: editorState,
         form: form,
         setForm: setForm,
-        onTextEditorChange: onTextEditorChange
+        onTextEditorChange: onTextEditorChange,
+        validationResult: shapeValidationError
     }
+
+    const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
+    const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
 
     return (
         <OntologySuggestionContext.Provider value={contextData}>
@@ -189,18 +138,8 @@ const OntologySuggestion = (props) => {
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" style={{width: progressBarValue + "%"}} aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>            
-                <br></br>                
-                {submitWait &&
-                    <div className="row">
-                        <div className="col-12 text-center">                
-                            <div class="spinner-border text-dark" role="status">
-                                <span class="visually-hidden"></span>                            
-                            </div>
-                            <div className="">Checking ontology shape ...</div>
-                        </div>
-                    </div>
-                }
-                {formSubmitted && formSubmitSuccess && !submitWait &&
+                <br></br>                                
+                {submitedSeccessfully &&
                     <>
                     <AlertBox
                         type="success"
@@ -208,7 +147,7 @@ const OntologySuggestion = (props) => {
                     />                    
                     </>
                 }
-                {formSubmitted && !formSubmitSuccess && !submitWait && shapeValidationError.error.length === 0 &&
+                {submitedFailed &&
                     <>
                     <AlertBox
                         type="danger"
@@ -216,100 +155,64 @@ const OntologySuggestion = (props) => {
                     />                    
                     </>
                 }
-                {shapeValidationError.error.length > 0 && !submitWait &&
+                {submitWait &&
+                    <div className="row">
+                        <div className="col-12 text-center">                
+                            <div class="spinner-border text-dark" role="status">
+                                <span class="visually-hidden"></span>                            
+                            </div>
+                            <div className="">Please wait ...</div>
+                        </div>
+                    </div>
+                }   
+                {runningTest &&
+                    <div className="row">
+                        <div className="col-12 text-center">                
+                            <div class="spinner-border text-dark" role="status">
+                                <span class="visually-hidden"></span>                            
+                            </div>
+                            <div className="">Testing the ontology shape ...</div>
+                        </div>
+                    </div>
+                }             
+                {testFailed &&
                     <>
                     <AlertBox
                         type="danger"
-                        message="Sorry! Your ontology shape is not valid."
-                    />
-                    <br></br>
-                    {/* <button type="button" class="btn btn-sm btn-secondary float-right" onClick={exportReportAsPdf}>Export report as PDF</button>
-                    <br></br> */}
-                    <h5><b>Issues found</b></h5>
-                    <br></br>                                        
-                    {shapeValidationError.error.map((e) =>{
-                        let errorContent = Toolkit.transformLinksInStringToAnchor(e);
-                        return (<><div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div><br></br></>)
-                    })
-                    }
-                    <br></br>
-                    <h5><b>Warnings. These are Not preventing the validation but would be nice to address them.</b></h5>
-                    {shapeValidationError.info.map((i) =>{
-                        let infoContent = Toolkit.transformLinksInStringToAnchor(i);
-                        return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
-                    })
-                    }
+                        message="Sorry! We cannot test this ontology's shape. Please try again later."
+                    />                    
                     </>
                 }
                 {formSubmitted && !submitWait &&
                     <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
                 }
-                {progressStep === 0 && !formSubmitted && !submitWait &&
-                    <>
-                    <p>Before starting, please make sure you prepaired these information:</p>
-                    <ul>
-                        <li>Your name and email</li>
-                        <li>Ontology name and PURL</li>
-                        <li>Reason for suggesting the ontology (short text)</li>
-                    </ul>
-                    <br></br>
-                    <p>
-                        <b>Attention</b>
-                        <br></br>
-                        Your ontology shape gets evaluated based on: 
-                        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1">
-                            https://www.purl.org/ontologymetadata/shape/20240502
-                        </a>                    
-                    </p>
-                    <p>Click next to start</p>
-                    </>
+                {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
+                    <Intro />
                 }
-                {progressStep === 1 && !formSubmitted && !submitWait &&
-                    <UserForm />     
+                {progressStep === ONTOLOGY_MAIN_METADATA_SETP && noErrorsAndLoading() &&
+                    <OntologyMainMetaDataForm />                    
                 }
-                {progressStep === 2 && !formSubmitted && !submitWait &&
-                    <OntologyMainMetaDataForm />
-                }                
-                {progressStep === 3 && !formSubmitted && !submitWait &&
+                {progressStep === ONTOLOGY_EXTRA_METADATA_STEP && noErrorsAndLoading() &&
                     <OntologyExtraMetadataForm />
                 }
-                {progressStep === 4 && !formSubmitted && !submitWait &&
-                    <>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <label className="required_input" for="onto-suggest-safe-q">What is {randomNum1 + " + " + randomNum2}</label>
-                            <input 
-                                type="text"                             
-                                onChange={(e) => {
-                                    e.target.style.borderColor = '';
-                                    let formData = form;
-                                    formData.safeAnswer = e.target.value;
-                                    formData.safeQuestion = `${randomNum1}+${randomNum2}`;
-                                    setForm(formData);
-                                }}
-                                class="form-control" 
-                                id="onto-suggest-safe-q">
-                            </input>
-                        </div>
-                    </div>        
-                    <br></br>                    
-                    </>
+                {progressStep === USER_FORM_STEP && noErrorsAndLoading() &&
+                    <UserForm />
                 }    
                 <br></br>            
-                {progressStep !== 0 && !formSubmitted && !submitWait &&
+                {progressStep !== ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
                     <button type="button" class="btn btn-secondary mr-3" onClick={() => {
                         let nextStep = progressStep - 1;
-                        setProgressBarValue(progressBarValue - 20);
+                        setProgressBarValue(progressBarValue - PROGRESS_BAR_INCREMENT_PERCENTAGE);
                         setProgressStep(nextStep)
                         }}
                         >
                         Previous
                     </button>
                 }
-                {progressStep === 4 && !formSubmitted && !submitWait &&
+                {progressStep === USER_FORM_STEP && noErrorsAndLoading() &&
                     <button type="button" class="btn btn-secondary" onClick={submit}>Submit</button>
                 }
-                {progressStep !== 4 && !formSubmitted && !submitWait &&
+                {progressStep !== USER_FORM_STEP && noErrorsAndLoading() &&
                     <>                                        
                     <button type="button" class="btn btn-secondary" onClick={onNextClick}
                         >
@@ -325,21 +228,90 @@ const OntologySuggestion = (props) => {
 
 
 
+const OntologyExtraMetadataForm = () => {
+    const componentContext = useContext(OntologySuggestionContext);
+
+    function renderErrosWithTheirInputFields(){
+        let result = [];
+        for (let error of componentContext.validationResult.error){
+            let errorContent = Toolkit.transformLinksInStringToAnchor(error['text']);
+            result.push(
+                <>
+                <div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div>                
+                <label className="required_input" for={"missing-metadata-" + error['about']}>{error['about']}</label>
+                <input 
+                    type="text"
+                    onChange={(e) => {
+                        e.target.style.borderColor = '';
+                        // let form = componentContext.form;
+                        // form.username = e.target.value;
+                        // componentContext.setForm(form);
+                    }}                                                         
+                    class="form-control" 
+                    id={"missing-metadata-" + error['about']}
+                    // defaultValue={componentContext.form.username}
+                    >
+                </input>
+                <br></br>
+                <br></br>
+                </>
+            );
+        }
+        return result;
+    }
+    
+
+
+    return (
+        <>                          
+        <h5><b>Missing metadata</b></h5>
+        <p>
+            The following metadata are missing from the ontology. Please consider adding them.
+        </p>
+        <br></br>                                        
+        {renderErrosWithTheirInputFields()}
+        <br></br>
+        <h5><b>Warnings (no action needed)</b></h5>
+        {componentContext.validationResult.info.map((i) =>{
+            let infoContent = Toolkit.transformLinksInStringToAnchor(i);
+            return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
+        })
+        }
+        </>
+    );
+}
+
+
+
+const Intro = () => {
+    return(
+        <>
+        <p>Before starting, please make sure you prepaired these information:</p>
+        <ul>
+            <li>Your name and email</li>
+            <li>Ontology name and PURL</li>
+            <li>Reason for suggesting the ontology (short text)</li>
+        </ul>
+        <br></br>
+        <p>
+            <b>Attention</b>
+            <br></br>
+            Your ontology shape gets evaluated based on: 
+            <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1">
+                https://www.purl.org/ontologymetadata/shape/20240502
+            </a>                    
+        </p>
+        <p>Click next to start</p>
+        </>
+    );
+}
+
+
 
 const UserForm = () => {    
     const componentContext = useContext(OntologySuggestionContext);
     return (
-        <>
-            {/* <div className="row">
-                <div className="col-sm-8">
-                    <label className="custom-file-upload" for="onto-suggest-file">
-                    <i className="fa fa-upload"></i>
-                    ontology config YAML
-                    </label>
-                    <input type="file" id="onto-suggest-file" onChange={handleFileChange} />  
-                </div>
-            </div>
-            <br></br>                                       */}
+        <>        
             <div className="row">
                 <div className="col-sm-8">
                     <label className="required_input" for="onto-suggest-username">Your name</label>
@@ -377,6 +349,21 @@ const UserForm = () => {
                         defaultValue={componentContext.form.email}
                         >
                     </input>
+                </div>
+            </div>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label className="required_input">Reason</label>
+                    <TextEditor 
+                        editorState={componentContext.editorState} 
+                        textChangeHandlerFunction={componentContext.onTextEditorChange}
+                        wrapperClassName=""
+                        editorClassName=""
+                        placeholder="Please briefly describe the ontology and its purpose and why it should get indexed in TIB TS."
+                        textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
+                        wrapperId="contact-form-text-editor"
+                    />  
                 </div>
             </div>
         </>
@@ -427,211 +414,199 @@ const OntologyMainMetaDataForm = () => {
                     >
                 </input>
             </div>
-        </div>
-        <br></br>
-        <div className="row">
-            <div className="col-sm-8">
-                <label className="required_input">Reason</label>
-                <TextEditor 
-                    editorState={componentContext.editorState} 
-                    textChangeHandlerFunction={componentContext.onTextEditorChange}
-                    wrapperClassName=""
-                    editorClassName=""
-                    placeholder="Please briefly describe the ontology and its purpose."
-                    textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
-                    wrapperId="contact-form-text-editor"
-                />  
-            </div>
-        </div>
+        </div>                
         </>
     );
 }   
 
 
 
-const OntologyExtraMetadataForm = () => {
-    const componentContext = useContext(OntologySuggestionContext);
 
-    return (
-        <>
-            <p>
-                These fields are not mandatory and can be skipped. 
-                However, providing these information will help us to evaluate your ontology better.
-            </p>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-pprefix"
-                        placeholder="Enter the ontology's preferred prefix"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.preferredPrefix = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.preferredPrefix}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-uri">Ontology URI</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-uri"
-                        placeholder="Enter the ontology's URI"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.uri = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.uri}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-licenseUrl">Ontology License URL</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-licenseUrl"
-                        placeholder="Enter the ontology's License URL"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.licenseUrl = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.licenseUrl}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-licenseName">Ontology License Name</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-licenseName"
-                        placeholder="Enter the ontology's License Label"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.licenseLabel = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.licenseLabel}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-title">Ontology title</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-title"
-                        placeholder="Enter the ontology's title"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.title = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.title}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-discription">Ontology Description</label>
-                    <textarea 
-                        rows={5}
-                        cols={20}                         
-                        class="form-control" 
-                        id="onto-suggest-discription"
-                        placeholder="Enter the ontology's description"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.description = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.description}
-                        >
-                    </textarea>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-creators">Ontology Creators (comma separated)</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-creators"
-                        placeholder="Name1,Name2,..."
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.creator = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.creator}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-homepage">Ontology HomePage URL</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-homepage"
-                        placeholder="Enter the ontology's homepage URL"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.homepage = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.homepage}
-                        >
-                    </input>
-                </div>
-            </div>
-            <br></br>
-            <div className="row">
-                <div className="col-sm-8">
-                    <label for="onto-suggest-tracker">Ontology issue tracker URL (Example: GitHub issues list)</label>
-                    <input 
-                        type="text"                                
-                        class="form-control" 
-                        id="onto-suggest-tracker"
-                        placeholder="Enter the ontology's issue tracker URL"
-                        onChange={(e) => {                            
-                            let form = componentContext.form;
-                            form.tracker = e.target.value;
-                            componentContext.setForm(form);
-                        }}
-                        defaultValue={componentContext.form.tracker}
-                        >
-                    </input>
-                </div>
-            </div>
-        </>
-    );
-}
+
+
+// const OntologyExtraMetadataForm = () => {
+//     const componentContext = useContext(OntologySuggestionContext);
+
+//     return (
+//         <>
+//             <p>
+//                 These fields are not mandatory and can be skipped. 
+//                 However, providing these information will help us to evaluate your ontology better.
+//             </p>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-pprefix"
+//                         placeholder="Enter the ontology's preferred prefix"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.preferredPrefix = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.preferredPrefix}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-uri">Ontology URI</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-uri"
+//                         placeholder="Enter the ontology's URI"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.uri = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.uri}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-licenseUrl">Ontology License URL</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-licenseUrl"
+//                         placeholder="Enter the ontology's License URL"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.licenseUrl = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.licenseUrl}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-licenseName">Ontology License Name</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-licenseName"
+//                         placeholder="Enter the ontology's License Label"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.licenseLabel = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.licenseLabel}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-title">Ontology title</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-title"
+//                         placeholder="Enter the ontology's title"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.title = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.title}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-discription">Ontology Description</label>
+//                     <textarea 
+//                         rows={5}
+//                         cols={20}                         
+//                         class="form-control" 
+//                         id="onto-suggest-discription"
+//                         placeholder="Enter the ontology's description"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.description = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.description}
+//                         >
+//                     </textarea>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-creators">Ontology Creators (comma separated)</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-creators"
+//                         placeholder="Name1,Name2,..."
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.creator = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.creator}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-homepage">Ontology HomePage URL</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-homepage"
+//                         placeholder="Enter the ontology's homepage URL"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.homepage = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.homepage}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//             <br></br>
+//             <div className="row">
+//                 <div className="col-sm-8">
+//                     <label for="onto-suggest-tracker">Ontology issue tracker URL (Example: GitHub issues list)</label>
+//                     <input 
+//                         type="text"                                
+//                         class="form-control" 
+//                         id="onto-suggest-tracker"
+//                         placeholder="Enter the ontology's issue tracker URL"
+//                         onChange={(e) => {                            
+//                             let form = componentContext.form;
+//                             form.tracker = e.target.value;
+//                             componentContext.setForm(form);
+//                         }}
+//                         defaultValue={componentContext.form.tracker}
+//                         >
+//                     </input>
+//                 </div>
+//             </div>
+//         </>
+//     );
+// }
 
 
 

@@ -5,24 +5,14 @@ const blueprint = {
     form: {
         "username": "",
         "email": "",
-        "reason": "",
-        "safeQestion": "",
-        "safeAnswer": "",
+        "reason": "",        
         "name": "",
-        "purl": "",
-        "preferredPrefix": "",
-        "uri": "",
-        "licenseUrl": "",
-        "licenseLabel": "",
-        "title": "",
-        "description": "",
-        "creator": "",
-        "homepage": "",
-        "tracker": "",
+        "purl": "",        
         "ontologyFile": ""
     },
     setForm: () => {},
     onTextEditorChange: () => {},
+    validationResults: {"error": [], "info": []},
 }
 
 
