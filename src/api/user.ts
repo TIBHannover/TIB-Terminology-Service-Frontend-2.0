@@ -5,7 +5,7 @@ import { LoginResponse
  } from "./types/userTypes";
  import { TsPluginHeader } from "./types/headerTypes";
  import { getTsPluginHeaders } from "./header";
- import { OntologySuggestionData } from "./types/ontologyTypes";
+
 
 
 
@@ -139,33 +139,6 @@ export async function deleteSearchSetting(settingId:string|number):Promise<boole
         if(result){
             return true;        
         }        
-        return false;
-    }
-    catch(e){
-        return false;
-    }
-}
-
-
-
-export async function submitOntologySuggestion(formData: OntologySuggestionData): Promise<boolean>{
-    try{
-        let form = new FormData();
-        let formDataAny = formData as any;
-        for(let key in formDataAny){
-            form.append(key, formDataAny[key]);
-        }
-        let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});                      
-        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create';
-        let result:any = await fetch(url, {method:'POST', headers:headers, body:form});
-        if (result.status === 200){
-            result = await result.json();
-            result = result['_result'];
-            if(result['response'] && !result['response']['error']){
-                return true;
-            }                        
-            return result['response'];
-        }
         return false;
     }
     catch(e){

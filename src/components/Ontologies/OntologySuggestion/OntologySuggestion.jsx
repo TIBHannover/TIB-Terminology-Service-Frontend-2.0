@@ -4,8 +4,7 @@ import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
-import { submitOntologySuggestion } from "../../../api/user";
-import { runShapeTest } from "../../../api/ontology";
+import { runShapeTest, submitOntologySuggestion } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
 
@@ -14,7 +13,7 @@ const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
 const ONTOLOGY_MAIN_METADATA_SETP = 1;
 const ONTOLOGY_EXTRA_METADATA_STEP = 2;
 const USER_FORM_STEP = 3;
-const PROGRESS_BAR_INCREMENT_PERCENTAGE = 20;
+const PROGRESS_BAR_INCREMENT_PERCENTAGE = 25;
 
 
 
@@ -71,7 +70,19 @@ const OntologySuggestion = () => {
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);
             setRunningTest(false);
-        }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){            
+        }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){    
+            let valid = true;
+            for(let error of shapeValidationError.error){
+                let inputField = document.getElementById("missing-metadata-" + error['about']);
+                if (inputField && inputField.value === ""){
+                    inputField.style.borderColor = 'red';
+                    valid = false;
+                }
+            }
+            if (!valid){
+                return;
+            }
+            
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(USER_FORM_STEP);            
         }       
@@ -79,36 +90,24 @@ const OntologySuggestion = () => {
 
 
 
-    function submit(){
-        setSubmitWait(true);
+    function submit(){       
         let username = FormLib.getFieldByIdIfValid('onto-suggest-username');
         let email = FormLib.getFieldByIdIfValid('onto-suggest-email');
         let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
         if (!username || !email || !reason){
             return;
-        }          
+        }
+        setSubmitWait(true);          
         let formData = form;
         reason = editorState.getCurrentContent();        
         reason = draftToMarkdown(convertToRaw(reason));
         formData.reason = reason;
 
-        submitOntologySuggestion(formData).then((result) => {
-            if (result === true){
-                setFormSubmitted(true);
-                setFormSubmitSuccess(true);
-                setShapeValidationError({"error":[], "info":[]});
-                setSubmitWait(false);
-            } else if (result === false){
-                setFormSubmitted(true);
-                setFormSubmitSuccess(false);
-                setShapeValidationError({"error":[], "info":[]});
-                setSubmitWait(false);
-            }else{
-                setFormSubmitted(true);
-                setFormSubmitSuccess(false);                
-                setSubmitWait(false);                             
-                setShapeValidationError(result);
-            }
+        submitOntologySuggestion(formData).then((result) => {            
+            setFormSubmitSuccess(result);                
+            setFormSubmitted(true);
+            setSubmitWait(false);
+            setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
         });
     }
 
@@ -229,6 +228,7 @@ const OntologySuggestion = () => {
 
 
 const OntologyExtraMetadataForm = () => {
+    const [infoIsExpanded, setInfoIsExpanded] = useState(false);
     const componentContext = useContext(OntologySuggestionContext);
 
     function renderErrosWithTheirInputFields(){
@@ -243,13 +243,13 @@ const OntologyExtraMetadataForm = () => {
                     type="text"
                     onChange={(e) => {
                         e.target.style.borderColor = '';
-                        // let form = componentContext.form;
-                        // form.username = e.target.value;
-                        // componentContext.setForm(form);
+                        let form = componentContext.form;
+                        form[error['about']] = e.target.value;
+                        componentContext.setForm(form);                        
                     }}                                                         
                     class="form-control" 
                     id={"missing-metadata-" + error['about']}
-                    // defaultValue={componentContext.form.username}
+                    defaultValue={componentContext.form[error['about']]}
                     >
                 </input>
                 <br></br>
@@ -258,6 +258,14 @@ const OntologyExtraMetadataForm = () => {
             );
         }
         return result;
+    }
+
+
+    function renderInfo(){
+        return componentContext.validationResult.info.map((i) =>{
+            let infoContent = Toolkit.transformLinksInStringToAnchor(i);
+            return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
+        });
     }
     
 
@@ -271,12 +279,17 @@ const OntologyExtraMetadataForm = () => {
         <br></br>                                        
         {renderErrosWithTheirInputFields()}
         <br></br>
-        <h5><b>Warnings (no action needed)</b></h5>
-        {componentContext.validationResult.info.map((i) =>{
-            let infoContent = Toolkit.transformLinksInStringToAnchor(i);
-            return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
-        })
+        <button type="button" class="btn btn-sm btn-secondary mb-2" onClick={() => setInfoIsExpanded(!infoIsExpanded)}>
+            {!infoIsExpanded && <><i className="fa fa-angle-double-down fa-borderless fs-6"></i>More</>}
+            {infoIsExpanded && <><i className="fa fa-angle-double-up fa-borderless fs-6"></i>Less</>}            
+        </button>        
+        {infoIsExpanded &&
+            <>
+            <h5><b>Warnings (no action needed)</b></h5>
+            {renderInfo()}
+            </>
         }
+        <hr></hr>
         </>
     );
 }
@@ -418,198 +431,6 @@ const OntologyMainMetaDataForm = () => {
         </>
     );
 }   
-
-
-
-
-
-
-// const OntologyExtraMetadataForm = () => {
-//     const componentContext = useContext(OntologySuggestionContext);
-
-//     return (
-//         <>
-//             <p>
-//                 These fields are not mandatory and can be skipped. 
-//                 However, providing these information will help us to evaluate your ontology better.
-//             </p>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-pprefix">Ontology preferred prefix</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-pprefix"
-//                         placeholder="Enter the ontology's preferred prefix"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.preferredPrefix = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.preferredPrefix}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-uri">Ontology URI</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-uri"
-//                         placeholder="Enter the ontology's URI"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.uri = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.uri}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-licenseUrl">Ontology License URL</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-licenseUrl"
-//                         placeholder="Enter the ontology's License URL"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.licenseUrl = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.licenseUrl}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-licenseName">Ontology License Name</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-licenseName"
-//                         placeholder="Enter the ontology's License Label"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.licenseLabel = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.licenseLabel}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-title">Ontology title</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-title"
-//                         placeholder="Enter the ontology's title"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.title = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.title}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-discription">Ontology Description</label>
-//                     <textarea 
-//                         rows={5}
-//                         cols={20}                         
-//                         class="form-control" 
-//                         id="onto-suggest-discription"
-//                         placeholder="Enter the ontology's description"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.description = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.description}
-//                         >
-//                     </textarea>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-creators">Ontology Creators (comma separated)</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-creators"
-//                         placeholder="Name1,Name2,..."
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.creator = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.creator}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-homepage">Ontology HomePage URL</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-homepage"
-//                         placeholder="Enter the ontology's homepage URL"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.homepage = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.homepage}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//             <br></br>
-//             <div className="row">
-//                 <div className="col-sm-8">
-//                     <label for="onto-suggest-tracker">Ontology issue tracker URL (Example: GitHub issues list)</label>
-//                     <input 
-//                         type="text"                                
-//                         class="form-control" 
-//                         id="onto-suggest-tracker"
-//                         placeholder="Enter the ontology's issue tracker URL"
-//                         onChange={(e) => {                            
-//                             let form = componentContext.form;
-//                             form.tracker = e.target.value;
-//                             componentContext.setForm(form);
-//                         }}
-//                         defaultValue={componentContext.form.tracker}
-//                         >
-//                     </input>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// }
-
-
-
 
 
 export default OntologySuggestion;

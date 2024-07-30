@@ -99,21 +99,11 @@ export type TermListData = {
 export type OntologySuggestionData = {
     username: string,
     email: string, 
-    reason: string,
-    safeQuestion: string,
-    safeAnswer: string,
+    reason: string,    
     name: string,
-    purl: string,
-    preferredPrefix?: string,
-    uri?: string,
-    description?: string,
-    homepage?: string,
-    licenseUrl?: string,
-    licenseLabel?: string,
-    title?: string,
-    creator?: string,
-    tracker?: string,
-    ontologyFile?: string
+    purl: string,    
+    ontologyFile?: string,
+    [key: string]: string|undefined
 }
 
 
