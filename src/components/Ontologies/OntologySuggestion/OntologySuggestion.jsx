@@ -165,7 +165,7 @@ const OntologySuggestion = () => {
                     <>
                     <AlertBox
                         type="success"
-                        message="Thank you! Your query has been submitted successfully."
+                        message="Thank you! Your query has been submitted successfully. We will inform you about our decision via email."
                     />                    
                     </>
                 }
@@ -205,7 +205,7 @@ const OntologySuggestion = () => {
                     />                    
                     </>
                 }
-                {(formSubmitted && !submitWait) || testFailed &&
+                {(submitedSeccessfully || testFailed ||  submitedFailed) && 
                     <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
                 }
                 {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
@@ -423,8 +423,21 @@ const OntologyMainMetaDataForm = () => {
         for(let collectionId of selectedList){
             collectionIds += collectionId + ",";
         }
+        collectionIds = collectionIds.slice(0, -1);
         form.collection_ids = collectionIds;
         componentContext.setForm(form);
+    }
+
+
+    function getSelectedCollections(){
+        let selectedCollections = [];
+        let spilitedList = componentContext.form.collection_ids.split(",");
+        for(let collection of spilitedList){
+            if (collection !== ""){
+                selectedCollections.push(collection);
+            }
+        }
+        return selectedCollections;
     }
 
 
@@ -476,7 +489,7 @@ const OntologyMainMetaDataForm = () => {
                 <Multiselect
                     isObject={false}
                     options={componentContext.collections}  
-                    selectedValues={componentContext.selectedCollections}                       
+                    selectedValues={getSelectedCollections()}
                     onSelect={onSelectRemoveCollection}
                     onRemove={onSelectRemoveCollection}                        
                     avoidHighlightFirstOption={true}                                        
