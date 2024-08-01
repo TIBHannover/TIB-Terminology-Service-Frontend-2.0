@@ -1,4 +1,4 @@
-import { useState , useContext} from "react";
+import { useState , useContext, useEffect} from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
@@ -7,6 +7,8 @@ import FormLib from "../../../Libs/FormLib";
 import { runShapeTest, submitOntologySuggestion } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
+import CollectionApi from "../../../api/collection";
+import Multiselect from 'multiselect-react-dropdown';
 
 
 const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
@@ -27,12 +29,16 @@ const OntologySuggestion = () => {
     const [progressStep, setProgressStep] = useState(ONTOLOGY_SUGGESTION_INTRO_STEP);
     const [progressBarValue, setProgressBarValue] = useState(1);
     const [shapeValidationError, setShapeValidationError] = useState({"error": [], "info": []});
+    const [shapeTestIsReady, setShapeTestIsReady] = useState(false);
+    const [collections, setCollections] = useState([]);
+    const [selectedCollections, setSelectedCollections] = useState([]);
     const [form, setForm] = useState({
         "username": "",
         "email": "",
         "reason": "",        
         "name": "",
-        "purl": ""        
+        "purl": "",
+        "collection_ids": ""
     });
 
 
@@ -46,42 +52,46 @@ const OntologySuggestion = () => {
         if(progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP){
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(ONTOLOGY_MAIN_METADATA_SETP);
-        }else if (progressStep === ONTOLOGY_MAIN_METADATA_SETP){
-            setRunningTest(true);
+        }else if (progressStep === ONTOLOGY_MAIN_METADATA_SETP){            
             let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
             let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
             if (!name || !purl){
                 return;
             }
-            let validationResult = await runShapeTest(purl);
-            if (!validationResult){
-                setTestFailed(true);
+            if(!shapeTestIsReady){
+                setRunningTest(true);
+                let validationResult = await runShapeTest(purl);
+                if (!validationResult){
+                    setTestFailed(true);
+                    setRunningTest(false);
+                    return;
+                }
+                if (validationResult.error.length === 0){
+                    setShapeValidationError({"error":[], "info":[]});                
+                    setProgressBarValue(progressBarValue + 2*PROGRESS_BAR_INCREMENT_PERCENTAGE);
+                    setProgressStep(USER_FORM_STEP);
+                    setRunningTest(false);
+                    setShapeTestIsReady(true);
+                    return;
+                }
+                setShapeValidationError(validationResult);                
                 setRunningTest(false);
-                return;
+                setShapeTestIsReady(true);
             }
-            if (validationResult.error.length === 0){
-                setShapeValidationError({"error":[], "info":[]});                
-                setProgressBarValue(progressBarValue + 2*PROGRESS_BAR_INCREMENT_PERCENTAGE);
-                setProgressStep(USER_FORM_STEP);
-                setRunningTest(false);
-                return;
-            }
-            setShapeValidationError(validationResult);
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);
-            setRunningTest(false);
         }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){    
-            let valid = true;
-            for(let error of shapeValidationError.error){
-                let inputField = document.getElementById("missing-metadata-" + error['about']);
-                if (inputField && inputField.value === ""){
-                    inputField.style.borderColor = 'red';
-                    valid = false;
-                }
-            }
-            if (!valid){
-                return;
-            }
+            // let valid = true;
+            // for(let error of shapeValidationError.error){
+            //     let inputField = document.getElementById("missing-metadata-" + error['about']);
+            //     if (inputField && inputField.value === ""){
+            //         inputField.style.borderColor = 'red';
+            //         valid = false;
+            //     }
+            // }
+            // if (!valid){
+            //     return;
+            // }
             
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(USER_FORM_STEP);            
@@ -117,13 +127,26 @@ const OntologySuggestion = () => {
     }
 
 
+    useEffect(async() => {
+        let collectionApi = new CollectionApi();
+        await collectionApi.fetchCollectionsWithStats();
+        let collections = [];
+        for (let colStats of collectionApi.collectionsList){
+            collections.push(colStats['collection']);
+        }
+        setCollections(collections);
+    },[]);
+
+
 
     const contextData = {
         editorState: editorState,
         form: form,
         setForm: setForm,
         onTextEditorChange: onTextEditorChange,
-        validationResult: shapeValidationError
+        validationResult: shapeValidationError,
+        collections: collections,
+        selectedCollections: selectedCollections,
     }
 
     const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
@@ -182,7 +205,7 @@ const OntologySuggestion = () => {
                     />                    
                     </>
                 }
-                {formSubmitted && !submitWait &&
+                {(formSubmitted && !submitWait) || testFailed &&
                     <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
                 }
                 {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
@@ -238,7 +261,7 @@ const OntologyExtraMetadataForm = () => {
             result.push(
                 <>
                 <div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div>                
-                <label className="required_input" for={"missing-metadata-" + error['about']}>{error['about']}</label>
+                <label for={"missing-metadata-" + error['about']}>{error['about']}</label>
                 <input 
                     type="text"
                     onChange={(e) => {
@@ -276,6 +299,10 @@ const OntologyExtraMetadataForm = () => {
         <p>
             The following metadata are missing from the ontology. Please consider adding them.
         </p>
+        <p>
+            <b>Attention</b> You can skip this step and submit the ontology without adding the missing metadata.
+            However, <b>the chance of your ontology getting indexed in TIB TS will be lower.</b>
+        </p>
         <br></br>                                        
         {renderErrosWithTheirInputFields()}
         <br></br>
@@ -309,7 +336,8 @@ const Intro = () => {
         <p>
             <b>Attention</b>
             <br></br>
-            Your ontology shape gets evaluated based on: 
+            The ontology you are suggesting will be validated against the following SHACL shape. This shape tests 
+            whether the ontology contains a rich set of metadata or not. <br></br>
             <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1">
                 https://www.purl.org/ontologymetadata/shape/20240502
             </a>                    
@@ -338,7 +366,7 @@ const UserForm = () => {
                         }}                                                         
                         class="form-control" 
                         id="onto-suggest-username"
-                        placeholder="Enter your fullname"  
+                        placeholder="Enter your fullname. E.g., John Doe"  
                         defaultValue={componentContext.form.username}                        
                         >
                     </input>
@@ -348,6 +376,7 @@ const UserForm = () => {
             <div className="row">
                 <div className="col-sm-8">
                     <label className="required_input" for="onto-suggest-email">Email</label>
+                    <small> (we use this email to inform you about our decision regarding indexing your ontology.)</small>
                     <input 
                         type="text"
                         onChange={(e) => {
@@ -374,7 +403,7 @@ const UserForm = () => {
                         wrapperClassName=""
                         editorClassName=""
                         placeholder="Please briefly describe the ontology and its purpose and why it should get indexed in TIB TS."
-                        textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
+                        textSizeOptions={['Normal']}
                         wrapperId="contact-form-text-editor"
                     />  
                 </div>
@@ -387,6 +416,18 @@ const UserForm = () => {
 
 const OntologyMainMetaDataForm = () => {
     const componentContext = useContext(OntologySuggestionContext);
+
+    function onSelectRemoveCollection(selectedList, selectedItem){
+        let form = componentContext.form;
+        let collectionIds = "";
+        for(let collectionId of selectedList){
+            collectionIds += collectionId + ",";
+        }
+        form.collection_ids = collectionIds;
+        componentContext.setForm(form);
+    }
+
+
     return(
         <>
         <div className="row">
@@ -426,6 +467,23 @@ const OntologyMainMetaDataForm = () => {
                     defaultValue={componentContext.form.purl}
                     >
                 </input>
+            </div>
+        </div>
+        <br></br>
+        <div className="row">
+            <div className="col-sm-8">
+                <label>Collection in TIB (optional)</label>
+                <Multiselect
+                    isObject={false}
+                    options={componentContext.collections}  
+                    selectedValues={componentContext.selectedCollections}                       
+                    onSelect={onSelectRemoveCollection}
+                    onRemove={onSelectRemoveCollection}                        
+                    avoidHighlightFirstOption={true}                                        
+                    closeIcon={"cancel"}
+                    id="onto-suggest-collection"
+                    placeholder="Click here to select collections"
+                />
             </div>
         </div>                
         </>

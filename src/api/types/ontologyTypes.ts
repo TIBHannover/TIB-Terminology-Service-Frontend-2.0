@@ -103,6 +103,7 @@ export type OntologySuggestionData = {
     name: string,
     purl: string,    
     ontologyFile?: string,
+    collection_ids?: string,
     [key: string]: string|undefined
 }
 
