@@ -1,5 +1,6 @@
 import { getCallSetting } from "./constants";
 import { OntologyData } from "./types/ontologyTypes";
+import { CollectionWithItsOntologyListData } from "./types/collectionTypes";
 
 
 
@@ -35,8 +36,8 @@ export async function fetchCollectionsWithStats():Promise<Array<object>>{
 }
 
 
-
-export async function fetchAllCollectionWithOntologyList():Promise<Array<object>> {
+/* react query key: allCollectionsWithTheirOntologies  */
+export async function fetchAllCollectionWithOntologyList():Promise<Array<CollectionWithItsOntologyListData>> {
   type CollectionIdsResponseType = {
       _embedded: {
           strings: Array<{
@@ -58,11 +59,12 @@ export async function fetchAllCollectionWithOntologyList():Promise<Array<object>
       let collectionOntologies = await fetchOntologyListForCollections([col['content']], false);
       let collectionOntologiesIds = [];
       for(let onto of collectionOntologies){
-        collectionOntologiesIds.push(onto['ontologyId'].toUpperCase())
+        let temp = {"ontologyId": onto['ontologyId'].toUpperCase(), "purl": onto['purl']};
+        collectionOntologiesIds.push(temp)
       }
-      let record = {"collection": col['content'], "ontolgies": collectionOntologiesIds};    
+      let record = {"collection": col['content'], "ontologies": collectionOntologiesIds};    
       result.push(record);
-    }
+    }    
     return result;    
   }
   catch(e){
@@ -96,14 +98,11 @@ export async function fetchOntologyListForCollections (collectionsIds:Array<stri
       }
       }
       targetUrl += urlPros;
-      let result = await fetch(targetUrl, getCallSetting);
-      if(!result.ok){
-          return Promise.reject(new Error(result.statusText));
-      }
+      let result = await fetch(targetUrl, getCallSetting);      
       let collectionOntologiesList:CollectionOntologiesResponseType = await result.json();      
       return collectionOntologiesList['_embedded']['ontologies'];        
   }
   catch(e){
-      return Promise.reject(e);
+      return [];
   }        
 }

@@ -1,32 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import '../layout/collectionList.css';
-import { fetchOntologyListForCollections } from '../../api/collection';
+import { fetchAllCollectionWithOntologyList } from '../../api/collection';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import Toolkit from '../../Libs/Toolkit';
 import CommonUrlFactory from '../../UrlFactory/CommonUrlFactory';
 
 
-const Collections = (props) => {
-    const [collectionOntologies, setCollectionOntologies] = useState([]);
+const Collections = () => {    
 
+    const collectionsWithOntologiesQuery = useQuery({
+        queryKey: ['allCollectionsWithTheirOntologies'],
+        queryFn: fetchAllCollectionWithOntologyList
+    });    
 
-    async function setComponentData(){        
-        let collectionOntologies = {};
-        for (let col in collectionsInfoJson){            
-            let ontologies = await fetchOntologyListForCollections([collectionsInfoJson[col]["id"]], false);            
-            collectionOntologies[col] = [];
-            for (let onto of ontologies){
-                collectionOntologies[col].push(
+    let collectionOntologiesData = {};
+    if(collectionsWithOntologiesQuery.data){
+        let collectionsWithTheirOntologies = collectionsWithOntologiesQuery.data;                         
+        for (let colData of collectionsWithTheirOntologies){
+            let collectionId = colData["collection"];
+            collectionOntologiesData[collectionId] = [];                                
+            for (let onto of colData["ontologies"]){
+                collectionOntologiesData[collectionId].push(
                     <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
                 );
-            }
-        }
-        setCollectionOntologies(collectionOntologies);        
+            }                
+        }        
     }
+    const collectionOntologies = collectionOntologiesData;          
 
 
-
-    function createCollectionCard(collectionId, collectionJson){
+    function createCollectionCard(collectionId, collectionJson){             
         let card = [
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
                 <div className='col-sm-3' key={collectionId + "_logo"}>                    
@@ -67,7 +71,7 @@ const Collections = (props) => {
                     </div> 
                     <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
-                            <b>Ontologies:</b>{collectionOntologies.length != 0 ? collectionOntologies[collectionId] : ""}
+                            <b>Ontologies:</b>{collectionOntologies[collectionId] || ""}
                         </div>
                     </div>           
                 </div>
@@ -80,7 +84,7 @@ const Collections = (props) => {
 
     function createCollectionList(){                
         let result = [];
-        for (let col in collectionsInfoJson){
+        for (let col in collectionsInfoJson){            
             result.push(createCollectionCard(col, collectionsInfoJson[col]));
         }
 
@@ -88,8 +92,7 @@ const Collections = (props) => {
     }
 
 
-    useEffect(() => {
-        setComponentData();
+    useEffect(() => {        
         let urlFactory = new CommonUrlFactory();        
         let targetCollectionId = urlFactory.getParam({name: "CollectionId"});        
         if(targetCollectionId){

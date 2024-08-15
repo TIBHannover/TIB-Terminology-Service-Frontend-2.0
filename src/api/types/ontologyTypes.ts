@@ -1,5 +1,6 @@
 export type OntologyData = {
     ontologyId: string,
+    purl?: string,
     loaded? : string,
     updated? : string,
     status? : string,
