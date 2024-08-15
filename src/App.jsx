@@ -38,7 +38,7 @@ const App = () => {
   
   const [showLoadingPage, setShowLoadingPage] = useState(true);
 
-  const olsIsUpQuery = useQuery({queryKey:['olsIsUpCall'], queryFn: olsIsUp});
+  const olsIsUpQuery = useQuery({queryKey:['olsIsUpCall'], queryFn: olsIsUp, meta:{cache: false}});
   if(olsIsUpQuery.isError){
     setIsBackendDown(true);
   }
