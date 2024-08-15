@@ -1,4 +1,4 @@
-import { useState , useContext, useEffect} from "react";
+import { useState , useContext} from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
@@ -7,7 +7,8 @@ import FormLib from "../../../Libs/FormLib";
 import { runShapeTest, submitOntologySuggestion } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
-import CollectionApi from "../../../api/collection";
+import { fetchCollectionsWithStats } from "../../../api/collection";
+import { useQuery } from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
 
 
@@ -30,7 +31,6 @@ const OntologySuggestion = () => {
     const [progressBarValue, setProgressBarValue] = useState(1);
     const [shapeValidationError, setShapeValidationError] = useState({"error": [], "info": []});
     const [shapeTestIsReady, setShapeTestIsReady] = useState(false);
-    const [collections, setCollections] = useState([]);
     const [selectedCollections, setSelectedCollections] = useState([]);
     const [form, setForm] = useState({
         "username": "",
@@ -41,6 +41,19 @@ const OntologySuggestion = () => {
         "collection_ids": ""
     });
 
+    const collectionWithStatsQuery = useQuery({
+        queryKey: ['allCollectionsWithTheirStats'],
+        queryFn: fetchCollectionsWithStats
+    });
+
+    let collectionIds = [];
+    if(collectionWithStatsQuery.data){
+        for(let collection of collectionWithStatsQuery.data){
+            collectionIds.push(collection['collection']);
+        }
+    }
+    const collections = collectionIds;
+
 
     function onTextEditorChange (newEditorState){
         document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
@@ -48,51 +61,53 @@ const OntologySuggestion = () => {
     };
 
 
+    async function runShapeTest(purl){
+        if(!shapeTestIsReady){
+            setRunningTest(true);
+            let validationResult = await runShapeTest(purl);
+            if (!validationResult){
+                setTestFailed(true);
+                setRunningTest(false);
+                return;
+            }
+            if (validationResult.error.length === 0){
+                setShapeValidationError({"error":[], "info":[]});                
+                setProgressBarValue(progressBarValue + 2*PROGRESS_BAR_INCREMENT_PERCENTAGE);
+                setProgressStep(USER_FORM_STEP);
+                setRunningTest(false);
+                setShapeTestIsReady(true);
+                return;
+            }
+            setShapeValidationError(validationResult);                
+            setRunningTest(false);
+            setShapeTestIsReady(true);
+        }
+    }
+
+
+    async function runOntologyMainMetaDataValidation(ontoPurl){       
+        // ToDo: Check if the ontology exists
+        await runShapeTest(ontoPurl);
+        return true;
+        
+    }
+
+
+
     async function onNextClick(){
         if(progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP){
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(ONTOLOGY_MAIN_METADATA_SETP);
-        }else if (progressStep === ONTOLOGY_MAIN_METADATA_SETP){            
+        }else if (progressStep === ONTOLOGY_MAIN_METADATA_SETP){  
             let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
             let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
             if (!name || !purl){
                 return;
-            }
-            if(!shapeTestIsReady){
-                setRunningTest(true);
-                let validationResult = await runShapeTest(purl);
-                if (!validationResult){
-                    setTestFailed(true);
-                    setRunningTest(false);
-                    return;
-                }
-                if (validationResult.error.length === 0){
-                    setShapeValidationError({"error":[], "info":[]});                
-                    setProgressBarValue(progressBarValue + 2*PROGRESS_BAR_INCREMENT_PERCENTAGE);
-                    setProgressStep(USER_FORM_STEP);
-                    setRunningTest(false);
-                    setShapeTestIsReady(true);
-                    return;
-                }
-                setShapeValidationError(validationResult);                
-                setRunningTest(false);
-                setShapeTestIsReady(true);
-            }
+            }          
+            await runOntologyMainMetaDataValidation(purl);
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);
-        }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){    
-            // let valid = true;
-            // for(let error of shapeValidationError.error){
-            //     let inputField = document.getElementById("missing-metadata-" + error['about']);
-            //     if (inputField && inputField.value === ""){
-            //         inputField.style.borderColor = 'red';
-            //         valid = false;
-            //     }
-            // }
-            // if (!valid){
-            //     return;
-            // }
-            
+        }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){             
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(USER_FORM_STEP);            
         }       
@@ -125,17 +140,6 @@ const OntologySuggestion = () => {
     function noErrorsAndLoading(){
         return !formSubmitted && !submitWait && !runningTest && !testFailed;
     }
-
-
-    useEffect(async() => {
-        let collectionApi = new CollectionApi();
-        await collectionApi.fetchCollectionsWithStats();
-        let collections = [];
-        for (let colStats of collectionApi.collectionsList){
-            collections.push(colStats['collection']);
-        }
-        setCollections(collections);
-    },[]);
 
 
 
