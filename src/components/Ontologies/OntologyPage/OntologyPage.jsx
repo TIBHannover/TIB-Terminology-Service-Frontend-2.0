@@ -53,7 +53,9 @@ const OntologyPage = (props) => {
   
   */
 
-  document.getElementById('application_content').style.width = '100%';  
+  if(document.getElementById('application_content')){
+    document.getElementById('application_content').style.width = '100%';  
+  }
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [ontology, setOntology] = useState(null);

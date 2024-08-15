@@ -4,6 +4,11 @@ import './index.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { defaultShouldDehydrateQuery } from '@tanstack/react-query'
 
 
  
@@ -22,12 +27,41 @@ const instance = createInstance({
   }
 )
 
+const aWeek = 1000 * 60 * 60 * 24 * 7;
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: aWeek,
+      staleTime: aWeek,
+    },
+  },
+});
+
+const localStoragePersister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
 
 
 ReactDOM.render(
   <React.StrictMode>
     <MatomoProvider value={instance}>
-       <App />
+      <PersistQueryClientProvider 
+        client={queryClient} 
+        persistOptions={{
+          persister:localStoragePersister,
+          dehydrateOptions:{
+            shouldDehydrateQuery: (query) => {
+              if (!query.meta){
+                return true;
+              }
+              return defaultShouldDehydrateQuery(query) && query.meta.cache !== false
+            }
+          }
+        }}
+        >
+        <App />
+        {process.env.REACT_APP_DEBUG_MODE === "true" && <ReactQueryDevtools initialIsOpen={false} />}
+      </PersistQueryClientProvider>
     </MatomoProvider>
   </React.StrictMode>,
   document.getElementById('root')
