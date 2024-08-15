@@ -3,7 +3,7 @@ import { OntologyData } from "./types/ontologyTypes";
 import { CollectionWithItsOntologyListData } from "./types/collectionTypes";
 
 
-
+/* react query key:  allCollectionsWithTheirStats   */
 export async function fetchCollectionsWithStats():Promise<Array<object>>{
   type CollectionStatsResponseType = {
       [key: string]: {
@@ -29,8 +29,7 @@ export async function fetchCollectionsWithStats():Promise<Array<object>>{
     }    
     return collections;
   }
-  catch(e){
-    // throw e
+  catch(e){    
     return Promise.reject(e);
   }
 }

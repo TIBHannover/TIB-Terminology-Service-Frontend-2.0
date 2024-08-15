@@ -8,6 +8,7 @@ import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 import { AppContext } from '../../../context/AppContext';
+import { useQuery } from '@tanstack/react-query';
 
 
 
@@ -31,10 +32,23 @@ const OntologyList = (props) => {
   const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);  
   const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);  
   const [sortField, setSortField] = useState(TITLE_SORT_KEY);
-  const [selectedCollections, setSelectedCollections] = useState([]);
-  const [allCollections, setAllCollections] = useState([]);  
+  const [selectedCollections, setSelectedCollections] = useState([]);  
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
+
+
+  let allCollectionsWithStatsQuery = useQuery({
+    queryKey: ['allCollectionsWithTheirStats'],
+    queryFn: fetchCollectionsWithStats,
+    
+  });
+  
+  let allCollectionWithStats = [];
+  if(process.env.REACT_APP_PROJECT_NAME === "" && allCollectionsWithStatsQuery.data){
+    // Only for TIB General
+    allCollectionWithStats = allCollectionsWithStatsQuery.data;
+  } 
+  const allCollections = allCollectionWithStats;
 
 
 
@@ -64,12 +78,6 @@ const OntologyList = (props) => {
     }
   }
 
-
-  async function setCollectionData(){    
-    let allCollections = [];              
-    allCollections =  await fetchCollectionsWithStats();
-    setAllCollections(allCollections);        
-  }
 
 
 
@@ -231,19 +239,13 @@ const OntologyList = (props) => {
       page: pageNumber,
       size: pageSize,
       andOpValue: exclusiveCollections
-    });
-    
-    // history.push(updatedUrl);    
+    });  
   }
 
 
 
   useEffect(() => {
-    setComponentData();
-    if(process.env.REACT_APP_PROJECT_NAME === ""){
-      // If TIB General, fetch all the collections. Otherwise not needed.
-      setCollectionData();
-    }    
+    setComponentData();       
     setStateBasedOnUrlParams();      
   }, []);
 
