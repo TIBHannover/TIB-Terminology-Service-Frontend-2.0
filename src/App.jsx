@@ -14,7 +14,7 @@ import { AppContext } from './context/AppContext';
 import { getReportList } from './api/tsMicroBackendCalls';
 import LoadingPage from './LoadingPage';
 import { olsIsUp } from './api/system';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -38,7 +38,7 @@ const App = () => {
   
   const [showLoadingPage, setShowLoadingPage] = useState(true);
 
-  const olsIsUpQuery = useQuery('olsIsUpCall', olsIsUp);
+  const olsIsUpQuery = useQuery({queryKey:['olsIsUpCall'], queryFn: olsIsUp});
   if(olsIsUpQuery.isError){
     setIsBackendDown(true);
   }
