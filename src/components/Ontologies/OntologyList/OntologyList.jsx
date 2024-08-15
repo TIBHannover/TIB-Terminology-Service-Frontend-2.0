@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import CollectionApi from '../../../api/collection';
+import { fetchCollectionsWithStats, fetchOntologyListForCollections } from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
@@ -65,11 +65,9 @@ const OntologyList = (props) => {
   }
 
 
-  async function setCollectionData(){
-    let collectionApi = new CollectionApi();
-    let allCollections = [];          
-    await collectionApi.fetchCollectionsWithStats();       
-    allCollections =  collectionApi.collectionsList;    
+  async function setCollectionData(){    
+    let allCollections = [];              
+    allCollections =  await fetchCollectionsWithStats();
     setAllCollections(allCollections);        
   }
 
@@ -195,8 +193,7 @@ const OntologyList = (props) => {
 
 
 
-  async function runFilter(){     
-    let collectionApi = new CollectionApi();
+  async function runFilter(){         
     let ontologiesList = [...unFilteredOntologies];
     let keywordOntologies = [];          
     if(keywordFilterString !== ""){                   
@@ -209,7 +206,7 @@ const OntologyList = (props) => {
       ontologiesList = keywordOntologies;    
     }
     if(selectedCollections.length !== 0){      
-      let collectionOntologies = await collectionApi.fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
+      let collectionOntologies = await fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
       let collectionFilteredOntologies = [];
       for (let onto of collectionOntologies){
         if(typeof(ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){

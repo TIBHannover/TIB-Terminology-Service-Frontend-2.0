@@ -7,7 +7,7 @@ import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import SearchLib from '../../../Libs/searchLib';
-import CollectionApi from '../../../api/collection';
+import { fetchAllCollectionWithOntologyList } from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
@@ -54,11 +54,10 @@ const SearchResult = (props) => {
 
 
   async function getAllCollectionIds(){
-    // Fetch all collection Ids for TIB General to show in the facet.
-    let collectionApi = new CollectionApi();
+    // Fetch all collection Ids for TIB General to show in the facet.    
     if(process.env.REACT_APP_PROJECT_ID === "general"){
-      await collectionApi.fetchAllCollectionWithOntologyList(false);
-      setAllCollectionIds(collectionApi.collectionsList);
+      let collectionIds = await fetchAllCollectionWithOntologyList(false);
+      setAllCollectionIds(collectionIds);
       return true;
     }
     return []; 

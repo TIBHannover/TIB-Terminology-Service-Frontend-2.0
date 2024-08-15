@@ -1,29 +1,19 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import '../layout/collectionList.css';
-import CollectionApi from '../../api/collection';
+import { fetchOntologyListForCollections } from '../../api/collection';
 import collectionsInfoJson from "../../assets/collectionsText.json";
-import queryString from 'query-string'; 
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Toolkit from '../../Libs/Toolkit';
+import CommonUrlFactory from '../../UrlFactory/CommonUrlFactory';
 
 
-class Collections extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = ({
-            collectionOntologies: [],
-        });
+const Collections = (props) => {
+    const [collectionOntologies, setCollectionOntologies] = useState([]);
 
-        this.setComponentData = this.setComponentData.bind(this);
-        this.createCollectionCard = this.createCollectionCard.bind(this);
-        this.createCollectionList = this.createCollectionList.bind(this);
-    }
 
-    
-    async setComponentData(){
-        let collectionApi = new CollectionApi();
+    async function setComponentData(){        
         let collectionOntologies = {};
         for (let col in collectionsInfoJson){            
-            let ontologies = await collectionApi.fetchOntologyListForCollections([collectionsInfoJson[col]["id"]], false);            
+            let ontologies = await fetchOntologyListForCollections([collectionsInfoJson[col]["id"]], false);            
             collectionOntologies[col] = [];
             for (let onto of ontologies){
                 collectionOntologies[col].push(
@@ -31,22 +21,12 @@ class Collections extends React.Component{
                 );
             }
         }
-        
-        this.setState({
-            collectionOntologies: collectionOntologies
-        });
+        setCollectionOntologies(collectionOntologies);        
     }
 
 
-    /**
-     * Create the skeleton for rendering a collectin info
-     * @param {*} collectionName 
-     * @param {*} collectionId 
-     * @param {*} Logo 
-     * @param {*} content 
-     * @returns 
-     */
-    createCollectionCard(collectionId, collectionJson){
+
+    function createCollectionCard(collectionId, collectionJson){
         let card = [
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
                 <div className='col-sm-3' key={collectionId + "_logo"}>                    
@@ -87,7 +67,7 @@ class Collections extends React.Component{
                     </div> 
                     <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
-                            <b>Ontologies:</b>{this.state.collectionOntologies.length != 0 ? this.state.collectionOntologies[collectionId] : ""}
+                            <b>Ontologies:</b>{collectionOntologies.length != 0 ? collectionOntologies[collectionId] : ""}
                         </div>
                     </div>           
                 </div>
@@ -98,44 +78,38 @@ class Collections extends React.Component{
     }
 
 
-    createCollectionList(){                
+    function createCollectionList(){                
         let result = [];
         for (let col in collectionsInfoJson){
-            result.push(this.createCollectionCard(col, collectionsInfoJson[col]));
+            result.push(createCollectionCard(col, collectionsInfoJson[col]));
         }
 
         return result;
     }
 
-    
-    componentDidMount(){
-        this.setComponentData();
-        let targetQueryParams = queryString.parse(this.props.location.search + this.props.location.hash);
-        let targetCollectionId = targetQueryParams.col;
-        if(typeof(targetCollectionId) !== "undefined"){
+
+    useEffect(() => {
+        setComponentData();
+        let urlFactory = new CommonUrlFactory();        
+        let targetCollectionId = urlFactory.getParam({name: "CollectionId"});        
+        if(targetCollectionId){
             document.getElementById("section_" + targetCollectionId).scrollIntoView();
-        }        
-    }
+        }     
+    }, []);
 
 
-    render(){
-        return(
-            <>
-                <HelmetProvider>
-                    <div>
-                        <Helmet>
-                        <title>Collections</title>
-                        </Helmet>
-                    </div>
-                </HelmetProvider>
-                <div className='row'> 
-                    <div className='col-sm-12 collections-info-container'>
-                        {this.createCollectionList()}
-                    </div>                                            
-                </div>
-            </>
-        );
-    }
+    return(
+        <>
+            {Toolkit.createHelmet("Collections")}            
+            <div className='row'> 
+                <div className='col-sm-12 collections-info-container'>
+                    {createCollectionList()}
+                </div>                                            
+            </div>
+        </>
+    );
 }
+
+
 
 export default Collections;

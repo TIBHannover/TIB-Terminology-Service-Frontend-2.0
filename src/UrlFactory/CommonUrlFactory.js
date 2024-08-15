@@ -39,6 +39,13 @@ class CommonUrlFactory{
     }
 
 
+    getParam({name}){
+        let url = new URL(window.location);
+        let currentParams = url.searchParams;
+        return currentParams.get(SiteUrlParamNames[name]);
+    }
+
+
 
     getIri(){
         let url = new URL(window.location);
