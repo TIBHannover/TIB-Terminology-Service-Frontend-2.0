@@ -11,7 +11,9 @@ export type OntologyData = {
     numberOfTerms?: number,
     numberOfProperties?: number,
     numberOfIndividuals?: number,
-    config?: object,
+    config?: {
+        id?: string
+    },
     _links?: {
         self: {
             href: string

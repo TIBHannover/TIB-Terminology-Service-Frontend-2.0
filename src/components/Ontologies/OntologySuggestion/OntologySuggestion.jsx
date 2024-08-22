@@ -4,10 +4,10 @@ import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
-import { runShapeTest, submitOntologySuggestion } from "../../../api/ontology";
+import {submitOntologySuggestion, runShapeTest } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
-import { fetchCollectionsWithStats } from "../../../api/collection";
+import { fetchAllCollectionWithOntologyList } from "../../../api/collection";
 import { useQuery } from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
 
@@ -31,6 +31,9 @@ const OntologySuggestion = () => {
     const [progressBarValue, setProgressBarValue] = useState(1);
     const [shapeValidationError, setShapeValidationError] = useState({"error": [], "info": []});
     const [shapeTestIsReady, setShapeTestIsReady] = useState(false);
+    const [ontologyExist, setOntologyExist] = useState(false);
+    const [existingOntologyId, setExistingOntologyId] = useState("");
+    const [existingCollections, setExistingCollections] = useState([]);
     const [selectedCollections, setSelectedCollections] = useState([]);
     const [form, setForm] = useState({
         "username": "",
@@ -41,15 +44,15 @@ const OntologySuggestion = () => {
         "collection_ids": ""
     });
 
-    const collectionWithStatsQuery = useQuery({
-        queryKey: ['allCollectionsWithTheirStats'],
-        queryFn: fetchCollectionsWithStats
+    const collectionWithOntologyListQuery = useQuery({
+        queryKey: ['allCollectionsWithTheirOntologies'],
+        queryFn: fetchAllCollectionWithOntologyList
     });
 
     let collectionIds = [];
-    if(collectionWithStatsQuery.data){
-        for(let collection of collectionWithStatsQuery.data){
-            collectionIds.push(collection['collection']);
+    if(collectionWithOntologyListQuery.data){
+        for(let res of collectionWithOntologyListQuery.data){
+            collectionIds.push(res['collection']);
         }
     }
     const collections = collectionIds;
@@ -61,7 +64,7 @@ const OntologySuggestion = () => {
     };
 
 
-    async function runShapeTest(purl){
+    async function shapeTest(purl){
         if(!shapeTestIsReady){
             setRunningTest(true);
             let validationResult = await runShapeTest(purl);
@@ -85,9 +88,27 @@ const OntologySuggestion = () => {
     }
 
 
-    async function runOntologyMainMetaDataValidation(ontoPurl){       
-        // ToDo: Check if the ontology exists
-        await runShapeTest(ontoPurl);
+    async function runOntologyMainMetaDataValidation(ontoPurl){  
+        let ontoExist = false; 
+        let existingOnto = "";
+        let existingCollectionsList = [];                
+        for(let res of collectionWithOntologyListQuery.data){            
+            for(let onto of res['ontologies']){
+                if(onto['purl'] === ontoPurl){                    
+                    existingOnto = onto['ontologyId'];                    
+                    existingCollectionsList.push(res['collection']);                    
+                    ontoExist = true;
+                }
+            }
+        }
+        if (ontoExist){
+            setOntologyExist(true);
+            setExistingOntologyId(existingOnto);
+            setExistingCollections(existingCollectionsList);
+            return true;
+        }
+
+        await shapeTest(ontoPurl);
         return true;
         
     }
@@ -138,7 +159,7 @@ const OntologySuggestion = () => {
 
 
     function noErrorsAndLoading(){
-        return !formSubmitted && !submitWait && !runningTest && !testFailed;
+        return !formSubmitted && !submitWait && !runningTest && !testFailed && !ontologyExist;
     }
 
 
@@ -209,7 +230,33 @@ const OntologySuggestion = () => {
                     />                    
                     </>
                 }
-                {(submitedSeccessfully || testFailed ||  submitedFailed) && 
+                {ontologyExist && 
+                    <>
+                        <AlertBox
+                            type="info"
+                            message="This ontology already exists in the system."
+                        />
+                        Check: &nbsp;
+                        <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + existingOntologyId} target="_blank">
+                             {existingOntologyId}
+                        </a></b>
+                        <br/>                        
+                        Part of these collections:
+                        <ul>
+                            {existingCollections.map((colId) => {
+                                return (
+                                    <li>
+                                        <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId} target="_blank">
+                                            {colId}
+                                        </a>
+                                    </li>)
+                            })}                                        
+                        </ul>                           
+                        <br/><br/>
+                    </>
+
+                }
+                {(submitedSeccessfully || testFailed ||  submitedFailed || ontologyExist) && 
                     <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
                 }
                 {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
