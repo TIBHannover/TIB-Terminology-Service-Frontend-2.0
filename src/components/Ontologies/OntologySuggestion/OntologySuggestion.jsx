@@ -35,13 +35,16 @@ const OntologySuggestion = () => {
     const [existingOntologyId, setExistingOntologyId] = useState("");
     const [existingCollections, setExistingCollections] = useState([]);
     const [selectedCollections, setSelectedCollections] = useState([]);
+    const [collectionSuggestMode, setCollectionSuggestMode] = useState(false); 
+    const [missingCollectionIds, setMissingCollectionIds] = useState([]);
     const [form, setForm] = useState({
         "username": "",
         "email": "",
         "reason": "",        
         "name": "",
         "purl": "",
-        "collection_ids": ""
+        "collection_ids": "",
+        "collection_suggestion": false
     });
 
     const collectionWithOntologyListQuery = useQuery({
@@ -91,24 +94,53 @@ const OntologySuggestion = () => {
     async function runOntologyMainMetaDataValidation(ontoPurl){  
         let ontoExist = false; 
         let existingOnto = "";
-        let existingCollectionsList = [];                
+        let existingCollectionsList = []; 
+        let selectedCollectionIds = [];
+        let missingCollections = [];        
+        if(process.env.REACT_APP_PROJECT_ID === "general"){
+            selectedCollectionIds = selectedCollections;
+        }else{
+            // on projects frontend. Collection is preselected for the app.
+            selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME)
+        }
+
         for(let res of collectionWithOntologyListQuery.data){            
             for(let onto of res['ontologies']){
                 if(onto['purl'] === ontoPurl){                    
                     existingOnto = onto['ontologyId'];                    
-                    existingCollectionsList.push(res['collection']);                    
+                    existingCollectionsList.push(res['collection']);                                        
                     ontoExist = true;
                 }
             }
         }
-        if (ontoExist){
+              
+        for(let colId of selectedCollectionIds){
+            if(!existingCollectionsList.includes(colId)){
+                missingCollections.push(colId);                
+            }
+        }
+
+        if (ontoExist && missingCollections.length === 0){
+            setOntologyExist(true);
+            setExistingOntologyId(existingOnto);
+            setExistingCollections(existingCollectionsList); 
+            setMissingCollectionIds([]); 
+            setCollectionSuggestMode(false);                      
+            return true;
+        }else if(ontoExist && missingCollections.length !== 0){
+            let formData = form;
+            formData.collection_suggestion = true;
+            formData.collection_ids = missingCollections;
+            setForm(formData);
             setOntologyExist(true);
             setExistingOntologyId(existingOnto);
             setExistingCollections(existingCollectionsList);
+            setCollectionSuggestMode(true);
+            setMissingCollectionIds(missingCollections);            
             return true;
         }
 
-        await shapeTest(ontoPurl);
+        await shapeTest(ontoPurl);        
         return true;
         
     }
@@ -125,9 +157,9 @@ const OntologySuggestion = () => {
             if (!name || !purl){
                 return;
             }          
-            await runOntologyMainMetaDataValidation(purl);
+            await runOntologyMainMetaDataValidation(purl);        
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
-            setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);
+            setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);    
         }else if (progressStep === ONTOLOGY_EXTRA_METADATA_STEP){             
             setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
             setProgressStep(USER_FORM_STEP);            
@@ -159,7 +191,7 @@ const OntologySuggestion = () => {
 
 
     function noErrorsAndLoading(){
-        return !formSubmitted && !submitWait && !runningTest && !testFailed && !ontologyExist;
+        return !formSubmitted && !submitWait && !runningTest && !testFailed;
     }
 
 
@@ -172,10 +204,16 @@ const OntologySuggestion = () => {
         validationResult: shapeValidationError,
         collections: collections,
         selectedCollections: selectedCollections,
+        setSelectedCollections: setSelectedCollections,
+        ontologyExist: ontologyExist,
+        existingOntologyId: existingOntologyId,
+        missingCollectionIds: missingCollectionIds,
+        existingCollections: existingCollections
     }
 
     const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
     const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
+    const showNewSuggestionBtn = (submitedSeccessfully || testFailed ||  submitedFailed || (ontologyExist && !collectionSuggestMode));
 
     return (
         <OntologySuggestionContext.Provider value={contextData}>
@@ -229,50 +267,21 @@ const OntologySuggestion = () => {
                         message="Sorry! We cannot test this ontology's shape. Please try again later."
                     />                    
                     </>
-                }
-                {ontologyExist && 
-                    <>
-                        <AlertBox
-                            type="info"
-                            message="This ontology already exists in the system."
-                        />
-                        Check: &nbsp;
-                        <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + existingOntologyId} target="_blank">
-                             {existingOntologyId}
-                        </a></b>
-                        <br/>                        
-                        Part of these collections:
-                        <ul>
-                            {existingCollections.map((colId) => {
-                                return (
-                                    <li>
-                                        <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId} target="_blank">
-                                            {colId}
-                                        </a>
-                                    </li>)
-                            })}                                        
-                        </ul>                           
-                        <br/><br/>
-                    </>
-
-                }
-                {(submitedSeccessfully || testFailed ||  submitedFailed || ontologyExist) && 
-                    <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
-                }
+                }                              
                 {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
                     <Intro />
                 }
                 {progressStep === ONTOLOGY_MAIN_METADATA_SETP && noErrorsAndLoading() &&
                     <OntologyMainMetaDataForm />                    
                 }
-                {progressStep === ONTOLOGY_EXTRA_METADATA_STEP && noErrorsAndLoading() &&
+                {progressStep === ONTOLOGY_EXTRA_METADATA_STEP && noErrorsAndLoading() && 
                     <OntologyExtraMetadataForm />
                 }
                 {progressStep === USER_FORM_STEP && noErrorsAndLoading() &&
                     <UserForm />
                 }    
                 <br></br>            
-                {progressStep !== ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
+                {(progressStep !== ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
                     <button type="button" class="btn btn-secondary mr-3" onClick={() => {
                         let nextStep = progressStep - 1;
                         setProgressBarValue(progressBarValue - PROGRESS_BAR_INCREMENT_PERCENTAGE);
@@ -282,10 +291,13 @@ const OntologySuggestion = () => {
                         Previous
                     </button>
                 }
-                {progressStep === USER_FORM_STEP && noErrorsAndLoading() &&
+                {showNewSuggestionBtn && 
+                    <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
+                }
+                {progressStep === USER_FORM_STEP && noErrorsAndLoading() && !(ontologyExist && !collectionSuggestMode) &&
                     <button type="button" class="btn btn-secondary" onClick={submit}>Submit</button>
                 }
-                {progressStep !== USER_FORM_STEP && noErrorsAndLoading() &&
+                {(progressStep !== USER_FORM_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
                     <>                                        
                     <button type="button" class="btn btn-secondary" onClick={onNextClick}
                         >
@@ -340,6 +352,48 @@ const OntologyExtraMetadataForm = () => {
             let infoContent = Toolkit.transformLinksInStringToAnchor(i);
             return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
         });
+    }
+
+
+    if(componentContext.ontologyExist){
+        return(
+            <>
+                <AlertBox
+                    type="info"
+                    message="This ontology already exists in the system."
+                />
+                Check: &nbsp;
+                <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId} target="_blank">
+                        {componentContext.existingOntologyId}
+                </a></b>
+                <br/>                        
+                Part of these collections:
+                <ul>
+                    {componentContext.existingCollections.map((colId) => {
+                        return (
+                            <li>
+                                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId} target="_blank">
+                                    {colId}
+                                </a>
+                            </li>)
+                    })}                                        
+                </ul> 
+                <br/>
+                {componentContext.missingCollectionIds.length !== 0 &&
+                    <>
+                    <h5><b>Missing from your selected collection(s)</b></h5>   
+                    <ul>
+                        {componentContext.missingCollectionIds.map((colId) => {
+                            return (<li>{colId}</li>)
+                        })}                                        
+                    </ul>
+                    Would you like to add this ontology to these collection(s)? &nbsp;
+                    <b>If yes, click on the Next button</b>  
+                    </>      
+                }          
+                <br/><br/>
+            </>
+        );
     }
     
 
@@ -477,18 +531,7 @@ const OntologyMainMetaDataForm = () => {
         collectionIds = collectionIds.slice(0, -1);
         form.collection_ids = collectionIds;
         componentContext.setForm(form);
-    }
-
-
-    function getSelectedCollections(){
-        let selectedCollections = [];
-        let spilitedList = componentContext.form.collection_ids.split(",");
-        for(let collection of spilitedList){
-            if (collection !== ""){
-                selectedCollections.push(collection);
-            }
-        }
-        return selectedCollections;
+        componentContext.setSelectedCollections(selectedList);
     }
 
 
@@ -533,23 +576,27 @@ const OntologyMainMetaDataForm = () => {
                 </input>
             </div>
         </div>
-        <br></br>
-        <div className="row">
-            <div className="col-sm-8">
-                <label>Collection in TIB (optional)</label>
-                <Multiselect
-                    isObject={false}
-                    options={componentContext.collections}  
-                    selectedValues={getSelectedCollections()}
-                    onSelect={onSelectRemoveCollection}
-                    onRemove={onSelectRemoveCollection}                        
-                    avoidHighlightFirstOption={true}                                        
-                    closeIcon={"cancel"}
-                    id="onto-suggest-collection"
-                    placeholder="Click here to select collections"
-                />
-            </div>
-        </div>                
+        {process.env.REACT_APP_PROJECT_ID == "general" &&
+            <>
+            <br></br>
+            <div className="row">
+                <div className="col-sm-8">
+                    <label>Collection in TIB (optional)</label>
+                    <Multiselect
+                        isObject={false}
+                        options={componentContext.collections}  
+                        selectedValues={componentContext.selectedCollections}
+                        onSelect={onSelectRemoveCollection}
+                        onRemove={onSelectRemoveCollection}                        
+                        avoidHighlightFirstOption={true}                                        
+                        closeIcon={"cancel"}
+                        id="onto-suggest-collection"
+                        placeholder="Click here to select collections"
+                    />
+                </div>
+            </div>  
+            </>
+        }              
         </>
     );
 }   
