@@ -213,4 +213,25 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
 }
 
 
+export async function checkSuggestionExist(purl: string): Promise<boolean> {
+  try{
+    let headers = getTsPluginHeaders({withAccessToken:true, isJson:false});         
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/suggestion_exist?purl=' + purl;
+    let result = await fetch(url, {method:'GET', headers:headers});
+    if (result.status !== 200){
+      return false;
+    }
+    let data = await result.json();
+    if (data['_result']['exist']){
+      return true
+    }
+    return false
+  }
+  catch(e){
+    return false
+  }
+}
+
+
+
 export default OntologyApi;

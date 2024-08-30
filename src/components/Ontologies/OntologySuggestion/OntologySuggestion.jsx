@@ -4,7 +4,7 @@ import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
-import {submitOntologySuggestion, runShapeTest } from "../../../api/ontology";
+import {submitOntologySuggestion, runShapeTest, checkSuggestionExist } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw } from 'draft-js';
 import { fetchAllCollectionWithOntologyList } from "../../../api/collection";
@@ -37,6 +37,7 @@ const OntologySuggestion = () => {
     const [selectedCollections, setSelectedCollections] = useState([]);
     const [collectionSuggestMode, setCollectionSuggestMode] = useState(false); 
     const [missingCollectionIds, setMissingCollectionIds] = useState([]);
+    const [suggestionExist, setSuggestionExist] = useState(false);
     const [form, setForm] = useState({
         "username": "",
         "email": "",
@@ -91,7 +92,7 @@ const OntologySuggestion = () => {
     }
 
 
-    async function runOntologyMainMetaDataValidation(ontoPurl){  
+    async function runOntologyMainMetaDataValidation(ontoPurl){   
         let ontoExist = false; 
         let existingOnto = "";
         let existingCollectionsList = []; 
@@ -138,6 +139,12 @@ const OntologySuggestion = () => {
             setCollectionSuggestMode(true);
             setMissingCollectionIds(missingCollections);            
             return true;
+        }
+
+        let suggestionAlreadyExist = await checkSuggestionExist(ontoPurl);
+        if (suggestionAlreadyExist){
+            setSuggestionExist(true);
+            return
         }
 
         await shapeTest(ontoPurl);        
@@ -191,7 +198,7 @@ const OntologySuggestion = () => {
 
 
     function noErrorsAndLoading(){
-        return !formSubmitted && !submitWait && !runningTest && !testFailed;
+        return !formSubmitted && !submitWait && !runningTest && !testFailed && !suggestionExist;
     }
 
 
@@ -213,7 +220,7 @@ const OntologySuggestion = () => {
 
     const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
     const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
-    const showNewSuggestionBtn = (submitedSeccessfully || testFailed ||  submitedFailed || (ontologyExist && !collectionSuggestMode));
+    const showNewSuggestionBtn = (submitedSeccessfully || testFailed ||  submitedFailed || (ontologyExist && !collectionSuggestMode) || suggestionExist);
 
     return (
         <OntologySuggestionContext.Provider value={contextData}>
@@ -265,6 +272,17 @@ const OntologySuggestion = () => {
                     <AlertBox
                         type="danger"
                         message="Sorry! We cannot test this ontology's shape. Please try again later."
+                    />                    
+                    </>
+                }   
+                {suggestionExist &&
+                    <>
+                    <AlertBox
+                        type="info"
+                        message="This ontology is already suggested to us by another user
+                        . As we are processing the ontology, we cannot accept your request at the moment. 
+                        Thank for your understanding!
+                        "
                     />                    
                     </>
                 }                              
