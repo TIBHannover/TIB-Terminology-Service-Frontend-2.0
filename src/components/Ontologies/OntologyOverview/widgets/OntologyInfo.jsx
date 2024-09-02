@@ -4,7 +4,7 @@ import { OntologyPageContext } from '../../../../context/OntologyPageContext';
 import OntologyLib from '../../../../Libs/OntologyLib';
 
 
-
+const PLACE_HOLDER = "N/A"
 
 const OntologyInfoTable = () => {
 
@@ -86,7 +86,7 @@ const OntologyInfoTable = () => {
                         <a href={ontology.config.versionIri} target="_blank" rel="noopener noreferrer">{ontology.config.versionIri}</a>
                         {typeof(ontology.config.versionIri) !== 'undefined' && ontology.config.versionIri !== null
                             ? <CopyLinkButton  valueToCopy={ontology.config.versionIri}  />                                  
-                            : ""
+                            : PLACE_HOLDER
                          }  
                       </td>
                     </tr>
@@ -96,7 +96,7 @@ const OntologyInfoTable = () => {
                         <a href={ontology.config.id}  className="anchor-in-table"  target="_blank" rel="noopener noreferrer">{ontology.config.id}</a>
                          {typeof(ontology.config.id) !== 'undefined' && ontology.config.id !== null
                           ? <CopyLinkButton  valueToCopy={ontology.config.id}  />                                       
-                          : ""
+                          : PLACE_HOLDER
                         }  
                       </td>
                     </tr>
@@ -106,7 +106,7 @@ const OntologyInfoTable = () => {
                         <a href={ontology.config.homepage} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.homepage}</a>
                          {typeof(ontology.config.homepage) !== 'undefined' && ontology.config.homepage !== null
                             ? <CopyLinkButton  valueToCopy={ontology.config.homepage}  />                                  
-                            : ""
+                            : PLACE_HOLDER
                          }               
                        </td>
                     </tr>
@@ -116,7 +116,7 @@ const OntologyInfoTable = () => {
                         <a href={ontology.config.tracker} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.config.tracker}</a>
                           {typeof(ontology.config.tracker) !== 'undefined' && ontology.config.tracker !== null
                             ? <CopyLinkButton  valueToCopy={ontology.config.tracker}  />                                 
-                            : ""
+                            : PLACE_HOLDER
                           }               
                       </td>
                     </tr>
@@ -144,6 +144,24 @@ const OntologyInfoTable = () => {
                        <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                        <td>
                           {String(ontology.config.skos)}
+                       </td>
+                    </tr>
+                    <tr>
+                       <td className="ontology-overview-table-id-column"><b>Collections</b></td>
+                       <td>
+                        <ul>
+                          {
+                            ontology.config.classifications[0]['collection'].map((col) => {
+                              return (
+                                <li>
+                                  <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=" + col} target='_blank'>
+                                    {col}
+                                  </a>
+                                </li>
+                              )
+                            })
+                          }
+                          </ul>
                        </td>
                     </tr>
                     {ontology.config.allowDownload == true &&
