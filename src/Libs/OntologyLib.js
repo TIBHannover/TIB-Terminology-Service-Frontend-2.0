@@ -2,7 +2,10 @@
 
 class OntologyLib{
 
-    static formatCreators(creators) {        
+    static formatCreators(creators) {  
+        if (creators.length === 0){
+            return "N/A"
+        }      
         let value = []
         for (let i = 0; i < creators.length; i++) {
           value.push(creators[i])
