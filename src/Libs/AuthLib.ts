@@ -1,34 +1,39 @@
 import UserModel from "../models/user";
 import { runLogin, isLogin } from "../api/user";
 import { getTsPluginHeaders } from "../api/header";
+import { LoginResponse } from "../api/types/userTypes";
 
 
-class AuthLib{
+class Auth{
 
-    static run(){
+    static run():boolean{
         let cUrl = window.location.href;
         if(cUrl.includes("code=")){
-            AuthLib.enableLoginAnimation();
+            Auth.enableLoginAnimation();
             let code = cUrl.split("code=")[1];        
             runLogin(code).then((resp) => {
                 if(resp){                    
-                    let userData = AuthLib.createUserDataObjectFromAuthResponse(resp);
+                    let userData = Auth.createUserDataObjectFromAuthResponse(resp);
+                    if(!userData){
+                        Auth.disableLoginAnimation();                
+                        return false;
+                    }
                     localStorage.setItem('user', JSON.stringify(userData));                     
                     let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
-                    window.location.replace(redirectUrl);                    
+                    if(redirectUrl){
+                        window.location.replace(redirectUrl);
+                    }                    
                     return true;
                 }
-                AuthLib.disableLoginAnimation();                
+                Auth.disableLoginAnimation();                
                 return false;
             });                                   
         }
-        else{
-            return false;
-        }      
+        return false;     
     }
 
 
-    static createUserDataObjectFromAuthResponse(response){
+    static createUserDataObjectFromAuthResponse(response:LoginResponse):UserModel|null{
         try{
             let authProvider = localStorage.getItem('authProvider');
             let user = new UserModel();            
@@ -53,19 +58,21 @@ class AuthLib{
     }
 
 
-    static enableLoginAnimation(){
-        document.getElementsByClassName("App")[0].style.filter = "blur(10px)";
-        document.getElementById("login-loading").style.display = "block";
+    static enableLoginAnimation():void{
+        let app = document.getElementsByClassName("App")[0] as HTMLElement;
+        app.style.filter = "blur(10px)";
+        document.getElementById("login-loading")!.style.display = "block";
     }
 
 
-    static disableLoginAnimation(){
-        document.getElementsByClassName("App")[0].style.filter = "";
-        document.getElementById("login-loading").style.display = "none";
+    static disableLoginAnimation():void{
+        let app = document.getElementsByClassName("App")[0] as HTMLElement;
+        app.style.filter = "";
+        document.getElementById("login-loading")!.style.display = "none";
     }
 
 
-    static getUserName(internalUserName){
+    static getUserName(internalUserName:string|null):string|null{
         if (!internalUserName){
             return internalUserName;
         }
@@ -79,47 +86,34 @@ class AuthLib{
     }
 
 
-    static async userIsLogin(){      
+    static async userIsLogin():Promise<UserModel|null>{      
         if(process.env.REACT_APP_AUTH_FEATURE !== "true"){
-            return false;
+            return null;
         } 
-        let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;     
+        let userObjInStore = localStorage.getItem('user');
+        let user: UserModel|null = null;
+        if(userObjInStore){
+            user = JSON.parse(userObjInStore)
+        } 
         if(user && user.token){        
             let validation = await isLogin();                        
             if(validation){
                 return user;
-            }
-            else{
-                return null;
-            }
+            }           
         }
-        else{        
-            return null;
-        }
+        return null;
     }
 
 
-    static async userIsSysAdmin(){               
-        let headers = getTsPluginHeaders({withAccessToken: true});
-        let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_system_admin', {method: "POST", headers:headers});    
-        if (result.status !== 200){
-            return false;
-        }
-        result = await result.json();
-        result = result["_result"];
-        if(result && result["is_system_admin"] === true){        
-            return true
-        }    
-        return false;
-    }
-
-
-    static runLogout(){    
-        localStorage.setItem("user", null);
-        let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;   
-        window.location.replace(redirectUrl);
+    static runLogout():void{    
+        // localStorage.setItem("user", null);
+        localStorage.removeItem("user");
+        let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;  
+        if(redirectUrl){
+            window.location.replace(redirectUrl);
+        } 
     }
 
 }
 
-export default AuthLib;
+export default Auth;

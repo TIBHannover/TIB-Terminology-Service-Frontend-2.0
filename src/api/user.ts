@@ -11,7 +11,7 @@ import { LoginResponse
 const baseUrl:string|undefined = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
 
 
-export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
+export async function runLogin(authCode:string):Promise<LoginResponse|null>{
     try{
         let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: false});
         headers["X-TS-Auth-APP-Code"] = authCode;
@@ -19,12 +19,12 @@ export async function runLogin(authCode:string):Promise<LoginResponse|[]>{
         result = await result.json();
         result = result['_result'];
         if(result && result["issue"]){
-            return [];
+            return null;
         }        
         return result;
     }
     catch(e){
-        return [];
+        return null;
     }
 }
 
