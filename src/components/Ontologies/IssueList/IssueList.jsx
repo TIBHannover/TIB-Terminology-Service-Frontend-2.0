@@ -7,6 +7,7 @@ import { AppContext } from "../../../context/AppContext";
 import '../../layout/githubPanel.css';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import IssueListUrlFactory from "../../../UrlFactory/IssueListUrlFactory";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 
@@ -38,6 +39,7 @@ const IssueList = (props) => {
     const urlFactory = new IssueListUrlFactory();
     
     const [waiting, setWaiting] = useState(true);
+    const [noTrackerOnto, setNoTrackerOnto] = useState(false);
     const [contentForRender, setContentForRender] = useState([]);
     const [selectedStateId, setSelectedStateId] = useState(urlFactory.selectedStateId ? urlFactory.selectedStateId : OPEN_ISSUE_ID);    
     const [pageNumber, setPageNumber] = useState(urlFactory.pageNumber ? urlFactory.pageNumber : 1);    
@@ -49,13 +51,18 @@ const IssueList = (props) => {
 
     async function createIssueList(){               
         let ontology = ontologyPageContext.ontology;
-        let issueTrackerUrl = typeof(ontology.config.tracker) !== "undefined" ? ontology.config.tracker : null;
+        let issueTrackerUrl = ontology.config.tracker ? ontology.config.tracker : null;       
+        if(!issueTrackerUrl){
+            setNoTrackerOnto(true);
+            return true;
+        }
         let listOfIssues = [];                                                    
         setTypeRadioBtn(selectedType);  
         let issueStateValue =  ISSUE_STATES_VALUES[selectedStateId];        
         listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, selectedType, resultCountPerPage, pageNumber);
         if(listOfIssues.length === 0){            
-            setNoMoreIssuesExist(true);            
+            setNoMoreIssuesExist(true);     
+            setWaiting(false);       
             return true;
         }                
                 
@@ -141,6 +148,14 @@ const IssueList = (props) => {
 
     if(process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true"){            
         return null;
+    }
+
+    if(noTrackerOnto){
+        return(
+            <div className="row tree-view-container list-container">
+                <AlertBox type="info" message="Ontology is not hosted on GitHub." />
+            </div>
+        );
     }
 
     return (
