@@ -36,8 +36,8 @@ const OntologyInfoTable = () => {
       for(let [key,value] of entries){
         annotations.push(
           <tr>
-            <td className="ontology-overview-table-id-column"><b>{key}</b></td>
-            <td>{(value).join(',\n')}</td>
+            <td className="node-metadata-label"><b>{key}</b></td>
+            <td className="node-metadata-value">{(value).join(',\n')}</td>
           </tr>
           )
       }
