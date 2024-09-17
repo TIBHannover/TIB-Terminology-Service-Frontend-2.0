@@ -1,6 +1,5 @@
 import UserModel from "../models/user";
 import { runLogin, isLogin } from "../api/user";
-import { getTsPluginHeaders } from "../api/header";
 import { LoginResponse } from "../api/types/userTypes";
 
 
@@ -105,8 +104,7 @@ class Auth{
     }
 
 
-    static runLogout():void{    
-        // localStorage.setItem("user", null);
+    static runLogout():void{            
         localStorage.removeItem("user");
         let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;  
         if(redirectUrl){
