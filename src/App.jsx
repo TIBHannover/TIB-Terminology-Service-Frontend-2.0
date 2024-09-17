@@ -7,7 +7,7 @@ import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
 import { BackendIsDownMessage, setSiteTitleAndFavIcon, InlineWrapperWithMargin } from './AppHelpers';
-import AuthFactory from './components/User/Login/AuthFactory';
+import Auth from './Libs/AuthLib';
 import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
@@ -49,10 +49,10 @@ const App = () => {
     if(process.env.REACT_APP_AUTH_FEATURE === "true"){   
       let cUrl = window.location.href;
       if(cUrl.includes("code=")){
-        AuthFactory.runAuthentication();        
+        Auth.run();       
       }
 
-      AuthFactory.userIsLogin().then((user) => {
+      Auth.userIsLogin().then((user) => {
         setUser(user);
         setIsSystemAdmin(user?.systemAdmin);
         let settings = {...userSettings};                
