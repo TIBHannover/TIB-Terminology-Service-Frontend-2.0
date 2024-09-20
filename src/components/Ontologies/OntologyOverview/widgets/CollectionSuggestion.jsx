@@ -31,7 +31,17 @@ const CollectionSuggestion = () => {
     let collectionIds = [];
     if(collectionWithOntologyListQuery.data){
         for(let res of collectionWithOntologyListQuery.data){
-            collectionIds.push(res['collection']);
+            let ontoIsPartOfCollection = false;
+            for(let classif of ontoPageContext.ontology?.config?.classifications){
+                console.log(classif)
+                if (classif.collection && classif.collection[0] === res['collection']){
+                    ontoIsPartOfCollection = true;
+                    break;
+                }
+            }
+            if(!ontoIsPartOfCollection){
+                collectionIds.push(res['collection']);
+            }
         }
     }
     const collections = collectionIds;
@@ -51,15 +61,13 @@ const CollectionSuggestion = () => {
         let username = FormLib.getFieldByIdIfValid('col-suggest-username');
         let email = FormLib.getFieldByIdIfValid('col-suggest-email');
         let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
-        if(!username || !email || !editorState){
-            return;
-        }
-
         if(selectedCollections.length === 0){
-            document.getElementById('onto-suggest-collection_input').style.borderColor = 'red !important';
+            document.getElementsByClassName('searchWrapper')[0].style.borderColor = 'red';
+        }
+        if(!username || !email || !editorState || selectedCollections.length === 0){
             return;
         }
-        
+    
         let collectionIds = "";
         for(let collectionId of selectedCollections){
             collectionIds += collectionId + ",";
