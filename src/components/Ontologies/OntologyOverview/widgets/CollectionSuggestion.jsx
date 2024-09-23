@@ -198,7 +198,9 @@ const CollectionSuggestion = () => {
                             <div className="col-auto mr-auto">
                                 <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                             </div>                             
-                            <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
+                            {!submitWait && !formSubmitted &&
+                                <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
+                            }
                         </div>
                     </div>
                 </div>
