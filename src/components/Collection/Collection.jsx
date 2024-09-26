@@ -72,7 +72,14 @@ const Collections = () => {
                     <div className='row' key={collectionId + "_ontoList"}>
                         <div className='col-sm-12 collection-ontologies-text'>
                             <b>Ontologies:</b>{collectionOntologies[collectionId] || ""}
+                            <a 
+                                className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1 ml-0 " 
+                                href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
+                            >
+                                Suggest an ontology for this collection
+                            </a>
                         </div>
+                        
                     </div>           
                 </div>
             </div>

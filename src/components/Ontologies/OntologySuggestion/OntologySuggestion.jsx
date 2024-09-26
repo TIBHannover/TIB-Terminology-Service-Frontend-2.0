@@ -10,7 +10,7 @@ import {convertToRaw } from 'draft-js';
 import { fetchAllCollectionWithOntologyList } from "../../../api/collection";
 import { useQuery } from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
-
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
 const ONTOLOGY_MAIN_METADATA_SETP = 1;
@@ -21,6 +21,9 @@ const PROGRESS_BAR_INCREMENT_PERCENTAGE = 25;
 
 
 const OntologySuggestion = () => {
+    const urlManager = new CommonUrlFactory();
+    const inputCollectionId = urlManager.getParam({name: "CollectionId"});
+
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
     const [submitWait, setSubmitWait] = useState(false);
@@ -34,7 +37,7 @@ const OntologySuggestion = () => {
     const [ontologyExist, setOntologyExist] = useState(false);
     const [existingOntologyId, setExistingOntologyId] = useState("");
     const [existingCollections, setExistingCollections] = useState([]);
-    const [selectedCollections, setSelectedCollections] = useState([]);
+    const [selectedCollections, setSelectedCollections] = useState(inputCollectionId ? [inputCollectionId] : []);
     const [collectionSuggestMode, setCollectionSuggestMode] = useState(false); 
     const [missingCollectionIds, setMissingCollectionIds] = useState([]);
     const [suggestionExist, setSuggestionExist] = useState(false);
@@ -44,7 +47,7 @@ const OntologySuggestion = () => {
         "reason": "",        
         "name": "",
         "purl": "",
-        "collection_ids": "",
+        "collection_ids": inputCollectionId ? inputCollectionId : "",
         "collection_suggestion": false
     });
 
@@ -215,7 +218,8 @@ const OntologySuggestion = () => {
         ontologyExist: ontologyExist,
         existingOntologyId: existingOntologyId,
         missingCollectionIds: missingCollectionIds,
-        existingCollections: existingCollections
+        existingCollections: existingCollections,
+        inputCollectionId: inputCollectionId
     }
 
     const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
@@ -226,7 +230,7 @@ const OntologySuggestion = () => {
         <OntologySuggestionContext.Provider value={contextData}>
         <div className="row">
             <div className="col-sm-12 user-info-panel">
-                <h4><b>Suggest your Ontology</b></h4>    
+                <h4><b>Suggest your Ontology {inputCollectionId ? `for ${inputCollectionId}` : ""}</b></h4>    
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" style={{width: progressBarValue + "%"}} aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>            
@@ -594,7 +598,7 @@ const OntologyMainMetaDataForm = () => {
                 </input>
             </div>
         </div>
-        {process.env.REACT_APP_PROJECT_ID == "general" &&
+        {process.env.REACT_APP_PROJECT_ID == "general" && !componentContext.inputCollectionId &&
             <>
             <br></br>
             <div className="row">
