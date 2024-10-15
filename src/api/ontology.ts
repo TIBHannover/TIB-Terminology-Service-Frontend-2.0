@@ -28,7 +28,7 @@ class OntologyApi{
     }
 
 
-    async fetchOntologyList ():Promise<boolean>{
+    async fetchOntologyList ():Promise<Array<OntologyData>>{
       type TempResult = {
         _embedded:{
           ontologies: Array<OntologyData>
@@ -40,11 +40,11 @@ class OntologyApi{
         let resp = await fetch(OntologiesListUrl, getCallSetting);
         let result:TempResult = await resp.json();
         this.list = result['_embedded']['ontologies'];         
-        return true;
+        return this.list;
       } 
       catch(e){
         this.list = [];
-        return true;
+        return [];
       }       
     }
 

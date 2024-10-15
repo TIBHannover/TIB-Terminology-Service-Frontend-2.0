@@ -21,7 +21,7 @@ const TermsOfUse = () => {
         <strong>Status: May 2024</strong>            
         <p>
             <br/>
-            Terms of Use of the TIB apply, supplemented by the following Special Conditions  Terminology Service
+            <a href="https://www.tib.eu/en/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of Use of the TIB</a> apply, supplemented by the following Special Conditions Terminology Service (TS)
             <br/><br/>
             Special Conditions  Terminology Service
             The  Terminology Service (TS) is provided by:

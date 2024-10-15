@@ -30,3 +30,5 @@ yarn.lock
 sonarqube/extensions
 sonarqube/data
 sonarqube/logs
+
+.vscode/

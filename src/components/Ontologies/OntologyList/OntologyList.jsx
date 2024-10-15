@@ -37,10 +37,16 @@ const OntologyList = (props) => {
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
 
-  let allCollectionsWithStatsQuery = useQuery({
+  const allCollectionsWithStatsQuery = useQuery({
     queryKey: ['allCollectionsWithTheirStats'],
     queryFn: fetchCollectionsWithStats,
     
+  });
+  
+  const ontologyApi = new OntologyApi({});      
+  const ontologyListQuery = useQuery({
+    queryKey: ['ontologyList'],
+    queryFn: ontologyApi.fetchOntologyList,
   });
   
   let allCollectionWithStats = [];
@@ -50,29 +56,25 @@ const OntologyList = (props) => {
   } 
   const allCollections = allCollectionWithStats;
 
-
-
   async function setComponentData (){    
     try{      
-      let ontologyApi = new OntologyApi({});      
-      await ontologyApi.fetchOntologyList();
       let ontologiesList = [];
       if(appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0){
-        for(let onto of ontologyApi.list){
+        for(let onto of ontologyListQuery.data){
           if(appContext.userSettings.activeCollection.ontology_ids.includes(onto.ontologyId)){
             ontologiesList.push(onto);
           }
         }
       }
       else{
-        ontologiesList = ontologyApi.list;
+        ontologiesList = ontologyListQuery.data;
       }
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);                 
       setOntologies(sortedOntologies);
       setUnFilteredOntologies(sortedOntologies);              
       setIsLoaded(true);      
     }
-    catch(error){            
+    catch(error){                  
       setIsLoaded(true);
       setError(error);        
     }

@@ -2,12 +2,18 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CommonUrlFactory from '../UrlFactory/CommonUrlFactory';
 
 
+type GenericObject= {
+    [key: string]: any;
+}
+
+
+
 const urlFacory = new CommonUrlFactory();
 
 
 class Toolkit{
 
-    static createHelmet(helmetString) {
+    static createHelmet(helmetString: string): JSX.Element[] {
         return [
             <HelmetProvider>
                 <div>
@@ -20,31 +26,34 @@ class Toolkit{
     }
 
 
-    static sortListOfObjectsByKey(objectList, key, isReverse=false, parentKey=null){
-        let sortNumber = !isReverse ? 1 : -1;
+    static sortListOfObjectsByKey(objectList: Array<GenericObject>, key: string, isReverse:boolean=false, parentKey:string=""){
+        let reverseSortSign = !isReverse ? 1 : -1;
         if(parentKey){
-            return objectList.sort(function (a, b) {
-                let x = typeof a[key] === "number" ? a[parentKey][key]: a[parentKey][key]?.toLowerCase(); 
-                let y = typeof b[key] === "number" ? b[parentKey][key]: b[parentKey][key]?.toLowerCase(); 
-                return (x<y ? sortNumber : (-1 * sortNumber) )
+            return objectList.sort(function (a:GenericObject, b:GenericObject) {
+                let x:number|string = typeof a[key] === "number" ? a[parentKey][key]: a[parentKey][key]?.toLowerCase(); 
+                let y:number|string = typeof b[key] === "number" ? b[parentKey][key]: b[parentKey][key]?.toLowerCase(); 
+                return (x<y ? reverseSortSign : (-1 * reverseSortSign) )
               });
         }
-        return objectList.sort(function (a, b) {
-            let x = typeof a[key] === "number" ? a[key]: a[key]?.toLowerCase(); 
-            let y = typeof b[key] === "number" ? b[key]: b[key]?.toLowerCase(); 
-            return (x<y ? sortNumber : (-1 * sortNumber) )
+        return objectList.sort(function (a:GenericObject, b:GenericObject) {
+            let x:number|string = typeof a[key] === "number" ? a[key]: a[key]?.toLowerCase(); 
+            let y:number|string = typeof b[key] === "number" ? b[key]: b[key]?.toLowerCase(); 
+            return (x<y ? reverseSortSign : (-1 * reverseSortSign) )
           });        
     }
 
     
-    static transformLinksInStringToAnchor(text){  
+    static transformLinksInStringToAnchor(text:string){  
         try{    
             if(typeof(text) !== "string"){
                 return text;
             }
             let urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;
             let result = text.replace(urlRegex, (url) => {
-                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                if (url.at(-1) === ","){
+                    url = url.slice(0, -1);
+                }
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a><br/>`;
             });           
             return result;
         }   
@@ -55,9 +64,12 @@ class Toolkit{
 
 
 
-    static buildHierarchicalArrayFromFlat(flatList, idKeyName, parentKeyName){
-        let map = {}; 
-        let node = "";
+    static buildHierarchicalArrayFromFlat(flatList:Array<GenericObject>, idKeyName:string, parentKeyName:string){
+        type TempMap={
+            [key: string]: number;
+        }
+        let map:TempMap = {}; 
+        let node:GenericObject;
         let roots = [];
         for (let i = 0; i < flatList.length; i++) {
             map[flatList[i][idKeyName]] = i; 
@@ -76,7 +88,7 @@ class Toolkit{
     }
 
  
-    static getObjectInListIfExist(list, searchKey, searchValue){
+    static getObjectInListIfExist(list:Array<GenericObject>, searchKey:string, searchValue:any){
         for(let item of list){
             if (item[searchKey] === searchValue){
                 return item;
@@ -87,15 +99,15 @@ class Toolkit{
 
 
 
-    static getVarInLocalSrorageIfExist(varName, defaultValue){
+    static getVarInLocalSrorageIfExist(varName:string, defaultValue:string){
         return localStorage.getItem(varName) ? localStorage.getItem(varName) : defaultValue;
     }
 
 
     static getObsoleteFlagValue(){
-        let currentUrlParams = new URL(window.location).searchParams;
+        let currentUrlParams = new URL(window.location.href).searchParams;
         if(!currentUrlParams.get('obsoletes')){
-            let obsoleteValue = Toolkit.getVarInLocalSrorageIfExist("obsoletes", "false");
+            let obsoleteValue:any = Toolkit.getVarInLocalSrorageIfExist("obsoletes", "false");
             obsoleteValue = obsoleteValue === "true" ? true : false;
             return Boolean(obsoleteValue);
         }
@@ -103,16 +115,17 @@ class Toolkit{
         return obsoleteValue; 
     }
 
-
-    static setObsoleteInStorageAndUrl(obsoletesValue) {                   
+    static setObsoleteInStorageAndUrl(obsoletesValue:boolean|string) {                   
+        // @ts-ignore
         localStorage.setItem("obsoletes", obsoletesValue);
+        // @ts-ignore
         document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
         urlFacory.setObsoletes({value:obsoletesValue});
         return true;
     }
 
 
-    static urlNotEncoded(url) {
+    static urlNotEncoded(url:string) {
         try {          
           const decodedUrl = decodeURIComponent(url);                
           return decodedUrl === url;
@@ -123,7 +136,7 @@ class Toolkit{
     }
 
 
-    static formatDateTime(datetime){
+    static formatDateTime(datetime:string|undefined){
         // if the time is 00:00:00, then remove it
         if(datetime && typeof(datetime) !== "undefined" && datetime.includes("00:00:00")){
             let date = datetime.split("00:00:00")[0];            
