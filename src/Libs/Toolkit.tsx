@@ -50,7 +50,10 @@ class Toolkit{
             }
             let urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;
             let result = text.replace(urlRegex, (url) => {
-                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                if (url.at(-1) === ","){
+                    url = url.slice(0, -1);
+                }
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a><br/>`;
             });           
             return result;
         }   
