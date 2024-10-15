@@ -23,8 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 
-*.env
-.env.bak
+.env.*
 
 .scannerwork
 sonarqube/extensions
