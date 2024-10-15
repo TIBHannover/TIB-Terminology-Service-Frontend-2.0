@@ -57,7 +57,10 @@ const OntologyList = (props) => {
   const allCollections = allCollectionWithStats;
 
   async function setComponentData (){    
-    try{      
+    try{   
+      if(!ontologyListQuery.data){
+        return;
+      }   
       let ontologiesList = [];
       if(appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0){
         for(let onto of ontologyListQuery.data){
@@ -74,7 +77,7 @@ const OntologyList = (props) => {
       setUnFilteredOntologies(sortedOntologies);              
       setIsLoaded(true);      
     }
-    catch(error){                  
+    catch(error){       
       setIsLoaded(true);
       setError(error);        
     }
@@ -249,7 +252,7 @@ const OntologyList = (props) => {
   useEffect(() => {
     setComponentData();       
     setStateBasedOnUrlParams();      
-  }, []);
+  }, [ontologyListQuery.data]);
 
 
 
