@@ -28,7 +28,7 @@ const instance = createInstance({
 )
 
 const aWeek = 1000 * 60 * 60 * 24 * 7;
-const cacheTime = process.env.REACT_APP_CACHE_ENABLED === "true" ? 0 : aWeek;
+const cacheTime = process.env.REACT_APP_CACHE_ENABLED === "true" ? aWeek : 0;
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
