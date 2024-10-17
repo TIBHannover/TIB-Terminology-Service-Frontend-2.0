@@ -29,7 +29,7 @@ const Facet = (props) => {
         else{            
             let facetData = props.facetData["facet_fields"];
             let allTypes = facetData["type"];
-            let allOntologies = facetData["ontology_name"];
+            let allOntologies = facetData["ontologyId"];
             let ontologyFacetData = {};
             let types = {};                        
             for(let i=0; i < allOntologies.length; i++){               

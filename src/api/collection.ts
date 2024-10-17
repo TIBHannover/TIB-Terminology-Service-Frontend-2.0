@@ -38,11 +38,7 @@ export async function fetchCollectionsWithStats():Promise<Array<object>>{
 /* react query key: allCollectionsWithTheirOntologies  */
 export async function fetchAllCollectionWithOntologyList():Promise<Array<CollectionWithItsOntologyListData>> {
   type CollectionIdsResponseType = {
-      _embedded: {
-          strings: Array<{
-              content: string
-          }>
-      }
+      content: Array<string>;
   }
 
   try{
@@ -52,16 +48,16 @@ export async function fetchAllCollectionWithOntologyList():Promise<Array<Collect
       return Promise.reject(new Error(resp.statusText));
     }
     let cols:CollectionIdsResponseType = await resp.json();
-    let collections = cols['_embedded']["strings"];
+    let collections = cols['content'];
     let result = [];
     for( let col of collections ){                      
-      let collectionOntologies = await fetchOntologyListForCollections([col['content']], false);
+      let collectionOntologies = await fetchOntologyListForCollections([col], false);
       let collectionOntologiesIds = [];
       for(let onto of collectionOntologies){
         let temp = {"ontologyId": onto['ontologyId'].toUpperCase(), "purl": onto['purl']};
         collectionOntologiesIds.push(temp)
       }
-      let record = {"collection": col['content'], "ontologies": collectionOntologiesIds};    
+      let record = {"collection": col, "ontologies": collectionOntologiesIds};    
       result.push(record);
     }    
     return result;    
