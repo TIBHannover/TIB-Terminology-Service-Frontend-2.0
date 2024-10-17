@@ -66,7 +66,6 @@ export const CommentCardHeader = (props) =>{
 
     useEffect(() => {
         setComment(props.comment);
-        console.log("CommentCardHeader: ", props.comment);
     },[props.comment]);
     
     let deleteFormData = {};

@@ -197,7 +197,6 @@ export const RenderTermList = (props) => {
     
 
     useEffect(() => {
-        console.log(props.listOfTerms)
         if(props.listOfTerms.length !== 0 && props.listOfTerms[0] !== "loading"){            
             setNoResultFlag(false);
             createList();            

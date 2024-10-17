@@ -15,7 +15,6 @@ export async function getObsoleteTermsForTermList(ontologyId:string, termType:st
     let url = OntologiesBaseServiceUrl + "/";  
     url += ontologyId + "/" + termType + "/roots?includeObsoletes=true&size=" + size + "&page=" + page;    
     let res =  await (await fetch(url, getCallSetting)).json();
-    console.log(res);
     let totalTermsCount = res['page']['totalElements'];
     res = res['_embedded'];
     return {"results": res['terms'], "totalTermsCount":totalTermsCount };

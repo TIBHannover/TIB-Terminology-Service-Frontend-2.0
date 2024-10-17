@@ -135,7 +135,10 @@ const Tree = (props) => {
                 }
                 else{ 
                     let i = 0;                  
-                    for(i=0; i < rootNodesWithChildren.length; i++){      
+                    for(i=0; i < rootNodesWithChildren.length; i++){  
+                        if (rootNodesWithChildren[i].iri === "http://www.w3.org/2002/07/owl#Thing"){
+                            continue;
+                        }    
                         let treeNode = new TreeNodeController();
                         let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
@@ -201,6 +204,9 @@ const Tree = (props) => {
         }
         let i = 0;        
         for(i=0; i < rootNodes.length; i++){
+            if (rootNodes[i].iri === "http://www.w3.org/2002/07/owl#Thing"){
+                continue;
+            }  
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
