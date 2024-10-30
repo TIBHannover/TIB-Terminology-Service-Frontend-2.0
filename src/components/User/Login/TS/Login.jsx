@@ -11,9 +11,13 @@ const Login = (props) => {
             loginUrl = process.env.REACT_APP_GITHUB_AUTH_BASE_URL;
             loginUrl += "&client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID;                   
         }
-        else{
+        else if(authProvider === "orcid"){
             loginUrl = process.env.REACT_APP_ORCID_AUTH_BASE_URL;
             loginUrl += "&client_id=" + process.env.REACT_APP_ORCID_CLIENT_ID;            
+        }
+        else if(authProvider === "gitlab"){
+            loginUrl = process.env.REACT_APP_GITLAB_AUTH_BASE_URL;
+            loginUrl += "&client_id=" + process.env.REACT_APP_GITLAB_CLIENT_ID;
         }
         
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
@@ -34,8 +38,14 @@ const Login = (props) => {
                 </div>
                 <br></br>
                 <div className="row justify-content-center">
+                    <a onClick={getAuthenticationCode}  authProvider="gitlab" className="btn btn-secondary gitlab-login-btn">
+                        <i className="fa fa-gitlab"></i> Sign in with GitLab
+                    </a>
+                </div>
+                <br></br>
+                <div className="row justify-content-center">
                     <a onClick={getAuthenticationCode} authProvider="orcid" className="btn btn-secondary orcid-login-btn">
-                    <i class="fa-brands fa-orcid"></i> Sign in with ORCID
+                        <i class="fa-brands fa-orcid"></i> Sign in with ORCID
                     </a>
                 </div>   
             </span>
