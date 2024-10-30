@@ -20,7 +20,7 @@ export function renderHelpPage(){
             </ul>
             <p>Reference to shared domain terminologies helps to make data FAIR and discoverable by peers and web services.</p>
             <h4>3 How can I use TIB Terminology Service for research data management ?</h4>
-            <p>You can integrate TIB Terminology Service into your own applications via its REST API (see <b><a href={'/documentation'}>Documentation</a></b>)</p>
+            <p>You can integrate TIB Terminology Service into your own applications via its REST API (see <b><a href={'https://service.tib.eu/ts4tib/swagger-ui.html'} target="_blank">Documentation</a></b>)</p>
             <p>Each concept is represented by a Uniform Resource Identifier (URI). You can use this URI in data documentation and data annotation to persistently refer to concept descriptions related to your research.</p>
             <h4>4 I do not find the terms I need - what can I do now ?</h4>
             <p>If you want to suggest a new terminology to be added to TIB Terminology Service leave an issue at <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a></b>.</p>
