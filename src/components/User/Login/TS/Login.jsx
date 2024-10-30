@@ -10,15 +10,17 @@ const Login = (props) => {
         if(authProvider === "github"){
             loginUrl = process.env.REACT_APP_GITHUB_AUTH_BASE_URL;
             loginUrl += "&client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID;                   
-        }
-        else if(authProvider === "orcid"){
+        }else if(authProvider === "orcid"){
             loginUrl = process.env.REACT_APP_ORCID_AUTH_BASE_URL;
             loginUrl += "&client_id=" + process.env.REACT_APP_ORCID_CLIENT_ID;            
-        }
-        else if(authProvider === "gitlab"){
+        }else if(authProvider === "gitlab"){
             loginUrl = process.env.REACT_APP_GITLAB_AUTH_BASE_URL;
             loginUrl += "&client_id=" + process.env.REACT_APP_GITLAB_CLIENT_ID;
+        }else if(authProvider === "native"){
+            loginUrl = process.env.REACT_APP_REGAPP_AUTH_BASE_URL;
+            loginUrl += "?client_id=" + process.env.REACT_APP_REGAPP_CLIENT_ID;
         }
+
         
         loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
         localStorage.setItem("authProvider", authProvider);
@@ -48,6 +50,11 @@ const Login = (props) => {
                         <i class="fa-brands fa-orcid"></i> Sign in with ORCID
                     </a>
                 </div>   
+                <div className="row justify-content-center">
+                    <a onClick={getAuthenticationCode} authProvider="native" className="btn btn-secondary">
+                        Sign in with RegApp
+                    </a>
+                </div>
             </span>
         ];
     }

@@ -1,4 +1,4 @@
-import UserModel from "../models/user";
+import UserModel from "../components/User/Model/user";
 import { runLogin, isLogin } from "../api/user";
 import { LoginResponse } from "../api/types/userTypes";
 
@@ -10,6 +10,9 @@ class Auth{
         if(cUrl.includes("code=")){
             Auth.enableLoginAnimation();
             let code = cUrl.split("code=")[1];        
+            if(code.includes("&")){
+              code = code.split('&')[0];
+            }
             runLogin(code).then((resp) => {
                 if(resp){                    
                     let userData = Auth.createUserDataObjectFromAuthResponse(resp);
@@ -44,7 +47,7 @@ class Auth{
             user.setSettings(response["settings"]);            
             user.setAuthProvider(authProvider);        
             if(authProvider === 'github'){            
-                user.setGithubInfo({company: response["company"], homeUrl: response["github_home"]});            
+                user.setGitInfo({company: response["company"], homeUrl: response["github_home"]});            
             }
             else if(authProvider === "orcid"){
                 user.setOrcidInfo({orcidId:response["orcid_id"]});                        
