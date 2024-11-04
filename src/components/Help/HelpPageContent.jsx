@@ -2,7 +2,7 @@ export function renderHelpPage(){
     let content = [
         <div>
             <h3>Feedback and Suggestion</h3>
-            <p>For feedback, enquiries or suggestion about TIB Terminology Service or to request a new terminology please visit <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a></b> (requires sign-in)</p>
+            <p>For feedback, enquiries or suggestion about TIB Terminology Service or to request a new terminology please visit <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"} target="_blank">our issue tracker</a></b> (requires sign-in)</p>
             <br/>
             <h3>Frequently Asked Questions (FAQ)</h3>
             <br/>
@@ -23,7 +23,7 @@ export function renderHelpPage(){
             <p>You can integrate TIB Terminology Service into your own applications via its REST API (see <b><a href={'https://service.tib.eu/ts4tib/swagger-ui.html'} target="_blank">Documentation</a></b>)</p>
             <p>Each concept is represented by a Uniform Resource Identifier (URI). You can use this URI in data documentation and data annotation to persistently refer to concept descriptions related to your research.</p>
             <h4>4 I do not find the terms I need - what can I do now ?</h4>
-            <p>If you want to suggest a new terminology to be added to TIB Terminology Service leave an issue at <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a></b>.</p>
+            <p>If you want to suggest a new terminology to be added to TIB Terminology Service leave an issue at <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"} target="_blank">our issue tracker</a></b>.</p>
             <p>If you do not know a fitting terminology please get in touch with us (felix.engel [AT] tib.eu).</p>
             <p>We are constantly adding new contents to the service. In the meantime you could also visit other terminology services.</p>
             <h4>5 I am maintainer of a terminology - how can I have it added to the service ?</h4>
@@ -36,7 +36,7 @@ export function renderHelpPage(){
                 <li>with machine-readable metadata</li>
             </ul>
             <p>Terminologies in a tabular format (.tsv, .csv, .xlsx) or in mark-up languages like XML (.xml) are not ready for ingest and require further processing.</p>
-            <p>Make a request at <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"}>our issue tracker</a></b>.</p>
+            <p>Make a request at <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"} target="_blank">our issue tracker</a></b>.</p>
             <h4>6 How can I contribute to any of the terminologies ?</h4>
             <p>The terminologies listed on TIB Terminology Service are usually maintained by dedicated communities and developed on web services like GitHub or GitLab.</p>
             <p>If you have suggestions for a particular terminology you should visit their repository and open an issue.</p>
@@ -44,22 +44,19 @@ export function renderHelpPage(){
             <h4>7 Are there other services to look up terminology ?</h4>
             <p>Yes, there are but some of these do not offer an API. There are a several terminology portals offered by standardization bodies like ISO, DIN or IEC where you can look up standardized terms and definitions:</p>
             <ul>
-                <li><b><a href={"https://www.iso.org/obp/ui#search"}>ISO Open Browsing Platform</a></b></li>
-                <li><b><a href={"https://www.electropedia.org/"}>Electropedia</a></b></li>
-                <li><b><a href={"https://www.din.de/de/service-fuer-anwender/din-term"}>DINTerm</a></b> (search for terms and definitions from German standards, requires registration)</li>
-                <li><b><a href={"https://www.din.de/de/service-fuer-anwender/din-termonline"}>DINTerm Online</a></b> (search for terms and approved translations, available without registration)</li>
-            </ul>
-            <p>A multiple domain search for terms is also possible on services like</p>
-            <ul>
-                <li><b><a href={"https://bartoc-fast.ub.unibas.ch/bartocfast/"}>Bartoc FAST</a></b></li>
+                <li><b><a href={"https://www.iso.org/obp/ui#search"} target="_blank">ISO Open Browsing Platform</a></b></li>
+                <li><b><a href={"https://www.electropedia.org/"} target="_blank">Electropedia</a></b></li>
+                <li><b><a href={"https://www.din.de/de/service-fuer-anwender/terminologie/din-term"} target="_blank">DIN-TERMinologieportal</a></b> (search for terms and definitions from German standards, requires registration)</li>
+                <li><b><a href={"https://www.din.de/de/service-fuer-anwender/terminologie/din-termonline"} target="_blank">DINTerm Online</a></b> (search for terms and approved translations, available without registration)</li>
             </ul>
             <p>The following services allow the search for terminological collections which may contain relevant terms:</p>
             <ul>
-                <li><b><a href={"https://bartoc.org/"}>Bartoc</a></b></li>
-                <li><b><a href={"https://lov.linkeddata.es/dataset/lov/"}>Linked Open Vocabularies</a></b></li>
-                <li><b><a href={"https://www.lod-cloud.net/"}>Linked Open Data Cloud</a></b></li>
-                <li><b><a href={"https://archivo.dbpedia.org/list"}>DBpedia Archivo</a></b></li>
+                <li><b><a href={"https://bartoc.org/registries"} target="_blank">Bartoc</a></b></li>
+                <li><b><a href={"https://lov.linkeddata.es/dataset/lov/"} target="_blank">Linked Open Vocabularies</a></b></li>
+                <li><b><a href={"https://www.lod-cloud.net/"} target="_blank">Linked Open Data Cloud</a></b></li>
+                <li><b><a href={"https://archivo.dbpedia.org/list"} target="_blank">DBpedia Archivo</a></b></li>
             </ul>
+            <p>A list of further services is provided by <a href={"https://bartoc.org/registries"} target="_blank">Bartoc</a>.</p>
         </div>
     ];
 
