@@ -48,7 +48,6 @@ const App = () => {
 
     if(process.env.REACT_APP_AUTH_FEATURE === "true"){   
       let cUrl = window.location.href;
-      console.log(cUrl)
       if(cUrl.includes("code=")){
         Auth.run();       
       }
