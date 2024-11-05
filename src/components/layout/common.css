@@ -568,17 +568,18 @@ body .user-profile-dropdown{
     font-size: 12px;    
 }
 
-body .github-login-btn, body .github-login-btn:hover, body .github-login-btn:focus{
-    background-color: black;
+body .login-btn{
     color: white;
     width: 300px;
+}
+
+body .github-login-btn, body .github-login-btn:hover, body .github-login-btn:focus{
+    background-color: black;
     border: 1px solid black;
 }
 
 body .gitlab-login-btn, body .gitlab-login-btn:hover, body .gitlab-login-btn:focus{
     background-color: #CB4E18;
-    color: white;
-    width: 300px;
     border: 1px solid #CB4E18;
 }
 
@@ -590,8 +591,6 @@ body .login-btn-header:hover{
 
 body .orcid-login-btn, body .orcid-login-btn:hover, body .orcid-login-btn:focus{
     background-color: #A6CE39;
-    color: white;
-    width: 300px;
     border: 1px solid #A6CE39;
 }
 
