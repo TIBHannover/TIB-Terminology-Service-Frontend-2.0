@@ -1,8 +1,4 @@
-
-
-
 const Login = (props) => {    
-
 
     function getAuthenticationCode(e){
         let authProvider = e.target.getAttribute("authProvider");
@@ -34,24 +30,25 @@ const Login = (props) => {
         return [
             <span>
                 <div className="row justify-content-center">
-                    <a onClick={getAuthenticationCode}  authProvider="github" className="btn btn-secondary github-login-btn">
+                    <a onClick={getAuthenticationCode}  authProvider="github" className="btn btn-secondary github-login-btn login-btn">
                         <i className="fa fa-github"></i> Sign in with GitHub
                     </a>
                 </div>
                 <br></br>
                 <div className="row justify-content-center">
-                    <a onClick={getAuthenticationCode}  authProvider="gitlab" className="btn btn-secondary gitlab-login-btn">
+                    <a onClick={getAuthenticationCode}  authProvider="gitlab" className="btn btn-secondary gitlab-login-btn login-btn">
                         <i className="fa fa-gitlab"></i> Sign in with GitLab
                     </a>
                 </div>
                 <br></br>
                 <div className="row justify-content-center">
-                    <a onClick={getAuthenticationCode} authProvider="orcid" className="btn btn-secondary orcid-login-btn">
+                    <a onClick={getAuthenticationCode} authProvider="orcid" className="btn btn-secondary orcid-login-btn login-btn">
                         <i class="fa-brands fa-orcid"></i> Sign in with ORCID
                     </a>
                 </div>   
+                <br/>
                 <div className="row justify-content-center">
-                    <a onClick={getAuthenticationCode} authProvider="native" className="btn btn-secondary">
+                    <a onClick={getAuthenticationCode} authProvider="native" className="btn btn-secondary login-btn">
                         Sign in with RegApp
                     </a>
                 </div>
