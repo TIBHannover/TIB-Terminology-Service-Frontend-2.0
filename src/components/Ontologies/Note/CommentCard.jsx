@@ -1,5 +1,5 @@
 import {useState, useEffect, useContext} from "react";
-import AuthLib from "../../../Libs/AuthLib";
+import Auth from "../../../Libs/AuthLib";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
@@ -85,7 +85,7 @@ export const CommentCardHeader = (props) =>{
         <div className="row" key={"c-" + comment['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + Toolkit.formatDateTime(comment['created_at']) + " by "} <b>{AuthLib.getUserName(comment['created_by'])}</b> 
+                    {"Opened on " + Toolkit.formatDateTime(comment['created_at']) + " by "} <b>{Auth.getUserName(comment['created_by'])}</b> 
                 </small>
                 {linkCopied && <CopiedSuccessAlert message="link copied" />}
             </div>

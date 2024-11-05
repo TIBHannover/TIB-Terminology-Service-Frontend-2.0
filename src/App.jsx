@@ -6,13 +6,15 @@ import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 import  CookieBanner  from './components/common/CookieBanner/CookieBanner';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
-import AppHelpers from './AppHelpers';
-import AuthFactory from './components/User/Login/AuthFactory';
+import { BackendIsDownMessage, setSiteTitleAndFavIcon, InlineWrapperWithMargin } from './AppHelpers';
+import Auth from './Libs/AuthLib';
 import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
 import { getReportList } from './api/tsMicroBackendCalls';
 import LoadingPage from './LoadingPage';
+import { olsIsUp } from './api/system';
+import { useQuery } from '@tanstack/react-query';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -24,6 +26,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
+  const [isBackendDown, setIsBackendDown] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
   const [userSettings, setUserSettings] = useState({
     "activeCollection": {"title": "", "ontology_ids": []}, 
@@ -33,20 +36,23 @@ const App = () => {
     "activeSearchSettingIsModified": false
   } );
   
-    const [showLoadingPage, setShowLoadingPage] = useState(true);
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
 
+  const olsIsUpQuery = useQuery({queryKey:['olsIsUpCall'], queryFn: olsIsUp, meta:{cache: false}});
+  if(olsIsUpQuery.isError){
+    setIsBackendDown(true);
+  }
 
   useEffect(() => {
-    AppHelpers.setSiteTitleAndFavIcon();
-    AppHelpers.checkBackendStatus();
+    setSiteTitleAndFavIcon();
 
     if(process.env.REACT_APP_AUTH_FEATURE === "true"){   
       let cUrl = window.location.href;
       if(cUrl.includes("code=")){
-        AuthFactory.runAuthentication();        
+        Auth.run();       
       }
 
-      AuthFactory.userIsLogin().then((user) => {
+      Auth.userIsLogin().then((user) => {
         setUser(user);
         setIsSystemAdmin(user?.systemAdmin);
         let settings = {...userSettings};                
@@ -69,6 +75,9 @@ const App = () => {
         setUserSettings(settings); 
         setShowLoadingPage(false);    
       });      
+    }
+    else{
+      setShowLoadingPage(false); 
     }
 
     setTimeout( () => {
@@ -101,7 +110,7 @@ const App = () => {
                   {loading && 
                     <Skeleton 
                       count={2} 
-                      wrapper={AppHelpers.InlineWrapperWithMargin} 
+                      wrapper={InlineWrapperWithMargin} 
                       inline width={600} 
                       height={200} 
                       marginLeft={20} 
@@ -109,7 +118,7 @@ const App = () => {
                   }
                   {!loading &&
                     <>            
-                      <span id="backend-is-down-message-span"></span>
+                      {isBackendDown && <BackendIsDownMessage />}
                       <CookieBanner />
                       <AppRouter />        
                     </>   

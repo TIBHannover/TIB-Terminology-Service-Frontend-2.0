@@ -26,7 +26,7 @@ export const OntologyListRender = (props) =>{
     const [ontologyListContent, setOntologyListContent] = useState('');
 
     function BuildCollectionForCard(collections){
-        if (collections == null){
+        if (collections === null){
             return "";
         }
         let result = [];

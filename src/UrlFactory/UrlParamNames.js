@@ -5,6 +5,7 @@ export const Size = 'size';
 export const Collection = 'collection';
 export const SortBy = 'sortedBy';
 export const SubTabInTermTable = 'subtab';
+export const CollectionId = 'col';
 
 // Search related
 export const SearchQuery = 'q';

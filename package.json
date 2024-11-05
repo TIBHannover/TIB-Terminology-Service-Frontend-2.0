@@ -1,9 +1,13 @@
 {
   "name": "TIB Terminology Service Frontend",
   "version": "2.0.0",
-  "private": true, 
+  "private": true,
   "dependencies": {
     "@datapunt/matomo-tracker-react": "^0.5.1",
+    "@tanstack/query-sync-storage-persister": "^4.36.1",
+    "@tanstack/react-query": "^4.36.1",
+    "@tanstack/react-query-devtools": "^4.36.1",
+    "@tanstack/react-query-persist-client": "^4.36.1",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
@@ -34,7 +38,6 @@
     "react-loading-skeleton": "^3.1.1",
     "react-markdown": "^8.0.7",
     "react-oidc-context": "^2.2.2",
-    "react-query": "^3.34.19",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
     "react-spring": "^9.4.4",

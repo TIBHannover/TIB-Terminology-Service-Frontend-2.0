@@ -15,3 +15,12 @@ export type CollectionDataResponse ={
     owner_id:string|number,
     public:boolean
 }
+
+
+export type CollectionWithItsOntologyListData = {
+    collection?: string,
+    ontologies?: Array<{
+      ontologyId?: string,
+      purl?: string
+    }>
+  }

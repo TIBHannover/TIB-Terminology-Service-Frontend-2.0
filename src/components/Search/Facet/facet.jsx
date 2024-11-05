@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
-import { a } from "react-spring";
 
 
 const Facet = (props) => {
@@ -130,8 +129,9 @@ const Facet = (props) => {
 
     function createCollectionsCheckBoxes(){        
         let result = [];
-        for (let record of props.allCollections){
-            for(let ontoId of record['ontolgies']){
+        for (let record of props.allCollections){            
+            for(let onto of record['ontologies']){
+                let ontoId = onto['ontologyId'];
                 if(props.selectedOntologies.includes(ontoId.toLowerCase()) || props.selectedOntologies.length === 0){
                     result.push(
                         <div className="row facet-item-row">

@@ -1,13 +1,14 @@
 import {useState, useEffect, useContext} from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import CollectionApi from '../../../api/collection';
+import { fetchCollectionsWithStats, fetchOntologyListForCollections } from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 import { AppContext } from '../../../context/AppContext';
+import { useQuery } from '@tanstack/react-query';
 
 
 
@@ -31,47 +32,57 @@ const OntologyList = (props) => {
   const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);  
   const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);  
   const [sortField, setSortField] = useState(TITLE_SORT_KEY);
-  const [selectedCollections, setSelectedCollections] = useState([]);
-  const [allCollections, setAllCollections] = useState([]);  
+  const [selectedCollections, setSelectedCollections] = useState([]);  
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
 
+  const allCollectionsWithStatsQuery = useQuery({
+    queryKey: ['allCollectionsWithTheirStats'],
+    queryFn: fetchCollectionsWithStats,
+    
+  });
+  
+  const ontologyApi = new OntologyApi({});      
+  const ontologyListQuery = useQuery({
+    queryKey: ['ontologyList'],
+    queryFn: ontologyApi.fetchOntologyList,
+  });
+  
+  let allCollectionWithStats = [];
+  if(process.env.REACT_APP_PROJECT_NAME === "" && allCollectionsWithStatsQuery.data){
+    // Only for TIB General
+    allCollectionWithStats = allCollectionsWithStatsQuery.data;
+  } 
+  const allCollections = allCollectionWithStats;
 
   async function setComponentData (){    
-    try{      
-      let ontologyApi = new OntologyApi({});      
-      await ontologyApi.fetchOntologyList();
+    try{   
+      if(!ontologyListQuery.data){
+        return;
+      }   
       let ontologiesList = [];
       if(appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0){
-        for(let onto of ontologyApi.list){
+        for(let onto of ontologyListQuery.data){
           if(appContext.userSettings.activeCollection.ontology_ids.includes(onto.ontologyId)){
             ontologiesList.push(onto);
           }
         }
       }
       else{
-        ontologiesList = ontologyApi.list;
+        ontologiesList = ontologyListQuery.data;
       }
       let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);                 
       setOntologies(sortedOntologies);
       setUnFilteredOntologies(sortedOntologies);              
       setIsLoaded(true);      
     }
-    catch(error){            
+    catch(error){       
       setIsLoaded(true);
       setError(error);        
     }
   }
 
-
-  async function setCollectionData(){
-    let collectionApi = new CollectionApi();
-    let allCollections = [];          
-    await collectionApi.fetchCollectionsWithStats();       
-    allCollections =  collectionApi.collectionsList;    
-    setAllCollections(allCollections);        
-  }
 
 
 
@@ -195,8 +206,7 @@ const OntologyList = (props) => {
 
 
 
-  async function runFilter(){     
-    let collectionApi = new CollectionApi();
+  async function runFilter(){         
     let ontologiesList = [...unFilteredOntologies];
     let keywordOntologies = [];          
     if(keywordFilterString !== ""){                   
@@ -209,7 +219,7 @@ const OntologyList = (props) => {
       ontologiesList = keywordOntologies;    
     }
     if(selectedCollections.length !== 0){      
-      let collectionOntologies = await collectionApi.fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
+      let collectionOntologies = await fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
       let collectionFilteredOntologies = [];
       for (let onto of collectionOntologies){
         if(typeof(ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
@@ -234,21 +244,15 @@ const OntologyList = (props) => {
       page: pageNumber,
       size: pageSize,
       andOpValue: exclusiveCollections
-    });
-    
-    // history.push(updatedUrl);    
+    });  
   }
 
 
 
   useEffect(() => {
-    setComponentData();
-    if(process.env.REACT_APP_PROJECT_NAME === ""){
-      // If TIB General, fetch all the collections. Otherwise not needed.
-      setCollectionData();
-    }    
+    setComponentData();       
     setStateBasedOnUrlParams();      
-  }, []);
+  }, [ontologyListQuery.data]);
 
 
 

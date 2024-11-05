@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from "react";
 import { buildNoteAboutPart, PinnModalBtn, PinnModal } from "./helpers";
 import { Link } from 'react-router-dom';
-import AuthLib from "../../../Libs/AuthLib";
+import Auth from "../../../Libs/AuthLib";
 import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
 import { ReportModalBtn, ReportModal } from "../../common/ReportModal/ReportModal";
 import NoteEdit from "./NoteEdit";
@@ -113,7 +113,7 @@ export const NoteCardHeader = (props) => {
         <div className="row" key={"note-" + note['id']}>        
             <div className="col-sm-9">
                 <small>
-                    {"Opened on " + Toolkit.formatDateTime(note['created_at']) + " by "} <b>{AuthLib.getUserName(note['created_by'])}</b> 
+                    {"Opened on " + Toolkit.formatDateTime(note['created_at']) + " by "} <b>{Auth.getUserName(note['created_by'])}</b> 
                 </small>
                 {note['pinned'] && !note['imported']  && 
                     // Pinned Imported notes from child should not be pinned in parent
