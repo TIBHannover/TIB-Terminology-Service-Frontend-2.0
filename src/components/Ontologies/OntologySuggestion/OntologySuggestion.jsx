@@ -107,8 +107,6 @@ const OntologySuggestion = () => {
       // on projects frontend. Collection is preselected for the app.
       selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME)
     }
-    console.log(selectedCollectionIds)
-    console.log(collectionWithOntologyListQuery.data)
     for (let res of collectionWithOntologyListQuery.data) {
       for (let onto of res['ontologies']) {
         if (onto['purl'] === ontoPurl) {
