@@ -23,13 +23,13 @@ export function renderHomePage() {
       <br></br>
       <div className="row">
         <div className="col-sm-4">
-          <CollectionCard  collectionId={'NFDI4Ing'} />
+          <CollectionCard  collectionId={'NFDI4ING'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4Chem'} />
+          <CollectionCard collectionId={'NFDI4CHEM'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4Culture'} />
+          <CollectionCard collectionId={'NFDI4CULTURE'} />
         </div>
       </div>
       <br></br>
@@ -38,10 +38,10 @@ export function renderHomePage() {
           <CollectionCard collectionId={'CoyPu'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard collectionId={'FID Move'} />
+          <CollectionCard collectionId={'FID move'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard  collectionId={'FID Baudigital'} />
+          <CollectionCard  collectionId={'FID BAUdigital'} />
         </div>
       </div>
       <br></br>
@@ -53,13 +53,13 @@ export function renderHomePage() {
           <CollectionCard  collectionId={'ESS'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4Cat'} />
+          <CollectionCard collectionId={'NFDI4CAT'} />
         </div>
       </div>
       <br></br>
       <div className="row">
         <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4ENERGY'} />
+          <CollectionCard collectionId={'NFDI4Energy'} />
         </div>
         <div className="col-sm-4">
           <CollectionCard collectionId={'DataPLANT'}  />

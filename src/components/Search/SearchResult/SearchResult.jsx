@@ -7,13 +7,14 @@ import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import SearchLib from '../../../Libs/searchLib';
-import CollectionApi from '../../../api/collection';
+import { fetchAllCollectionWithOntologyList } from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import { AppContext } from '../../../context/AppContext';
+import { useQuery } from '@tanstack/react-query';
 
 
 
@@ -40,8 +41,7 @@ const SearchResult = (props) => {
   const [pageNumber, setPageNumber] = useState(parseInt(searchUrlFactory.page ? searchUrlFactory.page : DEFAULT_PAGE_NUMBER));
   const [pageSize, setPageSize] = useState(parseInt(searchUrlFactory.size ? searchUrlFactory.size : DEFAULT_PAGE_SIZE));
   const [expandedResults, setExpandedResults] = useState([]);
-  const [totalResultsCount, setTotalResultsCount] = useState([]);  
-  const [allCollectionIds, setAllCollectionIds] = useState([]);
+  const [totalResultsCount, setTotalResultsCount] = useState([]);
   const [filterTags, setFilterTags] = useState("");
   const [loading, setLoading] = useState(true);        
 
@@ -53,16 +53,17 @@ const SearchResult = (props) => {
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
 
-  async function getAllCollectionIds(){
-    // Fetch all collection Ids for TIB General to show in the facet.
-    let collectionApi = new CollectionApi();
-    if(process.env.REACT_APP_PROJECT_ID === "general"){
-      await collectionApi.fetchAllCollectionWithOntologyList(false);
-      setAllCollectionIds(collectionApi.collectionsList);
-      return true;
-    }
-    return []; 
+  let collectionIdsAndOntologies = [];
+  const collectionsWithOntologiesQuery = useQuery({
+    queryKey: ['allCollectionsWithTheirOntologies'],
+    queryFn: fetchAllCollectionWithOntologyList
+  });
+
+  if(process.env.REACT_APP_PROJECT_ID === "general" && collectionsWithOntologiesQuery.data){
+    collectionIdsAndOntologies = collectionsWithOntologiesQuery.data;
   }
+  const allCollectionIds = collectionIdsAndOntologies;
+
 
 
   async function search(){  
@@ -315,8 +316,7 @@ const SearchResult = (props) => {
 
 
   useEffect(() => {
-    search();
-    getAllCollectionIds();
+    search();    
   }, []);
 
 

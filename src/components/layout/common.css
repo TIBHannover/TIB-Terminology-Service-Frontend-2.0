@@ -469,6 +469,11 @@ body .fa-download{
     border: none;
 }
 
+body .fa-upload{
+    border: none;
+    font-size: 18px;
+}
+
 body .fa-check{
     border: none;
     margin-left: 1px;
@@ -662,3 +667,16 @@ body .modal{
     font-size: 5px;
     padding: 2px;
 }
+
+input[type="file"] {
+    display: none;
+}
+  
+body .custom-file-upload {    
+    display: inline-block;
+    padding: 5px;
+    cursor: pointer;
+    background-color: #404040;
+    color: white;
+    border-radius: 5px;
+  }

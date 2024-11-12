@@ -131,9 +131,11 @@ const TermDetailTable = (props) => {
     return <div className="is-loading-term-list isLoading-small"></div>;
   }
 
+  const helmetText = props.node.label ? `${props.node.ontology_name}:${props.node.label}` : `${props.node.ontology_name}:${props.node.short_form}`;
+
   return(
     <div>
-      {Toolkit.createHelmet(`${props.node.ontology_name}:${props.node.short_form}`)}     
+      {Toolkit.createHelmet(helmetText)}     
       {props.node.is_obsolete &&
         <AlertBox  
           type="danger"
