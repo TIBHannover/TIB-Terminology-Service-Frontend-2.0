@@ -25,7 +25,7 @@ export function renderHelpPage() {
       <p>You can integrate TIB Terminology Service into your own applications via its REST API (see <b><a href={'https://service.tib.eu/ts4tib/swagger-ui.html'} target="_blank">Documentation</a></b>)</p>
       <p>Each concept is represented by a Uniform Resource Identifier (URI). You can use this URI in data documentation and data annotation to persistently refer to concept descriptions related to your research.</p>
       <h4>4 I do not find the terms I need - what can I do now ?</h4>
-      <p>If you want to suggest a new terminology to be added to TIB Terminology Service leave an issue at <b><a href={"https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker"} target="_blank">our issue tracker</a></b>.</p>
+      <p>If you want to suggest a new terminology to be added to TIB Terminology Service use: <a className="btn btn-secondary btn-sm pt-0 pb-0 pl-1 pr-1" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>Ontology suggestion</a></p>
       <p>If you do not know a fitting terminology please get in touch with us (felix.engel [AT] tib.eu).</p>
       <p>We are constantly adding new contents to the service. In the meantime you could also visit other terminology services.</p>
       <h4>5 I am maintainer of a terminology - how can I have it added to the service ?</h4>
