@@ -37,7 +37,7 @@ const OntologyOverview = () => {
             </div>
           </div>
           <br />
-          {process.env.REACT_APP_PROJECT_ID === "general" &&
+          {process.env.REACT_APP_PROJECT_ID === "general" && process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true" &&
             <div className='row'>
               <div className='col-sm-12'>
                 <button

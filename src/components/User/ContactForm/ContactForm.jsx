@@ -78,6 +78,9 @@ const ContactForm = () => {
   }
 
 
+  if (process.env.REACT_APP_CONTACT_FORM !== "true") {
+    return "";
+  }
 
   return (
     <div className="row">

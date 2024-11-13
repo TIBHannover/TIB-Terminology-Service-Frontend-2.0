@@ -224,6 +224,10 @@ const OntologySuggestion = () => {
   const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
   const showNewSuggestionBtn = (submitedSeccessfully || testFailed || submitedFailed || (ontologyExist && !collectionSuggestMode) || suggestionExist);
 
+  if (process.env.REACT_APP_ONTOLOGY_SUGGESTION !== "true") {
+    return "";
+  }
+
   return (
     <OntologySuggestionContext.Provider value={contextData}>
       <div className="row">
