@@ -18,6 +18,8 @@ import ReportPanel from "./components/User/Admin/ReportPanel";
 import Sitemap from './components/Sitemap/Sitemap';
 import {Route, Switch} from 'react-router-dom';
 import UserCollection from "./components/User/Collection/Collection";
+import ContactForm from "./components/User/ContactForm/ContactForm";
+import OntologySuggestion from "./components/Ontologies/OntologySuggestion/OntologySuggestion";
 
 
 
@@ -32,6 +34,7 @@ const AppRouter = () => {
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests}/>
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel}/>
             <RequireLoginRoute  path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection}/>
+            <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"} component={OntologySuggestion}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"} component={OntologyPage}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation}/>
@@ -42,7 +45,9 @@ const AppRouter = () => {
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>            
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>            
+            <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"} component={ContactForm}/>            
             <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>
+            <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/sitemap"} component={Sitemap}/>            
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>
             }
