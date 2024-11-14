@@ -1,10 +1,12 @@
 import { LoginResponse
     , UserSettings,
     SearchSettingPayload,
-    SearchSettingApiResponse
+    SearchSettingApiResponse,
+    ContactFormData
  } from "./types/userTypes";
  import { TsPluginHeader } from "./types/headerTypes";
  import { getTsPluginHeaders } from "./header";
+
 
 
 
@@ -138,6 +140,21 @@ export async function deleteSearchSetting(settingId:string|number):Promise<boole
         if(result){
             return true;        
         }        
+        return false;
+    }
+    catch(e){
+        return false;
+    }
+}
+
+
+export async function sendContactFrom(data:ContactFormData):Promise<boolean>{
+    try{
+        let headers:TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: false});        
+        let result:any = await fetch(baseUrl + "/contact/create", {method: "POST", headers:headers, body: JSON.stringify(data)});
+        if(result.status === 200){
+            return true;
+        }
         return false;
     }
     catch(e){

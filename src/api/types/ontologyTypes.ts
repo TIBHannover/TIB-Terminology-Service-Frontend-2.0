@@ -11,7 +11,9 @@ export type OntologyData = {
     numberOfTerms?: number,
     numberOfProperties?: number,
     numberOfIndividuals?: number,
-    config?: object,
+    config?: {
+        id?: string
+    },
     _links?: {
         self: {
             href: string
@@ -94,4 +96,26 @@ export type ParentNode = {
 export type TermListData = {
     results?: Array<OntologyTermData>,
     totalTermsCount?: number|string
+}
+
+
+export type OntologySuggestionData = {
+    username: string,
+    email: string, 
+    reason: string,    
+    name: string,
+    purl: string,    
+    ontologyFile?: string,
+    collection_ids?: string,
+    collection_suggestion?: boolean,
+    [key: string]: string|boolean|undefined
+}
+
+
+export type OntologyShapeTestResult = {
+    error: Array<{
+        text: string,
+        about: string
+    }>,
+    info: Array<string>
 }

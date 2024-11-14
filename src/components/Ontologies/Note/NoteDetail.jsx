@@ -45,8 +45,7 @@ const NoteDetail = () => {
             }
         });
     }
-
-
+    
     function reloadNoteDetail(){        
         commonUrlFactory.deleteParam({name: SiteUrlParamNames.CommentId});
         setNote({});

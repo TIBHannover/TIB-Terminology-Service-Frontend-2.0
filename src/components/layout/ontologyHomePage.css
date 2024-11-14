@@ -119,4 +119,7 @@
 .show-header-arrow-down{
     margin-top: -45px !important;
 }
-
+#collectionSuggestionModalDialog{
+    max-width: 50% !important;
+    margin: auto !important;
+}

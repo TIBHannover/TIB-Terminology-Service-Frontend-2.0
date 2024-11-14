@@ -1,6 +1,8 @@
 import { getCallSetting, size } from "./constants";
 import { getPageCount } from "./helper";
-import { OntologyData, OntologyTermData } from "./types/ontologyTypes";
+import { OntologyData, OntologyTermData, OntologyShapeTestResult, OntologySuggestionData } from "./types/ontologyTypes";
+import { getTsPluginHeaders } from "./header";
+import { TsPluginHeader } from "./types/headerTypes";
 
 
 
@@ -166,7 +168,70 @@ class OntologyApi{
       return true;
     }    
   }
-
 }
+
+
+
+export async function runShapeTest(ontologyPurl:string): Promise<OntologyShapeTestResult|boolean>{
+  try{
+    let headers = getTsPluginHeaders({withAccessToken:true, isJson:false});         
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/testshape?purl=' + ontologyPurl;
+    let result = await fetch(url, {method:'GET', headers:headers});
+    if (result.status !== 200){
+      return false;
+    }
+    let data = await result.json();
+    return data['_result']['response'];
+  }
+  catch(e){
+    return false;
+  }
+}
+
+
+
+export async function submitOntologySuggestion(formData: OntologySuggestionData): Promise<boolean>{
+  try{
+      let form = new FormData();
+      let formDataAny = formData as any;
+      for(let key in formDataAny){
+          form.append(key, formDataAny[key]);
+      }
+      let headers:TsPluginHeader = getTsPluginHeaders({isJson: false, withAccessToken: true});                      
+      let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create';
+      let result:any = await fetch(url, {method:'POST', headers:headers, body:form});
+      if (result.status === 200){
+          result = await result.json();
+          result = result['_result']['response'];                                  
+          return result;
+      }
+      return false;
+  }
+  catch(e){
+      return false;
+  }
+}
+
+
+export async function checkSuggestionExist(purl: string): Promise<boolean> {
+  try{
+    let headers = getTsPluginHeaders({withAccessToken:true, isJson:false});         
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/suggestion_exist?purl=' + purl;
+    let result = await fetch(url, {method:'GET', headers:headers});
+    if (result.status !== 200){
+      return false;
+    }
+    let data = await result.json();
+    if (data['_result']['exist']){
+      return true
+    }
+    return false
+  }
+  catch(e){
+    return false
+  }
+}
+
+
 
 export default OntologyApi;
