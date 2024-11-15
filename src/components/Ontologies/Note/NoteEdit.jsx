@@ -59,7 +59,7 @@ const NoteEdit = (props) => {
         let noteTitle = FormLib.getFieldByIdIfValid("noteTitle" + props.note['id']);
         let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];        
         let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];        
-        let noteContent = FormLib.getTextEditorValueIfValid(editorState, props.note['id']);                    
+        let noteContent = FormLib.getTextEditorValueIfValid(editorState, "noteContent" + props.note['id']);                    
         formIsValid = noteTitle && noteContent;           
 
         if(parseInt(targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri){

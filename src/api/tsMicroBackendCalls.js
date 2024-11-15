@@ -111,3 +111,4 @@ export async function submitGitIssue({repoUrl, gitUsername, issueTitle, issueBod
         return false;
     }
 }
+
