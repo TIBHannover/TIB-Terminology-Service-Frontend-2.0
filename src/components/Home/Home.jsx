@@ -43,24 +43,24 @@ const Home = () => {
 
   useEffect(() => {
     fetchStats();
+    document.documentElement.style.overflowX = 'inherit';
+    document.documentElement.style.scrollBehavior = 'inherit';
   }, []);
 
   return (
     <>
-      {isTourOpen &&
-        <Tour
-          steps={tourSteps}
-          isOpen={isTourOpen}
-          onRequestClose={() => {
-            setIsTourOpen(false);
-            tourP.homepage = true;
-            storeTourProfile(tourP);
-          }}
-          showNumber={false}
-          disableInteraction={true}
-          scrollOffset={-2000}
-        />
-      }
+      <Tour
+        steps={tourSteps}
+        isOpen={isTourOpen}
+        onRequestClose={() => {
+          setIsTourOpen(false);
+          tourP.homepage = true;
+          storeTourProfile(tourP);
+        }}
+        showNumber={false}
+        disableInteraction={true}
+        scrollOffset={-2000}
+      />
       <div className="row">
         <div className="col-sm-12">
           {renderHomePage(setIsTourOpen)}
