@@ -5,7 +5,8 @@ import { renderHomePage } from "./HomePageContent";
 import { getCallSetting } from "../../api/constants";
 import Tour from 'reactour';
 import { AppContext } from '../../context/AppContext';
-import { tibGeneralHomePageTour } from '../../tours/home';
+import { headerTourStepsTibGeneral, homePageTourStepsTibGeneral } from '../../tours/tibGeneral';
+import { loginInHeaderTourSteps } from '../../tours/login';
 
 const Home = () => {
   const appContext = useContext(AppContext);
@@ -16,7 +17,11 @@ const Home = () => {
   const isUserLogin = appContext.user ? true : false;
   let tourSteps = [];
   if (process.env.REACT_APP_PROJECT_ID === 'general') {
-    tourSteps = tibGeneralHomePageTour(isUserLogin);
+    tourSteps = headerTourStepsTibGeneral();
+    if (process.env.REACT_APP_AUTH_FEATURE === "true") {
+      tourSteps = tourSteps.concat(loginInHeaderTourSteps(isUserLogin));
+    }
+    tourSteps = tourSteps.concat(homePageTourStepsTibGeneral())
   }
 
 

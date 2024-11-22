@@ -1,5 +1,32 @@
-export function tibGeneralHomePageTour(isUserLogin) {
-  const tourSelectorPrefix = '.stour-';
+
+const tourSelectorPrefix = '.stour-';
+
+
+
+export function homePageTourStepsTibGeneral() {
+  const steps = [
+
+    {
+      selector: tourSelectorPrefix + 'collection-box-in-home',
+      content: () => {
+        return (
+          <>
+            <span>Each box reperesents a hosted collection in TIB terminology service</span>
+            <br /><br />
+            <span>Click on the logo to check the list of ontologies in each collection.</span>
+            <br /><br />
+            <span>Click on the [Read More] to check more details about the collection.</span>
+          </>
+        )
+      }
+    },
+  ]
+
+  return steps;
+}
+
+
+export function headerTourStepsTibGeneral() {
   const steps = [
     {
       selector: tourSelectorPrefix + 'searchbox',
@@ -44,48 +71,6 @@ export function tibGeneralHomePageTour(isUserLogin) {
       selector: tourSelectorPrefix + 'about-navbar-item',
       content: "Read more about TIB terminology service.",
     },
-    {
-      selector: tourSelectorPrefix + 'collection-box-in-home',
-      content: () => {
-        return (
-          <>
-            <span>Each box reperesents a hosted collection in TIB terminology service</span>
-            <br /><br />
-            <span>Click on the logo to check the list of ontologies in each collection.</span>
-            <br /><br />
-            <span>Click on the [Read More] to check more details about the collection.</span>
-          </>
-        )
-      }
-    },
-    {
-      selector: tourSelectorPrefix + 'login-in-header',
-      content: () => {
-        if (isUserLogin) {
-          return (
-            <>
-              <span>Your user panel. You can check:</span>
-              <li>Profile info</li>
-              <li>Define and check your custom ontology collections</li>
-              <li>Your submited issue requests for ontologies.</li>
-            </>
-          );
-        }
-        return (
-          <>
-            <span>
-              Although ontology lookup is completely free to access, there are some extra functionalities such as note
-              feature and term request that require authentication. This it not mondatory for most core functions in terminology service.
-            </span>
-            <br />
-            <span>In case you wish to use the extra features, you can login via:</span>
-            <li>GitHub</li>
-            <li>Orcid</li>
-          </>
-        )
-      }
-    },
-  ]
-
+  ];
   return steps;
 }
