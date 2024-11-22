@@ -58,6 +58,7 @@ const Home = () => {
           }}
           showNumber={false}
           disableInteraction={true}
+          scrollOffset={-2000}
         />
       }
       <div className="row">
