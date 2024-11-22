@@ -18,9 +18,11 @@ export function homePageTourStepsTibGeneral() {
             <span>Click on the [Read More] to check more details about the collection.</span>
           </>
         )
-      }
-    },
-  ]
+      },
+      action: (node) => {
+        node.focus();
+      },
+   ]
 
   return steps;
 }
