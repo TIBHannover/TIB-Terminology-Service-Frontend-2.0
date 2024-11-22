@@ -8,15 +8,17 @@ import { AppContext } from '../../context/AppContext';
 import { headerTourStepsTibGeneral, homePageTourStepsTibGeneral } from '../../tours/tibGeneral';
 import { loginInHeaderTourSteps } from '../../tours/login';
 import { tourWelcomeStep } from '../../tours/globals';
+import { storeTourProfile, getTourProfile } from '../../tours/controller';
 
 const Home = () => {
   const appContext = useContext(AppContext);
+  let tourP = getTourProfile();
 
   const [statsResult, setStatsResult] = useState([]);
+  const [isTourOpen, setIsTourOpen] = useState(!tourP.homepage ? true : false);
 
-  const [isTourOpen, setIsTourOpen] = useState(true);
-  const isUserLogin = appContext.user ? true : false;
   let tourSteps = [];
+  const isUserLogin = appContext.user ? true : false;
   if (process.env.REACT_APP_PROJECT_ID === 'general') {
     tourSteps = tourWelcomeStep();
     tourSteps = tourSteps.concat(headerTourStepsTibGeneral());
@@ -45,13 +47,19 @@ const Home = () => {
 
   return (
     <>
-      <Tour
-        steps={tourSteps}
-        isOpen={isTourOpen}
-        onRequestClose={() => { setIsTourOpen(false) }}
-        showNumber={false}
-        disableInteraction={true}
-      />
+      {isTourOpen &&
+        <Tour
+          steps={tourSteps}
+          isOpen={isTourOpen}
+          onRequestClose={() => {
+            setIsTourOpen(false);
+            tourP.homepage = true;
+            storeTourProfile(tourP);
+          }}
+          showNumber={false}
+          disableInteraction={true}
+        />
+      }
       <div className="row">
         <div className="col-sm-12">
           {renderHomePage(setIsTourOpen)}
