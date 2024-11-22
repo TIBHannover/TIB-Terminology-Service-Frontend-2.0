@@ -539,6 +539,11 @@ body .fa-borderless{
     cursor: pointer;
 }
 
+body .fa-arrow-right{
+  border: none;
+  font-size: 16px;
+}
+
 body .overlay {
     position: fixed;
     width: 100%;
