@@ -5,25 +5,21 @@ const tourSelectorPrefix = '.stour-';
 
 export function homePageTourStepsTibGeneral() {
   const steps = [
-
     {
       selector: tourSelectorPrefix + 'collection-box-in-home',
       content: () => {
         return (
           <>
-            <span>Each box reperesents a hosted collection in TIB terminology service</span>
+            <span>Each box represents a hosted collection in TIB terminology service</span>
             <br /><br />
             <span>Click on the logo to check the list of ontologies in each collection.</span>
             <br /><br />
             <span>Click on the [Read More] to check more details about the collection.</span>
           </>
-        )
+        );
       },
-      action: (node) => {
-        node.focus();
-      },
-   ]
-
+    },
+  ];
   return steps;
 }
 
