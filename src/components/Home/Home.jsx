@@ -59,7 +59,9 @@ const Home = () => {
         }}
         showNumber={false}
         disableInteraction={true}
-        scrollOffset={-2000}
+        onAfterOpen={() => (document.body.style.overflowY = 'hidden')}
+        onBeforeClose={() => (document.body.style.overflowY = 'auto')}
+        startAt={0}
       />
       <div className="row">
         <div className="col-sm-12">
