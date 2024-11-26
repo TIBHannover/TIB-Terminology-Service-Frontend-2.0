@@ -260,7 +260,7 @@ class TermApi {
   async getIndividualInstancesForClass(): Promise<any> {
     try {
       let baseUrl = process.env.REACT_APP_API_BASE_URL;
-      let callUrl = baseUrl + "/" + this.ontologyId + "/" + this.iri + "/terminstances";
+      let callUrl = baseUrl + "/" + this.ontologyId + "/terms/" + this.iri + "/instances";
       let result = await fetch(callUrl, getCallSetting);
       let apiResult: Ols3ApiResponse = await result.json();
       let indvResult = apiResult['_embedded'];

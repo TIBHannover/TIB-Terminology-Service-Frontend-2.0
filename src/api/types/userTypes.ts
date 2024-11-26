@@ -54,6 +54,16 @@ export type SearchSettingApiResponse = {
     updated_at?: string
 }
 
+export type ContactFormData = {
+    title:string,
+    description:string,
+    email:string,
+    name:string,
+    safeQuestion:string,
+    safeAnswer:string,
+    type:string,
+}
+
 
 type UserCollection = {
     title:string,

@@ -36,7 +36,8 @@ const Footer = () => (
                         <a href="https://service.tib.eu/ts4tib/swagger-ui.html" target="_blank" rel="noopener noreferrer" className='footer-link'>API</a>
                     </li>
                     <li>
-                        <a href="https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker" target="_blank" rel="noopener noreferrer"  className='footer-link'>GitLab Issue Tracker</a>
+                        {/* <a href="https://gitlab.com/TIBHannover/terminology/tib-terminology-service-issue-tracker" target="_blank" rel="noopener noreferrer"  className='footer-link'>GitLab Issue Tracker</a> */}
+                        <a className='footer-link'  href={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>Contact us</a>
                     </li>
                 </ul>
             </div>
