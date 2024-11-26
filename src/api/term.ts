@@ -145,18 +145,16 @@ class TermApi {
     let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/terms/${this.iri}/json`;
     let res = await fetch(url, getCallSetting);
     let classData = await res.json();
-    let [eqAxiom, subClassOf, instancesList] = await Promise.all([
-      this.getEqAxiom(),
+    let [subClassOf, instancesList] = await Promise.all([
       this.getSubClassOf(),
       this.getIndividualInstancesForClass(),
       this.createHasCurationStatus()
 
     ]);
     this.term['relations'] = this.getRelations(classData);
-    this.term['eqAxiom'] = eqAxiom;
+    this.term['eqAxiom'] = this.getEqAxiom(classData);
     this.term['subClassOf'] = subClassOf;
     this.term['instancesList'] = instancesList;
-    console.log(this.term.relations)
     return true;
   }
 
@@ -208,30 +206,39 @@ class TermApi {
       return div.outerHTML;
     }
     catch (e) {
-      // console.log(e)
       return null;
     }
   }
 
 
 
-  async getEqAxiom(): Promise<string | null> {
+  getEqAxiom(classData): string | null {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/equivalentclassdescription';
-      let res = await fetch(url, getCallSetting);
-      let apiRes: Ols3ApiResponse = await res.json();
-      let eqAxioms = apiRes["_embedded"];
-      if (typeof (eqAxioms) !== "undefined") {
-        let resultHtml = "";
-        resultHtml += "<ul>";
-        for (let item of eqAxioms["strings"]) {
-          let eqTextWithInternalUrls = await this.replaceExternalIrisWithInternal(item["content"]);
-          resultHtml += `<li>${eqTextWithInternalUrls}</li>`;
-        }
-        resultHtml += "</ul>";
-        return resultHtml;
+      let eqevalentAxiomData = classData['http://www.w3.org/2002/07/owl#equivalentClass'];
+      if (!eqevalentAxiomData) {
+        return null;
       }
-      return null;
+      let propertyIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#onProperty'];
+      let targetIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#someValuesFrom'];
+      let propertyLabel = classData['linkedEntities'][propertyIri]['label']['value'];
+      let targetLabel = classData['linkedEntities'][targetIri]['label']['value'];
+      let relationText = document.createElement('span');
+      relationText.innerHTML = " some ";
+      let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
+      let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+      let span = document.createElement('span');
+      let propAnchor = document.createElement('a');
+      propAnchor.href = propUrl;
+      propAnchor.target = '_blank';
+      propAnchor.innerHTML = propertyLabel;
+      span.appendChild(propAnchor);
+      span.appendChild(relationText);
+      let targetAnchor = document.createElement('a');
+      targetAnchor.href = targetUrl;
+      targetAnchor.target = '_blank';
+      targetAnchor.innerHTML = targetLabel;
+      span.appendChild(targetAnchor);
+      return span.outerHTML;
     }
     catch (e) {
       return null;
