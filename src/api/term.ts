@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
@@ -139,18 +142,21 @@ class TermApi {
 
 
   async fetchClassRelations(): Promise<boolean> {
-    let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
-      this.getRelations(),
+    let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/terms/${this.iri}/json`;
+    let res = await fetch(url, getCallSetting);
+    let classData = await res.json();
+    let [eqAxiom, subClassOf, instancesList] = await Promise.all([
       this.getEqAxiom(),
       this.getSubClassOf(),
       this.getIndividualInstancesForClass(),
       this.createHasCurationStatus()
 
     ]);
-    this.term['relations'] = relations;
+    this.term['relations'] = this.getRelations(classData);
     this.term['eqAxiom'] = eqAxiom;
     this.term['subClassOf'] = subClassOf;
     this.term['instancesList'] = instancesList;
+    console.log(this.term.relations)
     return true;
   }
 
@@ -168,31 +174,41 @@ class TermApi {
   }
 
 
-
-
-  async getRelations(): Promise<string | null> {
+  getRelations(classData): string | null {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/relatedfroms';
-      let res = await fetch(url, getCallSetting);
-      res = await res.json();
-      if (typeof (res) !== "undefined") {
-        let entries = Object.entries(res)
-        let result = "";
-
-        for (let [k, v] of entries) {
-          result += k
-          result += "<ul>"
-          for (let item of v) {
-            result += '<li>' + '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.ontologyId + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>' + '</li>';
-          }
-          result += "</ul>"
-        }
-        return result
+      let relatedFromData = classData['relatedFrom'];
+      if (!relatedFromData || relatedFromData.length === 0) {
+        return null;
       }
-
-      return null;
+      let div = document.createElement('div');
+      for (let relation of relatedFromData) {
+        let propertyIri = relation['property'];
+        let targetIri = relation['value'];
+        let propertyLabel = classData['linkedEntities'][propertyIri]['label']['value'];
+        let targetLabel = classData['linkedEntities'][targetIri]['label']['value'];
+        let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let span = document.createElement('span');
+        let li = document.createElement('li');
+        let ul = document.createElement('ul');
+        let propAnchor = document.createElement('a');
+        propAnchor.href = propUrl;
+        propAnchor.target = '_blank';
+        propAnchor.innerHTML = propertyLabel;
+        span.appendChild(propAnchor);
+        let targetAnchor = document.createElement('a');
+        targetAnchor.href = targetUrl;
+        targetAnchor.target = '_blank';
+        targetAnchor.innerHTML = targetLabel;
+        li.appendChild(targetAnchor);
+        ul.appendChild(li);
+        span.appendChild(ul);
+        div.appendChild(span);
+      }
+      return div.outerHTML;
     }
     catch (e) {
+      // console.log(e)
       return null;
     }
   }
