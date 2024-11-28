@@ -24,6 +24,8 @@ export type SuggestAndSelectApiInput = {
   types: string[],
   obsoletes: boolean,
   collectionIds: string[]
+  searchUnderIris: string[],
+  searchUnderAllIris: string[]
 };
 
 

@@ -10,6 +10,7 @@ import '../../layout/searchBar.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import { AppContext } from '../../../context/AppContext';
 import { storeUserSettings } from '../../../api/user';
+import SearchLib from '../../../Libs/searchLib';
 
 
 
@@ -27,113 +28,118 @@ const SearchForm = () => {
 
   const searchUrlFactory = new SearchUrlFactory();
 
-  let advSearchEnabledLoad = searchUrlFactory.advancedSearchEnabled === "true" ? true : appContext.userSettings.advancedSearchEnabled;    
-  advSearchEnabledLoad = advSearchEnabledLoad ? true : false;  
+  let advSearchEnabledLoad = searchUrlFactory.advancedSearchEnabled === "true" ? true : appContext.userSettings.advancedSearchEnabled;
+  advSearchEnabledLoad = advSearchEnabledLoad ? true : false;
 
-  const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");    
+  const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");
   const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const [jumpToResult, setJumpToResult] = useState([]);  
-  const [advSearchEnabled, setAdvSearchEnabled] = useState(advSearchEnabledLoad);  
+  const [jumpToResult, setJumpToResult] = useState([]);
+  const [advSearchEnabled, setAdvSearchEnabled] = useState(advSearchEnabledLoad);
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
   const exact = searchUrlFactory.exact === "true" ? true : false;
 
+  const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
+  const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
-  async function handleSearchInputChange(e){    
-    let inputForAutoComplete = {};    
-    let searchQuery = e.target.value;    
-    if(searchQuery.length === 0){      
+
+  async function handleSearchInputChange(e) {
+    let inputForAutoComplete = {};
+    let searchQuery = e.target.value;
+    if (searchQuery.length === 0) {
       setJumpToResult([]);
       setAutoCompleteResult([]);
       return true;
     }
     setSearchQuery(searchQuery);
-    inputForAutoComplete['searchQuery'] = searchQuery;    
+    inputForAutoComplete['searchQuery'] = searchQuery;
     inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
-    if(appContext.userSettings.userCollectionEnabled){
-      inputForAutoComplete['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');    
+    if (appContext.userSettings.userCollectionEnabled) {
+      inputForAutoComplete['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
     inputForAutoComplete['ontologyIds'] = searchUrlFactory.ontologies.length !== 0 ? searchUrlFactory.ontologies.join(',') : inputForAutoComplete['ontologyIds'];
     inputForAutoComplete['ontologyIds'] = ontologyId ? ontologyId : inputForAutoComplete['ontologyIds'];
-    inputForAutoComplete['types'] = searchUrlFactory.types.length !== 0 ? searchUrlFactory.types.join(',') : null;    
-    if(process.env.REACT_APP_PROJECT_NAME === "" ){
+    inputForAutoComplete['types'] = searchUrlFactory.types.length !== 0 ? searchUrlFactory.types.join(',') : null;
+    if (process.env.REACT_APP_PROJECT_NAME === "") {
       /* check if it is TIB General to read the collection ids from url. Else, set the project ID such as NFDI4CHEM.        
       */
       inputForAutoComplete['collectionIds'] = searchUrlFactory.collections.length !== 0 ? searchUrlFactory.collections.join(',') : null;
     }
-    else if(!ontologyId && !appContext.userSettings.userCollectionEnabled){
+    else if (!ontologyId && !appContext.userSettings.userCollectionEnabled) {
       /* 
         If ontologyId exist, it means the user is doing the search from an ontology page and collection is NOT needed.
         If userCollectionEnabled is true, it means the user is doing the search from the user collection page and collection is NOT needed.
       */
       inputForAutoComplete['collectionIds'] = process.env.REACT_APP_PROJECT_NAME;
     }
-    
+    inputForAutoComplete['searchUnderIris'] = searchUnderIris;
+    inputForAutoComplete['searchUnderAllIris'] = searchUnderAllIris;
+
     let [autoCompleteResult, jumpToResult] = await Promise.all([
       getAutoCompleteResult(inputForAutoComplete, resultCount),
       getJumpToResult(inputForAutoComplete, resultCount)
-    ]);        
+    ]);
     setJumpToResult(!ontologyId ? jumpToResult : []);
-    setAutoCompleteResult(autoCompleteResult);    
+    setAutoCompleteResult(autoCompleteResult);
   }
 
 
 
-  function handleKeyDown(e){
+  function handleKeyDown(e) {
     if (e.key === 'Enter') {
       triggerSearch();
     }
   }
 
 
-  
-  function setSearchUrl(label){    
+
+  function setSearchUrl(label) {
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     return searchUrlFactory.createSearchUrlForAutoSuggestItem({
-      label:label, 
-      ontologyId:ontologyId, 
-      obsoleteFlag: obsoletesFlag, 
+      label: label,
+      ontologyId: ontologyId,
+      obsoleteFlag: obsoletesFlag,
       exact: exact
     });
   }
-  
-  
-  
-  function triggerSearch(){
-    if(searchQuery.length === 0){
+
+
+
+  function triggerSearch() {
+    if (searchQuery.length === 0) {
       return true;
     }
-    let searchUrl = setSearchUrl(searchQuery);        
+    let searchUrl = setSearchUrl(searchQuery);
     window.location.replace(searchUrl);
   }
 
 
-  function closeResultBoxWhenClickedOutside(e){       
-    if(!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)){
+  function closeResultBoxWhenClickedOutside(e) {
+    if (!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)) {
       setAutoCompleteResult([]);
       setJumpToResult([]);
     }
   }
 
 
-  function handleExactCheckboxClick(e){    
-    searchUrlFactory.setExact({exact: e.target.checked});
+  function handleExactCheckboxClick(e) {
+    searchUrlFactory.setExact({ exact: e.target.checked });
   }
 
 
 
-  function handleObsoletesCheckboxClick(e){        
-    Toolkit.setObsoleteInStorageAndUrl(e.target.checked);    
+  function handleObsoletesCheckboxClick(e) {
+    Toolkit.setObsoleteInStorageAndUrl(e.target.checked);
   }
 
 
-  async function handleAdvancedSearchToggle(){           
-    searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
+  async function handleAdvancedSearchToggle() {
+    searchUrlFactory.setAdvancedSearchEnabled({ enabled: !advSearchEnabled });
     setAdvSearchEnabled(!advSearchEnabled);
-    let userSettings = {...appContext.userSettings};
+    let userSettings = { ...appContext.userSettings };
     userSettings.advancedSearchEnabled = !advSearchEnabled;
     appContext.setUserSettings(userSettings);
     await storeUserSettings(userSettings);
@@ -144,9 +150,9 @@ const SearchForm = () => {
   useEffect(() => {
     document.getElementById("s-field").value = searchUrlFactory.decodeSearchQuery();
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
-    document.addEventListener("keydown", keyboardNavigationForJumpto, false);           
-    if(Toolkit.getObsoleteFlagValue()){ document.getElementById("obsoletes-checkbox").checked = true;}   
-    if(exact){ document.getElementById("exact-checkbox").checked = true;}               
+    document.addEventListener("keydown", keyboardNavigationForJumpto, false);
+    if (Toolkit.getObsoleteFlagValue()) { document.getElementById("obsoletes-checkbox").checked = true; }
+    if (exact) { document.getElementById("exact-checkbox").checked = true; }
     return () => {
       document.removeEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
@@ -154,15 +160,15 @@ const SearchForm = () => {
   }, []);
 
   useEffect(() => {
-    if(appContext.userSettings.advancedSearchEnabled){
+    if (appContext.userSettings.advancedSearchEnabled) {
       setAdvSearchEnabled(appContext.userSettings.advancedSearchEnabled);
-    }    
-  },[appContext.userSettings.advancedSearchEnabled]);
+    }
+  }, [appContext.userSettings.advancedSearchEnabled]);
 
 
-  return(
+  return (
     <>
-      <RenderSearchForm 
+      <RenderSearchForm
         ontologyId={ontologyId}
         handleSearchInputChange={handleSearchInputChange}
         handleKeyDown={handleKeyDown}
@@ -176,9 +182,9 @@ const SearchForm = () => {
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         advSearchEnabled={advSearchEnabled}
         handleAdvancedSearchToggle={handleAdvancedSearchToggle}
-      />            
-      <AdvancedSearch  advSearchEnabled={advSearchEnabled} />      
-    </>     
+      />
+      <AdvancedSearch advSearchEnabled={advSearchEnabled} />
+    </>
   );
 }
 
