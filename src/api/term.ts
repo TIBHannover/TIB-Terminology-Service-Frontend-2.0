@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis } from "../Libs/htmlFactory";
 
 
 import { getCallSetting } from "./constants";
@@ -14,6 +15,10 @@ import { Ols3ApiResponse } from "./types/common";
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_NUMBER = 1;
+const TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+const TYPE_CLASS_URI = "http://www.w3.org/2002/07/owl#Class";
+const ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
+
 
 
 class TermApi {
@@ -145,15 +150,14 @@ class TermApi {
     let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/terms/${this.iri}/json`;
     let res = await fetch(url, getCallSetting);
     let classData = await res.json();
-    let [subClassOf, instancesList] = await Promise.all([
-      this.getSubClassOf(),
+    let [instancesList] = await Promise.all([
       this.getIndividualInstancesForClass(),
       this.createHasCurationStatus()
 
     ]);
     this.term['relations'] = this.getRelations(classData);
     this.term['eqAxiom'] = this.getEqAxiom(classData);
-    this.term['subClassOf'] = subClassOf;
+    this.term['subClassOf'] = this.getSubClassOf(classData);
     this.term['instancesList'] = instancesList;
     return true;
   }
@@ -189,15 +193,9 @@ class TermApi {
         let span = document.createElement('span');
         let li = document.createElement('li');
         let ul = document.createElement('ul');
-        let propAnchor = document.createElement('a');
-        propAnchor.href = propUrl;
-        propAnchor.target = '_blank';
-        propAnchor.innerHTML = propertyLabel;
+        let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
         span.appendChild(propAnchor);
-        let targetAnchor = document.createElement('a');
-        targetAnchor.href = targetUrl;
-        targetAnchor.target = '_blank';
-        targetAnchor.innerHTML = targetLabel;
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
         li.appendChild(targetAnchor);
         ul.appendChild(li);
         span.appendChild(ul);
@@ -227,16 +225,10 @@ class TermApi {
       let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
       let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
       let span = document.createElement('span');
-      let propAnchor = document.createElement('a');
-      propAnchor.href = propUrl;
-      propAnchor.target = '_blank';
-      propAnchor.innerHTML = propertyLabel;
+      let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
       span.appendChild(propAnchor);
       span.appendChild(relationText);
-      let targetAnchor = document.createElement('a');
-      targetAnchor.href = targetUrl;
-      targetAnchor.target = '_blank';
-      targetAnchor.innerHTML = targetLabel;
+      let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
       span.appendChild(targetAnchor);
       return span.outerHTML;
     }
@@ -246,37 +238,100 @@ class TermApi {
   }
 
 
-  async getSubClassOf(): Promise<string | null> {
+  getSubClassOf(classData): string | null {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/superclassdescription';
-      let parents = await this.getParents();
-      let res = await fetch(url, getCallSetting);
-      if (res.status === 404) {
+      let subClassOfData = classData['http://www.w3.org/2000/01/rdf-schema#subClassOf'];
+      if (!subClassOfData || subClassOfData.length === 0) {
         return null;
       }
-      let apiRes: Ols3ApiResponse = await res.json();
-      let subClassRelations = apiRes["_embedded"];
-      if (parents.length === 0 && typeof (subClassRelations) === "undefined") {
-        return null;
-      }
-      let result = "<ul>";
-      for (let parent of parents) {
-        let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parent["iri"] ? parent["iri"] : "")}`;
-        result += `<li><a href=${parentUrl}>${parent["label"]}</a></li>`;
-      }
-      if (typeof (subClassRelations) !== "undefined") {
-        for (let subClassString of subClassRelations["strings"]) {
-          let subClassStringWithInternalIris = await this.replaceExternalIrisWithInternal(subClassString["content"]);
-          result += `<li>${subClassStringWithInternalIris}</li>`;
+      let ul = document.createElement('ul');
+
+      for (let i = 0; i < subClassOfData.length; i++) {
+        if (typeof (subClassOfData[i]) === "string") {
+          let parentIri = subClassOfData[0];
+          let parentLabel = classData['linkedEntities'][parentIri]['label']['value'];
+          let parentLi = document.createElement('li');
+          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
+          let parentAnchor = buildHtmlAnchor(parentUrl, parentLabel);
+          parentLi.appendChild(parentAnchor);
+          ul.appendChild(parentLi);
+          continue;
         }
+        let li = document.createElement('li');
+        let content = this.recSubClass(subClassOfData[i], classData);
+        li.appendChild(content);
+        ul.appendChild(li);
       }
-      result += "</ul>";
-      return result;
+
+      return ul.outerHTML;
+
     }
     catch (e) {
-      // throw(e)        
+      console.log(e)
       return null;
     }
+  }
+
+
+  recSubClass(relationObj, classData, relation = "") {
+    if (relationObj instanceof Array) {
+      let targetIri = relationObj[0];
+      let targetLabel = classData['linkedEntities'][targetIri]['label']['value'];
+      let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+      let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+      let liContent = document.createElement('span');
+      liContent.appendChild(buildOpenParanthesis());
+      liContent.appendChild(targetAnchor);
+      let relationTextspan = document.createElement('span');
+      relationTextspan.innerHTML = ` ${relation} `;
+      liContent.appendChild(relationTextspan);
+      if (typeof (relationObj[1]) === "string") {
+        let targetIri = relationObj[1];
+        let targetLabel = classData['linkedEntities'][targetIri]['label']['value'];
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+        liContent.appendChild(targetAnchor);
+        liContent.appendChild(buildCloseParanthesis());
+        return liContent;
+      }
+      let content = this.recSubClass(relationObj[1], classData);
+      liContent.appendChild(content);
+      liContent.appendChild(buildCloseParanthesis());
+      return liContent;
+    }
+    if (relationObj instanceof Object) {
+      let propertyIri = relationObj['http://www.w3.org/2002/07/owl#onProperty'];
+      if (!propertyIri) {
+        let relKey = Object.keys(relationObj).find((key) => (key !== TYPE_URI));
+        return this.recSubClass(relationObj[relKey], classData, relKey?.split('#')[1]);
+      }
+      let propertyLabel = classData['linkedEntities'][propertyIri]['label']['value'];
+      let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
+      let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
+      let liContent = document.createElement('span');
+      liContent.appendChild(buildOpenParanthesis());
+      let relationTextspan = document.createElement('span');
+      liContent.appendChild(propAnchor);
+      let keys = Object.keys(relationObj);
+      let targetKey = keys.find((key) => (key !== TYPE_URI && key !== ON_PROPERTY_URI));
+      relationTextspan.innerHTML = ` ${targetKey.split('#')[1]} `;
+      liContent.appendChild(relationTextspan);
+      if (typeof (relationObj[targetKey]) === "string") {
+        let targetIri = relationObj[targetKey];
+        let targetLabel = classData['linkedEntities'][targetIri]['label']['value'];
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+        liContent.appendChild(targetAnchor);
+        liContent.appendChild(buildCloseParanthesis());
+        return liContent;
+      }
+      let content = this.recSubClass(relationObj[targetKey], classData, targetKey?.split('#')[1]);
+      liContent.appendChild(content);
+      liContent.appendChild(buildCloseParanthesis());
+      return liContent;
+    }
+
+    // console.log(relation)
   }
 
 
