@@ -56,9 +56,11 @@ class TermApi {
 
 
   async fetchTermJson() {
-    let urlJson = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/terms/${this.iri}/json`;
-    let res = await fetch(urlJson, getCallSetting);
-    this.classData = await res.json();
+    if (this.ontologyId && this.iri) {
+      let urlJson = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/terms/${this.iri}/json`;
+      let res = await fetch(urlJson, getCallSetting);
+      this.classData = await res.json();
+    }
   }
 
 
