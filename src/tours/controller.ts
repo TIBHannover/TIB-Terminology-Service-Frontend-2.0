@@ -1,5 +1,6 @@
 type TourProfile = {
-  homepage?: boolean
+  homepage?: boolean;
+  ontoPageTabs?: boolean;
 }
 
 

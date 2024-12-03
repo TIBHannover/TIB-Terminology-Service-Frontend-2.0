@@ -5,7 +5,11 @@ import { AppContext } from "../context/AppContext";
 import { tourWelcomeStep } from "./globals";
 import { headerTourStepsTibGeneral, homePageTourStepsTibGeneral } from "./tibGeneral";
 import { loginInHeaderTourSteps } from "./login";
+import { ontologyPageTabTourSteps } from "./ontologypage";
 
+
+const HOME_PAGE_ID = 'homepage';
+const ONTOLOGY_PAGE_ID = 'ontologyOverview';
 
 
 const SiteTour = (props) => {
@@ -14,14 +18,25 @@ const SiteTour = (props) => {
   const isUserLogin = appContext.user ? true : false;
   const tourP = getTourProfile();
   let tourSteps = [];
+  const [isTourOpen, setIsTourOpen] = useState(!tourP.homepage ? true : false);
 
-  let currentUrl = window.location.href;
-  let urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH)[1];
-  if (urlPath && urlPath[0] === '/') {
-    urlPath = urlPath.substring(1);
+
+  function whichPage() {
+    let currentUrl = window.location.href;
+    let urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH)[1];
+    if (urlPath && urlPath[0] === '/') {
+      urlPath = urlPath.substring(1);
+    }
+    if (!urlPath || urlPath[0] === "?") {
+      return HOME_PAGE_ID;
+    } else if (urlPath.includes('ontologies')) {
+      return ONTOLOGY_PAGE_ID;
+    }
   }
-  if (!urlPath || urlPath[0] === "?") {
-    // homepage url 
+
+
+  function makeHomePageTourSteps() {
+    let tourSteps = [];
     if (process.env.REACT_APP_PROJECT_ID === 'general') {
       tourSteps = tourWelcomeStep();
       tourSteps = tourSteps.concat(headerTourStepsTibGeneral());
@@ -30,10 +45,23 @@ const SiteTour = (props) => {
         tourSteps = tourSteps.concat(loginInHeaderTourSteps(isUserLogin));
       }
     }
+    return tourSteps;
+  }
+
+
+  function makeOntologyOverviewTourSteps() {
+    let tourSteps = ontologyPageTabTourSteps();
+    return tourSteps;
 
   }
 
-  const [isTourOpen, setIsTourOpen] = useState(!tourP.homepage ? true : false);
+
+  let currentPage = whichPage();
+  if (currentPage === HOME_PAGE_ID) {
+    tourSteps = makeHomePageTourSteps();
+  } else if (currentPage === ONTOLOGY_PAGE_ID) {
+    tourSteps = makeOntologyOverviewTourSteps();
+  }
 
 
   return (
@@ -54,7 +82,7 @@ const SiteTour = (props) => {
           startAt={0}
         />
       }
-      <a className='btn btn-secondary btn-sm site-tour-btn' onClick={() => { setIsTourOpen(true) }}>Take a tour</a>
+      <a className='btn btn-secondary btn-sm site-tour-btn' onClick={() => { setIsTourOpen(true) }}>Guide me</a>
     </>
   );
 }
