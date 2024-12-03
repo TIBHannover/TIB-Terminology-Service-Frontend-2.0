@@ -684,4 +684,11 @@ body .custom-file-upload {
     background-color: #404040;
     color: white;
     border-radius: 5px;
-  }
+}
+
+body .site-tour-btn{
+  position: fixed;
+  top: 50%;
+  right: 0;
+  /*rotate: -90deg;*/
+}

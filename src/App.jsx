@@ -13,6 +13,7 @@ import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
 import { getReportList } from './api/tsMicroBackendCalls';
 import LoadingPage from './LoadingPage';
+import SiteTour from './tours/Tour';
 import { olsIsUp } from './api/system';
 import { useQuery } from '@tanstack/react-query';
 import './components/layout/common.css';
@@ -121,6 +122,7 @@ const App = () => {
                       </>
                     }
                   </div>
+                  <SiteTour />
                   <Footer />
                 </>
               }

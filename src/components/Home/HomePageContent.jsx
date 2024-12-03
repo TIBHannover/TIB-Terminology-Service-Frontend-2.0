@@ -1,6 +1,6 @@
 import collectionsInfoJson from '../../assets/collectionsText.json';
 
-export function renderHomePage(setTourOpen) {
+export function renderHomePage() {
   return [
     <div className="general-home-page-content">
       <br />
@@ -11,10 +11,6 @@ export function renderHomePage(setTourOpen) {
             With the Terminology Service, TIB – Leibniz Information Centre for Science and Technology and University Library provides a single point of access to terminologies from domains such as
             architecture, chemistry, computer science, mathematics and physics. You can browse ontologies through the website or use its API to retrieve terminological information and use it in your
             technical services.
-          </p>
-          <p>
-            Would like to know how to navigate in TIB TS?
-            <a className='btn btn-secondary btn-sm ml-2' onClick={() => { setTourOpen(true) }}>Take a tour</a>
           </p>
         </div>
       </div>
