@@ -38,3 +38,36 @@ export function ontologyPageTabTourSteps() {
 }
 
 
+export function ontologyOverViewTourSteps() {
+  const steps = [
+    {
+      selector: tourSelectorPrefix + 'overview-page-table',
+      content: "Check the core information about an ontology in this table.",
+    },
+    {
+      selector: tourSelectorPrefix + 'overview-page-stats',
+      content: "Ontology content (class/property/individual) stats.",
+    },
+    {
+      selector: tourSelectorPrefix + 'overview-page-more-metadata',
+      content: "Click here to check more metadata (if exist. Example: creator, publiser, etc.) about this onology.",
+    },
+    {
+      selector: tourSelectorPrefix + 'overview-page-show-metadata-as-json-btn',
+      content: "Check this ontology complete metadata in JSON format in your browser.",
+    },
+  ];
+  if (process.env.REACT_APP_PROJECT_ID === "general" && process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true") {
+    steps.push(
+      {
+        selector: tourSelectorPrefix + 'overview-page-add-to-collection',
+        content: "Request adding this ontology to TIB collection(s) in case you see the need. We will evaluate your request and add it to the desired collecion(s) if it fits.",
+      }
+    );
+  }
+
+
+  return steps;
+}
+
+

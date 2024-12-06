@@ -1,6 +1,13 @@
 type TourProfile = {
   homepage?: boolean;
   ontoPageTabs?: boolean;
+  ontoOverViewPage?: boolean;
+  ontoClassTreePage?: boolean;
+  ontoPropertyTreePage?: boolean;
+  ontoIndividualPage?: boolean;
+  ontoClassListPage?: boolean;
+  ontoNotesPage?: boolean;
+  ontoGithubPage?: boolean;
 }
 
 

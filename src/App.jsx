@@ -122,7 +122,7 @@ const App = () => {
                       </>
                     }
                   </div>
-                  {process.env.REACT_APP_SITE_TOUR === "true" && <SiteTour />}
+                  {process.env.REACT_APP_SITE_TOUR === "true" && !showLoadingPage && <SiteTour />}
                   <Footer />
                 </>
               }

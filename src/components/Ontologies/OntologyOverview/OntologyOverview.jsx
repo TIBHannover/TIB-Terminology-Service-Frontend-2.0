@@ -18,7 +18,7 @@ const OntologyOverview = () => {
   return (
     <>
       <div key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
-        <div className='col-sm-9'>
+        <div className='col-sm-9 '>
           <OntologyInfoTable />
         </div>
         <div className='col-sm-3'>
@@ -30,7 +30,7 @@ const OntologyOverview = () => {
                 href={process.env.REACT_APP_API_BASE_URL + "/" + ontologyPageContext.ontology.ontologyId}
                 target='_blank'
                 rel="noreferrer"
-                className='btn btn-secondary download-ontology-btn w-75'
+                className='btn btn-secondary download-ontology-btn w-75 stour-overview-page-show-metadata-as-json-btn'
               >
                 Show Ontology Metdata as JSON
               </a>
@@ -42,7 +42,7 @@ const OntologyOverview = () => {
               <div className='col-sm-12'>
                 <button
                   type="button"
-                  className={"btn btn-secondary w-75 download-ontology-btn"}
+                  className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
                   data-toggle="modal"
                   data-target={"#collectionSuggestionModal"}
                   data-backdrop="static"
