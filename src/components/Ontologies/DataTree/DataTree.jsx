@@ -100,7 +100,7 @@ const DataTree = (props) => {
     <div className="tree-view-container resizable-container">
       <div className="tree-page-left-part" id="page-left-pane">
         <div className='row autosuggest-sticky'>
-          <div className='col-sm-10'>
+          <div className='col-sm-10 stour-tree-jumpto-box'>
             <JumpTo
               targetType={props.componentIdentity}
               label={"Jump to"}

@@ -1,190 +1,193 @@
 import React from "react";
 
 
-class TreeNodeController{
-    constructor(){
-        this.classes = "tree-node-li";
-        this.iconInTree = "";
-        this.textDivContainer = "";
-        this.textDiv = "";
-        this.nodeRootElementName = "li";
-        this.nodeIri = "";
-        this.nodeId = "";
-        this.children = [];        
+class TreeNodeController {
+  constructor() {
+    this.classes = "tree-node-li";
+    this.iconInTree = "";
+    this.textDivContainer = "";
+    this.textDiv = "";
+    this.nodeRootElementName = "li";
+    this.nodeIri = "";
+    this.nodeId = "";
+    this.children = [];
+  }
+
+
+  buildNodeWithReact(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
+    let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
+    let nodeHasChildren = (typeof (nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
+    let partOfSymbol = "";
+    if (nodeObject.is_obsolete) {
+      nodeLabel = React.createElement("s", {}, nodeLabel);
+    }
+    this.textDiv = React.createElement("div", { "className": "li-label-text stour-tree-node" }, nodeLabel);
+
+    if (typeof (nodeObject['a_attr']) !== "undefined" && nodeObject['a_attr']["class"] === "part_of") {
+      partOfSymbol = React.createElement("div", { "className": "p-icon-style" }, "P");
     }
 
-
-    buildNodeWithReact(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){        
-        let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
-        let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);           
-        let partOfSymbol = "";        
-        if (nodeObject.is_obsolete){
-            nodeLabel = React.createElement("s", {}, nodeLabel);
-        }        
-        this.textDiv = React.createElement("div", {"className": "li-label-text"}, nodeLabel);
-
-        if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject['a_attr']["class"] === "part_of"){
-            partOfSymbol = React.createElement("div", {"className": "p-icon-style"}, "P");            
-        }
-
-        if(nodeIsClicked){
-            this.textDivContainer = React.createElement("div", {"className": "tree-text-container clicked targetNodeByIri"}, partOfSymbol, this.textDiv);
-        }
-        else{
-            this.textDivContainer = React.createElement("div", {"className": "tree-text-container"}, partOfSymbol, this.textDiv);
-        }        
-        this.nodeIri = nodeObject.iri;
-        if (!nodeHasChildren){            
-            this.classes += " leaf-node";            
-            this.iconInTree = React.createElement("i", {"className": ""}, "");
-        } 
-        else if(nodeHasChildren && !isExpanded){
-            this.classes += " closed";            
-            this.iconInTree = React.createElement("i", {"className": "fa fa-plus", "aria-hidden": "true"}, "");
-        }
-        else{
-            this.classes += " opened";            
-            this.iconInTree = React.createElement("i", {"className": "fa fa-minus", "aria-hidden": "true"}, "");
-        }
-       
-        let node = React.createElement(this.nodeRootElementName, {         
-            "data-iri":this.nodeIri, 
-            "data-id": nodeId,
-            "className": this.classes,
-            "id": nodeId
-            }
-            , this.iconInTree, this.textDivContainer, this.children
-            );
-        
-        return node;
-
+    if (nodeIsClicked) {
+      this.textDivContainer = React.createElement("div", { "className": "tree-text-container clicked targetNodeByIri" }, partOfSymbol, this.textDiv);
+    }
+    else {
+      this.textDivContainer = React.createElement("div", { "className": "tree-text-container " }, partOfSymbol, this.textDiv);
+    }
+    this.nodeIri = nodeObject.iri;
+    if (!nodeHasChildren) {
+      this.classes += " leaf-node";
+      this.iconInTree = React.createElement("i", { "className": "" }, "");
+    }
+    else if (nodeHasChildren && !isExpanded) {
+      this.classes += " closed";
+      this.iconInTree = React.createElement("i", { "className": "fa fa-plus stour-tree-expand-node-icon", "aria-hidden": "true" }, "");
+    }
+    else {
+      this.classes += " opened";
+      this.iconInTree = React.createElement("i", { "className": "fa fa-minus stour-tree-expand-node-icon", "aria-hidden": "true" }, "");
     }
 
+    let node = React.createElement(this.nodeRootElementName, {
+      "data-iri": this.nodeIri,
+      "data-id": nodeId,
+      "className": this.classes,
+      "id": nodeId
+    }
+      , this.iconInTree, this.textDivContainer, this.children
+    );
 
-    buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked=false, isExpanded=false){                
-        let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
-        let nodeHasChildren = (typeof(nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
-        this.textDiv = document.createElement("div");
-        let label = document.createTextNode(nodeLabel);
-        this.textDiv.classList.add("li-label-text");
-        this.textDiv.appendChild(label);
-        this.iconInTree = document.createElement("i");
-        this.textDivContainer = document.createElement("div");
-        this.textDivContainer.classList.add("tree-text-container");
-        let node = document.createElement(this.nodeRootElementName);
-        node.setAttribute("id", nodeObject.id + "_" + nodeObject.parent);
-        node.setAttribute("data-iri", nodeObject.iri);
-        node.setAttribute("data-id", nodeObject.id); 
-        node.classList.add(this.classes);
-        if(nodeIsClicked){            
-            this.textDivContainer.classList.add("clicked");
-            this.textDivContainer.classList.add("targetNodeByIri");
-        }        
-        this.nodeIri = nodeObject.iri;
-        if (!nodeHasChildren){
-            node.classList.add("leaf-node");
-        } 
-        else if(nodeHasChildren && !isExpanded){            
-            node.classList.add("closed");   
-            this.iconInTree.classList.add('fa');
-            this.iconInTree.classList.add('fa-plus');
-        }
-        else{            
-            node.classList.add("opened");               
-            this.iconInTree.classList.add('fa');
-            this.iconInTree.classList.add('fa-minus');
-        }
+    return node;
 
-        node.appendChild(this.iconInTree);
-        if(typeof(nodeObject['a_attr']) !== "undefined" && nodeObject["a_attr"]["class"] === "part_of"){
-            let partOfSymbol = document.createElement("div");
-            let pText = document.createTextNode("P");
-            partOfSymbol.appendChild(pText);
-            partOfSymbol.classList.add("p-icon-style");      
-            this.textDivContainer.appendChild(partOfSymbol);
-          }
-        
-        this.textDivContainer.appendChild(this.textDiv);
-        node.appendChild(this.textDivContainer);
-               
-        return node;
+  }
+
+
+  buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
+    let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
+    let nodeHasChildren = (typeof (nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
+    this.textDiv = document.createElement("div");
+    let label = document.createTextNode(nodeLabel);
+    this.textDiv.classList.add("li-label-text");
+    this.textDiv.classList.add("stour-tree-node");
+    this.textDiv.appendChild(label);
+    this.iconInTree = document.createElement("i");
+    this.textDivContainer = document.createElement("div");
+    this.textDivContainer.classList.add("tree-text-container");
+    let node = document.createElement(this.nodeRootElementName);
+    node.setAttribute("id", nodeObject.id + "_" + nodeObject.parent);
+    node.setAttribute("data-iri", nodeObject.iri);
+    node.setAttribute("data-id", nodeObject.id);
+    node.classList.add(this.classes);
+    if (nodeIsClicked) {
+      this.textDivContainer.classList.add("clicked");
+      this.textDivContainer.classList.add("targetNodeByIri");
+    }
+    this.nodeIri = nodeObject.iri;
+    if (!nodeHasChildren) {
+      node.classList.add("leaf-node");
+    }
+    else if (nodeHasChildren && !isExpanded) {
+      node.classList.add("closed");
+      this.iconInTree.classList.add('fa');
+      this.iconInTree.classList.add('fa-plus');
+      this.iconInTree.classList.add('stour-tree-expand-node-icon');
+    }
+    else {
+      node.classList.add("opened");
+      this.iconInTree.classList.add('fa');
+      this.iconInTree.classList.add('fa-minus');
+      this.iconInTree.classList.add('stour-tree-expand-node-icon');
     }
 
-
-    unClickAllNodes(){
-        let selectedElement = document.querySelectorAll(".clicked");
-        for(let i=0; i < selectedElement.length; i++){
-            selectedElement[i].classList.remove("clicked");
-        }
+    node.appendChild(this.iconInTree);
+    if (typeof (nodeObject['a_attr']) !== "undefined" && nodeObject["a_attr"]["class"] === "part_of") {
+      let partOfSymbol = document.createElement("div");
+      let pText = document.createTextNode("P");
+      partOfSymbol.appendChild(pText);
+      partOfSymbol.classList.add("p-icon-style");
+      this.textDivContainer.appendChild(partOfSymbol);
     }
 
-    scrollToNode(id){
-        let position = document.getElementById(id).offsetTop;
-        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
-    }
+    this.textDivContainer.appendChild(this.textDiv);
+    node.appendChild(this.textDivContainer);
 
-    scrollToNextNode(id){
-        document.getElementsByClassName('tree-page-left-part')[0].getElementById(id).nextSibling.scrollIntoView();        
-    }
+    return node;
+  }
 
-    scrollToPreviousNode(id){
-        let position = document.getElementById(id).previousSibling.offsetTop;
-        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;        
-    }
 
-    getClickedNodeDiv(node){
-        if(node.tagName === "DIV"){
-            return node;    
-        }
-        return null;
+  unClickAllNodes() {
+    let selectedElement = document.querySelectorAll(".clicked");
+    for (let i = 0; i < selectedElement.length; i++) {
+      selectedElement[i].classList.remove("clicked");
     }
+  }
 
-    getClickedNodeIri(node){        
-        return node.parentNode.dataset.iri;
-    }
+  scrollToNode(id) {
+    let position = document.getElementById(id).offsetTop;
+    document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+  }
 
-    getClickedNodeId(node){
-        return node.parentNode.id;
-    }
+  scrollToNextNode(id) {
+    document.getElementsByClassName('tree-page-left-part')[0].getElementById(id).nextSibling.scrollIntoView();
+  }
 
-    getNodeLabelTextById(id){
-        return document.getElementById(id).getElementsByClassName('tree-text-container')[0];
-    }
+  scrollToPreviousNode(id) {
+    let position = document.getElementById(id).previousSibling.offsetTop;
+    document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+  }
 
-    getFirstNodeInTree(){
-        let treeRootUl = document.getElementById('tree-root-ul');
-        return treeRootUl.querySelector('li:first-child').getElementsByClassName('tree-text-container')[0];
+  getClickedNodeDiv(node) {
+    if (node.tagName === "DIV") {
+      return node;
     }
+    return null;
+  }
 
-    getFirstChildLabelText(id){
-        return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0];
-    }
+  getClickedNodeIri(node) {
+    return node.parentNode.dataset.iri;
+  }
 
-    getNodeNextSiblings(id){         
-        let node = document.getElementById(id);
-        return node.nextSibling.getElementsByClassName('tree-text-container')[0];
-    }
+  getClickedNodeId(node) {
+    return node.parentNode.id;
+  }
 
-    getParentNode(id){
-        let node = document.getElementById(id);
-        return node.parentNode.parentNode;
-    }
+  getNodeLabelTextById(id) {
+    return document.getElementById(id).getElementsByClassName('tree-text-container')[0];
+  }
 
-    getNodeChildren(id){
-        return document.getElementById("children_for_" + id).getElementsByClassName('tree-node-li');
-    }
+  getFirstNodeInTree() {
+    let treeRootUl = document.getElementById('tree-root-ul');
+    return treeRootUl.querySelector('li:first-child').getElementsByClassName('tree-text-container')[0];
+  }
 
-    isNodeExpanded(node){
-        return node.classList.contains("opened");
-    }
+  getFirstChildLabelText(id) {
+    return document.getElementById("children_for_" + id).getElementsByClassName('tree-text-container')[0];
+  }
 
-    isNodeClosed(node){
-        return node.classList.contains("closed")
-    }
+  getNodeNextSiblings(id) {
+    let node = document.getElementById(id);
+    return node.nextSibling.getElementsByClassName('tree-text-container')[0];
+  }
 
-    isNodeLeaf(node){
-        return node.classList.contains("leaf-node");
-    }
+  getParentNode(id) {
+    let node = document.getElementById(id);
+    return node.parentNode.parentNode;
+  }
+
+  getNodeChildren(id) {
+    return document.getElementById("children_for_" + id).getElementsByClassName('tree-node-li');
+  }
+
+  isNodeExpanded(node) {
+    return node.classList.contains("opened");
+  }
+
+  isNodeClosed(node) {
+    return node.classList.contains("closed")
+  }
+
+  isNodeLeaf(node) {
+    return node.classList.contains("leaf-node");
+  }
 }
 
 export default TreeNodeController;

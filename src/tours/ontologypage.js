@@ -66,6 +66,92 @@ export function ontologyOverViewTourSteps() {
     );
   }
 
+  return steps;
+}
+
+
+export function treeViewTourSteps(type) {
+  const steps = [
+    {
+      selector: tourSelectorPrefix + 'tree-welcome',
+      content: `This the ontology ${type} tree view. Here you can check the tree structure, check the ${type} detail, check its notes, etc.`,
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-node',
+      content: () => {
+        return (
+          <>
+            <p>This is a {type}. You can click on it to check its detail on the right side of this page.</p>
+            <p>
+              <b>Hint: </b> You can use arrow keys <i className="fa fa-arrow-up"></i>/<i className="fa fa-arrow-down"></i> on your keyboard
+              <i className="fa fa-keyboard-o"></i> to move between nodes and select them in this tree.
+            </p>
+          </>
+        );
+      }
+
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-expand-node-icon',
+      content: () => {
+        return (
+          <>
+            <p>You can use this to expand(+) or collapse(-) (in case it is already expanded) this {type} to see its children.
+              In case you do not see these icons means this {type} is a leaf (has no child).
+            </p>
+            <p>
+              <b>Hint: </b> You can use arrow keys <i className="fa fa-arrow-left"></i>/<i className="fa fa-arrow-right"></i> on your keyboard
+              <i className="fa fa-keyboard-o"></i> to expand/collapse a node.
+            </p>
+          </>
+        );
+      }
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-action-btn-reset',
+      content: `This will reset the tree that means closing the right side detail pane and unselecting the selected ${type}`
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-action-btn-showobsolete',
+      content: `Click here if you like to see the obsolete ${type}(s) in this tree. They will get added as tree roots.`
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-action-btn-subtree',
+      content: `Use this to switch between ${type} sub-tree/full-tree mode. Sub-tree means only showing the path from the root to this ${type}.
+        Full-tree means vice versa. 
+      `
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-jumpto-box',
+      content: `This is the jump-to that allows you to jump to your desire ${type} in the tree. Type your ${type} label partially here and 
+        select it to jump to it in the tree.
+      `
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-page-resize-line',
+      content: `You can resize the left pane (tree) and the right pane (detail table) by dragging this line to left and right.`
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-table-detail',
+      content: `Here you can check the detail about this ${type}. 
+        You can also check this ${type} metadata as JSON by using the button at the end of this table.
+      `
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-table-note_tab',
+      content: `Here you can check the notes defined for this ${type} by other people. 
+        This help you to achieve a better understanding regarding this ${type} and its usage.
+      `
+    },
+
+  ];
+  if (type === 'class') {
+    steps.push({
+      selector: tourSelectorPrefix + 'tree-table-graph',
+      content: `Here you can check this ${type} graph visualization.`
+
+    });
+  }
 
   return steps;
 }

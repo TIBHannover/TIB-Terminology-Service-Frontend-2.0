@@ -539,7 +539,12 @@ body .fa-borderless{
     cursor: pointer;
 }
 
-body .fa-arrow-right{
+body .fa-arrow-right, .fa-arrow-left, .fa-arrow-up, .fa-arrow-down{
+  border: none;
+  font-size: 16px;
+}
+
+body .fa-keyboard-o{
   border: none;
   font-size: 16px;
 }

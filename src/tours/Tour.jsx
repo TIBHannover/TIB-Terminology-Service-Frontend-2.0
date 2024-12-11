@@ -5,7 +5,11 @@ import { AppContext } from "../context/AppContext";
 import { tourWelcomeStep } from "./globals";
 import { headerTourStepsTibGeneral, homePageTourStepsTibGeneral } from "./tibGeneral";
 import { loginInHeaderTourSteps } from "./login";
-import { ontologyPageTabTourSteps, ontologyOverViewTourSteps } from "./ontologypage";
+import {
+  ontologyPageTabTourSteps,
+  ontologyOverViewTourSteps,
+  treeViewTourSteps
+} from "./ontologypage";
 
 
 const HOME_PAGE_ID = 'homepage';
@@ -70,13 +74,26 @@ const SiteTour = () => {
   }
 
 
+  function expandLeftPaneIfnot() {
+    let detailPane = document.getElementById('page-right-pane');
+    if (!detailPane) {
+      let termContainer = document.getElementsByClassName('tree-text-container');
+      if (termContainer.length !== 0) {
+        termContainer[0].click();
+      }
+    }
+  }
+
+
   function makeOntologyPageTourSteps() {
     let tourSteps = [];
     let cUrl = window.location.href;
     if (cUrl.includes("/terms")) {
-      tourSteps = tourSteps.concat([]);
+      expandLeftPaneIfnot();
+      tourSteps = tourSteps.concat(treeViewTourSteps("class"));
     } else if (cUrl.includes("/props")) {
-      tourSteps = tourSteps.concat([]);
+      expandLeftPaneIfnot();
+      tourSteps = tourSteps.concat(treeViewTourSteps("property"));
     } else if (cUrl.includes("/individuals")) {
       tourSteps = tourSteps.concat([]);
     } else if (cUrl.includes("/termList")) {
@@ -89,7 +106,10 @@ const SiteTour = () => {
       // ontology overview tab
       tourSteps = ontologyOverViewTourSteps();
     }
-    tourSteps = tourSteps.concat(ontologyPageTabTourSteps())
+
+    if (!tourP.ontoPageTabs) {
+      tourSteps = tourSteps.concat(ontologyPageTabTourSteps())
+    }
 
     return tourSteps;
   }

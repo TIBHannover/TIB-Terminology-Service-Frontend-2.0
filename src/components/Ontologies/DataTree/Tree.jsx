@@ -219,9 +219,6 @@ const Tree = (props) => {
 
 
 
-
-
-
   function resetTree() {
     urlFacory.resetUrl();
     props.handleResetTreeInParent();
@@ -370,14 +367,14 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {!props.isIndividual && props.selectedNodeIri !== "" &&
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={resetTree}>Reset</button>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-reset' onClick={resetTree}>Reset</button>
               }
             </div>
           </div>
           {props.componentIdentity !== "individuals" &&
             <div className='row tree-action-btn-holder'>
               <div className="col-sm-12">
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={showObsoletes}>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete' onClick={showObsoletes}>
                   {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
                 </button>
               </div>
@@ -386,7 +383,7 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {subOrFullTreeBtnShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={reduceTree}>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree' onClick={reduceTree}>
                   {!subTreeMode
                     ? "Sub Tree"
                     : "Full Tree"
@@ -398,7 +395,7 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {siblingsButtonShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={showSiblings}>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings' onClick={showSiblings}>
                   {!siblingsVisible
                     ? "Show Siblings"
                     : "Hide Siblings"
