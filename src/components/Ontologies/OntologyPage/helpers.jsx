@@ -44,8 +44,8 @@ export const OntologyPageTabs = (props) => {
 export const OntologyPageHeadSection = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
   return [
-    <div className='span'>
-      <div className='row ont-info-bar header-collapseable-section'>
+    <>
+      <div className='row ont-info-bar header-collapseable-section' id='ontology-page-header'>
         <div className="col-sm-12">
           <div>
             <h2><Link className={"ont-info-bar-title"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId}>{ontologyPageContext.ontology.config.title}</Link></h2>
@@ -62,7 +62,7 @@ export const OntologyPageHeadSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   ];
 }
 

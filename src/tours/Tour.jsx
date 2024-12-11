@@ -39,10 +39,6 @@ const SiteTour = () => {
   }
 
 
-
-
-
-
   const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
 
 

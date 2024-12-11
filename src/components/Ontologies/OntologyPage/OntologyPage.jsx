@@ -180,7 +180,10 @@ const OntologyPage = (props) => {
     setTabOnLoad();
   }, []);
 
-
+  let ontoPageHeader = document.getElementById('ontology-page-header');
+  if (ontoPageHeader) {
+    ontoPageHeader.scrollIntoView();
+  }
 
 
   if (error) {
