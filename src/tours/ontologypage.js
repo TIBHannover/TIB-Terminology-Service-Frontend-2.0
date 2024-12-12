@@ -236,3 +236,107 @@ export function classListTourSteps() {
 }
 
 
+export function githubPanelTourSteps() {
+  const steps = [
+    {
+      selector: tourSelectorPrefix + 'github-welcome',
+      content: () => {
+        return (
+          <>
+            <p>
+              This the ontology GitHub panel (if hosted on GitHub). Here you can check the list of open issues, and also, open new issues and term requests.
+            </p>
+            <p>
+              <b>Attention:</b> You can file a new issue or term request only if you login in TS via your GitHub account. Otherwise you can
+              only check the list of issues.
+            </p>
+
+          </>
+        );
+      }
+    },
+    {
+      selector: tourSelectorPrefix + 'github-issue-status-dropdown',
+      content: () => {
+        return (
+          <>
+            <p>
+              This is the filter for issues/pull-requests based on their status on GitHub.
+            </p>
+            <ul>
+              <li>open (default)</li>
+              <li>closed</li>
+              <li>all: closed + open</li>
+            </ul>
+
+          </>
+        );
+      }
+    },
+    {
+      selector: tourSelectorPrefix + 'github-issue-type-radio',
+      content: () => {
+        return (
+          <>
+            <p>
+              Here you can select the type of this list: issues and pull requests.
+            </p>
+            in case you do not know what is a pull request check
+            <a
+              href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
+              target={'_blank'}
+              className='ml-1'
+            >
+              here
+            </a>
+          </>
+        );
+      }
+    },
+    {
+      selector: tourSelectorPrefix + 'github-issue-title',
+      content: 'This is the issue title. Clicking on it will open the issue page on GitHub.'
+    },
+    {
+      selector: tourSelectorPrefix + 'github-issue-number',
+      content: 'This is the issue #number, opening date, and the GitHub user who opened it.'
+    },
+    {
+      selector: tourSelectorPrefix + 'github-issue-open-btn-general',
+      content: () => {
+        return (
+          <>
+            <p>
+              Use this to open an issue for this ontology on its GitHub repository.
+            </p>
+            <p>
+              <b>Attention:</b> If you plan to create a Term Request, use the other button below this.
+            </p>
+          </>
+        );
+      }
+
+    },
+    {
+      selector: tourSelectorPrefix + 'github-issue-open-btn-termRequest',
+      content: () => {
+        return (
+          <>
+            <p>
+              Use this to request a new term for this ontology. The request will be an issue on the ontology repository.
+              We provide a template for you to help you requesting the term.
+            </p>
+            <p>
+              <b>Attention:</b> We cannot guarantee that your term request will be accepted. It is up to the ontology maintainers.
+            </p>
+          </>
+        );
+      }
+
+    }
+  ];
+
+  return steps;
+}
+
+

@@ -13,7 +13,8 @@ import {
   ontologyOverViewTourSteps,
   treeViewTourSteps,
   individualsListTourSteps,
-  classListTourSteps
+  classListTourSteps,
+  githubPanelTourSteps
 } from "./ontologypage";
 
 
@@ -107,7 +108,7 @@ const SiteTour = () => {
     } else if (cUrl.includes("/notes")) {
       tourSteps = tourSteps.concat([]);
     } else if (cUrl.includes("/gitpanel")) {
-      tourSteps = tourSteps.concat([]);
+      tourSteps = tourSteps.concat(githubPanelTourSteps());
     } else {
       // ontology overview tab
       tourSteps = ontologyOverViewTourSteps();
