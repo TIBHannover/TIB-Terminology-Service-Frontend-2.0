@@ -157,3 +157,45 @@ export function treeViewTourSteps(type) {
 }
 
 
+export function individualsListTourSteps() {
+  const steps = [
+    {
+      selector: tourSelectorPrefix + 'individual-list-welcome',
+      content: `This the ontology individuals list view. Here you can check individuals detail, check thier notes, and check their parent class in the tree.`,
+    },
+    {
+      selector: tourSelectorPrefix + 'individual-list-node',
+      content: 'This an individual lable. You can click on it to check its detail on the right pane table.'
+    },
+    {
+      selector: tourSelectorPrefix + 'check-in-tree-individual',
+      content: 'Click here to check the selected individual in the class tree structure. You can use this to check the class that this individual instantiated from.'
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-jumpto-box',
+      content: `This is the jump-to that allows you to jump to your desire individual in the list. Type your individual label partially here and 
+        select it to jump to it in the list.
+      `
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-page-resize-line',
+      content: `You can resize the left pane (tree) and the right pane (detail table) by dragging this line to left and right.`
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-table-detail',
+      content: `Here you can check the detail about this individual. 
+        You can also check this individual metadata as JSON by using the button at the end of this table.
+      `
+    },
+    {
+      selector: tourSelectorPrefix + 'tree-table-note_tab',
+      content: `Here you can check the notes defined for this individual by other people. 
+        This help you to achieve a better understanding regarding this individual and its usage.
+      `
+    },
+  ];
+
+  return steps;
+}
+
+

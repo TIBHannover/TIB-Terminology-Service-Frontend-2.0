@@ -3,12 +3,16 @@ import Tour from 'reactour';
 import { getTourProfile, storeTourProfile } from "./controller";
 import { AppContext } from "../context/AppContext";
 import { tourWelcomeStep } from "./globals";
-import { headerTourStepsTibGeneral, homePageTourStepsTibGeneral } from "./tibGeneral";
+import {
+  headerTourStepsTibGeneral,
+  homePageTourStepsTibGeneral
+} from "./tibGeneral";
 import { loginInHeaderTourSteps } from "./login";
 import {
   ontologyPageTabTourSteps,
   ontologyOverViewTourSteps,
-  treeViewTourSteps
+  treeViewTourSteps,
+  individualsListTourSteps
 } from "./ontologypage";
 
 
@@ -95,7 +99,8 @@ const SiteTour = () => {
       expandLeftPaneIfnot();
       tourSteps = tourSteps.concat(treeViewTourSteps("property"));
     } else if (cUrl.includes("/individuals")) {
-      tourSteps = tourSteps.concat([]);
+      expandLeftPaneIfnot();
+      tourSteps = tourSteps.concat(individualsListTourSteps());
     } else if (cUrl.includes("/termList")) {
       tourSteps = tourSteps.concat([]);
     } else if (cUrl.includes("/notes")) {
