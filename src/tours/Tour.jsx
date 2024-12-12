@@ -12,7 +12,8 @@ import {
   ontologyPageTabTourSteps,
   ontologyOverViewTourSteps,
   treeViewTourSteps,
-  individualsListTourSteps
+  individualsListTourSteps,
+  classListTourSteps
 } from "./ontologypage";
 
 
@@ -102,7 +103,7 @@ const SiteTour = () => {
       expandLeftPaneIfnot();
       tourSteps = tourSteps.concat(individualsListTourSteps());
     } else if (cUrl.includes("/termList")) {
-      tourSteps = tourSteps.concat([]);
+      tourSteps = tourSteps.concat(classListTourSteps());
     } else if (cUrl.includes("/notes")) {
       tourSteps = tourSteps.concat([]);
     } else if (cUrl.includes("/gitpanel")) {

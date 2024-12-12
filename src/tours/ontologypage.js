@@ -1,4 +1,3 @@
-
 const tourSelectorPrefix = '.stour-';
 
 
@@ -192,6 +191,44 @@ export function individualsListTourSteps() {
       content: `Here you can check the notes defined for this individual by other people. 
         This help you to achieve a better understanding regarding this individual and its usage.
       `
+    },
+  ];
+
+  return steps;
+}
+
+
+export function classListTourSteps() {
+  const steps = [
+    {
+      selector: tourSelectorPrefix + 'class-list-welcome',
+      content: `This the ontology class list view. Here you can check the list of classes alongside with some their of the most important metadata.`,
+    },
+    {
+      selector: tourSelectorPrefix + 'class-list-obsolete-checkbox',
+      content: () => {
+        return (
+          <>
+            <p>
+              Check this to only see the obsolete classes list. Unchecked means only show the non-obsolete classes.
+            </p>
+            <p>
+              <b>Attention:</b> this enable the obsolete check globally for this application. This means obsolete checkbox will be enabled
+              for all other section such as the search and tree view.
+            </p>
+          </>
+        );
+      }
+    },
+    {
+      selector: tourSelectorPrefix + 'class-list-jumpto-box',
+      content: `This is the jump-to that allows you to jump to your desire class in the list. Type your class label partially here and 
+        select it to jump to it in the list.
+      `
+    },
+    {
+      selector: tourSelectorPrefix + 'class-list-hide-column-icon',
+      content: 'Use this to hide a column from your view in case you like to have a smaller table.'
     },
   ];
 

@@ -60,7 +60,7 @@ export const RenderTermList = (props) => {
     return [
       <thead>
         <tr>
-          {columnVisibility.label && <th scope="col">Label <a onClick={showHideTableColumn} value={LABEL_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
+          {columnVisibility.label && <th scope="col">Label <a onClick={showHideTableColumn} value={LABEL_COL_NAME}><i className="fa fa-eye-slash hidden-fa stour-class-list-hide-column-icon"></i></a></th>}
           {columnVisibility.id && <th scope="col">ID <a onClick={showHideTableColumn} value={ID_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
           {columnVisibility.description && <th scope="col">Description <a onClick={showHideTableColumn} value={DESCRIPTION_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
           {columnVisibility.alternativeTerm && <th scope="col">Alternative Term <a onClick={showHideTableColumn} value={ALTERNATIVE_TERM_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
@@ -81,7 +81,7 @@ export const RenderTermList = (props) => {
     return [
       <thead>
         <tr>
-          {columnVisibility.label && <th scope="col">Label <a onClick={showHideTableColumn} value={LABEL_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
+          {columnVisibility.label && <th scope="col">Label <a onClick={showHideTableColumn} value={LABEL_COL_NAME}><i className="fa fa-eye-slash hidden-fa stour-class-list-hide-column-icon"></i></a></th>}
           {columnVisibility.comment && <th scope="col">Comment <a onClick={showHideTableColumn} value={COMMENT_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
           {columnVisibility.id && <th scope="col">ID <a onClick={showHideTableColumn} value={ID_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
           {columnVisibility.description && <th scope="col">Description <a onClick={showHideTableColumn} value={DESCRIPTION_COL_NAME}><i className="fa fa-eye-slash hidden-fa"></i></a></th>}
@@ -212,7 +212,7 @@ export const RenderTermList = (props) => {
   return (
     <div className="tree-view-container list-container">
       <div className="row">
-        <div className="col-sm-12">
+        <div className="col-sm-12 stour-class-list-jumpto-box">
           <JumpTo
             targetType={"terms"}
             label={"Jump to"}
@@ -226,14 +226,14 @@ export const RenderTermList = (props) => {
         {!props.iri &&
           <div className="col-sm-3 mt-1">
             <div className="termlist-jumpto-container">
-              <div class="form-group form-check">
+              <div className="form-group form-check stour-class-list-obsolete-checkbox">
                 <input
                   type="checkbox"
-                  class="form-check-input"
+                  className="form-check-input"
                   id="obsolte_check_term_list"
                   onChange={props.obsoletesCheckboxHandler}
                 />
-                <label class="form-check-label" for="obsolte_check_term_list">Only show obsoletes</label>
+                <label className="form-check-label" for="obsolte_check_term_list">Only show obsoletes</label>
               </div>
             </div>
           </div>}
