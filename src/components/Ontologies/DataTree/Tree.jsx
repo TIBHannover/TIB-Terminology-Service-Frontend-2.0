@@ -10,6 +10,7 @@ import KeyboardNavigator from "./KeyboardNavigation";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import { getTourProfile } from "../../../tours/controller";
 
 
 
@@ -414,6 +415,17 @@ const Tree = (props) => {
     keyboardNavigationManager.run(event);
   };
 
+  function expandLeftPaneIfnot() {
+    let detailPane = document.getElementById('page-right-pane');
+    if (!detailPane) {
+      let termContainer = document.getElementsByClassName('tree-text-container');
+      if (termContainer.length !== 0) {
+        termContainer[0].click();
+      }
+    }
+  }
+
+
 
   useEffect(() => {
     setComponentData();
@@ -422,7 +434,6 @@ const Tree = (props) => {
       document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
     }
     document.addEventListener("keydown", handleKeyDown, false);
-
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown, false);
@@ -436,6 +447,10 @@ const Tree = (props) => {
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
+    let tourP = getTourProfile();
+    if (!tourP.ontoClassTreePage) {
+      expandLeftPaneIfnot();
+    }
 
   }, [resetTreeFlag, reload]);
 

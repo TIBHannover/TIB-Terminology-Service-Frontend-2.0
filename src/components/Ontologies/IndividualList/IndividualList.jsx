@@ -8,6 +8,7 @@ import { RenderIndividualList } from "./RenderIndividualList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import PropTypes from 'prop-types';
+import { getTourProfile } from "../../../tours/controller";
 
 
 
@@ -192,6 +193,10 @@ const IndividualsList = (props) => {
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
+    let tourP = getTourProfile();
+    if (!tourP.ontoIndividualPage) {
+      document.getElementById('tour-trigger-btn').click();
+    }
 
     return () => {
       document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);

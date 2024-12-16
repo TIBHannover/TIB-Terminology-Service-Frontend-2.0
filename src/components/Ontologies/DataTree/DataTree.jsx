@@ -63,6 +63,7 @@ const DataTree = (props) => {
   }
 
 
+
   useEffect(() => {
     paneResizeClass.setOriginalWidthForLeftPanes();
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);

@@ -40,6 +40,10 @@ export function ontologyPageTabTourSteps() {
 export function ontologyOverViewTourSteps() {
   const steps = [
     {
+      selector: tourSelectorPrefix + 'overview-welcome',
+      content: "This the ontology overview page where you can check the ontology metadata and stats.",
+    },
+    {
       selector: tourSelectorPrefix + 'overview-page-table',
       content: "Check the core information about an ontology in this table.",
     },
@@ -339,4 +343,101 @@ export function githubPanelTourSteps() {
   return steps;
 }
 
+
+export function notesTourSteps() {
+  const steps = [
+    {
+      selector: tourSelectorPrefix + 'ontology-note-welcome',
+      style: {
+        maxWidth: '50%',
+      },
+      content: () => {
+        return (
+          <>
+            <h5>Ontology Notes</h5>
+            <p>This is the ontology notes panel. Here you can check the existing notes,
+              create new notes, and add comment to other users notes.
+            </p>
+            <p>
+              <b>Hint: What is a note exactly?</b>
+            </p>
+            <p>
+              You can see the notes as the extra contexual data for an ontology or a term defined by the community
+              (like a community note). Notes helps ontology users to understand and use the ontology
+              better. Besides, it is a place to ask question about the ontology and its terms from the community.
+            </p>
+            <p><b>Why use note and not GitHub issues for this?</b></p>
+            <p>
+              <ul>
+                <li>
+                  Some ontologies are not hosted on GitHub (or any version control
+                  system with issue list feature.)
+                </li>
+                <li>
+                  Some questions might not be suitable and accpetable as a Git issue
+                  based on the target repository rules.
+                </li>
+                <li>
+                  You can attach a note directly to a term and visit it on the tree under note tab for the target term.
+                  Not possible on GitHub.
+                </li>
+              </ul>
+            </p>
+            <br />
+            <p>
+              <b>Hint: </b>This is one of the good examples of using the note feature:
+              <a href='https://terminology.nfdi4chem.de/ts/ontologies/vibso/notes?page=1&size=10&originalNotes=false&type=all'
+                target={'_blank'} className='ml-2'
+              >
+                VIBSO Notes
+              </a>
+            </p>
+
+          </>
+        );
+      }
+    },
+    {
+      selector: tourSelectorPrefix + 'onto-note-type-filter',
+      content: 'Here you can filter the note list (if exist) for this ontology based on the target type.'
+    },
+    {
+      selector: tourSelectorPrefix + 'onto-note-import-from-parent',
+      content: `By default this list contains also the notes that are defined for any term that is imported from this ontology.
+            For instance, if someone define a note for a term X somewhere else and the term X belongs to this ontology,
+            you will see that note here in case they publish it for the parent also.
+            `
+    }
+  ];
+
+  if (!window.location.href.includes('noteId=')) {
+    steps.push({
+      selector: tourSelectorPrefix + 'onto-note-add-btn',
+      content: 'Use this to define a new note for this ontology (you need to be logged in.)'
+    });
+  }
+
+  let noteList = document.getElementsByClassName('note-list-card');
+  if (noteList && noteList.length !== 0) {
+    steps.push({
+      selector: tourSelectorPrefix + 'onto-note-list-card',
+      content: 'This is a note.'
+    });
+    steps.push({
+      selector: tourSelectorPrefix + 'onto-note-list-card-meta',
+      content: 'Creation date and made by whome. Besides, you will see Pinned tag if the note is pinned by admin and Imported tag if it is imported.'
+    });
+    steps.push({
+      selector: tourSelectorPrefix + 'onto-note-list-card-title',
+      content: 'This is the note title. You can click on it to check the note detail.'
+    });
+    steps.push({
+      selector: tourSelectorPrefix + 'onto-note-list-card-about',
+      content: 'Check this note describes which artifact: ontology, class, property, and individual. You can click on them to see the term details.'
+    });
+
+  }
+
+  return steps;
+}
 

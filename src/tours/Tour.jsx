@@ -14,7 +14,8 @@ import {
   treeViewTourSteps,
   individualsListTourSteps,
   classListTourSteps,
-  githubPanelTourSteps
+  githubPanelTourSteps,
+  notesTourSteps
 } from "./ontologypage";
 
 
@@ -48,7 +49,6 @@ const SiteTour = () => {
     tourOpenValue = true;
   }
 
-
   const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
 
 
@@ -60,7 +60,7 @@ const SiteTour = () => {
     }
     if (!urlPath || urlPath[0] === "?") {
       return HOME_PAGE_ID;
-    } else if (urlPath.includes('ontologies')) {
+    } else if (urlPath.includes('ontologies/')) {
       return ONTOLOGY_PAGE_ID;
     }
   }
@@ -95,18 +95,24 @@ const SiteTour = () => {
     let tourSteps = [];
     let cUrl = window.location.href;
     if (cUrl.includes("/terms")) {
-      expandLeftPaneIfnot();
+      setTimeout(() => {
+        expandLeftPaneIfnot();
+      }, 1000)
       tourSteps = tourSteps.concat(treeViewTourSteps("class"));
     } else if (cUrl.includes("/props")) {
-      expandLeftPaneIfnot();
+      setTimeout(() => {
+        expandLeftPaneIfnot();
+      }, 1000)
       tourSteps = tourSteps.concat(treeViewTourSteps("property"));
     } else if (cUrl.includes("/individuals")) {
-      expandLeftPaneIfnot();
+      setTimeout(() => {
+        expandLeftPaneIfnot();
+      }, 1000)
       tourSteps = tourSteps.concat(individualsListTourSteps());
     } else if (cUrl.includes("/termList")) {
       tourSteps = tourSteps.concat(classListTourSteps());
     } else if (cUrl.includes("/notes")) {
-      tourSteps = tourSteps.concat([]);
+      tourSteps = tourSteps.concat(notesTourSteps());
     } else if (cUrl.includes("/gitpanel")) {
       tourSteps = tourSteps.concat(githubPanelTourSteps());
     } else {

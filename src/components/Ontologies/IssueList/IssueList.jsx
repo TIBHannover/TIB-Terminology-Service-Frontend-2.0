@@ -8,6 +8,7 @@ import '../../layout/githubPanel.css';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import IssueListUrlFactory from "../../../UrlFactory/IssueListUrlFactory";
 import AlertBox from "../../common/Alerts/Alerts";
+import { getTourProfile } from "../../../tours/controller";
 
 
 
@@ -136,6 +137,10 @@ const IssueList = (props) => {
 
   useEffect(() => {
     createIssueList();
+    let tourP = getTourProfile();
+    if (!tourP.ontoGithubPage) {
+      document.getElementById('tour-trigger-btn').click();
+    }
   }, []);
 
 
