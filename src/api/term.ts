@@ -189,8 +189,8 @@ class TermApi {
       for (let relation of relatedFromData) {
         let propertyIri = relation['property'];
         let targetIri = relation['value'];
-        let propertyLabel = this.classData['linkedEntities'][propertyIri]['label']['value'];
-        let targetLabel = this.classData['linkedEntities'][targetIri]['label']['value'];
+        let propertyLabel = this.classData['linkedEntities'][propertyIri]['label'][0]['value'];
+        let targetLabel = this.classData['linkedEntities'][targetIri]['label'][0]['value'];
         let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let span = document.createElement('span');
@@ -221,8 +221,8 @@ class TermApi {
       }
       let propertyIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#onProperty'];
       let targetIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#someValuesFrom'];
-      let propertyLabel = this.classData['linkedEntities'][propertyIri]['label']['value'];
-      let targetLabel = this.classData['linkedEntities'][targetIri]['label']['value'];
+      let propertyLabel = this.classData['linkedEntities'][propertyIri]['label'][0]['value'];
+      let targetLabel = this.classData['linkedEntities'][targetIri]['label'][0]['value'];
       let relationText = document.createElement('span');
       relationText.innerHTML = " some ";
       let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
@@ -252,7 +252,7 @@ class TermApi {
       for (let i = 0; i < subClassOfData.length; i++) {
         if (typeof (subClassOfData[i]) === "string") {
           let parentIri = subClassOfData[0];
-          let parentLabel = this.classData['linkedEntities'][parentIri]['label']['value'];
+          let parentLabel = this.classData['linkedEntities'][parentIri]['label'][0]['value'];
           let parentLi = document.createElement('li');
           let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
           let parentAnchor = buildHtmlAnchor(parentUrl, parentLabel);
@@ -278,7 +278,7 @@ class TermApi {
   recSubClass(relationObj, relation = "") {
     if (relationObj instanceof Array) {
       let targetIri = relationObj[0];
-      let targetLabel = this.classData['linkedEntities'][targetIri]['label']['value'];
+      let targetLabel = this.classData['linkedEntities'][targetIri]['label'][0]['value'];
       let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
       let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
       let liContent = document.createElement('span');
@@ -289,7 +289,7 @@ class TermApi {
       liContent.appendChild(relationTextspan);
       if (typeof (relationObj[1]) === "string") {
         let targetIri = relationObj[1];
-        let targetLabel = this.classData['linkedEntities'][targetIri]['label']['value'];
+        let targetLabel = this.classData['linkedEntities'][targetIri]['label'][0]['value'];
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
         liContent.appendChild(targetAnchor);
@@ -307,7 +307,7 @@ class TermApi {
         let relKey = Object.keys(relationObj).find((key) => (key !== TYPE_URI));
         return this.recSubClass(relationObj[relKey], relKey?.split('#')[1]);
       }
-      let propertyLabel = this.classData['linkedEntities'][propertyIri]['label']['value'];
+      let propertyLabel = this.classData['linkedEntities'][propertyIri]['label'][0]['value'];
       let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
       let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
       let liContent = document.createElement('span');
@@ -320,7 +320,7 @@ class TermApi {
       liContent.appendChild(relationTextspan);
       if (typeof (relationObj[targetKey]) === "string") {
         let targetIri = relationObj[targetKey];
-        let targetLabel = this.classData['linkedEntities'][targetIri]['label']['value'];
+        let targetLabel = this.classData['linkedEntities'][targetIri]['label'][0]['value'];
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
         liContent.appendChild(targetAnchor);
@@ -438,7 +438,6 @@ class TermApi {
     catch (e) {
       return null;
     }
-
   }
 
 
