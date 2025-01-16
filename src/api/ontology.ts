@@ -144,7 +144,7 @@ class OntologyApi {
 
   async fetchObsoleteClasses(): Promise<boolean> {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/terms/roots?includeObsoletes=true&size=1000";
+      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/terms/roots?obsoletes=true&size=1000";
       let res = await (await fetch(url, getCallSetting)).json();
       this.obsoleteClasses = res['_embedded']["terms"];
       return true;
@@ -164,7 +164,7 @@ class OntologyApi {
     }
 
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/properties/roots?includeObsoletes=true&size=1000";
+      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/properties/roots?obsoletes=true&size=1000";
       let res: TempResult = await (await fetch(url, getCallSetting)).json();
       this.obsoleteProperties = res['_embedded']["properties"];
       return true;
