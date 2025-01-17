@@ -100,7 +100,7 @@ const SearchResult = (props) => {
       searchParams.selectedTypes = selectedTypes;
       searchParams.selectedOntologies = [];
       searchResultForFacetCount = await olsSearch(searchParams);
-      result['facet_counts']['facet_fields']['ontology_name'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontology_name'];
+      result['facet_counts']['facet_fields']['ontologyId'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontologyId'];
 
       setSearchResult(result['response']['docs']);
       setTotalResultsCount(result['response']['numFound']);

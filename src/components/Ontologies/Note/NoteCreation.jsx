@@ -133,7 +133,8 @@ const NoteCreation = (props) => {
     if (selectedTerm) {
       document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '';
       let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
-      let parentOnto = await termApi.getClassOriginalOntology();
+      await termApi.fetchTermJson();
+      let parentOnto = termApi.getClassOriginalOntology();
       setSelectedTermFromAutoComplete(selectedTerm);
       setParentOntology(parentOnto);
     }
@@ -148,7 +149,8 @@ const NoteCreation = (props) => {
   useEffect(async () => {
     if (noteContext.selectedTermInTree) {
       let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
-      let parentOnto = await termApi.getClassOriginalOntology();
+      await termApi.fetchTermJson();
+      let parentOnto = termApi.getClassOriginalOntology();
       setParentOntology(parentOnto);
     }
   }, [noteContext.selectedTermInTree]);

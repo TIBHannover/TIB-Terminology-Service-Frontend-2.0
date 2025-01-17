@@ -84,7 +84,7 @@ const OntologyPage = (props) => {
       setError("Can not load this ontology");
       return true;
     }
-    let isSkos = ontologyApi.ontology['config']?.['skos'];
+    let isSkos = ontologyApi.ontology['config']?.['isSkos'];
     let skosIndividuals = [];
     if (isSkos) {
       let skosApi = new SkosApi({ ontologyId: ontologyId, iri: "" });

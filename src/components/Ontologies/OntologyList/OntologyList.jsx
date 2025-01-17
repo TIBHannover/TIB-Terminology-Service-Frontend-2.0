@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
 import { fetchCollectionsWithStats, fetchOntologyListForCollections } from '../../../api/collection';
@@ -27,12 +27,12 @@ const OntologyList = (props) => {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [ontologies, setOntologies] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);  
+  const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);  
-  const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);  
+  const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);
+  const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);
   const [sortField, setSortField] = useState(TITLE_SORT_KEY);
-  const [selectedCollections, setSelectedCollections] = useState([]);  
+  const [selectedCollections, setSelectedCollections] = useState([]);
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
@@ -40,202 +40,202 @@ const OntologyList = (props) => {
   const allCollectionsWithStatsQuery = useQuery({
     queryKey: ['allCollectionsWithTheirStats'],
     queryFn: fetchCollectionsWithStats,
-    
+
   });
-  
-  const ontologyApi = new OntologyApi({});      
+
+  const ontologyApi = new OntologyApi({});
   const ontologyListQuery = useQuery({
     queryKey: ['ontologyList'],
     queryFn: ontologyApi.fetchOntologyList,
   });
-  
+
   let allCollectionWithStats = [];
-  if(process.env.REACT_APP_PROJECT_NAME === "" && allCollectionsWithStatsQuery.data){
+  if (process.env.REACT_APP_PROJECT_NAME === "" && allCollectionsWithStatsQuery.data) {
     // Only for TIB General
     allCollectionWithStats = allCollectionsWithStatsQuery.data;
-  } 
+  }
   const allCollections = allCollectionWithStats;
 
-  async function setComponentData (){    
-    try{   
-      if(!ontologyListQuery.data){
+  async function setComponentData() {
+    try {
+      if (!ontologyListQuery.data) {
         return;
-      }   
+      }
       let ontologiesList = [];
-      if(appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0){
-        for(let onto of ontologyListQuery.data){
-          if(appContext.userSettings.activeCollection.ontology_ids.includes(onto.ontologyId)){
+      if (appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0) {
+        for (let onto of ontologyListQuery.data) {
+          if (appContext.userSettings.activeCollection.ontology_ids.includes(onto.ontologyId)) {
             ontologiesList.push(onto);
           }
         }
       }
-      else{
+      else {
         ontologiesList = ontologyListQuery.data;
       }
-      let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);                 
+      let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);
       setOntologies(sortedOntologies);
-      setUnFilteredOntologies(sortedOntologies);              
-      setIsLoaded(true);      
-    }
-    catch(error){       
+      setUnFilteredOntologies(sortedOntologies);
       setIsLoaded(true);
-      setError(error);        
+    }
+    catch (error) {
+      setIsLoaded(true);
+      setError(error);
     }
   }
 
 
 
 
-  function setStateBasedOnUrlParams(){
-    let ontologyListUrlFactory = new OntologyListUrlFactory();    
+  function setStateBasedOnUrlParams() {
+    let ontologyListUrlFactory = new OntologyListUrlFactory();
     let collectionsInUrl = ontologyListUrlFactory.collections
     let sortByInUrl = ontologyListUrlFactory.sortedBy;
     let pageInUrl = ontologyListUrlFactory.page;
     let sizeInUrl = ontologyListUrlFactory.size;
     let keywordFilterInUrl = ontologyListUrlFactory.keywordFilter;
-    collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];    
+    collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
-    pageInUrl = pageInUrl ? parseInt(pageInUrl) : pageNumber; 
-    sizeInUrl = sizeInUrl ? parseInt(sizeInUrl) : pageSize; 
+    pageInUrl = pageInUrl ? parseInt(pageInUrl) : pageNumber;
+    sizeInUrl = sizeInUrl ? parseInt(sizeInUrl) : pageSize;
     setSelectedCollections(collectionsInUrl);
     setKeywordFilterString(keywordFilterInUrl);
-    setSortField(sortByInUrl);      
+    setSortField(sortByInUrl);
     setPageNumber(pageInUrl);
     setPageSize(sizeInUrl);
   }
 
 
 
-  function ontology_has_searchKey(ontology, value){
-    try{
-        value = value.toLowerCase();
-        if (ontology.ontologyId.includes(value)) {
-            return true;
-        }
-        if (ontology.config.title.toLowerCase().includes(value)) {
-            return true;
-        }
-        if (ontology.config.description != null &&  ontology.config.description.toLowerCase().includes(value)) {
-            return true;
-        }
-  
-        return false;
+  function ontology_has_searchKey(ontology, value) {
+    try {
+      value = value.toLowerCase();
+      if (ontology.ontologyId.includes(value)) {
+        return true;
+      }
+      if (ontology.config.title.toLowerCase().includes(value)) {
+        return true;
+      }
+      if (ontology.config.description != null && ontology.config.description.toLowerCase().includes(value)) {
+        return true;
+      }
+
+      return false;
     }
-    catch (e){        
-        return false;
+    catch (e) {
+      return false;
     }
   }
 
 
 
-  function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {    
-    if(key === "title"){
-        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');        
+  function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
+    if (key === "title") {
+      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');
     }
-    else if(key === 'ontologyId'){
-        return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);         
+    else if (key === 'ontologyId') {
+      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);
     }
-    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);    
+    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);
   }
 
 
 
-  function handlePagination (value) {    
-    setPageNumber(parseInt(value));    
+  function handlePagination(value) {
+    setPageNumber(parseInt(value));
   }
 
 
 
-  function showInPageRangeOntologies(){
+  function showInPageRangeOntologies() {
     let down = (pageNumber - 1) * pageSize;
     let up = down + pageSize;
-    if (up > ontologies.length){
+    if (up > ontologies.length) {
       up = ontologies.length;
-    }    
+    }
     let hiddenStatus = new Array(ontologies.length).fill(false);
     for (let i = down; i < up; i++) {
       hiddenStatus[i] = true;
     }
-    setOntologiesHiddenStatus(hiddenStatus);   
+    setOntologiesHiddenStatus(hiddenStatus);
   }
 
 
 
-  function handlePageSizeDropDownChange(e){
-    setPageSize(parseInt(e.target.value));    
+  function handlePageSizeDropDownChange(e) {
+    setPageSize(parseInt(e.target.value));
   }
 
 
 
-  function handleSortChange(e, value){
-    let newSortField = e.target.value;    
+  function handleSortChange(e, value) {
+    let newSortField = e.target.value;
     let sortedOntology = sortArrayOfOntologiesBasedOnKey(ontologies, newSortField);
     setSortField(newSortField);
-    setOntologies(sortedOntology);     
+    setOntologies(sortedOntology);
   }
 
 
-  
-  function filterWordChange(e){
+
+  function filterWordChange(e) {
     setKeywordFilterString(e.target.value);
-    setPageNumber(1);    
+    setPageNumber(1);
   }
 
 
 
-  function handleSwitchange(e){
-    setExclusiveCollections(e.target.checked); 
-    setPageNumber(1);      
+  function handleSwitchange(e) {
+    setExclusiveCollections(e.target.checked);
+    setPageNumber(1);
   }
 
 
-  function handleFacetCollection(e, value){        
-    let collection = e.target.value.trim();    
-    let currentSelectedCollections = [...selectedCollections];     
-    if(e.target.checked){            
-      currentSelectedCollections.push(collection);         
+  function handleFacetCollection(e, value) {
+    let collection = e.target.value.trim();
+    let currentSelectedCollections = [...selectedCollections];
+    if (e.target.checked) {
+      currentSelectedCollections.push(collection);
     }
-    else{      
+    else {
       let index = currentSelectedCollections.indexOf(collection);
-      currentSelectedCollections.splice(index, 1);      
-    }        
+      currentSelectedCollections.splice(index, 1);
+    }
     setSelectedCollections(currentSelectedCollections);
-    setPageNumber(1);       
+    setPageNumber(1);
   }
 
 
 
-  async function runFilter(){         
+  async function runFilter() {
     let ontologiesList = [...unFilteredOntologies];
-    let keywordOntologies = [];          
-    if(keywordFilterString !== ""){                   
+    let keywordOntologies = [];
+    if (keywordFilterString !== "") {
       for (let i = 0; i < ontologiesList.length; i++) {
-        let ontology = ontologiesList[i];                
+        let ontology = ontologiesList[i];
         if (ontology_has_searchKey(ontology, keywordFilterString)) {
           keywordOntologies.push(ontology)
         }
       }
-      ontologiesList = keywordOntologies;    
+      ontologiesList = keywordOntologies;
     }
-    if(selectedCollections.length !== 0){      
+    if (selectedCollections.length !== 0) {
       let collectionOntologies = await fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
       let collectionFilteredOntologies = [];
-      for (let onto of collectionOntologies){
-        if(typeof(ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined"){
+      for (let onto of collectionOntologies) {
+        if (typeof (ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined") {
           collectionFilteredOntologies.push(onto);
         }
       }
-      ontologiesList = collectionFilteredOntologies;  
+      ontologiesList = collectionFilteredOntologies;
     }
-  
-    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);           
-    setOntologies(ontologiesList);        
+
+    ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);
+    setOntologies(ontologiesList);
   }
 
 
 
-  function updateUrl(){     
+  function updateUrl() {
     let ontologyListUrl = new OntologyListUrlFactory();
     ontologyListUrl.update({
       keywordFilter: keywordFilterString,
@@ -244,74 +244,74 @@ const OntologyList = (props) => {
       page: pageNumber,
       size: pageSize,
       andOpValue: exclusiveCollections
-    });  
+    });
   }
 
 
 
   useEffect(() => {
-    setComponentData();       
-    setStateBasedOnUrlParams();      
+    setComponentData();
+    setStateBasedOnUrlParams();
   }, [ontologyListQuery.data]);
 
 
 
   useEffect(() => {
-    if(isLoaded){      
+    if (isLoaded) {
       updateUrl();
-      runFilter();      
-    }              
+      runFilter();
+    }
   }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections, isLoaded]);
 
 
-  useEffect(() => {          
-      showInPageRangeOntologies();
+  useEffect(() => {
+    showInPageRangeOntologies();
   }, [ontologies]);
 
 
-  
-    if (error) {
-      return <div>Error: Something Went Wrong!</div>
-    }     
-    return (
-      <>
-        {Toolkit.createHelmet("Ontologies")}          
-        <div className='row justify-content-center ontology-list-container' id="ontologyList-wrapper-div">
-          <div className='col-sm-11'>
-          {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
-           {isLoaded &&  
-            <div className='row'>
-                <div className='col-sm-4'>
-                    <OntologyListFacet 
-                      enteredKeyword={keywordFilterString}
-                      filterWordChange={filterWordChange}
-                      onSwitchChange={handleSwitchange}
-                      handleFacetCollection={handleFacetCollection}
-                      selectedCollections={selectedCollections}
-                      allCollections={allCollections}
 
-                    />
-                </div>
-                <div className='col-sm-8'>
-                    <OntologyListRender 
-                      handlePagination={handlePagination}
-                      pageCount={Math.ceil(ontologies.length / pageSize)}
-                      pageNumber={pageNumber}
-                      pageSize={pageSize}
-                      handlePageSizeDropDownChange={handlePageSizeDropDownChange}
-                      sortField={sortField}
-                      handleSortChange={handleSortChange}
-                      ontologies={ontologies}
-                      ontologiesHiddenStatus={ontologiesHiddenStatus}
-                      isLoaded={isLoaded}
-                    />
-                </div>
+  if (error) {
+    return <div>Error: Something Went Wrong!</div>
+  }
+  return (
+    <>
+      {Toolkit.createHelmet("Ontologies")}
+      <div className='row justify-content-center ontology-list-container' id="ontologyList-wrapper-div">
+        <div className='col-sm-11'>
+          {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
+          {isLoaded &&
+            <div className='row'>
+              <div className='col-sm-4'>
+                <OntologyListFacet
+                  enteredKeyword={keywordFilterString}
+                  filterWordChange={filterWordChange}
+                  onSwitchChange={handleSwitchange}
+                  handleFacetCollection={handleFacetCollection}
+                  selectedCollections={selectedCollections}
+                  allCollections={allCollections}
+
+                />
+              </div>
+              <div className='col-sm-8'>
+                <OntologyListRender
+                  handlePagination={handlePagination}
+                  pageCount={Math.ceil(ontologies.length / pageSize)}
+                  pageNumber={pageNumber}
+                  pageSize={pageSize}
+                  handlePageSizeDropDownChange={handlePageSizeDropDownChange}
+                  sortField={sortField}
+                  handleSortChange={handleSortChange}
+                  ontologies={ontologies}
+                  ontologiesHiddenStatus={ontologiesHiddenStatus}
+                  isLoaded={isLoaded}
+                />
+              </div>
             </div>
-           }
-          </div>            
-        </div>          
-      </>
-    )
+          }
+        </div>
+      </div>
+    </>
+  )
 }
 
 

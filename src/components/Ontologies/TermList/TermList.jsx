@@ -59,12 +59,9 @@ const TermList = (props) => {
     let termList = [];
     for (let term of listOfTermsAndStats['results']) {
       let termApi = new TermApi(term['ontology_name'], encodeURIComponent(term['iri']), "terms");
-      let [subclassOfText, equivalentToText] = await Promise.all([
-        termApi.getSubClassOf(),
-        termApi.getEqAxiom()
-      ]);
-      term['subclassOfText'] = subclassOfText;
-      term['equivalentToText'] = equivalentToText;
+      await termApi.fetchTermJson();
+      term['subclassOfText'] = termApi.getSubClassOf();
+      term['equivalentToText'] = termApi.getEqAxiom();
       termList.push(term);
     }
 

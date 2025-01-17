@@ -137,6 +137,9 @@ const Tree = (props) => {
         else {
           let i = 0;
           for (i = 0; i < rootNodesWithChildren.length; i++) {
+            if (rootNodesWithChildren[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
+              continue;
+            }
             let treeNode = new TreeNodeController();
             let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
             let isExpanded = result.isExpanded;
@@ -202,12 +205,15 @@ const Tree = (props) => {
     }
     let i = 0;
     for (i = 0; i < rootNodes.length; i++) {
+      if (rootNodes[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
+        continue;
+      }
       let treeNode = new TreeNodeController();
       let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)
       if (nodeIsClicked) {
         selectedItemId = i;
       }
-      let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);
+      let node = treeNode.buildNodeWithReact(rootNodes[i], btoa(rootNodes[i].iri), nodeIsClicked);
       childrenList.push(node);
     }
     if (obsoletesShown) {
@@ -217,6 +223,9 @@ const Tree = (props) => {
     let treeList = React.createElement("ul", { className: "tree-node-ul", id: "tree-root-ul" }, childrenList);
     return { "treeDomContent": treeList, "selectedItemId": selectedItemId };
   }
+
+
+
 
 
 
@@ -243,10 +252,7 @@ const Tree = (props) => {
           SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
         }
         else if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
-          // Target node is a root node            
-          let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);
-          let res = await termApi.getNodeJsTree('true');
-          TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);
+          TreeHelper.showSiblingsForRootNode(props.rootNodes, targetNodes[0].parentNode.dataset.iri);
         }
         else {
           await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
@@ -258,7 +264,6 @@ const Tree = (props) => {
         }
 
         if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
-          // Target node is a root node
           TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
         }
         else {
@@ -351,6 +356,7 @@ const Tree = (props) => {
 
 
 
+
   function createTreeActionButtons() {
     return [
       <div className='row tree-action-button-area'>
@@ -415,6 +421,8 @@ const Tree = (props) => {
     keyboardNavigationManager.run(event);
   };
 
+
+
   function expandLeftPaneIfnot() {
     let detailPane = document.getElementById('page-right-pane');
     if (!detailPane) {
@@ -426,7 +434,6 @@ const Tree = (props) => {
   }
 
 
-
   useEffect(() => {
     setComponentData();
     buildTheTree();
@@ -434,6 +441,7 @@ const Tree = (props) => {
       document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
     }
     document.addEventListener("keydown", handleKeyDown, false);
+
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown, false);
@@ -451,7 +459,6 @@ const Tree = (props) => {
     if (!tourP.ontoClassTreePage) {
       expandLeftPaneIfnot();
     }
-
   }, [resetTreeFlag, reload]);
 
 
