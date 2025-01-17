@@ -12,7 +12,7 @@ const Home = () => {
   async function fetchStats() {
     try {
       let res = await fetch(process.env.REACT_APP_STATS_API_URL, getCallSetting)
-      res = (await statsResult.json());
+      res = await res.json();
       setStatsResult(res);
 
     } catch (e) {
