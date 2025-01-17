@@ -72,7 +72,7 @@ const OntologyInfoTable = () => {
             </div>
           </div>
 
-          <table className="ontology-detail-table" striped="columns">
+          <table className="ontology-detail-table stour-overview-page-table" striped="columns">
             <tbody>
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Version</b></td>
@@ -217,8 +217,8 @@ const OntologyInfoTable = () => {
             {createAnnotations()}
           </tbody>
         </table>}
-      <div className="text-center" id="search-facet-show-more-ontology-btn">
-        <a className="show-more-btn" onClick={handleOntologyShowMoreClick}>{showExtraAnotationBtnText}</a>
+      <div className="text-center " id="search-facet-show-more-ontology-btn">
+        <a className="show-more-btn stour-overview-page-more-metadata" onClick={handleOntologyShowMoreClick}>{showExtraAnotationBtnText}</a>
       </div>
     </div>
   );

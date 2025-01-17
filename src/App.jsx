@@ -13,6 +13,7 @@ import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
 import { getReportList } from './api/tsMicroBackendCalls';
 import LoadingPage from './LoadingPage';
+import SiteTour from './tours/Tour';
 import { olsIsUp } from './api/system';
 import { useQuery } from '@tanstack/react-query';
 import './components/layout/common.css';
@@ -106,6 +107,11 @@ const App = () => {
               {!showLoadingPage &&
                 <>
                   <Header />
+                  <div className='alert alert-warning text-center' id="demo-message">
+                    <h2><b>This the Demo Server</b></h2>
+                    <h3>Check the service here:</h3>
+                    <h2><a href='https://terminology.tib.eu/ts'>https://terminology.tib.eu/ts</a></h2>
+                  </div>
                   <div className='application-content' id="application_content">
                     {loading &&
                       <Skeleton
@@ -124,6 +130,7 @@ const App = () => {
                       </>
                     }
                   </div>
+                  {process.env.REACT_APP_SITE_TOUR === "true" && !showLoadingPage && <SiteTour />}
                   <Footer />
                 </>
               }

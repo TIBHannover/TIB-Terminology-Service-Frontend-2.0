@@ -7,6 +7,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import TermListUrlFactory from "../../../UrlFactory/TermListUrlFactory";
 import PropTypes from 'prop-types';
 import '../../layout/termList.css';
+import { getTourProfile } from "../../../tours/controller";
 
 
 
@@ -142,6 +143,10 @@ const TermList = (props) => {
     loadComponent();
     if (obsoletes) {
       document.getElementById("obsolte_check_term_list").checked = true;
+    }
+    let tourP = getTourProfile();
+    if (!tourP.ontoClassListPage) {
+      document.getElementById('tour-trigger-btn').click();
     }
   }, []);
 

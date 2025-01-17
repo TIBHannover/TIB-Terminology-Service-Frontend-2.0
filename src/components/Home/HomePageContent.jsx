@@ -22,8 +22,8 @@ export function renderHomePage() {
       </div>
       <br></br>
       <div className="row">
-        <div className="col-sm-4">
-          <CollectionCard  collectionId={'NFDI4ING'} />
+        <div className="col-sm-4 stour-collection-box-in-home">
+          <CollectionCard collectionId={'NFDI4ING'} />
         </div>
         <div className="col-sm-4">
           <CollectionCard collectionId={'NFDI4CHEM'} />
@@ -41,16 +41,16 @@ export function renderHomePage() {
           <CollectionCard collectionId={'FID move'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard  collectionId={'FID BAUdigital'} />
+          <CollectionCard collectionId={'FID BAUdigital'} />
         </div>
       </div>
       <br></br>
       <div className="row">
         <div className="col-sm-4">
-          <CollectionCard collectionId={'FAIR Data Spaces'}  />
+          <CollectionCard collectionId={'FAIR Data Spaces'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard  collectionId={'ESS'} />
+          <CollectionCard collectionId={'ESS'} />
         </div>
         <div className="col-sm-4">
           <CollectionCard collectionId={'NFDI4CAT'} />
@@ -62,18 +62,18 @@ export function renderHomePage() {
           <CollectionCard collectionId={'NFDI4Energy'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard collectionId={'DataPLANT'}  />
+          <CollectionCard collectionId={'DataPLANT'} />
         </div>
         <div className="col-sm-4">
-          <CollectionCard collectionId={'Educational Resources'}  />
+          <CollectionCard collectionId={'Educational Resources'} />
         </div>
       </div>
       <br />
       <div className="row">
         <div className="col-sm-4">
           <CollectionCard collectionId={'Foundational Ontologies'} />
-        </div>        
-      </div>           
+        </div>
+      </div>
     </div>,
   ];
 }
@@ -81,12 +81,12 @@ export function renderHomePage() {
 
 
 
-const CollectionCard = ({collectionId}) => {
+const CollectionCard = ({ collectionId }) => {
   let subPath = process.env.REACT_APP_PROJECT_SUB_PATH;
-  return(
+  return (
     <div className="collection-card">
       <a href={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor" target='_blank'>
-        <img className="img-fluid collection-logo" alt="NFDI4Ing" src={collectionsInfoJson[collectionId]['logo']} />
+        <img className="img-fluid collection-logo" alt="collection_logo" src={subPath + collectionsInfoJson[collectionId]['logo']} />
       </a>
       <div className="collection-card-text">
         <p className="trunc">{collectionsInfoJson[collectionId]['text']}</p>

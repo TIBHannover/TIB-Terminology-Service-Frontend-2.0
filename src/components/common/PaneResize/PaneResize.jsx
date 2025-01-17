@@ -30,72 +30,72 @@
 
 
 
-class PaneResize{
+class PaneResize {
 
-    constructor(){
-        this.lastPagePositionX = 0;
-        this.isResizeOn = false;        
-        this.originalLeftPaneWidth = 0;
+  constructor() {
+    this.lastPagePositionX = 0;
+    this.isResizeOn = false;
+    this.originalLeftPaneWidth = 0;
+  }
+
+
+  setOriginalWidthForLeftPanes() {
+    this.originalLeftPaneWidth = document.getElementById("page-left-pane").offsetWidth;
+  }
+
+
+  generateVerticalResizeLine() {
+    return [
+      <div className='page-resize-vertical-line stour-tree-page-resize-line'></div>
+    ];
+  }
+
+  onMouseDown(event) {
+    let targetElement = event.target;
+    if (!targetElement.classList.contains('page-resize-vertical-line')) {
+      return null;
     }
+    this.lastPagePositionX = event.clientX;
+    this.isResizeOn = true;
+  }
 
 
-    setOriginalWidthForLeftPanes(){        
-        this.originalLeftPaneWidth = document.getElementById("page-left-pane").offsetWidth;
+  moveToResize(event) {
+    if (!this.isResizeOn) {
+      return null;
     }
-
-
-    generateVerticalResizeLine(){
-        return [
-            <div className='page-resize-vertical-line'></div>
-        ];
+    let addedWidth = (event.clientX - this.lastPagePositionX) / 1;
+    let pageLeftPane = document.getElementById("page-left-pane");
+    let pageRightPane = document.getElementById("page-right-pane");
+    let currentWidthLeft = parseInt(pageLeftPane.offsetWidth);
+    let currentWidthRight = parseInt(pageRightPane.offsetWidth);
+    pageLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
+    pageRightPane.style.width = (currentWidthRight - addedWidth) + "px";
+    this.lastPagePositionX = event.clientX;
+    let jumpToBox = document.getElementsByClassName('react-autosuggest__input');
+    if (jumpToBox.length !== 0 && addedWidth < 0) {
+      jumpToBox[0].classList.add('small-jumpto-box');
     }
-
-    onMouseDown(event){
-        let targetElement = event.target;
-        if (!targetElement.classList.contains('page-resize-vertical-line')){
-          return null;
-        }
-        this.lastPagePositionX = event.clientX;
-        this.isResizeOn = true;        
+    else if (jumpToBox.length !== 0 && addedWidth < 0) {
+      jumpToBox[0].classList.remove('small-jumpto-box');
     }
-    
+  }
 
-    moveToResize(event){
-        if(!this.isResizeOn){
-          return null;
-        }   
-        let addedWidth = (event.clientX - this.lastPagePositionX) / 1;    
-        let pageLeftPane = document.getElementById("page-left-pane");
-        let pageRightPane = document.getElementById("page-right-pane");
-        let currentWidthLeft = parseInt(pageLeftPane.offsetWidth);    
-        let currentWidthRight = parseInt(pageRightPane.offsetWidth);    
-        pageLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
-        pageRightPane.style.width = (currentWidthRight - addedWidth) + "px";
-        this.lastPagePositionX = event.clientX;   
-        let jumpToBox = document.getElementsByClassName('react-autosuggest__input');
-        if(jumpToBox.length !== 0 && addedWidth < 0){
-            jumpToBox[0].classList.add('small-jumpto-box');
-        }
-        else if(jumpToBox.length !== 0 && addedWidth < 0){
-            jumpToBox[0].classList.remove('small-jumpto-box');
-        }
-      } 
-    
 
-    releaseMouseFromResize(event){
-        if(!this.isResizeOn){
-          return null;
-        }
-        this.isResizeOn = false;    
+  releaseMouseFromResize(event) {
+    if (!this.isResizeOn) {
+      return null;
     }
+    this.isResizeOn = false;
+  }
 
 
-    resetTheWidthToOrignial(){
-        let pageLeftPane = document.getElementById("page-left-pane");                    
-        pageLeftPane.style.width = this.originalLeftPaneWidth + "px";        ;
-        this.lastPagePositionX = 0;        
-        this.isResizeOn = false;   
-    }
+  resetTheWidthToOrignial() {
+    let pageLeftPane = document.getElementById("page-left-pane");
+    pageLeftPane.style.width = this.originalLeftPaneWidth + "px";;
+    this.lastPagePositionX = 0;
+    this.isResizeOn = false;
+  }
 
 }
 

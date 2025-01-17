@@ -17,14 +17,13 @@ const Login = (props) => {
       loginUrl += "?client_id=" + process.env.REACT_APP_REGAPP_CLIENT_ID;
     }
 
-
     loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
     localStorage.setItem("authProvider", authProvider);
     localStorage.setItem("redirectUrl", window.location.href);
     window.location.replace(loginUrl);
   }
 
-
+    
 
   function buildAuthButtons() {
     return [

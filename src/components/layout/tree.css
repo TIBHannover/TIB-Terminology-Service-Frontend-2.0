@@ -127,7 +127,7 @@
     display: inline-block;    
     vertical-align: top;
     margin-bottom: 5px;     
-    width: 600%;
+    /*width: 600%;*/
     position: absolute;
     padding-left: 5px;
 }
