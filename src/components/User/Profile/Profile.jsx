@@ -6,7 +6,7 @@ const UserProfile = () =>{
 
     const appContext = useContext(AppContext);
 
-    function buildGithubProfile(){
+    function buildGitProfile(){
         return [
             <tbody>
                 <tr>                            
@@ -14,7 +14,7 @@ const UserProfile = () =>{
                     <td>{appContext.user.fullName}</td>                            
                 </tr>
                 <tr>                            
-                    <td>GitHub Homepage</td>
+                    <td>Homepage</td>
                     <td><a href={appContext.user.githubHomeUrl} target={"_blank"}>{appContext.user.githubHomeUrl}</a></td>                            
                 </tr>
                 <tr>                            
@@ -49,7 +49,7 @@ const UserProfile = () =>{
         <div className="row">                
                 <div className="col-sm-6 user-info-panel user-profile-container">
                     <table class="table table-striped">                    
-                        {localStorage.getItem("authProvider") === "github" ? buildGithubProfile() : buildOrcidProfile()}
+                        {localStorage.getItem("authProvider") === "orcid" ? buildOrcidProfile() : buildGitProfile()}
                     </table>         
                 </div>                      
         </div>                    
