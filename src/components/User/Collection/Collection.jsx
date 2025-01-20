@@ -124,7 +124,7 @@ const UserCollection = () => {
           <DeleteModal
             modalId={collection['id']}
             callHeaders={callHeader}
-            deleteEndpoint={deleteEndpoint + collection['id']}
+            deleteEndpoint={deleteEndpoint + collection['id'] + '/'}
             afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
             key={"deleteCollection" + collection['id']}
             afterDeleteProcess={disableTheDeletedCollection}

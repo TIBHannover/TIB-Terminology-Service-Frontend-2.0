@@ -192,14 +192,15 @@ export async function runShapeTest(ontologyPurl: string): Promise<OntologyShapeT
 
 export async function submitOntologySuggestion(formData: OntologySuggestionData): Promise<boolean> {
   try {
-    let form = new FormData();
+    let form = {};
     let formDataAny = formData as any;
     for (let key in formDataAny) {
-      form.append(key, formDataAny[key]);
+      //@ts-ignore
+      form[key] = formDataAny[key];
     }
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create';
-    let result: any = await fetch(url, { method: 'POST', headers: headers, body: form });
+    let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(form) });
     if (result.status === 200) {
       result = await result.json();
       result = result['_result']['response'];

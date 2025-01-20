@@ -102,10 +102,10 @@ export const NoteCardHeader = (props) => {
   deleteFormData["objectType"] = 'note';
   deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
 
-  let reportFormData = new FormData();
-  reportFormData.append("objectId", note['id']);
-  reportFormData.append("objectType", 'note');
-  reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
+  let reportFormData = {};
+  reportFormData["objectId"] = note['id'];
+  reportFormData["objectType"] = 'note';
+  reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
 
   let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({ page: 1, size: 10 });
 

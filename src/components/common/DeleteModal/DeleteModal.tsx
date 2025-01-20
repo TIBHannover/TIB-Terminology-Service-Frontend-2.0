@@ -45,7 +45,7 @@ export const DeleteModal = (props: DeleteModalProps) => {
 
   const deleteResource = async () => {
     try {
-      let postConfig: RequestInit = { method: 'POST', headers: callHeaders, body: formData };
+      let postConfig: RequestInit = { method: 'POST', headers: callHeaders, body: JSON.stringify(formData) };
       if (method === "DELETE") {
         postConfig = { method: method, headers: callHeaders };
       }

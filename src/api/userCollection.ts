@@ -28,7 +28,7 @@ export async function saveCollection(collectionData: CollectionData): Promise<Co
 export async function updateCollection(collectionId: string | number, collectionData: CollectionData): Promise<CollectionDataResponse | null> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-    let result: any = await fetch(baseUrl + "/collection/update/" + collectionId, { method: "PUT", headers: headers, body: JSON.stringify(collectionData) });
+    let result: any = await fetch(baseUrl + "/collection/update/" + collectionId + '/', { method: "PUT", headers: headers, body: JSON.stringify(collectionData) });
     result = await result.json();
     result = result['_result']['collection'];
     return result;

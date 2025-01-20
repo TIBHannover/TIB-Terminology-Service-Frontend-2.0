@@ -30,13 +30,13 @@ export async function getOntologyGithubIssueList(ontologyIssueTrackerUrl, issueS
 export async function sendResolveRequest({ objectType, objectId, action, creatorUsername }) {
   try {
     let headers = getTsPluginHeaders({ withAccessToken: true });
-    let formData = new FormData();
-    formData.append('objectType', objectType);
-    formData.append('objectId', objectId);
-    formData.append('action', action);
-    formData.append('creatorUsername', creatorUsername);
+    let formData = {};
+    formData['objectType'] = objectType;
+    formData['objectId'] = objectId;
+    formData['action'] = action;
+    formData['creatorUsername'] = creatorUsername;
     let resolveUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/resolve/';
-    let result = await fetch(resolveUrl, { method: 'POST', headers: headers, body: formData });
+    let result = await fetch(resolveUrl, { method: 'POST', headers: headers, body: JSON.stringify(formData) });
     if (result.status !== 200) {
       return false;
     }
@@ -70,12 +70,10 @@ export async function getReportList() {
 
 export async function getGitRepoTemplates({ repoUrl, gitUsername }) {
   try {
-    let headers = getTsPluginHeaders({ withAccessToken: true });
+    let headers = getTsPluginHeaders({ withAccessToken: true, isJson: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates/';
-    let formData = new FormData();
-    formData.append("repo_url", repoUrl);
-    formData.append("username", gitUsername);
-    let result = await fetch(url, { method: 'POST', headers: headers, body: formData });
+    let formData = { "repo_url": repoUrl, "username": gitUsername };
+    let result = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(formData) });
     if (result.status !== 200) {
       return false;
     }
@@ -91,16 +89,16 @@ export async function getGitRepoTemplates({ repoUrl, gitUsername }) {
 
 export async function submitGitIssue({ repoUrl, gitUsername, issueTitle, issueBody, issueType, ontologyId }) {
   try {
-    let data = new FormData();
+    let data = {};
     let headers = getTsPluginHeaders({ withAccessToken: true });
-    data.append("ontology_id", ontologyId);
-    data.append("username", gitUsername);
-    data.append("title", issueTitle);
-    data.append("content", issueBody);
-    data.append("issueType", issueType);
-    data.append("repo_url", repoUrl);
+    data["ontology_id"] = ontologyId;
+    data["username"] = gitUsername;
+    data["title"] = issueTitle;
+    data["content"] = issueBody;
+    data["issueType"] = issueType;
+    data["repo_url"] = repoUrl;
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue/';
-    let result = await fetch(url, { method: 'POST', headers: headers, body: data });
+    let result = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(data) });
     if (result.status !== 200) {
       return false;
     }
