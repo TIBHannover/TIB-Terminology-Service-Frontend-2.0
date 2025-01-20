@@ -35,7 +35,7 @@ export async function sendResolveRequest({ objectType, objectId, action, creator
     formData.append('objectId', objectId);
     formData.append('action', action);
     formData.append('creatorUsername', creatorUsername);
-    let resolveUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/resolve';
+    let resolveUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/resolve/';
     let result = await fetch(resolveUrl, { method: 'POST', headers: headers, body: formData });
     if (result.status !== 200) {
       return false;
@@ -53,7 +53,7 @@ export async function sendResolveRequest({ objectType, objectId, action, creator
 export async function getReportList() {
   try {
     let headers = getTsPluginHeaders({ withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/list';
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/list/';
     let result = await fetch(url, { method: 'GET', headers: headers });
     if (result.status !== 200) {
       return [];
@@ -71,7 +71,7 @@ export async function getReportList() {
 export async function getGitRepoTemplates({ repoUrl, gitUsername }) {
   try {
     let headers = getTsPluginHeaders({ withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates';
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates/';
     let formData = new FormData();
     formData.append("repo_url", repoUrl);
     formData.append("username", gitUsername);
@@ -99,7 +99,7 @@ export async function submitGitIssue({ repoUrl, gitUsername, issueTitle, issueBo
     data.append("content", issueBody);
     data.append("issueType", issueType);
     data.append("repo_url", repoUrl);
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue';
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue/';
     let result = await fetch(url, { method: 'POST', headers: headers, body: data });
     if (result.status !== 200) {
       return false;
