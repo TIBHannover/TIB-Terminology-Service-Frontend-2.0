@@ -91,7 +91,7 @@ const NoteList = (props) => {
 
   async function checkIsOntologyAdmin() {
     let callHeaders = getTsPluginHeaders({ withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin';
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/admin/is_entity_admin/';
     let formData = {};
     formData["ontologyId"] = ontologyPageContext.ontology.ontologyId;
     let postConfig = { method: 'POST', headers: callHeaders, body: JSON.stringify(formData) };
