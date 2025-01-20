@@ -21,7 +21,7 @@ export async function submitNote(noteData: NewNoteRequest, editMode: boolean = f
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
-    let path = !editMode ? '/note/create' : '/note/update/';
+    let path = !editMode ? '/note/create/' : '/note/update/';
     let httpMethod = !editMode ? 'POST' : 'PUT';
     let extractKey = !editMode ? 'note_created' : 'note_updated';
     let result: any = await fetch(url + path, { method: httpMethod, headers: headers, body: JSON.stringify(noteData) });
