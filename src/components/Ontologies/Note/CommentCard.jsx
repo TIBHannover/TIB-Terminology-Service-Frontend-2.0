@@ -16,7 +16,7 @@ import { getTsPluginHeaders } from "../../../api/header";
 
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete/';
-const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report/';
+const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create/';
 
 
 
