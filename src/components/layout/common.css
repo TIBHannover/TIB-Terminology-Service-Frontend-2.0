@@ -679,4 +679,8 @@ body .custom-file-upload {
     background-color: #404040;
     color: white;
     border-radius: 5px;
-  }
+}
+
+#site-warning-banner{
+  margin-top: -10px;
+}
