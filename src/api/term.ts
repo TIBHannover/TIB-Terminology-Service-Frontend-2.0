@@ -251,7 +251,7 @@ class TermApi {
 
       for (let i = 0; i < subClassOfData.length; i++) {
         if (typeof (subClassOfData[i]) === "string") {
-          let parentIri = subClassOfData[0];
+          let parentIri = subClassOfData[i];
           let parentLabel = this.classData['linkedEntities'][parentIri]['label'];
           let parentLi = document.createElement('li');
           let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
