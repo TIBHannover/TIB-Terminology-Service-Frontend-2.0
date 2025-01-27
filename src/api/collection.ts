@@ -12,13 +12,8 @@ export async function fetchCollectionsWithStats(): Promise<Array<object>> {
   }
 
   try {
-<<<<<<< HEAD
-    let ontologiesBaseServiceUrl = process.env.REACT_APP_API_BASE_URL;
-    let url = ontologiesBaseServiceUrl + '/getstatisticsbyschema?schema=collection';
-=======
     let ontologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
     let url = ontologiesBaseServiceUrl + '/v2/allstatsbyschema?schema=collection';
->>>>>>> master
     let result = await fetch(url, getCallSetting);
     if (!result.ok) {
       return Promise.reject(new Error(result.statusText));
@@ -28,11 +23,7 @@ export async function fetchCollectionsWithStats(): Promise<Array<object>> {
     for (let colMultiKey in colStats) {
       let record = {
         "collection": colMultiKey.split(',')[1].split(']')[0].trim(), // format example: MultiKey[collection, NFDI4Energy]
-<<<<<<< HEAD
-        "ontologiesCount": colStats[colMultiKey]['numberOfOntologies']
-=======
         "ontologiesCount": colStats[colMultiKey]['body']['numberOfOntologies']
->>>>>>> master
       };
       collections.push(record)
     }
