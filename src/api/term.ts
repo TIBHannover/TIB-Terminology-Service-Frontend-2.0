@@ -1,3 +1,7 @@
+// @ts-nocheck
+import { buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis } from "../Libs/htmlFactory";
+
+
 import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
@@ -11,6 +15,10 @@ import { Ols3ApiResponse } from "./types/common";
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_NUMBER = 1;
+const TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+// const TYPE_CLASS_URI = "http://www.w3.org/2002/07/owl#Class";
+const ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
+
 
 
 class TermApi {
@@ -27,6 +35,7 @@ class TermApi {
     this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
     this.setTermType(termType);
     this.term = {};
+    this.classData = {};
   }
 
 
@@ -46,6 +55,15 @@ class TermApi {
   }
 
 
+  async fetchTermJson() {
+    if (this.ontologyId && this.iri) {
+      let urlJson = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=en`;
+      let res = await fetch(urlJson, getCallSetting);
+      this.classData = await res.json();
+    }
+  }
+
+
   async fetchTerm(): Promise<boolean> {
     try {
       if (this.iri === "%20") {
@@ -57,6 +75,10 @@ class TermApi {
       let baseUrl = OntologiesBaseServiceUrl + this.ontologyId + "/" + this.termType;
       let callResult = await fetch(baseUrl + "/" + this.iri, getCallSetting);
 
+      if (this.termType === 'terms') {
+        await this.fetchTermJson();
+      }
+
       if (callResult.status === 404) {
         this.term = {};
         return true;
@@ -66,7 +88,7 @@ class TermApi {
       this.term['eqAxiom'] = undefined;
       this.term['subClassOf'] = undefined;
       this.term['isIndividual'] = (this.termType === "individuals");
-      await this.fetchImportedAndAlsoInOntologies();
+      this.fetchImportedAndAlsoInOntologies();
       let curationStatus = await this.createHasCurationStatus();
       if (curationStatus) {
         this.term['curationStatus'] = curationStatus;
@@ -139,58 +161,50 @@ class TermApi {
 
 
   async fetchClassRelations(): Promise<boolean> {
-    let [relations, eqAxiom, subClassOf, instancesList] = await Promise.all([
-      this.getRelations(),
-      this.getEqAxiom(),
-      this.getSubClassOf(),
-      this.getIndividualInstancesForClass(),
-      this.createHasCurationStatus()
 
-    ]);
-    this.term['relations'] = relations;
-    this.term['eqAxiom'] = eqAxiom;
-    this.term['subClassOf'] = subClassOf;
+    let instancesList = await this.getIndividualInstancesForClass();
+    this.term['relations'] = this.getRelations();
+    this.term['eqAxiom'] = this.getEqAxiom();
+    this.term['subClassOf'] = this.getSubClassOf();
     this.term['instancesList'] = instancesList;
     return true;
   }
 
 
 
-  async fetchImportedAndAlsoInOntologies() {
-    let [originalOntology, alsoIn] = await Promise.all([
-      this.getClassOriginalOntology(),
-      this.getClassAllOntologies()
-
-    ]);
-    this.term['originalOntology'] = originalOntology;
-    this.term['alsoIn'] = alsoIn;
+  fetchImportedAndAlsoInOntologies() {
+    this.term['originalOntology'] = this.getClassOriginalOntology();
+    this.term['alsoIn'] = this.getClassAllOntologies();
     return true;
   }
 
 
-
-
-  async getRelations(): Promise<string | null> {
+  getRelations(): string | null {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/relatedfroms';
-      let res = await fetch(url, getCallSetting);
-      res = await res.json();
-      if (typeof (res) !== "undefined") {
-        let entries = Object.entries(res)
-        let result = "";
-
-        for (let [k, v] of entries) {
-          result += k
-          result += "<ul>"
-          for (let item of v) {
-            result += '<li>' + '<a href=' + process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.ontologyId + '/terms?iri=' + encodeURIComponent(item["iri"]) + '>' + item["label"] + '</a>' + '</li>';
-          }
-          result += "</ul>"
-        }
-        return result
+      let relatedFromData = this.classData['relatedFrom'];
+      if (!relatedFromData || relatedFromData.length === 0) {
+        return null;
       }
-
-      return null;
+      let div = document.createElement('div');
+      for (let relation of relatedFromData) {
+        let propertyIri = relation['property'];
+        let targetIri = relation['value'];
+        let propertyLabel = this.classData['linkedEntities'][propertyIri]['label'];
+        let targetLabel = this.classData['linkedEntities'][targetIri]['label'];
+        let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let span = document.createElement('span');
+        let li = document.createElement('li');
+        let ul = document.createElement('ul');
+        let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
+        span.appendChild(propAnchor);
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+        li.appendChild(targetAnchor);
+        ul.appendChild(li);
+        span.appendChild(ul);
+        div.appendChild(span);
+      }
+      return div.outerHTML;
     }
     catch (e) {
       return null;
@@ -199,23 +213,27 @@ class TermApi {
 
 
 
-  async getEqAxiom(): Promise<string | null> {
+  getEqAxiom(): string | null {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/equivalentclassdescription';
-      let res = await fetch(url, getCallSetting);
-      let apiRes: Ols3ApiResponse = await res.json();
-      let eqAxioms = apiRes["_embedded"];
-      if (typeof (eqAxioms) !== "undefined") {
-        let resultHtml = "";
-        resultHtml += "<ul>";
-        for (let item of eqAxioms["strings"]) {
-          let eqTextWithInternalUrls = await this.replaceExternalIrisWithInternal(item["content"]);
-          resultHtml += `<li>${eqTextWithInternalUrls}</li>`;
-        }
-        resultHtml += "</ul>";
-        return resultHtml;
+      let eqevalentAxiomData = this.classData['http://www.w3.org/2002/07/owl#equivalentClass'];
+      if (!eqevalentAxiomData) {
+        return null;
       }
-      return null;
+      let propertyIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#onProperty'];
+      let targetIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#someValuesFrom'];
+      let propertyLabel = this.classData['linkedEntities'][propertyIri]['label'];
+      let targetLabel = this.classData['linkedEntities'][targetIri]['label'];
+      let relationText = document.createElement('span');
+      relationText.innerHTML = " some ";
+      let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
+      let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+      let span = document.createElement('span');
+      let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
+      span.appendChild(propAnchor);
+      span.appendChild(relationText);
+      let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+      span.appendChild(targetAnchor);
+      return span.outerHTML;
     }
     catch (e) {
       return null;
@@ -223,36 +241,96 @@ class TermApi {
   }
 
 
-  async getSubClassOf(): Promise<string | null> {
+  getSubClassOf(): string | null {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + this.ontologyId + '/terms/' + this.iri + '/superclassdescription';
-      let parents = await this.getParents();
-      let res = await fetch(url, getCallSetting);
-      if (res.status === 404) {
+      let subClassOfData = this.classData['http://www.w3.org/2000/01/rdf-schema#subClassOf'];
+      if (!subClassOfData || subClassOfData.length === 0) {
         return null;
       }
-      let apiRes: Ols3ApiResponse = await res.json();
-      let subClassRelations = apiRes["_embedded"];
-      if (parents.length === 0 && typeof (subClassRelations) === "undefined") {
-        return null;
-      }
-      let result = "<ul>";
-      for (let parent of parents) {
-        let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parent["iri"] ? parent["iri"] : "")}`;
-        result += `<li><a href=${parentUrl}>${parent["label"]}</a></li>`;
-      }
-      if (typeof (subClassRelations) !== "undefined") {
-        for (let subClassString of subClassRelations["strings"]) {
-          let subClassStringWithInternalIris = await this.replaceExternalIrisWithInternal(subClassString["content"]);
-          result += `<li>${subClassStringWithInternalIris}</li>`;
+      let ul = document.createElement('ul');
+
+      for (let i = 0; i < subClassOfData.length; i++) {
+        if (typeof (subClassOfData[i]) === "string") {
+          let parentIri = subClassOfData[i];
+          let parentLabel = this.classData['linkedEntities'][parentIri]['label'];
+          let parentLi = document.createElement('li');
+          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
+          let parentAnchor = buildHtmlAnchor(parentUrl, parentLabel);
+          parentLi.appendChild(parentAnchor);
+          ul.appendChild(parentLi);
+          continue;
         }
+        let li = document.createElement('li');
+        let content = this.recSubClass(subClassOfData[i]);
+        li.appendChild(content);
+        ul.appendChild(li);
       }
-      result += "</ul>";
-      return result;
+
+      return ul.outerHTML;
+
     }
     catch (e) {
-      // throw(e)        
       return null;
+    }
+  }
+
+
+  recSubClass(relationObj, relation = "") {
+    if (relationObj instanceof Array) {
+      let targetIri = relationObj[0];
+      let targetLabel = this.classData['linkedEntities'][targetIri]['label'];
+      let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+      let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+      let liContent = document.createElement('span');
+      liContent.appendChild(buildOpenParanthesis());
+      liContent.appendChild(targetAnchor);
+      let relationTextspan = document.createElement('span');
+      relationTextspan.innerHTML = ` ${relation} `;
+      liContent.appendChild(relationTextspan);
+      if (typeof (relationObj[1]) === "string") {
+        let targetIri = relationObj[1];
+        let targetLabel = this.classData['linkedEntities'][targetIri]['label'];
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+        liContent.appendChild(targetAnchor);
+        liContent.appendChild(buildCloseParanthesis());
+        return liContent;
+      }
+      let content = this.recSubClass(relationObj[1]);
+      liContent.appendChild(content);
+      liContent.appendChild(buildCloseParanthesis());
+      return liContent;
+    }
+    if (relationObj instanceof Object) {
+      let propertyIri = relationObj['http://www.w3.org/2002/07/owl#onProperty'];
+      if (!propertyIri) {
+        let relKey = Object.keys(relationObj).find((key) => (key !== TYPE_URI));
+        return this.recSubClass(relationObj[relKey], relKey?.split('#')[1]);
+      }
+      let propertyLabel = this.classData['linkedEntities'][propertyIri]['label'];
+      let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
+      let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
+      let liContent = document.createElement('span');
+      liContent.appendChild(buildOpenParanthesis());
+      let relationTextspan = document.createElement('span');
+      liContent.appendChild(propAnchor);
+      let keys = Object.keys(relationObj);
+      let targetKey = keys.find((key) => (key !== TYPE_URI && key !== ON_PROPERTY_URI));
+      relationTextspan.innerHTML = ` ${targetKey.split('#')[1]} `;
+      liContent.appendChild(relationTextspan);
+      if (typeof (relationObj[targetKey]) === "string") {
+        let targetIri = relationObj[targetKey];
+        let targetLabel = this.classData['linkedEntities'][targetIri]['label'];
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+        liContent.appendChild(targetAnchor);
+        liContent.appendChild(buildCloseParanthesis());
+        return liContent;
+      }
+      let content = this.recSubClass(relationObj[targetKey], targetKey?.split('#')[1]);
+      liContent.appendChild(content);
+      liContent.appendChild(buildCloseParanthesis());
+      return liContent;
     }
   }
 
@@ -260,7 +338,7 @@ class TermApi {
   async getIndividualInstancesForClass(): Promise<any> {
     try {
       let baseUrl = process.env.REACT_APP_API_BASE_URL;
-      let callUrl = baseUrl + "/" + this.ontologyId + "/" + this.iri + "/terminstances";
+      let callUrl = baseUrl + "/" + this.ontologyId + "/terms/" + this.iri + "/instances";
       let result = await fetch(callUrl, getCallSetting);
       let apiResult: Ols3ApiResponse = await result.json();
       let indvResult = apiResult['_embedded'];
@@ -330,7 +408,7 @@ class TermApi {
       let targetIriType = "terms";
       let termApi = new TermApi(this.ontologyId, encodeURIComponent(href), targetIriType);
       await termApi.fetchTermWithoutRelations();
-      if (Object.keys(termApi.term).length === 0) {
+      if (!termApi.term) {
         targetIriType = "props";
       }
       let internalUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/${targetIriType}?iri=${href}`;
@@ -341,22 +419,9 @@ class TermApi {
 
 
 
-  async getClassOriginalOntology(): Promise<string | null> {
-    /**
-     * This API endpoint expect a raw Iri (Not encoded)
-     */
+  getClassOriginalOntology(): string | null {
     try {
-      let iri = decodeURIComponent(this.iri);
-      let url = `${process.env.REACT_APP_API_URL}/${this.termType}/findByIdAndIsDefiningOntology?iri=${iri}`;
-      let result = await (await fetch(url, getCallSetting)).json();
-      result = result['_embedded'][this.termType];
-      let originalOntology = null;
-      for (let res of result) {
-        if (res['ontology_name'].toLowerCase() !== "vibso" && this.ontologyId !== res['ontology_name']) {
-          originalOntology = res['ontology_name'];
-        }
-      }
-      return originalOntology;
+      return this.classData['definedBy'][0];
     }
     catch (e) {
       return null;
@@ -366,27 +431,13 @@ class TermApi {
 
 
 
-  async getClassAllOntologies(): Promise<Array<string> | null> {
+  getClassAllOntologies(): Array<string> | null {
     try {
-      /**
-      * This API endpoint expect a raw Iri (Not encoded)
-      */
-      let iri = decodeURIComponent(this.iri);
-      let url = `${process.env.REACT_APP_API_URL}/${this.termType}?iri=${iri}`;
-      let result = await (await fetch(url, getCallSetting)).json();
-      result = result['_embedded'][this.termType];
-      let ontologies = [];
-      for (let term of result) {
-        if (this.ontologyId !== term['ontology_name']) {
-          ontologies.push(term['ontology_name']);
-        }
-      }
-      return ontologies;
+      return this.classData['appearsIn'];
     }
     catch (e) {
       return null;
     }
-
   }
 
 

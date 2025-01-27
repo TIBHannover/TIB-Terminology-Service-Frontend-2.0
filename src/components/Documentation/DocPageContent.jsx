@@ -27,12 +27,12 @@ export function renderDocumentation() {
         e.g. in services of the research data management infrastructure of various research communities. In applications like research
         data management systems, ontological terms and their unique identifiers can, for example, be used as metadata on research data
         artifacts - thereby making research (meta)data more findable and interoperable. The REST API interface of the TIB Central
-        Terminology Service starts with <b><a href="https://service.tib.eu/ts4tib/api">https://service.tib.eu/ts4tib/api</a></b>.
+        Terminology Service starts with <b><a href="https://api.terminology.tib.eu/api/">https://api.terminology.tib.eu/api/</a></b>.
         This API enables to query all the terminologies of various research communities maintained by TIB. The methodology on how
-        to use this interface is explained in the <b><a href="https://service.tib.eu/ts4tib/swagger-ui.html">Swagger Documentation</a></b> in detail.
+        to use this interface is explained in the <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html">Swagger Documentation</a></b> in detail.
         The underlying models can also be viewed through this documentation for a deeper understanding of the API commands. Besides,
         it is possible to execute the publicly available API commands from
-        the <b><a href="https://service.tib.eu/ts4tib/swagger-ui.html">Swagger Documentation</a></b>
+        the <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html">Swagger Documentation</a></b>
       </p>
       <br />
       <h3>Report an Issue</h3>

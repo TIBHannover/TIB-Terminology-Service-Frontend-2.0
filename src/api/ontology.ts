@@ -80,6 +80,9 @@ class OntologyApi {
         return true;
       }
       let termsLink = this.ontology?.['_links']?.['terms']?.['href'];
+      if (!termsLink?.includes('https')) {
+        termsLink = termsLink?.replace('http', 'https');
+      }
       let pageCount = await getPageCount(termsLink + '/roots');
       let terms: Array<OntologyTermData> = [];
       for (let page = 0; page < pageCount; page++) {
@@ -112,6 +115,9 @@ class OntologyApi {
         return true;
       }
       let propertiesLink = this.ontology?.['_links']?.['properties']?.['href'];
+      if (!propertiesLink?.includes('https')) {
+        propertiesLink = propertiesLink?.replace('http', 'https');
+      }
       let pageCount = await getPageCount(propertiesLink + '/roots');
       let props: Array<OntologyTermData> = [];
       for (let page = 0; page < pageCount; page++) {
@@ -138,7 +144,7 @@ class OntologyApi {
 
   async fetchObsoleteClasses(): Promise<boolean> {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/terms/roots?includeObsoletes=true&size=1000";
+      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/terms/roots?obsoletes=true&size=1000";
       let res = await (await fetch(url, getCallSetting)).json();
       this.obsoleteClasses = res['_embedded']["terms"];
       return true;
@@ -158,7 +164,7 @@ class OntologyApi {
     }
 
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/properties/roots?includeObsoletes=true&size=1000";
+      let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/properties/roots?obsoletes=true&size=1000";
       let res: TempResult = await (await fetch(url, getCallSetting)).json();
       this.obsoleteProperties = res['_embedded']["properties"];
       return true;
@@ -192,15 +198,14 @@ export async function runShapeTest(ontologyPurl: string): Promise<OntologyShapeT
 
 export async function submitOntologySuggestion(formData: OntologySuggestionData): Promise<boolean> {
   try {
-    let form = {};
+    let form = new FormData();
     let formDataAny = formData as any;
     for (let key in formDataAny) {
-      //@ts-ignore
-      form[key] = formDataAny[key];
+      form.append(key, formDataAny[key]);
     }
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create';
-    let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(form) });
+    let result: any = await fetch(url, { method: 'POST', headers: headers, body: form });
     if (result.status === 200) {
       result = await result.json();
       result = result['_result']['response'];

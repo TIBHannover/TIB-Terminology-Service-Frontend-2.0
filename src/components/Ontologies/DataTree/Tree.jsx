@@ -135,7 +135,10 @@ const Tree = (props) => {
                 }
                 else{ 
                     let i = 0;                  
-                    for(i=0; i < rootNodesWithChildren.length; i++){      
+                    for(i=0; i < rootNodesWithChildren.length; i++){  
+                        if (rootNodesWithChildren[i].iri === "http://www.w3.org/2002/07/owl#Thing"){
+                            continue;
+                        }    
                         let treeNode = new TreeNodeController();
                         let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
                         let isExpanded = result.isExpanded;
@@ -201,12 +204,15 @@ const Tree = (props) => {
         }
         let i = 0;        
         for(i=0; i < rootNodes.length; i++){
+            if (rootNodes[i].iri === "http://www.w3.org/2002/07/owl#Thing"){
+                continue;
+            }  
             let treeNode = new TreeNodeController();
             let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)  
             if(nodeIsClicked){
                 selectedItemId =  i;
             }  
-            let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);                       
+            let node = treeNode.buildNodeWithReact(rootNodes[i], btoa(rootNodes[i].iri), nodeIsClicked);
             childrenList.push(node);
         }        
         if(obsoletesShown){            
@@ -239,20 +245,17 @@ const Tree = (props) => {
 
     async function showSiblings(){
         try{    
-            let targetNodes = document.getElementsByClassName("targetNodeByIri");        
+            let targetNodes = document.getElementsByClassName("targetNodeByIri");
             if(!siblingsVisible){
                 if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
                     SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
                 }
                 else if(!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
-                    // Target node is a root node            
-                    let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);  
-                    let res = await termApi.getNodeJsTree('true');
-                    TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);    
+                    TreeHelper.showSiblingsForRootNode(props.rootNodes, targetNodes[0].parentNode.dataset.iri);
                 }
                 else{
                     await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
-                }                                
+                }
             }
             else{
                 if(ontologyPageContext.isSkos && props.componentIdentity === "individuals"){
@@ -260,15 +263,14 @@ const Tree = (props) => {
                 } 
         
                 if(!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)){
-                    // Target node is a root node
                     TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
                 }
                 else{
                     TreeHelper.hideSiblings(targetNodes);
-                }                                
+                }
             }
 
-            setSiblingsVisible(!siblingsVisible);               
+            setSiblingsVisible(!siblingsVisible);
         }
         catch(e){
             // console.info(e);

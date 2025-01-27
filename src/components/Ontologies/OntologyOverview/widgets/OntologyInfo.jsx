@@ -143,7 +143,7 @@ const OntologyInfoTable = () => {
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                 <td>
-                  {String(ontology.config.skos)}
+                  {String(ontology.config.isSkos)}
                 </td>
               </tr>
               {process.env.REACT_APP_PROJECT_ID === "general" &&
