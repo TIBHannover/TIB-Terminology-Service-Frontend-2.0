@@ -135,7 +135,7 @@ export async function updateSearchSettings(settingId: string | number, settingDa
 export async function deleteSearchSetting(settingId: string | number): Promise<boolean> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-    let result: any = await fetch(baseUrl + "/user/search_setting/" + settingId, { method: "DELETE", headers: headers });
+    let result: any = await fetch(baseUrl + "/user/search_setting/" + settingId + '/', { method: "DELETE", headers: headers });
     result = await result.json();
     result = result['_result']['deleted'];
     if (result) {
