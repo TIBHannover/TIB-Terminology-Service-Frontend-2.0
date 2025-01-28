@@ -21,9 +21,10 @@ export async function submitNote(noteData: NewNoteRequest, editMode: boolean = f
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
-    let path = !editMode ? '/note/create' : '/note/update';
+    let path = !editMode ? '/note/create/' : '/note/update/';
+    let httpMethod = !editMode ? 'POST' : 'PUT';
     let extractKey = !editMode ? 'note_created' : 'note_updated';
-    let result: any = await fetch(url + path, { method: 'POST', headers: headers, body: JSON.stringify(noteData) });
+    let result: any = await fetch(url + path, { method: httpMethod, headers: headers, body: JSON.stringify(noteData) });
     result = await result.json();
     result = result['_result'][extractKey]['id'];
     return result;
@@ -107,7 +108,7 @@ export async function getNoteDetail(params: GetNoteDetailParams): Promise<NoteDe
 export async function submitNoteComment(params: CreateCommentParams): Promise<CommentData | boolean> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_comment';
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/create_comment/';
     let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(params) });
     result = await result.json();
     result = result['_result']['comment_created'];
@@ -124,8 +125,8 @@ export async function submitNoteComment(params: CreateCommentParams): Promise<Co
 export async function editNoteComment(params: UpdateCommentParams) {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_comment';
-    let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(params) });
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_comment/';
+    let result: any = await fetch(url, { method: 'PUT', headers: headers, body: JSON.stringify(params) });
     result = await result.json();
     result = result['_result']['comment_updated'];
     return result;
@@ -140,8 +141,8 @@ export async function editNoteComment(params: UpdateCommentParams) {
 export async function pinnNote(params: PinnNoteParams): Promise<boolean> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_pin';
-    let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(params) });
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/update_pin/';
+    let result: any = await fetch(url, { method: 'PUT', headers: headers, body: JSON.stringify(params) });
     return result.ok;
   }
   catch (e) {
