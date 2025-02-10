@@ -18,7 +18,7 @@ const TermDetailTable = (props) => {
   const ontologyPageContext = useContext(OntologyPageContext);
 
   let nodeIri = encodeURIComponent(encodeURIComponent(props.node.iri));
-  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL + `/v2/ontologies/${props.node.ontology_name}/entities/${nodeIri}?lang=en`;
+  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL + `/v2/ontologies/${props.node.ontology_name}/entities/${nodeIri}?lang=${ontologyPageContext.ontoLang}`;
 
 
   function setLabelAsLink() {

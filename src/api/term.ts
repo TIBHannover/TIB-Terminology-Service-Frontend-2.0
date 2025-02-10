@@ -27,15 +27,18 @@ class TermApi {
   iri: string = "";
   term: OntologyTermData = {};
   termType: string = "";
+  lang: string = "en";
 
 
-  constructor(ontologyId?: string, iri?: string, termType?: string) {
+  constructor(ontologyId?: string, iri?: string, termType?: string, language?: string) {
     this.ontologyId = ontologyId ? ontologyId : "";
     iri = iri ? iri : "";
     this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
     this.setTermType(termType);
     this.term = {};
     this.classData = {};
+    this.lang = language;
+
   }
 
 
@@ -57,7 +60,7 @@ class TermApi {
 
   async fetchTermJson() {
     if (this.ontologyId && this.iri) {
-      let urlJson = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=en`;
+      let urlJson = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=${this.lang}`;
       let res = await fetch(urlJson, getCallSetting);
       this.classData = await res.json();
     }
