@@ -97,9 +97,9 @@ class TermLib {
       }
       return result;
     }
-    else if (term.description) {
+    else if (term.definition) {
       let result = [];
-      for (let desc of term.description) {
+      for (let desc of term.definition) {
         result.push(<p>{desc}</p>);
       }
       return result;

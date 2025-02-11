@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { classMetaData, propertyMetaData } from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
@@ -18,11 +18,11 @@ const TermDetailTable = (props) => {
   const ontologyPageContext = useContext(OntologyPageContext);
 
   let nodeIri = encodeURIComponent(encodeURIComponent(props.node.iri));
-  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL + `/v2/ontologies/${props.node.ontology_name}/entities/${nodeIri}?lang=${ontologyPageContext.ontoLang}`;
+  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL + `/v2/ontologies/${props.node.ontologyId}/entities/${nodeIri}?lang=${ontologyPageContext.ontoLang}`;
 
 
   function setLabelAsLink() {
-    let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(props.node.ontology_name);
+    let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(props.node.ontologyId);
     let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(props.node.iri);
     if (props.componentIdentity === 'props') {
       targetHref = baseUrl + '/props?iri=' + encodeURIComponent(props.node.iri);
@@ -73,7 +73,7 @@ const TermDetailTable = (props) => {
             {isLink && metadataLabel !== "Label" && <CopyLinkButton valueToCopy={metadataValue} />}
             {metadataLabel === "Label" &&
               <CopyLinkButtonMarkdownFormat
-                label={props.node.ontology_name.toUpperCase() + ":" + props.node.label}
+                label={props.node.ontologyId.toUpperCase() + ":" + props.node.label}
                 url={setLabelAsLink()}
                 tooltipText={"This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " + props.node.ontology_prefix + ":" + props.node.label}
               />
@@ -99,8 +99,7 @@ const TermDetailTable = (props) => {
       return metadataValue;
     }
 
-    let formatedText = Toolkit.transformLinksInStringToAnchor(metadataValue);
-    return (<span dangerouslySetInnerHTML={{ __html: formatedText }}></span>)
+    return (<span dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
   }
 
 
@@ -110,7 +109,7 @@ const TermDetailTable = (props) => {
     return <div className="is-loading-term-list isLoading-small"></div>;
   }
 
-  const helmetText = props.node.label ? `${props.node.ontology_name}:${props.node.label}` : `${props.node.ontology_name}:${props.node.short_form}`;
+  const helmetText = props.node.label ? `${props.node.ontologyId}:${props.node.label}` : `${props.node.ontologyId}:${props.node.short_form}`;
 
   return (
     <div>

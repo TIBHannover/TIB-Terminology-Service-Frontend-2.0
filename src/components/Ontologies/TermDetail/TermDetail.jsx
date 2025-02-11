@@ -35,7 +35,7 @@ const TermDetail = (props) => {
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
   const [targetTerm, setTargetTerm] = useState({ "iri": null });
-  const [notesCount, setNotesCount] = useState("");
+  const [notesCount, setNotesCount] = useState(0);
 
 
   async function fetchTheTargetTerm() {
@@ -51,15 +51,23 @@ const TermDetail = (props) => {
       await termApi.fetchTerm();
       term = termApi.term;
     }
-
-    let countOfNotes = 0;
-    if (process.env.REACT_APP_NOTE_FEATURE === "true") {
-      countOfNotes = await getNoteList({ ontologyId: ontologyId, type: null, pageNumber: 0, pageSize: 1, targetTerm: term, onlyOntologyOriginalNotes: false });
-      countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
-    }
-
     setTargetTerm(term);
-    setNotesCount(countOfNotes);
+  }
+
+
+  async function fetchNoteCount() {
+    try {
+      let ontologyId = ontologyPageContext.ontology.ontologyId;
+      let term = { "iri": props.iri };
+      let countOfNotes = 0;
+      if (process.env.REACT_APP_NOTE_FEATURE === "true") {
+        countOfNotes = await getNoteList({ ontologyId: ontologyId, type: null, pageNumber: 0, pageSize: 1, targetTerm: term, onlyOntologyOriginalNotes: false });
+        countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+      }
+      setNotesCount(countOfNotes);
+    } catch {
+      setNotesCount(0);
+    }
   }
 
 
@@ -101,7 +109,14 @@ const TermDetail = (props) => {
   useEffect(() => {
     setTabOnLoad();
     fetchTheTargetTerm();
+    fetchNoteCount();
   }, [props.iri, activeTab]);
+
+  useEffect(() => {
+    setWaiting(true);
+    fetchTheTargetTerm();
+    setWaiting(false);
+  }, [ontologyPageContext.ontoLang])
 
 
 
@@ -114,6 +129,7 @@ const TermDetail = (props) => {
           activeTab={activeTab}
           noteCounts={notesCount}
         />
+        {waiting && <div className="isLoading-small"></div>}
         {!waiting && (activeTab === DETAIL_TAB_ID) &&
           <TermDetailTable
             iri={props.iri}
