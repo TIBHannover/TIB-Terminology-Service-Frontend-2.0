@@ -105,7 +105,11 @@ class TermApi {
         continue;
       }
       if (this.term['linkedEntities'][key]) {
-        annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key];
+        if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
+          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
+        } else {
+          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key];
+        }
       }
     }
     return annotations;

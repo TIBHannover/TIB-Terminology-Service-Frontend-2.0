@@ -100,7 +100,11 @@ class TermLib {
     else if (term.definition) {
       let result = [];
       for (let desc of term.definition) {
-        result.push(<p>{desc}</p>);
+        if (typeof (desc) === "object" && desc.value) {
+          result.push(<p>{desc.value}</p>);
+        } else {
+          result.push(<p>{desc}</p>);
+        }
       }
       return result;
     }

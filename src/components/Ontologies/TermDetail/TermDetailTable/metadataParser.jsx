@@ -39,13 +39,12 @@ export function classMetaData(term, termType) {
         metadata[key] = { "value": res, "isLink": false };
       } else if (typeof (term.annotation[key]) === "object" && term.annotation[key].value) {
         metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false };
-      }
-      else {
+      } else {
         metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false };
       }
     }
   }
-
+  console.log(metadata)
   return metadata;
 }
 
