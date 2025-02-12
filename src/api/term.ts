@@ -101,7 +101,7 @@ class TermApi {
   buildAnnotations() {
     let annotations = {};
     for (let key in this.term) {
-      if (!key.includes('purl.obolibrary.org')) {
+      if (!key.includes('purl.obolibrary.org') || key === Has_Curation_Status_Purl) {
         continue;
       }
       if (this.term['linkedEntities'][key]) {
@@ -365,7 +365,7 @@ class TermApi {
       let targetIriType = "terms";
       let termApi = new TermApi(this.ontologyId, encodeURIComponent(href), targetIriType);
       await termApi.fetchTerm({ withRelations: false });
-      if (!termApi.term) {
+      if (termApi.term.types[0] !== "class") {
         targetIriType = "props";
       }
       let internalUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/${targetIriType}?iri=${href}`;
