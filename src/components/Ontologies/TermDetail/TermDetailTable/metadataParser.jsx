@@ -44,7 +44,6 @@ export function classMetaData(term, termType) {
       }
     }
   }
-  console.log(metadata)
   return metadata;
 }
 

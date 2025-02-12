@@ -42,7 +42,7 @@ export async function getNoteList(params: NoteListParams): Promise<NoteListRespo
 
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/list?ontology=' + ontologyId;
-    url += ('&page=' + pageNumber + '&size=' + pageSize)
+    url += ('&page=' + pageNumber + '&size=' + pageSize);
     if (targetTerm) {
       url += ('&artifact_iri=' + targetTerm['iri'])
     }
@@ -60,8 +60,8 @@ export async function getNoteList(params: NoteListParams): Promise<NoteListRespo
     for (let note of notes['notes']) {
       if (!note['semantic_component_label']) {
         let termApi: any = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
-        await termApi.fetchTermWithoutRelations();
-        note['semantic_component_label'] = termApi.term['label'];
+        await termApi.fetchTerm({ withRelations: false });
+        note['semantic_component_label'] = termApi.term['label'][0];
       }
     }
     return notes;
@@ -91,8 +91,8 @@ export async function getNoteDetail(params: GetNoteDetailParams): Promise<NoteDe
     note['comments_count'] = note['comments'].length;
     if (!note['semantic_component_label']) {
       let termApi: any = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
-      await termApi.fetchTermWithoutRelations();
-      note['semantic_component_label'] = termApi.term['label'];
+      await termApi.fetchTerm({ withRelations: false });
+      note['semantic_component_label'] = termApi.term['label'][0];
     }
     noteResp['note'] = note;
     return noteResp;

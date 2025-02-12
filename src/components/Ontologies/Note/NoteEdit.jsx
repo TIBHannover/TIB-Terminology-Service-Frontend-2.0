@@ -114,7 +114,7 @@ const NoteEdit = (props) => {
   async function handleJumtoSelection(selectedTerm) {
     if (selectedTerm) {
       let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
-      await termApi.fetchTermJson();
+      await termApi.fetchTerm();
       let parentOnto = termApi.getClassOriginalOntology();
       setSelectedTermFromAutoComplete(selectedTerm);
       setParentOntology(parentOnto);
@@ -129,7 +129,7 @@ const NoteEdit = (props) => {
 
   useEffect(async () => {
     let termApi = new TermApi(props.note['ontology_id'], props.note['semantic_component_iri'], constantsVars.TERM_TYPES[targetArtifact]);
-    await termApi.fetchTermJson();
+    await termApi.fetchTerm();
     let parentOnto = termApi.getClassOriginalOntology();
     setParentOntology(parentOnto);
     setSelectedTermFromAutoComplete({ "iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label'] });

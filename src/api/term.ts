@@ -364,7 +364,7 @@ class TermApi {
       let [, attributes, href] = match;
       let targetIriType = "terms";
       let termApi = new TermApi(this.ontologyId, encodeURIComponent(href), targetIriType);
-      await termApi.fetchTermWithoutRelations();
+      await termApi.fetchTerm({ withRelations: false });
       if (!termApi.term) {
         targetIriType = "props";
       }

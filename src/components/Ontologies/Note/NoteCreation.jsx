@@ -29,7 +29,7 @@ const NoteCreation = (props) => {
   let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
   targetType = targetType !== -1 ? targetType : 1;
   let selectedTerm = noteContext.selectedTermInTree
-    ? { "iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label'] }
+    ? { "iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label'][0] }
     : { "iri": null, "label": null };
 
 
@@ -84,7 +84,7 @@ const NoteCreation = (props) => {
     let formIsValid = true;
     let noteTitle = FormLib.getFieldByIdIfValid('noteTitle' + noteIdForRender);
     let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];
-    let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];
+    let selectedTargetTermLabel = selectedTermFromAutoComplete['label'][0];
     let noteContent = FormLib.getTextEditorValueIfValid(editorState, "noteContent" + noteIdForRender);
     formIsValid = noteTitle && noteContent;
 
@@ -108,7 +108,7 @@ const NoteCreation = (props) => {
     if (noteContext.selectedTermInTree) {
       // Note creation for an specific term in from term detail tabel
       selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
-      selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
+      selectedTargetTermLabel = noteContext.selectedTermInTree['label'][0];
       targetType = noteContext.selectedTermTypeInTree;
     }
     let data = {};
@@ -133,7 +133,7 @@ const NoteCreation = (props) => {
     if (selectedTerm) {
       document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '';
       let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
-      await termApi.fetchTermJson();
+      await termApi.fetchTerm();
       let parentOnto = termApi.getClassOriginalOntology();
       setSelectedTermFromAutoComplete(selectedTerm);
       setParentOntology(parentOnto);
@@ -149,7 +149,7 @@ const NoteCreation = (props) => {
   useEffect(async () => {
     if (noteContext.selectedTermInTree) {
       let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
-      await termApi.fetchTermJson();
+      await termApi.fetchTerm();
       let parentOnto = termApi.getClassOriginalOntology();
       setParentOntology(parentOnto);
     }
