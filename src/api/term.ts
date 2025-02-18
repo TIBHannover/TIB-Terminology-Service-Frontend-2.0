@@ -98,6 +98,34 @@ class TermApi {
   }
 
 
+  async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE): Promise<TermListData | []> {
+    try {
+      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?lang=${this.lang}&page=${page}&size=${size}`;
+      let result = await (await fetch(url, getCallSetting)).json();
+      let totalTermsCount = result['totalElements'];
+      result = result['elements'];
+      if (!result) {
+        return [];
+      }
+      let refinedResults = [];
+      for (let term of result) {
+        let termObject = new TermApi();
+        termObject.term = term;
+        termObject.ontologyId = term['ontologyId'];
+        termObject.term['annotation'] = termObject.buildAnnotations();
+        termObject.term['subClassOf'] = termObject.getSubClassOf();
+        termObject.term['eqAxiom'] = termObject.getEqAxiom();
+        refinedResults.push(termObject.term);
+      }
+      return { "results": refinedResults, "totalTermsCount": totalTermsCount };
+    }
+    catch (e) {
+      // throw(e)
+      return [];
+    }
+  }
+
+
   buildAnnotations() {
     let annotations = {};
     for (let key in this.term) {
@@ -204,8 +232,10 @@ class TermApi {
       if (!subClassOfData || subClassOfData.length === 0) {
         return null;
       }
+      if (typeof (subClassOfData) === "string") {
+        subClassOfData = [subClassOfData];
+      }
       let ul = document.createElement('ul');
-
       for (let i = 0; i < subClassOfData.length; i++) {
         if (typeof (subClassOfData[i]) === "string") {
           let parentIri = subClassOfData[i];
@@ -334,25 +364,7 @@ class TermApi {
 
 
 
-  async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE): Promise<TermListData | []> {
-    try {
-      let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/${this.termType}?page=${page}&size=${size}`;
-      let result = await (await fetch(url, getCallSetting)).json();
-      let totalTermsCount = result['page']['totalElements'];
-      result = result['_embedded'];
-      if (!result) {
-        return [];
-      }
-      if (typeof (result[this.termType]) === "undefined") {
-        return [];
-      }
-      return { "results": result[this.termType], "totalTermsCount": totalTermsCount };
-    }
-    catch (e) {
-      // throw(e)
-      return [];
-    }
-  }
+
 
 
   async replaceExternalIrisWithInternal(textWithExternalIris: string): Promise<string> {
