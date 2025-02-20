@@ -74,6 +74,7 @@ const OntologyPage = (props) => {
   const [isSkosOntology, setIsSkosOntology] = useState(false);
   const [notesCount, setNotesCount] = useState("");
   const [ontoLang, setOntoLang] = useState(UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) ?? "en");
+  window.localStorage.setItem("language", ontoLang);
 
 
   async function loadOntologyData() {
@@ -180,6 +181,7 @@ const OntologyPage = (props) => {
   useEffect(() => {
     if (ontoLang !== UrlFactory.getParam({ name: SiteUrlParamNames.Lang })) {
       UrlFactory.setParam({ name: SiteUrlParamNames.Lang, value: ontoLang });
+      window.localStorage.setItem("language", ontoLang);
       setRootTerms([]);
       setRootProps([]);
       setLastTabsStates({ "terms": null, "properties": null, "gitIssues": "" });

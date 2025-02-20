@@ -7,88 +7,88 @@ import '../../layout/reactAutoSuggestLib.css';
 
 
 
-const TYPE_MAPP = {"terms": "class", "properties": "property", "individuals": "individual"};
+const TYPE_MAPP = { "terms": "class", "properties": "property", "individuals": "individual" };
 
 
 const JumpTo = (props) => {
 
-    const ontologyPageContext = useContext(OntologyPageContext);    
+  const ontologyPageContext = useContext(OntologyPageContext);
 
-    const [enteredTerm, setEnteredTerm] = useState(props.initialInput ? props.initialInput : "");
-    const [resultList, setResultList] = useState([]);
-    const [selectedTerm, setSelectedTerm] = useState( {"iri": null, "label": null});
+  const [enteredTerm, setEnteredTerm] = useState(props.initialInput ? props.initialInput : "");
+  const [resultList, setResultList] = useState([]);
+  const [selectedTerm, setSelectedTerm] = useState({ "iri": null, "label": null });
 
-    const getAutoCompleteValue = suggestion => suggestion.label;
-    const rendetAutoCompleteItem = suggestion => (
-        <div>
-            {suggestion.label}
-        </div>
-    );
+  const getAutoCompleteValue = suggestion => suggestion.label;
+  const rendetAutoCompleteItem = suggestion => (
+    <div>
+      {suggestion.label}
+    </div>
+  );
 
-    const value = enteredTerm;
-    const inputPropsAutoSuggest = {
-        placeholder: 'type your target term ...',
-        value,
-        onChange: onAutoCompleteTextBoxChange
-    };
+  const value = enteredTerm;
+  const inputPropsAutoSuggest = {
+    placeholder: 'type your target term ...',
+    value,
+    onChange: onAutoCompleteTextBoxChange
+  };
 
 
-    function onAutoCompleteTextBoxChange(event, { newValue }){        
-        setEnteredTerm(newValue);       
+  function onAutoCompleteTextBoxChange(event, { newValue }) {
+    setEnteredTerm(newValue);
+  }
+
+
+  async function onAutoCompleteChange({ value }) {
+    let enteredTerm = value;
+    let type = TYPE_MAPP[props.targetType];
+    // if(type === "class" && props.isSkos){
+    //     type = "individual"; 
+    // }       
+    if (enteredTerm.length > 0) {
+      let inputForAutoComplete = {};
+      inputForAutoComplete['searchQuery'] = value;
+      inputForAutoComplete['ontologyIds'] = ontologyPageContext.ontology.ontologyId;
+      inputForAutoComplete['types'] = type;
+      inputForAutoComplete['obsoletes'] = props.obsoletes;
+      let autoCompleteResult = await getJumpToResult(inputForAutoComplete, 10, ontologyPageContext.ontoLang);
+      setResultList(autoCompleteResult);
     }
+  }
 
 
-    async function onAutoCompleteChange({value}){   
-        let enteredTerm = value;                  
-        let type = TYPE_MAPP[props.targetType];        
-        // if(type === "class" && props.isSkos){
-        //     type = "individual"; 
-        // }       
-        if (enteredTerm.length > 0){
-            let inputForAutoComplete = {};    
-            inputForAutoComplete['searchQuery'] = value;
-            inputForAutoComplete['ontologyIds'] = ontologyPageContext.ontology.ontologyId;
-            inputForAutoComplete['types'] = type;
-            inputForAutoComplete['obsoletes'] = props.obsoletes;
-            let autoCompleteResult = await getJumpToResult(inputForAutoComplete);
-            setResultList(autoCompleteResult);                                  
-        }       
-    }
+  function clearAutoComplete() {
+    setResultList([]);
+    props.handleJumtoSelection(null);
+  }
 
 
-    function clearAutoComplete(){        
-        setResultList([]);
-        props.handleJumtoSelection(null);
-    }
-
-
-    function onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }){
-        let autoCompleteSelectedTerm = selectedTerm;
-        autoCompleteSelectedTerm['iri'] = resultList[suggestionIndex]['iri'];
-        autoCompleteSelectedTerm['label'] = resultList[suggestionIndex]['label'];
-        setSelectedTerm(autoCompleteSelectedTerm);
-        props.handleJumtoSelection(autoCompleteSelectedTerm);   
-    }
+  function onAutoCompleteSelecteion(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) {
+    let autoCompleteSelectedTerm = selectedTerm;
+    autoCompleteSelectedTerm['iri'] = resultList[suggestionIndex]['iri'];
+    autoCompleteSelectedTerm['label'] = resultList[suggestionIndex]['label'];
+    setSelectedTerm(autoCompleteSelectedTerm);
+    props.handleJumtoSelection(autoCompleteSelectedTerm);
+  }
 
 
 
-    return(
-        <div className="row">
-            <div className="col-sm-12 autosuggest-jumpto-container">
-                {props.label && <label for="jumpto-autosuggest-box">{props.label}</label>}
-                <Autosuggest
-                    suggestions={resultList}
-                    onSuggestionsFetchRequested={onAutoCompleteChange}
-                    onSuggestionsClearRequested={clearAutoComplete}
-                    getSuggestionValue={getAutoCompleteValue}
-                    renderSuggestion={rendetAutoCompleteItem}
-                    onSuggestionSelected={onAutoCompleteSelecteion}
-                    inputProps={inputPropsAutoSuggest}
-                    id={props.id ? props.id : "jumpto_auto_suggest"}
-                />
-            </div>
-        </div>
-    );
+  return (
+    <div className="row">
+      <div className="col-sm-12 autosuggest-jumpto-container">
+        {props.label && <label for="jumpto-autosuggest-box">{props.label}</label>}
+        <Autosuggest
+          suggestions={resultList}
+          onSuggestionsFetchRequested={onAutoCompleteChange}
+          onSuggestionsClearRequested={clearAutoComplete}
+          getSuggestionValue={getAutoCompleteValue}
+          renderSuggestion={rendetAutoCompleteItem}
+          onSuggestionSelected={onAutoCompleteSelecteion}
+          inputProps={inputPropsAutoSuggest}
+          id={props.id ? props.id : "jumpto_auto_suggest"}
+        />
+      </div>
+    </div>
+  );
 }
 
 
