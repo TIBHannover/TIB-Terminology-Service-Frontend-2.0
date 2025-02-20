@@ -79,7 +79,7 @@ const OntologyPage = (props) => {
 
   async function loadOntologyData() {
     let ontologyId = props.match.params.ontologyId;
-    let ontologyApi = new OntologyApi({ ontologyId: ontologyId });
+    let ontologyApi = new OntologyApi({ ontologyId: ontologyId, lang: ontoLang });
     await ontologyApi.fetchOntology();
     if (!ontologyApi.ontology) {
       setError("Can not load this ontology");
@@ -181,6 +181,10 @@ const OntologyPage = (props) => {
     setCountOfNotes();
     setTabOnLoad();
   }, []);
+
+  useEffect(() => {
+    loadOntologyData();
+  }, [ontoLang]);
 
 
 
