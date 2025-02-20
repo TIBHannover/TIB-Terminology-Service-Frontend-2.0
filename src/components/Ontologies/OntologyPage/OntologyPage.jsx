@@ -16,6 +16,7 @@ import '../../layout/ontologyHomePage.css';
 import '../../layout/note.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -56,6 +57,7 @@ const OntologyPage = (props) => {
   if (document.getElementById('application_content')) {
     document.getElementById('application_content').style.width = '100%';
   }
+  const UrlFactory = new CommonUrlFactory();
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [ontology, setOntology] = useState(null);
@@ -71,10 +73,7 @@ const OntologyPage = (props) => {
   const [lastTabsStates, setLastTabsStates] = useState({ "terms": null, "properties": null, "gitIssues": "" });
   const [isSkosOntology, setIsSkosOntology] = useState(false);
   const [notesCount, setNotesCount] = useState("");
-  const [ontoLang, setOntoLang] = useState("en");
-
-  const UrlFactory = new CommonUrlFactory();
-
+  const [ontoLang, setOntoLang] = useState(UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) ?? "en");
 
 
   async function loadOntologyData() {
@@ -94,11 +93,8 @@ const OntologyPage = (props) => {
       skosIndividuals = skosApi.rootConcepts;
     }
 
-
-
-
     setOntology(ontologyApi.ontology);
-    setOntoLang(ontologyApi.ontology.languages[0])
+    // setOntoLang(ontologyApi.ontology.languages[0])
     setIsSkosOntology(isSkos);
     setObsoleteTerms(ontologyApi.obsoleteClasses);
     setObsoleteProps(ontologyApi.obsoleteProperties);
@@ -183,7 +179,10 @@ const OntologyPage = (props) => {
   }, []);
 
   useEffect(() => {
-    loadOntologyData();
+    if (ontoLang !== UrlFactory.getParam({ name: "lang" })) {
+      UrlFactory.setParam({ name: "lang", value: ontoLang });
+      // window.location.reload();
+    }
   }, [ontoLang]);
 
 

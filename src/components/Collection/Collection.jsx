@@ -5,6 +5,7 @@ import { fetchAllCollectionWithOntologyList } from '../../api/collection';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import Toolkit from '../../Libs/Toolkit';
 import CommonUrlFactory from '../../UrlFactory/CommonUrlFactory';
+import * as SiteUrlParamNames from '../../UrlFactory/UrlParamNames';
 
 
 const Collections = () => {
@@ -78,11 +79,11 @@ const Collections = () => {
           <div className='row' key={collectionId + "_ontoList"}>
             <div className='col-sm-12 collection-ontologies-text'>
               <b>Ontologies:</b>{collectionOntologies[collectionId] || ""}
-              <a 
-                  className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1 ml-0 " 
-                  href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
+              <a
+                className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1 ml-0 "
+                href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
               >
-                  Suggest an ontology for this collection
+                Suggest an ontology for this collection
               </a>
             </div>
           </div>
@@ -106,7 +107,7 @@ const Collections = () => {
 
   useEffect(() => {
     let urlFactory = new CommonUrlFactory();
-    let targetCollectionId = urlFactory.getParam({ name: "CollectionId" });
+    let targetCollectionId = urlFactory.getParam({ name: SiteUrlParamNames.CollectionId });
     if (targetCollectionId) {
       document.getElementById("section_" + targetCollectionId).scrollIntoView();
     }

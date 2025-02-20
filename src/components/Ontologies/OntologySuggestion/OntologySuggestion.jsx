@@ -11,6 +11,7 @@ import { fetchAllCollectionWithOntologyList } from "../../../api/collection";
 import { useQuery } from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
 const ONTOLOGY_MAIN_METADATA_SETP = 1;
@@ -22,7 +23,7 @@ const PROGRESS_BAR_INCREMENT_PERCENTAGE = 25;
 
 const OntologySuggestion = () => {
   const urlManager = new CommonUrlFactory();
-  const inputCollectionId = urlManager.getParam({ name: "CollectionId" });
+  const inputCollectionId = urlManager.getParam({ name: SiteUrlParamNames.CollectionId });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);

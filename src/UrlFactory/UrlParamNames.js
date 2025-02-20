@@ -6,6 +6,7 @@ export const Collection = 'collection';
 export const SortBy = 'sortedBy';
 export const SubTabInTermTable = 'subtab';
 export const CollectionId = 'col';
+export const Lang = 'lang';
 
 // Search related
 export const SearchQuery = 'q';
@@ -22,7 +23,7 @@ export const AdvOntology = 'advontology';
 // Note related
 export const OriginalNotes = 'originalNotes';
 export const NoteType = 'type';
-export const NoteId = 'noteId';  
+export const NoteId = 'noteId';
 export const CommentId = 'comment';
 
 // Issue related
