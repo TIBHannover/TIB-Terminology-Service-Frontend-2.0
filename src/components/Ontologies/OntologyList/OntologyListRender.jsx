@@ -61,7 +61,7 @@ export const OntologyListRender = (props) => {
             {process.env.REACT_APP_PROJECT_ID === "general" &&
               <div className='ontology-card-collection-name'>
                 <b>Collections:</b>
-                {item.config.classifications[0]
+                {item.config.classifications[0]?.collection
                   ? BuildCollectionForCard(item.config.classifications[0].collection)
                   : "-"
                 }
