@@ -6,7 +6,6 @@ import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
   OntologyTermData,
-  ParentNode,
   TermListData
 } from "./types/ontologyTypes";
 import { Ols3ApiResponse } from "./types/common";
@@ -342,8 +341,7 @@ class TermApi {
 
   async getNodeJsTree(viewMode: string): Promise<any> {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + "/";
-      url += this.ontologyId + "/" + this.termType + "/" + this.iri + "/jstree?viewMode=All&siblings=" + viewMode;
+      let url = `${process.env.REACT_APP_API_BASE_URL}/${this.ontologyId}/${this.termType}/${this.iri}/jstree?viewMode=All&siblings=${viewMode}&lang=${this.lang}`;
       let listOfNodes = await (await fetch(url, getCallSetting)).json();
       return listOfNodes;
     }
@@ -361,9 +359,6 @@ class TermApi {
     let res = await (await fetch(url, getCallSetting)).json();
     return res;
   }
-
-
-
 
 
 

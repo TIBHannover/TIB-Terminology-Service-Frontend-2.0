@@ -1,11 +1,11 @@
 
 const DropDown = (props) => {
-  const { mandatory, options, dropDownId, containerClass, dropDownTitle, dropdownClassName, dropDownValue, dropDownChangeHandler } = props;
+  const { mandatory, options, dropDownId, containerClass, dropDownTitle, dropdownClassName, dropDownValue, dropDownChangeHandler, defaultValue } = props;
 
   let optionsRendered = [];
   for (let item of options) {
     optionsRendered.push(
-      <option value={item.value} key={item.value}>{item.label}</option>
+      <option value={item.value} key={item.value} selected={item.value === defaultValue && "selected"}>{item.label}</option>
     );
   }
 

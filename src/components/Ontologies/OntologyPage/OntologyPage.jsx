@@ -94,7 +94,6 @@ const OntologyPage = (props) => {
     }
 
     setOntology(ontologyApi.ontology);
-    // setOntoLang(ontologyApi.ontology.languages[0])
     setIsSkosOntology(isSkos);
     setObsoleteTerms(ontologyApi.obsoleteClasses);
     setObsoleteProps(ontologyApi.obsoleteProperties);
@@ -179,9 +178,12 @@ const OntologyPage = (props) => {
   }, []);
 
   useEffect(() => {
-    if (ontoLang !== UrlFactory.getParam({ name: "lang" })) {
-      UrlFactory.setParam({ name: "lang", value: ontoLang });
-      // window.location.reload();
+    if (ontoLang !== UrlFactory.getParam({ name: SiteUrlParamNames.Lang })) {
+      UrlFactory.setParam({ name: SiteUrlParamNames.Lang, value: ontoLang });
+      setRootTerms([]);
+      setRootProps([]);
+      setLastTabsStates({ "terms": null, "properties": null, "gitIssues": "" });
+      loadOntologyData();
     }
   }, [ontoLang]);
 

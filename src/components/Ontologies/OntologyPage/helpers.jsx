@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import { useContext } from 'react';
 import DropDown from '../../common/DropDown/DropDown';
+import { Lang } from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -36,7 +37,7 @@ export const OntologyPageTabs = (props) => {
     );
   }
 
-  const langOptions = [];
+  let langOptions = [];
   for (let lang of ontologyPageContext.ontology.languages) {
     let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
@@ -54,6 +55,7 @@ export const OntologyPageTabs = (props) => {
             dropDownChangeHandler={(e) => {
               ontologyPageContext.setOntoLang(e.target.value);
             }}
+            defaultValue={ontologyPageContext.ontoLang}
           />
         </form>
       </ul>
