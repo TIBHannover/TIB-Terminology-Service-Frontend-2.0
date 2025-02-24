@@ -350,7 +350,7 @@ const Tree = (props) => {
 
 
   async function expandNodeHandler(node) {
-    await TreeHelper.expandNode(node, ontologyPageContext.ontology.ontologyId, childExtractName, ontologyPageContext.isSkos);
+    await TreeHelper.expandNode(node, ontologyPageContext.ontology.ontologyId, childExtractName, ontologyPageContext.isSkos, ontologyPageContext.ontoLang);
     saveComponentStateInParent();
   }
 

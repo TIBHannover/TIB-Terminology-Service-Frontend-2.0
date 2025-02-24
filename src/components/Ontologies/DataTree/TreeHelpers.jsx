@@ -61,7 +61,7 @@ export default class TreeHelper {
   }
 
 
-  static async expandNode(e, ontologyId, childExtractName, isSkos) {
+  static async expandNode(e, ontologyId, childExtractName, isSkos, lang) {
     let targetNodeIri = e.dataset.iri;
     let targetNodeId = e.dataset.id;
     let Id = e.id;
@@ -76,7 +76,7 @@ export default class TreeHelper {
       }
       else {
         let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName);
-        res = await termApi.getChildrenJsTree(targetNodeId);
+        res = await termApi.getChildrenJsTree(targetNodeId, lang);
       }
       let sortKey = TreeHelper.getTheNodeSortKey(res);
       if (sortKey) {
