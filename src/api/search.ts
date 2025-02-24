@@ -69,8 +69,9 @@ export async function getJumpToResult(inputData: SuggestAndSelectApiInput, count
 
 
 
-export async function getAutoCompleteResult(inputData: SuggestAndSelectApiInput, count: number = 5, lang: string = "en"): Promise<AutoSuggestSingleResult[]> {
+export async function getAutoCompleteResult(inputData: SuggestAndSelectApiInput, count: number = 5): Promise<AutoSuggestSingleResult[]> {
   try {
+    let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let url: string = process.env.REACT_APP_API_URL + `/suggest?q=${inputData['searchQuery']}&rows=${count}&lang=${lang}`;
     url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
     url = inputData['types'] ? (url + `&type=${inputData['types']}`) : url;
