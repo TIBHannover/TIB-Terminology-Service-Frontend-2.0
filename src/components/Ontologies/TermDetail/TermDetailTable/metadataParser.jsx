@@ -11,7 +11,7 @@ export function classMetaData(term, termType) {
   metadata['Description'] = { "value": TermLib.createTermDiscription(term) ?? term?.annotation?.definition, "isLink": false };
   metadata['Imported From'] = { "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, termType), "isLink": false };
   metadata['Also In'] = { "value": TermLib.createAlsoInTags(term, termType), "isLink": false };
-  metadata['Synonyms'] = { "value": term.synonyms ? (term.synonyms).join(',\n') : "", "isLink": false }
+  metadata['Synonyms'] = { "value": term.synonym ? (term.synonym).join(',\n') : "", "isLink": false }
   metadata['CURIE'] = { "value": term.curie, "isLink": false };
   metadata['Term ID'] = { "value": term.shortForm, "isLink": false };
   metadata['fullIRI'] = { "value": term.iri, "isLink": true };
