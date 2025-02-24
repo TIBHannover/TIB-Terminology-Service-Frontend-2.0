@@ -16,8 +16,9 @@ class OntologyApi {
   rootProperties: Array<OntologyTermData> = [];
   obsoleteClasses: Array<OntologyTermData> = [];
   obsoleteProperties: Array<OntologyTermData> = [];
+  lang: string = "en";
 
-  constructor({ ontologyId = null }) {
+  constructor({ ontologyId = null, lang = "en" }) {
     this.ontologyId = ontologyId;
     this.list = [];
     this.ontology = null;
@@ -25,6 +26,7 @@ class OntologyApi {
     this.rootProperties = [];
     this.obsoleteClasses = [];
     this.obsoleteProperties = [];
+    this.lang = lang;
   }
 
 
@@ -86,7 +88,7 @@ class OntologyApi {
       let pageCount = await getPageCount(termsLink + '/roots');
       let terms: Array<OntologyTermData> = [];
       for (let page = 0; page < pageCount; page++) {
-        let url = termsLink + "/roots?page=" + page + "&size=" + size;
+        let url = `${termsLink}/roots?page=${page}&size=${size}&lang=${this.lang}`;
         let res = await (await fetch(url, getCallSetting)).json();
         if (page == 0) {
           terms = res['_embedded']['terms'];

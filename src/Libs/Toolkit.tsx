@@ -48,7 +48,9 @@ class Toolkit {
       if (typeof (text) !== "string") {
         return text;
       }
-      let urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;
+      let urlRegex = /https?:\/\/(?:www\.)?[^\s/$.?#].[^\s]*/g;
+      text = text.replace('<', ' ');
+      text = text.replace('>', ' ');
       let result = text.replace(urlRegex, (url) => {
         if (url.at(-1) === ",") {
           url = url.slice(0, -1);
@@ -96,7 +98,6 @@ class Toolkit {
     }
     return false;
   }
-
 
 
   static getVarInLocalSrorageIfExist(varName: string, defaultValue: string) {

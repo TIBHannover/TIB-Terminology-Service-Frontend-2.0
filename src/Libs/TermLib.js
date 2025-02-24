@@ -97,10 +97,14 @@ class TermLib {
       }
       return result;
     }
-    else if (term.description) {
+    else if (term.definition) {
       let result = [];
-      for (let desc of term.description) {
-        result.push(<p>{desc}</p>);
+      for (let desc of term.definition) {
+        if (typeof (desc) === "object" && desc.value) {
+          result.push(<p>{desc.value}</p>);
+        } else {
+          result.push(<p>{desc}</p>);
+        }
       }
       return result;
     }

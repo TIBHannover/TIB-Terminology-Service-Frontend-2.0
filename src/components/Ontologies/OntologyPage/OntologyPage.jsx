@@ -16,6 +16,7 @@ import '../../layout/ontologyHomePage.css';
 import '../../layout/note.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -56,6 +57,7 @@ const OntologyPage = (props) => {
   if (document.getElementById('application_content')) {
     document.getElementById('application_content').style.width = '100%';
   }
+  const UrlFactory = new CommonUrlFactory();
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [ontology, setOntology] = useState(null);
@@ -71,14 +73,13 @@ const OntologyPage = (props) => {
   const [lastTabsStates, setLastTabsStates] = useState({ "terms": null, "properties": null, "gitIssues": "" });
   const [isSkosOntology, setIsSkosOntology] = useState(false);
   const [notesCount, setNotesCount] = useState("");
-
-  const UrlFactory = new CommonUrlFactory();
-
+  const [ontoLang, setOntoLang] = useState(UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) ?? "en");
+  window.localStorage.setItem("language", ontoLang);
 
 
   async function loadOntologyData() {
     let ontologyId = props.match.params.ontologyId;
-    let ontologyApi = new OntologyApi({ ontologyId: ontologyId });
+    let ontologyApi = new OntologyApi({ ontologyId: ontologyId, lang: ontoLang });
     await ontologyApi.fetchOntology();
     if (!ontologyApi.ontology) {
       setError("Can not load this ontology");
@@ -92,9 +93,6 @@ const OntologyPage = (props) => {
       SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
       skosIndividuals = skosApi.rootConcepts;
     }
-
-
-
 
     setOntology(ontologyApi.ontology);
     setIsSkosOntology(isSkos);
@@ -180,6 +178,17 @@ const OntologyPage = (props) => {
     setTabOnLoad();
   }, []);
 
+  useEffect(() => {
+    if (ontoLang !== UrlFactory.getParam({ name: SiteUrlParamNames.Lang })) {
+      UrlFactory.setParam({ name: SiteUrlParamNames.Lang, value: ontoLang });
+      window.localStorage.setItem("language", ontoLang);
+      setRootTerms([]);
+      setRootProps([]);
+      setLastTabsStates({ "terms": null, "properties": null, "gitIssues": "" });
+      loadOntologyData();
+    }
+  }, [ontoLang]);
+
 
 
   if (error) {
@@ -195,7 +204,9 @@ const OntologyPage = (props) => {
       storeIriForComponent: storeIriForComponent,
       storeState: tabsStateKeeper,
       tabLastStates: lastTabsStates,
-      lastVisitedIri: lastIrisHistory
+      lastVisitedIri: lastIrisHistory,
+      ontoLang: ontoLang,
+      setOntoLang: setOntoLang
     };
 
     return (

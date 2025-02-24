@@ -3,6 +3,7 @@ import Pagination from "../../common/Pagination/Pagination";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import DropDown from "../../common/DropDown/DropDown";
 import AlertBox from "../../common/Alerts/Alerts";
+import TermLib from "../../../Libs/TermLib";
 
 
 
@@ -43,9 +44,9 @@ export const RenderTermList = (props) => {
     let listOfterms = props.listOfTerms;
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
     for (let term of listOfterms) {
-      let termTreeUrl = baseUrl + encodeURIComponent(term['ontology_name']) + '/terms?iri=' + encodeURIComponent(term['iri']);
+      let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
       let tableBodyContent = !props.isObsolete
-        ? createTableBody(term, termTreeUrl, term.subclassOfText, term.equivalentToText)
+        ? createTableBody(term, termTreeUrl, term.subClassOf, term.eqAxiom)
         : createTableBodyForObsoletes(term, termTreeUrl, term.subclassOfText, term.equivalentToText)
 
       result.push(tableBodyContent);
@@ -98,6 +99,10 @@ export const RenderTermList = (props) => {
 
 
   function createTableBody(term, termTreeUrl, subclassOfText, equivalentToText) {
+    let annotation = term['annotation'];
+    if (Array.isArray(annotation['alternative label'])) {
+      annotation['alternative label'] = annotation['alternative label'].join(", ");
+    }
     return (
       <tr>
         {columnVisibility.label &&
@@ -107,9 +112,9 @@ export const RenderTermList = (props) => {
             </a>
           </td>
         }
-        {columnVisibility.id && <td className="text-break">{term['short_form']}</td>}
-        {columnVisibility.description && <td className="text-break">{term['description'] ? term['description'] : ""}</td>}
-        {columnVisibility.alternativeTerm && <td className="text-break">{term['annotation']['alternative term'] ? term['annotation']['alternative term'] : "N/A"}</td>}
+        {columnVisibility.id && <td className="text-break">{term['shortForm']}</td>}
+        {columnVisibility.description && <td className="text-break">{TermLib.createTermDiscription(term) ?? term?.annotation?.definition}</td>}
+        {columnVisibility.alternativeTerm && <td className="text-break">{annotation['alternative label'] ? annotation['alternative label'] : "N/A"}</td>}
         {columnVisibility.subClassOf && <td className="text-break"><span dangerouslySetInnerHTML={{ __html: subclassOfText }} /></td>}
         {columnVisibility.equivalentTo && <td className="text-break"><span dangerouslySetInnerHTML={{ __html: equivalentToText }} /></td>}
         {columnVisibility.exampleOfUsage && <td className="text-break">{term['annotation']['example of usage'] ? term['annotation']['example of usage'] : "N/A"}</td>}
@@ -184,12 +189,22 @@ export const RenderTermList = (props) => {
   function showHideTableColumn(e) {
     try {
       props.setTableIsLoading(true);
-      let colId = e.target.parentNode.attributes.value.value;
+      let colId = "";
+      if (e.target.tagName === "I") {
+        colId = e?.target?.parentNode?.attributes?.value?.value;
+      } else {
+        colId = e?.target?.attributes?.value?.value;
+      }
+      if (!colId) {
+        props.setTableIsLoading(false);
+        return true;
+      }
       let columnVisibilityCopy = { ...columnVisibility };
       columnVisibilityCopy[colId] = !columnVisibilityCopy[colId];
       setColumnVisibility(columnVisibilityCopy);
     }
     catch (e) {
+      props.setTableIsLoading(false);
       return true;
     }
   }

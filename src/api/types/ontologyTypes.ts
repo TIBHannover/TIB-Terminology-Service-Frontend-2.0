@@ -89,6 +89,33 @@ export type OntologyTermData = {
 }
 
 
+export type OntologyTermDataV2 = {
+  iri?: string,
+  label?: string[],
+  definition?: Array<any>,
+  synonyms?: string,
+  ontologyId?: string,
+  ontologyPreferredPrefix?: string,
+  ontologyIri?: string,
+  isObsolete?: boolean,
+  definedBy?: string[],
+  hasHierarchicalChildren?: boolean,
+  hasDirectParents?: boolean,
+  shortForm?: string,
+  isPreferredRoot?: boolean,
+  relations?: string | null,
+  eqAxiom?: string | null,
+  subClassOf?: string | null,
+  isIndividual?: boolean,
+  curationStatus?: Array<string> | null,
+  parents?: Array<ParentNode>,
+  instancesList?: any,
+  originalOntology?: string | null,
+  alsoIn?: Array<string> | null,
+  [key: string]: any
+}
+
+
 export type ParentNode = {
   label?: string,
   iri?: string,
@@ -96,7 +123,7 @@ export type ParentNode = {
 }
 
 export type TermListData = {
-  results?: Array<OntologyTermData>,
+  results?: Array<OntologyTermDataV2>,
   totalTermsCount?: number | string
 }
 

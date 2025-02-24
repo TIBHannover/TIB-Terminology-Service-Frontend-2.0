@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import { useContext } from 'react';
+import DropDown from '../../common/DropDown/DropDown';
+import { Lang } from '../../../UrlFactory/UrlParamNames';
 
 
 
@@ -35,7 +37,30 @@ export const OntologyPageTabs = (props) => {
     );
   }
 
-  return <ul className="nav nav-tabs">{result}</ul>;
+  let langOptions = [];
+  for (let lang of ontologyPageContext.ontology.languages) {
+    let temp = { "label": lang, "value": lang };
+    langOptions.push(temp);
+  }
+
+  return (
+    <>
+      <ul className="nav nav-tabs">
+        {result}
+        <form class="ml-auto">
+          <DropDown
+            options={langOptions}
+            dropDownId="onto-language"
+            dropDownTitle="Language"
+            dropDownChangeHandler={(e) => {
+              ontologyPageContext.setOntoLang(e.target.value);
+            }}
+            defaultValue={ontologyPageContext.ontoLang}
+          />
+        </form>
+      </ul>
+    </>
+  );
 }
 
 
@@ -44,11 +69,18 @@ export const OntologyPageTabs = (props) => {
 export const OntologyPageHeadSection = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
   return [
-    <>
-      <div className='row ont-info-bar header-collapseable-section' id='ontology-page-header'>
+    <div className='span'>
+      <div className='row ont-info-bar header-collapseable-section'>
         <div className="col-sm-12">
           <div>
-            <h2><Link className={"ont-info-bar-title"} to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId}>{ontologyPageContext.ontology.config.title}</Link></h2>
+            <h2>
+              <Link
+                className={"ont-info-bar-title"}
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId}
+              >
+                {ontologyPageContext.ontology.config.title}
+              </Link>
+            </h2>
           </div>
           <div>
             <a href={ontologyPageContext.ontology.config.id}>{ontologyPageContext.ontology.config.id}</a>
@@ -62,7 +94,7 @@ export const OntologyPageHeadSection = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   ];
 }
 

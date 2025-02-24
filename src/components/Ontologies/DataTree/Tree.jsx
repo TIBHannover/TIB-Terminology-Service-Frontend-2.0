@@ -125,7 +125,7 @@ const Tree = (props) => {
       }
       else {
         targetHasChildren = await TreeHelper.nodeHasChildren(ontologyPageContext.ontology.ontologyId, target, props.componentIdentity);
-        let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName);
+        let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName, ontologyPageContext.ontoLang);
         listOfNodes = await termApi.getNodeJsTree(treeFullView);
         rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');
         if (Toolkit.getObjectInListIfExist(rootNodesWithChildren, 'iri', target)) {
@@ -353,7 +353,6 @@ const Tree = (props) => {
     await TreeHelper.expandNode(node, ontologyPageContext.ontology.ontologyId, childExtractName, ontologyPageContext.isSkos);
     saveComponentStateInParent();
   }
-
 
 
 

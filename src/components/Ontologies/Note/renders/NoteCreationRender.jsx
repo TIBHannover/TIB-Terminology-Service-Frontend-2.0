@@ -39,15 +39,15 @@ export const NoteCreationRender = (props) => {
         </div>
       }
 
-      <div className="modal" id={"edit-note-modal" + props.targetNoteId} key={"edit-note-modal" + props.targetNoteId}>
-        <div className="modal-dialog modal-xl">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">{"Add a Note"}</h4>
-              <button onClick={() => { props.closeModal() }} type="button" className="close close-mark-btn" data-dismiss="modal">&times;</button>
+      <div class="modal" id={"edit-note-modal" + props.targetNoteId} key={"edit-note-modal" + props.targetNoteId}>
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{"Add a Note"}</h4>
+              <button onClick={() => { props.closeModal() }} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
             </div>
             <br></br>
-            <div className="modal-body">
+            <div class="modal-body">
               <div className="row">
                 <div className="col-sm-8">
                   {!noteContext.selectedTermInTree &&
@@ -86,7 +86,7 @@ export const NoteCreationRender = (props) => {
                         label={"About *"}
                         handleJumtoSelection={props.handleJumtoSelection}
                         obsoletes={false}
-                        initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'] : props.selectedTerm['label']}
+                        initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'][0] : props.selectedTerm['label']}
                         id="note_creation_auto_suggest"
                       />
                       <br></br>
@@ -99,14 +99,14 @@ export const NoteCreationRender = (props) => {
                 <>
                   <div className="row">
                     <div className="col-sm-10">
-                      <div className="form-group form-check">
+                      <div class="form-group form-check">
                         <input
                           type="checkbox"
-                          className="form-check-input"
+                          class="form-check-input"
                           id="publish_note_to_parent_checkbox"
                           onChange={props.handlePublishToParentCheckbox}
                         />
-                        <label className="form-check-label" for="publish_note_to_parent_checkbox">
+                        <label class="form-check-label" for="publish_note_to_parent_checkbox">
                           {"Publish this note also for  "}
                           {TermLib.createTermUrlWithOntologyPrefix({
                             ontology_name: props.parentOntology,
@@ -129,7 +129,7 @@ export const NoteCreationRender = (props) => {
                     type="text"
                     value={props.noteTitle}
                     onChange={() => { props.onTextInputChange() }}
-                    className="form-control"
+                    class="form-control"
                     id={"noteTitle" + props.targetNoteId}
                     placeholder="Enter Title">
                   </input>
@@ -150,8 +150,8 @@ export const NoteCreationRender = (props) => {
                 </div>
               </div>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary submit-term-request-modal-btn" onClick={props.submit}>Submit</button>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={props.submit}>Submit</button>
             </div>
           </div>
         </div>
