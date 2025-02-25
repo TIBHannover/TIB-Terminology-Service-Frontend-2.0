@@ -698,9 +698,10 @@ body .custom-file-upload {
 }
 
 body .site-tour-btn{
-  position: fixed;
-  top: 50%;
-  right: 0;
+    position: fixed;
+    top: 50%;
+    right: 0;
+    z-index: 99999; 
   /*rotate: -90deg;*/
 }
 #site-warning-banner{

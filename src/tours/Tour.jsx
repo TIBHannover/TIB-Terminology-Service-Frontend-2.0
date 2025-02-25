@@ -60,8 +60,11 @@ const SiteTour = () => {
 
   function whichPage() {
     let currentUrl = window.location.href;
-    let urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH);
-    urlPath = urlPath[urlPath.length - 1];
+    let urlPath = currentUrl;
+    if (process.env.REACT_APP_PROJECT_SUB_PATH) {
+      urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH);
+      urlPath = urlPath[urlPath.length - 1];
+    }
     if (urlPath && urlPath[0] === '/') {
       urlPath = urlPath.substring(1);
     }
