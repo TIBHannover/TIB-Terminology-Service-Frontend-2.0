@@ -164,7 +164,7 @@ const NoteCreation = (props) => {
     const addNoteBtn = <div className="row float-right">
       <div className="col-sm-12">
         <button type="button"
-          class="btn btn-secondary"
+          class="btn btn-secondary stour-onto-note-add-btn"
           data-toggle="modal"
           data-target={"#" + loginModalId}
           data-backdrop="static"

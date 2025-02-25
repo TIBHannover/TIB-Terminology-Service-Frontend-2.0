@@ -703,3 +703,6 @@ body .site-tour-btn{
   right: 0;
   /*rotate: -90deg;*/
 }
+#site-warning-banner{
+  margin-top: -10px;
+}
