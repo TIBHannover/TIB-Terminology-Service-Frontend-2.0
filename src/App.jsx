@@ -104,6 +104,14 @@ const App = () => {
               {!showLoadingPage &&
                 <>
                   <Header />
+                  {process.env.REACT_APP_PROJECT_ID === "general" &&
+                    <div className='row alert alert-warning text-center' id="site-warning-banner">
+                      <div className='col-sm-12'>
+                        The Terminology Service is now running under OLS4.
+                        You may experience missing ontologies for a short time during the transition phase.
+                      </div>
+                    </div>
+                  }
                   <div className='application-content' id="application_content">
                     {loading &&
                       <Skeleton
