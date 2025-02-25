@@ -60,7 +60,8 @@ const SiteTour = () => {
 
   function whichPage() {
     let currentUrl = window.location.href;
-    let urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH)[1];
+    let urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH);
+    urlPath = urlPath[urlPath.length - 1];
     if (urlPath && urlPath[0] === '/') {
       urlPath = urlPath.substring(1);
     }
@@ -187,7 +188,7 @@ const SiteTour = () => {
           onAfterOpen={() => (document.body.style.overflowY = 'hidden')}
           onBeforeClose={() => (document.body.style.overflowY = 'auto')}
           startAt={0}
-          scrollOffset={-800}
+          scrollOffset={-500}
         />
       }
       <a className='btn btn-secondary btn-sm site-tour-btn' id="tour-trigger-btn" onClick={() => { setIsTourOpen(true) }}>Guide me</a>
