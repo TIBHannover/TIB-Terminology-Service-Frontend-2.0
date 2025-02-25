@@ -10,7 +10,7 @@ export function homePageTourStepsTibGeneral() {
       content: () => {
         return (
           <>
-            <span>Each box represents a hosted collection in TIB terminology service</span>
+            <span>Each box represents a hosted collection in TIB Terminology Service.</span>
             <br /><br />
             <span>Click on the logo to check the list of ontologies in each collection.</span>
             <br /><br />
@@ -28,7 +28,7 @@ export function headerTourStepsTibGeneral() {
   const steps = [
     {
       selector: tourSelectorPrefix + 'searchbox',
-      content: 'You can use this to search after ontologies, classes, properties, and individuals.',
+      content: 'You can use the search bar to search after ontologies, classes, properties, and individuals.',
     },
     {
       selector: tourSelectorPrefix + 'searchbox-exactmatch',
@@ -51,7 +51,7 @@ export function headerTourStepsTibGeneral() {
 
     {
       selector: tourSelectorPrefix + 'collections-navbar-item',
-      content: 'Checkout the details about the hosted Collections in TIB.',
+      content: 'Checkout the details about the hosted collections in TIB.',
     },
     {
       selector: tourSelectorPrefix + 'ontologies-navbar-item',
@@ -59,15 +59,15 @@ export function headerTourStepsTibGeneral() {
     },
     {
       selector: tourSelectorPrefix + 'help-navbar-item',
-      content: "Need help? Here you can find the most frequent questions and answers regarding TIB terminology service.",
+      content: "Need help? Here you can find the most frequent questions and answers regarding TIB Terminology Service.",
     },
     {
       selector: tourSelectorPrefix + 'api-navbar-item',
-      content: "You plan to use API? check this for the detailed documentation.",
+      content: "You plan to use API? Check this for the detailed documentation.",
     },
     {
       selector: tourSelectorPrefix + 'about-navbar-item',
-      content: "Read more about TIB terminology service.",
+      content: "Read more about TIB Terminology Service.",
     },
   ];
   return steps;

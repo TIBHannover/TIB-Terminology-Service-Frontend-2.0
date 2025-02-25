@@ -5,7 +5,7 @@ export function ontologyPageTabTourSteps() {
   const steps = [
     {
       selector: tourSelectorPrefix + 'overview',
-      content: "Check the ontology metadata and stats.",
+      content: "Check the ontology metadata and statistics.",
     },
     {
       selector: tourSelectorPrefix + 'term',
@@ -41,7 +41,7 @@ export function ontologyOverViewTourSteps() {
   const steps = [
     {
       selector: tourSelectorPrefix + 'overview-welcome',
-      content: "This the ontology overview page where you can check the ontology metadata and stats.",
+      content: "This the ontology overview page where you can check the ontology metadata and statistics.",
     },
     {
       selector: tourSelectorPrefix + 'overview-page-table',
@@ -49,11 +49,11 @@ export function ontologyOverViewTourSteps() {
     },
     {
       selector: tourSelectorPrefix + 'overview-page-stats',
-      content: "Ontology content (class/property/individual) stats.",
+      content: "Ontology content (class/property/individual) statistics.",
     },
     {
       selector: tourSelectorPrefix + 'overview-page-more-metadata',
-      content: "Click here to check more metadata (if exist. Example: creator, publiser, etc.) about this onology.",
+      content: "Click here to check if more metadata (e.g. creator, publisher, etc.) is available about this ontology.",
     },
     {
       selector: tourSelectorPrefix + 'overview-page-show-metadata-as-json-btn',
@@ -64,7 +64,7 @@ export function ontologyOverViewTourSteps() {
     steps.push(
       {
         selector: tourSelectorPrefix + 'overview-page-add-to-collection',
-        content: "Request adding this ontology to TIB collection(s) in case you see the need. We will evaluate your request and add it to the desired collecion(s) if it fits.",
+        content: "Request adding this ontology to TIB collection(s) in case you see the need. We will evaluate your request and add it to the desired collecion(s) if it fits the criteria.",
       }
     );
   }

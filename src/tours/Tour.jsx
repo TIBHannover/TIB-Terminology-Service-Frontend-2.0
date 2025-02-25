@@ -30,6 +30,7 @@ const SiteTour = () => {
   const tourP = getTourProfile();
   let tourSteps = [];
   let currentPage = whichPage();
+
   let tourOpenValue = false;
   if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
     tourOpenValue = true;
@@ -51,6 +52,11 @@ const SiteTour = () => {
 
   const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
 
+  if (!currentPage) {
+    // do not show the tour button when the page does not need one
+    return "";
+  }
+
 
   function whichPage() {
     let currentUrl = window.location.href;
@@ -62,6 +68,9 @@ const SiteTour = () => {
       return HOME_PAGE_ID;
     } else if (urlPath.includes('ontologies/')) {
       return ONTOLOGY_PAGE_ID;
+    } else {
+      // the target page does not need a tour button
+      return false;
     }
   }
 
