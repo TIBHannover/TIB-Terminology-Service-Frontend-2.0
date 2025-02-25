@@ -20,11 +20,11 @@ export function loginInHeaderTourSteps(isUserLogin) {
         return (
           <>
             <span>
-              Although ontology lookup is completely free to access, there are some extra functionalities such as note
-              feature and term request that require authentication. This it not mandatory for most core functions of the terminology service.
+              TIB Terminology service can be used freely and without authentication.
+              There are features like personal collections, adding notes, ontology suggestions, or term requests which increase your experience even more but require login.
             </span>
             <br />
-            <span>In case you wish to use the extra features, you can login via:</span>
+            <span>You can authenticate via:</span>
             <li>GitHub</li>
             <li>ORCID</li>
           </>

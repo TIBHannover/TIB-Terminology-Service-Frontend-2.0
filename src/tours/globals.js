@@ -16,7 +16,7 @@ export function tourWelcomeStep() {
             <span>You can skip this by closing this box.</span>
             <br />
             <br />
-            <span>You can always re-run this tour later.</span>
+            <span>You can always re-run this tour later by clicking on <b>Guide me</b> on the right..</span>
           </>
         )
       }
