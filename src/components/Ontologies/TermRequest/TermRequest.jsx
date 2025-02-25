@@ -202,7 +202,7 @@ const TermRequest = (props) => {
   if (!appContext.user) {
     const loginModalId = "loginModal" + props.reportType;
     const loginBtn = <button type="button"
-      className="btn btn-secondary issue-report-btn"
+      className={"btn btn-secondary issue-report-btn " + (props.reportType === "termRequest" ? "stour-github-issue-open-btn-termRequest" : "stour-github-issue-open-btn-general")}
       data-toggle="modal"
       data-target={"#" + loginModalId}
       data-backdrop="static"

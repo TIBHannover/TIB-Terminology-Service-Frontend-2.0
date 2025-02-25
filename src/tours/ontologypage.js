@@ -298,14 +298,6 @@ export function githubPanelTourSteps() {
       }
     },
     {
-      selector: tourSelectorPrefix + 'github-issue-title',
-      content: 'This is the issue title. Clicking on it will open the issue page on GitHub.'
-    },
-    {
-      selector: tourSelectorPrefix + 'github-issue-number',
-      content: 'This is the issue #number, opening date, and the GitHub user who opened it.'
-    },
-    {
       selector: tourSelectorPrefix + 'github-issue-open-btn-general',
       content: () => {
         return (
@@ -340,6 +332,21 @@ export function githubPanelTourSteps() {
     }
   ];
 
+  if (document.getElementsByClassName("git-issue-title").length !== 0) {
+    steps.push(
+      {
+        selector: tourSelectorPrefix + 'github-issue-title',
+        content: 'This is the issue title. Clicking on it will open the issue page on GitHub.'
+      }
+    );
+    steps.push(
+      {
+        selector: tourSelectorPrefix + 'github-issue-number',
+        content: 'This is the issue #number, opening date, and the GitHub user who opened it.'
+      }
+    );
+  }
+
   return steps;
 }
 
@@ -371,7 +378,7 @@ export function notesTourSteps() {
               <ul>
                 <li>
                   Some ontologies are not hosted on GitHub (or any version control
-                  system with issue list feature.)
+                  system with an issue list feature.)
                 </li>
                 <li>
                   Some questions might not be suitable and accpetable as a Git issue
