@@ -83,8 +83,8 @@ const SiteTour = () => {
     let tourSteps = [];
     if (process.env.REACT_APP_PROJECT_ID === 'general') {
       tourSteps = tourWelcomeStep();
-      tourSteps = tourSteps.concat(headerTourStepsTibGeneral());
       tourSteps = tourSteps.concat(homePageTourStepsTibGeneral())
+      tourSteps = tourSteps.concat(headerTourStepsTibGeneral());
       if (process.env.REACT_APP_AUTH_FEATURE === "true") {
         tourSteps = tourSteps.concat(loginInHeaderTourSteps(isUserLogin));
       }
@@ -199,4 +199,4 @@ const SiteTour = () => {
   );
 }
 
-export default SiteTour;
+export default SiteTour
