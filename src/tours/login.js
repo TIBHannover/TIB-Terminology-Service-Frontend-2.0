@@ -20,7 +20,7 @@ export function loginInHeaderTourSteps(isUserLogin) {
         return (
           <>
             <span>
-              TIB Terminology service can be used freely and without authentication.
+              TIB Terminology Service can be used freely and without authentication.
               There are features like personal collections, adding notes, ontology suggestions, or term requests which increase your experience even more but require login.
             </span>
             <br />

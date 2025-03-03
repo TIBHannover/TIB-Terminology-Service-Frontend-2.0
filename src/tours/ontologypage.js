@@ -41,7 +41,7 @@ export function ontologyOverViewTourSteps() {
   const steps = [
     {
       selector: tourSelectorPrefix + 'overview-welcome',
-      content: "This the ontology overview page where you can check the ontology metadata and statistics.",
+      content: "This is the ontology overview page where you can check the ontology metadata and statistics.",
     },
     {
       selector: tourSelectorPrefix + 'overview-page-table',
