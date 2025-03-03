@@ -27,7 +27,7 @@ export function homePageTourStepsTibGeneral() {
             <p>
               A collection is a set of ontologies associated with a project. Projects use and/or develop
               these ontologies to semantically annotate their datasets. Defining a collection for a project helps the project members and software to
-              norrow down their term lookup to their target ontologies. These collections are defined by the TIB team for projects.
+              narrow down their term lookup to their target ontologies. These collections are defined by the TIB team for projects.
             </p>
           </>
         );
