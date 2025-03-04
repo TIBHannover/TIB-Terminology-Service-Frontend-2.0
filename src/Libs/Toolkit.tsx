@@ -29,13 +29,13 @@ class Toolkit {
   static sortListOfObjectsByKey(objectList: Array<GenericObject>, key: string, isReverse: boolean = false, parentKey: string = "") {
     let reverseSortSign = !isReverse ? 1 : -1;
     if (parentKey) {
-      return objectList.sort(function (a: GenericObject, b: GenericObject) {
+      return objectList.sort(function(a: GenericObject, b: GenericObject) {
         let x: number | string = typeof a[key] === "number" ? a[parentKey][key] : a[parentKey][key]?.toLowerCase();
         let y: number | string = typeof b[key] === "number" ? b[parentKey][key] : b[parentKey][key]?.toLowerCase();
         return (x < y ? reverseSortSign : (-1 * reverseSortSign))
       });
     }
-    return objectList.sort(function (a: GenericObject, b: GenericObject) {
+    return objectList.sort(function(a: GenericObject, b: GenericObject) {
       let x: number | string = typeof a[key] === "number" ? a[key] : a[key]?.toLowerCase();
       let y: number | string = typeof b[key] === "number" ? b[key] : b[key]?.toLowerCase();
       return (x < y ? reverseSortSign : (-1 * reverseSortSign))
@@ -150,6 +150,16 @@ class Toolkit {
   static getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min
   };
+
+
+  static listOfSiteLangs(): { label: string, value: string }[] {
+    let langs = ["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "hr", "hu", "it", "ja", "la", "lt", "lv", "nl", "no", "pl", "pt", "ro", "sk", "sl", "sv", "zh", "zh-tw"];
+    let result = [];
+    for (let l of langs) {
+      result.push({ "label": l, "value": l });
+    }
+    return result;
+  }
 
 
 }
