@@ -58,6 +58,7 @@ const OntologyPage = (props) => {
     document.getElementById('application_content').style.width = '100%';
   }
   const UrlFactory = new CommonUrlFactory();
+  let language = UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [ontology, setOntology] = useState(null);
@@ -73,7 +74,7 @@ const OntologyPage = (props) => {
   const [lastTabsStates, setLastTabsStates] = useState({ "terms": null, "properties": null, "gitIssues": "" });
   const [isSkosOntology, setIsSkosOntology] = useState(false);
   const [notesCount, setNotesCount] = useState("");
-  const [ontoLang, setOntoLang] = useState(UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) ?? "en");
+  const [ontoLang, setOntoLang] = useState(language);
   window.localStorage.setItem("language", ontoLang);
 
 

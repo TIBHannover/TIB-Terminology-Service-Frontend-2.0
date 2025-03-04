@@ -36,6 +36,7 @@ const OntologyList = (props) => {
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
+  localStorage.setItem('language', "en");
 
   const allCollectionsWithStatsQuery = useQuery({
     queryKey: ['allCollectionsWithTheirStats'],
