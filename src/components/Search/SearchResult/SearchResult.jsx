@@ -268,6 +268,8 @@ const SearchResult = (props) => {
     setPageNumber(1);
     setPageSize(10);
     setFilterTags("");
+    localStorage.setItem('language', "en");
+    commonUrlFactory.deleteParam({ name: 'lang' });
   }
 
 
@@ -289,6 +291,8 @@ const SearchResult = (props) => {
       else if (tagType === "collection") {
         handleCollectionFacetSelection(e);
       }
+      localStorage.setItem('language', "en");
+      commonUrlFactory.deleteParam({ name: 'lang' });
     }
     catch (e) {
       // console.info(e);

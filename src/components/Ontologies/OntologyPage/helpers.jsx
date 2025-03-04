@@ -51,7 +51,7 @@ export const OntologyPageTabs = (props) => {
           <DropDown
             options={langOptions}
             dropDownId="onto-language"
-            dropDownTitle="Language"
+            dropDownTitle="Ontology language"
             dropDownChangeHandler={(e) => {
               ontologyPageContext.setOntoLang(e.target.value);
             }}
