@@ -86,7 +86,7 @@ const CollectionCard = ({ collectionId }) => {
   return (
     <div className="collection-card">
       <a href={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor" target='_blank'>
-        <img className="img-fluid collection-logo" alt="collection_logo" src={subPath + collectionsInfoJson[collectionId]['logo']} />
+        <img className="img-fluid collection-logo" alt="collection_logo" src={collectionsInfoJson[collectionId]['logo']} />
       </a>
       <div className="collection-card-text">
         <p className="trunc">{collectionsInfoJson[collectionId]['text']}</p>
