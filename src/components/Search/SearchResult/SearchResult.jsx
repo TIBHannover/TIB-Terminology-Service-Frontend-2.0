@@ -30,6 +30,8 @@ const SearchResult = (props) => {
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
 
+  let language = commonUrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
+
   const DEFAULT_PAGE_NUMBER = 1;
   const DEFAULT_PAGE_SIZE = 10;
 
@@ -44,6 +46,7 @@ const SearchResult = (props) => {
   const [totalResultsCount, setTotalResultsCount] = useState([]);
   const [filterTags, setFilterTags] = useState("");
   const [loading, setLoading] = useState(true);
+  const [lang, setLang] = useState(language);
 
 
   const PAGE_SIZES_FOR_DROPDOWN = [{ label: "10", value: 10 }, { label: "20", value: 20 }, { label: "30", value: 30 }, { label: "40", value: 40 }];
@@ -270,6 +273,7 @@ const SearchResult = (props) => {
     setFilterTags("");
     localStorage.setItem('language', "en");
     commonUrlFactory.deleteParam({ name: 'lang' });
+    setLang("en");
   }
 
 
@@ -293,6 +297,7 @@ const SearchResult = (props) => {
       }
       localStorage.setItem('language', "en");
       commonUrlFactory.deleteParam({ name: 'lang' });
+      setLang("en");
     }
     catch (e) {
       // console.info(e);
@@ -329,7 +334,7 @@ const SearchResult = (props) => {
     setSearchResult([]);
     search();
     createFilterTags();
-  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections]);
+  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang]);
 
 
 
@@ -358,7 +363,21 @@ const SearchResult = (props) => {
             {searchResult.length > 0 && <h3 className="text-dark">{`${totalResultsCount} results found for "${searchQuery}"`}</h3>}
             <div>{filterTags}</div>
             <div className='row'>
-              <div className='col-sm-12 text-right zero-padding-col'>
+              <div className='col-sm-8 text-right zero-padding-col'>
+                <DropDown
+                  options={Toolkit.listOfSiteLangs()}
+                  dropDownId="lang-list"
+                  dropDownTitle="Language"
+                  dropdownClassName={"white-dropdown"}
+                  dropDownValue={lang}
+                  dropDownChangeHandler={(e) => {
+                    localStorage.setItem('language', e.target.value);
+                    commonUrlFactory.setParam({ name: 'lang', value: e.target.value });
+                    setLang(e.target.value);
+                  }}
+                />
+              </div>
+              <div className='col-sm-4 text-right zero-padding-col'>
                 <DropDown
                   options={PAGE_SIZES_FOR_DROPDOWN}
                   dropDownId="list-result-per-page"
