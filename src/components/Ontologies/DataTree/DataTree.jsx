@@ -86,7 +86,7 @@ const DataTree = (props) => {
 
     let tourP = getTourProfile();
     if ((props.componentIdentity === 'terms' && !tourP.ontoClassTreePage) || (props.componentIdentity === 'properties' && !tourP.ontoPropertyTreePage)) {
-      document.getElementById('tour-trigger-btn').click();
+      document.getElementById('tour-trigger-btn')?.click();
     }
 
     return () => {
