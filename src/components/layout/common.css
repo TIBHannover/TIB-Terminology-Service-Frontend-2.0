@@ -110,7 +110,7 @@ body .ontology-button{
     margin-right: 10px;
     font-size: 12px;
     border-color: #bbae9e;
-    margin-top: -5px;    
+    margin-top: 2px;
 }
 
 body .ontology-button:hover{ 
@@ -539,6 +539,16 @@ body .fa-borderless{
     cursor: pointer;
 }
 
+body .fa-arrow-right, .fa-arrow-left, .fa-arrow-up, .fa-arrow-down{
+  border: none;
+  font-size: 16px;
+}
+
+body .fa-keyboard-o{
+  border: none;
+  font-size: 16px;
+}
+
 body .overlay {
     position: fixed;
     width: 100%;
@@ -679,4 +689,15 @@ body .custom-file-upload {
     background-color: #404040;
     color: white;
     border-radius: 5px;
-  }
+}
+
+body .site-tour-btn{
+    position: fixed;
+    top: 50%;
+    right: 0;
+    z-index: 99999; 
+  /*rotate: -90deg;*/
+}
+#site-warning-banner{
+  margin-top: -10px;
+}

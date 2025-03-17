@@ -115,7 +115,7 @@ export default class TreeHelper {
       nodes = Toolkit.sortListOfObjectsByKey(nodes, sortKey, true);
     }
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].iri === selectedNodeIri) {
+      if (nodes[i].iri === selectedNodeIri || nodes[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
         continue;
       }
       let node = treeNode.buildNodeWithTradionalJs(nodes[i], nodes[i].id);

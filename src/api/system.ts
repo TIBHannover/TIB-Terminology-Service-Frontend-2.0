@@ -2,7 +2,7 @@
 export async function olsIsUp(): Promise<boolean> {
   try {
     let getCallSetting = {method: 'GET', headers: {'Accept': 'text/plain;charset=UTF-8 '}};
-    let url = process.env.REACT_APP_API_URL + "/accessibility";
+    let url = process.env.REACT_APP_API_URL + "/v2/health";
     let response = await fetch(url, getCallSetting);
     if(!response.ok) {
         return Promise.reject(new Error(response.statusText));

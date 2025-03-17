@@ -72,7 +72,7 @@ const OntologyInfoTable = () => {
             </div>
           </div>
 
-          <table className="ontology-detail-table" striped="columns">
+          <table className="ontology-detail-table stour-overview-page-table" striped="columns">
             <tbody>
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Version</b></td>
@@ -143,7 +143,7 @@ const OntologyInfoTable = () => {
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                 <td>
-                  {String(ontology.config.skos)}
+                  {String(ontology.config.isSkos)}
                 </td>
               </tr>
               {process.env.REACT_APP_PROJECT_ID === "general" &&
@@ -167,34 +167,35 @@ const OntologyInfoTable = () => {
                 </tr>
               }
 
-              {ontology.config.allowDownload == true &&
-                <tr>
-                  <td className="ontology-overview-table-id-column"><b>Download</b></td>
-                  <td>
-                    <a
-                      href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
-                      className='btn btn-secondary btn-dark download-ontology-btn'
-                      target="_blank"
-                    >
-                      <i class="fa fa-download"></i>OWL
-                    </a>
-                    <a
-                      className='btn btn-secondary btn-dark download-ontology-btn'
-                      onClick={async () => {
-                        const jsonFile = JSON.stringify(ontology);
-                        const blob = new Blob([jsonFile], { type: 'application/json' });
-                        const href = await URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = href;
-                        link.download = ontology.ontologyId + "_metadata.json";
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
-                    >
-                      <i class="fa fa-download"></i>Ontology metadata as JSON</a>
-                  </td>
-                </tr>}
+              {/* {ontology.config.allowDownload == true && */}
+              <tr>
+                <td className="ontology-overview-table-id-column"><b>Download</b></td>
+                <td>
+                  <a
+                    href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
+                    className='btn btn-secondary btn-dark download-ontology-btn'
+                    target="_blank"
+                  >
+                    <i class="fa fa-download"></i>OWL
+                  </a>
+                  <a
+                    className='btn btn-secondary btn-dark download-ontology-btn'
+                    onClick={async () => {
+                      const jsonFile = JSON.stringify(ontology);
+                      const blob = new Blob([jsonFile], { type: 'application/json' });
+                      const href = await URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = href;
+                      link.download = ontology.ontologyId + "_metadata.json";
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                  >
+                    <i class="fa fa-download"></i>Ontology metadata as JSON</a>
+                </td>
+              </tr>
+              {/* } */}
             </tbody>
           </table>
         </div>
@@ -217,8 +218,8 @@ const OntologyInfoTable = () => {
             {createAnnotations()}
           </tbody>
         </table>}
-      <div className="text-center" id="search-facet-show-more-ontology-btn">
-        <a className="show-more-btn" onClick={handleOntologyShowMoreClick}>{showExtraAnotationBtnText}</a>
+      <div className="text-center " id="search-facet-show-more-ontology-btn">
+        <a className="show-more-btn stour-overview-page-more-metadata" onClick={handleOntologyShowMoreClick}>{showExtraAnotationBtnText}</a>
       </div>
     </div>
   );

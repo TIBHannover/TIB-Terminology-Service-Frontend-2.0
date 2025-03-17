@@ -15,8 +15,8 @@ import { getTsPluginHeaders } from "../../../api/header";
 
 
 
-const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete';
-const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create_report';
+const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete/';
+const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create/';
 
 
 
@@ -73,10 +73,10 @@ export const CommentCardHeader = (props) => {
   deleteFormData["objectType"] = 'comment';
   deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
 
-  let reportFormData = new FormData();
-  reportFormData.append("objectId", comment['id']);
-  reportFormData.append("objectType", 'comment');
-  reportFormData.append("ontology", ontologyPageContext.ontology.ontologyId);
+  let reportFormData = {};
+  reportFormData["objectId"] = comment['id'];
+  reportFormData["objectType"] = 'comment';
+  reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
 
   let redirectAfterDeleteEndpoint = noteUrlFactory.getCommentDeleteRedirectLink();
 
@@ -154,6 +154,7 @@ export const CommentCardHeader = (props) => {
         deleteEndpoint={deleteEndpoint}
         afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
         key={"commentDelModal" + comment['id']}
+        method="DELETE"
       />
       <ReportModal
         modalId={comment['id']}

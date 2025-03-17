@@ -8,23 +8,22 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { defaultShouldDehydrateQuery } from '@tanstack/react-query'
+import { defaultShouldDehydrateQuery } from '@tanstack/react-query';
 
 
- 
 // Adding Matomo
 const instance = createInstance({
   urlBase: process.env.REACT_APP_TS_PUBLIC_URL as string,
-  siteId: process.env.REACT_APP_TS_SITE_ID as any, 
+  siteId: process.env.REACT_APP_TS_SITE_ID as any,
   trackerUrl: "https://support.tib.eu/piwik/matomo.php",
   srcUrl: "https://support.tib.eu/piwik/matomo.js",
   disabled: false,
   linkTracking: true,
   configurations: {
-      disableCookies: true,
-      },
+    disableCookies: true,
+  },
 
-  }
+}
 )
 
 const aWeek = 1000 * 60 * 60 * 24 * 7;
@@ -46,20 +45,20 @@ const localStoragePersister = createSyncStoragePersister({
 ReactDOM.render(
   <React.StrictMode>
     <MatomoProvider value={instance}>
-      <PersistQueryClientProvider 
-        client={queryClient} 
+      <PersistQueryClientProvider
+        client={queryClient}
         persistOptions={{
-          persister:localStoragePersister,
-          dehydrateOptions:{
+          persister: localStoragePersister,
+          dehydrateOptions: {
             shouldDehydrateQuery: (query) => {
-              if (!query.meta){
+              if (!query.meta) {
                 return true;
               }
               return defaultShouldDehydrateQuery(query) && query.meta.cache !== false
             }
           }
         }}
-        >
+      >
         <App />
         {process.env.REACT_APP_DEBUG_MODE === "true" && <ReactQueryDevtools initialIsOpen={false} />}
       </PersistQueryClientProvider>

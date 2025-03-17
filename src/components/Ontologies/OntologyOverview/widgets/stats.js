@@ -14,7 +14,7 @@ const OntologyStatsBox = () => {
   return (
     <div id="stats-table-wrapper">
       <h4>Metrics</h4>
-      <table className="ontology-metric-table">
+      <table className="ontology-metric-table stour-overview-page-stats">
         <tbody>
           <tr>
             <td className="ontology-overview-table-id-column">Number of Classes</td>

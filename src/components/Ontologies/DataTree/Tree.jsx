@@ -10,6 +10,7 @@ import KeyboardNavigator from "./KeyboardNavigation";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import { getTourProfile } from "../../../tours/controller";
 
 
 
@@ -99,19 +100,26 @@ const Tree = (props) => {
     let rootNodesWithChildren = [];
     let childrenList = [];
     let selectedItemId = "";
+    let showNodeDetailPage = false;
 
     if (firstTimeLoad && lastState && lastState.html && !props.isIndividual) {
-      // on tab change in ontology page. do not reload the tree. 
       loadTheTreeLastState();
       return true;
     }
     if (!target || resetTreeFlag) {
-      // when reset button is clicked or when iri is not given(just rendering the ontology root terms)
-      setSiblingsVisible(false);
-      setTreeDomContent(renderTreeRoots());
-      return true;
+      let result = [];
+      if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
+        result = buildTheTreeFirstLayer(props.rootNodesForSkos);
+      }
+      else {
+        result = buildTheTreeFirstLayer(props.rootNodes);
+      }
+      treeList = result.treeDomContent;
+      target = "";
+      siblingsVisible = false;
     }
     else if (target != undefined || reload) {
+      showNodeDetailPage = true;
       if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
         treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView);
       }
@@ -120,34 +128,37 @@ const Tree = (props) => {
         let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName);
         listOfNodes = await termApi.getNodeJsTree(treeFullView);
         rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');
-        // if (Toolkit.getObjectInListIfExist(rootNodesWithChildren, 'iri', target)) {
-        //   // the target node is a root node
-        //   let result = buildTheTreeFirstLayer(rootNodesWithChildren, target);
-        //   treeList = result.treeDomContent;
-        //   selectedItemId = result.selectedItemId;
-        // }
-        // else {
-        let i = 0;
-        for (i = 0; i < rootNodesWithChildren.length; i++) {
-          let treeNode = new TreeNodeController();
-          let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
-          let isExpanded = result.isExpanded;
-          rootNodesWithChildren[i]['has_children'] = result.hasChildren;
-          if (rootNodesWithChildren[i].childrenList.length !== 0) {
-            treeNode.children = TreeHelper.autoExpandTargetNode(rootNodesWithChildren[i].childrenList, i, target, targetHasChildren);
+        if (Toolkit.getObjectInListIfExist(rootNodesWithChildren, 'iri', target)) {
+          // the target node is a root node
+          let result = buildTheTreeFirstLayer(rootNodesWithChildren, target);
+          treeList = result.treeDomContent;
+          selectedItemId = result.selectedItemId;
+        }
+        else {
+          let i = 0;
+          for (i = 0; i < rootNodesWithChildren.length; i++) {
+            if (rootNodesWithChildren[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
+              continue;
+            }
+            let treeNode = new TreeNodeController();
+            let result = TreeHelper.setIsExpandedAndHasChildren(rootNodesWithChildren[i]);
+            let isExpanded = result.isExpanded;
+            rootNodesWithChildren[i]['has_children'] = result.hasChildren;
+            if (rootNodesWithChildren[i].childrenList.length !== 0) {
+              treeNode.children = TreeHelper.autoExpandTargetNode(rootNodesWithChildren[i].childrenList, i, target, targetHasChildren);
+            }
+            let isClicked = false;
+            let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
+            childrenList.push(node);
           }
-          let isClicked = rootNodesWithChildren[i].iri === target ? true : false;
-          let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
-          childrenList.push(node);
-        }
 
-        if (obsoletesShown) {
-          [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
-        }
+          if (obsoletesShown) {
+            [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
+          }
 
-        treeList = React.createElement("ul", { className: "tree-node-ul", id: "tree-root-ul" }, childrenList);
+          treeList = React.createElement("ul", { className: "tree-node-ul", id: "tree-root-ul" }, childrenList);
+        }
       }
-      // }
 
     }
 
@@ -158,6 +169,9 @@ const Tree = (props) => {
     keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
     ontologyPageContext.storeIriForComponent(target, props.componentIdentity);
   }
+
+
+
 
 
   function loadTheTreeLastState() {
@@ -182,19 +196,6 @@ const Tree = (props) => {
   }
 
 
-  function renderTreeRoots() {
-    let result = [];
-    if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
-      result = buildTheTreeFirstLayer(props.rootNodesForSkos);
-    }
-    else {
-      result = buildTheTreeFirstLayer(props.rootNodes);
-    }
-    return result.treeDomContent;
-  }
-
-
-
   function buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri = false) {
     let childrenList = [];
     let selectedItemId = 0;
@@ -204,12 +205,15 @@ const Tree = (props) => {
     }
     let i = 0;
     for (i = 0; i < rootNodes.length; i++) {
+      if (rootNodes[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
+        continue;
+      }
       let treeNode = new TreeNodeController();
       let nodeIsClicked = (targetSelectedNodeIri && rootNodes[i].iri === targetSelectedNodeIri)
       if (nodeIsClicked) {
         selectedItemId = i;
       }
-      let node = treeNode.buildNodeWithReact(rootNodes[i], i, nodeIsClicked);
+      let node = treeNode.buildNodeWithReact(rootNodes[i], btoa(rootNodes[i].iri), nodeIsClicked);
       childrenList.push(node);
     }
     if (obsoletesShown) {
@@ -248,10 +252,7 @@ const Tree = (props) => {
           SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
         }
         else if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
-          // Target node is a root node            
-          let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, childExtractName);
-          let res = await termApi.getNodeJsTree('true');
-          TreeHelper.showSiblingsForRootNode(res, targetNodes[0].parentNode.dataset.iri);
+          TreeHelper.showSiblingsForRootNode(props.rootNodes, targetNodes[0].parentNode.dataset.iri);
         }
         else {
           await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
@@ -263,7 +264,6 @@ const Tree = (props) => {
         }
 
         if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
-          // Target node is a root node
           TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
         }
         else {
@@ -356,6 +356,7 @@ const Tree = (props) => {
 
 
 
+
   function createTreeActionButtons() {
     return [
       <div className='row tree-action-button-area'>
@@ -373,14 +374,14 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {!props.isIndividual && props.selectedNodeIri !== "" &&
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={resetTree}>Reset</button>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-reset' onClick={resetTree}>Reset</button>
               }
             </div>
           </div>
           {props.componentIdentity !== "individuals" &&
             <div className='row tree-action-btn-holder'>
               <div className="col-sm-12">
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={showObsoletes}>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete' onClick={showObsoletes}>
                   {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
                 </button>
               </div>
@@ -389,7 +390,7 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {subOrFullTreeBtnShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={reduceTree}>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree' onClick={reduceTree}>
                   {!subTreeMode
                     ? "Sub Tree"
                     : "Full Tree"
@@ -401,7 +402,7 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {siblingsButtonShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={showSiblings}>
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings' onClick={showSiblings}>
                   {!siblingsVisible
                     ? "Show Siblings"
                     : "Hide Siblings"
@@ -419,6 +420,18 @@ const Tree = (props) => {
   const handleKeyDown = (event) => {
     keyboardNavigationManager.run(event);
   };
+
+
+
+  function expandLeftPaneIfnot() {
+    let detailPane = document.getElementById('page-right-pane');
+    if (!detailPane) {
+      let termContainer = document.getElementsByClassName('tree-text-container');
+      if (termContainer.length !== 0) {
+        termContainer[0].click();
+      }
+    }
+  }
 
 
   useEffect(() => {
@@ -442,7 +455,10 @@ const Tree = (props) => {
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
-
+    let tourP = getTourProfile();
+    if (!tourP.ontoClassTreePage) {
+      expandLeftPaneIfnot();
+    }
   }, [resetTreeFlag, reload]);
 
 

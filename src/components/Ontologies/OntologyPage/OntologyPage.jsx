@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import DataTree from '../DataTree/DataTree';
 import SkosApi from '../../../api/skos';
 import SkosLib from '../../../Libs/Skos';
@@ -7,7 +7,7 @@ import IndividualsList from '../IndividualList/IndividualList';
 import TermList from '../TermList/TermList';
 import OntologyOverview from '../OntologyOverview/OntologyOverview';
 import ontologyPageTabConfig from './listOfComponentsAsTabs.json';
-import {OntologyPageTabs, OntologyPageHeadSection } from './helpers';
+import { OntologyPageTabs, OntologyPageHeadSection } from './helpers';
 import { getNoteList } from '../../../api/note';
 import Toolkit from '../../../Libs/Toolkit';
 import IssueList from '../IssueList/IssueList';
@@ -16,7 +16,7 @@ import '../../layout/ontologyHomePage.css';
 import '../../layout/note.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
-
+import ChangesTimeline from "../../Ondet/ChangesTimeline";
 
 
 
@@ -27,6 +27,7 @@ const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
 const NOTES_TAB_ID = 5;
 const GIT_ISSUE_LIST_ID = 6;
+const ONDET_TAB_ID = 7;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "terms": TERM_TREE_TAB_ID,
@@ -34,7 +35,8 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "individuals": INDIVIDUAL_LIST_TAB_ID,
   "termList": TERM_LIST_TAB_ID,
   "notes": NOTES_TAB_ID,
-  "gitpanel": GIT_ISSUE_LIST_ID
+  "gitpanel": GIT_ISSUE_LIST_ID,
+  "ondet": ONDET_TAB_ID
 }
 
 
@@ -53,13 +55,13 @@ const OntologyPage = (props) => {
   
   */
 
-  if(document.getElementById('application_content')){
-    document.getElementById('application_content').style.width = '100%';  
+  if (document.getElementById('application_content')) {
+    document.getElementById('application_content').style.width = '100%';
   }
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [ontology, setOntology] = useState(null);
-  const [error, setError] = useState(null);  
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState(OVERVIEW_TAB_ID);
   const [rootTerms, setRootTerms] = useState([]);
   const [skosRootIndividuals, setSkosRootIndividuals] = useState([]);
@@ -67,51 +69,51 @@ const OntologyPage = (props) => {
   const [obsoleteTerms, setObsoleteTerms] = useState([]);
   const [obsoleteProps, setObsoleteProps] = useState([]);
   const [waiting, setWaiting] = useState(false);
-  const [lastIrisHistory, setLastIrisHistory] = useState({"terms": "", "properties": "", "individuals": "", "termList": ""});
-  const [lastTabsStates, setLastTabsStates] = useState({"terms": null, "properties": null, "gitIssues": ""});  
+  const [lastIrisHistory, setLastIrisHistory] = useState({ "terms": "", "properties": "", "individuals": "", "termList": "" });
+  const [lastTabsStates, setLastTabsStates] = useState({ "terms": null, "properties": null, "gitIssues": "" });
   const [isSkosOntology, setIsSkosOntology] = useState(false);
   const [notesCount, setNotesCount] = useState("");
 
   const UrlFactory = new CommonUrlFactory();
-  
 
 
-  async function loadOntologyData(){
+
+  async function loadOntologyData() {
     let ontologyId = props.match.params.ontologyId;
-    let ontologyApi = new OntologyApi({ontologyId:ontologyId});
-    await ontologyApi.fetchOntology();    
-    if(!ontologyApi.ontology){      
-      setError("Can not load this ontology");   
+    let ontologyApi = new OntologyApi({ ontologyId: ontologyId });
+    await ontologyApi.fetchOntology();
+    if (!ontologyApi.ontology) {
+      setError("Can not load this ontology");
       return true;
     }
-    let isSkos = ontologyApi.ontology['config']?.['skos'];
+    let isSkos = ontologyApi.ontology['config']?.['isSkos'];
     let skosIndividuals = [];
-    if(isSkos){
-      let skosApi = new SkosApi({ontologyId:ontologyId, iri:""});
-      await skosApi.fetchRootConcepts();                    
+    if (isSkos) {
+      let skosApi = new SkosApi({ ontologyId: ontologyId, iri: "" });
+      await skosApi.fetchRootConcepts();
       SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
       skosIndividuals = skosApi.rootConcepts;
     }
 
-    
-    
+
+
 
     setOntology(ontologyApi.ontology);
-    setIsSkosOntology(isSkos);       
+    setIsSkosOntology(isSkos);
     setObsoleteTerms(ontologyApi.obsoleteClasses);
-    setObsoleteProps(ontologyApi.obsoleteProperties); 
+    setObsoleteProps(ontologyApi.obsoleteProperties);
     setRootTerms(ontologyApi.rootClasses);
     setRootProps(ontologyApi.rootProperties);
-    setSkosRootIndividuals(skosIndividuals);        
+    setSkosRootIndividuals(skosIndividuals);
   }
 
 
 
-  async function setCountOfNotes(){
+  async function setCountOfNotes() {
     let countOfNotes = 0;
     let ontologyId = props.match.params.ontologyId;
-    if(process.env.REACT_APP_NOTE_FEATURE === "true"){
-      countOfNotes = await getNoteList({ontologyId:ontologyId, type:null, pageNumber:0, pageSize:1, targetTerm:null, onlyOntologyOriginalNotes:false});    
+    if (process.env.REACT_APP_NOTE_FEATURE === "true") {
+      countOfNotes = await getNoteList({ ontologyId: ontologyId, type: null, pageNumber: 0, pageSize: 1, targetTerm: null, onlyOntologyOriginalNotes: false });
       countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
     }
     setNotesCount(countOfNotes);
@@ -119,61 +121,61 @@ const OntologyPage = (props) => {
 
 
 
-  function setTabOnLoad(){
-    let requestedTab = props.match.params.tab;    
-    if (requestedTab === lastRequestedTab){
+  function setTabOnLoad() {
+    let requestedTab = props.match.params.tab;
+    if (requestedTab === lastRequestedTab) {
       return true;
     }
 
-    let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;   
-    let irisHistory = {...lastIrisHistory};        
+    let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;
+    let irisHistory = { ...lastIrisHistory };
     irisHistory[requestedTab] = UrlFactory.getIri();
 
     setActiveTab(activeTabId);
     setWaiting(false);
     setLastRequestedTab(requestedTab);
-    setLastIrisHistory(irisHistory);    
+    setLastIrisHistory(irisHistory);
   }
 
 
 
-  function tabChange(e, v){
-    try{
-      let selectedTabId = e.target.dataset.value;         
+  function tabChange(e, v) {
+    try {
+      let selectedTabId = e.target.dataset.value;
       setWaiting(true);
       setActiveTab(parseInt(selectedTabId));
       setWaiting(false);
-    } 
-    catch(e){
+    }
+    catch (e) {
       setActiveTab(OVERVIEW_TAB_ID);
-      setWaiting(false);     
-    }      
+      setWaiting(false);
+    }
   }
 
 
 
 
-  function storeIriForComponent(iri, componentId){  
+  function storeIriForComponent(iri, componentId) {
     /**
      * Store the last input iri for tabs
-     */ 
-    let irisHistory = {...lastIrisHistory};
+     */
+    let irisHistory = { ...lastIrisHistory };
     irisHistory[componentId] = iri;
-    setLastIrisHistory(irisHistory);    
+    setLastIrisHistory(irisHistory);
   }
 
 
 
-  function tabsStateKeeper(domContent, stateObject, componentId, iri){         
+  function tabsStateKeeper(domContent, stateObject, componentId, iri) {
     /**
     * Stores the last state in for tabs components to prevent reload on tab change
     */
-    let tabsStates = {...lastTabsStates};    
-    tabsStates[componentId] = {"html": domContent, "states": stateObject, "lastIri": iri};
-    setLastTabsStates(tabsStates);    
+    let tabsStates = { ...lastTabsStates };
+    tabsStates[componentId] = { "html": domContent, "states": stateObject, "lastIri": iri };
+    setLastTabsStates(tabsStates);
   }
 
-  
+
   useEffect(() => {
     loadOntologyData();
     setCountOfNotes();
@@ -182,76 +184,83 @@ const OntologyPage = (props) => {
 
 
 
-
   if (error) {
     return <div>Something went wrong. Please try later.</div>
   }
   else if (!ontology) {
     return <div className="is-loading-term-list isLoading"></div>
-  } 
-  else{
+  }
+  else {
     const contextData = {
-      ontology:ontology, 
-      isSkos:isSkosOntology, 
-      storeIriForComponent:storeIriForComponent,
+      ontology: ontology,
+      isSkos: isSkosOntology,
+      storeIriForComponent: storeIriForComponent,
       storeState: tabsStateKeeper,
       tabLastStates: lastTabsStates,
       lastVisitedIri: lastIrisHistory
     };
-    
-    return (        
-      <div className='justify-content-center ontology-page-container'>          
-            {Toolkit.createHelmet(ontology.ontologyId)}
-            <OntologyPageContext.Provider  value={contextData}>
-              <OntologyPageHeadSection />          
-              <div className='col-sm-12'>                  
-                  <OntologyPageTabs 
-                    tabMetadataJson={ontologyPageTabConfig}
-                    tabChangeHandler={tabChange}
-                    activeTabId={activeTab}
-                    noteCounts={notesCount}
-                  />                                  
-                  {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
-                        <OntologyOverview />
-                  }
-                  {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
-                        <DataTree
-                          rootNodes={rootTerms}
-                          obsoleteTerms={obsoleteTerms}                                    
-                          componentIdentity={'terms'}                                    
-                          key={'termTreePage'}                                                                      
-                        />                                  
-                  }
 
-                  {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
-                        <DataTree
-                          rootNodes={rootProps}
-                          obsoleteTerms={obsoleteProps}                                    
-                          componentIdentity={'properties'}                                    
-                          key={'propertyTreePage'}                                                                
-                        />
-                  }
-                  {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
-                        <IndividualsList
-                          rootNodes={rootTerms}
-                          rootNodesForSkos={skosRootIndividuals}                                    
-                          componentIdentity={'individuals'}
-                          key={'individualsTreePage'}                                                                                                                                                           
-                        />
-                  }
-                  {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-                        <TermList componentIdentity={'termList'}  key={'termListPage'} />
-                  }             
-                  {!waiting && (activeTab === NOTES_TAB_ID) &&
-                          <NoteList key={'notesPage'}/>
-                  }                                      
-                  {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&                            
-                          <IssueList  componentIdentity={'gitIssues'}  key={'gitIssueList'} />
-                  } 
+    return (
+      <div className='justify-content-center ontology-page-container'>
+        {Toolkit.createHelmet(ontology.ontologyId)}
+        <OntologyPageContext.Provider value={contextData}>
+          <OntologyPageHeadSection />
+          <div className='col-sm-12'>
+            <OntologyPageTabs
+              tabMetadataJson={ontologyPageTabConfig}
+              tabChangeHandler={tabChange}
+              activeTabId={activeTab}
+              noteCounts={notesCount}
+            />
+            {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
+              <OntologyOverview />
+            }
+            {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
+              <DataTree
+                rootNodes={rootTerms}
+                obsoleteTerms={obsoleteTerms}
+                componentIdentity={'terms'}
+                key={'termTreePage'}
+              />
+            }
 
-                  {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
-              </div>
-          </OntologyPageContext.Provider>                    
+            {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
+              <DataTree
+                rootNodes={rootProps}
+                obsoleteTerms={obsoleteProps}
+                componentIdentity={'properties'}
+                key={'propertyTreePage'}
+              />
+            }
+            {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
+              <IndividualsList
+                rootNodes={rootTerms}
+                rootNodesForSkos={skosRootIndividuals}
+                componentIdentity={'individuals'}
+                key={'individualsTreePage'}
+              />
+            }
+            {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
+              <TermList componentIdentity={'termList'} key={'termListPage'} />
+            }
+            {!waiting && (activeTab === NOTES_TAB_ID) &&
+              <NoteList key={'notesPage'} />
+            }
+            {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&
+              <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'} />
+            }
+
+            {
+            (!waiting && (activeTab === ONDET_TAB_ID)) &&
+                //Uses existing fileLocation field, should be switched to ondet_url,
+                // when https://git.tib.eu/terminology/terminology-system-config/-/merge_requests/650 is merged
+              <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+            }
+
+
+            {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
+          </div>
+        </OntologyPageContext.Provider>
       </div>
 
     )

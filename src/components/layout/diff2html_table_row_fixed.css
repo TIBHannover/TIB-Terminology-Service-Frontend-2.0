@@ -1,0 +1,11 @@
+/*
+    Purpose:
+    - This override is required to fix the layout issue in the diff2html output.
+    - Prevents an unwanted gap between the line numbers and the git diff result.
+
+    Cause of the Issue:
+    - The problem originates from the "termList.css" file, where the "table-layout: fixed" rule is applied.
+*/
+.class-list-table thead, tbody tr {
+    table-layout: auto !important;
+}
