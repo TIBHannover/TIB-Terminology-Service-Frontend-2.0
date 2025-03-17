@@ -58,5 +58,13 @@
         "tabId": 6,
         "tabTitle": "Github Panel",
         "urlEndPoint": "/gitpanel"
+    },
+    "Ondet" : {
+        "id": "ondet",
+        "keyForRenderAsComponent": "ondetPage",
+        "keyForRenderAsTabItem": "ondetPage-tab",
+        "tabId": 7,
+        "tabTitle": "Changes Management",
+        "urlEndPoint": "/ondet"
     }
 }
