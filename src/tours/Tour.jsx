@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Tour from 'reactour';
 import { getTourProfile, storeTourProfile } from "./controller";
 import { AppContext } from "../context/AppContext";
@@ -28,7 +28,6 @@ const SiteTour = () => {
   const appContext = useContext(AppContext);
   const isUserLogin = appContext.user ? true : false;
   const tourP = getTourProfile();
-  let tourSteps = [];
   let currentPage = whichPage();
 
   let tourOpenValue = false;
@@ -51,11 +50,9 @@ const SiteTour = () => {
   }
 
   const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
+  const [tourSteps, setTourSteps] = useState([]);
 
-  if (!currentPage) {
-    // do not show the tour button when the page does not need one
-    return "";
-  }
+
 
 
   function whichPage() {
@@ -133,6 +130,7 @@ const SiteTour = () => {
       tourSteps = ontologyOverViewTourSteps();
     }
 
+
     if (!tourP.ontoPageTabs) {
       tourSteps = tourSteps.concat(ontologyPageTabTourSteps())
     }
@@ -160,11 +158,10 @@ const SiteTour = () => {
         tourP.ontoNotesPage = true;
       } else if (cUrl.includes("/gitpanel")) {
         tourP.ontoGithubPage = true;
-      } else {
+      } else if (!cUrl.includes('/ondet')) {
         // ontology overview tab
         tourP.ontoOverViewPage = true;
       }
-
 
     }
     setIsTourOpen(false);
@@ -172,12 +169,19 @@ const SiteTour = () => {
   }
 
 
-  if (currentPage === HOME_PAGE_ID) {
-    tourSteps = makeHomePageTourSteps();
-  } else if (currentPage === ONTOLOGY_PAGE_ID) {
-    tourSteps = makeOntologyPageTourSteps();
-  }
+  useEffect(() => {
+    if (currentPage === HOME_PAGE_ID) {
+      setTourSteps(makeHomePageTourSteps());
+    } else if (currentPage === ONTOLOGY_PAGE_ID) {
+      setTourSteps(makeOntologyPageTourSteps());
+    }
+  }, [isTourOpen]);
 
+
+  if (!currentPage) {
+    // do not show the tour button when the page does not need one
+    return "";
+  }
 
   return (
     <>

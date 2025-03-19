@@ -164,7 +164,9 @@ const NoteList = (props) => {
     checkIsOntologyAdmin();
     let tourP = getTourProfile();
     if (!tourP.ontoNotesPage && process.env.REACT_APP_SITE_TOUR === "true") {
-      document.getElementById('tour-trigger-btn').click();
+      if (document.getElementById('tour-trigger-btn')) {
+        document.getElementById('tour-trigger-btn').click();
+      }
     }
   }, []);
 

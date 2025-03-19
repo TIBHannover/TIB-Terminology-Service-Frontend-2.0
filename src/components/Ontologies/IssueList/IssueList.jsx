@@ -139,7 +139,9 @@ const IssueList = (props) => {
     createIssueList();
     let tourP = getTourProfile();
     if (!tourP.ontoGithubPage && process.env.REACT_APP_SITE_TOUR === "true") {
-      document.getElementById('tour-trigger-btn').click();
+      if (document.getElementById('tour-trigger-btn')) {
+        document.getElementById('tour-trigger-btn').click();
+      }
     }
   }, []);
 
