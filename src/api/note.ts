@@ -58,7 +58,7 @@ export async function getNoteList(params: NoteListParams): Promise<NoteListRespo
     result = await result.json();
     let notes: NoteListResponse = result['_result'];
     for (let note of notes['notes']) {
-      if (!note['semantic_component_label']) {
+      if (!note['semantic_component_label'] && note['semantic_component_type'] !== "ontology") {
         let termApi: any = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
         await termApi.fetchTerm({ withRelations: false });
         note['semantic_component_label'] = termApi.term['label'][0];

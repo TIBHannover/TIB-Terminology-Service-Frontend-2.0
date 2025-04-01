@@ -36,7 +36,7 @@ class TermApi {
     this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
     this.setTermType(termType);
     this.term = {};
-    this.lang = language;
+    this.lang = language ? language : "en";
 
   }
 
