@@ -136,7 +136,7 @@ const TermList = (props) => {
       document.getElementById("obsolte_check_term_list").checked = true;
     }
     let tourP = getTourProfile();
-    if (!tourP.ontoClassListPage) {
+    if (!tourP.ontoClassListPage && process.env.REACT_APP_SITE_TOUR === "true") {
       document.getElementById('tour-trigger-btn').click();
     }
   }, []);

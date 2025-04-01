@@ -17,7 +17,7 @@ import '../../layout/note.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
-
+import ChangesTimeline from "../../Ondet/ChangesTimeline";
 
 
 
@@ -28,6 +28,7 @@ const INDIVIDUAL_LIST_TAB_ID = 3;
 const TERM_LIST_TAB_ID = 4;
 const NOTES_TAB_ID = 5;
 const GIT_ISSUE_LIST_ID = 6;
+const ONDET_TAB_ID = 7;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "terms": TERM_TREE_TAB_ID,
@@ -35,7 +36,8 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "individuals": INDIVIDUAL_LIST_TAB_ID,
   "termList": TERM_LIST_TAB_ID,
   "notes": NOTES_TAB_ID,
-  "gitpanel": GIT_ISSUE_LIST_ID
+  "gitpanel": GIT_ISSUE_LIST_ID,
+  "ondet": ONDET_TAB_ID
 }
 
 
@@ -259,6 +261,14 @@ const OntologyPage = (props) => {
             {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&
               <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'} />
             }
+
+            {
+            (!waiting && (activeTab === ONDET_TAB_ID)) &&
+                //Uses existing fileLocation field, should be switched to ondet_url,
+                // when https://git.tib.eu/terminology/terminology-system-config/-/merge_requests/650 is merged
+              <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+            }
+
 
             {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
           </div>

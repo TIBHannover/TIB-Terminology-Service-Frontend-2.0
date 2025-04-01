@@ -194,8 +194,10 @@ const IndividualsList = (props) => {
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
     let tourP = getTourProfile();
-    if (!tourP.ontoIndividualPage) {
-      document.getElementById('tour-trigger-btn').click();
+    if (!tourP.ontoIndividualPage && process.env.REACT_APP_SITE_TOUR === "true") {
+      if (document.getElementById('tour-trigger-btn')) {
+        document.getElementById('tour-trigger-btn').click();
+      }
     }
 
     return () => {

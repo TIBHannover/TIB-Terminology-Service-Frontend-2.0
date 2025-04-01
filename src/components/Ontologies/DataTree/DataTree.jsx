@@ -84,8 +84,10 @@ const DataTree = (props) => {
     setIsPropertyTree(!termTree);
 
     let tourP = getTourProfile();
-    if ((props.componentIdentity === 'terms' && !tourP.ontoClassTreePage) || (props.componentIdentity === 'properties' && !tourP.ontoPropertyTreePage)) {
-      document.getElementById('tour-trigger-btn').click();
+    if (process.env.REACT_APP_SITE_TOUR === "true" && ((props.componentIdentity === 'terms' && !tourP.ontoClassTreePage) || (props.componentIdentity === 'properties' && !tourP.ontoPropertyTreePage))) {
+      if (document.getElementById('tour-trigger-btn')) {
+        document.getElementById('tour-trigger-btn').click();
+      }
     }
 
     return () => {

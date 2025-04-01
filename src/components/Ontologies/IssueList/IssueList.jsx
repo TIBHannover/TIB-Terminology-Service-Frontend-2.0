@@ -138,8 +138,10 @@ const IssueList = (props) => {
   useEffect(() => {
     createIssueList();
     let tourP = getTourProfile();
-    if (!tourP.ontoGithubPage) {
-      document.getElementById('tour-trigger-btn').click();
+    if (!tourP.ontoGithubPage && process.env.REACT_APP_SITE_TOUR === "true") {
+      if (document.getElementById('tour-trigger-btn')) {
+        document.getElementById('tour-trigger-btn').click();
+      }
     }
   }, []);
 
