@@ -107,11 +107,6 @@ const App = () => {
               {!showLoadingPage &&
                 <>
                   <Header />
-                  <div className='alert alert-warning text-center' id="demo-message">
-                    <h2><b>This is the Demo Server</b></h2>
-                    <h3>You can check the service here:</h3>
-                    <h2><a href='https://terminology.tib.eu/ts'>https://terminology.tib.eu/ts</a></h2>
-                  </div>
                   <div className='application-content' id="application_content">
                     {loading &&
                       <Skeleton
