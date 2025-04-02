@@ -10,7 +10,7 @@ export const RenderIndividualList = (props) => {
       result.push(
         <li className="list-node-li">
           <span className="tree-text-container stour-individual-list-node" data-iri={indv["iri"]} id={indv["iri"]}>
-            {indv["label"] !== "" ? indv["label"] : "N/A"}
+            {indv["label"]}
           </span>
         </li>
       );

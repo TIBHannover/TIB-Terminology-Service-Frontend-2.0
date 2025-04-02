@@ -8,17 +8,17 @@ import ResolveReportActionsForAdmins from "../../../common/ResolveReportActions/
 
 export const NoteDetailRender = (props) => {
 
-    function create_note_card(){                    
+    function create_note_card() {
         return [
             <div className="row">
                 <div className="col-sm-12">
                     <div className="card">
                         <div className="card-header">
-                            <NoteCardHeader note={props.note} />              
+                            <NoteCardHeader note={props.note} />
                         </div>
                         <div class="card-body">
                             <h4 className="card-title note-list-title">{props.note['title']}</h4>
-                            <ResolveReportActionsForAdmins 
+                            <ResolveReportActionsForAdmins
                                 objectType="note"
                                 objectId={props.note['id']}
                                 reportStatus={props.note['is_reported']}
@@ -28,28 +28,28 @@ export const NoteDetailRender = (props) => {
                                 <ul className="">
                                     <li>type: {props.note['semantic_component_type']}</li>
                                     <li>About: {buildNoteAboutPart(props.note)}</li>
-                                </ul>                            
-                            </small>   
+                                </ul>
+                            </small>
                             <hr></hr>
-                            <p className="card-text">                                                            
-                                <div dangerouslySetInnerHTML={{ __html: props.noteContent}}></div>                                
-                            </p>                        
+                            <p className="card-text">
+                                <div dangerouslySetInnerHTML={{ __html: props.noteContent }}></div>
+                            </p>
                         </div>
-                    </div>                
+                    </div>
                 </div>
-            </div>     
+            </div>
         ];
     }
 
 
-    return(
+    return (
         <span>
-            {create_note_card()}                
-            <NoteCommentList 
-                note={props.note}  
-                noteDetailReloader={props.reloadNoteDetail}    
+            {create_note_card()}
+            <NoteCommentList
+                note={props.note}
+                noteDetailReloader={props.reloadNoteDetail}
             />
-        </span>  
+        </span>
     );
 
 }

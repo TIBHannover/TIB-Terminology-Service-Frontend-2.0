@@ -61,7 +61,7 @@ export async function getNoteList(params: NoteListParams): Promise<NoteListRespo
       if (!note['semantic_component_label'] && note['semantic_component_type'] !== "ontology") {
         let termApi: any = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
         await termApi.fetchTerm({ withRelations: false });
-        note['semantic_component_label'] = termApi.term['label'][0];
+        note['semantic_component_label'] = termApi.term['label'];
       }
     }
     return notes;
@@ -92,7 +92,7 @@ export async function getNoteDetail(params: GetNoteDetailParams): Promise<NoteDe
     if (!note['semantic_component_label'] && note['semantic_component_type'] !== "ontology") {
       let termApi: any = new TermApi(note['ontology_id'], note['semantic_component_iri'], note['semantic_component_type']);
       await termApi.fetchTerm({ withRelations: false });
-      note['semantic_component_label'] = termApi.term['label'][0];
+      note['semantic_component_label'] = termApi.term['label'];
     }
     noteResp['note'] = note;
     return noteResp;

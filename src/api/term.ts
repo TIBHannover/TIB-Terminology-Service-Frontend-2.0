@@ -73,6 +73,7 @@ class TermApi {
         return true;
       }
 
+      this.term['label'] = this.extractLabel();
       this.term['annotation'] = this.buildAnnotations();
       this.term['relations'] = undefined;
       this.term['eqAxiom'] = undefined;
@@ -114,6 +115,7 @@ class TermApi {
         termObject.term['annotation'] = termObject.buildAnnotations();
         termObject.term['subClassOf'] = termObject.getSubClassOf();
         termObject.term['eqAxiom'] = termObject.getEqAxiom();
+        termObject.term['label'] = termObject.extractLabel();
         refinedResults.push(termObject.term);
       }
       return { "results": refinedResults, "totalTermsCount": totalTermsCount };
@@ -437,6 +439,25 @@ class TermApi {
     }
     catch (e) {
       return null;
+    }
+  }
+
+
+  extractLabel(): string {
+    try {
+      if (this.term.label instanceof String) {
+        return this.term.label;
+      }
+      let label = this.term.label[this.term.label?.length - 1];
+      if (!label) {
+        return "N/A";
+      }
+      if ((label as Object).hasOwnProperty("value")) {
+        return (label as Object).value;
+      }
+      return label;
+    } catch {
+      return "N/A";
     }
   }
 
