@@ -88,7 +88,7 @@ const OntologyPage = (props) => {
       setError("Can not load this ontology");
       return true;
     }
-    let isSkos = ontologyApi.ontology['config']?.['isSkos'];
+    let isSkos = ontologyApi.ontology?.['config']?.['isSkos'] ?? false;
     let skosIndividuals = [];
     if (isSkos) {
       let skosApi = new SkosApi({ ontologyId: ontologyId, iri: "" });
@@ -263,10 +263,10 @@ const OntologyPage = (props) => {
             }
 
             {
-            (!waiting && (activeTab === ONDET_TAB_ID)) &&
-                //Uses existing fileLocation field, should be switched to ondet_url,
-                // when https://git.tib.eu/terminology/terminology-system-config/-/merge_requests/650 is merged
-              <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+              (!waiting && (activeTab === ONDET_TAB_ID)) &&
+              //Uses existing fileLocation field, should be switched to ondet_url,
+              // when https://git.tib.eu/terminology/terminology-system-config/-/merge_requests/650 is merged
+              <ChangesTimeline ontologyRawUrl={ontology.ontologyPurl} />
             }
 
 

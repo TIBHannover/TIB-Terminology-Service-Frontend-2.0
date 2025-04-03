@@ -33,7 +33,7 @@ const OntologyOverview = () => {
           <div className='row'>
             <div className='col-sm-12'>
               <a
-                href={process.env.REACT_APP_API_BASE_URL + "/" + ontologyPageContext.ontology.ontologyId}
+                href={`${process.env.REACT_APP_API_URL}/v2/ontologies/${ontologyPageContext.ontology.ontologyId}?lang=${ontologyPageContext.ontoLang}`}
                 target='_blank'
                 rel="noreferrer"
                 className='btn btn-secondary download-ontology-btn w-75 stour-overview-page-show-metadata-as-json-btn'

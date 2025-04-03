@@ -32,3 +32,4 @@ sonarqube/data
 sonarqube/logs
 
 .vscode/
+issues_notes

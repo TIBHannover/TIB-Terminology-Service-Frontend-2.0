@@ -60,7 +60,7 @@ const TermRequest = (props) => {
 
 
   function loadTemplates() {
-    getGitRepoTemplates({ repoUrl: ontologyPageContext.ontology.config.repoUrl, gitUsername: localStorage.getItem('ts_username') })
+    getGitRepoTemplates({ repoUrl: ontologyPageContext.ontology.repo_url, gitUsername: localStorage.getItem('ts_username') })
       .then((templates) => {
         setIssueTemplates(templates);
       });
@@ -138,7 +138,7 @@ const TermRequest = (props) => {
     }
 
     submitGitIssue({
-      repoUrl: ontologyPageContext.ontology.config.repoUrl,
+      repoUrl: ontologyPageContext.ontology.repo_url,
       gitUsername: localStorage.getItem('ts_username'),
       issueTitle: issueTitle,
       issueBody: issueContent,

@@ -38,7 +38,7 @@ export const OntologyPageTabs = (props) => {
   }
 
   let langOptions = [];
-  for (let lang of ontologyPageContext.ontology.languages) {
+  for (let lang of ontologyPageContext.ontology.language) {
     let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
   }
@@ -78,12 +78,12 @@ export const OntologyPageHeadSection = () => {
                 className={"ont-info-bar-title"}
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId}
               >
-                {ontologyPageContext.ontology.config.title}
+                {ontologyPageContext.ontology.title}
               </Link>
             </h2>
           </div>
           <div>
-            <a href={ontologyPageContext.ontology.config.id}>{ontologyPageContext.ontology.config.id}</a>
+            <a href={ontologyPageContext.ontology.iri}>{ontologyPageContext.ontology.iri}</a>
           </div>
         </div>
       </div>

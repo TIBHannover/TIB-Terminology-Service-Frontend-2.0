@@ -52,7 +52,7 @@ const IssueList = (props) => {
 
   async function createIssueList() {
     let ontology = ontologyPageContext.ontology;
-    let issueTrackerUrl = ontology.config.tracker ? ontology.config.tracker : null;
+    let issueTrackerUrl = ontology.tracker ? ontology.tracker : null;
     if (!issueTrackerUrl) {
       setNoTrackerOnto(true);
       return true;

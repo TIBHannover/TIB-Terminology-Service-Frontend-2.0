@@ -54,7 +54,8 @@ class OntologyApi {
 
   async fetchOntology(): Promise<boolean> {
     try {
-      let url = process.env.REACT_APP_API_BASE_URL + '/' + encodeURIComponent(this.ontologyId ? this.ontologyId : "");
+      let ontoId = encodeURIComponent(this.ontologyId ? this.ontologyId : "");
+      let url = `${process.env.REACT_APP_API_URL!}/v2/ontologies/${ontoId}?lang=${this.lang}`;
       let resp = await fetch(url, getCallSetting);
       let result: OntologyData = await resp.json();
       this.ontology = result;

@@ -32,7 +32,7 @@ const CollectionSuggestion = () => {
   if (collectionWithOntologyListQuery.data) {
     for (let res of collectionWithOntologyListQuery.data) {
       let ontoIsPartOfCollection = false;
-      for (let classif of ontoPageContext.ontology?.config?.classifications) {
+      for (let classif of ontoPageContext.ontology?.classifications) {
         if (classif.collection && classif.collection[0] === res['collection']) {
           ontoIsPartOfCollection = true;
           break;
@@ -78,7 +78,7 @@ const CollectionSuggestion = () => {
       "email": email,
       "reason": reason,
       "name": ontoPageContext.ontology?.ontologyId,
-      "purl": ontoPageContext.ontology?.config?.id,
+      "purl": ontoPageContext.ontology?.iri,
       "collection_ids": collectionIds.slice(0, -1),
       "collection_suggestion": true
     }
