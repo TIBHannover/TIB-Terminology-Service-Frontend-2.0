@@ -195,19 +195,19 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                                 <div className="d-flex">
                                     <div className="col-sm-6">
                                         <div className='row sticky-top text-center'>
-                                            <h3>COnto Diff</h3>
+                                            <h3>ROBOT Diff</h3>
                                         </div>
                                         <div className='node-table-container'>
-                                            <ReactMarkdown>{contoMarkdown}</ReactMarkdown>
+                                            <ReactMarkdown>{robotMarkdown}</ReactMarkdown>
                                         </div>
                                     </div>
 
                                     <div className="col-sm-6">
                                         <div className='row sticky-top text-center'>
-                                            <h3>ROBOT Diff</h3>
+                                            <h3>COnto Diff</h3>
                                         </div>
                                         <div className='node-table-container'>
-                                            <ReactMarkdown>{robotMarkdown}</ReactMarkdown>
+                                            <ReactMarkdown>{contoMarkdown}</ReactMarkdown>
                                         </div>
                                     </div>
                                 </div>
