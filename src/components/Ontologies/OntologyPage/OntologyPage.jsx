@@ -44,16 +44,16 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT = {
 
 const OntologyPage = (props) => {
 
-  /* 
+  /*
     This component holds the entire ontology page.
 
       - Fetches Ontology data including its root terms (classes), properties, individuals, and obsoletes
       - Renders Tabs (Each Tab is a child component)
       - Stores the last state and iri for each tab --> used when a user changes tabs.
-    
+
     Context:
       The component provides its Context for the children. Look at src/context/OntologyPageContext.js
-  
+
   */
 
   if (document.getElementById('application_content')) {
@@ -263,10 +263,18 @@ const OntologyPage = (props) => {
             }
 
             {
-            (!waiting && (activeTab === ONDET_TAB_ID)) &&
-                //Uses existing fileLocation field, should be switched to ondet_url,
-                // when https://git.tib.eu/terminology/terminology-system-config/-/merge_requests/650 is merged
-              <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+                !waiting && activeTab === ONDET_TAB_ID && (() => {
+                  const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
+
+                  try {
+                    const fileUrl = new URL(ontology.config.fileLocation);
+                    return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
+                        ? <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+                        : errorMessage;
+                  } catch (error) {
+                    return errorMessage;
+                  }
+                })()
             }
 
 
