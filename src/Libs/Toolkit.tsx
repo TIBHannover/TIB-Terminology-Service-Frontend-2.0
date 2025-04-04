@@ -65,31 +65,6 @@ class Toolkit {
   }
 
 
-
-  static buildHierarchicalArrayFromFlat(flatList: Array<GenericObject>, idKeyName: string, parentKeyName: string) {
-    type TempMap = {
-      [key: string]: number;
-    }
-    let map: TempMap = {};
-    let node: GenericObject;
-    let roots = [];
-    for (let i = 0; i < flatList.length; i++) {
-      map[flatList[i][idKeyName]] = i;
-      flatList[i].childrenList = [];
-    }
-    for (let i = 0; i < flatList.length; i++) {
-      node = flatList[i];
-      if (node[parentKeyName] !== "#") {
-        flatList[map[node[parentKeyName]]].childrenList.push(node);
-      }
-      else {
-        roots.push(node);
-      }
-    }
-    return roots;
-  }
-
-
   static getObjectInListIfExist(list: Array<GenericObject>, searchKey: string, searchValue: any) {
     for (let item of list) {
       if (item[searchKey] === searchValue) {

@@ -127,8 +127,11 @@ const Tree = (props) => {
       else {
         targetHasChildren = await TreeHelper.nodeHasChildren(ontologyPageContext.ontology.ontologyId, target, props.componentIdentity);
         let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, target, childExtractName, ontologyPageContext.ontoLang);
+        await termApi.fetchTerm();
         listOfNodes = await termApi.getNodeJsTree(treeFullView);
-        rootNodesWithChildren = Toolkit.buildHierarchicalArrayFromFlat(listOfNodes, 'id', 'parent');
+        listOfNodes.push(termApi.term);
+        rootNodesWithChildren = TreeHelper.buildTermTreeFromFlatList(listOfNodes);
+        //console.log(rootNodesWithChildren)
         if (Toolkit.getObjectInListIfExist(rootNodesWithChildren, 'iri', target)) {
           // the target node is a root node
           let result = buildTheTreeFirstLayer(rootNodesWithChildren, target);

@@ -25,26 +25,26 @@ export default class TreeHelper {
 
       if (nodeList[i].iri === targetIri) {
         if (targetHasChildren) {
-          nodeList[i]['has_children'] = true;
+          nodeList[i]['hasDirectChildren'] = true;
           isExpanded = false;
         }
         else {
           isExpanded = false;
-          nodeList[i]['has_children'] = false;
+          nodeList[i]['hasDirectChildren'] = false;
         }
         isClicked = true;
       }
       else {
         if (nodeList[i].children && nodeList[i].childrenList.length == 0) {
-          nodeList[i]['has_children'] = true;
+          nodeList[i]['hasDirectChildren'] = true;
           isExpanded = false;
         }
-        else if (nodeList[i].state.opened && nodeList[i].childrenList.length != 0) {
+        else if (nodeList[i].childrenList.length != 0) {
           isExpanded = true;
-          nodeList[i]['has_children'] = true;
+          nodeList[i]['hasDirectChildren'] = true;
         }
         else {
-          nodeList[i]['has_children'] = false;
+          nodeList[i]['hasDirectChildren'] = false;
         }
       }
 
@@ -260,6 +260,32 @@ export default class TreeHelper {
         return 1;
       });
     }
+  }
+
+
+  static buildTermTreeFromFlatList(terms) {
+    for (let term of terms) {
+      for (let potentialChild of terms) {
+        let parentsIris = potentialChild.type[0] === "class" ? potentialChild["hierarchicalParent"] : potentialChild["directParent"];
+        if (!parentsIris) {
+          // Thing class
+          continue;
+        }
+        if (parentsIris.includes(term.iri)) {
+          if (term.childrenList) {
+            term.childrenList.push(potentialChild);
+          } else {
+            term.childrenList = [potentialChild];
+          }
+        }
+      }
+    }
+    for (let term of terms) {
+      if (term.childrenList === undefined) {
+        term.childrenList = [];
+      }
+    }
+    return terms.filter((term) => !term.hasHierarchicalParents && !term.hasDirectParents);
   }
 
 

@@ -146,7 +146,7 @@ class TermLib {
 
   static extractLabel(term) {
     try {
-      if (term.label instanceof String) {
+      if (term.label instanceof String || typeof term.label === "string") {
         return term.label;
       }
       let label = term.label[term.label?.length - 1];
