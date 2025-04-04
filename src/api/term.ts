@@ -1,7 +1,5 @@
 // @ts-nocheck
 import { buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis } from "../Libs/htmlFactory";
-
-
 import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
@@ -9,6 +7,7 @@ import {
   TermListData
 } from "./types/ontologyTypes";
 import { Ols3ApiResponse } from "./types/common";
+import TermLib from "../Libs/TermLib";
 
 
 
@@ -42,8 +41,8 @@ class TermApi {
 
 
   setTermType(termType?: string): void {
-    if (termType === "class") {
-      this.termType = "terms";
+    if (termType === "term" || termType === "class" || termType === "terms") {
+      this.termType = "classes";
     }
     else if (termType === "property") {
       this.termType = "properties";
@@ -73,7 +72,7 @@ class TermApi {
         return true;
       }
 
-      this.term['label'] = this.extractLabel();
+      this.term['label'] = TermLib.extractLabel(this.term);
       this.term['annotation'] = this.buildAnnotations();
       this.term['relations'] = undefined;
       this.term['eqAxiom'] = undefined;
@@ -355,10 +354,10 @@ class TermApi {
 
 
   async getChildrenJsTree(targetNodeId: string, lang: string = "en"): Promise<any> {
-    let OntologiesBaseServiceUrl = process.env.REACT_APP_API_BASE_URL;
-    let url = `${OntologiesBaseServiceUrl}/${this.ontologyId}/${this.termType}/${this.iri}/jstree/children/${targetNodeId}?lang=${lang}`;
+    let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
+    let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/hierarchicalChildren?size=1000&lang=${lang}&includeObsoleteEntities=false`;
     let res = await (await fetch(url, getCallSetting)).json();
-    return res;
+    return res["elements"] ?? [];
   }
 
 
@@ -439,25 +438,6 @@ class TermApi {
     }
     catch (e) {
       return null;
-    }
-  }
-
-
-  extractLabel(): string {
-    try {
-      if (this.term.label instanceof String) {
-        return this.term.label;
-      }
-      let label = this.term.label[this.term.label?.length - 1];
-      if (!label) {
-        return "N/A";
-      }
-      if ((label as Object).hasOwnProperty("value")) {
-        return (label as Object).value;
-      }
-      return label;
-    } catch {
-      return "N/A";
     }
   }
 

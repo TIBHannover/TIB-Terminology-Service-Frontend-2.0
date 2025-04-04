@@ -4,6 +4,7 @@ import TermApi from '../../../api/term';
 import TreeNodeController from './TreeNode';
 import Toolkit from '../../../Libs/Toolkit';
 import SkosLib from '../../../Libs/Skos';
+import TermLib from '../../../Libs/TermLib';
 
 
 
@@ -78,10 +79,7 @@ export default class TreeHelper {
         let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName);
         res = await termApi.getChildrenJsTree(targetNodeId);
       }
-      let sortKey = TreeHelper.getTheNodeSortKey(res);
-      if (sortKey) {
-        res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
-      }
+      TreeHelper.sortTermsInTree(res);
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
@@ -247,6 +245,21 @@ export default class TreeHelper {
     }
 
     return [resultArrayToPush, lastSelectedItemId];
+  }
+
+
+  static sortTermsInTree(terms) {
+    let sortKey = TreeHelper.getTheNodeSortKey(terms);
+    if (sortKey) {
+      terms.sort((node1, node2) => {
+        let label1 = TermLib.extractLabel(node1);
+        let label2 = TermLib.extractLabel(node2);
+        if (label1 < label2) {
+          return -1;
+        }
+        return 1;
+      });
+    }
   }
 
 

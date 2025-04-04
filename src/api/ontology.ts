@@ -60,7 +60,7 @@ class OntologyApi {
       let result: OntologyData = await resp.json();
       this.ontology = result;
       await Promise.all([
-        this.fetchRootCalsses(),
+        this.fetchRootClasses(),
         this.fetchRootProperties(),
         this.fetchObsoleteClasses(),
         this.fetchObsoleteProperties()
@@ -76,32 +76,18 @@ class OntologyApi {
 
 
 
-  async fetchRootCalsses(): Promise<boolean> {
+  async fetchRootClasses(): Promise<boolean> {
     try {
       if (!this.ontology) {
         this.rootClasses = [];
         return true;
       }
-      let termsLink = this.ontology?.['_links']?.['terms']?.['href'];
-      if (!termsLink?.includes('https')) {
-        termsLink = termsLink?.replace('http', 'https');
-      }
-      let pageCount = await getPageCount(termsLink + '/roots');
-      let terms: Array<OntologyTermData> = [];
-      for (let page = 0; page < pageCount; page++) {
-        let url = `${termsLink}/roots?page=${page}&size=${size}&lang=${this.lang}`;
-        let res = await (await fetch(url, getCallSetting)).json();
-        if (page == 0) {
-          terms = res['_embedded']['terms'];
-        }
-        else {
-          terms = terms.concat(res['_embedded']['terms']);
-        }
-      }
 
-      this.rootClasses = terms;
+      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+      let result = await fetch(url, getCallSetting);
+      let terms = await result.json();
+      this.rootClasses = terms['elements'];
       return true;
-
     }
     catch (e) {
       this.rootClasses = [];

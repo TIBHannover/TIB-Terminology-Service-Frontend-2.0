@@ -11,6 +11,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import { getTourProfile } from "../../../tours/controller";
+import TermLib from "../../../Libs/TermLib";
 
 
 
@@ -199,10 +200,7 @@ const Tree = (props) => {
   function buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri = false) {
     let childrenList = [];
     let selectedItemId = 0;
-    let sortKey = TreeHelper.getTheNodeSortKey(rootNodes);
-    if (sortKey) {
-      rootNodes = Toolkit.sortListOfObjectsByKey(rootNodes, sortKey, true);
-    }
+    TreeHelper.sortTermsInTree(rootNodes);
     let i = 0;
     for (i = 0; i < rootNodes.length; i++) {
       if (rootNodes[i].iri === "http://www.w3.org/2002/07/owl#Thing") {

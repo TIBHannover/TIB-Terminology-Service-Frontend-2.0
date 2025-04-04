@@ -1,4 +1,5 @@
 import React from "react";
+import TermLib from "../../../Libs/TermLib";
 
 
 class TreeNodeController {
@@ -15,15 +16,16 @@ class TreeNodeController {
 
 
   buildNodeWithReact(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
-    let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
-    let nodeHasChildren = (typeof (nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children);
+    let nodeLabel = TermLib.extractLabel(nodeObject);
+    let nodeHasChildren = TermLib.termHasChildren(nodeObject);
     let partOfSymbol = "";
-    if (nodeObject.is_obsolete) {
+    if (nodeObject.isObsolete) {
       nodeLabel = React.createElement("s", {}, nodeLabel);
     }
     this.textDiv = React.createElement("div", { "className": "li-label-text stour-tree-node" }, nodeLabel);
 
-    if (typeof (nodeObject['a_attr']) !== "undefined" && nodeObject['a_attr']["class"] === "part_of") {
+    if (nodeObject.hasHierarchicalParents && false) {
+      // find the part of relation metadat
       partOfSymbol = React.createElement("div", { "className": "p-icon-style" }, "P");
     }
 
@@ -49,9 +51,9 @@ class TreeNodeController {
 
     let node = React.createElement(this.nodeRootElementName, {
       "data-iri": this.nodeIri,
-      "data-id": nodeId,
+      "data-id": TermLib.makeTermIdForTree(nodeObject),
       "className": this.classes,
-      "id": nodeId
+      "id": TermLib.makeTermIdForTree(nodeObject)
     }
       , this.iconInTree, this.textDivContainer, this.children
     );
@@ -62,8 +64,9 @@ class TreeNodeController {
 
 
   buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
-    let nodeLabel = (nodeObject.label ? nodeObject.label : nodeObject.text);
-    let nodeHasChildren = (typeof (nodeObject.has_children) !== "undefined" ? nodeObject.has_children : nodeObject.children)
+    let nodeLabel = TermLib.extractLabel(nodeObject);
+    let nodeHasChildren = TermLib.termHasChildren(nodeObject);
+    console.log(nodeHasChildren)
     this.textDiv = document.createElement("div");
     let label = document.createTextNode(nodeLabel);
     this.textDiv.classList.add("li-label-text");
@@ -73,9 +76,9 @@ class TreeNodeController {
     this.textDivContainer = document.createElement("div");
     this.textDivContainer.classList.add("tree-text-container");
     let node = document.createElement(this.nodeRootElementName);
-    node.setAttribute("id", nodeObject.id + "_" + nodeObject.parent);
+    node.setAttribute("id", TermLib.makeTermIdForTree(nodeObject));
     node.setAttribute("data-iri", nodeObject.iri);
-    node.setAttribute("data-id", nodeObject.id);
+    node.setAttribute("data-id", TermLib.makeTermIdForTree(nodeObject));
     node.classList.add(this.classes);
     if (nodeIsClicked) {
       this.textDivContainer.classList.add("clicked");
@@ -99,7 +102,7 @@ class TreeNodeController {
     }
 
     node.appendChild(this.iconInTree);
-    if (typeof (nodeObject['a_attr']) !== "undefined" && nodeObject["a_attr"]["class"] === "part_of") {
+    if (nodeObject.hasHierarchicalParents && false) {
       let partOfSymbol = document.createElement("div");
       let pText = document.createTextNode("P");
       partOfSymbol.appendChild(pText);
