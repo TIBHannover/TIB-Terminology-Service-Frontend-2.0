@@ -103,26 +103,12 @@ class OntologyApi {
         this.rootProperties = [];
         return true;
       }
-      let propertiesLink = this.ontology?.['_links']?.['properties']?.['href'];
-      if (!propertiesLink?.includes('https')) {
-        propertiesLink = propertiesLink?.replace('http', 'https');
-      }
-      let pageCount = await getPageCount(propertiesLink + '/roots');
-      let props: Array<OntologyTermData> = [];
-      for (let page = 0; page < pageCount; page++) {
-        let url = propertiesLink + "/roots?page=" + page + "&size=" + size;
-        let res = await (await fetch(url, getCallSetting)).json();
-        if (page == 0) {
-          props = res['_embedded']['properties'];
-        }
-        else {
-          props = props.concat(res['_embedded']['properties']);
-        }
-      }
 
-      this.rootProperties = props;
+      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+      let result = await fetch(url, getCallSetting);
+      let terms = await result.json();
+      this.rootProperties = terms['elements'];
       return true;
-
     }
     catch (e) {
       this.rootProperties = [];

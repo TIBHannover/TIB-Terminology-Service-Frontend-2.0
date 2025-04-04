@@ -66,7 +66,6 @@ class TreeNodeController {
   buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
     let nodeLabel = TermLib.extractLabel(nodeObject);
     let nodeHasChildren = TermLib.termHasChildren(nodeObject);
-    console.log(nodeHasChildren)
     this.textDiv = document.createElement("div");
     let label = document.createTextNode(nodeLabel);
     this.textDiv.classList.add("li-label-text");

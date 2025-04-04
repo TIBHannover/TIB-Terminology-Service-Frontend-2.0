@@ -170,7 +170,7 @@ class TermLib {
     let postfix = term.hierarchicalAncestor
       ? term.hierarchicalAncestor.join("_")
       : "_root";
-    return term.iri + postfix;
+    return term.iri + "_" + postfix;
   }
 }
 
