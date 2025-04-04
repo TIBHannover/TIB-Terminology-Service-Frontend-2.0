@@ -263,18 +263,18 @@ const OntologyPage = (props) => {
             }
 
             {
-                !waiting && activeTab === ONDET_TAB_ID && (() => {
-                  const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
+              !waiting && activeTab === ONDET_TAB_ID && (() => {
+                const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
 
-                  try {
-                    const fileUrl = new URL(ontology.config.ontologyPurl);
-                    return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
-                        ? <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
-                        : errorMessage;
-                  } catch (error) {
-                    return errorMessage;
-                  }
-                })()
+                try {
+                  const fileUrl = new URL(ontology.config.ontologyPurl);
+                  return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
+                    ? <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+                    : errorMessage;
+                } catch (error) {
+                  return errorMessage;
+                }
+              })()
             }
 
 

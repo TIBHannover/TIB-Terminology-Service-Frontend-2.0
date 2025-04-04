@@ -1,6 +1,6 @@
 class OntologyLib {
   static formatCreators(creators) {
-    if (creators.length === 0) {
+    if (!creators || creators.length === 0) {
       return "N/A";
     }
     let value = [];
@@ -11,6 +11,9 @@ class OntologyLib {
   }
 
   static formatSubject(classifications) {
+    if (!classifications) {
+      return "";
+    }
     if (classifications[1] !== undefined) {
       let value = [];
       let subjectList = classifications[1].subject ?? [];
