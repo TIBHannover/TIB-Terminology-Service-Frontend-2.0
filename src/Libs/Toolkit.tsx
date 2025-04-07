@@ -1,4 +1,5 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { inspect } from 'util';
 import CommonUrlFactory from '../UrlFactory/CommonUrlFactory';
 
 
@@ -29,13 +30,13 @@ class Toolkit {
   static sortListOfObjectsByKey(objectList: Array<GenericObject>, key: string, isReverse: boolean = false, parentKey: string = "") {
     let reverseSortSign = !isReverse ? 1 : -1;
     if (parentKey) {
-      return objectList.sort(function(a: GenericObject, b: GenericObject) {
+      return objectList.sort(function (a: GenericObject, b: GenericObject) {
         let x: number | string = typeof a[key] === "number" ? a[parentKey][key] : a[parentKey][key]?.toLowerCase();
         let y: number | string = typeof b[key] === "number" ? b[parentKey][key] : b[parentKey][key]?.toLowerCase();
         return (x < y ? reverseSortSign : (-1 * reverseSortSign))
       });
     }
-    return objectList.sort(function(a: GenericObject, b: GenericObject) {
+    return objectList.sort(function (a: GenericObject, b: GenericObject) {
       let x: number | string = typeof a[key] === "number" ? a[key] : a[key]?.toLowerCase();
       let y: number | string = typeof b[key] === "number" ? b[key] : b[key]?.toLowerCase();
       return (x < y ? reverseSortSign : (-1 * reverseSortSign))
@@ -134,6 +135,14 @@ class Toolkit {
       result.push({ "label": l, "value": l });
     }
     return result;
+  }
+
+
+  static isString(input: any): boolean {
+    if (input instanceof String || typeof input === "string") {
+      return true;
+    }
+    return false;
   }
 
 

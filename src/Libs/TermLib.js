@@ -172,6 +172,16 @@ class TermLib {
       : "_root";
     return term.iri + "_" + postfix;
   }
+
+  static getTermType(term) {
+    if (!term.type) {
+      return "";
+    }
+    if (Toolkit.isString(term.type)) {
+      return term.type;
+    }
+    return term.type[0];
+  }
 }
 
 export default TermLib;

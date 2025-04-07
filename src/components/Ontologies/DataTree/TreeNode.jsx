@@ -19,6 +19,7 @@ class TreeNodeController {
     let nodeLabel = TermLib.extractLabel(nodeObject);
     let nodeHasChildren = TermLib.termHasChildren(nodeObject);
     let partOfSymbol = "";
+    let individualSymbol = "";
     if (nodeObject.isObsolete) {
       nodeLabel = React.createElement("s", {}, nodeLabel);
     }
@@ -29,11 +30,15 @@ class TreeNodeController {
       partOfSymbol = React.createElement("div", { "className": "p-icon-style" }, "P");
     }
 
+    if (TermLib.getTermType(nodeObject) === "individual") {
+      individualSymbol = React.createElement("div", { "className": "p-icon-style", "title": "individual" }, "i");
+    }
+
     if (nodeIsClicked) {
-      this.textDivContainer = React.createElement("div", { "className": "tree-text-container clicked targetNodeByIri" }, partOfSymbol, this.textDiv);
+      this.textDivContainer = React.createElement("div", { "className": "tree-text-container clicked targetNodeByIri" }, partOfSymbol, individualSymbol, this.textDiv);
     }
     else {
-      this.textDivContainer = React.createElement("div", { "className": "tree-text-container " }, partOfSymbol, this.textDiv);
+      this.textDivContainer = React.createElement("div", { "className": "tree-text-container " }, partOfSymbol, individualSymbol, this.textDiv);
     }
     this.nodeIri = nodeObject.iri;
     if (!nodeHasChildren) {
@@ -107,6 +112,15 @@ class TreeNodeController {
       partOfSymbol.appendChild(pText);
       partOfSymbol.classList.add("p-icon-style");
       this.textDivContainer.appendChild(partOfSymbol);
+    }
+
+    if (TermLib.getTermType(nodeObject) === "individual") {
+      let individualSymbol = document.createElement("div");
+      individualSymbol.title = "individual";
+      let text = document.createTextNode("i");
+      individualSymbol.appendChild(text);
+      individualSymbol.classList.add("p-icon-style");
+      this.textDivContainer.appendChild(individualSymbol);
     }
 
     this.textDivContainer.appendChild(this.textDiv);
