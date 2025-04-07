@@ -343,7 +343,7 @@ class TermApi {
   async getNodeJsTree(viewMode: string): Promise<any> {
     try {
       let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-      let parentPath = this.termType === "classes" ? "hierarchicalAncestors" : "parents";
+      let parentPath = this.termType === "classes" ? "hierarchicalAncestors" : "ancestors";
       let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${parentPath}?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
       let listOfNodes = await (await fetch(url, getCallSetting)).json();
       return listOfNodes["elements"] ?? [];
