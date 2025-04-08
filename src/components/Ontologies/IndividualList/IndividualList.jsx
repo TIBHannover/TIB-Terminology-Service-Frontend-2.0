@@ -110,6 +110,10 @@ const IndividualsList = (props) => {
       }
     }
     else if (e.target.tagName === "SPAN") {
+      let nodeContainers = document.getElementsByClassName("list-node-li");
+      for (let li of nodeContainers) {
+        li.style.marginBottom = '30px';
+      }
       selectNode(e.target);
     }
   }
