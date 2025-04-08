@@ -140,7 +140,7 @@ const IndividualsList = (props) => {
 
 
   function sortIndividuals(individuals) {
-    return individuals.sort(function(a, b) {
+    return individuals.sort(function (a, b) {
       let x = a["label"];
       let y = b["label"];
       return (x < y ? -1 : 1)

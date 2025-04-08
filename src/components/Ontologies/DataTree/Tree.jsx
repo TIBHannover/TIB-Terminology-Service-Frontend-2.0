@@ -454,10 +454,6 @@ const Tree = (props) => {
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
-    let tourP = getTourProfile();
-    if (!tourP.ontoClassTreePage) {
-      expandLeftPaneIfnot();
-    }
   }, [resetTreeFlag, reload]);
 
 

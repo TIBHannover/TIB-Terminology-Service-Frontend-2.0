@@ -106,18 +106,18 @@ const SiteTour = () => {
     let cUrl = window.location.href;
     if (cUrl.includes("/terms")) {
       setTimeout(() => {
-        expandLeftPaneIfnot();
+        !tourP.ontoClassTreePage && expandLeftPaneIfnot();
       }, 1000)
       tourSteps = tourSteps.concat(treeViewTourSteps("class"));
     } else if (cUrl.includes("/props")) {
       setTimeout(() => {
-        expandLeftPaneIfnot();
+        !tourP.ontoPropertyTreePage && expandLeftPaneIfnot();
       }, 1000)
       tourSteps = tourSteps.concat(treeViewTourSteps("property"));
     } else if (cUrl.includes("/individuals")) {
       setTimeout(() => {
-        expandLeftPaneIfnot();
-      }, 1000)
+        !tourP.ontoIndividualPage && expandLeftPaneIfnot();
+      }, 3000)
       tourSteps = tourSteps.concat(individualsListTourSteps());
     } else if (cUrl.includes("/termList")) {
       tourSteps = tourSteps.concat(classListTourSteps());
@@ -170,9 +170,30 @@ const SiteTour = () => {
 
 
   useEffect(() => {
+    if (!isTourOpen) {
+      return;
+    }
     if (currentPage === HOME_PAGE_ID) {
       setTourSteps(makeHomePageTourSteps());
     } else if (currentPage === ONTOLOGY_PAGE_ID) {
+      let cUrl = window.location.href;
+      if (cUrl.includes("/terms")) {
+        tourP.ontoClassTreePage = false;
+      } else if (cUrl.includes("/props")) {
+        tourP.ontoPropertyTreePage = false;
+      } else if (cUrl.includes("/individuals")) {
+        tourP.ontoIndividualPage = false;
+      } else if (cUrl.includes("/termList")) {
+        tourP.ontoClassListPage = false;
+      } else if (cUrl.includes("/notes")) {
+        tourP.ontoNotesPage = false;
+      } else if (cUrl.includes("/gitpanel")) {
+        tourP.ontoGithubPage = false;
+      } else if (!cUrl.includes('/ondet')) {
+        // ontology overview tab
+        tourP.ontoOverViewPage = false;
+      }
+      storeTourProfile(tourP);
       setTourSteps(makeOntologyPageTourSteps());
     }
   }, [isTourOpen]);
