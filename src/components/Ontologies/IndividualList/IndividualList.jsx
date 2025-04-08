@@ -58,22 +58,6 @@ const IndividualsList = (props) => {
   }
 
 
-
-  function selectNodeOnLoad() {
-    if (ontologyPageContext.isSkos && !listView) {
-      return true;
-    }
-    let node = document.getElementById(selectedNodeIri);
-    if (node) {
-      node.classList.add('clicked');
-      let position = document.getElementById(selectedNodeIri).offsetTop;
-      document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
-      setJumpToOnload(false);
-    }
-  }
-
-
-
   function selectNode(target) {
     if (ontologyPageContext.isSkos && !listView) {
       return true;
@@ -216,9 +200,7 @@ const IndividualsList = (props) => {
     if (selectedNodeIri !== "") {
       setShowNodeDetailPage(true);
     }
-    if (JumpToOnLoad) {
-      selectNodeOnLoad();
-    }
+
   }, [selectedNodeIri, JumpToOnLoad, listView]);
 
 

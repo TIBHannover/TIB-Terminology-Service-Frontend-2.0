@@ -1,6 +1,11 @@
+import { useEffect, useState, useContext } from "react";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 
 export const RenderIndividualList = (props) => {
 
+  const ontologyPageContext = useContext(OntologyPageContext);
+
+  const [content, setContent] = useState("");
 
 
   function createIndividualList() {
@@ -22,7 +27,7 @@ export const RenderIndividualList = (props) => {
         </div>
       );
     }
-    return result;
+    setContent(result);
   }
 
 
@@ -42,6 +47,31 @@ export const RenderIndividualList = (props) => {
   }
 
 
+  function selectNodeOnLoad() {
+    if (ontologyPageContext.isSkos && !props.listView) {
+      return true;
+    }
+    let node = document.getElementById(props.iri);
+    if (node) {
+      node.classList.add('clicked');
+      let position = document.getElementById(props.iri).offsetTop;
+      document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+    }
+  }
+
+  useEffect(() => {
+    createIndividualList();
+  }, [props.individuals]);
+
+  useEffect(() => {
+    let nodeContainers = document.getElementsByClassName("list-node-li");
+    for (let li of nodeContainers) {
+      li.style.marginBottom = '30px';
+    }
+    selectNodeOnLoad();
+  }, [props.iri])
+
+
   return (
     <>
       <div className='row tree-action-button-area'>
@@ -55,7 +85,7 @@ export const RenderIndividualList = (props) => {
           <div className="row">
             <div className="col-sm-12">
               <ul>
-                {createIndividualList()}
+                {content}
               </ul>
             </div>
           </div>
