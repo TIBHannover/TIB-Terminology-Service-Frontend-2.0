@@ -346,7 +346,14 @@ class TermApi {
       let parentPath = this.termType === "classes" ? "hierarchicalAncestors" : "ancestors";
       let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${parentPath}?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
       let listOfNodes = await (await fetch(url, getCallSetting)).json();
-      return listOfNodes["elements"] ?? [];
+      let nodesList = listOfNodes["elements"] ?? [];
+      if (nodesList.length === 0) {
+        // fallback: the target is individual on a class tree
+        let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/individuals/${this.iri}/ancestors?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+        let listOfNodes = await (await fetch(url, getCallSetting)).json();
+        return listOfNodes["elements"] ?? [];
+      }
+      return nodesList;
     }
     catch (e) {
       return [];

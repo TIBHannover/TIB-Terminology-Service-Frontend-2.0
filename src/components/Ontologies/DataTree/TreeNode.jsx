@@ -31,7 +31,7 @@ class TreeNodeController {
     }
 
     if (TermLib.getTermType(nodeObject) === "individual") {
-      individualSymbol = React.createElement("div", { "className": "p-icon-style", "title": "individual" }, "i");
+      individualSymbol = React.createElement("div", { "className": "i-icon-style", "title": "individual" }, <i class="fa fa-solid fa-info"></i>);
     }
 
     if (nodeIsClicked) {
@@ -117,9 +117,10 @@ class TreeNodeController {
     if (TermLib.getTermType(nodeObject) === "individual") {
       let individualSymbol = document.createElement("div");
       individualSymbol.title = "individual";
-      let text = document.createTextNode("i");
+      let text = document.createElement("i");
+      text.classList.add("fa", "fa-solid", "fa-info");
       individualSymbol.appendChild(text);
-      individualSymbol.classList.add("p-icon-style");
+      individualSymbol.classList.add("i-icon-style");
       this.textDivContainer.appendChild(individualSymbol);
     }
 
