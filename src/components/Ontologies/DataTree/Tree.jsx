@@ -11,7 +11,6 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import { getTourProfile } from "../../../tours/controller";
-import TermLib from "../../../Libs/TermLib";
 
 
 
