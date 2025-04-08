@@ -248,7 +248,7 @@ export const RenderTermList = (props) => {
                   id="obsolte_check_term_list"
                   onChange={props.obsoletesCheckboxHandler}
                 />
-                <label className="form-check-label" for="obsolte_check_term_list">Only show obsoletes</label>
+                <label className="form-check-label" for="obsolte_check_term_list">Include obsoletes terms</label>
               </div>
             </div>
           </div>}

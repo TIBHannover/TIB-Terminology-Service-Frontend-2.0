@@ -114,7 +114,7 @@ const TermDetailTable = (props) => {
   return (
     <div>
       {Toolkit.createHelmet(helmetText)}
-      {props.node.is_obsolete &&
+      {props.node.isObsolete &&
         <AlertBox
           type="danger"
           message="Attention: This term is deprecated!"

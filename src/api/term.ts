@@ -97,9 +97,9 @@ class TermApi {
   }
 
 
-  async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE): Promise<TermListData | []> {
+  async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE, obsoletes: boolean = false): Promise<TermListData | []> {
     try {
-      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?lang=${this.lang}&page=${page}&size=${size}`;
+      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?lang=${this.lang}&page=${page}&size=${size}&includeObsoleteEntities=${obsoletes}`;
       let result = await (await fetch(url, getCallSetting)).json();
       let totalTermsCount = result['totalElements'];
       result = result['elements'];
@@ -114,13 +114,13 @@ class TermApi {
         termObject.term['annotation'] = termObject.buildAnnotations();
         termObject.term['subClassOf'] = termObject.getSubClassOf();
         termObject.term['eqAxiom'] = termObject.getEqAxiom();
-        termObject.term['label'] = termObject.extractLabel();
+        termObject.term['label'] = TermLib.extractLabel(termObject.term);
         refinedResults.push(termObject.term);
       }
       return { "results": refinedResults, "totalTermsCount": totalTermsCount };
     }
     catch (e) {
-      // throw(e)
+      //throw (e)
       return [];
     }
   }

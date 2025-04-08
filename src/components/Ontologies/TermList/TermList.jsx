@@ -44,11 +44,8 @@ const TermList = (props) => {
     let ontologyId = ontologyPageContext.ontology.ontologyId;
     let listOfTermsAndStats = { "results": [], "totalTermsCount": 0 };
     let termApi = new TermApi(ontologyId, iri, mode);
-    if (!iri && !obsoletes) {
-      listOfTermsAndStats = await termApi.fetchListOfTerms(pageNumber, pageSize);
-    }
-    else if (!iri && obsoletes) {
-      listOfTermsAndStats = await getObsoleteTermsForTermList(ontologyId, mode, pageNumber, pageSize);
+    if (!iri) {
+      listOfTermsAndStats = await termApi.fetchListOfTerms(pageNumber, pageSize, obsoletes);
     }
     else {
       await termApi.fetchTerm();
