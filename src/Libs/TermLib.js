@@ -167,10 +167,8 @@ class TermLib {
   }
 
   static makeTermIdForTree(term) {
-    let postfix = term.hierarchicalAncestor
-      ? term.hierarchicalAncestor.join("_")
-      : "_root";
-    return term.iri + "_" + postfix;
+    let id = term.iri + "___" + Math.random().toString(36).substring(2, 20);
+    return id;
   }
 
   static getTermType(term) {

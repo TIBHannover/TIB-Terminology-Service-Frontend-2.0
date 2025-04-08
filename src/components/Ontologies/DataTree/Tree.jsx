@@ -149,7 +149,7 @@ const Tree = (props) => {
             let isExpanded = result.isExpanded;
             rootNodesWithChildren[i]['has_children'] = result.hasChildren;
             if (rootNodesWithChildren[i].childrenList.length !== 0) {
-              treeNode.children = TreeHelper.autoExpandTargetNode(rootNodesWithChildren[i].childrenList, i, target, targetHasChildren);
+              treeNode.children = TreeHelper.autoExpandTargetNode(rootNodesWithChildren[i].childrenList, rootNodesWithChildren[i].id, target, targetHasChildren);
             }
             let isClicked = false;
             let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
@@ -275,7 +275,7 @@ const Tree = (props) => {
       setSiblingsVisible(!siblingsVisible);
     }
     catch (e) {
-      // console.info(e);
+      console.info(e);
     }
 
   }

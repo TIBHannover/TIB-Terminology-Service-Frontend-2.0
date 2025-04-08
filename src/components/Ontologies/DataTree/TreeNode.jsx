@@ -56,9 +56,9 @@ class TreeNodeController {
 
     let node = React.createElement(this.nodeRootElementName, {
       "data-iri": this.nodeIri,
-      "data-id": TermLib.makeTermIdForTree(nodeObject),
+      "data-id": nodeObject.id ?? TermLib.makeTermIdForTree(nodeObject),
       "className": this.classes,
-      "id": TermLib.makeTermIdForTree(nodeObject)
+      "id": nodeObject.id ?? TermLib.makeTermIdForTree(nodeObject)
     }
       , this.iconInTree, this.textDivContainer, this.children
     );

@@ -108,15 +108,12 @@ export default class TreeHelper {
 
   static showSiblingsForRootNode(nodes, selectedNodeIri) {
     let treeNode = new TreeNodeController();
-    let sortKey = TreeHelper.getTheNodeSortKey(nodes);
-    if (sortKey) {
-      nodes = Toolkit.sortListOfObjectsByKey(nodes, sortKey, true);
-    }
+    TreeHelper.sortTermsInTree(nodes);
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].iri === selectedNodeIri || nodes[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
         continue;
       }
-      let node = treeNode.buildNodeWithTradionalJs(nodes[i], nodes[i].id);
+      let node = treeNode.buildNodeWithTradionalJs(nodes[i], nodes[i].iri);
       document.getElementById("tree-root-ul").appendChild(node);
     }
   }
@@ -131,10 +128,7 @@ export default class TreeHelper {
       Iri = Iri.dataset.iri;
       let termApi = new TermApi(ontologyId, Iri, childExtractName);
       let res = await termApi.getChildrenJsTree(parentId);
-      let sortKey = TreeHelper.getTheNodeSortKey(res);
-      if (sortKey) {
-        res = Toolkit.sortListOfObjectsByKey(res, sortKey, true);
-      }
+      TreeHelper.sortTermsInTree(res);
       for (let i = 0; i < res.length; i++) {
         if (res[i].iri === node.parentNode.dataset.iri) {
           continue;
@@ -189,10 +183,10 @@ export default class TreeHelper {
 
 
   static async nodeIsRoot(ontology, nodeIri, mode) {
-    let termType = mode === 'terms' ? "terms" : "properties";
+    let termType = mode === 'terms' ? "classes" : "properties";
     let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
     await termApi.fetchTerm();
-    return termApi.term.directParent[0] === "https://www.w3.org/2002/07/owl#Thing";
+    return !termApi.term.hasDirectParents && !termApi.term.hasHierarchicalParents;
   }
 
 
@@ -284,6 +278,7 @@ export default class TreeHelper {
       if (term.childrenList === undefined) {
         term.childrenList = [];
       }
+      term.id = TermLib.makeTermIdForTree(term);
     }
     return terms.filter((term) => !term.hasHierarchicalParents && !term.hasDirectParents);
   }
