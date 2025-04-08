@@ -357,10 +357,17 @@ class TermApi {
 
   async getChildrenJsTree(targetNodeId: string, lang: string = "en"): Promise<any> {
     let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-    let childPath = this.termType === "classes" ? "children" : "children";
-    let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${childPath}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
+    let path = this.termType === "classes" ? "hierarchicalChildren" : "children";
+    let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
     let res = await (await fetch(url, getCallSetting)).json();
-    return res["elements"] ?? [];
+    let childrenList = res["elements"] ?? [];
+
+    if (this.termType === "classes") {
+      let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/classes/${this.iri}/individuals?size=1000&lang=${lang}`;
+      let res = await (await fetch(url, getCallSetting)).json();
+      childrenList = [...childrenList, ...(res["elements"] ?? [])];
+    }
+    return childrenList;
   }
 
 
