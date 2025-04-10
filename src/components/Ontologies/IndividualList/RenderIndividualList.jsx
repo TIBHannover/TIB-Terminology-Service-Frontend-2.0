@@ -54,7 +54,7 @@ export const RenderIndividualList = (props) => {
     let node = document.getElementById(props.iri);
     if (node) {
       node.classList.add('clicked');
-      let position = document.getElementById(props.iri).offsetTop;
+      let position = node.offsetTop;
       document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
     }
   }
@@ -63,13 +63,16 @@ export const RenderIndividualList = (props) => {
     createIndividualList();
   }, [props.individuals]);
 
+  //useEffect(() => {
+  //  let nodeContainers = document.getElementsByClassName("list-node-li");
+  //  for (let li of nodeContainers) {
+  //    li.style.marginBottom = '30px';
+  //  }
+  //}, [props.iri])
+
   useEffect(() => {
-    let nodeContainers = document.getElementsByClassName("list-node-li");
-    for (let li of nodeContainers) {
-      li.style.marginBottom = '30px';
-    }
     selectNodeOnLoad();
-  }, [props.iri])
+  }, [content])
 
 
   return (
