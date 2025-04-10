@@ -363,18 +363,27 @@ class TermApi {
 
 
   async getChildrenJsTree(targetNodeId: string, lang: string = "en"): Promise<any> {
-    let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-    let path = this.termType === "classes" ? "hierarchicalChildren" : "children";
-    let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
-    let res = await (await fetch(url, getCallSetting)).json();
-    let childrenList = res["elements"] ?? [];
+    let [children, hierarchialChildren] = await Promise.all([getChildren(this, lang), getHierarchicalChilren(this, lang)]);
 
-    if (this.termType === "classes") {
-      let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/classes/${this.iri}/individuals?size=1000&lang=${lang}`;
+    async function getChildren(parentThis, lang) {
+      let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
+      let path = parentThis.termType === "classes" ? "hierarchicalChildren" : "children";
+      let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${parentThis.ontologyId}/${parentThis.termType}/${parentThis.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
       let res = await (await fetch(url, getCallSetting)).json();
-      childrenList = [...childrenList, ...(res["elements"] ?? [])];
+      return res["elements"] ?? [];
     }
-    return childrenList;
+
+    async function getHierarchicalChilren(parentThis, lang) {
+      if (parentThis.termType === "classes") {
+        let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
+        let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${parentThis.ontologyId}/classes/${parentThis.iri}/individuals?size=1000&lang=${lang}`;
+        let res = await (await fetch(url, getCallSetting)).json();
+        return res["elements"] ?? [];
+      }
+      return [];
+    }
+
+    return [...children, ...hierarchialChildren];
   }
 
 

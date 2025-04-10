@@ -50,6 +50,7 @@ const Tree = (props) => {
   const [obsoletesShown, setObsoletesShown] = useState(Toolkit.getObsoleteFlagValue());
   const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));
   const [firstTimeLoad, setFirstTimeLoad] = useState(lastState ? true : false);
+  const [btnLoading, setBtnLoading] = useState(false);
 
 
   function saveComponentStateInParent() {
@@ -272,8 +273,10 @@ const Tree = (props) => {
       }
 
       setSiblingsVisible(!siblingsVisible);
+      setBtnLoading(false);
     }
     catch (e) {
+      setBtnLoading(false);
       console.info(e);
     }
 
@@ -398,11 +401,13 @@ const Tree = (props) => {
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {siblingsButtonShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings' onClick={showSiblings}>
-                  {!siblingsVisible
-                    ? "Show Siblings"
-                    : "Hide Siblings"
-                  }
+                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings' onClick={() => {
+                  setBtnLoading(true);
+                  showSiblings().then(() => { setIsLoading(false) })
+                }}>
+                  {!btnLoading && !siblingsVisible && "Show Siblings"}
+                  {!btnLoading && siblingsVisible && "Hide Siblings"}
+                  {btnLoading && <div className="isLoading-btn"></div>}
                 </button>
               }
             </div>
