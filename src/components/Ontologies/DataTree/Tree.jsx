@@ -390,10 +390,7 @@ const Tree = (props) => {
             <div className="col-sm-12">
               {subOrFullTreeBtnShow && !props.isIndividual &&
                 <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree' onClick={reduceTree}>
-                  {!subTreeMode
-                    ? "Sub Tree"
-                    : "Full Tree"
-                  }
+                  Sub Tree
                 </button>
               }
             </div>
@@ -420,17 +417,6 @@ const Tree = (props) => {
     keyboardNavigationManager.run(event);
   };
 
-
-
-  function expandLeftPaneIfnot() {
-    let detailPane = document.getElementById('page-right-pane');
-    if (!detailPane) {
-      let termContainer = document.getElementsByClassName('tree-text-container');
-      if (termContainer.length !== 0) {
-        termContainer[0].click();
-      }
-    }
-  }
 
 
   useEffect(() => {
