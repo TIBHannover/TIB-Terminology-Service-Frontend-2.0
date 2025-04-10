@@ -43,7 +43,6 @@
         The tree wrapper
     */
 
-  margin-top: -40px;
   z-index: 999;
   overflow-x: hidden;
 }
@@ -122,6 +121,7 @@
   border-left: 1px dotted;
   border-left-color: gray;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 .tree-node-li::before {
