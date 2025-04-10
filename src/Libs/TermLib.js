@@ -180,6 +180,25 @@ class TermLib {
     }
     return term.type[0];
   }
+
+  static gerTermSynonyms(term) {
+    if (!term.synonym) {
+      return;
+    }
+    let result = [];
+    for (let syn of term.synonym) {
+      try {
+        if (Toolkit.isString(syn)) {
+          result.push(syn);
+          continue;
+        }
+        result.push(syn.value);
+      } catch {
+        continue;
+      }
+    }
+    return result;
+  }
 }
 
 export default TermLib;

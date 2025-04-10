@@ -73,6 +73,7 @@ class TermApi {
       }
 
       this.term['label'] = TermLib.extractLabel(this.term);
+      this.term['synonym'] = TermLib.gerTermSynonyms(this.term);
       this.term['annotation'] = this.buildAnnotations();
       this.term['relations'] = undefined;
       this.term['eqAxiom'] = undefined;
