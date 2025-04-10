@@ -94,10 +94,6 @@ const IndividualsList = (props) => {
       }
     }
     else if (e.target.tagName === "SPAN") {
-      //let nodeContainers = document.getElementsByClassName("list-node-li");
-      //for (let li of nodeContainers) {
-      //li.style.marginBottom = '30px';
-      //}
       selectNode(e.target);
     }
   }
@@ -144,7 +140,7 @@ const IndividualsList = (props) => {
           rootNodes={props.rootNodes}
           obsoleteTerms={[]}
           rootNodesForSkos={props.rootNodesForSkos}
-          componentIdentity={props.componentIdentity}
+          componentIdentity={"terms"}
           selectedNodeIri={selectedNodeIri}
           key={props.key}
           rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}

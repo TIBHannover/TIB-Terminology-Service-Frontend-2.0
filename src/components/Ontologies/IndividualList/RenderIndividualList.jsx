@@ -63,12 +63,6 @@ export const RenderIndividualList = (props) => {
     createIndividualList();
   }, [props.individuals]);
 
-  //useEffect(() => {
-  //  let nodeContainers = document.getElementsByClassName("list-node-li");
-  //  for (let li of nodeContainers) {
-  //    li.style.marginBottom = '30px';
-  //  }
-  //}, [props.iri])
 
   useEffect(() => {
     selectNodeOnLoad();

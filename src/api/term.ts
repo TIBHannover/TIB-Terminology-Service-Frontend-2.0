@@ -100,7 +100,7 @@ class TermApi {
 
   async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE, obsoletes: boolean = false): Promise<TermListData | []> {
     try {
-      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?lang=${this.lang}&page=${page}&size=${size}&includeObsoleteEntities=${obsoletes}`;
+      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/${this.termType}?lang=${this.lang}&page=${page}&size=${size}&includeObsoleteEntities=${obsoletes}`;
       let result = await (await fetch(url, getCallSetting)).json();
       let totalTermsCount = result['totalElements'];
       result = result['elements'];
@@ -116,6 +116,7 @@ class TermApi {
         termObject.term['subClassOf'] = termObject.getSubClassOf();
         termObject.term['eqAxiom'] = termObject.getEqAxiom();
         termObject.term['label'] = TermLib.extractLabel(termObject.term);
+        termObject.term['synonym'] = TermLib.gerTermSynonyms(termObject.term);
         refinedResults.push(termObject.term);
       }
       return { "results": refinedResults, "totalTermsCount": totalTermsCount };
