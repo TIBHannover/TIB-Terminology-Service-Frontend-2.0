@@ -36,6 +36,24 @@ class OntologyLib {
     }
     return ontologyIdInUrl;
   }
+
+  static getLabel(ontology) {
+    if (ontology.title) {
+      return ontology.title;
+    }
+    return ontology.label?.[0] ?? "";
+  }
+
+  static gerDescription(ontology) {
+    return ontology.description ? ontology.description : "";
+  }
+
+  static getCollections(ontology) {
+    if (!ontology.classifications) {
+      return [];
+    }
+    return ontology.classifications?.[0]?.collection ?? [];
+  }
 }
 
 export default OntologyLib;

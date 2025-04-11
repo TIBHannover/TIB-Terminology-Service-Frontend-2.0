@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Pagination from "../../common/Pagination/Pagination";
 import DropDown from "../../common/DropDown/DropDown";
+import OntologyLib from "../../../Libs/OntologyLib";
 
 
 const TITLE_SORT_KEY = "title";
@@ -26,7 +27,7 @@ export const OntologyListRender = (props) => {
   const [ontologyListContent, setOntologyListContent] = useState('');
 
   function BuildCollectionForCard(collections) {
-    if (collections === null) {
+    if (!collections) {
       return "";
     }
     let result = [];
@@ -53,22 +54,19 @@ export const OntologyListRender = (props) => {
           <div className='col-sm-9'>
             <div className="ontology-card-title-section">
               <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className='ontology-button btn btn-secondary'>{item.ontologyId}</a>
-              <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{item.config.title}</b></a>
+              <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{OntologyLib.getLabel(item)}</b></a>
             </div>
             <div className="ontology-card-description">
-              <p>{item.config.description ? item.config.description : ""}</p>
+              <p>{OntologyLib.gerDescription(item)}</p>
             </div>
             {process.env.REACT_APP_PROJECT_ID === "general" &&
               <div className='ontology-card-collection-name'>
                 <b>Collections:</b>
-                {item.config.classifications[0]?.collection
-                  ? BuildCollectionForCard(item.config.classifications[0].collection)
-                  : "-"
-                }
+                {BuildCollectionForCard(OntologyLib.getCollections(item))}
               </div>}
           </div>
           <div className="col-sm-3 ontology-card-meta-data">
-            <span className='ontology-meta-data-field-span'>{item.numberOfTerms} Classes</span>
+            <span className='ontology-meta-data-field-span'>{item.numberOfClasses} Classes</span>
             <hr />
             <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
             <hr />

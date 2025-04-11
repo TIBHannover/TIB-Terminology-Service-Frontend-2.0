@@ -30,18 +30,16 @@ class OntologyApi {
   }
 
 
-  async fetchOntologyList(): Promise<Array<OntologyData>> {
+  async fetchOntologyList(): Promise<Array<any>> {
     type TempResult = {
-      _embedded: {
-        ontologies: Array<OntologyData>
-      }
+      elements: Array<any>
     }
 
     try {
-      let OntologiesListUrl = `${process.env.REACT_APP_API_ONTOLOGY_LIST}`;
+      let OntologiesListUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000`;
       let resp = await fetch(OntologiesListUrl, getCallSetting);
       let result: TempResult = await resp.json();
-      this.list = result['_embedded']['ontologies'];
+      this.list = result['elements'];
       return this.list;
     }
     catch (e) {

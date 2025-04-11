@@ -9,6 +9,7 @@ import Toolkit from '../../../Libs/Toolkit';
 import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
+import OntologyLib from '../../../Libs/OntologyLib';
 
 
 
@@ -73,12 +74,13 @@ const OntologyList = (props) => {
       else {
         ontologiesList = ontologyListQuery.data;
       }
-      let sortedOntologies = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);
-      setOntologies(sortedOntologies);
-      setUnFilteredOntologies(sortedOntologies);
+      ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);
+      setOntologies(ontologiesList);
+      setUnFilteredOntologies(ontologiesList);
       setIsLoaded(true);
     }
     catch (error) {
+      //console.log(error)
       setIsLoaded(true);
       setError(error);
     }
@@ -114,10 +116,10 @@ const OntologyList = (props) => {
       if (ontology.ontologyId.includes(value)) {
         return true;
       }
-      if (ontology.config.title.toLowerCase().includes(value)) {
+      if (OntologyLib.getLabel(ontology).toLowerCase().includes(value)) {
         return true;
       }
-      if (ontology.config.description != null && ontology.config.description.toLowerCase().includes(value)) {
+      if (OntologyLib.gerDescription(ontology).toLowerCase().includes(value)) {
         return true;
       }
 
@@ -132,12 +134,28 @@ const OntologyList = (props) => {
 
   function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
     if (key === "title") {
-      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true, 'config');
+      ontologiesArray.sort((o1, o2) => {
+        if (OntologyLib.getLabel(o1) < OntologyLib.getLabel(o2)) {
+          return 1;
+        }
+        return -1;
+      })
     }
     else if (key === 'ontologyId') {
-      return Toolkit.sortListOfObjectsByKey(ontologiesArray, key, true);
+      ontologiesArray.sort((o1, o2) => {
+        if (o1.ontologyId < o2.ontologyId) {
+          return 1;
+        }
+        return -1;
+      })
     }
-    return Toolkit.sortListOfObjectsByKey(ontologiesArray, key);
+    ontologiesArray.sort((o1, o2) => {
+      if (o1.key < o2.key) {
+        return 1;
+      }
+      return -1;
+    })
+    return ontologiesArray;
   }
 
 

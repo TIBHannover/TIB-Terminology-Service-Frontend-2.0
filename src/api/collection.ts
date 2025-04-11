@@ -54,7 +54,7 @@ export async function fetchAllCollectionWithOntologyList(): Promise<Array<Collec
       let collectionOntologies = await fetchOntologyListForCollections([col], false);
       let collectionOntologiesIds = [];
       for (let onto of collectionOntologies) {
-        let temp = { "ontologyId": onto['ontologyId'].toUpperCase(), "purl": onto['purl'] };
+        let temp = { "ontologyId": onto['ontologyId'].toUpperCase(), "purl": onto['ontologyPurl'] };
         collectionOntologiesIds.push(temp)
       }
       let record = { "collection": col, "ontologies": collectionOntologiesIds };

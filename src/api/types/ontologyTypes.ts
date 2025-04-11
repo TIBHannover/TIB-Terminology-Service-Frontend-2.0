@@ -2,11 +2,8 @@ import { type } from "os"
 
 export type OntologyData = {
   ontologyId: string,
-  purl?: string,
+  ontologyPurl?: string,
   loaded?: string,
-  updated?: string,
-  status?: string,
-  message?: string,
   version?: string,
   fileHash?: string,
   loadAttempts?: number,
