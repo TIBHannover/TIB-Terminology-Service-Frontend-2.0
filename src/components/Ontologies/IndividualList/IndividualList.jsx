@@ -195,6 +195,12 @@ const IndividualsList = (props) => {
   useEffect(() => {
     if (selectedNodeIri !== "") {
       setShowNodeDetailPage(true);
+      let node = document.getElementById(selectedNodeIri);
+      if (node) {
+        node.classList.add('clicked');
+        let position = node.offsetTop;
+        document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+      }
     }
 
   }, [selectedNodeIri, JumpToOnLoad, listView]);
