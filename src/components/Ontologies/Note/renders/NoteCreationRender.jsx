@@ -86,7 +86,7 @@ export const NoteCreationRender = (props) => {
                         label={"About *"}
                         handleJumtoSelection={props.handleJumtoSelection}
                         obsoletes={false}
-                        initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'][0] : props.selectedTerm['label']}
+                        initialInput={noteContext.selectedTermInTree ? noteContext.selectedTermInTree['label'] : props.selectedTerm['label']}
                         id="note_creation_auto_suggest"
                       />
                       <br></br>

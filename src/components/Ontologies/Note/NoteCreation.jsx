@@ -29,7 +29,7 @@ const NoteCreation = (props) => {
   let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
   targetType = targetType !== -1 ? targetType : 1;
   let selectedTerm = noteContext.selectedTermInTree
-    ? { "iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label'][0] }
+    ? { "iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label'] }
     : { "iri": null, "label": null };
 
 
@@ -84,7 +84,7 @@ const NoteCreation = (props) => {
     let formIsValid = true;
     let noteTitle = FormLib.getFieldByIdIfValid('noteTitle' + noteIdForRender);
     let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];
-    let selectedTargetTermLabel = selectedTermFromAutoComplete['label'][0];
+    let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];
     let noteContent = FormLib.getTextEditorValueIfValid(editorState, "noteContent" + noteIdForRender);
     formIsValid = noteTitle && noteContent;
 
@@ -108,7 +108,7 @@ const NoteCreation = (props) => {
     if (noteContext.selectedTermInTree) {
       // Note creation for an specific term in from term detail tabel
       selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
-      selectedTargetTermLabel = noteContext.selectedTermInTree['label'][0];
+      selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
       targetType = noteContext.selectedTermTypeInTree;
     }
     let data = {};

@@ -44,7 +44,7 @@ export async function getNoteList(params: NoteListParams): Promise<NoteListRespo
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/list?ontology=' + ontologyId;
     url += ('&page=' + pageNumber + '&size=' + pageSize);
     if (targetTerm) {
-      url += ('&artifact_iri=' + targetTerm['iri'])
+      url += ('&artifact_iri=' + encodeURIComponent(targetTerm['iri']))
     }
     if (type) {
       url += ('&artifact_type=' + type);
