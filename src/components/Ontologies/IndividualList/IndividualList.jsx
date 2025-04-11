@@ -38,7 +38,7 @@ const IndividualsList = (props) => {
 
   async function setComponentData() {
     try {
-      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, null, props.componentIdentity);
+      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, null, props.componentIdentity, ontologyPageContext.ontoLang);
       let indvList = await termApi.fetchListOfTerms(0, 10000);
       indvList = indvList["results"];
       setIsLoaded(true);
