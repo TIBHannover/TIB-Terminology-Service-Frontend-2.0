@@ -229,7 +229,7 @@ const OntologyList = (props) => {
 
 
 
-  async function runFilter() {
+  function runFilter() {
     let ontologiesList = [...unFilteredOntologies];
     let keywordOntologies = [];
     if (keywordFilterString !== "") {
@@ -242,11 +242,26 @@ const OntologyList = (props) => {
       ontologiesList = keywordOntologies;
     }
     if (selectedCollections.length !== 0) {
-      let collectionOntologies = await fetchOntologyListForCollections(selectedCollections, exclusiveCollections);
       let collectionFilteredOntologies = [];
-      for (let onto of collectionOntologies) {
-        if (typeof (ontologiesList.find(o => o.ontologyId === onto.ontologyId)) !== "undefined") {
-          collectionFilteredOntologies.push(onto);
+      for (let onto of ontologiesList) {
+        if (!exclusiveCollections) {
+          for (let col of selectedCollections) {
+            if (OntologyLib.getCollections(onto).includes(col)) {
+              collectionFilteredOntologies.push(onto);
+              break;
+            }
+          }
+        } else {
+          let found = true;
+          for (let col of selectedCollections) {
+            if (!OntologyLib.getCollections(onto).includes(col)) {
+              found = false;
+              break;
+            }
+          }
+          if (found) {
+            collectionFilteredOntologies.push(onto);
+          }
         }
       }
       ontologiesList = collectionFilteredOntologies;
