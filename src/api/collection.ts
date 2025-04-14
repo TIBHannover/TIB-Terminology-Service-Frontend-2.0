@@ -119,5 +119,7 @@ export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key:
       }
     }
   }
-  return result;
+  return Object.fromEntries(
+    Object.entries(result).sort(([, v1], [, v2]) => v2 - v1)
+  );
 }
