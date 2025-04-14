@@ -5,7 +5,7 @@ import OntologyLib from "../../../Libs/OntologyLib";
 
 
 const TITLE_SORT_KEY = "title";
-const CLASS_SORT_KEY = "numberOfTerms";
+const CLASS_SORT_KEY = "numberOfClasses";
 const PROPERT_SORT_KEY = "numberOfProperties";
 const INDIVIDUAL_SORT_KEY = "numberOfIndividuals";
 const PREFIX_SORT_KEY = "ontologyId";

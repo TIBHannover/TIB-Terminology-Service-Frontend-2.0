@@ -130,25 +130,35 @@ const OntologyList = (props) => {
     if (key === "title") {
       ontologiesArray.sort((o1, o2) => {
         if (OntologyLib.getLabel(o1) < OntologyLib.getLabel(o2)) {
-          return 1;
+          return -1;
         }
-        return -1;
+        return 1;
       })
     }
     else if (key === 'ontologyId') {
       ontologiesArray.sort((o1, o2) => {
         if (o1.ontologyId < o2.ontologyId) {
+          return -1;
+        }
+        return 1;
+      })
+    }
+    else if (key.includes("numberOf")) {
+      ontologiesArray.sort((o1, o2) => {
+        if (parseInt(o1[key]) < parseInt(o2[key])) {
+          return 1;
+        }
+        return -1;
+      })
+
+    } else {
+      ontologiesArray.sort((o1, o2) => {
+        if (o1[key] < o2[key]) {
           return 1;
         }
         return -1;
       })
     }
-    ontologiesArray.sort((o1, o2) => {
-      if (o1.key < o2.key) {
-        return 1;
-      }
-      return -1;
-    })
     return ontologiesArray;
   }
 

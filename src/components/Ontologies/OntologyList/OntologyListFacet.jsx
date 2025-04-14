@@ -23,6 +23,7 @@ export const OntologyListFacet = (props) => {
                                 key={col}
                                 onClick={props.handleFacetCollection}
                                 checked={props.selectedCollections.includes(col)}
+                                onChange={() => { }}
                             />
                             <label className="form-check-label" for={"col-checkbox-" + col} >
                                 {col}
