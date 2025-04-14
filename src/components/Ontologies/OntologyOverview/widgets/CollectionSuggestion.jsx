@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { AppContext } from "../../../../context/AppContext";
 import Multiselect from "multiselect-react-dropdown";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllCollectionWithOntologyList } from "../../../../api/collection";
+import { getCollectionsAndThierOntologies } from "../../../../api/collection";
 import { submitOntologySuggestion } from "../../../../api/ontology";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
@@ -25,21 +25,21 @@ const CollectionSuggestion = () => {
 
   const collectionWithOntologyListQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
-    queryFn: fetchAllCollectionWithOntologyList
+    queryFn: getCollectionsAndThierOntologies
   });
 
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
-    for (let res of collectionWithOntologyListQuery.data) {
+    for (let col in collectionWithOntologyListQuery.data) {
       let ontoIsPartOfCollection = false;
       for (let classif of ontoPageContext.ontology?.classifications) {
-        if (classif.collection && classif.collection[0] === res['collection']) {
+        if (classif.collection && classif.collection.includes(col)) {
           ontoIsPartOfCollection = true;
           break;
         }
       }
       if (!ontoIsPartOfCollection) {
-        collectionIds.push(res['collection']);
+        collectionIds.push(col);
       }
     }
   }
