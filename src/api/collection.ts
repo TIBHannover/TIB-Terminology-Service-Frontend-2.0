@@ -1,6 +1,7 @@
 import { getCallSetting } from "./constants";
 import { OntologyData } from "./types/ontologyTypes";
 import { CollectionWithItsOntologyListData } from "./types/collectionTypes";
+import OntologyLib from "../Libs/OntologyLib";
 
 
 /* react query key:  allCollectionsWithTheirStats   */
@@ -100,4 +101,23 @@ export async function fetchOntologyListForCollections(collectionsIds: Array<stri
   catch (e) {
     return [];
   }
+}
+
+
+export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key: string]: number } {
+  let result: { [key: string]: number } = {};
+  for (let onto of ontoList) {
+    let collections = OntologyLib.getCollections(onto) as string[];
+    if (collections.length === 0) {
+      continue;
+    }
+    for (let col of collections) {
+      if (col in result) {
+        result[col] += 1;
+      } else {
+        result[col] = 1;
+      }
+    }
+  }
+  return result;
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import { fetchCollectionsWithStats, fetchOntologyListForCollections } from '../../../api/collection';
+import { fetchCollectionsWithStats, fetchOntologyListForCollections, getCollectionStatFromOntoList } from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
@@ -39,12 +39,6 @@ const OntologyList = (props) => {
 
   localStorage.setItem('language', "en");
 
-  const allCollectionsWithStatsQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirStats'],
-    queryFn: fetchCollectionsWithStats,
-
-  });
-
   const ontologyApi = new OntologyApi({});
   const ontologyListQuery = useQuery({
     queryKey: ['ontologyList'],
@@ -52,9 +46,9 @@ const OntologyList = (props) => {
   });
 
   let allCollectionWithStats = [];
-  if (process.env.REACT_APP_PROJECT_NAME === "" && allCollectionsWithStatsQuery.data) {
+  if (process.env.REACT_APP_PROJECT_NAME === "" && ontologyListQuery.data) {
     // Only for TIB General
-    allCollectionWithStats = allCollectionsWithStatsQuery.data;
+    allCollectionWithStats = getCollectionStatFromOntoList(ontologyListQuery.data);
   }
   const allCollections = allCollectionWithStats;
 
