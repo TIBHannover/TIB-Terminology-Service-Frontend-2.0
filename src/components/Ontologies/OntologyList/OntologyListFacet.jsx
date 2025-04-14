@@ -50,6 +50,7 @@ export const OntologyListFacet = (props) => {
     }, [props.selectedCollections, props.allCollections]);
 
 
+
     return (
         <div className="row">
             <div className='col-sm-12' id="ontology-list-facet-grid">

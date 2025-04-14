@@ -3,6 +3,7 @@ import { getPageCount } from "./helper";
 import { OntologyData, OntologyTermData, OntologyShapeTestResult, OntologySuggestionData } from "./types/ontologyTypes";
 import { getTsPluginHeaders } from "./header";
 import { TsPluginHeader } from "./types/headerTypes";
+import OntologyLib from "../Libs/OntologyLib";
 
 
 
@@ -39,7 +40,17 @@ class OntologyApi {
       let OntologiesListUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000`;
       let resp = await fetch(OntologiesListUrl, getCallSetting);
       let result: TempResult = await resp.json();
-      this.list = result['elements'];
+      let ontoList = [];
+      if (process.env.REACT_APP_PROJECT_ID === "general") {
+        ontoList = result['elements'];
+      } else {
+        for (let onto of result['elements']) {
+          if (OntologyLib.getCollections(onto).includes(process.env.REACT_APP_PROJECT_ID?.toUpperCase())) {
+            ontoList.push(onto);
+          }
+        }
+      }
+      this.list = ontoList;
       return this.list;
     }
     catch (e) {
