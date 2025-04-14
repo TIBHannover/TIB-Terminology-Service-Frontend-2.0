@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import { fetchCollectionsWithStats, fetchOntologyListForCollections, getCollectionStatFromOntoList } from '../../../api/collection';
+import { getCollectionStatFromOntoList } from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import '../layout/collectionList.css';
-import { fetchAllCollectionWithOntologyList } from '../../api/collection';
+import { getCollectionsAndThierOntologies } from '../../api/collection';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import Toolkit from '../../Libs/Toolkit';
 import CommonUrlFactory from '../../UrlFactory/CommonUrlFactory';
@@ -12,17 +12,16 @@ const Collections = () => {
 
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
-    queryFn: fetchAllCollectionWithOntologyList
+    queryFn: getCollectionsAndThierOntologies
   });
 
   let collectionOntologiesData = {};
   if (collectionsWithOntologiesQuery.data) {
     let collectionsWithTheirOntologies = collectionsWithOntologiesQuery.data;
-    for (let colData of collectionsWithTheirOntologies) {
-      let collectionId = colData["collection"];
-      collectionOntologiesData[collectionId] = [];
-      for (let onto of colData["ontologies"]) {
-        collectionOntologiesData[collectionId].push(
+    for (let col in collectionsWithTheirOntologies) {
+      collectionOntologiesData[col] = [];
+      for (let onto of collectionsWithTheirOntologies[col]) {
+        collectionOntologiesData[col].push(
           <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto["ontologyId"]} className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</a>
         );
       }
