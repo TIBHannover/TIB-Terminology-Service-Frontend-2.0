@@ -8,12 +8,21 @@ import DOMPurify from "dompurify";
 import PropTypes from 'prop-types';
 import OndetApi from "../../api/ondet";
 
-const MARKDOWN_FILE_STATIC_HEADER_REGEX = /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
+const ROBOT_DIFF_STATIC_HEADER_REGEX = /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
 
 const ondetApi = new OndetApi({});
 
+const customMarkdownComponents = {
+    h3: 'h6',
+    h4: 'p',
+    a(props) {
+        const {node, ...rest} = props
+        return <a href style={{'font-size': '14px'}} {...rest} />
+    }
+};
+
 const ChangesTimeline = ({ontologyRawUrl}) => {
-    const [ontology, setOntology] = useState([]);
+    const [ontologyCommits, setOntologyCommits] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [contoMarkdown, setContoMarkdown] = useState("");
@@ -27,7 +36,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
         async function fetchOntology() {
             setCommitsFetched(true);
             const data = await ondetApi.fetchOntologyCommits(ontologyRawUrl);
-            setOntology(data);
+            setOntologyCommits(data);
             setCommitsFetched(false);
         }
 
@@ -60,7 +69,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
 
     const getRobotDiff = (markdown) => {
         if (markdown.hasOwnProperty("file")) {
-            return markdown.file.split(MARKDOWN_FILE_STATIC_HEADER_REGEX)[1];
+            return markdown.file.split(ROBOT_DIFF_STATIC_HEADER_REGEX)[1];
         } else {
             return "### Robot was not able to calculate the differences";
         }
@@ -124,11 +133,19 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
     return (
         <div className="tree-view-container resizable-container">
             {commitsFetched && <Spinner animation="border" variant="primary"/>}
-            {!commitsFetched && (
+            {!commitsFetched && ontologyCommits.length <= 1 && (
+                <>
+                    <h5>Ontology was not added into OnDeT even though it is in supported GIT-repository.
+                        <br/>
+                        We are currently investigating the cause.
+                    </h5>
+                </>
+            )}
+            {!commitsFetched && ontologyCommits.length !== 1 && (
                 <>
                     <div className='node-table-container'>
                         <ul>
-                            {ontology.map((diff, index, arr) => {
+                            {ontologyCommits.map((diff, index, arr) => {
                                 if (arr[index - 1] === undefined) return null;
 
                                 const item = arr[index - 1];
@@ -198,7 +215,9 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                                             <h3>ROBOT Diff</h3>
                                         </div>
                                         <div className='node-table-container'>
-                                            <ReactMarkdown>{robotMarkdown}</ReactMarkdown>
+                                            <ReactMarkdown
+                                                components={customMarkdownComponents}
+                                            >{robotMarkdown}</ReactMarkdown>
                                         </div>
                                     </div>
 
@@ -207,7 +226,8 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                                             <h3>COnto Diff</h3>
                                         </div>
                                         <div className='node-table-container'>
-                                            <ReactMarkdown>{contoMarkdown}</ReactMarkdown>
+                                            <ReactMarkdown
+                                                components={customMarkdownComponents}>{contoMarkdown}</ReactMarkdown>
                                         </div>
                                     </div>
                                 </div>

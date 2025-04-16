@@ -267,9 +267,10 @@ const OntologyPage = (props) => {
                 const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
 
                 try {
-                  const fileUrl = new URL(ontology.config.ontologyPurl);
+                  const fileUrl = new URL(ontology.versioned_url);
+
                   return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
-                    ? <ChangesTimeline ontologyRawUrl={ontology.config.fileLocation} />
+                    ? <ChangesTimeline ontologyRawUrl={ontology.versioned_url} />
                     : errorMessage;
                 } catch (error) {
                   return errorMessage;
