@@ -21,6 +21,7 @@ const CollectionSuggestion = () => {
   const [submitWait, setSubmitWait] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   const collectionWithOntologyListQuery = useQuery({
@@ -66,7 +67,7 @@ const CollectionSuggestion = () => {
     if (!username || !email || !editorState || selectedCollections.length === 0) {
       return;
     }
-
+    setLoading(true);
     let collectionIds = "";
     for (let collectionId of selectedCollections) {
       collectionIds += collectionId + ",";
@@ -87,6 +88,7 @@ const CollectionSuggestion = () => {
       setFormSubmitSuccess(result);
       setFormSubmitted(true);
       setSubmitWait(false);
+      setLoading(false);
     });
 
   }
@@ -198,7 +200,10 @@ const CollectionSuggestion = () => {
                 <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
               </div>
               {!submitWait && !formSubmitted &&
-                <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
+                <button type="button" className="btn btn-secondary" onClick={submit}>
+                  {loading && <div className="isLoading-btn"></div>}
+                  {!loading && "Submit"}
+                </button>
               }
             </div>
           </div>
