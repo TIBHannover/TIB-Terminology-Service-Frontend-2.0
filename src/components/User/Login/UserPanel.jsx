@@ -20,20 +20,20 @@ const UserPanel = (props) => {
         <Login isModal={props.isModal} />
       }
       {appContext.user &&
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle user-profile-dropdown stour-login-in-header" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div className="dropdown">
+          <button className="btn btn-secondary dropdown-toggle user-profile-dropdown stour-login-in-header" type="button" id="userProfileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {appContext.user.fullName}
           </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userProfileDropdown">
-            <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
-            <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}>My Ontology Collection</a>
+          <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userProfileDropdown">
+            <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
+            <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}>My Ontology Collection</a>
             {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&
-              <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</a>
+              <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</a>
             }
             {appContext.isUserSystemAdmin &&
-              <a class="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</a>
+              <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</a>
             }
-            <a class="dropdown-item" href="#" onClick={() => { Auth.runLogout(); }}>Logout</a>
+            <a className="dropdown-item" href="#" onClick={() => { Auth.runLogout(); }}>Logout</a>
           </div>
         </div>
       }

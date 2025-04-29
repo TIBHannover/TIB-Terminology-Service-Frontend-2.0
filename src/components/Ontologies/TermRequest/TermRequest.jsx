@@ -257,14 +257,14 @@ const TermRequest = (props) => {
                       <div className="col-sm-8">
                         {props.reportType === "general" &&
                           <div className="form-group">
-                            <label for="issue-templates" className='col-form-label'>Issue Template</label>
+                            <label htmlFor="issue-templates" className='col-form-label'>Issue Template</label>
                             <select className='site-dropdown-menu list-result-per-page-dropdown-menu' id="issue-templates" value={selectedTemplate} onChange={templateDropDownChange}>
                               <option value={0} key={0}>None</option>
                               {createIssueTemplatesDropDown()}
                             </select>
                           </div>
                         }
-                        <label className="required_input" for="issueTitle">
+                        <label className="required_input" htmlFor="issueTitle">
                           {props.reportType === "general" ? "Issue Title" : "Term Request Title"}
                         </label>
                         <input type="text" className="form-control" value={issueTitle} onChange={() => { onTextInputChange() }} id="issueTitle" placeholder="Enter Title ..."></input>

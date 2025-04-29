@@ -181,11 +181,11 @@ const IssueList = (props) => {
           <div className="col-sm-3 stour-github-issue-type-radio">
             <div className="form-check-inline form-check-inline-github-issue">
               <input type="radio" id="issue_radio" className="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"issue"} onChange={handleTypeChange} />
-              <label className="form-check-label" for="issue_radio">Issue</label>
+              <label className="form-check-label" htmlFor="issue_radio">Issue</label>
             </div>
             <div className="form-check-inline form-check-inline-github-issue">
               <input type="radio" id="pr_radio" className="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio" value={"pr"} onChange={handleTypeChange} />
-              <label className="form-check-label" for="pr_radio">Pull Request</label>
+              <label className="form-check-label" htmlFor="pr_radio">Pull Request</label>
             </div>
           </div>
           <div className="col-sm-3">

@@ -75,7 +75,7 @@ const JumpTo = (props) => {
   return (
     <div className="row">
       <div className="col-sm-12 autosuggest-jumpto-container">
-        {props.label && <label for="jumpto-autosuggest-box">{props.label}</label>}
+        {props.label && <label htmlFor="jumpto-autosuggest-box">{props.label}</label>}
         <Autosuggest
           suggestions={resultList}
           onSuggestionsFetchRequested={onAutoCompleteChange}

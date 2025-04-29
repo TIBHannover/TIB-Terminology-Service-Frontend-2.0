@@ -55,7 +55,7 @@ export const ReportModal = (props) => {
 
   return (
     <div>
-      <div class="modal fade" id={"reportModal" + props.modalId} tabindex="-1" role="dialog" aria-labelledby={"reportModalLabel" + props.modalId} aria-hidden="true">
+      <div class="modal fade" id={"reportModal" + props.modalId} tabIndex="-1" role="dialog" aria-labelledby={"reportModalLabel" + props.modalId} aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -70,7 +70,7 @@ export const ReportModal = (props) => {
               {!submited &&
                 <>
                   <div class="mb-3">
-                    <label for={"reportReason" + props.modalId} class="form-label">Please describe briefly the reason for this report</label>
+                    <label htmlFor={"reportReason" + props.modalId} class="form-label">Please describe briefly the reason for this report</label>
                     <textarea class="form-control" id={"reportReason" + props.modalId} rows="3"></textarea>
                   </div>
                   <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse?section=3"} target="_blank">Terms of Use</a>

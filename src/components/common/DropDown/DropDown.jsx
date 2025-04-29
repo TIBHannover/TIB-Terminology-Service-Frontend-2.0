@@ -11,7 +11,7 @@ const DropDown = (props) => {
 
   return (
     <div className={"site-dropdown-container " + containerClass}>
-      <label for={dropDownId} className={'col-form-label ' + (mandatory ? "required_input" : "")}>
+      <label htmlFor={dropDownId} className={'col-form-label ' + (mandatory ? "required_input" : "")}>
         {dropDownTitle}
       </label>
       <select

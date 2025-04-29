@@ -111,7 +111,7 @@ export const NoteListRender = (props) => {
                     checked={props.onlyOntologyOriginalNotes}
                     onChange={props.handleOntologyOriginalNotesCheckbox}
                   />
-                  <label class="form-check-label" for="note_list_sho_imported_notes_checkbox">
+                  <label class="form-check-label" htmlFor="note_list_sho_imported_notes_checkbox">
                     Without Imported Notes.
                   </label>
                 </div>

@@ -126,7 +126,7 @@ const ContactForm = () => {
             <br></br>
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input" for="contact-form-title">Title</label>
+                <label className="required_input" htmlFor="contact-form-title">Title</label>
                 <input
                   type="text"
                   onChange={() => { document.getElementById('contact-form-title').style.borderColor = ''; }}
@@ -153,7 +153,7 @@ const ContactForm = () => {
             <br></br>
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input" for="contact-form-username">Your Name</label>
+                <label className="required_input" htmlFor="contact-form-username">Your Name</label>
                 <input
                   type="text"
                   onChange={() => { document.getElementById('contact-form-username').style.borderColor = ''; }}
@@ -166,7 +166,7 @@ const ContactForm = () => {
             <br></br>
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input" for="contact-form-email">Email</label>
+                <label className="required_input" htmlFor="contact-form-email">Email</label>
                 <input
                   type="text"
                   onChange={() => { document.getElementById('contact-form-email').style.borderColor = ''; }}
@@ -179,7 +179,7 @@ const ContactForm = () => {
             <br></br>
             <div className="row">
               <div className="col-sm-6">
-                <label className="required_input" for="contact-form-safe-q">What is {randomNum1 + " + " + randomNum2}</label>
+                <label className="required_input" htmlFor="contact-form-safe-q">What is {randomNum1 + " + " + randomNum2}</label>
                 <input
                   type="text"
                   onChange={() => { document.getElementById('contact-form-safe-q').style.borderColor = ''; }}

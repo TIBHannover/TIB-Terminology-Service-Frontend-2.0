@@ -106,7 +106,7 @@ export const NoteCreationRender = (props) => {
                           id="publish_note_to_parent_checkbox"
                           onChange={props.handlePublishToParentCheckbox}
                         />
-                        <label class="form-check-label" for="publish_note_to_parent_checkbox">
+                        <label class="form-check-label" htmlFor="publish_note_to_parent_checkbox">
                           {"Publish this note also for  "}
                           {TermLib.createTermUrlWithOntologyPrefix({
                             ontology_name: props.parentOntology,
@@ -124,7 +124,7 @@ export const NoteCreationRender = (props) => {
               }
               <div className="row">
                 <div className="col-sm-10">
-                  <label className="required_input" for={"noteTitle" + props.targetNoteId}>Title</label>
+                  <label className="required_input" htmlFor={"noteTitle" + props.targetNoteId}>Title</label>
                   <input
                     type="text"
                     value={props.noteTitle}

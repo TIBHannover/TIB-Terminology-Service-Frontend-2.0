@@ -25,7 +25,7 @@ export const OntologyListFacet = (props) => {
                                 checked={props.selectedCollections.includes(col)}
                                 onChange={() => { }}
                             />
-                            <label className="form-check-label" for={"col-checkbox-" + col} >
+                            <label className="form-check-label" htmlFor={"col-checkbox-" + col} >
                                 {col}
                             </label>
                         </div>
@@ -79,7 +79,7 @@ export const OntologyListFacet = (props) => {
                                     <div className='facet-switch-holder'>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch" onChange={props.onSwitchChange} />
-                                            <label class="form-check-label" for="facet-switch">Intersection</label>
+                                            <label class="form-check-label" htmlFor="facet-switch">Intersection</label>
                                         </div>
                                     </div>
                                     <div>

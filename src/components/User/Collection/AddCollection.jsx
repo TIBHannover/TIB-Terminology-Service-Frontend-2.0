@@ -143,7 +143,7 @@ const AddCollection = (props) => {
         {!editMode ? "New Collection" : editBtnText}
       </button>
 
-      <div className="modal fade" id={modalId} tabindex="-1" role="dialog" aria-labelledby={modalId + "Label"} aria-hidden="true">
+      <div className="modal fade" id={modalId} tabIndex="-1" role="dialog" aria-labelledby={modalId + "Label"} aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -158,7 +158,7 @@ const AddCollection = (props) => {
               }
               <div className="row">
                 <div className="col-sm-12">
-                  <label className="required_input" for={"collectionTitle" + idPostfix}>Name</label>
+                  <label className="required_input" htmlFor={"collectionTitle" + idPostfix}>Name</label>
                   <input
                     type="text"
                     className="form-control"
@@ -173,7 +173,7 @@ const AddCollection = (props) => {
               <br></br>
               <div className='row'>
                 <div className='col-sm-12'>
-                  <label className="required_input" for={'collection-ontologies' + idPostfix}>Ontologies</label>
+                  <label className="required_input" htmlFor={'collection-ontologies' + idPostfix}>Ontologies</label>
                   {ontologiesListForSelection && ontologiesListForSelection.length !== 0 &&
                     <Multiselect
                       isObject={true}
@@ -194,7 +194,7 @@ const AddCollection = (props) => {
               <br></br>
               <div className="row">
                 <div className="col-sm-12">
-                  <label for={"collectionDescription" + idPostfix}>Description (optional)</label>
+                  <label htmlFor={"collectionDescription" + idPostfix}>Description (optional)</label>
                   <textarea
                     className="form-control"
                     id={"collectionDescription" + idPostfix}

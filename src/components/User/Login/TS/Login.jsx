@@ -70,7 +70,7 @@ const Login = (props) => {
         // render the modal. Used in the site header 
         <span>
           {createLoginButton()}
-          <div class="modal fade loginModal" id={modalId} tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+          <div class="modal fade loginModal" id={modalId} tabIndex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">

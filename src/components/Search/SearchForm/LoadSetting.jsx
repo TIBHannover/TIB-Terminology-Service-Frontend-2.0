@@ -13,7 +13,7 @@ import Toolkit from "../../../Libs/Toolkit";
 
 
 const LoadSetting = (props) => {
-    const {loadFunc, resetAdvancedSearch, loadedSettingNameSetter} = props;
+    const { loadFunc, resetAdvancedSearch, loadedSettingNameSetter } = props;
 
     const appContext = useContext(AppContext);
 
@@ -26,37 +26,37 @@ const LoadSetting = (props) => {
     const [settingToEdit, setSettingToEdit] = useState(null);
     const [editMode, setEditMode] = useState(false);
 
-    
-    function renderSettingsList(){
+
+    function renderSettingsList() {
         let result = [];
-        for(let setting of settingsList){           
+        for (let setting of settingsList) {
             result.push(
                 <>
-                    <SwitchButton                     
+                    <SwitchButton
                         id={"searchSettingSwitch" + setting['id']}
                         dataId={setting['id']}
-                        label={setting['title']}                    
+                        label={setting['title']}
                         className="search-setting-checkbox"
-                        inLine={true}                    
+                        inLine={true}
                     />
                     <button
                         type="button"
                         className="btn btn-secondary ml-2 extra-sm-btn"
                         onClick={() => {
                             setSettingToEdit(setting);
-                            setEditMode(true);                        
-                        }}                        
-                        >
+                            setEditMode(true);
+                        }}
+                    >
                         <i className="fa fa-edit"></i>
-                    </button>             
-                    <button 
-                        className="btn btn-danger btn-sm btn-delete-note borderless-btn extra-sm-btn ml-2" 
+                    </button>
+                    <button
+                        className="btn btn-danger btn-sm btn-delete-note borderless-btn extra-sm-btn ml-2"
                         key={"deleteBtnUserSetting" + setting['id']}
                         onClick={() => {
                             setSettingToDelete(setting);
-                            setDeleteMode(true);                        
+                            setDeleteMode(true);
                         }}
-                        >
+                    >
                         <i className="fa fa-close fa-borderless"></i>
                     </button>
                     <p><small>{setting['description']}</small></p>
@@ -68,30 +68,30 @@ const LoadSetting = (props) => {
 
 
 
-    function loadSetting(){
+    function loadSetting() {
         let settingId = document.querySelector('.search-setting-checkbox:checked')?.dataset?.id;
-        let setting = settingsList.find(setting => setting['id'] == settingId);        
+        let setting = settingsList.find(setting => setting['id'] == settingId);
         loadFunc(setting);
     }
 
 
-    async function deleteSetting(){
-        let deleted = await deleteSearchSetting(settingToDelete['id']);        
-        if(deleted){
+    async function deleteSetting() {
+        let deleted = await deleteSearchSetting(settingToDelete['id']);
+        if (deleted) {
             setDeleteSuccess(true);
-            if(appContext.userSettings.activeSearchSetting['id'] == settingToDelete['id']){
+            if (appContext.userSettings.activeSearchSetting['id'] == settingToDelete['id']) {
                 resetAdvancedSearch();
             }
-            return true;            
+            return true;
         }
         setDeleteSuccess(false);
         return;
     }
 
 
-    function returnSettingTitleIfValid(){
-        let title = document.getElementById('searchSettingTitle').value;        
-        if(!title || title === ''){
+    function returnSettingTitleIfValid() {
+        let title = document.getElementById('searchSettingTitle').value;
+        if (!title || title === '') {
             document.getElementById('searchSettingTitle').style.border = '1px solid red';
             return false;
         }
@@ -100,33 +100,33 @@ const LoadSetting = (props) => {
 
 
 
-    async function updateTitleAndDescription(){        
-        let settingTitle = returnSettingTitleIfValid();                        
-        if(!settingTitle){
+    async function updateTitleAndDescription() {
+        let settingTitle = returnSettingTitleIfValid();
+        if (!settingTitle) {
             return;
-        }                
-        let userSettings = {...appContext.userSettings};
-        let description = document.getElementById('searchSettingDescription').value;              
+        }
+        let userSettings = { ...appContext.userSettings };
+        let description = document.getElementById('searchSettingDescription').value;
         let settingData = {
             'title': settingTitle,
             'description': description,
-            'setting': settingToEdit['setting'] 
-        };        
-        let response = await updateSearchSettings(settingToEdit['id'], settingData);   
-        if(response === "Title already exists"){
+            'setting': settingToEdit['setting']
+        };
+        let response = await updateSearchSettings(settingToEdit['id'], settingData);
+        if (response === "Title already exists") {
             setEditTitleError(true);
             return;
-        }     
-        if(response){
+        }
+        if (response) {
             setEditSuccess(true);
-            if(appContext.userSettings.activeSearchSetting['id'] == settingToEdit['id']){
+            if (appContext.userSettings.activeSearchSetting['id'] == settingToEdit['id']) {
                 userSettings.activeSearchSetting.title = settingTitle;
                 userSettings.activeSearchSetting.description = description;
                 appContext.setUserSettings(userSettings);
                 storeUserSettings(userSettings);
-                loadedSettingNameSetter(settingTitle);                
-            }  
-            return true;                
+                loadedSettingNameSetter(settingTitle);
+            }
+            return true;
         }
         setEditSuccess(false);
         return true;
@@ -134,7 +134,7 @@ const LoadSetting = (props) => {
 
 
 
-    function fetchSettingList(){
+    function fetchSettingList() {
         setDeleteMode(false);
         setEditMode(false);
         setDeleteSuccess(null);
@@ -143,9 +143,9 @@ const LoadSetting = (props) => {
         fetchSearchSettings().then((settingsList) => {
             setSettingsList(Toolkit.sortListOfObjectsByKey(settingsList, 'created_at'));
             let userSettings = appContext.userSettings;
-            if(userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']){
+            if (userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']) {
                 let activeCheckbox = document.getElementById("searchSettingSwitch" + userSettings.activeSearchSetting['id']);
-                if(activeCheckbox){
+                if (activeCheckbox) {
                     activeCheckbox.checked = true;
                 }
             }
@@ -157,9 +157,9 @@ const LoadSetting = (props) => {
 
     useEffect(() => {
         let userSettings = appContext.userSettings;
-        if(userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']){
+        if (userSettings.activeSearchSetting && userSettings.activeSearchSetting['id']) {
             let activeCheckbox = document.getElementById("searchSettingSwitch" + userSettings.activeSearchSetting['id']);
-            if(activeCheckbox){
+            if (activeCheckbox) {
                 activeCheckbox.checked = true;
             }
         }
@@ -167,40 +167,40 @@ const LoadSetting = (props) => {
 
 
 
-    if(!appContext.user){
+    if (!appContext.user) {
         const loginModalId = "loginModalLoadAdvSearchSetting";
-        const loadBtn = <button type="button" 
-                            class="btn btn-secondary ml-2" 
-                            data-toggle="modal" 
-                            data-target={"#" + loginModalId}
-                            data-backdrop="static"
-                            data-keyboard="false"                                    
-                            >
-                            My search settings
-                        </button>;
-        return (            
-            <Login isModal={true}  customLoginBtn={loadBtn} customModalId={loginModalId} />
+        const loadBtn = <button type="button"
+            class="btn btn-secondary ml-2"
+            data-toggle="modal"
+            data-target={"#" + loginModalId}
+            data-backdrop="static"
+            data-keyboard="false"
+        >
+            My search settings
+        </button>;
+        return (
+            <Login isModal={true} customLoginBtn={loadBtn} customModalId={loginModalId} />
         );
     }
 
-    
-    return(
+
+    return (
         <>
-            <button 
-                type="button" 
+            <button
+                type="button"
                 className={"btn btn-secondary ml-2"}
-                data-toggle="modal" 
-                data-target={"#SearchSettingListModal"} 
+                data-toggle="modal"
+                data-target={"#SearchSettingListModal"}
                 data-backdrop="static"
                 onClick={fetchSettingList}
-                >
+            >
                 My search settings
-            </button>            
-            <div className="modal fade" id={'SearchSettingListModal'} tabindex="-1" role="dialog" aria-labelledby={"SearchSettingListModalLabel"} aria-hidden="true">
+            </button>
+            <div className="modal fade" id={'SearchSettingListModal'} tabIndex="-1" role="dialog" aria-labelledby={"SearchSettingListModalLabel"} aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            {!editMode && !deleteMode && 
+                            {!editMode && !deleteMode &&
                                 <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"My search settings"}</h5>
                             }
                             {deleteMode && !editMode &&
@@ -210,25 +210,25 @@ const LoadSetting = (props) => {
                                 <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"Edit: " + settingToEdit['title']}</h5>
                             }
                         </div>
-                        <div className="modal-body">                            
+                        <div className="modal-body">
                             <div className="row">
-                                <div className="col-sm-12">                                    
-                                   {!deleteMode && !editMode && renderSettingsList()}
-                                   {deleteMode && !editMode && deleteSuccess === null &&
-                                        <AlertBox 
-                                            type="danger" 
+                                <div className="col-sm-12">
+                                    {!deleteMode && !editMode && renderSettingsList()}
+                                    {deleteMode && !editMode && deleteSuccess === null &&
+                                        <AlertBox
+                                            type="danger"
                                             message="Are you sure you want to delete this setting? This action is irreversible."
                                             alertColumnClass="col-sm-12"
                                         />
-                                   }
-                                   {deleteMode && !editMode && deleteSuccess === true && 
+                                    }
+                                    {deleteMode && !editMode && deleteSuccess === true &&
                                         <AlertBox
                                             type="success"
                                             message="Setting deleted successfully."
                                             alertColumnClass="col-sm-12"
                                         />
                                     }
-                                    {deleteMode && !editMode && deleteSuccess === false && 
+                                    {deleteMode && !editMode && deleteSuccess === false &&
                                         <AlertBox
                                             type="danger"
                                             message="Setting could not be deleted. Please try again later."
@@ -243,7 +243,7 @@ const LoadSetting = (props) => {
                                         />
                                     }
                                     {editMode && !deleteMode && editSuccess === null &&
-                                        <SearchSettingForm 
+                                        <SearchSettingForm
                                             editMode={true}
                                             settingToEdit={settingToEdit}
                                         />
@@ -262,32 +262,32 @@ const LoadSetting = (props) => {
                                             alertColumnClass="col-sm-12"
                                         />
                                     }
-                                </div>                                
-                            </div>                                                   
-                            <br></br>                            
+                                </div>
+                            </div>
+                            <br></br>
                         </div>
                         <div className="modal-footer">
                             <div className="col-auto mr-auto">
-                                {!deleteMode && !editMode && 
+                                {!deleteMode && !editMode &&
                                     <button type="button" className="btn btn-secondary close-btn-message-modal float-right" data-dismiss="modal">Close</button>
                                 }
-                                {(deleteMode || editMode) && 
+                                {(deleteMode || editMode) &&
                                     <button type="button" className="btn btn-secondary close-btn-message-modal float-right" onClick={fetchSettingList}>Back</button>
                                 }
-                            </div>                             
-                            {!deleteMode && !editMode && 
+                            </div>
+                            {!deleteMode && !editMode &&
                                 <button type="button" className="btn btn-secondary" onClick={loadSetting} data-dismiss="modal">Load</button>
                             }
-                            {deleteMode && !editMode && 
+                            {deleteMode && !editMode &&
                                 <button type="button" className="btn btn-secondary" onClick={deleteSetting}>Delete</button>
                             }
-                            {!deleteMode && editMode && 
+                            {!deleteMode && editMode &&
                                 <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>
                             }
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
         </>
     );
 

@@ -100,7 +100,7 @@ const CollectionSuggestion = () => {
 
   return (
     <>
-      <div className="modal fade" id={'collectionSuggestionModal'} tabindex="-1" role="dialog" aria-labelledby={"collectionSuggestionModalLabel"} aria-hidden="true">
+      <div className="modal fade" id={'collectionSuggestionModal'} tabIndex="-1" role="dialog" aria-labelledby={"collectionSuggestionModalLabel"} aria-hidden="true">
         <div className="modal-dialog" role="document" id="collectionSuggestionModalDialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -150,7 +150,7 @@ const CollectionSuggestion = () => {
                   <br />
                   <div className="row">
                     <div className="col-sm-8">
-                      <label className="required_input" for="col-suggest-username">Your name</label>
+                      <label className="required_input" htmlFor="col-suggest-username">Your name</label>
                       <input
                         type="text"
                         onChange={(e) => { e.target.style.borderColor = ''; }}
@@ -164,7 +164,7 @@ const CollectionSuggestion = () => {
                   <br />
                   <div className="row">
                     <div className="col-sm-8">
-                      <label className="required_input" for="col-suggest-email">Email</label>
+                      <label className="required_input" htmlFor="col-suggest-email">Email</label>
                       <small> (we use this email to inform you about our decision regarding adding this ontology to the chosen collections.)</small>
                       <input
                         type="text"

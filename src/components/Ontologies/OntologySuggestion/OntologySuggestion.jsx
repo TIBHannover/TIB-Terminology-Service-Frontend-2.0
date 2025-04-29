@@ -349,7 +349,7 @@ const OntologyExtraMetadataForm = () => {
       result.push(
         <>
           <div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div>
-          <label for={"missing-metadata-" + error['about']}>{error['about']}</label>
+          <label htmlFor={"missing-metadata-" + error['about']}>{error['about']}</label>
           <input
             type="text"
             onChange={(e) => {
@@ -485,7 +485,7 @@ const UserForm = () => {
     <>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" for="onto-suggest-username">Your name</label>
+          <label className="required_input" htmlFor="onto-suggest-username">Your name</label>
           <input
             type="text"
             onChange={(e) => {
@@ -505,7 +505,7 @@ const UserForm = () => {
       <br></br>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" for="onto-suggest-email">Email</label>
+          <label className="required_input" htmlFor="onto-suggest-email">Email</label>
           <small> (we use this email to inform you about our decision regarding indexing your ontology.)</small>
           <input
             type="text"
@@ -564,7 +564,7 @@ const OntologyMainMetaDataForm = () => {
     <>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" for="onto-suggest-name">Ontology name</label>
+          <label className="required_input" htmlFor="onto-suggest-name">Ontology name</label>
           <input
             type="text"
             onChange={(e) => {
@@ -584,7 +584,7 @@ const OntologyMainMetaDataForm = () => {
       <br></br>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" for="onto-suggest-purl">Ontology purl</label>
+          <label className="required_input" htmlFor="onto-suggest-purl">Ontology purl</label>
           <input
             type="text"
             onChange={(e) => {

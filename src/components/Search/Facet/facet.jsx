@@ -69,7 +69,7 @@ const Facet = (props) => {
                   onClick={props.handleTypesCheckBoxClick}
                   data-isChecked={props.selectedTypes.includes(type)}
                 />
-                <label class="form-check-label" for={"search-checkbox-" + type} >
+                <label class="form-check-label" htmlFor={"search-checkbox-" + type} >
                   {type}
                 </label>
               </div>
@@ -108,7 +108,7 @@ const Facet = (props) => {
                     onClick={props.handleOntologyCheckBoxClick}
                     data-isChecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
                   />
-                  <label class="form-check-label" for={"search-checkbox-" + ontologyId} >
+                  <label class="form-check-label" htmlFor={"search-checkbox-" + ontologyId} >
                     {ontologyId}
                   </label>
                 </div>
@@ -146,7 +146,7 @@ const Facet = (props) => {
                     onClick={props.handleCollectionsCheckboxClick}
                     data-isChecked={props.selectedCollections.includes(record['collection'])}
                   />
-                  <label class="form-check-label" for={"search-checkbox-" + record['collection']} >
+                  <label class="form-check-label" htmlFor={"search-checkbox-" + record['collection']} >
                     {record['collection']}
                   </label>
                 </div>
