@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { OntologyPageContext } from '../../../../context/OntologyPageContext';
 import OntologyLib from '../../../../Libs/OntologyLib';
+import Toolkit from '../../../../Libs/Toolkit';
 
 
 const PLACE_HOLDER = "N/A"
@@ -30,24 +31,29 @@ const OntologyInfoTable = () => {
 
 
   function createAnnotations() {
-    let entries = Object.entries(ontology.config.annotations);
+    let annotationProps = OntologyLib.getAnnotationProperties(ontology);
     let annotations = [];
-    if (entries.length !== 0) {
-      for (let [key, value] of entries) {
-        annotations.push(
-          <tr>
-            <td className="node-metadata-label"><b>{key}</b></td>
-            <td className="node-metadata-value">{(value).join(',\n')}</td>
-          </tr>
-        )
+    for (let prop in annotationProps) {
+      let value = "";
+      if (Toolkit.isString(annotationProps[prop])) {
+        value = annotationProps[prop];
+      } else {
+        value = annotationProps[prop].join(',\n')
       }
+      annotations.push(
+        <tr>
+          <td className='node-metadata-label'><b>{prop}</b></td>
+          <td className='node-metadata-value'>{value}</td>
+        </tr>
+      );
     }
-    else {
+
+    if (annotations.length === 0) {
       annotations.push(
         <tr>
           <td colSpan={3}>No additional information available</td>
         </tr>
-      )
+      );
     }
 
     return annotations;
@@ -215,7 +221,7 @@ const OntologyInfoTable = () => {
             <tr>
               <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
             </tr>
-            {/*createAnnotations()*/}
+            {createAnnotations()}
           </tbody>
         </table>}
       <div className="text-center " id="search-facet-show-more-ontology-btn">
