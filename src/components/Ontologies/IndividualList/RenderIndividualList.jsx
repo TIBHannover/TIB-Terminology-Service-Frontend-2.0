@@ -13,7 +13,7 @@ export const RenderIndividualList = (props) => {
     let individuals = props.individuals;
     for (let indv of individuals) {
       result.push(
-        <li className="list-node-li">
+        <li className="list-node-li" key={indv['iri']}>
           <span className="tree-text-container stour-individual-list-node" data-iri={indv["iri"]} id={indv["iri"]}>
             {indv["label"]}
           </span>

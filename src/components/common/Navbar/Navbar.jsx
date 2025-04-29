@@ -9,34 +9,34 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="siteMainNavbar">
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
+            <li className="nav-item" key={1}>
               {urlPath === "/" || urlPath === "/ts"
                 ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</a>
                 : <a className="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</a>
               }
             </li>
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
-              <li className="nav-item">
+              <li className="nav-item" key={2}>
                 {urlPath.includes("/collections")
                   ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</a>
                   : <a className="nav-link navbar-item stour-collections-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</a>
                 }
               </li>
             }
-            <li className="nav-item second-step">
+            <li className="nav-item second-step" key={3}>
               {urlPath.includes("/ontologies")
                 ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</a>
                 : <a className="nav-link navbar-item stour-ontologies-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</a>
               }
             </li>
-            <li className="nav-item">
+            <li className="nav-item" key={4}>
               {urlPath.includes("/help")
                 ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
                 : <a className="nav-link navbar-item stour-help-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
               }
             </li>
             {process.env.REACT_APP_PROJECT_ID !== "nfdi4ing" &&
-              <li className="nav-item">
+              <li className="nav-item" key={5}>
                 {urlPath.includes("/api")
                   ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
                   : <a className="nav-link navbar-item stour-api-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
@@ -44,7 +44,7 @@ function Navbar() {
               </li>
             }
             {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-              <li className="nav-item">
+              <li className="nav-item" key={6}>
                 {urlPath.includes("/docs")
                   ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a>
                   : <a className="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a>
@@ -52,14 +52,14 @@ function Navbar() {
               </li>
             }
             {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-              <li className="nav-item">
+              <li className="nav-item" key={7}>
                 {urlPath.includes("/usage")
                   ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</a>
                   : <a className="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</a>
                 }
               </li>
             }
-            <li className="nav-item">
+            <li className="nav-item" key={8}>
               {urlPath.includes("/about")
                 ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</a>
                 : <a className="nav-link navbar-item stour-about-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</a>

@@ -124,10 +124,10 @@ const IssueList = (props) => {
   function createPagination() {
     return [
       <ul className='pagination-holder'>
-        <li className='pagination-btn pagination-start'>
+        <li className='pagination-btn pagination-start' key={1}>
           <a className='pagination-link' data-value={'minus'} onClick={handlePagination}>Previous</a>
         </li>
-        <li className='pagination-btn pagination-end'>
+        <li className='pagination-btn pagination-end' key={2}>
           <a className='pagination-link' data-value={'plus'} onClick={handlePagination}>Next</a>
         </li>
       </ul>
