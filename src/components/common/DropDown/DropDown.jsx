@@ -5,7 +5,7 @@ const DropDown = (props) => {
   let optionsRendered = [];
   for (let item of options) {
     optionsRendered.push(
-      <option value={item.value} key={item.value} selected={item.value === defaultValue && "selected"}>{item.label}</option>
+      <option value={item.value} key={item.value} defaultValue={defaultValue}>{item.label}</option>
     );
   }
 

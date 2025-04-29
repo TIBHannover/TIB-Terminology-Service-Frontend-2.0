@@ -57,25 +57,25 @@ const Facet = (props) => {
     for (let type in resultTypes) {
       if (parseInt(resultTypes[type]) !== 0) {
         result.push(
-          <div class="row typeRow facet-item-row" key={type}>
-            <div class="col-sm-9">
-              <div class="form-check">
+          <div className="row typeRow facet-item-row" key={type}>
+            <div className="col-sm-9">
+              <div className="form-check">
                 <input
-                  class="form-check-input search-facet-checkbox"
+                  className="form-check-input search-facet-checkbox"
                   type="checkbox"
                   value={type}
                   id={"search-checkbox-" + type}
                   key={type}
                   onClick={props.handleTypesCheckBoxClick}
-                  data-isChecked={props.selectedTypes.includes(type)}
+                  data-ischecked={props.selectedTypes.includes(type)}
                 />
-                <label class="form-check-label" htmlFor={"search-checkbox-" + type} >
+                <label className="form-check-label" htmlFor={"search-checkbox-" + type} >
                   {type}
                 </label>
               </div>
             </div>
-            <div class="col-sm-3">
-              <div class="facet-result-count">{resultTypes[type]}</div>
+            <div className="col-sm-3">
+              <div className="facet-result-count">{resultTypes[type]}</div>
             </div>
           </div>
         );
@@ -96,25 +96,25 @@ const Facet = (props) => {
       if (parseInt(ontologyFacetData[ontologyId]) !== 0) {
         result.push(
           <div key={ontologyId}>
-            <div class="row ontoloyRow facet-item-row">
-              <div class="col-sm-9">
-                <div class="form-check">
+            <div className="row ontoloyRow facet-item-row">
+              <div className="col-sm-9">
+                <div className="form-check">
                   <input
-                    class="form-check-input search-facet-checkbox ontology-facet-checkbox"
+                    className="form-check-input search-facet-checkbox ontology-facet-checkbox"
                     type="checkbox"
                     value={ontologyId}
                     id={"search-checkbox-" + ontologyId.toLowerCase()}
                     key={ontologyId}
                     onClick={props.handleOntologyCheckBoxClick}
-                    data-isChecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
+                    data-ischecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
                   />
-                  <label class="form-check-label" htmlFor={"search-checkbox-" + ontologyId} >
+                  <label className="form-check-label" htmlFor={"search-checkbox-" + ontologyId} >
                     {ontologyId}
                   </label>
                 </div>
               </div>
-              <div class="col-sm-3">
-                <div class="facet-result-count">{ontologyFacetData[ontologyId]}</div>
+              <div className="col-sm-3">
+                <div className="facet-result-count">{ontologyFacetData[ontologyId]}</div>
               </div>
             </div>
           </div>
@@ -136,17 +136,17 @@ const Facet = (props) => {
           result.push(
             <div className="row facet-item-row">
               <div className='col-sm-9'>
-                <div class="form-check">
+                <div className="form-check">
                   <input
-                    class="form-check-input search-facet-checkbox"
+                    className="form-check-input search-facet-checkbox"
                     type="checkbox"
                     value={record['collection']}
                     id={"search-checkbox-" + record['collection']}
                     key={record['collection']}
                     onClick={props.handleCollectionsCheckboxClick}
-                    data-isChecked={props.selectedCollections.includes(record['collection'])}
+                    data-ischecked={props.selectedCollections.includes(record['collection'])}
                   />
-                  <label class="form-check-label" htmlFor={"search-checkbox-" + record['collection']} >
+                  <label className="form-check-label" htmlFor={"search-checkbox-" + record['collection']} >
                     {record['collection']}
                   </label>
                 </div>
@@ -264,15 +264,15 @@ const Facet = (props) => {
 
 
   return (
-    <div class="row" id="search-facet-container-box">
+    <div className="row" id="search-facet-container-box">
       {isLoading &&
-        <div class="d-flex justify-content-center">
-          <div class="spinner-grow text-info facet-loading-effect" role="status">
-            <span class="sr-only">Loading...</span>
+        <div className="d-flex justify-content-center">
+          <div className="spinner-grow text-info facet-loading-effect" role="status">
+            <span className="sr-only">Loading...</span>
           </div>
         </div>}
       {!isLoading &&
-        <div class="col-sm-12">
+        <div className="col-sm-12">
           <h2>Filter Results</h2>
           <div className="row">
             <div className="col-sm-12 clear-filter-link-box">
@@ -281,11 +281,11 @@ const Facet = (props) => {
             </div>
           </div>
           <h4>{"Type"}</h4>
-          <div class="facet-box" id="facet-types-list">
+          <div className="facet-box" id="facet-types-list">
             {typesCheckBoxesToRender}
           </div>
           <h4>{"Ontologies"}</h4>
-          <div class="facet-box">
+          <div className="facet-box">
             {ontologyCheckBoxesToRender}
             {showMoreIsNeededForOntologies &&
               <div className="text-center" id="search-facet-show-more-ontology-btn">
@@ -296,7 +296,7 @@ const Facet = (props) => {
           {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
             <>
               <h4>{"Collections"}</h4>
-              <div class="facet-box" id="facet-collections-list">
+              <div className="facet-box" id="facet-collections-list">
                 {!appContext.userSettings.userCollectionEnabled && collectionCheckBoxesToRender}
                 {appContext.userSettings.userCollectionEnabled &&
                   <>

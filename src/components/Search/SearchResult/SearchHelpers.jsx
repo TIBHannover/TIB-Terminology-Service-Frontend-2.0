@@ -1,7 +1,6 @@
 
 export function setResultTitleAndLabel(resultItem, obsoletes) {
     let content = [];
-    console.log(resultItem['type'])
     let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontology_name']);
     if (resultItem["type"] === 'class') {
         targetHref += '/terms?iri=' + encodeURIComponent(resultItem['iri']) + `&obsoletes=${obsoletes}`;
