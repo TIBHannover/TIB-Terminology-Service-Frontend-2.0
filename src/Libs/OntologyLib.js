@@ -1,7 +1,12 @@
+import Toolkit from "./Toolkit";
+
 class OntologyLib {
   static formatCreators(creators) {
     if (!creators || creators.length === 0) {
       return "N/A";
+    }
+    if (Toolkit.isString(creators)) {
+      return creators;
     }
     let value = [];
     for (let i = 0; i < creators.length; i++) {
