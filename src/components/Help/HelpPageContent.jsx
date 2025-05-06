@@ -41,8 +41,8 @@ export function renderHelpPage() {
       <p>Make a request at <b><a className="btn btn-secondary btn-sm pt-0 pb-0 pl-1 pr-1" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>Ontology suggestion</a></b>.</p>
       <h4>6 How can I contribute to any of the terminologies ?</h4>
       <p>The terminologies listed on TIB Terminology Service are usually maintained by dedicated communities and developed on web services like GitHub or GitLab.</p>
-      <p>If you have suggestions for a particular terminology you should visit their repository and open an issue.</p>
-      <p>You can find the link to a terminology issue tracker in the “Request a term” button on each terminology’s overview page</p>
+      <p>If you have suggestions for a particular terminology you should visit their repository and open an issue. You can find the link to the issue tracker of an ontology in its metadata in its overview tab.</p>
+      <p>If the ontology is maintained on GitHub you can also log-in to TIB Terminology Service with your GitHub credentials and file an issue directly from our GitHub Panel tab.</p>
       <h4>7 Are there other services to look up terminology ?</h4>
       <p>Yes, there are but some of these do not offer an API. There are a several terminology portals offered by standardization bodies like ISO, DIN or IEC where you can look up standardized terms and definitions:</p>
       <ul>
