@@ -8,7 +8,7 @@ const CopyLinkButton = (props) => {
   return [
     <button
       type="button"
-      class="btn btn-sm copy-link-icon-btn borderless-btn"
+      className="btn btn-sm copy-link-icon-btn borderless-btn"
       key={"copy-btn"}
       onClick={() => {
         navigator.clipboard.writeText(props.valueToCopy);
@@ -18,7 +18,7 @@ const CopyLinkButton = (props) => {
         }, 1000);
       }}
     >
-      <i class="fa fa-solid fa-copy"></i> {copied && <i class="fa fa-check" aria-hidden="true"></i>}
+      <i className="fa fa-solid fa-copy"></i> {copied && <i className="fa fa-check" aria-hidden="true"></i>}
     </button>
   ];
 }
@@ -31,7 +31,7 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
   return [
     <button
       type="button"
-      class="btn btn-secondary btn-sm copy-link-btn"
+      className="btn btn-secondary btn-sm copy-link-btn"
       key={"copy-btn"}
       onClick={() => {
         let copyValue = document.createElement('a');
@@ -58,7 +58,7 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
       data-placement="left"
       title={props.tooltipText}
     >
-      copy label as link {copied && <i class="fa fa-check" aria-hidden="true"></i>}
+      copy label as link {copied && <i className="fa fa-check" aria-hidden="true"></i>}
     </button>
   ];
 }

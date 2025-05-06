@@ -15,6 +15,7 @@ import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
+import CopyLinkButton from '../../common/CopyButton/CopyButton';
 
 
 
@@ -149,6 +150,7 @@ const SearchResult = (props) => {
             {setResultTitleAndLabel(searchResult[i], Toolkit.getObsoleteFlagValue())}
             <div className="searchresult-iri">
               {searchResult[i].iri}
+              <CopyLinkButton valueToCopy={searchResult[i].iri}></CopyLinkButton>
             </div>
             <div className="searchresult-card-description">
               <p>{searchResult[i].description}</p>
