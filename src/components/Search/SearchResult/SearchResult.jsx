@@ -158,7 +158,7 @@ const SearchResult = (props) => {
             <div className="searchresult-ontology">
               <span><b>Ontology: </b></span>
               <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontology_name']} target="_blank">
-                {searchResult[i].ontology_prefix}
+                {searchResult[i].ontology_name}
               </a>
             </div>
             <br />
