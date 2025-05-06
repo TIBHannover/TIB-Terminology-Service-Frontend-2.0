@@ -57,7 +57,21 @@ export const OntologyListRender = (props) => {
               <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{OntologyLib.getLabel(item)}</b></a>
             </div>
             <div className="ontology-card-description">
-              <p>{OntologyLib.gerDescription(item)}</p>
+              <p className="trunc-text">{OntologyLib.gerDescription(item).substring(0, 100) + " ... "}</p>
+              <a className="read-more-btn" data-value={OntologyLib.gerDescription(item)} onClick={(e) => {
+                let fullDescp = e.target.getAttribute("data-value");
+                let p = e.target.previousElementSibling;
+                if (!p) { return }
+                if (e.target.textContent === "[Read more]") {
+                  p.textContent = fullDescp;
+                  e.target.textContent = "[Read less]"
+                } else {
+                  p.textContent = fullDescp.substring(0, 100) + " ... ";
+                  e.target.textContent = "[Read more]"
+                }
+              }}
+              >
+                [Read more]</a>
             </div>
             {process.env.REACT_APP_PROJECT_ID === "general" &&
               <div className='ontology-card-collection-name'>
