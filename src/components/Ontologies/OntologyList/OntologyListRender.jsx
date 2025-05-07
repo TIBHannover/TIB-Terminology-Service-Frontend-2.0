@@ -17,7 +17,7 @@ const SORT_DROPDONW_OPTIONS = [
   { label: "Classes Count", value: CLASS_SORT_KEY },
   { label: "Properties Count", value: PROPERT_SORT_KEY },
   { label: "Individuals Count", value: INDIVIDUAL_SORT_KEY },
-  { label: "Data Loaded", value: TIME_SORT_KEY },
+  { label: "Date Loaded", value: TIME_SORT_KEY },
 ];
 
 

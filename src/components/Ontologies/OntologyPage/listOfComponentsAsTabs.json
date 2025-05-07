@@ -64,7 +64,7 @@
         "keyForRenderAsComponent": "ondetPage",
         "keyForRenderAsTabItem": "ondetPage-tab",
         "tabId": 7,
-        "tabTitle": "Changes Management",
+        "tabTitle": "Change Management",
         "urlEndPoint": "/ondet"
     }
 }
