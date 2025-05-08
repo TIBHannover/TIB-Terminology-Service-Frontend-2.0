@@ -104,7 +104,6 @@ export async function fetchOntologyListForCollections(collectionsIds: Array<stri
 }
 
 
-/* react query key: allCollectionsWithTheirOntologies  */
 export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key: string]: number } {
   let result: { [key: string]: number } = {};
   for (let onto of ontoList) {
@@ -126,6 +125,7 @@ export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key:
 }
 
 
+/* react query key: allCollectionsWithTheirOntologies  */
 export async function getCollectionsAndThierOntologies(): Promise<{ [key: string]: OntologyData[] }> {
   let result: { [key: string]: OntologyData[] } = {};
   let ontoAPI = new OntologyApi({});

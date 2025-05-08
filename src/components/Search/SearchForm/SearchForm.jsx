@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from './KeyboardNavigation';
@@ -27,6 +27,7 @@ const SearchForm = () => {
 
   const appContext = useContext(AppContext);
   const navigator = useHistory();
+  const location = useLocation();
 
   const searchUrlFactory = new SearchUrlFactory();
 
@@ -121,6 +122,17 @@ const SearchForm = () => {
   }
 
 
+  function handleJumptoAutocompleteClick(e) {
+    let selectedQuery = e.currentTarget.getAttribute("data-value");
+    if (selectedQuery) {
+      setSearchQuery(selectedQuery);
+      document.getElementById("s-field").value = selectedQuery;
+    }
+    setAutoCompleteResult([]);
+    setJumpToResult([]);
+  }
+
+
   function closeResultBoxWhenClickedOutside(e) {
     if (!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)) {
       setAutoCompleteResult([]);
@@ -169,6 +181,10 @@ const SearchForm = () => {
     }
   }, [appContext.userSettings.advancedSearchEnabled]);
 
+  useEffect(() => {
+    setOntologyId(OntologyLib.getCurrentOntologyIdFromUrlPath());
+  }, [location.pathname]);
+
 
   return (
     <>
@@ -186,6 +202,7 @@ const SearchForm = () => {
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         advSearchEnabled={advSearchEnabled}
         handleAdvancedSearchToggle={handleAdvancedSearchToggle}
+        optionClickCallback={handleJumptoAutocompleteClick}
       />
       <AdvancedSearch advSearchEnabled={advSearchEnabled} />
     </>

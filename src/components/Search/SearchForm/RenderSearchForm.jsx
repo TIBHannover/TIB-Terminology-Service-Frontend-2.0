@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Toolkit from "../../../Libs/Toolkit";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
+import { Link } from "react-router-dom";
 
 
 const RenderSearchForm = (props) => {
@@ -23,11 +24,11 @@ const RenderSearchForm = (props) => {
     let key = 0;
     for (let result of props.autoCompleteResult) {
       resultList.push(
-        <a href={props.setSearchUrl(result['autosuggest'])} key={key} className="container">
+        <Link to={props.setSearchUrl(result['autosuggest'])} key={key} className="container" data-value={result['autosuggest']} onClick={(e) => { props.optionClickCallback(e) }}>
           <div className="autocomplete-item item-for-navigation">
             {result['autosuggest']}
           </div>
-        </a>
+        </Link>
       )
       key++;
     }
@@ -66,13 +67,13 @@ const RenderSearchForm = (props) => {
     }
 
     content.push(
-      <a href={targetHref} className="jumto-result-link container">
+      <Link to={targetHref} className="jumto-result-link container" data-value={resultItem['label']} onClick={(e) => { props.optionClickCallback(e) }}>
         <div className="jump-autocomplete-item jumpto-result-text item-for-navigation">
           {resultItem['label']}
           <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
           {resultItem["type"] !== 'ontology' && <div className="btn btn-default button-in-jumpto term-button">{resultItem['short_form']}</div>}
         </div>
-      </a>
+      </Link>
     );
 
     return content;
@@ -150,8 +151,9 @@ const RenderSearchForm = (props) => {
 
           {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
             <p>
-              <span className="examples" >Examples: <a className="example-link" href="search?q=electric+vehicle">electric vehicle</a>,
-                <a className="example-link" href="search?q=agent">agent</a></span>
+              <span className="examples" >
+                Examples: <Link className="example-link" to="search?q=electric+vehicle">electric vehicle</Link>,
+                <Link className="example-link" href="search?q=agent">agent</Link></span>
             </p>
           }
 

@@ -8,7 +8,7 @@ import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import SearchLib from '../../../Libs/searchLib';
-import { fetchAllCollectionWithOntologyList } from '../../../api/collection';
+import { fetchAllCollectionWithOntologyList, getCollectionsAndThierOntologies } from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
@@ -63,7 +63,7 @@ const SearchResult = (props) => {
   let collectionIdsAndOntologies = [];
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
-    queryFn: fetchAllCollectionWithOntologyList
+    queryFn: getCollectionsAndThierOntologies
   });
 
   if (process.env.REACT_APP_PROJECT_ID === "general" && collectionsWithOntologiesQuery.data) {

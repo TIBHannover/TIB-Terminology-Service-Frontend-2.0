@@ -106,7 +106,7 @@ const Facet = (props) => {
                     id={"search-checkbox-" + ontologyId.toLowerCase()}
                     key={ontologyId}
                     onClick={props.handleOntologyCheckBoxClick}
-                    data-ischecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
+                    data-isChecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
                   />
                   <label className="form-check-label" htmlFor={"search-checkbox-" + ontologyId} >
                     {ontologyId}
@@ -129,8 +129,8 @@ const Facet = (props) => {
 
   function createCollectionsCheckBoxes() {
     let result = [];
-    for (let record of props.allCollections) {
-      for (let onto of record['ontologies']) {
+    for (let col in props.allCollections) {
+      for (let onto of props.allCollections[col]) {
         let ontoId = onto['ontologyId'];
         if (props.selectedOntologies.includes(ontoId.toLowerCase()) || props.selectedOntologies.length === 0) {
           result.push(
@@ -140,14 +140,14 @@ const Facet = (props) => {
                   <input
                     className="form-check-input search-facet-checkbox"
                     type="checkbox"
-                    value={record['collection']}
-                    id={"search-checkbox-" + record['collection']}
-                    key={record['collection']}
+                    value={col}
+                    id={"search-checkbox-" + col}
+                    key={col}
                     onClick={props.handleCollectionsCheckboxClick}
-                    data-ischecked={props.selectedCollections.includes(record['collection'])}
+                    data-ischecked={props.selectedCollections.includes(col)}
                   />
-                  <label className="form-check-label" htmlFor={"search-checkbox-" + record['collection']} >
-                    {record['collection']}
+                  <label className="form-check-label" htmlFor={"search-checkbox-" + col} >
+                    {col}
                   </label>
                 </div>
               </div>
