@@ -411,6 +411,15 @@ body .cc_more_info {
   text-decoration: underline;
 }
 
+.navbar-item:visited {
+  color: white;
+  text-decoration: underline;
+}
+.navbar-item:focus {
+  color: white;
+  text-decoration: underline;
+}
+
 body .navbar-collapse-btn {
   background-color: black;
   color: white;

@@ -1,3 +1,6 @@
+
+import { Link } from 'react-router-dom';
+
 function Navbar() {
 
   let urlPath = window.location.pathname;
@@ -11,58 +14,58 @@ function Navbar() {
           <ul className="navbar-nav ml-auto">
             <li className="nav-item" key={1}>
               {urlPath === "/" || urlPath === "/ts"
-                ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</a>
-                : <a className="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</a>
+                ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</Link>
+                : <Link className="nav-link navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>Home</Link>
               }
             </li>
             {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
               <li className="nav-item" key={2}>
                 {urlPath.includes("/collections")
-                  ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</a>
-                  : <a className="nav-link navbar-item stour-collections-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</a>
+                  ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</Link>
+                  : <Link className="nav-link navbar-item stour-collections-navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"}>Collections</Link>
                 }
               </li>
             }
             <li className="nav-item second-step" key={3}>
               {urlPath.includes("/ontologies")
-                ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</a>
-                : <a className="nav-link navbar-item stour-ontologies-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</a>
+                ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</Link>
+                : <Link className="nav-link navbar-item stour-ontologies-navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"}>Ontologies</Link>
               }
             </li>
             <li className="nav-item" key={4}>
               {urlPath.includes("/help")
-                ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
-                : <a className="nav-link navbar-item stour-help-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</a>
+                ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</Link>
+                : <Link className="nav-link navbar-item stour-help-navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"}>Help</Link>
               }
             </li>
             {process.env.REACT_APP_PROJECT_ID !== "nfdi4ing" &&
               <li className="nav-item" key={5}>
                 {urlPath.includes("/api")
-                  ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
-                  : <a className="nav-link navbar-item stour-api-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</a>
+                  ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</Link>
+                  : <Link className="nav-link navbar-item stour-api-navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}>API</Link>
                 }
               </li>
             }
             {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
               <li className="nav-item" key={6}>
                 {urlPath.includes("/docs")
-                  ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a>
-                  : <a className="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</a>
+                  ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</Link>
+                  : <Link className="nav-link navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}>Documentation</Link>
                 }
               </li>
             }
             {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
               <li className="nav-item" key={7}>
                 {urlPath.includes("/usage")
-                  ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</a>
-                  : <a className="nav-link navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</a>
+                  ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</Link>
+                  : <Link className="nav-link navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"}>Usage</Link>
                 }
               </li>
             }
             <li className="nav-item" key={8}>
               {urlPath.includes("/about")
-                ? <a className="nav-link navbar-item nav-clicked" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</a>
-                : <a className="nav-link navbar-item stour-about-navbar-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</a>
+                ? <Link className="nav-link navbar-item nav-clicked" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</Link>
+                : <Link className="nav-link navbar-item stour-about-navbar-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"}>About</Link>
               }
             </li>
           </ul>
