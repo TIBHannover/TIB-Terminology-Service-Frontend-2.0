@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 
 export function setResultTitleAndLabel(resultItem, obsoletes) {
     let content = [];
@@ -14,12 +16,12 @@ export function setResultTitleAndLabel(resultItem, obsoletes) {
 
     content.push(
         <div className="search-card-title">
-            <a href={targetHref} className="search-result-title">
+            <Link to={targetHref} className="search-result-title">
                 [{resultItem.type}] <h4>{resultItem.label}</h4>
-            </a>
-            <a className="btn btn-default term-button" href={targetHref} >
+            </Link>
+            <Link className="btn btn-default term-button" to={targetHref} >
                 {resultItem.short_form}
-            </a>
+            </Link>
         </div>
     );
 

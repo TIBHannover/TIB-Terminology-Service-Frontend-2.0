@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Pagination from "../../common/Pagination/Pagination";
 import DropDown from "../../common/DropDown/DropDown";
 import OntologyLib from "../../../Libs/OntologyLib";
+import { Link } from 'react-router-dom';
 
 
 const TITLE_SORT_KEY = "title";
@@ -33,11 +34,11 @@ export const OntologyListRender = (props) => {
     let result = [];
     for (let i = 0; i < collections.length; i++) {
       if (i !== collections.length - 1) {
-        result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collections[i]}>{collections[i]}</a></span>)
+        result.push(<span className='ontology-collection-name'><Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collections[i]}>{collections[i]}</Link></span>)
         result.push(",")
       }
       else {
-        result.push(<span className='ontology-collection-name'><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collections[i]}>{collections[i]}</a></span>)
+        result.push(<span className='ontology-collection-name'><Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collections[i]}>{collections[i]}</Link></span>)
       }
 
     }
@@ -53,8 +54,8 @@ export const OntologyListRender = (props) => {
         <div className="row result-card" id={'ontology_' + i} key={item.ontologyId}>
           <div className='col-sm-9'>
             <div className="ontology-card-title-section">
-              <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className='ontology-button btn btn-secondary'>{item.ontologyId}</a>
-              <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{OntologyLib.getLabel(item)}</b></a>
+              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className='ontology-button btn btn-secondary'>{item.ontologyId}</Link>
+              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId} className="ontology-title-text-in-box"><b>{OntologyLib.getLabel(item)}</b></Link>
             </div>
             <div className="ontology-card-description">
               <p className="trunc-text">{OntologyLib.gerDescription(item).substring(0, 100) + " ... "}</p>

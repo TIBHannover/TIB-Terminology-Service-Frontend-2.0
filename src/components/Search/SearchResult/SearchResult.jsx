@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
@@ -160,9 +160,9 @@ const SearchResult = (props) => {
             </div>
             <div className="searchresult-ontology">
               <span><b>Ontology: </b></span>
-              <a className='btn btn-default ontology-button' href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontology_name']} target="_blank">
+              <Link className='btn btn-default ontology-button' to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontology_name']} target="_blank">
                 {searchResult[i].ontology_name}
-              </a>
+              </Link>
             </div>
             <br />
             {alsoInList.length !== 0 &&
