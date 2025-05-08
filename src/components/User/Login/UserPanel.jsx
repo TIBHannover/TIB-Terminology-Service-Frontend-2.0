@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
 import Auth from "../../../Libs/AuthLib";
 import Login from "./TS/Login";
+import { Link } from 'react-router-dom';
 
 
 
@@ -25,15 +26,15 @@ const UserPanel = (props) => {
             {appContext.user.fullName}
           </button>
           <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userProfileDropdown">
-            <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</a>
-            <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}>My Ontology Collection</a>
+            <Link className="dropdown-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My Profile</Link>
+            <Link className="dropdown-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}>My Ontology Collection</Link>
             {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&
-              <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</a>
+              <Link className="dropdown-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited Issue Requests</Link>
             }
             {appContext.isUserSystemAdmin &&
-              <a className="dropdown-item" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</a>
+              <Link className="dropdown-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</Link>
             }
-            <a className="dropdown-item" href="#" onClick={() => { Auth.runLogout(); }}>Logout</a>
+            <Link className="dropdown-item" to="#" onClick={() => { Auth.runLogout(); }}>Logout</Link>
           </div>
         </div>
       }
