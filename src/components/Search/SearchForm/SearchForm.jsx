@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom'
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
 import { keyboardNavigationForJumpto } from './KeyboardNavigation';
@@ -25,6 +26,7 @@ const SearchForm = () => {
   */
 
   const appContext = useContext(AppContext);
+  const navigator = useHistory();
 
   const searchUrlFactory = new SearchUrlFactory();
 
@@ -113,7 +115,9 @@ const SearchForm = () => {
       return true;
     }
     let searchUrl = setSearchUrl(searchQuery);
-    window.location.replace(searchUrl);
+    setAutoCompleteResult([]);
+    setJumpToResult([]);
+    navigator.push(searchUrl);
   }
 
 

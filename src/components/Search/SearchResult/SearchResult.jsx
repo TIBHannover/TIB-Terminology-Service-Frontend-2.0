@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom'
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
@@ -27,6 +28,8 @@ const SearchResult = (props) => {
   */
 
   const appContext = useContext(AppContext);
+
+  const location = useLocation();
 
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
@@ -336,7 +339,7 @@ const SearchResult = (props) => {
     setSearchResult([]);
     search();
     createFilterTags();
-  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang]);
+  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, location.search]);
 
 
 
