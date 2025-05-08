@@ -38,7 +38,7 @@ const OntologyOverview = () => {
                 rel="noreferrer"
                 className='btn btn-secondary download-ontology-btn w-75 stour-overview-page-show-metadata-as-json-btn'
               >
-                Show Ontology Metdata as JSON
+                Show Ontology Metadata as JSON
               </a>
             </div>
           </div>
