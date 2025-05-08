@@ -56,9 +56,7 @@ const OntologyPage = (props) => {
 
   */
 
-  if (document.getElementById('application_content')) {
-    document.getElementById('application_content').style.width = '100%';
-  }
+
   const UrlFactory = new CommonUrlFactory();
   let language = UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
 
