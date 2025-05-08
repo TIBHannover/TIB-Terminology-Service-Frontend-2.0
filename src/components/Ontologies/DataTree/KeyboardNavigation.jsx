@@ -21,7 +21,7 @@ class KeyboardNavigator {
 
   run(event) {
     let treeNodeManager = new TreeNodeController();
-    let jumtoItems = document.getElementsByClassName('react-autosuggest__suggestions-container--open');
+    let jumtoItems = document.getElementsByClassName('autocomplete-item');
     let reactour = document.getElementsByClassName('reactour__helper');
     if (jumtoItems.length !== 0 || reactour.length !== 0) {
       // do not perform when Jumpto box is open OR site tour is open

@@ -92,6 +92,9 @@ const SearchForm = () => {
 
 
   function handleKeyDown(e) {
+    if (document.getElementsByClassName("selected-by-arrow-key").length !== 0) {
+      return;
+    }
     if (e.key === 'Enter') {
       triggerSearch();
     }
