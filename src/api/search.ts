@@ -15,7 +15,7 @@ export async function olsSearch(inputData: SearchApiInput): Promise<SearchApiRes
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let rangeStart: number = (inputData.page - 1) * inputData.size;
-    let searchUrl: string = process.env.REACT_APP_SEARCH_URL + `?q=${inputData.searchQuery}&start=${rangeStart}&groupField=iri&rows=${inputData.size}&lang=${lang}`;
+    let searchUrl: string = process.env.REACT_APP_SEARCH_URL + `?q=${inputData.searchQuery}&start=${rangeStart}&groupField=iri&rows=${inputData.size}&lang=${lang}&exclusive=true`;
     searchUrl = inputData.selectedOntologies.length !== 0 ? (searchUrl + `&ontology=${inputData.selectedOntologies.join(',')}`) : searchUrl;
     searchUrl = inputData.selectedTypes.length !== 0 ? (searchUrl + `&type=${inputData.selectedTypes.join(',')}`) : searchUrl;
     searchUrl = inputData.searchInValues.length !== 0 ? (searchUrl + `&queryFields=${inputData.searchInValues.join(',')}`) : searchUrl;
