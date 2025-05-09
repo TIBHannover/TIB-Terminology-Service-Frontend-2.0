@@ -9,9 +9,8 @@
 
 .ontology-page-container {
   width: 135%;
-  position: relative;
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -18%;
 }
 
 .ontology-page-container .header-collapse-btn {

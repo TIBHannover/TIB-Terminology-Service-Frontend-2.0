@@ -710,6 +710,7 @@ body .extra-sm-btn {
 
 body .modal {
   color: black;
+  z-index: 10000;
 }
 
 @keyframes fadeInOut {
