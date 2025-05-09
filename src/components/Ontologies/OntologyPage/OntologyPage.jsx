@@ -211,77 +211,75 @@ const OntologyPage = (props) => {
     };
 
     return (
-      <div className="ontolgoy-page-container-wrapper">
-        <div className='justify-content-center ontology-page-container'>
-          {Toolkit.createHelmet(ontology.ontologyId)}
-          <OntologyPageContext.Provider value={contextData}>
-            <OntologyPageHeadSection />
-            <div className='col-sm-12'>
-              <OntologyPageTabs
-                tabMetadataJson={ontologyPageTabConfig}
-                tabChangeHandler={tabChange}
-                activeTabId={activeTab}
-                noteCounts={notesCount}
+      <div className='justify-content-center ontology-page-container'>
+        {Toolkit.createHelmet(ontology.ontologyId)}
+        <OntologyPageContext.Provider value={contextData}>
+          <OntologyPageHeadSection />
+          <div className='col-sm-12'>
+            <OntologyPageTabs
+              tabMetadataJson={ontologyPageTabConfig}
+              tabChangeHandler={tabChange}
+              activeTabId={activeTab}
+              noteCounts={notesCount}
+            />
+            {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
+              <OntologyOverview />
+            }
+            {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
+              <DataTree
+                rootNodes={rootTerms}
+                obsoleteTerms={obsoleteTerms}
+                componentIdentity={'terms'}
+                key={'termTreePage'}
               />
-              {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
-                <OntologyOverview />
-              }
-              {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
-                <DataTree
-                  rootNodes={rootTerms}
-                  obsoleteTerms={obsoleteTerms}
-                  componentIdentity={'terms'}
-                  key={'termTreePage'}
-                />
-              }
+            }
 
-              {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
-                <DataTree
-                  rootNodes={rootProps}
-                  obsoleteTerms={obsoleteProps}
-                  componentIdentity={'properties'}
-                  key={'propertyTreePage'}
-                />
-              }
-              {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
-                <IndividualsList
-                  rootNodes={rootTerms}
-                  rootNodesForSkos={skosRootIndividuals}
-                  componentIdentity={'individuals'}
-                  key={'individualsTreePage'}
-                />
-              }
-              {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-                <TermList componentIdentity={'termList'} key={'termListPage'} />
-              }
-              {!waiting && (activeTab === NOTES_TAB_ID) &&
-                <NoteList key={'notesPage'} />
-              }
-              {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&
-                <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'} />
-              }
+            {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
+              <DataTree
+                rootNodes={rootProps}
+                obsoleteTerms={obsoleteProps}
+                componentIdentity={'properties'}
+                key={'propertyTreePage'}
+              />
+            }
+            {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
+              <IndividualsList
+                rootNodes={rootTerms}
+                rootNodesForSkos={skosRootIndividuals}
+                componentIdentity={'individuals'}
+                key={'individualsTreePage'}
+              />
+            }
+            {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
+              <TermList componentIdentity={'termList'} key={'termListPage'} />
+            }
+            {!waiting && (activeTab === NOTES_TAB_ID) &&
+              <NoteList key={'notesPage'} />
+            }
+            {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&
+              <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'} />
+            }
 
-              {
-                !waiting && activeTab === ONDET_TAB_ID && (() => {
-                  const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
+            {
+              !waiting && activeTab === ONDET_TAB_ID && (() => {
+                const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
 
-                  try {
-                    const fileUrl = new URL(ontology.versioned_url);
+                try {
+                  const fileUrl = new URL(ontology.versioned_url);
 
-                    return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
-                      ? <ChangesTimeline ontologyRawUrl={ontology.versioned_url} />
-                      : errorMessage;
-                  } catch (error) {
-                    return errorMessage;
-                  }
-                })()
-              }
+                  return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
+                    ? <ChangesTimeline ontologyRawUrl={ontology.versioned_url} />
+                    : errorMessage;
+                } catch (error) {
+                  return errorMessage;
+                }
+              })()
+            }
 
 
-              {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
-            </div>
-          </OntologyPageContext.Provider>
-        </div>
+            {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
+          </div>
+        </OntologyPageContext.Provider>
       </div>
     )
   }
