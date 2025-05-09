@@ -375,6 +375,7 @@ const SearchResult = (props) => {
                   dropDownTitle="Language"
                   dropdownClassName={"white-dropdown"}
                   dropDownValue={lang}
+                  defaultVaue={lang}
                   dropDownChangeHandler={(e) => {
                     localStorage.setItem('language', e.target.value);
                     commonUrlFactory.setParam({ name: 'lang', value: e.target.value });

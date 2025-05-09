@@ -17,6 +17,7 @@ const DropDown = (props) => {
       <select
         className={'site-dropdown-menu ' + dropdownClassName}
         id={dropDownId}
+        defaultValue={defaultValue}
         value={dropDownValue}
         onChange={dropDownChangeHandler}
       >

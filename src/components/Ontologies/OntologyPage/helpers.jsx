@@ -42,7 +42,6 @@ export const OntologyPageTabs = (props) => {
     let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
   }
-
   return (
     <>
       <ul className="nav nav-tabs">
