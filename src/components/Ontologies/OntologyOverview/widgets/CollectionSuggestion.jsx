@@ -32,14 +32,7 @@ const CollectionSuggestion = () => {
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
     for (let col in collectionWithOntologyListQuery.data) {
-      let ontoIsPartOfCollection = false;
-      for (let classif of ontoPageContext.ontology?.classifications) {
-        if (classif.collection && classif.collection.includes(col)) {
-          ontoIsPartOfCollection = true;
-          break;
-        }
-      }
-      if (!ontoIsPartOfCollection) {
+      if (!collectionWithOntologyListQuery.data[col].find((onto) => onto.ontologyId === ontoPageContext.ontology.ontologyId)) {
         collectionIds.push(col);
       }
     }

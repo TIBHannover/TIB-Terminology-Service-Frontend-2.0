@@ -158,7 +158,7 @@ const OntologyInfoTable = () => {
                   <td>
                     <ul>
                       {
-                        ontology.classifications[0]['collection'].map((col) => {
+                        OntologyLib.getCollections(ontology).map((col) => {
                           return (
                             <li>
                               <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=" + col} target='_blank'>
