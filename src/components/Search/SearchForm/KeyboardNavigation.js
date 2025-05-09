@@ -47,7 +47,6 @@ function performEnter() {
     "selected-by-arrow-key",
   );
 
-  console.log(selectedElement);
   if (selectedElement.length !== 0) {
     selectedElement[0].parentNode.click();
   }
