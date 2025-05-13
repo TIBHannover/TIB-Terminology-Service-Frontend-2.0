@@ -128,7 +128,7 @@ const DataTree = (props) => {
               handleResetTreeInParent={handleResetTreeEvent}
               jumpToIri={jumpToIri}
             />
-            : <div className="no-node">It is currently not possible to load this tree. Please try later.</div>
+            : <div className="no-node">There is no term to load in this tree</div>
           }
         </div>
       </div>
