@@ -170,6 +170,7 @@ const Tree = (props) => {
     setReload(false);
     setSiblingsVisible(siblingsVisible);
     setResetTreeFlag(false);
+    setIsLoading(false);
     keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
     ontologyPageContext.storeIriForComponent(target, props.componentIdentity);
   }
@@ -441,7 +442,6 @@ const Tree = (props) => {
 
   useEffect(() => {
     buildTheTree();
-    setIsLoading(false);
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
