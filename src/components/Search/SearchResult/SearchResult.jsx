@@ -97,23 +97,27 @@ const SearchResult = (props) => {
         searchUnderAllIris: searchUnderAllIris,
       };
 
-      let result = await olsSearch(searchParams);
-
       // This part is for updating the facet counts. 
-      // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.          
-      searchParams.selectedTypes = [];
-      let searchResultForFacetCount = await olsSearch(searchParams);
-      result['facet_counts']['facet_fields']['type'] = searchResultForFacetCount['facet_counts']['facet_fields']['type'];
-      searchParams.selectedTypes = selectedTypes;
-      searchParams.selectedOntologies = [];
-      searchResultForFacetCount = await olsSearch(searchParams);
-      result['facet_counts']['facet_fields']['ontologyId'] = searchResultForFacetCount['facet_counts']['facet_fields']['ontologyId'];
+      // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.
+      let searchParamsForTypeCount = { ...searchParams };
+      searchParamsForTypeCount.selectedTypes = [];
+      let searchParamsForOntoCount = { ...searchParams };
+      searchParamsForOntoCount.selectedOntologies = [];
 
-      setSearchResult(result['response']['docs']);
-      setTotalResultsCount(result['response']['numFound']);
-      setFacetFields(result['facet_counts']);
-      setExpandedResults(result['expanded'])
-      setLoading(false);
+      Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
+        let result = values[0];
+        setSearchResult(result['response']['docs']);
+        setLoading(false);
+        let resultForFacetTypeCount = values[1];
+        let resultForFacetOntoCount = values[2];
+        result['facet_counts']['facet_fields']['type'] = resultForFacetTypeCount['facet_counts']['facet_fields']['type'];
+        result['facet_counts']['facet_fields']['ontologyId'] = resultForFacetOntoCount['facet_counts']['facet_fields']['ontologyId'];
+        setTotalResultsCount(result['response']['numFound']);
+        setFacetFields(result['facet_counts']);
+        setExpandedResults(result['expanded'])
+
+      });
+
     }
     catch (e) {
       setSearchResult([]);
