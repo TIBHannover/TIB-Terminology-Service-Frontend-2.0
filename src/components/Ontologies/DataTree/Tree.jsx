@@ -10,7 +10,6 @@ import KeyboardNavigator from "./KeyboardNavigation";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
-import { getTourProfile } from "../../../tours/controller";
 
 
 
