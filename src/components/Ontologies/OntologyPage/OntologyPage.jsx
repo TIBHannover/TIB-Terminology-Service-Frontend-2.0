@@ -91,7 +91,7 @@ const OntologyPage = (props) => {
     if (isSkos) {
       let skosApi = new SkosApi({ ontologyId: ontologyId, iri: "" });
       await skosApi.fetchRootConcepts();
-      SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
+      //SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
       skosIndividuals = skosApi.rootConcepts;
     }
 
@@ -230,6 +230,7 @@ const OntologyPage = (props) => {
                 rootNodes={rootTerms}
                 obsoleteTerms={obsoleteTerms}
                 componentIdentity={'terms'}
+                rootNodesForSkos={skosRootIndividuals}
                 key={'termTreePage'}
               />
             }
