@@ -7,8 +7,8 @@ import TreeNodeController from './TreeNode';
 export default class SkosHelper {
 
 
-  static async buildSkosTree(ontologyId, targetIri = null, fullTree = false) {
-    let subTreeObject = await SkosHelper.buildSkosSubTree(ontologyId, targetIri, fullTree);
+  static async buildSkosTree(ontologyId, targetIri = null, fullTree = false, lang = "en") {
+    let subTreeObject = await SkosHelper.buildSkosSubTree(ontologyId, targetIri, lang, fullTree);
     let ul = subTreeObject.ul;
     let subTreeRoot = subTreeObject.treeNodesArray[subTreeObject.treeNodesArray.length - 1];
     if (fullTree) {
@@ -22,9 +22,9 @@ export default class SkosHelper {
 
 
 
-  static async buildSkosSubTree(ontologyId, iri, fullTree = false) {
+  static async buildSkosSubTree(ontologyId, iri, lang, fullTree = false) {
     let treeNodes = [];
-    let skosApi = new SkosApi({ ontologyId: ontologyId, iri: iri });
+    let skosApi = new SkosApi({ ontologyId: ontologyId, iri: iri, lang: lang });
     await skosApi.fetchSkosTerm();
     treeNodes.push(skosApi.skosTerm);
     let targetNodeIri = iri;
@@ -34,7 +34,6 @@ export default class SkosHelper {
       if (!res) {
         break;
       }
-      res['has_children'] = SkosLib.skosTermHasChildren(res);
       treeNodes.push(res);
       skosApi.setIri(res['iri']);
     }
@@ -43,22 +42,22 @@ export default class SkosHelper {
     let ul = "";
     for (let i = 0; i < treeNodes.length; i++) {
       let node = treeNodes[i];
-      let leafClass = i !== 0 ? " opened" : " closed";
+      let leafClass = i !== 0 ? "opened" : "closed";
       let clickedClass = i === 0 ? " clicked" : "";
       let symbol = React.createElement("i", { "className": "fa fa-minus", "aria-hidden": "true" }, "");
       let textSpan = React.createElement("div", { "className": "li-label-text" }, node.label);
       let containerSpan = React.createElement("div", { "className": "tree-text-container" + clickedClass }, textSpan);
-      if (!node.has_children) {
-        leafClass = " leaf-node";
+      if (!SkosLib.skosTermHasChildren(node)) {
+        leafClass = "leaf-node";
         symbol = React.createElement("i", { "className": "" }, "");
       }
-      else if (node.has_children && i === 0) {
+      else if (SkosLib.skosTermHasChildren(node) && i === 0) {
         symbol = React.createElement("i", { "className": "fa fa-plus", "aria-hidden": "true" }, "");
       }
       nodeInTree = React.createElement("li", {
         "data-iri": node.iri,
         "data-id": node.iri,
-        "className": "tree-node-li" + leafClass,
+        "className": "tree-node-li " + leafClass,
         "id": node.iri
       }
         , symbol, containerSpan, childNode
@@ -152,7 +151,7 @@ export default class SkosHelper {
 
 
   static async showHidesiblingsForSkos(showFlag, ontologyId, iri, skosRoot, lang) {
-    let skosApi = new SkosApi({ ontologyId: ontologyId, iri: iri });
+    let skosApi = new SkosApi({ ontologyId: ontologyId, iri: iri, lang: lang });
     let parent = await skosApi.fetchSkosTermParent();
     let siblingsNodes = "";
     let targetUl = "";
@@ -168,14 +167,14 @@ export default class SkosHelper {
         targetUl = document.getElementById("tree-root-ul");
       }
       else {
-        let skosApi = new SkosApi({ ontologyId: ontologyId, iri: parent.iri });
+        let skosApi = new SkosApi({ ontologyId: ontologyId, iri: parent.iri, lang: lang });
         await skosApi.fetchChildrenForSkosTerm();
         siblingsNodes = skosApi.childrenForSkosTerm;
         targetUl = document.getElementById("children_for_" + parent.iri);
       }
       for (let node of siblingsNodes) {
         if (node.iri !== iri) {
-          let listItem = treeNode.buildNodeWithTradionalJs({ nodeObject: node, isSkos: true, lang: lang });
+          let listItem = treeNode.buildNodeWithTradionalJs({ nodeObject: node, isSkos: true });
           targetUl.appendChild(listItem);
         }
       }

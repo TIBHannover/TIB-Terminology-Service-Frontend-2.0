@@ -56,25 +56,11 @@ class SkosApi {
 
   async fetchSkosTerm() {
     try {
-      let OntologiesBaseServiceUrl = process.env.REACT_APP_API_BASE_URL;
-      let url =
-        OntologiesBaseServiceUrl +
-        "/" +
-        this.ontologyId +
-        "/individuals/" +
-        this.iri;
+      let baseUrl = process.env.REACT_APP_API_URL;
+      let url = `${baseUrl}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=${this.lang}`;
       let res = await (await fetch(url, getCallSetting)).json();
-      if (!res) {
-        this.skosTerm = null;
-        return true;
-      } else if (typeof res["iri"] === "undefined") {
-        this.skosTerm = null;
-        return true;
-      } else {
-        res["has_children"] = SkosLib.skosTermHasChildren(res);
-        this.skosTerm = res;
-        return true;
-      }
+      this.skosTerm = res;
+      return true;
     } catch (e) {
       this.skosTerm = null;
       return true;
@@ -83,21 +69,15 @@ class SkosApi {
 
   async fetchSkosTermParent() {
     try {
-      let baseUrl = process.env.REACT_APP_API_BASE_URL;
-      let url =
-        baseUrl +
-        "/" +
-        this.ontologyId +
-        "/skos/" +
-        this.iri +
-        "/relations?relation_type=broader";
+      let baseUrl = process.env.REACT_APP_API_URL;
+      let url = `${baseUrl}/v2/ontologies/${this.ontologyId}/skos/${this.iri}/relations?lang=${this.lang}&relation_type=broader`;
       let res = await (await fetch(url, getCallSetting)).json();
       res = res["_embedded"];
-      if (!res || !res["individuals"]) {
+      if (!res || !res["v2Entities"]) {
         return false;
       }
 
-      return res["individuals"][0];
+      return res["v2Entities"][0];
     } catch (e) {
       return false;
     }

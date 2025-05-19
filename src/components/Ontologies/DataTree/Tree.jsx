@@ -121,7 +121,7 @@ const Tree = (props) => {
     else if (target != undefined || reload) {
       showNodeDetailPage = true;
       if (ontologyPageContext.isSkos) {
-        treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView);
+        treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView, ontologyPageContext.ontoLang);
       }
       else {
         targetHasChildren = await TreeHelper.nodeHasChildren(ontologyPageContext.ontology.ontologyId, target, props.componentIdentity);

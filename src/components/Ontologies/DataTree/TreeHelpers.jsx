@@ -2,8 +2,6 @@ import React from 'react';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import TreeNodeController from './TreeNode';
-import Toolkit from '../../../Libs/Toolkit';
-import SkosLib from '../../../Libs/Skos';
 import TermLib from '../../../Libs/TermLib';
 
 
