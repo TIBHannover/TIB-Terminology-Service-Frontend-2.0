@@ -89,9 +89,8 @@ const OntologyPage = (props) => {
     let isSkos = ontologyApi.ontology?.['skos'] ?? false;
     let skosIndividuals = [];
     if (isSkos) {
-      let skosApi = new SkosApi({ ontologyId: ontologyId, iri: "" });
+      let skosApi = new SkosApi({ ontologyId: ontologyId, iri: "", skosRoot: ontologyApi.ontology?.['skosRoot'], lang: ontoLang });
       await skosApi.fetchRootConcepts();
-      //SkosLib.shapeSkosRootConcepts(skosApi.rootConcepts);
       skosIndividuals = skosApi.rootConcepts;
     }
 
@@ -185,6 +184,7 @@ const OntologyPage = (props) => {
       window.localStorage.setItem("language", ontoLang);
       setRootTerms([]);
       setRootProps([]);
+      setSkosRootIndividuals([]);
       setLastTabsStates({ "terms": null, "properties": null, "gitIssues": "" });
       loadOntologyData();
     }

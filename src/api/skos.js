@@ -3,7 +3,7 @@ import { getCallSetting } from "./constants";
 import SkosLib from "../Libs/Skos";
 
 class SkosApi {
-  constructor({ ontologyId, iri }) {
+  constructor({ ontologyId, iri, skosRoot, lang }) {
     this.ontologyId = ontologyId;
     this.iri = Toolkit.urlNotEncoded(iri)
       ? encodeURIComponent(encodeURIComponent(iri))
@@ -11,6 +11,8 @@ class SkosApi {
     this.rootConcepts = [];
     this.childrenForSkosTerm = [];
     this.skosTerm = {};
+    this.skosRoot = skosRoot;
+    this.lang = lang ?? "en";
   }
 
   setIri(newIri) {
@@ -22,7 +24,7 @@ class SkosApi {
   async fetchRootConcepts() {
     try {
       let baseUrl = process.env.REACT_APP_API_URL;
-      let url = `${baseUrl}/v2/ontologies/${this.ontologyId}/skos/tree?find_roots=TOPCONCEPTOF_PROPERTY`;
+      let url = `${baseUrl}/v2/ontologies/${this.ontologyId}/skos/tree?find_roots=${this.skosRoot}&lang=${this.lang}`;
       let results = await (await fetch(url, getCallSetting)).json();
       let cleanResult = [];
       for (let item of results) {
