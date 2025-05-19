@@ -49,7 +49,7 @@ export default class TreeHelper {
       }
 
       treeNode.children = childNodeChildren;
-      let childNode = treeNode.buildNodeWithReact(nodeList[i], nodeList[i].id, isClicked, isExpanded);
+      let childNode = treeNode.buildNodeWithReact({ nodeObject: nodeList[i], nodeIsClicked: isClicked, isExpanded: isExpanded });
       subNodes.push(childNode);
     }
 
@@ -62,7 +62,7 @@ export default class TreeHelper {
   }
 
 
-  static async expandNode(e, ontologyId, childExtractName, isSkos) {
+  static async expandNode({ e, ontologyId, childExtractName, isSkos, lang }) {
     let targetNodeIri = e.dataset.iri;
     let targetNodeId = e.dataset.id;
     let Id = e.id;
@@ -70,22 +70,21 @@ export default class TreeHelper {
     if (document.getElementById(Id).classList.contains("closed")) {
       // expand node
       let res = [];
-      if (isSkos && childExtractName !== "terms") {
-        let skosApi = new SkosApi({ ontologyId: ontologyId, iri: targetNodeIri });
+      if (isSkos) {
+        let skosApi = new SkosApi({ ontologyId: ontologyId, iri: targetNodeIri, lang: lang });
         await skosApi.fetchChildrenForSkosTerm();
         res = skosApi.childrenForSkosTerm;
       }
       else {
-        let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName);
+        let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName, lang);
         res = await termApi.getChildrenJsTree(targetNodeId);
       }
       TreeHelper.sortTermsInTree(res);
       let ul = document.createElement("ul");
       ul.setAttribute("id", "children_for_" + Id);
       ul.classList.add("tree-node-ul");
-      for (let i = 0; i < res.length; i++) {
-        let node = (isSkos && childExtractName !== "terms") ? SkosLib.shapeSkosMetadata(res[i]) : res[i];
-        let listItem = treeNode.buildNodeWithTradionalJs(node, node.iri);
+      for (let node of res) {
+        let listItem = treeNode.buildNodeWithTradionalJs({ nodeObject: node, isSkos: isSkos, lang: lang });
         ul.appendChild(listItem);
       }
       document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
@@ -113,7 +112,7 @@ export default class TreeHelper {
       if (nodes[i].iri === selectedNodeIri || nodes[i].iri === "http://www.w3.org/2002/07/owl#Thing") {
         continue;
       }
-      let node = treeNode.buildNodeWithTradionalJs(nodes[i], nodes[i].iri);
+      let node = treeNode.buildNodeWithTradionalJs({ nodeObject: nodes[i] });
       document.getElementById("tree-root-ul").appendChild(node);
     }
   }
@@ -133,7 +132,7 @@ export default class TreeHelper {
         if (res[i].iri === node.parentNode.dataset.iri) {
           continue;
         }
-        let item = treeNode.buildNodeWithTradionalJs(res[i], res[i].id);
+        let item = treeNode.buildNodeWithTradionalJs({ nodeObject: res[i] });
         parentUl.appendChild(item);
       }
     }
@@ -234,7 +233,7 @@ export default class TreeHelper {
       if (nodeIsClicked) {
         lastSelectedItemId = i + startIndex;
       }
-      let node = treeNode.buildNodeWithReact(obsoletes[i], i + startIndex, nodeIsClicked);
+      let node = treeNode.buildNodeWithReact({ nodeObject: obsoletes[i], nodeIsClicked: nodeIsClicked });
       resultArrayToPush.push(node);
     }
 

@@ -108,7 +108,7 @@ const Tree = (props) => {
     }
     if (!target || resetTreeFlag) {
       let result = [];
-      if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
+      if (ontologyPageContext.isSkos) {
         result = buildTheTreeFirstLayer(props.rootNodesForSkos);
       }
       else {
@@ -120,7 +120,7 @@ const Tree = (props) => {
     }
     else if (target != undefined || reload) {
       showNodeDetailPage = true;
-      if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
+      if (ontologyPageContext.isSkos) {
         treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView);
       }
       else {
@@ -130,7 +130,6 @@ const Tree = (props) => {
         listOfNodes = await termApi.getNodeJsTree(treeFullView);
         listOfNodes.push(termApi.term);
         rootNodesWithChildren = TreeHelper.buildTermTreeFromFlatList(listOfNodes);
-        //console.log(rootNodesWithChildren)
         if (Toolkit.getObjectInListIfExist(rootNodesWithChildren, 'iri', target)) {
           // the target node is a root node
           let result = buildTheTreeFirstLayer(rootNodesWithChildren, target);
@@ -151,7 +150,7 @@ const Tree = (props) => {
               treeNode.children = TreeHelper.autoExpandTargetNode(rootNodesWithChildren[i].childrenList, rootNodesWithChildren[i].id, target, targetHasChildren);
             }
             let isClicked = false;
-            let node = treeNode.buildNodeWithReact(rootNodesWithChildren[i], i, isClicked, isExpanded);
+            let node = treeNode.buildNodeWithReact({ nodeObject: rootNodesWithChildren[i], nodeIsClicked: isClicked, isExpanded: isExpanded });
             childrenList.push(node);
           }
 
@@ -214,7 +213,7 @@ const Tree = (props) => {
       if (nodeIsClicked) {
         selectedItemId = i;
       }
-      let node = treeNode.buildNodeWithReact(rootNodes[i], btoa(rootNodes[i].iri), nodeIsClicked);
+      let node = treeNode.buildNodeWithReact({ nodeObject: rootNodes[i], nodeIsClicked: nodeIsClicked, isSkos: ontologyPageContext.isSkos });
       childrenList.push(node);
     }
     if (obsoletesShown) {
@@ -245,33 +244,13 @@ const Tree = (props) => {
 
 
 
-  async function showSiblings() {
+  async function handleSiblings() {
     try {
-      let targetNodes = document.getElementsByClassName("targetNodeByIri");
       if (!siblingsVisible) {
-        if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
-          SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
-        }
-        else if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
-          TreeHelper.showSiblingsForRootNode(props.rootNodes, targetNodes[0].parentNode.dataset.iri);
-        }
-        else {
-          await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
-        }
+        await showSiblings();
+      } else {
+        await hideSiblings();
       }
-      else {
-        if (ontologyPageContext.isSkos && props.componentIdentity === "individuals") {
-          SkosHelper.showHidesiblingsForSkos(false, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
-        }
-
-        if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
-          TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
-        }
-        else {
-          TreeHelper.hideSiblings(targetNodes);
-        }
-      }
-
       setSiblingsVisible(!siblingsVisible);
       setBtnLoading(false);
     }
@@ -280,6 +259,34 @@ const Tree = (props) => {
       console.info(e);
     }
 
+  }
+
+
+  async function showSiblings() {
+    let targetNodes = document.getElementsByClassName("targetNodeByIri");
+    if (ontologyPageContext.isSkos) {
+      SkosHelper.showHidesiblingsForSkos(true, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri, ontologyPageContext.ontology.skosRoot, ontologyPageContext.ontoLang);
+    }
+    else if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
+      TreeHelper.showSiblingsForRootNode(props.rootNodes, targetNodes[0].parentNode.dataset.iri);
+    }
+    else {
+      await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
+    }
+  }
+
+  async function hideSiblings() {
+    let targetNodes = document.getElementsByClassName("targetNodeByIri");
+    if (ontologyPageContext.isSkos) {
+      SkosHelper.showHidesiblingsForSkos(false, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
+    }
+
+    if (!ontologyPageContext.isSkos && await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
+      TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
+    }
+    else {
+      TreeHelper.hideSiblings(targetNodes);
+    }
   }
 
 
@@ -352,8 +359,14 @@ const Tree = (props) => {
 
 
 
-  async function expandNodeHandler(node) {
-    await TreeHelper.expandNode(node, ontologyPageContext.ontology.ontologyId, childExtractName, ontologyPageContext.isSkos, ontologyPageContext.ontoLang);
+  async function expandNodeHandler(targetEvent) {
+    await TreeHelper.expandNode({
+      e: targetEvent,
+      ontologyId: ontologyPageContext.ontology.ontologyId,
+      childExtractName: childExtractName,
+      isSkos: ontologyPageContext.isSkos,
+      lang: ontologyPageContext.ontoLang
+    });
     saveComponentStateInParent();
   }
 
@@ -403,7 +416,7 @@ const Tree = (props) => {
               {siblingsButtonShow && !props.isIndividual &&
                 <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings' onClick={() => {
                   setBtnLoading(true);
-                  showSiblings().then(() => { setIsLoading(false) })
+                  handleSiblings().then(() => { setIsLoading(false) })
                 }}>
                   {!btnLoading && !siblingsVisible && "Show Siblings"}
                   {!btnLoading && siblingsVisible && "Hide Siblings"}
@@ -444,7 +457,7 @@ const Tree = (props) => {
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
-  }, [resetTreeFlag, reload]);
+  }, [resetTreeFlag, reload, props.rootNodesForSkos]);
 
 
   useEffect(() => {

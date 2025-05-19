@@ -40,22 +40,13 @@ class SkosApi {
 
   async fetchChildrenForSkosTerm() {
     try {
-      let OntologiesBaseServiceUrl = process.env.REACT_APP_API_BASE_URL;
-      let url =
-        OntologiesBaseServiceUrl +
-        "/" +
-        this.ontologyId +
-        "/skos/" +
-        this.iri +
-        "/relations?relation_type=narrower&page=0&size=1000";
+      let baseUrl = process.env.REACT_APP_API_URL;
+      let url = `${baseUrl}/v2/ontologies/${this.ontologyId}/skos/${this.iri}/tree?lang=${this.lang}`;
       let res = await (await fetch(url, getCallSetting)).json();
-      res = res["_embedded"];
-      if (typeof res["individuals"] !== "undefined") {
-        this.childrenForSkosTerm = res["individuals"];
-        return true;
+      let children = res["children"] ?? [];
+      for (let ch of children) {
+        this.childrenForSkosTerm.push(ch["data"]);
       }
-
-      this.childrenForSkosTerm = [];
       return true;
     } catch (e) {
       this.childrenForSkosTerm = [];

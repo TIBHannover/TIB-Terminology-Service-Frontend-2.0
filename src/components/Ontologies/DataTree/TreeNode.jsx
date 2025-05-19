@@ -1,5 +1,6 @@
 import React from "react";
 import TermLib from "../../../Libs/TermLib";
+import SkosLib from "../../../Libs/Skos";
 
 
 class TreeNodeController {
@@ -15,9 +16,9 @@ class TreeNodeController {
   }
 
 
-  buildNodeWithReact(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
+  buildNodeWithReact({ nodeObject, nodeIsClicked = false, isExpanded = false, isSkos = false }) {
     let nodeLabel = TermLib.extractLabel(nodeObject);
-    let nodeHasChildren = TermLib.termHasChildren(nodeObject);
+    let nodeHasChildren = !isSkos ? TermLib.termHasChildren(nodeObject) : SkosLib.skosTermHasChildren(nodeObject);
     let partOfSymbol = "";
     let individualSymbol = "";
     if (nodeObject.isObsolete) {
@@ -68,9 +69,9 @@ class TreeNodeController {
   }
 
 
-  buildNodeWithTradionalJs(nodeObject, nodeId, nodeIsClicked = false, isExpanded = false) {
+  buildNodeWithTradionalJs({ nodeObject, nodeIsClicked = false, isExpanded = false, isSkos = false }) {
     let nodeLabel = TermLib.extractLabel(nodeObject);
-    let nodeHasChildren = TermLib.termHasChildren(nodeObject);
+    let nodeHasChildren = !isSkos ? TermLib.termHasChildren(nodeObject) : SkosLib.skosTermHasChildren(nodeObject);
     this.textDiv = document.createElement("div");
     let label = document.createTextNode(nodeLabel);
     this.textDiv.classList.add("li-label-text");
