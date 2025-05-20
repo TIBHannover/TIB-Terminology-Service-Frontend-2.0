@@ -234,7 +234,9 @@ const IndividualsList = (props) => {
             switchViewFunction={switchView}
           />
         }
-        {!listView && (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0) && createIndividualTree()}
+        {!listView && (props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0)) &&
+          createIndividualTree()
+        }
       </div>
       {showNodeDetailPage && paneResizeClass.generateVerticalResizeLine()}
       {showNodeDetailPage &&
