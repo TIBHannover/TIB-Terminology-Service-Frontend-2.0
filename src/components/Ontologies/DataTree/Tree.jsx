@@ -118,7 +118,7 @@ const Tree = (props) => {
       target = "";
       siblingsVisible = false;
     }
-    else if (target != undefined || reload) {
+    else if (target || reload) {
       showNodeDetailPage = true;
       if (ontologyPageContext.isSkos) {
         treeList = await SkosHelper.buildSkosTree(ontologyPageContext.ontology.ontologyId, target, treeFullView, ontologyPageContext.ontoLang);
@@ -311,8 +311,8 @@ const Tree = (props) => {
 
 
   function processClick(e) {
-    if (props.isIndividual) {
-      return true;
+    if (props.isIndividual && !ontologyPageContext.isSkos) {
+      return;
     }
     if (e.target.tagName === "DIV" && e.target.classList.contains("tree-text-container")) {
       selectNode(e.target);
@@ -331,7 +331,7 @@ const Tree = (props) => {
 
 
   function selectNode(target) {
-    if (props.isIndividual) {
+    if (props.isIndividual && !ontologyPageContext.isSkos) {
       return true;
     }
     let treeNode = new TreeNodeController();

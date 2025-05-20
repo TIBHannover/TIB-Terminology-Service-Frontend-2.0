@@ -29,7 +29,7 @@ const IndividualsList = (props) => {
   const [showNodeDetailPage, setShowNodeDetailPage] = useState(false);
   const [selectedNodeIri, setSelectedNodeIri] = useState("");
   const [jumpToIri, setJumpToIri] = useState(null);
-  const [listView, setListView] = useState(true);
+  const [listView, setListView] = useState(!ontologyPageContext.isSkos);
   const [JumpToOnLoad, setJumpToOnload] = useState(false);
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
 
@@ -124,7 +124,7 @@ const IndividualsList = (props) => {
 
 
   function sortIndividuals(individuals) {
-    return individuals.sort(function (a, b) {
+    return individuals.sort(function(a, b) {
       let x = a["label"];
       let y = b["label"];
       return (x < y ? -1 : 1)
@@ -145,7 +145,7 @@ const IndividualsList = (props) => {
           key={props.key}
           rootNodeNotExist={ontologyPageContext.isSkos ? props.rootNodesForSkos.length === 0 : props.rootNodes.length === 0}
           handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
-          isIndividual={ontologyPageContext.isSkos ? false : true}
+          isIndividual={ontologyPageContext.isSkos}
           showListSwitchEnabled={true}
           individualViewChanger={switchView}
           handleResetTreeInParent={handleResetTreeEvent}
@@ -206,9 +206,8 @@ const IndividualsList = (props) => {
   }, [selectedNodeIri, JumpToOnLoad, listView]);
 
 
-
   useEffect(() => {
-    setListView(ontologyPageContext.isSkos ? false : true);
+    setListView(!ontologyPageContext.isSkos);
   }, [ontologyPageContext.isSkos]);
 
 
@@ -235,7 +234,7 @@ const IndividualsList = (props) => {
             switchViewFunction={switchView}
           />
         }
-        {!listView && createIndividualTree()}
+        {!listView && (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0) && createIndividualTree()}
       </div>
       {showNodeDetailPage && paneResizeClass.generateVerticalResizeLine()}
       {showNodeDetailPage &&
