@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client';
 import './index.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals'
-import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
+import { createInstance } from '@datapunt/matomo-tracker-react';
+import SiteMatomoProvider from './components/Matomo/SiteMatomoProvider';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
@@ -13,7 +14,7 @@ import { defaultShouldDehydrateQuery } from '@tanstack/react-query';
 
 // Adding Matomo
 const instance = createInstance({
-  urlBase: process.env.REACT_APP_TS_PUBLIC_URL as string,
+  urlBase: process.env.REACT_APP_TS_PUBLIC_URL! as string,
   siteId: process.env.REACT_APP_TS_SITE_ID as any,
   trackerUrl: "https://support.tib.eu/piwik/matomo.php",
   srcUrl: "https://support.tib.eu/piwik/matomo.js",
@@ -45,9 +46,10 @@ const localStoragePersister = createSyncStoragePersister({
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
+
 root.render(
   <React.StrictMode>
-    <MatomoProvider value={instance}>
+    <SiteMatomoProvider value={instance}>
       <PersistQueryClientProvider
         client={queryClient}
         persistOptions={{
@@ -65,8 +67,8 @@ root.render(
         <App />
         {process.env.REACT_APP_DEBUG_MODE === "true" && <ReactQueryDevtools initialIsOpen={false} />}
       </PersistQueryClientProvider>
-    </MatomoProvider>
-  </React.StrictMode>
+    </SiteMatomoProvider>
+  </React.StrictMode >
 )
 
 
