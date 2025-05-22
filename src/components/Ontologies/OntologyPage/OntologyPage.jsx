@@ -241,6 +241,7 @@ const OntologyPage = (props) => {
                 obsoleteTerms={obsoleteProps}
                 componentIdentity={'properties'}
                 key={'propertyTreePage'}
+                rootNodesForSkos={skosRootIndividuals}
               />
             }
             {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&

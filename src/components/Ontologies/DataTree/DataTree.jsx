@@ -117,7 +117,7 @@ const DataTree = (props) => {
           </div>
         </div>
         <div className='tree-container'>
-          {!loading && (props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0)) &&
+          {!loading && (props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0 && props.componentIdentity !== "properties")) &&
             <Tree
               rootNodes={props.rootNodes}
               obsoleteTerms={props.obsoleteTerms}
@@ -131,7 +131,7 @@ const DataTree = (props) => {
               jumpToIri={jumpToIri}
             />
           }
-          {!loading && props.rootNodes.length === 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length === 0) &&
+          {!loading && props.rootNodes.length === 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length === 0 && props.componentIdentity !== "properties") &&
             <div className="no-node">There is no term to load in this tree</div>
           }
         </div>
