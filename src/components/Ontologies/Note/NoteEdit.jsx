@@ -127,12 +127,14 @@ const NoteEdit = (props) => {
   }
 
 
-  useEffect(async () => {
+  useEffect(() => {
     let termApi = new TermApi(props.note['ontology_id'], props.note['semantic_component_iri'], constantsVars.TERM_TYPES[targetArtifact]);
-    await termApi.fetchTerm();
-    let parentOnto = termApi.getClassOriginalOntology();
-    setParentOntology(parentOnto);
-    setSelectedTermFromAutoComplete({ "iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label'] });
+    termApi.fetchTerm().then(() => {
+      let parentOnto = termApi.getClassOriginalOntology();
+      setParentOntology(parentOnto);
+      setSelectedTermFromAutoComplete({ "iri": props.note['semantic_component_iri'], "label": props.note['semantic_component_label'] });
+
+    });
   }, []);
 
 

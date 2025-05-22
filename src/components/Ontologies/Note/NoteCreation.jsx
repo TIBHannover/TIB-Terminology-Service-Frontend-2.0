@@ -146,12 +146,13 @@ const NoteCreation = (props) => {
   }
 
 
-  useEffect(async () => {
+  useEffect(() => {
     if (noteContext.selectedTermInTree) {
       let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
-      await termApi.fetchTerm();
-      let parentOnto = termApi.getClassOriginalOntology();
-      setParentOntology(parentOnto);
+      termApi.fetchTerm().then(() => {
+        let parentOnto = termApi.getClassOriginalOntology();
+        setParentOntology(parentOnto);
+      });
     }
   }, [noteContext.selectedTermInTree]);
 

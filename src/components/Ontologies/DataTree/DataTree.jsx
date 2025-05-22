@@ -34,6 +34,7 @@ const DataTree = (props) => {
   const [isPropertyTree, setIsPropertyTree] = useState(false);
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
   const [jumpToIri, setJumpToIri] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const urlFacory = new CommonUrlFactory();
 
@@ -82,6 +83,7 @@ const DataTree = (props) => {
 
     setIsTermTree(termTree);
     setIsPropertyTree(!termTree);
+    setLoading(false);
 
     let tourP = getTourProfile();
     if (
@@ -115,7 +117,7 @@ const DataTree = (props) => {
           </div>
         </div>
         <div className='tree-container'>
-          {(props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0)) ?
+          {!loading && (props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0)) &&
             <Tree
               rootNodes={props.rootNodes}
               obsoleteTerms={props.obsoleteTerms}
@@ -128,7 +130,9 @@ const DataTree = (props) => {
               handleResetTreeInParent={handleResetTreeEvent}
               jumpToIri={jumpToIri}
             />
-            : <div className="no-node">There is no term to load in this tree</div>
+          }
+          {!loading && props.rootNodes.length === 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length === 0) &&
+            <div className="no-node">There is no term to load in this tree</div>
           }
         </div>
       </div>
