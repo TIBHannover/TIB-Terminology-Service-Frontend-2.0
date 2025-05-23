@@ -1,6 +1,7 @@
 import collectionsInfoJson from '../../assets/collectionsText.json';
+import { Link } from 'react-router-dom';
 
-export function renderHomePage() {
+const RenderHomePage = () => {
   return [
     <div className="general-home-page-content">
       <br />
@@ -73,6 +74,9 @@ export function renderHomePage() {
         <div className="col-sm-4">
           <CollectionCard collectionId={'Foundational Ontologies'} />
         </div>
+        <div className="col-sm-4">
+          <CollectionCard collectionId={"FAIRmat"} />
+        </div>
       </div>
     </div>,
   ];
@@ -85,17 +89,19 @@ const CollectionCard = ({ collectionId }) => {
   let subPath = process.env.REACT_APP_PROJECT_SUB_PATH;
   return (
     <div className="collection-card">
-      <a href={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor" target='_blank'>
+      <Link to={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor">
         <img className="img-fluid collection-logo" alt="collection_logo" src={collectionsInfoJson[collectionId]['logo']} />
-      </a>
+      </Link>
       <div className="collection-card-text">
         <p className="trunc">{collectionsInfoJson[collectionId]['text']}</p>
-        <a href={subPath + '/collections?col=' + collectionsInfoJson[collectionId]['html_id']} className="show-more-text-link" target='_blank'>
+        <Link to={subPath + '/collections?col=' + collectionsInfoJson[collectionId]['html_id']} className="show-more-text-link">
           [Read More]
-        </a>
+        </Link>
       </div>
     </div>
   );
 }
+
+export default RenderHomePage;
 
 

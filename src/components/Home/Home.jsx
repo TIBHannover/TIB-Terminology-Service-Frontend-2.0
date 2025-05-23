@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import '../layout/home.css';
 import { createStatsBox } from './StatsBox';
-import { renderHomePage } from "./HomePageContent";
 import { getCallSetting } from "../../api/constants";
+import RenderHomePage from './HomePageContent';
 
 
 const Home = () => {
@@ -16,7 +16,6 @@ const Home = () => {
       setStatsResult(res);
 
     } catch (e) {
-      console.log(e)
       setStatsResult([]);
     }
   }
@@ -32,7 +31,7 @@ const Home = () => {
     <>
       <div className="row">
         <div className="col-sm-12">
-          {renderHomePage()}
+          <RenderHomePage />
           <div className="row justify-content-center home-page-stats-container">
             {createStatsBox(statsResult)}
           </div>

@@ -1,133 +1,143 @@
 {
-    "NFDI4ING":{
-        "id":"NFDI4ING",
-        "html_id":"NFDI4ING",
-        "name":"NFDI4Ing Project",
-        "text": "NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service.",
-        "logo": "/nfdi4ing_logo.svg",
-        "ontology_list_url": "/ontologies?collection=NFDI4ING&and=false&page=1",
-        "project_homepage":"https://nfdi4ing.de/",
-        "domain_ts_link": "https://terminology.nfdi4ing.de/ts/"
-    },      
-    "NFDI4CHEM":{
-        "id":"NFDI4CHEM",
-        "html_id":"NFDI4CHEM",
-        "name":"NFDI4Chem Project",
-        "text":"The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.",
-        "logo": "/NFDI4CHEM_LOGO.svg",
-        "ontology_list_url": "/ontologies?collection=NFDI4CHEM&and=false&page=1",
-        "project_homepage":"https://www.nfdi4chem.de/",
-        "domain_ts_link": "https://terminology.nfdi4chem.de/ts/",
-        "selection_criteria": "<ul><li>The ontology should provide terms and relations to describe research activities and research data in chemistry. We although considered terminologies, taxonomies and controlled vocabularies, as it might not be necessary to make full use of description logic to semantically describe research data depending on the involved stakeholders</li><li>The ontology should have been developed by or in cooperation with domain experts to ensure chemistry knowledge is codified accurately</li><li>The ontology should adhere to best practices in ontology development</li><li>The ontology should be FAIR (Findable, Accessible, Interoperable Reusable), i.e. indexed in a prominent registry, accessible via a permanent URL and provided with a documentation. The ontology must provide a machine-readable license information-. The ontology should be aligned with compatible upper ontologies and should be reusable in a modular way</li><li>The  ontology should be actively and openly maintained</li><li>The ontology should be used in prominent applications</li></ul>"
-    },
-    "NFDI4CULTURE":{
-        "id":"NFDI4CULTURE",
-        "html_id":"NFDI4CULTURE",
-        "name":"NFDI4Culture Project",
-        "text":"The NFDI4Culture collection by TIB Terminology Service provides a selection of ontologies for representing research data on tangible and intangible cultural assets. The NFDI4Culture collection is developed and maintained by the Open Science Lab at TIB. It serves as one of the key sources for terminology search and entity recognition within Antelope, the annotation and terminology service tool developed by the Open Science Lab as part of the service portfolio of the NFDI4Culture consortium within the National Research Data Infrastructure.",
-        "logo": "/NFDI4C_Logo_DyptichText.svg",
-        "ontology_list_url": "/ontologies?collection=NFDI4CULTURE&and=false&page=1",
-        "project_homepage":"https://www.nfdi4culture.de/",
-        "domain_ts_link": "https://service.tib.eu/annotation/"
-    },
-    "CoyPu":{
-        "id":"CoyPu",
-        "html_id":"CoyPu",
-        "name":"CoyPu Project",
-        "text":"The CoyPu collection by TIB Terminology Service provides a well-selected set of ontologies for representing the domain for integrating, structuring, networking, analyzing and evaluating heterogeneous data from economic value networks as well as the industry environment and social context.",
-        "logo":"/logo_CoyPu.svg",
-        "ontology_list_url": "/ontologies?collection=CoyPu&and=false&page=1",
-        "project_homepage":"https://coypu.org/",
-        "domain_ts_link": ""
-    },
-    "FAIR Data Spaces":{
-        "id":"FAIR Data Spaces",
-        "html_id":"FAIR Data Spaces",
-        "name":"FAIR Data Spaces Project",
-        "text":"The collection of ontologies used in FAIR Data Spaces project is developed by the demonstrators from the  biodiversity, engineering sciences, and healthcare domain to enable the implementation of a common cloud-based data space for industry and academia within the Gaia-X European data infrastructure.  The focus of this collection is to ensure interoperability and reusability in Gaia-X, especially for organizations.",
-        "logo":"/FAIR_DS_Logo_RGB.svg",
-        "ontology_list_url": "/ontologies?collection=FAIR+Data+Spaces&and=false&page=1",
-        "project_homepage":"https://websites.fraunhofer.de/fair-ds/",
-        "domain_ts_link": ""
-    },    
-    "FID move":{
-        "id":"FID move",
-        "html_id":"FID move",
-        "name":"FID Move Project",
-        "text":"The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.",
-        "logo":"/fidmove_logo.svg",
-        "ontology_list_url": "/ontologies?collection=FID+move&and=false&page=1",
-        "project_homepage":"https://www.fid-move.de/de/",
-        "domain_ts_link": ""
-    },
-    "FID BAUdigital":{
-        "id":"FID BAUdigital",
-        "html_id":"FID BAUdigital",
-        "name":"FID Baudigital Project",
-        "text":"The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.",
-        "logo":"/bau-digital_logo210420_RZ_Web_RGB_11.svg",
-        "ontology_list_url": "/ontologies?collection=FID+BAUdigital&and=false&page=1",
-        "project_homepage":"https://www.fid-bau.de/",
-        "domain_ts_link": ""
-    },
-    "NFDI4CAT":{
-        "id":"NFDI4CAT",
-        "html_id":"NFDI4CAT",
-        "name":"NFDI4Cat Project",
-        "text":"NFDI4Cat is a community-driven and user-oriented initiative to secure the digital future of catalysis",
-        "logo":"/logo_text.svg",
-        "ontology_list_url": "/ontologies?collection=NFDI4CAT&and=false&page=1",
-        "project_homepage":"https://nfdi4cat.org/en/",
-        "domain_ts_link": ""
-    },
-    "ESS":{
-        "id": "ESS",
-        "html_id": "ESS",
-        "name": "Earth System Sciences",
-        "text": "The ESS Terminology Service is a collection of Earth System Science terminologies and a single point of access to the latest terminology versions. The service provides researchers, repository staff, and everybody interested with the ability to describe their research results in a semantically correct, machine-understandable way. The ESS TS is being developed by the BITS project titled “BluePrints for the Integration of Terminology Services in Earth System Sciences”  and is maintained by TIB as an extension of the TIB Central Terminology Service. It can be used either by humans through the website or by machines via the TS API.",
-        "logo": "/Color_logo_-_no_background.svg",
-        "ontology_list_url": "/ontologies?collection=ESS&and=false&page=1",
-        "project_homepage": "https://projects.tib.eu/bits",
-        "domain_ts_link": ""
-    },
-    "NFDI4Energy":{
-        "id": "NFDI4Energy",
-        "html_id": "NFDI4Energy",
-        "name": "NFDI4Energy Project",
-        "text": "Explore energy-related ontologies effortlessly with the NFDI4Energy Terminology Service, maintained by TIB - Leibniz Information Centre for Science and Technology. Access the latest ontology versions, with options for both human users through the website and machine interaction via the TS API. This invaluable service is a key component of the NFDI4Energy consortium's involvement in the National Research Data Infrastructure.",
-        "logo": "/logo_NFDI4ENERGY.svg",
-        "ontology_list_url": "/ontologies?collection=NFDI4Energy&and=false&page=1",
-        "project_homepage": "https://nfdi4energy.uol.de/",
-        "domain_ts_link": ""
-    },
-    "DataPLANT":{
-        "id": "DataPLANT",
-        "html_id": "DataPLANT",
-        "name": "DataPLANT Project",
-        "text": "The DataPLANT ontology collection provides a selection of ontologies relevant for the fundamental plant sciences. This collection includes vocabulary to describe general information about scientific investigations, as well as plant-specific aspects such as plant traits, environmental conditions, experimental setups and chemicals or physiological properties.",
-        "logo": "/DataPLANT_logo.svg",
-        "ontology_list_url": "/ontologies?collection=DataPLANT&and=false&page=1",
-        "project_homepage": "https://nfdi4plants.org/",
-        "domain_ts_link": ""
-    },
-    "Educational Resources":{
-        "id": "Educational Resources",
-        "html_id": "Educational Resources",
-        "name": "Educational Resources",
-        "text": "This collection contains ontologies for quality education. This collection thus provides a structured framework that defines the fundamental concepts, relationships and principles that are essential for promoting comprehensive learning experiences that are conducive to personal, academic and social development.",
-        "logo": "/educational_resources.svg",
-        "ontology_list_url": "/ontologies?collection=Educational+Resources&and=false&page=1",
-        "project_homepage": "",
-        "domain_ts_link": ""
-    },
-    "Foundational Ontologies":{
-        "id": "Foundational Ontologies",
-        "html_id": "Foundational Ontologies",
-        "name": "Foundational Ontologies",
-        "text": "Foundational ontologies provide a basic framework of abstract concepts and relationships that serve as a common vocabulary for describing and organising knowledge in different domains.",
-        "logo": "/foundational_ontologies.svg",
-        "ontology_list_url": "/ontologies?collection=Foundational+Ontologies&and=false&page=1",
-        "project_homepage": "",
-        "domain_ts_link": ""
-    }
+  "NFDI4ING": {
+    "id": "NFDI4ING",
+    "html_id": "NFDI4ING",
+    "name": "NFDI4Ing Project",
+    "text": "NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service.",
+    "logo": "/nfdi4ing_logo.svg",
+    "ontology_list_url": "/ontologies?collection=NFDI4ING&and=false&page=1",
+    "project_homepage": "https://nfdi4ing.de/",
+    "domain_ts_link": "https://terminology.nfdi4ing.de/ts/"
+  },
+  "NFDI4CHEM": {
+    "id": "NFDI4CHEM",
+    "html_id": "NFDI4CHEM",
+    "name": "NFDI4Chem Project",
+    "text": "The NFDI4Chem Terminology Service is a repository for chemistry and related ontologies providing a single point of access to the latest ontology versions. You can browse or search the ontologies and look into their terms and relations. The Terminology Service can be used either by humans throught the website or by machines via the TS API. The NFDI4Chem Terminology Service is developed and maintained by TIB - Leibniz Information Centre for Science and Technology. It is part of the service portfolio of the NFDI4Chem consortium within the National Research Data Infrastructure.",
+    "logo": "/NFDI4CHEM_LOGO.svg",
+    "ontology_list_url": "/ontologies?collection=NFDI4CHEM&and=false&page=1",
+    "project_homepage": "https://www.nfdi4chem.de/",
+    "domain_ts_link": "https://terminology.nfdi4chem.de/ts/",
+    "selection_criteria": "<ul><li>The ontology should provide terms and relations to describe research activities and research data in chemistry. We although considered terminologies, taxonomies and controlled vocabularies, as it might not be necessary to make full use of description logic to semantically describe research data depending on the involved stakeholders</li><li>The ontology should have been developed by or in cooperation with domain experts to ensure chemistry knowledge is codified accurately</li><li>The ontology should adhere to best practices in ontology development</li><li>The ontology should be FAIR (Findable, Accessible, Interoperable Reusable), i.e. indexed in a prominent registry, accessible via a permanent URL and provided with a documentation. The ontology must provide a machine-readable license information-. The ontology should be aligned with compatible upper ontologies and should be reusable in a modular way</li><li>The  ontology should be actively and openly maintained</li><li>The ontology should be used in prominent applications</li></ul>"
+  },
+  "NFDI4CULTURE": {
+    "id": "NFDI4CULTURE",
+    "html_id": "NFDI4CULTURE",
+    "name": "NFDI4Culture Project",
+    "text": "The NFDI4Culture collection by TIB Terminology Service provides a selection of ontologies for representing research data on tangible and intangible cultural assets. The NFDI4Culture collection is developed and maintained by the Open Science Lab at TIB. It serves as one of the key sources for terminology search and entity recognition within Antelope, the annotation and terminology service tool developed by the Open Science Lab as part of the service portfolio of the NFDI4Culture consortium within the National Research Data Infrastructure.",
+    "logo": "/NFDI4C_Logo_DyptichText.svg",
+    "ontology_list_url": "/ontologies?collection=NFDI4CULTURE&and=false&page=1",
+    "project_homepage": "https://www.nfdi4culture.de/",
+    "domain_ts_link": "https://service.tib.eu/annotation/"
+  },
+  "CoyPu": {
+    "id": "CoyPu",
+    "html_id": "CoyPu",
+    "name": "CoyPu Project",
+    "text": "The CoyPu collection by TIB Terminology Service provides a well-selected set of ontologies for representing the domain for integrating, structuring, networking, analyzing and evaluating heterogeneous data from economic value networks as well as the industry environment and social context.",
+    "logo": "/logo_CoyPu.svg",
+    "ontology_list_url": "/ontologies?collection=CoyPu&and=false&page=1",
+    "project_homepage": "https://coypu.org/",
+    "domain_ts_link": ""
+  },
+  "FAIR Data Spaces": {
+    "id": "FAIR Data Spaces",
+    "html_id": "FAIR Data Spaces",
+    "name": "FAIR Data Spaces Project",
+    "text": "The collection of ontologies used in FAIR Data Spaces project is developed by the demonstrators from the  biodiversity, engineering sciences, and healthcare domain to enable the implementation of a common cloud-based data space for industry and academia within the Gaia-X European data infrastructure.  The focus of this collection is to ensure interoperability and reusability in Gaia-X, especially for organizations.",
+    "logo": "/FAIR_DS_Logo_RGB.svg",
+    "ontology_list_url": "/ontologies?collection=FAIR+Data+Spaces&and=false&page=1",
+    "project_homepage": "https://websites.fraunhofer.de/fair-ds/",
+    "domain_ts_link": ""
+  },
+  "FID move": {
+    "id": "FID move",
+    "html_id": "FID move",
+    "name": "FID Move Project",
+    "text": "The FID move collection on TIB Terminology Service provides a well-selected set of ontologies related to the domains of mobility and transportation research.",
+    "logo": "/fidmove_logo.svg",
+    "ontology_list_url": "/ontologies?collection=FID+move&and=false&page=1",
+    "project_homepage": "https://www.fid-move.de/de/",
+    "domain_ts_link": ""
+  },
+  "FID BAUdigital": {
+    "id": "FID BAUdigital",
+    "html_id": "FID BAUdigital",
+    "name": "FID Baudigital Project",
+    "text": "The FID BAUdigital collection provides a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies.",
+    "logo": "/bau-digital_logo210420_RZ_Web_RGB_11.svg",
+    "ontology_list_url": "/ontologies?collection=FID+BAUdigital&and=false&page=1",
+    "project_homepage": "https://www.fid-bau.de/",
+    "domain_ts_link": ""
+  },
+  "NFDI4CAT": {
+    "id": "NFDI4CAT",
+    "html_id": "NFDI4CAT",
+    "name": "NFDI4Cat Project",
+    "text": "NFDI4Cat is a community-driven and user-oriented initiative to secure the digital future of catalysis",
+    "logo": "/logo_text.svg",
+    "ontology_list_url": "/ontologies?collection=NFDI4CAT&and=false&page=1",
+    "project_homepage": "https://nfdi4cat.org/en/",
+    "domain_ts_link": ""
+  },
+  "ESS": {
+    "id": "ESS",
+    "html_id": "ESS",
+    "name": "Earth System Sciences",
+    "text": "The ESS Terminology Service is a collection of Earth System Science terminologies and a single point of access to the latest terminology versions. The service provides researchers, repository staff, and everybody interested with the ability to describe their research results in a semantically correct, machine-understandable way. The ESS TS is being developed by the BITS project titled “BluePrints for the Integration of Terminology Services in Earth System Sciences”  and is maintained by TIB as an extension of the TIB Central Terminology Service. It can be used either by humans through the website or by machines via the TS API.",
+    "logo": "/Color_logo_-_no_background.svg",
+    "ontology_list_url": "/ontologies?collection=ESS&and=false&page=1",
+    "project_homepage": "https://projects.tib.eu/bits",
+    "domain_ts_link": ""
+  },
+  "NFDI4Energy": {
+    "id": "NFDI4Energy",
+    "html_id": "NFDI4Energy",
+    "name": "NFDI4Energy Project",
+    "text": "Explore energy-related ontologies effortlessly with the NFDI4Energy Terminology Service, maintained by TIB - Leibniz Information Centre for Science and Technology. Access the latest ontology versions, with options for both human users through the website and machine interaction via the TS API. This invaluable service is a key component of the NFDI4Energy consortium's involvement in the National Research Data Infrastructure.",
+    "logo": "/logo_NFDI4ENERGY.svg",
+    "ontology_list_url": "/ontologies?collection=NFDI4Energy&and=false&page=1",
+    "project_homepage": "https://nfdi4energy.uol.de/",
+    "domain_ts_link": ""
+  },
+  "DataPLANT": {
+    "id": "DataPLANT",
+    "html_id": "DataPLANT",
+    "name": "DataPLANT Project",
+    "text": "The DataPLANT ontology collection provides a selection of ontologies relevant for the fundamental plant sciences. This collection includes vocabulary to describe general information about scientific investigations, as well as plant-specific aspects such as plant traits, environmental conditions, experimental setups and chemicals or physiological properties.",
+    "logo": "/DataPLANT_logo.svg",
+    "ontology_list_url": "/ontologies?collection=DataPLANT&and=false&page=1",
+    "project_homepage": "https://nfdi4plants.org/",
+    "domain_ts_link": ""
+  },
+  "Educational Resources": {
+    "id": "Educational Resources",
+    "html_id": "Educational Resources",
+    "name": "Educational Resources",
+    "text": "This collection contains ontologies for quality education. This collection thus provides a structured framework that defines the fundamental concepts, relationships and principles that are essential for promoting comprehensive learning experiences that are conducive to personal, academic and social development.",
+    "logo": "/educational_resources.svg",
+    "ontology_list_url": "/ontologies?collection=Educational+Resources&and=false&page=1",
+    "project_homepage": "",
+    "domain_ts_link": ""
+  },
+  "Foundational Ontologies": {
+    "id": "Foundational Ontologies",
+    "html_id": "Foundational Ontologies",
+    "name": "Foundational Ontologies",
+    "text": "Foundational ontologies provide a basic framework of abstract concepts and relationships that serve as a common vocabulary for describing and organising knowledge in different domains.",
+    "logo": "/foundational_ontologies.svg",
+    "ontology_list_url": "/ontologies?collection=Foundational+Ontologies&and=false&page=1",
+    "project_homepage": "",
+    "domain_ts_link": ""
+  },
+  "FAIRmat": {
+    "id": "FAIRmat",
+    "html_id": "FAIRmat",
+    "name": "FAIRmat",
+    "text": "The FAIRmat collection contains terminologies and ontologies relevant for data management in condensed-matter physics and the chemical physics of solids.",
+    "logo": "https://www.fairmat-nfdi.eu/uploads/Area%20F/text_white_background_space_rounded_corners.png",
+    "ontology_list_url": "/ontologies?collection=FAIRmat&and=false&page=1",
+    "project_homepage": "https://www.fairmat-nfdi.eu/fairmat",
+    "domain_ts_link": ""
+  }
 }
