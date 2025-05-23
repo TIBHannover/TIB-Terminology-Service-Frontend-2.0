@@ -773,3 +773,7 @@ body .site-tour-btn {
   padding: 0 !important;
   margin-top: -5px !important;
 }
+
+.bg-main-color {
+  background-color: #0e6668;
+}

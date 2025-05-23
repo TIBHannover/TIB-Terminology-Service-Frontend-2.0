@@ -41,7 +41,7 @@ const RenderSearchForm = (props) => {
     let resultList = []
     for (let result of props.jumpToResult) {
       resultList.push(
-        <div className="jump-autocomplete-container">
+        <div className="row mb-3">
           {setJumpResultButtons(result)}
         </div>
       )
@@ -68,10 +68,10 @@ const RenderSearchForm = (props) => {
 
     content.push(
       <Link to={targetHref} className="jumto-result-link container" data-value={resultItem['label']} onClick={(e) => { props.optionClickCallback(e) }}>
-        <div className="jump-autocomplete-item jumpto-result-text item-for-navigation">
+        <div className="item-for-navigation">
           {resultItem['label']}
-          <div className="btn btn-default button-in-jumpto ontology-button">{resultItem['ontology_name']}</div>
-          {resultItem["type"] !== 'ontology' && <div className="btn btn-default button-in-jumpto term-button">{resultItem['short_form']}</div>}
+          <div className="jumpto-badge-onto">{resultItem['ontology_name']}</div>
+          {resultItem["type"] !== 'ontology' && <div className="jumpto-badge-onto bg-main-color">{resultItem['short_form']}</div>}
         </div>
       </Link>
     );

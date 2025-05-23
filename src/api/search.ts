@@ -15,7 +15,7 @@ export async function olsSearch(inputData: SearchApiInput): Promise<SearchApiRes
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let rangeStart: number = (inputData.page - 1) * inputData.size;
-    let searchUrl: string = process.env.REACT_APP_SEARCH_URL + `?q=${inputData.searchQuery}&start=${rangeStart}&groupField=iri&rows=${inputData.size}&lang=${lang}&exclusive=true`;
+    let searchUrl: string = process.env.REACT_APP_SEARCH_URL + `?q=${encodeURIComponent(inputData.searchQuery)}&start=${rangeStart}&groupField=iri&rows=${inputData.size}&lang=${lang}&exclusive=true`;
     searchUrl = inputData.selectedOntologies.length !== 0 ? (searchUrl + `&ontology=${inputData.selectedOntologies.join(',')}`) : searchUrl;
     searchUrl = inputData.selectedTypes.length !== 0 ? (searchUrl + `&type=${inputData.selectedTypes.join(',')}`) : searchUrl;
     searchUrl = inputData.searchInValues.length !== 0 ? (searchUrl + `&queryFields=${inputData.searchInValues.join(',')}`) : searchUrl;
@@ -50,7 +50,7 @@ export async function getJumpToResult(inputData: SuggestAndSelectApiInput, count
     inputData['searchUnderAllIris'] = inputData['searchUnderAllIris'] ? inputData['searchUnderAllIris'] : [];
     let autocompleteApiBaseUrl: string = process.env.REACT_APP_SEARCH_URL || '';
     autocompleteApiBaseUrl = autocompleteApiBaseUrl.split('search')[0] + "select";
-    let url = `${autocompleteApiBaseUrl}?q=${inputData['searchQuery']}&rows=${count}&lang=${lang}`;
+    let url = `${autocompleteApiBaseUrl}?q=${encodeURIComponent(inputData['searchQuery'])}&rows=${count}&lang=${lang}`;
     url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
     url = inputData['types'] ? (url + `&type=${inputData['types']}`) : url;
     url = inputData['obsoletes'] ? (url + "&obsoletes=true") : url;
@@ -72,7 +72,7 @@ export async function getJumpToResult(inputData: SuggestAndSelectApiInput, count
 export async function getAutoCompleteResult(inputData: SuggestAndSelectApiInput, count: number = 5): Promise<AutoSuggestSingleResult[]> {
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
-    let url: string = process.env.REACT_APP_API_URL + `/suggest?q=${inputData['searchQuery']}&rows=${count}&lang=${lang}`;
+    let url: string = process.env.REACT_APP_API_URL + `/suggest?q=${encodeURIComponent(inputData['searchQuery'])}&rows=${count}&lang=${lang}`;
     url = inputData['ontologyIds'] ? (url + `&ontology=${inputData['ontologyIds']}`) : url;
     url = inputData['types'] ? (url + `&type=${inputData['types']}`) : url;
     url = inputData['obsoletes'] ? (url + "&obsoletes=true") : url;
