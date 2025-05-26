@@ -1,4 +1,3 @@
-import { type } from "os"
 
 export type OntologyData = {
   ontologyId: string,

@@ -11,6 +11,8 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import PropTypes from 'prop-types';
+import { AddToTermsetModal, AddToTermsetModalBtn } from '../../TermSet/TermSet';
+import TermLib from '../../../Libs/TermLib';
 
 
 
@@ -122,6 +124,8 @@ const TermDetail = (props) => {
   return (
     <div className='row'>
       <div className='col-sm-12'>
+        <AddToTermsetModalBtn modalId={"term-in-tree"} />
+        <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm} />
         <RenderTermDetailTab
           componentIdentity={props.componentIdentity}
           tabChangeHandler={tabChangeHandler}

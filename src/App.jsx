@@ -16,6 +16,7 @@ import LoadingPage from './LoadingPage';
 import SiteTour from './tours/Tour';
 import { olsIsUp } from './api/system';
 import { useQuery } from '@tanstack/react-query';
+import { getTermsetList } from './api/term_set';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -29,6 +30,7 @@ const App = () => {
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [isBackendDown, setIsBackendDown] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
+  const [userTermsets, setUserTermsets] = useState([]);
   const [userSettings, setUserSettings] = useState({
     "activeCollection": { "title": "", "ontology_ids": [] },
     "userCollectionEnabled": false,
@@ -73,6 +75,10 @@ const App = () => {
           });
         }
 
+        getTermsetList().then((termsets) => {
+          setUserTermsets(termsets);
+        })
+
         setUserSettings(settings);
         setShowLoadingPage(false);
       });
@@ -94,6 +100,8 @@ const App = () => {
     reportsListForAdmin: reportsListForAdmin,
     userSettings: userSettings,
     setUserSettings: setUserSettings,
+    userTermsets: userTermsets,
+    setUserTermsets: setUserTermsets
   };
 
   return (
