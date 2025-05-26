@@ -8,7 +8,7 @@ import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import SearchLib from '../../../Libs/searchLib';
-import { fetchAllCollectionWithOntologyList, getCollectionsAndThierOntologies } from '../../../api/collection';
+import { getCollectionsAndThierOntologies } from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
@@ -17,6 +17,7 @@ import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
+import { AddToTermsetModal, AddToTermsetModalBtn } from '../../TermSet/TermSet';
 
 
 
@@ -175,6 +176,10 @@ const SearchResult = (props) => {
               </div>
             }
 
+          </div>
+          <div className='col-sm-2'>
+            <AddToTermsetModalBtn modalId={i} />
+            <AddToTermsetModal modalId={i} term={searchResult[i]} />
           </div>
         </div>
       );
