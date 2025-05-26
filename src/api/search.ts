@@ -15,15 +15,16 @@ export async function olsSearch(inputData: SearchApiInput): Promise<SearchApiRes
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let rangeStart: number = (inputData.page - 1) * inputData.size;
-    let searchUrl: string = process.env.REACT_APP_SEARCH_URL + `?q=${encodeURIComponent(inputData.searchQuery)}&start=${rangeStart}&groupField=iri&rows=${inputData.size}&lang=${lang}&exclusive=true`;
-    searchUrl = inputData.selectedOntologies.length !== 0 ? (searchUrl + `&ontology=${inputData.selectedOntologies.join(',')}`) : searchUrl;
+    let searchUrl: string = process.env.REACT_APP_API_URL!;
+    searchUrl += `/v2/entities?search=${encodeURIComponent(inputData.searchQuery)}&size=${inputData.size}&page=${inputData.page}&lang=${lang}&facetFields=ontologyId type`;
+    searchUrl = inputData.selectedOntologies.length !== 0 ? (searchUrl + `&ontologyId=${inputData.selectedOntologies.join(',')}`) : searchUrl;
     searchUrl = inputData.selectedTypes.length !== 0 ? (searchUrl + `&type=${inputData.selectedTypes.join(',')}`) : searchUrl;
-    searchUrl = inputData.searchInValues.length !== 0 ? (searchUrl + `&queryFields=${inputData.searchInValues.join(',')}`) : searchUrl;
-    searchUrl = inputData.searchUnderIris.length !== 0 ? (searchUrl + `&childrenOf=${inputData.searchUnderIris.join(',')}`) : searchUrl;
-    searchUrl = inputData.searchUnderAllIris.length !== 0 ? (searchUrl + `&allChildrenOf=${inputData.searchUnderAllIris.join(',')}`) : searchUrl;
-    searchUrl = inputData.obsoletes ? (searchUrl + "&obsoletes=true") : searchUrl;
-    searchUrl = inputData.exact ? (searchUrl + "&exact=true") : searchUrl;
-    searchUrl = inputData.isLeaf ? (searchUrl + "&isLeaf=true") : searchUrl;
+    searchUrl = inputData.searchInValues.length !== 0 ? (searchUrl + `&searchFields=${inputData.searchInValues.join(' ')}`) : searchUrl;
+    //searchUrl = inputData.searchUnderIris.length !== 0 ? (searchUrl + `&childrenOf=${inputData.searchUnderIris.join(',')}`) : searchUrl;
+    //searchUrl = inputData.searchUnderAllIris.length !== 0 ? (searchUrl + `&allChildrenOf=${inputData.searchUnderAllIris.join(',')}`) : searchUrl;
+    searchUrl = inputData.obsoletes ? (searchUrl + "&includeObsoleteEntities=true") : searchUrl;
+    searchUrl = inputData.exact ? (searchUrl + "&exactMatch=true") : searchUrl;
+    //searchUrl = inputData.isLeaf ? (searchUrl + "&isLeaf=true") : searchUrl;
     if (process.env.REACT_APP_PROJECT_NAME === "" && inputData.selectedCollections.length !== 0) {
       // If TIB General. Set collections if exist in filter
       searchUrl += `&schema=collection&classification=${inputData.selectedCollections.join(',')}`;

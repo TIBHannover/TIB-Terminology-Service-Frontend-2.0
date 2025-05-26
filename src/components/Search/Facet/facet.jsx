@@ -22,30 +22,21 @@ const Facet = (props) => {
 
 
   function setComponentData() {
-    if (props.facetData.length === 0 || typeof props.facetData["facet_fields"] === "undefined") {
+    if (!props.facetData) {
       setResultTypes({});
       setOntologyFacetData({});
     }
     else {
-      let facetData = props.facetData["facet_fields"];
-      let allTypes = facetData["type"];
+      let facetData = props.facetData;
       let allOntologies = facetData["ontologyId"];
       let ontologyFacetData = {};
-      let types = {};
-      for (let i = 0; i < allOntologies.length; i++) {
-        if (i % 2 == 0) {
-          if (appContext.userSettings.userCollectionEnabled && !appContext.userSettings.activeCollection['ontology_ids'].includes(allOntologies[i].toLowerCase())) {
-            continue;
-          }
-          ontologyFacetData[allOntologies[i].toUpperCase()] = allOntologies[i + 1];
+      for (let onto in allOntologies) {
+        if (appContext.userSettings.userCollectionEnabled && !appContext.userSettings.activeCollection['ontology_ids'].includes(onto.toLowerCase())) {
+          continue;
         }
+        ontologyFacetData[onto.toUpperCase()] = allOntologies[onto];
       }
-      for (let i = 0; i < allTypes.length; i++) {
-        if (i % 2 == 0) {
-          types[allTypes[i]] = allTypes[i + 1];
-        }
-      }
-      setResultTypes(types);
+      setResultTypes(facetData["type"]);
       setOntologyFacetData(ontologyFacetData);
     }
   }

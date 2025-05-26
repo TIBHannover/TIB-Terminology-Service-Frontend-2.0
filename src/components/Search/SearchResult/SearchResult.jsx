@@ -106,15 +106,15 @@ const SearchResult = (props) => {
 
       Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
         let result = values[0];
-        setSearchResult(result['response']['docs']);
+        setSearchResult(result['elements']);
         setLoading(false);
         let resultForFacetTypeCount = values[1];
         let resultForFacetOntoCount = values[2];
-        result['facet_counts']['facet_fields']['type'] = resultForFacetTypeCount['facet_counts']['facet_fields']['type'];
-        result['facet_counts']['facet_fields']['ontologyId'] = resultForFacetOntoCount['facet_counts']['facet_fields']['ontologyId'];
-        setTotalResultsCount(result['response']['numFound']);
-        setFacetFields(result['facet_counts']);
-        setExpandedResults(result['expanded'])
+        result['facetFieldsToCounts']['type'] = resultForFacetTypeCount['facetFieldsToCounts']['type'];
+        result['facetFieldsToCounts']['ontologyId'] = resultForFacetOntoCount['facetFieldsToCounts']['ontologyId'];
+        setTotalResultsCount(result['totalElements']);
+        setFacetFields(result['facetFieldsToCounts']);
+        setExpandedResults([])
 
       });
 
@@ -130,17 +130,17 @@ const SearchResult = (props) => {
 
 
 
-  function alsoInResult(iri) {
+  function alsoInResult(term) {
     let otherOntologies = [];
-    if (expandedResults && expandedResults[iri]) {
-      let allTags = expandedResults[iri]['docs'];
-      for (let term of allTags) {
-        otherOntologies.push(
-          <div className='also-in-ontologies'>
-            {TermLib.createOntologyTagWithTermURL(term['ontology_name'], term['iri'], term['type'])}
-          </div>
-        );
+    for (let onto of term["appearsIn"]) {
+      if (onto.toLowerCase() === term["ontologyId"].toLowerCase()) {
+        continue;
       }
+      otherOntologies.push(
+        <div className='also-in-ontologies'>
+          {TermLib.createOntologyTagWithTermURL(onto, term['iri'], TermLib.getTermType(term))}
+        </div>
+      );
     }
     return otherOntologies;
   }
@@ -150,7 +150,7 @@ const SearchResult = (props) => {
   function createSearchResultList() {
     let searchResultList = [];
     for (let i = 0; i < searchResult.length; i++) {
-      let alsoInList = alsoInResult(searchResult[i].iri);
+      let alsoInList = alsoInResult(searchResult[i]);
       searchResultList.push(
         <div className="row result-card" key={searchResult[i]['id']}>
           <div className='col-sm-10'>
@@ -160,12 +160,12 @@ const SearchResult = (props) => {
               <CopyLinkButton valueToCopy={searchResult[i].iri}></CopyLinkButton>
             </div>
             <div className="searchresult-card-description">
-              <p>{searchResult[i].description}</p>
+              <p>{TermLib.createTermDiscription(searchResult[i])}</p>
             </div>
             <div className="searchresult-ontology">
               <span><b>Ontology: </b></span>
-              <Link className='btn btn-default ontology-button' to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontology_name']} target="_blank">
-                {searchResult[i].ontology_name}
+              <Link className='btn btn-default ontology-button' to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontologyId']}>
+                {searchResult[i].ontologyId}
               </Link>
             </div>
             <br />
