@@ -134,7 +134,8 @@ const TermDetail = (props) => {
             rel="noreferrer"
             className='btn btn-secondary btn-dark download-ontology-btn'
           >
-            Term as JSON
+            <i class="bi bi-filetype-json"></i>
+            JSON
           </a>
         </div>
         <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm} />

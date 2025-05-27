@@ -22,14 +22,15 @@ const VISIBILITY_FOR_DROPDOWN = [
 export const AddToTermsetModalBtn = (props) => {
   const { modalId } = props;
   return (
-    <button type="button"
+    <a
       className={"btn btn-secondary btn-sm borderless-btn"}
       data-toggle="modal"
       data-target={"#addToTermsetModal-" + modalId}
       data-backdrop="static"
     >
-      {"Add to set"}
-    </button>
+      <i class="bi bi-plus-square"></i>
+      {" set"}
+    </a>
   );
 }
 
@@ -108,7 +109,7 @@ export const AddToTermsetModal = (props) => {
             <div className="modal-header">
               <h5 className="modal-title" id={"addToTermsetModal-" + modalId}>{`Add "${TermLib.extractLabel(term)}" to Termset`}</h5>
               {!submited &&
-                <button onClick={closeModal} type="button" className="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
+                <button onClick={closeModal} type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               }

@@ -81,9 +81,10 @@ const IndividualsList = (props) => {
 
 
   function processClick(e) {
-    if (ontologyPageContext.isSkos && !listView) {
+    if ((ontologyPageContext.isSkos && !listView) || !e.target.closest('.individual-list-container')) {
       return true;
     }
+
     if (!listView) {
       // select a class on the individual tree. Load the tree view for the class
       if (e.target.parentNode.parentNode.classList.contains("opened")) {
