@@ -20,6 +20,7 @@ import { Route, Switch } from 'react-router-dom';
 import UserCollection from "./components/User/Collection/Collection";
 import ContactForm from "./components/User/ContactForm/ContactForm";
 import OntologySuggestion from "./components/Ontologies/OntologySuggestion/OntologySuggestion";
+import TermSetList from "./components/TermSet/TermSetList";
 
 
 
@@ -33,6 +34,7 @@ const AppRouter = () => {
             <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile} />
             <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"} component={SubmitedIssueRequests} />
             <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel} />
+            <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"} component={TermSetList} />
             <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection} />
             <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"} component={OntologySuggestion} />
             <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList} />
