@@ -4,7 +4,7 @@ import Multiselect from "multiselect-react-dropdown";
 import { AppContext } from "../../context/AppContext";
 import TermLib from "../../Libs/TermLib";
 import DropDown from "../common/DropDown/DropDown";
-import { createTermset } from "../../api/term_set";
+import { createTermset, addTermToMultipleSets } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 
 
@@ -79,7 +79,28 @@ export const AddToTermsetModal = (props) => {
       setSubmited(true);
       setAddedSuccess(false);
     });
+  }
 
+
+  function addTermToSet() {
+    if (selectedTermsetIds.length === 0) {
+      document.getElementById("selected-termsets-" + term["iri"]).style.border = '1px solid red';
+      return;
+    }
+    const setIds = selectedTermsetIds.map((tset) => tset.id);
+    addTermToMultipleSets(setIds, term).then((success) => {
+      if (success) {
+        let userTermsets = [...appContext.userTermsets];
+        userTermsets.forEach((tset) => {
+          if (setIds.includes(tset.id)) {
+            tset.terms.push(term)
+          }
+        });
+        appContext.setUserTermsets(userTermsets);
+      }
+      setSubmited(true);
+      setAddedSuccess(success);
+    });
   }
 
 
@@ -179,8 +200,14 @@ export const AddToTermsetModal = (props) => {
                       isObject={true}
                       options={termsets}
                       selectedValues={selectedTermsetIds}
-                      onSelect={() => { }}
-                      onRemove={() => { }}
+                      onSelect={(selectedList, selectedItem) => {
+                        document.getElementById("selected-termsets-" + term["iri"]).style.border = '';
+                        setSelectedTermsetIds(selectedList);
+                      }}
+                      onRemove={(selectedList, selectedItem) => {
+                        document.getElementById("selected-termsets-" + term["iri"]).style.border = '';
+                        setSelectedTermsetIds(selectedList);
+                      }}
                       displayValue={"text"}
                       avoidHighlightFirstOption={true}
                       closeIcon={"cancel"}
@@ -211,7 +238,14 @@ export const AddToTermsetModal = (props) => {
               }
             </div>
             <div className="modal-footer justify-content-center">
-              {!submited && <button type="button" className="btn btn-secondary" onClick={submitNewTermset}>
+              {!submited && <button type="button" className="btn btn-secondary"
+                onClick={() => {
+                  if (createMode) {
+                    submitNewTermset();
+                  } else {
+                    addTermToSet();
+                  }
+                }}>
                 {createMode ? "Create and add" : "Add"}
               </button>
               }
