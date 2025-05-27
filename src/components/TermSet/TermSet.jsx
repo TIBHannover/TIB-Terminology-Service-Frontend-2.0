@@ -3,6 +3,20 @@ import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import { AppContext } from "../../context/AppContext";
 import TermLib from "../../Libs/TermLib";
+import DropDown from "../common/DropDown/DropDown";
+import { createTermset } from "../../api/term_set";
+
+
+const VISIBILITY_ONLY_ME = 1;
+const VISIBILITY_TS_USRES = 2;
+const VISIBILITY_PUBLIC = 3;
+const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
+const VISIBILITY_FOR_DROPDOWN = [
+  { label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME },
+  { label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES },
+  { label: "Public (open for everyone)", value: VISIBILITY_PUBLIC }
+];
+
 
 
 export const AddToTermsetModalBtn = (props) => {
@@ -35,6 +49,37 @@ export const AddToTermsetModal = (props) => {
     }
     return options;
   });
+  const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
+
+
+  function submitNewTermset() {
+    let name = document.getElementById("termsetTitle" + modalId).value;
+    let description = document.getElementById("termsetDescription" + modalId).value;
+    if (!name) {
+      return;
+    }
+    let data = {
+      name: name,
+      visibility: VISIBILITY_VALUES[newTermsetVisibility],
+      description: description,
+      terms: [props.term]
+    };
+
+    createTermset(data).then((newTermset) => {
+      if (newTermset) {
+        let userTermsets = [...appContext.userTermsets];
+        userTermsets.push(newTermset);
+        appContext.setUserTermsets(userTermsets);
+        setSubmited(true);
+        setAddedSuccess(true);
+        return true;
+      }
+      setSubmited(true);
+      setAddedSuccess(false);
+    });
+
+  }
+
 
   return (
     <div>
@@ -52,9 +97,10 @@ export const AddToTermsetModal = (props) => {
             <div className="modal-body">
               {!submited &&
                 <>
-                  <h5>
+                  <h6>
                     Please select or create a set to add this term.
-                  </h5>
+                  </h6>
+                  <br></br>
                   {createMode &&
                     <>
                       <div className="row">
@@ -67,6 +113,17 @@ export const AddToTermsetModal = (props) => {
                             placeholder="Enter a Name"
                           >
                           </input>
+                        </div>
+                      </div>
+                      <br></br>
+                      <div className="row">
+                        <div className="col-sm-12">
+                          <DropDown
+                            options={VISIBILITY_FOR_DROPDOWN}
+                            dropDownId="termset_visibility_dropdown"
+                            dropDownTitle="Visibility"
+                            dropDownChangeHandler={(e) => { setNewTermsetVisibility(e.target.value) }}
+                          />
                         </div>
                       </div>
                       <br></br>
@@ -120,7 +177,7 @@ export const AddToTermsetModal = (props) => {
               }
             </div>
             <div className="modal-footer justify-content-center">
-              {!submited && <button type="button" className="btn btn-secondary" onClick={() => { }}>
+              {!submited && <button type="button" className="btn btn-secondary" onClick={submitNewTermset}>
                 {createMode ? "Create and add" : "Add"}
               </button>
               }

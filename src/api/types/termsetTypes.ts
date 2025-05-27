@@ -11,3 +11,10 @@ export type TermSet = {
     visibility: "me" | "internal" | "public",
     terms: OntologyTermDataV2[]
 }
+
+export type NewTermSetFormData = {
+    name: string,
+    description?: string,
+    visibility: "me" | "internal" | "public",
+    terms: OntologyTermDataV2[]
+}

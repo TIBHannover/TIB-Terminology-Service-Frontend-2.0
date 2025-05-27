@@ -741,6 +741,10 @@ input[type="file"] {
   display: none;
 }
 
+input {
+  font-size: 12px;
+}
+
 body .custom-file-upload {
   display: inline-block;
   padding: 5px;
