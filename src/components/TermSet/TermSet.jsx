@@ -5,6 +5,7 @@ import { AppContext } from "../../context/AppContext";
 import TermLib from "../../Libs/TermLib";
 import DropDown from "../common/DropDown/DropDown";
 import { createTermset } from "../../api/term_set";
+import FormLib from "../../Libs/FormLib";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -46,18 +47,23 @@ export const AddToTermsetModal = (props) => {
   const [termsets, setTermSets] = useState();
   const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
   const [termExistingSets, setTermExistingSets] = useState("");
+  const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
 
 
   function submitNewTermset() {
-    let name = document.getElementById("termsetTitle" + modalId).value;
-    let description = document.getElementById("termsetDescription" + modalId).value;
+    let name = FormLib.getFieldByIdIfValid("termsetTitle" + modalId);
+    let description = document.getElementById("termsetDescription" + modalId);
     if (!name) {
+      return;
+    }
+    if (appContext.userTermsets.find((tset) => tset.name === name)) {
+      setTermsetNameNotValid(true);
       return;
     }
     let data = {
       name: name,
       visibility: VISIBILITY_VALUES[newTermsetVisibility],
-      description: description,
+      description: description ? description.value : "",
       terms: [props.term]
     };
 
@@ -98,7 +104,7 @@ export const AddToTermsetModal = (props) => {
     }
     setTermExistingSets(existingSets.length !== 0 ? existingSets.join(", ") : "")
     setTermSets(options);
-  }, [term]);
+  }, [term, appContext.userTermsets]);
 
 
   return (
@@ -132,8 +138,15 @@ export const AddToTermsetModal = (props) => {
                             className="form-control"
                             id={"termsetTitle" + modalId}
                             placeholder="Enter a Name"
+                            onClick={(e) => {
+                              setTermsetNameNotValid(false);
+                              e.target.style.borderColor = "";
+                            }}
                           >
                           </input>
+                          {termsetNameNotValid &&
+                            <small className="text-danger">Termset already exist.</small>
+                          }
                         </div>
                       </div>
                       <br></br>

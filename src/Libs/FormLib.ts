@@ -4,17 +4,17 @@ import { getTextEditorContent } from "../components/common/TextEditor/TextEditor
 
 class FormLib {
 
-  static getFieldByIdIfValid(id: string): false | string {
+  static getFieldByIdIfValid(id: string): string {
     let field = document.getElementById(id) as HTMLInputElement;
     if (field) {
       let value = field.value;
-      if (!value || value === "") {
+      if (!value) {
         field.style.borderColor = 'red';
-        return false;
+        return "";
       }
       return value;
     }
-    return false;
+    return "";
   }
 
 
