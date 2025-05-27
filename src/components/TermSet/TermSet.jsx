@@ -81,6 +81,15 @@ export const AddToTermsetModal = (props) => {
   }
 
 
+  function closeModal() {
+    setAddedSuccess(false);
+    setSubmited(false);
+    setCreateMode(false);
+    setSelectedTermsetIds([]);
+    setNewTermsetVisibility(VISIBILITY_ONLY_ME);
+  }
+
+
   return (
     <div>
       <div className="modal fade" id={"addToTermsetModal-" + modalId} tabIndex={-1} role="dialog" aria-labelledby={"addToTermsetModal-" + modalId} aria-hidden="true">
@@ -181,7 +190,7 @@ export const AddToTermsetModal = (props) => {
                 {createMode ? "Create and add" : "Add"}
               </button>
               }
-              {submited && <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>}
+              {submited && <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeModal}>Close</button>}
             </div>
           </div>
         </div>
