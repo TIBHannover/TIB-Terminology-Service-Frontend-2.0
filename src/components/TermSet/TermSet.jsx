@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import { AppContext } from "../../context/AppContext";
@@ -23,7 +23,7 @@ export const AddToTermsetModalBtn = (props) => {
   const { modalId } = props;
   return (
     <button type="button"
-      className={"btn btn-primary btn-sm borderless-btn"}
+      className={"btn btn-secondary btn-sm borderless-btn"}
       data-toggle="modal"
       data-target={"#addToTermsetModal-" + modalId}
       data-backdrop="static"
@@ -42,14 +42,9 @@ export const AddToTermsetModal = (props) => {
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [createMode, setCreateMode] = useState(false);
   const [selectedTermsetIds, setSelectedTermsetIds] = useState([]);
-  const [termsets, _] = useState(() => {
-    let options = [];
-    for (let tset of appContext.userTermsets) {
-      options.push({ "text": tset.name, "id": tset.id });
-    }
-    return options;
-  });
+  const [termsets, setTermSets] = useState();
   const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
+  const [termExistingSets, setTermExistingSets] = useState("");
 
 
   function submitNewTermset() {
@@ -90,6 +85,21 @@ export const AddToTermsetModal = (props) => {
   }
 
 
+  useEffect(() => {
+    let options = [];
+    let existingSets = [];
+    for (let tset of appContext.userTermsets) {
+      if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term.iri)) {
+        options.push({ "text": tset.name, "id": tset.id });
+      } else {
+        existingSets.push(tset.name);
+      }
+    }
+    setTermExistingSets(existingSets.length !== 0 ? existingSets.join(", ") : "")
+    setTermSets(options);
+  }, [term]);
+
+
   return (
     <div>
       <div className="modal fade" id={"addToTermsetModal-" + modalId} tabIndex={-1} role="dialog" aria-labelledby={"addToTermsetModal-" + modalId} aria-hidden="true">
@@ -98,7 +108,7 @@ export const AddToTermsetModal = (props) => {
             <div className="modal-header">
               <h5 className="modal-title" id={"addToTermsetModal-" + modalId}>{`Add "${TermLib.extractLabel(term)}" to Termset`}</h5>
               {!submited &&
-                <button type="button" className="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
+                <button onClick={closeModal} type="button" className="close close-btn-message-modal" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               }
@@ -106,6 +116,7 @@ export const AddToTermsetModal = (props) => {
             <div className="modal-body">
               {!submited &&
                 <>
+                  {termExistingSets && <AlertBox message={`Selected term is already part of these sets: ${termExistingSets}`} type="warning" />}
                   <h6>
                     Please select or create a set to add this term.
                   </h6>
@@ -165,7 +176,7 @@ export const AddToTermsetModal = (props) => {
                     />
                   }
                   <br />
-                  <button className="btn btn-primary btn-sm" onClick={() => { setCreateMode(!createMode) }}>
+                  <button className="btn btn-secondary btn-sm" onClick={() => { setCreateMode(!createMode) }}>
                     {createMode ? "Back to selection" : "I want to create a new set"}
                   </button>
                 </>

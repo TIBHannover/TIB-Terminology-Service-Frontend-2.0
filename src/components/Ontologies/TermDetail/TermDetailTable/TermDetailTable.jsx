@@ -1,10 +1,8 @@
-import { useContext } from 'react';
 import { classMetaData, propertyMetaData } from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
-import { OntologyPageContext } from '../../../../context/OntologyPageContext';
 import PropTypes from 'prop-types';
 
 
@@ -15,10 +13,6 @@ const TermDetailTable = (props) => {
     It requires the ontologyPageContext to be available.
   */
 
-  const ontologyPageContext = useContext(OntologyPageContext);
-
-  let nodeIri = encodeURIComponent(encodeURIComponent(props.node.iri));
-  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL + `/v2/ontologies/${props.node.ontologyId}/entities/${nodeIri}?lang=${ontologyPageContext.ontoLang}`;
 
 
   function setLabelAsLink() {
@@ -122,20 +116,6 @@ const TermDetailTable = (props) => {
         />
       }
       {createTable()}
-      <div className='col-sm-12' key={"json-button-row"}>
-        <div className='row'>
-          <div className='col-sm-12 node-metadata-value'>
-            <a
-              href={showDataAsJsonBtnHref}
-              target='_blank'
-              rel="noreferrer"
-              className='btn btn-secondary btn-dark download-ontology-btn'
-            >
-              Show Data as JSON
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

@@ -196,3 +196,17 @@
   font-size: 13px;
   white-space: nowrap;
 }
+
+.term-detail-action-bar {
+  background-color: #ecf0f0;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.term-detail-action-bar > button,
+.term-detail-action-bar > a {
+  font-size: 11px !important;
+  margin-right: 20px;
+  display: inline;
+}

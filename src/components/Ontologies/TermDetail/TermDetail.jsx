@@ -39,6 +39,8 @@ const TermDetail = (props) => {
   const [targetTerm, setTargetTerm] = useState({ "iri": null });
   const [notesCount, setNotesCount] = useState(0);
 
+  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL +
+    `/v2/ontologies/${targetTerm.ontologyId}/entities/${encodeURIComponent(encodeURIComponent(targetTerm.iri))}?lang=${ontologyPageContext.ontoLang}`;
 
   async function fetchTheTargetTerm() {
     let term = null;
@@ -124,7 +126,17 @@ const TermDetail = (props) => {
   return (
     <div className='row'>
       <div className='col-sm-12'>
-        <AddToTermsetModalBtn modalId={"term-in-tree"} />
+        <div className='term-detail-action-bar'>
+          <AddToTermsetModalBtn modalId={"term-in-tree"} />
+          <a
+            href={showDataAsJsonBtnHref}
+            target='_blank'
+            rel="noreferrer"
+            className='btn btn-secondary btn-dark download-ontology-btn'
+          >
+            Term as JSON
+          </a>
+        </div>
         <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm} />
         <RenderTermDetailTab
           componentIdentity={props.componentIdentity}
