@@ -4,7 +4,7 @@
     "html_id": "NFDI4ING",
     "name": "NFDI4Ing Project",
     "text": "NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service.",
-    "logo": "/nfdi4ing_logo.svg",
+    "logo": "/nfdi4ing.png",
     "ontology_list_url": "/ontologies?collection=NFDI4ING&and=false&page=1",
     "project_homepage": "https://nfdi4ing.de/",
     "domain_ts_link": "https://terminology.nfdi4ing.de/ts/"
@@ -135,9 +135,11 @@
     "html_id": "FAIRmat",
     "name": "FAIRmat",
     "text": "The FAIRmat collection contains terminologies and ontologies relevant for data management in condensed-matter physics and the chemical physics of solids.",
-    "logo": "https://www.fairmat-nfdi.eu/uploads/Area%20F/text_white_background_space_rounded_corners.png",
+    "logo": "/fairmat.png",
     "ontology_list_url": "/ontologies?collection=FAIRmat&and=false&page=1",
     "project_homepage": "https://www.fairmat-nfdi.eu/fairmat",
-    "domain_ts_link": ""
+    "domain_ts_link": "",
+    "logo_width": 200,
+    "logo_height": 200
   }
 }
