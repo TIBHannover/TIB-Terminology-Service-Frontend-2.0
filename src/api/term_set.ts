@@ -50,6 +50,27 @@ export async function getAllTermsetList(): Promise<TermSet[]> {
 }
 
 
+export async function getTermset(termsetId: string): Promise<TermSet | null> {
+  try {
+    type RespType = {
+      _result: {
+        term_set: TermSet
+      }
+    }
+    let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/" + termsetId + "/";
+    let result = await fetch(url, { headers: headers })
+    if (!result.ok) {
+      return null;
+    }
+    let termset = await result.json() as RespType;
+    return termset["_result"]["term_set"];
+  } catch {
+    return null;
+  }
+}
+
+
 export async function createTermset(termset: NewTermSetFormData): Promise<TermSet | null> {
   try {
     type RespType = {

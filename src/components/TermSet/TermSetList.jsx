@@ -22,7 +22,7 @@ const TermSetList = () => {
         return (
           <div className="row">
             <div className="col-sm-12 term-set-card">
-              <Link>
+              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id}>
                 <b>{tset.name}</b>
               </Link>
               <DeleteModalBtn
