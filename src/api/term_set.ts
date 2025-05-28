@@ -4,7 +4,32 @@ import { TermSet, NewTermSetFormData } from "./types/termsetTypes";
 import { OntologyTermDataV2 } from "./types/ontologyTypes";
 
 
-export async function getTermsetList(): Promise<TermSet[] | []> {
+export async function getUserTermsetList(userId: string): Promise<TermSet[]> {
+  try {
+    type RespType = {
+      _result: {
+        term_sets: TermSet[]
+      }
+    }
+    if (!userId) {
+      return [];
+    }
+    let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/";
+    let result = await fetch(url, { headers: headers })
+    if (!result.ok) {
+      return [];
+    }
+    let termSetList = await result.json() as RespType;
+    let userTermSets: TermSet[] = termSetList["_result"]["term_sets"].filter((tset) => tset.creator === userId);
+    return userTermSets;
+  } catch {
+    return [];
+  }
+}
+
+
+export async function getAllTermsetList(): Promise<TermSet[]> {
   try {
     type RespType = {
       _result: {

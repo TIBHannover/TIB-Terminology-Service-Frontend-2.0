@@ -16,7 +16,7 @@ import LoadingPage from './LoadingPage';
 import SiteTour from './tours/Tour';
 import { olsIsUp } from './api/system';
 import { useQuery } from '@tanstack/react-query';
-import { getTermsetList } from './api/term_set';
+import { getUserTermsetList } from './api/term_set';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -75,7 +75,7 @@ const App = () => {
           });
         }
 
-        getTermsetList().then((termsets) => {
+        getUserTermsetList(user?.id).then((termsets) => {
           setUserTermsets(termsets);
         })
 

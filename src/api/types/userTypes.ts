@@ -1,26 +1,27 @@
 import { SearchSetting } from "./searchApiTypes"
 
 
-export type LoginResponse ={
-    name?:string,
-    token?:string,
-    ts_username?:string,
-    ts_user_token?:string,
-    system_admin?:boolean,
-    company?:string,
-    github_home?:string,
-    login?:string,
-    orcid_id?:string,
+export type LoginResponse = {
+    id?: string
+    name?: string,
+    token?: string,
+    ts_username?: string,
+    ts_user_token?: string,
+    system_admin?: boolean,
+    company?: string,
+    github_home?: string,
+    login?: string,
+    orcid_id?: string,
     settings?: object,
 }
 
 
 export type UserSettings = {
-    userCollectionEnabled:boolean|undefined,
-    activeCollection:UserCollection|undefined,
-    advancedSearchEnabled:boolean|undefined,
-    activeSearchSetting:SearchSettingApiResponse|undefined,
-    activeSearchSettingIsModified:boolean|undefined,
+    userCollectionEnabled: boolean | undefined,
+    activeCollection: UserCollection | undefined,
+    advancedSearchEnabled: boolean | undefined,
+    activeSearchSetting: SearchSettingApiResponse | undefined,
+    activeSearchSettingIsModified: boolean | undefined,
 }
 
 
@@ -38,16 +39,16 @@ export type UserModelType = {
 }
 
 
-export type SearchSettingPayload ={
-    title:string,
-    description?:string,
-    settings:SearchSetting
+export type SearchSettingPayload = {
+    title: string,
+    description?: string,
+    settings: SearchSetting
 }
 
 export type SearchSettingApiResponse = {
-    id: string|number,
+    id: string | number,
     title: string,
-    user_id: string|number,
+    user_id: string | number,
     setting: SearchSetting,
     description?: string,
     created_at: string,
@@ -55,17 +56,17 @@ export type SearchSettingApiResponse = {
 }
 
 export type ContactFormData = {
-    title:string,
-    description:string,
-    email:string,
-    name:string,
-    safeQuestion:string,
-    safeAnswer:string,
-    type:string,
+    title: string,
+    description: string,
+    email: string,
+    name: string,
+    safeQuestion: string,
+    safeAnswer: string,
+    type: string,
 }
 
 
 type UserCollection = {
-    title:string,
-    ontology_ids:string[]
+    title: string,
+    ontology_ids: string[]
 }
