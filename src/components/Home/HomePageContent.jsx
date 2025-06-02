@@ -88,9 +88,15 @@ const RenderHomePage = () => {
 const CollectionCard = ({ collectionId }) => {
   let subPath = process.env.REACT_APP_PROJECT_SUB_PATH;
   return (
-    <div className="collection-card">
+    <div className="collection-card text-center">
       <Link to={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor">
-        <img className="img-fluid collection-logo" alt="collection_logo" src={collectionsInfoJson[collectionId]['logo']} />
+        <img
+          className="img-fluid p-5"
+          alt="collection_logo"
+          src={collectionsInfoJson[collectionId]['logo']}
+          style={{ height: collectionsInfoJson[collectionId]["logo_height"] ?? 200, width: collectionsInfoJson[collectionId]["logo_width"] ?? 300 }}
+
+        />
       </Link>
       <div className="collection-card-text">
         <p className="trunc">{collectionsInfoJson[collectionId]['text']}</p>
