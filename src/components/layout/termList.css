@@ -1,65 +1,79 @@
-.class-list-tablle-holder{
-    overflow-x: auto;
-    overflow-y: scroll;
-    transform: rotateX(180deg);
-    padding: 20px;    
+.class-list-tablle-holder {
+  overflow-x: auto;
+  overflow-y: scroll;
+  transform: rotateX(180deg);
+  padding: 20px;
 }
 
-.class-list-tablle-holder table{
-    transform: rotateX(180deg);            
+.class-list-tablle-holder table {
+  transform: rotateX(180deg);
 }
 
-.class-list-table tbody {
-    display: block;
-    height: 1000px;
-    overflow: auto;
-    direction: ltr;
+.term-table tbody {
+  display: block;
+  height: 1000px;
+  overflow: auto;
+  direction: ltr;
 }
-.class-list-table thead, tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    direction: ltr;
+.term-table thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  direction: ltr;
 }
-.class-list-table td{
-    width: 300px;    
-}
-
-.term-list-table{
-    margin-top: 30px;
-    width: 100%;    
+.term-table td {
+  /*width: 300px;*/
 }
 
-.table-list-label-anchor{
-    color: black;
-    text-decoration: underline;
+.term-list-table {
+  margin-top: 30px;
+  width: 100%;
 }
 
-.result-per-page-dropdown-container{
-    margin-left: 50px;
-    background-color: white;
-    border-color: white;
-    color: #42484e;
+.table-list-label-anchor {
+  color: black;
+  text-decoration: underline;
 }
 
-.is-loading-term-list{    
-    margin-right: 50%;
+.result-per-page-dropdown-container {
+  margin-left: 50px;
+  background-color: white;
+  border-color: white;
+  color: #42484e;
 }
 
-.number-of-result-text-container{
-    padding-top: 8px;
+.is-loading-term-list {
+  margin-right: 50%;
 }
 
-.show-hidden-column{
-    background-color: #2E7A7B;
-    width: 180px;
-    color: white;
-    border-radius: 5px;
-    padding: 2px;
-    font-size: 14px;
-    text-align: center;
-    margin-bottom: 10px;    
-    cursor: pointer;
-    margin-right: 5px;  
-    display: inline-block;  
+.number-of-result-text-container {
+  padding-top: 8px;
 }
+
+.show-hidden-column {
+  background-color: #2e7a7b;
+  width: 180px;
+  color: white;
+  border-radius: 5px;
+  padding: 2px;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.table-header-cell {
+  width: 300px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.table-body-cell {
+  width: 300px;
+  text-align: left;
+  font-size: 13px;
+}
+
