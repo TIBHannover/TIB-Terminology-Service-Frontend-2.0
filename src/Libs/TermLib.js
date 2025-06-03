@@ -199,6 +199,18 @@ class TermLib {
     }
     return result;
   }
+
+  static getContributors(term) {
+    if (term["annotation"]["contributor"]) {
+      return term["annotation"]["contributor"];
+    } else if (term["annotation"]["term editor"]) {
+      return term["annotation"]["term editor"];
+    } else if (term["annotation"]["creator"]) {
+      return term["annotation"]["creator"];
+    } else {
+      return "N/A";
+    }
+  }
 }
 
 export default TermLib;

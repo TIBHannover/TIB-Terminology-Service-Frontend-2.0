@@ -75,5 +75,10 @@ tbody tr {
   width: 300px;
   text-align: left;
   font-size: 13px;
+  padding: 20px !important;
 }
 
+.eye-icon {
+  display: inline;
+  cursor: pointer;
+}

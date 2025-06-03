@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { getObsoleteTermsForTermList } from "../../../api/obsolete";
 import TermApi from "../../../api/term";
 import Toolkit from "../../../Libs/Toolkit";
 import { RenderTermList } from "./RenderTermList";

@@ -8,13 +8,15 @@ type Column = {
 
 type Term = {
   value: string,
-  valueLink: string
+  valueLink: string,
+  valueIsHtml: boolean, // value is html and needs dangerouslySetInnerHTML
 }
 
 type InputProp = {
   columns: Column[],
-  terms: Map<string, Term>[], // id of this map is the id field in the Column
-  tableIsLoading: boolean
+  terms: Map<string, Term>[], // !Attention!: id of this map has to be the id field in the Column
+  tableIsLoading: boolean, // get the loading status from the parent component who provides the data
+  setTableIsLoading: (isLoading: boolean) => void, // set the table is loading when an event is triggered inside the table
 }
 
 
@@ -36,9 +38,9 @@ const TermTable = (props: InputProp) => {
             return (
               <th scope="col" className="table-header-cell">
                 {col.text}
-                <a onClick={() => { }} data-value={col.id}>
+                <div onClick={showHideTableColumn} data-value={col.id} className="eye-icon">
                   <i className="fa fa-eye-slash hidden-fa stour-class-list-hide-column-icon"></i>
-                </a>
+                </div>
               </th>
             )
           })
@@ -68,9 +70,13 @@ const TermTable = (props: InputProp) => {
               </a>
             </td>
           )
-        } else {
+        } else if (term.get(col.id)!.valueIsHtml) {
           oneRow.push(
             <td className="table-body-cell"><span dangerouslySetInnerHTML={{ __html: term.get(col.id)!.value }} /></td>
+          );
+        } else {
+          oneRow.push(
+            <td className="table-body-cell">{term.get(col.id)!.value}</td>
           );
         }
       }
@@ -89,7 +95,7 @@ const TermTable = (props: InputProp) => {
             return;
           }
           return (
-            <div className="show-hidden-column" onClick={() => { }} data-value={col.id}>{col.text} <i className="fa fa-eye"></i></div>
+            <div className="show-hidden-column" onClick={showHideTableColumn} data-value={col.id}>{col.text} <i className="fa fa-eye"></i></div>
           )
         })
         }
@@ -98,27 +104,52 @@ const TermTable = (props: InputProp) => {
   }
 
 
+  function showHideTableColumn(e: React.MouseEvent<HTMLDivElement>) {
+    try {
+      props.setTableIsLoading(true);
+      let colId: string | undefined = "";
+      colId = (e?.currentTarget as HTMLDivElement).dataset?.value;
+      if (!colId) {
+        props.setTableIsLoading(false);
+        return true;
+      }
+      let columnVisibilityCopy = new Map(colVis);
+      columnVisibilityCopy.set(colId, !columnVisibilityCopy.get(colId))
+      setColVis(columnVisibilityCopy);
+      props.setTableIsLoading(false);
+    }
+    catch (e) {
+      props.setTableIsLoading(false);
+      return true;
+    }
+  }
+
+
   useEffect(() => {
+    if (!columns) {
+      return;
+    }
     const visMap: Map<string, boolean> = new Map();
     for (let col of columns) {
       visMap.set(col.id, true);
     }
     setColVis(visMap);
-  }, []);
+    setTableBody(createTableBody());
+  }, [columns]);
 
   useEffect(() => {
     setTableBody(createTableBody());
-  }, [terms]);
+  }, [terms, colVis]);
 
 
 
   return (
     <table className="table table-striped term-list-table term-table" id="class-list-table">
-      {createShowColumnsTags()}
-      {createTableHeader()}
+      {columns && createShowColumnsTags()}
+      {columns && createTableHeader()}
       <tbody>
         {tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
-        {tableBody}
+        {!tableIsLoading && columns && tableBody}
       </tbody>
     </table>
   );
