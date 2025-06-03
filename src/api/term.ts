@@ -74,7 +74,7 @@ class TermApi {
 
       this.term['label'] = TermLib.extractLabel(this.term);
       this.term['synonym'] = TermLib.gerTermSynonyms(this.term);
-      this.term['annotation'] = this.buildAnnotations();
+      this.term['annotation'] = TermLib.getAnnotations(this.term);
       this.term['relations'] = undefined;
       this.term['eqAxiom'] = undefined;
       this.term['subClassOf'] = undefined;
@@ -112,7 +112,7 @@ class TermApi {
         let termObject = new TermApi();
         termObject.term = term;
         termObject.ontologyId = term['ontologyId'];
-        termObject.term['annotation'] = termObject.buildAnnotations();
+        termObject.term['annotation'] = TermLib.getAnnotations(termObject.term);
         termObject.term['subClassOf'] = termObject.getSubClassOf();
         termObject.term['eqAxiom'] = termObject.getEqAxiom();
         termObject.term['label'] = TermLib.extractLabel(termObject.term);
@@ -126,25 +126,6 @@ class TermApi {
       return [];
     }
   }
-
-
-  buildAnnotations() {
-    let annotations = {};
-    for (let key in this.term) {
-      if (!key.includes('purl.obolibrary.org') || key === Has_Curation_Status_Purl) {
-        continue;
-      }
-      if (this.term['linkedEntities'][key]) {
-        if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
-          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
-        } else {
-          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key];
-        }
-      }
-    }
-    return annotations;
-  }
-
 
 
   async fetchClassRelations(): Promise<boolean> {

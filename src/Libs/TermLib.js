@@ -1,5 +1,6 @@
 import Toolkit from "./Toolkit";
-import TermApi from "../api/term";
+
+const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 
 class TermLib {
   static createOntologyTagWithTermURL(ontology_name, termIri, type) {
@@ -210,6 +211,27 @@ class TermLib {
     } else {
       return "N/A";
     }
+  }
+
+  static getAnnotations(term) {
+    let annotations = {};
+    for (let key in term) {
+      if (
+        !key.includes("purl.obolibrary.org") ||
+        key === Has_Curation_Status_Purl
+      ) {
+        continue;
+      }
+      if (term["linkedEntities"][key]) {
+        if (typeof term[key] === "object" && !Array.isArray(term[key])) {
+          annotations[term["linkedEntities"][key]["label"][0]] =
+            term[key]?.value;
+        } else {
+          annotations[term["linkedEntities"][key]["label"][0]] = term[key];
+        }
+      }
+    }
+    return annotations;
   }
 }
 
