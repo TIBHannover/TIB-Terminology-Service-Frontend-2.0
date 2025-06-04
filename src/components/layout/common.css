@@ -468,6 +468,18 @@ body .isLoading-btn {
   animation: spin 1s linear infinite;
 }
 
+body .isLoading-inline-small {
+  display: inline-block;
+  margin-left: 5px;
+  border: 7px solid #ffffff;
+  border-radius: 50%;
+  border-top: 7px solid #404040;
+  width: 10px;
+  height: 10px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
@@ -587,6 +599,14 @@ body .fa-keyboard-o {
 body .fa-info {
   border: none;
   font-size: 13px;
+}
+
+body .bi-file-minus-fill {
+  color: red;
+  fill: white;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 3px;
 }
 
 body .overlay {

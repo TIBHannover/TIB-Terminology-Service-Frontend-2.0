@@ -121,3 +121,24 @@ export async function addTermToMultipleSets(setIds: string[], term: OntologyTerm
     return false;
   }
 }
+
+
+export async function removeTermFromSet(termsetId: string, termId: string): Promise<boolean> {
+  try {
+    type RespType = {
+      _result: {
+        removed: boolean
+      }
+    }
+    let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/" + termsetId + "/remove_term?termId=" + termId;
+    let result = await fetch(url, { method: "DELETE", headers: headers })
+    if (!result.ok) {
+      return false;
+    }
+    let removedStatus = await result.json() as RespType;
+    return removedStatus["_result"]["removed"];
+  } catch (e) {
+    return false;
+  }
+}

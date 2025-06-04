@@ -4,7 +4,7 @@ import Multiselect from "multiselect-react-dropdown";
 import { AppContext } from "../../context/AppContext";
 import TermLib from "../../Libs/TermLib";
 import DropDown from "../common/DropDown/DropDown";
-import { createTermset, addTermToMultipleSets } from "../../api/term_set";
+import { createTermset, addTermToMultipleSets, removeTermFromSet } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 
 
@@ -46,8 +46,9 @@ export const AddToTermsetModal = (props) => {
   const [selectedTermsetIds, setSelectedTermsetIds] = useState([]);
   const [termsets, setTermSets] = useState();
   const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
-  const [termExistingSets, setTermExistingSets] = useState("");
+  const [termExistingSets, setTermExistingSets] = useState([]);
   const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
+  const [removeLoading, setRemoveLoading] = useState(new Map());
 
 
   function submitNewTermset() {
@@ -104,6 +105,43 @@ export const AddToTermsetModal = (props) => {
   }
 
 
+  function removeTerm(e) {
+    try {
+      let removeLoadingMap = new Map(removeLoading);
+      let termsetId = e.currentTarget.dataset.tsetid;
+      if (!termsetId) {
+        return;
+      }
+      removeLoadingMap.set(termsetId, true);
+      setRemoveLoading(removeLoadingMap);
+      removeTermFromSet(termsetId, term.iri).then((removed) => {
+        if (removed) {
+          let deletedSet = document.getElementById("termCurrentSetsLi-" + termsetId);
+          if (deletedSet) {
+            let existingSetsList = [...termExistingSets];
+            let userTermsets = [...appContext.userTermsets];
+            let setToRemoveIndex = existingSetsList.findIndex(tset => tset.id === termsetId);
+            if (setToRemoveIndex !== -1) {
+              existingSetsList.splice(setToRemoveIndex, 1);
+              setTermExistingSets(existingSetsList);
+            }
+            let targetSetIndex = userTermsets.findIndex(tset => tset.id === termsetId);
+            let termToRemoveIdex = userTermsets[targetSetIndex].terms.findIndex(tsetTerm => tsetTerm.iri === term.iri);
+            if (termToRemoveIdex !== -1) {
+              userTermsets[targetSetIndex].terms.splice(termToRemoveIdex, 1);
+              appContext.setUserTermsets(userTermsets);
+            }
+          }
+        }
+        removeLoadingMap.set(termsetId, false);
+        setRemoveLoading(removeLoadingMap);
+      })
+    } catch {
+      return;
+    }
+  }
+
+
   function closeModal() {
     setAddedSuccess(false);
     setSubmited(false);
@@ -116,14 +154,17 @@ export const AddToTermsetModal = (props) => {
   useEffect(() => {
     let options = [];
     let existingSets = [];
+    let removeLoadingMap = new Map(removeLoading);
     for (let tset of appContext.userTermsets) {
       if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term.iri)) {
         options.push({ "text": tset.name, "id": tset.id });
       } else {
-        existingSets.push(tset.name);
+        removeLoadingMap.set(tset.id, false);
+        existingSets.push({ name: tset.name, id: tset.id });
       }
     }
-    setTermExistingSets(existingSets.length !== 0 ? existingSets.join(", ") : "")
+    setTermExistingSets(existingSets)
+    setRemoveLoading(removeLoadingMap);
     setTermSets(options);
   }, [term, appContext.userTermsets]);
 
@@ -144,7 +185,28 @@ export const AddToTermsetModal = (props) => {
             <div className="modal-body">
               {!submited &&
                 <>
-                  {termExistingSets && <AlertBox message={`Selected term is already part of these sets: ${termExistingSets}`} type="warning" />}
+                  {termExistingSets.length !== 0 &&
+                    <div className="row">
+                      <div className="col-sm-12">
+                        <b>Term exists in these sets:</b>
+                        <ul>
+                          {termExistingSets.map((tset) => {
+                            return (
+                              <li id={"termCurrentSetsLi-" + tset.id}>
+                                {tset.name}
+                                {removeLoading.get(tset.id) && <div className="isLoading-inline-small"></div>}
+                                <span className="">
+                                  <i class="bi bi-file-minus-fill" title="remove from this termset" data-tsetid={tset.id} onClick={removeTerm}>
+                                  </i>
+                                </span>
+                              </li>)
+                          })
+
+                          }
+                        </ul>
+                      </div>
+                    </div>
+                  }
                   <h6>
                     Please select or create a set to add this term.
                   </h6>
