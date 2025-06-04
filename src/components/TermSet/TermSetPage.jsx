@@ -3,6 +3,7 @@ import { getTermset } from "../../api/term_set";
 import { useQuery } from "@tanstack/react-query";
 import TermTable from "../common/TermTable/TermTable";
 import TermLib from "../../Libs/TermLib";
+import { Link } from 'react-router-dom';
 
 
 const TermSetPage = (props) => {
@@ -74,6 +75,14 @@ const TermSetPage = (props) => {
   return (
     <div className="justify-content-center ontology-page-container">
       <div className="tree-view-container list-container">
+        <div className="row" id="termset-page-action-bar">
+          <div className="col-sm-12">
+            <Link className="btn btn-secondary" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
+              <i class="bi bi-arrow-left mr-1"></i>
+              My termset list
+            </Link>
+          </div>
+        </div>
         <div className="row class-list-tablle-holder">
           <TermTable
             columns={tableColumns}
