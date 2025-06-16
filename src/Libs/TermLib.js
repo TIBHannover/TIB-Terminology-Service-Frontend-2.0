@@ -158,7 +158,7 @@ class TermLib {
         return label.value;
       }
       return label;
-    } catch {
+    } catch(e) {
       return "N/A";
     }
   }

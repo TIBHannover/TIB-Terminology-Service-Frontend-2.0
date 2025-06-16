@@ -10,3 +10,15 @@
   padding-right: 20px;
   margin-bottom: 20px;
 }
+
+.search-input-termset{
+  width: 70%;
+  height: 30px;
+  display: inline;
+}
+
+.search-input-termset::placeholder {
+  font-size: 12px;
+  font-style: italic;
+  color: gray;
+}

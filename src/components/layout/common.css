@@ -801,3 +801,7 @@ body .site-tour-btn {
 .bg-main-color {
   background-color: #0e6668;
 }
+
+.inline-label{
+  display: inline-block;
+}
