@@ -113,13 +113,52 @@ const TermSetPage = (props) => {
     return (
         <div className="justify-content-center ontology-page-container">
             <div className="tree-view-container list-container">
-                <div className="row" id="termset-page-action-bar">
-                    <div className="col-sm-2 mt-1">
+                <div className="row">
+                    <div className="col-12">
                         <Link className="btn-sm btn-secondary"
                               to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
                             <i className="bi bi-arrow-left mr-1"></i>
                             My termset list
                         </Link>
+                    </div>
+                </div>
+                <br/>
+                <div className="row">
+                    <div className="col-sm-12 text-center">
+                        <h2><b>{data ? data.name : ""}</b></h2>
+                    </div>
+                </div>
+                <br/><br/>
+                <div className="row" id="termset-page-action-bar">
+                    <div className="col-sm-2 mt-1">
+                        <button
+                            className="btn btn-sm btn-secondary mr-2"
+                            onClick={async () => {
+                                if (!data) {
+                                    return;
+                                }
+                                let termList = [];
+                                for (let term of data.terms) {
+                                    termList.push(term.json);
+                                }
+                                const jsonFile = JSON.stringify(termList);
+                                const blob = new Blob([jsonFile], {type: 'application/json'});
+                                const href = await URL.createObjectURL(blob);
+                                const link = document.createElement('a');
+                                link.href = href;
+                                link.download = data.name + "_terms.json";
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }}
+                        >
+                            <i className="bi bi-download ml-1"></i>
+                            JSON
+                        </button>
+                        <button className="btn btn-sm btn-secondary">
+                            <i className="bi bi-download ml-1"></i>
+                            CSV
+                        </button>
                     </div>
                     <div className="col-sm-3 mt-1">
                         <label for="search-input-for-termset" className={"inline-label"}>
