@@ -108,6 +108,46 @@ const TermSetPage = (props) => {
     await Toolkit.downloadJsonFile(data.name + "_terms.json", jsonFile);
   }
   
+  async function downloadCsvOnClick() {
+    if (!data) {
+      return;
+    }
+    let rows = [];
+    rows.push(tableColumns.map(column => column.text));
+    for (let termWrapper of data.terms) {
+      let term = termWrapper.json;
+      let annotation = TermLib.getAnnotations(term);
+      let row = [];
+      console.log(TermLib.createTermDiscription(term) ?? annotation?.definition)
+      row.push(escapeCSV(term["shortForm"]));
+      row.push(escapeCSV(TermLib.extractLabel(term)));
+      row.push(escapeCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
+      row.push(escapeCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
+      row.push(escapeCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
+      row.push(escapeCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
+      row.push(escapeCSV(TermLib.getContributors(term)));
+      row.push(escapeCSV(annotation['comment'] ? annotation['comment'] : "N/A"));
+      rows.push(row);
+    }
+    let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", data.name + "_terms.csv");
+    document.body.appendChild(link);
+    link.click();
+    
+  }
+  
+  function escapeCSV(value) {
+    if (value == null) return ''; // handle null/undefined
+    const str = String(value);
+    if (/[,"\n\r]/.test(str)) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+  }
+  
   
   useEffect(() => {
     if (dataLoaded) {
@@ -150,7 +190,7 @@ const TermSetPage = (props) => {
               <i className="bi bi-download ml-1"></i>
               JSON
             </button>
-            <button className="btn btn-sm btn-secondary">
+            <button className="btn btn-sm btn-secondary" onClick={downloadCsvOnClick}>
               <i className="bi bi-download ml-1"></i>
               CSV
             </button>

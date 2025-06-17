@@ -12,7 +12,7 @@ class TermLib {
     if (!ontology_name) {
       return null;
     }
-
+    
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -24,7 +24,7 @@ class TermLib {
     } else if (type === "individual" || type === "individuals") {
       targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
     }
-
+    
     return [
       <a
         href={targetHref}
@@ -35,17 +35,17 @@ class TermLib {
       </a>,
     ];
   }
-
+  
   static createTermUrlWithOntologyPrefix({
-    ontology_name,
-    termIri,
-    termLabel,
-    type,
-  }) {
+                                           ontology_name,
+                                           termIri,
+                                           termLabel,
+                                           type,
+                                         }) {
     if (!ontology_name) {
       return null;
     }
-
+    
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -63,7 +63,7 @@ class TermLib {
       </a>,
     ];
   }
-
+  
   static createAlsoInTags(term, termType) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
@@ -82,22 +82,18 @@ class TermLib {
     }
     return null;
   }
-
+  
   static createTermDiscription(term) {
     if (term.isIndividual && term.description) {
       // individual description structure is different
-      let result = [];
-      for (let desc of term.description) {
-        result.push(<p>{desc}</p>);
-      }
-      return result;
+      return term.description;
     } else if (term.obo_definition_citation) {
       let result = [];
       for (let cite of term.obo_definition_citation) {
         result.push(
           <div>
             {Toolkit.transformLinksInStringToAnchor(cite["definition"])}
-            <br />[<span className="node-metadata-label">Reference</span>:{" "}
+            <br/>[<span className="node-metadata-label">Reference</span>:{" "}
             <a href={cite["oboXrefs"][0]["url"]} target="_blank">
               {cite["oboXrefs"][0]["url"] ? cite["oboXrefs"][0]["url"] : "N/A"}
             </a>
@@ -110,17 +106,17 @@ class TermLib {
       let result = [];
       for (let desc of term.definition) {
         if (typeof desc === "object" && desc.value) {
-          result.push(<p>{desc.value}</p>);
+          result.push(desc.value);
         } else {
-          result.push(<p>{desc}</p>);
+          result.push(desc);
         }
       }
       return result;
     }
-
+    
     return null;
   }
-
+  
   static createInstancesListForClass(term) {
     // instances are the individuals which are a type of this class.
     if (!term.instancesList) {
@@ -144,7 +140,7 @@ class TermLib {
     }
     return result;
   }
-
+  
   static extractLabel(term) {
     try {
       if (term.label instanceof String || typeof term.label === "string") {
@@ -158,20 +154,20 @@ class TermLib {
         return label.value;
       }
       return label;
-    } catch(e) {
+    } catch (e) {
       return "N/A";
     }
   }
-
+  
   static termHasChildren(term) {
     return term.hasHierarchicalChildren || term.hasDirectChildren;
   }
-
+  
   static makeTermIdForTree(term) {
     let id = term.iri + "___" + Math.random().toString(36).substring(2, 20);
     return id;
   }
-
+  
   static getTermType(term) {
     if (!term.type) {
       return "";
@@ -181,7 +177,7 @@ class TermLib {
     }
     return term.type[0];
   }
-
+  
   static gerTermSynonyms(term) {
     if (!term.synonym) {
       return;
@@ -200,7 +196,7 @@ class TermLib {
     }
     return result;
   }
-
+  
   static getContributors(term) {
     if (term["annotation"]["contributor"]) {
       return term["annotation"]["contributor"];
@@ -212,7 +208,7 @@ class TermLib {
       return "N/A";
     }
   }
-
+  
   static getAnnotations(term) {
     let annotations = {};
     for (let key in term) {
