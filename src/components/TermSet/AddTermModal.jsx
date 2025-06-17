@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect, useRef} from "react";
+import {useState, useContext, useRef} from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import {AppContext} from "../../context/AppContext";
@@ -39,7 +39,6 @@ export const AddTermModal = (props) => {
   
   
   function submitNewTermsToSet() {
-    setSubmited(true);
     const payload = {};
     payload['id'] = termset.id;
     payload['name'] = termset.name;
@@ -48,8 +47,10 @@ export const AddTermModal = (props) => {
     payload['terms'] = [...termset.terms.map(term => term.json), ...selectedTermsJson];
     updateTermset(payload).then((updatedTermset) => {
       if (updatedTermset) {
+        setSubmited(true);
         setAddedSuccess(true);
       } else {
+        setSubmited(true);
         setAddedSuccess(false);
       }
     });
@@ -94,24 +95,6 @@ export const AddTermModal = (props) => {
     setSelectedTerms([]);
     setSelectedTermsJson([]);
   }
-  
-  
-  // useEffect(() => {
-  //     let options = [];
-  //     let existingSets = [];
-  //     let removeLoadingMap = new Map(removeLoading);
-  //     for (let tset of appContext.userTermsets) {
-  //         if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term.iri)) {
-  //             options.push({"text": tset.name, "id": tset.id});
-  //         } else {
-  //             removeLoadingMap.set(tset.id, false);
-  //             existingSets.push({name: tset.name, id: tset.id});
-  //         }
-  //     }
-  //     setTermExistingSets(existingSets)
-  //     setRemoveLoading(removeLoadingMap);
-  //     setTermSets(options);
-  // }, [term, appContext.userTermsets]);
   
   
   return (
@@ -177,7 +160,12 @@ export const AddTermModal = (props) => {
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
-                  onClick={closeModal}>Close
+                  onClick={() => {
+                    closeModal();
+                    window.location.reload();
+                  }}
+                >
+                  Close
                 </button>
               }
             </div>

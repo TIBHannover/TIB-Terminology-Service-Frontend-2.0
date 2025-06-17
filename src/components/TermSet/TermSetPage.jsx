@@ -10,10 +10,13 @@ import {AddTermModal, AddTermModalBtn} from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
 
 
-const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value: 10}, {label: "20", value: 20}, {
-  label: "30",
-  value: 30
-}, {label: "40", value: 40}, {label: "50", value: 50}];
+const PAGE_SIZES_FOR_DROPDOWN = [
+  {label: "10", value: 10},
+  {label: "20", value: 20},
+  {label: "30", value: 30},
+  {label: "40", value: 40},
+  {label: "50", value: 50}
+];
 const DEFAUTL_ROWS_COUNT = 10;
 
 
@@ -48,6 +51,7 @@ const TermSetPage = (props) => {
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
+    console.log(listOfterms)
     for (let termWrapper of listOfterms) {
       let term = termWrapper.json;
       let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
@@ -119,14 +123,14 @@ const TermSetPage = (props) => {
       let annotation = TermLib.getAnnotations(term);
       let row = [];
       console.log(TermLib.createTermDiscription(term) ?? annotation?.definition)
-      row.push(escapeCSV(term["shortForm"]));
-      row.push(escapeCSV(TermLib.extractLabel(term)));
-      row.push(escapeCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
-      row.push(escapeCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
-      row.push(escapeCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
-      row.push(escapeCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
-      row.push(escapeCSV(TermLib.getContributors(term)));
-      row.push(escapeCSV(annotation['comment'] ? annotation['comment'] : "N/A"));
+      row.push(escapeForCSV(term["shortForm"]));
+      row.push(escapeForCSV(TermLib.extractLabel(term)));
+      row.push(escapeForCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
+      row.push(escapeForCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
+      row.push(escapeForCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
+      row.push(escapeForCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
+      row.push(escapeForCSV(TermLib.getContributors(term)));
+      row.push(escapeForCSV(annotation['comment'] ? annotation['comment'] : "N/A"));
       rows.push(row);
     }
     let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
@@ -139,8 +143,8 @@ const TermSetPage = (props) => {
     
   }
   
-  function escapeCSV(value) {
-    if (value == null) return ''; // handle null/undefined
+  function escapeForCSV(value) {
+    if (value == null) return '';
     const str = String(value);
     if (/[,"\n\r]/.test(str)) {
       return `"${str.replace(/"/g, '""')}"`;
@@ -158,7 +162,14 @@ const TermSetPage = (props) => {
       createTermListForTable(data.terms);
       setTotalTermsCount(data.terms.length);
     }
-  }, [data]);
+  }, [data, page, size]);
+  
+  
+  useEffect(() => {
+    if (data) {
+      createTermListForTable(data.terms);
+    }
+  }, [page, size]);
   
   
   if (error) {
@@ -223,7 +234,9 @@ const TermSetPage = (props) => {
           </div>
           <div className="col-sm-2 text-right mt-1">
             <Pagination
-              clickHandler={setPage}
+              clickHandler={(newPage) => {
+                setPage(parseInt(newPage) - 1)
+              }}
               count={Math.ceil(totalTermsCount / size)}
               initialPageNumber={page + 1}
             />
