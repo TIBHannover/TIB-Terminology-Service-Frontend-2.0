@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import {getTermset} from "../../api/term_set";
 import {useQuery} from "@tanstack/react-query";
 import TermTable from "../common/TermTable/TermTable";
@@ -8,6 +8,9 @@ import DropDown from "../common/DropDown/DropDown";
 import Pagination from "../common/Pagination/Pagination";
 import {AddTermModal, AddTermModalBtn} from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
+import DeleteModalBtn, {DeleteModal} from "../common/DeleteModal/DeleteModal";
+import {removeTermFromSet} from "../../api/term_set";
+import {AppContext} from "../../context/AppContext";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -23,10 +26,13 @@ const DEFAUTL_ROWS_COUNT = 10;
 const TermSetPage = (props) => {
   const termsetId = props.match.params.termsetId;
   
+  const appContext = useContext(AppContext);
+  
   const [dataLoaded, setDataLoaded] = useState(false);
   const [rowDataForTable, setRowDataForTable] = useState([]);
   const [tableColumns, _] = useState(
     [
+      {id: "action", value: ""},
       {id: "shortForm", text: "ID"},
       {id: "label", text: "Label"},
       {id: "decs", text: "Description"},
@@ -51,9 +57,17 @@ const TermSetPage = (props) => {
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
-    console.log(listOfterms)
     for (let termWrapper of listOfterms) {
       let term = termWrapper.json;
+      const DeleteBtn =
+        <i
+          className="bi bi-file-minus-fill"
+          title="remove from this termset"
+          data-tsetid={data.id}
+          data-termid={term['iri']}
+          onClick={removeTerm}
+        />
+      
       let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
       let annotation = TermLib.getAnnotations(term);
       term["annotation"] = annotation;
@@ -74,6 +88,7 @@ const TermSetPage = (props) => {
       termMap.set("seealso", {value: annotation['seeAlso'] ? annotation['seeAlso'] : "N/A", valueLink: ""});
       termMap.set("contrib", {value: TermLib.getContributors(term), valueLink: ""});
       termMap.set("comment", {value: annotation['comment'] ? annotation['comment'] : "N/A", valueLink: ""});
+      termMap.set("action", {value: DeleteBtn, valueLink: ""});
       
       dataForTable.push(termMap);
     }
@@ -141,6 +156,24 @@ const TermSetPage = (props) => {
     document.body.appendChild(link);
     link.click();
     
+  }
+  
+  function removeTerm(e) {
+    try {
+      let termsetId = e.currentTarget.dataset.tsetid;
+      let termId = e.currentTarget.dataset.termid;
+      if (!termsetId || !termId) {
+        return;
+      }
+      removeTermFromSet(termsetId, termId).then((removed) => {
+        if (removed) {
+          setDataLoaded(false)
+          // remove from appcontext and table
+        }
+      })
+    } catch {
+      return;
+    }
   }
   
   function escapeForCSV(value) {
