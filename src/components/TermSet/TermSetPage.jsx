@@ -230,7 +230,7 @@ const TermSetPage = (props) => {
           </div>
           <div className="col-sm-3 text-end mt-2">
             <AddTermModalBtn modalId={"add-term-modal"}></AddTermModalBtn>
-            <AddTermModal modalId={"add-term-modal"}></AddTermModal>
+            <AddTermModal termset={data} modalId={"add-term-modal"}></AddTermModal>
           </div>
         </div>
         <div className="row">

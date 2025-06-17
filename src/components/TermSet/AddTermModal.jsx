@@ -2,11 +2,9 @@ import {useState, useContext, useEffect, useRef} from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import {AppContext} from "../../context/AppContext";
-import {createTermset, addTermToMultipleSets, removeTermFromSet} from "../../api/term_set";
-import FormLib from "../../Libs/FormLib";
-import Toolkit from "../../Libs/Toolkit";
 import {getJumpToResultV2} from "../../api/search";
 import TermLib from "../../Libs/TermLib";
+import {updateTermset} from "../../api/term_set";
 
 
 export const AddTermModalBtn = (props) => {
@@ -26,29 +24,40 @@ export const AddTermModalBtn = (props) => {
 
 
 export const AddTermModal = (props) => {
-  const {modalId} = props;
+  const {termset, modalId} = props;
   const appContext = useContext(AppContext);
   
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
-  const [createMode, setCreateMode] = useState(false);
-  const [selectedTermsetIds, setSelectedTermsetIds] = useState([]);
-  const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
-  
   const [termListOptions, setTermListOptions] = useState([]);
   const [selectedTerms, setSelectedTerms] = useState(null);
+  const [selectedTermsJson, setSelectedTermsJson] = useState([]);
   const [loading, setLoading] = useState(true);
   
   
   const searchUnderRef = useRef(null);
   
   
-  function submitNewTermset() {
-    return;
+  function submitNewTermsToSet() {
+    setSubmited(true);
+    const payload = {};
+    payload['id'] = termset.id;
+    payload['name'] = termset.name;
+    payload['description'] = termset.description;
+    payload['visibility'] = termset.visibility;
+    payload['terms'] = [...termset.terms.map(term => term.json), ...selectedTermsJson];
+    updateTermset(payload).then((updatedTermset) => {
+      if (updatedTermset) {
+        setAddedSuccess(true);
+      } else {
+        setAddedSuccess(false);
+      }
+    });
   }
   
-  function onTermSelect(event) {
-    return;
+  function onTermSelect(selectedTerms) {
+    let termsJson = selectedTerms.map(term => term.json);
+    setSelectedTermsJson(termsJson);
   }
   
   
@@ -71,6 +80,7 @@ export const AddTermModal = (props) => {
       let opt = {};
       opt['text'] = `${term['ontologyId']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
       opt['iri'] = term['iri'];
+      opt['json'] = term;
       options.push(opt);
     }
     setLoading(false);
@@ -81,8 +91,8 @@ export const AddTermModal = (props) => {
   function closeModal() {
     setAddedSuccess(false);
     setSubmited(false);
-    setCreateMode(false);
-    setSelectedTermsetIds([]);
+    setSelectedTerms([]);
+    setSelectedTermsJson([]);
   }
   
   
@@ -158,11 +168,7 @@ export const AddTermModal = (props) => {
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={() => {
-                    if (createMode) {
-                      submitNewTermset();
-                    }
-                  }}>
+                  onClick={submitNewTermsToSet}>
                   {"Add"}
                 </button>
               }

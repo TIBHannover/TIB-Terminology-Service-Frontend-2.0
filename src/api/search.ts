@@ -65,6 +65,10 @@ export async function getJumpToResultV2(query: string, lang: string = "en") {
     try {
         let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
         let url = `${apiBaseUrl}/v2/entities?search=${query}&lang=${lang}&searchFields=label`;
+        if (process.env.REACT_APP_PROJECT_NAME !== "") {
+            // Projects such as NFDI4CHEM. pre-set the target collection on each search
+            url += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
+        }
         let result = await (await fetch(url, getCallSetting)).json();
         return result['elements'] ?? [];
     } catch {
