@@ -1,13 +1,14 @@
-import { useEffect, useState, useContext } from "react";
-import { AppContext } from "../../../context/AppContext";
+import {useEffect, useState, useContext} from "react";
+import {AppContext} from "../../../context/AppContext";
+import OntologyLib from "../../../Libs/OntologyLib";
 
 
 const Facet = (props) => {
-
+  
   const appContext = useContext(AppContext);
-
+  
   const DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES = 5;
-
+  
   const [resultTypes, setResultTypes] = useState([]);
   const [ontologyFacetData, setOntologyFacetData] = useState([]);
   const [ontologyListShowAll, setOntologyListShowAll] = useState(false);
@@ -18,15 +19,14 @@ const Facet = (props) => {
   const [typesCheckBoxesToRender, setTypesCheckBoxesToRender] = useState(null);
   const [ontologyCheckBoxesToRender, setOntologyCheckBoxesToRender] = useState(null);
   const [collectionCheckBoxesToRender, setCollectionCheckBoxesToRender] = useState(null);
-
-
-
+  const [ontoCollectionMap, setOntoCollectionMap] = useState(new Map());
+  
+  
   function setComponentData() {
     if (!props.facetData) {
       setResultTypes({});
       setOntologyFacetData({});
-    }
-    else {
+    } else {
       let facetData = props.facetData;
       let allOntologies = facetData["ontologyId"];
       let ontologyFacetData = {};
@@ -36,13 +36,14 @@ const Facet = (props) => {
         }
         ontologyFacetData[onto.toUpperCase()] = allOntologies[onto];
       }
+      
+      
       setResultTypes(facetData["type"]);
       setOntologyFacetData(ontologyFacetData);
     }
   }
-
-
-
+  
+  
   function createTypesCheckboxList() {
     let result = [];
     for (let type in resultTypes) {
@@ -60,7 +61,7 @@ const Facet = (props) => {
                   onClick={props.handleTypesCheckBoxClick}
                   data-ischecked={props.selectedTypes.includes(type)}
                 />
-                <label className="form-check-label" htmlFor={"search-checkbox-" + type} >
+                <label className="form-check-label" htmlFor={"search-checkbox-" + type}>
                   {type}
                 </label>
               </div>
@@ -74,16 +75,30 @@ const Facet = (props) => {
     }
     setTypesCheckBoxesToRender(result);
   }
-
-
+  
+  
   function createOntologiesCheckboxList() {
+    
     let result = [];
     let counter = 1;
-
+    
     for (let ontologyId in ontologyFacetData) {
       if (counter > countOfShownOntologies && !ontologyListShowAll) {
         break;
       }
+      // let skip = false;
+      // if (props.selectedCollections.length && ontoCollectionMap.size > 0) {
+      //   for (let col of props.selectedCollections) {
+      //     if (!ontoCollectionMap.get(ontologyId)?.includes(col)) {
+      //       skip = true;
+      //       break;
+      //     }
+      //   }
+      // }
+      // if (skip) {
+      //   continue;
+      // }
+      
       if (parseInt(ontologyFacetData[ontologyId]) !== 0) {
         result.push(
           <div key={ontologyId}>
@@ -99,7 +114,7 @@ const Facet = (props) => {
                     onClick={props.handleOntologyCheckBoxClick}
                     data-isChecked={props.selectedOntologies.includes(ontologyId.toLowerCase())}
                   />
-                  <label className="form-check-label" htmlFor={"search-checkbox-" + ontologyId} >
+                  <label className="form-check-label" htmlFor={"search-checkbox-" + ontologyId}>
                     {ontologyId}
                   </label>
                 </div>
@@ -115,9 +130,8 @@ const Facet = (props) => {
     }
     setOntologyCheckBoxesToRender(result);
   }
-
-
-
+  
+  
   function createCollectionsCheckBoxes() {
     let result = [];
     for (let col in props.allCollections) {
@@ -137,7 +151,7 @@ const Facet = (props) => {
                     onClick={props.handleCollectionsCheckboxClick}
                     data-ischecked={props.selectedCollections.includes(col)}
                   />
-                  <label className="form-check-label" htmlFor={"search-checkbox-" + col} >
+                  <label className="form-check-label" htmlFor={"search-checkbox-" + col}>
                     {col}
                   </label>
                 </div>
@@ -150,27 +164,27 @@ const Facet = (props) => {
     }
     setCollectionCheckBoxesToRender(result);
   }
-
-
-
+  
+  
   function handleOntologyShowMoreClick(e) {
     if (ontologyListShowAll) {
       setShowMoreLessOntologiesText("+ Show More");
       setOntologyListShowAll(false);
-    }
-    else {
+    } else {
       setShowMoreLessOntologiesText("- Show Less");
       setOntologyListShowAll(true);
     }
-
+    
   }
-
-
+  
+  
   function updateCountOfShownOntologies() {
     let lastSelectedOntologyIndex = 0;
     let counter = 1;
     let ontologiesInFacetLength = 0;
     for (let ontoId in ontologyFacetData) {
+      console.log(ontoId)
+      console.log(props.selectedOntologies)
       if (props.selectedOntologies.includes(ontoId.toLowerCase())) {
         lastSelectedOntologyIndex = counter;
       }
@@ -179,23 +193,22 @@ const Facet = (props) => {
       }
       counter += 1;
     }
-
+    
     let numberOfShownOntologies = DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES;
     if (lastSelectedOntologyIndex > countOfShownOntologies) {
       setCountOfShownOntologies(lastSelectedOntologyIndex);
       numberOfShownOntologies = lastSelectedOntologyIndex;
     }
-
+    
     if (ontologiesInFacetLength > numberOfShownOntologies) {
       setShowMoreIsNeededForOntologies(true);
-    }
-    else {
+    } else {
       setShowMoreIsNeededForOntologies(false);
     }
-
+    
   }
-
-
+  
+  
   function enableSelectedCheckBoxesOnLoad() {
     let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');
     for (let checkbox of allFacetCheckBoxes) {
@@ -205,23 +218,35 @@ const Facet = (props) => {
       delete checkbox.dataset.ischecked;
     }
   }
-
-
+  
+  
   useEffect(() => {
     setComponentData();
     updateCountOfShownOntologies();
   }, []);
-
-
+  
+  
   useEffect(() => {
     if (!appContext.userSettings.userCollectionEnabled) {
       createCollectionsCheckBoxes();
       setIsLoading(false);
     }
+    const ontoColMap = new Map();
+    for (let col in props.allCollections) {
+      for (let onto of props.allCollections[col]) {
+        if (!ontoColMap.has(onto['preferredPrefix'])) {
+          ontoColMap.set(onto['preferredPrefix'], [col]);
+        } else {
+          let temp = ontoColMap.get(onto['preferredPrefix']);
+          temp.push(col);
+          ontoColMap.set(onto['preferredPrefix'], [col]);
+        }
+      }
+    }
+    setOntoCollectionMap(ontoColMap);
   }, [props.allCollections]);
-
-
-
+  
+  
   useEffect(() => {
     setComponentData();
     createTypesCheckboxList();
@@ -229,31 +254,30 @@ const Facet = (props) => {
     !appContext.userSettings.userCollectionEnabled && createCollectionsCheckBoxes();
     setIsLoading(false);
   }, [props.facetData]);
-
-
+  
+  
   useEffect(() => {
     createTypesCheckboxList();
   }, [resultTypes]);
-
-
+  
+  
   useEffect(() => {
     createOntologiesCheckboxList();
     updateCountOfShownOntologies();
   }, [ontologyFacetData]);
-
-
+  
+  
   useEffect(() => {
     createOntologiesCheckboxList();
     setIsLoading(false);
   }, [countOfShownOntologies, ontologyListShowAll]);
-
-
+  
+  
   useEffect(() => {
     enableSelectedCheckBoxesOnLoad();
   }, [typesCheckBoxesToRender, ontologyCheckBoxesToRender, collectionCheckBoxesToRender]);
-
-
-
+  
+  
   return (
     <div className="row" id="search-facet-container-box">
       {isLoading &&
@@ -305,8 +329,8 @@ const Facet = (props) => {
         </div>}
     </div>
   );
-
-
+  
+  
 }
 
 export default Facet;
