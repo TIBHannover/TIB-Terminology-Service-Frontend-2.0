@@ -9,28 +9,35 @@ import {
 import Toolkit from "../Libs/Toolkit";
 
 
-export async function olsSearch(inputData: SearchApiInput): Promise<SearchApiResponse | []> {
+export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {
     try {
         let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
-        let rangeStart: number = (inputData.page - 1) * inputData.size;
-        let searchUrl: string = process.env.REACT_APP_SEARCH_URL + `?q=${encodeURIComponent(inputData.searchQuery)}&start=${rangeStart}&groupField=iri&rows=${inputData.size}&lang=${lang}&exclusive=true`;
-        searchUrl = inputData.selectedOntologies.length !== 0 ? (searchUrl + `&ontology=${inputData.selectedOntologies.join(',')}`) : searchUrl;
-        searchUrl = inputData.selectedTypes.length !== 0 ? (searchUrl + `&type=${inputData.selectedTypes.join(',')}`) : searchUrl;
-        searchUrl = inputData.searchInValues.length !== 0 ? (searchUrl + `&queryFields=${inputData.searchInValues.join(',')}`) : searchUrl;
-        searchUrl = inputData.searchUnderIris.length !== 0 ? (searchUrl + `&childrenOf=${inputData.searchUnderIris.join(',')}`) : searchUrl;
-        searchUrl = inputData.searchUnderAllIris.length !== 0 ? (searchUrl + `&allChildrenOf=${inputData.searchUnderAllIris.join(',')}`) : searchUrl;
-        searchUrl = inputData.obsoletes ? (searchUrl + "&obsoletes=true") : searchUrl;
-        searchUrl = inputData.exact ? (searchUrl + "&exact=true") : searchUrl;
+        let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
+        let query = encodeURIComponent(inputData.searchQuery);
+        let page = inputData.page ? inputData.page - 1 : 0;
+        let size = inputData.size ? inputData.size : 10;
+        let searchUrl: string = apiBaseUrl + `/v2/entities?search=${query}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
+        searchUrl = jumpToMode ? (searchUrl + "&searchFields=label") : searchUrl;
+        searchUrl = inputData?.selectedOntologies?.length ? (searchUrl + `&ontology=${inputData?.selectedOntologies?.join(',')}`) : searchUrl;
+        searchUrl = inputData?.selectedTypes?.length ? (searchUrl + `&type=${inputData?.selectedTypes?.join(',')}`) : searchUrl;
+        searchUrl = inputData?.searchInValues?.length ? (searchUrl + `&queryFields=${inputData?.searchInValues?.join(',')}`) : searchUrl;
+        searchUrl = inputData?.searchUnderIris?.length ? (searchUrl + `&childrenOf=${inputData?.searchUnderIris?.join(',')}`) : searchUrl;
+        searchUrl = inputData?.searchUnderAllIris?.length ? (searchUrl + `&allChildrenOf=${inputData?.searchUnderAllIris?.join(',')}`) : searchUrl;
+        searchUrl = inputData.obsoletes ? (searchUrl + "&includeObsoleteEntities=true") : searchUrl;
+        searchUrl = inputData.exact ? (searchUrl + "&exactMatch=true") : searchUrl;
         searchUrl = inputData.isLeaf ? (searchUrl + "&isLeaf=true") : searchUrl;
-        if (process.env.REACT_APP_PROJECT_NAME === "" && inputData.selectedCollections.length !== 0) {
+        if (process.env.REACT_APP_PROJECT_NAME === "" && inputData?.selectedCollections?.length) {
             // If TIB General. Set collections if exist in filter
-            searchUrl += `&schema=collection&classification=${inputData.selectedCollections.join(',')}`;
-        } else if (inputData.selectedOntologies.length === 0 && process.env.REACT_APP_PROJECT_NAME !== "") {
+            searchUrl += `&schema=collection&classification=${inputData?.selectedCollections?.join(',')}&option=composite`;
+        } else if (inputData?.selectedOntologies?.length === 0 && process.env.REACT_APP_PROJECT_NAME !== "") {
             // Projects such as NFDI4CHEM. pre-set the target collection on each search
             // This should NOT be included when ontologies are selected.
-            searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
+            searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}&option=composite`;
         }
         let result: any = await (await fetch(searchUrl, getCallSetting)).json();
+        if (jumpToMode) {
+            return result['elements'];
+        }
         return result;
     } catch (e) {
         return [];
@@ -56,22 +63,6 @@ export async function getJumpToResult(inputData: SuggestAndSelectApiInput, count
         result = result['response']['docs'];
         return result;
     } catch (e) {
-        return [];
-    }
-}
-
-
-export async function getJumpToResultV2(query: string, lang: string = "en") {
-    try {
-        let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
-        let url = `${apiBaseUrl}/v2/entities?search=${query}&lang=${lang}&searchFields=label`;
-        if (process.env.REACT_APP_PROJECT_NAME !== "") {
-            // Projects such as NFDI4CHEM. pre-set the target collection on each search
-            url += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}`;
-        }
-        let result = await (await fetch(url, getCallSetting)).json();
-        return result['elements'] ?? [];
-    } catch {
         return [];
     }
 }

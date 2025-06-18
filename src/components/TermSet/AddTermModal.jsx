@@ -2,7 +2,7 @@ import {useState, useContext, useRef} from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import {AppContext} from "../../context/AppContext";
-import {getJumpToResultV2} from "../../api/search";
+import {olsSearch} from "../../api/search";
 import TermLib from "../../Libs/TermLib";
 import {updateTermset} from "../../api/term_set";
 
@@ -79,7 +79,7 @@ export const AddTermModal = (props) => {
     if (appContext.userSettings.userCollectionEnabled) {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
-    let terms = await getJumpToResultV2(query);
+    let terms = await olsSearch(inputQuery, true);
     let options = [];
     for (let term of terms) {
       let opt = {};
