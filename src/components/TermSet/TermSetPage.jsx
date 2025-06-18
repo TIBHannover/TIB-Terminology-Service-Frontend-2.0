@@ -8,7 +8,6 @@ import DropDown from "../common/DropDown/DropDown";
 import Pagination from "../common/Pagination/Pagination";
 import {AddTermModal, AddTermModalBtn} from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
-import DeleteModalBtn, {DeleteModal} from "../common/DeleteModal/DeleteModal";
 import {removeTermFromSet} from "../../api/term_set";
 import {AppContext} from "../../context/AppContext";
 
@@ -168,7 +167,18 @@ const TermSetPage = (props) => {
       removeTermFromSet(termsetId, termId).then((removed) => {
         if (removed) {
           setDataLoaded(false)
-          // remove from appcontext and table
+          let i = data.terms.findIndex((term) => term.iri === termId);
+          let usertermsets = [...appContext.userTermsets];
+          let termsetInContextIndex = usertermsets.findIndex((tset) => tset.id === termsetId);
+          if (termsetInContextIndex > 0) {
+            let tindexInSet = usertermsets[termsetInContextIndex].terms.findIndex((term) => term.iri === termId);
+            if (tindexInSet) {
+              usertermsets[termsetInContextIndex].terms.splice(tindexInSet, 1);
+              appContext.setUserTermsets(usertermsets);
+            }
+          }
+          data.terms.splice(i, 1);
+          createTermListForTable(data.terms);
         }
       })
     } catch {

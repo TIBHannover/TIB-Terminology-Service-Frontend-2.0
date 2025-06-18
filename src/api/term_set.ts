@@ -152,7 +152,7 @@ export async function removeTermFromSet(termsetId: string, termId: string): Prom
             }
         }
         let headers: TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});
-        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/" + termsetId + "/remove_term?termId=" + termId;
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/" + termsetId + "/remove_term?termId=" + encodeURIComponent(termId);
         let result = await fetch(url, {method: "DELETE", headers: headers})
         if (!result.ok) {
             return false;

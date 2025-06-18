@@ -6,7 +6,6 @@ import {getJumpToResultV2} from "../../api/search";
 import TermLib from "../../Libs/TermLib";
 import {updateTermset} from "../../api/term_set";
 
-
 export const AddTermModalBtn = (props) => {
   const {modalId} = props;
   return (
@@ -47,6 +46,11 @@ export const AddTermModal = (props) => {
     payload['terms'] = [...termset.terms.map(term => term.json), ...selectedTermsJson];
     updateTermset(payload).then((updatedTermset) => {
       if (updatedTermset) {
+        let userTermsets = [...appContext.userTermsets];
+        let tsInex = userTermsets.findIndex(tset => tset.id === updatedTermset.id);
+        userTermsets.splice(tsInex, 1);
+        userTermsets.push(updatedTermset);
+        appContext.setUserTermsets(userTermsets);
         setSubmited(true);
         setAddedSuccess(true);
       } else {
