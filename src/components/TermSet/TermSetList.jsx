@@ -48,8 +48,15 @@ const TermSetList = () => {
         return (
           <div className="row">
             <div className="col-sm-12 term-set-card">
-              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id}>
+              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id} style={{ marginTop: "2px" }}>
                 <b>{tset.name}</b>
+              </Link>
+              <Link
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id + "/edit"}
+                className="btn btn-sm borderless-btn"
+                style={{marginTop: "1px"}}
+              >
+                <i className="fa fa-edit fa-borderless edit-termset-icon"></i>
               </Link>
               <DeleteModalBtn
                 modalId={tset.id}

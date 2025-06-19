@@ -89,6 +89,7 @@ const CreateTermSetPage = (props) => {
       if (newTermset) {
         let userTermsets = [...appContext.userTermsets];
         userTermsets.push(newTermset);
+        userTermsets.sort((s1, s2)=> s1.name.localeCompare(s2.name));
         appContext.setUserTermsets(userTermsets);
         setSubmited(true);
         setAddedSuccess(true);
