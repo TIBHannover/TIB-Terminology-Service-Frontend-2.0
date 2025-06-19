@@ -18,6 +18,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
         let size = inputData.size ? inputData.size : 10;
         let searchUrl: string = apiBaseUrl + `/v2/entities?search=${query}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
         searchUrl = jumpToMode ? (searchUrl + "&searchFields=label") : searchUrl;
+        searchUrl = !jumpToMode ? (searchUrl + "&facetFields=type+ontologyId") : searchUrl;
         searchUrl = inputData?.selectedOntologies?.length ? (searchUrl + `&ontology=${inputData?.selectedOntologies?.join(',')}`) : searchUrl;
         searchUrl = inputData?.selectedTypes?.length ? (searchUrl + `&type=${inputData?.selectedTypes?.join(',')}`) : searchUrl;
         searchUrl = inputData?.searchInValues?.length ? (searchUrl + `&queryFields=${inputData?.searchInValues?.join(',')}`) : searchUrl;
@@ -28,11 +29,11 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
         searchUrl = inputData.isLeaf ? (searchUrl + "&isLeaf=true") : searchUrl;
         if (process.env.REACT_APP_PROJECT_NAME === "" && inputData?.selectedCollections?.length) {
             // If TIB General. Set collections if exist in filter
-            searchUrl += `&schema=collection&classification=${inputData?.selectedCollections?.join(',')}&option=composite`;
+            searchUrl += `&schema=collection&classification=${inputData?.selectedCollections?.join(',')}&option=COMPOSITE`;
         } else if (inputData?.selectedOntologies?.length === 0 && process.env.REACT_APP_PROJECT_NAME !== "") {
             // Projects such as NFDI4CHEM. pre-set the target collection on each search
             // This should NOT be included when ontologies are selected.
-            searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}&option=composite`;
+            searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}&option=COMPOSITE`;
         }
         let result: any = await (await fetch(searchUrl, getCallSetting)).json();
         if (jumpToMode) {

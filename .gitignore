@@ -34,3 +34,5 @@ sonarqube/logs
 .vscode/
 issues_notes
 temp.txt
+
+.idea/
