@@ -50,6 +50,7 @@ const TermSetPage = (props) => {
   const {data, loading, error} = useQuery({
     queryKey: ["termset", termsetId],
     queryFn: () => getTermset(termsetId),
+    retry: 1
   });
   
   function createTermListForTable(listOfterms) {
@@ -215,8 +216,16 @@ const TermSetPage = (props) => {
   }, [page, size]);
   
   
-  if (error) {
+  if (!data && !error) {
+    return (
+      <div className="justify-content-center ontology-page-container">
+        <div className="isLoading"></div>
+      </div>
+    );
+  } else if (!data && error && error.status !== 404) {
     return ("error!")
+  } else if (!data && error && error.status === 404) {
+    return ("not found!");
   }
   
   return (

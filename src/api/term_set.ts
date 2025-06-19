@@ -61,12 +61,14 @@ export async function getTermset(termsetId: string): Promise<TermSet | null> {
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/" + termsetId + "/";
         let result = await fetch(url, {headers: headers})
         if (!result.ok) {
-            return null;
+            const error = new Error("Fetch failed");
+            (error as any).status = result.status;
+            throw error;
         }
         let termset = await result.json() as RespType;
         return termset["_result"]["term_set"];
-    } catch {
-        return null;
+    } catch (error) {
+        throw error;
     }
 }
 

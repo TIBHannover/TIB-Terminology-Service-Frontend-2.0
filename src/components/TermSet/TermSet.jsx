@@ -6,6 +6,7 @@ import TermLib from "../../Libs/TermLib";
 import DropDown from "../common/DropDown/DropDown";
 import {createTermset, addTermToMultipleSets, removeTermFromSet} from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
+import Login from "../User/Login/TS/Login";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -21,6 +22,25 @@ const VISIBILITY_FOR_DROPDOWN = [
 
 export const AddToTermsetModalBtn = (props) => {
   const {modalId, btnClass} = props;
+  const appContext = useContext(AppContext);
+  if (!appContext.user) {
+    const loginModalId = "loginModal" + modalId;
+    const loginBtn =
+      <button
+        type="button"
+        className={"btn btn-secondary btn-sm borderless-btn " + (btnClass ?? "")}
+        data-toggle="modal"
+        data-target={"#" + loginModalId}
+        data-backdrop="static"
+        data-keyboard="false"
+      >
+        <i className="bi bi-plus-square"></i>
+        {" set"}
+      </button>
+    return (
+      <Login isModal={true} customLoginBtn={loginBtn} customModalId={loginModalId}/>
+    );
+  }
   return (
     <a
       className={"btn btn-secondary btn-sm borderless-btn " + (btnClass ?? "")}
