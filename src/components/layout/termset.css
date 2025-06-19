@@ -1,24 +1,30 @@
 .term-set-card {
-  background-color: white;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
 }
 
 #termset-page-action-bar {
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 20px;
 }
 
-.search-input-termset{
-  width: 70%;
-  height: 30px;
-  display: inline;
+.search-input-termset {
+    width: 70%;
+    height: 30px;
+    display: inline;
 }
 
 .search-input-termset::placeholder {
-  font-size: 12px;
-  font-style: italic;
-  color: gray;
+    font-size: 12px;
+    font-style: italic;
+    color: gray;
+}
+
+.create-termset-btn {
+    margin-bottom: 20px;
+    /*float: right;*/
+    font-weight: bold;
 }

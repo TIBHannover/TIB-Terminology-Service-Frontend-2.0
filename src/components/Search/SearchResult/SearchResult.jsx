@@ -17,7 +17,7 @@ import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import {AppContext} from '../../../context/AppContext';
 import {useQuery} from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
-import {AddToTermsetModal, AddToTermsetModalBtn} from "../../TermSet/TermSet";
+import {AddToTermsetModal, AddToTermsetModalBtn} from "../../TermSet/AddTermToSet";
 
 
 const SearchResult = (props) => {

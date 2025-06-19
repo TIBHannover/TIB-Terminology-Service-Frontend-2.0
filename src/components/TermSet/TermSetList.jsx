@@ -1,24 +1,50 @@
-import { useContext } from "react";
-import { AppContext } from "../../context/AppContext";
+import {useContext, useState} from "react";
+import {AppContext} from "../../context/AppContext";
 import "../layout/termset.css";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import DeleteModalBtn from "../common/DeleteModal/DeleteModal";
-import { DeleteModal } from "../common/DeleteModal/DeleteModal";
-import { getTsPluginHeaders } from "../../api/header";
-
+import {DeleteModal} from "../common/DeleteModal/DeleteModal";
+import {getTsPluginHeaders} from "../../api/header";
+import CreateTermsetPage from "./CreateTermset";
 
 
 const TermSetList = () => {
   const appContext = useContext(AppContext);
-
-
-  const callHeader = getTsPluginHeaders({ withAccessToken: true });
+  
+  const [createMode, setCreateMode] = useState(false);
+  
+  const callHeader = getTsPluginHeaders({withAccessToken: true});
   let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
   let redirectAfterDeleteEndpoint = process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets";
-
+  
+  
   return (
     <>
-      {appContext.userTermsets.map((tset) => {
+      <div className="row">
+        <div className="col-sm-12">
+          <button className={"btn btn-secondary create-termset-btn " + (!createMode ? "float-right" : "")}
+                  onClick={() => {
+                    setCreateMode(!createMode);
+                  }}>
+            {!createMode &&
+              <>
+                <i className="bi bi-plus-square mr-2"></i>
+                Termset
+              </>
+            }
+            {createMode &&
+              <>
+                <i className="bi bi-arrow-left mr-1"></i>
+                My termset list
+              </>
+            }
+          </button>
+        </div>
+      </div>
+      {createMode &&
+        <CreateTermsetPage/>
+      }
+      {!createMode && appContext.userTermsets.map((tset) => {
         return (
           <div className="row">
             <div className="col-sm-12 term-set-card">
@@ -37,7 +63,8 @@ const TermSetList = () => {
                 deleteEndpoint={deleteEndpoint + tset.id + "/"}
                 afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
                 key={"deleteCollection" + tset.id}
-                afterDeleteProcess={() => { }}
+                afterDeleteProcess={() => {
+                }}
                 objectToDelete={tset}
                 method="DELETE"
               />
@@ -45,7 +72,7 @@ const TermSetList = () => {
           </div>
         )
       })
-
+      
       }
     </>
   )
