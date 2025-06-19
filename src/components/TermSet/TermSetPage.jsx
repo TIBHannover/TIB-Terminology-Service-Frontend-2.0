@@ -10,6 +10,7 @@ import {AddTermModal, AddTermModalBtn} from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
 import {removeTermFromSet} from "../../api/term_set";
 import {AppContext} from "../../context/AppContext";
+import {NotFoundErrorPage, GeneralErrorPage} from "../common/ErrorPages/ErrorPages";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -223,9 +224,17 @@ const TermSetPage = (props) => {
       </div>
     );
   } else if (!data && error && error.status !== 404) {
-    return ("error!")
+    return (
+      <div className="justify-content-center ontology-page-container">
+        <GeneralErrorPage/>
+      </div>
+    );
   } else if (!data && error && error.status === 404) {
-    return ("not found!");
+    return (
+      <div className="justify-content-center ontology-page-container">
+        <NotFoundErrorPage/>
+      </div>
+    );
   }
   
   return (
