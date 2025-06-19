@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4d1375bc-2a3c-4003-b0ff-2e4678b2eaad" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/api/search.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/search.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Search/Facet/facet.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Search/Facet/facet.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Search/SearchResult/SearchResult.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Search/SearchResult/SearchResult.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/FuzzierSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FuzzierSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/ontology.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/ontology.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Ontologies/DataTree/Tree.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Ontologies/DataTree/Tree.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Ontologies/OntologyPage/OntologyPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Ontologies/OntologyPage/OntologyPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +49,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "/home/pooya/Documents/projects/NFDIChem/TIB_Terminology_Service_2.0",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
