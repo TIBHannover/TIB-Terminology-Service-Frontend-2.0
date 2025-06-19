@@ -1,54 +1,54 @@
-#searchterm-wrapper{
+#searchterm-wrapper {
     overflow-x: hidden;
     overflow-y: hidden;
     padding-top: 20px;
     display: flex;
 }
 
-.searchresult-card-description{
+.searchresult-card-description {
     margin-top: 30px;
 }
 
-.search-result-container .search-result-title{ 
+.search-result-container .search-result-title {
     color: #5F6469;
     display: inline;
 }
 
-.search-result-title:hover{ 
+.search-result-title:hover {
     color: #5F6469;
     text-decoration: none;
 }
 
-.search-result-container .search-result-title > h4{
+.search-result-container .search-result-title > h4 {
     display: inline;
 }
 
-.also-in-design{ 
+.also-in-design {
     display: inline-block;
 }
 
-.search-result-container .also-in-ontologies{  
+.search-result-container .also-in-ontologies {
     display: inline-block;
     padding-bottom: 7px;
 }
 
-.dropdown-colour{    
-   background-color: white;
+.dropdown-colour {
+    background-color: white;
 }
 
 .search-result-container .form-check-inline-github-issue,
-.search-result-container .form-check-input-github-issue{
+.search-result-container .form-check-input-github-issue {
     margin-top: 4px;
     margin-left: 2px;
 }
 
-.show-more-btn{
+.show-more-btn {
     cursor: pointer;
 }
 
-.search-filter-tags{
+.search-filter-tags {
     padding: 4px;
-    background-color: white;    
+    background-color: white;
     margin-right: 10px;
     border-radius: 10px;
     font-size: 14px;
@@ -58,9 +58,20 @@
     display: inline-block;
 }
 
-.remove-tag-icon{
+.remove-tag-icon {
     margin-left: 2px;
     border: none !important;
     font-size: 15px !important;
     cursor: pointer;
+}
+
+.action-btn {
+    font-size: 11px;
+    padding: 2px;
+    float: right;
+    font-weight: bold;
+}
+
+.action-btn > i {
+    font-size: 9px;
 }
