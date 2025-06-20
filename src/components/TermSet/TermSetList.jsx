@@ -17,6 +17,9 @@ const TermSetList = () => {
   let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
   let redirectAfterDeleteEndpoint = process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets";
   
+  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+    return "";
+  }
   
   return (
     <>

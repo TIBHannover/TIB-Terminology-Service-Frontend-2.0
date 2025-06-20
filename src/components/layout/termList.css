@@ -84,6 +84,7 @@ tbody tr {
     text-align: left;
     font-size: 13px;
     padding: 20px !important;
+    word-break: break-word;
 }
 
 .table-body-cell-small {

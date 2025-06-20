@@ -23,6 +23,11 @@ const VISIBILITY_FOR_DROPDOWN = [
 export const AddToTermsetModalBtn = (props) => {
   const {modalId, btnClass} = props;
   const appContext = useContext(AppContext);
+  
+  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+    return "";
+  }
+  
   if (!appContext.user) {
     const loginModalId = "loginModal" + modalId;
     const loginBtn =
@@ -187,6 +192,10 @@ export const AddToTermsetModal = (props) => {
     setRemoveLoading(removeLoadingMap);
     setTermSets(options);
   }, [term, appContext.userTermsets]);
+  
+  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+    return "";
+  }
   
   
   return (

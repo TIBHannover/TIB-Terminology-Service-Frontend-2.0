@@ -33,3 +33,14 @@
     color: black;
     font-size: 16px !important;
 }
+
+.visibility-tag{
+    background-color: #0E6668;
+    color: white;
+    width: 200px;
+    border-radius: 5px;
+    text-align: center;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+}

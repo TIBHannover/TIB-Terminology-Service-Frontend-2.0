@@ -60,7 +60,7 @@ const TermSetPage = (props) => {
     listOfterms = listOfterms.slice(page * size, page * size + size);
     for (let termWrapper of listOfterms) {
       let term = termWrapper.json;
-      const DeleteBtn =
+      let DeleteBtn =
         <i
           className="bi bi-file-minus-fill"
           title="remove from this termset"
@@ -68,6 +68,9 @@ const TermSetPage = (props) => {
           data-termid={term['iri']}
           onClick={removeTerm}
         />
+      if(!appContext.userTermsets.find((tset) => tset.id === data.id) || !appContext.user){
+        DeleteBtn = "";
+      }
       
       let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
       let annotation = TermLib.getAnnotations(term);
@@ -133,12 +136,17 @@ const TermSetPage = (props) => {
       return;
     }
     let rows = [];
-    rows.push(tableColumns.map(column => column.text));
+    let headers = [];
+    for(let col of tableColumns){
+      if(col.id !== "action"){
+        headers.push(col.text);
+      }
+    }
+    rows.push(headers);
     for (let termWrapper of data.terms) {
       let term = termWrapper.json;
       let annotation = TermLib.getAnnotations(term);
       let row = [];
-      console.log(TermLib.createTermDiscription(term) ?? annotation?.definition)
       row.push(escapeForCSV(term["shortForm"]));
       row.push(escapeForCSV(TermLib.extractLabel(term)));
       row.push(escapeForCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
@@ -181,6 +189,7 @@ const TermSetPage = (props) => {
           }
           data.terms.splice(i, 1);
           createTermListForTable(data.terms);
+          setTotalTermsCount(data.terms.length);
         }
       })
     } catch {
@@ -215,7 +224,11 @@ const TermSetPage = (props) => {
       createTermListForTable(data.terms);
     }
   }, [page, size]);
+ 
   
+  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+    return "";
+  }
   
   if (!data && !error) {
     return (
@@ -241,18 +254,24 @@ const TermSetPage = (props) => {
     <div className="justify-content-center ontology-page-container">
       <div className="tree-view-container list-container">
         <div className="row">
-          <div className="col-12">
+          <div className="col-6">
             <Link className="btn-sm btn-secondary"
                   to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
               <i className="bi bi-arrow-left mr-1"></i>
               My termset list
             </Link>
           </div>
+          {appContext.userTermsets.find((tset) => tset.id === data.id) &&
+            <div className="col-sm-6 float-right">
+              <div className="visibility-tag">visibility: {data ? data.visibility : ""}</div>
+            </div>
+          }
         </div>
         <br/>
         <div className="row">
           <div className="col-sm-12 text-center">
             <h2><b>{data ? data.name : ""}</b></h2>
+            <small>{data ? data.description : ""}</small>
           </div>
         </div>
         <br/><br/>
@@ -302,10 +321,13 @@ const TermSetPage = (props) => {
               initialPageNumber={page + 1}
             />
           </div>
-          <div className="col-sm-3 text-end mt-2">
+          {appContext.userTermsets.find((tset) => tset.id === data.id) &&
+            // only owner can see this button
+            <div className="col-sm-3 text-end mt-2">
             <AddTermModalBtn modalId={"add-term-modal"}></AddTermModalBtn>
             <AddTermModal termset={data} modalId={"add-term-modal"}></AddTermModal>
           </div>
+          }
         </div>
         <div className="row">
           <div className="col-sm-12 pl-4">
