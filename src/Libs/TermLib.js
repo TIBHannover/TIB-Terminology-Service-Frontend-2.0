@@ -35,12 +35,13 @@ class TermLib {
     ];
   }
   
-  static createTermUrlWithOntologyPrefix({
-                                           ontology_name,
-                                           termIri,
-                                           termLabel,
-                                           type,
-                                         }) {
+  static createTermUrlWithOntologyPrefix(
+    {
+      ontology_name,
+      termIri,
+      termLabel,
+      type,
+    }) {
     if (!ontology_name) {
       return null;
     }
@@ -88,21 +89,6 @@ class TermLib {
       let result = [];
       for (let desc of term.description) {
         result.push(<p>{desc}</p>);
-      }
-      return result;
-    } else if (term.obo_definition_citation) {
-      let result = [];
-      for (let cite of term.obo_definition_citation) {
-        result.push(
-          <div>
-            {Toolkit.transformLinksInStringToAnchor(cite["definition"])}
-            <br/>[<span className="node-metadata-label">Reference</span>:{" "}
-            <a href={cite["oboXrefs"][0]["url"]} target="_blank">
-              {cite["oboXrefs"][0]["url"] ? cite["oboXrefs"][0]["url"] : "N/A"}
-            </a>
-            ]
-          </div>,
-        );
       }
       return result;
     } else if (term.definition) {
