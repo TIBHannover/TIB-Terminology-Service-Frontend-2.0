@@ -11,7 +11,7 @@ class TermLib {
     if (!ontology_name) {
       return null;
     }
-
+    
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -23,7 +23,7 @@ class TermLib {
     } else if (type === "individual" || type === "individuals") {
       targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
     }
-
+    
     return [
       <a
         href={targetHref}
@@ -34,17 +34,17 @@ class TermLib {
       </a>,
     ];
   }
-
+  
   static createTermUrlWithOntologyPrefix({
-    ontology_name,
-    termIri,
-    termLabel,
-    type,
-  }) {
+                                           ontology_name,
+                                           termIri,
+                                           termLabel,
+                                           type,
+                                         }) {
     if (!ontology_name) {
       return null;
     }
-
+    
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -62,7 +62,7 @@ class TermLib {
       </a>,
     ];
   }
-
+  
   static createAlsoInTags(term, termType) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
@@ -81,7 +81,7 @@ class TermLib {
     }
     return null;
   }
-
+  
   static createTermDiscription(term) {
     if (term.isIndividual && term.description) {
       // individual description structure is different
@@ -96,7 +96,7 @@ class TermLib {
         result.push(
           <div>
             {Toolkit.transformLinksInStringToAnchor(cite["definition"])}
-            <br />[<span className="node-metadata-label">Reference</span>:{" "}
+            <br/>[<span className="node-metadata-label">Reference</span>:{" "}
             <a href={cite["oboXrefs"][0]["url"]} target="_blank">
               {cite["oboXrefs"][0]["url"] ? cite["oboXrefs"][0]["url"] : "N/A"}
             </a>
@@ -109,17 +109,26 @@ class TermLib {
       let result = [];
       for (let desc of term.definition) {
         if (typeof desc === "object" && desc.value) {
-          result.push(<p>{desc.value}</p>);
+          let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
+          let defArr = [];
+          defArr.push(defText);
+          defArr.push(<><br/><span className="node-metadata-label">Reference: </span></>);
+          for (let ax of (desc.axioms ?? [])) {
+            for (let key in ax) {
+              defArr.push(<a href={key} target="_blank" rel="noreferrer">{ax[key]}</a>);
+            }
+          }
+          result.push(<p>{defArr}</p>);
         } else {
           result.push(<p>{desc}</p>);
         }
       }
       return result;
     }
-
+    
     return null;
   }
-
+  
   static createInstancesListForClass(term) {
     // instances are the individuals which are a type of this class.
     if (!term.instancesList) {
@@ -143,7 +152,7 @@ class TermLib {
     }
     return result;
   }
-
+  
   static extractLabel(term) {
     try {
       if (term.label instanceof String || typeof term.label === "string") {
@@ -161,16 +170,16 @@ class TermLib {
       return "N/A";
     }
   }
-
+  
   static termHasChildren(term) {
     return term.hasHierarchicalChildren || term.hasDirectChildren;
   }
-
+  
   static makeTermIdForTree(term) {
     let id = term.iri + "___" + Math.random().toString(36).substring(2, 20);
     return id;
   }
-
+  
   static getTermType(term) {
     if (!term.type) {
       return "";
@@ -180,7 +189,7 @@ class TermLib {
     }
     return term.type[0];
   }
-
+  
   static gerTermSynonyms(term) {
     if (!term.synonym) {
       return;
