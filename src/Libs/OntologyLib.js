@@ -1,7 +1,12 @@
 import Toolkit from "./Toolkit";
 
+const CREATOR_PURL1 = "http://purl.org/dc/terms/creator";
+const CREATOR_PURL2 = "http://purl.org/dc/elements/1.1/creator";
+
+
 class OntologyLib {
-  static formatCreators(creators) {
+  static formatCreators(ontology) {
+    let creators = ontology[CREATOR_PURL1] || ontology[CREATOR_PURL2];
     if (!creators || creators.length === 0) {
       return "N/A";
     }
@@ -14,7 +19,7 @@ class OntologyLib {
     }
     return value.join(",\n");
   }
-
+  
   static formatSubject(classifications) {
     if (!classifications) {
       return "";
@@ -29,7 +34,7 @@ class OntologyLib {
     }
     return "";
   }
-
+  
   static getCurrentOntologyIdFromUrlPath() {
     let currentUrlPath = window.location.pathname;
     currentUrlPath = currentUrlPath.split("ontologies/");
@@ -41,25 +46,25 @@ class OntologyLib {
     }
     return ontologyIdInUrl;
   }
-
+  
   static getLabel(ontology) {
     if (ontology.title) {
       return ontology.title;
     }
     return ontology.label?.[0] ?? "";
   }
-
+  
   static gerDescription(ontology) {
     return ontology.description ? ontology.description : "";
   }
-
+  
   static getCollections(ontology) {
     if (!ontology.classifications) {
       return [];
     }
     return ontology.classifications?.[0]?.collection ?? [];
   }
-
+  
   static getAnnotationProperties(ontology) {
     try {
       let annotations = {};
@@ -87,6 +92,31 @@ class OntologyLib {
       return {};
     }
   }
+  
+  static getImports(ontology) {
+    try {
+      if (!ontology["importsFrom"]) {
+        return [];
+      }
+      let res = [];
+      for (let ontoId of ontology["importsFrom"]) {
+        res.push(
+          <a
+            href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontoId}
+            className={"mr-2"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {ontoId}
+          </a>
+        );
+      }
+      return res;
+    } catch {
+      return [];
+    }
+  }
 }
+
 
 export default OntologyLib;
