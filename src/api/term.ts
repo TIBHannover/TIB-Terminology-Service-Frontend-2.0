@@ -18,6 +18,7 @@ const ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 const DEFINITION_PROPERTY_PURL = "http://purl.obolibrary.org/obo/IAO_0000115";
 const DB_XREF_PURL = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
+const IDENTIFIER_PURL = "https://schema.org/identifier";
 
 
 class TermApi {
@@ -128,6 +129,9 @@ class TermApi {
         let dbXref = this.createDbXrefAnnotation();
         if (dbXref) {
             annotations["has_dbxref"] = dbXref;
+        }
+        if (this.term[IDENTIFIER_PURL]) {
+            annotations["Identifier"] = this.term[IDENTIFIER_PURL];
         }
         for (let key in this.term) {
             if (!key.includes('purl.obolibrary.org') || key === Has_Curation_Status_Purl) {
