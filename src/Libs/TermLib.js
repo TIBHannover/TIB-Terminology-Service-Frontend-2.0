@@ -106,7 +106,11 @@ class TermLib {
                   <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
                 </>
               );
-              defArr.push(<>{ax[key]}<br/></>);
+              if (Array.isArray(ax[key]) && ax[key].length > 1) {
+                defArr.push(<>{ax[key].join(", ")}<br/></>);
+              } else {
+                defArr.push(<>{ax[key]}<br/></>);
+              }
             }
           }
           result.push(<p>{defArr}</p>);
