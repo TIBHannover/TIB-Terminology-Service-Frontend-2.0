@@ -106,13 +106,7 @@ class TermLib {
                   <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
                 </>
               );
-              defArr.push(
-                <>
-                  <a href={key} target="_blank" rel="noreferrer">{ax[key]}</a>
-                  <br/>
-                </>
-              );
-              
+              defArr.push(<>{ax[key]}<br/></>);
             }
           }
           result.push(<p>{defArr}</p>);
