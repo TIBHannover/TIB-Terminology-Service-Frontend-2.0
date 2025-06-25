@@ -98,10 +98,21 @@ class TermLib {
           let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
           let defArr = [];
           defArr.push(defText);
-          defArr.push(<><br/><span className="node-metadata-label">Reference: </span></>);
           for (let ax of (desc.axioms ?? [])) {
             for (let key in ax) {
-              defArr.push(<a href={key} target="_blank" rel="noreferrer">{ax[key]}</a>);
+              defArr.push(
+                <>
+                  <br/>
+                  <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
+                </>
+              );
+              defArr.push(
+                <>
+                  <a href={key} target="_blank" rel="noreferrer">{ax[key]}</a>
+                  <br/>
+                </>
+              );
+              
             }
           }
           result.push(<p>{defArr}</p>);

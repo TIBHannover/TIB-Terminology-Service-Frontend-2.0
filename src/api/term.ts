@@ -150,9 +150,9 @@ class TermApi {
             if (!dbxrefValue) {
                 return "";
             }
-            dbxrefValue = dbxrefValue.includes(":") ? dbxrefValue.replace(":", "_") : dbxrefValue;
             let dbXrefValueLink = dbxrefValue;
-            if (!dbxrefValue.includes("purl.obolibrary.org")) {
+            if (!dbxrefValue.includes("purl.obolibrary.org") && !dbxrefValue.includes("http")) {
+                dbxrefValue = dbxrefValue.includes(":") ? dbxrefValue.replace(":", "_") : dbxrefValue;
                 dbXrefValueLink = "http://purl.obolibrary.org/obo/" + dbxrefValue;
             }
             return dbXrefValueLink
