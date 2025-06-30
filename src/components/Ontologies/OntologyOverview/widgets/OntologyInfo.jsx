@@ -134,21 +134,13 @@ const OntologyInfoTable = () => {
             <tr>
               <td className="ontology-overview-table-id-column"><b>Creator</b></td>
               <td>
-                {OntologyLib.formatCreators(ontology["http://purl.org/dc/terms/creator"])}
+                {OntologyLib.formatCreators(ontology)}
               </td>
             </tr>
-            {process.env.REACT_APP_PROJECT_ID === "general" &&
-              <tr>
-                <td className="ontology-overview-table-id-column"><b>Subject</b></td>
-                <td>
-                  {OntologyLib.formatSubject(ontology.classifications)}
-                </td>
-              </tr>
-            }
             <tr>
-              <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
+              <td className="ontology-overview-table-id-column"><b>Imports</b></td>
               <td>
-                {String(ontologyPageContext.isSkos)}
+                {OntologyLib.getImports(ontology)}
               </td>
             </tr>
             {process.env.REACT_APP_PROJECT_ID === "general" &&
@@ -173,29 +165,50 @@ const OntologyInfoTable = () => {
                 </td>
               </tr>
             }
-            
-            {/*{ontology.allow_download &&*/}
+            {process.env.REACT_APP_PROJECT_ID === "general" &&
+              <tr>
+                <td className="ontology-overview-table-id-column"><b>Subject</b></td>
+                <td>
+                  {OntologyLib.formatSubject(ontology.classifications)}
+                </td>
+              </tr>
+            }
             <tr>
-              <td className="ontology-overview-table-id-column"><b>Download</b></td>
+              <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
               <td>
-                <a
-                  href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
-                  className='btn btn-secondary btn-dark download-ontology-btn'
-                  target="_blank"
-                >
-                  <i className="fa fa-download"></i>OWL
-                </a>
-                <a
-                  className='btn btn-secondary btn-dark download-ontology-btn'
-                  onClick={async () => {
-                    const jsonFile = JSON.stringify(ontology);
-                    await Toolkit.downloadJsonFile(ontology.ontologyId + "_metadata.json", jsonFile);
-                  }}
-                >
-                  <i className="fa fa-download"></i>Ontology metadata as JSON</a>
+                {String(ontologyPageContext.isSkos)}
               </td>
             </tr>
-            {/*}*/}
+            
+            {ontology.allow_download == true &&
+              <tr>
+                <td className="ontology-overview-table-id-column"><b>Download</b></td>
+                <td>
+                  <a
+                    href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
+                    className='btn btn-secondary btn-dark download-ontology-btn'
+                    target="_blank"
+                  >
+                    <i class="fa fa-download"></i>OWL
+                  </a>
+                  <a
+                    className='btn btn-secondary btn-dark download-ontology-btn'
+                    onClick={async () => {
+                      const jsonFile = JSON.stringify(ontology);
+                      const blob = new Blob([jsonFile], {type: 'application/json'});
+                      const href = await URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = href;
+                      link.download = ontology.ontologyId + "_metadata.json";
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                  >
+                    <i class="fa fa-download"></i>Ontology metadata as JSON</a>
+                </td>
+              </tr>
+            }
             </tbody>
           </table>
         </div>

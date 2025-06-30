@@ -81,7 +81,7 @@ const OntologySuggestion = () => {
         setRunningTest(false);
         return;
       }
-      if (validationResult.error.length === 0) {
+      if (validationResult.error.length === 0 && validationResult.info.length === 0) {
         setShapeValidationError({ "error": [], "info": [] });
         setProgressBarValue(progressBarValue + 2 * PROGRESS_BAR_INCREMENT_PERCENTAGE);
         setProgressStep(USER_FORM_STEP);
@@ -366,6 +366,15 @@ const OntologyExtraMetadataForm = () => {
           <br></br>
           <br></br>
         </>
+      );
+    }
+
+    if (result.length === 0) {
+      result.push(
+        <AlertBox
+          type="info"
+          message="No issue found with this ontology's shape."
+        />
       );
     }
     return result;

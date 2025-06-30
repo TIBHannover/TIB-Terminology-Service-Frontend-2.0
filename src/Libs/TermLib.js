@@ -36,12 +36,13 @@ class TermLib {
     ];
   }
   
-  static createTermUrlWithOntologyPrefix({
-                                           ontology_name,
-                                           termIri,
-                                           termLabel,
-                                           type,
-                                         }) {
+  static createTermUrlWithOntologyPrefix(
+    {
+      ontology_name,
+      termIri,
+      termLabel,
+      type,
+    }) {
     if (!ontology_name) {
       return null;
     }
@@ -86,29 +87,36 @@ class TermLib {
   static createTermDiscription(term) {
     if (term.isIndividual && term.description) {
       // individual description structure is different
-      return term.description;
-    } else if (term.obo_definition_citation) {
       let result = [];
-      for (let cite of term.obo_definition_citation) {
-        result.push(
-          <div>
-            {Toolkit.transformLinksInStringToAnchor(cite["definition"])}
-            <br/>[<span className="node-metadata-label">Reference</span>:{" "}
-            <a href={cite["oboXrefs"][0]["url"]} target="_blank">
-              {cite["oboXrefs"][0]["url"] ? cite["oboXrefs"][0]["url"] : "N/A"}
-            </a>
-            ]
-          </div>,
-        );
+      for (let desc of term.description) {
+        result.push(<p>{desc}</p>);
       }
       return result;
     } else if (term.definition) {
       let result = [];
       for (let desc of term.definition) {
         if (typeof desc === "object" && desc.value) {
-          result.push(desc.value);
+          let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
+          let defArr = [];
+          defArr.push(defText);
+          for (let ax of (desc.axioms ?? [])) {
+            for (let key in ax) {
+              defArr.push(
+                <>
+                  <br/>
+                  <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
+                </>
+              );
+              if (Array.isArray(ax[key]) && ax[key].length > 1) {
+                defArr.push(<>{ax[key].join(", ")}<br/></>);
+              } else {
+                defArr.push(<>{ax[key]}<br/></>);
+              }
+            }
+          }
+          result.push(<p>{defArr}</p>);
         } else {
-          result.push(desc);
+          result.push(<p>{desc}</p>);
         }
       }
       return result;
@@ -154,7 +162,7 @@ class TermLib {
         return label.value;
       }
       return label;
-    } catch (e) {
+    } catch {
       return "N/A";
     }
   }
