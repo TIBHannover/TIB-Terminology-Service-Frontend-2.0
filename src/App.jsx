@@ -74,9 +74,7 @@ const App = () => {
           });
         }
         
-        console.log(user);
         getUserTermsetList(user?.id).then((termsets) => {
-          console.log(termsets)
           setUserTermsets(termsets);
         })
         

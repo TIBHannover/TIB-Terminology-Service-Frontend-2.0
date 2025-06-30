@@ -230,7 +230,7 @@ export const AddToTermsetModal = (props) => {
                                 </a>
                                 {removeLoading.get(tset.id) && <div className="isLoading-inline-small"></div>}
                                 <span className="">
-                                  <i class="bi bi-file-minus-fill" title="remove from this termset"
+                                  <i className="bi bi-file-minus-fill" title="remove from this termset"
                                      data-tsetid={tset.id} onClick={removeTerm}>
                                   </i>
                                 </span>

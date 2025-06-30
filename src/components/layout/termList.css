@@ -97,3 +97,9 @@ tbody tr {
     display: inline;
     cursor: pointer;
 }
+
+.termset-btn {
+    font-size: 11px;
+    padding: 3px;
+    margin-top: 50%;
+}
