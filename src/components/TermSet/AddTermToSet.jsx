@@ -24,7 +24,7 @@ export const AddToTermsetModalBtn = (props) => {
   const {modalId, btnClass} = props;
   const appContext = useContext(AppContext);
   
-  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+  if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
   
@@ -193,7 +193,7 @@ export const AddToTermsetModal = (props) => {
     setTermSets(options);
   }, [term, appContext.userTermsets]);
   
-  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+  if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
   
@@ -224,7 +224,10 @@ export const AddToTermsetModal = (props) => {
                           {termExistingSets.map((tset) => {
                             return (
                               <li id={"termCurrentSetsLi-" + tset.id}>
-                                {tset.name}
+                                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id}
+                                   target={"_blank"} rel={"noreferrer"}>
+                                  {tset.name}
+                                </a>
                                 {removeLoading.get(tset.id) && <div className="isLoading-inline-small"></div>}
                                 <span className="">
                                   <i class="bi bi-file-minus-fill" title="remove from this termset"
