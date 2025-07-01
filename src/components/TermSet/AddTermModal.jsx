@@ -2,9 +2,10 @@ import {useState, useContext, useRef} from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import {AppContext} from "../../context/AppContext";
-import {olsSearch} from "../../api/search";
+import {getJumpToResult} from "../../api/search";
 import TermLib from "../../Libs/TermLib";
 import {updateTermset} from "../../api/term_set";
+import TermApi from "../../api/term";
 
 export const AddTermModalBtn = (props) => {
   const {modalId} = props;
@@ -30,20 +31,27 @@ export const AddTermModal = (props) => {
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [termListOptions, setTermListOptions] = useState([]);
   const [selectedTerms, setSelectedTerms] = useState(null);
-  const [selectedTermsJson, setSelectedTermsJson] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
   
   
   const searchUnderRef = useRef(null);
   
   
-  function submitNewTermsToSet() {
+  async function submitNewTermsToSet() {
+    setSubmitLoading(true);
+    let selectedTermsV2 = [];
+    for (let term of selectedTerms) {
+      let termApi = new TermApi(term['ontologyId'], term['iri']);
+      await termApi.fetchTerm();
+      selectedTermsV2.push(termApi.term);
+    }
     const payload = {};
     payload['id'] = termset.id;
     payload['name'] = termset.name;
     payload['description'] = termset.description;
     payload['visibility'] = termset.visibility;
-    payload['terms'] = [...termset.terms.map(term => term.json), ...selectedTermsJson];
+    payload['terms'] = [...termset.terms.map(term => term.json), ...selectedTermsV2];
     updateTermset(payload).then((updatedTermset) => {
       if (updatedTermset) {
         let userTermsets = [...appContext.userTermsets];
@@ -57,12 +65,12 @@ export const AddTermModal = (props) => {
         setSubmited(true);
         setAddedSuccess(false);
       }
+      setSubmitLoading(false);
     });
   }
   
   function onTermSelect(selectedTerms) {
-    let termsJson = selectedTerms.map(term => term.json);
-    setSelectedTermsJson(termsJson);
+    setSelectedTerms(selectedTerms);
   }
   
   
@@ -74,18 +82,18 @@ export const AddTermModal = (props) => {
     }
     let inputQuery = {
       "searchQuery": query,
-      "types": "class,property,individual",
+      // "types": "class,property,individual",
     };
     if (appContext.userSettings.userCollectionEnabled) {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
-    let terms = await olsSearch(inputQuery, true);
+    let terms = await getJumpToResult(inputQuery, 10);
     let options = [];
     for (let term of terms) {
       let opt = {};
-      opt['text'] = `${term['ontologyId']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
+      opt['text'] = `${term['ontology_name']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
       opt['iri'] = term['iri'];
-      opt['json'] = term;
+      opt['ontologyId'] = term['ontology_name'];
       options.push(opt);
     }
     setLoading(false);
@@ -97,7 +105,6 @@ export const AddTermModal = (props) => {
     setAddedSuccess(false);
     setSubmited(false);
     setSelectedTerms([]);
-    setSelectedTermsJson([]);
   }
   
   
@@ -157,6 +164,7 @@ export const AddTermModal = (props) => {
                   className="btn btn-secondary"
                   onClick={submitNewTermsToSet}>
                   {"Add"}
+                  {submitLoading && <div className="isLoading-btn"></div>}
                 </button>
               }
               {submited &&

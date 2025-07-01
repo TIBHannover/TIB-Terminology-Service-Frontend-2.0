@@ -11,9 +11,6 @@ export async function getUserTermsetList(userId: string): Promise<TermSet[]> {
                 term_sets: TermSet[]
             }
         }
-        if (!userId) {
-            return [];
-        }
         let headers: TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/";
         let result = await fetch(url, {headers: headers})
@@ -21,6 +18,12 @@ export async function getUserTermsetList(userId: string): Promise<TermSet[]> {
             return [];
         }
         let termSetList = await result.json() as RespType;
+        if (!userId) {
+            // guest users
+            let userTermSets: TermSet[] = termSetList["_result"]["term_sets"];
+            userTermSets.sort((s1, s2) => s1.name.localeCompare(s2.name));
+            return userTermSets;
+        }
         let userTermSets: TermSet[] = termSetList["_result"]["term_sets"].filter((tset) => tset.creator === userId);
         userTermSets.sort((s1, s2) => s1.name.localeCompare(s2.name));
         return userTermSets;

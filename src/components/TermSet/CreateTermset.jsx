@@ -1,12 +1,13 @@
 import DropDown from "../common/DropDown/DropDown";
 import {useState, useContext, useRef} from "react";
 import Multiselect from "multiselect-react-dropdown";
-import {olsSearch} from "../../api/search";
+import {getJumpToResult} from "../../api/search";
 import TermLib from "../../Libs/TermLib";
 import {AppContext} from "../../context/AppContext";
 import {createTermset} from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 import AlertBox from "../common/Alerts/Alerts";
+import TermApi from "../../api/term";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -29,16 +30,15 @@ const CreateTermSetPage = (props) => {
   const [termListOptions, setTermListOptions] = useState([]);
   const [selectedTerms, setSelectedTerms] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedTermsJson, setSelectedTermsJson] = useState([]);
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   
   
   const searchUnderRef = useRef(null);
   
   function onTermSelect(selectedTerms) {
-    let termsJson = selectedTerms.map(term => term.json);
-    setSelectedTermsJson(termsJson);
+    setSelectedTerms(selectedTerms);
   }
   
   async function onSearchTermChange(query) {
@@ -54,13 +54,13 @@ const CreateTermSetPage = (props) => {
     if (appContext.userSettings.userCollectionEnabled) {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
-    let terms = await olsSearch(inputQuery, true);
+    let terms = await getJumpToResult(inputQuery, 10);
     let options = [];
     for (let term of terms) {
       let opt = {};
-      opt['text'] = `${term['ontologyId']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
+      opt['text'] = `${term['ontology_name']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
       opt['iri'] = term['iri'];
-      opt['json'] = term;
+      opt['ontologyId'] = term['ontology_name'];
       options.push(opt);
     }
     setLoading(false);
@@ -68,7 +68,7 @@ const CreateTermSetPage = (props) => {
   }
   
   
-  function submit() {
+  async function submit() {
     let name = FormLib.getFieldByIdIfValid("termsetTitle");
     let description = document.getElementById("termsetDescription");
     if (!name) {
@@ -78,18 +78,26 @@ const CreateTermSetPage = (props) => {
       setTermsetNameNotValid(true);
       return;
     }
+    
+    setSubmitLoading(true);
+    let selectedTermsV2 = [];
+    for (let term of selectedTerms) {
+      let termApi = new TermApi(term['ontologyId'], term['iri']);
+      await termApi.fetchTerm();
+      selectedTermsV2.push(termApi.term);
+    }
     let data = {
       name: name,
       visibility: VISIBILITY_VALUES[newTermsetVisibility],
       description: description ? description.value : "",
-      terms: selectedTermsJson
+      terms: selectedTermsV2
     };
     
     createTermset(data).then((newTermset) => {
       if (newTermset) {
         let userTermsets = [...appContext.userTermsets];
         userTermsets.push(newTermset);
-        userTermsets.sort((s1, s2)=> s1.name.localeCompare(s2.name));
+        userTermsets.sort((s1, s2) => s1.name.localeCompare(s2.name));
         appContext.setUserTermsets(userTermsets);
         setSubmited(true);
         setAddedSuccess(true);
@@ -188,7 +196,10 @@ const CreateTermSetPage = (props) => {
       </div>
       <div className="row">
         <div className="col-sm-12">
-          <button className="btn btn-secondary" onClick={submit}>Create</button>
+          <button className="btn btn-secondary" onClick={submit}>
+            Create
+            {submitLoading && <div className="isLoading-btn"></div>}
+          </button>
         </div>
       </div>
     </div>

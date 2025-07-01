@@ -68,7 +68,7 @@ const TermSetPage = (props) => {
           data-termid={term['iri']}
           onClick={removeTerm}
         />
-      if(!appContext.userTermsets.find((tset) => tset.id === data.id) || !appContext.user){
+      if (!appContext.userTermsets.find((tset) => tset.id === data.id) || !appContext.user) {
         DeleteBtn = "";
       }
       
@@ -137,8 +137,8 @@ const TermSetPage = (props) => {
     }
     let rows = [];
     let headers = [];
-    for(let col of tableColumns){
-      if(col.id !== "action"){
+    for (let col of tableColumns) {
+      if (col.id !== "action") {
         headers.push(col.text);
       }
     }
@@ -224,9 +224,9 @@ const TermSetPage = (props) => {
       createTermListForTable(data.terms);
     }
   }, [page, size]);
- 
   
-  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+  
+  if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
   
@@ -321,12 +321,12 @@ const TermSetPage = (props) => {
               initialPageNumber={page + 1}
             />
           </div>
-          {appContext.userTermsets.find((tset) => tset.id === data.id) &&
+          {appContext.user && appContext.userTermsets.find((tset) => tset.id === data.id) &&
             // only owner can see this button
             <div className="col-sm-3 text-end mt-2">
-            <AddTermModalBtn modalId={"add-term-modal"}></AddTermModalBtn>
-            <AddTermModal termset={data} modalId={"add-term-modal"}></AddTermModal>
-          </div>
+              <AddTermModalBtn modalId={"add-term-modal"}></AddTermModalBtn>
+              <AddTermModal termset={data} modalId={"add-term-modal"}></AddTermModal>
+            </div>
           }
         </div>
         <div className="row">

@@ -29,12 +29,12 @@
     font-weight: bold;
 }
 
-.edit-termset-icon{
+.edit-termset-icon {
     color: black;
     font-size: 16px !important;
 }
 
-.visibility-tag{
+.visibility-tag {
     background-color: #0E6668;
     color: white;
     width: 200px;
@@ -44,3 +44,4 @@
     font-size: 14px;
     font-weight: bold;
 }
+
