@@ -90,8 +90,8 @@ const Login = (props) => {
                     </>
                   }
                   <div className="login-modal-hint-text">
-                    <strong>Attention:</strong> Some of the features, such as term request, are only available if you
-                    authenticate with Github.
+                    <strong>Attention:</strong> Term Request feature is only available if you
+                  authenticate with Github.
                   </div>
                   <br></br>
                   {buildAuthButtons()}
@@ -105,16 +105,14 @@ const Login = (props) => {
         // render the normal login form. Used when a user need to login before accessing a section
         <div className="row">
           <div className="col-sm-12 text-center">
-            {!props.ignoreMessage &&
-              <>
-                <h5>You need to login for accessing this section.</h5>
-                <div>
-                  <strong>Attention:</strong> Term Request feature is only available if you
-                  authenticate with Github.
-                </div>
-                <br></br>
-              </>
-            }
+            <>
+              {!props.ignoreMessage && <h5>You need to login for accessing this section.</h5>}
+              <div>
+                <strong>Attention:</strong> Term Request feature is only available if you
+                authenticate with Github.
+              </div>
+              <br></br>
+            </>
             {buildAuthButtons()}
           </div>
         </div>
