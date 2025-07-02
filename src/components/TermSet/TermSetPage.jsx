@@ -11,6 +11,7 @@ import Toolkit from "../../Libs/Toolkit";
 import {removeTermFromSet} from "../../api/term_set";
 import {AppContext} from "../../context/AppContext";
 import {NotFoundErrorPage, GeneralErrorPage} from "../common/ErrorPages/ErrorPages";
+import TermApi from "../../api/term";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -37,8 +38,8 @@ const TermSetPage = (props) => {
       {id: "label", text: "Label"},
       {id: "decs", text: "Description"},
       {id: "altTerm", text: "Alternative Term"},
-      //{ id: "subclass", text: "SubClass Of" },
-      //{ id: "eqto", text: "Equivalent to" },
+      {id: "subclass", text: "SubClass Of"},
+      {id: "eqto", text: "Equivalent to"},
       {id: "example", text: "Example of usage"},
       {id: "seealso", text: "See Also"},
       {id: "contrib", text: "Contributor"},
@@ -58,6 +59,7 @@ const TermSetPage = (props) => {
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
+    let termApi = new TermApi();
     for (let termWrapper of listOfterms) {
       let term = termWrapper.json;
       let DeleteBtn =
@@ -83,8 +85,8 @@ const TermSetPage = (props) => {
         value: annotation['alternative label'] ? annotation['alternative label'] : "N/A",
         valueLink: ""
       });
-      //termMap.set("subclass", { value: term.subClassOf, valueLink: "", valueIsHtml: true });
-      //termMap.set("eqto", { value: term.eqAxiom, valueLink: "", valueIsHtml: true });
+      termMap.set("subclass", {value: term.subClassOf, valueLink: "", valueIsHtml: true});
+      termMap.set("eqto", {value: termApi.getEqAxiom(term), valueLink: "", valueIsHtml: true});
       termMap.set("example", {
         value: annotation['example of usage'] ? annotation['example of usage'] : "N/A",
         valueLink: ""
@@ -143,6 +145,7 @@ const TermSetPage = (props) => {
       }
     }
     rows.push(headers);
+    let termApi = new TermApi();
     for (let termWrapper of data.terms) {
       let term = termWrapper.json;
       let annotation = TermLib.getAnnotations(term);
@@ -151,6 +154,8 @@ const TermSetPage = (props) => {
       row.push(escapeForCSV(TermLib.extractLabel(term)));
       row.push(escapeForCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
       row.push(escapeForCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
+      row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
+      row.push(escapeForCSV(termApi.getEqAxiom(term) ?? "N/A"));
       row.push(escapeForCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
       row.push(escapeForCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
       row.push(escapeForCSV(TermLib.getContributors(term)));

@@ -114,9 +114,9 @@ class TermLib {
               }
             }
           }
-          result.push(<p>{defArr}</p>);
+          result.push(defArr);
         } else {
-          result.push(<p>{desc}</p>);
+          result.push(desc);
         }
       }
       return result;

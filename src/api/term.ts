@@ -3,7 +3,7 @@ import {buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis} from "../L
 import {getCallSetting} from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
-    OntologyTermData,
+    OntologyTermData, OntologyTermDataV2,
     TermListData
 } from "./types/ontologyTypes";
 import {Ols3ApiResponse} from "./types/common";
@@ -92,7 +92,7 @@ class TermApi {
             return false;
         }
 
-  }
+    }
 
 
     async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE, obsoletes: boolean = false): Promise<TermListData | []> {
@@ -216,8 +216,11 @@ class TermApi {
     }
 
 
-    getEqAxiom(): string | null {
+    getEqAxiom(term: OntologyTermDataV2 | undefined = undefined): string | null {
         try {
+            if (term) {
+                this.term = term;
+            }
             let eqevalentAxiomData = this.term['http://www.w3.org/2002/07/owl#equivalentClass'];
             if (!eqevalentAxiomData) {
                 return null;
