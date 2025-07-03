@@ -88,6 +88,7 @@ tbody tr {
 }
 
 .table-body-cell-small {
+    width: 40px;
     font-size: 13px;
     padding: 0px !important;
     border-right: 1px #c4c0c0 solid;

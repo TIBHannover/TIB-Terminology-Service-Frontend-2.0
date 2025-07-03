@@ -4,6 +4,7 @@ import {useState, useEffect, ReactNode} from "react";
 type Column = {
     id: string,
     text: string,
+    defaultVisible?: boolean,
 }
 
 type Term = {
@@ -142,7 +143,7 @@ const TermTable = (props: InputProp) => {
         }
         const visMap: Map<string, boolean> = new Map();
         for (let col of columns) {
-            visMap.set(col.id, true);
+            visMap.set(col.id, col.defaultVisible ?? true);
         }
         setColVis(visMap);
         setTableBody(createTableBody());

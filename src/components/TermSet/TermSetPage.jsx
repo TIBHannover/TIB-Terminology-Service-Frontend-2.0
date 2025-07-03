@@ -33,17 +33,17 @@ const TermSetPage = (props) => {
   const [rowDataForTable, setRowDataForTable] = useState([]);
   const [tableColumns, _] = useState(
     [
-      {id: "action", value: ""},
-      {id: "shortForm", text: "ID"},
-      {id: "label", text: "Label"},
-      {id: "decs", text: "Description"},
-      {id: "altTerm", text: "Alternative Term"},
-      {id: "subclass", text: "SubClass Of"},
-      {id: "eqto", text: "Equivalent to"},
-      {id: "example", text: "Example of usage"},
-      {id: "seealso", text: "See Also"},
-      {id: "contrib", text: "Contributor"},
-      {id: "comment", text: "Comment"},
+      {id: "action", text: "", defaultVisible: true},
+      {id: "shortForm", text: "ID", defaultVisible: true},
+      {id: "label", text: "Label", defaultVisible: true},
+      {id: "decs", text: "Description", defaultVisible: true},
+      {id: "altTerm", text: "Alternative Term", defaultVisible: false},
+      {id: "subclass", text: "SubClass Of", defaultVisible: false},
+      {id: "eqto", text: "Equivalent to", defaultVisible: false},
+      {id: "example", text: "Example of usage", defaultVisible: false},
+      {id: "seealso", text: "See Also", defaultVisible: false},
+      {id: "contrib", text: "Contributor", defaultVisible: false},
+      {id: "comment", text: "Comment", defaultVisible: false},
     ]);
   const [size, setSize] = useState(DEFAUTL_ROWS_COUNT);
   const [page, setPage] = useState(0);
