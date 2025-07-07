@@ -444,7 +444,7 @@ class TermApi {
 
     async fetchGraphData(): Promise<any> {
         try {
-            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/terms/${this.iri}/graph`;
+            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/terms/${this.iri}/graph?lang=${this.lang}`;
             let graphData = await fetch(url, getCallSetting);
             graphData = await graphData.json();
             return graphData;
