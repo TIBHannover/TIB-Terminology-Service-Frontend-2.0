@@ -6,7 +6,7 @@ const CREATOR_PURL2 = "http://purl.org/dc/elements/1.1/creator";
 
 class OntologyLib {
   static formatCreators(ontology) {
-    let creators = ontology[CREATOR_PURL1] || ontology[CREATOR_PURL2];
+    let creators = ontology[CREATOR_PURL1] || ontology[CREATOR_PURL2] || ontology['creator'];
     if (!creators || creators.length === 0) {
       return "N/A";
     }
