@@ -31,10 +31,16 @@ export function classMetaData(term, termType) {
     let link = [];
     for (let parentIri of term['directParent']) {
       let parentClassUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${term["ontologyId"]}/terms?iri=${encodeURIComponent(parentIri)}`;
-      link.push(<a href={parentClassUrl} target='_blank'
-                   rel='noopener noreferrer'>{term['linkedEntities'][parentIri]["label"]?.[0]}</a>);
+      link.push(
+        <>
+          <a href={parentClassUrl} target='_blank' rel='noopener noreferrer'>
+            {term['linkedEntities'][parentIri]["label"]?.[0]}
+          </a>
+          <br/>
+        </>
+      );
     }
-    metadata['Instance of'] = {"value": link, "isLink": true};
+    metadata['Instance of'] = {"value": link, "isLink": false};
   }
   
   if (term.annotation) {
