@@ -1,17 +1,24 @@
-import { useState, useContext } from "react";
+import {useState, useContext} from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
-import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
+import {OntologySuggestionContext} from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
-import { submitOntologySuggestion, runShapeTest, checkSuggestionExist } from "../../../api/ontology";
+import {
+  submitOntologySuggestion,
+  runShapeTest,
+  checkSuggestionExist,
+  checkOntologyPurlIsValidUrl
+} from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
-import { convertToRaw } from 'draft-js';
-import { fetchAllCollectionWithOntologyList } from "../../../api/collection";
-import { useQuery } from "@tanstack/react-query";
+import {convertToRaw} from 'draft-js';
+import {fetchAllCollectionWithOntologyList} from "../../../api/collection";
+import {useQuery} from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import {Link} from "react-router-dom";
+
 
 const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
 const ONTOLOGY_MAIN_METADATA_SETP = 1;
@@ -20,11 +27,10 @@ const USER_FORM_STEP = 3;
 const PROGRESS_BAR_INCREMENT_PERCENTAGE = 25;
 
 
-
 const OntologySuggestion = () => {
   const urlManager = new CommonUrlFactory();
-  const inputCollectionId = urlManager.getParam({ name: SiteUrlParamNames.CollectionId });
-
+  const inputCollectionId = urlManager.getParam({name: SiteUrlParamNames.CollectionId});
+  
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
   const [submitWait, setSubmitWait] = useState(false);
@@ -33,7 +39,7 @@ const OntologySuggestion = () => {
   const [editorState, setEditorState] = useState(null);
   const [progressStep, setProgressStep] = useState(ONTOLOGY_SUGGESTION_INTRO_STEP);
   const [progressBarValue, setProgressBarValue] = useState(1);
-  const [shapeValidationError, setShapeValidationError] = useState({ "error": [], "info": [] });
+  const [shapeValidationError, setShapeValidationError] = useState({"error": [], "info": []});
   const [shapeTestIsReady, setShapeTestIsReady] = useState(false);
   const [ontologyExist, setOntologyExist] = useState(false);
   const [existingOntologyId, setExistingOntologyId] = useState("");
@@ -42,6 +48,7 @@ const OntologySuggestion = () => {
   const [collectionSuggestMode, setCollectionSuggestMode] = useState(false);
   const [missingCollectionIds, setMissingCollectionIds] = useState([]);
   const [suggestionExist, setSuggestionExist] = useState(false);
+  const [purlIsNotValidMessage, setPurlIsNotValidMessage] = useState("");
   const [form, setForm] = useState({
     "username": "",
     "email": "",
@@ -51,12 +58,12 @@ const OntologySuggestion = () => {
     "collection_ids": inputCollectionId ? inputCollectionId : "",
     "collection_suggestion": false
   });
-
+  
   const collectionWithOntologyListQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
     queryFn: fetchAllCollectionWithOntologyList
   });
-
+  
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
     for (let res of collectionWithOntologyListQuery.data) {
@@ -64,14 +71,14 @@ const OntologySuggestion = () => {
     }
   }
   const collections = collectionIds;
-
-
+  
+  
   function onTextEditorChange(newEditorState) {
     document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
     setEditorState(newEditorState);
   };
-
-
+  
+  
   async function shapeTest(purl) {
     if (!shapeTestIsReady) {
       setRunningTest(true);
@@ -82,7 +89,7 @@ const OntologySuggestion = () => {
         return;
       }
       if (validationResult.error.length === 0 && validationResult.info.length === 0) {
-        setShapeValidationError({ "error": [], "info": [] });
+        setShapeValidationError({"error": [], "info": []});
         setProgressBarValue(progressBarValue + 2 * PROGRESS_BAR_INCREMENT_PERCENTAGE);
         setProgressStep(USER_FORM_STEP);
         setRunningTest(false);
@@ -94,8 +101,8 @@ const OntologySuggestion = () => {
       setShapeTestIsReady(true);
     }
   }
-
-
+  
+  
   async function runOntologyMainMetaDataValidation(ontoPurl) {
     let ontoExist = false;
     let existingOnto = "";
@@ -109,6 +116,7 @@ const OntologySuggestion = () => {
       selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME)
     }
     for (let res of collectionWithOntologyListQuery.data) {
+      // find the collection ids that contains the provided ontology purl
       for (let onto of res['ontologies']) {
         if (onto['purl'] === ontoPurl) {
           existingOnto = onto['ontologyId'];
@@ -118,12 +126,15 @@ const OntologySuggestion = () => {
       }
     }
     for (let colId of selectedCollectionIds) {
+      // if the selected collection ids by user (to add the ontology) are not configured in the system, then
+      // the selected collection ids should be part of the onto suggest request.
       if (!existingCollectionsList.includes(colId)) {
         missingCollections.push(colId);
       }
     }
-
+    
     if (ontoExist && missingCollections.length === 0) {
+      // onto exist and there is no new selected collection to add it. process is over.
       setOntologyExist(true);
       setExistingOntologyId(existingOnto);
       setExistingCollections(existingCollectionsList);
@@ -131,6 +142,7 @@ const OntologySuggestion = () => {
       setCollectionSuggestMode(false);
       return true;
     } else if (ontoExist && missingCollections.length !== 0) {
+      // ontology exist but there are some missing collection ids. suggest add to collection.
       let formData = form;
       formData.collection_suggestion = true;
       formData.collection_ids = missingCollections;
@@ -142,20 +154,37 @@ const OntologySuggestion = () => {
       setMissingCollectionIds(missingCollections);
       return true;
     }
-
+    
+    // if we reach here, it means the ontology does not exist in the system. run the onto suggest.
     let suggestionAlreadyExist = await checkSuggestionExist(ontoPurl);
     if (suggestionAlreadyExist) {
       setSuggestionExist(true);
       return
     }
-
+    
     await shapeTest(ontoPurl);
     return true;
-
+    
   }
-
-
-
+  
+  async function ontologyPurlIsValid(ontoPurl) {
+    /**
+     * it should:
+     *  return 2xx on call
+     *  point to either a .owl or .ttl file
+     */
+    
+    let purlIsValidRes = await checkOntologyPurlIsValidUrl(ontoPurl);
+    if (!purlIsValidRes["valid"]) {
+      document.getElementById('onto-suggest-purl').style.borderColor = 'red';
+      setPurlIsNotValidMessage(purlIsValidRes["reason"]);
+      return false;
+    }
+    setPurlIsNotValidMessage("");
+    return true;
+  }
+  
+  
   async function onNextClick() {
     if (progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP) {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
@@ -166,6 +195,9 @@ const OntologySuggestion = () => {
       if (!name || !purl) {
         return;
       }
+      if (!await ontologyPurlIsValid(purl)) {
+        return;
+      }
       await runOntologyMainMetaDataValidation(purl);
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
       setProgressStep(ONTOLOGY_EXTRA_METADATA_STEP);
@@ -174,9 +206,8 @@ const OntologySuggestion = () => {
       setProgressStep(USER_FORM_STEP);
     }
   }
-
-
-
+  
+  
   function submit() {
     let username = FormLib.getFieldByIdIfValid('onto-suggest-username');
     let email = FormLib.getFieldByIdIfValid('onto-suggest-email');
@@ -189,7 +220,7 @@ const OntologySuggestion = () => {
     reason = editorState.getCurrentContent();
     reason = draftToMarkdown(convertToRaw(reason));
     formData.reason = reason;
-
+    
     submitOntologySuggestion(formData).then((result) => {
       setFormSubmitSuccess(result);
       setFormSubmitted(true);
@@ -197,14 +228,13 @@ const OntologySuggestion = () => {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
     });
   }
-
-
+  
+  
   function noErrorsAndLoading() {
     return !formSubmitted && !submitWait && !runningTest && !testFailed && !suggestionExist;
   }
-
-
-
+  
+  
   const contextData = {
     editorState: editorState,
     form: form,
@@ -218,24 +248,26 @@ const OntologySuggestion = () => {
     existingOntologyId: existingOntologyId,
     missingCollectionIds: missingCollectionIds,
     existingCollections: existingCollections,
-    inputCollectionId: inputCollectionId
+    inputCollectionId: inputCollectionId,
+    purlIsNotValidMessage: purlIsNotValidMessage
   }
-
+  
   const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
   const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
   const showNewSuggestionBtn = (submitedSeccessfully || testFailed || submitedFailed || (ontologyExist && !collectionSuggestMode) || suggestionExist);
-
+  
   if (process.env.REACT_APP_ONTOLOGY_SUGGESTION !== "true") {
     return "";
   }
-
+  
   return (
     <OntologySuggestionContext.Provider value={contextData}>
       <div className="row">
         <div className="col-sm-12 user-info-panel">
           <h4><b>Suggest your Ontology {inputCollectionId ? `for ${inputCollectionId}` : ""}</b></h4>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style={{ width: progressBarValue + "%" }} aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
+          <div className="progress">
+            <div className="progress-bar" role="progressbar" style={{width: progressBarValue + "%"}}
+                 aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
           </div>
           <br></br>
           {submitedSeccessfully &&
@@ -257,8 +289,8 @@ const OntologySuggestion = () => {
           {submitWait &&
             <div className="row">
               <div className="col-12 text-center">
-                <div class="spinner-border text-dark" role="status">
-                  <span class="visually-hidden"></span>
+                <div className="spinner-border text-dark" role="status">
+                  <span className="visually-hidden"></span>
                 </div>
                 <div className="">Please wait ...</div>
               </div>
@@ -267,8 +299,8 @@ const OntologySuggestion = () => {
           {runningTest &&
             <div className="row">
               <div className="col-12 text-center">
-                <div class="spinner-border text-dark" role="status">
-                  <span class="visually-hidden"></span>
+                <div className="spinner-border text-dark" role="status">
+                  <span className="visually-hidden"></span>
                 </div>
                 <div className="">Testing the ontology shape ...</div>
               </div>
@@ -294,20 +326,20 @@ const OntologySuggestion = () => {
             </>
           }
           {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
-            <Intro />
+            <Intro/>
           }
           {progressStep === ONTOLOGY_MAIN_METADATA_SETP && noErrorsAndLoading() &&
-            <OntologyMainMetaDataForm />
+            <OntologyMainMetaDataForm/>
           }
           {progressStep === ONTOLOGY_EXTRA_METADATA_STEP && noErrorsAndLoading() &&
-            <OntologyExtraMetadataForm />
+            <OntologyExtraMetadataForm/>
           }
           {progressStep === USER_FORM_STEP && noErrorsAndLoading() &&
-            <UserForm />
+            <UserForm/>
           }
           <br></br>
           {(progressStep !== ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
-            <button type="button" class="btn btn-secondary mr-3" onClick={() => {
+            <button type="button" className="btn btn-secondary mr-3" onClick={() => {
               let nextStep = progressStep - 1;
               setProgressBarValue(progressBarValue - PROGRESS_BAR_INCREMENT_PERCENTAGE);
               setProgressStep(nextStep)
@@ -317,14 +349,15 @@ const OntologySuggestion = () => {
             </button>
           }
           {showNewSuggestionBtn &&
-            <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New suggestion</a>
+            <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New
+              suggestion</a>
           }
           {progressStep === USER_FORM_STEP && noErrorsAndLoading() && !(ontologyExist && !collectionSuggestMode) &&
-            <button type="button" class="btn btn-secondary" onClick={submit}>Submit</button>
+            <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
           }
           {(progressStep !== USER_FORM_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
             <>
-              <button type="button" class="btn btn-secondary" onClick={onNextClick}
+              <button type="button" className="btn btn-secondary" onClick={onNextClick}
               >
                 Next
               </button>
@@ -337,18 +370,17 @@ const OntologySuggestion = () => {
 }
 
 
-
 const OntologyExtraMetadataForm = () => {
   const [infoIsExpanded, setInfoIsExpanded] = useState(false);
   const componentContext = useContext(OntologySuggestionContext);
-
+  
   function renderErrosWithTheirInputFields() {
     let result = [];
     for (let error of componentContext.validationResult.error) {
       let errorContent = Toolkit.transformLinksInStringToAnchor(error['text']);
       result.push(
         <>
-          <div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div>
+          <div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{__html: errorContent}}></div>
           <label htmlFor={"missing-metadata-" + error['about']}>{error['about']}</label>
           <input
             type="text"
@@ -358,7 +390,7 @@ const OntologyExtraMetadataForm = () => {
               form[error['about']] = e.target.value;
               componentContext.setForm(form);
             }}
-            class="form-control"
+            className="form-control"
             id={"missing-metadata-" + error['about']}
             defaultValue={componentContext.form[error['about']]}
           >
@@ -368,7 +400,7 @@ const OntologyExtraMetadataForm = () => {
         </>
       );
     }
-
+    
     if (result.length === 0) {
       result.push(
         <AlertBox
@@ -379,16 +411,18 @@ const OntologyExtraMetadataForm = () => {
     }
     return result;
   }
-
-
+  
+  
   function renderInfo() {
     return componentContext.validationResult.info.map((i) => {
       let infoContent = Toolkit.transformLinksInStringToAnchor(i);
-      return (<><div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div><br></br></>)
+      return (<>
+        <div className="p-2 alert alert-info" dangerouslySetInnerHTML={{__html: infoContent}}></div>
+        <br></br></>)
     });
   }
-
-
+  
+  
   if (componentContext.ontologyExist) {
     return (
       <>
@@ -397,10 +431,11 @@ const OntologyExtraMetadataForm = () => {
           message="This ontology already exists in the system."
         />
         Check: &nbsp;
-        <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId} target="_blank">
+        <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId}
+              target="_blank">
           {componentContext.existingOntologyId}
         </a></b>
-        <br />
+        <br/>
         Part of these collections:
         <ul>
           {componentContext.existingCollections.map((colId) => {
@@ -412,7 +447,7 @@ const OntologyExtraMetadataForm = () => {
               </li>)
           })}
         </ul>
-        <br />
+        <br/>
         {componentContext.missingCollectionIds.length !== 0 &&
           <>
             <h5><b>Missing from your selected collection(s)</b></h5>
@@ -425,13 +460,12 @@ const OntologyExtraMetadataForm = () => {
             <b>If yes, click on the Next button</b>
           </>
         }
-        <br /><br />
+        <br/><br/>
       </>
     );
   }
-
-
-
+  
+  
   return (
     <>
       <h5><b>Missing metadata</b></h5>
@@ -445,7 +479,8 @@ const OntologyExtraMetadataForm = () => {
       <br></br>
       {renderErrosWithTheirInputFields()}
       <br></br>
-      <button type="button" class="btn btn-sm btn-secondary mb-2" onClick={() => setInfoIsExpanded(!infoIsExpanded)}>
+      <button type="button" className="btn btn-sm btn-secondary mb-2"
+              onClick={() => setInfoIsExpanded(!infoIsExpanded)}>
         {!infoIsExpanded && <><i className="fa fa-angle-double-down fa-borderless fs-6"></i>More</>}
         {infoIsExpanded && <><i className="fa fa-angle-double-up fa-borderless fs-6"></i>Less</>}
       </button>
@@ -459,7 +494,6 @@ const OntologyExtraMetadataForm = () => {
     </>
   );
 }
-
 
 
 const Intro = () => {
@@ -477,7 +511,8 @@ const Intro = () => {
         <br></br>
         The ontology you are suggesting will be validated against the following SHACL shape. This shape tests
         whether the ontology contains a rich set of metadata or not. <br></br>
-        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1">
+        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1"
+           rel="noopener noreferrer">
           https://www.purl.org/ontologymetadata/shape/20240502
         </a>
       </p>
@@ -485,7 +520,6 @@ const Intro = () => {
     </>
   );
 }
-
 
 
 const UserForm = () => {
@@ -503,7 +537,7 @@ const UserForm = () => {
               form.username = e.target.value;
               componentContext.setForm(form);
             }}
-            class="form-control"
+            className="form-control"
             id="onto-suggest-username"
             placeholder="Enter your fullname. E.g., John Doe"
             defaultValue={componentContext.form.username}
@@ -524,7 +558,7 @@ const UserForm = () => {
               form.email = e.target.value;
               componentContext.setForm(form);
             }}
-            class="form-control"
+            className="form-control"
             id="onto-suggest-email"
             placeholder="Enter your email"
             defaultValue={componentContext.form.email}
@@ -552,10 +586,9 @@ const UserForm = () => {
 }
 
 
-
 const OntologyMainMetaDataForm = () => {
   const componentContext = useContext(OntologySuggestionContext);
-
+  
   function onSelectRemoveCollection(selectedList, selectedItem) {
     let form = componentContext.form;
     let collectionIds = "";
@@ -567,10 +600,26 @@ const OntologyMainMetaDataForm = () => {
     componentContext.setForm(form);
     componentContext.setSelectedCollections(selectedList);
   }
-
-
+  
+  
   return (
     <>
+      {componentContext.purlIsNotValidMessage &&
+        <div className="row">
+          <div className="col-sm-12">
+            <AlertBox type="danger" message={
+              <div className="text-center">
+                Reason: {componentContext.purlIsNotValidMessage}
+                <br/>
+                In case you find this unreasonable, please send us your request via the contact form:
+                <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                  Contact us
+                </Link>
+              </div>
+            }></AlertBox>
+          </div>
+        </div>
+      }
       <div className="row">
         <div className="col-sm-8">
           <label className="required_input" htmlFor="onto-suggest-name">Ontology name</label>
@@ -582,7 +631,7 @@ const OntologyMainMetaDataForm = () => {
               form.name = e.target.value;
               componentContext.setForm(form);
             }}
-            class="form-control"
+            className="form-control"
             id="onto-suggest-name"
             placeholder="Enter the ontology's name"
             defaultValue={componentContext.form.name}
@@ -602,7 +651,7 @@ const OntologyMainMetaDataForm = () => {
               form.purl = e.target.value;
               componentContext.setForm(form);
             }}
-            class="form-control"
+            className="form-control"
             id="onto-suggest-purl"
             placeholder="Enter the ontology's PURL"
             defaultValue={componentContext.form.purl}
