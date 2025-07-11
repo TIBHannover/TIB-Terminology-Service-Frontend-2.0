@@ -249,7 +249,8 @@ const OntologySuggestion = () => {
     missingCollectionIds: missingCollectionIds,
     existingCollections: existingCollections,
     inputCollectionId: inputCollectionId,
-    purlIsNotValidMessage: purlIsNotValidMessage
+    purlIsNotValidMessage: purlIsNotValidMessage,
+    setPurlIsNotValidMessage: setPurlIsNotValidMessage
   }
   
   const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
@@ -609,6 +610,9 @@ const OntologyMainMetaDataForm = () => {
           <div className="col-sm-12">
             <AlertBox type="danger" message={
               <div className="text-center">
+                We cannot proceed with your request.
+                <br/>
+                <br/>
                 Reason: {componentContext.purlIsNotValidMessage}
                 <br/>
                 In case you find this unreasonable, please send us your request via the contact form:
@@ -650,6 +654,7 @@ const OntologyMainMetaDataForm = () => {
               let form = componentContext.form;
               form.purl = e.target.value;
               componentContext.setForm(form);
+              componentContext.setPurlIsNotValidMessage("");
             }}
             className="form-control"
             id="onto-suggest-purl"
