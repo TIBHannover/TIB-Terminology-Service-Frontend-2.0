@@ -1,6 +1,11 @@
-import {getCallSetting, size} from "./constants";
-import {getPageCount} from "./helper";
-import {OntologyData, OntologyTermData, OntologyShapeTestResult, OntologySuggestionData} from "./types/ontologyTypes";
+import {getCallSetting} from "./constants";
+import {
+    OntologyData,
+    OntologyTermData,
+    OntologyShapeTestResult,
+    OntologySuggestionData,
+    OntologyPurlValidationRes
+} from "./types/ontologyTypes";
 import {getTsPluginHeaders} from "./header";
 import {TsPluginHeader} from "./types/headerTypes";
 import OntologyLib from "../Libs/OntologyLib";
@@ -199,12 +204,27 @@ export async function checkSuggestionExist(purl: string): Promise<boolean> {
             return false;
         }
         let data = await result.json();
-        if (data['_result']['exist']) {
-            return true
-        }
-        return false
+        return !!data['_result']['exist'];
+
     } catch (e) {
         return false
+    }
+}
+
+
+export async function checkOntologyPurlIsValidUrl(purl: string): Promise<OntologyPurlValidationRes> {
+    try {
+        let headers = getTsPluginHeaders({withAccessToken: false, isJson: false});
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/purl_is_valid?purl=' + purl;
+        let result = await fetch(url, {method: 'GET', headers: headers});
+        if (result.status !== 200) {
+            return {"valid": false, "reason": "unknown"};
+        }
+        let data = await result.json();
+        return data['_result'];
+
+    } catch (e) {
+        return {"valid": false, "reason": "unknown"};
     }
 }
 
