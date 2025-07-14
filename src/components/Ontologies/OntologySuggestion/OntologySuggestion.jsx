@@ -325,7 +325,17 @@ const OntologySuggestion = () => {
             <>
               <AlertBox
                 type="danger"
-                message="Sorry! We cannot test this ontology's shape. Please try again later."
+                message={
+                  <div className="text-center">
+                    Sorry! We cannot test this ontology shape. Please try again later.
+                    <br/>
+                    <br/>
+                    In case you find this unreasonable, please send us your request via the contact form:
+                    <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                      Contact us
+                    </Link>
+                  </div>
+                }
               />
             </>
           }
@@ -680,7 +690,7 @@ const OntologyMainMetaDataForm = () => {
           </input>
         </div>
       </div>
-      {process.env.REACT_APP_PROJECT_ID == "general" && !componentContext.inputCollectionId &&
+      {process.env.REACT_APP_PROJECT_ID === "general" && !componentContext.inputCollectionId &&
         <>
           <br></br>
           <div className="row">
