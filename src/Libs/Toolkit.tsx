@@ -1,5 +1,4 @@
 import {Helmet, HelmetProvider} from 'react-helmet-async';
-import {inspect} from 'util';
 import CommonUrlFactory from '../UrlFactory/CommonUrlFactory';
 
 
@@ -142,18 +141,16 @@ class Toolkit {
         return false;
     }
 
-    static async downloadJsonFile(fileName: string, content: string) {
-        try {
-            const blob = new Blob([content], {type: 'application/json'});
-            const href = await URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = href;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch {
-            return false;
+    static selectSiteNavbarOption(navbarText: string) {
+        let currentSelected = document.getElementsByClassName("nav-clicked");
+        if (currentSelected.length > 0) {
+            currentSelected[0].classList.remove("nav-clicked");
+        }
+        let navOptions = document.getElementsByClassName("nav-link");
+        for (let nav of navOptions) {
+            if (nav.innerHTML === navbarText) {
+                nav.classList.add("nav-clicked");
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
@@ -12,7 +12,7 @@ import {
 } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw} from 'draft-js';
-import {fetchAllCollectionWithOntologyList} from "../../../api/collection";
+import {getCollectionsAndThierOntologies} from "../../../api/collection";
 import {useQuery} from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
@@ -49,6 +49,8 @@ const OntologySuggestion = () => {
   const [missingCollectionIds, setMissingCollectionIds] = useState([]);
   const [suggestionExist, setSuggestionExist] = useState(false);
   const [purlIsNotValidMessage, setPurlIsNotValidMessage] = useState("");
+  const [queryEnabled, setQueryEnabled] = useState(true);
+  const [nextBtnLoading, setNextBtnLoading] = useState(false);
   const [form, setForm] = useState({
     "username": "",
     "email": "",
@@ -61,13 +63,14 @@ const OntologySuggestion = () => {
   
   const collectionWithOntologyListQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
-    queryFn: fetchAllCollectionWithOntologyList
+    queryFn: getCollectionsAndThierOntologies,
+    enabled: queryEnabled
   });
   
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
-    for (let res of collectionWithOntologyListQuery.data) {
-      collectionIds.push(res['collection']);
+    for (let col in collectionWithOntologyListQuery.data) {
+      collectionIds.push(col);
     }
   }
   const collections = collectionIds;
@@ -115,12 +118,13 @@ const OntologySuggestion = () => {
       // on projects frontend. Collection is preselected for the app.
       selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME)
     }
-    for (let res of collectionWithOntologyListQuery.data) {
+    for (let col in collectionWithOntologyListQuery.data) {
       // find the collection ids that contains the provided ontology purl
-      for (let onto of res['ontologies']) {
-        if (onto['purl'] === ontoPurl) {
+      let ontologies = collectionWithOntologyListQuery.data[col];
+      for (let onto of ontologies) {
+        if (onto['ontologyPurl'] === ontoPurl) {
           existingOnto = onto['ontologyId'];
-          existingCollectionsList.push(res['collection']);
+          existingCollectionsList.push(col);
           ontoExist = true;
         }
       }
@@ -186,6 +190,7 @@ const OntologySuggestion = () => {
   
   
   async function onNextClick() {
+    setNextBtnLoading(true);
     if (progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP) {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
       setProgressStep(ONTOLOGY_MAIN_METADATA_SETP);
@@ -193,9 +198,11 @@ const OntologySuggestion = () => {
       let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
       let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
       if (!name || !purl) {
+        setNextBtnLoading(false);
         return;
       }
       if (!await ontologyPurlIsValid(purl)) {
+        setNextBtnLoading(false);
         return;
       }
       await runOntologyMainMetaDataValidation(purl);
@@ -205,6 +212,7 @@ const OntologySuggestion = () => {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
       setProgressStep(USER_FORM_STEP);
     }
+    setNextBtnLoading(false);
   }
   
   
@@ -233,6 +241,12 @@ const OntologySuggestion = () => {
   function noErrorsAndLoading() {
     return !formSubmitted && !submitWait && !runningTest && !testFailed && !suggestionExist;
   }
+  
+  useEffect(() => {
+    if (collectionWithOntologyListQuery.data) {
+      setQueryEnabled(false);
+    }
+  }, [collectionWithOntologyListQuery.data]);
   
   
   const contextData = {
@@ -311,7 +325,17 @@ const OntologySuggestion = () => {
             <>
               <AlertBox
                 type="danger"
-                message="Sorry! We cannot test this ontology's shape. Please try again later."
+                message={
+                  <div className="text-center">
+                    Sorry! We cannot test this ontology shape. Please try again later.
+                    <br/>
+                    <br/>
+                    In case you find this unreasonable, please send us your request via the contact form:
+                    <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                      Contact us
+                    </Link>
+                  </div>
+                }
               />
             </>
           }
@@ -361,6 +385,7 @@ const OntologySuggestion = () => {
               <button type="button" className="btn btn-secondary" onClick={onNextClick}
               >
                 Next
+                {nextBtnLoading && <div className="isLoading-btn"></div>}
               </button>
             </>
           }
@@ -432,19 +457,20 @@ const OntologyExtraMetadataForm = () => {
           message="This ontology already exists in the system."
         />
         Check: &nbsp;
-        <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId}
-              target="_blank">
-          {componentContext.existingOntologyId}
-        </a></b>
+        <b>
+          <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId}>
+            {componentContext.existingOntologyId}
+          </Link>
+        </b>
         <br/>
         Part of these collections:
         <ul>
           {componentContext.existingCollections.map((colId) => {
             return (
               <li>
-                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId} target="_blank">
+                <Link href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId}>
                   {colId}
-                </a>
+                </Link>
               </li>)
           })}
         </ul>
@@ -664,7 +690,7 @@ const OntologyMainMetaDataForm = () => {
           </input>
         </div>
       </div>
-      {process.env.REACT_APP_PROJECT_ID == "general" && !componentContext.inputCollectionId &&
+      {process.env.REACT_APP_PROJECT_ID === "general" && !componentContext.inputCollectionId &&
         <>
           <br></br>
           <div className="row">
