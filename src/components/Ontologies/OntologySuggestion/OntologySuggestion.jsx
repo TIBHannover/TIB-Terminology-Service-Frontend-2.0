@@ -60,7 +60,7 @@ const OntologySuggestion = () => {
   });
   
   const collectionWithOntologyListQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirOntologies'],
+    queryKey: ['allCollectionsWithTheirOntologiesInCollectionPage'],
     queryFn: fetchAllCollectionWithOntologyList
   });
   
