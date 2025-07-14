@@ -1,4 +1,4 @@
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
@@ -49,6 +49,7 @@ const OntologySuggestion = () => {
   const [missingCollectionIds, setMissingCollectionIds] = useState([]);
   const [suggestionExist, setSuggestionExist] = useState(false);
   const [purlIsNotValidMessage, setPurlIsNotValidMessage] = useState("");
+  const [queryEnabled, setQueryEnabled] = useState(true);
   const [form, setForm] = useState({
     "username": "",
     "email": "",
@@ -61,7 +62,8 @@ const OntologySuggestion = () => {
   
   const collectionWithOntologyListQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologiesInCollectionPage'],
-    queryFn: fetchAllCollectionWithOntologyList
+    queryFn: fetchAllCollectionWithOntologyList,
+    enabled: queryEnabled
   });
   
   let collectionIds = [];
@@ -233,6 +235,12 @@ const OntologySuggestion = () => {
   function noErrorsAndLoading() {
     return !formSubmitted && !submitWait && !runningTest && !testFailed && !suggestionExist;
   }
+  
+  useEffect(() => {
+    if (collectionWithOntologyListQuery.data) {
+      setQueryEnabled(false);
+    }
+  }, [collectionWithOntologyListQuery.data]);
   
   
   const contextData = {
