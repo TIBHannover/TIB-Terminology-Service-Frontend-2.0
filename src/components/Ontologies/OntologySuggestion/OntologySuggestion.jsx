@@ -50,6 +50,7 @@ const OntologySuggestion = () => {
   const [suggestionExist, setSuggestionExist] = useState(false);
   const [purlIsNotValidMessage, setPurlIsNotValidMessage] = useState("");
   const [queryEnabled, setQueryEnabled] = useState(true);
+  const [nextBtnLoading, setNextBtnLoading] = useState(false);
   const [form, setForm] = useState({
     "username": "",
     "email": "",
@@ -189,6 +190,7 @@ const OntologySuggestion = () => {
   
   
   async function onNextClick() {
+    setNextBtnLoading(true);
     if (progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP) {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
       setProgressStep(ONTOLOGY_MAIN_METADATA_SETP);
@@ -196,9 +198,11 @@ const OntologySuggestion = () => {
       let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
       let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
       if (!name || !purl) {
+        setNextBtnLoading(false);
         return;
       }
       if (!await ontologyPurlIsValid(purl)) {
+        setNextBtnLoading(false);
         return;
       }
       await runOntologyMainMetaDataValidation(purl);
@@ -208,6 +212,7 @@ const OntologySuggestion = () => {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
       setProgressStep(USER_FORM_STEP);
     }
+    setNextBtnLoading(false);
   }
   
   
@@ -359,8 +364,8 @@ const OntologySuggestion = () => {
             </button>
           }
           {showNewSuggestionBtn &&
-            <Link className="btn btn-secondary" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New
-              suggestion</Link>
+            <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New
+              suggestion</a>
           }
           {progressStep === USER_FORM_STEP && noErrorsAndLoading() && !(ontologyExist && !collectionSuggestMode) &&
             <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
@@ -370,6 +375,7 @@ const OntologySuggestion = () => {
               <button type="button" className="btn btn-secondary" onClick={onNextClick}
               >
                 Next
+                {nextBtnLoading && <div className="isLoading-btn"></div>}
               </button>
             </>
           }
