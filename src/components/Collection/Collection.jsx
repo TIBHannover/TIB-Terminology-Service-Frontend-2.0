@@ -21,11 +21,16 @@ const Collections = () => {
     let collectionsWithTheirOntologies = collectionsWithOntologiesQuery.data;
     for (let col in collectionsWithTheirOntologies) {
       collectionOntologiesData[col] = [];
-      console.log(collectionsWithTheirOntologies);
       for (let onto of collectionsWithTheirOntologies[col]) {
         collectionOntologiesData[col].push(
-          <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto["ontologyId"]}
-                className='ontologies-link-tag' target="_blank">{onto["ontologyId"]}</Link>
+          <Link
+            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto["ontologyId"]}
+            className='ontologies-link-tag'
+            onClick={() => {
+              Toolkit.selectSiteNavbarOption("Ontologies")
+            }}>
+            {onto["ontologyId"]}
+          </Link>
         );
       }
     }
@@ -37,8 +42,8 @@ const Collections = () => {
     let card = [
       <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
         <div className='col-sm-3 text-center' key={collectionId + "_logo"}>
-          <a href={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]}
-             className="collection-image-anchor">
+          <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]}
+                className="collection-image-anchor">
             <img
               className='collection-logo-in-list img-fluid '
               alt="logo"
@@ -46,7 +51,7 @@ const Collections = () => {
               width={collectionJson["logo_width"] ?? 250}
               height={collectionJson["logo_height"] ?? 130}
             />
-          </a>
+          </Link>
         </div>
         <div className='col-sm-9 collection-content'>
           <div className='row' key={collectionId + "_name"}>
@@ -93,6 +98,9 @@ const Collections = () => {
               <Link
                 className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1 ml-0 "
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
+                onClick={() => {
+                  Toolkit.selectSiteNavbarOption("Ontologies")
+                }}
               >
                 Suggest an ontology for this collection
               </Link>
