@@ -12,7 +12,7 @@ import {
 } from "../../../api/ontology";
 import draftToMarkdown from 'draftjs-to-markdown';
 import {convertToRaw} from 'draft-js';
-import {fetchAllCollectionWithOntologyList} from "../../../api/collection";
+import {getCollectionsAndThierOntologies} from "../../../api/collection";
 import {useQuery} from "@tanstack/react-query";
 import Multiselect from 'multiselect-react-dropdown';
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
@@ -61,15 +61,15 @@ const OntologySuggestion = () => {
   });
   
   const collectionWithOntologyListQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirOntologiesInCollectionPage'],
-    queryFn: fetchAllCollectionWithOntologyList,
+    queryKey: ['allCollectionsWithTheirOntologies'],
+    queryFn: getCollectionsAndThierOntologies,
     enabled: queryEnabled
   });
   
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
-    for (let res of collectionWithOntologyListQuery.data) {
-      collectionIds.push(res['collection']);
+    for (let col in collectionWithOntologyListQuery.data) {
+      collectionIds.push(col);
     }
   }
   const collections = collectionIds;
@@ -117,12 +117,13 @@ const OntologySuggestion = () => {
       // on projects frontend. Collection is preselected for the app.
       selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME)
     }
-    for (let res of collectionWithOntologyListQuery.data) {
+    for (let col in collectionWithOntologyListQuery.data) {
       // find the collection ids that contains the provided ontology purl
-      for (let onto of res['ontologies']) {
+      let ontologies = collectionWithOntologyListQuery.data[col];
+      for (let onto of ontologies) {
         if (onto['purl'] === ontoPurl) {
           existingOnto = onto['ontologyId'];
-          existingCollectionsList.push(res['collection']);
+          existingCollectionsList.push(col);
           ontoExist = true;
         }
       }

@@ -12,7 +12,7 @@ import {Link} from 'react-router-dom';
 const Collections = () => {
   
   const collectionsWithOntologiesQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirOntologies'],
+    queryKey: ['allCollectionsWithTheirOntologiesInCollectionPage'],
     queryFn: getCollectionsAndThierOntologies
   });
   
