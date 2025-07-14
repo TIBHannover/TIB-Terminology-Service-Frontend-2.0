@@ -121,7 +121,7 @@ const OntologySuggestion = () => {
       // find the collection ids that contains the provided ontology purl
       let ontologies = collectionWithOntologyListQuery.data[col];
       for (let onto of ontologies) {
-        if (onto['purl'] === ontoPurl) {
+        if (onto['ontologyPurl'] === ontoPurl) {
           existingOnto = onto['ontologyId'];
           existingCollectionsList.push(col);
           ontoExist = true;
@@ -359,8 +359,8 @@ const OntologySuggestion = () => {
             </button>
           }
           {showNewSuggestionBtn &&
-            <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New
-              suggestion</a>
+            <Link className="btn btn-secondary" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New
+              suggestion</Link>
           }
           {progressStep === USER_FORM_STEP && noErrorsAndLoading() && !(ontologyExist && !collectionSuggestMode) &&
             <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
@@ -441,19 +441,20 @@ const OntologyExtraMetadataForm = () => {
           message="This ontology already exists in the system."
         />
         Check: &nbsp;
-        <b><a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId}
-              target="_blank">
-          {componentContext.existingOntologyId}
-        </a></b>
+        <b>
+          <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId}>
+            {componentContext.existingOntologyId}
+          </Link>
+        </b>
         <br/>
         Part of these collections:
         <ul>
           {componentContext.existingCollections.map((colId) => {
             return (
               <li>
-                <a href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId} target="_blank">
+                <Link href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId}>
                   {colId}
-                </a>
+                </Link>
               </li>)
           })}
         </ul>
