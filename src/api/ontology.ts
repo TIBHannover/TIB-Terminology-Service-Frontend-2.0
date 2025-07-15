@@ -161,7 +161,7 @@ export async function runShapeTest(ontologyPurl: string): Promise<OntologyShapeT
         let headers = getTsPluginHeaders({withAccessToken: true, isJson: false});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/testshape?purl=' + ontologyPurl;
         let result = await fetch(url, {method: 'GET', headers: headers});
-        if (result.status !== 200) {
+        if (!result.ok) {
             return false;
         }
         let data = await result.json();

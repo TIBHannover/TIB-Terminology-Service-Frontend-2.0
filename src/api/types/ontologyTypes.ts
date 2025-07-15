@@ -143,7 +143,8 @@ export type OntologyShapeTestResult = {
         text: string,
         about: string
     }>,
-    info: Array<string>
+    info: Array<string>,
+    shape_test_failed: boolean,
 }
 
 export  type OntologyPurlValidationRes = {

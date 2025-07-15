@@ -86,9 +86,10 @@ const OntologySuggestion = () => {
     if (!shapeTestIsReady) {
       setRunningTest(true);
       let validationResult = await runShapeTest(purl);
-      if (!validationResult) {
+      if (!validationResult || validationResult["shape_test_failed"]) {
         setTestFailed(true);
         setRunningTest(false);
+        setShapeTestIsReady(true);
         return;
       }
       if (validationResult.error.length === 0 && validationResult.info.length === 0) {
@@ -239,7 +240,7 @@ const OntologySuggestion = () => {
   
   
   function noErrorsAndLoading() {
-    return !formSubmitted && !submitWait && !runningTest && !testFailed && !suggestionExist;
+    return !formSubmitted && !submitWait && !runningTest && !suggestionExist;
   }
   
   useEffect(() => {
@@ -253,7 +254,6 @@ const OntologySuggestion = () => {
     editorState: editorState,
     form: form,
     setForm: setForm,
-    onTextEditorChange: onTextEditorChange,
     validationResult: shapeValidationError,
     collections: collections,
     selectedCollections: selectedCollections,
@@ -264,12 +264,14 @@ const OntologySuggestion = () => {
     existingCollections: existingCollections,
     inputCollectionId: inputCollectionId,
     purlIsNotValidMessage: purlIsNotValidMessage,
-    setPurlIsNotValidMessage: setPurlIsNotValidMessage
+    setPurlIsNotValidMessage: setPurlIsNotValidMessage,
+    testFailed: testFailed,
+    onTextEditorChange: onTextEditorChange
   }
   
   const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
   const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
-  const showNewSuggestionBtn = (submitedSeccessfully || testFailed || submitedFailed || (ontologyExist && !collectionSuggestMode) || suggestionExist);
+  const showNewSuggestionBtn = (submitedSeccessfully || submitedFailed || (ontologyExist && !collectionSuggestMode) || suggestionExist);
   
   if (process.env.REACT_APP_ONTOLOGY_SUGGESTION !== "true") {
     return "";
@@ -297,7 +299,17 @@ const OntologySuggestion = () => {
             <>
               <AlertBox
                 type="danger"
-                message="Sorry! Something went wrong. Please try again later."
+                message={
+                  <div className="text-center">
+                    Sorry! Something went wrong. Please try again later.
+                    <br/>
+                    <br/>
+                    You can report this incident to us via:
+                    <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                      Contact us
+                    </Link>
+                  </div>
+                }
               />
             </>
           }
@@ -321,19 +333,19 @@ const OntologySuggestion = () => {
               </div>
             </div>
           }
-          {testFailed &&
+          {testFailed && progressStep === ONTOLOGY_EXTRA_METADATA_STEP &&
             <>
               <AlertBox
                 type="danger"
                 message={
                   <div className="text-center">
-                    Sorry! We cannot test this ontology shape. Please try again later.
+                    The ontology metadata test cannot be performed on this ontology.
                     <br/>
                     <br/>
-                    In case you find this unreasonable, please send us your request via the contact form:
-                    <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
-                      Contact us
-                    </Link>
+                    <p>
+                      <b>Attention</b> You can skip this step and submit the ontology without a test report.
+                      However, <b>the chance of your ontology getting indexed in TIB TS will be lower.</b>
+                    </p>
                   </div>
                 }
               />
@@ -492,34 +504,36 @@ const OntologyExtraMetadataForm = () => {
     );
   }
   
-  
-  return (
-    <>
-      <h5><b>Missing metadata</b></h5>
-      <p>
-        The following metadata are missing from the ontology. Please consider adding them.
-      </p>
-      <p>
-        <b>Attention</b> You can skip this step and submit the ontology without adding the missing metadata.
-        However, <b>the chance of your ontology getting indexed in TIB TS will be lower.</b>
-      </p>
-      <br></br>
-      {renderErrosWithTheirInputFields()}
-      <br></br>
-      <button type="button" className="btn btn-sm btn-secondary mb-2"
-              onClick={() => setInfoIsExpanded(!infoIsExpanded)}>
-        {!infoIsExpanded && <><i className="fa fa-angle-double-down fa-borderless fs-6"></i>More</>}
-        {infoIsExpanded && <><i className="fa fa-angle-double-up fa-borderless fs-6"></i>Less</>}
-      </button>
-      {infoIsExpanded &&
-        <>
-          <h5><b>Warnings (no action needed)</b></h5>
-          {renderInfo()}
-        </>
-      }
-      <hr></hr>
-    </>
-  );
+  if (!componentContext.testFailed) {
+    return (
+      <>
+        <h5><b>Missing metadata</b></h5>
+        <p>
+          The following metadata are missing from the ontology. Please consider adding them.
+        </p>
+        <p>
+          <b>Attention</b> You can skip this step and submit the ontology without adding the missing metadata.
+          However, <b>the chance of your ontology getting indexed in TIB TS will be lower.</b>
+        </p>
+        <br></br>
+        {renderErrosWithTheirInputFields()}
+        <br></br>
+        <button type="button" className="btn btn-sm btn-secondary mb-2"
+                onClick={() => setInfoIsExpanded(!infoIsExpanded)}>
+          {!infoIsExpanded && <><i className="fa fa-angle-double-down fa-borderless fs-6"></i>More</>}
+          {infoIsExpanded && <><i className="fa fa-angle-double-up fa-borderless fs-6"></i>Less</>}
+        </button>
+        {infoIsExpanded &&
+          <>
+            <h5><b>Warnings (no action needed)</b></h5>
+            {renderInfo()}
+          </>
+        }
+        <hr></hr>
+      </>
+    );
+  }
+  return "";
 }
 
 
@@ -641,7 +655,7 @@ const OntologyMainMetaDataForm = () => {
                 <br/>
                 Reason: {componentContext.purlIsNotValidMessage}
                 <br/>
-                In case you find this unreasonable, please send us your request via the contact form:
+                If you believe the PURL is correct, then please send your request via the:
                 <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
                   Contact us
                 </Link>
