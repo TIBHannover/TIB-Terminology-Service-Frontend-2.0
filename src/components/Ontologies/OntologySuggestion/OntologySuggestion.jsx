@@ -655,7 +655,7 @@ const OntologyMainMetaDataForm = () => {
                 <br/>
                 Reason: {componentContext.purlIsNotValidMessage}
                 <br/>
-                If you believe the PURL is correct, then please send your request via the:
+                If you believe the PURL is correct, then please report this issue via:
                 <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
                   Contact us
                 </Link>
