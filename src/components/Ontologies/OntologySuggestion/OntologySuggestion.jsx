@@ -329,7 +329,7 @@ const OntologySuggestion = () => {
                 <div className="spinner-border text-dark" role="status">
                   <span className="visually-hidden"></span>
                 </div>
-                <div className="">Testing the ontology shape ...</div>
+                <div className="">Testing the ontology metadata ...</div>
               </div>
             </div>
           }
@@ -342,9 +342,9 @@ const OntologySuggestion = () => {
                     The ontology metadata test cannot be performed on this ontology.
                     <br/>
                     <br/>
-                    <p>
-                      <b>Attention</b> You can skip this step and submit the ontology without a test report.
-                      However, <b>the chance of your ontology getting indexed in TIB TS will be lower.</b>
+                    <p className="text-center">
+                      <b>Attention</b> You can skip this step by clicking <b>Next</b> and submit the ontology without a
+                      test report.
                     </p>
                   </div>
                 }
