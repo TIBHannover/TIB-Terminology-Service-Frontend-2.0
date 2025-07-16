@@ -10,7 +10,6 @@
     "@tanstack/react-query-persist-client": "^4.36.1",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
     "@types/node": "^16.18.96",
     "@types/react-router": "^5.1.18",
     "@types/reactour": "^1.18.5",
@@ -18,6 +17,7 @@
     "devextreme-react": "^21.2.7",
     "diff2html": "^3.4.51",
     "dompurify": "^3.0.5",
+    "dotenv": "^17.1.0",
     "draft-js": "^0.11.7",
     "draft-js-import-markdown": "^1.4.1",
     "draftjs-to-html": "^0.9.1",
@@ -75,6 +75,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@types/react": "^18.3.22",
     "@types/react-dom": "^18.3.7",
