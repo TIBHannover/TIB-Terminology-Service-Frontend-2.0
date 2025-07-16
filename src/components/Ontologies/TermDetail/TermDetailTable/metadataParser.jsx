@@ -27,6 +27,22 @@ export function classMetaData(term, termType) {
   metadata['Instances'] = {"value": TermLib.createInstancesListForClass(term), "isLink": false};
   metadata['has curation status'] = {"value": term.curationStatus, "isLink": false};
   
+  if (term['isIndividual'] && term['directParent'].length > 0) {
+    let link = [];
+    for (let parentIri of term['directParent']) {
+      let parentClassUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${term["ontologyId"]}/terms?iri=${encodeURIComponent(parentIri)}`;
+      link.push(
+        <>
+          <a href={parentClassUrl} target='_blank' rel='noopener noreferrer'>
+            {term['linkedEntities'][parentIri]["label"]?.[0]}
+          </a>
+          <br/>
+        </>
+      );
+    }
+    metadata['Instance of'] = {"value": link, "isLink": false};
+  }
+  
   if (term.annotation) {
     // add custom annotation fields. Metadata key can be anything
     for (let key in term.annotation) {

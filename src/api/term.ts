@@ -13,12 +13,14 @@ import TermLib from "../Libs/TermLib";
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_NUMBER = 1;
 const TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-// const TYPE_CLASS_URI = "http://www.w3.org/2002/07/owl#Class";
 const ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
-const DEFINITION_PROPERTY_PURL = "http://purl.obolibrary.org/obo/IAO_0000115";
 const DB_XREF_PURL = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
 const IDENTIFIER_PURL = "https://schema.org/identifier";
+
+const CLASS_TYPE_ID = "classes";
+const PROPERTY_TYPE_ID = "properties";
+const INDIVIDUAL_TYPE_ID = "individuals";
 
 
 class TermApi {
@@ -43,11 +45,11 @@ class TermApi {
 
     setTermType(termType?: string): void {
         if (termType === "term" || termType === "class" || termType === "terms") {
-            this.termType = "classes";
+            this.termType = CLASS_TYPE_ID;
         } else if (termType === "property") {
-            this.termType = "properties";
+            this.termType = PROPERTY_TYPE_ID;
         } else if (termType === "individual") {
-            this.termType = "individuals";
+            this.termType = INDIVIDUAL_TYPE_ID;
         } else {
             this.termType = termType ? termType : "";
         }
@@ -76,13 +78,14 @@ class TermApi {
             this.term['relations'] = undefined;
             this.term['eqAxiom'] = undefined;
             this.term['subClassOf'] = undefined;
-            this.term['isIndividual'] = (this.termType === "individuals");
+            this.term['isIndividual'] = this.term['type'].includes("individual");
+            this.term['directParent'] = this.term['directParent'] ? this.term['directParent'] : [];
             this.fetchImportedAndAlsoInOntologies();
             let curationStatus = this.createHasCurationStatus();
             if (curationStatus) {
                 this.term['curationStatus'] = curationStatus;
             }
-            if (this.termType === "classes") {
+            if (this.termType === CLASS_TYPE_ID) {
                 await this.fetchClassRelations();
             }
 
@@ -358,7 +361,7 @@ class TermApi {
     async getNodeJsTree(viewMode: string): Promise<any> {
         try {
             let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-            let parentPath = this.termType === "classes" ? "hierarchicalAncestors" : "ancestors";
+            let parentPath = this.termType === CLASS_TYPE_ID ? "hierarchicalAncestors" : "ancestors";
             let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${parentPath}?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
             let listOfNodes = await (await fetch(url, getCallSetting)).json();
             let nodesList = listOfNodes["elements"] ?? [];
@@ -380,14 +383,14 @@ class TermApi {
 
         async function getChildren(parentThis, lang) {
             let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-            let path = parentThis.termType === "classes" ? "hierarchicalChildren" : "children";
+            let path = parentThis.termType === CLASS_TYPE_ID ? "hierarchicalChildren" : "children";
             let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${parentThis.ontologyId}/${parentThis.termType}/${parentThis.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
             let res = await (await fetch(url, getCallSetting)).json();
             return res["elements"] ?? [];
         }
 
         async function getHierarchicalChilren(parentThis, lang) {
-            if (parentThis.termType === "classes") {
+            if (parentThis.termType === CLASS_TYPE_ID) {
                 let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
                 let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${parentThis.ontologyId}/classes/${parentThis.iri}/individuals?size=1000&lang=${lang}`;
                 let res = await (await fetch(url, getCallSetting)).json();
