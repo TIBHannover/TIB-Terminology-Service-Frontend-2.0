@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
+import {BASE_URL} from "./libs";
 
-const BASE_URL = 'http://localhost:3000';
 const ONTOLOGY_SUGGESTION_IS_ENABLED = process.env.REACT_APP_ONTOLOGY_SUGGESTION === 'true';
 const ONTOLOGY_SUGGESTION_ENDPOINT = "/ts/ontologysuggestion";
 const COLLECTION_ID_TO_TEST = "NFDI4CHEM";
