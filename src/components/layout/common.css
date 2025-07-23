@@ -289,7 +289,7 @@ body .cc_more_info {
 
 .header-wrapper {
     background-repeat: no-repeat;
-    background-image: url("../../assets/img/background.png");
+    background-image: url("../../../public/header-background.webp");
     background-position: right center;
     background-color: #0e6668;
     padding: 10px;
