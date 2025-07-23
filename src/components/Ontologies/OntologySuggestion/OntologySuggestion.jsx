@@ -305,7 +305,7 @@ const OntologySuggestion = () => {
                     <br/>
                     <br/>
                     You can report this incident to us via:
-                    <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                    <Link className="btn btn-secondary ms-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
                       Contact us
                     </Link>
                   </div>
@@ -552,7 +552,7 @@ const Intro = () => {
         <br></br>
         The ontology you are suggesting will be validated against the following SHACL shape. This shape tests
         whether the ontology contains a rich set of metadata or not. <br></br>
-        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ml-1"
+        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ms-1"
            rel="noopener noreferrer">
           https://www.purl.org/ontologymetadata/shape/20240502
         </a>
@@ -656,7 +656,7 @@ const OntologyMainMetaDataForm = () => {
                 Reason: {componentContext.purlIsNotValidMessage}
                 <br/>
                 If you believe the PURL is correct, then please report this issue via:
-                <Link className="btn btn-secondary ml-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                <Link className="btn btn-secondary ms-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
                   Contact us
                 </Link>
               </div>

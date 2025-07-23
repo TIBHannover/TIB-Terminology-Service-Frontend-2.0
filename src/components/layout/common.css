@@ -37,7 +37,6 @@ p {
 
 body a {
     color: #0e6668;
-    text-decoration: none;
 }
 
 body a:hover {
@@ -306,6 +305,7 @@ body .cc_more_info {
     margin-bottom: 30px;
     margin-top: 10px;
 }
+
 
 .site-header-searchbox-holder {
     padding-left: 10%;

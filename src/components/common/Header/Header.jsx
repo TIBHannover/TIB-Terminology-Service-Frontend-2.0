@@ -9,7 +9,7 @@ function Header() {
       <div className='row header-wrapper header-collapseable-section'>
         <div className='col-sm-10 site-header'>
           <div className='row'>
-            <div className='col-sm-11 text-right'>
+            <div className='col-sm-11 text-end'>
               <UserPanel isModal={true}></UserPanel>
             </div>
           </div>

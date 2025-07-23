@@ -1,136 +1,138 @@
 .search-overlay-box {
-  position: absolute;
-  width: 97%;
-  margin: auto;
-  z-index: 2147483647;
+    position: absolute;
+    width: 97%;
+    margin: auto;
+    z-index: 2147483647;
 }
 
 #autocomplete-container {
-  height: fit-content;
-  border: 0.5px solid black;
-  padding-bottom: 10px;
-  padding-left: 10x;
-  padding-right: 10px;
-  background-color: white;
-  width: 100%;
-  text-align: left;
+    height: fit-content;
+    border: 0.5px solid black;
+    padding-bottom: 10px;
+    padding-left: 10x;
+    padding-right: 10px;
+    background-color: white;
+    width: 100%;
+    text-align: left;
 }
 
 .autocomplete-item {
-  text-align: justify;
-  margin-bottom: -20px;
-  color: black;
-  padding-left: 10px;
+    text-align: justify;
+    margin-bottom: -20px;
+    color: black;
+    padding-left: 10px;
 }
 
 .autocomplete-item:hover {
-  vertical-align: top;
-  background-color: #dfdddd;
-  width: 100%;
+    vertical-align: top;
+    background-color: #dfdddd;
+    width: 100%;
 }
 
 .search-bar-container .jump-autocomplete-container {
-  line-height: initial;
-  height: 50px;
+    line-height: initial;
+    height: 50px;
 }
 
 .jump-autocomplete-item {
-  margin-left: 10px;
-  display: grid;
-  grid-template-columns: auto auto auto;
-  color: black;
+    margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    color: black;
 }
 
 #search-box {
-  border-right: 0;
+    border-right: 0;
 }
 
 .search-bar-container .search-btn {
-  background-color: #404040;
-  color: white;
+    background-color: #404040;
+    color: white;
+    padding: 10px;
+    border-radius: 0;
 }
 
 .search-bar-container .search-btn:hover {
-  background-color: #404040;
-  color: white;
+    background-color: #404040;
+    color: white;
 }
 
 .search-in-box {
-  background-color: #dfe4e5;
-  display: inline-block;
+    background-color: #dfe4e5;
+    display: inline-block;
 }
 
 .search-form-nav:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .search-form-nav-clicked {
-  font-weight: bold;
-  text-decoration: underline;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .search-forn-checkbox-holders {
-  text-align: left;
+    text-align: left;
 }
 
 .search-bar-container {
-  margin: auto;
+    margin: auto;
 }
 
 .site-header-search-filters-container {
-  margin-left: 1%;
-  margin-top: 1%;
+    margin-left: 1%;
+    margin-top: 1%;
 }
 
 .site-header-search-filters-container .adv-search-title-holder {
-  text-align: right;
+    text-align: right;
 }
 
-.adv-search-container {
-  text-align: left;
-  margin-left: 19%;
+body .adv-search-container {
+    margin: auto;
+    width: 61%;
 }
 
 .optionListContainer {
-  color: black;
+    color: black;
 }
 
 .searchWrapper {
-  background-color: white;
+    background-color: white;
 }
 
 .searchBox {
-  width: 100%;
-  white-space: nowrap;
-  overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: auto;
 }
 
 .adv-search-label-holder {
-  text-align: left;
+    text-align: left;
 }
 
 .multiSelectContainer li:hover {
-  background-color: #dfdddd !important;
-  color: black !important;
+    background-color: #dfdddd !important;
+    color: black !important;
 }
 
 .multiselect-container .chip {
-  background-color: #404040 !important;
+    background-color: #404040 !important;
 }
 
 .custom-collection-btn {
-  background-color: #404040;
-  color: white;
-  border-radius: 5px;
-  height: 50px;
+    background-color: #404040;
+    color: white;
+    border-radius: 5px;
+    height: 50px;
 }
 
 .custom-collection-btn .fa {
-  font-size: 12px;
+    font-size: 12px;
 }
 
 .custom-collection-btn div {
-  margin-top: 12px;
-  margin-right: 10px;
-  margin-left: 10px;
+    margin-top: 12px;
+    margin-right: 10px;
+    margin-left: 10px;
 }

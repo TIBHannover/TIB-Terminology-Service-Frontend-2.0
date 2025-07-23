@@ -32,7 +32,7 @@ export function ontologyPageTabTourSteps() {
       content: "(If hosted on GitHub) Check the list of issues from the ontology GitHub repository, report issues, and request missing terms.",
     },
   ];
-
+  
   return steps;
 }
 
@@ -68,7 +68,7 @@ export function ontologyOverViewTourSteps() {
       }
     );
   }
-
+  
   return steps;
 }
 
@@ -86,24 +86,27 @@ export function treeViewTourSteps(type) {
           <>
             <p>This is a {type}. You can click on it to check its detail on the right side of this page.</p>
             <p>
-              <b>Hint: </b> You can use arrow keys <i className="fa fa-arrow-up"></i>/<i className="fa fa-arrow-down"></i> on your keyboard
+              <b>Hint: </b> You can use arrow keys <i className="fa fa-arrow-up"></i>/<i
+              className="fa fa-arrow-down"></i> on your keyboard
               <i className="fa fa-keyboard-o"></i> to move between nodes and select them in this tree.
             </p>
           </>
         );
       }
-
+      
     },
     {
       selector: tourSelectorPrefix + 'tree-expand-node-icon',
       content: () => {
         return (
           <>
-            <p>You can use this to expand(+) or collapse(-) (in case it is already expanded) this {type} to see its children.
+            <p>You can use this to expand(+) or collapse(-) (in case it is already expanded) this {type} to see its
+              children.
               In case you do not see these icons means this {type} is a leaf (has no child).
             </p>
             <p>
-              <b>Hint: </b> You can use arrow keys <i className="fa fa-arrow-left"></i>/<i className="fa fa-arrow-right"></i> on your keyboard
+              <b>Hint: </b> You can use arrow keys <i className="fa fa-arrow-left"></i>/<i
+              className="fa fa-arrow-right"></i> on your keyboard
               <i className="fa fa-keyboard-o"></i> to expand/collapse a node.
             </p>
           </>
@@ -146,16 +149,16 @@ export function treeViewTourSteps(type) {
         This help you to achieve a better understanding regarding this ${type} and its usage.
       `
     },
-
+  
   ];
   if (type === 'class') {
     steps.push({
       selector: tourSelectorPrefix + 'tree-table-graph',
       content: `Here you can check this ${type} graph visualization.`
-
+      
     });
   }
-
+  
   return steps;
 }
 
@@ -197,7 +200,7 @@ export function individualsListTourSteps() {
       `
     },
   ];
-
+  
   return steps;
 }
 
@@ -217,7 +220,8 @@ export function classListTourSteps() {
               Check this to only see the obsolete classes list. Unchecked means only show the non-obsolete classes.
             </p>
             <p>
-              <b>Attention:</b> this enable the obsolete check globally for this application. This means obsolete checkbox will be enabled
+              <b>Attention:</b> this enable the obsolete check globally for this application. This means obsolete
+              checkbox will be enabled
               for all other section such as the search and tree view.
             </p>
           </>
@@ -235,7 +239,7 @@ export function classListTourSteps() {
       content: 'Use this to hide a column from your view in case you like to have a smaller table.'
     },
   ];
-
+  
   return steps;
 }
 
@@ -248,13 +252,15 @@ export function githubPanelTourSteps() {
         return (
           <>
             <p>
-              This the ontology GitHub panel (if hosted on GitHub). Here you can check the list of open issues, and also, open new issues and term requests.
+              This the ontology GitHub panel (if hosted on GitHub). Here you can check the list of open issues, and
+              also, open new issues and term requests.
             </p>
             <p>
-              <b>Attention:</b> You can file a new issue or term request only if you login in TS via your GitHub account. Otherwise you can
+              <b>Attention:</b> You can file a new issue or term request only if you login in TS via your GitHub
+              account. Otherwise you can
               only check the list of issues.
             </p>
-
+          
           </>
         );
       }
@@ -272,7 +278,7 @@ export function githubPanelTourSteps() {
               <li>closed</li>
               <li>all: closed + open</li>
             </ul>
-
+          
           </>
         );
       }
@@ -289,7 +295,7 @@ export function githubPanelTourSteps() {
             <a
               href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
               target={'_blank'}
-              className='ml-1'
+              className='ms-1'
             >
               here
             </a>
@@ -311,7 +317,7 @@ export function githubPanelTourSteps() {
           </>
         );
       }
-
+      
     },
     {
       selector: tourSelectorPrefix + 'github-issue-open-btn-termRequest',
@@ -323,15 +329,16 @@ export function githubPanelTourSteps() {
               We provide a template for you to help you requesting the term.
             </p>
             <p>
-              <b>Attention:</b> We cannot guarantee that your term request will be accepted. It is up to the ontology maintainers.
+              <b>Attention:</b> We cannot guarantee that your term request will be accepted. It is up to the ontology
+              maintainers.
             </p>
           </>
         );
       }
-
+      
     }
   ];
-
+  
   if (document.getElementsByClassName("git-issue-title").length !== 0) {
     steps.push(
       {
@@ -346,7 +353,7 @@ export function githubPanelTourSteps() {
       }
     );
   }
-
+  
   return steps;
 }
 
@@ -390,16 +397,17 @@ export function notesTourSteps() {
                 </li>
               </ul>
             </p>
-            <br />
+            <br/>
             <p>
               <b>Hint: </b>This is one of the good examples of using the note feature:
-              <a href='https://terminology.nfdi4chem.de/ts/ontologies/vibso/notes?page=1&size=10&originalNotes=false&type=all'
-                target={'_blank'} className='ml-2'
+              <a
+                href='https://terminology.nfdi4chem.de/ts/ontologies/vibso/notes?page=1&size=10&originalNotes=false&type=all'
+                target={'_blank'} className='ms-2'
               >
                 VIBSO Notes
               </a>
             </p>
-
+          
           </>
         );
       }
@@ -416,14 +424,14 @@ export function notesTourSteps() {
             `
     }
   ];
-
+  
   if (!window.location.href.includes('noteId=')) {
     steps.push({
       selector: tourSelectorPrefix + 'onto-note-add-btn',
       content: 'Use this to define a new note for this ontology (you need to be logged in.)'
     });
   }
-
+  
   let noteList = document.getElementsByClassName('note-list-card');
   if (noteList && noteList.length !== 0) {
     steps.push({
@@ -442,9 +450,9 @@ export function notesTourSteps() {
       selector: tourSelectorPrefix + 'onto-note-list-card-about',
       content: 'Check this note describes which artifact: ontology, class, property, and individual. You can click on them to see the term details.'
     });
-
+    
   }
-
+  
   return steps;
 }
 

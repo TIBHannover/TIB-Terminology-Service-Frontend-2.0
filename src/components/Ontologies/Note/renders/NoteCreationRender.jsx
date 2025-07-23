@@ -1,50 +1,51 @@
-import { useEffect, useContext } from "react";
+import {useEffect, useContext} from "react";
 import DropDown from "../../../common/DropDown/DropDown";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
 import TermLib from "../../../../Libs/TermLib";
-import { OntologyPageContext } from "../../../../context/OntologyPageContext";
-import { NoteContext } from "../../../../context/NoteContext";
-
+import {OntologyPageContext} from "../../../../context/OntologyPageContext";
+import {NoteContext} from "../../../../context/NoteContext";
 
 
 export const NoteCreationRender = (props) => {
-
+  
   const ontologyPageContext = useContext(OntologyPageContext);
   const noteContext = useContext(NoteContext);
-
+  
   useEffect(() => {
     if (props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")) {
       document.getElementById("publish_note_to_parent_checkbox").checked = true;
     }
   }, []);
-
-
+  
+  
   return (
     <>
       {props.mode === "newNote" &&
-        <div className="row float-right">
+        <div className="row text-end">
           <div className="col-sm-12">
             <button type="button"
-              className="btn btn-secondary stour-onto-note-add-btn"
-              data-toggle="modal"
-              data-target={"#edit-note-modal" + props.targetNoteId}
-              data-backdrop="static"
-              data-keyboard="false"
+                    className="btn btn-secondary stour-onto-note-add-btn"
+                    data-toggle="modal"
+                    data-target={"#edit-note-modal" + props.targetNoteId}
+                    data-backdrop="static"
+                    data-keyboard="false"
             >
               Add Note
             </button>
           </div>
         </div>
       }
-
+      
       <div class="modal" id={"edit-note-modal" + props.targetNoteId} key={"edit-note-modal" + props.targetNoteId}>
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">{"Add a Note"}</h4>
-              <button onClick={() => { props.closeModal() }} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
+              <button onClick={() => {
+                props.closeModal()
+              }} type="button" class="close close-mark-btn" data-dismiss="modal">&times;</button>
             </div>
             <br></br>
             <div class="modal-body">
@@ -128,7 +129,9 @@ export const NoteCreationRender = (props) => {
                   <input
                     type="text"
                     value={props.noteTitle}
-                    onChange={() => { props.onTextInputChange() }}
+                    onChange={() => {
+                      props.onTextInputChange()
+                    }}
                     class="form-control"
                     id={"noteTitle" + props.targetNoteId}
                     placeholder="Enter Title">
@@ -151,12 +154,14 @@ export const NoteCreationRender = (props) => {
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary submit-term-request-modal-btn" onClick={props.submit}>Submit</button>
+              <button type="button" class="btn btn-secondary submit-term-request-modal-btn"
+                      onClick={props.submit}>Submit
+              </button>
             </div>
           </div>
         </div>
       </div>
     </>
   );
-
+  
 }

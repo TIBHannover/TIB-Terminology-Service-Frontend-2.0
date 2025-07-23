@@ -77,10 +77,10 @@ export const OntologyListFacet = (props) => {
               {!appContext.userSettings.userCollectionEnabled &&
                 <>
                   <div className='facet-switch-holder'>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch"
+                    <div className="form-switch">
+                      <input className="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch"
                              onChange={props.onSwitchChange}/>
-                      <label class="form-check-label" htmlFor="facet-switch">Intersection</label>
+                      <label className="form-check-label ms-2" htmlFor="facet-switch">Intersection</label>
                     </div>
                   </div>
                   <div>

@@ -1,134 +1,140 @@
 .header-collapseable-section {
-  transition: max-height 0.4s ease-out;
+    transition: max-height 0.4s ease-out;
 }
 
 .collpase-button-container {
-  padding-top: 0;
-  margin-top: -10px;
+    padding-top: 0;
+    margin-top: -10px;
 }
 
 .ontology-page-container {
-  width: 133%;
-  left: 50%;
-  margin-left: -17%;
+    width: 133%;
+    left: 50%;
+    margin-left: -17%;
 }
 
 .ontology-page-container .header-collapse-btn {
-  background-color: transparent;
-  color: black;
-  padding: 0px;
-  margin-bottom: 0;
-  border-right: 20px solid transparent;
-  border-top: 20px solid white;
-  border-left: 20px solid transparent;
-  cursor: pointer;
-  text-align: center;
+    background-color: transparent;
+    color: black;
+    padding: 0px;
+    margin-bottom: 0;
+    border-right: 20px solid transparent;
+    border-top: 20px solid white;
+    border-left: 20px solid transparent;
+    cursor: pointer;
+    text-align: center;
 }
 
 .ontology-page-container .header-collpase-icon {
-  font-size: 22px;
-  border: none;
-  position: relative;
-  top: -20px;
+    font-size: 22px;
+    border: none;
+    position: relative;
+    top: -20px;
 }
 
 .ontology-page-container .ont-info-bar {
-  background-color: white;
-  padding: 5px;
-  padding-bottom: 1px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  margin-top: -30px;
+    background-color: white;
+    padding: 5px;
+    padding-bottom: 1px;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    margin-top: -30px;
 }
 
 .ontology-page-container .ont-info-bar-title {
-  color: black;
-  font-weight: bold;
+    color: black;
+    font-weight: bold;
 }
 
 .ontology-page-container .ontology-detail-page-container,
 .ontology-page-container .tree-view-container {
-  background-color: white;
-  margin-top: 0px;
-  padding-top: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-left: -15px;
-  margin-right: -15px;
+    background-color: white;
+    margin-top: 0px;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 
 .ontology-detail-table,
 .ontology-metric-table {
-  border-collapse: collapse;
-  width: 92%;
+    border-collapse: collapse;
+    width: 92%;
 }
 
 .ontology-detail-table td,
 th {
-  border: 1px solid #dad2d2;
-  text-align: left;
-  padding: 8px;
+    border: 1px solid #dad2d2;
+    text-align: left;
+    padding: 8px;
 }
 
 .ontology-metric-table td,
 th {
-  border-bottom: 1px solid #dfe4e5;
-  text-align: left;
+    border-bottom: 1px solid #dfe4e5;
+    text-align: left;
 }
 
 .ontology-page-container .copy-link-btn {
-  margin-left: 20px;
-  font-size: 10px;
+    margin-left: 20px;
+    font-size: 10px;
 }
 
 .ontology-page-container .copy-link-icon-btn {
-  margin-left: 10px;
-  font-size: 10px;
-  background-color: white;
-  color: black;
-  border: none;
+    margin-left: 10px;
+    font-size: 10px;
+    background-color: white;
+    color: black;
+    border: none;
 }
 
 .ontology-page-container .download-ontology-btn {
-  margin-right: 20px;
-  background-color: #404040;
-  font-size: 14px;
+    margin-right: 20px;
+    background-color: #404040;
+    font-size: 14px;
 }
 
 .ontology-overview-table-id-column {
-  width: 280px;
+    width: 280px;
 }
 
 #annotation-heading {
-  border-top: solid 6px #dfe4e5;
+    border-top: solid 6px #dfe4e5;
 }
 
 .nav-tabs {
-  margin-left: -15px;
+    margin-left: -15px;
 }
 
 .nav-tabs-node {
-  margin-left: 0%;
+    margin-left: 0%;
 }
 
 .ontology-page-container .ontology-detail-navbar {
-  background-color: #ecf0f0;
-  border-radius: 25px;
-  margin-bottom: 20px;
+    background-color: #ecf0f0;
+    border-radius: 25px;
+    margin-bottom: 20px;
 }
 
 .ontology-detail-nav-item > .nav-link {
-  color: #0e6668;
+    color: #0e6668;
+    text-decoration: none;
+}
+
+.ontology-detail-nav-item > .nav-link:hover {
+    color: #0e6668;
 }
 
 .issue-report-btn {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .show-header-arrow-down {
-  margin-top: -45px !important;
+    margin-top: -45px !important;
 }
+
 #collectionSuggestionModalDialog {
-  max-width: 50% !important;
-  margin: auto !important;
+    max-width: 50% !important;
+    margin: auto !important;
 }

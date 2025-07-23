@@ -96,7 +96,7 @@ const Collections = () => {
             <div className='col-sm-12 collection-ontologies-text'>
               <b>Ontologies:</b>{collectionOntologies[collectionId] || ""}
               <Link
-                className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1 ml-0 "
+                className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 pl-1 pr-1 ms-0 "
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
                 onClick={() => {
                   Toolkit.selectSiteNavbarOption("Ontologies")
