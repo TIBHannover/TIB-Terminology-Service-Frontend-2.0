@@ -1,6 +1,4 @@
 import {Link} from "react-router-dom";
-import TIB_LOGO from "../../../assets/img/TIB_Logo_EN_WM_W.SVG";
-import DFG_LOGO from "../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_en.gif";
 
 const Footer = () => (
   <div className="row site-footer">
@@ -10,7 +8,8 @@ const Footer = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src={DFG_LOGO} alt="dfg-logo" className="footer-logo" loading="lazy"/>
+        <img src="/dfg_logo_schriftzug_weiss_foerderung_en.gif" alt="dfg-logo" className="footer-logo"
+             loading="lazy"/>
       </a>
     </div>
     <div className="col-sm-2">
@@ -84,7 +83,7 @@ const Footer = () => (
         rel="noopener noreferrer"
       >
         <img
-          src={TIB_LOGO}
+          src="/TIB_Logo_EN_WM_W.SVG"
           alt="Logo Technische Informationsbibliothek (TIB)"
           className="footer-logo"
           loading="lazy"
