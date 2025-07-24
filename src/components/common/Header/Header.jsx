@@ -7,12 +7,12 @@ function Header() {
   return (
     <>
       <div className='row header-wrapper header-collapseable-section'>
-        <div className='col-sm-10 site-header'>
-          <div className='row'>
-            <div className='col-sm-11 text-end'>
-              <UserPanel isModal={true}></UserPanel>
-            </div>
+        <div className='row'>
+          <div className='col-xl-11 text-end m-auto'>
+            <UserPanel isModal={true}></UserPanel>
           </div>
+        </div>
+        <div className='col-sm-10 site-header'>
           <div className='row site-header-nav-logo-holder'>
             <div className='col-lg-4 col-md-6'>
               {process.env.REACT_APP_PROJECT_ID === "general" &&

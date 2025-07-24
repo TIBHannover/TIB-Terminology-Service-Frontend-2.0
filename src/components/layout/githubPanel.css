@@ -1,27 +1,27 @@
-body .git-issue-card{
-    background-color: white;    
+body .git-issue-card {
+    background-color: white;
     padding: 10px;
     height: auto;
     text-align: justify;
-    border: 1px solid #7AABAC;    
+    border: 1px solid #7AABAC;
 }
 
-body .git-issue-title{
+body .git-issue-title {
     color: black;
-    font-weight: bold;    
-}
-
-body .git-issue-tag-link{
-    color: black;    
-}
-
-body .git-issue-tag-link:hover{
-    color: black;
-    cursor: pointer;
+    font-weight: bold;
     text-decoration: none;
 }
 
-body .git-issue-label-tag{
+body .git-issue-tag-link {
+    color: black;
+}
+
+body .git-issue-tag-link:hover {
+    color: black;
+    cursor: pointer;
+}
+
+body .git-issue-label-tag {
     display: inline;
     border-radius: 15px;
     padding: 5px;
@@ -29,28 +29,32 @@ body .git-issue-label-tag{
     margin-left: 10px;
 }
 
-body .close-mark-btn{
+body .git-issue-label-tag a, body .git-issue-label-tag a:hover {
+    text-decoration: none;
+}
+
+body .close-mark-btn {
     background-color: white;
 }
 
-body .close-term-request-modal-btn{
+body .close-term-request-modal-btn {
     background-color: red;
     float: left;
 }
 
-body .required_input::after{
+body .required_input::after {
     content: "*";
-    color: red;    
+    color: red;
 }
 
-body .rdw-editor-wrapper{
+body .rdw-editor-wrapper {
     border: 1px solid rgb(218, 216, 216);
     border-radius: 10px !important;
 }
 
-body .rdw-editor-main{
+body .rdw-editor-main {
     height: 400px;
-    padding: 10px ;
+    padding: 10px;
 }
 
 

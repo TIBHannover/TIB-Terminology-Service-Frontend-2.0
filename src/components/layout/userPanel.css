@@ -1,4 +1,18 @@
-.user-info-panel{
+.user-info-panel {
     background-color: white;
-    padding: 20px;    
+    padding: 20px;
+}
+
+body .user-panel-item {
+    text-decoration: none;
+    color: black;
+}
+
+body .user-panel-item:hover {
+    text-decoration: none !important;
+    color: black;
+}
+
+body.dropdown-item:hover {
+    text-decoration: none !important;
 }

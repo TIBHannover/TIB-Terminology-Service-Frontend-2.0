@@ -165,12 +165,12 @@ const RenderSearchForm = (props) => {
             <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders stour-searchbox-exactmatch'>
               <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match"
                      onClick={props.handleExactCheckboxClick}/>
-              <label className="form-check-label" htmlFor="exact-checkbox">Exact match</label>
+              <label className="form-check-label ms-2" htmlFor="exact-checkbox">Exact match</label>
             </div>
             <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders stour-searchbox-obsolete'>
               <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results"
                      onClick={props.handleObsoletesCheckboxClick}/>
-              <label className="form-check-label" htmlFor="obsoletes-checkbox">Obsolete terms</label>
+              <label className="form-check-label ms-2" htmlFor="obsoletes-checkbox">Obsolete terms</label>
             </div>
             {process.env.REACT_APP_ADVANCED_SEARCH === "true" &&
               <div className="col-lg-6 col-sm-4 adv-search-title-holder stour-searchbox-advanced">
