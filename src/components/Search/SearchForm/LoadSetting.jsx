@@ -8,6 +8,7 @@ import {deleteSearchSetting, storeUserSettings} from "../../../api/user";
 import {SearchSettingForm} from "./StoreSettings";
 import {updateSearchSettings} from "../../../api/user";
 import Toolkit from "../../../Libs/Toolkit";
+import Modal from 'react-bootstrap/Modal';
 
 
 const LoadSetting = (props) => {
@@ -23,6 +24,7 @@ const LoadSetting = (props) => {
   const [editTitleError, setEditTitleError] = useState(false);
   const [settingToEdit, setSettingToEdit] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
   
   
   function renderSettingsList() {
@@ -69,6 +71,7 @@ const LoadSetting = (props) => {
     let settingId = document.querySelector('.search-setting-checkbox:checked')?.dataset?.id;
     let setting = settingsList.find(setting => setting['id'] == settingId);
     loadFunc(setting);
+    setModalShow(false);
   }
   
   
@@ -135,6 +138,7 @@ const LoadSetting = (props) => {
     setDeleteSuccess(null);
     setEditSuccess(null);
     setEditTitleError(false);
+    setModalShow(true);
     fetchSearchSettings().then((settingsList) => {
       setSettingsList(Toolkit.sortListOfObjectsByKey(settingsList, 'created_at'));
       let userSettings = appContext.userSettings;
@@ -162,7 +166,7 @@ const LoadSetting = (props) => {
   if (!appContext.user) {
     const loginModalId = "loginModalLoadAdvSearchSetting";
     const loadBtn = <button type="button"
-                            class="btn btn-secondary ms-2"
+                            className="btn btn-secondary ms-2"
                             data-toggle="modal"
                             data-target={"#" + loginModalId}
                             data-backdrop="static"
@@ -188,103 +192,98 @@ const LoadSetting = (props) => {
       >
         My search settings
       </button>
-      <div className="modal fade" id={'SearchSettingListModal'} tabIndex="-1" role="dialog"
-           aria-labelledby={"SearchSettingListModalLabel"} aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              {!editMode && !deleteMode &&
-                <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"My search settings"}</h5>
+      <Modal show={modalShow} id={'SearchSettingListModal'}>
+        <Modal.Header>
+          {!editMode && !deleteMode &&
+            <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"My search settings"}</h5>
+          }
+          {deleteMode && !editMode &&
+            <h5 className="modal-title"
+                id={"SearchSettingListModalLabel"}>{"Delete: " + settingToDelete['title']}</h5>
+          }
+          {editMode && !deleteMode &&
+            <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"Edit: " + settingToEdit['title']}</h5>
+          }
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col-sm-12">
+              {!deleteMode && !editMode && renderSettingsList()}
+              {deleteMode && !editMode && deleteSuccess === null &&
+                <AlertBox
+                  type="danger"
+                  message="Are you sure you want to delete this setting? This action is irreversible."
+                  alertColumnclassName="col-sm-12"
+                />
               }
-              {deleteMode && !editMode &&
-                <h5 className="modal-title"
-                    id={"SearchSettingListModalLabel"}>{"Delete: " + settingToDelete['title']}</h5>
+              {deleteMode && !editMode && deleteSuccess === true &&
+                <AlertBox
+                  type="success"
+                  message="Setting deleted successfully."
+                  alertColumnclassName="col-sm-12"
+                />
               }
-              {editMode && !deleteMode &&
-                <h5 className="modal-title" id={"SearchSettingListModalLabel"}>{"Edit: " + settingToEdit['title']}</h5>
+              {deleteMode && !editMode && deleteSuccess === false &&
+                <AlertBox
+                  type="danger"
+                  message="Setting could not be deleted. Please try again later."
+                  alertColumnclassName="col-sm-12"
+                />
               }
-            </div>
-            <div className="modal-body">
-              <div className="row">
-                <div className="col-sm-12">
-                  {!deleteMode && !editMode && renderSettingsList()}
-                  {deleteMode && !editMode && deleteSuccess === null &&
-                    <AlertBox
-                      type="danger"
-                      message="Are you sure you want to delete this setting? This action is irreversible."
-                      alertColumnClass="col-sm-12"
-                    />
-                  }
-                  {deleteMode && !editMode && deleteSuccess === true &&
-                    <AlertBox
-                      type="success"
-                      message="Setting deleted successfully."
-                      alertColumnClass="col-sm-12"
-                    />
-                  }
-                  {deleteMode && !editMode && deleteSuccess === false &&
-                    <AlertBox
-                      type="danger"
-                      message="Setting could not be deleted. Please try again later."
-                      alertColumnClass="col-sm-12"
-                    />
-                  }
-                  {editMode && !deleteMode && editTitleError &&
-                    <AlertBox
-                      type="danger"
-                      message="Title already exists. Please choose a different title."
-                      alertColumnClass="col-sm-12"
-                    />
-                  }
-                  {editMode && !deleteMode && editSuccess === null &&
-                    <SearchSettingForm
-                      editMode={true}
-                      settingToEdit={settingToEdit}
-                    />
-                  }
-                  {editMode && !deleteMode && editSuccess === true &&
-                    <AlertBox
-                      type="success"
-                      message="Setting updated successfully."
-                      alertColumnClass="col-sm-12"
-                    />
-                  }
-                  {editMode && !deleteMode && editSuccess === false &&
-                    <AlertBox
-                      type="danger"
-                      message="Setting could not be updated. Please try again later."
-                      alertColumnClass="col-sm-12"
-                    />
-                  }
-                </div>
-              </div>
-              <br></br>
-            </div>
-            <div className="modal-footer">
-              <div className="col-auto mr-auto">
-                {!deleteMode && !editMode &&
-                  <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
-                          data-dismiss="modal">Close</button>
-                }
-                {(deleteMode || editMode) &&
-                  <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
-                          onClick={fetchSettingList}>Back</button>
-                }
-              </div>
-              {!deleteMode && !editMode &&
-                <button type="button" className="btn btn-secondary" onClick={loadSetting}
-                        data-dismiss="modal">Load</button>
+              {editMode && !deleteMode && editTitleError &&
+                <AlertBox
+                  type="danger"
+                  message="Title already exists. Please choose a different title."
+                  alertColumnclassName="col-sm-12"
+                />
               }
-              {deleteMode && !editMode &&
-                <button type="button" className="btn btn-secondary" onClick={deleteSetting}>Delete</button>
+              {editMode && !deleteMode && editSuccess === null &&
+                <SearchSettingForm
+                  editMode={true}
+                  settingToEdit={settingToEdit}
+                />
               }
-              {!deleteMode && editMode &&
-                <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>
+              {editMode && !deleteMode && editSuccess === true &&
+                <AlertBox
+                  type="success"
+                  message="Setting updated successfully."
+                  alertColumnclassName="col-sm-12"
+                />
+              }
+              {editMode && !deleteMode && editSuccess === false &&
+                <AlertBox
+                  type="danger"
+                  message="Setting could not be updated. Please try again later."
+                  alertColumnclassName="col-sm-12"
+                />
               }
             </div>
           </div>
-        </div>
-      </div>
+          <br></br>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="col-auto mr-auto">
+            {!deleteMode && !editMode &&
+              <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
+                      data-dismiss="modal" onClick={() => setModalShow(false)}>Close</button>
+            }
+            {(deleteMode || editMode) &&
+              <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
+                      onClick={fetchSettingList}>Back</button>
+            }
+          </div>
+          {!deleteMode && !editMode &&
+            <button type="button" className="btn btn-secondary" onClick={loadSetting}
+                    data-dismiss="modal">Load</button>
+          }
+          {deleteMode && !editMode &&
+            <button type="button" className="btn btn-secondary" onClick={deleteSetting}>Delete</button>
+          }
+          {!deleteMode && editMode &&
+            <button type="button" className="btn btn-secondary" onClick={updateTitleAndDescription}>Save</button>
+          }
+        </Modal.Footer>
+      </Modal>
     </>
   );
   

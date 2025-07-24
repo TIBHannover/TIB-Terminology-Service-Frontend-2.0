@@ -238,16 +238,6 @@ const AdvancedSearch = (props) => {
                       <h5>
                         Loaded: {loadedSettingName + (searchSettingIsModified ? " *" : "")}
                         <small>{searchSettingIsModified && "Setting is modified but not updated."}</small>
-                        {/* <StoreSearchSettings 
-                                                    editMode={true} 
-                                                    settings={{
-                                                        selectedMetaData,
-                                                        selectedSearchUnderTerms,
-                                                        selectedSearchUnderAllTerms
-                                                    
-                                                    }}                                                    
-                                                    setLoadedSettingName={setLoadedSettingName}
-                                                />                                                                                                 */}
                       </h5>
                     }
                   </div>

@@ -284,7 +284,7 @@ const OntologyPage = (props) => {
             }
             
             
-            {waiting && <i class="fa fa-circle-o-notch fa-spin"></i>}
+            {waiting && <i className="fa fa-circle-o-notch fa-spin"></i>}
           </div>
         </OntologyPageContext.Provider>
       </div>

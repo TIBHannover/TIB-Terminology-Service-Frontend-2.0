@@ -1,18 +1,18 @@
 import {useState, useEffect, useContext} from "react";
-import {buildNoteAboutPart, PinnModalBtn, PinnModal} from "./helpers";
+import {buildNoteAboutPart, PinnModal} from "./helpers";
 import {Link} from 'react-router-dom';
 import Auth from "../../../Libs/AuthLib";
-import {DeleteModal, DeleteModalBtn} from "../../common/DeleteModal/DeleteModal";
-import {ReportModalBtn, ReportModal} from "../../common/ReportModal/ReportModal";
+import {DeleteModal} from "../../common/DeleteModal/DeleteModal";
+import {ReportModal} from "../../common/ReportModal/ReportModal";
 import NoteEdit from "./NoteEdit";
 import {CopiedSuccessAlert} from "../../common/Alerts/Alerts";
 import {NoteContext} from "../../../context/NoteContext";
-import {AppContext} from "../../../context/AppContext";
 import {OntologyPageContext} from "../../../context/OntologyPageContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
 import {getTsPluginHeaders} from "../../../api/header";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 
 const VISIBILITY_HELP = {
@@ -40,7 +40,7 @@ export const NoteCard = (props) => {
     <div className="row" key={props.note['id']}>
       <div className="col-sm-12">
         <div className="card note-list-card stour-onto-note-list-card">
-          <div class="card-header">
+          <div className="card-header">
             <NoteCardHeader
               note={props.note}
             />
@@ -64,7 +64,7 @@ export const NoteCard = (props) => {
                 </small>
               </div>
               <div className="col-sm-1 text-right">
-                <i class="fa fa-comment" aria-hidden="true"><small>{props.note['comments_count']}</small></i>
+                <i className="fa fa-comment" aria-hidden="true"><small>{props.note['comments_count']}</small></i>
               </div>
             </div>
           </div>
@@ -81,6 +81,7 @@ export const NoteCardHeader = (props) => {
   */
   
   const ontologyPageContext = useContext(OntologyPageContext);
+  const noteContext = useContext(NoteContext);
   
   const noteUrlFactory = new NoteUrlFactory();
   
@@ -125,120 +126,81 @@ export const NoteCardHeader = (props) => {
       <div className="col-sm-3">
         <div className="row">
           <div className="col-sm-12 text-end note-header-container">
-            <NoteActionDropDown
-              note={note}
-              setLinkCopied={setLinkCopied}
-            />
+            <Dropdown>
+              <Dropdown.Toggle
+                className="btn btn-secondary note-dropdown-toggle btn-sm note-dropdown-btn borderless-btn"
+                type="button" id="dropdownMenu2">
+                <i className="fa fa-ellipsis-h"></i>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item className="note-dropdown-item">
+                  <div title={VISIBILITY_HELP[note['visibility']]} className="ps-2">
+                    <small><i className="fa fa-solid fa-eye ms-0 me-1 "></i>{note['visibility']}</small>
+                  </div>
+                </Dropdown.Item>
+                <Dropdown.Item className="note-dropdown-item">
+                  <button
+                    type="button"
+                    className="btn btn-sm note-action-menu-btn borderless-btn ms-0"
+                    onClick={() => {
+                      let noteLink = noteUrlFactory.getCurrentNoteLink({noteId: note['id'], fullLink: true});
+                      navigator.clipboard.writeText(noteLink);
+                      setLinkCopied(true);
+                      setTimeout(() => {
+                        setLinkCopied(false);
+                      }, 2000);
+                    }}
+                  >
+                    <i className="fa fa-solid fa-copy ms-0"></i> Link
+                  </button>
+                </Dropdown.Item>
+                <Dropdown.Item className="note-dropdown-item">
+                  <ReportModal
+                    modalId={note['id']}
+                    formData={reportFormData}
+                    callHeaders={getTsPluginHeaders({withAccessToken: true})}
+                    reportEndpoint={reportEndpoint}
+                    key={"reportNote" + note['id']}
+                  />
+                </Dropdown.Item>
+                {note['can_edit'] && !note['imported'] &&
+                  <>
+                    <div className="dropdown-divider"></div>
+                    <Dropdown.Item className="note-dropdown-item">
+                      <PinnModal
+                        note={note}
+                        modalId={note['id']}
+                        callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
+                        key={"pinnModal" + note['id']}
+                      />
+                    </Dropdown.Item>
+                    <Dropdown.Item className="note-dropdown-item">
+                      <NoteEdit
+                        note={note}
+                        key={"editNode" + note['id']}
+                      />
+                    </Dropdown.Item>
+                    <Dropdown.Item className="note-dropdown-item">
+                      <DeleteModal
+                        modalId={note['id']}
+                        formData={JSON.stringify(deleteFormData)}
+                        callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
+                        deleteEndpoint={deleteEndpoint}
+                        afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
+                        key={"deleteNode" + note['id']}
+                        method="DELETE"
+                      />
+                    </Dropdown.Item>
+                  </>
+                }
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
       </div>
-      <NoteEdit
-        note={note}
-        key={"editNode" + note['id']}
-      />
-      <DeleteModal
-        modalId={note['id']}
-        formData={JSON.stringify(deleteFormData)}
-        callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
-        deleteEndpoint={deleteEndpoint}
-        afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
-        key={"deleteNode" + note['id']}
-        method="DELETE"
-      />
-      <PinnModal
-        note={note}
-        modalId={note['id']}
-        callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
-        key={"pinnModal" + note['id']}
-      />
-      <ReportModal
-        modalId={note['id']}
-        formData={reportFormData}
-        callHeaders={getTsPluginHeaders({withAccessToken: true})}
-        reportEndpoint={reportEndpoint}
-        key={"reportNote" + note['id']}
-      />
       <Login isModal={true} customModalId="loginModalReport" withoutButton={true}/>
     </div>
   ];
-}
-
-
-const NoteActionDropDown = ({note, setLinkCopied}) => {
-  
-  const noteContext = useContext(NoteContext);
-  const appContext = useContext(AppContext);
-  
-  const noteUrlFactory = new NoteUrlFactory();
-  
-  return (
-    <div class="dropdown custom-dropdown">
-      <button class="btn btn-secondary note-dropdown-toggle dropdown-toggle btn-sm note-dropdown-btn borderless-btn"
-              type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-ellipsis-h"></i>
-      </button>
-      <div class="dropdown-menu note-dropdown-menu" aria-labelledby="dropdownMenu2">
-        <div class="dropdown-item note-dropdown-item" data-toggle="tooltip" data-placement="top"
-             title={VISIBILITY_HELP[note['visibility']]}>
-          <small><i class="fa fa-solid fa-eye"></i>{note['visibility']}</small>
-        </div>
-        <div class="dropdown-item note-dropdown-item">
-          <button
-            type="button"
-            class="btn btn-sm note-action-menu-btn borderless-btn"
-            onClick={() => {
-              let noteLink = noteUrlFactory.getCurrentNoteLink({noteId: note['id'], fullLink: true});
-              navigator.clipboard.writeText(noteLink);
-              setLinkCopied(true);
-              setTimeout(() => {
-                setLinkCopied(false);
-              }, 2000);
-            }}
-          >
-            <i class="fa fa-solid fa-copy"></i> Link
-          </button>
-        </div>
-        <div class="dropdown-item note-dropdown-item">
-          <ReportModalBtn
-            modalId={note['id']}
-            key={"reportBtnNote" + note['id']}
-          />
-        </div>
-        {note['can_edit'] && !note['imported'] &&
-          <span>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-item note-dropdown-item">
-              <PinnModalBtn
-                modalId={note['id']}
-                key={"pinBtnNode" + note['id']}
-                note={note}
-                isAdminForOntology={noteContext.isAdminForOntology}
-                numberOfpinned={noteContext.numberOfPinned}
-              />
-            </div>
-            <div class="dropdown-item note-dropdown-item">
-              <button type="button"
-                      class="btn btn-sm borderless-btn note-action-menu-btn"
-                      data-toggle="modal"
-                      data-target={"#edit-note-modal" + note['id']}
-                      data-backdrop="static"
-                      data-keyboard="false"
-                      key={"editNode" + note['id']}
-              >
-                Edit
-              </button>
-            </div>
-            <div class="dropdown-item note-dropdown-item">
-              <DeleteModalBtn
-                modalId={note['id']}
-                key={"deleteBtnNode" + note['id']}
-              />
-            </div>
-          </span>
-        }
-      </div>
-    </div>
-  );
 }
 
 

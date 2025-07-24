@@ -4,6 +4,7 @@ import {AppContext} from "../../../context/AppContext";
 import {storeUserSettings} from "../../../api/user";
 import Login from "../../User/Login/TS/Login";
 import AlertBox from "../../common/Alerts/Alerts";
+import Modal from 'react-bootstrap/Modal';
 
 
 const StoreUpdateSearchSetting = (props) => {
@@ -11,7 +12,7 @@ const StoreUpdateSearchSetting = (props) => {
   
   const appContext = useContext(AppContext);
   
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   
   
@@ -49,7 +50,7 @@ const StoreUpdateSearchSetting = (props) => {
       userSettings.activeSearchSettingIsModified = false;
       appContext.setUserSettings(userSettings);
       await storeUserSettings(userSettings);
-      closeModal();
+      setModalIsOpen(false);
     }
   }
   
@@ -69,17 +70,6 @@ const StoreUpdateSearchSetting = (props) => {
     setSearchSettingIsModified(false);
     await storeUserSettings(userSettings);
     return true;
-  }
-  
-  
-  function closeModal(newNoteId = true) {
-    let modalBackDrop = document.getElementsByClassName('modal-backdrop');
-    document.body.classList.remove('modal-open');
-    if (modalBackDrop.length === 1) {
-      modalBackDrop[0].remove();
-    }
-    setModalIsOpen(false);
-    ;
   }
   
   
@@ -118,39 +108,32 @@ const StoreUpdateSearchSetting = (props) => {
           Save
         </button>
       }
-      {modalIsOpen &&
-        <div className="modal fade" id={'storeSearchSettingModal'} tabIndex="-1" role="dialog"
-             aria-labelledby={"storeSearchSettingModalLabel"} aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id={"storeSearchSettingModalLabel"}>{"Store search settings"}</h5>
-              </div>
-              <div className="modal-body">
-                {showAlert &&
-                  <AlertBox
-                    type="danger"
-                    message="Setting name already exists."
-                  />
-                }
-                <SearchSettingForm
-                  editMode={false}
-                />
-              </div>
-              <div className="modal-footer">
-                <div className="col-auto mr-auto">
-                  <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
-                          data-dismiss="modal" onClick={() => {
-                    setModalIsOpen(false)
-                  }}>Close
-                  </button>
-                </div>
-                <button type="button" className="btn btn-secondary" onClick={store}>Save</button>
-              </div>
-            </div>
+      <Modal show={modalIsOpen} id={'storeSearchSettingModal'}>
+        <Modal.Header className="modal-header">
+          <h5 className="modal-title" id={"storeSearchSettingModalLabel"}>{"Store search settings"}</h5>
+        </Modal.Header>
+        <Modal.Body className="modal-body">
+          {showAlert &&
+            <AlertBox
+              type="danger"
+              message="Setting name already exists."
+            />
+          }
+          <SearchSettingForm
+            editMode={false}
+          />
+        </Modal.Body>
+        <Modal.Footer className="modal-footer">
+          <div className="col-auto mr-auto">
+            <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
+                    data-dismiss="modal" onClick={() => {
+              setModalIsOpen(false)
+            }}>Close
+            </button>
           </div>
-        </div>
-      }
+          <button type="button" className="btn btn-secondary" onClick={store}>Save</button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
   

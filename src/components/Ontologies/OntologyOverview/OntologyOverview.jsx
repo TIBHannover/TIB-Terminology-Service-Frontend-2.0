@@ -1,34 +1,33 @@
 import OntologyInfoTable from './widgets/OntologyInfo';
 import OntologyStatsBox from './widgets/stats';
-import { useContext } from 'react';
-import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import {useContext, useState} from 'react';
+import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import CollectionSuggestion from './widgets/CollectionSuggestion';
-
-
 
 
 const OntologyOverview = () => {
   /*
     This component is responsible for rendering the overview page of an ontology.
   */
-
+  
   const ontologyPageContext = useContext(OntologyPageContext);
-
+  
+  const [showCollectionSuggestionModal, setShowCollectionSuggestionModal] = useState(false);
+  
   let ontoPageHeader = document.getElementById('ontology-page-header');
   if (ontoPageHeader) {
     ontoPageHeader.scrollIntoView();
   }
-
-
-
+  
+  
   return (
     <>
       <div key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
         <div className='col-sm-9 '>
-          <OntologyInfoTable />
+          <OntologyInfoTable/>
         </div>
         <div className='col-sm-3'>
-          <OntologyStatsBox />
+          <OntologyStatsBox/>
           <br></br>
           <div className='row'>
             <div className='col-sm-12'>
@@ -42,16 +41,14 @@ const OntologyOverview = () => {
               </a>
             </div>
           </div>
-          <br />
+          <br/>
           {process.env.REACT_APP_PROJECT_ID === "general" && process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true" &&
             <div className='row'>
               <div className='col-sm-12'>
                 <button
                   type="button"
                   className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
-                  data-toggle="modal"
-                  data-target={"#collectionSuggestionModal"}
-                  data-backdrop="static"
+                  onClick={() => setShowCollectionSuggestionModal(true)}
                 >
                   Add to Collection
                 </button>
@@ -60,10 +57,13 @@ const OntologyOverview = () => {
           }
         </div>
       </div>
-      <CollectionSuggestion />
+      <CollectionSuggestion
+        showModal={showCollectionSuggestionModal}
+        setShowModal={setShowCollectionSuggestionModal}
+      />
     </>
   );
-
+  
 }
 
 export default OntologyOverview;
