@@ -37,6 +37,7 @@ const TermRequest = (props) => {
   const [issueTemplates, setIssueTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(0);
   const [issueTitle, setIssueTitle] = useState("");
+  const [loginModal, setLoginModal] = useState(false);
   
   
   function onTextAreaChange(newEditorState) {
@@ -154,6 +155,11 @@ const TermRequest = (props) => {
   
   
   function openModal() {
+    if (!appContext.user) {
+      setLoginModal(true);
+      setTimeout(() => setLoginModal(false), 1000);
+      return;
+    }
     setModalIsOpen(true);
     if (props.reportType === "general" && localStorage.getItem('authProvider') === 'github') {
       loadTemplates();
@@ -191,18 +197,6 @@ const TermRequest = (props) => {
     return "";
   }
   
-  if (!appContext.user) {
-    const loginModalId = "loginModal" + props.reportType;
-    const loginBtn = <button type="button"
-                             className={"btn btn-secondary issue-report-btn " + (props.reportType === "termRequest" ? "stour-github-issue-open-btn-termRequest" : "stour-github-issue-open-btn-general")}
-    >
-      File {props.reportType === "termRequest" ? "a Term Request" : "a General Issue"}
-    </button>
-    return (
-      <Login isModal={true} customLoginBtn={loginBtn} customModalId={loginModalId}/>
-    );
-  }
-  
   if (appContext.user && localStorage.getItem('authProvider') !== 'github') {
     return "";
   }
@@ -215,7 +209,7 @@ const TermRequest = (props) => {
       >
         {props.reportType === "termRequest" ? "File a Term Request" : "File a General Issue "}
       </button>
-      
+      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
       <Modal show={modalIsOpen} fullscreen={true} id={props.reportType + "_issue_modal"}>
         <Modal.Header className="row">
           <div className="row">

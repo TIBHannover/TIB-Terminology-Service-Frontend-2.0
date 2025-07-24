@@ -152,25 +152,6 @@ const NoteCreation = (props) => {
   if (process.env.REACT_APP_NOTE_FEATURE !== "true") {
     return null;
   }
-  if (!appContext.user) {
-    const loginModalId = "loginModalAddNote";
-    const addNoteBtn = <div className="row float-right">
-      <div className="col-sm-12">
-        <button type="button"
-                className="btn btn-secondary stour-onto-note-add-btn"
-                data-toggle="modal"
-                data-target={"#" + loginModalId}
-                data-backdrop="static"
-                data-keyboard="false"
-        >
-          Add Note
-        </button>
-      </div>
-    </div>
-    return (
-      <Login isModal={true} customLoginBtn={addNoteBtn} customModalId={loginModalId}/>
-    );
-  }
   
   return (
     <NoteCreationRender

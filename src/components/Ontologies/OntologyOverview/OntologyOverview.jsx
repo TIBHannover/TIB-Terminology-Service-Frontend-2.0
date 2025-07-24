@@ -3,6 +3,8 @@ import OntologyStatsBox from './widgets/stats';
 import {useContext, useState} from 'react';
 import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import CollectionSuggestion from './widgets/CollectionSuggestion';
+import Login from "../../User/Login/TS/Login";
+import {AppContext} from "../../../context/AppContext";
 
 
 const OntologyOverview = () => {
@@ -11,8 +13,10 @@ const OntologyOverview = () => {
   */
   
   const ontologyPageContext = useContext(OntologyPageContext);
+  const appContext = useContext(AppContext);
   
   const [showCollectionSuggestionModal, setShowCollectionSuggestionModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
   
   let ontoPageHeader = document.getElementById('ontology-page-header');
   if (ontoPageHeader) {
@@ -48,7 +52,14 @@ const OntologyOverview = () => {
                 <button
                   type="button"
                   className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
-                  onClick={() => setShowCollectionSuggestionModal(true)}
+                  onClick={() => {
+                    if (appContext.user) {
+                      setShowCollectionSuggestionModal(true);
+                    } else {
+                      setLoginModal(true);
+                      setTimeout(() => setLoginModal(false), 1000);
+                    }
+                  }}
                 >
                   Add to Collection
                 </button>
@@ -61,6 +72,7 @@ const OntologyOverview = () => {
         showModal={showCollectionSuggestionModal}
         setShowModal={setShowCollectionSuggestionModal}
       />
+      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
     </>
   );
   

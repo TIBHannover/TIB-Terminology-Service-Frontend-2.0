@@ -25,6 +25,7 @@ const LoadSetting = (props) => {
   const [settingToEdit, setSettingToEdit] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
   
   
   function renderSettingsList() {
@@ -133,6 +134,11 @@ const LoadSetting = (props) => {
   
   
   function fetchSettingList() {
+    if (!appContext.user) {
+      setLoginModal(true);
+      setTimeout(() => setLoginModal(false), 1000);
+      return;
+    }
     setDeleteMode(false);
     setEditMode(false);
     setDeleteSuccess(null);
@@ -163,23 +169,6 @@ const LoadSetting = (props) => {
   }, [editMode, deleteMode]);
   
   
-  if (!appContext.user) {
-    const loginModalId = "loginModalLoadAdvSearchSetting";
-    const loadBtn = <button type="button"
-                            className="btn btn-secondary ms-2"
-                            data-toggle="modal"
-                            data-target={"#" + loginModalId}
-                            data-backdrop="static"
-                            data-keyboard="false"
-    >
-      My search settings
-    </button>;
-    return (
-      <Login isModal={true} customLoginBtn={loadBtn} customModalId={loginModalId}/>
-    );
-  }
-  
-  
   return (
     <>
       <button
@@ -192,6 +181,7 @@ const LoadSetting = (props) => {
       >
         My search settings
       </button>
+      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
       <Modal show={modalShow} id={'SearchSettingListModal'}>
         <Modal.Header>
           {!editMode && !deleteMode &&

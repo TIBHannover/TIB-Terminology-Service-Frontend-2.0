@@ -14,6 +14,7 @@ const StoreUpdateSearchSetting = (props) => {
   
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
   
   
   function returnSettingTitleIfValid() {
@@ -72,23 +73,6 @@ const StoreUpdateSearchSetting = (props) => {
     return true;
   }
   
-  
-  if (!appContext.user) {
-    const loginModalId = "loginModalSaveAdvSearchSetting";
-    const saveBtn = <button type="button"
-                            className="btn btn-secondary ms-2"
-                            data-toggle="modal"
-                            data-target={"#" + loginModalId}
-                            data-backdrop="static"
-                            data-keyboard="false"
-    >
-      Save
-    </button>;
-    return (
-      <Login isModal={true} customLoginBtn={saveBtn} customModalId={loginModalId}/>
-    );
-  }
-  
   return (
     <>
       {appContext.userSettings.activeSearchSetting.setting !== undefined &&
@@ -102,12 +86,18 @@ const StoreUpdateSearchSetting = (props) => {
           data-target={"#storeSearchSettingModal"}
           data-backdrop="static"
           onClick={() => {
+            if (!appContext.user) {
+              setLoginModal(true);
+              setTimeout(() => setLoginModal(false), 1000);
+              return;
+            }
             setModalIsOpen(true)
           }}
         >
           Save
         </button>
       }
+      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
       <Modal show={modalIsOpen} id={'storeSearchSettingModal'}>
         <Modal.Header className="modal-header">
           <h5 className="modal-title" id={"storeSearchSettingModalLabel"}>{"Store search settings"}</h5>

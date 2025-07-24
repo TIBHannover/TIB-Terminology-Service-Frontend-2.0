@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 
 const Login = (props) => {
@@ -62,6 +62,13 @@ const Login = (props) => {
     return <button className="login-btn-header btn-secondary" onClick={() => setShowModal(true)}>Login</button>;
   }
   
+  useEffect(() => {
+    if (!props.showModal) {
+      return;
+    }
+    setShowModal(props.showModal);
+  }, [props.showModal])
+  
   
   if (process.env.REACT_APP_AUTH_FEATURE !== "true") {
     return null;
@@ -86,7 +93,7 @@ const Login = (props) => {
                   </div>
                 </Modal.Header>
                 <Modal.Body>
-                  {(props.customLoginBtn || props.withoutButton) &&
+                  {(props.customLoginBtn || props.withoutButton || props.showModal) &&
                     <>
                       <div className="row">
                         <div className="col-sm-12">
