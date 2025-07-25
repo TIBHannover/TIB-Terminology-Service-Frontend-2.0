@@ -87,7 +87,7 @@
     }
 
     body .search-overlay-box {
-        width: 96%;
+        width: 49%;
     }
 
     .graph-container {
@@ -202,7 +202,7 @@
     }
 
     body .search-overlay-box {
-        width: 95%;
+        width: 49%;
     }
 
     .graph-container {
@@ -304,7 +304,7 @@
     }
 
     body .search-overlay-box {
-        width: 93%;
+        width: 48%;
     }
 
     .jumpto-badge-onto {
@@ -378,12 +378,16 @@
     }
 
     body .search-overlay-box {
-        width: 93%;
+        width: 60%;
     }
 }
 
 @media only screen and (max-width: 600px) {
     body .user-profile-dropdown {
         margin-right: 0px;
+    }
+
+    body .search-overlay-box {
+        width: 92%;
     }
 }

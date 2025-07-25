@@ -1,8 +1,9 @@
 .search-overlay-box {
     position: absolute;
-    width: 97%;
-    margin: auto;
-    z-index: 2147483647;
+    width: 49%;
+    z-index: 5;
+    padding-left: 10px;
+    padding-right: 3px;
 }
 
 #autocomplete-container {
