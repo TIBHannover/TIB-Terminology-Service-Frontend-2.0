@@ -21,7 +21,7 @@ function Header() {
                   <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>TERMINOLOGY SERVICE</a>
                 </span>
               }
-              {process.env.REACT_APP_PROJECT_ID !== "nfdi4chem" &&
+              {process.env.REACT_APP_PROJECT_ID !== "nfdi4chem" && process.env.REACT_APP_PROJECT_ID !== "general" &&
                 <span>
                   <img src="/site_logo.png" alt="site_logo" className='site-logo-image' loading="lazy"/>
                   <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>TERMINOLOGY SERVICE</a>
