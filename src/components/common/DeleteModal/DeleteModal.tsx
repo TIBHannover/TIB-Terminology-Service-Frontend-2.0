@@ -80,7 +80,7 @@ export const DeleteModal = (props: DeleteModalProps) => {
 
 
     return (
-        <div>
+        <>
             <DeleteModalBtn setShowModal={setShowModal} btnText={props.btnText} btnClass={props.btnClass}/>
             <Modal show={showModal} id={"deleteModal" + modalId}>
                 <Modal.Header className="row">
@@ -126,7 +126,7 @@ export const DeleteModal = (props: DeleteModalProps) => {
                                          onClick={redirectAfterDelete}>Close</button>}
                 </Modal.Footer>
             </Modal>
-        </div>
+        </>
     );
 }
 

@@ -103,17 +103,6 @@ const UserCollection = () => {
             exstingCollectionList={collections}
             ontologiesListForSelection={ontologiesListForSelection}
           />
-          <DeleteModalBtn
-            modalId={collection['id']}
-            key={"deleteBtnUserCollection" + collection['id']}
-            btnText={<i className="fa fa-close fa-borderless"></i>}
-            btnClass="extra-sm-btn ms-2"
-          />
-          <p>
-            {collection['description'] &&
-              <small>{collection['description']}</small>
-            }
-          </p>
           <DeleteModal
             modalId={collection['id']}
             callHeaders={callHeader}
@@ -123,7 +112,14 @@ const UserCollection = () => {
             afterDeleteProcess={disableTheDeletedCollection}
             objectToDelete={collection}
             method="DELETE"
+            btnText={<i className="fa fa-close fa-borderless"></i>}
+            btnClass="extra-sm-btn ms-2"
           />
+          <p>
+            {collection['description'] &&
+              <small>{collection['description']}</small>
+            }
+          </p>
         </>
       );
     }
