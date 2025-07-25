@@ -17,6 +17,7 @@ import SiteTour from './tours/Tour';
 import {olsIsUp} from './api/system';
 import {useQuery} from '@tanstack/react-query';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
