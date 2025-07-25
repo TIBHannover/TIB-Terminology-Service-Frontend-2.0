@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 export function renderDocumentation() {
   let content = [
     <div>
@@ -37,28 +39,32 @@ export function renderDocumentation() {
         research data
         artifacts - thereby making research (meta)data more findable and interoperable. The REST API interface of the
         TIB Central
-        Terminology Service starts with <b><a
-        href="https://api.terminology.tib.eu/api/">https://api.terminology.tib.eu/api/</a></b>.
+        Terminology Service starts with
+        <b><a href="https://api.terminology.tib.eu/api/" rel="nofollow noreferrer"
+              target="_blank"> https://api.terminology.tib.eu/api/</a></b>.
         This API enables to query all the terminologies of various research communities maintained by TIB. The
         methodology on how
-        to use this interface is explained in the <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html">Swagger
-        Documentation</a></b> in detail.
+        to use this interface is explained in the
+        <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html"
+              rel="nofollow noreferrer" target="_blank"> Swagger
+          Documentation</a></b> in detail.
         The underlying models can also be viewed through this documentation for a deeper understanding of the API
         commands. Besides,
         it is possible to execute the publicly available API commands from
-        the <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html">Swagger Documentation</a></b>
+        the <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html" rel="nofollow noreferrer" target="_blank">Swagger
+        Documentation</a></b>
       </p>
       <br/>
       <h3>Report an Issue</h3>
       <p>
         For feedback, enquiries or suggestion about TIB Terminology Service:
-        <b><a className="btn-secondary btn btn-sm ms-1 pt-0 pb-0 pl-1 pr-1"
-              href={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>Contact us</a></b>
+        <b><Link className="btn-secondary btn btn-sm ms-1 pt-0 pb-0 pl-1 pr-1"
+                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>Contact us</Link></b>
       </p>
       <p>
         To request a new terminology:
-        <b><a className="btn-secondary btn btn-sm pt-0 pb-0 pl-1 pr-1 me-1 ms-1"
-              href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>Ontology suggestion</a></b>
+        <b><Link className="btn-secondary btn btn-sm pt-0 pb-0 pl-1 pr-1 me-1 ms-1"
+                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>Ontology suggestion</Link></b>
         (requires sign-in)
       </p>
     </div>
