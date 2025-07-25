@@ -1,4 +1,4 @@
-import Navbar from '../Navbar/Navbar';
+import SiteNavbar from '../Navbar/Navbar';
 import SearchForm from '../../Search/SearchForm/SearchForm';
 import UserPanel from '../../User/Login/UserPanel';
 
@@ -28,7 +28,7 @@ function Header() {
                 </span>
               }
             </div>
-            <Navbar/>
+            <SiteNavbar/>
           </div>
           <SearchForm/>
         </div>

@@ -122,6 +122,7 @@
 
     body .navbar-item {
         float: right;
+        font-size: 13px;
     }
 
     body .navbar-nav {
@@ -184,10 +185,9 @@
         font-size: 11px;
     }
 
-    body .user-profile-dropdown {
-        margin-right: -150px;
-    }
-
+    /*body .user-profile-dropdown {*/
+    /*    !*margin-right: -150px;*!*/
+    /*}*/
     body .react-autosuggest__input,
     body .react-autosuggest__suggestions-container--open {
         width: 90%;
