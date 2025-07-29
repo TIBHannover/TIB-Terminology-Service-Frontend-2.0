@@ -1,7 +1,5 @@
 import Modal from "react-bootstrap/Modal";
 import {useState, useEffect} from "react";
-import "../../../../assets/fontawesome/css/brands.min.css";
-import "../../../../assets/fontawesome/css/all.min.css";
 
 
 const Login = (props) => {

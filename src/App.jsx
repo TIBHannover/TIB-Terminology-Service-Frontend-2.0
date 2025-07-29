@@ -18,7 +18,7 @@ import {olsIsUp} from './api/system';
 import {useQuery} from '@tanstack/react-query';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
-import '../src/assets/fontawesome/css/all.min.css';
+// import '../public/fontawesome/css/all.min.css';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
