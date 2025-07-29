@@ -176,7 +176,7 @@ const SearchResult = (props) => {
           
           </div>
           <div className="col-sm-2 float-right">
-            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]} btnClass="action-btn"/>
+            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]} btnClass="btn-sm action-btn"/>
           </div>
         </div>
       );
