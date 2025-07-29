@@ -1,14 +1,13 @@
-import { useEffect, useState, useContext } from "react";
+import {useEffect, useState, useContext} from "react";
 import DropDown from "../../../common/DropDown/DropDown";
 import Pagination from "../../../common/Pagination/Pagination";
 import NoteDetail from "../NoteDetail";
 import NoteCreation from "../NoteCreation";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import AlertBox from "../../../common/Alerts/Alerts";
 import NoteCard from "../NoteCard";
-import { NoteContext } from "../../../../context/NoteContext";
+import {NoteContext} from "../../../../context/NoteContext";
 import NoteUrlFactory from "../../../../UrlFactory/NoteUrlFactory";
-
 
 
 const ALL_TYPE = 0
@@ -17,35 +16,33 @@ const CLASS_TYPE = 2
 const PROPERTY_TYPE = 3
 const INDIVIDUAL_TYPE = 4
 const COMPONENT_TYPES_FOR_DROPDOWN = [
-  { label: "All", value: ALL_TYPE },
-  { label: "Ontology", value: ONTOLOGY_TYPE },
-  { label: "Class", value: CLASS_TYPE },
-  { label: "Property", value: PROPERTY_TYPE },
-  { label: "Individual", value: INDIVIDUAL_TYPE }
+  {label: "All", value: ALL_TYPE},
+  {label: "Ontology", value: ONTOLOGY_TYPE},
+  {label: "Class", value: CLASS_TYPE},
+  {label: "Property", value: PROPERTY_TYPE},
+  {label: "Individual", value: INDIVIDUAL_TYPE}
 ];
 
 
-
-
 export const NoteListRender = (props) => {
-
+  
   const noteContext = useContext(NoteContext);
-
+  
   const [renderContent, setRenderContent] = useState("");
-
+  
   const noteUrlFactory = new NoteUrlFactory();
-
-
+  
+  
   function createNotesList() {
     let notes = props.notesList;
     let noteExist = true;
     let result = [];
     for (let note of notes) {
       result.push(
-        <NoteCard note={note} />
+        <NoteCard note={note}/>
       );
     }
-
+    
     if (result.length === 0) {
       noteExist = false
       result = [
@@ -53,42 +50,41 @@ export const NoteListRender = (props) => {
           <br></br>
           <AlertBox
             type="info"
-            alertColumnClass="col-sm-12"
+            alertColumnclassName="col-sm-12"
             message="This Ontology does not have any note yet."
           />
         </span>
       ];
     }
-
+    
     setRenderContent(result);
     props.setNoteExistState(noteExist);
   }
-
-
+  
+  
   useEffect(() => {
     createNotesList();
   }, [props.notesList]);
-
-
-
+  
+  
   return (
     <div className="tree-view-container list-container">
       {props.noteSubmited && props.noteSubmitSeccuess &&
         <AlertBox
           type="success"
           message="Your Note is submitted successfully! "
-          alertColumnClass="col-sm-12"
+          alertColumnclassName="col-sm-12"
         />
       }
       {props.noteSubmited && !props.noteSubmitSeccuess &&
         <AlertBox
           type="danger"
           message="Something went wrong. Please try again!"
-          alertColumnClass="col-sm-12"
+          alertColumnclassName="col-sm-12"
         />
       }
       {!props.noteDetailPage && !props.componentIsLoading &&
-        <div className="row">
+        <div className="row pe-3 ps-3">
           <div className="col-sm-12">
             <div className="row">
               <div className="col-sm-3 stour-onto-note-type-filter">
@@ -103,15 +99,15 @@ export const NoteListRender = (props) => {
                 }
               </div>
               <div className="col-sm-4 pt-2 stour-onto-note-import-from-parent">
-                <div class="form-group form-check">
+                <div className="form-group form-check">
                   <input
                     type="checkbox"
-                    class="form-check-input"
+                    className="form-check-input"
                     id="note_list_sho_imported_notes_checkbox"
                     checked={props.onlyOntologyOriginalNotes}
                     onChange={props.handleOntologyOriginalNotesCheckbox}
                   />
-                  <label class="form-check-label" htmlFor="note_list_sho_imported_notes_checkbox">
+                  <label className="form-check-label" htmlFor="note_list_sho_imported_notes_checkbox">
                     Without Imported Notes.
                   </label>
                 </div>
@@ -126,7 +122,7 @@ export const NoteListRender = (props) => {
                 }
               </div>
               <div className="col-sm-2">
-                <NoteCreation key={"note-creation-btn"} />
+                <NoteCreation key={"note-creation-btn"}/>
               </div>
             </div>
             <div className="row">
@@ -153,10 +149,10 @@ export const NoteListRender = (props) => {
             </div>
           </div>
           <br></br>
-          <NoteDetail />
+          <NoteDetail/>
         </span>
       }
     </div>
   );
-
+  
 }

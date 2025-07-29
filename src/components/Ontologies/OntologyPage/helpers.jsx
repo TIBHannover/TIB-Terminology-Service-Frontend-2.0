@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
-import { OntologyPageContext } from '../../../context/OntologyPageContext';
-import { useContext } from 'react';
+import {Link} from 'react-router-dom';
+import {OntologyPageContext} from '../../../context/OntologyPageContext';
+import {useContext} from 'react';
 import DropDown from '../../common/DropDown/DropDown';
-import { Lang } from '../../../UrlFactory/UrlParamNames';
-
+import {Lang} from '../../../UrlFactory/UrlParamNames';
 
 
 export const OntologyPageTabs = (props) => {
@@ -11,7 +10,7 @@ export const OntologyPageTabs = (props) => {
       Renders tabs for the Ontology page.
       The tab metadata comes from listOfComponentsAsTabs.json
   */
-
+  
   const ontologyPageContext = useContext(OntologyPageContext);
   let result = [];
   for (let configItemKey in props.tabMetadataJson) {
@@ -23,7 +22,8 @@ export const OntologyPageTabs = (props) => {
       continue;
     }
     result.push(
-      <li className={"nav-item ontology-detail-nav-item " + "stour-" + configObject['id']} key={configObject['keyForRenderAsTabItem']}>
+      <li className={"nav-item ontology-detail-nav-item " + "stour-" + configObject['id']}
+          key={configObject['keyForRenderAsTabItem']}>
         <Link
           onClick={props.tabChangeHandler}
           data-value={configObject['tabId']}
@@ -36,33 +36,37 @@ export const OntologyPageTabs = (props) => {
       </li>
     );
   }
-
+  
   let langOptions = [];
   for (let lang of ontologyPageContext.ontology.language) {
-    let temp = { "label": lang, "value": lang };
+    let temp = {"label": lang, "value": lang};
     langOptions.push(temp);
   }
   return (
     <>
-      <ul className="nav nav-tabs">
-        {result}
-        <form class="ml-auto">
-          <DropDown
-            options={langOptions}
-            dropDownId="onto-language"
-            dropDownTitle="Ontology language"
-            dropDownChangeHandler={(e) => {
-              ontologyPageContext.setOntoLang(e.target.value);
-            }}
-            defaultValue={ontologyPageContext.ontoLang}
-          />
-        </form>
-      </ul>
+      <div className="row">
+        <div className="col-10">
+          <ul className="nav nav-tabs">
+            {result}
+          </ul>
+        </div>
+        <div className="col-2">
+          <form className="ms-auto text-end">
+            <DropDown
+              options={langOptions}
+              dropDownId="onto-language"
+              dropDownTitle="Ontology language"
+              dropDownChangeHandler={(e) => {
+                ontologyPageContext.setOntoLang(e.target.value);
+              }}
+              defaultValue={ontologyPageContext.ontoLang}
+            />
+          </form>
+        </div>
+      </div>
     </>
   );
 }
-
-
 
 
 export const OntologyPageHeadSection = () => {
@@ -88,7 +92,9 @@ export const OntologyPageHeadSection = () => {
       </div>
       <div className='row collpase-button-container justify-content-md-center'>
         <div className='col-sm-1'>
-          <div className='header-collapse-btn' onClick={() => { collpaseSiteHeader() }}>
+          <div className='header-collapse-btn' onClick={() => {
+            collpaseSiteHeader()
+          }}>
             <i className='fa fa-angle-double-up header-collpase-icon'></i>
           </div>
         </div>
@@ -111,8 +117,7 @@ function collpaseSiteHeader() {
     collapseIcone.classList.remove('fa-angle-double-up');
     collapseIcone.classList.add('fa-angle-double-down');
     collapseIconContainer.classList.add('show-header-arrow-down');
-  }
-  else {
+  } else {
     siteHeader.classList.remove('hidden-header');
     ontologyBannerContainer.classList.remove('hidden-header');
     siteHeader.classList.add('visible-header');
@@ -121,5 +126,5 @@ function collpaseSiteHeader() {
     collapseIcone.classList.remove('fa-angle-double-down');
     collapseIconContainer.classList.remove('show-header-arrow-down');
   }
-
+  
 }

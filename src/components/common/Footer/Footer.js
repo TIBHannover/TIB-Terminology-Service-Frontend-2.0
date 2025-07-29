@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom";
-import TIB_LOGO from "../../../assets/img/TIB_Logo_EN_WM_W.SVG";
-import DFG_LOGO from "../../../assets/img/dfg_logo_schriftzug_weiss_foerderung_en.gif";
+import {Link} from "react-router-dom";
 
 const Footer = () => (
   <div className="row site-footer">
@@ -10,12 +8,13 @@ const Footer = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src={DFG_LOGO} alt="" className="footer-logo" />
+        <img src="/dfg_logo_schriftzug_weiss_foerderung_en.gif" alt="dfg-logo" className="footer-logo"
+             loading="lazy"/>
       </a>
     </div>
     <div className="col-sm-2">
-      <h6>ABOUT</h6>
-      <hr className="me-5" />
+      <p>ABOUT</p>
+      <hr className="me-5"/>
       <ul className="footer-list">
         <li>
           <Link
@@ -44,8 +43,8 @@ const Footer = () => (
       </ul>
     </div>
     <div className="col-sm-2">
-      <h6>RESOURCES</h6>
-      <hr className="me-5" />
+      <p>RESOURCES</p>
+      <hr className="me-5"/>
       <ul className="footer-list">
         <li>
           <Link
@@ -76,17 +75,18 @@ const Footer = () => (
       </ul>
     </div>
     <div className="col-sm-4">
-      <h6>PROVIDED BY</h6>
-      <hr className="me-5" />
+      <p>PROVIDED BY</p>
+      <hr className="me-5"/>
       <a
         href="https://www.tib.eu/en/"
         target="_blank"
         rel="noopener noreferrer"
       >
         <img
-          src={TIB_LOGO}
+          src="/TIB_Logo_EN_WM_W.SVG"
           alt="Logo Technische Informationsbibliothek (TIB)"
           className="footer-logo"
+          loading="lazy"
         />
       </a>
     </div>

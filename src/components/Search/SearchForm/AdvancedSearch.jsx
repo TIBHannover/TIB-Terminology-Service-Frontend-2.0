@@ -1,22 +1,20 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
 import Multiselect from 'multiselect-react-dropdown';
-import { getJumpToResult } from '../../../api/search';
+import {getJumpToResult} from '../../../api/search';
 import SearchLib from '../../../Libs/searchLib';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
-import { AppContext } from '../../../context/AppContext';
+import {AppContext} from '../../../context/AppContext';
 import StoreUpdateSearchSetting from './StoreSettings';
 import LoadSetting from './LoadSetting';
-import { storeUserSettings } from '../../../api/user';
-
-
+import {storeUserSettings} from '../../../api/user';
 
 
 const AdvancedSearch = (props) => {
-
+  
   const appContext = useContext(AppContext);
-
+  
   const [selectedMetaData, setSelectedMetaData] = useState(SearchLib.getSearchInMetadataFieldsFromUrl());
   const [selectedSearchUnderTerms, setSelectedSearchUnderTerms] = useState(SearchLib.getSearchUnderTermsFromUrl());
   const [selectedSearchUnderAllTerms, setSelectedSearchUnderAllTerms] = useState(SearchLib.getSearchUnderAllTermsFromUrl());
@@ -25,22 +23,21 @@ const AdvancedSearch = (props) => {
   const [placeHolderExtraText, setPlaceHolderExtraText] = useState(createOntologyListForPlaceholder([]));
   const [loadedSettingName, setLoadedSettingName] = useState(false);
   const [searchSettingIsModified, setSearchSettingIsModified] = useState(false);
-
+  
   const searchUrlFactory = new SearchUrlFactory();
-
+  
   const searchInMetaDataOptions = ['label', 'description', 'synonym', 'short_form', 'obo_id', 'annotations', 'iri'];
-
+  
   // The check to see whether we are on an ontology page or not.
   const ontologyPageId = OntologyLib.getCurrentOntologyIdFromUrlPath();
-
+  
   const ontologyIdsInUrl = SearchLib.getFilterAndAdvancedOntologyIdsFromUrl();
-
+  
   const searchUnderRef = useRef(null);
   const searchUnderAllRef = useRef(null);
   const searchInMetadataSelectRef = useRef(null);
-
-
-
+  
+  
   async function loadTermsForSelection(query) {
     setLoadingResult(true);
     if (query === "") {
@@ -71,40 +68,48 @@ const AdvancedSearch = (props) => {
     setLoadingResult(false);
     setTermListForSearchUnder(options);
   }
-
-
-
+  
+  
   function handleSearchInMultiSelect(selectedList, selectedItem) {
     if (appContext.userSettings.activeSearchSetting.setting !== undefined) {
-      changeSearchSettingIsModified(true, { selectedMetaData: selectedList, selectedSearchUnderTerms, selectedSearchUnderAllTerms });
+      changeSearchSettingIsModified(true, {
+        selectedMetaData: selectedList,
+        selectedSearchUnderTerms,
+        selectedSearchUnderAllTerms
+      });
     }
     setSelectedMetaData(selectedList);
   }
-
-
-
+  
+  
   function handleTermSelectionSearchUnder(selectedList, selectedItem) {
     if (appContext.userSettings.activeSearchSetting.setting !== undefined) {
-      changeSearchSettingIsModified(true, { selectedMetaData, selectedSearchUnderTerms: selectedList, selectedSearchUnderAllTerms });
+      changeSearchSettingIsModified(true, {
+        selectedMetaData,
+        selectedSearchUnderTerms: selectedList,
+        selectedSearchUnderAllTerms
+      });
     }
     setSelectedSearchUnderTerms(selectedList);
     setLoadingResult(true);
     setTermListForSearchUnder([]);
   }
-
-
-
+  
+  
   function handleTermSelectionSearchUnderAll(selectedList, selectedItem) {
     if (appContext.userSettings.activeSearchSetting.setting !== undefined) {
-      changeSearchSettingIsModified(true, { selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms: selectedList });
+      changeSearchSettingIsModified(true, {
+        selectedMetaData,
+        selectedSearchUnderTerms,
+        selectedSearchUnderAllTerms: selectedList
+      });
     }
     setSelectedSearchUnderAllTerms(selectedList);
     setLoadingResult(true);
     setTermListForSearchUnder([]);
   }
-
-
-
+  
+  
   function createOntologyListForPlaceholder(ontologyList) {
     let selectedOntologyIdsText = (ontologyList.length !== 0 ? "in " : "");
     for (let ontology of ontologyList) {
@@ -115,8 +120,8 @@ const AdvancedSearch = (props) => {
     }
     return selectedOntologyIdsText;
   }
-
-
+  
+  
   async function reset() {
     setSelectedMetaData([]);
     searchInMetadataSelectRef.current.resetSelectedValues();
@@ -125,15 +130,14 @@ const AdvancedSearch = (props) => {
     setPlaceHolderExtraText("");
     searchUrlFactory.resetAdvancedSearchUrlParams();
     setLoadedSettingName(false);
-    let userSettings = { ...appContext.userSettings };
+    let userSettings = {...appContext.userSettings};
     userSettings.activeSearchSetting = {};
     userSettings.activeSearchSettingIsModified = false;
     appContext.setUserSettings(userSettings);
     await storeUserSettings(userSettings);
   }
-
-
-
+  
+  
   function handleClickOutsideSelectionBox(e) {
     let advSearchUnderBox = document.getElementById("adv-s-search-under-term");
     let advSearchUnderAllBox = document.getElementById("adv-s-search-under-all-term");
@@ -142,53 +146,50 @@ const AdvancedSearch = (props) => {
       setLoadingResult(true);
     }
   }
-
-
+  
+  
   async function loadSettings(setting) {
     if (setting === undefined) {
       return;
     }
-    let { selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms } = setting['setting'];
+    let {selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms} = setting['setting'];
     let loadedSettingName = setting['title'];
     setSelectedMetaData(selectedMetaData);
     setSelectedSearchUnderTerms(selectedSearchUnderTerms);
     setSelectedSearchUnderAllTerms(selectedSearchUnderAllTerms);
     setLoadedSettingName(loadedSettingName);
-    let userSettings = { ...appContext.userSettings };
+    let userSettings = {...appContext.userSettings};
     userSettings.activeSearchSetting = setting;
     userSettings.activeSearchSettingIsModified = false;
     appContext.setUserSettings(userSettings);
     await storeUserSettings(userSettings);
   }
-
-
-
+  
+  
   async function changeSearchSettingIsModified(isModified, setting) {
     // setting has changed. The user did not update the current setting yet. We need to track this to inform the user.
-    let userSettings = { ...appContext.userSettings };
+    let userSettings = {...appContext.userSettings};
     userSettings.activeSearchSettingIsModified = isModified;
     userSettings.activeSearchSetting.setting = setting;
     appContext.setUserSettings(userSettings);
     setSearchSettingIsModified(isModified);
     await storeUserSettings(userSettings);
   }
-
-
-
+  
+  
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutsideSelectionBox, true);
-
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideSelectionBox, true);
     }
   }, []);
-
-
+  
+  
   useEffect(() => {
     if (!props.advSearchEnabled) {
       searchUrlFactory.resetAdvancedSearchUrlParams();
-    }
-    else {
+    } else {
       searchUrlFactory.updateAdvancedSearchUrl({
         searchInValues: selectedMetaData,
         searchUnderTerms: selectedSearchUnderTerms,
@@ -196,9 +197,8 @@ const AdvancedSearch = (props) => {
       });
     }
   }, [props.advSearchEnabled]);
-
-
-
+  
+  
   useEffect(() => {
     props.advSearchEnabled && searchUrlFactory.updateAdvancedSearchUrl({
       searchInValues: selectedMetaData,
@@ -206,8 +206,8 @@ const AdvancedSearch = (props) => {
       searchUnderAllTerms: selectedSearchUnderAllTerms
     });
   }, [selectedMetaData, selectedSearchUnderTerms, selectedSearchUnderAllTerms]);
-
-
+  
+  
   useEffect(() => {
     if (appContext.user && appContext.userSettings.activeSearchSetting.setting !== undefined) {
       setSelectedMetaData(appContext.userSettings.activeSearchSetting?.setting?.selectedMetaData);
@@ -217,19 +217,18 @@ const AdvancedSearch = (props) => {
       setSearchSettingIsModified(appContext.userSettings.activeSearchSettingIsModified);
     }
   }, [appContext.userSettings.activeSearchSetting]);
-
-
-
+  
+  
   if (process.env.REACT_APP_ADVANCED_SEARCH !== "true") {
     return "";
   }
-
-
+  
+  
   return (
     <>
       {props.advSearchEnabled &&
-        <div className='row adv-search-container'>
-          <div className='col-sm-9'>
+        <div className='row'>
+          <div className='col-sm-8 adv-search-container'>
             <br></br>
             <div className="row">
               <div className="col-sm-12">
@@ -239,16 +238,6 @@ const AdvancedSearch = (props) => {
                       <h5>
                         Loaded: {loadedSettingName + (searchSettingIsModified ? " *" : "")}
                         <small>{searchSettingIsModified && "Setting is modified but not updated."}</small>
-                        {/* <StoreSearchSettings 
-                                                    editMode={true} 
-                                                    settings={{
-                                                        selectedMetaData,
-                                                        selectedSearchUnderTerms,
-                                                        selectedSearchUnderAllTerms
-                                                    
-                                                    }}                                                    
-                                                    setLoadedSettingName={setLoadedSettingName}
-                                                />                                                                                                 */}
                       </h5>
                     }
                   </div>
@@ -256,7 +245,8 @@ const AdvancedSearch = (props) => {
                 <br></br>
                 <div className='row'>
                   <div className='col-sm-11 adv-search-label-holder'>
-                    <label htmlFor='adv-s-search-in-select' title='Search based on specific Metadata such as label or description.'>
+                    <label htmlFor='adv-s-search-in-select'
+                           title='Search based on specific Metadata such as label or description.'>
                       Search in metadata
                       <i className="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                     </label>
@@ -285,7 +275,8 @@ const AdvancedSearch = (props) => {
               <div className="col-sm-12">
                 <div className='row'>
                   <div className='col-sm-12 adv-search-label-holder'>
-                    <label htmlFor='adv-s-search-under-term' title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
+                    <label htmlFor='adv-s-search-under-term'
+                           title='In this field, you can set the classes or properties that are supposed to be the parent(s) of the one you search for (Is-a relation).'>
                       Search under parent
                       <i className="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                     </label>
@@ -317,7 +308,8 @@ const AdvancedSearch = (props) => {
               <div className="col-sm-12">
                 <div className='row'>
                   <div className='col-sm-12 adv-search-label-holder'>
-                    <label htmlFor='adv-s-search-under-term' title='Includes is-a, part-of, and develops-from relations.'>
+                    <label htmlFor='adv-s-search-under-term'
+                           title='Includes is-a, part-of, and develops-from relations.'>
                       Search under all transitive parent
                       <i className="fa fa-question-circle tooltip-questionmark" aria-hidden="true"></i>
                     </label>
@@ -346,8 +338,8 @@ const AdvancedSearch = (props) => {
             </div>
             <br></br>
             <div className='row'>
-              <div className='col-sm-12'>
-                <button className='btn btn-secondary' onClick={reset} >Reset</button>
+              <div className='col-sm-12 text-start'>
+                <button className='btn btn-secondary' onClick={reset}>Reset</button>
                 <LoadSetting
                   loadFunc={loadSettings}
                   resetAdvancedSearch={reset}
@@ -358,11 +350,11 @@ const AdvancedSearch = (props) => {
                     selectedMetaData,
                     selectedSearchUnderTerms,
                     selectedSearchUnderAllTerms
-
+                    
                   }}
                   setSearchSettingIsModified={setSearchSettingIsModified}
                 />
-
+              
               </div>
             </div>
           </div>
@@ -370,8 +362,8 @@ const AdvancedSearch = (props) => {
       }
     </>
   );
-
-
+  
+  
 }
 
 export default AdvancedSearch;

@@ -356,7 +356,7 @@ const Tree = (props) => {
   function createTreeActionButtons() {
     return [
       <div className='row tree-action-button-area'>
-        <div className="col-sm-12 text-right">
+        <div className="col-sm-12 text-end">
           <div className='row tree-action-btn-holder'>
             <div className="col-sm-12">
               {props.showListSwitchEnabled &&

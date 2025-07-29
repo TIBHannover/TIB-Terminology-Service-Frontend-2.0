@@ -1,318 +1,393 @@
 @media only screen and (max-width: 1025px) {
-  .application-content {
-    width: 95%;
-  }
+    .application-content {
+        width: 95%;
+    }
 
-  .site-footer {
-    font-size: 10px;
-  }
+    .site-footer {
+        font-size: 10px;
+    }
 
-  .footer-logo {
-    width: 200px;
-    height: 50px;
-  }
+    .footer-logo {
+        width: 200px;
+        height: 50px;
+    }
 }
 
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {
-  body .jumpto-wrapper {
-    width: 90%;
-  }
-  body .collection-card {
-    padding: 10px;
-  }
-  body .collection-logo {
-    margin-left: 0px;
-  }
-  body .collection-logo-in-list {
-    width: 200px;
-    height: 150px;
-  }
-  button {
-    font-size: 12px;
-  }
-  .btn-secondary {
-    font-size: 12px;
-  }
-  body {
-    font-size: 14px;
-  }
-  body h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 1rem;
-  }
-  body button,
-  .btn {
-    font-size: 10px;
-  }
-  body .close {
-    font-size: 20px;
-  }
-  body input::-moz-placeholder {
-    font-size: 11px;
-  }
-  body ::-webkit-input-placeholder {
-    font-size: 11px;
-  }
-  body .user-profile-dropdown {
-    margin-right: -70px;
-  }
-  body .react-autosuggest__input,
-  body .react-autosuggest__suggestions-container--open {
-    width: 90%;
-  }
-  body .tree-container {
-    margin-top: 150px;
-  }
-  body .small-jumpto-box {
-    width: 80%;
-  }
-  body .search-overlay-box {
-    width: 96%;
-  }
-  .graph-container {
-    height: 500px;
-    width: 600px;
-  }
-  .jumpto-badge-onto {
-    padding: 5px;
-    margin-left: 5px;
-    font-size: 10px;
-  }
-}
-@media only screen and (max-width: 1299px) and (min-width: 1031px) {
-  body .jumpto-wrapper {
-    width: 80%;
-  }
-  body .tree-action-button-area {
-    margin-top: -400px;
-  }
-  body .site-footer {
-    font-size: 10px;
-  }
-  body .footer-logo {
-    width: 200px;
-    height: 50px;
-  }
-  body .navbar-item {
-    float: right;
-  }
+    body .jumpto-wrapper {
+        width: 90%;
+    }
 
-  body .navbar-nav {
-    margin-right: 40px;
-  }
-  body .navbar-collapse-btn {
-    margin-right: 40px;
-  }
-  body .collection-card {
-    padding: 10px;
-  }
-  body .collection-logo {
-    margin-left: 0px;
-  }
-  body .general-home-page-content {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-  body .collection-logo-in-list {
-    width: 200px;
-    height: 150px;
-  }
-  body .pagination-holder {
-    font-size: 12px;
-  }
-  body {
-    font-size: 13px;
-  }
-  body h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 1rem;
-  }
-  body button,
-  .btn {
-    font-size: 10px;
-  }
-  body .close {
-    font-size: 20px;
-  }
-  body input::-moz-placeholder {
-    font-size: 11px;
-  }
-  body input::-webkit-input-placeholder {
-    font-size: 11px;
-  }
-  body .user-profile-dropdown {
-    margin-right: -150px;
-  }
-  body .react-autosuggest__input,
-  body .react-autosuggest__suggestions-container--open {
-    width: 90%;
-  }
-  body .tree-container {
-    margin-top: 150px;
-  }
-  body .small-jumpto-box {
-    width: 80%;
-  }
-  body .search-overlay-box {
-    width: 95%;
-  }
-  .graph-container {
-    height: 400px;
-    width: 500px;
-  }
-  .jumpto-badge-onto {
-    padding: 2px;
-    margin-left: 5px;
-    font-size: 9px;
-  }
+    body .collection-card {
+        padding: 10px;
+    }
+
+    body .collection-logo {
+        margin-left: 0px;
+    }
+
+    body .collection-logo-in-list {
+        width: 200px;
+        height: 150px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+
+    .btn-secondary {
+        font-size: 12px;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+    body h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-size: 1rem;
+    }
+
+    body button,
+    .btn {
+        font-size: 10px;
+    }
+
+    body .close {
+        font-size: 20px;
+    }
+
+    body input::-moz-placeholder {
+        font-size: 11px;
+    }
+
+    body ::-webkit-input-placeholder {
+        font-size: 11px;
+    }
+
+    body .user-profile-dropdown {
+        margin-right: -70px;
+    }
+
+    body .react-autosuggest__input,
+    body .react-autosuggest__suggestions-container--open {
+        width: 90%;
+    }
+
+    body .tree-container {
+        margin-top: 40px;
+    }
+
+    body .small-jumpto-box {
+        width: 80%;
+    }
+
+    body .search-overlay-box {
+        width: 49%;
+    }
+
+    .graph-container {
+        height: 500px;
+        width: 600px;
+    }
+
+    .jumpto-badge-onto {
+        padding: 5px;
+        margin-left: 5px;
+        font-size: 10px;
+    }
+}
+
+@media only screen and (max-width: 1299px) and (min-width: 1031px) {
+    body .jumpto-wrapper {
+        width: 80%;
+    }
+
+    body .tree-action-button-area {
+        margin-top: -400px;
+    }
+
+    body .site-footer {
+        font-size: 10px;
+    }
+
+    body .footer-logo {
+        width: 200px;
+        height: 50px;
+    }
+
+    body .navbar-item {
+        float: right;
+        font-size: 13px;
+    }
+
+    body .navbar-nav {
+        margin-right: 40px;
+    }
+
+    body .navbar-collapse-btn {
+        margin-right: 40px;
+    }
+
+    body .collection-card {
+        padding: 10px;
+    }
+
+    body .collection-logo {
+        margin-left: 0px;
+    }
+
+    body .general-home-page-content {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    body .collection-logo-in-list {
+        width: 200px;
+        height: 150px;
+    }
+
+    body .pagination-holder {
+        font-size: 12px;
+    }
+
+    body {
+        font-size: 13px;
+    }
+
+    body h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-size: 1rem;
+    }
+
+    body button,
+    .btn {
+        font-size: 10px;
+    }
+
+    body .close {
+        font-size: 20px;
+    }
+
+    body input::-moz-placeholder {
+        font-size: 11px;
+    }
+
+    body input::-webkit-input-placeholder {
+        font-size: 11px;
+    }
+
+    /*body .user-profile-dropdown {*/
+    /*    !*margin-right: -150px;*!*/
+    /*}*/
+    body .react-autosuggest__input,
+    body .react-autosuggest__suggestions-container--open {
+        width: 90%;
+    }
+
+    body .tree-container {
+        margin-top: 50px;
+    }
+
+    body .small-jumpto-box {
+        width: 80%;
+    }
+
+    body .search-overlay-box {
+        width: 49%;
+    }
+
+    .graph-container {
+        height: 400px;
+        width: 500px;
+    }
+
+    .jumpto-badge-onto {
+        padding: 2px;
+        margin-left: 5px;
+        font-size: 9px;
+    }
 }
 
 @media only screen and (max-width: 1030px) and (min-width: 901px) {
-  body .jumpto-wrapper {
-    width: 80%;
-  }
-  body .tree-action-button-area {
-    right: 40px;
-  }
-  body .site-footer {
-    font-size: 10px;
-  }
-  body .footer-logo {
-    width: 200px;
-    height: 50px;
-  }
-  body .navbar-item {
-    float: right;
-  }
+    body .jumpto-wrapper {
+        width: 80%;
+    }
 
-  body .navbar-nav {
-    margin-right: 40px;
-  }
-  body .navbar-collapse-btn {
-    margin-right: 40px;
-  }
-  body .collection-card {
-    padding: 10px;
-  }
-  body .collection-logo {
-    margin-left: 0px;
-  }
-  body .general-home-page-content {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-  body .collection-logo-in-list {
-    width: 200px;
-    height: 150px;
-  }
-  body .pagination-holder {
-    font-size: 12px;
-  }
-  body {
-    font-size: 13px;
-  }
-  body h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 1rem;
-  }
-  body button,
-  .btn {
-    font-size: 10px;
-  }
-  body .close {
-    font-size: 20px;
-  }
-  body input::-moz-placeholder {
-    font-size: 11px;
-  }
-  body input::-webkit-input-placeholder {
-    font-size: 11px;
-  }
-  body .user-profile-dropdown {
-    margin-right: 40px;
-  }
-  body .search-overlay-box {
-    width: 93%;
-  }
-  .jumpto-badge-onto {
-    padding: 2px;
-    margin-left: 5px;
-    font-size: 9px;
-  }
+    body .tree-action-button-area {
+        right: 40px;
+    }
+
+    body .site-footer {
+        font-size: 10px;
+    }
+
+    body .footer-logo {
+        width: 200px;
+        height: 50px;
+    }
+
+    body .navbar-item {
+        float: right;
+    }
+
+    body .navbar-nav {
+        margin-right: 40px;
+    }
+
+    body .navbar-collapse-btn {
+        margin-right: 40px;
+    }
+
+    body .collection-card {
+        padding: 10px;
+    }
+
+    body .collection-logo {
+        margin-left: 0px;
+    }
+
+    body .general-home-page-content {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    body .collection-logo-in-list {
+        width: 200px;
+        height: 150px;
+    }
+
+    body .pagination-holder {
+        font-size: 12px;
+    }
+
+    body {
+        font-size: 13px;
+    }
+
+    body h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-size: 1rem;
+    }
+
+    body button,
+    .btn {
+        font-size: 10px;
+    }
+
+    body .close {
+        font-size: 20px;
+    }
+
+    body input::-moz-placeholder {
+        font-size: 11px;
+    }
+
+    body input::-webkit-input-placeholder {
+        font-size: 11px;
+    }
+
+    body .user-profile-dropdown {
+        margin-right: 40px;
+    }
+
+    body .search-overlay-box {
+        width: 48%;
+    }
+
+    .jumpto-badge-onto {
+        padding: 2px;
+        margin-left: 5px;
+        font-size: 9px;
+    }
 }
 
 @media only screen and (max-width: 900px) {
-  body .navbar-item {
-    float: right;
-  }
+    body .navbar-item {
+        float: right;
+    }
 
-  body .site-header-searchbox-holder {
-    padding-left: 0px;
-    padding-right: 0px;
-    margin-bottom: 5px;
-  }
-  body .general-home-page-content {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
+    body .site-header-searchbox-holder {
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-bottom: 5px;
+    }
 
-  body .collection-card {
-    padding: 10px;
-  }
+    body .general-home-page-content {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
 
-  body .collection-logo {
-    margin-left: 0px;
-  }
-  body .collection-logo-in-list {
-    width: 150px;
-    height: 100px;
-  }
-  body {
-    font-size: 10px;
-  }
-  body h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 1rem;
-  }
-  body button,
-  .btn {
-    font-size: 10px;
-  }
-  body .close {
-    font-size: 20px;
-  }
-  body input::-moz-placeholder {
-    font-size: 10px;
-  }
-  body ::-webkit-input-placeholder {
-    font-size: 10px;
-  }
-  body .user-profile-dropdown {
-    margin-right: -55px;
-  }
-  body .search-overlay-box {
-    width: 93%;
-  }
+    body .collection-card {
+        padding: 10px;
+    }
+
+    body .collection-logo {
+        margin-left: 0px;
+    }
+
+    body .collection-logo-in-list {
+        width: 150px;
+        height: 100px;
+    }
+
+    body {
+        font-size: 10px;
+    }
+
+    body h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-size: 1rem;
+    }
+
+    body button,
+    .btn {
+        font-size: 10px;
+    }
+
+    body .close {
+        font-size: 20px;
+    }
+
+    body input::-moz-placeholder {
+        font-size: 10px;
+    }
+
+    body ::-webkit-input-placeholder {
+        font-size: 10px;
+    }
+
+    body .user-profile-dropdown {
+        margin-right: -55px;
+    }
+
+    body .search-overlay-box {
+        width: 60%;
+    }
 }
 
 @media only screen and (max-width: 600px) {
-  body .user-profile-dropdown {
-    margin-right: 0px;
-  }
+    body .user-profile-dropdown {
+        margin-right: 0px;
+    }
+
+    body .search-overlay-box {
+        width: 92%;
+    }
 }

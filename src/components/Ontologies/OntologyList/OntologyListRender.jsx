@@ -120,9 +120,10 @@ export const OntologyListRender = (props) => {
           <>
             <div className='row'>
               <div className='col-sm-12'>
-                Not able to find what you are looking for? You can suggest your ontology to be added to the list.
-                <Link className="btn btn-sm btn-secondary ml-2 pt-0 pb-0 pl-1 pr-1"
+                Not able to find what you are looking for? You can
+                <Link className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 ps-1 pe-1 me-2"
                       to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>suggest</Link>
+                your ontology to be added to the list.
               </div>
             </div>
             <br></br>
@@ -140,7 +141,7 @@ export const OntologyListRender = (props) => {
               dropdownClassName={"white-dropdown"}
             />
           </div>
-          <div className='col-sm-6 text-right zero-padding-col'>
+          <div className='col-sm-6 text-end zero-padding-col'>
             <DropDown
               options={SORT_DROPDONW_OPTIONS}
               dropDownId="ontology-list-sorting"

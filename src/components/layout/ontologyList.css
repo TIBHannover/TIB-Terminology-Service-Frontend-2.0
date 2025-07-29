@@ -1,55 +1,57 @@
 .ontology-list-sorting {
-  margin-left: 5px;
-  background-color: white;
-  border-color: white;
-  color: #42484e;
+    margin-left: 5px;
+    background-color: white;
+    border-color: white;
+    color: #42484e;
 }
 
 .ontology-list-container .ontology-title-text-in-box {
-  text-decoration: none;
-  color: #42484e;
+    text-decoration: none;
+    color: #42484e;
 }
 
 .ontology-card-description {
-  margin-top: 20px;
-  margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
+
 .ontology-card-description p {
-  display: inline;
+    display: inline;
 }
 
 .read-more-btn {
-  display: inline-block;
-  font-size: 10px;
-  padding: 0;
-  font-weight: bold;
-  position: relative;
-  margin-left: 5px;
+    display: inline-block;
+    font-size: 10px;
+    padding: 0;
+    font-weight: bold;
+    position: relative;
+    margin-left: 5px;
+    cursor: pointer;
 }
 
 .ontology-list-facet-header {
-  margin-bottom: 25px;
-  margin-left: -7px;
+    margin-bottom: 25px;
+    margin-left: -7px;
 }
 
 .ontology-card-meta-data {
-  padding-left: 40px;
+    padding-left: 40px;
 }
 
 #ontologylist-search-grid {
-  padding-left: 0px;
-  margin-top: 30px;
+    padding-left: 0px;
+    margin-top: 30px;
 }
 
 .ontology-collection-name {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 
 .ontology-list-container .ontology-list-facet-section-box {
-  margin-top: 30px;
-  width: 100%;
+    margin-top: 30px;
+    width: 100%;
 }
 
 #lastUpdateRange {
-  margin-left: 10px;
+    margin-left: 10px;
 }

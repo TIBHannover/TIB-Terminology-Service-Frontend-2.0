@@ -14,12 +14,15 @@ import {AppContext} from './context/AppContext';
 import {getReportList} from './api/tsMicroBackendCalls';
 import LoadingPage from './LoadingPage';
 import SiteTour from './tours/Tour';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import {olsIsUp} from './api/system';
 import {useQuery} from '@tanstack/react-query';
 import {getUserTermsetList} from './api/term_set';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
+
 
 
 const App = () => {

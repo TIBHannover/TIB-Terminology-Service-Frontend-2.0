@@ -7,11 +7,21 @@ import TermLib from "../../../Libs/TermLib";
 import TermTable from "../../common/TermTable/TermTable";
 import {AddToTermsetModal, AddToTermsetModalBtn} from "../../TermSet/AddTermToSet";
 
-
 const PAGE_SIZES_FOR_DROPDOWN = [{label: "20", value: 20}, {label: "30", value: 30}, {
   label: "40",
   value: 40
 }, {label: "50", value: 50}];
+
+const LABEL_COL_NAME = "label";
+const ID_COL_NAME = "id";
+const DESCRIPTION_COL_NAME = "description";
+const ALTERNATIVE_TERM_COL_NAME = "alternativeTerm";
+const SUB_CLASS_OF_COL_NAME = "subClassOf";
+const EQUIVALENT_TO_COL_NAME = "equivalentTo";
+const EXAMPLE_OF_USAGE_COL_NAME = "exampleOfUsage";
+const SEE_ALSO_COL_NAME = "seeAlso";
+const CONTRIBUTOR_COL_NAME = "contributor";
+const COMMENT_COL_NAME = "comment";
 
 
 export const RenderTermList = (props) => {
@@ -110,7 +120,8 @@ export const RenderTermList = (props) => {
     if (props.listOfTerms.length !== 0 && props.listOfTerms[0] !== "loading") {
       setNoResultFlag(false);
       createList();
-    } else if (props.listOfTerms.length === 0) {
+    }
+    else if (props.listOfTerms.length === 0) {
       setNoResultFlag(true);
     }
   }, [props.listOfTerms]);
@@ -129,7 +140,7 @@ export const RenderTermList = (props) => {
           <br></br>
         </div>
       </div>
-      <div className="row">
+      <div className="row ps-3 pe-3">
         {!props.iri &&
           <div className="col-sm-3 mt-1">
             <div className="termlist-jumpto-container">
@@ -159,7 +170,7 @@ export const RenderTermList = (props) => {
             />
           }
           {props.iri &&
-            <button className='btn btn-secondary ml-2' onClick={props.resetList}>Show All Classes</button>
+            <button className='btn btn-secondary ms-2' onClick={props.resetList}>Show All Classes</button>
           }
         </div>
         <div className="col-sm-3 text-right mt-1">
