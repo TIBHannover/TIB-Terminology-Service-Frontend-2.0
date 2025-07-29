@@ -161,7 +161,7 @@ const RenderSearchForm = (props) => {
             </p>
           }
           
-          <div className='row site-header-search-filters-container'>
+          <div className='row site-header-search-filters-container mt-1'>
             <div className='col-lg-3 col-sm-4 search-forn-checkbox-holders stour-searchbox-exactmatch'>
               <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match"
                      onClick={props.handleExactCheckboxClick}/>

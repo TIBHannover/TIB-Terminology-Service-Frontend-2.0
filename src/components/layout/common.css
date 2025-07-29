@@ -194,7 +194,7 @@ input[type="checkbox"]:checked {
 }
 
 .form-check-input {
-    /*margin-top: 5px !important;*/
+    margin-top: 5px !important;
     cursor: pointer;
 }
 
