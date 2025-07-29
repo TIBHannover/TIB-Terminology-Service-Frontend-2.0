@@ -13,7 +13,7 @@ const Footer = () => (
       </a>
     </div>
     <div className="col-sm-2">
-      <h6>ABOUT</h6>
+      <p>ABOUT</p>
       <hr className="me-5"/>
       <ul className="footer-list">
         <li>
@@ -43,7 +43,7 @@ const Footer = () => (
       </ul>
     </div>
     <div className="col-sm-2">
-      <h6>RESOURCES</h6>
+      <p>RESOURCES</p>
       <hr className="me-5"/>
       <ul className="footer-list">
         <li>
@@ -75,7 +75,7 @@ const Footer = () => (
       </ul>
     </div>
     <div className="col-sm-4">
-      <h6>PROVIDED BY</h6>
+      <p>PROVIDED BY</p>
       <hr className="me-5"/>
       <a
         href="https://www.tib.eu/en/"

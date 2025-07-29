@@ -1,13 +1,13 @@
-import { useState } from "react";
-
+import {useState} from "react";
 
 
 const CopyLinkButton = (props) => {
   const [copied, setCopied] = useState(false);
-
+  
   return [
     <button
       type="button"
+      aria-label="Copy to clipboard"
       className="btn btn-sm copy-link-icon-btn borderless-btn"
       key={"copy-btn"}
       onClick={() => {
@@ -24,13 +24,13 @@ const CopyLinkButton = (props) => {
 }
 
 
-
 export const CopyLinkButtonMarkdownFormat = (props) => {
   const [copied, setCopied] = useState(false);
-
+  
   return [
     <button
       type="button"
+      aria-label="Copy to clipboard the term label in markdown format"
       className="btn btn-secondary btn-sm copy-link-btn"
       key={"copy-btn"}
       onClick={() => {
@@ -62,7 +62,6 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
     </button>
   ];
 }
-
 
 
 export default CopyLinkButton;

@@ -44,20 +44,26 @@ export const OntologyPageTabs = (props) => {
   }
   return (
     <>
-      <ul className="nav nav-tabs">
-        {result}
-        <form className="ms-auto">
-          <DropDown
-            options={langOptions}
-            dropDownId="onto-language"
-            dropDownTitle="Ontology language"
-            dropDownChangeHandler={(e) => {
-              ontologyPageContext.setOntoLang(e.target.value);
-            }}
-            defaultValue={ontologyPageContext.ontoLang}
-          />
-        </form>
-      </ul>
+      <div className="row">
+        <div className="col-10">
+          <ul className="nav nav-tabs">
+            {result}
+          </ul>
+        </div>
+        <div className="col-2">
+          <form className="ms-auto text-end">
+            <DropDown
+              options={langOptions}
+              dropDownId="onto-language"
+              dropDownTitle="Ontology language"
+              dropDownChangeHandler={(e) => {
+                ontologyPageContext.setOntoLang(e.target.value);
+              }}
+              defaultValue={ontologyPageContext.ontoLang}
+            />
+          </form>
+        </div>
+      </div>
     </>
   );
 }

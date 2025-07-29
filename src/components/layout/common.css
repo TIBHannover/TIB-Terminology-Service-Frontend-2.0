@@ -100,8 +100,7 @@ body .term-button:hover {
 
 body .ontology-button {
     background-color: #bbae9e;
-    color: white;
-    margin-right: 5px;
+    color: black;
     padding: 3px;
     margin-right: 10px;
     font-size: 12px;
