@@ -19,7 +19,9 @@ export type NoteListParams = {
     pageNumber?: number | string,
     pageSize?: number | string,
     targetTerm?: any,
-    onlyOntologyOriginalNotes?: boolean
+    onlyOntologyOriginalNotes?: boolean,
+    // if false, do not fetch each term to set the missing labels for a note target_semantic_label
+    withoutLabelFetch?: boolean,
 
 }
 

@@ -122,7 +122,8 @@ const OntologyPage = (props) => {
         pageNumber: 0,
         pageSize: 1,
         targetTerm: null,
-        onlyOntologyOriginalNotes: false
+        onlyOntologyOriginalNotes: false,
+        withoutLabelFetch: true
       });
       countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
     }
