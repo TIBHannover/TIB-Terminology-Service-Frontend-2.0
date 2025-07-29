@@ -395,7 +395,7 @@ const SearchResult = (props) => {
               <h3 className="text-dark">{`${totalResultsCount} results found for "${searchQuery}"`}</h3>}
             <div>{filterTags}</div>
             <div className='row'>
-              <div className='col-sm-8 text-right zero-padding-col'>
+              <div className='col-sm-8 text-end zero-padding-col'>
                 <DropDown
                   options={Toolkit.listOfSiteLangs()}
                   dropDownId="lang-list"
@@ -410,7 +410,7 @@ const SearchResult = (props) => {
                   }}
                 />
               </div>
-              <div className='col-sm-4 text-right zero-padding-col'>
+              <div className='col-sm-4 text-end zero-padding-col'>
                 <DropDown
                   options={PAGE_SIZES_FOR_DROPDOWN}
                   dropDownId="list-result-per-page"
