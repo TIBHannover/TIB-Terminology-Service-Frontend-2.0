@@ -1,18 +1,3 @@
-@media only screen and (max-width: 1025px) {
-    .application-content {
-        width: 95%;
-    }
-
-    .site-footer {
-        font-size: 10px;
-    }
-
-    .footer-logo {
-        width: 200px;
-        height: 50px;
-    }
-}
-
 @media only screen and (max-width: 1500px) and (min-width: 1300px) {
     body .jumpto-wrapper {
         width: 90%;
@@ -99,6 +84,22 @@
         padding: 5px;
         margin-left: 5px;
         font-size: 10px;
+    }
+}
+
+
+@media only screen and (max-width: 1025px) {
+    .application-content {
+        width: 95%;
+    }
+
+    .site-footer {
+        font-size: 10px;
+    }
+
+    .footer-logo {
+        width: 200px;
+        height: 50px;
     }
 }
 

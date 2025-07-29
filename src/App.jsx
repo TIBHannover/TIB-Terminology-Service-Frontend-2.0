@@ -24,7 +24,6 @@ import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
 
 
-
 const App = () => {
   
   const [loading, setLoading] = useState(true);
@@ -111,34 +110,38 @@ const App = () => {
       <BrowserRouter>
         <MatomoWrapper>
           <div className='container-fluid'>
-            <AppContext.Provider value={appContextData}>
-              {showLoadingPage && <LoadingPage/>}
-              {!showLoadingPage &&
-                <>
-                  <Header/>
-                  <div className='application-content' id="application_content">
-                    {loading &&
-                      <Skeleton
-                        count={2}
-                        wrapper={InlineWrapperWithMargin}
-                        inline width={600}
-                        height={200}
-                        marginLeft={20}
-                        baseColor={'#f4f2f2'}/>
-                    }
-                    {!loading &&
-                      <>
-                        {isBackendDown && <BackendIsDownMessage/>}
-                        <CookieBanner/>
-                        <AppRouter/>
-                      </>
-                    }
-                  </div>
-                  {process.env.REACT_APP_SITE_TOUR === "true" && !showLoadingPage && <SiteTour/>}
-                  <Footer/>
-                </>
-              }
-            </AppContext.Provider>
+            <div className='row'>
+              <div className='col-sm-12'>
+                <AppContext.Provider value={appContextData}>
+                  {showLoadingPage && <LoadingPage/>}
+                  {!showLoadingPage &&
+                    <>
+                      <Header/>
+                      <div className='application-content' id="application_content">
+                        {loading &&
+                          <Skeleton
+                            count={2}
+                            wrapper={InlineWrapperWithMargin}
+                            inline width={600}
+                            height={200}
+                            marginLeft={20}
+                            baseColor={'#f4f2f2'}/>
+                        }
+                        {!loading &&
+                          <>
+                            {isBackendDown && <BackendIsDownMessage/>}
+                            <CookieBanner/>
+                            <AppRouter/>
+                          </>
+                        }
+                      </div>
+                      {process.env.REACT_APP_SITE_TOUR === "true" && !showLoadingPage && <SiteTour/>}
+                      <Footer/>
+                    </>
+                  }
+                </AppContext.Provider>
+              </div>
+            </div>
           </div>
         </MatomoWrapper>
       </BrowserRouter>
