@@ -39,7 +39,8 @@ const UserPanel = (props) => {
             </Dropdown.Item>
             {process.env.REACT_APP_TERMSET_FEATURE === "true" &&
               <Dropdown.Item>
-                <Link className="dropdown-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>My Termsets</Link>
+                <Link className="user-panel-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>My
+                  Termsets</Link>
               </Dropdown.Item>
             }
             {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&
