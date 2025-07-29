@@ -6,7 +6,7 @@ import TermLib from "../../Libs/TermLib";
 import {Link} from 'react-router-dom';
 import DropDown from "../common/DropDown/DropDown";
 import Pagination from "../common/Pagination/Pagination";
-import {AddTermModal, AddTermModalBtn} from "./AddTermModal";
+import {AddTermModal} from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
 import {removeTermFromSet} from "../../api/term_set";
 import {AppContext} from "../../context/AppContext";
@@ -260,7 +260,7 @@ const TermSetPage = (props) => {
       <div className="tree-view-container list-container">
         <div className="row">
           <div className="col-6">
-            <Link className="btn-sm btn-secondary"
+            <Link className="btn-secondary p-1 text-white"
                   to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
               <i className="bi bi-arrow-left mr-1"></i>
               My termset list
@@ -282,19 +282,19 @@ const TermSetPage = (props) => {
         <br/><br/>
         <div className="row" id="termset-page-action-bar">
           <div className="col-sm-2 mt-1">
-            <button className="btn btn-sm btn-secondary mr-2" onClick={downloadJsonOnClick}>
-              <i className="bi bi-download ml-1"></i>
+            <button className="btn-secondary text-white me-2" onClick={downloadJsonOnClick}>
+              <i className="bi bi-download ms-1"></i>
               JSON
             </button>
-            <button className="btn btn-sm btn-secondary" onClick={downloadCsvOnClick}>
-              <i className="bi bi-download ml-1"></i>
+            <button className="btn-secondary text-white" onClick={downloadCsvOnClick}>
+              <i className="bi bi-download ms-1"></i>
               CSV
             </button>
           </div>
           <div className="col-sm-3 mt-1">
-            <label for="search-input-for-termset" className={"inline-label"}>
+            <label htmlFor="search-input-for-termset" className={"inline-label"}>
               Search
-              <i className="bi bi-question-circle-fill mr-1 ml-1"
+              <i className="bi bi-question-circle-fill me-1 ms-1"
                  title="Search the table based on term label"></i>
             </label>
             <input
@@ -329,7 +329,6 @@ const TermSetPage = (props) => {
           {appContext.user && appContext.userTermsets.find((tset) => tset.id === data.id) &&
             // only owner can see this button
             <div className="col-sm-3 text-end mt-2">
-              <AddTermModalBtn modalId={"add-term-modal"}></AddTermModalBtn>
               <AddTermModal termset={data} modalId={"add-term-modal"}></AddTermModal>
             </div>
           }

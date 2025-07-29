@@ -23,7 +23,6 @@ const VISIBILITY_FOR_DROPDOWN = [
 ];
 
 
-
 const EditTermset = (props) => {
   const termsetId = props.match.params.termsetId;
   
@@ -106,7 +105,7 @@ const EditTermset = (props) => {
         let oldSetIndex = userTermsets.findIndex((tset) => tset.id === updatedTermset.id);
         userTermsets.splice(oldSetIndex, 1);
         userTermsets.push(updatedTermset);
-        userTermsets.sort((s1, s2)=> s1.name.localeCompare(s2.name));
+        userTermsets.sort((s1, s2) => s1.name.localeCompare(s2.name));
         appContext.setUserTermsets(userTermsets);
         setSubmited(true);
         setAddedSuccess(true);
@@ -120,9 +119,9 @@ const EditTermset = (props) => {
   const backBtn = (
     <div className="row mt-4 mb-4">
       <div className="col-12">
-        <Link className="btn-sm btn-secondary"
+        <Link className="btn-secondary p-1 text-white"
               to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
-          <i className="bi bi-arrow-left mr-1"></i>
+          <i className="bi bi-arrow-left me-1"></i>
           My termset list
         </Link>
       </div>
@@ -133,14 +132,14 @@ const EditTermset = (props) => {
   if (submited && addedSuccess) {
     return (
       <>
-      <div className="row user-info-panel">
-        <AlertBox
-          type="success"
-          message="Added successfully!"
-          alertColumnClass="col-sm-12"
-        />
-      </div>
-      {backBtn}
+        <div className="row user-info-panel">
+          <AlertBox
+            type="success"
+            message="Added successfully!"
+            alertColumnClass="col-sm-12"
+          />
+        </div>
+        {backBtn}
       </>
     );
   } else if (submited && addedSuccess) {
@@ -157,7 +156,6 @@ const EditTermset = (props) => {
       </>
     )
   }
-  
   
   
   if (!data && !error) {
@@ -178,14 +176,14 @@ const EditTermset = (props) => {
         <NotFoundErrorPage/>
       </div>
     );
-  }else if(data && !appContext.userTermsets.find((tset) => tset.name === data.name)) {
+  } else if (data && !appContext.userTermsets.find((tset) => tset.name === data.name)) {
     // non owner is not allowed to visit the edit page
     return (
       <div className="justify-content-center ontology-page-container">
         <NotFoundErrorPage/>
       </div>
     );
-  }else if(data && !dataLoaded){
+  } else if (data && !dataLoaded) {
     // load the set terms in the multi select input
     let options = [];
     let termsJson = [];

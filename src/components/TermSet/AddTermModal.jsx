@@ -6,21 +6,7 @@ import {getJumpToResult} from "../../api/search";
 import TermLib from "../../Libs/TermLib";
 import {updateTermset} from "../../api/term_set";
 import TermApi from "../../api/term";
-
-export const AddTermModalBtn = (props) => {
-  const {modalId} = props;
-  return (
-    <a
-      className={"btn btn-secondary btn-sm borderless-btn"}
-      data-toggle="modal"
-      data-target={"#addToTermsetModal-" + modalId}
-      data-backdrop="static"
-    >
-      <i className="bi bi-plus-square"></i>
-      {" terms"}
-    </a>
-  );
-}
+import Modal from "react-bootstrap/Modal";
 
 
 export const AddTermModal = (props) => {
@@ -33,6 +19,7 @@ export const AddTermModal = (props) => {
   const [selectedTerms, setSelectedTerms] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   
   
   const searchUnderRef = useRef(null);
@@ -105,85 +92,93 @@ export const AddTermModal = (props) => {
     setAddedSuccess(false);
     setSubmited(false);
     setSelectedTerms([]);
+    setShowModal(false);
   }
   
   
   return (
-    <div>
-      <div className="modal fade" id={"addToTermsetModal-" + modalId} tabIndex={-1} role="dialog"
-           aria-labelledby={"addToTermsetModal-" + modalId} aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title"
-                  id={"addToTermsetModal-" + modalId}>{`Add terms to this set`}</h5>
-              {!submited &&
-                <button onClick={closeModal} type="button" className="close" data-dismiss="modal"
-                        aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              }
-            </div>
-            <div className="modal-body">
-              {!submited &&
-                <Multiselect
-                  isObject={true}
-                  options={termListOptions}
-                  selectedValues={selectedTerms}
-                  onSelect={onTermSelect}
-                  onRemove={onTermSelect}
-                  onSearch={onSearchTermChange}
-                  displayValue={"text"}
-                  avoidHighlightFirstOption={true}
-                  loading={loading}
-                  closeIcon={"cancel"}
-                  id="search-terms"
-                  placeholder={"class, property, individual"}
-                  ref={searchUnderRef}
-                />
-              }
-              {submited && addedSuccess &&
-                <AlertBox
-                  type="success"
-                  message="Added successfully!"
-                  alertColumnClass="col-sm-12"
-                />
-              }
-              {submited && !addedSuccess &&
-                <AlertBox
-                  type="danger"
-                  message="Something went wrong. Please try again!"
-                  alertColumnClass="col-sm-12"
-                />
-              }
-            </div>
-            <div className="modal-footer justify-content-center">
-              {!submited &&
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={submitNewTermsToSet}>
-                  {"Add"}
-                  {submitLoading && <div className="isLoading-btn"></div>}
-                </button>
-              }
-              {submited &&
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                  onClick={() => {
-                    closeModal();
-                    window.location.reload();
-                  }}
-                >
-                  Close
-                </button>
-              }
-            </div>
+    <>
+      <button
+        className={"btn-secondary text-white borderless-btn"}
+        aria-label="add this term to termset"
+        onClick={() => {
+          setShowModal(true)
+        }}
+      >
+        <i className="bi bi-plus-square"></i>
+        {" terms"}
+      </button>
+      <Modal show={showModal} id={"addToTermsetModal-" + modalId}>
+        <Modal.Header className="row">
+          <div className="col-6">
+            <h5 className="modal-title"
+                id={"addToTermsetModal-" + modalId}>{`Add terms to this set`}</h5>
           </div>
-        </div>
-      </div>
-    </div>
+          <div className="col-6 text-end">
+            {!submited &&
+              <button onClick={closeModal} type="button" className="close bg-white" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            }
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          {!submited &&
+            <Multiselect
+              isObject={true}
+              options={termListOptions}
+              selectedValues={selectedTerms}
+              onSelect={onTermSelect}
+              onRemove={onTermSelect}
+              onSearch={onSearchTermChange}
+              displayValue={"text"}
+              avoidHighlightFirstOption={true}
+              loading={loading}
+              closeIcon={"cancel"}
+              id="search-terms"
+              placeholder={"class, property, individual"}
+              ref={searchUnderRef}
+            />
+          }
+          {submited && addedSuccess &&
+            <AlertBox
+              type="success"
+              message="Added successfully!"
+              alertColumnClass="col-sm-12"
+            />
+          }
+          {submited && !addedSuccess &&
+            <AlertBox
+              type="danger"
+              message="Something went wrong. Please try again!"
+              alertColumnClass="col-sm-12"
+            />
+          }
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          {!submited &&
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={submitNewTermsToSet}>
+              {"Add"}
+              {submitLoading && <div className="isLoading-btn"></div>}
+            </button>
+          }
+          {submited &&
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => {
+                closeModal();
+                window.location.reload();
+              }}
+            >
+              Close
+            </button>
+          }
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }

@@ -11,8 +11,7 @@ import {OntologyPageContext} from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import PropTypes from 'prop-types';
-import {AddToTermsetModal, AddToTermsetModalBtn} from '../../TermSet/AddTermToSet';
-import TermLib from '../../../Libs/TermLib';
+import {AddToTermsetModal} from '../../TermSet/AddTermToSet';
 
 
 const DETAIL_TAB_ID = 0;
@@ -127,7 +126,7 @@ const TermDetail = (props) => {
     <div className='row'>
       <div className='col-sm-12'>
         <div className='term-detail-action-bar'>
-          <AddToTermsetModalBtn modalId={"term-in-tree"}/>
+          <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm}/>
           <a
             href={showDataAsJsonBtnHref}
             target='_blank'
@@ -138,7 +137,6 @@ const TermDetail = (props) => {
             JSON
           </a>
         </div>
-        <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm}/>
         <RenderTermDetailTab
           componentIdentity={props.componentIdentity}
           tabChangeHandler={tabChangeHandler}

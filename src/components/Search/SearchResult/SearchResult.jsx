@@ -17,7 +17,7 @@ import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import {AppContext} from '../../../context/AppContext';
 import {useQuery} from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
-import {AddToTermsetModal, AddToTermsetModalBtn} from "../../TermSet/AddTermToSet";
+import {AddToTermsetModal} from "../../TermSet/AddTermToSet";
 
 
 const SearchResult = (props) => {
@@ -176,8 +176,7 @@ const SearchResult = (props) => {
           
           </div>
           <div className="col-sm-2 float-right">
-            <AddToTermsetModalBtn modalId={"term-in-tree-" + i} btnClass="action-btn"/>
-            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]}/>
+            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]} btnClass="action-btn"/>
           </div>
         </div>
       );

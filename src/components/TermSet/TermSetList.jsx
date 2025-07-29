@@ -17,27 +17,27 @@ const TermSetList = () => {
   let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
   let redirectAfterDeleteEndpoint = process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets";
   
-  if(process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+  if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
   
   return (
     <>
       <div className="row">
-        <div className="col-sm-12">
-          <button className={"btn btn-secondary create-termset-btn " + (!createMode ? "float-right" : "")}
+        <div className={"col-sm-12 " + (!createMode ? "text-end" : "")}>
+          <button className="btn btn-secondary create-termset-btn"
                   onClick={() => {
                     setCreateMode(!createMode);
                   }}>
             {!createMode &&
               <>
-                <i className="bi bi-plus-square mr-2"></i>
+                <i className="bi bi-plus-square me-2"></i>
                 Termset
               </>
             }
             {createMode &&
               <>
-                <i className="bi bi-arrow-left mr-1"></i>
+                <i className="bi bi-arrow-left me-1"></i>
                 My termset list
               </>
             }
@@ -51,7 +51,7 @@ const TermSetList = () => {
         return (
           <div className="row">
             <div className="col-sm-12 term-set-card">
-              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id} style={{ marginTop: "2px" }}>
+              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id} style={{marginTop: "2px"}}>
                 <b>{tset.name}</b>
               </Link>
               <Link
@@ -61,12 +61,6 @@ const TermSetList = () => {
               >
                 <i className="fa fa-edit fa-borderless edit-termset-icon"></i>
               </Link>
-              <DeleteModalBtn
-                modalId={tset.id}
-                key={"deleteBtnUserCollection" + tset.id}
-                btnText={<i className="fa fa-close fa-borderless"></i>}
-                btnClass="extra-sm-btn ml-2"
-              />
               <DeleteModal
                 modalId={tset.id}
                 callHeaders={callHeader}
@@ -77,6 +71,8 @@ const TermSetList = () => {
                 }}
                 objectToDelete={tset}
                 method="DELETE"
+                btnText={<i className="fa fa-close fa-borderless"></i>}
+                btnClass="extra-sm-btn ml-2"
               />
             </div>
           </div>

@@ -5,7 +5,7 @@ import DropDown from "../../common/DropDown/DropDown";
 import AlertBox from "../../common/Alerts/Alerts";
 import TermLib from "../../../Libs/TermLib";
 import TermTable from "../../common/TermTable/TermTable";
-import {AddToTermsetModal, AddToTermsetModalBtn} from "../../TermSet/AddTermToSet";
+import {AddToTermsetModal} from "../../TermSet/AddTermToSet";
 
 const PAGE_SIZES_FOR_DROPDOWN = [{label: "20", value: 20}, {label: "30", value: 30}, {
   label: "40",
@@ -76,8 +76,8 @@ export const RenderTermList = (props) => {
     for (let term of listOfterms) {
       let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
       let annotation = term['annotation'];
-      let addToSetButton = <AddToTermsetModalBtn modalId={"term-in-tree-" + id} btnClass={"termset-btn"}/>;
-      let addToSetModal = <AddToTermsetModal modalId={"term-in-tree-" + id} term={term}/>;
+      let addToSetButton = <AddToTermsetModal modalId={"term-in-tree-" + id} term={term}
+                                              btnClass="btn-sm termset-btn"/>;
       id += 1;
       let termMap = new Map();
       termMap.set("shortForm", {value: term["shortForm"], valueLink: ""});
@@ -103,7 +103,6 @@ export const RenderTermList = (props) => {
         valueLink: ""
       });
       termMap.set("action", {value: addToSetButton, valueLink: ""});
-      modals.push(addToSetModal);
       dataForTable.push(termMap);
     }
     setTermsetModals(modals);
@@ -120,8 +119,7 @@ export const RenderTermList = (props) => {
     if (props.listOfTerms.length !== 0 && props.listOfTerms[0] !== "loading") {
       setNoResultFlag(false);
       createList();
-    }
-    else if (props.listOfTerms.length === 0) {
+    } else if (props.listOfTerms.length === 0) {
       setNoResultFlag(true);
     }
   }, [props.listOfTerms]);

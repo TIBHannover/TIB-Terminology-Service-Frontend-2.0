@@ -7,6 +7,7 @@ import DropDown from "../common/DropDown/DropDown";
 import {createTermset, addTermToMultipleSets, removeTermFromSet} from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 import Login from "../User/Login/TS/Login";
+import Modal from "react-bootstrap/Modal";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -20,36 +21,8 @@ const VISIBILITY_FOR_DROPDOWN = [
 ];
 
 
-export const AddToTermsetModalBtn = (props) => {
-  const {modalId, btnClass} = props;
-  const appContext = useContext(AppContext);
-  
-  if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
-    return "";
-  }
-  let title = "Add this term to your termsets. Check the existing termsets for this term.";
-  if (!appContext.user) {
-    title = "Check the existing termsets for this term.";
-  }
-  
-  return (
-    <a
-      className={"btn btn-secondary btn-sm borderless-btn " + (btnClass ?? "")}
-      data-toggle="modal"
-      data-target={"#addToTermsetModal-" + modalId}
-      data-backdrop="static"
-      title={title}
-    >
-      {appContext.user && <i className="bi bi-plus-square"></i>}
-      {!appContext.user && <i className="bi bi-bookmark"></i>}
-      {" set"}
-    </a>
-  );
-}
-
-
 export const AddToTermsetModal = (props) => {
-  const {modalId, term} = props;
+  const {modalId, term, btnClass} = props;
   const appContext = useContext(AppContext);
   
   const [submited, setSubmited] = useState(false);
@@ -61,6 +34,7 @@ export const AddToTermsetModal = (props) => {
   const [termExistingSets, setTermExistingSets] = useState([]);
   const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(new Map());
+  const [showModal, setShowModal] = useState(false);
   
   
   function submitNewTermset() {
@@ -311,6 +285,7 @@ export const AddToTermsetModal = (props) => {
     setCreateMode(false);
     setSelectedTermsetIds([]);
     setNewTermsetVisibility(VISIBILITY_ONLY_ME);
+    setShowModal(false);
   }
   
   
@@ -340,59 +315,74 @@ export const AddToTermsetModal = (props) => {
     modalTitle = `Termsets for "${TermLib.extractLabel(term)}"`;
   }
   
+  
+  let title = "Add this term to your termsets. Check the existing termsets for this term.";
+  if (!appContext.user) {
+    title = "Check the existing termsets for this term.";
+  }
+  
   return (
-    <div>
-      <div className="modal fade" id={"addToTermsetModal-" + modalId} tabIndex={-1} role="dialog"
-           aria-labelledby={"addToTermsetModal-" + modalId} aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title"
-                  id={"addToTermsetModal-" + modalId}>{modalTitle}</h5>
-              {!submited &&
-                <button onClick={closeModal} type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              }
-            </div>
-            <div className="modal-body">
-              {!submited && renderTermsetList()}
-              {!submited && !createMode && renderTermsetAddingSection()}
-              {!submited && createMode && renderTermsetCreateSection()}
-              {submited && addedSuccess &&
-                <AlertBox
-                  type="success"
-                  message="Added successfully!"
-                  alertColumnClass="col-sm-12"
-                />
-              }
-              {submited && !addedSuccess &&
-                <AlertBox
-                  type="danger"
-                  message="Something went wrong. Please try again!"
-                  alertColumnClass="col-sm-12"
-                />
-              }
-            </div>
-            <div className="modal-footer justify-content-center">
-              {!submited && appContext.user &&
-                <button type="button" className="btn btn-secondary"
-                        onClick={() => {
-                          if (createMode) {
-                            submitNewTermset();
-                          } else {
-                            addTermToSet();
-                          }
-                        }}>
-                  {createMode ? "Create and add" : "Add"}
-                </button>
-              }
-              {submited && <button type="button" className="btn btn-secondary" data-dismiss="modal"
-                                   onClick={closeModal}>Close</button>}
-            </div>
+    <>
+      <button
+        className={"btn btn-secondary borderless-btn " + (btnClass ?? "")}
+        aria-label="add this term to termsets"
+        title={title}
+        onClick={() => setShowModal(true)}
+      >
+        {appContext.user && <i className="bi bi-plus-square"></i>}
+        {!appContext.user && <i className="bi bi-bookmark"></i>}
+        {" set"}
+      </button>
+      <Modal show={showModal} id={"addToTermsetModal-" + modalId}>
+        <Modal.Header className="row">
+          <div className="col-sm-10">
+            <h5 className="modal-title"
+                id={"addToTermsetModal-" + modalId}>{modalTitle}</h5>
           </div>
-        </div>
-      </div>
-    </div>
+          <div className="col-sm-2 text-end">
+            {!submited &&
+              <button onClick={closeModal} type="button" className="close bg-white" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            }
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          {!submited && renderTermsetList()}
+          {!submited && !createMode && renderTermsetAddingSection()}
+          {!submited && createMode && renderTermsetCreateSection()}
+          {submited && addedSuccess &&
+            <AlertBox
+              type="success"
+              message="Added successfully!"
+              alertColumnClass="col-sm-12"
+            />
+          }
+          {submited && !addedSuccess &&
+            <AlertBox
+              type="danger"
+              message="Something went wrong. Please try again!"
+              alertColumnClass="col-sm-12"
+            />
+          }
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          {!submited && appContext.user &&
+            <button type="button" className="btn btn-secondary"
+                    onClick={() => {
+                      if (createMode) {
+                        submitNewTermset();
+                      } else {
+                        addTermToSet();
+                      }
+                    }}>
+              {createMode ? "Create and add" : "Add"}
+            </button>
+          }
+          {submited && <button type="button" className="btn btn-secondary"
+                               onClick={closeModal}>Close</button>}
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }

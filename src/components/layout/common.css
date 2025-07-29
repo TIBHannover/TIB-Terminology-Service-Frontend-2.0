@@ -53,6 +53,13 @@ body .btn-secondary,
 .btn-secondary:hover {
     background-color: #404040;
     border-color: #404040;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+body .btn-sm {
+    font-size: 10px;
+    padding: 5px;
 }
 
 body .btn-danger {
@@ -467,15 +474,15 @@ body .isLoading-btn {
 }
 
 body .isLoading-inline-small {
-  display: inline-block;
-  margin-left: 5px;
-  border: 7px solid #ffffff;
-  border-radius: 50%;
-  border-top: 7px solid #404040;
-  width: 10px;
-  height: 10px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-left: 5px;
+    border: 7px solid #ffffff;
+    border-radius: 50%;
+    border-top: 7px solid #404040;
+    width: 10px;
+    height: 10px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 @-webkit-keyframes spin {
@@ -542,6 +549,8 @@ body .fa-eye {
     border: none;
     font-size: 16px;
     margin-right: 2px;
+    background: transparent;
+    color: white;
 }
 
 body .fa-trash {
@@ -600,11 +609,11 @@ body .fa-info {
 }
 
 body .bi-file-minus-fill {
-  color: red;
-  fill: white;
-  font-size: 13px;
-  cursor: pointer;
-  margin-left: 3px;
+    color: red;
+    fill: white;
+    font-size: 13px;
+    cursor: pointer;
+    margin-left: 3px;
 }
 
 body .overlay {
@@ -760,7 +769,7 @@ input[type="file"] {
 }
 
 input {
-  font-size: 12px;
+    font-size: 12px;
 }
 
 body .custom-file-upload {
@@ -801,6 +810,6 @@ body .site-tour-btn {
     background-color: #0e6668;
 }
 
-.inline-label{
-  display: inline-block;
+.inline-label {
+    display: inline-block;
 }
