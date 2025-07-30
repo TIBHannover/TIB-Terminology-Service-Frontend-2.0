@@ -1,4 +1,5 @@
 import {useState, useContext, useEffect} from "react";
+import {useLocation} from "react-router-dom";
 import Tour from 'reactour';
 import {getTourProfile, storeTourProfile} from "./controller";
 import {AppContext} from "../context/AppContext";
@@ -26,9 +27,10 @@ const ONTOLOGY_PAGE_ID = 'ontologyOverview';
 const SiteTour = () => {
   
   const appContext = useContext(AppContext);
-  const isUserLogin = appContext.user ? true : false;
+  const location = useLocation();
+  const [currentPage, setCurrentPage] = useState();
+  const isUserLogin = !!appContext.user;
   const tourP = getTourProfile();
-  let currentPage = whichPage();
   
   let tourOpenValue = false;
   if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
@@ -56,11 +58,15 @@ const SiteTour = () => {
   function whichPage() {
     let currentUrl = window.location.href;
     let urlPath = currentUrl;
-    if (process.env.REACT_APP_PROJECT_SUB_PATH) {
-      urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH);
+    let baseUrl = window.location.origin + process.env.REACT_APP_PROJECT_SUB_PATH;
+    urlPath = currentUrl.split(baseUrl);
+    if (urlPath.length >= 1) {
       urlPath = urlPath[urlPath.length - 1];
+    } else {
+      return HOME_PAGE_ID;
     }
     if (urlPath && urlPath[0] === '/') {
+      // remove leading / if exists
       urlPath = urlPath.substring(1);
     }
     if (!urlPath || urlPath[0] === "?") {
@@ -166,6 +172,13 @@ const SiteTour = () => {
     storeTourProfile(tourP);
   }
   
+  useEffect(() => {
+    setCurrentPage(whichPage());
+  }, [])
+  
+  useEffect(() => {
+    setCurrentPage(whichPage());
+  }, [location])
   
   useEffect(() => {
     if (!isTourOpen) {
