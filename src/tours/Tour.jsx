@@ -1,13 +1,13 @@
-import { useState, useContext, useEffect } from "react";
+import {useState, useContext, useEffect} from "react";
 import Tour from 'reactour';
-import { getTourProfile, storeTourProfile } from "./controller";
-import { AppContext } from "../context/AppContext";
-import { tourWelcomeStep } from "./globals";
+import {getTourProfile, storeTourProfile} from "./controller";
+import {AppContext} from "../context/AppContext";
+import {tourWelcomeStep} from "./globals";
 import {
   headerTourStepsTibGeneral,
   homePageTourStepsTibGeneral
 } from "./tibGeneral";
-import { loginInHeaderTourSteps } from "./login";
+import {loginInHeaderTourSteps} from "./login";
 import {
   ontologyPageTabTourSteps,
   ontologyOverViewTourSteps,
@@ -24,12 +24,12 @@ const ONTOLOGY_PAGE_ID = 'ontologyOverview';
 
 
 const SiteTour = () => {
-
+  
   const appContext = useContext(AppContext);
   const isUserLogin = appContext.user ? true : false;
   const tourP = getTourProfile();
   let currentPage = whichPage();
-
+  
   let tourOpenValue = false;
   if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
     tourOpenValue = true;
@@ -48,13 +48,11 @@ const SiteTour = () => {
   } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/gitpanel') && !tourP.ontoGithubPage) {
     tourOpenValue = true;
   }
-
+  
   const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
   const [tourSteps, setTourSteps] = useState([]);
-
-
-
-
+  
+  
   function whichPage() {
     let currentUrl = window.location.href;
     let urlPath = currentUrl;
@@ -74,8 +72,8 @@ const SiteTour = () => {
       return false;
     }
   }
-
-
+  
+  
   function makeHomePageTourSteps() {
     let tourSteps = [];
     if (process.env.REACT_APP_PROJECT_ID === 'general') {
@@ -88,8 +86,8 @@ const SiteTour = () => {
     }
     return tourSteps;
   }
-
-
+  
+  
   function expandLeftPaneIfnot() {
     let detailPane = document.getElementById('page-right-pane');
     if (!detailPane) {
@@ -99,8 +97,8 @@ const SiteTour = () => {
       }
     }
   }
-
-
+  
+  
   function makeOntologyPageTourSteps() {
     let tourSteps = [];
     let cUrl = window.location.href;
@@ -129,16 +127,16 @@ const SiteTour = () => {
       // ontology overview tab
       tourSteps = ontologyOverViewTourSteps();
     }
-
-
+    
+    
     if (!tourP.ontoPageTabs) {
       tourSteps = tourSteps.concat(ontologyPageTabTourSteps())
     }
-
+    
     return tourSteps;
   }
-
-
+  
+  
   function onCloseTour() {
     let tourP = getTourProfile();
     if (currentPage === HOME_PAGE_ID) {
@@ -162,13 +160,13 @@ const SiteTour = () => {
         // ontology overview tab
         tourP.ontoOverViewPage = true;
       }
-
+      
     }
     setIsTourOpen(false);
     storeTourProfile(tourP);
   }
-
-
+  
+  
   useEffect(() => {
     if (!isTourOpen) {
       return;
@@ -197,13 +195,13 @@ const SiteTour = () => {
       setTourSteps(makeOntologyPageTourSteps());
     }
   }, [isTourOpen]);
-
-
+  
+  
   if (!currentPage) {
     // do not show the tour button when the page does not need one
     return "";
   }
-
+  
   return (
     <>
       {tourSteps.length !== 0 &&
@@ -219,7 +217,15 @@ const SiteTour = () => {
           scrollOffset={-500}
         />
       }
-      <a className='btn btn-secondary btn-sm site-tour-btn' id="tour-trigger-btn" onClick={() => { setIsTourOpen(true) }}>Guide me</a>
+      <button
+        className='btn site-tour-btn'
+        id="tour-trigger-btn"
+        onClick={() => {
+          setIsTourOpen(true)
+        }}
+      >
+        Guide me
+      </button>
     </>
   );
 }
