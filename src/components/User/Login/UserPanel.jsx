@@ -22,7 +22,7 @@ const UserPanel = (props) => {
       }
       {appContext.user &&
         <Dropdown>
-          <Dropdown.Toggle className="btn btn-secondary user-profile-dropdown stour-login-in-header"
+          <Dropdown.Toggle className="btn btn-secondary user-profile-dropdown stour-login-in-header mt-3"
                            type="button" id="userProfileDropdown">
             {appContext.user.fullName}
           </Dropdown.Toggle>

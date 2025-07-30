@@ -837,3 +837,9 @@ body .site-tour-btn:hover {
 .inline-label {
     display: inline-block;
 }
+
+.navbar-burger-menu {
+    background-color: #404040;
+    color: white;
+    margin-top: 12px;
+}

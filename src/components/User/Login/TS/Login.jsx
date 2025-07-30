@@ -60,7 +60,7 @@ const Login = (props) => {
     if (props.customLoginBtn) {
       return props.customLoginBtn;
     }
-    return <button className="login-btn-header btn-secondary" onClick={() => setShowModal(true)}>Login</button>;
+    return <button className="mt-3 login-btn-header btn-secondary" onClick={() => setShowModal(true)}>Login</button>;
   }
   
   useEffect(() => {

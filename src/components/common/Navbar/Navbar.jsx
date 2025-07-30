@@ -18,10 +18,10 @@ const SiteNavbar = () => {
   
   
   return (
-    <div className='col-lg-7 col-md-6'>
+    <div className='mt-0'>
       <Navbar collapseOnSelect expand="lg" className="site-navbar">
         <Container>
-          <Navbar.Toggle aria-controls="siteMainNavbar" className="ms-auto">
+          <Navbar.Toggle aria-controls="siteMainNavbar" className="ms-auto  navbar-burger-menu">
             <i className="fa fa-bars collpase-btn-content"></i>
           </Navbar.Toggle>
           <Navbar.Collapse id="siteMainNavbar">

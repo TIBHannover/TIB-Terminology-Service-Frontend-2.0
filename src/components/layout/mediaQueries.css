@@ -75,6 +75,10 @@
         width: 49%;
     }
 
+    body .nav-link {
+        font-size: 0.8rem;
+    }
+
     .graph-container {
         height: 500px;
         width: 600px;
@@ -103,6 +107,22 @@
     }
 }
 
+
+@media only screen and (max-width: 1299px) and (min-width: 901px) {
+    body .nav-link {
+        font-size: 0.8rem;
+    }
+
+    body .main-title {
+        font-size: 0.8rem;
+    }
+
+    body .user-profile-dropdown {
+        font-size: 10px;
+    }
+}
+
+
 @media only screen and (max-width: 1299px) and (min-width: 1031px) {
     body .jumpto-wrapper {
         width: 80%;
@@ -121,10 +141,6 @@
         height: 50px;
     }
 
-    body .navbar-item {
-        float: right;
-        font-size: 13px;
-    }
 
     body .navbar-nav {
         margin-right: 40px;
