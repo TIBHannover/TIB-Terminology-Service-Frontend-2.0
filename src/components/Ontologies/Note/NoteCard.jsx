@@ -134,10 +134,11 @@ export const NoteCardHeader = (props) => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item className="note-dropdown-item">
-                  <div title={VISIBILITY_HELP[note['visibility']]} className="ps-2">
+                  <div title={VISIBILITY_HELP[note['visibility']]}>
                     <small><i className="fa fa-solid fa-eye ms-0 me-1 "></i>{note['visibility']}</small>
                   </div>
                 </Dropdown.Item>
+                <div className="dropdown-divider"></div>
                 <Dropdown.Item className="note-dropdown-item">
                   <button
                     type="button"

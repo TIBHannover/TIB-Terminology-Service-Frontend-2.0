@@ -107,7 +107,7 @@ const TermTable = (props: InputProp) => {
                     data-value={col.id}
                 >
                     {col.text}
-                    <i className="fa fa-eye"></i>
+                    <i className="fa fa-eye fa-eye-table"></i>
                 </div>
             )
         })
