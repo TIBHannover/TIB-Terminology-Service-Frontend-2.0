@@ -25,60 +25,13 @@ const RenderHomePage = () => {
       </div>
       <br></br>
       <div className="row">
-        <div className="col-sm-4 stour-collection-box-in-home">
-          <CollectionCard collectionId={'NFDI4ING'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4CHEM'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4CULTURE'}/>
-        </div>
-      </div>
-      <br></br>
-      <div className="row">
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'CoyPu'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'FID move'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'FID BAUdigital'}/>
-        </div>
-      </div>
-      <br></br>
-      <div className="row">
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'FAIR Data Spaces'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'ESS'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4CAT'}/>
-        </div>
-      </div>
-      <br></br>
-      <div className="row">
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'NFDI4Energy'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'DataPLANT'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'Educational Resources'}/>
-        </div>
-      </div>
-      <br/>
-      <div className="row">
-        <div className="col-sm-4">
-          <CollectionCard collectionId={'Foundational Ontologies'}/>
-        </div>
-        <div className="col-sm-4">
-          <CollectionCard collectionId={"FAIRmat"}/>
-        </div>
+        {Object.keys(collectionsInfoJson).map((collectionId, index) => {
+          return (
+            <div className={"col-12 col-lg-4 mb-3 " + (index === 0 ? "stour-collection-box-in-home" : "")}>
+              <CollectionCard collectionId={collectionId}/>
+            </div>
+          );
+        })}
       </div>
     </div>,
   ];
