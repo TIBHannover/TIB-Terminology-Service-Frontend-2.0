@@ -92,23 +92,7 @@
 }
 
 
-@media only screen and (max-width: 1025px) {
-    .application-content {
-        width: 95%;
-    }
-
-    .site-footer {
-        font-size: 10px;
-    }
-
-    .footer-logo {
-        width: 200px;
-        height: 50px;
-    }
-}
-
-
-@media only screen and (max-width: 1299px) and (min-width: 901px) {
+@media only screen and (max-width: 1299px) and (min-width: 1025px) {
     body .nav-link {
         font-size: 0.8rem;
     }
@@ -124,6 +108,8 @@
 
 
 @media only screen and (max-width: 1299px) and (min-width: 1031px) {
+
+
     body .jumpto-wrapper {
         width: 80%;
     }
@@ -234,7 +220,71 @@
     }
 }
 
+
+@media only screen and (max-width: 1025px) {
+    .site-footer {
+        font-size: 10px;
+    }
+
+    .footer-logo {
+        width: 200px;
+        height: 50px;
+    }
+
+    body .main-title {
+        font-size: 0.7rem;
+    }
+
+    body .nav-item:not(.ontology-detail-nav-item) {
+        font-size: 0.5rem !important;
+    }
+
+    body .navbar-item {
+        font-size: 0.5rem !important;
+    }
+
+    body .user-profile-dropdown {
+        width: 100px !important;
+    }
+
+    body .btn-secondary:not(.extra-sm-btn):not(.search-btn),
+    body .btn:not(.extra-sm-btn):not(.search-btn) {
+        font-size: 8px !important;
+        padding: 2px;
+        /*width: 50px;*/
+    }
+
+    body div {
+        font-size: 0.6rem !important;
+    }
+
+    body .tree-text-container {
+        width: 49%;
+    }
+
+    body .autosuggest-jumpto-container label {
+        padding: 7px;
+    }
+
+    body .fa {
+        font-size: 9px;
+    }
+
+    body .graph-container {
+        width: 450px;
+    }
+
+    body .form-check-label {
+        margin-top: 5px;
+    }
+
+}
+
 @media only screen and (max-width: 1030px) and (min-width: 901px) {
+    body .main-title {
+        font-size: 0.7rem;
+    }
+
     body .jumpto-wrapper {
         width: 80%;
     }
@@ -282,8 +332,8 @@
         height: 150px;
     }
 
-    body .pagination-holder {
-        font-size: 12px;
+    body .pagination-link {
+        font-size: 10px;
     }
 
     body {
@@ -332,6 +382,10 @@
 }
 
 @media only screen and (max-width: 900px) {
+    body .main-title {
+        font-size: 0.7rem;
+    }
+
     body .navbar-item {
         float: right;
     }

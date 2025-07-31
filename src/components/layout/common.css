@@ -841,5 +841,6 @@ body .site-tour-btn:hover {
 .navbar-burger-menu {
     background-color: #404040;
     color: white;
-    margin-top: 12px;
+    margin-top: 4px;
+    padding: 3px;
 }

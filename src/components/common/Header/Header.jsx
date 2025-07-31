@@ -9,17 +9,17 @@ function Header() {
       <div className='row header-wrapper header-collapseable-section'>
         <div className="col-sm-12">
           <div className='row'>
-            <div className='col-12 col-md-3 mb-3 mb-md-0'>
+            <div className='col-12 col-md-3'>
               <SiteLogo/>
             </div>
-            <div className='col-6 col-md-6 mb-3 mb-md-0'>
+            <div className='col-6 col-md-6'>
               <div className="row">
                 <div className='col-sm-12'>
                   <SiteNavbar/>
                 </div>
               </div>
             </div>
-            <div className='col-6 col-md-3 mb-3 mb-md-0 text-start'>
+            <div className='col-6 col-md-3 text-start'>
               <UserPanel isModal={true}></UserPanel>
             </div>
           </div>
