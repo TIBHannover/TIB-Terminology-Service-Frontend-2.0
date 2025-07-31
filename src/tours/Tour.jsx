@@ -32,27 +32,7 @@ const SiteTour = () => {
   const isUserLogin = !!appContext.user;
   const tourP = getTourProfile();
   
-  let tourOpenValue = false;
-  if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
-    tourOpenValue = true;
-  }
-  // else if (currentPage === ONTOLOGY_PAGE_ID && !tourP.ontoPageTabs) {
-  //   tourOpenValue = true;
-  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/terms') && !tourP.ontoClassTreePage) {
-  //   tourOpenValue = true;
-  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/props') && !tourP.ontoPropertyTreePage) {
-  //   tourOpenValue = true;
-  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/individuals') && !tourP.ontoIndividualPage) {
-  //   tourOpenValue = true;
-  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/termList') && !tourP.ontoClassListPage) {
-  //   tourOpenValue = true;
-  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/notes') && !tourP.ontoNotesPage) {
-  //   tourOpenValue = true;
-  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/gitpanel') && !tourP.ontoGithubPage) {
-  //   tourOpenValue = true;
-  // }
-  
-  const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
+  const [isTourOpen, setIsTourOpen] = useState(false);
   const [tourSteps, setTourSteps] = useState([]);
   
   
@@ -175,6 +155,12 @@ const SiteTour = () => {
   useEffect(() => {
     setCurrentPage(whichPage());
   }, [])
+  
+  useEffect(() => {
+    if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
+      setIsTourOpen(true);
+    }
+  }, [currentPage])
   
   useEffect(() => {
     setCurrentPage(whichPage());
