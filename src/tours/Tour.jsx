@@ -35,21 +35,22 @@ const SiteTour = () => {
   let tourOpenValue = false;
   if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
     tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && !tourP.ontoPageTabs) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/terms') && !tourP.ontoClassTreePage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/props') && !tourP.ontoPropertyTreePage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/individuals') && !tourP.ontoIndividualPage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/termList') && !tourP.ontoClassListPage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/notes') && !tourP.ontoNotesPage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/gitpanel') && !tourP.ontoGithubPage) {
-    tourOpenValue = true;
   }
+  // else if (currentPage === ONTOLOGY_PAGE_ID && !tourP.ontoPageTabs) {
+  //   tourOpenValue = true;
+  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/terms') && !tourP.ontoClassTreePage) {
+  //   tourOpenValue = true;
+  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/props') && !tourP.ontoPropertyTreePage) {
+  //   tourOpenValue = true;
+  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/individuals') && !tourP.ontoIndividualPage) {
+  //   tourOpenValue = true;
+  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/termList') && !tourP.ontoClassListPage) {
+  //   tourOpenValue = true;
+  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/notes') && !tourP.ontoNotesPage) {
+  //   tourOpenValue = true;
+  // } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/gitpanel') && !tourP.ontoGithubPage) {
+  //   tourOpenValue = true;
+  // }
   
   const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
   const [tourSteps, setTourSteps] = useState([]);
@@ -57,9 +58,8 @@ const SiteTour = () => {
   
   function whichPage() {
     let currentUrl = window.location.href;
-    let urlPath = currentUrl;
     let baseUrl = window.location.origin + process.env.REACT_APP_PROJECT_SUB_PATH;
-    urlPath = currentUrl.split(baseUrl);
+    let urlPath = currentUrl.split(baseUrl);
     if (urlPath.length >= 1) {
       urlPath = urlPath[urlPath.length - 1];
     } else {
