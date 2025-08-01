@@ -19,7 +19,7 @@ function Header() {
                 </div>
               </div>
             </div>
-            <div className='col-6 col-md-3 text-start'>
+            <div className='col-6 col-md-3 text-center'>
               <UserPanel isModal={true}></UserPanel>
             </div>
           </div>

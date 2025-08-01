@@ -27,39 +27,55 @@ const UserPanel = (props) => {
             {appContext.user.fullName}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item>
-              <Link className="user-panel-item"
-                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}>My
-                Profile</Link>
+            <Dropdown.Item
+              as={Link}
+              className="user-panel-item"
+              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}
+            >
+              My Profile
             </Dropdown.Item>
-            <Dropdown.Item>
-              <Link className="user-panel-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}>My
-                Ontology
-                Collection</Link>
+            <Dropdown.Item
+              as={Link}
+              className="user-panel-item"
+              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}
+            >
+              Ontology Collection
             </Dropdown.Item>
             {process.env.REACT_APP_TERMSET_FEATURE === "true" &&
-              <Dropdown.Item>
-                <Link className="user-panel-item" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>My
-                  Termsets</Link>
+              <Dropdown.Item
+                as={Link}
+                className="user-panel-item"
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}
+              >
+                Termsets
               </Dropdown.Item>
             }
             {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&
-              <Dropdown.Item>
-                <Link className="user-panel-item"
-                      to={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}>Submited
-                  Issue Requests</Link>
+              <Dropdown.Item
+                as={Link}
+                className="user-panel-item"
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}
+              >
+                Issue Requests
               </Dropdown.Item>
             }
             {appContext.isUserSystemAdmin &&
-              <Dropdown.Item>
-                <Link className="user-panel-item"
-                      to={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}>{`Reports (${appContext.reportsListForAdmin.length})`}</Link>
+              <Dropdown.Item
+                as={Link}
+                className="user-panel-item"
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"}
+              >
+                {`Reports (${appContext.reportsListForAdmin.length})`}
               </Dropdown.Item>
             }
-            <Dropdown.Item>
-              <Link className="user-panel-item" to="#" onClick={() => {
+            <Dropdown.Item
+              as={Link}
+              className="user-panel-item"
+              onClick={() => {
                 Auth.runLogout();
-              }}>Logout</Link>
+              }}
+            >
+              Logout
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
