@@ -103,7 +103,7 @@ class OntologyLib {
         res.push(
           <a
             href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontoId}
-            className={"mr-2"}
+            className="me-2"
             target="_blank"
             rel="noopener noreferrer"
           >
