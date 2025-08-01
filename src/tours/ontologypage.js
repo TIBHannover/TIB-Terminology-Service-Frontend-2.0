@@ -64,7 +64,7 @@ export function ontologyOverViewTourSteps() {
     steps.push(
       {
         selector: tourSelectorPrefix + 'overview-page-add-to-collection',
-        content: "Request adding this ontology to TIB collection(s) in case you see the need. We will evaluate your request and add it to the desired collecion(s) if it fits the criteria.",
+        content: "Request to add this ontology to one or more TIB collections if you believe it’s relevant. We will evaluate your request and include it if it meets the criteria.",
       }
     );
   }

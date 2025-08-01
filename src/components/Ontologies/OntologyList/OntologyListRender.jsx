@@ -54,15 +54,15 @@ export const OntologyListRender = (props) => {
     for (let i = 0; i < props.ontologies.length; i++) {
       let item = props.ontologies[i]
       ontologyList.push(props.ontologiesHiddenStatus[i] &&
-        <div className="row result-card" id={'ontology_' + i} key={item.ontologyId}>
+        <div className="row result-card stour-ontology-card-in-list" id={'ontology_' + i} key={item.ontologyId}>
           <div className='col-sm-9'>
             <div className="ontology-card-title-section">
               <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
-                    className='ontology-button btn btn-secondary'>{item.ontologyId}</Link>
+                    className='ontology-button btn btn-secondary stour-onto-id'>{item.ontologyId}</Link>
               <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
-                    className="ontology-title-text-in-box"><b>{OntologyLib.getLabel(item)}</b></Link>
+                    className="ontology-title-text-in-box stour-onto-name"><b>{OntologyLib.getLabel(item)}</b></Link>
             </div>
-            <div className="ontology-card-description">
+            <div className="ontology-card-description stour-onto-description">
               <p className="trunc-text">{OntologyLib.gerDescription(item).substring(0, 100) + " ... "}</p>
               <a className="read-more-btn" data-value={OntologyLib.gerDescription(item)} onClick={(e) => {
                 let fullDescp = e.target.getAttribute("data-value");
@@ -82,18 +82,19 @@ export const OntologyListRender = (props) => {
                 [Read more]</a>
             </div>
             {process.env.REACT_APP_PROJECT_ID === "general" &&
-              <div className='ontology-card-collection-name'>
+              <div className='ontology-card-collection-name stour-onto-collection-list'>
                 <b>Collections:</b>
                 {BuildCollectionForCard(OntologyLib.getCollections(item))}
               </div>}
           </div>
           <div className="col-sm-3 ontology-card-meta-data">
-            <span className='ontology-meta-data-field-span'>{item.numberOfClasses} Classes</span>
-            <hr/>
-            <span className='ontology-meta-data-field-span'>{item.numberOfProperties} Properties</span>
+            <span className='ontology-meta-data-field-span stour-onto-class-count'>{item.numberOfClasses} Classes</span>
             <hr/>
             <span
-              className='ontology-meta-data-field-span'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
+              className='ontology-meta-data-field-span stour-onto-props-count'>{item.numberOfProperties} Properties</span>
+            <hr/>
+            <span
+              className='ontology-meta-data-field-span stour-onto-loaded-time'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
           </div>
         </div>
       )
@@ -113,7 +114,7 @@ export const OntologyListRender = (props) => {
       <div className='col-sm-12'>
         <div className='row'>
           <div className='col-sm-6'>
-            <h3 className='h-headers'>Browse Ontologies ({props.ontologies.length})</h3>
+            <h3 className='h-headers stour-onto-list-browse'>Browse Ontologies ({props.ontologies.length})</h3>
           </div>
         </div>
         {process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true" &&
@@ -121,7 +122,7 @@ export const OntologyListRender = (props) => {
             <div className='row'>
               <div className='col-sm-12'>
                 Not able to find what you are looking for? You can
-                <Link className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 ps-1 pe-1 me-2"
+                <Link className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 ps-1 pe-1 me-2 stour-onto-list-suggest-onto"
                       to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>suggest</Link>
                 your ontology to be added to the list.
               </div>
@@ -141,7 +142,7 @@ export const OntologyListRender = (props) => {
               dropdownClassName={"white-dropdown"}
             />
           </div>
-          <div className='col-sm-6 text-end zero-padding-col'>
+          <div className='col-sm-6 text-end zero-padding-col stour-onto-list-sort'>
             <DropDown
               options={SORT_DROPDONW_OPTIONS}
               dropDownId="ontology-list-sorting"

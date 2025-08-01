@@ -18,10 +18,12 @@ import {
   githubPanelTourSteps,
   notesTourSteps
 } from "./ontologypage";
+import {makeOntologyListPageTourSteps} from "./ontologyListPage";
 
 
 const HOME_PAGE_ID = 'homepage';
 const ONTOLOGY_PAGE_ID = 'ontologyOverview';
+const ONTOLOGY_LIST_PAGE_ID = "ontologyListPage";
 
 
 const SiteTour = () => {
@@ -53,6 +55,8 @@ const SiteTour = () => {
       return HOME_PAGE_ID;
     } else if (urlPath.includes('ontologies/')) {
       return ONTOLOGY_PAGE_ID;
+    } else if (urlPath.includes("ontologies")) {
+      return ONTOLOGY_LIST_PAGE_ID;
     } else {
       // the target page does not need a tour button
       return false;
@@ -146,7 +150,8 @@ const SiteTour = () => {
         // ontology overview tab
         tourP.ontoOverViewPage = true;
       }
-      
+    } else if (currentPage === ONTOLOGY_LIST_PAGE_ID) {
+      tourP.ontoListPage = true;
     }
     setIsTourOpen(false);
     storeTourProfile(tourP);
@@ -192,6 +197,9 @@ const SiteTour = () => {
       }
       storeTourProfile(tourP);
       setTourSteps(makeOntologyPageTourSteps());
+    } else if (currentPage === ONTOLOGY_LIST_PAGE_ID) {
+      setTourSteps(makeOntologyListPageTourSteps());
+      tourP.ontoListPage = false;
     }
   }, [isTourOpen]);
   
@@ -229,4 +237,4 @@ const SiteTour = () => {
   );
 }
 
-export default SiteTour
+export default SiteTour;
