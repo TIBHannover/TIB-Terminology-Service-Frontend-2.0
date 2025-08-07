@@ -198,10 +198,9 @@ body .individual-list-container {
 }
 
 .term-detail-action-bar {
-    background-color: #cfd1d1;
+    background-color: #128c8d;
     padding: 5px;
     margin-bottom: 10px;
-    border-radius: 5px;
 }
 
 .term-detail-action-bar > button,
