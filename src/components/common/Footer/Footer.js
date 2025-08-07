@@ -8,7 +8,7 @@ const Footer = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src={process.env.REACT_APP_PROJECT_SUB_PATH + "/dfg_logo_schriftzug_weiss_foerderung_en.gif"}
+        <img src={"/dfg_logo_schriftzug_weiss_foerderung_en.gif"}
              alt="dfg-logo" className="footer-logo"
              loading="lazy"/>
       </a>
@@ -84,7 +84,7 @@ const Footer = () => (
         rel="noopener noreferrer"
       >
         <img
-          src={process.env.REACT_APP_PROJECT_SUB_PATH + "/TIB_Logo_EN_WM_W.SVG"}
+          src={"/TIB_Logo_EN_WM_W.SVG"}
           alt="Logo Technische Informationsbibliothek (TIB)"
           className="footer-logo"
           loading="lazy"
