@@ -1,13 +1,13 @@
-import { useEffect, useState, useContext } from "react";
-import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import {useEffect, useState, useContext} from "react";
+import {OntologyPageContext} from "../../../context/OntologyPageContext";
 
 export const RenderIndividualList = (props) => {
-
+  
   const ontologyPageContext = useContext(OntologyPageContext);
-
+  
   const [content, setContent] = useState("");
-
-
+  
+  
   function createIndividualList() {
     let result = [];
     let individuals = props.individuals;
@@ -29,24 +29,24 @@ export const RenderIndividualList = (props) => {
     }
     setContent(result);
   }
-
-
-
+  
+  
   function createActionButtonSection() {
     return [
       typeof (props.iri) !== "undefined" && props.iri !== " " && props.individuals.length !== 0 &&
       <div className="row tree-action-button-holder">
         <div className="col-sm-12">
-          <button className='btn btn-secondary btn-sm tree-action-btn stour-check-in-tree-individual' onClick={props.switchViewFunction}>
+          <button className='btn btn-secondary btn-sm tree-action-btn stour-check-in-tree-individual'
+                  onClick={props.switchViewFunction}>
             {props.listView ? "Show In Tree" : ""}
           </button>
         </div>
       </div>
-
+    
     ];
   }
-
-
+  
+  
   function selectNodeOnLoad() {
     if (ontologyPageContext.isSkos && !props.listView) {
       return true;
@@ -55,20 +55,21 @@ export const RenderIndividualList = (props) => {
     if (node) {
       node.classList.add('clicked');
       let position = node.offsetTop;
-      document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+      // -40 due to the margin-top of the container that makes issue for the scroll
+      document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position - 40;
     }
   }
-
+  
   useEffect(() => {
     createIndividualList();
   }, [props.individuals]);
-
-
+  
+  
   useEffect(() => {
     selectNodeOnLoad();
   }, [content])
-
-
+  
+  
   return (
     <>
       <div className='row tree-action-button-area'>
@@ -90,5 +91,5 @@ export const RenderIndividualList = (props) => {
       </div>
     </>
   );
-
+  
 }
