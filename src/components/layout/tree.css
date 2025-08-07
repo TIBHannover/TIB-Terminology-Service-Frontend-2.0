@@ -20,9 +20,9 @@
     width: 100%;
 }
 
-.tree-container,
-.individual-list-container {
-    margin-top: 20px;
+body .tree-container,
+body .individual-list-container {
+    margin-top: 40px;
 }
 
 .tree-action-button-area {
@@ -198,21 +198,22 @@
 }
 
 .term-detail-action-bar {
-  background-color: #cfd1d1;
-  padding: 5px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+    background-color: #cfd1d1;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
 .term-detail-action-bar > button,
 .term-detail-action-bar > a {
-  font-size: 13px;
-  margin-right: 20px;
-  display: inline-block;
-  padding: 2px;
-  max-width: 80px;
-  width: 80px;
+    font-size: 13px;
+    margin-right: 20px;
+    display: inline-block;
+    padding: 2px;
+    max-width: 80px;
+    width: 80px;
 }
+
 .term-detail-action-bar > i {
-  font-size: 13px;
+    font-size: 13px;
 }
