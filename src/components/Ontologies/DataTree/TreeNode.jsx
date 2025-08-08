@@ -17,7 +17,9 @@ class TreeNodeController {
   
   
   buildNodeWithReact({nodeObject, nodeIsClicked = false, isExpanded = false, isSkos = false}) {
-    let nodeLabel = `${TermLib.extractLabel(nodeObject)} (${nodeObject["numDescendants"] ?? "0"})`;
+    let numOfdescendant = nodeObject["numDescendants"] ?? 0;
+    numOfdescendant = numOfdescendant ? `(${numOfdescendant})` : "";
+    let nodeLabel = `${TermLib.extractLabel(nodeObject)}${numOfdescendant}`;
     let nodeHasChildren = !isSkos ? TermLib.termHasChildren(nodeObject) : SkosLib.skosTermHasChildren(nodeObject);
     let partOfSymbol = "";
     let individualSymbol = "";
@@ -74,7 +76,9 @@ class TreeNodeController {
   
   
   buildNodeWithTradionalJs({nodeObject, nodeIsClicked = false, isExpanded = false, isSkos = false}) {
-    let nodeLabel = `${TermLib.extractLabel(nodeObject)} (${nodeObject["numDescendants"] ?? "0"})`;
+    let numOfdescendant = nodeObject["numDescendants"] ?? 0;
+    numOfdescendant = numOfdescendant ? `(${numOfdescendant})` : "";
+    let nodeLabel = `${TermLib.extractLabel(nodeObject)}${numOfdescendant}`;
     let nodeHasChildren = !isSkos ? TermLib.termHasChildren(nodeObject) : SkosLib.skosTermHasChildren(nodeObject);
     this.textDiv = document.createElement("div");
     let label = document.createTextNode(nodeLabel);
