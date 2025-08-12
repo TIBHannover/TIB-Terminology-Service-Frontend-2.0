@@ -130,6 +130,7 @@ export function renderHelpPage() {
           Cloud</a></b></li>
         <li><b><a href={"https://archivo.dbpedia.org/list"} target="_blank" rel="nofollow noreferrer">DBpedia
           Archivo</a></b></li>
+        <li><b><a href={"https://bioregistry.io"} target="_blank" rel="nofollow noreferrer">The Bioregistry</a></b></li>
       </ul>
       <p>A list of further services is provided by <a href={"https://bartoc.org/registries"} target="_blank"
                                                       rel="nofollow noreferrer">Bartoc</a>.
