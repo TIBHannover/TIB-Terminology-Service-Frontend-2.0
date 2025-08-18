@@ -36,7 +36,7 @@ const SiteLogo = () => {
       <div className=''>
         {process.env.REACT_APP_PROJECT_ID === "general" &&
           <span>
-                  <img src={process.env.REACT_APP_PROJECT_SUB_PATH + "/TIB_Logo_W_W.SVG"} alt="tib logo" height={60}
+                  <img src={"/TIB_Logo_W_W.SVG"} alt="tib logo" height={60}
                        width={80} loading="lazy"/>
                   <a className="main-title" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>TERMINOLOGY SERVICE</a>
                 </span>
