@@ -4,7 +4,7 @@
     "html_id": "NFDI4ING",
     "name": "NFDI4Ing Project",
     "text": "NFDI4Ing Terminology Service is a repository for engineering ontologies that aims to provide a single point of access to the latest ontology versions. You can browse engineering ontologies either through this website or via the Rest API. NFDI4Ing TS is developed and maintained by TIB as an extension of the TIB Central Terminology Service.",
-    "logo": "/nfdi4ing.webp",
+    "logo": "/NFDI4ING_Logo_Update.svg", 
     "ontology_list_url": "/ontologies?collection=NFDI4ING&and=false&page=1",
     "project_homepage": "https://nfdi4ing.de/",
     "domain_ts_link": "https://terminology.nfdi4ing.de/ts/"

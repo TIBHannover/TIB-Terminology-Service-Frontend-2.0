@@ -53,10 +53,10 @@ export const OntologyListFacet = (props) => {
   
   return (
     <div className="row">
-      <div className='col-sm-12' id="ontology-list-facet-grid">
+      <div className='col-sm-12 ' id="ontology-list-facet-grid">
         <h3 className='ontology-list-facet-header'>Filter</h3>
         <div className='row'>
-          <div className='col-sm-12' id="ontologylist-search-grid">
+          <div className='col-sm-12 stour-onto-list-filter-keyword' id="ontologylist-search-grid">
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -71,7 +71,7 @@ export const OntologyListFacet = (props) => {
           </div>
         </div>
         {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
-          <div className='row ontology-list-facet-section-box'>
+          <div className='row ontology-list-facet-section-box stour-onto-list-filter-collectin'>
             <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
             <div className="col-sm-12 facet-box">
               {!appContext.userSettings.userCollectionEnabled &&

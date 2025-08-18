@@ -1,4 +1,5 @@
 import {useState, useContext, useEffect} from "react";
+import {useLocation} from "react-router-dom";
 import Tour from 'reactour';
 import {getTourProfile, storeTourProfile} from "./controller";
 import {AppContext} from "../context/AppContext";
@@ -17,56 +18,45 @@ import {
   githubPanelTourSteps,
   notesTourSteps
 } from "./ontologypage";
+import {makeOntologyListPageTourSteps} from "./ontologyListPage";
 
 
 const HOME_PAGE_ID = 'homepage';
 const ONTOLOGY_PAGE_ID = 'ontologyOverview';
+const ONTOLOGY_LIST_PAGE_ID = "ontologyListPage";
 
 
 const SiteTour = () => {
   
   const appContext = useContext(AppContext);
-  const isUserLogin = appContext.user ? true : false;
+  const location = useLocation();
+  const [currentPage, setCurrentPage] = useState();
+  const isUserLogin = !!appContext.user;
   const tourP = getTourProfile();
-  let currentPage = whichPage();
   
-  let tourOpenValue = false;
-  if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && !tourP.ontoPageTabs) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/terms') && !tourP.ontoClassTreePage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/props') && !tourP.ontoPropertyTreePage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/individuals') && !tourP.ontoIndividualPage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/termList') && !tourP.ontoClassListPage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/notes') && !tourP.ontoNotesPage) {
-    tourOpenValue = true;
-  } else if (currentPage === ONTOLOGY_PAGE_ID && window.location.href.includes('/gitpanel') && !tourP.ontoGithubPage) {
-    tourOpenValue = true;
-  }
-  
-  const [isTourOpen, setIsTourOpen] = useState(tourOpenValue);
+  const [isTourOpen, setIsTourOpen] = useState(false);
   const [tourSteps, setTourSteps] = useState([]);
   
   
   function whichPage() {
     let currentUrl = window.location.href;
-    let urlPath = currentUrl;
-    if (process.env.REACT_APP_PROJECT_SUB_PATH) {
-      urlPath = currentUrl.split(process.env.REACT_APP_PROJECT_SUB_PATH);
+    let baseUrl = window.location.origin + process.env.REACT_APP_PROJECT_SUB_PATH;
+    let urlPath = currentUrl.split(baseUrl);
+    if (urlPath.length >= 1) {
       urlPath = urlPath[urlPath.length - 1];
+    } else {
+      return HOME_PAGE_ID;
     }
     if (urlPath && urlPath[0] === '/') {
+      // remove leading / if exists
       urlPath = urlPath.substring(1);
     }
     if (!urlPath || urlPath[0] === "?") {
       return HOME_PAGE_ID;
     } else if (urlPath.includes('ontologies/')) {
       return ONTOLOGY_PAGE_ID;
+    } else if (urlPath.includes("ontologies")) {
+      return ONTOLOGY_LIST_PAGE_ID;
     } else {
       // the target page does not need a tour button
       return false;
@@ -160,12 +150,26 @@ const SiteTour = () => {
         // ontology overview tab
         tourP.ontoOverViewPage = true;
       }
-      
+    } else if (currentPage === ONTOLOGY_LIST_PAGE_ID) {
+      tourP.ontoListPage = true;
     }
     setIsTourOpen(false);
     storeTourProfile(tourP);
   }
   
+  useEffect(() => {
+    setCurrentPage(whichPage());
+  }, [])
+  
+  useEffect(() => {
+    if (currentPage === HOME_PAGE_ID && !tourP.homepage) {
+      setIsTourOpen(true);
+    }
+  }, [currentPage])
+  
+  useEffect(() => {
+    setCurrentPage(whichPage());
+  }, [location])
   
   useEffect(() => {
     if (!isTourOpen) {
@@ -193,6 +197,9 @@ const SiteTour = () => {
       }
       storeTourProfile(tourP);
       setTourSteps(makeOntologyPageTourSteps());
+    } else if (currentPage === ONTOLOGY_LIST_PAGE_ID) {
+      setTourSteps(makeOntologyListPageTourSteps());
+      tourP.ontoListPage = false;
     }
   }, [isTourOpen]);
   
@@ -230,4 +237,4 @@ const SiteTour = () => {
   );
 }
 
-export default SiteTour
+export default SiteTour;

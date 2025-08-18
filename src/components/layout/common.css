@@ -230,14 +230,8 @@ body .cc_banner-wrapper {
     position: absolute;
 }
 
-body .cc_container {
-    background: #444;
-    font-family: inherit;
-}
-
 body .cc_container,
-.cc_message,
-.cc_btn {
+.cc_message {
     animation-duration: 4s;
     -webkit-animation-duration: 4s;
     -moz-animation-duration: 4s;
@@ -246,44 +240,41 @@ body .cc_container,
     animation-name: slideUp;
 }
 
+body .cc_message {
+    display: inline-block;
+    margin-right: 0;
+    padding-top: 5px;
+}
+
 body .cc_container {
     background: #222;
     color: #fff;
     font-size: 20px;
-    font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri,
-    Helvetica, Arial;
     box-sizing: border-box;
-}
-
-body .cc_container {
-    padding: 10px 50px 10px;
-}
-
-body .cc_container {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     overflow: hidden;
     padding: 10px;
-    box-sizing: border-box;
     border-top: 1px solid #888;
+
 }
 
-body .cc_container .cc_btn {
-    padding: 8px 10px;
-    background-color: #c8c8c8;
+
+body .cc_btn {
+    background-color: #6de16d;
     cursor: pointer;
     -webkit-transition: font-size 200ms;
     transition: font-size 200ms;
     text-align: center;
     color: black;
-    font-size: 1em;
-    display: block;
-    width: 33%;
-    margin-left: 10px;
+    display: inline-block;
     float: right;
-    max-width: 120px;
+    padding: 10px;
+    font-size: 20px;
+    width: 100px;
+    border-radius: 5px;
 }
 
 body .cc_more_info {
