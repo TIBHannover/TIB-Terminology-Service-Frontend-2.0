@@ -4,58 +4,59 @@ class UserModel {
     this.token = "";
     this.fullName = "";
     this.username = "";
-    this.userToken = "";
     this.authProvider = "";
     this.company = "";
     this.gitHomeUrl = "";
     this.orcidId = "";
+    this.jwt = "";
     this.systemAdmin = false;
     this.settings = {
       userCollectionEnabled: false,
-      activeCollection: { title: "", ontology_ids: [] },
+      activeCollection: {title: "", ontology_ids: []},
       advancedSearchEnabled: false,
       activeSearchSetting: {},
       activeSearchSettingIsModified: false,
     };
   }
-
+  
   setId(id) {
     this.id = id;
   }
-
+  
+  setJwt(token) {
+    this.jwt = token;
+  }
+  
   setToken(token) {
     this.token = token;
   }
-
+  
   setUsername(username) {
     this.username = username;
   }
-
-  setUserToken(token) {
-    this.userToken = token;
-  }
-
+  
+  
   setAuthProvider(providerName) {
     this.authProvider = providerName;
   }
-
+  
   setFullName(fullName) {
     this.fullName = fullName;
   }
-
-  setGitInfo({ company, homeUrl }) {
+  
+  setGitInfo({company, homeUrl}) {
     this.company = company;
     this.gitHomeUrl = homeUrl;
   }
-
-  setOrcidInfo({ orcidId }) {
+  
+  setOrcidInfo({orcidId}) {
     this.orcidId = orcidId;
   }
-
+  
   setSystemAdmin(isAdmin) {
     this.systemAdmin = isAdmin;
   }
-
+  
   setSettings(settings) {
     this.settings = settings;
   }
