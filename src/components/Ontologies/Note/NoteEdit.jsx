@@ -1,5 +1,5 @@
 import {useEffect, useState, useContext} from "react";
-import {getTextEditorContent, createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
+import {createTextEditorStateFromJson} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import {submitNote} from "../../../api/note";
 import {NoteCreationRender} from "./renders/NoteCreationRender";
