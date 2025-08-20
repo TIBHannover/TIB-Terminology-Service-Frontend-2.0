@@ -10,6 +10,7 @@ export type SearchApiInput = {
     selectedCollections?: string[],
     obsoletes?: boolean,
     exact?: boolean,
+    includeImported?: boolean,
     isLeaf?: boolean,
     searchInValues?: string[],
     searchUnderIris?: string[],
