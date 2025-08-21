@@ -11,8 +11,6 @@ export function getTsPluginHeaders(params: GetHeaderFuncParams): TsPluginHeader 
     header["X-TS-Frontend-Id"] = process.env.REACT_APP_PROJECT_ID;
     header["X-TS-Frontend-Token"] = process.env.REACT_APP_MICRO_BACKEND_TOKEN;
     header["X-TS-Auth-Provider"] = localStorage.getItem('authProvider');
-    header['X-TS-Orcid-Id'] = user?.orcidId;
-    header["X-TS-User-Name"] = user?.username;
 
     if (withAccessToken) {
         header["Authorization"] = `Bearer ${user?.jwt}`;
