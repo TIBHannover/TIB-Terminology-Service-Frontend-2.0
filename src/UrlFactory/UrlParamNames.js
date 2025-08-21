@@ -18,6 +18,7 @@ export const SearchUnder = 'searchunder';
 export const SearchUnderAll = 'searchunderall';
 export const SearchIn = 'searchin';
 export const AdvOntology = 'advontology';
+export const IncludeImported = 'includeimported';
 
 
 // Note related

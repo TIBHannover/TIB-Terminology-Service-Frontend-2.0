@@ -1,6 +1,4 @@
-import {getCallSetting} from "./constants";
 import {OntologyData} from "./types/ontologyTypes";
-import {CollectionWithItsOntologyListData} from "./types/collectionTypes";
 import OntologyLib from "../Libs/OntologyLib";
 import OntologyApi from "./ontology";
 

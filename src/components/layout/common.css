@@ -776,7 +776,7 @@ body .site-tour-btn {
     position: fixed;
     right: 0px;
     bottom: 0px;
-    z-index: 99999;
+    z-index: 10;
     color: white;
     /*background-color: #0E6668;*/
     background: linear-gradient(145deg, #0e8a8b, #0E6668);

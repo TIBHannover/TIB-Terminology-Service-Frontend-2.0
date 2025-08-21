@@ -57,7 +57,8 @@ const SearchResult = (props) => {
     value: 30
   }, {label: "40", value: 40}];
   const searchQuery = searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "";
-  const exact = searchUrlFactory.exact === "true" ? true : false;
+  const exact = searchUrlFactory.exact === "true";
+  const includeImported = (searchUrlFactory.includeImported === "true");
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
   
@@ -93,6 +94,7 @@ const SearchResult = (props) => {
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
         exact: exact,
+        includeImported: includeImported,
         searchInValues: searchUrlFactory.searchIn,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,

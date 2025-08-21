@@ -11,7 +11,6 @@ import {convertToRaw} from 'draft-js';
 import AlertBox from "../../../common/Alerts/Alerts";
 import FormLib from "../../../../Libs/FormLib";
 import Modal from "react-bootstrap/Modal";
-import Login from "../../../User/Login/TS/Login";
 
 
 const CollectionSuggestion = (props) => {
