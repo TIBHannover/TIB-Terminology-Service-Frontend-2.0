@@ -16,7 +16,8 @@ const TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 const ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 const DB_XREF_PURL = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
-const IDENTIFIER_PURL = "https://schema.org/identifier";
+const IDENTIFIER_PURL_HTTPS = "https://schema.org/identifier";
+const IDENTIFIER_PURL_HTTP = "http://schema.org/identifier";
 
 const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
@@ -133,8 +134,10 @@ class TermApi {
         if (dbXref) {
             annotations["has_dbxref"] = dbXref;
         }
-        if (this.term[IDENTIFIER_PURL]) {
-            annotations["Identifier"] = this.term[IDENTIFIER_PURL];
+        if (this.term[IDENTIFIER_PURL_HTTP]) {
+            annotations["Identifier"] = this.term[IDENTIFIER_PURL_HTTP];
+        } else if (this.term[IDENTIFIER_PURL_HTTPS]) {
+            annotations["Identifier"] = this.term[IDENTIFIER_PURL_HTTPS];
         }
         for (let key in this.term) {
             if (!key.includes('purl.obolibrary.org') || key === Has_Curation_Status_Purl) {
