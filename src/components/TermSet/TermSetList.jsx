@@ -2,7 +2,6 @@ import {useContext, useState} from "react";
 import {AppContext} from "../../context/AppContext";
 import "../layout/termset.css";
 import {Link} from 'react-router-dom';
-import DeleteModalBtn from "../common/DeleteModal/DeleteModal";
 import {DeleteModal} from "../common/DeleteModal/DeleteModal";
 import {getTsPluginHeaders} from "../../api/header";
 import CreateTermsetPage from "./CreateTermset";
