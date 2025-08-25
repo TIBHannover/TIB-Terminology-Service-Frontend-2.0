@@ -88,7 +88,8 @@ export function renderDocumentation() {
                 and supports FAIR principles (Findable, Accessible, Interoperable, Reusable). Detailed guidance on its
                 usage,
                 including endpoint descriptions, request/response structures, and practical examples, is provided in the
-                accompanying <b><a href="https://api.terminology.tib.eu/swagger-ui/index.html" rel="nofollow noreferrer"
+                accompanying <b><a href="https://api.terminology.tib.eu/mod/swagger-ui/index.html"
+                                   rel="nofollow noreferrer"
                                    target="_blank">Swagger
                 Documentation</a></b>.
                 For further information on the importance of semantic artifact descriptions in the context of producing
