@@ -156,18 +156,52 @@ class TermApi {
 
     createDbXrefAnnotation() {
         try {
+            let dbXrefLinks = [];
             let dbxrefValue = this.term[DB_XREF_PURL];
             if (!dbxrefValue) {
-                return "";
+                return dbXrefLinks;
             }
-            let dbXrefValueLink = dbxrefValue;
-            if (!dbxrefValue.includes("purl.obolibrary.org") && !dbxrefValue.includes("http")) {
-                dbxrefValue = dbxrefValue.includes(":") ? dbxrefValue.replace(":", "_") : dbxrefValue;
-                dbXrefValueLink = "http://purl.obolibrary.org/obo/" + dbxrefValue;
+            let termDbXrefList: { value: string, axioms: { [key: string]: string }[] }[] = [];
+            if (Toolkit.isString(dbxrefValue)) {
+                termDbXrefList = [{value: dbxrefValue, axioms: []}];
+            } else {
+                termDbXrefList = dbxrefValue;
             }
-            return dbXrefValueLink
-        } catch {
-            return "";
+            for (let xref of termDbXrefList) {
+                if (Toolkit.isString(xref)) {
+                    xref = {value: xref, axioms: []};
+                }
+                if (!this.term["linkedEntities"][xref.value]) {
+                    // the xref value is not part of linked entities --> display as plain string
+                    let sources = [];
+                    for (let ax of xref.axioms) {
+                        sources.push(Object.values(ax)[0]);
+                    }
+                    sources.length ?
+                        dbXrefLinks.push(`${xref.value} <small>(source: ${sources.join(', ')})</small>`)
+                        : dbXrefLinks.push(`${xref.value}`);
+                } else {
+                    let anchor = this.term["linkedEntities"][xref.value];
+                    let sources = [];
+                    for (let ax of xref.axioms) {
+                        sources.push(Object.values(ax)[0]);
+                    }
+                    if (anchor.url) {
+                        sources.length ?
+                            dbXrefLinks.push(`<a href="${anchor.url}" target="_blank" rel="noopener noreferrer">${xref.value}</a> <small>(source: ${sources})</small>`)
+                            : dbXrefLinks.push(`<a href="${anchor.url}" target="_blank" rel="noopener noreferrer">${xref.value}</a>`);
+                    } else {
+                        sources.length ?
+                            dbXrefLinks.push(`${xref.value} <small>(source: ${sources.join(', ')})</small>`)
+                            : dbXrefLinks.push(`${xref.value}`);
+                    }
+                }
+            }
+
+            return dbXrefLinks;
+        } catch (e) {
+            console.log(e)
+            return [];
         }
     }
 

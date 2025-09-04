@@ -46,7 +46,7 @@ export function classMetaData(term, termType) {
   if (term.annotation) {
     // add custom annotation fields. Metadata key can be anything
     for (let key in term.annotation) {
-      if (key === 'definition') {
+      if (key === 'definition' || key === "has_dbxref") {
         continue;
       }
       if (Array.isArray(term.annotation[key])) {
@@ -66,11 +66,14 @@ export function classMetaData(term, termType) {
       }
     }
   }
-  
-  if (term.annotation["has_dbxref"]) {
-    metadata["has_dbxref"] = {value: term.annotation["has_dbxref"], isLink: true};
+  if (term.annotation["has_dbxref"] && term.annotation["has_dbxref"].length > 0) {
+    const xrefContent = `
+        <ul>
+            ${term.annotation["has_dbxref"].map(xref => `<li>${xref}</li>`).join('')}
+        </ul>
+      `;
+    metadata["has_dbxref"] = {value: xrefContent, isLink: false};
   }
-  
   return metadata;
 }
 

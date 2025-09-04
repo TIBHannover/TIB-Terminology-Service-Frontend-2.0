@@ -8,15 +8,13 @@ import {OntologyPageContext} from '../../../../context/OntologyPageContext';
 import PropTypes from 'prop-types';
 
 
-
 const TermDetailTable = (props) => {
   /*
     This component is responsible for rendering the detail table of a term.
     It requires the ontologyPageContext to be available.
   */
-
-
-
+  
+  
   function setLabelAsLink() {
     let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(props.node.ontologyId);
     let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(props.node.iri);
