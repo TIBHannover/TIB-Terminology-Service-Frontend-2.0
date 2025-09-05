@@ -23,26 +23,20 @@ class SearchUrlFactory {
       SiteUrlParamNames.SearchUnderAll,
     );
     this.advOntologies = url.searchParams.getAll(SiteUrlParamNames.AdvOntology);
+    this.fromOntologyPage = url.searchParams.get(SiteUrlParamNames.FromOntologyPage);
   }
   
-  createSearchUrlForAutoSuggestItem({
-                                      label,
-                                      ontologyId,
-                                      obsoleteFlag,
-                                      exact,
-                                    }) {
+  createSearchUrlForAutoSuggestItem({label, ontologyId, obsoleteFlag, exact, fromOntologyPage}) {
     let searchUrl = new URL(window.location);
     searchUrl.pathname = process.env.REACT_APP_PROJECT_SUB_PATH + "/search";
     searchUrl.searchParams.delete(SiteUrlParamNames.Iri);
     searchUrl.searchParams.delete(SiteUrlParamNames.IssueType);
     searchUrl.searchParams.set(SiteUrlParamNames.SearchQuery, label);
     searchUrl.searchParams.set(SiteUrlParamNames.Page, 1);
-    ontologyId &&
-    searchUrl.searchParams.set(SiteUrlParamNames.Ontology, ontologyId);
-    obsoleteFlag &&
-    searchUrl.searchParams.set(SiteUrlParamNames.Obsoletes, obsoleteFlag);
+    ontologyId && searchUrl.searchParams.set(SiteUrlParamNames.Ontology, ontologyId);
+    obsoleteFlag && searchUrl.searchParams.set(SiteUrlParamNames.Obsoletes, obsoleteFlag);
     exact && searchUrl.searchParams.set(SiteUrlParamNames.Exact, exact);
-    //return searchUrl.toString();
+    fromOntologyPage && searchUrl.searchParams.set(SiteUrlParamNames.FromOntologyPage, fromOntologyPage);
     return searchUrl.pathname + searchUrl.search;
   }
   
@@ -136,6 +130,7 @@ class SearchUrlFactory {
     currentUrlParams.delete(SiteUrlParamNames.Collection);
     currentUrlParams.set(SiteUrlParamNames.Page, 1);
     currentUrlParams.set(SiteUrlParamNames.Size, 10);
+    currentUrlParams.delete(SiteUrlParamNames.FromOntologyPage);
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
 }

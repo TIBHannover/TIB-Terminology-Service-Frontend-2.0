@@ -97,7 +97,6 @@ const EditTermset = (props) => {
       description: description ? description.value : "",
       terms: selectedTermsJson
     };
-    console.log(payload);
     
     updateTermset(payload).then((updatedTermset) => {
       if (updatedTermset) {

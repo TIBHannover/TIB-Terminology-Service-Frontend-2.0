@@ -104,7 +104,8 @@ const SearchForm = () => {
       label: label,
       ontologyId: ontologyId,
       obsoleteFlag: obsoletesFlag,
-      exact: exact
+      exact: exact,
+      fromOntologyPage: !!ontologyId
     });
   }
   

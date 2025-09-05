@@ -14,7 +14,8 @@ export type SearchApiInput = {
     isLeaf?: boolean,
     searchInValues?: string[],
     searchUnderIris?: string[],
-    searchUnderAllIris?: string[]
+    searchUnderAllIris?: string[],
+    fromOntologyPage?: boolean
 };
 
 

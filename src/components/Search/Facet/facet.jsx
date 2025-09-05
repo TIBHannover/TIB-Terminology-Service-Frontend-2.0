@@ -183,8 +183,6 @@ const Facet = (props) => {
     let counter = 1;
     let ontologiesInFacetLength = 0;
     for (let ontoId in ontologyFacetData) {
-      console.log(ontoId)
-      console.log(props.selectedOntologies)
       if (props.selectedOntologies.includes(ontoId.toLowerCase())) {
         lastSelectedOntologyIndex = counter;
       }

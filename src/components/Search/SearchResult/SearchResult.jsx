@@ -98,6 +98,7 @@ const SearchResult = (props) => {
         searchInValues: searchUrlFactory.searchIn,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,
+        fromOntologyPage: !!searchUrlFactory.fromOntologyPage
       };
       
       // This part is for updating the facet counts. 
@@ -234,6 +235,7 @@ const SearchResult = (props) => {
   
   
   function handleOntologyFacetSelection(e) {
+    commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
     let selectedOntologiesList = [...selectedOntologies];
     let targetOntologyId = e.target.value.toLowerCase();
     if (e.target.checked) {
@@ -259,6 +261,7 @@ const SearchResult = (props) => {
   
   
   function handleCollectionFacetSelection(e) {
+    commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
     let selectedCollectionsList = [...selectedCollections];
     let targetCollection = e.target.value.trim();
     if (e.target.checked) {
@@ -299,7 +302,7 @@ const SearchResult = (props) => {
     setPageSize(10);
     setFilterTags("");
     localStorage.setItem('language', "en");
-    commonUrlFactory.deleteParam({name: 'lang'});
+    commonUrlFactory.deleteParam({name: SiteUrlParamNames.Lang});
     setLang("en");
   }
   
@@ -321,7 +324,8 @@ const SearchResult = (props) => {
         handleCollectionFacetSelection(e);
       }
       localStorage.setItem('language', "en");
-      commonUrlFactory.deleteParam({name: 'lang'});
+      commonUrlFactory.deleteParam({name: SiteUrlParamNames.Lang});
+      commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
       setLang("en");
     } catch (e) {
       // console.info(e);

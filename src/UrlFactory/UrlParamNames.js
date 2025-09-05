@@ -19,6 +19,7 @@ export const SearchUnderAll = 'searchunderall';
 export const SearchIn = 'searchin';
 export const AdvOntology = 'advontology';
 export const IncludeImported = 'includeimported';
+export const FromOntologyPage = 'fromOntologyPage';
 
 
 // Note related
