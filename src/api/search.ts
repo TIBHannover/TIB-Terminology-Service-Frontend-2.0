@@ -16,7 +16,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
         let query = encodeURIComponent(inputData.searchQuery);
         let page = inputData.page ? inputData.page - 1 : 0;
         let size = inputData.size ? inputData.size : 10;
-        let searchUrl: string = apiBaseUrl + `/v2/entities?search=${query}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
+        let searchUrl: string = apiBaseUrl + `/v2/entities?search=${encodeURIComponent(query)}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
         searchUrl = !inputData.includeImported ? (searchUrl + "&isDefiningOntology=true") : searchUrl;
         searchUrl = jumpToMode ? (searchUrl + "&boostFields=label^3") : searchUrl;
         searchUrl = !jumpToMode ? (searchUrl + "&facetFields=type+ontologyId") : searchUrl;
