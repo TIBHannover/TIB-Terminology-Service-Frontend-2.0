@@ -1,0 +1,25 @@
+{
+  "usedBy": {
+    "type": "data repository",
+    "identifier": [
+      "https://doi.org/10.17616/R3989R",
+      "https://doi.org/10.25504/FAIRsharing.x3hgaw"
+    ],
+    "label": "World Data Center for Climate",
+    "altLabel": "WDCC",
+    "description": "World Data Center for Climate at DKRZ",
+    "homepage": "https://www.wdc-climate.de/ui/",
+    "provider": [
+      {
+        "label": "Deutsches Klimarechenzentrum (DKRZ)",
+        "identifier": "https://ror.org/03ztgj037"
+      }
+    ],
+    "contact": [{ "mail": "data@wdc-climate.de" }]
+  },
+  "usageDescription": {
+    "description": "CF (as community standard) is used to describe the variable of datasets, archived at WDCC; TS is used to make the description of the variables, as part of CF, directly accessible for the user",
+    "language": "en"
+  },
+  "usageReportMetadata": { "created": "2025-07-24" }
+}

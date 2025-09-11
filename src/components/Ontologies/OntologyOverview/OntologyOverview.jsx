@@ -7,6 +7,10 @@ import Login from "../../User/Login/TS/Login";
 import {AppContext} from "../../../context/AppContext";
 
 
+import OntologyAdopters from './widgets/OntologyAdopters';
+
+
+
 const OntologyOverview = () => {
   /*
     This component is responsible for rendering the overview page of an ontology.
@@ -17,6 +21,11 @@ const OntologyOverview = () => {
   
   const [showCollectionSuggestionModal, setShowCollectionSuggestionModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
+  /* ichrak button */ 
+  // new state to control the adopters modal
+  const [showOntologyAdopters, setShowOntologyAdopters] = useState(false);
+
+
   
   let ontoPageHeader = document.getElementById('ontology-page-header');
   if (ontoPageHeader) {
@@ -66,12 +75,34 @@ const OntologyOverview = () => {
               </div>
             </div>
           }
+          {/* Ontology adopters button (prototype) */}
+<div className='row' style={{ marginTop: 10 }}>
+  <div className='col-sm-12'>
+    <button
+      type="button"
+      className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
+      onClick={() => setShowOntologyAdopters(true)}
+    >
+      Ontology adopters
+    </button>
+  </div>
+</div>
+
         </div>
       </div>
       <CollectionSuggestion
         showModal={showCollectionSuggestionModal}
         setShowModal={setShowCollectionSuggestionModal}
       />
+    
+    <OntologyAdopters
+  showModal={showOntologyAdopters}
+  setShowModal={setShowOntologyAdopters}
+/>
+
+
+
+
       <Login isModal={true} showModal={loginModal} withoutButton={true}/>
     </>
   );
