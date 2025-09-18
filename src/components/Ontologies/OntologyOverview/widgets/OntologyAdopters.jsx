@@ -26,86 +26,96 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
       </Modal.Header>
 
       <Modal.Body>
-        {loading && <div>Loading…</div>}
-        {!loading && !data && <div>No adopters info available for this ontology yet.</div>}
-        {!loading && data && (
-          <div className="p-3 border rounded bg-white">
-            <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-              <strong>Used by:</strong>{" "}
-              {data.usedBy?.label} {data.usedBy?.altLabel ? `(${data.usedBy.altLabel})` : ""}
-            </div>
+  {loading && <div>Loading…</div>}
+  {!loading && !data && <div>No adopters info available for this ontology yet.</div>}
+  {!loading && data && (
+    <div className="p-3 border rounded bg-white">
+      {/* data repository */}
+      <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
+        <span style={{ fontWeight: 600 }}>data repository:</span>{" "}
+        <span>
+          {data.usedBy?.label || "—"}
+          {data.usedBy?.altLabel ? ` (${data.usedBy.altLabel})` : ""}
+        </span>
+      </div>
 
-            <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-              <strong>Type:</strong> {data.usedBy?.type}
-            </div>
+      {/* identifiers */}
+      {Array.isArray(data.usedBy?.identifier) && data.usedBy.identifier.length > 0 && (
+        <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
+          <span style={{ fontWeight: 600 }}>identifiers:</span>{" "}
+          {data.usedBy.identifier.map((id, i) => (
+            <span key={id}>
+              <a href={id} target="_blank" rel="noopener noreferrer">{id}</a>
+              {i < data.usedBy.identifier.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </div>
+      )}
 
-            {Array.isArray(data.usedBy?.identifier) && data.usedBy.identifier.length > 0 && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>Identifiers:</strong>{" "}
-                {data.usedBy.identifier.map((id, i) => (
-                  <span key={id}>
-                    <a href={id} target="_blank" rel="noopener noreferrer">{id}</a>
-                    {i < data.usedBy.identifier.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
+      {/* description + homepage (no "homepage:" label) */}
+      {data.usedBy?.homepage && (
+        <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
+          {data.usedBy?.description || ""}
+          {" ("}
+          <a href={data.usedBy.homepage} target="_blank" rel="noopener noreferrer">
+            link to {data.usedBy.homepage}
+          </a>
+          {")"}
+        </div>
+      )}
 
-            {data.usedBy?.homepage && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>Homepage:</strong>{" "}
-                <a href={data.usedBy.homepage} target="_blank" rel="noopener noreferrer">
-                  {data.usedBy.homepage}
-                </a>
-              </div>
-            )}
+      {/* provider */}
+      {Array.isArray(data.usedBy?.provider) && data.usedBy.provider.length > 0 && (
+        <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
+          <span style={{ fontWeight: 600 }}>provider:</span>{" "}
+          {data.usedBy.provider.map((p, i) => (
+            <span key={i}>
+              {p.label}
+              {p.identifier ? (
+                <>
+                  {", links to "}
+                  <a href={p.identifier} target="_blank" rel="noopener noreferrer">
+                    {p.identifier}
+                  </a>
+                </>
+              ) : null}
+              {i < data.usedBy.provider.length - 1 ? "; " : ""}
+            </span>
+          ))}
+        </div>
+      )}
 
-            {Array.isArray(data.usedBy?.provider) && data.usedBy.provider.length > 0 && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>Provider:</strong>{" "}
-                {data.usedBy.provider.map((p, i) => (
-                  <span key={i}>
-                    {p.label}
-                    {p.identifier ? (
-                      <>
-                        {" — "}
-                        <a href={p.identifier} target="_blank" rel="noopener noreferrer">
-                          {p.identifier}
-                        </a>
-                      </>
-                    ) : null}
-                    {i < data.usedBy.provider.length - 1 ? "; " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
+      {/* contact */}
+      {Array.isArray(data.usedBy?.contact) && data.usedBy.contact.length > 0 && (
+        <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
+          <span style={{ fontWeight: 600 }}>contact:</span>{" "}
+          {data.usedBy.contact.map((c, i) => (
+            <span key={i}>
+              <a href={`mailto:${c.mail}`}>{c.mail}</a>
+              {i < data.usedBy.contact.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </div>
+      )}
 
-            {Array.isArray(data.usedBy?.contact) && data.usedBy.contact.length > 0 && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>Contact:</strong>{" "}
-                {data.usedBy.contact.map((c, i) => (
-                  <span key={i}>
-                    {c.mail}
-                    {i < data.usedBy.contact.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
+      {/* usage paragraph (no label) */}
+      {data.usageDescription?.description && (
+        <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
+          {data.usageDescription.description}
+        </div>
+      )}
 
-            {data.usageDescription?.description && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>Usage:</strong> {data.usageDescription.description}
-              </div>
-            )}
+      {/* created */}
+      {data.usageReportMetadata?.created && (
+        <div style={{ padding: "8px 0" }}>
+          <span style={{ fontWeight: 600 }}>created:</span>{" "}
+          {data.usageReportMetadata.created}
+        </div>
+      )}
+    </div>
+  )}
+</Modal.Body>
 
-            {data.usageReportMetadata?.created && (
-              <div style={{ padding: "8px 0" }}>
-                <strong>Reported:</strong> {data.usageReportMetadata.created}
-              </div>
-            )}
-          </div>
-        )}
-      </Modal.Body>
 
       <Modal.Footer>
         <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
