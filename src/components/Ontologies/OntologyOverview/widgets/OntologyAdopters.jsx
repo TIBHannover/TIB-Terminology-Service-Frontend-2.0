@@ -43,6 +43,12 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
 
         {!loading && data && (
           <div className="adopters-panel">
+            
+             {/* usage (no “description:” label) */}
+            {data.usageDescription?.description && (
+              <div className="adopters-row">{data.usageDescription.description}</div>
+            )}  
+
             {/* used by */}
             <div className="adopters-row">
               <span className="adopters-key">used by:</span>{" "}
@@ -110,10 +116,7 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
               </div>
             )}
 
-            {/* usage (no “description:” label) */}
-            {data.usageDescription?.description && (
-              <div className="adopters-row">{data.usageDescription.description}</div>
-            )}
+           
 
             {/* created */}
             {data.usageReportMetadata?.created && (
