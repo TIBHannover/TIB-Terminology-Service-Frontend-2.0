@@ -70,6 +70,16 @@
     "project_homepage": "https://www.fid-bau.de/",
     "domain_ts_link": ""
   },
+  "Digital Planning and Construction": {
+    "id": "Digital Planning and Construction",
+    "html_id": "Digital Planning and Construction",
+    "name": "Digital Planning and Construction",
+    "text": "",
+    "logo": "",
+    "ontology_list_url": "/ontologies?collection=Digital+Planning+and+Construction&and=false&page=1",
+    "project_homepage": "",
+    "domain_ts_link": ""
+  },
   "NFDI4CAT": {
     "id": "NFDI4CAT",
     "html_id": "NFDI4CAT",
