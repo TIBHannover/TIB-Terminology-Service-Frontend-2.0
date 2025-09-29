@@ -75,7 +75,7 @@
     "html_id": "Digital Planning and Construction",
     "name": "Digital Planning and Construction",
     "text": "The collection contains a well-selected set of ontologies and controlled vocabularies related to the domains of civil engineering, architecture and urban planning with a focus on digital methods and technologies. It is the successor of the FID BAUdigital collection which was created and maintained during the <a href=\"https://gepris.dfg.de/gepris/projekt/432774435\">DFG-funded project</a> <a href=\"https://www.fid-bau.de/de/\">FID BAUdigital</a> from 2020-2023. ⚠️ <b>Please replace all references to the FID BAUdigital collection by the new collection links as appropriate!</b> If you have any questions write a mail to <a href=\"mailto:info@fid-bau.de\">info@fid-bau.de</a>",
-    "logo": "baudigital-logo-klein.webp",
+    "logo": "/baudigital-logo-klein.webp",
     "ontology_list_url": "/ontologies?collection=Digital+Planning+and+Construction&and=false&page=1",
     "project_homepage": "",
     "domain_ts_link": "",
