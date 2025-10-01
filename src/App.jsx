@@ -1,31 +1,31 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import Footer from "./components/common/Footer/Footer";
 import Header from "./components/common/Header/Header";
-import {BrowserRouter} from 'react-router-dom';
-import {MatomoWrapper} from './components/Matomo/MatomoWrapper';
+import { BrowserRouter } from 'react-router-dom';
+import { MatomoWrapper } from './components/Matomo/MatomoWrapper';
 import CookieBanner from './components/common/CookieBanner/CookieBanner';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css';
-import {BackendIsDownMessage, setSiteTitleAndFavIcon, InlineWrapperWithMargin} from './AppHelpers';
+import { BackendIsDownMessage, setSiteTitleAndFavIcon, InlineWrapperWithMargin } from './AppHelpers';
 import Auth from './Libs/AuthLib';
 import AppRouter from './Router';
-import {LoginLoadingAnimation} from './components/User/Login/LoginLoading';
-import {AppContext} from './context/AppContext';
-import {getReportList} from './api/tsMicroBackendCalls';
+import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
+import { AppContext } from './context/AppContext';
+import { getReportList } from './api/tsMicroBackendCalls';
 import LoadingPage from './LoadingPage';
 import SiteTour from './tours/Tour';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
-import {olsIsUp} from './api/system';
-import {useQuery} from '@tanstack/react-query';
-import {getUserTermsetList} from './api/term_set';
+import { olsIsUp } from './api/system';
+import { useQuery } from '@tanstack/react-query';
+import { getUserTermsetList } from './api/term_set';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
 
 
 const App = () => {
-  
+
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
@@ -33,33 +33,33 @@ const App = () => {
   const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
   const [userTermsets, setUserTermsets] = useState([]);
   const [userSettings, setUserSettings] = useState({
-    "activeCollection": {"title": "", "ontology_ids": []},
+    "activeCollection": { "title": "", "ontology_ids": [] },
     "userCollectionEnabled": false,
     "advancedSearchEnabled": false,
     "activeSearchSetting": {},
     "activeSearchSettingIsModified": false
   });
-  
   const [showLoadingPage, setShowLoadingPage] = useState(true);
-  
-  const olsIsUpQuery = useQuery({queryKey: ['olsIsUpCall'], queryFn: olsIsUp, meta: {cache: false}});
+  const [includeImportedTerms, setIncludeImportedTerms] = useState(true);
+
+  const olsIsUpQuery = useQuery({ queryKey: ['olsIsUpCall'], queryFn: olsIsUp, meta: { cache: false } });
   if (olsIsUpQuery.isError) {
     setIsBackendDown(true);
   }
-  
+
   useEffect(() => {
     setSiteTitleAndFavIcon();
-    
+
     if (process.env.REACT_APP_AUTH_FEATURE === "true") {
       let cUrl = window.location.href;
       if (cUrl.includes("code=")) {
         Auth.run();
       }
-      
+
       Auth.userIsLogin().then((user) => {
         setUser(user);
         setIsSystemAdmin(user?.systemAdmin);
-        let settings = {...userSettings};
+        let settings = { ...userSettings };
         settings.userCollectionEnabled = user?.settings?.userCollectionEnabled;
         settings.advancedSearchEnabled = user?.settings?.advancedSearchEnabled;
         settings.activeSearchSettingIsModified = user?.settings?.activeSearchSettingIsModified;
@@ -69,31 +69,31 @@ const App = () => {
         if (user?.settings?.activeSearchSetting) {
           settings.activeSearchSetting = user?.settings?.activeSearchSetting;
         }
-        
+
         if (user?.systemAdmin) {
           getReportList().then((reports) => {
             setReportsListForAdmin(reports);
           });
         }
-        
+
         getUserTermsetList(user?.id).then((termsets) => {
           setUserTermsets(termsets);
         })
-        
+
         setUserSettings(settings);
         setShowLoadingPage(false);
       });
     } else {
       setShowLoadingPage(false);
     }
-    
+
     setTimeout(() => {
       setLoading(false);
     }, 500);
-    
+
   }, []);
-  
-  
+
+
   const appContextData = {
     user: user,
     isUserSystemAdmin: isSystemAdmin,
@@ -101,22 +101,24 @@ const App = () => {
     userSettings: userSettings,
     setUserSettings: setUserSettings,
     userTermsets: userTermsets,
-    setUserTermsets: setUserTermsets
+    setUserTermsets: setUserTermsets,
+    includeImportedTerms: includeImportedTerms,
+    setIncludeImportedTerms: setIncludeImportedTerms
   };
-  
+
   return (
     <div className="App">
-      <LoginLoadingAnimation/>
+      <LoginLoadingAnimation />
       <BrowserRouter>
         <MatomoWrapper>
           <div className='container-fluid'>
             <div className='row'>
               <div className='col-sm-12'>
                 <AppContext.Provider value={appContextData}>
-                  {showLoadingPage && <LoadingPage/>}
+                  {showLoadingPage && <LoadingPage />}
                   {!showLoadingPage &&
                     <>
-                      <Header/>
+                      <Header />
                       <div className='application-content' id="application_content">
                         {loading &&
                           <Skeleton
@@ -125,18 +127,18 @@ const App = () => {
                             inline width={600}
                             height={200}
                             marginLeft={20}
-                            baseColor={'#f4f2f2'}/>
+                            baseColor={'#f4f2f2'} />
                         }
                         {!loading &&
                           <>
-                            {isBackendDown && <BackendIsDownMessage/>}
-                            <CookieBanner/>
-                            <AppRouter/>
+                            {isBackendDown && <BackendIsDownMessage />}
+                            <CookieBanner />
+                            <AppRouter />
                           </>
                         }
                       </div>
-                      {process.env.REACT_APP_SITE_TOUR === "true" && !showLoadingPage && <SiteTour/>}
-                      <Footer/>
+                      {process.env.REACT_APP_SITE_TOUR === "true" && !showLoadingPage && <SiteTour />}
+                      <Footer />
                     </>
                   }
                 </AppContext.Provider>
