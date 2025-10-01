@@ -4,7 +4,7 @@ export async function olsIsUp(): Promise<boolean> {
     let getCallSetting = {
       method: 'GET', headers: {
         'Accept': 'text/plain;charset=UTF-8 ',
-        'caller': process.env.REACT_APP_HEADER_INFO_TIB
+        'caller': process.env.REACT_APP_HEADER_INFO_TIB ?? 'TIBCENTRAL'
       }
     };
     let url = process.env.REACT_APP_API_URL + "/v2/health";
