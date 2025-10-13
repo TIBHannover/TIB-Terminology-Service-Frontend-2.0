@@ -20,7 +20,11 @@ export function classMetaData(term, termType) {
     };
   }
 
-  metadata['Also In'] = { "value": TermLib.createAlsoInTags(term, termType), "isLink": false };
+  const alsoInContent = TermLib.createAlsoInTags(term, termType);
+  if (alsoInContent.length !== 0) {
+    metadata['Also In'] = { "value": alsoInContent, "isLink": false };
+  }
+
   metadata['Synonyms'] = { "value": term.synonym ? (term.synonym).join('<br/>') : "", "isLink": false }
   metadata['CURIE'] = { "value": term.curie, "isLink": false };
   metadata['Term ID'] = { "value": term.shortForm, "isLink": false };
@@ -90,11 +94,18 @@ export function propertyMetaData(term) {
 
   metadata['Label'] = { "value": term.label, "isLink": false };
   metadata['Description'] = { "value": term?.annotation?.definition ?? null, "isLink": false };
-  metadata['Imported From'] = {
-    "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, "property"),
-    "isLink": false
-  };
-  metadata['Also In'] = { "value": TermLib.createAlsoInTags(term, "property"), "isLink": false };
+  if (term.originalOntology !== term.ontologyId) {
+    metadata['Imported From'] = {
+      "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, "property"),
+      "isLink": false
+    };
+  }
+
+  const alsoInContent = TermLib.createAlsoInTags(term, "property");
+  if (alsoInContent.length !== 0) {
+    metadata['Also In'] = { "value": alsoInContent, "isLink": false };
+  }
+
   metadata['Synonyms'] = { "value": term.synonyms, "isLink": false };
   metadata['CURIE'] = { "value": term.obo_id, "isLink": false };
   metadata['Term ID'] = { "value": term.shortForm, "isLink": false };

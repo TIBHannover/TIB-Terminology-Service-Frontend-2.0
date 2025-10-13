@@ -76,9 +76,6 @@ class TermApi {
             this.term['label'] = TermLib.extractLabel(this.term);
             this.term['synonym'] = TermLib.gerTermSynonyms(this.term);
             this.term['annotation'] = this.buildAnnotations();
-            this.term['relations'] = undefined;
-            this.term['eqAxiom'] = undefined;
-            this.term['subClassOf'] = undefined;
             this.term['isIndividual'] = this.term['type'].includes("individual");
             this.term['directParent'] = this.term['directParent'] ? this.term['directParent'] : [];
             this.term['originalOntology'] = this.getClassOriginalOntology();
@@ -132,7 +129,7 @@ class TermApi {
     buildAnnotations() {
         let annotations = {};
         let dbXref = this.createDbXrefAnnotation();
-        if (dbXref) {
+        if (dbXref && this.termType === CLASS_TYPE_ID) {
             annotations["has_dbxref"] = dbXref;
         }
         if (this.term[IDENTIFIER_PURL_HTTP]) {

@@ -12,7 +12,7 @@ class TermLib {
     if (!ontology_name) {
       return null;
     }
-    
+
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -24,7 +24,7 @@ class TermLib {
     } else if (type === "individual" || type === "individuals") {
       targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
     }
-    
+
     return [
       <a
         href={targetHref}
@@ -35,7 +35,7 @@ class TermLib {
       </a>,
     ];
   }
-  
+
   static createTermUrlWithOntologyPrefix(
     {
       ontology_name,
@@ -46,7 +46,7 @@ class TermLib {
     if (!ontology_name) {
       return null;
     }
-    
+
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -64,7 +64,7 @@ class TermLib {
       </a>,
     ];
   }
-  
+
   static createAlsoInTags(term, termType) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
@@ -81,9 +81,9 @@ class TermLib {
       }
       return alsoInList;
     }
-    return null;
+    return [];
   }
-  
+
   static createTermDiscription(term) {
     if (term.isIndividual && term.description) {
       // individual description structure is different
@@ -103,14 +103,14 @@ class TermLib {
             for (let key in ax) {
               defArr.push(
                 <>
-                  <br/>
+                  <br />
                   <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
                 </>
               );
               if (Array.isArray(ax[key]) && ax[key].length > 1) {
-                defArr.push(<>{ax[key].join(", ")}<br/></>);
+                defArr.push(<>{ax[key].join(", ")}<br /></>);
               } else {
-                defArr.push(<>{ax[key]}<br/></>);
+                defArr.push(<>{ax[key]}<br /></>);
               }
             }
           }
@@ -121,10 +121,10 @@ class TermLib {
       }
       return result;
     }
-    
+
     return null;
   }
-  
+
   static createInstancesListForClass(term) {
     // instances are the individuals which are a type of this class.
     if (!term.instancesList) {
@@ -148,7 +148,7 @@ class TermLib {
     }
     return result;
   }
-  
+
   static extractLabel(term) {
     try {
       if (term.label instanceof String || typeof term.label === "string") {
@@ -166,16 +166,16 @@ class TermLib {
       return "N/A";
     }
   }
-  
+
   static termHasChildren(term) {
     return term.hasHierarchicalChildren || term.hasDirectChildren;
   }
-  
+
   static makeTermIdForTree(term) {
     let id = term.iri + "___" + Math.random().toString(36).substring(2, 20);
     return id;
   }
-  
+
   static getTermType(term) {
     if (!term.type) {
       return "";
@@ -185,7 +185,7 @@ class TermLib {
     }
     return term.type[0];
   }
-  
+
   static gerTermSynonyms(term) {
     if (!term.synonym) {
       return;
@@ -204,7 +204,7 @@ class TermLib {
     }
     return result;
   }
-  
+
   static getContributors(term) {
     if (term["annotation"]?.["contributor"]) {
       return term["annotation"]["contributor"];
@@ -216,7 +216,7 @@ class TermLib {
       return "N/A";
     }
   }
-  
+
   static getAnnotations(term) {
     let annotations = {};
     for (let key in term) {
