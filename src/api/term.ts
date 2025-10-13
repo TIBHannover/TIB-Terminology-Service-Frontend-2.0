@@ -18,6 +18,8 @@ const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 const DB_XREF_PURL = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
 const IDENTIFIER_PURL_HTTPS = "https://schema.org/identifier";
 const IDENTIFIER_PURL_HTTP = "http://schema.org/identifier";
+const PROPERTY_DOMAIN_PURL = "http://www.w3.org/2000/01/rdf-schema#domain";
+const PROPERTY_RANGE_PURL = "http://www.w3.org/2000/01/rdf-schema#range";
 
 const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
@@ -86,6 +88,8 @@ class TermApi {
             }
             if (this.termType === CLASS_TYPE_ID) {
                 await this.fetchClassRelations();
+            } else if (this.termType === PROPERTY_TYPE_ID) {
+                this.getPropDomainRange();
             }
 
             return true;
@@ -122,6 +126,47 @@ class TermApi {
         } catch (e) {
             //throw (e)
             return [];
+        }
+    }
+
+
+    getPropDomainRange() {
+        try {
+            if (this.term[PROPERTY_DOMAIN_PURL]) {
+                let domains = [];
+                if (Toolkit.isString(this.term[PROPERTY_DOMAIN_PURL])) {
+                    domains.push(this.term[PROPERTY_DOMAIN_PURL]);
+                } else {
+                    domains = this.term[PROPERTY_DOMAIN_PURL];
+                }
+                this.term["domains"] = [];
+                for (let iri of domains) {
+                    let domainObj = { ontologyId: "", iri: iri, label: "" };
+                    domainObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
+                    domainObj.label = this.term["linkedEntities"][iri]["label"][0];
+                    this.term["domains"].push(domainObj);
+                }
+
+            }
+            if (this.term[PROPERTY_RANGE_PURL]) {
+                let ranges = [];
+                if (Toolkit.isString(this.term[PROPERTY_RANGE_PURL])) {
+                    ranges.push(this.term[PROPERTY_RANGE_PURL]);
+                } else {
+                    ranges = this.term[PROPERTY_RANGE_PURL];
+                }
+                this.term["ranges"] = [];
+                for (let iri of ranges) {
+                    let rangeObj = { ontologyId: "", iri: iri, label: "" };
+                    rangeObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
+                    rangeObj.label = this.term["linkedEntities"][iri]["label"][0];
+                    this.term["ranges"].push(rangeObj);
+                }
+            }
+
+        } catch (e) {
+            // console.log(e)
+            return;
         }
     }
 
@@ -198,7 +243,7 @@ class TermApi {
 
             return dbXrefLinks;
         } catch (e) {
-            console.log(e)
+            // console.log(e)
             return [];
         }
     }

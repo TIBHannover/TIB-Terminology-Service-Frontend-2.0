@@ -65,6 +65,7 @@ class TermLib {
     ];
   }
 
+
   static createAlsoInTags(term, termType) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
@@ -144,6 +145,30 @@ class TermLib {
             {instance["label"]}
           </a>
         </li>,
+      );
+    }
+    return result;
+  }
+
+
+  static createListOfClasses(classList) {
+    // render a list of classes as a list
+    // classList is list of object with props: {ontologyId:"", iri:"", label:""}
+    let result = [];
+    for (let cl of classList) {
+      let classUrl =
+        process.env.REACT_APP_PROJECT_SUB_PATH +
+        "/ontologies/" +
+        cl["ontologyId"] +
+        "/terms?iri=" +
+        encodeURIComponent(cl["iri"]);
+      result.push(
+        <>
+          <a href={classUrl} target="_blank">
+            {cl["label"]}
+          </a>
+          <br />
+        </>,
       );
     }
     return result;

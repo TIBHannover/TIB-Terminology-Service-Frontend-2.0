@@ -107,6 +107,15 @@ export function propertyMetaData(term) {
   }
 
   metadata['Synonyms'] = { "value": term.synonyms, "isLink": false };
+
+  if (term["domains"] && term["domains"].length !== 0) {
+    metadata['Domain'] = { "value": TermLib.createListOfClasses(term["domains"]), "isLink": false };
+  }
+
+  if (term["ranges"] && term["ranges"].length !== 0) {
+    metadata['Range'] = { "value": TermLib.createListOfClasses(term["ranges"]), "isLink": false };
+  }
+
   metadata['CURIE'] = { "value": term.obo_id, "isLink": false };
   metadata['Term ID'] = { "value": term.shortForm, "isLink": false };
   metadata['fullIRI'] = { "value": term.iri, "isLink": true };

@@ -1,10 +1,8 @@
-import {useContext} from 'react';
-import {classMetaData, propertyMetaData} from './metadataParser';
+import { classMetaData, propertyMetaData } from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
-import {CopyLinkButtonMarkdownFormat} from '../../../common/CopyButton/CopyButton';
+import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
-import {OntologyPageContext} from '../../../../context/OntologyPageContext';
 import PropTypes from 'prop-types';
 
 
@@ -13,8 +11,8 @@ const TermDetailTable = (props) => {
     This component is responsible for rendering the detail table of a term.
     It requires the ontologyPageContext to be available.
   */
-  
-  
+
+
   function setLabelAsLink() {
     let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(props.node.ontologyId);
     let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(props.node.iri);
@@ -25,8 +23,8 @@ const TermDetailTable = (props) => {
     }
     return targetHref
   }
-  
-  
+
+
   function createTable() {
     let metadataToRender = "";
     if (props.componentIdentity === "terms") {
@@ -36,20 +34,21 @@ const TermDetailTable = (props) => {
     } else {
       metadataToRender = propertyMetaData(props.node);
     }
-    
+
+
     let result = [];
     for (let key of Object.keys(metadataToRender)) {
       if (!metadataToRender[key].value || typeof (metadataToRender[key].value) === "undefined" || metadataToRender[key].value === '') {
         continue;
       }
-      
+
       let row = createRowInTable(key, metadataToRender[key].value, metadataToRender[key].isLink);
       result.push(row);
     }
     return result;
   }
-  
-  
+
+
   function createRowInTable(metadataLabel, metadataValue, isLink) {
     let row = [
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
@@ -59,7 +58,7 @@ const TermDetailTable = (props) => {
           </div>
           <div className="col-sm-8 col-md-9 node-metadata-value" key={metadataLabel + "-value"}>
             {formatText(metadataLabel, metadataValue, isLink)}
-            {isLink && metadataLabel !== "Label" && <CopyLinkButton valueToCopy={metadataValue}/>}
+            {isLink && metadataLabel !== "Label" && <CopyLinkButton valueToCopy={metadataValue} />}
             {metadataLabel === "Label" &&
               <CopyLinkButtonMarkdownFormat
                 label={props.node.ontologyId.toUpperCase() + ":" + props.node.label}
@@ -71,30 +70,30 @@ const TermDetailTable = (props) => {
         </div>
       </div>
     ];
-    
+
     return row;
   }
-  
-  
+
+
   function formatText(metadataLabel, metadataValue, isLink = false) {
     if (isLink) {
       return (<a href={metadataValue} target='_blank' rel="noreferrer">{metadataValue}</a>)
     } else if (["Used in axiom", "Equivalent to", "SubClass Of", "has curation status"].includes(metadataLabel)) {
-      return (<span dangerouslySetInnerHTML={{__html: metadataValue}}></span>)
-    } else if (["Type", "Description", "Imported From", "Also In", "Instances", "Instance of"].includes(metadataLabel)) {
+      return (<span dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
+    } else if (["Type", "Description", "Imported From", "Also In", "Instances", "Instance of", "Domain", "Range"].includes(metadataLabel)) {
       return metadataValue;
     }
-    
-    return (<span dangerouslySetInnerHTML={{__html: metadataValue}}></span>)
+
+    return (<span dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
   }
-  
-  
+
+
   if (!props.node.iri) {
     return <div className="is-loading-term-list isLoading-small"></div>;
   }
-  
+
   const helmetText = props.node.label ? `${props.node.ontologyId}:${props.node.label}` : `${props.node.ontologyId}:${props.node.short_form}`;
-  
+
   return (
     <div>
       {Toolkit.createHelmet(helmetText)}
