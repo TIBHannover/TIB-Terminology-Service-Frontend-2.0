@@ -31,6 +31,7 @@ export function classMetaData(term, termType) {
   metadata['fullIRI'] = { "value": term.iri, "isLink": true };
   metadata['SubClass Of'] = { "value": term.subClassOf, "isLink": false };
   metadata['Equivalent to'] = { "value": term.eqAxiom, "isLink": false };
+  metadata['Disjoint with'] = { "value": term.disjointWith, "isLink": false };
   metadata['Used in axiom'] = { "value": term.relations, "isLink": false };
   metadata['Instances'] = { "value": TermLib.createInstancesListForClass(term), "isLink": false };
   metadata['has curation status'] = { "value": term.curationStatus, "isLink": false };

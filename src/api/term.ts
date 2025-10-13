@@ -22,6 +22,7 @@ const PROPERTY_DOMAIN_PURL = "http://www.w3.org/2000/01/rdf-schema#domain";
 const PROPERTY_RANGE_PURL = "http://www.w3.org/2000/01/rdf-schema#range";
 const SUBCLASS_PURL = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
 const EQUIVALENT_CLASS_PURL = "http://www.w3.org/2002/07/owl#equivalentClass";
+const DISJOINTWITH_PURL = "http://www.w3.org/2002/07/owl#disjointWith";
 
 const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
@@ -89,7 +90,12 @@ class TermApi {
                 this.term['curationStatus'] = curationStatus;
             }
             if (this.termType === CLASS_TYPE_ID) {
-                await this.fetchClassRelations();
+                let instancesList = await this.getIndividualInstancesForClass();
+                this.term['relations'] = this.getRelations();
+                this.term['eqAxiom'] = this.recursivelyBuildStructure(EQUIVALENT_CLASS_PURL);
+                this.term['subClassOf'] = this.recursivelyBuildStructure(SUBCLASS_PURL);
+                this.term['disjointWith'] = this.recursivelyBuildStructure(DISJOINTWITH_PURL);
+                this.term['instancesList'] = instancesList;
             } else if (this.termType === PROPERTY_TYPE_ID) {
                 this.getPropDomainRange();
             }
@@ -249,18 +255,6 @@ class TermApi {
             return [];
         }
     }
-
-
-    async fetchClassRelations(): Promise<boolean> {
-
-        let instancesList = await this.getIndividualInstancesForClass();
-        this.term['relations'] = this.getRelations();
-        this.term['eqAxiom'] = this.recursivelyBuildStructure(EQUIVALENT_CLASS_PURL);
-        this.term['subClassOf'] = this.recursivelyBuildStructure(SUBCLASS_PURL);
-        this.term['instancesList'] = instancesList;
-        return true;
-    }
-
 
     getRelations(): string | null {
         try {
