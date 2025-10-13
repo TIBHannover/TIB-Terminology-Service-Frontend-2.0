@@ -7,26 +7,30 @@ import Toolkit from "../../../../Libs/Toolkit";
  */
 export function classMetaData(term, termType) {
   let metadata = {}
-  metadata['Label'] = {"value": term.label, "isLink": false};
+  metadata['Label'] = { "value": term.label, "isLink": false };
   metadata['Description'] = {
     "value": TermLib.createTermDiscription(term) ?? term?.annotation?.definition,
     "isLink": false
   };
-  metadata['Imported From'] = {
-    "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, termType),
-    "isLink": false
-  };
-  metadata['Also In'] = {"value": TermLib.createAlsoInTags(term, termType), "isLink": false};
-  metadata['Synonyms'] = {"value": term.synonym ? (term.synonym).join('<br/>') : "", "isLink": false}
-  metadata['CURIE'] = {"value": term.curie, "isLink": false};
-  metadata['Term ID'] = {"value": term.shortForm, "isLink": false};
-  metadata['fullIRI'] = {"value": term.iri, "isLink": true};
-  metadata['SubClass Of'] = {"value": term.subClassOf, "isLink": false};
-  metadata['Equivalent to'] = {"value": term.eqAxiom, "isLink": false};
-  metadata['Used in axiom'] = {"value": term.relations, "isLink": false};
-  metadata['Instances'] = {"value": TermLib.createInstancesListForClass(term), "isLink": false};
-  metadata['has curation status'] = {"value": term.curationStatus, "isLink": false};
-  
+
+  if (term.originalOntology !== term.ontologyId) {
+    metadata['Imported From'] = {
+      "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, termType),
+      "isLink": false
+    };
+  }
+
+  metadata['Also In'] = { "value": TermLib.createAlsoInTags(term, termType), "isLink": false };
+  metadata['Synonyms'] = { "value": term.synonym ? (term.synonym).join('<br/>') : "", "isLink": false }
+  metadata['CURIE'] = { "value": term.curie, "isLink": false };
+  metadata['Term ID'] = { "value": term.shortForm, "isLink": false };
+  metadata['fullIRI'] = { "value": term.iri, "isLink": true };
+  metadata['SubClass Of'] = { "value": term.subClassOf, "isLink": false };
+  metadata['Equivalent to'] = { "value": term.eqAxiom, "isLink": false };
+  metadata['Used in axiom'] = { "value": term.relations, "isLink": false };
+  metadata['Instances'] = { "value": TermLib.createInstancesListForClass(term), "isLink": false };
+  metadata['has curation status'] = { "value": term.curationStatus, "isLink": false };
+
   if (term['isIndividual'] && term['directParent'].length > 0) {
     let link = [];
     for (let parentIri of term['directParent']) {
@@ -36,13 +40,13 @@ export function classMetaData(term, termType) {
           <a href={parentClassUrl} target='_blank' rel='noopener noreferrer'>
             {term['linkedEntities'][parentIri]["label"]?.[0]}
           </a>
-          <br/>
+          <br />
         </>
       );
     }
-    metadata['Instance of'] = {"value": link, "isLink": false};
+    metadata['Instance of'] = { "value": link, "isLink": false };
   }
-  
+
   if (term.annotation) {
     // add custom annotation fields. Metadata key can be anything
     for (let key in term.annotation) {
@@ -58,11 +62,11 @@ export function classMetaData(term, termType) {
             res.push(Toolkit.transformLinksInStringToAnchor(value));
           }
         });
-        metadata[key] = {"value": res, "isLink": false};
+        metadata[key] = { "value": res, "isLink": false };
       } else if (typeof (term.annotation[key]) === "object" && term.annotation[key].value) {
-        metadata[key] = {"value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false};
+        metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false };
       } else {
-        metadata[key] = {"value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false};
+        metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false };
       }
     }
   }
@@ -72,7 +76,7 @@ export function classMetaData(term, termType) {
             ${term.annotation["has_dbxref"].map(xref => `<li>${xref}</li>`).join('')}
         </ul>
       `;
-    metadata["has_dbxref"] = {value: xrefContent, isLink: false};
+    metadata["has_dbxref"] = { value: xrefContent, isLink: false };
   }
   return metadata;
 }
@@ -83,21 +87,21 @@ export function classMetaData(term, termType) {
  */
 export function propertyMetaData(term) {
   let metadata = {};
-  
-  metadata['Label'] = {"value": term.label, "isLink": false};
-  metadata['Description'] = {"value": term?.annotation?.definition ?? null, "isLink": false};
+
+  metadata['Label'] = { "value": term.label, "isLink": false };
+  metadata['Description'] = { "value": term?.annotation?.definition ?? null, "isLink": false };
   metadata['Imported From'] = {
     "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, "property"),
     "isLink": false
   };
-  metadata['Also In'] = {"value": TermLib.createAlsoInTags(term, "property"), "isLink": false};
-  metadata['Synonyms'] = {"value": term.synonyms, "isLink": false};
-  metadata['CURIE'] = {"value": term.obo_id, "isLink": false};
-  metadata['Term ID'] = {"value": term.shortForm, "isLink": false};
-  metadata['fullIRI'] = {"value": term.iri, "isLink": true};
-  metadata['Ontology'] = {"value": term.ontologyId, "isLink": false};
-  metadata['has curation status'] = {"value": term.curationStatus, "isLink": false};
-  
+  metadata['Also In'] = { "value": TermLib.createAlsoInTags(term, "property"), "isLink": false };
+  metadata['Synonyms'] = { "value": term.synonyms, "isLink": false };
+  metadata['CURIE'] = { "value": term.obo_id, "isLink": false };
+  metadata['Term ID'] = { "value": term.shortForm, "isLink": false };
+  metadata['fullIRI'] = { "value": term.iri, "isLink": true };
+  metadata['Ontology'] = { "value": term.ontologyId, "isLink": false };
+  metadata['has curation status'] = { "value": term.curationStatus, "isLink": false };
+
   if (term.annotation) {
     // add custom annotation fields. Metadata key can be anything
     for (let key in term.annotation) {
@@ -113,15 +117,15 @@ export function propertyMetaData(term) {
             res.push(Toolkit.transformLinksInStringToAnchor(value));
           }
         });
-        metadata[key] = {"value": res, "isLink": false};
+        metadata[key] = { "value": res, "isLink": false };
       } else if (typeof (term.annotation[key]) === "object" && term.annotation[key].value) {
-        metadata[key] = {"value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false};
+        metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false };
       } else {
-        metadata[key] = {"value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false};
+        metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false };
       }
     }
   }
-  
+
   return metadata;
 }
 

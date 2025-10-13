@@ -1,12 +1,12 @@
 // @ts-nocheck
-import {buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis} from "../Libs/htmlFactory";
-import {getCallSetting} from "./constants";
+import { buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis } from "../Libs/htmlFactory";
+import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
     OntologyTermData, OntologyTermDataV2,
     TermListData
 } from "./types/ontologyTypes";
-import {Ols3ApiResponse} from "./types/common";
+import { Ols3ApiResponse } from "./types/common";
 import TermLib from "../Libs/TermLib";
 
 
@@ -81,7 +81,8 @@ class TermApi {
             this.term['subClassOf'] = undefined;
             this.term['isIndividual'] = this.term['type'].includes("individual");
             this.term['directParent'] = this.term['directParent'] ? this.term['directParent'] : [];
-            this.fetchImportedAndAlsoInOntologies();
+            this.term['originalOntology'] = this.getClassOriginalOntology();
+            this.term['alsoIn'] = this.getClassAllOntologies();
             let curationStatus = this.createHasCurationStatus();
             if (curationStatus) {
                 this.term['curationStatus'] = curationStatus;
@@ -120,7 +121,7 @@ class TermApi {
                 termObject.term['synonym'] = TermLib.gerTermSynonyms(termObject.term);
                 refinedResults.push(termObject.term);
             }
-            return {"results": refinedResults, "totalTermsCount": totalTermsCount};
+            return { "results": refinedResults, "totalTermsCount": totalTermsCount };
         } catch (e) {
             //throw (e)
             return [];
@@ -163,13 +164,13 @@ class TermApi {
             }
             let termDbXrefList: { value: string, axioms: { [key: string]: string }[] }[] = [];
             if (Toolkit.isString(dbxrefValue)) {
-                termDbXrefList = [{value: dbxrefValue, axioms: []}];
+                termDbXrefList = [{ value: dbxrefValue, axioms: [] }];
             } else {
                 termDbXrefList = dbxrefValue;
             }
             for (let xref of termDbXrefList) {
                 if (Toolkit.isString(xref)) {
-                    xref = {value: xref, axioms: []};
+                    xref = { value: xref, axioms: [] };
                 }
                 if (!this.term["linkedEntities"][xref.value]) {
                     // the xref value is not part of linked entities --> display as plain string
@@ -213,13 +214,6 @@ class TermApi {
         this.term['eqAxiom'] = this.getEqAxiom();
         this.term['subClassOf'] = this.getSubClassOf();
         this.term['instancesList'] = instancesList;
-        return true;
-    }
-
-
-    fetchImportedAndAlsoInOntologies() {
-        this.term['originalOntology'] = this.getClassOriginalOntology();
-        this.term['alsoIn'] = this.getClassAllOntologies();
         return true;
     }
 
@@ -452,7 +446,7 @@ class TermApi {
             let [, attributes, href] = match;
             let targetIriType = "terms";
             let termApi = new TermApi(this.ontologyId, encodeURIComponent(href), targetIriType);
-            await termApi.fetchTerm({withRelations: false});
+            await termApi.fetchTerm({ withRelations: false });
             if (termApi.term.types[0] !== "class") {
                 targetIriType = "props";
             }
