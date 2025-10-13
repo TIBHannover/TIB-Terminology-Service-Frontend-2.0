@@ -1,65 +1,63 @@
-import {useState, useEffect, useContext} from "react";
-import {getTermset} from "../../api/term_set";
-import {useQuery} from "@tanstack/react-query";
+import { useState, useEffect, useContext } from "react";
+import { getTermset } from "../../api/term_set";
+import { useQuery } from "@tanstack/react-query";
 import TermTable from "../common/TermTable/TermTable";
 import TermLib from "../../Libs/TermLib";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import DropDown from "../common/DropDown/DropDown";
 import Pagination from "../common/Pagination/Pagination";
-import {AddTermModal} from "./AddTermModal";
+import { AddTermModal } from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
-import {removeTermFromSet} from "../../api/term_set";
-import {AppContext} from "../../context/AppContext";
-import {NotFoundErrorPage, GeneralErrorPage} from "../common/ErrorPages/ErrorPages";
-import TermApi from "../../api/term";
+import { removeTermFromSet } from "../../api/term_set";
+import { AppContext } from "../../context/AppContext";
+import { NotFoundErrorPage, GeneralErrorPage } from "../common/ErrorPages/ErrorPages";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
-  {label: "10", value: 10},
-  {label: "20", value: 20},
-  {label: "30", value: 30},
-  {label: "40", value: 40},
-  {label: "50", value: 50}
+  { label: "10", value: 10 },
+  { label: "20", value: 20 },
+  { label: "30", value: 30 },
+  { label: "40", value: 40 },
+  { label: "50", value: 50 }
 ];
 const DEFAUTL_ROWS_COUNT = 10;
 
 
 const TermSetPage = (props) => {
   const termsetId = props.match.params.termsetId;
-  
+
   const appContext = useContext(AppContext);
-  
+
   const [dataLoaded, setDataLoaded] = useState(false);
   const [rowDataForTable, setRowDataForTable] = useState([]);
   const [tableColumns, _] = useState(
     [
-      {id: "action", text: "", defaultVisible: true},
-      {id: "shortForm", text: "ID", defaultVisible: true},
-      {id: "label", text: "Label", defaultVisible: true},
-      {id: "decs", text: "Description", defaultVisible: true},
-      {id: "altTerm", text: "Alternative Term", defaultVisible: false},
-      {id: "subclass", text: "SubClass Of", defaultVisible: false},
-      {id: "eqto", text: "Equivalent to", defaultVisible: false},
-      {id: "example", text: "Example of usage", defaultVisible: false},
-      {id: "seealso", text: "See Also", defaultVisible: false},
-      {id: "contrib", text: "Contributor", defaultVisible: false},
-      {id: "comment", text: "Comment", defaultVisible: false},
+      { id: "action", text: "", defaultVisible: true },
+      { id: "shortForm", text: "ID", defaultVisible: true },
+      { id: "label", text: "Label", defaultVisible: true },
+      { id: "decs", text: "Description", defaultVisible: true },
+      { id: "altTerm", text: "Alternative Term", defaultVisible: false },
+      { id: "subclass", text: "SubClass Of", defaultVisible: false },
+      { id: "eqto", text: "Equivalent to", defaultVisible: false },
+      { id: "example", text: "Example of usage", defaultVisible: false },
+      { id: "seealso", text: "See Also", defaultVisible: false },
+      { id: "contrib", text: "Contributor", defaultVisible: false },
+      { id: "comment", text: "Comment", defaultVisible: false },
     ]);
   const [size, setSize] = useState(DEFAUTL_ROWS_COUNT);
   const [page, setPage] = useState(0);
   const [totalTermsCount, setTotalTermsCount] = useState(0);
-  
-  const {data, loading, error} = useQuery({
+
+  const { data, loading, error } = useQuery({
     queryKey: ["termset", termsetId],
     queryFn: () => getTermset(termsetId),
     retry: 1
   });
-  
+
   function createTermListForTable(listOfterms) {
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
-    let termApi = new TermApi();
     for (let termWrapper of listOfterms) {
       let term = termWrapper.json;
       let DeleteBtn =
@@ -73,36 +71,36 @@ const TermSetPage = (props) => {
       if (!appContext.userTermsets.find((tset) => tset.id === data.id) || !appContext.user) {
         DeleteBtn = "";
       }
-      
+
       let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
       let annotation = TermLib.getAnnotations(term);
       term["annotation"] = annotation;
       let termMap = new Map();
-      termMap.set("shortForm", {value: term["shortForm"], valueLink: ""});
-      termMap.set("label", {value: TermLib.extractLabel(term), valueLink: termTreeUrl});
-      termMap.set("decs", {value: TermLib.createTermDiscription(term) ?? annotation?.definition, valueLink: ""});
+      termMap.set("shortForm", { value: term["shortForm"], valueLink: "" });
+      termMap.set("label", { value: TermLib.extractLabel(term), valueLink: termTreeUrl });
+      termMap.set("decs", { value: TermLib.createTermDiscription(term) ?? annotation?.definition, valueLink: "" });
       termMap.set("altTerm", {
         value: annotation['alternative label'] ? annotation['alternative label'] : "N/A",
         valueLink: ""
       });
-      termMap.set("subclass", {value: term.subClassOf, valueLink: "", valueIsHtml: true});
-      termMap.set("eqto", {value: termApi.getEqAxiom(term), valueLink: "", valueIsHtml: true});
+      termMap.set("subclass", { value: term.subClassOf, valueLink: "", valueIsHtml: true });
+      termMap.set("eqto", { value: term.eqAxiom, valueLink: "", valueIsHtml: true });
       termMap.set("example", {
         value: annotation['example of usage'] ? annotation['example of usage'] : "N/A",
         valueLink: ""
       });
-      termMap.set("seealso", {value: annotation['seeAlso'] ? annotation['seeAlso'] : "N/A", valueLink: ""});
-      termMap.set("contrib", {value: TermLib.getContributors(term), valueLink: ""});
-      termMap.set("comment", {value: annotation['comment'] ? annotation['comment'] : "N/A", valueLink: ""});
-      termMap.set("action", {value: DeleteBtn, valueLink: ""});
-      
+      termMap.set("seealso", { value: annotation['seeAlso'] ? annotation['seeAlso'] : "N/A", valueLink: "" });
+      termMap.set("contrib", { value: TermLib.getContributors(term), valueLink: "" });
+      termMap.set("comment", { value: annotation['comment'] ? annotation['comment'] : "N/A", valueLink: "" });
+      termMap.set("action", { value: DeleteBtn, valueLink: "" });
+
       dataForTable.push(termMap);
     }
     setRowDataForTable(dataForTable);
     //props.setTableIsLoading(false);
   }
-  
-  
+
+
   function searchInputChangeHandler(e) {
     let query = e.target.value;
     if (query) {
@@ -120,7 +118,7 @@ const TermSetPage = (props) => {
       setTotalTermsCount(data.terms.length);
     }
   }
-  
+
   async function downloadJsonOnClick() {
     if (!data) {
       return;
@@ -132,7 +130,7 @@ const TermSetPage = (props) => {
     const jsonFile = JSON.stringify(termList);
     await Toolkit.downloadJsonFile(data.name + "_terms.json", jsonFile);
   }
-  
+
   async function downloadCsvOnClick() {
     if (!data) {
       return;
@@ -145,7 +143,6 @@ const TermSetPage = (props) => {
       }
     }
     rows.push(headers);
-    let termApi = new TermApi();
     for (let termWrapper of data.terms) {
       let term = termWrapper.json;
       let annotation = TermLib.getAnnotations(term);
@@ -155,7 +152,7 @@ const TermSetPage = (props) => {
       row.push(escapeForCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
       row.push(escapeForCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
       row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
-      row.push(escapeForCSV(termApi.getEqAxiom(term) ?? "N/A"));
+      row.push(escapeForCSV(term.eqAxiom ?? "N/A"));
       row.push(escapeForCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
       row.push(escapeForCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
       row.push(escapeForCSV(TermLib.getContributors(term)));
@@ -169,9 +166,9 @@ const TermSetPage = (props) => {
     link.setAttribute("download", data.name + "_terms.csv");
     document.body.appendChild(link);
     link.click();
-    
+
   }
-  
+
   function removeTerm(e) {
     try {
       let termsetId = e.currentTarget.dataset.tsetid;
@@ -201,7 +198,7 @@ const TermSetPage = (props) => {
       return;
     }
   }
-  
+
   function escapeForCSV(value) {
     if (value == null) return '';
     const str = String(value);
@@ -210,8 +207,8 @@ const TermSetPage = (props) => {
     }
     return str;
   }
-  
-  
+
+
   useEffect(() => {
     if (dataLoaded) {
       return;
@@ -222,19 +219,19 @@ const TermSetPage = (props) => {
       setTotalTermsCount(data.terms.length);
     }
   }, [data, page, size]);
-  
-  
+
+
   useEffect(() => {
     if (data) {
       createTermListForTable(data.terms);
     }
   }, [page, size]);
-  
-  
+
+
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
-  
+
   if (!data && !error) {
     return (
       <div className="justify-content-center ontology-page-container">
@@ -244,24 +241,24 @@ const TermSetPage = (props) => {
   } else if (!data && error && error.status !== 404) {
     return (
       <div className="justify-content-center ontology-page-container">
-        <GeneralErrorPage/>
+        <GeneralErrorPage />
       </div>
     );
   } else if (!data && error && error.status === 404) {
     return (
       <div className="justify-content-center ontology-page-container">
-        <NotFoundErrorPage/>
+        <NotFoundErrorPage />
       </div>
     );
   }
-  
+
   return (
     <div className="justify-content-center ontology-page-container">
       <div className="tree-view-container list-container">
         <div className="row">
           <div className="col-6">
             <Link className="btn-secondary p-1 text-white"
-                  to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
+              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
               <i className="bi bi-arrow-left mr-1"></i>
               My termset list
             </Link>
@@ -272,14 +269,14 @@ const TermSetPage = (props) => {
             </div>
           }
         </div>
-        <br/>
+        <br />
         <div className="row">
           <div className="col-sm-12 text-center">
             <h2><b>{data ? data.name : ""}</b></h2>
             <small>{data ? data.description : ""}</small>
           </div>
         </div>
-        <br/><br/>
+        <br /><br />
         <div className="row" id="termset-page-action-bar">
           <div className="col-sm-2 mt-1">
             <button className="btn-secondary text-white me-2" onClick={downloadJsonOnClick}>
@@ -295,7 +292,7 @@ const TermSetPage = (props) => {
             <label htmlFor="search-input-for-termset" className={"inline-label"}>
               Search
               <i className="bi bi-question-circle-fill me-1 ms-1"
-                 title="Search the table based on term label"></i>
+                title="Search the table based on term label"></i>
             </label>
             <input
               className={"form-control search-input-termset"}

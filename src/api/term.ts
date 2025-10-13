@@ -294,36 +294,6 @@ class TermApi {
     }
 
 
-    getEqAxiom(term: OntologyTermDataV2 | undefined = undefined): string | null {
-        try {
-            if (term) {
-                this.term = term;
-            }
-            let eqevalentAxiomData = this.term['http://www.w3.org/2002/07/owl#equivalentClass'];
-            if (!eqevalentAxiomData) {
-                return null;
-            }
-            let propertyIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#onProperty'];
-            let targetIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#someValuesFrom'];
-            let propertyLabel = this.term['linkedEntities'][propertyIri]['label'];
-            let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];
-            let relationText = document.createElement('span');
-            relationText.innerHTML = " some ";
-            let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
-            let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
-            let span = document.createElement('span');
-            let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
-            span.appendChild(propAnchor);
-            span.appendChild(relationText);
-            let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
-            span.appendChild(targetAnchor);
-            return span.outerHTML;
-        } catch (e) {
-            return null;
-        }
-    }
-
-
     recursivelyBuildStructure(metadataPurl): string | null {
         try {
             let data = this.term[metadataPurl];
