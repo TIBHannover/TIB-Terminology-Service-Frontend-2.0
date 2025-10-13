@@ -116,6 +116,7 @@ export function propertyMetaData(term) {
     metadata['Range'] = { "value": TermLib.createListOfClasses(term["ranges"]), "isLink": false };
   }
 
+
   metadata['CURIE'] = { "value": term.obo_id, "isLink": false };
   metadata['Term ID'] = { "value": term.shortForm, "isLink": false };
   metadata['fullIRI'] = { "value": term.iri, "isLink": true };

@@ -20,6 +20,8 @@ const IDENTIFIER_PURL_HTTPS = "https://schema.org/identifier";
 const IDENTIFIER_PURL_HTTP = "http://schema.org/identifier";
 const PROPERTY_DOMAIN_PURL = "http://www.w3.org/2000/01/rdf-schema#domain";
 const PROPERTY_RANGE_PURL = "http://www.w3.org/2000/01/rdf-schema#range";
+const SUBCLASS_PURL = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+const EQUIVALENT_CLASS_PURL = "http://www.w3.org/2002/07/owl#equivalentClass";
 
 const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
@@ -116,8 +118,8 @@ class TermApi {
                 termObject.term = term;
                 termObject.ontologyId = term['ontologyId'];
                 termObject.term['annotation'] = termObject.buildAnnotations();
-                termObject.term['subClassOf'] = termObject.getSubClassOf();
-                termObject.term['eqAxiom'] = termObject.getEqAxiom();
+                termObject.term['subClassOf'] = termObject.recursivelyBuildStructure(SUBCLASS_PURL);
+                termObject.term['eqAxiom'] = termObject.recursivelyBuildStructure(EQUIVALENT_CLASS_PURL);
                 termObject.term['label'] = TermLib.extractLabel(termObject.term);
                 termObject.term['synonym'] = TermLib.gerTermSynonyms(termObject.term);
                 refinedResults.push(termObject.term);
@@ -253,8 +255,8 @@ class TermApi {
 
         let instancesList = await this.getIndividualInstancesForClass();
         this.term['relations'] = this.getRelations();
-        this.term['eqAxiom'] = this.getEqAxiom();
-        this.term['subClassOf'] = this.getSubClassOf();
+        this.term['eqAxiom'] = this.recursivelyBuildStructure(EQUIVALENT_CLASS_PURL);
+        this.term['subClassOf'] = this.recursivelyBuildStructure(SUBCLASS_PURL);
         this.term['instancesList'] = instancesList;
         return true;
     }
@@ -322,19 +324,22 @@ class TermApi {
     }
 
 
-    getSubClassOf(): string | null {
+    recursivelyBuildStructure(metadataPurl): string | null {
         try {
-            let subClassOfData = this.term['http://www.w3.org/2000/01/rdf-schema#subClassOf'];
-            if (!subClassOfData || subClassOfData.length === 0) {
+            let data = this.term[metadataPurl];
+            if (!data || data.length === 0) {
                 return null;
             }
-            if (typeof (subClassOfData) === "string") {
-                subClassOfData = [subClassOfData];
+            if (typeof (data) === "string") {
+                data = [data];
+            }
+            if (metadataPurl === EQUIVALENT_CLASS_PURL) {
+                data = [data];
             }
             let ul = document.createElement('ul');
-            for (let i = 0; i < subClassOfData.length; i++) {
-                if (typeof (subClassOfData[i]) === "string") {
-                    let parentIri = subClassOfData[i];
+            for (let i = 0; i < data.length; i++) {
+                if (typeof (data[i]) === "string") {
+                    let parentIri = data[i];
                     let parentLabel = this.term['linkedEntities'][parentIri]['label'][0];
                     let parentLi = document.createElement('li');
                     let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
@@ -344,7 +349,7 @@ class TermApi {
                     continue;
                 }
                 let li = document.createElement('li');
-                let content = this.recSubClass(subClassOfData[i]);
+                let content = this.recSubClass(data[i]);
                 li.appendChild(content);
                 ul.appendChild(li);
             }
@@ -352,6 +357,7 @@ class TermApi {
             return ul.outerHTML;
 
         } catch (e) {
+            console.log(e)
             return null;
         }
     }
