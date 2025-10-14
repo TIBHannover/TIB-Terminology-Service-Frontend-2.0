@@ -3,6 +3,13 @@ import { PropDomainRangeObj } from "./types";
 
 class TsProperty extends TsTerm {
 
+  override get type(): string {
+    return "property";
+  }
+
+  override get isIndividual(): boolean {
+    return false;
+  }
 
   get domains(): PropDomainRangeObj[] {
     try {
