@@ -103,15 +103,6 @@ export type OntologyTermDataV2 = {
   hasDirectParents?: boolean,
   shortForm?: string,
   isPreferredRoot?: boolean,
-  relations?: string | null, // not part of ols api
-  eqAxiom?: string | null, // not part of ols api
-  subClassOf?: string | null, // not part of ols api
-  isIndividual?: boolean, // not part of ols api
-  curationStatus?: Array<string> | null, // not part of ols api
-  parents?: Array<ParentNode>, // used anywhere?
-  instancesList?: any, // not part of ols api
-  originalOntology?: string | null, // not part of ols api
-  alsoIn?: Array<string> | null, // not part of ols api
   [key: string]: any
 }
 

@@ -1,12 +1,12 @@
-import {useEffect, useState, useContext} from "react";
+import { useEffect, useState, useContext } from "react";
 import TermApi from "../../../api/term";
 import Toolkit from "../../../Libs/Toolkit";
-import {RenderTermList} from "./RenderTermList";
-import {OntologyPageContext} from "../../../context/OntologyPageContext";
+import { RenderTermList } from "./RenderTermList";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import TermListUrlFactory from "../../../UrlFactory/TermListUrlFactory";
 import PropTypes from 'prop-types';
 import '../../layout/termList.css';
-import {getTourProfile} from "../../../tours/controller";
+import { getTourProfile } from "../../../tours/controller";
 
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -18,15 +18,15 @@ const TermList = (props) => {
       This component is responsible for rendering the list of terms in the ontology.
       It requires the ontologyPageContext to be available.
   */
-  
+
   const ontologyPageContext = useContext(OntologyPageContext);
   const termListUrlFactory = new TermListUrlFactory();
-  
+
   let iriInUrl = termListUrlFactory.iri;
   let pageNumberInUrl = !termListUrlFactory.page ? DEFAULT_PAGE_NUMBER : parseInt(termListUrlFactory.page);
   let internalSize = Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
   let sizeInUrl = !termListUrlFactory.size ? internalSize : parseInt(termListUrlFactory.size);
-  
+
   const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
   const [pageSize, setPageSize] = useState(sizeInUrl);
   const [listOfTerms, setListOfTerms] = useState(['loading']);
@@ -35,53 +35,53 @@ const TermList = (props) => {
   const [iri, setIri] = useState(iriInUrl);
   const [tableIsLoading, setTableIsLoading] = useState(true);
   const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue());
-  
-  
+
+
   async function loadComponent() {
     let ontologyId = ontologyPageContext.ontology.ontologyId;
-    let listOfTermsAndStats = {"results": [], "totalTermsCount": 0};
+    let listOfTermsAndStats = { "results": [], "totalTermsCount": 0 };
     let termApi = new TermApi(ontologyId, iri, mode);
     if (!iri) {
       listOfTermsAndStats = await termApi.fetchListOfTerms(pageNumber, pageSize, obsoletes);
     } else {
-      await termApi.fetchTerm();
-      listOfTermsAndStats["results"] = [termApi.term];
+      let tsTerm = await termApi.fetchTerm();
+      listOfTermsAndStats["results"] = [tsTerm];
       listOfTermsAndStats["totalTermsCount"] = 1;
     }
-    
+
     setListOfTerms(listOfTermsAndStats['results']);
     setTotalNumberOfTerms(listOfTermsAndStats['totalTermsCount']);
     storePageSizeInLocalStorage(pageSize);
   }
-  
-  
+
+
   function storePageSizeInLocalStorage(size) {
     if (parseInt(size) !== 1) {
       localStorage.setItem('termListPageSize', size);
     }
   }
-  
-  
+
+
   function pageCount() {
     if (isNaN(Math.ceil(totalNumberOfTerms / pageSize))) {
       return 0;
     }
     return (Math.ceil(totalNumberOfTerms / pageSize))
   }
-  
-  
+
+
   function handlePagination(value) {
     setPageNumber(parseInt(value) - 1);
   }
-  
-  
+
+
   function handlePageSizeDropDownChange(e) {
     let size = parseInt(e.target.value);
     setPageSize(size);
     storePageSizeInLocalStorage(size);
   }
-  
-  
+
+
   function resetList() {
     let size = Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
     setIri(null);
@@ -89,8 +89,8 @@ const TermList = (props) => {
     setPageSize(size);
     storePageSizeInLocalStorage(pageSize);
   }
-  
-  
+
+
   function hideHiddenColumnsOnLoad() {
     let tableHeaders = document.getElementsByTagName('th');
     for (let th of tableHeaders) {
@@ -102,22 +102,22 @@ const TermList = (props) => {
       }
     }
   }
-  
-  
+
+
   function handleJumtoSelection(selectedTerm) {
     if (selectedTerm) {
       setIri(selectedTerm['iri']);
     }
   }
-  
-  
+
+
   function obsoletesCheckboxHandler(e) {
     Toolkit.setObsoleteInStorageAndUrl(e.target.checked);
     setObsoletes(e.target.checked);
     setPageNumber(0);
   }
-  
-  
+
+
   useEffect(() => {
     hideHiddenColumnsOnLoad();
     loadComponent();
@@ -129,8 +129,8 @@ const TermList = (props) => {
       document.getElementById('tour-trigger-btn').click();
     }
   }, []);
-  
-  
+
+
   useEffect(() => {
     setTableIsLoading(true);
     setListOfTerms(['loading']);
@@ -139,10 +139,10 @@ const TermList = (props) => {
     if (obsoletes && document.getElementById("obsolte_check_term_list")) {
       document.getElementById("obsolte_check_term_list").checked = true;
     }
-    termListUrlFactory.update({iri: iri, page: pageNumber + 1, size: pageSize, obsoletes: obsoletes});
+    termListUrlFactory.update({ iri: iri, page: pageNumber + 1, size: pageSize, obsoletes: obsoletes });
   }, [pageNumber, pageSize, iri, obsoletes]);
-  
-  
+
+
   return (
     <RenderTermList
       componentIdentity={props.componentIdentity}
@@ -162,7 +162,7 @@ const TermList = (props) => {
       isObsolete={obsoletes}
     />
   );
-  
+
 }
 
 TermList.propTypes = {

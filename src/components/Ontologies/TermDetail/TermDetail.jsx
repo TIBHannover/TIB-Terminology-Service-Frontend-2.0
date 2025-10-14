@@ -1,17 +1,17 @@
-import {useEffect, useState, useContext} from 'react';
+import { useEffect, useState, useContext } from 'react';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import TermDetailTable from './TermDetailTable/TermDetailTable';
 import NoteList from '../Note/NoteList';
 import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
-import {Link} from 'react-router-dom';
-import {getNoteList} from '../../../api/note';
+import { Link } from 'react-router-dom';
+import { getNoteList } from '../../../api/note';
 import Graph from '../../common/Graph/Graph';
-import {OntologyPageContext} from "../../../context/OntologyPageContext";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import PropTypes from 'prop-types';
-import {AddToTermsetModal} from '../../TermSet/AddTermToSet';
+import { AddToTermsetModal } from '../../TermSet/AddTermToSet';
 
 
 const DETAIL_TAB_ID = 0;
@@ -26,38 +26,37 @@ const TermDetail = (props) => {
     It also contains the tab navigation for switching between these components.
     It requires the ontologyPageContext to be available.
   */
-  
+
   const ontologyPageContext = useContext(OntologyPageContext);
-  
+
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
-  const [targetTerm, setTargetTerm] = useState({"iri": null});
+  const [targetTerm, setTargetTerm] = useState({ "iri": null });
   const [notesCount, setNotesCount] = useState(0);
-  
+
   const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL +
     `/v2/ontologies/${targetTerm.ontologyId}/entities/${encodeURIComponent(encodeURIComponent(targetTerm.iri))}?lang=${ontologyPageContext.ontoLang}`;
-  
+
   async function fetchTheTargetTerm() {
     let term = null;
     let ontologyId = ontologyPageContext.ontology.ontologyId;
     if (ontologyPageContext.isSkos && props.componentIdentity === "individual") {
-      let skosApi = new SkosApi({ontologyId: ontologyId, iri: props.iri})
+      let skosApi = new SkosApi({ ontologyId: ontologyId, iri: props.iri })
       await skosApi.fetchSkosTerm();
       term = skosApi.skosTerm;
     } else {
       let termApi = new TermApi(ontologyId, encodeURIComponent(props.iri), props.extractKey, ontologyPageContext.ontoLang);
-      await termApi.fetchTerm();
-      term = termApi.term;
+      term = await termApi.fetchTerm();
     }
     setTargetTerm(term);
   }
-  
-  
+
+
   async function fetchNoteCount() {
     try {
       let ontologyId = ontologyPageContext.ontology.ontologyId;
-      let term = {"iri": props.iri};
+      let term = { "iri": props.iri };
       let countOfNotes = 0;
       if (process.env.REACT_APP_NOTE_FEATURE === "true") {
         countOfNotes = await getNoteList({
@@ -75,8 +74,8 @@ const TermDetail = (props) => {
       setNotesCount(0);
     }
   }
-  
-  
+
+
   function setTabOnLoad() {
     let url = new URL(window.location);
     let requestedTab = url.searchParams.get("subtab");
@@ -88,14 +87,14 @@ const TermDetail = (props) => {
     } else if (requestedTab !== lastRequestedTab) {
       activeTabId = DETAIL_TAB_ID;
     }
-    
+
     if (activeTabId !== activeTab) {
       setActiveTab(activeTabId);
       setWaiting(false);
       setLastRequestedTab(requestedTab);
     }
   }
-  
+
   function tabChangeHandler(e, v) {
     try {
       let selectedTabId = e.target.dataset.value;
@@ -107,26 +106,26 @@ const TermDetail = (props) => {
       setWaiting(false);
     }
   }
-  
-  
+
+
   useEffect(() => {
     setTabOnLoad();
     fetchTheTargetTerm();
     fetchNoteCount();
   }, [props.iri, activeTab]);
-  
+
   useEffect(() => {
     setWaiting(true);
     fetchTheTargetTerm();
     setWaiting(false);
   }, [ontologyPageContext.ontoLang])
-  
-  
+
+
   return (
     <div className='row'>
       <div className='col-sm-12'>
         <div className='term-detail-action-bar'>
-          <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm}/>
+          <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm} />
           <a
             href={showDataAsJsonBtnHref}
             target='_blank'
@@ -175,10 +174,10 @@ const TermDetail = (props) => {
 
 
 const RenderTermDetailTab = (props) => {
-  
+
   const ontologyPageContext = useContext(OntologyPageContext);
   const UrlFactory = new CommonUrlFactory();
-  
+
   function createTabs() {
     let result = [];
     for (let configItemKey in NodePageTabConfig) {
@@ -194,10 +193,10 @@ const RenderTermDetailTab = (props) => {
       if (configItemKey === "GraphView" && (props.componentIdentity === "props" || (props.componentIdentity === "individuals" && !ontologyPageContext.isSkos))) {
         continue;
       }
-      
+
       result.push(
         <li className={"nav-item ontology-detail-nav-item stour-tree-table-" + configObject['id']}
-            key={configObject['keyForRenderAsTabItem']}>
+          key={configObject['keyForRenderAsTabItem']}>
           <Link
             onClick={props.tabChangeHandler}
             data-value={configObject['tabId']}
@@ -210,10 +209,10 @@ const RenderTermDetailTab = (props) => {
         </li>
       );
     }
-    
+
     return result;
   }
-  
+
   return (
     <ul className="nav nav-tabs nav-tabs-node">
       {createTabs()}

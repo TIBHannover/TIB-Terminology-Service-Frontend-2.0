@@ -31,7 +31,7 @@ class TermApi {
     iri = iri ? iri : "";
     this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
     this.setTermType(termType);
-    this.term = {};
+    this.term = {}; // this holds the term data from ols api.
     this.lang = language ? language : "en";
 
   }

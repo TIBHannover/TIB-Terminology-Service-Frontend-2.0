@@ -75,7 +75,7 @@ export default class TreeHelper {
       }
       else {
         let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName, lang);
-        res = await termApi.getChildrenJsTree(targetNodeId);
+        res = await termApi.getChildrenJsTree();
       }
       TreeHelper.sortTermsInTree(res);
       let ul = document.createElement("ul");
@@ -124,7 +124,7 @@ export default class TreeHelper {
       let Iri = document.getElementById(parentId);
       Iri = Iri.dataset.iri;
       let termApi = new TermApi(ontologyId, Iri, childExtractName);
-      let res = await termApi.getChildrenJsTree(parentId);
+      let res = await termApi.getChildrenJsTree();
       TreeHelper.sortTermsInTree(res);
       for (let i = 0; i < res.length; i++) {
         if (res[i].iri === node.parentNode.dataset.iri) {
@@ -174,16 +174,16 @@ export default class TreeHelper {
       return false;
     }
     let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
-    await termApi.fetchTerm();
-    return termApi.term.hasHierarchicalChildren || termApi.hasDirectChildren;
+    let tsTerm = await termApi.fetchTerm();
+    return tsTerm.hasHierarchicalChildren || tsTerm.hasDirectChildren;
   }
 
 
   static async nodeIsRoot(ontology, nodeIri, mode) {
     let termType = mode === 'terms' ? "classes" : "properties";
     let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
-    await termApi.fetchTerm();
-    return !termApi.term.hasDirectParents && !termApi.term.hasHierarchicalParents;
+    let tsTerm = await termApi.fetchTerm();
+    return !tsTerm.hasDirectParents && !tsTerm.hasHierarchicalParents;
   }
 
 

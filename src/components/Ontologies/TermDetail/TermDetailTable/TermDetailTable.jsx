@@ -78,9 +78,9 @@ const TermDetailTable = (props) => {
   function formatText(metadataLabel, metadataValue, isLink = false) {
     if (isLink) {
       return (<a href={metadataValue} target='_blank' rel="noreferrer">{metadataValue}</a>)
-    } else if (["Used in axiom", "Equivalent to", "SubClass Of", "has curation status", "Disjoint with"].includes(metadataLabel)) {
+    } else if (["Used in axiom", "Equivalent to", "SubClass Of", "has curation status", "Disjoint with", "Description"].includes(metadataLabel)) {
       return (<span dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
-    } else if (["Type", "Description", "Imported From", "Also In", "Instances", "Instance of", "Domain", "Range"].includes(metadataLabel)) {
+    } else if (["Type", "Imported From", "Also In", "Instances", "Instance of", "Domain", "Range"].includes(metadataLabel)) {
       return metadataValue;
     }
 
