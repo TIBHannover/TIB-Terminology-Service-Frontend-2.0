@@ -1,0 +1,15 @@
+{
+  "usedBy": {
+    "type": "repository/portal",
+    "label": "GBIF (Global Biodiversity Information Facility)",
+    "description": "GBIF — the Global Biodiversity Information Facility — is an international network and data infrastructure funded by the world's governments and aimed at providing anyone, anywhere, open access to data about all types of life on Earth.",
+    "homepage": "https://www.gbif.org/what-is-gbif"
+  },
+  "usageDescription": {
+    "description": "ABCD is used by GBIF to standardize biological collection data across repositories and enable global data sharing.",
+    "language": "en"
+  },
+  "usageReportMetadata": {
+    "created": "2025-08-19"
+  }
+}

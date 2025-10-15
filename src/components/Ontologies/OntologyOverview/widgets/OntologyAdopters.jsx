@@ -7,9 +7,14 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // feature flag  ichrak 
+  const showAdopters = process.env.REACT_APP_SHOW_ONTOLOGY_ADOPTERS === "true";  
+
   const ontologyId = (onto?.ontologyId || "").toLowerCase();
 
-  useEffect(() => {
+  useEffect(() => { 
+    // if not true no fetch 
+    if (!showAdopters) return;  
     if (!ontologyId) return;
     setLoading(true);
     fetch(`${process.env.PUBLIC_URL}/ontology-use/${ontologyId}.json`, { cache: "no-store" })
@@ -17,8 +22,9 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
       .then(setData)
       .catch(() => setData(null))
       .finally(() => setLoading(false));
-  }, [ontologyId, showModal]);
+  }, [ontologyId, showModal,showAdopters]);
 
+    if (!showAdopters) return null;  
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
       <Modal.Header closeButton>

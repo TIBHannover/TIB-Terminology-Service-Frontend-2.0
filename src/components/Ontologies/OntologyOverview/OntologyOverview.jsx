@@ -76,17 +76,20 @@ const OntologyOverview = () => {
             </div>
           }
           {/* Ontology adopters button (prototype) */}
-<div className='row' style={{ marginTop: 10 }}>
-  <div className='col-sm-12'>
-    <button
-      type="button"
-      className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
-      onClick={() => setShowOntologyAdopters(true)}
-    >
-      Ontology adopters
-    </button>
+
+{process.env.REACT_APP_SHOW_ONTOLOGY_ADOPTERS === "true" && (
+  <div className='row' style={{ marginTop: 10 }}>
+    <div className='col-sm-12'>
+      <button
+        type="button"
+        className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
+        onClick={() => setShowOntologyAdopters(true)}
+      >
+        Ontology adopters
+      </button>
+    </div>
   </div>
-</div>
+)}
 
         </div>
       </div>
@@ -95,12 +98,12 @@ const OntologyOverview = () => {
         setShowModal={setShowCollectionSuggestionModal}
       />
     
-    <OntologyAdopters
-  showModal={showOntologyAdopters}
-  setShowModal={setShowOntologyAdopters}
-/>
-
-
+  {process.env.REACT_APP_SHOW_ONTOLOGY_ADOPTERS === "true" && (
+  <OntologyAdopters
+    showModal={showOntologyAdopters}
+    setShowModal={setShowOntologyAdopters}
+  />
+)}
 
 
       <Login isModal={true} showModal={loginModal} withoutButton={true}/>
