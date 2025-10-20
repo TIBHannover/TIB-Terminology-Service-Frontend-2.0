@@ -11,6 +11,7 @@ import Toolkit from "../../Libs/Toolkit";
 import { removeTermFromSet } from "../../api/term_set";
 import { AppContext } from "../../context/AppContext";
 import { NotFoundErrorPage, GeneralErrorPage } from "../common/ErrorPages/ErrorPages";
+import TsTerm from "../../concepts/term";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -59,26 +60,25 @@ const TermSetPage = (props) => {
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
     for (let termWrapper of listOfterms) {
-      let term = termWrapper.json;
+      let term = new TsTerm(termWrapper.json);
       let DeleteBtn =
         <i
           className="bi bi-file-minus-fill"
           title="remove from this termset"
           data-tsetid={data.id}
-          data-termid={term['iri']}
+          data-termid={term.iri}
           onClick={removeTerm}
         />
       if (!appContext.userTermsets.find((tset) => tset.id === data.id) || !appContext.user) {
         DeleteBtn = "";
       }
 
-      let termTreeUrl = baseUrl + encodeURIComponent(term['ontologyId']) + '/terms?iri=' + encodeURIComponent(term['iri']);
-      let annotation = TermLib.getAnnotations(term);
-      term["annotation"] = annotation;
+      let termTreeUrl = baseUrl + encodeURIComponent(term.ontologyId) + '/terms?iri=' + encodeURIComponent(term.iri);
+      let annotation = term.annotation;
       let termMap = new Map();
-      termMap.set("shortForm", { value: term["shortForm"], valueLink: "" });
-      termMap.set("label", { value: TermLib.extractLabel(term), valueLink: termTreeUrl });
-      termMap.set("decs", { value: TermLib.createTermDiscription(term) ?? annotation?.definition, valueLink: "" });
+      termMap.set("shortForm", { value: term.shortForm, valueLink: "" });
+      termMap.set("label", { value: term.label, valueLink: termTreeUrl });
+      termMap.set("decs", { value: term.definition ?? annotation?.definition, valueLink: "" });
       termMap.set("altTerm", {
         value: annotation['alternative label'] ? annotation['alternative label'] : "N/A",
         valueLink: ""
@@ -90,7 +90,7 @@ const TermSetPage = (props) => {
         valueLink: ""
       });
       termMap.set("seealso", { value: annotation['seeAlso'] ? annotation['seeAlso'] : "N/A", valueLink: "" });
-      termMap.set("contrib", { value: TermLib.getContributors(term), valueLink: "" });
+      termMap.set("contrib", { value: term.contributors, valueLink: "" });
       termMap.set("comment", { value: annotation['comment'] ? annotation['comment'] : "N/A", valueLink: "" });
       termMap.set("action", { value: DeleteBtn, valueLink: "" });
 
@@ -144,18 +144,18 @@ const TermSetPage = (props) => {
     }
     rows.push(headers);
     for (let termWrapper of data.terms) {
-      let term = termWrapper.json;
-      let annotation = TermLib.getAnnotations(term);
+      let term = new TsTerm(termWrapper.json);
+      let annotation = term.annotation;
       let row = [];
       row.push(escapeForCSV(term["shortForm"]));
-      row.push(escapeForCSV(TermLib.extractLabel(term)));
-      row.push(escapeForCSV(TermLib.createTermDiscription(term) ?? annotation?.definition));
+      row.push(escapeForCSV(term.label));
+      row.push(escapeForCSV(TermLib.definition ?? annotation?.definition));
       row.push(escapeForCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
       row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
       row.push(escapeForCSV(term.eqAxiom ?? "N/A"));
       row.push(escapeForCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
       row.push(escapeForCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
-      row.push(escapeForCSV(TermLib.getContributors(term)));
+      row.push(escapeForCSV(term.contributors));
       row.push(escapeForCSV(annotation['comment'] ? annotation['comment'] : "N/A"));
       rows.push(row);
     }
