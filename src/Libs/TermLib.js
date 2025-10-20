@@ -66,7 +66,7 @@ class TermLib {
   }
 
 
-  static createAlsoInTags(term, termType) {
+  static createAlsoInTags(term) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
       for (let ontologyId of term.alsoIn) {
@@ -75,7 +75,7 @@ class TermLib {
             TermLib.createOntologyTagWithTermURL(
               ontologyId,
               term.iri,
-              termType,
+              term.type,
             ),
           );
         }

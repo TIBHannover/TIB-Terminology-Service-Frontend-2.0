@@ -8,6 +8,7 @@ import { Ols3ApiResponse } from "./types/common";
 import TsClass from "../concepts/class";
 import TsProperty from "../concepts/property";
 import TsTerm from "../concepts/term";
+import TsIndividual from "../concepts/individual";
 
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -69,7 +70,7 @@ class TermApi {
         let tsProp = new TsProperty(this.term);
         return tsProp;
       }
-      let indiv = new TsTerm(this.term);
+      let indiv = new TsIndividual(this.term);
       return indiv;
     } catch (e) {
       this.term = {};

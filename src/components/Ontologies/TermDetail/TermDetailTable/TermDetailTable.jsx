@@ -1,4 +1,4 @@
-import { classMetaData, propertyMetaData } from './metadataParser';
+import { classMetaData, propertyMetaData, individualMetadata } from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
@@ -28,9 +28,9 @@ const TermDetailTable = (props) => {
   function createTable() {
     let metadataToRender = "";
     if (props.componentIdentity === "terms") {
-      metadataToRender = classMetaData(props.node, "class");
+      metadataToRender = classMetaData(props.node);
     } else if (props.componentIdentity === "individuals") {
-      metadataToRender = classMetaData(props.node, "individual");
+      metadataToRender = individualMetadata(props.node);
     } else {
       metadataToRender = propertyMetaData(props.node);
     }
