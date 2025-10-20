@@ -1,120 +1,163 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 
+const Row = ({ label, children }) => (
+  <div className="mb-2 pb-2" style={{ borderBottom: "1px dotted #e5e7eb" }}>
+    {label && <strong className="text-capitalize">{label}: </strong>}
+    {children}
+  </div>
+);
+
+const asArray = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+
+const LinkList = ({ urls }) => {
+  const list = asArray(urls).filter(Boolean);
+  if (!list.length) return null;
+  return (
+    <>
+      {list.map((u, i) => (
+        <span key={u}>
+          <a href={u} target="_blank" rel="noopener noreferrer">
+            {u}
+          </a>
+          {i < list.length - 1 ? ", " : ""}
+        </span>
+      ))}
+    </>
+  );
+};
+
+const ProviderList = ({ providers }) => {
+  const list = asArray(providers);
+  if (!list.length) return null;
+  return (
+    <>
+      {list.map((p, i) => {
+        const label = p?.label || "";
+        const id = p?.identifier;
+        return (
+          <span key={`${label}-${i}`}>
+            {label}
+            {id ? (
+              <>
+                {", "}links to{" "}
+                <a href={id} target="_blank" rel="noopener noreferrer">
+                  {id}
+                </a>
+              </>
+            ) : null}
+            {i < list.length - 1 ? "; " : ""}
+          </span>
+        );
+      })}
+    </>
+  );
+};
+
+const ContactList = ({ contacts }) => {
+  const list = asArray(contacts);
+  if (!list.length) return null;
+  return (
+    <>
+      {list.map((c, i) => {
+        const mail = c?.mail;
+        return (
+          <span key={`${mail || i}`}>
+            {mail}
+            {i < list.length - 1 ? ", " : ""}
+          </span>
+        );
+      })}
+    </>
+  );
+};
+
+const UsageBlock = ({ useEntry }) => {
+  const usedBy = useEntry?.usedBy || {};
+  const usedByName = usedBy.label || "";
+  const alt = usedBy.altLabel ? ` (${usedBy.altLabel})` : "";
+
+  const identifiers = usedBy.identifier;
+  const homepage = usedBy.homepage;
+  const providers = usedBy.provider;
+  const contacts = usedBy.contact;
+
+  const usageDesc = useEntry?.usageDescription?.description;
+  const created = useEntry?.usageReportMetadata?.created;
+
+  return (
+    <div className="p-3 border rounded bg-white mb-3">
+      {/* usage description at the top if present */}
+      {usageDesc && <Row label={null}>{usageDesc}</Row>}
+
+      {/* used by */}
+      {(usedByName || alt) && (
+        <Row label="used by">
+          {usedByName}
+          {alt}
+        </Row>
+      )}
+
+      {/* identifiers */}
+      {asArray(identifiers).length > 0 && (
+        <Row label="identifiers">
+          <LinkList urls={identifiers} />
+        </Row>
+      )}
+
+      {/* homepage – show only the link, no “link to” text */}
+      {homepage && (
+        <Row label={null}>
+          <a href={homepage} target="_blank" rel="noopener noreferrer">
+            {homepage}
+          </a>
+        </Row>
+      )}
+
+      {/* provider */}
+      {asArray(providers).length > 0 && (
+        <Row label="provider">
+          <ProviderList providers={providers} />
+        </Row>
+      )}
+
+      {/* contact */}
+      {asArray(contacts).length > 0 && (
+        <Row label="contact">
+          <ContactList contacts={contacts} />
+        </Row>
+      )}
+
+      {/* created */}
+      {created && (
+        <Row label="created">
+          {created}
+        </Row>
+      )}
+    </div>
+  );
+};
+
 const OntologyAdopters = ({ showModal, setShowModal }) => {
   const onto = useContext(OntologyPageContext)?.ontology;
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const uses = asArray(onto?.ontology_use);
 
-  // feature flag  ichrak 
-  const showAdopters = process.env.REACT_APP_SHOW_ONTOLOGY_ADOPTERS === "true";  
-
-  const ontologyId = (onto?.ontologyId || "").toLowerCase();
-
-  useEffect(() => { 
-    // if not true no fetch 
-    if (!showAdopters) return;  
-    if (!ontologyId) return;
-    setLoading(true);
-    fetch(`${process.env.PUBLIC_URL}/ontology-use/${ontologyId}.json`, { cache: "no-store" })
-      .then(r => (r.ok ? r.json() : Promise.reject()))
-      .then(setData)
-      .catch(() => setData(null))
-      .finally(() => setLoading(false));
-  }, [ontologyId, showModal,showAdopters]);
-
-    if (!showAdopters) return null;  
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
       <Modal.Header closeButton>
         <h5 className="modal-title">Ontology adopters</h5>
       </Modal.Header>
-
       <Modal.Body>
-        {loading && <div>Loading…</div>}
-        {!loading && !data && <div>No adopters info available for this ontology yet.</div>}
-        {!loading && data && (
-          <div className="p-3 border rounded bg-white">
-
-            {/* --- Usage description at top --- */}
-            {data.usageDescription?.description && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                {data.usageDescription.description}
-              </div>
-            )}
-
-            {/* --- Used by --- */}
-            <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-              <strong>used by:</strong>{" "}
-              {data.usedBy?.homepage ? (
-                <a href={data.usedBy.homepage} target="_blank" rel="noopener noreferrer">
-                  {data.usedBy?.label} {data.usedBy?.altLabel ? `(${data.usedBy.altLabel})` : ""}
-                </a>
-              ) : (
-                <>
-                  {data.usedBy?.label} {data.usedBy?.altLabel ? `(${data.usedBy.altLabel})` : ""}
-                </>
-              )}
-            </div>
-
-            {/* --- Identifiers --- */}
-            {Array.isArray(data.usedBy?.identifier) && data.usedBy.identifier.length > 0 && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>identifiers:</strong>{" "}
-                {data.usedBy.identifier.map((id, i) => (
-                  <span key={id}>
-                    <a href={id} target="_blank" rel="noopener noreferrer">{id}</a>
-                    {i < data.usedBy.identifier.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* --- Provider --- */}
-            {Array.isArray(data.usedBy?.provider) && data.usedBy.provider.length > 0 && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>provider:</strong>{" "}
-                {data.usedBy.provider.map((p, i) => (
-                  <span key={i}>
-                    {p.identifier ? (
-                      <a href={p.identifier} target="_blank" rel="noopener noreferrer">
-                        {p.label}
-                      </a>
-                    ) : (
-                      p.label
-                    )}
-                    {i < data.usedBy.provider.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* --- Contact --- */}
-            {Array.isArray(data.usedBy?.contact) && data.usedBy.contact.length > 0 && (
-              <div style={{ padding: "8px 0", borderBottom: "1px dotted #e5e7eb" }}>
-                <strong>contact:</strong>{" "}
-                {data.usedBy.contact.map((c, i) => (
-                  <span key={i}>
-                    {c.mail}
-                    {i < data.usedBy.contact.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* --- Created --- */}
-            {data.usageReportMetadata?.created && (
-              <div style={{ padding: "8px 0" }}>
-                <strong>created:</strong> {data.usageReportMetadata.created}
-              </div>
-            )}
-          </div>
-        )}
+        {!uses.length && <div>No adopters information available yet.</div>}
+        {uses.map((u, i) => (
+          <UsageBlock key={i} useEntry={u} />
+        ))}
       </Modal.Body>
-
       <Modal.Footer>
-        <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+        <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+          Close
+        </button>
       </Modal.Footer>
     </Modal>
   );
