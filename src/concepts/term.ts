@@ -1,6 +1,7 @@
 import { OntologyTermDataV2 } from "../api/types/ontologyTypes";
 import Toolkit from "../Libs/Toolkit";
 import { buildHtmlAnchor } from "../Libs/htmlFactory";
+import { createElement } from "react";
 
 
 class TsTerm {
@@ -53,48 +54,48 @@ class TsTerm {
   }
 
   get definition() {
-    if (this.term.definition) {
-      let result = [];
-      for (let desc of this.term.definition) {
-        if (typeof desc === "object" && desc.value) {
-          let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
-          let defArr = [];
-          defArr.push(defText);
-          for (let ax of (desc.axioms ?? [])) {
-            for (let key in ax) {
-              let conatiner = document.createElement("span") as HTMLSpanElement;
-              let axiomLabelSpan = document.createElement("span") as HTMLSpanElement;
-              let emptyLine = document.createElement("br") as HTMLBRElement;
-              let targetLabel = this.term["linkedEntities"]?.[key]?.label[0] as string;
-              axiomLabelSpan.appendChild(document.createTextNode(targetLabel + ": "));
-              axiomLabelSpan.classList.add("node-metadata-label");
-              conatiner.appendChild(emptyLine);
-              conatiner.appendChild(axiomLabelSpan);
-              defArr.push(conatiner);
-              if (Array.isArray(ax[key]) && ax[key].length > 1) {
-                let span = document.createElement("span") as HTMLSpanElement;
-                let emptyLine = document.createElement("br") as HTMLBRElement;
-                span.appendChild(document.createTextNode(ax[key].join(", ")));
-                span.appendChild(emptyLine);
-                defArr.push(span);
-              } else {
-                let span = document.createElement("span") as HTMLSpanElement;
-                let emptyLine = document.createElement("br") as HTMLBRElement;
-                span.appendChild(document.createTextNode(ax[key]));
-                span.appendChild(emptyLine);
-                defArr.push(span);
+    try {
+      if (this.term.definition) {
+        let result = [];
+        for (let desc of this.term.definition) {
+          if (typeof desc === "object" && desc.value) {
+            let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
+            let defArr = [];
+            defArr.push(defText);
+            for (let ax of (desc.axioms ?? [])) {
+              for (let key in ax) {
+                let span = createElement('span', { className: "node-metadata-label" }, this.term?.["linkedEntities"]?.[key]?.label[0] + ": ");
+                let conatiner = createElement('span', {}, createElement('br'), span);
+                defArr.push(conatiner);
+                if (Array.isArray(ax[key]) && ax[key].length > 1) {
+                  defArr.push(
+                    createElement('span', {},
+                      createElement('span', {}, ax[key].join(", ")),
+                      createElement('br')
+                    )
+                  );
+                } else {
+                  defArr.push(
+                    createElement('span', {},
+                      createElement('span', {}, ax[key]),
+                      createElement('br')
+                    )
+                  );
+                }
               }
             }
+            result.push(defArr);
+          } else {
+            result.push(desc);
           }
-          result.push(defArr);
-        } else {
-          result.push(desc);
         }
+        return result;
       }
-      return result;
-    }
 
-    return null;
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
 
@@ -128,8 +129,8 @@ class TsTerm {
       for (let relation of relatedFromData) {
         let propertyIri = relation['property'];
         let targetIri = relation['value'];
-        let propertyLabel = this.term['linkedEntities'][propertyIri]['label'][0];
-        let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];
+        let propertyLabel = this.term?.['linkedEntities'][propertyIri]['label'][0];
+        let targetLabel = this.term?.['linkedEntities'][targetIri]['label'][0];
         let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let span = document.createElement('span');
@@ -246,7 +247,7 @@ class TsTerm {
       }
       let result = [];
       for (let csLink of curationStatusLinks) {
-        let curStatusIndiv = this.term['linkedEntities'][csLink];
+        let curStatusIndiv = this.term?.['linkedEntities'][csLink];
         let individualUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + this.term['ontologyId'] + "/individuals?iri=" + encodeURIComponent(csLink);
         result.push(`<a href="${individualUrl}" target='_blank'>${curStatusIndiv['label'][0]}</a>`);
       }
@@ -267,11 +268,11 @@ class TsTerm {
       if (!key.includes('purl.obolibrary.org') || key === TsTerm.CURATION_STATUS_PURL) {
         continue;
       }
-      if (this.term['linkedEntities'][key]) {
+      if (this.term?.['linkedEntities'][key]) {
         if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
-          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
+          annotations[this.term?.['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
         } else {
-          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key];
+          annotations[this.term?.['linkedEntities'][key]['label'][0]] = this.term[key];
         }
       }
     }

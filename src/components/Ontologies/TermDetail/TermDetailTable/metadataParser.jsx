@@ -43,7 +43,7 @@ export function classMetaData(term, termType) {
       link.push(
         <>
           <a href={parentClassUrl} target='_blank' rel='noopener noreferrer'>
-            {term['linkedEntities'][parentIri]["label"]?.[0]}
+            {term?.['linkedEntities']?.[parentIri]?.["label"]?.[0]}
           </a>
           <br />
         </>

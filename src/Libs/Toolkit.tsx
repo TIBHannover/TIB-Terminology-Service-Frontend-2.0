@@ -73,7 +73,7 @@ class Toolkit {
     }
 
 
-    static getVarInLocalSrorageIfExist(varName: string, defaultValue: string) {
+    static getVarInLocalSrorageIfExist(varName: string, defaultValue: string | boolean) {
         return localStorage.getItem(varName) ?? defaultValue;
     }
 

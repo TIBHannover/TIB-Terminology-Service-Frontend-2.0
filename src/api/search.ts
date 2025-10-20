@@ -7,6 +7,7 @@ import {
   AutoSuggestSingleResult
 } from "./types/searchApiTypes";
 import Toolkit from "../Libs/Toolkit";
+import TsTerm from "../concepts/term";
 
 
 export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {
@@ -37,6 +38,13 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
       searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}&option=COMPOSITE`;
     }
     let result: any = await (await fetch(searchUrl, getCallSetting)).json();
+    let resultTerms = [];
+    for (let el of result["elements"]) {
+      let tsTerm = new TsTerm(el);
+      resultTerms.push(tsTerm);
+    }
+    result["elements"] = resultTerms;
+
     if (jumpToMode) {
       return result['elements'];
     }

@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import TermLib from '../../../Libs/TermLib';
+import TsTerm from '../../../concepts/term';
 
 
-export function setResultTitleAndLabel(resultItem, obsoletes) {
+export function setResultTitleAndLabel(resultItem: TsTerm, obsoletes: boolean) {
     let content = [];
     let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(resultItem['ontologyId']);
     let termType = TermLib.getTermType(resultItem);

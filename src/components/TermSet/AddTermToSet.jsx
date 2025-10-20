@@ -1,10 +1,10 @@
-import {useState, useContext, useEffect} from "react";
+import { useState, useContext, useEffect } from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
-import {AppContext} from "../../context/AppContext";
+import { AppContext } from "../../context/AppContext";
 import TermLib from "../../Libs/TermLib";
 import DropDown from "../common/DropDown/DropDown";
-import {createTermset, addTermToMultipleSets, removeTermFromSet} from "../../api/term_set";
+import { createTermset, addTermToMultipleSets, removeTermFromSet } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 import Login from "../User/Login/TS/Login";
 import Modal from "react-bootstrap/Modal";
@@ -15,16 +15,16 @@ const VISIBILITY_TS_USRES = 2;
 const VISIBILITY_PUBLIC = 3;
 const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
 const VISIBILITY_FOR_DROPDOWN = [
-  {label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME},
-  {label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES},
-  {label: "Public (open for everyone)", value: VISIBILITY_PUBLIC}
+  { label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME },
+  { label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES },
+  { label: "Public (open for everyone)", value: VISIBILITY_PUBLIC }
 ];
 
 
 export const AddToTermsetModal = (props) => {
-  const {modalId, term, btnClass} = props;
+  const { modalId, term, btnClass } = props;
   const appContext = useContext(AppContext);
-  
+
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [createMode, setCreateMode] = useState(false);
@@ -35,8 +35,8 @@ export const AddToTermsetModal = (props) => {
   const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(new Map());
   const [showModal, setShowModal] = useState(false);
-  
-  
+
+
   function submitNewTermset() {
     let name = FormLib.getFieldByIdIfValid("termsetTitle" + modalId);
     let description = document.getElementById("termsetDescription" + modalId);
@@ -53,7 +53,7 @@ export const AddToTermsetModal = (props) => {
       description: description ? description.value : "",
       terms: [props.term]
     };
-    
+
     createTermset(data).then((newTermset) => {
       if (newTermset) {
         let userTermsets = [...appContext.userTermsets];
@@ -67,8 +67,8 @@ export const AddToTermsetModal = (props) => {
       setAddedSuccess(false);
     });
   }
-  
-  
+
+
   function addTermToSet() {
     if (selectedTermsetIds.length === 0) {
       document.getElementById("selected-termsets-" + term["iri"]).style.border = '1px solid red';
@@ -89,8 +89,8 @@ export const AddToTermsetModal = (props) => {
       setAddedSuccess(success);
     });
   }
-  
-  
+
+
   function removeTerm(e) {
     try {
       let removeLoadingMap = new Map(removeLoading);
@@ -126,8 +126,8 @@ export const AddToTermsetModal = (props) => {
       return;
     }
   }
-  
-  
+
+
   function renderTermsetCreateSection() {
     if (!appContext.user) {
       return "";
@@ -175,7 +175,7 @@ export const AddToTermsetModal = (props) => {
               id={"termsetDescription" + modalId}
               rows="5"
               placeholder="Enter a Description">
-                          </textarea>
+            </textarea>
           </div>
         </div>
         <br></br>
@@ -187,13 +187,13 @@ export const AddToTermsetModal = (props) => {
       </>
     ];
   }
-  
+
   function renderTermsetAddingSection() {
     if (!appContext.user) {
       return <div className="row">
         <div className="col-sm-12">
           <AlertBox type="info"
-                    message={"Would you like to create your own term set? Log in to get started!"}></AlertBox>
+            message={"Would you like to create your own term set? Log in to get started!"}></AlertBox>
           <Login isModal={false} ignoreMessage={true}></Login>
         </div>
       </div>;
@@ -223,7 +223,7 @@ export const AddToTermsetModal = (props) => {
           placeholder="Enter termset name ..."
           className='multiselect-container'
         />
-        <br/>
+        <br />
         <button className="btn btn-secondary btn-sm" onClick={() => {
           setCreateMode(true)
         }}>
@@ -232,7 +232,7 @@ export const AddToTermsetModal = (props) => {
       </>
     ];
   }
-  
+
   function renderTermsetList() {
     if (termExistingSets.length === 0) {
       return [
@@ -242,8 +242,8 @@ export const AddToTermsetModal = (props) => {
               <b>The term is not associated with any set.</b>
             </div>
           </div>
-          <br/>
-          <br/>
+          <br />
+          <br />
         </>
       ];
     }
@@ -256,20 +256,20 @@ export const AddToTermsetModal = (props) => {
               return (
                 <li id={"termCurrentSetsLi-" + tset.id}>
                   <a href={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id}
-                     target={"_blank"} rel={"noreferrer"}>
+                    target={"_blank"} rel={"noreferrer"}>
                     {tset.name}
                   </a>
                   {appContext.user && removeLoading.get(tset.id) && <div className="isLoading-inline-small"></div>}
                   {appContext.user &&
                     <span className="">
                       <i className="bi bi-file-minus-fill" title="remove from this termset"
-                         data-tsetid={tset.id} onClick={removeTerm}>
+                        data-tsetid={tset.id} onClick={removeTerm}>
                       </i>
                     </span>
                   }
                 </li>)
             })
-              
+
             }
           </ul>
         </div>
@@ -277,8 +277,8 @@ export const AddToTermsetModal = (props) => {
     ];
     return result;
   }
-  
-  
+
+
   function closeModal() {
     setAddedSuccess(false);
     setSubmited(false);
@@ -287,40 +287,40 @@ export const AddToTermsetModal = (props) => {
     setNewTermsetVisibility(VISIBILITY_ONLY_ME);
     setShowModal(false);
   }
-  
-  
+
+
   useEffect(() => {
     let options = [];
     let existingSets = [];
     let removeLoadingMap = new Map(removeLoading);
     for (let tset of appContext.userTermsets) {
       if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term.iri)) {
-        options.push({"text": tset.name, "id": tset.id});
+        options.push({ "text": tset.name, "id": tset.id });
       } else {
         removeLoadingMap.set(tset.id, false);
-        existingSets.push({name: tset.name, id: tset.id});
+        existingSets.push({ name: tset.name, id: tset.id });
       }
     }
     setTermExistingSets(existingSets)
     setRemoveLoading(removeLoadingMap);
     setTermSets(options);
   }, [term, appContext.userTermsets]);
-  
+
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
-    return "";
+    return <></>;
   }
-  
+
   let modalTitle = `Add "${TermLib.extractLabel(term)}" to Termset`;
   if (!appContext.user) {
     modalTitle = `Termsets for "${TermLib.extractLabel(term)}"`;
   }
-  
-  
+
+
   let title = "Add this term to your termsets. Check the existing termsets for this term.";
   if (!appContext.user) {
     title = "Check the existing termsets for this term.";
   }
-  
+
   return (
     <>
       <button
@@ -337,7 +337,7 @@ export const AddToTermsetModal = (props) => {
         <Modal.Header className="row">
           <div className="col-sm-10">
             <h5 className="modal-title"
-                id={"addToTermsetModal-" + modalId}>{modalTitle}</h5>
+              id={"addToTermsetModal-" + modalId}>{modalTitle}</h5>
           </div>
           <div className="col-sm-2 text-end">
             {!submited &&
@@ -369,18 +369,18 @@ export const AddToTermsetModal = (props) => {
         <Modal.Footer className="justify-content-center">
           {!submited && appContext.user &&
             <button type="button" className="btn btn-secondary"
-                    onClick={() => {
-                      if (createMode) {
-                        submitNewTermset();
-                      } else {
-                        addTermToSet();
-                      }
-                    }}>
+              onClick={() => {
+                if (createMode) {
+                  submitNewTermset();
+                } else {
+                  addTermToSet();
+                }
+              }}>
               {createMode ? "Create and add" : "Add"}
             </button>
           }
           {submited && <button type="button" className="btn btn-secondary"
-                               onClick={closeModal}>Close</button>}
+            onClick={closeModal}>Close</button>}
         </Modal.Footer>
       </Modal>
     </>

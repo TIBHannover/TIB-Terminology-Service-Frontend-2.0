@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, ReactNode, ReactElement, ChangeEvent } from 'react';
 import { useLocation, Link } from 'react-router-dom'
 import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
@@ -18,9 +18,12 @@ import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
 import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
+import TsTerm from '../../../concepts/term';
+import { SearchApiResponse, SearchResultFacet } from '../../../api/types/searchApiTypes';
+import { OntologyData } from '../../../api/types/ontologyTypes';
 
 
-const SearchResult = (props) => {
+const SearchResult = () => {
 
   /*
     This component is responsible for rendering the search results and facet.
@@ -35,19 +38,18 @@ const SearchResult = (props) => {
 
   let language = commonUrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
 
-  const DEFAULT_PAGE_NUMBER = 1;
-  const DEFAULT_PAGE_SIZE = 10;
+  const DEFAULT_PAGE_NUMBER = "1";
+  const DEFAULT_PAGE_SIZE = "10";
 
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState<Array<TsTerm>>([]);
   const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getFilterAndAdvancedOntologyIdsFromUrl());
   const [selectedTypes, setSelectedTypes] = useState(searchUrlFactory.types);
   const [selectedCollections, setSelectedCollections] = useState(searchUrlFactory.collections);
-  const [facetFields, setFacetFields] = useState([]);
+  const [facetFields, setFacetFields] = useState<SearchResultFacet>({ type: {}, ontologyId: {} });
   const [pageNumber, setPageNumber] = useState(parseInt(searchUrlFactory.page ? searchUrlFactory.page : DEFAULT_PAGE_NUMBER));
   const [pageSize, setPageSize] = useState(parseInt(searchUrlFactory.size ? searchUrlFactory.size : DEFAULT_PAGE_SIZE));
-  const [expandedResults, setExpandedResults] = useState([]);
-  const [totalResultsCount, setTotalResultsCount] = useState([]);
-  const [filterTags, setFilterTags] = useState("");
+  const [totalResultsCount, setTotalResultsCount] = useState<number>(0);
+  const [filterTags, setFilterTags] = useState<ReactElement[]>([]);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState(language);
 
@@ -62,7 +64,7 @@ const SearchResult = (props) => {
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
 
-  let collectionIdsAndOntologies = [];
+  let collectionIdsAndOntologies: { [key: string]: OntologyData[] } = {};
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
     queryFn: getCollectionsAndThierOntologies
@@ -110,38 +112,39 @@ const SearchResult = (props) => {
       searchParamsForOntoCount.selectedOntologies = [];
 
       Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
-        let result = values[0];
-        setSearchResult(result['elements']);
+        let result = values[0] as SearchApiResponse;
+        setSearchResult(result['elements'] as Array<TsTerm>);
         setLoading(false);
-        let resultForFacetTypeCount = values[1];
-        let resultForFacetOntoCount = values[2];
+        let resultForFacetTypeCount = values[1] as SearchApiResponse;
+        let resultForFacetOntoCount = values[2] as SearchApiResponse;
         result['facetFieldsToCounts']['type'] = resultForFacetTypeCount['facetFieldsToCounts']['type'];
         result['facetFieldsToCounts']['ontologyId'] = resultForFacetOntoCount['facetFieldsToCounts']['ontologyId'];
-        setTotalResultsCount(result['totalElements']);
-        setFacetFields(result['facetFieldsToCounts']);
-        setExpandedResults([])
+        setTotalResultsCount(result.totalElements);
+        setFacetFields(result.facetFieldsToCounts);
 
       });
 
     } catch (e) {
       setSearchResult([]);
       setTotalResultsCount(0);
-      setFacetFields([]);
-      setExpandedResults([]);
+      setFacetFields({});
       setLoading(false);
     }
   }
 
 
-  function alsoInResult(term) {
-    let otherOntologies = [];
-    for (let onto of term["appearsIn"]) {
-      if (onto.toLowerCase() === term["ontologyId"].toLowerCase()) {
+  function alsoInResult(term: TsTerm): ReactNode[] {
+    let otherOntologies: ReactNode[] = [];
+    if (!term.alsoIn) {
+      return otherOntologies;
+    }
+    for (let onto of term.alsoIn) {
+      if (onto.toLowerCase() === term.ontologyId.toLowerCase()) {
         continue;
       }
       otherOntologies.push(
         <div className='also-in-ontologies'>
-          {TermLib.createOntologyTagWithTermURL(onto, term['iri'], TermLib.getTermType(term))}
+          {TermLib.createOntologyTagWithTermURL(onto, term.iri, term.type)}
         </div>
       );
     }
@@ -154,7 +157,7 @@ const SearchResult = (props) => {
     for (let i = 0; i < searchResult.length; i++) {
       let alsoInList = alsoInResult(searchResult[i]);
       searchResultList.push(
-        <div className="row result-card" key={searchResult[i]['id']}>
+        <div className="row result-card" key={searchResult[i].curie}>
           <div className='col-sm-10'>
             {setResultTitleAndLabel(searchResult[i], Toolkit.getObsoleteFlagValue())}
             <div className="searchresult-iri">
@@ -162,12 +165,12 @@ const SearchResult = (props) => {
               <CopyLinkButton valueToCopy={searchResult[i].iri}></CopyLinkButton>
             </div>
             <div className="searchresult-card-description">
-              <p>{TermLib.createTermDiscription(searchResult[i])}</p>
+              <p>{searchResult[i].definition}</p>
             </div>
             <div className="searchresult-ontology">
               <span><b>Ontology: </b></span>
               <Link className='btn btn-default ontology-button'
-                to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontologyId']}>
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i].ontologyId}>
                 {searchResult[i].ontologyId}
               </Link>
             </div>
@@ -180,7 +183,7 @@ const SearchResult = (props) => {
 
           </div>
           <div className="col-sm-2 float-right">
-            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]} btnClass="btn-sm action-btn" />
+            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i].term} btnClass="btn-sm action-btn" />
           </div>
         </div>
       );
@@ -189,14 +192,14 @@ const SearchResult = (props) => {
   }
 
 
-  function handlePageSizeDropDownChange(e) {
+  function handlePageSizeDropDownChange(e: React.ChangeEvent<HTMLSelectElement>) {
     let size = parseInt(e.target.value);
     setPageSize(size);
     commonUrlFactory.setParam({ name: SiteUrlParamNames.Size, value: size });
   }
 
 
-  function handlePagination(value) {
+  function handlePagination(value: number) {
     setPageNumber(value);
     commonUrlFactory.setParam({ name: SiteUrlParamNames.Page, value: value });
   }
@@ -210,7 +213,7 @@ const SearchResult = (props) => {
   }
 
 
-  function handleTypeFacetSelection(e) {
+  function handleTypeFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
     let targetType = e.target.value;
     let selectedTypeList = [...selectedTypes];
     if (e.target.checked) {
@@ -235,7 +238,7 @@ const SearchResult = (props) => {
   }
 
 
-  function handleOntologyFacetSelection(e) {
+  function handleOntologyFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedOntologiesList = [...selectedOntologies];
     let targetOntologyId = e.target.value.toLowerCase();
@@ -261,7 +264,7 @@ const SearchResult = (props) => {
   }
 
 
-  function handleCollectionFacetSelection(e) {
+  function handleCollectionFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedCollectionsList = [...selectedCollections];
     let targetCollection = e.target.value.trim();
@@ -288,10 +291,10 @@ const SearchResult = (props) => {
 
 
   function clearFilters() {
-    let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');
+    let allFacetCheckBoxes = [...document.getElementsByClassName('search-facet-checkbox')] as HTMLInputElement[];
     for (let checkbox of allFacetCheckBoxes) {
       if (checkbox.dataset.ischecked !== "true") {
-        document.getElementById(checkbox.id).checked = false;
+        (document.getElementById(checkbox.id)! as HTMLInputElement).checked = false;
       }
       delete checkbox.dataset.ischecked;
     }
@@ -301,28 +304,27 @@ const SearchResult = (props) => {
     setSelectedCollections([]);
     setPageNumber(1);
     setPageSize(10);
-    setFilterTags("");
+    setFilterTags([]);
     localStorage.setItem('language', "en");
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.Lang });
     setLang("en");
   }
 
 
-  function handleRemoveTagClick(e) {
+  function handleRemoveTagClick(e: React.MouseEvent<HTMLElement>) {
     try {
-      let tagType = e.target.dataset.type;
-      let tagValue = e.target.dataset.value;
-      e.target.checked = false;
-      e.target.value = tagValue;
+      let tagType = (e.target as HTMLElement).dataset.type;
+      let tagValue = (e.target as HTMLElement).dataset.value;
+      let selectionEvent = { target: { checked: false, value: tagValue } } as unknown as React.ChangeEvent<HTMLInputElement>;
       if (document.getElementById('search-checkbox-' + tagValue)) {
-        document.getElementById('search-checkbox-' + tagValue).checked = false;
+        (document.getElementById('search-checkbox-' + tagValue) as HTMLInputElement).checked = false;
       }
       if (tagType === "type") {
-        handleTypeFacetSelection(e);
+        handleTypeFacetSelection(selectionEvent);
       } else if (tagType === "ontology") {
-        handleOntologyFacetSelection(e);
+        handleOntologyFacetSelection(selectionEvent);
       } else if (tagType === "collection") {
-        handleCollectionFacetSelection(e);
+        handleCollectionFacetSelection(selectionEvent);
       }
       localStorage.setItem('language', "en");
       commonUrlFactory.deleteParam({ name: SiteUrlParamNames.Lang });
@@ -330,6 +332,7 @@ const SearchResult = (props) => {
       setLang("en");
     } catch (e) {
       // console.info(e);
+      return;
     }
   }
 
@@ -410,7 +413,7 @@ const SearchResult = (props) => {
                   dropdownClassName={"white-dropdown"}
                   dropDownValue={lang}
                   defaultVaue={lang}
-                  dropDownChangeHandler={(e) => {
+                  dropDownChangeHandler={(e: ChangeEvent<HTMLSelectElement>) => {
                     localStorage.setItem('language', e.target.value);
                     commonUrlFactory.setParam({ name: 'lang', value: e.target.value });
                     setLang(e.target.value);

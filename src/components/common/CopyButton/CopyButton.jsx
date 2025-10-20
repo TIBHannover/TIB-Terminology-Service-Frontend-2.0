@@ -1,10 +1,10 @@
-import {useState} from "react";
+import { useState } from "react";
 
 
 const CopyLinkButton = (props) => {
   const [copied, setCopied] = useState(false);
-  
-  return [
+
+  return (
     <button
       type="button"
       aria-label="Copy to clipboard"
@@ -20,13 +20,13 @@ const CopyLinkButton = (props) => {
     >
       <i className="fa fa-solid fa-copy"></i> {copied && <i className="fa fa-check" aria-hidden="true"></i>}
     </button>
-  ];
+  );
 }
 
 
 export const CopyLinkButtonMarkdownFormat = (props) => {
   const [copied, setCopied] = useState(false);
-  
+
   return [
     <button
       type="button"
