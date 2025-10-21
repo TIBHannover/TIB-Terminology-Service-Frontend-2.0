@@ -262,6 +262,22 @@ class TermLib {
     }
     return annotations;
   }
+
+
+  static getAnnotationDefinition(definitionList) {
+    if (!definitionList) {
+      return [];
+    }
+    let results = [];
+    for (let def of definitionList) {
+      if (typeof def === "string") {
+        results.push(def);
+      } else if ("value" in def) {
+        results.push(def.value);
+      }
+    }
+    return results;
+  }
 }
 
 export default TermLib;

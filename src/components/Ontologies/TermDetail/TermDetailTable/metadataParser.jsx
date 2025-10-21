@@ -94,7 +94,7 @@ export function propertyMetaData(term) {
   let metadata = {};
 
   metadata['Label'] = { "value": term.label, "isLink": false };
-  metadata['Description'] = { "value": term?.annotation?.definition ?? null, "isLink": false };
+  metadata['Description'] = { "value": TermLib.getAnnotationDefinition(term?.annotation?.definition) ?? null, "isLink": false };
   if (term.originalOntology !== term.ontologyId) {
     metadata['Imported From'] = {
       "value": TermLib.createOntologyTagWithTermURL(term.originalOntology, term.iri, "property"),
@@ -147,7 +147,6 @@ export function propertyMetaData(term) {
       }
     }
   }
-
   return metadata;
 }
 
