@@ -1,15 +1,17 @@
+// src/components/Ontologies/OntologyOverview/widgets/OntologyAdopters.jsx
 import { useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 
+/* ---------- helpers ---------- */
+const asArray = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+
 const Row = ({ label, children }) => (
-  <div className="mb-2 pb-2" style={{ borderBottom: "1px dotted #e5e7eb" }}>
-    {label && <strong className="text-capitalize">{label}: </strong>}
+  <div style={{ padding: "6px 0", borderBottom: "1px dotted #e5e7eb" }}>
+    {label ? <strong>{label}: </strong> : null}
     {children}
   </div>
 );
-
-const asArray = (v) => (Array.isArray(v) ? v : v ? [v] : []);
 
 const LinkList = ({ urls }) => {
   const list = asArray(urls).filter(Boolean);
@@ -73,9 +75,11 @@ const ContactList = ({ contacts }) => {
   );
 };
 
+/* ---------- one adopter block ---------- */
 const UsageBlock = ({ useEntry }) => {
   const usedBy = useEntry?.usedBy || {};
-  const usedByName = usedBy.label || "";
+
+  const title = usedBy.label || "";
   const alt = usedBy.altLabel ? ` (${usedBy.altLabel})` : "";
 
   const identifiers = usedBy.identifier;
@@ -83,30 +87,48 @@ const UsageBlock = ({ useEntry }) => {
   const providers = usedBy.provider;
   const contacts = usedBy.contact;
 
-  const usageDesc = useEntry?.usageDescription?.description;
-  const created = useEntry?.usageReportMetadata?.created;
+  // Some configs store the free text under usageDescription.description,
+  // others directly under description. Support both.
+  const usageDesc =
+    useEntry?.usageDescription?.description ||
+    useEntry?.description ||
+    "";
+
+  const created =
+    useEntry?.usageReportMetadata?.created ||
+    useEntry?.created ||
+    "";
 
   return (
     <div className="p-3 border rounded bg-white mb-3">
-      {/* usage description at the top if present */}
-      {usageDesc && <Row label={null}>{usageDesc}</Row>}
+      {/* free text on top */}
+      {usageDesc && (
+        <div
+          style={{
+            padding: "6px 0",
+            borderBottom: "1px dotted #e5e7eb",
+            color: "#374151",
+            lineHeight: 1.4,
+          }}
+        >
+          {usageDesc}
+        </div>
+      )}
 
-      {/* used by */}
-      {(usedByName || alt) && (
-        <Row label="used by">
-          {usedByName}
+      {(title || alt) && (
+        <Row label="Used By">
+          {title}
           {alt}
         </Row>
       )}
 
-      {/* identifiers */}
       {asArray(identifiers).length > 0 && (
-        <Row label="identifiers">
+        <Row label="Identifiers">
           <LinkList urls={identifiers} />
         </Row>
       )}
 
-      {/* homepage – show only the link, no “link to” text */}
+      {/* show homepage plainly (no 'link to' wording) */}
       {homepage && (
         <Row label={null}>
           <a href={homepage} target="_blank" rel="noopener noreferrer">
@@ -115,45 +137,45 @@ const UsageBlock = ({ useEntry }) => {
         </Row>
       )}
 
-      {/* provider */}
       {asArray(providers).length > 0 && (
-        <Row label="provider">
+        <Row label="Provider">
           <ProviderList providers={providers} />
         </Row>
       )}
 
-      {/* contact */}
       {asArray(contacts).length > 0 && (
-        <Row label="contact">
+        <Row label="Contact">
           <ContactList contacts={contacts} />
         </Row>
       )}
 
-      {/* created */}
-      {created && (
-        <Row label="created">
-          {created}
-        </Row>
-      )}
+      {created && <Row label="Created">{created}</Row>}
     </div>
   );
 };
 
+/* ---------- modal ---------- */
 const OntologyAdopters = ({ showModal, setShowModal }) => {
   const onto = useContext(OntologyPageContext)?.ontology;
-  const uses = asArray(onto?.ontology_use);
+
+  // keep only items that really have a 'usedBy' object
+  const uses = asArray(onto?.ontology_use).filter((u) => u?.usedBy);
+
+  // If there is nothing to show, do not render the modal at all.
+  if (!uses.length) return null;
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
       <Modal.Header closeButton>
         <h5 className="modal-title">Ontology adopters</h5>
       </Modal.Header>
+
       <Modal.Body>
-        {!uses.length && <div>No adopters information available yet.</div>}
         {uses.map((u, i) => (
           <UsageBlock key={i} useEntry={u} />
         ))}
       </Modal.Body>
+
       <Modal.Footer>
         <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
           Close
