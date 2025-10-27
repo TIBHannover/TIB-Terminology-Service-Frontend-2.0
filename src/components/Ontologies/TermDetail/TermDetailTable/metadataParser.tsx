@@ -4,14 +4,9 @@ import TsClass from "../../../../concepts/class";
 import TsProperty from "../../../../concepts/property";
 import TsIndividual from "../../../../concepts/individual";
 import TsTerm from "../../../../concepts/term";
+import { TableMetadata } from "../types";
 
 
-type TableMetadata = {
-  [key: string]: {
-    value: any,
-    isLink: boolean
-  }
-}
 
 
 function createBaseMetadata(term: TsTerm): TableMetadata {

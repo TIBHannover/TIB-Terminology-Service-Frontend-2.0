@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
+import { TermTabMetadata, TermDetailComPros, RenderTermDetailComProps } from './types';
 import NodePageTabConfig from './listOfComponentsTabs.json';
 import TermDetailTable from './TermDetailTable/TermDetailTable';
 import NoteList from '../Note/NoteList';
-import SkosApi from '../../../api/skos';
 import TermApi from '../../../api/term';
 import { Link } from 'react-router-dom';
 import { getNoteList } from '../../../api/note';
@@ -10,8 +10,9 @@ import Graph from '../../common/Graph/Graph';
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
-import PropTypes from 'prop-types';
 import { AddToTermsetModal } from '../../TermSet/AddTermToSet';
+import TsTerm from '../../../concepts/term';
+
 
 
 const DETAIL_TAB_ID = 0;
@@ -19,7 +20,7 @@ const NOTES_TAB_ID = 1;
 const GRAPH_TAB_ID = 2;
 
 
-const TermDetail = (props) => {
+const TermDetail = (props: TermDetailComPros) => {
   /*
     This component is responsible for rendering the detail page of a term.
     It contains the term detail table, notes, and graph view.
@@ -32,42 +33,34 @@ const TermDetail = (props) => {
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
   const [waiting, setWaiting] = useState(false);
-  const [targetTerm, setTargetTerm] = useState({ "iri": null });
+  const [targetTerm, setTargetTerm] = useState<TsTerm>();
   const [notesCount, setNotesCount] = useState(0);
 
   const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL +
-    `/v2/ontologies/${targetTerm.ontologyId}/entities/${encodeURIComponent(encodeURIComponent(targetTerm.iri))}?lang=${ontologyPageContext.ontoLang}`;
+    `/v2/ontologies/${targetTerm?.ontologyId ?? ""}/entities/${encodeURIComponent(encodeURIComponent(targetTerm?.iri ?? ""))}?lang=${ontologyPageContext.ontoLang}`;
 
   async function fetchTheTargetTerm() {
-    let term = null;
     let ontologyId = ontologyPageContext.ontology.ontologyId;
-    if (ontologyPageContext.isSkos && props.componentIdentity === "individual") {
-      let skosApi = new SkosApi({ ontologyId: ontologyId, iri: props.iri })
-      await skosApi.fetchSkosTerm();
-      term = skosApi.skosTerm;
-    } else {
-      let termApi = new TermApi(ontologyId, encodeURIComponent(props.iri), props.extractKey, ontologyPageContext.ontoLang);
-      term = await termApi.fetchTerm();
-    }
-    setTargetTerm(term);
+    let termApi = new TermApi(ontologyId, encodeURIComponent(props.iri), props.extractKey, ontologyPageContext.ontoLang);
+    let term = await termApi.fetchTerm();
+    setTargetTerm(term ?? undefined);
   }
 
 
   async function fetchNoteCount() {
     try {
       let ontologyId = ontologyPageContext.ontology.ontologyId;
-      let term = { "iri": props.iri };
       let countOfNotes = 0;
       if (process.env.REACT_APP_NOTE_FEATURE === "true") {
-        countOfNotes = await getNoteList({
+        let notes = await getNoteList({
           ontologyId: ontologyId,
-          type: null,
+          type: "",
           pageNumber: 0,
           pageSize: 1,
-          targetTerm: term,
+          targetTerm: targetTerm,
           onlyOntologyOriginalNotes: false
         });
-        countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+        countOfNotes = notes ? notes['stats']['total_number_of_records'] as number : 0;
       }
       setNotesCount(countOfNotes);
     } catch {
@@ -77,7 +70,7 @@ const TermDetail = (props) => {
 
 
   function setTabOnLoad() {
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     let requestedTab = url.searchParams.get("subtab");
     let activeTabId = activeTab;
     if (requestedTab !== lastRequestedTab && requestedTab === 'notes') {
@@ -91,13 +84,13 @@ const TermDetail = (props) => {
     if (activeTabId !== activeTab) {
       setActiveTab(activeTabId);
       setWaiting(false);
-      setLastRequestedTab(requestedTab);
+      setLastRequestedTab(requestedTab ?? "");
     }
   }
 
-  function tabChangeHandler(e, v) {
+  function tabChangeHandler(e: React.MouseEvent<HTMLAnchorElement>) {
     try {
-      let selectedTabId = e.target.dataset.value;
+      let selectedTabId = (e.currentTarget.dataset.value ?? DETAIL_TAB_ID) as number;
       setWaiting(true);
       setActiveTab(selectedTabId);
       setWaiting(false);
@@ -140,7 +133,7 @@ const TermDetail = (props) => {
           componentIdentity={props.componentIdentity}
           tabChangeHandler={tabChangeHandler}
           activeTab={activeTab}
-          noteCounts={notesCount}
+          noteCount={notesCount}
         />
         {waiting && <div className="isLoading-small"></div>}
         {!waiting && (activeTab === DETAIL_TAB_ID) &&
@@ -149,12 +142,13 @@ const TermDetail = (props) => {
             componentIdentity={props.componentIdentity}
             extractKey={props.extractKey}
             isIndividual={false}
-            node={targetTerm}
+            node={targetTerm ?? undefined}
           />
         }
         {!waiting && (activeTab === NOTES_TAB_ID) &&
           <NoteList
             key={'notesPage'}
+            //@ts-ignore
             term={targetTerm}
             termType={props.typeForNote}
           />
@@ -173,17 +167,19 @@ const TermDetail = (props) => {
 }
 
 
-const RenderTermDetailTab = (props) => {
+const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
 
   const ontologyPageContext = useContext(OntologyPageContext);
   const UrlFactory = new CommonUrlFactory();
 
   function createTabs() {
     let result = [];
-    for (let configItemKey in NodePageTabConfig) {
+    for (let configItemKey in NodePageTabConfig as TermTabMetadata) {
+      //@ts-ignore
       let configObject = NodePageTabConfig[configItemKey];
       let linkUrl = UrlFactory.setParam({
         name: SiteUrlParamNames.SubTabInTermTable,
+        //@ts-ignore
         value: NodePageTabConfig[configItemKey]['urlEndPoint'],
         updateUrl: false
       });
@@ -204,7 +200,7 @@ const RenderTermDetailTab = (props) => {
             to={linkUrl}
           >
             {configObject['tabTitle']}
-            {configItemKey === "Notes" ? ` (${props.noteCounts})` : ""}
+            {configItemKey === "Notes" ? ` (${props.noteCount})` : ""}
           </Link>
         </li>
       );
@@ -218,14 +214,6 @@ const RenderTermDetailTab = (props) => {
       {createTabs()}
     </ul>
   );
-}
-
-
-TermDetail.propTypes = {
-  iri: PropTypes.string.isRequired,
-  componentIdentity: PropTypes.string.isRequired,
-  extractKey: PropTypes.string.isRequired,
-  typeForNote: PropTypes.string.isRequired
 }
 
 export default TermDetail;

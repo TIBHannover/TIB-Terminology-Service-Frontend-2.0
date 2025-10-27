@@ -1,9 +1,9 @@
 import Toolkit from "../Libs/Toolkit";
-import {getCallSetting} from "./constants";
-import SkosLib from "../Libs/Skos";
+import { getCallSetting } from "./constants";
+import TsTerm from "../concepts/term";
 
 class SkosApi {
-  constructor({ontologyId, iri, skosRoot, lang}) {
+  constructor({ ontologyId, iri, skosRoot, lang }) {
     this.ontologyId = ontologyId;
     this.iri = Toolkit.urlNotEncoded(iri)
       ? encodeURIComponent(encodeURIComponent(iri))
@@ -14,13 +14,13 @@ class SkosApi {
     this.skosRoot = skosRoot;
     this.lang = lang ?? "en";
   }
-  
+
   setIri(newIri) {
     this.iri = Toolkit.urlNotEncoded(newIri)
       ? encodeURIComponent(encodeURIComponent(newIri))
       : encodeURIComponent(newIri);
   }
-  
+
   async fetchRootConcepts() {
     try {
       let baseUrl = process.env.REACT_APP_API_URL;
@@ -37,7 +37,7 @@ class SkosApi {
       return true;
     }
   }
-  
+
   async fetchChildrenForSkosTerm() {
     try {
       let baseUrl = process.env.REACT_APP_API_URL;
@@ -53,7 +53,7 @@ class SkosApi {
       return true;
     }
   }
-  
+
   async fetchSkosTerm() {
     try {
       let baseUrl = process.env.REACT_APP_API_URL;
@@ -66,7 +66,7 @@ class SkosApi {
       return true;
     }
   }
-  
+
   async fetchSkosTermParent() {
     try {
       let baseUrl = process.env.REACT_APP_API_URL;
@@ -76,13 +76,14 @@ class SkosApi {
       if (!res || !res["v2Entities"]) {
         return false;
       }
-      
-      return res["v2Entities"][0];
+
+      let skosTerm = new TsTerm(res["v2Entities"][0]);
+      return skosTerm;
     } catch (e) {
       return false;
     }
   }
-  
+
   async fetchGraphData() {
     try {
       let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/skos/${this.iri}/graph?lang=${this.lang}`;

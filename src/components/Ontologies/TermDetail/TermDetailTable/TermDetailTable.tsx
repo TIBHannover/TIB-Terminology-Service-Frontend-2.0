@@ -4,9 +4,13 @@ import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
 import PropTypes from 'prop-types';
+import { TermDetailTableComProp, TableMetadata } from '../types';
+import TsClass from '../../../../concepts/class';
+import TsProperty from '../../../../concepts/property';
+import TsIndividual from '../../../../concepts/individual';
 
 
-const TermDetailTable = (props) => {
+const TermDetailTable = (props: TermDetailTableComProp) => {
   /*
     This component is responsible for rendering the detail table of a term.
     It requires the ontologyPageContext to be available.
@@ -14,6 +18,9 @@ const TermDetailTable = (props) => {
 
 
   function setLabelAsLink() {
+    if (!props.node) {
+      return;
+    }
     let baseUrl = process.env.REACT_APP_PUBLIC_URL + 'ontologies/' + encodeURIComponent(props.node.ontologyId);
     let targetHref = baseUrl + '/terms?iri=' + encodeURIComponent(props.node.iri);
     if (props.componentIdentity === 'props') {
@@ -26,19 +33,18 @@ const TermDetailTable = (props) => {
 
 
   function createTable() {
-    let metadataToRender = "";
-    if (props.componentIdentity === "terms") {
+    let metadataToRender: TableMetadata = {};
+    if (props.node instanceof TsClass) {
       metadataToRender = classMetaData(props.node);
-    } else if (props.componentIdentity === "individuals") {
+    } else if (props.node instanceof TsIndividual) {
       metadataToRender = individualMetadata(props.node);
-    } else {
+    } else if (props.node instanceof TsProperty) {
       metadataToRender = propertyMetaData(props.node);
     }
 
-
     let result = [];
     for (let key of Object.keys(metadataToRender)) {
-      if (!metadataToRender[key].value || typeof (metadataToRender[key].value) === "undefined" || metadataToRender[key].value === '') {
+      if (!metadataToRender[key].value) {
         continue;
       }
 
@@ -49,7 +55,10 @@ const TermDetailTable = (props) => {
   }
 
 
-  function createRowInTable(metadataLabel, metadataValue, isLink) {
+  function createRowInTable(metadataLabel: string, metadataValue: any, isLink: boolean) {
+    if (!props.node) {
+      return [];
+    }
     let row = [
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
         <div className='row'>
@@ -63,7 +72,7 @@ const TermDetailTable = (props) => {
               <CopyLinkButtonMarkdownFormat
                 label={props.node.ontologyId.toUpperCase() + ":" + props.node.label}
                 url={setLabelAsLink()}
-                tooltipText={"This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " + props.node.ontology_prefix + ":" + props.node.label}
+                tooltipText={"This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " + props.node.ontologyPreferredPrefix + ":" + props.node.label}
               />
             }
           </div>
@@ -75,7 +84,10 @@ const TermDetailTable = (props) => {
   }
 
 
-  function formatText(metadataLabel, metadataValue, isLink = false) {
+  function formatText(metadataLabel: string, metadataValue: any, isLink: boolean = false) {
+    if (!props.node) {
+      return;
+    }
     if (isLink) {
       return (<a href={metadataValue} target='_blank' rel="noreferrer">{metadataValue}</a>)
     } else if (["Used in axiom", "Equivalent to", "SubClass Of", "has curation status", "Disjoint with"].includes(metadataLabel)) {
@@ -88,11 +100,11 @@ const TermDetailTable = (props) => {
   }
 
 
-  if (!props.node.iri) {
+  if (!props.node) {
     return <div className="is-loading-term-list isLoading-small"></div>;
   }
 
-  const helmetText = props.node.label ? `${props.node.ontologyId}:${props.node.label}` : `${props.node.ontologyId}:${props.node.short_form}`;
+  const helmetText = props.node.label ? `${props.node.ontologyId}:${props.node.label}` : `${props.node.ontologyId}:${props.node.shortForm}`;
 
   return (
     <div>

@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 
 const blueprint = {
-  ontology: {},
+  ontology: { ontologyId: "" },
   isSkos: false,
   lastVisitedIri: { "terms": "", "properties": "", "individuals": "", "termList": "" },
   storeIriForComponent: function itStoresIriInOntologyPageComponentForEachTab() { /* sets lastVisitedIri  */ },

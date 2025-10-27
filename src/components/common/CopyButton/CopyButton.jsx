@@ -27,7 +27,7 @@ const CopyLinkButton = (props) => {
 export const CopyLinkButtonMarkdownFormat = (props) => {
   const [copied, setCopied] = useState(false);
 
-  return [
+  return (
     <button
       type="button"
       aria-label="Copy to clipboard the term label in markdown format"
@@ -60,7 +60,7 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
     >
       copy label as link {copied && <i className="fa fa-check" aria-hidden="true"></i>}
     </button>
-  ];
+  );
 }
 
 
