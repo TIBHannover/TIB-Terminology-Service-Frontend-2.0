@@ -8,6 +8,8 @@ import { createTermset, addTermToMultipleSets, removeTermFromSet } from "../../a
 import FormLib from "../../Libs/FormLib";
 import Login from "../User/Login/TS/Login";
 import Modal from "react-bootstrap/Modal";
+import { AddToTermsetModalComProps } from "./types";
+import TsTermset from "../../concepts/termset";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -21,25 +23,28 @@ const VISIBILITY_FOR_DROPDOWN = [
 ];
 
 
-export const AddToTermsetModal = (props) => {
+export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
   const { modalId, term, btnClass } = props;
   const appContext = useContext(AppContext);
 
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [createMode, setCreateMode] = useState(false);
-  const [selectedTermsetIds, setSelectedTermsetIds] = useState([]);
-  const [termsets, setTermSets] = useState();
+  const [selectedTermsetIds, setSelectedTermsetIds] = useState<TsTermset[]>([]);
+  const [termsets, setTermSets] = useState<{ text: string, id: string }[]>();
   const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
-  const [termExistingSets, setTermExistingSets] = useState([]);
+  const [termExistingSets, setTermExistingSets] = useState<{ name: string, id: string }[]>([]);
   const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(new Map());
   const [showModal, setShowModal] = useState(false);
 
 
   function submitNewTermset() {
+    if (!term) {
+      return;
+    }
     let name = FormLib.getFieldByIdIfValid("termsetTitle" + modalId);
-    let description = document.getElementById("termsetDescription" + modalId);
+    let description = document.getElementById("termsetDescription" + modalId) as HTMLInputElement;
     if (!name) {
       return;
     }
@@ -51,7 +56,7 @@ export const AddToTermsetModal = (props) => {
       name: name,
       visibility: VISIBILITY_VALUES[newTermsetVisibility],
       description: description ? description.value : "",
-      terms: [props.term]
+      terms: [term.term]
     };
 
     createTermset(data).then((newTermset) => {
@@ -70,17 +75,21 @@ export const AddToTermsetModal = (props) => {
 
 
   function addTermToSet() {
-    if (selectedTermsetIds.length === 0) {
-      document.getElementById("selected-termsets-" + term["iri"]).style.border = '1px solid red';
+    if (!term) {
+      return;
+    }
+    let selectedTermsetsContainer = document.getElementById("selected-termsets-" + term?.iri);
+    if (selectedTermsetIds.length === 0 && selectedTermsetsContainer?.style?.border) {
+      selectedTermsetsContainer.style.border = '1px solid red';
       return;
     }
     const setIds = selectedTermsetIds.map((tset) => tset.id);
-    addTermToMultipleSets(setIds, term).then((success) => {
+    addTermToMultipleSets(setIds, term.term).then((success) => {
       if (success) {
         let userTermsets = [...appContext.userTermsets];
         userTermsets.forEach((tset) => {
           if (setIds.includes(tset.id)) {
-            tset.terms.push(term)
+            tset.terms.push(term.term)
           }
         });
         appContext.setUserTermsets(userTermsets);
@@ -91,8 +100,11 @@ export const AddToTermsetModal = (props) => {
   }
 
 
-  function removeTerm(e) {
+  function removeTerm(e: React.MouseEvent<HTMLElement>) {
     try {
+      if (!term) {
+        return;
+      }
       let removeLoadingMap = new Map(removeLoading);
       let termsetId = e.currentTarget.dataset.tsetid;
       if (!termsetId) {
@@ -144,7 +156,7 @@ export const AddToTermsetModal = (props) => {
               placeholder="Enter a Name"
               onClick={(e) => {
                 setTermsetNameNotValid(false);
-                e.target.style.borderColor = "";
+                e.currentTarget.style.borderColor = "";
               }}
             >
             </input>
@@ -160,8 +172,8 @@ export const AddToTermsetModal = (props) => {
               options={VISIBILITY_FOR_DROPDOWN}
               dropDownId="termset_visibility_dropdown"
               dropDownTitle="Visibility"
-              dropDownChangeHandler={(e) => {
-                setNewTermsetVisibility(e.target.value)
+              dropDownChangeHandler={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setNewTermsetVisibility(parseInt(e.currentTarget.value || "1"))
               }}
             />
           </div>
@@ -173,7 +185,7 @@ export const AddToTermsetModal = (props) => {
             <textarea
               className="form-control"
               id={"termsetDescription" + modalId}
-              rows="5"
+              rows={5}
               placeholder="Enter a Description">
             </textarea>
           </div>
@@ -208,18 +220,18 @@ export const AddToTermsetModal = (props) => {
           isObject={true}
           options={termsets}
           selectedValues={selectedTermsetIds}
-          onSelect={(selectedList, selectedItem) => {
-            document.getElementById("selected-termsets-" + term["iri"]).style.border = '';
+          onSelect={(selectedList, _) => {
+            document.getElementById("selected-termsets-" + term?.iri)!.style.border = '';
             setSelectedTermsetIds(selectedList);
           }}
-          onRemove={(selectedList, selectedItem) => {
-            document.getElementById("selected-termsets-" + term["iri"]).style.border = '';
+          onRemove={(selectedList, _) => {
+            document.getElementById("selected-termsets-" + term?.iri)!.style.border = '';
             setSelectedTermsetIds(selectedList);
           }}
           displayValue={"text"}
           avoidHighlightFirstOption={true}
           closeIcon={"cancel"}
-          id={"selected-termsets-" + term["iri"]}
+          id={"selected-termsets-" + term?.iri}
           placeholder="Enter termset name ..."
           className='multiselect-container'
         />
@@ -294,7 +306,7 @@ export const AddToTermsetModal = (props) => {
     let existingSets = [];
     let removeLoadingMap = new Map(removeLoading);
     for (let tset of appContext.userTermsets) {
-      if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term.iri)) {
+      if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term?.iri)) {
         options.push({ "text": tset.name, "id": tset.id });
       } else {
         removeLoadingMap.set(tset.id, false);

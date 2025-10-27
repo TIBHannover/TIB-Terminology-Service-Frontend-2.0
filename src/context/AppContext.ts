@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import TsTermset from "../concepts/termset";
 
 const blueprint = {
   user: null,
@@ -26,8 +27,8 @@ const blueprint = {
   setUserSettings: () => {
     /* set userSettings */
   },
-  userTermsets: [],
-  setUserTermsets: () => {
+  userTermsets: [] as TsTermset[],
+  setUserTermsets: (termsets: TsTermset[]) => {
     /* set user term sets*/
   },
   includeImportedTerms: true,

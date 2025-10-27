@@ -1,31 +1,37 @@
-import {useState, useContext, useRef} from "react";
+import { useState, useContext, useRef } from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
-import {AppContext} from "../../context/AppContext";
-import {getJumpToResult} from "../../api/search";
+import { AppContext } from "../../context/AppContext";
+import { getJumpToResult } from "../../api/search";
 import TermLib from "../../Libs/TermLib";
-import {updateTermset} from "../../api/term_set";
+import { updateTermset } from "../../api/term_set";
 import TermApi from "../../api/term";
 import Modal from "react-bootstrap/Modal";
+import { AddTermModalComProps } from "./types";
+import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
+import { BaseSearchSingleResult } from "../../api/types/searchApiTypes";
 
 
-export const AddTermModal = (props) => {
-  const {termset, modalId} = props;
+export const AddTermModal = (props: AddTermModalComProps) => {
+  const { termset, modalId } = props;
   const appContext = useContext(AppContext);
-  
+
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
-  const [termListOptions, setTermListOptions] = useState([]);
-  const [selectedTerms, setSelectedTerms] = useState(null);
+  const [termListOptions, setTermListOptions] = useState<{ text: string, iri: string, ontologyId: string }[]>();
+  const [selectedTerms, setSelectedTerms] = useState<OntologyTermDataV2[]>();
   const [loading, setLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  
-  
+
+
   const searchUnderRef = useRef(null);
-  
-  
+
+
   async function submitNewTermsToSet() {
+    if (!selectedTerms || !termset) {
+      return;
+    }
     setSubmitLoading(true);
     let selectedTermsV2 = [];
     for (let term of selectedTerms) {
@@ -33,13 +39,8 @@ export const AddTermModal = (props) => {
       await termApi.fetchTerm();
       selectedTermsV2.push(termApi.term);
     }
-    const payload = {};
-    payload['id'] = termset.id;
-    payload['name'] = termset.name;
-    payload['description'] = termset.description;
-    payload['visibility'] = termset.visibility;
-    payload['terms'] = [...termset.terms.map(term => term.json), ...selectedTermsV2];
-    updateTermset(payload).then((updatedTermset) => {
+    termset.terms = [...termset.terms, ...selectedTermsV2];
+    updateTermset(termset).then((updatedTermset) => {
       if (updatedTermset) {
         let userTermsets = [...appContext.userTermsets];
         let tsInex = userTermsets.findIndex(tset => tset.id === updatedTermset.id);
@@ -55,29 +56,32 @@ export const AddTermModal = (props) => {
       setSubmitLoading(false);
     });
   }
-  
-  function onTermSelect(selectedTerms) {
+
+  function onTermSelect(selectedTerms: OntologyTermDataV2[]) {
     setSelectedTerms(selectedTerms);
   }
-  
-  
-  async function onSearchTermChange(query) {
+
+
+  async function onSearchTermChange(query: string) {
     setLoading(true);
-    if (query === "") {
+    if (!query) {
+      //@ts-ignore
       setTermListOptions([]);
       return true;
     }
     let inputQuery = {
       "searchQuery": query,
+      "ontologyIds": ""
       // "types": "class,property,individual",
     };
     if (appContext.userSettings.userCollectionEnabled) {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
-    let terms = await getJumpToResult(inputQuery, 10);
-    let options = [];
+    //@ts-ignore
+    let terms: BaseSearchSingleResult[] = await getJumpToResult(inputQuery, 10);
+    let options: { text: string, iri: string, ontologyId: string }[] = [];
     for (let term of terms) {
-      let opt = {};
+      let opt = { text: "", iri: "", ontologyId: "" };
       opt['text'] = `${term['ontology_name']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
       opt['iri'] = term['iri'];
       opt['ontologyId'] = term['ontology_name'];
@@ -86,16 +90,16 @@ export const AddTermModal = (props) => {
     setLoading(false);
     setTermListOptions(options);
   }
-  
-  
+
+
   function closeModal() {
     setAddedSuccess(false);
     setSubmited(false);
     setSelectedTerms([]);
     setShowModal(false);
   }
-  
-  
+
+
   return (
     <>
       <button
@@ -112,7 +116,7 @@ export const AddTermModal = (props) => {
         <Modal.Header className="row">
           <div className="col-6">
             <h5 className="modal-title"
-                id={"addToTermsetModal-" + modalId}>{`Add terms to this set`}</h5>
+              id={"addToTermsetModal-" + modalId}>{`Add terms to this set`}</h5>
           </div>
           <div className="col-6 text-end">
             {!submited &&
