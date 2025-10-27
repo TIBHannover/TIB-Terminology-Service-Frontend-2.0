@@ -255,10 +255,27 @@ export default class TreeHelper {
 
 
   static buildTermTreeFromFlatList(terms) {
+
+    function getParentIris(parentIrisList) {
+      let parentIris = [];
+      if (!parentIrisList) {
+        return [];
+      }
+      for (let parentIri of parentIrisList) {
+        if (typeof parentIri === "string") {
+          parentIris.push(parentIri);
+        } else if ("value" in parentIri) {
+          parentIris.push(parentIri.value);
+        }
+      }
+      return parentIris;
+    }
+
     for (let term of terms) {
       for (let potentialChild of terms) {
-        let parentsIris = potentialChild.type[0] === "class" ? potentialChild["hierarchicalParent"] : potentialChild["directParent"];
-        if (!parentsIris) {
+        let parentsIrisList = potentialChild.type[0] === "class" ? potentialChild["hierarchicalParent"] : potentialChild["directParent"];
+        let parentsIris = getParentIris(parentsIrisList);
+        if (!parentsIris.length) {
           // Thing class
           continue;
         }
@@ -270,9 +287,7 @@ export default class TreeHelper {
           }
         }
       }
-    }
-    for (let term of terms) {
-      if (term.childrenList === undefined) {
+      if (!term.childrenList) {
         term.childrenList = [];
       }
       term.id = TermLib.makeTermIdForTree(term);
