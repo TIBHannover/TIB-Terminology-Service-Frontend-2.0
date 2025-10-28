@@ -23,7 +23,6 @@ class TermFactory {
         return new TsTerm(termData)
     }
   }
-
 }
 
 export default TermFactory;

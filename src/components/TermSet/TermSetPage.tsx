@@ -138,11 +138,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     if (!data) {
       return;
     }
-    let termList = [];
-    for (let term of data.terms) {
-      termList.push(term.json);
-    }
-    const jsonFile = JSON.stringify(termList);
+    const jsonFile = JSON.stringify(data.terms);
     await Toolkit.downloadJsonFile(data.name + "_terms.json", jsonFile);
   }
 
@@ -159,7 +155,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     }
     rows.push(headers);
     for (let t of data.terms) {
-      let term = new TsTerm(t);
+      let term = TermFactory.createTermForTS(t);
       let annotation = term.annotation;
       let row = [];
       row.push(escapeForCSV(term["shortForm"]));
