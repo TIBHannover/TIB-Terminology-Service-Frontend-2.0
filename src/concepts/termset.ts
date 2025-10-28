@@ -3,9 +3,17 @@ import { OntologyTermDataV2 } from "../api/types/ontologyTypes";
 
 class TsTermset {
   termsetData: TermSet;
+  private _name: string;
+  private _description: string;
+  private _visibility: string;
+  private _terms: OntologyTermDataV2[];
 
   constructor(termset: TermSet) {
     this.termsetData = termset;
+    this._description = this.description;
+    this._name = this.termsetData.name;
+    this._visibility = this.termsetData.visibility;
+    this._terms = this.termsetData.terms.map(twrapper => twrapper.json ?? {});
   }
 
   get id(): string {
@@ -13,11 +21,11 @@ class TsTermset {
   }
 
   get name(): string {
-    return this.termsetData.name;
+    return this._name;
   }
 
   get description(): string {
-    return this.termsetData.description ?? "";
+    return this._description ?? "";
   }
 
   get creator(): string {
@@ -33,31 +41,31 @@ class TsTermset {
   }
 
   get visibility(): string {
-    return this.termsetData.visibility;
+    return this._visibility;
   }
 
   get terms(): OntologyTermDataV2[] {
-    return this.termsetData.terms;
+    return this._terms;
   }
 
   set name(input: string) {
-    this.name = input;
+    this._name = input;
   }
 
   set description(input: string) {
-    this.description = input;
+    this._description = input;
   }
 
   set visibility(input: string) {
     if (["me", "internal", "public"].includes(input)) {
-      this.visibility = input;
+      this._visibility = input;
     } else {
-      this.visibility = "me";
+      this._visibility = "me";
     }
   }
 
   set terms(input: OntologyTermDataV2[]) {
-    this.terms = input;
+    this._terms = input;
   }
 
 }

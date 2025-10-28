@@ -24,7 +24,6 @@ class TsTerm {
     this.term = termData;
   }
 
-
   get type(): string {
     if (this.term.type && this.term.type.length > 1) {
       return this.term.type[0];

@@ -1,4 +1,4 @@
-import {useState, useEffect, ReactNode} from "react";
+import { useState, useEffect, ReactNode } from "react";
 
 
 type Column = {
@@ -22,7 +22,7 @@ type InputProp = {
 
 
 const TermTable = (props: InputProp) => {
-    const {columns, terms, tableIsLoading} = props;
+    const { columns, terms, tableIsLoading } = props;
 
     const [colVis, setColVis] = useState<Map<string, boolean>>(new Map());
     const [tableBody, setTableBody] = useState<ReactNode[]>([]);
@@ -31,32 +31,35 @@ const TermTable = (props: InputProp) => {
     function createTableHeader() {
         return [
             <thead>
-            <tr>
-                {columns.map((col) => {
-                    if (!colVis.get(col.id)) {
-                        return;
-                    }
-                    return (
-                        <th scope="col"
-                            className={col.id !== "action" ? "table-header-cell" : "table-header-cell-small"}>
-                            {col.text}
-                            {col.id !== "action" &&
-                              <div onClick={showHideTableColumn} data-value={col.id} className="eye-icon">
-                                <i className="fa fa-eye-slash hidden-fa stour-class-list-hide-column-icon"></i>
-                              </div>
-                            }
-                        </th>
-                    )
-                })
+                <tr>
+                    {columns.map((col) => {
+                        if (!colVis.get(col.id)) {
+                            return;
+                        }
+                        return (
+                            <th scope="col"
+                                className={col.id !== "action" ? "table-header-cell" : "table-header-cell-small"}>
+                                {col.text}
+                                {col.id !== "action" &&
+                                    <div onClick={showHideTableColumn} data-value={col.id} className="eye-icon">
+                                        <i className="fa fa-eye-slash hidden-fa stour-class-list-hide-column-icon"></i>
+                                    </div>
+                                }
+                            </th>
+                        )
+                    })
 
-                }
-            </tr>
+                    }
+                </tr>
             </thead>
         ];
     }
 
 
     function createTableBody() {
+        if (!terms.length) {
+            return [<></>];
+        }
         let tableRows = [];
         let oneRow = [];
 
@@ -70,7 +73,7 @@ const TermTable = (props: InputProp) => {
                     oneRow.push(
                         <td className="label-col table-body-cell">
                             <a className="table-list-label-anchor" href={term.get(col.id)!.valueLink} target="_blank"
-                               rel="noopener noreferrer">
+                                rel="noopener noreferrer">
                                 {term.get(col.id)!.value}
                             </a>
                         </td>
@@ -78,7 +81,7 @@ const TermTable = (props: InputProp) => {
                 } else if (term.get(col.id)!.valueIsHtml) {
                     oneRow.push(
                         <td className="table-body-cell"><span
-                            dangerouslySetInnerHTML={{__html: term.get(col.id)!.value}}/></td>
+                            dangerouslySetInnerHTML={{ __html: term.get(col.id)!.value }} /></td>
                     );
                 } else {
                     oneRow.push(
@@ -96,23 +99,23 @@ const TermTable = (props: InputProp) => {
     function createShowColumnsTags() {
         return [
             <span>
-        {columns.map((col) => {
-            if (colVis.get(col.id)) {
-                return;
-            }
-            return (
-                <div
-                    className="show-hidden-column"
-                    onClick={showHideTableColumn}
-                    data-value={col.id}
-                >
-                    {col.text}
-                    <i className="fa fa-eye fa-eye-table"></i>
-                </div>
-            )
-        })
-        }
-      </span>
+                {columns.map((col) => {
+                    if (colVis.get(col.id)) {
+                        return;
+                    }
+                    return (
+                        <div
+                            className="show-hidden-column"
+                            onClick={showHideTableColumn}
+                            data-value={col.id}
+                        >
+                            {col.text}
+                            <i className="fa fa-eye fa-eye-table"></i>
+                        </div>
+                    )
+                })
+                }
+            </span>
         ];
     }
 
@@ -159,8 +162,8 @@ const TermTable = (props: InputProp) => {
             {columns && createShowColumnsTags()}
             {columns && createTableHeader()}
             <tbody>
-            {tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
-            {!tableIsLoading && columns && tableBody}
+                {tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
+                {!tableIsLoading && columns && tableBody}
             </tbody>
         </table>
     );

@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import { getTermset } from "../../api/term_set";
 import { useQuery } from "@tanstack/react-query";
 import TermTable from "../common/TermTable/TermTable";
-import TermLib from "../../Libs/TermLib";
 import { Link } from 'react-router-dom';
 import DropDown from "../common/DropDown/DropDown";
 import Pagination from "../common/Pagination/Pagination";
@@ -10,8 +9,12 @@ import { AddTermModal } from "./AddTermModal";
 import Toolkit from "../../Libs/Toolkit";
 import { removeTermFromSet } from "../../api/term_set";
 import { AppContext } from "../../context/AppContext";
-import { NotFoundErrorPage, GeneralErrorPage } from "../common/ErrorPages/ErrorPages";
+import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
 import TsTerm from "../../concepts/term";
+import { TermsetPageComProps } from "./types";
+import TsClass from "../../concepts/class";
+import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
+import TermFactory from "../../concepts/termFactory";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -24,13 +27,13 @@ const PAGE_SIZES_FOR_DROPDOWN = [
 const DEFAUTL_ROWS_COUNT = 10;
 
 
-const TermSetPage = (props) => {
+const TermSetPage = (props: TermsetPageComProps) => {
   const termsetId = props.match.params.termsetId;
 
   const appContext = useContext(AppContext);
 
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [rowDataForTable, setRowDataForTable] = useState([]);
+  const [rowDataForTable, setRowDataForTable] = useState<Map<string, any>[]>([]);
   const [tableColumns, _] = useState(
     [
       { id: "action", text: "", defaultVisible: true },
@@ -49,18 +52,22 @@ const TermSetPage = (props) => {
   const [page, setPage] = useState(0);
   const [totalTermsCount, setTotalTermsCount] = useState(0);
 
-  const { data, loading, error } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["termset", termsetId],
     queryFn: () => getTermset(termsetId),
     retry: 1
   });
 
-  function createTermListForTable(listOfterms) {
+
+  function createTermListForTable(listOfterms: OntologyTermDataV2[]) {
+    if (!data) {
+      return;
+    }
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/';
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
-    for (let termWrapper of listOfterms) {
-      let term = new TsTerm(termWrapper.json);
+    for (let t of listOfterms) {
+      let term = TermFactory.createTermForTS(t);
       let DeleteBtn =
         <i
           className="bi bi-file-minus-fill"
@@ -70,12 +77,12 @@ const TermSetPage = (props) => {
           onClick={removeTerm}
         />
       if (!appContext.userTermsets.find((tset) => tset.id === data.id) || !appContext.user) {
-        DeleteBtn = "";
+        DeleteBtn = <i></i>;
       }
 
       let termTreeUrl = baseUrl + encodeURIComponent(term.ontologyId) + '/terms?iri=' + encodeURIComponent(term.iri);
       let annotation = term.annotation;
-      let termMap = new Map();
+      let termMap = new Map<string, any>();
       termMap.set("shortForm", { value: term.shortForm, valueLink: "" });
       termMap.set("label", { value: term.label, valueLink: termTreeUrl });
       termMap.set("decs", { value: term.definition ?? annotation?.definition, valueLink: "" });
@@ -83,8 +90,13 @@ const TermSetPage = (props) => {
         value: annotation['alternative label'] ? annotation['alternative label'] : "N/A",
         valueLink: ""
       });
-      termMap.set("subclass", { value: term.subClassOf, valueLink: "", valueIsHtml: true });
-      termMap.set("eqto", { value: term.eqAxiom, valueLink: "", valueIsHtml: true });
+      if (term instanceof TsClass) {
+        termMap.set("eqto", { value: term.eqAxiom, valueLink: "", valueIsHtml: true });
+        termMap.set("subclass", { value: term.subClassOf, valueLink: "", valueIsHtml: true });
+      } else {
+        termMap.set("eqto", { value: "", valueLink: "", valueIsHtml: true });
+        termMap.set("subclass", { value: "", valueLink: "", valueIsHtml: true });
+      }
       termMap.set("example", {
         value: annotation['example of usage'] ? annotation['example of usage'] : "N/A",
         valueLink: ""
@@ -101,12 +113,15 @@ const TermSetPage = (props) => {
   }
 
 
-  function searchInputChangeHandler(e) {
+  function searchInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!data) {
+      return;
+    }
     let query = e.target.value;
     if (query) {
       let selectedTerms = data.terms.filter((term) => {
-        let label = TermLib.extractLabel(term.json);
-        if (label.toLowerCase().includes(query.toLowerCase())) {
+        let t = new TsTerm(term.json ?? {});
+        if (t.label.toLowerCase().includes(query.toLowerCase())) {
           return true;
         }
         return false;
@@ -143,16 +158,21 @@ const TermSetPage = (props) => {
       }
     }
     rows.push(headers);
-    for (let termWrapper of data.terms) {
-      let term = new TsTerm(termWrapper.json);
+    for (let t of data.terms) {
+      let term = new TsTerm(t);
       let annotation = term.annotation;
       let row = [];
       row.push(escapeForCSV(term["shortForm"]));
       row.push(escapeForCSV(term.label));
-      row.push(escapeForCSV(TermLib.definition ?? annotation?.definition));
+      row.push(escapeForCSV(term.definition ?? annotation?.definition));
       row.push(escapeForCSV(annotation['alternative label'] ? annotation['alternative label'] : "N/A"));
-      row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
-      row.push(escapeForCSV(term.eqAxiom ?? "N/A"));
+      if (term instanceof TsClass) {
+        row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
+        row.push(escapeForCSV(term.eqAxiom ?? "N/A"));
+      } else {
+        row.push(escapeForCSV("N/A"));
+        row.push(escapeForCSV("N/A"));
+      }
       row.push(escapeForCSV(annotation['example of usage'] ? annotation['example of usage'] : "N/A"));
       row.push(escapeForCSV(annotation['seeAlso'] ? annotation['seeAlso'] : "N/A"));
       row.push(escapeForCSV(term.contributors));
@@ -169,8 +189,11 @@ const TermSetPage = (props) => {
 
   }
 
-  function removeTerm(e) {
+  function removeTerm(e: React.MouseEvent<HTMLElement>) {
     try {
+      if (!data) {
+        return;
+      }
       let termsetId = e.currentTarget.dataset.tsetid;
       let termId = e.currentTarget.dataset.termid;
       if (!termsetId || !termId) {
@@ -199,7 +222,7 @@ const TermSetPage = (props) => {
     }
   }
 
-  function escapeForCSV(value) {
+  function escapeForCSV(value: any) {
     if (value == null) return '';
     const str = String(value);
     if (/[,"\n\r]/.test(str)) {
@@ -232,19 +255,13 @@ const TermSetPage = (props) => {
     return "";
   }
 
-  if (!data && !error) {
+  if (!data && !isError) {
     return (
       <div className="justify-content-center ontology-page-container">
         <div className="isLoading"></div>
       </div>
     );
-  } else if (!data && error && error.status !== 404) {
-    return (
-      <div className="justify-content-center ontology-page-container">
-        <GeneralErrorPage />
-      </div>
-    );
-  } else if (!data && error && error.status === 404) {
+  } else if (!data && isError) {
     return (
       <div className="justify-content-center ontology-page-container">
         <NotFoundErrorPage />
@@ -263,7 +280,7 @@ const TermSetPage = (props) => {
               My termset list
             </Link>
           </div>
-          {appContext.userTermsets.find((tset) => tset.id === data.id) &&
+          {appContext.userTermsets.find((tset) => tset.id === data?.id) &&
             <div className="col-sm-6 float-right">
               <div className="visibility-tag">visibility: {data ? data.visibility : ""}</div>
             </div>
@@ -309,24 +326,24 @@ const TermSetPage = (props) => {
               containerClass="result-per-page-dropdown-container"
               dropDownTitle="size"
               dropDownValue={size}
-              dropDownChangeHandler={(e) => {
-                setSize(e.target.value)
+              dropDownChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setSize(parseInt(e.currentTarget.value))
               }}
             />
           </div>
           <div className="col-sm-2 text-right mt-1">
             <Pagination
-              clickHandler={(newPage) => {
+              clickHandler={(newPage: string) => {
                 setPage(parseInt(newPage) - 1)
               }}
               count={Math.ceil(totalTermsCount / size)}
               initialPageNumber={page + 1}
             />
           </div>
-          {appContext.user && appContext.userTermsets.find((tset) => tset.id === data.id) &&
+          {appContext.user && appContext.userTermsets.find((tset) => tset.id === data?.id) &&
             // only owner can see this button
             <div className="col-sm-3 text-end mt-2">
-              <AddTermModal termset={data} modalId={"add-term-modal"}></AddTermModal>
+              <AddTermModal termset={data ?? undefined} modalId={"add-term-modal"}></AddTermModal>
             </div>
           }
         </div>
@@ -348,7 +365,7 @@ const TermSetPage = (props) => {
           <TermTable
             columns={tableColumns}
             terms={rowDataForTable}
-            tableIsLoading={loading}
+            tableIsLoading={isLoading}
             setTableIsLoading={() => {
             }}
           />
