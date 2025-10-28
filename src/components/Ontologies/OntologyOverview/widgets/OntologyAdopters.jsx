@@ -1,168 +1,42 @@
-// src/components/Ontologies/OntologyOverview/widgets/OntologyAdopters.jsx
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import Modal from "react-bootstrap/Modal";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 
-/* ---------- helpers ---------- */
-const asArray = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+const LinkOrText = ({ href, children }) =>
+  href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {children ?? href}
+    </a>
+  ) : (
+    <>{children}</>
+  );
 
 const Row = ({ label, children }) => (
-  <div style={{ padding: "6px 0", borderBottom: "1px dotted #e5e7eb" }}>
-    {label ? <strong>{label}: </strong> : null}
-    {children}
+  <div className="mb-2">
+    <strong>{label}: </strong>
+    <span>{children}</span>
   </div>
 );
 
-const LinkList = ({ urls }) => {
-  const list = asArray(urls).filter(Boolean);
-  if (!list.length) return null;
-  return (
-    <>
-      {list.map((u, i) => (
-        <span key={u}>
-          <a href={u} target="_blank" rel="noopener noreferrer">
-            {u}
-          </a>
-          {i < list.length - 1 ? ", " : ""}
-        </span>
-      ))}
-    </>
-  );
-};
+const listWithCommas = (arr) =>
+  arr.map((el, i) => (
+    <span key={i}>
+      {el}
+      {i < arr.length - 1 ? ", " : ""}
+    </span>
+  ));
 
-const ProviderList = ({ providers }) => {
-  const list = asArray(providers);
-  if (!list.length) return null;
-  return (
-    <>
-      {list.map((p, i) => {
-        const label = p?.label || "";
-        const id = p?.identifier;
-        return (
-          <span key={`${label}-${i}`}>
-            {label}
-            {id ? (
-              <>
-                {", "}links to{" "}
-                <a href={id} target="_blank" rel="noopener noreferrer">
-                  {id}
-                </a>
-              </>
-            ) : null}
-            {i < list.length - 1 ? "; " : ""}
-          </span>
-        );
-      })}
-    </>
-  );
-};
-
-const ContactList = ({ contacts }) => {
-  const list = asArray(contacts);
-  if (!list.length) return null;
-  return (
-    <>
-      {list.map((c, i) => {
-        const mail = c?.mail;
-        return (
-          <span key={`${mail || i}`}>
-            {mail}
-            {i < list.length - 1 ? ", " : ""}
-          </span>
-        );
-      })}
-    </>
-  );
-};
-
-/* ---------- one adopter block ---------- */
-const UsageBlock = ({ useEntry }) => {
-  const usedBy = useEntry?.usedBy || {};
-
-  const title = usedBy.label || "";
-  const alt = usedBy.altLabel ? ` (${usedBy.altLabel})` : "";
-
-  const identifiers = usedBy.identifier;
-  const homepage = usedBy.homepage;
-  const providers = usedBy.provider;
-  const contacts = usedBy.contact;
-
-  // Some configs store the free text under usageDescription.description,
-  // others directly under description. Support both.
-  const usageDesc =
-    useEntry?.usageDescription?.description ||
-    useEntry?.description ||
-    "";
-
-  const created =
-    useEntry?.usageReportMetadata?.created ||
-    useEntry?.created ||
-    "";
-
-  return (
-    <div className="p-3 border rounded bg-white mb-3">
-      {/* free text on top */}
-      {usageDesc && (
-        <div
-          style={{
-            padding: "6px 0",
-            borderBottom: "1px dotted #e5e7eb",
-            color: "#374151",
-            lineHeight: 1.4,
-          }}
-        >
-          {usageDesc}
-        </div>
-      )}
-
-      {(title || alt) && (
-        <Row label="Used By">
-          {title}
-          {alt}
-        </Row>
-      )}
-
-      {asArray(identifiers).length > 0 && (
-        <Row label="Identifiers">
-          <LinkList urls={identifiers} />
-        </Row>
-      )}
-
-      {/* show homepage plainly (no 'link to' wording) */}
-      {homepage && (
-        <Row label={null}>
-          <a href={homepage} target="_blank" rel="noopener noreferrer">
-            {homepage}
-          </a>
-        </Row>
-      )}
-
-      {asArray(providers).length > 0 && (
-        <Row label="Provider">
-          <ProviderList providers={providers} />
-        </Row>
-      )}
-
-      {asArray(contacts).length > 0 && (
-        <Row label="Contact">
-          <ContactList contacts={contacts} />
-        </Row>
-      )}
-
-      {created && <Row label="Created">{created}</Row>}
-    </div>
-  );
-};
-
-/* ---------- modal ---------- */
-const OntologyAdopters = ({ showModal, setShowModal }) => {
+export default function OntologyAdopters({ showModal, setShowModal }) {
   const onto = useContext(OntologyPageContext)?.ontology;
 
-  // keep only items that really have a 'usedBy' object
-  const uses = asArray(onto?.ontology_use).filter((u) => u?.usedBy);
+  // debug
+  console.log("[Adopters] ontologyId =", onto?.ontologyId);
+  console.log("[Adopters] ontology_use =", JSON.stringify(onto?.ontology_use, null, 2));
 
-  // If there is nothing to show, do not render the modal at all.
-  if (!uses.length) return null;
+  const adopters = useMemo(() => {
+    if (!Array.isArray(onto?.ontology_use)) return [];
+    return onto.ontology_use.filter((u) => u && (u.usedBy || u.usageDescription));
+  }, [onto]);
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
@@ -171,9 +45,94 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
       </Modal.Header>
 
       <Modal.Body>
-        {uses.map((u, i) => (
-          <UsageBlock key={i} useEntry={u} />
-        ))}
+        {!adopters.length && (
+          <div>No adopters information available for this ontology yet.</div>
+        )}
+
+        {adopters.map((u, idx) => {
+          const used = u.usedBy || {};
+          const prov = Array.isArray(used.provider) ? used.provider : [];
+          const contacts = Array.isArray(used.contact)
+            ? used.contact.map((c) => c?.mail).filter(Boolean)
+            : [];
+          const ids = Array.isArray(used.identifier) ? used.identifier : [];
+
+          // --- NEW: gather usage descriptions from both possible places
+          const usageDescs = [
+            u?.usageDescription,
+            used?.usageDescription, // just in case some records put it here
+          ]
+            .filter(Boolean)
+            .filter((x) => x.description) // only show if we actually have text
+            .map((x) => ({ description: x.description, language: x.language }));
+
+          return (
+            <div key={idx} className="border rounded p-3 mb-3 bg-white">
+              {/* Usage descriptions at the TOP of each block (all sources) */}
+              {usageDescs.length > 0 && (
+                <div className="mb-2">
+                  {usageDescs.map((ud, i) => (
+                    <div key={i}>
+                      {ud.description}
+                      {ud.language ? <span className="ms-1">({ud.language})</span> : null}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {(used.label || used.altLabel) && (
+                <Row label="Used By">
+                  {used.label}
+                  {used.altLabel ? ` (${used.altLabel})` : ""}
+                </Row>
+              )}
+
+              {ids.length > 0 && (
+                <Row label="Identifiers">
+                  {listWithCommas(
+                    ids.map((d) => (
+                      <LinkOrText key={d} href={d}>
+                        {d}
+                      </LinkOrText>
+                    ))
+                  )}
+                </Row>
+              )}
+
+              {used.homepage && (
+                <div className="mb-2">
+                  <LinkOrText href={used.homepage}>{used.homepage}</LinkOrText>
+                </div>
+              )}
+
+              {prov.length > 0 && (
+                <Row label="Provider">
+                  {listWithCommas(
+                    prov.map((p, i) => (
+                      <span key={`${p.label}-${i}`}>
+                        {p.label}
+                        {p.identifier ? (
+                          <>
+                            {", links to "}
+                            <LinkOrText href={p.identifier}>{p.identifier}</LinkOrText>
+                          </>
+                        ) : null}
+                      </span>
+                    ))
+                  )}
+                </Row>
+              )}
+
+              {contacts.length > 0 && (
+                <Row label="Contact">{listWithCommas(contacts)}</Row>
+              )}
+
+              {u.usageReportMetadata?.created && (
+                <Row label="Created">{u.usageReportMetadata.created}</Row>
+              )}
+            </div>
+          );
+        })}
       </Modal.Body>
 
       <Modal.Footer>
@@ -183,6 +142,4 @@ const OntologyAdopters = ({ showModal, setShowModal }) => {
       </Modal.Footer>
     </Modal>
   );
-};
-
-export default OntologyAdopters;
+}
