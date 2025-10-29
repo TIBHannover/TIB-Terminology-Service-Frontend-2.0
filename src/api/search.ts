@@ -7,10 +7,10 @@ import {
   AutoSuggestSingleResult
 } from "./types/searchApiTypes";
 import Toolkit from "../Libs/Toolkit";
-import TsTerm from "../concepts/term";
+import TermFactory from "../concepts/termFactory";
 
 
-export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {
+export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | {}> {
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
@@ -19,7 +19,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     let size = inputData.size ? inputData.size : 10;
     let searchUrl: string = apiBaseUrl + `/v2/entities?search=${query}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
     searchUrl = !inputData.includeImported && !inputData.fromOntologyPage ? (searchUrl + "&isDefiningOntology=true") : searchUrl;
-    searchUrl = jumpToMode ? (searchUrl + "&boostFields=label^3") : searchUrl;
+    searchUrl = jumpToMode ? (searchUrl + "&boostFields=" + encodeURIComponent("label^3").replace(/\^/g, "%5E")) : searchUrl;
     searchUrl = !jumpToMode ? (searchUrl + "&facetFields=type+ontologyId") : searchUrl;
     searchUrl = inputData?.selectedOntologies?.length ? (searchUrl + `&ontology=${inputData?.selectedOntologies?.join(',')}`) : searchUrl;
     searchUrl = inputData?.selectedTypes?.length ? (searchUrl + `&type=${inputData?.selectedTypes?.join(',')}`) : searchUrl;
@@ -40,7 +40,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     let result: any = await (await fetch(searchUrl, getCallSetting)).json();
     let resultTerms = [];
     for (let el of result["elements"]) {
-      let tsTerm = new TsTerm(el);
+      let tsTerm = TermFactory.createTermForTS(el);
       resultTerms.push(tsTerm);
     }
     result["elements"] = resultTerms;
@@ -50,7 +50,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     }
     return result;
   } catch (e) {
-    return [];
+    return {};
   }
 }
 

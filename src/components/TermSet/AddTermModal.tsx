@@ -8,9 +8,14 @@ import { updateTermset } from "../../api/term_set";
 import TermApi from "../../api/term";
 import Modal from "react-bootstrap/Modal";
 import { AddTermModalComProps } from "./types";
-import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
 import { BaseSearchSingleResult } from "../../api/types/searchApiTypes";
 
+
+type MultiSelectOption = {
+  text?: string;
+  iri?: string;
+  ontologyId?: string;
+}
 
 export const AddTermModal = (props: AddTermModalComProps) => {
   const { termset, modalId } = props;
@@ -18,8 +23,8 @@ export const AddTermModal = (props: AddTermModalComProps) => {
 
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
-  const [termListOptions, setTermListOptions] = useState<{ text: string, iri: string, ontologyId: string }[]>();
-  const [selectedTerms, setSelectedTerms] = useState<OntologyTermDataV2[]>();
+  const [termListOptions, setTermListOptions] = useState<MultiSelectOption[]>();
+  const [selectedTerms, setSelectedTerms] = useState<MultiSelectOption[]>();
   const [loading, setLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -57,7 +62,7 @@ export const AddTermModal = (props: AddTermModalComProps) => {
     });
   }
 
-  function onTermSelect(selectedTerms: OntologyTermDataV2[]) {
+  function onTermSelect(selectedTerms: MultiSelectOption[]) {
     setSelectedTerms(selectedTerms);
   }
 
@@ -65,21 +70,19 @@ export const AddTermModal = (props: AddTermModalComProps) => {
   async function onSearchTermChange(query: string) {
     setLoading(true);
     if (!query) {
-      //@ts-ignore
       setTermListOptions([]);
       return true;
     }
     let inputQuery = {
       "searchQuery": query,
       "ontologyIds": ""
-      // "types": "class,property,individual",
     };
     if (appContext.userSettings.userCollectionEnabled) {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
     //@ts-ignore
     let terms: BaseSearchSingleResult[] = await getJumpToResult(inputQuery, 10);
-    let options: { text: string, iri: string, ontologyId: string }[] = [];
+    let options: MultiSelectOption[] = [];
     for (let term of terms) {
       let opt = { text: "", iri: "", ontologyId: "" };
       opt['text'] = `${term['ontology_name']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;

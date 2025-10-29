@@ -1,15 +1,17 @@
 import DropDown from "../common/DropDown/DropDown";
-import {useState, useContext, useRef} from "react";
+import { useState, useContext, useRef } from "react";
 import Multiselect from "multiselect-react-dropdown";
-import {olsSearch} from "../../api/search";
-import TermLib from "../../Libs/TermLib";
-import {AppContext} from "../../context/AppContext";
-import {updateTermset, getTermset} from "../../api/term_set";
+import { olsSearch } from "../../api/search";
+import { AppContext } from "../../context/AppContext";
+import { updateTermset, getTermset } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 import AlertBox from "../common/Alerts/Alerts";
-import {useQuery} from "@tanstack/react-query";
-import {GeneralErrorPage, NotFoundErrorPage} from "../common/ErrorPages/ErrorPages";
-import {Link} from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
+import { Link } from "react-router-dom";
+import { TermsetEditComProps } from "./types";
+import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
+import TermFactory from "../../concepts/termFactory";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -17,72 +19,84 @@ const VISIBILITY_TS_USRES = 2;
 const VISIBILITY_PUBLIC = 3;
 const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
 const VISIBILITY_FOR_DROPDOWN = [
-  {label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME},
-  {label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES},
-  {label: "Public (open for everyone)", value: VISIBILITY_PUBLIC}
+  { label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME },
+  { label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES },
+  { label: "Public (open for everyone)", value: VISIBILITY_PUBLIC }
 ];
 
 
-const EditTermset = (props) => {
+type MultiSelectOption = {
+  text?: string;
+  iri?: string;
+  json?: OntologyTermDataV2;
+}
+
+const EditTermset = (props: TermsetEditComProps) => {
   const termsetId = props.match.params.termsetId;
-  
+
   const appContext = useContext(AppContext);
-  
+
   const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
   const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
-  const [termListOptions, setTermListOptions] = useState([]);
-  const [selectedTerms, setSelectedTerms] = useState(null);
+  const [termListOptions, setTermListOptions] = useState<MultiSelectOption[]>([]);
+  const [selectedTerms, setSelectedTerms] = useState<MultiSelectOption[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTermsJson, setSelectedTermsJson] = useState([]);
+  const [selectedTermsJson, setSelectedTermsJson] = useState<OntologyTermDataV2[]>([]);
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  
-  
+
+
   const searchUnderRef = useRef(null);
-  
-  const {data, _, error} = useQuery({
+
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["termset", termsetId],
     queryFn: () => getTermset(termsetId),
     retry: 1
   });
-  
-  
-  function onTermSelect(selectedTerms) {
-    let termsJson = selectedTerms.map(term => term.json);
+
+
+  function onTermSelect(selectedTerms: MultiSelectOption[]) {
+    let termsJson = selectedTerms.map(term => term.json ?? {});
     setSelectedTermsJson(termsJson);
   }
-  
-  async function onSearchTermChange(query) {
+
+  async function onSearchTermChange(query: string) {
     setLoading(true);
-    if (query === "") {
+    if (!query) {
       setTermListOptions([]);
       return true;
     }
     let inputQuery = {
       "searchQuery": query,
       "types": "class,property,individual",
+      "ontologyIds": ""
     };
     if (appContext.userSettings.userCollectionEnabled) {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
-    let terms = await olsSearch(inputQuery, true);
-    let options = [];
+    let searchResult = await olsSearch(inputQuery, true);
+    let terms = "elements" in searchResult ? searchResult.elements : searchResult;
+    let options: MultiSelectOption[] = [];
+    //@ts-ignore
     for (let term of terms) {
-      let opt = {};
-      opt['text'] = `${term['ontologyId']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
-      opt['iri'] = term['iri'];
-      opt['json'] = term;
+      let opt: MultiSelectOption = {};
+      opt['text'] = `${term.ontologyId}:${term.label} (${term.type})`;
+      opt['iri'] = term.iri;
+      opt['json'] = term.term;
       options.push(opt);
     }
     setLoading(false);
     setTermListOptions(options);
   }
-  
-  
+
+
   function submit() {
+    if (!data) {
+      return;
+    }
     let name = FormLib.getFieldByIdIfValid("termsetTitle");
-    let description = document.getElementById("termsetDescription");
+    let description = document.getElementById("termsetDescription") as HTMLTextAreaElement;
     if (!name) {
       return;
     }
@@ -90,15 +104,12 @@ const EditTermset = (props) => {
       setTermsetNameNotValid(true);
       return;
     }
-    let payload = {
-      id: data.id,
-      name: name,
-      visibility: VISIBILITY_VALUES[newTermsetVisibility],
-      description: description ? description.value : "",
-      terms: selectedTermsJson
-    };
-    
-    updateTermset(payload).then((updatedTermset) => {
+    data.name = name;
+    data.visibility = VISIBILITY_VALUES[newTermsetVisibility];
+    data.description = description ? description.value : "";
+    data.terms = selectedTermsJson;
+
+    updateTermset(data).then((updatedTermset) => {
       if (updatedTermset) {
         let userTermsets = [...appContext.userTermsets];
         let oldSetIndex = userTermsets.findIndex((tset) => tset.id === updatedTermset.id);
@@ -114,20 +125,20 @@ const EditTermset = (props) => {
       setAddedSuccess(false);
     });
   }
-  
+
   const backBtn = (
     <div className="row mt-4 mb-4">
       <div className="col-12">
         <Link className="btn-secondary p-1 text-white"
-              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
+          to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
           <i className="bi bi-arrow-left me-1"></i>
           My termset list
         </Link>
       </div>
     </div>
   );
-  
-  
+
+
   if (submited && addedSuccess) {
     return (
       <>
@@ -155,53 +166,47 @@ const EditTermset = (props) => {
       </>
     )
   }
-  
-  
-  if (!data && !error) {
+
+
+  if (!data && !isError) {
     return (
       <div className="justify-content-center ontology-page-container">
         <div className="isLoading"></div>
       </div>
     );
-  } else if (!data && error && error.status !== 404) {
+  } else if (!data && isError) {
     return (
       <div className="justify-content-center ontology-page-container">
-        <GeneralErrorPage/>
-      </div>
-    );
-  } else if (!data && error && error.status === 404) {
-    return (
-      <div className="justify-content-center ontology-page-container">
-        <NotFoundErrorPage/>
+        <NotFoundErrorPage />
       </div>
     );
   } else if (data && !appContext.userTermsets.find((tset) => tset.name === data.name)) {
     // non owner is not allowed to visit the edit page
     return (
       <div className="justify-content-center ontology-page-container">
-        <NotFoundErrorPage/>
+        <NotFoundErrorPage />
       </div>
     );
   } else if (data && !dataLoaded) {
-    // load the set terms in the multi select input
-    let options = [];
+    // load the terms in the multi select input
+    let options: MultiSelectOption[] = [];
     let termsJson = [];
-    for (let termWrapper of data.terms) {
-      let term = termWrapper.json;
-      let opt = {};
-      opt['text'] = `${term['ontologyId']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
-      opt['iri'] = term['iri'];
-      opt['json'] = term;
+    for (let t of data.terms) {
+      let term = TermFactory.createTermForTS(t);
+      let opt: MultiSelectOption = {};
+      opt['text'] = `${term.ontologyId}:${term.label} (${term.type})`;
+      opt['iri'] = term.iri;
+      opt['json'] = term.term;
       options.push(opt);
-      termsJson.push(term);
+      termsJson.push(term.term);
     }
     setSelectedTerms(options);
     setSelectedTermsJson(termsJson);
-    setNewTermsetVisibility(data.visibility);
+    setNewTermsetVisibility(VISIBILITY_VALUES.indexOf(data.visibility));
     setDataLoaded(true);
   }
-  
-  
+
+
   return (
     <div className="row user-info-panel">
       {backBtn}
@@ -213,10 +218,10 @@ const EditTermset = (props) => {
             className="form-control"
             id={"termsetTitle"}
             placeholder="Enter a Name"
-            defaultValue={data.name}
-            onClick={(e) => {
+            defaultValue={data?.name}
+            onClick={(e: React.MouseEvent<HTMLInputElement>) => {
               setTermsetNameNotValid(false);
-              e.target.style.borderColor = "";
+              e.currentTarget.style.borderColor = "";
             }}
           >
           </input>
@@ -231,16 +236,16 @@ const EditTermset = (props) => {
             options={VISIBILITY_FOR_DROPDOWN}
             dropDownId="termset_visibility_dropdown"
             dropDownTitle="Visibility"
-            defaultValue={VISIBILITY_VALUES.findIndex((val) => val === data.visibility)}
-            dropDownChangeHandler={(e) => {
-              setNewTermsetVisibility(e.target.value)
+            defaultValue={VISIBILITY_VALUES.findIndex((val) => val === data?.visibility)}
+            dropDownChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setNewTermsetVisibility(parseInt(e.currentTarget.value))
             }}
           />
         </div>
       </div>
       <div className="row mb-4">
         <div className="col-sm-12">
-          <label for="search-terms">Terms</label>
+          <label htmlFor="search-terms">Terms</label>
           <Multiselect
             isObject={true}
             options={termListOptions}
@@ -264,9 +269,9 @@ const EditTermset = (props) => {
           <textarea
             className="form-control"
             id={"termsetDescription"}
-            rows="5"
+            rows={5}
             placeholder="Enter a Description"
-            defaultValue={data.description}
+            defaultValue={data?.description}
           >
           </textarea>
         </div>
@@ -278,7 +283,7 @@ const EditTermset = (props) => {
       </div>
     </div>
   );
-  
+
 }
 
 export default EditTermset;

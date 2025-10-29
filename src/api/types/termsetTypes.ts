@@ -9,7 +9,7 @@ export type TermSet = {
   created_at: string,
   updated_at?: string,
   visibility: string,
-  terms: OntologyTermDataV2[]
+  terms: OntologyTermDataV2[];
 }
 
 export type NewTermSetFormData = {
@@ -17,4 +17,11 @@ export type NewTermSetFormData = {
   description?: string,
   visibility: string,
   terms: OntologyTermDataV2[]
+}
+
+
+export type TermWrapperInSet = {
+  iri?: string,
+  type?: string,
+  json?: OntologyTermDataV2
 }
