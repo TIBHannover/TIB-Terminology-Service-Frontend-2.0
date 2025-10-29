@@ -24,6 +24,7 @@ import TermSetList from "./components/TermSet/TermSetList";
 import TermSetPage from "./components/TermSet/TermSetPage";
 import EditTermset from "./components/TermSet/EditTermset";
 import ErrorBoundary from "./errors/appErrorPage";
+import NotFoundPage from "./errors/notFound";
 
 
 const AppRouter = () => {
@@ -64,6 +65,7 @@ const AppRouter = () => {
         {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
           <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage} />
         }
+        <Route component={NotFoundPage} />
       </Switch>
     </ErrorBoundary>
   );
