@@ -30,6 +30,8 @@ const blueprint = {
   setUserTermsets: () => {
     /* set user term sets*/
   },
+  includeImportedTerms: true,
+  setIncludeImportedTerms: () => { }
 };
 
 export const AppContext = createContext(blueprint);

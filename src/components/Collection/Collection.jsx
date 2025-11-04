@@ -1,21 +1,21 @@
-import {useEffect} from 'react';
-import {useQuery} from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import '../layout/collectionList.css';
-import {getCollectionsAndThierOntologies} from '../../api/collection';
+import { getCollectionsAndThierOntologies } from '../../api/collection';
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import Toolkit from '../../Libs/Toolkit';
 import CommonUrlFactory from '../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../UrlFactory/UrlParamNames';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const Collections = () => {
-  
+
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologiesInCollectionPage'],
     queryFn: getCollectionsAndThierOntologies
   });
-  
+
   let collectionOntologiesData = {};
   if (collectionsWithOntologiesQuery.data) {
     let collectionsWithTheirOntologies = collectionsWithOntologiesQuery.data;
@@ -36,14 +36,14 @@ const Collections = () => {
     }
   }
   const collectionOntologies = collectionOntologiesData;
-  
-  
+
+
   function createCollectionCard(collectionId, collectionJson) {
     let card = [
       <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
         <div className='col-sm-3 text-center' key={collectionId + "_logo"}>
           <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]}
-                className="collection-image-anchor">
+            className="collection-image-anchor">
             <img
               className='collection-logo-in-list img-fluid '
               alt="logo"
@@ -62,7 +62,7 @@ const Collections = () => {
           <div className='row' key={collectionId + "_content"}>
             <div className='col-sm-12'>
               <p align="justify">
-                {collectionJson["text"]}
+                <div dangerouslySetInnerHTML={{ __html: collectionJson["text"] }}></div>
               </p>
             </div>
           </div>
@@ -71,7 +71,7 @@ const Collections = () => {
               <div className='col-sm-12 collection-ontologies-text'>
                 <b>Project Homepage: </b>
                 <a href={collectionJson["project_homepage"]} target="_blank"
-                   rel="noreferrer">{collectionJson["project_homepage"]}</a>
+                  rel="noreferrer">{collectionJson["project_homepage"]}</a>
               </div>
             </div>
           }
@@ -80,7 +80,7 @@ const Collections = () => {
               <div className='col-sm-12 collection-ontologies-text'>
                 <b>Domain-specific terminology service: </b>
                 <a href={collectionJson["domain_ts_link"]} target="_blank"
-                   rel="noreferrer">{collectionJson["domain_ts_link"]}</a>
+                  rel="noreferrer">{collectionJson["domain_ts_link"]}</a>
               </div>
             </div>
           }
@@ -88,7 +88,7 @@ const Collections = () => {
             <div className='row' key={collectionId + "_ontoList"}>
               <div className='col-sm-12 collection-ontologies-text'>
                 <b>Ontology Selection Criteria:</b>
-                <div dangerouslySetInnerHTML={{__html: collectionJson["selection_criteria"]}}></div>
+                <div dangerouslySetInnerHTML={{ __html: collectionJson["selection_criteria"] }}></div>
               </div>
             </div>
           }
@@ -109,30 +109,30 @@ const Collections = () => {
         </div>
       </div>
     ];
-    
+
     return card;
   }
-  
-  
+
+
   function createCollectionList() {
     let result = [];
     for (let col in collectionsInfoJson) {
       result.push(createCollectionCard(col, collectionsInfoJson[col]));
     }
-    
+
     return result;
   }
-  
-  
+
+
   useEffect(() => {
     let urlFactory = new CommonUrlFactory();
-    let targetCollectionId = urlFactory.getParam({name: SiteUrlParamNames.CollectionId});
+    let targetCollectionId = urlFactory.getParam({ name: SiteUrlParamNames.CollectionId });
     if (targetCollectionId) {
       document.getElementById("section_" + targetCollectionId).scrollIntoView();
     }
   }, []);
-  
-  
+
+
   return (
     <>
       {Toolkit.createHelmet("Collections")}

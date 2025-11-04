@@ -1,12 +1,12 @@
 // @ts-nocheck
-import {buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis} from "../Libs/htmlFactory";
-import {getCallSetting} from "./constants";
+import { buildHtmlAnchor, buildOpenParanthesis, buildCloseParanthesis } from "../Libs/htmlFactory";
+import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
     OntologyTermData, OntologyTermDataV2,
     TermListData
 } from "./types/ontologyTypes";
-import {Ols3ApiResponse} from "./types/common";
+import { Ols3ApiResponse } from "./types/common";
 import TermLib from "../Libs/TermLib";
 
 
@@ -18,6 +18,11 @@ const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 const DB_XREF_PURL = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
 const IDENTIFIER_PURL_HTTPS = "https://schema.org/identifier";
 const IDENTIFIER_PURL_HTTP = "http://schema.org/identifier";
+const PROPERTY_DOMAIN_PURL = "http://www.w3.org/2000/01/rdf-schema#domain";
+const PROPERTY_RANGE_PURL = "http://www.w3.org/2000/01/rdf-schema#range";
+const SUBCLASS_PURL = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
+const EQUIVALENT_CLASS_PURL = "http://www.w3.org/2002/07/owl#equivalentClass";
+const DISJOINTWITH_PURL = "http://www.w3.org/2002/07/owl#disjointWith";
 
 const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
@@ -76,18 +81,23 @@ class TermApi {
             this.term['label'] = TermLib.extractLabel(this.term);
             this.term['synonym'] = TermLib.gerTermSynonyms(this.term);
             this.term['annotation'] = this.buildAnnotations();
-            this.term['relations'] = undefined;
-            this.term['eqAxiom'] = undefined;
-            this.term['subClassOf'] = undefined;
             this.term['isIndividual'] = this.term['type'].includes("individual");
             this.term['directParent'] = this.term['directParent'] ? this.term['directParent'] : [];
-            this.fetchImportedAndAlsoInOntologies();
+            this.term['originalOntology'] = this.getClassOriginalOntology();
+            this.term['alsoIn'] = this.getClassAllOntologies();
             let curationStatus = this.createHasCurationStatus();
             if (curationStatus) {
                 this.term['curationStatus'] = curationStatus;
             }
             if (this.termType === CLASS_TYPE_ID) {
-                await this.fetchClassRelations();
+                let instancesList = await this.getIndividualInstancesForClass();
+                this.term['relations'] = this.getRelations();
+                this.term['eqAxiom'] = this.recursivelyBuildStructure(EQUIVALENT_CLASS_PURL);
+                this.term['subClassOf'] = this.recursivelyBuildStructure(SUBCLASS_PURL);
+                this.term['disjointWith'] = this.recursivelyBuildStructure(DISJOINTWITH_PURL);
+                this.term['instancesList'] = instancesList;
+            } else if (this.termType === PROPERTY_TYPE_ID) {
+                this.getPropDomainRange();
             }
 
             return true;
@@ -114,13 +124,13 @@ class TermApi {
                 termObject.term = term;
                 termObject.ontologyId = term['ontologyId'];
                 termObject.term['annotation'] = termObject.buildAnnotations();
-                termObject.term['subClassOf'] = termObject.getSubClassOf();
-                termObject.term['eqAxiom'] = termObject.getEqAxiom();
+                termObject.term['subClassOf'] = termObject.recursivelyBuildStructure(SUBCLASS_PURL);
+                termObject.term['eqAxiom'] = termObject.recursivelyBuildStructure(EQUIVALENT_CLASS_PURL);
                 termObject.term['label'] = TermLib.extractLabel(termObject.term);
                 termObject.term['synonym'] = TermLib.gerTermSynonyms(termObject.term);
                 refinedResults.push(termObject.term);
             }
-            return {"results": refinedResults, "totalTermsCount": totalTermsCount};
+            return { "results": refinedResults, "totalTermsCount": totalTermsCount };
         } catch (e) {
             //throw (e)
             return [];
@@ -128,10 +138,51 @@ class TermApi {
     }
 
 
+    getPropDomainRange() {
+        try {
+            if (this.term[PROPERTY_DOMAIN_PURL]) {
+                let domains = [];
+                if (Toolkit.isString(this.term[PROPERTY_DOMAIN_PURL])) {
+                    domains.push(this.term[PROPERTY_DOMAIN_PURL]);
+                } else {
+                    domains = this.term[PROPERTY_DOMAIN_PURL];
+                }
+                this.term["domains"] = [];
+                for (let iri of domains) {
+                    let domainObj = { ontologyId: "", iri: iri, label: "" };
+                    domainObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
+                    domainObj.label = this.term["linkedEntities"][iri]["label"][0];
+                    this.term["domains"].push(domainObj);
+                }
+
+            }
+            if (this.term[PROPERTY_RANGE_PURL]) {
+                let ranges = [];
+                if (Toolkit.isString(this.term[PROPERTY_RANGE_PURL])) {
+                    ranges.push(this.term[PROPERTY_RANGE_PURL]);
+                } else {
+                    ranges = this.term[PROPERTY_RANGE_PURL];
+                }
+                this.term["ranges"] = [];
+                for (let iri of ranges) {
+                    let rangeObj = { ontologyId: "", iri: iri, label: "" };
+                    rangeObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
+                    rangeObj.label = this.term["linkedEntities"][iri]["label"][0];
+                    this.term["ranges"].push(rangeObj);
+                }
+            }
+
+        } catch (e) {
+            // console.log(e)
+            return;
+        }
+    }
+
+
     buildAnnotations() {
         let annotations = {};
         let dbXref = this.createDbXrefAnnotation();
-        if (dbXref) {
+        if (dbXref && this.termType === CLASS_TYPE_ID) {
             annotations["has_dbxref"] = dbXref;
         }
         if (this.term[IDENTIFIER_PURL_HTTP]) {
@@ -163,13 +214,13 @@ class TermApi {
             }
             let termDbXrefList: { value: string, axioms: { [key: string]: string }[] }[] = [];
             if (Toolkit.isString(dbxrefValue)) {
-                termDbXrefList = [{value: dbxrefValue, axioms: []}];
+                termDbXrefList = [{ value: dbxrefValue, axioms: [] }];
             } else {
                 termDbXrefList = dbxrefValue;
             }
             for (let xref of termDbXrefList) {
                 if (Toolkit.isString(xref)) {
-                    xref = {value: xref, axioms: []};
+                    xref = { value: xref, axioms: [] };
                 }
                 if (!this.term["linkedEntities"][xref.value]) {
                     // the xref value is not part of linked entities --> display as plain string
@@ -200,29 +251,10 @@ class TermApi {
 
             return dbXrefLinks;
         } catch (e) {
-            console.log(e)
+            // console.log(e)
             return [];
         }
     }
-
-
-    async fetchClassRelations(): Promise<boolean> {
-
-        let instancesList = await this.getIndividualInstancesForClass();
-        this.term['relations'] = this.getRelations();
-        this.term['eqAxiom'] = this.getEqAxiom();
-        this.term['subClassOf'] = this.getSubClassOf();
-        this.term['instancesList'] = instancesList;
-        return true;
-    }
-
-
-    fetchImportedAndAlsoInOntologies() {
-        this.term['originalOntology'] = this.getClassOriginalOntology();
-        this.term['alsoIn'] = this.getClassAllOntologies();
-        return true;
-    }
-
 
     getRelations(): string | null {
         try {
@@ -256,49 +288,22 @@ class TermApi {
     }
 
 
-    getEqAxiom(term: OntologyTermDataV2 | undefined = undefined): string | null {
+    recursivelyBuildStructure(metadataPurl): string | null {
         try {
-            if (term) {
-                this.term = term;
-            }
-            let eqevalentAxiomData = this.term['http://www.w3.org/2002/07/owl#equivalentClass'];
-            if (!eqevalentAxiomData) {
+            let data = this.term[metadataPurl];
+            if (!data || data.length === 0) {
                 return null;
             }
-            let propertyIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#onProperty'];
-            let targetIri = eqevalentAxiomData['http://www.w3.org/2002/07/owl#someValuesFrom'];
-            let propertyLabel = this.term['linkedEntities'][propertyIri]['label'];
-            let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];
-            let relationText = document.createElement('span');
-            relationText.innerHTML = " some ";
-            let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
-            let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
-            let span = document.createElement('span');
-            let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
-            span.appendChild(propAnchor);
-            span.appendChild(relationText);
-            let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
-            span.appendChild(targetAnchor);
-            return span.outerHTML;
-        } catch (e) {
-            return null;
-        }
-    }
-
-
-    getSubClassOf(): string | null {
-        try {
-            let subClassOfData = this.term['http://www.w3.org/2000/01/rdf-schema#subClassOf'];
-            if (!subClassOfData || subClassOfData.length === 0) {
-                return null;
+            if (typeof (data) === "string") {
+                data = [data];
             }
-            if (typeof (subClassOfData) === "string") {
-                subClassOfData = [subClassOfData];
+            if (metadataPurl === EQUIVALENT_CLASS_PURL) {
+                data = [data];
             }
             let ul = document.createElement('ul');
-            for (let i = 0; i < subClassOfData.length; i++) {
-                if (typeof (subClassOfData[i]) === "string") {
-                    let parentIri = subClassOfData[i];
+            for (let i = 0; i < data.length; i++) {
+                if (typeof (data[i]) === "string") {
+                    let parentIri = data[i];
                     let parentLabel = this.term['linkedEntities'][parentIri]['label'][0];
                     let parentLi = document.createElement('li');
                     let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
@@ -308,7 +313,7 @@ class TermApi {
                     continue;
                 }
                 let li = document.createElement('li');
-                let content = this.recSubClass(subClassOfData[i]);
+                let content = this.recSubClass(data[i]);
                 li.appendChild(content);
                 ul.appendChild(li);
             }
@@ -316,6 +321,7 @@ class TermApi {
             return ul.outerHTML;
 
         } catch (e) {
+            console.log(e)
             return null;
         }
     }
@@ -452,7 +458,7 @@ class TermApi {
             let [, attributes, href] = match;
             let targetIriType = "terms";
             let termApi = new TermApi(this.ontologyId, encodeURIComponent(href), targetIriType);
-            await termApi.fetchTerm({withRelations: false});
+            await termApi.fetchTerm({ withRelations: false });
             if (termApi.term.types[0] !== "class") {
                 targetIriType = "props";
             }

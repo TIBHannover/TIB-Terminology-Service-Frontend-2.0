@@ -1,4 +1,4 @@
-import {createBrowserHistory} from "history";
+import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from "./UrlParamNames";
 
 class SearchUrlFactory {
@@ -25,8 +25,8 @@ class SearchUrlFactory {
     this.advOntologies = url.searchParams.getAll(SiteUrlParamNames.AdvOntology);
     this.fromOntologyPage = url.searchParams.get(SiteUrlParamNames.FromOntologyPage);
   }
-  
-  createSearchUrlForAutoSuggestItem({label, ontologyId, obsoleteFlag, exact, fromOntologyPage}) {
+
+  createSearchUrlForAutoSuggestItem({ label, ontologyId, obsoleteFlag, exact, fromOntologyPage }) {
     let searchUrl = new URL(window.location);
     searchUrl.pathname = process.env.REACT_APP_PROJECT_SUB_PATH + "/search";
     searchUrl.searchParams.delete(SiteUrlParamNames.Iri);
@@ -39,12 +39,12 @@ class SearchUrlFactory {
     fromOntologyPage && searchUrl.searchParams.set(SiteUrlParamNames.FromOntologyPage, fromOntologyPage);
     return searchUrl.pathname + searchUrl.search;
   }
-  
+
   updateAdvancedSearchUrl({
-                            searchInValues,
-                            searchUnderTerms,
-                            searchUnderAllTerms,
-                          }) {
+    searchInValues,
+    searchUnderTerms,
+    searchUnderAllTerms,
+  }) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.SearchIn);
     currentUrlParams.delete(SiteUrlParamNames.SearchUnder);
@@ -53,28 +53,28 @@ class SearchUrlFactory {
     for (let meta of searchInValues) {
       currentUrlParams.append(SiteUrlParamNames.SearchIn, meta);
     }
-    
+
     for (let term of searchUnderTerms) {
       currentUrlParams.append(
         SiteUrlParamNames.SearchUnder,
         encodeURIComponent(JSON.stringify(term)),
       );
     }
-    
+
     for (let term of searchUnderAllTerms) {
       currentUrlParams.append(
         SiteUrlParamNames.SearchUnderAll,
         encodeURIComponent(JSON.stringify(term)),
       );
     }
-    
+
     // for(let ontology of selectedOntologies){
     //     currentUrlParams.append('advontology', ontology['id']);
     // }
-    
+
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
-  
+
   resetAdvancedSearchUrlParams() {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.SearchIn);
@@ -82,36 +82,36 @@ class SearchUrlFactory {
     currentUrlParams.delete(SiteUrlParamNames.SearchUnderAll);
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
-  
+
   decodeSearchQuery() {
     if (this.searchQuery) {
       return decodeURIComponent(this.searchQuery);
     }
     return "";
   }
-  
-  setExact({exact}) {
+
+  setExact({ exact }) {
     let url = new URL(window.location);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.Exact, exact);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
-  
-  setIncludeImported({includeImported}) {
+
+  setIncludeImported({ includeImported }) {
     let url = new URL(window.location);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.IncludeImported, includeImported);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
-  
-  setAdvancedSearchEnabled({enabled}) {
+
+  setAdvancedSearchEnabled({ enabled }) {
     let url = new URL(window.location);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.AdvancedSearchEnabled, enabled);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
-  
-  updateUrlForFacetSelection({fieldNameInUrl, action, value}) {
+
+  updateUrlForFacetSelection({ fieldNameInUrl, action, value }) {
     let url = new URL(window.location);
     let currentParams = url.searchParams;
     if (action === "add") {
@@ -122,7 +122,7 @@ class SearchUrlFactory {
     currentParams.set(SiteUrlParamNames.Page, 1);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
-  
+
   clearFacetUrlParams() {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.TermType);

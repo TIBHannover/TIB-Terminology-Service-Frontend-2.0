@@ -1,43 +1,43 @@
-import {useState, useEffect, useContext} from 'react';
-import {useLocation, Link} from 'react-router-dom'
-import {olsSearch} from '../../../api/search';
+import { useState, useEffect, useContext } from 'react';
+import { useLocation, Link } from 'react-router-dom'
+import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
-import {setResultTitleAndLabel} from './SearchHelpers';
+import { setResultTitleAndLabel } from './SearchHelpers';
 import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import SearchLib from '../../../Libs/searchLib';
-import {getCollectionsAndThierOntologies} from '../../../api/collection';
+import { getCollectionsAndThierOntologies } from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
-import {AppContext} from '../../../context/AppContext';
-import {useQuery} from '@tanstack/react-query';
+import { AppContext } from '../../../context/AppContext';
+import { useQuery } from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
-import {AddToTermsetModal} from "../../TermSet/AddTermToSet";
+import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
 
 
 const SearchResult = (props) => {
-  
+
   /*
     This component is responsible for rendering the search results and facet.
   */
-  
+
   const appContext = useContext(AppContext);
-  
+
   const location = useLocation();
-  
+
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
-  
-  let language = commonUrlFactory.getParam({name: SiteUrlParamNames.Lang}) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
-  
+
+  let language = commonUrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
+
   const DEFAULT_PAGE_NUMBER = 1;
   const DEFAULT_PAGE_SIZE = 10;
-  
+
   const [searchResult, setSearchResult] = useState([]);
   const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getFilterAndAdvancedOntologyIdsFromUrl());
   const [selectedTypes, setSelectedTypes] = useState(searchUrlFactory.types);
@@ -50,39 +50,40 @@ const SearchResult = (props) => {
   const [filterTags, setFilterTags] = useState("");
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState(language);
-  
-  
-  const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value: 10}, {label: "20", value: 20}, {
+
+
+  const PAGE_SIZES_FOR_DROPDOWN = [{ label: "10", value: 10 }, { label: "20", value: 20 }, {
     label: "30",
     value: 30
-  }, {label: "40", value: 40}];
+  }, { label: "40", value: 40 }];
   const searchQuery = searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "";
   const exact = searchUrlFactory.exact === "true";
-  const includeImported = (searchUrlFactory.includeImported === "true");
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
-  
-  
+
+
   let collectionIdsAndOntologies = [];
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
     queryFn: getCollectionsAndThierOntologies
   });
-  
+
   if (process.env.REACT_APP_PROJECT_ID === "general" && collectionsWithOntologiesQuery.data) {
     collectionIdsAndOntologies = collectionsWithOntologiesQuery.data;
   }
   const allCollectionIds = collectionIdsAndOntologies;
-  
-  
+
+
   async function search() {
-    
+
     let ontologies = [...selectedOntologies];
-    
+
     if (appContext.userSettings.userCollectionEnabled && ontologies.length === 0) {
       ontologies = [...appContext.userSettings.activeCollection.ontology_ids];
     }
-    
+
+    searchUrlFactory.setIncludeImported({ includeImported: appContext.includeImportedTerms });
+
     try {
       let obsoletes = Toolkit.getObsoleteFlagValue();
       let searchParams = {
@@ -94,20 +95,20 @@ const SearchResult = (props) => {
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
         exact: exact,
-        includeImported: includeImported,
+        includeImported: appContext.includeImportedTerms,
         searchInValues: searchUrlFactory.searchIn,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,
         fromOntologyPage: !!searchUrlFactory.fromOntologyPage
       };
-      
+
       // This part is for updating the facet counts. 
       // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.
-      let searchParamsForTypeCount = {...searchParams};
+      let searchParamsForTypeCount = { ...searchParams };
       searchParamsForTypeCount.selectedTypes = [];
-      let searchParamsForOntoCount = {...searchParams};
+      let searchParamsForOntoCount = { ...searchParams };
       searchParamsForOntoCount.selectedOntologies = [];
-      
+
       Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
         let result = values[0];
         setSearchResult(result['elements']);
@@ -119,9 +120,9 @@ const SearchResult = (props) => {
         setTotalResultsCount(result['totalElements']);
         setFacetFields(result['facetFieldsToCounts']);
         setExpandedResults([])
-        
+
       });
-      
+
     } catch (e) {
       setSearchResult([]);
       setTotalResultsCount(0);
@@ -130,8 +131,8 @@ const SearchResult = (props) => {
       setLoading(false);
     }
   }
-  
-  
+
+
   function alsoInResult(term) {
     let otherOntologies = [];
     for (let onto of term["appearsIn"]) {
@@ -146,8 +147,8 @@ const SearchResult = (props) => {
     }
     return otherOntologies;
   }
-  
-  
+
+
   function createSearchResultList() {
     let searchResultList = [];
     for (let i = 0; i < searchResult.length; i++) {
@@ -166,49 +167,49 @@ const SearchResult = (props) => {
             <div className="searchresult-ontology">
               <span><b>Ontology: </b></span>
               <Link className='btn btn-default ontology-button'
-                    to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontologyId']}>
+                to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i]['ontologyId']}>
                 {searchResult[i].ontologyId}
               </Link>
             </div>
-            <br/>
+            <br />
             {alsoInList.length !== 0 &&
               <div className="also-in-design">
                 <b>Also in:</b> {alsoInList}
               </div>
             }
-          
+
           </div>
           <div className="col-sm-2 float-right">
-            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]} btnClass="btn-sm action-btn"/>
+            <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]} btnClass="btn-sm action-btn" />
           </div>
         </div>
       );
     }
     return searchResultList;
   }
-  
-  
+
+
   function handlePageSizeDropDownChange(e) {
     let size = parseInt(e.target.value);
     setPageSize(size);
-    commonUrlFactory.setParam({name: SiteUrlParamNames.Size, value: size});
+    commonUrlFactory.setParam({ name: SiteUrlParamNames.Size, value: size });
   }
-  
-  
+
+
   function handlePagination(value) {
     setPageNumber(value);
-    commonUrlFactory.setParam({name: SiteUrlParamNames.Page, value: value});
+    commonUrlFactory.setParam({ name: SiteUrlParamNames.Page, value: value });
   }
-  
-  
+
+
   function pageCount() {
     if (isNaN(Math.ceil(totalResultsCount / pageSize))) {
       return 0;
     }
     return (Math.ceil(totalResultsCount / pageSize))
   }
-  
-  
+
+
   function handleTypeFacetSelection(e) {
     let targetType = e.target.value;
     let selectedTypeList = [...selectedTypes];
@@ -228,14 +229,14 @@ const SearchResult = (props) => {
         value: targetType
       });
     }
-    
+
     setSelectedTypes(selectedTypeList);
     setPageNumber(1);
   }
-  
-  
+
+
   function handleOntologyFacetSelection(e) {
-    commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
+    commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedOntologiesList = [...selectedOntologies];
     let targetOntologyId = e.target.value.toLowerCase();
     if (e.target.checked) {
@@ -254,14 +255,14 @@ const SearchResult = (props) => {
         value: targetOntologyId
       });
     }
-    
+
     setSelectedOntologies(selectedOntologiesList);
     setPageNumber(1);
   }
-  
-  
+
+
   function handleCollectionFacetSelection(e) {
-    commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
+    commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedCollectionsList = [...selectedCollections];
     let targetCollection = e.target.value.trim();
     if (e.target.checked) {
@@ -280,12 +281,12 @@ const SearchResult = (props) => {
         value: targetCollection
       });
     }
-    
+
     setSelectedCollections(selectedCollectionsList);
     setPageNumber(1);
   }
-  
-  
+
+
   function clearFilters() {
     let allFacetCheckBoxes = document.getElementsByClassName('search-facet-checkbox');
     for (let checkbox of allFacetCheckBoxes) {
@@ -302,11 +303,11 @@ const SearchResult = (props) => {
     setPageSize(10);
     setFilterTags("");
     localStorage.setItem('language', "en");
-    commonUrlFactory.deleteParam({name: SiteUrlParamNames.Lang});
+    commonUrlFactory.deleteParam({ name: SiteUrlParamNames.Lang });
     setLang("en");
   }
-  
-  
+
+
   function handleRemoveTagClick(e) {
     try {
       let tagType = e.target.dataset.type;
@@ -324,57 +325,57 @@ const SearchResult = (props) => {
         handleCollectionFacetSelection(e);
       }
       localStorage.setItem('language', "en");
-      commonUrlFactory.deleteParam({name: SiteUrlParamNames.Lang});
-      commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
+      commonUrlFactory.deleteParam({ name: SiteUrlParamNames.Lang });
+      commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
       setLang("en");
     } catch (e) {
       // console.info(e);
     }
   }
-  
-  
+
+
   function createFilterTags() {
     let tagsList = [];
     for (let type of selectedTypes) {
       let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick}
-                                                                            data-type={"type"} data-value={type}
-                                                                            className="fa fa-close remove-tag-icon"></i>
+        data-type={"type"} data-value={type}
+        className="fa fa-close remove-tag-icon"></i>
       </div>;
       tagsList.push(newTag);
     }
     for (let ontologyId of selectedOntologies) {
       let newTag = <div className='search-filter-tags' key={ontologyId}>{ontologyId} <i onClick={handleRemoveTagClick}
-                                                                                        data-type={"ontology"}
-                                                                                        data-value={ontologyId}
-                                                                                        className="fa fa-close remove-tag-icon"></i>
+        data-type={"ontology"}
+        data-value={ontologyId}
+        className="fa fa-close remove-tag-icon"></i>
       </div>;
       tagsList.push(newTag);
     }
     for (let collection of selectedCollections) {
       let newTag = <div className='search-filter-tags' key={collection}>{collection} <i onClick={handleRemoveTagClick}
-                                                                                        data-type={"collection"}
-                                                                                        data-value={collection}
-                                                                                        className="fa fa-close remove-tag-icon"></i>
+        data-type={"collection"}
+        data-value={collection}
+        className="fa fa-close remove-tag-icon"></i>
       </div>;
       tagsList.push(newTag);
     }
     setFilterTags(tagsList);
   }
-  
-  
+
+
   useEffect(() => {
     search();
   }, []);
-  
-  
+
+
   useEffect(() => {
     setLoading(true);
     setSearchResult([]);
     search();
     createFilterTags();
   }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, location.search]);
-  
-  
+
+
   return (
     <div className='row justify-content-center search-result-container' id="searchterm-wrapper">
       {Toolkit.createHelmet(searchQuery)}
@@ -411,7 +412,7 @@ const SearchResult = (props) => {
                   defaultVaue={lang}
                   dropDownChangeHandler={(e) => {
                     localStorage.setItem('language', e.target.value);
-                    commonUrlFactory.setParam({name: 'lang', value: e.target.value});
+                    commonUrlFactory.setParam({ name: 'lang', value: e.target.value });
                     setLang(e.target.value);
                   }}
                 />
@@ -427,7 +428,7 @@ const SearchResult = (props) => {
                 />
               </div>
             </div>
-            
+
             {searchResult.length > 0 && createSearchResultList()}
             {searchResult.length > 0 &&
               <Pagination
@@ -446,7 +447,7 @@ const SearchResult = (props) => {
       </div>
     </div>
   );
-  
+
 }
 
 export default SearchResult;
