@@ -138,3 +138,11 @@ th {
     max-width: 50% !important;
     margin: auto !important;
 }
+
+/* Ontology Adopters (simple list look) ichrak part */
+.adopters-panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; }
+.adopters-row { padding: 10px 12px; border-bottom: 1px dotted #e5e7eb; line-height: 1.5; }
+.adopters-row:last-child { border-bottom: 0; }
+.adopters-key { font-weight: 600; text-transform: lowercase; }
+.adopters-modal .modal-body { padding: 16px; }
+
