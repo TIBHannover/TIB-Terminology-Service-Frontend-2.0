@@ -29,10 +29,6 @@ const listWithCommas = (arr) =>
 export default function OntologyAdopters({ showModal, setShowModal }) {
   const onto = useContext(OntologyPageContext)?.ontology;
 
-  // debug
-  console.log("[Adopters] ontologyId =", onto?.ontologyId);
-  console.log("[Adopters] ontology_use =", JSON.stringify(onto?.ontology_use, null, 2));
-
   const adopters = useMemo(() => {
     if (!Array.isArray(onto?.ontology_use)) return [];
     return onto.ontology_use.filter((u) => u && (u.usedBy || u.usageDescription));
