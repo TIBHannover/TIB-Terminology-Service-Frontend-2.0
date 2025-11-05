@@ -91,6 +91,8 @@ const TermSetPage = (props: TermsetPageComProps) => {
         valueLink: ""
       });
       if (term instanceof TsClass) {
+
+        console.log(term.subClassOf);
         termMap.set("eqto", { value: term.eqAxiom, valueLink: "", valueIsHtml: true });
         termMap.set("subclass", { value: term.subClassOf, valueLink: "", valueIsHtml: true });
       } else {

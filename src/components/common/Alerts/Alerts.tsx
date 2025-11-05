@@ -1,7 +1,7 @@
 type AlertBoxProps = {
   message: string;
   alertColumnClass?: string;
-  type: "danger" | "success" | "warning";
+  type: "danger" | "success" | "warning" | "info";
 }
 
 type CopiedSuccessAlertProps = {

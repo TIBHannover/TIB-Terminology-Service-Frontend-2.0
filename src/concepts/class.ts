@@ -140,6 +140,7 @@ class TsClass extends TsTerm {
           continue;
         }
         let li = document.createElement('li');
+        console.log(data[i]);
         let content = this.recSubClass(data[i])!;
         li.appendChild(content);
         ul.appendChild(li);
@@ -211,7 +212,8 @@ class TsClass extends TsTerm {
       liContent.appendChild(buildCloseParanthesis());
       return liContent;
     }
-    return;
+    let span = document.createElement('span') as HTMLSpanElement;
+    return span;
   }
 
 

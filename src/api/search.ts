@@ -10,7 +10,7 @@ import Toolkit from "../Libs/Toolkit";
 import TermFactory from "../concepts/termFactory";
 
 
-export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | {}> {
+export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
@@ -18,12 +18,12 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     let page = inputData.page ? inputData.page - 1 : 0;
     let size = inputData.size ? inputData.size : 10;
     let searchUrl: string = apiBaseUrl + `/v2/entities?search=${query}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
-    searchUrl = !inputData.includeImported && !inputData.fromOntologyPage ? (searchUrl + "&isDefiningOntology=true") : searchUrl;
-    searchUrl = jumpToMode ? (searchUrl + "&boostFields=" + encodeURIComponent("label^3").replace(/\^/g, "%5E")) : searchUrl;
+    searchUrl = !inputData.includeImported && !inputData.fromOntologyPage ? (searchUrl + "&isDefiningOntology=true") : (searchUrl + "&isDefiningOntology=false");
+    searchUrl = jumpToMode ? (searchUrl + "&boostFields=label^3") : searchUrl;
     searchUrl = !jumpToMode ? (searchUrl + "&facetFields=type+ontologyId") : searchUrl;
     searchUrl = inputData?.selectedOntologies?.length ? (searchUrl + `&ontology=${inputData?.selectedOntologies?.join(',')}`) : searchUrl;
     searchUrl = inputData?.selectedTypes?.length ? (searchUrl + `&type=${inputData?.selectedTypes?.join(',')}`) : searchUrl;
-    searchUrl = inputData?.searchInValues?.length ? (searchUrl + `&queryFields=${inputData?.searchInValues?.join(',')}`) : searchUrl;
+    searchUrl = inputData?.searchInValues?.length ? (searchUrl + `&searchFields=${inputData?.searchInValues?.join('+')}`) : searchUrl;
     searchUrl = inputData?.searchUnderIris?.length ? (searchUrl + `&childrenOf=${inputData?.searchUnderIris?.join(',')}`) : searchUrl;
     searchUrl = inputData?.searchUnderAllIris?.length ? (searchUrl + `&allChildrenOf=${inputData?.searchUnderAllIris?.join(',')}`) : searchUrl;
     searchUrl = inputData.obsoletes ? (searchUrl + "&includeObsoleteEntities=true") : searchUrl;
@@ -50,7 +50,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     }
     return result;
   } catch (e) {
-    return {};
+    return [];
   }
 }
 
