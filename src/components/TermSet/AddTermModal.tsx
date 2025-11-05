@@ -2,7 +2,8 @@ import { useState, useContext, useRef } from "react";
 import AlertBox from "../common/Alerts/Alerts";
 import Multiselect from "multiselect-react-dropdown";
 import { AppContext } from "../../context/AppContext";
-import { getJumpToResult } from "../../api/search";
+import { olsSearch } from "../../api/search";
+import { SearchApiInput } from "../../api/types/searchApiTypes";
 import TermLib from "../../Libs/TermLib";
 import { updateTermset } from "../../api/term_set";
 import TermApi from "../../api/term";
@@ -73,21 +74,32 @@ export const AddTermModal = (props: AddTermModalComProps) => {
       setTermListOptions([]);
       return true;
     }
-    let inputQuery = {
-      "searchQuery": query,
-      "ontologyIds": ""
+    let inputQuery: SearchApiInput = {
+      searchQuery: query,
+      selectedOntologies: [],
+      selectedTypes: [],
+      selectedCollections: [],
+      obsoletes: false,
+      exact: false,
+      includeImported: false,
+      isLeaf: false,
+      searchInValues: ["label"],
+      searchUnderIris: [],
+      searchUnderAllIris: [],
+      fromOntologyPage: false
     };
     if (appContext.userSettings.userCollectionEnabled) {
-      inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
+      inputQuery["selectedOntologies"] = appContext.userSettings.activeCollection.ontology_ids;
     }
     //@ts-ignore
-    let terms: BaseSearchSingleResult[] = await getJumpToResult(inputQuery, 10);
+    let searchRes = await olsSearch(inputQuery);
+    let terms = !Array.isArray(searchRes) ? searchRes.elements : [];
     let options: MultiSelectOption[] = [];
     for (let term of terms) {
       let opt = { text: "", iri: "", ontologyId: "" };
-      opt['text'] = `${term['ontology_name']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
-      opt['iri'] = term['iri'];
-      opt['ontologyId'] = term['ontology_name'];
+      opt['text'] = `${term.ontologyId}:${term.label} (${term.type})`;
+      opt['iri'] = term.iri;
+      opt['ontologyId'] = term.ontologyId;
       options.push(opt);
     }
     setLoading(false);

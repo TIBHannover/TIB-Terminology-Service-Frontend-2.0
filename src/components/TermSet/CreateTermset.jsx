@@ -1,10 +1,10 @@
 import DropDown from "../common/DropDown/DropDown";
-import {useState, useContext, useRef} from "react";
+import { useState, useContext, useRef } from "react";
 import Multiselect from "multiselect-react-dropdown";
-import {getJumpToResult} from "../../api/search";
+import { olsSearch } from "../../api/search";
 import TermLib from "../../Libs/TermLib";
-import {AppContext} from "../../context/AppContext";
-import {createTermset} from "../../api/term_set";
+import { AppContext } from "../../context/AppContext";
+import { createTermset } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 import AlertBox from "../common/Alerts/Alerts";
 import TermApi from "../../api/term";
@@ -15,16 +15,16 @@ const VISIBILITY_TS_USRES = 2;
 const VISIBILITY_PUBLIC = 3;
 const VISIBILITY_VALUES = ['', 'me', 'internal', 'public']
 const VISIBILITY_FOR_DROPDOWN = [
-  {label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME},
-  {label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES},
-  {label: "Public (open for everyone)", value: VISIBILITY_PUBLIC}
+  { label: "Me (only you can visit this temset)", value: VISIBILITY_ONLY_ME },
+  { label: "Internal (only TS users (not guests) can visit this termset)", value: VISIBILITY_TS_USRES },
+  { label: "Public (open for everyone)", value: VISIBILITY_PUBLIC }
 ];
 
 
 const CreateTermSetPage = (props) => {
-  
+
   const appContext = useContext(AppContext);
-  
+
   const [termsetNameNotValid, setTermsetNameNotValid] = useState(false);
   const [newTermsetVisibility, setNewTermsetVisibility] = useState(VISIBILITY_ONLY_ME);
   const [termListOptions, setTermListOptions] = useState([]);
@@ -33,14 +33,14 @@ const CreateTermSetPage = (props) => {
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
-  
-  
+
+
   const searchUnderRef = useRef(null);
-  
+
   function onTermSelect(selectedTerms) {
     setSelectedTerms(selectedTerms);
   }
-  
+
   async function onSearchTermChange(query) {
     setLoading(true);
     if (query === "") {
@@ -48,26 +48,38 @@ const CreateTermSetPage = (props) => {
       return true;
     }
     let inputQuery = {
-      "searchQuery": query,
-      "types": "class,property,individual",
+      searchQuery: query,
+      selectedOntologies: [],
+      selectedTypes: [],
+      selectedCollections: [],
+      obsoletes: false,
+      exact: false,
+      includeImported: false,
+      isLeaf: false,
+      searchInValues: ["label"],
+      searchUnderIris: [],
+      searchUnderAllIris: [],
+      fromOntologyPage: false
     };
     if (appContext.userSettings.userCollectionEnabled) {
-      inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
+      inputQuery["selectedOntologies"] = appContext.userSettings.activeCollection.ontology_ids;
     }
-    let terms = await getJumpToResult(inputQuery, 10);
+    //@ts-ignore
+    let searchRes = await olsSearch(inputQuery);
+    let terms = !Array.isArray(searchRes) ? searchRes.elements : [];
     let options = [];
     for (let term of terms) {
       let opt = {};
-      opt['text'] = `${term['ontology_name']}:${TermLib.extractLabel(term)} (${TermLib.getTermType(term)})`;
-      opt['iri'] = term['iri'];
-      opt['ontologyId'] = term['ontology_name'];
+      opt['text'] = `${term.ontologyId}:${term.label} (${term.type})`;
+      opt['iri'] = term.iri;
+      opt['ontologyId'] = term.ontologyId;
       options.push(opt);
     }
     setLoading(false);
     setTermListOptions(options);
   }
-  
-  
+
+
   async function submit() {
     let name = FormLib.getFieldByIdIfValid("termsetTitle");
     let description = document.getElementById("termsetDescription");
@@ -78,7 +90,7 @@ const CreateTermSetPage = (props) => {
       setTermsetNameNotValid(true);
       return;
     }
-    
+
     setSubmitLoading(true);
     let selectedTermsV2 = [];
     for (let term of selectedTerms) {
@@ -92,7 +104,7 @@ const CreateTermSetPage = (props) => {
       description: description ? description.value : "",
       terms: selectedTermsV2
     };
-    
+
     createTermset(data).then((newTermset) => {
       if (newTermset) {
         let userTermsets = [...appContext.userTermsets];
@@ -107,7 +119,7 @@ const CreateTermSetPage = (props) => {
       setAddedSuccess(false);
     });
   }
-  
+
   if (submited && addedSuccess) {
     return (
       <div className="row user-info-panel">
@@ -129,7 +141,7 @@ const CreateTermSetPage = (props) => {
       </div>
     )
   }
-  
+
   return (
     <div className="row user-info-panel">
       <div className="row mb-4">
@@ -204,7 +216,7 @@ const CreateTermSetPage = (props) => {
       </div>
     </div>
   );
-  
+
 }
 
 export default CreateTermSetPage;
