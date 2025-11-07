@@ -13,7 +13,7 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
   let metadata: TableMetadata = {}
   metadata['Label'] = { "value": term.label, "isLink": false };
   metadata['Description'] = {
-    "value": TermLib.createTermDiscription(term) ?? term?.annotation?.definition,
+    "value": term.definition ?? term?.annotation?.definition,
     "isLink": false
   };
   if (term.originalOntology !== term.ontologyId) {

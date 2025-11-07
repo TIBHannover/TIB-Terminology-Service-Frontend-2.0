@@ -55,7 +55,6 @@ class TsTerm {
   get definition() {
     try {
       if (this.term.definition) {
-        console.log(this.term.definition);
         let result = [];
         for (let desc of this.term.definition) {
           if (typeof desc === "object" && desc.value) {
