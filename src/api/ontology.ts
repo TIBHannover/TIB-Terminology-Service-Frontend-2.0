@@ -1,7 +1,6 @@
 import { getCallSetting } from "./constants";
 import {
     OntologyData,
-    OntologyTermData,
     OntologyShapeTestResult,
     OntologySuggestionData,
     OntologyPurlValidationRes
@@ -15,22 +14,10 @@ import { OntologyTermDataV2 } from "./types/ontologyTypes";
 class OntologyApi {
 
     ontologyId: string | null = "";
-    list: Array<OntologyData> = [];
-    ontology: TsOntology;
-    rootClasses: Array<OntologyTermData> = [];
-    rootProperties: Array<OntologyTermData> = [];
-    obsoleteClasses: Array<OntologyTermData> = [];
-    obsoleteProperties: Array<OntologyTermData> = [];
     lang: string = "en";
 
     constructor({ ontologyId = null, lang = "en" }) {
         this.ontologyId = ontologyId;
-        this.list = [];
-        this.ontology = new TsOntology({});
-        this.rootClasses = [];
-        this.rootProperties = [];
-        this.obsoleteClasses = [];
-        this.obsoleteProperties = [];
         this.lang = lang;
     }
 
