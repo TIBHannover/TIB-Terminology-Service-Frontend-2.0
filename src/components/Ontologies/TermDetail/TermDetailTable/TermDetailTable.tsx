@@ -5,9 +5,7 @@ import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyBut
 import Toolkit from '../../../../Libs/Toolkit';
 import PropTypes from 'prop-types';
 import { TermDetailTableComProp, TableMetadata } from '../types';
-import TsClass from '../../../../concepts/class';
-import TsProperty from '../../../../concepts/property';
-import TsIndividual from '../../../../concepts/individual';
+import { TsClass, TsIndividual, TsProperty } from '../../../../concepts';
 
 
 const TermDetailTable = (props: TermDetailTableComProp) => {

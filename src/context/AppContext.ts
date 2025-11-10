@@ -1,12 +1,13 @@
 import { createContext } from "react";
-import TsTermset from "../concepts/termset";
+import { TsTermset } from "../concepts";
+import { CollectionDataResponse } from "../api/types/collectionTypes";
 
 const blueprint = {
   user: null,
   isUserSystemAdmin: false,
   reportsListForAdmin: [],
   userSettings: {
-    activeCollection: { title: "", ontology_ids: [] },
+    activeCollection: { title: "", ontology_ids: [] } as CollectionDataResponse,
     userCollectionEnabled: false,
     advancedSearchEnabled: false,
     activeSearchSetting: {
@@ -24,7 +25,7 @@ const blueprint = {
     },
     activeSearchSettingIsModified: false,
   },
-  setUserSettings: () => {
+  setUserSettings: (userSettings: any) => {
     /* set userSettings */
   },
   userTermsets: [] as TsTermset[],

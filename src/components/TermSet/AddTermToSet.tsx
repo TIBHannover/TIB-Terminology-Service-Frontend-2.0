@@ -9,7 +9,7 @@ import FormLib from "../../Libs/FormLib";
 import Login from "../User/Login/TS/Login";
 import Modal from "react-bootstrap/Modal";
 import { AddToTermsetModalComProps } from "./types";
-import TsTermset from "../../concepts/termset";
+import { TsTermset } from "../../concepts";
 
 
 const VISIBILITY_ONLY_ME = 1;

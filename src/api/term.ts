@@ -5,10 +5,7 @@ import {
   TermListData
 } from "./types/ontologyTypes";
 import { Ols3ApiResponse } from "./types/common";
-import TsClass from "../concepts/class";
-import TsProperty from "../concepts/property";
-import TsTerm from "../concepts/term";
-import TsIndividual from "../concepts/individual";
+import { TsClass, TsProperty, TsTerm, TsIndividual } from "../concepts";
 
 
 const DEFAULT_PAGE_SIZE = 20;

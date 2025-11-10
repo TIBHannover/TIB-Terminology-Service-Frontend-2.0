@@ -1,10 +1,7 @@
 import TermLib from "../../../../Libs/TermLib";
 import Toolkit from "../../../../Libs/Toolkit";
-import TsClass from "../../../../concepts/class";
-import TsProperty from "../../../../concepts/property";
-import TsIndividual from "../../../../concepts/individual";
-import TsTerm from "../../../../concepts/term";
 import { TableMetadata } from "../types";
+import { TsClass, TsIndividual, TsProperty, TsTerm } from "../../../../concepts";
 
 
 

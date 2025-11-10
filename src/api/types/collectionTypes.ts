@@ -6,14 +6,14 @@ export type CollectionData ={
 
 
 export type CollectionDataResponse ={
-    id:string|number,
-    title:string,
-    description:string|null,
-    ontology_ids:Array<string>|[],
-    created_at:string,
-    updated_at:string|null,
-    owner_id:string|number,
-    public:boolean
+    id?:string|number,
+    title?:string,
+    description?:string|null,
+    ontology_ids?:Array<string>|[],
+    created_at?:string,
+    updated_at?:string|null,
+    owner_id?:string|number,
+    public?:boolean
 }
 
 

@@ -10,11 +10,9 @@ import Toolkit from "../../Libs/Toolkit";
 import { removeTermFromSet } from "../../api/term_set";
 import { AppContext } from "../../context/AppContext";
 import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
-import TsTerm from "../../concepts/term";
 import { TermsetPageComProps } from "./types";
-import TsClass from "../../concepts/class";
 import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
-import TermFactory from "../../concepts/termFactory";
+import { TsClass, TsTerm, TermFactory } from "../../concepts";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -119,7 +117,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     }
     let query = e.target.value;
     if (query) {
-      let selectedTerms = data.terms.filter((term) => {
+      let selectedTerms = data.terms.filter((term: OntologyTermDataV2) => {
         let t = new TsTerm(term.json ?? {});
         if (t.label.toLowerCase().includes(query.toLowerCase())) {
           return true;
@@ -198,7 +196,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
       removeTermFromSet(termsetId, termId).then((removed) => {
         if (removed) {
           setDataLoaded(false)
-          let i = data.terms.findIndex((term) => term.iri === termId);
+          let i = data.terms.findIndex((term: OntologyTermDataV2) => term.iri === termId);
           let usertermsets = [...appContext.userTermsets];
           let termsetInContextIndex = usertermsets.findIndex((tset) => tset.id === termsetId);
           if (termsetInContextIndex > 0) {

@@ -1,6 +1,7 @@
-import {OntologyData} from "./types/ontologyTypes";
+import { OntologyData } from "./types/ontologyTypes";
 import OntologyLib from "../Libs/OntologyLib";
 import OntologyApi from "./ontology";
+import { TsOntology } from "../concepts";
 
 
 export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key: string]: number } {
@@ -25,16 +26,15 @@ export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key:
 
 
 /* react query key: allCollectionsWithTheirOntologies  */
-export async function getCollectionsAndThierOntologies(): Promise<{ [key: string]: OntologyData[] }> {
-    let result: { [key: string]: OntologyData[] } = {};
+export async function getCollectionsAndThierOntologies(): Promise<{ [key: string]: TsOntology[] }> {
+    let result: { [key: string]: TsOntology[] } = {};
     let ontoAPI = new OntologyApi({});
-    await ontoAPI.fetchOntologyList();
-    for (let onto of ontoAPI.list) {
-        let collections = OntologyLib.getCollections(onto) as string[];
-        if (collections.length === 0) {
+    let ontologyList = await ontoAPI.fetchOntologyList();
+    for (let onto of ontologyList) {
+        if (!onto.collections.length) {
             continue;
         }
-        for (let col of collections) {
+        for (let col of onto.collections) {
             if (col in result) {
                 result[col].push(onto);
             } else {

@@ -7,7 +7,7 @@ import {
   AutoSuggestSingleResult
 } from "./types/searchApiTypes";
 import Toolkit from "../Libs/Toolkit";
-import TermFactory from "../concepts/termFactory";
+import { TermFactory } from "../concepts";
 
 
 export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {

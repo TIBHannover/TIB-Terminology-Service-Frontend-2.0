@@ -11,7 +11,7 @@ import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
 import { Link } from "react-router-dom";
 import { TermsetEditComProps } from "./types";
 import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
-import TermFactory from "../../concepts/termFactory";
+import { TermFactory } from "../../concepts";
 
 
 const VISIBILITY_ONLY_ME = 1;

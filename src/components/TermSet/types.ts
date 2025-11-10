@@ -1,6 +1,6 @@
-import TsTerm from "../../concepts/term";
-import TsTermset from "../../concepts/termset";
 import { RouteComponentProps } from "react-router";
+import { TsTermset, TsTerm } from "../../concepts";
+
 
 export type AddToTermsetModalComProps = {
   modalId?: string;

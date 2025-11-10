@@ -1,4 +1,4 @@
-import TsClass from "../../concepts/class"
+import { TsClass } from "../../concepts";
 
 export type OntologyData = {
   ontologyId?: string,

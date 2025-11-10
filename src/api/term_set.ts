@@ -1,9 +1,8 @@
 import { TsPluginHeader } from "./types/headerTypes";
 import { getTsPluginHeaders } from "./header";
-import { TermSet, NewTermSetFormData, TermWrapperInSet } from "./types/termsetTypes";
+import { TermSet, NewTermSetFormData } from "./types/termsetTypes";
 import { OntologyTermDataV2 } from "./types/ontologyTypes";
-import TsTermset from "../concepts/termset";
-import TsTerm from "../concepts/term";
+import { TsTermset } from "../concepts";
 
 
 export async function getUserTermsetList(userId: string): Promise<TsTermset[]> {
