@@ -4,7 +4,7 @@ import { buildHtmlAnchor } from "../Libs/htmlFactory";
 import { createElement } from "react";
 
 
-class TsTerm {
+export class TsTerm {
 
   static TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
   static ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
@@ -277,9 +277,5 @@ class TsTerm {
     }
     return annotations;
   }
-
-
-
 }
 
-export default TsTerm;

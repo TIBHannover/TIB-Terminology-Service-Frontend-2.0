@@ -1,4 +1,4 @@
-import {getCallSetting} from "./constants";
+import { getCallSetting } from "./constants";
 import {
     OntologyData,
     OntologyTermData,
@@ -6,26 +6,27 @@ import {
     OntologySuggestionData,
     OntologyPurlValidationRes
 } from "./types/ontologyTypes";
-import {getTsPluginHeaders} from "./header";
-import {TsPluginHeader} from "./types/headerTypes";
-import OntologyLib from "../Libs/OntologyLib";
+import { getTsPluginHeaders } from "./header";
+import { TsPluginHeader } from "./types/headerTypes";
+import { TsOntology, TsClass, TsProperty } from "../concepts";
+import { OntologyTermDataV2 } from "./types/ontologyTypes";
 
 
 class OntologyApi {
 
     ontologyId: string | null = "";
     list: Array<OntologyData> = [];
-    ontology: OntologyData | null = {"ontologyId": ""};
+    ontology: TsOntology;
     rootClasses: Array<OntologyTermData> = [];
     rootProperties: Array<OntologyTermData> = [];
     obsoleteClasses: Array<OntologyTermData> = [];
     obsoleteProperties: Array<OntologyTermData> = [];
     lang: string = "en";
 
-    constructor({ontologyId = null, lang = "en"}) {
+    constructor({ ontologyId = null, lang = "en" }) {
         this.ontologyId = ontologyId;
         this.list = [];
-        this.ontology = null;
+        this.ontology = new TsOntology({});
         this.rootClasses = [];
         this.rootProperties = [];
         this.obsoleteClasses = [];
@@ -34,7 +35,7 @@ class OntologyApi {
     }
 
 
-    async fetchOntologyList(): Promise<Array<any>> {
+    async fetchOntologyList(): Promise<TsOntology[]> {
         type TempResult = {
             elements: Array<any>
         }
@@ -43,124 +44,103 @@ class OntologyApi {
             let OntologiesListUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000`;
             let resp = await fetch(OntologiesListUrl, getCallSetting);
             let result: TempResult = await resp.json();
-            let ontoList = [];
-            if (process.env.REACT_APP_PROJECT_ID === "general") {
-                ontoList = result['elements'];
-            } else {
-                for (let onto of result['elements']) {
-                    if (OntologyLib.getCollections(onto).includes(process.env.REACT_APP_PROJECT_ID?.toUpperCase())) {
-                        ontoList.push(onto);
-                    }
+            let ontoList: TsOntology[] = [];
+            let projectId = process.env.REACT_APP_PROJECT_ID!;
+            for (let onto of result['elements']) {
+                let ontology = new TsOntology(onto);
+                if (projectId === "general") {
+                    ontoList.push(ontology);
+                } else if (ontology.collections.includes(projectId.toUpperCase())) {
+                    ontoList.push(ontology);
                 }
             }
-            this.list = ontoList;
-            return this.list;
+            return ontoList;
         } catch (e) {
-            this.list = [];
             return [];
         }
     }
 
 
-    async fetchOntology(): Promise<boolean> {
+    async fetchOntology(): Promise<TsOntology | null> {
         try {
             let ontoId = encodeURIComponent(this.ontologyId ? this.ontologyId : "");
             let url = `${process.env.REACT_APP_API_URL!}/v2/ontologies/${ontoId}?lang=${this.lang}`;
             let resp = await fetch(url, getCallSetting);
             let result: OntologyData = await resp.json();
-            this.ontology = result;
-            await Promise.all([
-                this.fetchRootClasses(),
-                this.fetchRootProperties(),
-                this.fetchObsoleteClasses(),
-                this.fetchObsoleteProperties()
-            ]);
-            return true;
+            let ontology = new TsOntology(result);
+            const [rootClasses, rootProperties] = await Promise.all(
+                [
+                    this.fetchRootClasses(),
+                    this.fetchRootProperties(),
+                ]);
+            ontology.rootClasses = rootClasses.roots;
+            ontology.obsoleteClasses = rootClasses.obsoletes;
+            ontology.rootProperties = rootProperties.roots;
+            ontology.obsoleteProperties = rootProperties.obsoletes;
+            return ontology;
 
         } catch (e) {
-            this.ontology = null;
-            return true;
+            return null;
         }
     }
 
 
-    async fetchRootClasses(): Promise<boolean> {
+    async fetchRootClasses(): Promise<{ roots: TsClass[], obsoletes: TsClass[] }> {
         try {
-            if (!this.ontology) {
-                this.rootClasses = [];
-                return true;
-            }
-
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
             let result = await fetch(url, getCallSetting);
-            let terms = await result.json();
-            this.rootClasses = terms['elements'];
-            return true;
+            let respData = await result.json();
+            let terms = respData['elements'] as OntologyTermDataV2[];
+            let rootClasses: TsClass[] = [];
+            let obsoleteClasses: TsClass[] = [];
+            for (let term of terms) {
+                if (!term.isObsolete) {
+                    let classObj = new TsClass(term, []);
+                    rootClasses.push(classObj);
+                } else {
+                    let classObj = new TsClass(term, []);
+                    obsoleteClasses.push(classObj);
+                }
+            }
+            return { roots: rootClasses, obsoletes: obsoleteClasses };
         } catch (e) {
-            this.rootClasses = [];
-            return true;
+            return { roots: [], obsoletes: [] };
         }
 
     }
 
 
-    async fetchRootProperties(): Promise<boolean> {
+    async fetchRootProperties(): Promise<{ roots: TsProperty[], obsoletes: TsProperty[] }> {
         try {
-            if (!this.ontology) {
-                this.rootProperties = [];
-                return true;
-            }
-
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
             let result = await fetch(url, getCallSetting);
-            let terms = await result.json();
-            this.rootProperties = terms['elements'];
-            return true;
-        } catch (e) {
-            this.rootProperties = [];
-            return true;
-        }
-    }
-
-
-    async fetchObsoleteClasses(): Promise<boolean> {
-        try {
-            let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/terms/roots?obsoletes=true&size=1000";
-            let res = await (await fetch(url, getCallSetting)).json();
-            this.obsoleteClasses = res['_embedded']["terms"];
-            return true;
-        } catch (e) {
-            this.obsoleteClasses = [];
-            return true;
-        }
-    }
-
-
-    async fetchObsoleteProperties(): Promise<boolean> {
-        type TempResult = {
-            _embedded: {
-                properties: Array<OntologyTermData>
+            let respData = await result.json();
+            let terms = respData['elements'] as OntologyTermDataV2[];
+            let rootProperties: TsProperty[] = [];
+            let obsoleteProperties: TsProperty[] = [];
+            for (let term of terms) {
+                if (!term.isObsolete) {
+                    let propObj = new TsProperty(term);
+                    rootProperties.push(propObj);
+                } else {
+                    let propObj = new TsProperty(term);
+                    obsoleteProperties.push(propObj);
+                }
             }
-        }
-
-        try {
-            let url = process.env.REACT_APP_API_BASE_URL + "/" + this.ontologyId + "/properties/roots?obsoletes=true&size=1000";
-            let res: TempResult = await (await fetch(url, getCallSetting)).json();
-            this.obsoleteProperties = res['_embedded']["properties"];
-            return true;
+            return { roots: rootProperties, obsoletes: obsoleteProperties };
         } catch (e) {
-            this.obsoleteProperties = [];
-            return true;
+            return { roots: [], obsoletes: [] };
         }
     }
+
 }
 
 
 export async function runShapeTest(ontologyPurl: string): Promise<OntologyShapeTestResult | boolean> {
     try {
-        let headers = getTsPluginHeaders({withAccessToken: true, isJson: false});
+        let headers = getTsPluginHeaders({ withAccessToken: true, isJson: false });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/testshape?purl=' + ontologyPurl;
-        let result = await fetch(url, {method: 'GET', headers: headers});
+        let result = await fetch(url, { method: 'GET', headers: headers });
         if (!result.ok) {
             return false;
         }
@@ -180,9 +160,9 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
             // @ts-ignore
             form[key] = formDataAny[key];
         }
-        let headers: TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});
+        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create/';
-        let result: any = await fetch(url, {method: 'POST', headers: headers, body: JSON.stringify(form)});
+        let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(form) });
         if (result.status === 200) {
             result = await result.json();
             result = result['_result']['response'];
@@ -197,9 +177,9 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
 
 export async function checkSuggestionExist(purl: string): Promise<boolean> {
     try {
-        let headers = getTsPluginHeaders({withAccessToken: true, isJson: false});
+        let headers = getTsPluginHeaders({ withAccessToken: true, isJson: false });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/suggestion_exist?purl=' + purl;
-        let result = await fetch(url, {method: 'GET', headers: headers});
+        let result = await fetch(url, { method: 'GET', headers: headers });
         if (result.status !== 200) {
             return false;
         }
@@ -214,17 +194,17 @@ export async function checkSuggestionExist(purl: string): Promise<boolean> {
 
 export async function checkOntologyPurlIsValidUrl(purl: string): Promise<OntologyPurlValidationRes> {
     try {
-        let headers = getTsPluginHeaders({withAccessToken: false, isJson: false});
+        let headers = getTsPluginHeaders({ withAccessToken: false, isJson: false });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/purl_is_valid?purl=' + purl;
-        let result = await fetch(url, {method: 'GET', headers: headers});
+        let result = await fetch(url, { method: 'GET', headers: headers });
         if (result.status !== 200) {
-            return {"valid": false, "reason": "unknown"};
+            return { "valid": false, "reason": "unknown" };
         }
         let data = await result.json();
         return data['_result'];
 
     } catch (e) {
-        return {"valid": false, "reason": "unknown"};
+        return { "valid": false, "reason": "unknown" };
     }
 }
 

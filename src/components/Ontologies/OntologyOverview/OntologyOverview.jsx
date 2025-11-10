@@ -39,11 +39,11 @@ const OntologyOverview = () => {
     <>
       <div key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
         <div className='col-sm-9 '>
-          <OntologyInfoTable/>
+          <OntologyInfoTable />
         </div>
         <div className='col-sm-3'>
-          <OntologyStatsBox/>
-          <br/>
+          <OntologyStatsBox />
+          <br />
           <div className='row'>
             <div className='col-sm-12'>
               <a
@@ -56,7 +56,7 @@ const OntologyOverview = () => {
               </a>
             </div>
           </div>
-          <br/>
+          <br />
           {process.env.REACT_APP_PROJECT_ID === "general" && process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true" &&
             <div className='row'>
               <div className='col-sm-12'>
@@ -108,7 +108,7 @@ const OntologyOverview = () => {
         />
       )}
 
-      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
+      <Login isModal={true} showModal={loginModal} withoutButton={true} />
     </>
   );
 }

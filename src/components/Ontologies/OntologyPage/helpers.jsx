@@ -1,8 +1,7 @@
-import {Link} from 'react-router-dom';
-import {OntologyPageContext} from '../../../context/OntologyPageContext';
-import {useContext} from 'react';
+import { Link } from 'react-router-dom';
+import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import { useContext } from 'react';
 import DropDown from '../../common/DropDown/DropDown';
-import {Lang} from '../../../UrlFactory/UrlParamNames';
 
 
 export const OntologyPageTabs = (props) => {
@@ -10,8 +9,9 @@ export const OntologyPageTabs = (props) => {
       Renders tabs for the Ontology page.
       The tab metadata comes from listOfComponentsAsTabs.json
   */
-  
+
   const ontologyPageContext = useContext(OntologyPageContext);
+  console.log(ontologyPageContext.ontology)
   let result = [];
   for (let configItemKey in props.tabMetadataJson) {
     let configObject = props.tabMetadataJson[configItemKey];
@@ -23,7 +23,7 @@ export const OntologyPageTabs = (props) => {
     }
     result.push(
       <li className={"nav-item ontology-detail-nav-item " + "stour-" + configObject['id']}
-          key={configObject['keyForRenderAsTabItem']}>
+        key={configObject['keyForRenderAsTabItem']}>
         <Link
           onClick={props.tabChangeHandler}
           data-value={configObject['tabId']}
@@ -36,10 +36,10 @@ export const OntologyPageTabs = (props) => {
       </li>
     );
   }
-  
+
   let langOptions = [];
-  for (let lang of ontologyPageContext.ontology.language) {
-    let temp = {"label": lang, "value": lang};
+  for (let lang of ontologyPageContext.ontology.language ?? []) {
+    let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
   }
   return (
@@ -126,5 +126,5 @@ function collpaseSiteHeader() {
     collapseIcone.classList.remove('fa-angle-double-down');
     collapseIconContainer.classList.remove('show-header-arrow-down');
   }
-  
+
 }

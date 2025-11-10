@@ -1,11 +1,8 @@
-import TsTerm from "./term";
-import TsClass from "./class";
-import TsProperty from "./property";
-import TsIndividual from "./individual";
+import { TsTerm, TsClass, TsProperty, TsIndividual } from "./";
 import { OntologyTermDataV2, OntologyTermData } from "../api/types/ontologyTypes";
 
 
-class TermFactory {
+export class TermFactory {
 
   static createTermForTS(termData: OntologyTermDataV2, instancesList: OntologyTermData[] = []) {
     let type = "";
@@ -25,4 +22,3 @@ class TermFactory {
   }
 }
 
-export default TermFactory;

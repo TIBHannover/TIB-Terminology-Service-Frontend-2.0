@@ -1,8 +1,8 @@
 import { createElement } from "react";
-import TsTerm from "./term";
+import { TsTerm } from "./";
 
 
-class TsIndividual extends TsTerm {
+export class TsIndividual extends TsTerm {
 
   get type(): string {
     return "individual";
@@ -31,5 +31,4 @@ class TsIndividual extends TsTerm {
 }
 
 
-export default TsIndividual;
 

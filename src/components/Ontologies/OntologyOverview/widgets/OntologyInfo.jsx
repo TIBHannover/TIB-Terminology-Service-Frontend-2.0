@@ -128,7 +128,7 @@ const OntologyInfoTable = () => {
               <tr>
                 <td className="ontology-overview-table-id-column"><b>License</b></td>
                 <td>
-                  <a href={ontology.license.url} target="_blank" rel="noopener noreferrer">{ontology.license.label}</a>
+                  <a href={ontology?.license?.url ?? ""} target="_blank" rel="noopener noreferrer">{ontology?.license?.label ?? ""}</a>
                 </td>
               </tr>
               <tr>

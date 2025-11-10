@@ -1,7 +1,7 @@
 import { TermSet } from "../api/types/termsetTypes";
 import { OntologyTermDataV2 } from "../api/types/ontologyTypes";
 
-class TsTermset {
+export class TsTermset {
   termsetData: TermSet;
   private _name: string;
   private _description: string;
@@ -70,4 +70,3 @@ class TsTermset {
 
 }
 
-export default TsTermset;

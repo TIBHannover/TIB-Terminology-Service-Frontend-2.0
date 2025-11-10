@@ -1,9 +1,9 @@
-import TsTerm from "./term";
 import { OntologyTermDataV2, OntologyTermData } from "../api/types/ontologyTypes";
 import { buildHtmlAnchor, buildCloseParanthesis, buildOpenParanthesis } from "../Libs/htmlFactory";
+import { TsTerm } from "./";
 
 
-class TsClass extends TsTerm {
+export class TsClass extends TsTerm {
 
   instancesList: OntologyTermData[];
 
@@ -219,4 +219,3 @@ class TsClass extends TsTerm {
 
 }
 
-export default TsClass;

@@ -1,7 +1,7 @@
-import TsTerm from "./term";
+import { TsTerm } from "./";
 import { PropDomainRangeObj } from "./types";
 
-class TsProperty extends TsTerm {
+export class TsProperty extends TsTerm {
 
   override get type(): string {
     return "property";
@@ -59,4 +59,3 @@ class TsProperty extends TsTerm {
   }
 }
 
-export default TsProperty;

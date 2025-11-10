@@ -1,32 +1,37 @@
 import TsClass from "../../concepts/class"
 
 export type OntologyData = {
-  ontologyId: string,
+  ontologyId?: string,
+  iri?: string,
+  title?: string,
+  label?: string,
+  description?: string,
+  "http://purl.org/dc/terms/description"?: string,
+  preferredPrefix?: string,
   ontologyPurl?: string,
   loaded?: string,
-  version?: string,
-  fileHash?: string,
-  loadAttempts?: number,
-  numberOfTerms?: number,
-  numberOfProperties?: number,
-  numberOfIndividuals?: number,
-  config?: {
-    id?: string
+  "http://www.w3.org/2002/07/owl#versionInfo"?: string,
+  "http://www.w3.org/2002/07/owl#versionIRI"?: string,
+  numberOfClasses?: string,
+  numberOfProperties?: string,
+  numberOfIndividuals?: string,
+  allow_download?: boolean,
+  classifications?: [
+    { collection: string[] },
+    { subject: string[] }
+  ],
+  homepage?: string,
+  tracker?: string,
+  License?: {
+    label: string,
+    url: string
   },
-  _links?: {
-    self: {
-      href: string
-    },
-    terms: {
-      href: string
-    },
-    properties: {
-      href: string
-    },
-    individuals: {
-      href: string
-    }
-  }
+  creator?: string[],
+  "http://purl.org/dc/terms/creator"?: string[],
+  "http://purl.org/dc/elements/1.1/creator"?: string[],
+  importsFrom?: string[],
+  isSkos?: boolean,
+  [key: string]: any // to support unkown properties returned by api for an ontology.
 }
 
 
