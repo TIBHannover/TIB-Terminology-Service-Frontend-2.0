@@ -11,7 +11,7 @@ import { TsOntology, TsClass, TsProperty } from "../concepts";
 import { OntologyTermDataV2 } from "./types/ontologyTypes";
 
 
-type constructorProps = { ontologyId: string, lang: string };
+type constructorProps = { ontologyId?: string, lang?: string };
 
 class OntologyApi {
 
@@ -19,8 +19,8 @@ class OntologyApi {
     lang: string = "en";
 
     constructor({ ontologyId, lang }: constructorProps) {
-        this.ontologyId = ontologyId;
-        this.lang = lang;
+        this.ontologyId = ontologyId ?? "";
+        this.lang = lang ?? "en";
     }
 
 

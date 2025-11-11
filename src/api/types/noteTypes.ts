@@ -1,4 +1,4 @@
-import TsTerm from "../../concepts/term"
+import { TsTerm } from "../../concepts"
 
 export type NewNoteRequest = {
   title: string,

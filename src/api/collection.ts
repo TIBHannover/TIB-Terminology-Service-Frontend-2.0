@@ -1,17 +1,14 @@
-import { OntologyData } from "./types/ontologyTypes";
-import OntologyLib from "../Libs/OntologyLib";
 import OntologyApi from "./ontology";
 import { TsOntology } from "../concepts";
 
 
-export function getCollectionStatFromOntoList(ontoList: OntologyData[]): { [key: string]: number } {
+export function getCollectionStatFromOntoList(ontoList: TsOntology[]): { [key: string]: number } {
     let result: { [key: string]: number } = {};
     for (let onto of ontoList) {
-        let collections = OntologyLib.getCollections(onto) as string[];
-        if (collections.length === 0) {
+        if (!onto.collections.length) {
             continue;
         }
-        for (let col of collections) {
+        for (let col of onto.collections) {
             if (col in result) {
                 result[col] += 1;
             } else {

@@ -1,5 +1,8 @@
-import { TsTerm, TsClass, TsProperty, TsIndividual } from "./";
 import { OntologyTermDataV2, OntologyTermData } from "../api/types/ontologyTypes";
+import { TsClass } from "./class";
+import { TsProperty } from "./property";
+import { TsIndividual } from "./individual";
+import { TsTerm } from "./term";
 
 
 export class TermFactory {

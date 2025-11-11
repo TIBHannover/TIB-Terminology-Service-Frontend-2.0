@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import TermLib from '../../../Libs/TermLib';
-import TsTerm from '../../../concepts/term';
+import { TsTerm } from '../../../concepts';
 
 
 export function setResultTitleAndLabel(resultItem: TsTerm, obsoletes: boolean) {

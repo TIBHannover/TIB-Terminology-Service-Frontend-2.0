@@ -10,6 +10,7 @@ import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
 import OntologyLib from '../../../Libs/OntologyLib';
+import { TsOntology } from '../../../concepts';
 
 
 
@@ -17,7 +18,7 @@ const TITLE_SORT_KEY = "title";
 
 
 
-const OntologyList = (props) => {
+const OntologyList = () => {
 
   /* 
     This component is responsible for rendering the list of ontologies.
@@ -25,15 +26,15 @@ const OntologyList = (props) => {
 
   const appContext = useContext(AppContext);
 
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [ontologies, setOntologies] = useState([]);
+  const [ontologies, setOntologies] = useState<TsOntology[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState([]);
-  const [unFilteredOntologies, setUnFilteredOntologies] = useState([]);
+  const [ontologiesHiddenStatus, setOntologiesHiddenStatus] = useState<boolean[]>([]);
+  const [unFilteredOntologies, setUnFilteredOntologies] = useState<TsOntology[]>([]);
   const [sortField, setSortField] = useState(TITLE_SORT_KEY);
-  const [selectedCollections, setSelectedCollections] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
@@ -45,7 +46,8 @@ const OntologyList = (props) => {
     queryFn: ontologyApi.fetchOntologyList,
   });
 
-  let allCollectionWithStats = [];
+
+  let allCollectionWithStats: { [key: string]: number } = {};
   if (process.env.REACT_APP_PROJECT_NAME === "" && ontologyListQuery.data) {
     // Only for TIB General
     allCollectionWithStats = getCollectionStatFromOntoList(ontologyListQuery.data);
@@ -59,7 +61,7 @@ const OntologyList = (props) => {
       }
       let ontologiesList = [];
       if (appContext.userSettings.userCollectionEnabled && appContext.userSettings.activeCollection.ontology_ids.length > 0) {
-        for (let onto of ontologyListQuery.data) {
+        for (let onto of ontologyListQuery.data ?? []) {
           if (appContext.userSettings.activeCollection.ontology_ids.includes(onto.ontologyId)) {
             ontologiesList.push(onto);
           }
@@ -76,7 +78,7 @@ const OntologyList = (props) => {
     catch (error) {
       //console.log(error)
       setIsLoaded(true);
-      setError(error);
+      setError(true);
     }
   }
 
@@ -87,14 +89,12 @@ const OntologyList = (props) => {
     let ontologyListUrlFactory = new OntologyListUrlFactory();
     let collectionsInUrl = ontologyListUrlFactory.collections
     let sortByInUrl = ontologyListUrlFactory.sortedBy;
-    let pageInUrl = ontologyListUrlFactory.page;
-    let sizeInUrl = ontologyListUrlFactory.size;
     let keywordFilterInUrl = ontologyListUrlFactory.keywordFilter;
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
-    pageInUrl = pageInUrl ? parseInt(pageInUrl) : pageNumber;
-    sizeInUrl = sizeInUrl ? parseInt(sizeInUrl) : pageSize;
+    let pageInUrl = ontologyListUrlFactory.page ? Number(ontologyListUrlFactory.page) : pageNumber;
+    let sizeInUrl = ontologyListUrlFactory.size ? Number(ontologyListUrlFactory.size) : pageSize;
     setSelectedCollections(collectionsInUrl);
     setKeywordFilterString(keywordFilterInUrl);
     setSortField(sortByInUrl);
@@ -104,16 +104,16 @@ const OntologyList = (props) => {
 
 
 
-  function ontology_has_searchKey(ontology, value) {
+  function ontology_has_searchKey(ontology: TsOntology, value: string) {
     try {
       value = value.toLowerCase();
       if (ontology.ontologyId.includes(value)) {
         return true;
       }
-      if (OntologyLib.getLabel(ontology).toLowerCase().includes(value)) {
+      if (ontology.title.toLowerCase().includes(value)) {
         return true;
       }
-      if (OntologyLib.gerDescription(ontology).toLowerCase().includes(value)) {
+      if (ontology.description.toLowerCase().includes(value)) {
         return true;
       }
 
@@ -126,37 +126,31 @@ const OntologyList = (props) => {
 
 
 
-  function sortArrayOfOntologiesBasedOnKey(ontologiesArray, key) {
+  function sortArrayOfOntologiesBasedOnKey(ontologiesArray: TsOntology[], key: string) {
     if (key === "title") {
       ontologiesArray.sort((o1, o2) => {
-        if (OntologyLib.getLabel(o1) < OntologyLib.getLabel(o2)) {
-          return -1;
-        }
-        return 1;
+        return o1.title.toLowerCase().localeCompare(o2.title.toLowerCase(), "en", { sensitivity: "base" });
       })
-    }
-    else if (key === 'ontologyId') {
+    } else if (key === 'ontologyId') {
       ontologiesArray.sort((o1, o2) => {
-        if (o1.ontologyId < o2.ontologyId) {
-          return -1;
-        }
-        return 1;
+        return o1.ontologyId.toLowerCase().localeCompare(o2.ontologyId.toLowerCase(), "en", { sensitivity: "base" });
       })
-    }
-    else if (key.includes("numberOf")) {
+    } else if (key.includes("numberOfClasses")) {
       ontologiesArray.sort((o1, o2) => {
-        if (parseInt(o1[key]) < parseInt(o2[key])) {
-          return 1;
-        }
-        return -1;
+        return Number(o2.numberOfClasses) - Number(o1.numberOfClasses);
       })
 
-    } else {
+    } else if (key.includes("numberOfProperties")) {
       ontologiesArray.sort((o1, o2) => {
-        if (o1[key] < o2[key]) {
-          return 1;
-        }
-        return -1;
+        return Number(o2.numberOfProperties) - Number(o1.numberOfProperties);
+      })
+    } else if (key.includes("numberOfIndividuals")) {
+      ontologiesArray.sort((o1, o2) => {
+        return Number(o2.numberOfIndividuals) - Number(o1.numberOfIndividuals);
+      })
+    } else if (key.includes("loaded")) {
+      ontologiesArray.sort((o1, o2) => {
+        return o1.loaded.localeCompare(o2.loaded);
       })
     }
     return ontologiesArray;
@@ -164,8 +158,8 @@ const OntologyList = (props) => {
 
 
 
-  function handlePagination(value) {
-    setPageNumber(parseInt(value));
+  function handlePagination(value: string) {
+    setPageNumber(Number(value));
   }
 
 
@@ -185,13 +179,13 @@ const OntologyList = (props) => {
 
 
 
-  function handlePageSizeDropDownChange(e) {
-    setPageSize(parseInt(e.target.value));
+  function handlePageSizeDropDownChange(e: React.MouseEvent<HTMLLIElement>) {
+    setPageSize(Number(e.currentTarget.value));
   }
 
 
 
-  function handleSortChange(e, value) {
+  function handleSortChange(e: React.ChangeEvent<HTMLSelectElement>) {
     let newSortField = e.target.value;
     let sortedOntology = sortArrayOfOntologiesBasedOnKey(ontologies, newSortField);
     setSortField(newSortField);
@@ -200,20 +194,20 @@ const OntologyList = (props) => {
 
 
 
-  function filterWordChange(e) {
+  function filterWordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setKeywordFilterString(e.target.value);
     setPageNumber(1);
   }
 
 
 
-  function handleSwitchange(e) {
+  function handleSwitchange(e: React.ChangeEvent<HTMLInputElement>) {
     setExclusiveCollections(e.target.checked);
     setPageNumber(1);
   }
 
 
-  function handleFacetCollection(e, value) {
+  function handleFacetCollection(e: React.ChangeEvent<HTMLInputElement>) {
     let collection = e.target.value.trim();
     let currentSelectedCollections = [...selectedCollections];
     if (e.target.checked) {

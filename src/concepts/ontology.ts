@@ -195,9 +195,9 @@ export class TsOntology {
 
   private processTitle(ontology: OntologyData): string {
     if (ontology.title) {
-      return ontology.title;
+      return ontology.title.trim();
     }
-    return ontology.label?.[0] ?? "";
+    return ontology.label?.[0].trim() ?? "";
   }
 
 

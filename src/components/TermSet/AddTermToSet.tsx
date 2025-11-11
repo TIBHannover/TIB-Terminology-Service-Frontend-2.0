@@ -10,6 +10,7 @@ import Login from "../User/Login/TS/Login";
 import Modal from "react-bootstrap/Modal";
 import { AddToTermsetModalComProps } from "./types";
 import { TsTermset } from "../../concepts";
+import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -124,7 +125,7 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
               setTermExistingSets(existingSetsList);
             }
             let targetSetIndex = userTermsets.findIndex(tset => tset.id === termsetId);
-            let termToRemoveIdex = userTermsets[targetSetIndex].terms.findIndex(tsetTerm => tsetTerm.iri === term.iri);
+            let termToRemoveIdex = userTermsets[targetSetIndex].terms.findIndex((tsetTerm: OntologyTermDataV2) => tsetTerm.iri === term.iri);
             if (termToRemoveIdex !== -1) {
               userTermsets[targetSetIndex].terms.splice(termToRemoveIdex, 1);
               appContext.setUserTermsets(userTermsets);
@@ -306,7 +307,7 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
     let existingSets = [];
     let removeLoadingMap = new Map(removeLoading);
     for (let tset of appContext.userTermsets) {
-      if (!tset.terms.find((tsetTerm) => tsetTerm.iri === term?.iri)) {
+      if (!tset.terms.find((tsetTerm: OntologyTermDataV2) => tsetTerm.iri === term?.iri)) {
         options.push({ "text": tset.name, "id": tset.id });
       } else {
         removeLoadingMap.set(tset.id, false);

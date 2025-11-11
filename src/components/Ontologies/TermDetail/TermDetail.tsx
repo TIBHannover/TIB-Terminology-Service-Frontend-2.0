@@ -11,7 +11,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import { AddToTermsetModal } from '../../TermSet/AddTermToSet';
-import TsTerm from '../../../concepts/term';
+import { TsTerm } from '../../../concepts';
 
 
 

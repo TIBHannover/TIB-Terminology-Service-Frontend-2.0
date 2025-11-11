@@ -1,5 +1,5 @@
-import { TsTerm } from "./";
 import { PropDomainRangeObj } from "./types";
+import { TsTerm } from "./term";
 
 export class TsProperty extends TsTerm {
 

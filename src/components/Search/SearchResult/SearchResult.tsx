@@ -18,9 +18,9 @@ import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
 import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
-import TsTerm from '../../../concepts/term';
+import { TsTerm } from '../../../concepts';
 import { SearchApiResponse, SearchResultFacet } from '../../../api/types/searchApiTypes';
-import { OntologyData } from '../../../api/types/ontologyTypes';
+import { TsOntology } from '../../../concepts';
 
 
 const SearchResult = () => {
@@ -64,7 +64,7 @@ const SearchResult = () => {
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
 
-  let collectionIdsAndOntologies: { [key: string]: OntologyData[] } = {};
+  let collectionIdsAndOntologies: { [key: string]: TsOntology[] } = {};
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
     queryFn: getCollectionsAndThierOntologies

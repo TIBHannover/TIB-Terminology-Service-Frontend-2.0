@@ -1,6 +1,6 @@
 import { OntologyTermDataV2, OntologyTermData } from "../api/types/ontologyTypes";
 import { buildHtmlAnchor, buildCloseParanthesis, buildOpenParanthesis } from "../Libs/htmlFactory";
-import { TsTerm } from "./";
+import { TsTerm } from "./term";
 
 
 export class TsClass extends TsTerm {

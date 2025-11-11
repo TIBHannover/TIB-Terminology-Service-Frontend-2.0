@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { TsTerm } from "./";
+import { TsTerm } from "./term";
 
 
 export class TsIndividual extends TsTerm {

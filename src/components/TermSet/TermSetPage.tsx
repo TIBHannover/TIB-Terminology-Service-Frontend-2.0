@@ -200,7 +200,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
           let usertermsets = [...appContext.userTermsets];
           let termsetInContextIndex = usertermsets.findIndex((tset) => tset.id === termsetId);
           if (termsetInContextIndex > 0) {
-            let tindexInSet = usertermsets[termsetInContextIndex].terms.findIndex((term) => term.iri === termId);
+            let tindexInSet = usertermsets[termsetInContextIndex].terms.findIndex((term: OntologyTermDataV2) => term.iri === termId);
             if (tindexInSet) {
               usertermsets[termsetInContextIndex].terms.splice(tindexInSet, 1);
               appContext.setUserTermsets(usertermsets);

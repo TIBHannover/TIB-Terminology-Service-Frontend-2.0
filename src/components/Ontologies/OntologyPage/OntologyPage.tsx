@@ -118,7 +118,6 @@ const OntologyPage = (props: CmpPropp) => {
         ontologyId: ontologyId,
         pageNumber: 0,
         pageSize: 1,
-        targetTerm: null,
         onlyOntologyOriginalNotes: false,
         withoutLabelFetch: true
       });

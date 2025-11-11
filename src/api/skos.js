@@ -1,6 +1,6 @@
 import Toolkit from "../Libs/Toolkit";
 import { getCallSetting } from "./constants";
-import TsTerm from "../concepts/term";
+import { TsTerm } from "../concepts";
 
 class SkosApi {
   constructor({ ontologyId, iri, skosRoot, lang }) {

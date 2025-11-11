@@ -1,5 +1,5 @@
 import { TermMultiSelectOption } from "./common";
-import TsTerm from "../../concepts/term";
+import { TsTerm } from "../../concepts";
 
 
 export type SearchApiInput = {
