@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
@@ -166,12 +165,6 @@ const DataTree = (props) => {
   );
 }
 
-
-DataTree.propTypes = {
-  rootNodes: PropTypes.array.isRequired,
-  obsoleteTerms: PropTypes.array,
-  componentIdentity: PropTypes.string.isRequired,
-};
 
 
 export default DataTree;

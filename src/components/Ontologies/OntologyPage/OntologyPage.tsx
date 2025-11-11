@@ -17,6 +17,8 @@ import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import ChangesTimeline from "../../Ondet/ChangesTimeline";
+import { RouteComponentProps } from 'react-router';
+import { TsOntology, TsClass, TsProperty } from '../../../concepts';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -28,7 +30,8 @@ const NOTES_TAB_ID = 5;
 const GIT_ISSUE_LIST_ID = 6;
 const ONDET_TAB_ID = 7;
 
-const TAB_ID_MAP_TO_TAB_ENDPOINT = {
+const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
+  "": OVERVIEW_TAB_ID,
   "terms": TERM_TREE_TAB_ID,
   "props": PROPERTY_TREE_TAB_ID,
   "individuals": INDIVIDUAL_LIST_TAB_ID,
@@ -38,8 +41,11 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT = {
   "ondet": ONDET_TAB_ID
 }
 
+type CmpPropp = RouteComponentProps<{ ontologyId: string, tab?: string }>;
+export type ComponentIdentity = "terms" | "properties" | "individuals";
 
-const OntologyPage = (props) => {
+
+const OntologyPage = (props: CmpPropp) => {
 
   /*
     This component holds the entire ontology page.
@@ -55,58 +61,51 @@ const OntologyPage = (props) => {
 
 
   const UrlFactory = new CommonUrlFactory();
-  let language = UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
+  let language = UrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || localStorage.getItem("language") || "en";
 
   const [lastRequestedTab, setLastRequestedTab] = useState("");
-  const [ontology, setOntology] = useState(null);
-  const [error, setError] = useState(null);
+  const [ontology, setOntology] = useState<TsOntology | null>(null);
+  const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState(OVERVIEW_TAB_ID);
-  const [rootTerms, setRootTerms] = useState([]);
+  const [rootTerms, setRootTerms] = useState<TsClass[]>([]);
   const [skosRootIndividuals, setSkosRootIndividuals] = useState([]);
-  const [rootProps, setRootProps] = useState([]);
-  const [obsoleteTerms, setObsoleteTerms] = useState([]);
-  const [obsoleteProps, setObsoleteProps] = useState([]);
+  const [rootProps, setRootProps] = useState<TsProperty[]>([]);
+  const [obsoleteTerms, setObsoleteTerms] = useState<TsClass[]>([]);
+  const [obsoleteProps, setObsoleteProps] = useState<TsProperty[]>([]);
   const [waiting, setWaiting] = useState(false);
-  const [lastIrisHistory, setLastIrisHistory] = useState({
-    "terms": "",
-    "properties": "",
-    "individuals": "",
-    "termList": ""
-  });
-  const [lastTabsStates, setLastTabsStates] = useState({ "terms": null, "properties": null, "gitIssues": "" });
-  const [isSkosOntology, setIsSkosOntology] = useState(false);
-  const [notesCount, setNotesCount] = useState("");
-  const [ontoLang, setOntoLang] = useState(language);
+  const [lastIrisHistory, setLastIrisHistory] = useState<{ [key: string]: string }>({ "terms": "", "properties": "", "individuals": "", "termList": "" });
+  const [lastTabsStates, setLastTabsStates] = useState<{ [key: string]: any }>({ "terms": null, "properties": null, "gitIssues": "" });
+  const [notesCount, setNotesCount] = useState(0);
+  const [ontoLang, setOntoLang] = useState<string>(language);
   window.localStorage.setItem("language", ontoLang);
 
 
   async function loadOntologyData() {
     let ontologyId = props.match.params.ontologyId;
-    let ontologyApi = new OntologyApi({ ontologyId: ontologyId, lang: ontoLang });
-    await ontologyApi.fetchOntology();
-    if (!ontologyApi.ontology) {
+    let ontologyApi = new OntologyApi({ ontologyId: ontologyId ?? "", lang: ontoLang });
+    let ontology = await ontologyApi.fetchOntology();
+    if (!ontology) {
       setError("Can not load this ontology");
       return true;
     }
-    let isSkos = (ontologyApi.ontology?.['skos'] === true || ontologyApi.ontology?.['skos'] === "true");
     let skosIndividuals = [];
-    if (isSkos) {
+    if (ontology.isSkos) {
       let skosApi = new SkosApi({
         ontologyId: ontologyId,
         iri: "",
-        skosRoot: ontologyApi.ontology?.['skosRoot'],
+        skosRoot: ontology.ontologyJsonData?.['skosRoot'],
         lang: ontoLang
       });
       await skosApi.fetchRootConcepts();
       skosIndividuals = skosApi.rootConcepts;
     }
 
-    setOntology(ontologyApi.ontology);
-    setIsSkosOntology(isSkos);
-    setObsoleteTerms(ontologyApi.obsoleteClasses);
-    setObsoleteProps(ontologyApi.obsoleteProperties);
-    setRootTerms(ontologyApi.rootClasses);
-    setRootProps(ontologyApi.rootProperties);
+    setOntology(ontology);
+    setObsoleteTerms(ontology.obsoleteClasses);
+    setObsoleteProps(ontology.obsoleteProperties);
+    setRootTerms(ontology.rootClasses);
+    setRootProps(ontology.rootProperties);
+    //@ts-ignore
     setSkosRootIndividuals(skosIndividuals);
   }
 
@@ -115,30 +114,31 @@ const OntologyPage = (props) => {
     let countOfNotes = 0;
     let ontologyId = props.match.params.ontologyId;
     if (process.env.REACT_APP_NOTE_FEATURE === "true") {
-      countOfNotes = await getNoteList({
+      let notesList = await getNoteList({
         ontologyId: ontologyId,
-        type: null,
         pageNumber: 0,
         pageSize: 1,
         targetTerm: null,
         onlyOntologyOriginalNotes: false,
         withoutLabelFetch: true
       });
-      countOfNotes = countOfNotes ? countOfNotes['stats']['total_number_of_records'] : 0;
+      countOfNotes = notesList?.stats.total_number_of_records ? Number(notesList.stats.total_number_of_records) : 0;
     }
     setNotesCount(countOfNotes);
   }
 
 
   function setTabOnLoad() {
-    let requestedTab = props.match.params.tab;
+    let requestedTab = props.match.params.tab ?? "";
     if (requestedTab === lastRequestedTab) {
       return true;
     }
 
     let activeTabId = TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] ? TAB_ID_MAP_TO_TAB_ENDPOINT[requestedTab] : OVERVIEW_TAB_ID;
     let irisHistory = { ...lastIrisHistory };
-    irisHistory[requestedTab] = UrlFactory.getIri();
+    if (requestedTab in irisHistory) {
+      irisHistory[requestedTab] = UrlFactory.getIri() ?? "";
+    }
 
     setActiveTab(activeTabId);
     setWaiting(false);
@@ -147,11 +147,11 @@ const OntologyPage = (props) => {
   }
 
 
-  function tabChange(e, v) {
+  function tabChange(e: React.MouseEvent<HTMLAnchorElement>) {
     try {
-      let selectedTabId = e.target.dataset.value;
+      let selectedTabId = e.currentTarget.dataset.value ?? OVERVIEW_TAB_ID;
       setWaiting(true);
-      setActiveTab(parseInt(selectedTabId));
+      setActiveTab(Number(selectedTabId));
       setWaiting(false);
     } catch (e) {
       setActiveTab(OVERVIEW_TAB_ID);
@@ -160,7 +160,7 @@ const OntologyPage = (props) => {
   }
 
 
-  function storeIriForComponent(iri, componentId) {
+  function storeIriForComponent(iri: string, componentId: ComponentIdentity) {
     /**
      * Store the last input iri for tabs
      */
@@ -170,7 +170,7 @@ const OntologyPage = (props) => {
   }
 
 
-  function tabsStateKeeper(domContent, stateObject, componentId, iri) {
+  function tabsStateKeeper(domContent: string, stateObject: any, componentId: ComponentIdentity, iri: string) {
     /**
      * Stores the last state in for tabs components to prevent reload on tab change
      */
@@ -189,7 +189,7 @@ const OntologyPage = (props) => {
   useEffect(() => {
     if (ontoLang !== UrlFactory.getParam({ name: SiteUrlParamNames.Lang })) {
       UrlFactory.setParam({ name: SiteUrlParamNames.Lang, value: ontoLang });
-      window.localStorage.setItem("language", ontoLang);
+      window.localStorage.setItem("language", ontoLang as string);
       setRootTerms([]);
       setRootProps([]);
       setSkosRootIndividuals([]);
@@ -206,7 +206,7 @@ const OntologyPage = (props) => {
   } else {
     const contextData = {
       ontology: ontology,
-      isSkos: isSkosOntology,
+      isSkos: ontology.isSkos,
       storeIriForComponent: storeIriForComponent,
       storeState: tabsStateKeeper,
       tabLastStates: lastTabsStates,
@@ -272,10 +272,10 @@ const OntologyPage = (props) => {
                 const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
 
                 try {
-                  const fileUrl = new URL(ontology.versioned_url);
+                  const fileUrl = new URL(ontology.versionedUrl);
 
                   return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
-                    ? <ChangesTimeline ontologyRawUrl={ontology.versioned_url} />
+                    ? <ChangesTimeline ontologyRawUrl={ontology.versionedUrl} />
                     : errorMessage;
                 } catch (error) {
                   return errorMessage;

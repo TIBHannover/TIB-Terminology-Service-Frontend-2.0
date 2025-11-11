@@ -11,7 +11,6 @@ export const OntologyPageTabs = (props) => {
   */
 
   const ontologyPageContext = useContext(OntologyPageContext);
-  console.log(ontologyPageContext.ontology)
   let result = [];
   for (let configItemKey in props.tabMetadataJson) {
     let configObject = props.tabMetadataJson[configItemKey];
@@ -71,7 +70,7 @@ export const OntologyPageTabs = (props) => {
 
 export const OntologyPageHeadSection = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
-  return [
+  return (
     <div className='span'>
       <div className='row ont-info-bar header-collapseable-section'>
         <div className="col-sm-12">
@@ -100,7 +99,7 @@ export const OntologyPageHeadSection = () => {
         </div>
       </div>
     </div>
-  ];
+  );
 }
 
 

@@ -4,7 +4,6 @@ import { getNoteList } from "../../../api/note";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
-import PropTypes from 'prop-types';
 import { getTsPluginHeaders } from "../../../api/header";
 import { getTourProfile } from "../../../tours/controller";
 
@@ -227,11 +226,6 @@ const NoteList = (props) => {
   );
 }
 
-
-NoteList.propTypes = {
-  term: PropTypes.string.isRequired,
-  termType: PropTypes.string.isRequired
-}
 
 
 export default NoteList;
