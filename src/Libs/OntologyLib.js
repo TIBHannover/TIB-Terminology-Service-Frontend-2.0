@@ -19,7 +19,7 @@ class OntologyLib {
     }
     return value.join(",\n");
   }
-  
+
   static formatSubject(classifications) {
     if (!classifications) {
       return "";
@@ -34,7 +34,7 @@ class OntologyLib {
     }
     return "";
   }
-  
+
   static getCurrentOntologyIdFromUrlPath() {
     let currentUrlPath = window.location.pathname;
     currentUrlPath = currentUrlPath.split("ontologies/");
@@ -46,25 +46,25 @@ class OntologyLib {
     }
     return ontologyIdInUrl;
   }
-  
+
   static getLabel(ontology) {
     if (ontology.title) {
       return ontology.title;
     }
     return ontology.label?.[0] ?? "";
   }
-  
+
   static gerDescription(ontology) {
     return ontology.description ? ontology.description : "";
   }
-  
+
   static getCollections(ontology) {
     if (!ontology.classifications) {
       return [];
     }
     return ontology.classifications?.[0]?.collection ?? [];
   }
-  
+
   static getAnnotationProperties(ontology) {
     try {
       let annotations = {};
@@ -92,7 +92,7 @@ class OntologyLib {
       return {};
     }
   }
-  
+
   static getImports(ontology) {
     try {
       if (!ontology["importsFrom"]) {

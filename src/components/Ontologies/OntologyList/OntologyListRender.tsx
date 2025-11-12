@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Pagination from "../../common/Pagination/Pagination";
 import DropDown from "../../common/DropDown/DropDown";
-import OntologyLib from "../../../Libs/OntologyLib";
 import { Link } from 'react-router-dom';
+import { TsOntology } from "../../../concepts";
 
 
 const TITLE_SORT_KEY = "title";
@@ -24,12 +24,25 @@ const SORT_DROPDONW_OPTIONS = [
   { label: "Date Loaded", value: TIME_SORT_KEY },
 ];
 
+type CmpProps = {
+  handlePagination: (value: string) => void;
+  pageCount: number;
+  pageNumber: number;
+  pageSize: number;
+  handlePageSizeDropDownChange: (e: React.MouseEvent<HTMLLIElement>) => void;
+  sortField: string;
+  handleSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  ontologies: TsOntology[];
+  ontologiesHiddenStatus: boolean[];
+  isLoaded: boolean;
+};
 
-export const OntologyListRender = (props) => {
 
-  const [ontologyListContent, setOntologyListContent] = useState('');
+export const OntologyListRender = (props: CmpProps) => {
 
-  function BuildCollectionForCard(collections) {
+  const [ontologyListContent, setOntologyListContent] = useState<JSX.Element[]>([]);
+
+  function BuildCollectionForCard(collections: string[]) {
     if (!collections) {
       return "";
     }
@@ -49,57 +62,63 @@ export const OntologyListRender = (props) => {
   }
 
 
-  function createOntologyList() {
-    let ontologyList = []
-    for (let i = 0; i < props.ontologies.length; i++) {
-      let item = props.ontologies[i]
-      ontologyList.push(props.ontologiesHiddenStatus[i] &&
-        <div className="row result-card stour-ontology-card-in-list" id={'ontology_' + i} key={item.ontologyId}>
-          <div className='col-sm-9'>
-            <div className="ontology-card-title-section">
-              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
-                className='ontology-button btn btn-secondary stour-onto-id'>{item.ontologyId}</Link>
-              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
-                className="ontology-title-text-in-box stour-onto-name"><b>{OntologyLib.getLabel(item)}</b></Link>
-            </div>
-            <div className="ontology-card-description stour-onto-description">
-              <p className="trunc-text">{OntologyLib.gerDescription(item).substring(0, 100) + " ... "}</p>
-              <a className="read-more-btn" data-value={OntologyLib.gerDescription(item)} onClick={(e) => {
-                let fullDescp = e.target.getAttribute("data-value");
-                let p = e.target.previousElementSibling;
+  function buildOntologyCard(item: TsOntology, identifier: number) {
+    return (
+      <div className="row result-card stour-ontology-card-in-list" id={'ontology_' + identifier} key={item.ontologyId}>
+        <div className='col-sm-9'>
+          <div className="ontology-card-title-section">
+            <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
+              className='ontology-button btn btn-secondary stour-onto-id'>{item.ontologyId}</Link>
+            <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
+              className="ontology-title-text-in-box stour-onto-name"><b>{item.title}</b></Link>
+          </div>
+          <div className="ontology-card-description stour-onto-description">
+            <p className="trunc-text">{item.description.substring(0, 100) + " ... "}</p>
+            <a className="read-more-btn" data-value={item.description}
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                let fullDescp = e.currentTarget.getAttribute("data-value") ?? "";
+                let p = e.currentTarget.previousElementSibling;
                 if (!p) {
                   return
                 }
-                if (e.target.textContent === "[Read more]") {
+                if (e.currentTarget.textContent === "[Read more]") {
                   p.textContent = fullDescp;
-                  e.target.textContent = "[Read less]"
+                  e.currentTarget.textContent = "[Read less]"
                 } else {
                   p.textContent = fullDescp.substring(0, 100) + " ... ";
-                  e.target.textContent = "[Read more]"
+                  e.currentTarget.textContent = "[Read more]"
                 }
               }}
-              >
-                [Read more]</a>
-            </div>
-            {process.env.REACT_APP_PROJECT_ID === "general" &&
-              <div className='ontology-card-collection-name stour-onto-collection-list'>
-                <b>Collections:</b>
-                {BuildCollectionForCard(item.collections)}
-              </div>}
+            >
+              [Read more]</a>
           </div>
-          <div className="col-sm-3 ontology-card-meta-data">
-            <span className='ontology-meta-data-field-span stour-onto-class-count'>{item.numberOfClasses} Classes</span>
-            <hr />
-            <span
-              className='ontology-meta-data-field-span stour-onto-props-count'>{item.numberOfProperties} Properties</span>
-            <hr />
-            <span
-              className='ontology-meta-data-field-span stour-onto-loaded-time'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
-          </div>
+          {process.env.REACT_APP_PROJECT_ID === "general" &&
+            <div className='ontology-card-collection-name stour-onto-collection-list'>
+              <b>Collections:</b>
+              {BuildCollectionForCard(item.collections)}
+            </div>}
         </div>
-      )
-    }
+        <div className="col-sm-3 ontology-card-meta-data">
+          <span className='ontology-meta-data-field-span stour-onto-class-count'>{item.numberOfClasses} Classes</span>
+          <hr />
+          <span
+            className='ontology-meta-data-field-span stour-onto-props-count'>{item.numberOfProperties} Properties</span>
+          <hr />
+          <span
+            className='ontology-meta-data-field-span stour-onto-loaded-time'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
+        </div>
+      </div>
 
+    );
+  }
+
+
+  function createOntologyList() {
+    let ontologyList: JSX.Element[] = []
+    for (let i = 0; i < props.ontologies.length; i++) {
+      let item = props.ontologies[i]
+      ontologyList.push(props.ontologiesHiddenStatus[i] ? buildOntologyCard(item, i) : <div></div>)
+    }
     setOntologyListContent(ontologyList);
   }
 

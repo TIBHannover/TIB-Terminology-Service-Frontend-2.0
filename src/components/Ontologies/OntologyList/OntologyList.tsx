@@ -9,7 +9,6 @@ import Toolkit from '../../../Libs/Toolkit';
 import OntologyListUrlFactory from '../../../UrlFactory/OntologyListUrlFactory';
 import { AppContext } from '../../../context/AppContext';
 import { useQuery } from '@tanstack/react-query';
-import OntologyLib from '../../../Libs/OntologyLib';
 import { TsOntology } from '../../../concepts';
 
 
