@@ -30,6 +30,7 @@ export class TsOntology {
   private _obsoleteProperties: TsProperty[] = [];
   private _annotations: Record<string, any> = {};
   private _importsFrom: Array<string> = [];
+  private _language: Array<string> = [];
   private _repo_url: string;
   ontologyJsonData: OntologyData = {};
 
@@ -60,6 +61,7 @@ export class TsOntology {
     this._annotations = this.processAnnotations(ontologyData);
     this._importsFrom = ontologyData["importsFrom"] ?? [];
     this._repo_url = ontologyData.repo_url ?? "";
+    this._language = ontologyData.language ?? [];
   }
 
   get ontologyId(): string {
@@ -176,6 +178,10 @@ export class TsOntology {
 
   get repo_url(): string {
     return this._repo_url;
+  }
+
+  get language(): Array<string> {
+    return this._language;
   }
 
   set rootClasses(input: TsClass[]) {
