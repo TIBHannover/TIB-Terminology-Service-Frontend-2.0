@@ -1,13 +1,13 @@
-import {useState, useContext, useEffect} from "react";
-import {AppContext} from "../../../../context/AppContext";
+import { useState, useContext, useEffect } from "react";
+import { AppContext } from "../../../../context/AppContext";
 import Multiselect from "multiselect-react-dropdown";
-import {useQuery} from "@tanstack/react-query";
-import {getCollectionsAndThierOntologies} from "../../../../api/collection";
-import {submitOntologySuggestion} from "../../../../api/ontology";
+import { useQuery } from "@tanstack/react-query";
+import { getCollectionsAndThierOntologies } from "../../../../api/collection";
+import { submitOntologySuggestion } from "../../../../api/ontology";
 import TextEditor from "../../../common/TextEditor/TextEditor";
-import {OntologyPageContext} from "../../../../context/OntologyPageContext";
+import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 import draftToMarkdown from 'draftjs-to-markdown';
-import {convertToRaw} from 'draft-js';
+import { convertToRaw } from 'draft-js';
 import AlertBox from "../../../common/Alerts/Alerts";
 import FormLib from "../../../../Libs/FormLib";
 import Modal from "react-bootstrap/Modal";
@@ -16,20 +16,20 @@ import Modal from "react-bootstrap/Modal";
 const CollectionSuggestion = (props) => {
   const appContext = useContext(AppContext);
   const ontoPageContext = useContext(OntologyPageContext);
-  
+
   const [selectedCollections, setSelectedCollections] = useState([]);
   const [editorState, setEditorState] = useState(null);
   const [submitWait, setSubmitWait] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  
-  
+
+
   const collectionWithOntologyListQuery = useQuery({
     queryKey: ['allCollectionsWithTheirOntologies'],
     queryFn: getCollectionsAndThierOntologies
   });
-  
+
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
     for (let col in collectionWithOntologyListQuery.data) {
@@ -39,18 +39,18 @@ const CollectionSuggestion = (props) => {
     }
   }
   const collections = collectionIds;
-  
-  
+
+
   function onSelectRemoveCollection(selectedList, selectedItem) {
     setSelectedCollections(selectedList);
   }
-  
+
   function onTextEditorChange(newEditorState) {
     document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
     setEditorState(newEditorState);
   };
-  
-  
+
+
   function submit() {
     let username = FormLib.getFieldByIdIfValid('col-suggest-username');
     let email = FormLib.getFieldByIdIfValid('col-suggest-email');
@@ -77,24 +77,24 @@ const CollectionSuggestion = (props) => {
       "collection_ids": collectionIds.slice(0, -1),
       "collection_suggestion": true
     }
-    
+
     submitOntologySuggestion(form).then((result) => {
       setFormSubmitSuccess(result);
       setFormSubmitted(true);
       setSubmitWait(false);
       setLoading(false);
     });
-    
+
   }
-  
-  
+
+
   if (!appContext.user) {
-    return ""
+    return <></>;
   }
-  
+
   return (
     <>
-      
+
       <Modal show={props.showModal} fullscreen={true}>
         <Modal.Header>
           <h5 className="modal-title" id={"collectionSuggestionModalLabel"}>{"Collection Suggestion"}</h5>
@@ -140,7 +140,7 @@ const CollectionSuggestion = (props) => {
                   />
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="row">
                 <div className="col-sm-8">
                   <label className="required_input" htmlFor="col-suggest-username">Your name</label>
@@ -156,7 +156,7 @@ const CollectionSuggestion = (props) => {
                   </input>
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="row">
                 <div className="col-sm-8">
                   <label className="required_input" htmlFor="col-suggest-email">Email</label>
@@ -174,7 +174,7 @@ const CollectionSuggestion = (props) => {
                   </input>
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="row">
                 <div className="col-sm-8">
                   <label className="required_input">Reason</label>
@@ -189,14 +189,14 @@ const CollectionSuggestion = (props) => {
                   />
                 </div>
               </div>
-              <br/>
+              <br />
             </>
           }
         </Modal.Body>
         <Modal.Footer>
           <div className="col-auto mr-auto">
             <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
-                    onClick={() => props.setShowModal(false)}>Close
+              onClick={() => props.setShowModal(false)}>Close
             </button>
           </div>
           {!submitWait && !formSubmitted &&

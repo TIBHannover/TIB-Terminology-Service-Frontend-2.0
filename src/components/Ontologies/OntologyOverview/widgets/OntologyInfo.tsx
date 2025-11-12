@@ -1,8 +1,6 @@
 import { useContext, useState } from 'react';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { OntologyPageContext } from '../../../../context/OntologyPageContext';
-import OntologyLib from '../../../../Libs/OntologyLib';
-import Toolkit from '../../../../Libs/Toolkit';
 
 
 const PLACE_HOLDER = "N/A"
@@ -16,7 +14,7 @@ const OntologyInfoTable = () => {
   const [showExtraAnotationBtnText, setShowExtraAnotationBtnText] = useState("+ Show more information");
 
 
-  function handleOntologyShowMoreClick(e) {
+  function handleOntologyShowMoreClick() {
     if (showExtraAnotation) {
       setShowExtraAnotationBtnText("+ Show more information");
       setShowExtraAnotation(false);
@@ -29,14 +27,13 @@ const OntologyInfoTable = () => {
 
 
   function createAnnotations() {
-    let annotationProps = OntologyLib.getAnnotationProperties(ontology);
     let annotations = [];
-    for (let prop in annotationProps) {
+    for (let prop in ontology.annotations) {
       let value = "";
-      if (Toolkit.isString(annotationProps[prop])) {
-        value = annotationProps[prop];
+      if (typeof ontology.annotations[prop] === "string") {
+        value = ontology.annotations[prop];
       } else {
-        value = annotationProps[prop].join(',\n')
+        value = ontology.annotations[prop].join(',\n')
       }
       annotations.push(
         <tr>
@@ -57,9 +54,56 @@ const OntologyInfoTable = () => {
     return annotations;
   };
 
+  function createImports(ontologiesIds: string[]) {
+    let res = [];
+    for (let ontoId of ontologiesIds) {
+      res.push(
+        <a
+          href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + ontoId}
+          className="me-2"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {ontoId}
+        </a>
+      );
+    }
+    return res;
+  }
+
+
+  function createCollections(collections: string[]) {
+    return (
+      <ul>
+        {
+          collections.map((col) => {
+            return (
+              <li>
+                <a
+                  href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=" + col}
+                  target='_blank'>
+                  {col}
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
+    );
+  }
+
+
+  function createSubjects(subjects: string[]) {
+    let value = [];
+    for (let i = 0; i < subjects.length; i++) {
+      value.push(subjects[i]);
+    }
+    return value.join(",\n");
+  }
+
 
   function createOverview() {
-    if (!ontology || ontology === null) {
+    if (!ontology) {
       return ""
     } else {
       return (
@@ -73,21 +117,20 @@ const OntologyInfoTable = () => {
             </div>
           </div>
 
-          <table className="ontology-detail-table stour-overview-page-table" striped="columns">
+          <table className="table table-striped ontology-detail-table stour-overview-page-table">
             <tbody>
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Version</b></td>
                 <td>
-                  {ontology?.["http://www.w3.org/2002/07/owl#versionInfo"]}
+                  {ontology.version}
                 </td>
               </tr>
               <tr>
                 <td className="ontology-overview-table-id-column"><b>VersionIRI</b></td>
                 <td>
-                  <a href={ontology?.["http://www.w3.org/2002/07/owl#versionIRI"]} target="_blank"
-                    rel="noopener noreferrer">{ontology?.["http://www.w3.org/2002/07/owl#versionIRI"]}</a>
-                  {ontology?.["http://www.w3.org/2002/07/owl#versionIRI"]
-                    ? <CopyLinkButton valueToCopy={ontology?.["http://www.w3.org/2002/07/owl#versionIRI"]} />
+                  <a href={ontology.versionedUrl} target="_blank" rel="noopener noreferrer">{ontology.versionedUrl}</a>
+                  {ontology.versionedUrl
+                    ? <CopyLinkButton valueToCopy={ontology.versionedUrl} />
                     : PLACE_HOLDER
                   }
                 </td>
@@ -117,10 +160,9 @@ const OntologyInfoTable = () => {
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Issue tracker</b></td>
                 <td>
-                  <a href={ontology.tracker} className="anchor-in-table" target="_blank"
-                    rel="noopener noreferrer">{ontology.tracker}</a>
-                  {ontology.tracker
-                    ? <CopyLinkButton valueToCopy={ontology.tracker} />
+                  <a href={ontology.issueTrackerUrl} className="anchor-in-table" target="_blank" rel="noopener noreferrer">{ontology.issueTrackerUrl}</a>
+                  {ontology.issueTrackerUrl
+                    ? <CopyLinkButton valueToCopy={ontology.issueTrackerUrl} />
                     : PLACE_HOLDER
                   }
                 </td>
@@ -128,40 +170,26 @@ const OntologyInfoTable = () => {
               <tr>
                 <td className="ontology-overview-table-id-column"><b>License</b></td>
                 <td>
-                  <a href={ontology?.license?.url ?? ""} target="_blank" rel="noopener noreferrer">{ontology?.license?.label ?? ""}</a>
+                  <a href={ontology.licenseUrl} target="_blank" rel="noopener noreferrer">{ontology.license}</a>
                 </td>
               </tr>
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Creator</b></td>
                 <td>
-                  {OntologyLib.formatCreators(ontology)}
+                  {ontology.creator}
                 </td>
               </tr>
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Imports</b></td>
                 <td>
-                  {OntologyLib.getImports(ontology)}
+                  {createImports(ontology.importsFrom)}
                 </td>
               </tr>
               {process.env.REACT_APP_PROJECT_ID === "general" &&
                 <tr>
                   <td className="ontology-overview-table-id-column"><b>Collections</b></td>
                   <td>
-                    <ul>
-                      {
-                        OntologyLib.getCollections(ontology).map((col) => {
-                          return (
-                            <li>
-                              <a
-                                href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=" + col}
-                                target='_blank'>
-                                {col}
-                              </a>
-                            </li>
-                          )
-                        })
-                      }
-                    </ul>
+                    {createCollections(ontology.collections)}
                   </td>
                 </tr>
               }
@@ -169,31 +197,33 @@ const OntologyInfoTable = () => {
                 <tr>
                   <td className="ontology-overview-table-id-column"><b>Subject</b></td>
                   <td>
-                    {OntologyLib.formatSubject(ontology.classifications)}
+                    {createSubjects(ontology.subjects)}
                   </td>
                 </tr>
               }
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Is Skos</b></td>
                 <td>
-                  {String(ontologyPageContext.isSkos)}
+                  {String(ontology.isSkos)}
                 </td>
               </tr>
+
 
               <tr>
                 <td className="ontology-overview-table-id-column"><b>Download</b></td>
                 <td>
-                  <a
+                  {/*<a
                     href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
                     className='btn btn-secondary btn-dark download-ontology-btn'
                     target="_blank"
                   >
-                    <i class="fa fa-download"></i>OWL
+                    <i className="fa fa-download"></i>OWL
                   </a>
+                  */}
                   <a
                     className='btn btn-secondary btn-dark download-ontology-btn'
                     onClick={async () => {
-                      const jsonFile = JSON.stringify(ontology);
+                      const jsonFile = JSON.stringify(ontology.ontologyJsonData);
                       const blob = new Blob([jsonFile], { type: 'application/json' });
                       const href = await URL.createObjectURL(blob);
                       const link = document.createElement('a');
@@ -204,9 +234,10 @@ const OntologyInfoTable = () => {
                       document.body.removeChild(link);
                     }}
                   >
-                    <i class="fa fa-download"></i>Ontology metadata as JSON</a>
+                    <i className="fa fa-download"></i>Ontology metadata as JSON</a>
                 </td>
               </tr>
+
             </tbody>
           </table>
         </div>

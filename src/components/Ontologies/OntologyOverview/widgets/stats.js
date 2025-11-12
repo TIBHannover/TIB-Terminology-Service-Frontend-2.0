@@ -6,7 +6,7 @@ const OntologyStatsBox = () => {
   const ontology = ontologyPageContext.ontology;
 
   if (!ontology || ontology === null) {
-    return "";
+    return <></>;
   }
 
   return (

@@ -28,6 +28,8 @@ export class TsOntology {
   private _rootProperties: TsProperty[] = [];
   private _obsoleteClasses: TsClass[] = [];
   private _obsoleteProperties: TsProperty[] = [];
+  private _annotations: Record<string, any> = {};
+  private _importsFrom: Array<string> = [];
   ontologyJsonData: OntologyData = {};
 
   constructor(ontologyData: OntologyData = {}) {
@@ -54,6 +56,8 @@ export class TsOntology {
     this._issueTrackerUrl = ontologyData.tracker ?? "";
     this._importedFrom = ontologyData.importsFrom ?? [];
     this._isSkos = ontologyData.isSkos ?? false;
+    this._annotations = this.processAnnotations(ontologyData);
+    this._importsFrom = ontologyData["importsFrom"] ?? [];
   }
 
   get ontologyId(): string {
@@ -160,6 +164,14 @@ export class TsOntology {
     return this._obsoleteProperties;
   }
 
+  get importsFrom(): Array<string> {
+    return this._importsFrom;
+  }
+
+  get annotations(): Record<string, any> {
+    return this._annotations;
+  }
+
   set rootClasses(input: TsClass[]) {
     this._rootClasses = input;
   }
@@ -198,6 +210,35 @@ export class TsOntology {
       return ontology.title.trim();
     }
     return ontology.label?.[0].trim() ?? "";
+  }
+
+
+  private processAnnotations(ontology: OntologyData): Record<string, any> {
+    try {
+      let annotations: Record<string, any> = {};
+      for (let prop in ontology) {
+        if (!prop.includes("://")) {
+          // properties that are not IRIs are discarded.
+          continue;
+        }
+        if (prop === "http://purl.obolibrary.org/obo/IAO_0000700") {
+          // has preferred root term prop
+          continue;
+        }
+        if (
+          prop.startsWith("http://www.w3.org/2000/01/rdf-schema#") ||
+          prop.startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#") ||
+          prop.startsWith("http://www.w3.org/2002/07/owl#")
+        ) {
+          // skip all props in owl, rdf, rdfs namespace
+          continue;
+        }
+        annotations[prop] = ontology[prop];
+      }
+      return annotations;
+    } catch {
+      return {};
+    }
   }
 
 

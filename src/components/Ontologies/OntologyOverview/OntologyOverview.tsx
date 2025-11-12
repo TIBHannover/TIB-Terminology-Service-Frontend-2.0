@@ -24,8 +24,8 @@ const OntologyOverview = () => {
 
   // show adopters only if there is at least one use entry with a usedBy block
   const hasAdopters =
-    Array.isArray(ontology?.ontology_use) &&
-    ontology.ontology_use.some((u) => u && u.usedBy);
+    Array.isArray(ontology.ontologyJsonData?.ontology_use) &&
+    ontology.ontologyJsonData.ontology_use.some((u) => u && u.usedBy);
 
   // new state to control the adopters modal
   const [showOntologyAdopters, setShowOntologyAdopters] = useState(false);
