@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Pagination from "../../common/Pagination/Pagination";
 import DropDown from "../../common/DropDown/DropDown";
 import OntologyLib from "../../../Libs/OntologyLib";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const TITLE_SORT_KEY = "title";
@@ -11,24 +11,24 @@ const PROPERT_SORT_KEY = "numberOfProperties";
 const INDIVIDUAL_SORT_KEY = "numberOfIndividuals";
 const PREFIX_SORT_KEY = "ontologyId";
 const TIME_SORT_KEY = "loaded"
-const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value: 10}, {label: "20", value: 20}, {
+const PAGE_SIZES_FOR_DROPDOWN = [{ label: "10", value: 10 }, { label: "20", value: 20 }, {
   label: "30",
   value: 30
-}, {label: "40", value: 40}];
+}, { label: "40", value: 40 }];
 const SORT_DROPDONW_OPTIONS = [
-  {label: "Title", value: TITLE_SORT_KEY},
-  {label: "Prefix", value: PREFIX_SORT_KEY},
-  {label: "Classes Count", value: CLASS_SORT_KEY},
-  {label: "Properties Count", value: PROPERT_SORT_KEY},
-  {label: "Individuals Count", value: INDIVIDUAL_SORT_KEY},
-  {label: "Date Loaded", value: TIME_SORT_KEY},
+  { label: "Title", value: TITLE_SORT_KEY },
+  { label: "Prefix", value: PREFIX_SORT_KEY },
+  { label: "Classes Count", value: CLASS_SORT_KEY },
+  { label: "Properties Count", value: PROPERT_SORT_KEY },
+  { label: "Individuals Count", value: INDIVIDUAL_SORT_KEY },
+  { label: "Date Loaded", value: TIME_SORT_KEY },
 ];
 
 
 export const OntologyListRender = (props) => {
-  
+
   const [ontologyListContent, setOntologyListContent] = useState('');
-  
+
   function BuildCollectionForCard(collections) {
     if (!collections) {
       return "";
@@ -43,12 +43,12 @@ export const OntologyListRender = (props) => {
         result.push(<span className='ontology-collection-name'><Link
           to={process.env.REACT_APP_PROJECT_SUB_PATH + '/collections?col=' + collections[i]}>{collections[i]}</Link></span>)
       }
-      
+
     }
     return result;
   }
-  
-  
+
+
   function createOntologyList() {
     let ontologyList = []
     for (let i = 0; i < props.ontologies.length; i++) {
@@ -58,9 +58,9 @@ export const OntologyListRender = (props) => {
           <div className='col-sm-9'>
             <div className="ontology-card-title-section">
               <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
-                    className='ontology-button btn btn-secondary stour-onto-id'>{item.ontologyId}</Link>
+                className='ontology-button btn btn-secondary stour-onto-id'>{item.ontologyId}</Link>
               <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + item.ontologyId}
-                    className="ontology-title-text-in-box stour-onto-name"><b>{OntologyLib.getLabel(item)}</b></Link>
+                className="ontology-title-text-in-box stour-onto-name"><b>{OntologyLib.getLabel(item)}</b></Link>
             </div>
             <div className="ontology-card-description stour-onto-description">
               <p className="trunc-text">{OntologyLib.gerDescription(item).substring(0, 100) + " ... "}</p>
@@ -84,31 +84,31 @@ export const OntologyListRender = (props) => {
             {process.env.REACT_APP_PROJECT_ID === "general" &&
               <div className='ontology-card-collection-name stour-onto-collection-list'>
                 <b>Collections:</b>
-                {BuildCollectionForCard(OntologyLib.getCollections(item))}
+                {BuildCollectionForCard(item.collections)}
               </div>}
           </div>
           <div className="col-sm-3 ontology-card-meta-data">
             <span className='ontology-meta-data-field-span stour-onto-class-count'>{item.numberOfClasses} Classes</span>
-            <hr/>
+            <hr />
             <span
               className='ontology-meta-data-field-span stour-onto-props-count'>{item.numberOfProperties} Properties</span>
-            <hr/>
+            <hr />
             <span
               className='ontology-meta-data-field-span stour-onto-loaded-time'>Loaded: {item.loaded ? item.loaded.split("T")[0] : "N/A"}</span>
           </div>
         </div>
       )
     }
-    
+
     setOntologyListContent(ontologyList);
   }
-  
-  
+
+
   useEffect(() => {
     createOntologyList();
   }, [props.ontologies, props.ontologiesHiddenStatus]);
-  
-  
+
+
   return (
     <div className='row'>
       <div className='col-sm-12'>
@@ -123,14 +123,14 @@ export const OntologyListRender = (props) => {
               <div className='col-sm-12'>
                 Not able to find what you are looking for? You can
                 <Link className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 ps-1 pe-1 me-2 stour-onto-list-suggest-onto"
-                      to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>suggest</Link>
+                  to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>suggest</Link>
                 your ontology to be added to the list.
               </div>
             </div>
             <br></br>
           </>
         }
-        
+
         <div className='row'>
           <div className='col-sm-6 text-right zero-padding-col'>
             <DropDown

@@ -240,7 +240,7 @@ const OntologyList = () => {
       for (let onto of ontologiesList) {
         if (!exclusiveCollections) {
           for (let col of selectedCollections) {
-            if (OntologyLib.getCollections(onto).includes(col)) {
+            if (onto.collections.includes(col)) {
               collectionFilteredOntologies.push(onto);
               break;
             }
@@ -248,7 +248,7 @@ const OntologyList = () => {
         } else {
           let found = true;
           for (let col of selectedCollections) {
-            if (!OntologyLib.getCollections(onto).includes(col)) {
+            if (!onto.collections.includes(col)) {
               found = false;
               break;
             }
