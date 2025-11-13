@@ -51,20 +51,31 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
           const contacts = Array.isArray(used.contact)
             ? used.contact.map((c) => c?.mail).filter(Boolean)
             : [];
-          const ids = Array.isArray(used.identifier) ? used.identifier : [];
 
-          // --- NEW: gather usage descriptions from both possible places
-          const usageDescs = [
-            u?.usageDescription,
-            used?.usageDescription, // just in case some records put it here
-          ]
+          // identifiers from ANY possible fields (string or array) ➜ flattened & deduped
+          const idSources = [
+            used?.identifier,
+            used?.identifiers,
+            used?.extraIdentifier,
+            used?.extraIdentifiers,
+            u?.identifier,
+            u?.identifiers,
+          ];
+          const ids = idSources
+            .flatMap((x) => (Array.isArray(x) ? x : x ? [x] : []))
+            .map(String)
             .filter(Boolean)
-            .filter((x) => x.description) // only show if we actually have text
+            .filter((v, i, arr) => arr.indexOf(v) === i);
+
+          // gather usage descriptions from both places
+          const usageDescs = [u?.usageDescription, used?.usageDescription]
+            .filter(Boolean)
+            .filter((x) => x.description)
             .map((x) => ({ description: x.description, language: x.language }));
 
           return (
             <div key={idx} className="border rounded p-3 mb-3 bg-white">
-              {/* Usage descriptions at the TOP of each block (all sources) */}
+              {/* Usage descriptions (all sources) */}
               {usageDescs.length > 0 && (
                 <div className="mb-2">
                   {usageDescs.map((ud, i) => (
@@ -83,16 +94,19 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
                 </Row>
               )}
 
+              {/* Identifiers: first one as "Identifier", extras as "Additional Identifier" */}
               {ids.length > 0 && (
-                <Row label="Identifiers">
-                  {listWithCommas(
-                    ids.map((d) => (
-                      <LinkOrText key={d} href={d}>
-                        {d}
-                      </LinkOrText>
-                    ))
-                  )}
-                </Row>
+                <>
+                  <Row label="Identifier">
+                    <LinkOrText href={ids[0]}>{ids[0]}</LinkOrText>
+                  </Row>
+
+                  {ids.slice(1).map((d, i) => (
+                    <Row key={i} label="Additional Identifier">
+                      <LinkOrText href={d}>{d}</LinkOrText>
+                    </Row>
+                  ))}
+                </>
               )}
 
               {used.homepage && (
@@ -104,17 +118,38 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               {prov.length > 0 && (
                 <Row label="Provider">
                   {listWithCommas(
-                    prov.map((p, i) => (
-                      <span key={`${p.label}-${i}`}>
-                        {p.label}
-                        {p.identifier ? (
-                          <>
-                            {", links to "}
-                            <LinkOrText href={p.identifier}>{p.identifier}</LinkOrText>
-                          </>
-                        ) : null}
-                      </span>
-                    ))
+                    prov.map((p, i) => {
+                      // provider identifiers (any field name), flattened & deduped
+                      const pIdSources = [
+                        p?.identifier,
+                        p?.identifiers,
+                        p?.extraIdentifier,
+                        p?.extraIdentifiers,
+                      ];
+                      const pIds = pIdSources
+                        .flatMap((x) => (Array.isArray(x) ? x : x ? [x] : []))
+                        .map(String)
+                        .filter(Boolean)
+                        .filter((v, j, arr) => arr.indexOf(v) === j);
+
+                      return (
+                        <span key={`${p.label}-${i}`}>
+                          {p.label}
+                          {pIds.length > 0 && (
+                            <>
+                              {" "}
+                              {listWithCommas(
+                                pIds.map((id) => (
+                                  <LinkOrText key={id} href={id}>
+                                    {id}
+                                  </LinkOrText>
+                                ))
+                              )}
+                            </>
+                          )}
+                        </span>
+                      );
+                    })
                   )}
                 </Row>
               )}
