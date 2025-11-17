@@ -44,13 +44,14 @@ export class TsProperty extends TsTerm {
         } else {
           ranges = this.term[TsProperty.PROPERTY_RANGE_PURL];
         }
-        this.term["ranges"] = [];
+        let propertyRanges = [];
         for (let iri of ranges) {
           let rangeObj = { ontologyId: "", iri: iri, label: "" };
           rangeObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
           rangeObj.label = this.term["linkedEntities"][iri]["label"][0];
-          this.term["ranges"].push(rangeObj);
+          propertyRanges.push(rangeObj);
         }
+        return propertyRanges;
       }
       return [];
     } catch {
