@@ -1,11 +1,11 @@
-import { classMetaData, propertyMetaData, individualMetadata } from './metadataParser';
+import { classMetaData, propertyMetaData, individualMetadata, skosTermMetaData } from './metadataParser';
 import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
 import PropTypes from 'prop-types';
 import { TermDetailTableComProp, TableMetadata } from '../types';
-import { TsClass, TsIndividual, TsProperty } from '../../../../concepts';
+import { TsClass, TsIndividual, TsProperty, TsSkosTerm } from '../../../../concepts';
 
 
 const TermDetailTable = (props: TermDetailTableComProp) => {
@@ -38,6 +38,8 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
       metadataToRender = individualMetadata(props.node);
     } else if (props.node instanceof TsProperty) {
       metadataToRender = propertyMetaData(props.node);
+    } else if (props.node instanceof TsSkosTerm) {
+      metadataToRender = skosTermMetaData(props.node);
     }
 
     let result = [];

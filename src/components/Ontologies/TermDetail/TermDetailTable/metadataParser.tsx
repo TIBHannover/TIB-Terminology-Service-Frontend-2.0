@@ -1,7 +1,7 @@
 import TermLib from "../../../../Libs/TermLib";
 import Toolkit from "../../../../Libs/Toolkit";
 import { TableMetadata } from "../types";
-import { TsClass, TsIndividual, TsProperty, TsTerm } from "../../../../concepts";
+import { TsClass, TsIndividual, TsProperty, TsTerm, TsSkosTerm } from "../../../../concepts";
 
 
 
@@ -121,6 +121,25 @@ export function propertyMetaData(term: TsProperty) {
   return metadata;
 }
 
+
+export function skosTermMetaData(term: TsSkosTerm) {
+  let metadata = createBaseMetadata(term);
+  metadata['Instances'] = { "value": TermLib.createInstancesListForClass(term), "isLink": false };
+  metadata['has curation status'] = { "value": term.curationStatus, "isLink": false };
+
+  if (term.annotation) {
+    renderAnnotation(term, metadata);
+  }
+  if (term.annotation["has_dbxref"] && term.annotation["has_dbxref"].length > 0) {
+    const xrefContent = `
+        <ul>
+            ${term.annotation["has_dbxref"].map((xref: string) => `<li>${xref}</li>`).join('')}
+        </ul>
+      `;
+    metadata["has_dbxref"] = { value: xrefContent, isLink: false };
+  }
+  return metadata;
+}
 
 
 
