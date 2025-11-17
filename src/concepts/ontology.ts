@@ -32,6 +32,7 @@ export class TsOntology {
   private _importsFrom: Array<string> = [];
   private _language: Array<string> = [];
   private _repo_url: string;
+  private _tracker: string;
   ontologyJsonData: OntologyData = {};
 
   constructor(ontologyData: OntologyData = {}) {
@@ -44,7 +45,7 @@ export class TsOntology {
     this._purl = ontologyData.ontologyPurl ?? "";
     this._loaded = ontologyData.loaded ?? "";
     this._version = ontologyData["http://www.w3.org/2002/07/owl#versionInfo"] ?? "";
-    this._versionedUrl = ontologyData["http://www.w3.org/2002/07/owl#versionIRI"] ?? "";
+    this._versionedUrl = ontologyData["versioned_url"] || ontologyData["http://www.w3.org/2002/07/owl#versionIRI"] || "";
     this._numberOfClasses = parseInt(ontologyData.numberOfClasses ?? "0");
     this._numberOfProperties = parseInt(ontologyData.numberOfProperties ?? "0");
     this._numberOfIndividuals = parseInt(ontologyData.numberOfIndividuals ?? "0");
@@ -62,6 +63,7 @@ export class TsOntology {
     this._importsFrom = ontologyData["importsFrom"] ?? [];
     this._repo_url = ontologyData.repo_url ?? "";
     this._language = ontologyData.language ?? [];
+    this._tracker = ontologyData.tracker ?? "";
   }
 
   get ontologyId(): string {
@@ -182,6 +184,10 @@ export class TsOntology {
 
   get language(): Array<string> {
     return this._language;
+  }
+
+  get tracker(): string {
+    return this._tracker;
   }
 
   set rootClasses(input: TsClass[]) {
