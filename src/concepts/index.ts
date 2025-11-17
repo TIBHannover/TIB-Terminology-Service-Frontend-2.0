@@ -6,3 +6,4 @@ export * from "./term";
 export * from "./termFactory";
 export * from "./termset";
 export * from "./types";
+export * from "./skosClass";

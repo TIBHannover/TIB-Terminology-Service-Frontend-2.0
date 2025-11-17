@@ -70,8 +70,7 @@ export default class TreeHelper {
       let res = [];
       if (isSkos) {
         let skosApi = new SkosApi({ ontologyId: ontologyId, iri: targetNodeIri, lang: lang });
-        await skosApi.fetchChildrenForSkosTerm();
-        res = skosApi.childrenForSkosTerm;
+        res = await skosApi.fetchChildrenForSkosTerm();
       }
       else {
         let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName, lang);

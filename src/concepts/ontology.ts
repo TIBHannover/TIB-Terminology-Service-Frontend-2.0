@@ -58,7 +58,7 @@ export class TsOntology {
     this._creator = this.processCreators(ontologyData);
     this._issueTrackerUrl = ontologyData.tracker ?? "";
     this._importedFrom = ontologyData.importsFrom ?? [];
-    this._isSkos = ontologyData.isSkos ?? false;
+    this._isSkos = ontologyData.skos ?? false;
     this._annotations = this.processAnnotations(ontologyData);
     this._importsFrom = ontologyData["importsFrom"] ?? [];
     this._repo_url = ontologyData.repo_url ?? "";

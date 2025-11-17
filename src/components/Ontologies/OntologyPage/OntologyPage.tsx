@@ -18,7 +18,7 @@ import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import ChangesTimeline from "../../Ondet/ChangesTimeline";
 import { RouteComponentProps } from 'react-router';
-import { TsOntology, TsClass, TsProperty } from '../../../concepts';
+import { TsOntology, TsClass, TsProperty, TsSkosTerm } from '../../../concepts';
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -88,7 +88,7 @@ const OntologyPage = (props: CmpPropp) => {
       setError("Can not load this ontology");
       return true;
     }
-    let skosIndividuals = [];
+    let skosIndividuals: TsSkosTerm[] = [];
     if (ontology.isSkos) {
       let skosApi = new SkosApi({
         ontologyId: ontologyId,
@@ -96,8 +96,7 @@ const OntologyPage = (props: CmpPropp) => {
         skosRoot: ontology.ontologyJsonData?.['skosRoot'],
         lang: ontoLang
       });
-      await skosApi.fetchRootConcepts();
-      skosIndividuals = skosApi.rootConcepts;
+      skosIndividuals = await skosApi.fetchRootConcepts();
     }
 
     setOntology(ontology);
