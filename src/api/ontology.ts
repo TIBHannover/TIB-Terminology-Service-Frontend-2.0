@@ -76,7 +76,7 @@ class OntologyApi {
 
     async fetchRootClasses(): Promise<{ roots: TsClass[], obsoletes: TsClass[] }> {
         try {
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
             let result = await fetch(url, getCallSetting);
             let respData = await result.json();
             let terms = respData['elements'] as OntologyTermDataV2[];
@@ -95,13 +95,12 @@ class OntologyApi {
         } catch (e) {
             return { roots: [], obsoletes: [] };
         }
-
     }
 
 
     async fetchRootProperties(): Promise<{ roots: TsProperty[], obsoletes: TsProperty[] }> {
         try {
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
             let result = await fetch(url, getCallSetting);
             let respData = await result.json();
             let terms = respData['elements'] as OntologyTermDataV2[];
