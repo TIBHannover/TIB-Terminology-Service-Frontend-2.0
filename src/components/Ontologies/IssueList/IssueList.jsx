@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { createLabelTags, createIssueDescription, createIssueTitle, setTypeRadioBtn } from './helper';
-import { getOntologyGithubIssueList } from "../../../api/tsMicroBackendCalls";
+import { getOntologyGithubIssueList } from "../../../api/github";
 import DropDown from "../../common/DropDown/DropDown";
 import TermRequest from '../TermRequest/TermRequest';
 import '../../layout/githubPanel.css';

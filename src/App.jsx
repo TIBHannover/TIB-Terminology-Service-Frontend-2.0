@@ -11,7 +11,7 @@ import Auth from './Libs/AuthLib';
 import AppRouter from './Router';
 import { LoginLoadingAnimation } from './components/User/Login/LoginLoading';
 import { AppContext } from './context/AppContext';
-import { getReportList } from './api/tsMicroBackendCalls';
+import { getReportList } from './api/report';
 import LoadingPage from './LoadingPage';
 import SiteTour from './tours/Tour';
 import 'bootstrap/dist/css/bootstrap.min.css';
