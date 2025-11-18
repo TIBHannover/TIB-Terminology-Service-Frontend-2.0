@@ -19,6 +19,7 @@ import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import { olsIsUp } from './api/system';
 import { useQuery } from '@tanstack/react-query';
 import { getUserTermsetList } from './api/term_set';
+import ErrorBoundary from './errors/appErrorPage';
 import './components/layout/common.css';
 import './components/layout/mediaQueries.css';
 import './components/layout/custom.css';
@@ -133,7 +134,9 @@ const App = () => {
                           <>
                             {isBackendDown && <BackendIsDownMessage />}
                             <CookieBanner />
-                            <AppRouter />
+                            <ErrorBoundary>
+                              <AppRouter />
+                            </ErrorBoundary>
                           </>
                         }
                       </div>

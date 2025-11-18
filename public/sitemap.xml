@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>http://localhost:3000/ts/</loc>
+    <title>Home</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/ontologysuggestion</loc>
+    <title>Ontology Suggestion</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/ontologies</loc>
+    <title>Ontologies</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/api</loc>
+    <title>API</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/docs</loc>
+    <title>Documentation</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/search</loc>
+    <title>Search</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/imprint</loc>
+    <title>Imprint</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/PrivacyPolicy</loc>
+    <title>Privacy Policy</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/TermsOfUse</loc>
+    <title>Terms of Use</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/about</loc>
+    <title>About</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/help</loc>
+    <title>Help</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/contact</loc>
+    <title>Contact</title>
+  </url>
+  <url>
+    <loc>http://localhost:3000/ts/collections</loc>
+    <title>Collections</title>
+  </url>
+</urlset>
