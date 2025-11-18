@@ -37,7 +37,7 @@ function generateSitemap() {
 ${urls}
 </urlset>`;
 
-  fs.writeFileSync('./public/sitemap.xml', xml.trim());
+  fs.writeFileSync('./build/sitemap.xml', xml.trim());
   console.log('Sitemap generated!');
 }
 
