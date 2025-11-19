@@ -17,6 +17,18 @@ export class TsTerm {
   static SUBCLASS_PURL = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
   static EQUIVALENT_CLASS_PURL = "http://www.w3.org/2002/07/owl#equivalentClass";
   static DISJOINTWITH_PURL = "http://www.w3.org/2002/07/owl#disjointWith";
+  static ANNOTATION_EXPECTION = [
+    TsTerm.IDENTIFIER_PURL_HTTP,
+    TsTerm.IDENTIFIER_PURL_HTTPS,
+    TsTerm.CURATION_STATUS_PURL,
+    TsTerm.DB_XREF_PURL,
+    TsTerm.PROPERTY_DOMAIN_PURL,
+    TsTerm.PROPERTY_RANGE_PURL,
+    TsTerm.SUBCLASS_PURL,
+    TsTerm.EQUIVALENT_CLASS_PURL,
+    TsTerm.DISJOINTWITH_PURL
+  ];
+
   term: OntologyTermDataV2;
 
 

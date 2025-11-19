@@ -50,7 +50,7 @@ export class TsClass extends TsTerm {
       annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTPS];
     }
     for (let key in this.term) {
-      if (!key.includes('purl.obolibrary.org') || key === TsClass.CURATION_STATUS_PURL) {
+      if (TsTerm.ANNOTATION_EXPECTION.includes(key)) {
         continue;
       }
       if (this.term['linkedEntities'][key]) {
