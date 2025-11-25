@@ -21,7 +21,7 @@ export const OntologyPageTabs = (props) => {
       continue;
     }
     result.push(
-      <li className={"nav-item ontology-detail-nav-item " + "stour-" + configObject['id']}
+      <div className={"ontology-detail-nav-item " + "stour-" + configObject['id']}
         key={configObject['keyForRenderAsTabItem']}>
         <Link
           onClick={props.tabChangeHandler}
@@ -32,7 +32,7 @@ export const OntologyPageTabs = (props) => {
           {configObject['tabTitle']}
           {configItemKey === "Notes" ? ` (${props.noteCounts})` : ""}
         </Link>
-      </li>
+      </div>
     );
   }
 
@@ -43,14 +43,10 @@ export const OntologyPageTabs = (props) => {
   }
   return (
     <>
-      <div className="row">
-        <div className="col-10">
-          <ul className="nav nav-tabs">
-            {result}
-          </ul>
-        </div>
-        <div className="col-2">
-          <form className="ms-auto text-end">
+      <div className="row h-100">
+        <div className="col-12 d-flex flex-column">
+          {result}
+          <form className="mt-auto bottom-0">
             <DropDown
               options={langOptions}
               dropDownId="onto-language"

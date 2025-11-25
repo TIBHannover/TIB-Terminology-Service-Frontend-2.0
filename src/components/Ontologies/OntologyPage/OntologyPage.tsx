@@ -219,70 +219,74 @@ const OntologyPage = (props: CmpPropp) => {
         <OntologyPageContext.Provider value={contextData}>
           <OntologyPageHeadSection />
           <div className='col-sm-12'>
-            <OntologyPageTabs
-              tabMetadataJson={ontologyPageTabConfig}
-              tabChangeHandler={tabChange}
-              activeTabId={activeTab}
-              noteCounts={notesCount}
-            />
-            {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
-              <OntologyOverview />
-            }
-            {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
-              <DataTree
-                rootNodes={rootTerms}
-                obsoleteTerms={obsoleteTerms}
-                componentIdentity={'terms'}
-                rootNodesForSkos={skosRootIndividuals}
-                key={'termTreePage'}
-              />
-            }
-
-            {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
-              <DataTree
-                rootNodes={rootProps}
-                obsoleteTerms={obsoleteProps}
-                componentIdentity={'properties'}
-                key={'propertyTreePage'}
-                rootNodesForSkos={skosRootIndividuals}
-              />
-            }
-            {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
-              <IndividualsList
-                rootNodes={rootTerms}
-                rootNodesForSkos={skosRootIndividuals}
-                componentIdentity={'individuals'}
-                key={'individualsTreePage'}
-              />
-            }
-            {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
-              <TermList componentIdentity={'termList'} key={'termListPage'} />
-            }
-            {!waiting && (activeTab === NOTES_TAB_ID) &&
-              <NoteList key={'notesPage'} />
-            }
-            {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&
-              <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'} />
-            }
-
-            {
-              !waiting && activeTab === ONDET_TAB_ID && (() => {
-                const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
-
-                try {
-                  const fileUrl = new URL(ontology.versionedUrl);
-
-                  return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
-                    ? <ChangesTimeline ontologyRawUrl={ontology.versionedUrl} />
-                    : errorMessage;
-                } catch (error) {
-                  return errorMessage;
+            <div className='row'>
+              <div className='col-sm-1'>
+                <OntologyPageTabs
+                  tabMetadataJson={ontologyPageTabConfig}
+                  tabChangeHandler={tabChange}
+                  activeTabId={activeTab}
+                  noteCounts={notesCount}
+                />
+              </div>
+              <div className='col-sm-10 rounded-2 bg-white p-4'>
+                {waiting && <i className="fa fa-circle-o-notch fa-spin"></i>}
+                {!waiting && (activeTab === OVERVIEW_TAB_ID) &&
+                  <OntologyOverview />
                 }
-              })()
-            }
+                {!waiting && (activeTab === TERM_TREE_TAB_ID) &&
+                  <DataTree
+                    rootNodes={rootTerms}
+                    obsoleteTerms={obsoleteTerms}
+                    componentIdentity={'terms'}
+                    rootNodesForSkos={skosRootIndividuals}
+                    key={'termTreePage'}
+                  />
+                }
 
+                {!waiting && (activeTab === PROPERTY_TREE_TAB_ID) &&
+                  <DataTree
+                    rootNodes={rootProps}
+                    obsoleteTerms={obsoleteProps}
+                    componentIdentity={'properties'}
+                    key={'propertyTreePage'}
+                    rootNodesForSkos={skosRootIndividuals}
+                  />
+                }
+                {!waiting && (activeTab === INDIVIDUAL_LIST_TAB_ID) &&
+                  <IndividualsList
+                    rootNodes={rootTerms}
+                    rootNodesForSkos={skosRootIndividuals}
+                    componentIdentity={'individuals'}
+                    key={'individualsTreePage'}
+                  />
+                }
+                {!waiting && (activeTab === TERM_LIST_TAB_ID) &&
+                  <TermList componentIdentity={'termList'} key={'termListPage'} />
+                }
+                {!waiting && (activeTab === NOTES_TAB_ID) &&
+                  <NoteList key={'notesPage'} />
+                }
+                {!waiting && (activeTab === GIT_ISSUE_LIST_ID) &&
+                  <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'} />
+                }
 
-            {waiting && <i className="fa fa-circle-o-notch fa-spin"></i>}
+                {
+                  !waiting && activeTab === ONDET_TAB_ID && (() => {
+                    const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted on Github or Gitlab</h5></p>;
+
+                    try {
+                      const fileUrl = new URL(ontology.versionedUrl);
+
+                      return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
+                        ? <ChangesTimeline ontologyRawUrl={ontology.versionedUrl} />
+                        : errorMessage;
+                    } catch (error) {
+                      return errorMessage;
+                    }
+                  })()
+                }
+              </div>
+            </div>
           </div>
         </OntologyPageContext.Provider>
       </div>

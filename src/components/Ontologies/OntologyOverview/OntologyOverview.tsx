@@ -37,7 +37,7 @@ const OntologyOverview = () => {
 
   return (
     <>
-      <div key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
+      <div key={'ontolofyOverviewPage'} className="row">
         <div className='col-sm-9 '>
           <OntologyInfoTable />
         </div>

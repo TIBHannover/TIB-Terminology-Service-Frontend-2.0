@@ -12,18 +12,6 @@ const PAGE_SIZES_FOR_DROPDOWN = [{ label: "20", value: 20 }, { label: "30", valu
   value: 40
 }, { label: "50", value: 50 }];
 
-const LABEL_COL_NAME = "label";
-const ID_COL_NAME = "id";
-const DESCRIPTION_COL_NAME = "description";
-const ALTERNATIVE_TERM_COL_NAME = "alternativeTerm";
-const SUB_CLASS_OF_COL_NAME = "subClassOf";
-const EQUIVALENT_TO_COL_NAME = "equivalentTo";
-const EXAMPLE_OF_USAGE_COL_NAME = "exampleOfUsage";
-const SEE_ALSO_COL_NAME = "seeAlso";
-const CONTRIBUTOR_COL_NAME = "contributor";
-const COMMENT_COL_NAME = "comment";
-
-
 export const RenderTermList = (props) => {
   const [rowDataForTable, setRowDataForTable] = useState([]);
   const [columnDataForTable, setColumnDataForTable] = useState();
@@ -126,7 +114,7 @@ export const RenderTermList = (props) => {
 
 
   return (
-    <div className="tree-view-container list-container">
+    <div className="tree-view-container">
       <div className="row">
         <div className="col-sm-12 stour-class-list-jumpto-box">
           <JumpTo
