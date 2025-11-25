@@ -20,13 +20,14 @@ export const OntologyPageTabs = (props) => {
     if (process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true" && configItemKey === "IssueList") {
       continue;
     }
+    let activeClassName = (props.activeTabId === parseInt(configObject['tabId'])) ? "nav-item-active" : "";
     result.push(
-      <div className={"ontology-detail-nav-item " + "stour-" + configObject['id']}
+      <div className={"ontology-detail-nav-item " + activeClassName + " stour-" + configObject['id']}
         key={configObject['keyForRenderAsTabItem']}>
         <Link
           onClick={props.tabChangeHandler}
           data-value={configObject['tabId']}
-          className={(props.activeTabId === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}
+          className={"nav-link"}
           to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId + configObject['urlEndPoint']}
         >
           {configObject['tabTitle']}

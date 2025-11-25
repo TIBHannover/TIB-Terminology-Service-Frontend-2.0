@@ -445,20 +445,23 @@ const Tree = (props) => {
 
   return (
     <div className="col-sm-12" onClick={(e) => processClick(e)}>
-      <div className="row">
-        <div className="col-sm-12">
-          <JumpTo
-            targetType={props.componentIdentity}
-            label={"Jump to"}
-            handleJumtoSelection={props.handleJumtoSelection}
-            obsoletes={false}
-          />
+      <div className="tree-action-area-container">
+        <div className="row">
+          <div className="col-sm-12">
+            <JumpTo
+              targetType={props.componentIdentity}
+              label={"Jump to"}
+              handleJumtoSelection={props.handleJumtoSelection}
+              obsoletes={false}
+            />
 
+          </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-12">
-          {!isLoading && !noNodeExist && createTreeActionButtons()}
+        <hr></hr>
+        <div className="row position-sticky top-0 start-0 w-100 z-50">
+          <div className="col-sm-12">
+            {!isLoading && !noNodeExist && createTreeActionButtons()}
+          </div>
         </div>
       </div>
       {isLoading && <div className="isLoading"></div>}

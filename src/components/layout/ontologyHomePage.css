@@ -113,6 +113,25 @@ th {
     border-radius: 5px;
     margin-bottom: 20px;
     font-size: 13px;
+    text-decoration: none;
+}
+
+.nav-item-active {
+    background-color: #0E6668;
+}
+
+.nav-item-active:hover {
+    background-color: #0E6668 !important;
+}
+
+.nav-item-active>.nav-link {
+    color: white !important;
+    text-decoration: none;
+}
+
+.nav-item-active>.nav-link:hover {
+    color: white !important;
+    text-decoration: none;
 }
 
 .ontology-detail-nav-item:hover {
