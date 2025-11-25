@@ -118,7 +118,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     let query = e.target.value;
     if (query) {
       let selectedTerms = data.terms.filter((term: OntologyTermDataV2) => {
-        let t = new TsTerm(term.json ?? {});
+        let t = new TsTerm(term);
         if (t.label.toLowerCase().includes(query.toLowerCase())) {
           return true;
         }
