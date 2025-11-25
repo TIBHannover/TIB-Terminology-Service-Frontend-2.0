@@ -17,7 +17,7 @@ body {
     background-color: #ecf0f0;
     color: #42484e;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     overflow-x: hidden;
 }
 
@@ -45,7 +45,7 @@ body a:hover {
 
 body button {
     background-color: #404040;
-    font-size: 14px;
+    font-size: 12px;
     border-color: #404040;
 }
 
@@ -55,11 +55,18 @@ body .btn-secondary,
     border-color: #404040;
     text-decoration: none;
     border-radius: 5px;
+    font-size: 13px;
+    padding: 5px;
 }
 
-body .btn-sm {
+body .btn-sm,
+.btn-sm:hover {
     font-size: 10px;
-    padding: 5px;
+    padding: 1px;
+    background-color: #404040;
+    border-color: #404040;
+    text-decoration: none;
+    color: white;
 }
 
 body .btn-danger {
@@ -312,7 +319,7 @@ body .cc_more_info {
     margin-bottom: 20px;
 }
 
-.site-header-top-row > a {
+.site-header-top-row>a {
     text-decoration: none;
     color: white;
 }
@@ -480,6 +487,7 @@ body .isLoading-inline-small {
     0% {
         -webkit-transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
     }
@@ -489,6 +497,7 @@ body .isLoading-inline-small {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -735,9 +744,11 @@ body .modal {
     0% {
         opacity: 0;
     }
+
     50% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
     }
@@ -794,7 +805,7 @@ body .site-tour-btn {
     /*box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.2),*/
     /*5px 5px 15px rgba(0, 0, 0, 0.3);*/
     box-shadow: -4px -4px 10px rgba(0.3, 0.3, 0.3, 0.3),
-    6px 6px 15px rgba(0, 0, 0, 0.3);
+        6px 6px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.2s ease;
 }
 

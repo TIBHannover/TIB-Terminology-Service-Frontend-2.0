@@ -10,7 +10,7 @@
 
 body .autosuggest-jumpto-container {
     position: relative;
-    margin-left: 10px;
+    /* margin-left: 10px; */
 }
 
 body .autosuggest-sticky {

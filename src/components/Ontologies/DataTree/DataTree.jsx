@@ -105,16 +105,6 @@ const DataTree = (props) => {
   return (
     <div className="tree-view-container resizable-container">
       <div className="tree-page-left-part" id="page-left-pane">
-        <div className='row autosuggest-sticky'>
-          <div className='col-sm-10 stour-tree-jumpto-box'>
-            <JumpTo
-              targetType={props.componentIdentity}
-              label={"Jump to"}
-              handleJumtoSelection={handleJumtoSelection}
-              obsoletes={false}
-            />
-          </div>
-        </div>
         <div className='tree-container'>
           {!loading && (props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0 && props.componentIdentity !== "properties")) &&
             <Tree
@@ -128,6 +118,7 @@ const DataTree = (props) => {
               individualViewChanger={""}
               handleResetTreeInParent={handleResetTreeEvent}
               jumpToIri={jumpToIri}
+              handleJumtoSelection={handleJumtoSelection}
             />
           }
           {!loading && props.rootNodes.length === 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length === 0 && props.componentIdentity !== "properties") &&

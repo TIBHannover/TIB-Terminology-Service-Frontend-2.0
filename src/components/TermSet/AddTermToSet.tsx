@@ -337,7 +337,7 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
   return (
     <>
       <button
-        className={"btn btn-secondary borderless-btn " + (btnClass ?? "")}
+        className={"btn btn-sm borderless-btn " + (btnClass ?? "")}
         aria-label="add this term to termsets"
         title={title}
         onClick={() => setShowModal(true)}
