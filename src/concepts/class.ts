@@ -57,7 +57,7 @@ export class TsClass extends TsTerm {
       if (TsTerm.ANNOTATION_EXPECTION.includes(key)) {
         continue;
       }
-      if (this.term['linkedEntities'][key]) {
+      if (this.term['linkedEntities']?.[key]) {
         if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
           annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
         } else {
