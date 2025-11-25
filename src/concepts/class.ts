@@ -33,6 +33,10 @@ export class TsClass extends TsTerm {
     return this.recursivelyBuildStructure(TsTerm.DISJOINTWITH_PURL);
   }
 
+  get rules(): string {
+    return this.getRules();
+  }
+
   override get annotation(): { [key: string]: any } {
     return this.buildAnnotations();
   }
@@ -214,6 +218,38 @@ export class TsClass extends TsTerm {
     }
     let span = document.createElement('span') as HTMLSpanElement;
     return span;
+  }
+
+
+  getRules(): string {
+    try {
+      const objectPurl = "http://www.w3.org/ns/shacl#object";
+      const predicatePurl = "http://www.w3.org/ns/shacl#predicate";
+      const subjectPurl = "http://www.w3.org/ns/shacl#subject";
+      if (!this.term[TsTerm.RULE_PURL]) {
+        return "";
+      }
+      let rules = this.term[TsTerm.RULE_PURL];
+      let result = document.createElement('div') as HTMLDivElement;
+      for (let triple of rules) {
+        let object = triple[objectPurl];
+        let predicate = triple[predicatePurl];
+        let subject = triple[subjectPurl];
+        let predicateLabel = this.term['linkedEntities'][predicate]['label'][0];
+        let ruleContainer = document.createElement('div') as HTMLDivElement;
+        let objectAnchor = buildHtmlAnchor(object, object);
+        let subjectAnchor = buildHtmlAnchor(subject, subject);
+        ruleContainer.appendChild(objectAnchor);
+        ruleContainer.appendChild(document.createTextNode("  " + predicateLabel + " "));
+        ruleContainer.appendChild(subjectAnchor);
+        result.appendChild(ruleContainer);
+      }
+      return result.outerHTML;
+
+    } catch (e) {
+      // console.log(e);
+      return "";
+    }
   }
 
 

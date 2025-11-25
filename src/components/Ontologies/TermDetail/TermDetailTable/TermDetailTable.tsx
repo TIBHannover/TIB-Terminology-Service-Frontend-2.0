@@ -90,8 +90,6 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     }
     if (isLink) {
       return (<a href={metadataValue} target='_blank' rel="noreferrer">{metadataValue}</a>)
-    } else if (["Used in axiom", "Equivalent to", "SubClass Of", "has curation status", "Disjoint with"].includes(metadataLabel)) {
-      return (<span dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
     } else if (["Type", "Imported From", "Also In", "Instances", "Instance of", "Domain", "Range", "Description"].includes(metadataLabel)) {
       return metadataValue;
     }

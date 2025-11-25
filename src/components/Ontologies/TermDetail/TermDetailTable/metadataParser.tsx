@@ -71,6 +71,7 @@ export function classMetaData(term: TsClass) {
   metadata['Used in axiom'] = { "value": term.relations, "isLink": false };
   metadata['Instances'] = { "value": TermLib.createInstancesListForClass(term), "isLink": false };
   metadata['has curation status'] = { "value": term.curationStatus, "isLink": false };
+  metadata['Rules'] = { "value": term.rules, "isLink": false };
 
   if (term.annotation) {
     renderAnnotation(term, metadata);
