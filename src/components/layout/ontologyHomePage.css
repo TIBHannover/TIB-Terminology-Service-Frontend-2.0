@@ -23,6 +23,7 @@
     border-left: 20px solid transparent;
     cursor: pointer;
     text-align: center;
+    margin-top: -40px;
 }
 
 .ontology-page-container .header-collpase-icon {
@@ -117,12 +118,12 @@ th {
     margin-bottom: 20px;
 }
 
-.ontology-detail-nav-item > .nav-link {
+.ontology-detail-nav-item>.nav-link {
     color: #0e6668;
     text-decoration: none;
 }
 
-.ontology-detail-nav-item > .nav-link:hover {
+.ontology-detail-nav-item>.nav-link:hover {
     color: #0e6668;
 }
 
@@ -140,9 +141,27 @@ th {
 }
 
 /* Ontology Adopters (simple list look) ichrak part */
-.adopters-panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; }
-.adopters-row { padding: 10px 12px; border-bottom: 1px dotted #e5e7eb; line-height: 1.5; }
-.adopters-row:last-child { border-bottom: 0; }
-.adopters-key { font-weight: 600; text-transform: lowercase; }
-.adopters-modal .modal-body { padding: 16px; }
+.adopters-panel {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
 
+.adopters-row {
+    padding: 10px 12px;
+    border-bottom: 1px dotted #e5e7eb;
+    line-height: 1.5;
+}
+
+.adopters-row:last-child {
+    border-bottom: 0;
+}
+
+.adopters-key {
+    font-weight: 600;
+    text-transform: lowercase;
+}
+
+.adopters-modal .modal-body {
+    padding: 16px;
+}
