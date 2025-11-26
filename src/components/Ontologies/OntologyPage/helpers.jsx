@@ -37,27 +37,12 @@ export const OntologyPageTabs = (props) => {
     );
   }
 
-  let langOptions = [];
-  for (let lang of ontologyPageContext.ontology.language ?? []) {
-    let temp = { "label": lang, "value": lang };
-    langOptions.push(temp);
-  }
   return (
     <>
       <div className="row h-100">
         <div className="col-12 d-flex flex-column">
           {result}
-          <form className="mt-auto bottom-0">
-            <DropDown
-              options={langOptions}
-              dropDownId="onto-language"
-              dropDownTitle="Ontology language"
-              dropDownChangeHandler={(e) => {
-                ontologyPageContext.setOntoLang(e.target.value);
-              }}
-              defaultValue={ontologyPageContext.ontoLang}
-            />
-          </form>
+
         </div>
       </div>
     </>
@@ -66,18 +51,49 @@ export const OntologyPageTabs = (props) => {
 
 
 export const OntologyPageHeadSection = () => {
+  const ontologyPageContext = useContext(OntologyPageContext);
+  let langOptions = [];
+  for (let lang of ontologyPageContext.ontology.language ?? []) {
+    let temp = { "label": lang, "value": lang };
+    langOptions.push(temp);
+  }
+
   return (
-    <div className='row collpase-button-container justify-content-md-center'>
-      <div className='col-sm-1'>
-        <div className='header-collapse-btn' onClick={() => {
-          collpaseSiteHeader()
-        }}>
-          <i className='fa fa-angle-double-up header-collpase-icon'></i>
-        </div>
+    <div className='row ontology-page-headbar'>
+      <div className='col-sm-6 pb-0'>
+        <p className='fw-bold'>{ontologyPageContext.ontology.title}</p>
+      </div>
+      <div className='col-sm-6 text-end pb-0'>
+        <form className="mt-auto bottom-0">
+          <DropDown
+            options={langOptions}
+            dropDownId="onto-language"
+            dropDownTitle={<i className="fa fa-language fs-5 border-0"></i>}
+            dropDownChangeHandler={(e) => {
+              ontologyPageContext.setOntoLang(e.target.value);
+            }}
+            defaultValue={ontologyPageContext.ontoLang}
+          />
+        </form>
       </div>
     </div>
   );
 }
+
+
+// export const OntologyPageHeadSection = () => {
+//   return (
+//     <div className='row collpase-button-container justify-content-md-center'>
+//       <div className='col-sm-1'>
+//         <div className='header-collapse-btn' onClick={() => {
+//           collpaseSiteHeader()
+//         }}>
+//           <i className='fa fa-angle-double-up header-collpase-icon'></i>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 function collpaseSiteHeader() {

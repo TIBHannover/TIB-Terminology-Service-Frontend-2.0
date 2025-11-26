@@ -79,10 +79,11 @@ th {
     border: none;
 }
 
-.ontology-page-container .download-ontology-btn {
-    /* margin-right: 20px; */
-    /* background-color: #404040; */
-    /* font-size: 14px; */
+body .ontology-page-headbar {
+    background-color: white;
+    font-size: 14px;
+    position: relative;
+    top: -5px;
 }
 
 .ontology-overview-table-id-column {
