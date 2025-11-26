@@ -271,25 +271,30 @@ export class TsTerm {
   }
 
   buildAnnotations(): { [key: string]: any } {
-    let annotations: { [key: string]: any } = {};
-    if (this.term[TsTerm.IDENTIFIER_PURL_HTTP]) {
-      annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTP];
-    } else if (this.term[TsTerm.IDENTIFIER_PURL_HTTPS]) {
-      annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTPS];
-    }
-    for (let key in this.term) {
-      if (!key.includes('purl.obolibrary.org') || key === TsTerm.CURATION_STATUS_PURL) {
-        continue;
+    try {
+      let annotations: { [key: string]: any } = {};
+      if (this.term[TsTerm.IDENTIFIER_PURL_HTTP]) {
+        annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTP];
+      } else if (this.term[TsTerm.IDENTIFIER_PURL_HTTPS]) {
+        annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTPS];
       }
-      if (this.term?.['linkedEntities'][key]) {
-        if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
-          annotations[this.term?.['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
-        } else {
-          annotations[this.term?.['linkedEntities'][key]['label'][0]] = this.term[key];
+      for (let key in this.term) {
+        if (!key.includes('purl.obolibrary.org') || key === TsTerm.CURATION_STATUS_PURL) {
+          continue;
+        }
+        if (this.term['linkedEntities']?.[key]?.['label']?.length) {
+          if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
+            annotations[this.term?.['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
+          } else {
+            annotations[this.term?.['linkedEntities'][key]['label'][0]] = this.term[key];
+          }
         }
       }
+      return annotations;
+
+    } catch (e) {
+      return {};
     }
-    return annotations;
   }
 }
 
