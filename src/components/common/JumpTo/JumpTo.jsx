@@ -41,16 +41,12 @@ const JumpTo = (props) => {
   async function onAutoCompleteChange({ value }) {
     let enteredTerm = value;
     let type = TYPE_MAPP[props.targetType];
-    // if(type === "class" && props.isSkos){
-    //     type = "individual"; 
-    // }       
     if (enteredTerm.length > 0) {
       let inputForAutoComplete = {};
       inputForAutoComplete['searchQuery'] = value;
       inputForAutoComplete['ontologyIds'] = ontologyPageContext.ontology.ontologyId;
       inputForAutoComplete['types'] = type;
       inputForAutoComplete['obsoletes'] = props.obsoletes;
-      console.log(inputForAutoComplete);
       let autoCompleteResult = await getJumpToResult(inputForAutoComplete, 10, ontologyPageContext.ontoLang);
       setResultList(autoCompleteResult);
     }

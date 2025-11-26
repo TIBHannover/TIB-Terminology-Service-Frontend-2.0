@@ -69,7 +69,7 @@ export const RenderIndividualList = (props) => {
       }
       let position = node.offsetTop;
       // -40 due to the margin-top of the container that makes issue for the scroll
-      document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position;
+      document.getElementsByClassName('tree-page-left-part')[0].scrollTop = position - 180;
     }
   }
 
@@ -85,24 +85,26 @@ export const RenderIndividualList = (props) => {
 
   return (
     <>
-      <div className='row'>
-        <div className="col-sm-12">
-          <JumpTo
-            targetType={props.componentIdentity}
-            label={"Jump to"}
-            handleJumtoSelection={props.handleJumtoSelection}
-            obsoletes={false}
-          />
-        </div>
-      </div>
-      {!ontologyPageContext.isSkos &&
-        <div className='row tree-action-button-area'>
+      <div className="tree-action-area-container">
+        <div className='row'>
           <div className="col-sm-12">
-            {createActionButtonSection()}
+            <JumpTo
+              targetType={props.componentIdentity}
+              label={"Jump to"}
+              handleJumtoSelection={props.handleJumtoSelection}
+              obsoletes={false}
+            />
           </div>
         </div>
-      }
-      <hr />
+        {!ontologyPageContext.isSkos &&
+          <div className='row tree-action-button-area'>
+            <div className="col-sm-12">
+              {createActionButtonSection()}
+            </div>
+          </div>
+        }
+        <hr />
+      </div>
       <div className="row">
         <div className="col-sm-12 individual-list-container">
           {!props.isLoaded && <div className="col-sm-12 isLoading"></div>}
