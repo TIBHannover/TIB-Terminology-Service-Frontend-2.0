@@ -1,6 +1,16 @@
 
 const DropDown = (props) => {
-  const { mandatory, options, dropDownId, containerClass, dropDownTitle, dropdownClassName, dropDownValue, dropDownChangeHandler, defaultValue } = props;
+  const {
+    mandatory,
+    options,
+    dropDownId,
+    containerClass,
+    dropDownTitle,
+    dropdownClassName,
+    dropDownValue,
+    dropDownChangeHandler,
+    defaultValue,
+    tooltipText } = props;
 
   let optionsRendered = [];
   for (let item of options) {
@@ -10,7 +20,7 @@ const DropDown = (props) => {
   }
 
   return (
-    <div className={"site-dropdown-container " + containerClass}>
+    <div className={"site-dropdown-container " + containerClass} title={tooltipText ?? ""}>
       <label htmlFor={dropDownId} className={'col-form-label ' + (mandatory ? "required_input" : "")}>
         {dropDownTitle}
       </label>

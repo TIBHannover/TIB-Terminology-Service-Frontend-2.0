@@ -68,6 +68,7 @@ export const OntologyPageHeadSection = () => {
           <DropDown
             options={langOptions}
             dropDownId="onto-language"
+            tooltipText="Select the language of the ontology"
             dropDownTitle={<i className="fa fa-language fs-5 border-0"></i>}
             dropDownChangeHandler={(e) => {
               ontologyPageContext.setOntoLang(e.target.value);
