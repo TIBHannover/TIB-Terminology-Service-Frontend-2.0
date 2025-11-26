@@ -50,6 +50,7 @@ const JumpTo = (props) => {
       inputForAutoComplete['ontologyIds'] = ontologyPageContext.ontology.ontologyId;
       inputForAutoComplete['types'] = type;
       inputForAutoComplete['obsoletes'] = props.obsoletes;
+      console.log(inputForAutoComplete);
       let autoCompleteResult = await getJumpToResult(inputForAutoComplete, 10, ontologyPageContext.ontoLang);
       setResultList(autoCompleteResult);
     }

@@ -20,8 +20,7 @@
     width: 100%;
 }
 
-.tree-container,
-.individual-list-container {
+.tree-container {
     margin-top: 20px;
 }
 
@@ -35,8 +34,7 @@
 
 
 .tree-action-button-area {
-    float: left;
-    padding-top: 10px;
+    padding-top: 20px;
     padding-bottom: 10px;
 }
 

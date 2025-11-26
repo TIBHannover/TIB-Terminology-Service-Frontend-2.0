@@ -3,7 +3,6 @@ import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
-import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';

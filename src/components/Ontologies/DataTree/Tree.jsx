@@ -457,13 +457,13 @@ const Tree = (props) => {
 
           </div>
         </div>
-        <hr></hr>
         <div className="row position-sticky top-0 start-0 w-100 z-50">
           <div className="col-sm-12">
             {!isLoading && !noNodeExist && createTreeActionButtons()}
           </div>
         </div>
       </div>
+      <hr />
       {isLoading && <div className="isLoading"></div>}
       {!isLoading && !noNodeExist &&
         <div className='row'>
