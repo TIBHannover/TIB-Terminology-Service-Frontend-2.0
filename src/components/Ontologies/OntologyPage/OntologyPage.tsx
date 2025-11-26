@@ -214,7 +214,7 @@ const OntologyPage = (props: CmpPropp) => {
     };
 
     return (
-      <div className='justify-content-center ontology-page-container'>
+      <div className='justify-content-center ontology-page-container' id="content-for-fullscreen">
         {Toolkit.createHelmet(ontology.ontologyId)}
         <OntologyPageContext.Provider value={contextData}>
           <div className='col-sm-12'>

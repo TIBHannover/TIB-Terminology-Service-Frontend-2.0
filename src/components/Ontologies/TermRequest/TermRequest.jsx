@@ -155,6 +155,9 @@ const TermRequest = (props) => {
 
 
   function openModal() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
     if (!appContext.user) {
       setLoginModal(true);
       setTimeout(() => setLoginModal(false), 1000);

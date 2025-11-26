@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
 import { useContext } from 'react';
 import DropDown from '../../common/DropDown/DropDown';
+import { useState } from 'react';
 
 
 export const OntologyPageTabs = (props) => {
@@ -52,32 +53,56 @@ export const OntologyPageTabs = (props) => {
 
 export const OntologyPageHeadSection = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
+  const [fullscreenMode, setFullscreenMode] = useState(false);
   let langOptions = [];
   for (let lang of ontologyPageContext.ontology.language ?? []) {
     let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
   }
 
+  function handleFullScreen() {
+    let contentToFullScreen = document.getElementById("content-for-fullscreen");
+    if (contentToFullScreen && !document.fullscreenElement) {
+      contentToFullScreen.requestFullscreen();
+      setFullscreenMode(true);
+      contentToFullScreen.style.paddingTop = '50px';
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+      setFullscreenMode(false);
+      contentToFullScreen.style.paddingTop = '0';
+    }
+  }
+
   return (
     <div className='row ontology-page-headbar'>
-      <div className='col-sm-6 pb-0'>
+      <div className='col-sm-8 pb-0'>
         <p className='fw-bold'>{ontologyPageContext.ontology.title}</p>
       </div>
-      <div className='col-sm-6 text-end pb-0'>
-        <form className="mt-auto bottom-0">
-          <DropDown
-            options={langOptions}
-            dropDownId="onto-language"
-            tooltipText="Select the language of the ontology"
-            dropDownTitle={<i className="fa fa-language fs-5 border-0"></i>}
-            dropDownChangeHandler={(e) => {
-              ontologyPageContext.setOntoLang(e.target.value);
-            }}
-            defaultValue={ontologyPageContext.ontoLang}
-          />
-        </form>
+      <div className='col-sm-4 pb-0'>
+        <div className='d-flex flex-row gap-4 justify-content-end'>
+          <div>
+            <form className="mt-auto bottom-0">
+              <DropDown
+                options={langOptions}
+                dropDownId="onto-language"
+                tooltipText="Select the language of the ontology"
+                dropDownTitle={<i className="fa fa-language fs-5 border-0"></i>}
+                dropDownChangeHandler={(e) => {
+                  ontologyPageContext.setOntoLang(e.target.value);
+                }}
+                defaultValue={ontologyPageContext.ontoLang}
+              />
+            </form>
+          </div>
+          <div className='pt-1'>
+            <button className='btn btn-sm' onClick={handleFullScreen}>
+              {!fullscreenMode && <i class="fas fa-expand fs-6 mt-1" title='Full screen'></i>}
+              {fullscreenMode && <i class="fas fa-compress fs-6 mt-1" title='Exit full screen'></i>}
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </div >
   );
 }
 

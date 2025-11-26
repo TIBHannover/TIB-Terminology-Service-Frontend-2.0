@@ -340,7 +340,13 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
         className={"btn btn-sm borderless-btn " + (btnClass ?? "")}
         aria-label="add this term to termsets"
         title={title}
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          }
+
+          setShowModal(true);
+        }}
       >
         {appContext.user && <i className="bi bi-plus-square"></i>}
         {!appContext.user && <i className="bi bi-bookmark"></i>}

@@ -64,6 +64,9 @@ const OntologyOverview = () => {
                   type="button"
                   className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
                   onClick={() => {
+                    if (document.fullscreenElement) {
+                      document.exitFullscreen();
+                    }
                     if (appContext.user) {
                       setShowCollectionSuggestionModal(true);
                     } else {
@@ -85,7 +88,12 @@ const OntologyOverview = () => {
                 <button
                   type="button"
                   className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
-                  onClick={() => setShowOntologyAdopters(true)}
+                  onClick={() => {
+                    if (document.fullscreenElement) {
+                      document.exitFullscreen();
+                    }
+                    setShowOntologyAdopters(true)
+                  }}
                 >
                   Ontology adopters
                 </button>
