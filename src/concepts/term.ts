@@ -98,7 +98,7 @@ export class TsTerm {
               }
             }
             result.push(defArr);
-          } else {
+          } else if (typeof desc.value === "string" || Array.isArray(desc.value)) {
             result.push(desc);
           }
         }
