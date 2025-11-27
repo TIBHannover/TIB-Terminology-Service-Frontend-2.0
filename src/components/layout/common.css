@@ -86,7 +86,8 @@ body .borderless-btn:focus {
     box-shadow: none;
 }
 
-body .term-button {
+body .term-button,
+.term-button:hover {
     background-color: #0e6668;
     color: white;
     margin-left: 15px;
@@ -96,7 +97,8 @@ body .term-button {
     border-color: #0e6668;
 }
 
-body .synonyms-button {
+body .synonyms-button,
+.synonyms-button:hover {
     background-color: #c2ba1c;
     color: white;
     margin-left: 15px;
@@ -106,13 +108,9 @@ body .synonyms-button {
     border-color: #0e6668;
 }
 
-body .term-button:hover {
-    text-decoration: none;
-    background-color: #0e6668;
-    color: white;
-}
 
-body .ontology-button {
+body .ontology-button,
+.ontology-button:hover {
     background-color: #bbae9e;
     color: black;
     padding: 3px;
@@ -120,12 +118,6 @@ body .ontology-button {
     font-size: 12px;
     border-color: #bbae9e;
     margin-top: 2px;
-}
-
-body .ontology-button:hover {
-    text-decoration: none;
-    background-color: #bbae9e;
-    color: white;
 }
 
 .site-footer {

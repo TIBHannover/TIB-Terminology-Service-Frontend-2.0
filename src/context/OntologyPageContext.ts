@@ -12,7 +12,7 @@ type Blueprint = {
   storeState: (domContent: string, stateObject: any, componentId: ComponentIdentity, iri: string) => void,
   ontoLang: string,
   setOntoLang: React.Dispatch<React.SetStateAction<string>>
-  handleFullScreen: () => void
+  // handleFullScreen: () => void
 }
 
 const blueprint: Blueprint = {
@@ -24,7 +24,7 @@ const blueprint: Blueprint = {
   storeState: function saveTabStatesToPreventReloadOnTabChange() { /* sets tabLastStates */ },
   ontoLang: "en",
   setOntoLang: function setOntoLang() { },
-  handleFullScreen: function handleFullScreen() { }
+  // handleFullScreen: function handleFullScreen() { }
 }
 
 

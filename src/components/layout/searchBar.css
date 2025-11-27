@@ -46,16 +46,12 @@
     border-right: 0;
 }
 
-.search-bar-container .search-btn {
+.search-bar-container .search-btn,
+.search-bar-container .search-btn:hover {
     background-color: #404040;
     color: white;
     padding: 10px;
     border-radius: 0;
-}
-
-.search-bar-container .search-btn:hover {
-    background-color: #404040;
-    color: white;
 }
 
 .search-in-box {
