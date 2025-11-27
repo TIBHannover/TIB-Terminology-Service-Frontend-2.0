@@ -7,6 +7,8 @@ import "../layout/diff2html_table_row_fixed.css"
 import DOMPurify from "dompurify";
 import PropTypes from 'prop-types';
 import OndetApi from "../../api/ondet";
+import { OntologyPageContext } from "../../context/OntologyPageContext";
+import { useContext } from "react";
 
 const ROBOT_DIFF_STATIC_HEADER_REGEX = /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
 
@@ -22,6 +24,7 @@ const customMarkdownComponents = {
 };
 
 const ChangesTimeline = ({ ontologyRawUrl }) => {
+    const ontologyPageContext = useContext(OntologyPageContext);
     const [ontologyCommits, setOntologyCommits] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -123,9 +126,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
     };
 
     const handleOpen = () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        }
+        ontologyPageContext.handleFullScreen();
         setOpen(true);
     };
 

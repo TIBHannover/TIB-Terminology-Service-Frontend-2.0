@@ -53,26 +53,11 @@ export const OntologyPageTabs = (props) => {
 
 export const OntologyPageHeadSection = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
-  const [fullscreenMode, setFullscreenMode] = useState(false);
   let langOptions = [];
   for (let lang of ontologyPageContext.ontology.language ?? []) {
     let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
   }
-
-  function handleFullScreen() {
-    let contentToFullScreen = document.getElementById("content-for-fullscreen");
-    if (contentToFullScreen && !document.fullscreenElement) {
-      contentToFullScreen.requestFullscreen();
-      setFullscreenMode(true);
-      contentToFullScreen.style.paddingTop = '50px';
-    } else if (document.exitFullscreen) {
-      document.exitFullscreen();
-      setFullscreenMode(false);
-      contentToFullScreen.style.paddingTop = '0';
-    }
-  }
-
   return (
     <div className='row ontology-page-headbar'>
       <div className='col-sm-8 pb-0'>
@@ -95,9 +80,9 @@ export const OntologyPageHeadSection = () => {
             </form>
           </div>
           <div className='pt-1'>
-            <button className='btn btn-sm' onClick={handleFullScreen}>
-              {!fullscreenMode && <i class="fas fa-expand fs-6 mt-1" title='Full screen'></i>}
-              {fullscreenMode && <i class="fas fa-compress fs-6 mt-1" title='Exit full screen'></i>}
+            <button className='btn btn-sm' onClick={ontologyPageContext.handleFullScreen}>
+              {!ontologyPageContext.fullScreenMode && <i class="fas fa-expand fs-6 mt-1" title='Full screen'></i>}
+              {ontologyPageContext.fullScreenMode && <i class="fas fa-compress fs-6 mt-1" title='Exit full screen'></i>}
             </button>
           </div>
         </div>

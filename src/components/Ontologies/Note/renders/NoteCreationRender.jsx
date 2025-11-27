@@ -37,9 +37,7 @@ export const NoteCreationRender = (props) => {
               : "btn btn-sm borderless-btn note-action-menu-btn"
             }
             onClick={() => {
-              if (document.fullscreenElement) {
-                document.exitFullscreen();
-              }
+              ontologyPageContext.handleFullScreen();
               if (appContext.user) {
                 setShowModal(true);
               } else {
@@ -185,5 +183,5 @@ export const NoteCreationRender = (props) => {
       </Modal>
     </>
   );
-  
+
 }

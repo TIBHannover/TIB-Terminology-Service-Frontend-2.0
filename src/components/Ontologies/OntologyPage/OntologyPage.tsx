@@ -77,6 +77,7 @@ const OntologyPage = (props: CmpPropp) => {
   const [lastTabsStates, setLastTabsStates] = useState<{ [key: string]: any }>({ "terms": null, "properties": null, "gitIssues": "" });
   const [notesCount, setNotesCount] = useState(0);
   const [ontoLang, setOntoLang] = useState<string>(language);
+  const [fullscreenMode, setFullscreenMode] = useState(false);
   window.localStorage.setItem("language", ontoLang);
 
 
@@ -177,6 +178,19 @@ const OntologyPage = (props: CmpPropp) => {
     setLastTabsStates(tabsStates);
   }
 
+  function handleFullScreen() {
+    let contentToFullScreen = document.getElementById("content-for-fullscreen");
+    if (contentToFullScreen && !document.fullscreenElement) {
+      contentToFullScreen.requestFullscreen();
+      setFullscreenMode(true);
+      contentToFullScreen.style.paddingTop = '50px';
+    } else if (document.exitFullscreen && contentToFullScreen) {
+      document.exitFullscreen();
+      setFullscreenMode(false);
+      contentToFullScreen.style.paddingTop = '0';
+    }
+  }
+
 
   useEffect(() => {
     loadOntologyData();
@@ -210,7 +224,9 @@ const OntologyPage = (props: CmpPropp) => {
       tabLastStates: lastTabsStates,
       lastVisitedIri: lastIrisHistory,
       ontoLang: ontoLang,
-      setOntoLang: setOntoLang
+      setOntoLang: setOntoLang,
+      fullScreenMode: fullscreenMode,
+      handleFullScreen: handleFullScreen
     };
 
     return (
