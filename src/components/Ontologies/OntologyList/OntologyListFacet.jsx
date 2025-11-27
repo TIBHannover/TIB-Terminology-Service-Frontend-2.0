@@ -1,13 +1,13 @@
-import {useState, useEffect, useContext} from "react";
-import {AppContext} from "../../../context/AppContext";
+import { useState, useEffect, useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
 
 
 export const OntologyListFacet = (props) => {
-  
+
   const appContext = useContext(AppContext);
   const [collectionBoxes, setCollectionBoxes] = useState('');
-  
-  
+
+
   function createCollectionsCheckBoxes() {
     let result = [];
     for (let col in props.allCollections) {
@@ -39,47 +39,51 @@ export const OntologyListFacet = (props) => {
     }
     setCollectionBoxes(result);
   }
-  
-  
+
+
   useEffect(() => {
     createCollectionsCheckBoxes();
   }, []);
-  
-  
+
+
   useEffect(() => {
     createCollectionsCheckBoxes();
   }, [props.selectedCollections, props.allCollections]);
-  
-  
+
+
   return (
     <div className="row">
-      <div className='col-sm-12 ' id="ontology-list-facet-grid">
-        <h3 className='ontology-list-facet-header'>Filter</h3>
-        <div className='row'>
-          <div className='col-sm-12 stour-onto-list-filter-keyword' id="ontologylist-search-grid">
-            <div className="input-group mb-3">
+      <div className='col-sm-12 ms-0 ps-0' id="ontology-list-facet-grid">
+        <div className="row">
+          <div className="col-sm-12 ps-0">
+            <div className="mb-2 d-flex flex-column stour-onto-list-filter-keyword" id="ontologylist-search-grid">
+              <label className="input-group-text" htmlFor="ontology-list-search-input" id="ontology-list-search-label">
+                Search for an ontology
+              </label>
               <input
                 type="text"
                 className="form-control"
                 aria-label="By keyword"
                 aria-describedby="By keyword"
-                placeholder='By keyword'
+                placeholder='Enter your keyword ...'
+                id="ontology-list-search-input"
                 value={props.enteredKeyword !== "" ? props.enteredKeyword : ""}
                 onChange={props.filterWordChange}
               />
             </div>
+
           </div>
         </div>
         {process.env.REACT_APP_COLLECTION_FACET_SHOWN === "true" &&
           <div className='row ontology-list-facet-section-box stour-onto-list-filter-collectin'>
-            <h3 className='h-headers ontology-list-facet-header'>Collection</h3>
             <div className="col-sm-12 facet-box">
+              <h4 className='h-headers ontology-list-facet-header text-center'>Filter by Collection</h4>
               {!appContext.userSettings.userCollectionEnabled &&
                 <>
                   <div className='facet-switch-holder'>
                     <div className="form-switch">
                       <input className="form-check-input toggle-input" type="checkbox" role="switch" id="facet-switch"
-                             onChange={props.onSwitchChange}/>
+                        onChange={props.onSwitchChange} />
                       <label className="form-check-label ms-2" htmlFor="facet-switch">Intersection</label>
                     </div>
                   </div>
@@ -100,7 +104,7 @@ export const OntologyListFacet = (props) => {
                 </>
               }
             </div>
-          
+
           </div>
         }
       </div>
