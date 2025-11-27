@@ -55,3 +55,8 @@
 #lastUpdateRange {
     margin-left: 10px;
 }
+
+#ontology-list-search-label {
+    background-color: #0e6668;
+    color: white;
+}

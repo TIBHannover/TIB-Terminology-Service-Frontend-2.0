@@ -33,6 +33,7 @@ export class TsOntology {
   private _language: Array<string> = [];
   private _repo_url: string;
   private _tracker: string;
+  private _cleanTitle: string;
   ontologyJsonData: OntologyData = {};
 
   constructor(ontologyData: OntologyData = {}) {
@@ -64,6 +65,7 @@ export class TsOntology {
     this._repo_url = ontologyData.repo_url ?? "";
     this._language = ontologyData.language ?? [];
     this._tracker = ontologyData.tracker ?? "";
+    this._cleanTitle = this.getCleanTitle();
   }
 
   get ontologyId(): string {
@@ -190,6 +192,10 @@ export class TsOntology {
     return this._tracker;
   }
 
+  get cleanTitle(): string {
+    return this._cleanTitle;
+  }
+
   set rootClasses(input: TsClass[]) {
     this._rootClasses = input;
   }
@@ -257,6 +263,14 @@ export class TsOntology {
     } catch {
       return {};
     }
+  }
+
+  private getCleanTitle(): string {
+    let title = this.ontologyJsonData["title"] ?? "";
+    title = title.trim();
+    const stopWords = ["a", "an", "the", "and", "or", "but", "is", "are", "to", "of"];
+    let cleanedTitle = title.split(" ").filter((word: string) => !stopWords.includes(word.toLowerCase())).join(" ");
+    return cleanedTitle;
   }
 
 

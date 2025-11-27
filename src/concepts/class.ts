@@ -43,29 +43,34 @@ export class TsClass extends TsTerm {
 
 
   override buildAnnotations(): { [key: string]: any } {
-    let annotations = {} as { [key: string]: any };
-    let dbXref = this.createDbXrefAnnotation();
-    if (dbXref && dbXref.length) {
-      annotations["has_dbxref"] = dbXref;
-    }
-    if (this.term[TsClass.IDENTIFIER_PURL_HTTP]) {
-      annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTP];
-    } else if (this.term[TsClass.IDENTIFIER_PURL_HTTPS]) {
-      annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTPS];
-    }
-    for (let key in this.term) {
-      if (TsTerm.ANNOTATION_EXPECTION.includes(key)) {
-        continue;
+    try {
+      let annotations = {} as { [key: string]: any };
+      let dbXref = this.createDbXrefAnnotation();
+      if (dbXref && dbXref.length) {
+        annotations["has_dbxref"] = dbXref;
       }
-      if (this.term['linkedEntities'][key]) {
-        if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
-          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
-        } else {
-          annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key];
+      if (this.term[TsClass.IDENTIFIER_PURL_HTTP]) {
+        annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTP];
+      } else if (this.term[TsClass.IDENTIFIER_PURL_HTTPS]) {
+        annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTPS];
+      }
+      for (let key in this.term) {
+        if (TsTerm.ANNOTATION_EXPECTION.includes(key)) {
+          continue;
+        }
+        if (this.term['linkedEntities']?.[key]?.['label']?.length) {
+          if (typeof (this.term[key]) === "object" && !Array.isArray(this.term[key])) {
+            annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key]?.value;
+          } else {
+            annotations[this.term['linkedEntities'][key]['label'][0]] = this.term[key];
+          }
         }
       }
+      return annotations;
+    } catch (e) {
+      return {};
     }
-    return annotations;
+
   }
 
   createDbXrefAnnotation(): string[] | undefined {

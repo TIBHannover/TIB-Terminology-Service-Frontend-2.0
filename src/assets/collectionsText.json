@@ -154,5 +154,17 @@
     "domain_ts_link": "",
     "logo_width": 200,
     "logo_height": 200
+  },
+  "Miscellaneous": {
+    "id": "Miscellaneous",
+    "html_id": "Miscellaneous",
+    "name": "Miscellaneous",
+    "text": "This collection contains terminologies spanning multiple research fields, being applicable by all domains, or addressing niche topics not covered by the main collections of TIB Terminology Service.",
+    "logo": "/Miscellaneous_collection.png",
+    "ontology_list_url": "/ontologies?collection=Miscellaneous&and=false&page=1",
+    "project_homepage": "",
+    "domain_ts_link": "",
+    "logo_width": 150,
+    "logo_height": 150
   }
 }

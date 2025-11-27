@@ -105,17 +105,17 @@ const OntologyList = () => {
 
   function ontology_has_searchKey(ontology: TsOntology, value: string) {
     try {
-      value = value.toLowerCase();
-      if (ontology.ontologyId.includes(value)) {
-        return true;
-      }
-      if (ontology.title.toLowerCase().includes(value)) {
-        return true;
-      }
-      if (ontology.description.toLowerCase().includes(value)) {
-        return true;
-      }
+      value = value.toLowerCase().trim();
+      let targetText = [
+        ontology.ontologyId.toLowerCase().trim(),
+        ontology.title.toLowerCase().trim(),
+      ];
 
+      for (let text of targetText) {
+        if (text.includes(value)) {
+          return true;
+        }
+      }
       return false;
     }
     catch (e) {
@@ -128,7 +128,7 @@ const OntologyList = () => {
   function sortArrayOfOntologiesBasedOnKey(ontologiesArray: TsOntology[], key: string) {
     if (key === "title") {
       ontologiesArray.sort((o1, o2) => {
-        return o1.title.toLowerCase().localeCompare(o2.title.toLowerCase(), "en", { sensitivity: "base" });
+        return o1.cleanTitle.toLowerCase().localeCompare(o2.cleanTitle.toLowerCase(), "en", { sensitivity: "base" });
       })
     } else if (key === 'ontologyId') {
       ontologiesArray.sort((o1, o2) => {
