@@ -53,8 +53,8 @@ export function makeOntologyListPageTourSteps() {
         return (
           <>
             <p>
-              Filter ontologies by keyword. The search applies to ontology <b>titles </b>
-              and <b>IDs</b>, making it the fastest way to
+              Search after ontologies by keyword. The search applies to ontology <b>title </b>
+              and <b>ID</b>, making it the fastest way to
               find your ontology.
             </p>
           </>
@@ -76,7 +76,7 @@ export function makeOntologyListPageTourSteps() {
       }
     }
   ];
-  
+
   if (process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true") {
     steps.push(
       {
