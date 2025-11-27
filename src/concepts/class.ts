@@ -149,7 +149,6 @@ export class TsClass extends TsTerm {
           continue;
         }
         let li = document.createElement('li');
-        console.log(data[i]);
         let content = this.recSubClass(data[i])!;
         li.appendChild(content);
         ul.appendChild(li);
