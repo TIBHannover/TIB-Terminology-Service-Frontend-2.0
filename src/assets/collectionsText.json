@@ -159,7 +159,7 @@
     "id": "Miscellaneous",
     "html_id": "Miscellaneous",
     "name": "Miscellaneous",
-    "text": "This collection contains terminologies spanning multiple research fields, being applicable by all domains, or addressing niche topics not covered by the main collections of TIB Terminology Service.",
+    "text": "This collection contains terminologies that are not included in any other TIB Terminology Service collection because they cover topics that are not addressed by the other collections.",
     "logo": "/Miscellaneous_collection.png",
     "ontology_list_url": "/ontologies?collection=Miscellaneous&and=false&page=1",
     "project_homepage": "",
