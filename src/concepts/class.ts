@@ -157,7 +157,7 @@ export class TsClass extends TsTerm {
       return ul.outerHTML;
 
     } catch (e) {
-      // console.log(e)
+      console.log(e)
       return;
     }
   }
@@ -165,16 +165,22 @@ export class TsClass extends TsTerm {
 
   recSubClass(relationObj: any, relation = ""): HTMLSpanElement | undefined {
     if (relationObj instanceof Array) {
-      let targetIri = relationObj[0];
-      let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];
-      let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
-      let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
       let liContent = document.createElement('span');
       liContent.appendChild(buildOpenParanthesis());
-      liContent.appendChild(targetAnchor);
+      if (typeof relationObj[0] === "string") {
+        let targetIri = relationObj[0];
+        let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];
+        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
+        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
+        liContent.appendChild(targetAnchor);
+      } else {
+        let content = this.recSubClass(relationObj[0])!;
+        liContent.appendChild(content);
+      }
       let relationTextspan = document.createElement('span');
       relationTextspan.innerHTML = ` ${relation} `;
       liContent.appendChild(relationTextspan);
+
       if (typeof (relationObj[1]) === "string") {
         let targetIri = relationObj[1];
         let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];

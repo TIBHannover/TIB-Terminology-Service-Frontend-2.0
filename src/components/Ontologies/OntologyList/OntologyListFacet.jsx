@@ -58,13 +58,13 @@ export const OntologyListFacet = (props) => {
           <div className="col-sm-12 ps-0">
             <div className="mb-2 d-flex flex-column stour-onto-list-filter-keyword" id="ontologylist-search-grid">
               <label className="input-group-text" htmlFor="ontology-list-search-input" id="ontology-list-search-label">
-                Search for an ontology
+                Filter this list by keyword
               </label>
               <input
                 type="text"
                 className="form-control"
-                aria-label="By keyword"
-                aria-describedby="By keyword"
+                aria-label="Filter this list by keyword"
+                aria-describedby="Filter this list by keyword"
                 placeholder='Enter your keyword ...'
                 id="ontology-list-search-input"
                 value={props.enteredKeyword !== "" ? props.enteredKeyword : ""}
