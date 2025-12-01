@@ -7,7 +7,7 @@ const RenderHomePage = () => {
       <br />
       <div className="row">
         <div>
-          <h2>TIB Terminology Service</h2>
+          <p className='fs-4 fw-bold'>TIB Terminology Service</p>
           <p>
             With the Terminology Service, TIB – Leibniz Information Centre for Science and Technology and University
             Library provides a single point of access to terminologies from domains such as
