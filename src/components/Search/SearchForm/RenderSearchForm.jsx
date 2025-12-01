@@ -104,7 +104,7 @@ const RenderSearchForm = (props) => {
   return (
     <>
       <div className='row site-header-searchbox-holder'>
-        <div className='col-sm-9 search-bar-container stour-searchbox'>
+        <div className='col-sm-8 search-bar-container stour-searchbox'>
           <div className="input-group">
             {appContext.user && appContext.userSettings.activeCollection.title !== "" && !props.ontologyId &&
               <div className="custom-collection-btn" title={createUserCollectionToggleTooltopText()}>
@@ -162,17 +162,17 @@ const RenderSearchForm = (props) => {
           }
 
           <div className='row site-header-search-filters-container mt-1'>
-            <div className='col-lg-2 col-sm-3 search-forn-checkbox-holders stour-searchbox-exactmatch'>
+            <div className='col-lg-2 col-sm-3 search-form-checkbox-holders stour-searchbox-exactmatch'>
               <input type="checkbox" className='form-check-input' id="exact-checkbox" value="exact match"
                 onClick={props.handleExactCheckboxClick} />
               <label className="form-check-label ms-2" htmlFor="exact-checkbox">Exact match</label>
             </div>
-            <div className='col-lg-3 col-sm-3 search-forn-checkbox-holders stour-searchbox-obsolete'>
+            <div className='col-lg-3 col-sm-3 search-form-checkbox-holders stour-searchbox-obsolete'>
               <input type="checkbox" className='form-check-input' id="obsoletes-checkbox" value="Obsolete results"
                 onClick={props.handleObsoletesCheckboxClick} />
               <label className="form-check-label ms-2" htmlFor="obsoletes-checkbox">Obsolete terms</label>
             </div>
-            <div className='col-lg-3 col-sm-3 search-forn-checkbox-holders stour-searchbox-include-imported'>
+            <div className='col-lg-3 col-sm-3 search-form-checkbox-holders stour-searchbox-include-imported'>
               <input type="checkbox" className='form-check-input' id="include-imported-checkbox"
                 value="include-imported"
                 onClick={props.handleIncludeImprtedCheckboxClick} />
@@ -194,7 +194,7 @@ const RenderSearchForm = (props) => {
                         onChange={() => {
                         }}
                       />
-                      <label className="form-check-label" htmlFor="adv-search-toggle">Advanced search</label>
+                      <label className="form-check-label  search-form-checkbox-holders" htmlFor="adv-search-toggle">Advanced search</label>
                     </div>
                   </div>
                 </div>
