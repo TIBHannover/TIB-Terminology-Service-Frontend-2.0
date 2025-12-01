@@ -27,13 +27,13 @@ export const RenderTermList = (props) => {
           { id: "shortForm", text: "ID" },
           { id: "label", text: "Label" },
           { id: "decs", text: "Description" },
-          { id: "altTerm", text: "Alternative Term" },
-          { id: "subclass", text: "SubClass Of" },
-          { id: "eqto", text: "Equivalent to" },
-          { id: "example", text: "Example of usage" },
-          { id: "seealso", text: "See Also" },
-          { id: "contrib", text: "Contributor" },
-          { id: "comment", text: "Comment" },
+          { id: "altTerm", text: "Alternative Term", defaultVisible: false },
+          { id: "subclass", text: "SubClass Of", defaultVisible: false },
+          { id: "eqto", text: "Equivalent to", defaultVisible: false },
+          { id: "example", text: "Example of usage", defaultVisible: false },
+          { id: "seealso", text: "See Also", defaultVisible: false },
+          { id: "contrib", text: "Contributor", defaultVisible: false },
+          { id: "comment", text: "Comment", defaultVisible: false },
         ]
       );
       return;
@@ -45,11 +45,11 @@ export const RenderTermList = (props) => {
         { id: "comment", text: "Comment" },
         { id: "shortForm", text: "ID" },
         { id: "decs", text: "Description" },
-        { id: "altTerm", text: "Alternative Term" },
-        { id: "eqto", text: "Equivalent to" },
-        { id: "example", text: "Example of usage" },
-        { id: "seealso", text: "See Also" },
-        { id: "contrib", text: "Contributor" },
+        { id: "altTerm", text: "Alternative Term", defaultVisible: false },
+        { id: "eqto", text: "Equivalent to", defaultVisible: false },
+        { id: "example", text: "Example of usage", defaultVisible: false },
+        { id: "seealso", text: "See Also", defaultVisible: false },
+        { id: "contrib", text: "Contributor", defaultVisible: false },
       ]
     );
   }
