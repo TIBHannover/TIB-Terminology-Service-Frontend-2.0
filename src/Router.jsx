@@ -19,8 +19,9 @@ import { Route, Switch } from 'react-router-dom';
 import UserCollection from "./components/User/Collection/Collection";
 import ContactForm from "./components/User/ContactForm/ContactForm";
 import OntologySuggestion from "./components/Ontologies/OntologySuggestion/OntologySuggestion";
-import TermSetList from "./components/TermSet/TermSetList";
 import TermSetPage from "./components/TermSet/TermSetPage";
+import UserTermSetList from "./components/TermSet/UserTermSetList";
+import TermsetList from "./components/TermSet/TermsetList";
 import EditTermset from "./components/TermSet/EditTermset";
 import NotFoundPage from "./errors/notFound";
 
@@ -35,10 +36,11 @@ const AppRouter = () => {
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}
         component={SubmitedIssueRequests} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel} />
-      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"} component={TermSetList} />
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"} component={UserTermSetList} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId/edit"}
         component={EditTermset} />
       <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId"} component={TermSetPage} />
+      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets"} component={TermsetList} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}
         component={OntologySuggestion} />

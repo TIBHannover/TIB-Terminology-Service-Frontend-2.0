@@ -2,7 +2,6 @@ import DropDown from "../common/DropDown/DropDown";
 import { useState, useContext, useRef } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import { olsSearch } from "../../api/search";
-import TermLib from "../../Libs/TermLib";
 import { AppContext } from "../../context/AppContext";
 import { createTermset } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
@@ -21,7 +20,7 @@ const VISIBILITY_FOR_DROPDOWN = [
 ];
 
 
-const CreateTermSetPage = (props) => {
+const CreateTermSetPage = () => {
 
   const appContext = useContext(AppContext);
 

@@ -1,34 +1,33 @@
-import {useContext, useState} from "react";
-import {AppContext} from "../../context/AppContext";
+import { useContext, useState } from "react";
+import { AppContext } from "../../context/AppContext";
 import "../layout/termset.css";
-import {Link} from 'react-router-dom';
-import DeleteModalBtn from "../common/DeleteModal/DeleteModal";
-import {DeleteModal} from "../common/DeleteModal/DeleteModal";
-import {getTsPluginHeaders} from "../../api/header";
+import { Link } from 'react-router-dom';
+import { DeleteModal } from "../common/DeleteModal/DeleteModal";
+import { getTsPluginHeaders } from "../../api/header";
 import CreateTermsetPage from "./CreateTermset";
 
 
-const TermSetList = () => {
+const UserTermSetList = () => {
   const appContext = useContext(AppContext);
-  
+
   const [createMode, setCreateMode] = useState(false);
-  
-  const callHeader = getTsPluginHeaders({withAccessToken: true});
+
+  const callHeader = getTsPluginHeaders({ withAccessToken: true });
   let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
   let redirectAfterDeleteEndpoint = process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets";
-  
+
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
-  
+
   return (
     <>
       <div className="row">
         <div className={"col-sm-12 " + (!createMode ? "text-end" : "")}>
           <button className="btn btn-secondary create-termset-btn"
-                  onClick={() => {
-                    setCreateMode(!createMode);
-                  }}>
+            onClick={() => {
+              setCreateMode(!createMode);
+            }}>
             {!createMode &&
               <>
                 <i className="bi bi-plus-square me-2"></i>
@@ -45,19 +44,19 @@ const TermSetList = () => {
         </div>
       </div>
       {createMode &&
-        <CreateTermsetPage/>
+        <CreateTermsetPage />
       }
       {!createMode && appContext.userTermsets.map((tset) => {
         return (
           <div className="row">
             <div className="col-sm-12 term-set-card">
-              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id} style={{marginTop: "2px"}}>
+              <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id} style={{ marginTop: "2px" }}>
                 <b>{tset.name}</b>
               </Link>
               <Link
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + tset.id + "/edit"}
                 className="btn btn-sm borderless-btn"
-                style={{marginTop: "1px"}}
+                style={{ marginTop: "1px" }}
               >
                 <i className="fa fa-edit fa-borderless edit-termset-icon"></i>
               </Link>
@@ -78,10 +77,10 @@ const TermSetList = () => {
           </div>
         )
       })
-      
+
       }
     </>
   )
 }
 
-export default TermSetList;
+export default UserTermSetList;
