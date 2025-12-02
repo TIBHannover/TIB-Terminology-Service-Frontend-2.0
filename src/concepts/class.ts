@@ -41,7 +41,6 @@ export class TsClass extends TsTerm {
     return this.buildAnnotations();
   }
 
-
   override buildAnnotations(): { [key: string]: any } {
     try {
       let annotations = {} as { [key: string]: any };
@@ -140,6 +139,9 @@ export class TsClass extends TsTerm {
       for (let i = 0; i < data.length; i++) {
         if (typeof (data[i]) === "string") {
           let parentIri = data[i];
+          if (!this.term['linkedEntities'][parentIri]) {
+            continue;
+          }
           let parentLabel = this.term['linkedEntities'][parentIri]['label'][0];
           let parentLi = document.createElement('li');
           let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;

@@ -1,5 +1,4 @@
 import React from "react";
-import TermLib from "../../../Libs/TermLib";
 
 
 class TreeNodeController {
@@ -18,8 +17,8 @@ class TreeNodeController {
   buildNodeWithReact({ nodeObject, nodeIsClicked = false, isExpanded = false, isSkos = false }) {
     let numOfdescendant = nodeObject["numDescendants"] ?? 0;
     numOfdescendant = numOfdescendant ? `(${numOfdescendant})` : "";
-    let nodeLabel = `${TermLib.extractLabel(nodeObject)}${numOfdescendant}`;
-    let nodeHasChildren = !isSkos ? TermLib.termHasChildren(nodeObject) : nodeObject.hasChildren;
+    let nodeLabel = `${nodeObject.label}${numOfdescendant}`;
+    let nodeHasChildren = !isSkos ? nodeObject.hasChildren : nodeObject.hasChildren;
     let partOfSymbol = "";
     let individualSymbol = "";
     if (nodeObject.isObsolete) {
@@ -32,7 +31,7 @@ class TreeNodeController {
       partOfSymbol = React.createElement("div", { "className": "p-icon-style" }, "P");
     }
 
-    if (TermLib.getTermType(nodeObject) === "individual") {
+    if (nodeObject.type === "individual") {
       individualSymbol = React.createElement("div", { "className": "i-icon-style", "title": "individual" }, <i
         class="fa fa-solid fa-info"></i>);
     }
@@ -62,12 +61,13 @@ class TreeNodeController {
 
     let node = React.createElement(this.nodeRootElementName, {
       "data-iri": this.nodeIri,
-      "data-id": nodeObject.id ?? TermLib.makeTermIdForTree(nodeObject),
+      "data-id": nodeObject.id,
       "className": this.classes,
-      "id": nodeObject.id ?? TermLib.makeTermIdForTree(nodeObject)
+      "id": nodeObject.id
     }
       , this.iconInTree, this.textDivContainer, this.children
     );
+
 
     return node;
 
@@ -77,8 +77,8 @@ class TreeNodeController {
   buildNodeWithTradionalJs({ nodeObject, nodeIsClicked = false, isExpanded = false, isSkos = false }) {
     let numOfdescendant = nodeObject["numDescendants"] ?? 0;
     numOfdescendant = numOfdescendant ? `(${numOfdescendant})` : "";
-    let nodeLabel = `${TermLib.extractLabel(nodeObject)}${numOfdescendant}`;
-    let nodeHasChildren = !isSkos ? TermLib.termHasChildren(nodeObject) : nodeObject.hasChildren;
+    let nodeLabel = `${nodeObject.label}${numOfdescendant}`;
+    let nodeHasChildren = !isSkos ? nodeObject.hasChildren : nodeObject.hasChildren;
     this.textDiv = document.createElement("div");
     let label = document.createTextNode(nodeLabel);
     this.textDiv.classList.add("li-label-text");
@@ -88,9 +88,9 @@ class TreeNodeController {
     this.textDivContainer = document.createElement("div");
     this.textDivContainer.classList.add("tree-text-container");
     let node = document.createElement(this.nodeRootElementName);
-    node.setAttribute("id", TermLib.makeTermIdForTree(nodeObject));
+    node.setAttribute("id", nodeObject.id);
     node.setAttribute("data-iri", nodeObject.iri);
-    node.setAttribute("data-id", TermLib.makeTermIdForTree(nodeObject));
+    node.setAttribute("data-id", nodeObject.id);
     node.classList.add(this.classes);
     if (nodeIsClicked) {
       this.textDivContainer.classList.add("clicked");
@@ -120,7 +120,7 @@ class TreeNodeController {
       this.textDivContainer.appendChild(partOfSymbol);
     }
 
-    if (TermLib.getTermType(nodeObject) === "individual") {
+    if (nodeObject.type === "individual") {
       let individualSymbol = document.createElement("div");
       individualSymbol.title = "individual";
       let text = document.createElement("i");
