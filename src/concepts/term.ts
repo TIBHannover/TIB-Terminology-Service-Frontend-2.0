@@ -32,10 +32,12 @@ export class TsTerm {
   ];
 
   term: OntologyTermDataV2;
+  private _id: string;
 
 
   constructor(termData: OntologyTermDataV2) {
     this.term = termData;
+    this._id = termData.iri + "___" + Math.random().toString(36).substring(2, 20);
   }
 
   get type(): string {
@@ -43,6 +45,10 @@ export class TsTerm {
       return this.term.type[0];
     }
     return "";
+  }
+
+  get id(): string {
+    return this._id;
   }
 
   get label(): string {
@@ -237,6 +243,10 @@ export class TsTerm {
 
   get directParent(): string[] {
     return this.term["directParent"] ?? [];
+  }
+
+  get hasChildren() {
+    return this.term.hasHierarchicalChildren || this.term.hasDirectChildren;
   }
 
   get shortForm(): string {

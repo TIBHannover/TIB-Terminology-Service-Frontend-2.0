@@ -62,7 +62,6 @@ export default class TreeHelper {
 
   static async expandNode({ e, ontologyId, childExtractName, isSkos, lang }) {
     let targetNodeIri = e.dataset.iri;
-    let targetNodeId = e.dataset.id;
     let Id = e.id;
     let treeNode = new TreeNodeController();
     if (document.getElementById(Id).classList.contains("closed")) {
@@ -254,7 +253,6 @@ export default class TreeHelper {
 
 
   static buildTermTreeFromFlatList(terms) {
-
     function getParentIris(parentIrisList) {
       let parentIris = [];
       if (!parentIrisList) {
@@ -289,7 +287,6 @@ export default class TreeHelper {
       if (!term.childrenList) {
         term.childrenList = [];
       }
-      term.id = TermLib.makeTermIdForTree(term);
     }
     return terms.filter((term) => !term.hasHierarchicalParents && !term.hasDirectParents);
   }
