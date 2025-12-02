@@ -7,6 +7,7 @@ export const SortBy = 'sortedBy';
 export const SubTabInTermTable = 'subtab';
 export const CollectionId = 'col';
 export const Lang = 'lang';
+export const From = 'from';
 
 // Search related
 export const SearchQuery = 'q';

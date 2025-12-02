@@ -21,9 +21,9 @@ import ContactForm from "./components/User/ContactForm/ContactForm";
 import OntologySuggestion from "./components/Ontologies/OntologySuggestion/OntologySuggestion";
 import TermSetPage from "./components/TermSet/TermSetPage";
 import UserTermSetList from "./components/TermSet/UserTermSetList";
-import TermsetList from "./components/TermSet/TermsetList";
 import EditTermset from "./components/TermSet/EditTermset";
 import NotFoundPage from "./errors/notFound";
+import BrowesTermSetList from "./components/TermSet/browesTermsetList";
 
 
 const AppRouter = () => {
@@ -40,7 +40,7 @@ const AppRouter = () => {
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId/edit"}
         component={EditTermset} />
       <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId"} component={TermSetPage} />
-      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets"} component={TermsetList} />
+      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets"} component={BrowesTermSetList} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}
         component={OntologySuggestion} />

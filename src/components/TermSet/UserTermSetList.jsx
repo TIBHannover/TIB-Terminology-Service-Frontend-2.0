@@ -13,6 +13,7 @@ const UserTermSetList = () => {
 
   return (
     <>
+      <p className="fs-2 fw-bold">My termsets</p>
       <TermsetList
         termsets={appContext.userTermsets}
         redirectAfterDeleteEndpoint={"/mytermsets"}

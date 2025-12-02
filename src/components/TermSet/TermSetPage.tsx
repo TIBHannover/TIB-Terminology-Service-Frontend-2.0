@@ -13,6 +13,8 @@ import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
 import { TermsetPageComProps } from "./types";
 import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
 import { TsClass, TsTerm, TermFactory } from "../../concepts";
+import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
 
 
 const PAGE_SIZES_FOR_DROPDOWN = [
@@ -27,6 +29,10 @@ const DEFAUTL_ROWS_COUNT = 10;
 
 const TermSetPage = (props: TermsetPageComProps) => {
   const termsetId = props.match.params.termsetId;
+  const urlFactory = new CommonUrlFactory();
+
+  const from = urlFactory.getParam({ name: SiteUrlParamNames.From });
+
 
   const appContext = useContext(AppContext);
 
@@ -269,7 +275,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
         <div className="row">
           <div className="col-6">
             <Link className="btn-secondary p-1 text-white"
-              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
+              to={process.env.REACT_APP_PROJECT_SUB_PATH + (from !== "browes" ? "/mytermsets" : "/termsets")}>
               <i className="bi bi-arrow-left mr-1"></i>
               My termset list
             </Link>
@@ -365,7 +371,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
           />
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
