@@ -113,7 +113,7 @@ class TermApi {
   }
 
 
-  async getNodeJsTree(): Promise<any> {
+  async getNodeJsTree(): Promise<TsTerm[]> {
     try {
       let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
       let parentPath = this.termType === CLASS_TYPE_ID ? "hierarchicalAncestors" : "ancestors";
@@ -124,22 +124,38 @@ class TermApi {
         // fallback: the target is individual on a class tree
         let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/individuals/${this.iri}/ancestors?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
         let listOfNodes = await (await fetch(url, getCallSetting)).json();
-        return listOfNodes["elements"] ?? [];
+        let results: TsTerm[] = [];
+        for (let node of listOfNodes["elements"] ?? []) {
+          let tsTerm = TermFactory.createTermForTS(node);
+          results.push(tsTerm);
+        }
+        return results;
       }
-      return nodesList;
+      let results: TsTerm[] = [];
+      for (let node of nodesList) {
+        let tsTerm = TermFactory.createTermForTS(node);
+        results.push(tsTerm);
+      }
+      return results;
     } catch (e) {
       return [];
     }
   }
 
 
-  async getChildrenJsTree(lang: string = "en"): Promise<any> {
+  async getChildrenJsTree(lang: string = "en"): Promise<TsTerm[]> {
     const getChildren = async (lang: string) => {
       let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
       let path = this.termType === CLASS_TYPE_ID ? "hierarchicalChildren" : "children";
       let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
       let res = await (await fetch(url, getCallSetting)).json();
-      return res["elements"] ?? [];
+      let nodesList = res["elements"] ?? [];
+      let results: TsTerm[] = [];
+      for (let node of nodesList) {
+        let tsTerm = TermFactory.createTermForTS(node);
+        results.push(tsTerm);
+      }
+      return results;
     }
 
     const getHierarchicalChilren = async (lang: string) => {
@@ -147,7 +163,12 @@ class TermApi {
         let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
         let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/classes/${this.iri}/individuals?size=1000&lang=${lang}`;
         let res = await (await fetch(url, getCallSetting)).json();
-        return res["elements"] ?? [];
+        let results: TsTerm[] = [];
+        for (let node of res["elements"] ?? []) {
+          let tsTerm = TermFactory.createTermForTS(node);
+          results.push(tsTerm);
+        }
+        return results;
       }
       return [];
     }
