@@ -215,6 +215,14 @@ export class TsClass extends TsTerm {
       relationTextspan.innerHTML = ` ${targetKey.split('#')[1]} `;
       liContent.appendChild(relationTextspan);
       if (typeof (relationObj[targetKey]) === "string") {
+        if (targetKey.includes("Cardinality")) {
+          // the target is a cardinality value such "1" not an iri
+          let targetLabel = " " + relationObj[targetKey];
+          liContent.appendChild(document.createTextNode(targetLabel));
+          liContent.appendChild(buildCloseParanthesis());
+          return liContent;
+        }
+        // the target is an iri
         let targetIri = relationObj[targetKey];
         let targetLabel = this.term['linkedEntities'][targetIri]['label'][0];
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
@@ -223,6 +231,7 @@ export class TsClass extends TsTerm {
         liContent.appendChild(buildCloseParanthesis());
         return liContent;
       }
+      // the target is an object
       let content = this.recSubClass(relationObj[targetKey], targetKey?.split('#')[1])!;
       liContent.appendChild(content);
       liContent.appendChild(buildCloseParanthesis());
