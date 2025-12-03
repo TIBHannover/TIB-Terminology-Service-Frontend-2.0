@@ -155,6 +155,7 @@ const TermRequest = (props) => {
 
 
   function openModal() {
+    ontologyPageContext.handleFullScreen();
     if (!appContext.user) {
       setLoginModal(true);
       setTimeout(() => setLoginModal(false), 1000);

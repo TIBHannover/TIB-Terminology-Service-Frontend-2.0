@@ -110,7 +110,7 @@ const OntologyInfoTable = () => {
         <div className="ontology-detail-table-wrapper">
           <div className='row'>
             <div className='col-sm-11 ontology-detail-text'>
-              <h4><b>{ontology.title}</b></h4>
+              <p className='fs-2 fw-bold'>{ontology.title}</p>
               <p>
                 {ontology.description}
               </p>

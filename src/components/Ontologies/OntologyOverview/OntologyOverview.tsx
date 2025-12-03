@@ -37,7 +37,7 @@ const OntologyOverview = () => {
 
   return (
     <>
-      <div key={'ontolofyOverviewPage'} className="row ontology-detail-page-container">
+      <div key={'ontolofyOverviewPage'} className="row">
         <div className='col-sm-9 '>
           <OntologyInfoTable />
         </div>
@@ -64,6 +64,7 @@ const OntologyOverview = () => {
                   type="button"
                   className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
                   onClick={() => {
+                    ontologyPageContext.handleFullScreen();
                     if (appContext.user) {
                       setShowCollectionSuggestionModal(true);
                     } else {
@@ -85,7 +86,10 @@ const OntologyOverview = () => {
                 <button
                   type="button"
                   className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
-                  onClick={() => setShowOntologyAdopters(true)}
+                  onClick={() => {
+                    ontologyPageContext.handleFullScreen();
+                    setShowOntologyAdopters(true)
+                  }}
                 >
                   Ontology adopters
                 </button>

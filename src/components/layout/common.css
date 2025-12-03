@@ -17,7 +17,7 @@ body {
     background-color: #ecf0f0;
     color: #42484e;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     overflow-x: hidden;
 }
 
@@ -45,7 +45,7 @@ body a:hover {
 
 body button {
     background-color: #404040;
-    font-size: 14px;
+    font-size: 12px;
     border-color: #404040;
 }
 
@@ -55,11 +55,18 @@ body .btn-secondary,
     border-color: #404040;
     text-decoration: none;
     border-radius: 5px;
+    font-size: 13px;
+    padding: 5px;
 }
 
-body .btn-sm {
+body .btn-sm,
+.btn-sm:hover {
     font-size: 10px;
-    padding: 5px;
+    padding: 1px;
+    background-color: #404040;
+    border-color: #404040;
+    text-decoration: none;
+    color: white;
 }
 
 body .btn-danger {
@@ -79,7 +86,8 @@ body .borderless-btn:focus {
     box-shadow: none;
 }
 
-body .term-button {
+body .term-button,
+.term-button:hover {
     background-color: #0e6668;
     color: white;
     margin-left: 15px;
@@ -89,7 +97,8 @@ body .term-button {
     border-color: #0e6668;
 }
 
-body .synonyms-button {
+body .synonyms-button,
+.synonyms-button:hover {
     background-color: #c2ba1c;
     color: white;
     margin-left: 15px;
@@ -99,13 +108,9 @@ body .synonyms-button {
     border-color: #0e6668;
 }
 
-body .term-button:hover {
-    text-decoration: none;
-    background-color: #0e6668;
-    color: white;
-}
 
-body .ontology-button {
+body .ontology-button,
+.ontology-button:hover {
     background-color: #bbae9e;
     color: black;
     padding: 3px;
@@ -113,12 +118,6 @@ body .ontology-button {
     font-size: 12px;
     border-color: #bbae9e;
     margin-top: 2px;
-}
-
-body .ontology-button:hover {
-    text-decoration: none;
-    background-color: #bbae9e;
-    color: white;
 }
 
 .site-footer {
@@ -194,7 +193,6 @@ input[type="checkbox"]:checked {
 }
 
 .form-check-input {
-    margin-top: 5px !important;
     cursor: pointer;
 }
 
@@ -287,7 +285,7 @@ body .cc_more_info {
     background-image: url("../../../public/header-background.webp");
     background-position: right center;
     background-color: #0e6668;
-    padding: 10px;
+    padding: 5px;
     margin-bottom: 10px;
     color: white;
 }
@@ -297,44 +295,16 @@ body .cc_more_info {
     margin: auto;
 }
 
-.site-header-nav-logo-holder {
-    margin-bottom: 30px;
-    margin-top: 10px;
-}
-
 
 .site-header-searchbox-holder {
     padding-left: 10%;
     padding-right: 10%;
 }
 
-.site-header-top-row {
-    margin-bottom: 20px;
-}
 
-.site-header-top-row > a {
+.site-header-top-row>a {
     text-decoration: none;
     color: white;
-}
-
-.header {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-}
-
-.header-top {
-    display: flex;
-    width: 100%;
-    height: 250px;
-}
-
-.header-top__logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 20px;
-    margin-left: 30px;
 }
 
 .main-title {
@@ -349,42 +319,6 @@ body .cc_more_info {
     text-decoration: none;
 }
 
-.header-logo {
-    color: inherit;
-    text-decoration: inherit;
-    font-family: RobotoThin;
-    font-size: 100px;
-}
-
-.header-top__navbar {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-}
-
-.header-top__seperator {
-    width: 100%;
-    border: none;
-    height: 2px;
-    margin-top: 2px;
-    background-color: black;
-}
-
-.header-top__navigation {
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-right: 55px;
-}
-
-.header-bottom {
-    display: flex;
-    flex: 1;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 6px;
-}
 
 body .site-navbar {
     margin-top: -3px;
@@ -398,7 +332,7 @@ body .site-navbar {
     outline: none;
     color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .navbar-item:hover {
@@ -480,6 +414,7 @@ body .isLoading-inline-small {
     0% {
         -webkit-transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
     }
@@ -489,6 +424,7 @@ body .isLoading-inline-small {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -700,7 +636,6 @@ body .result-card {
 
 .graph-container {
     height: 700px;
-    width: 800px;
     border: 1px solid black;
 }
 
@@ -735,9 +670,11 @@ body .modal {
     0% {
         opacity: 0;
     }
+
     50% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
     }
@@ -794,7 +731,7 @@ body .site-tour-btn {
     /*box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.2),*/
     /*5px 5px 15px rgba(0, 0, 0, 0.3);*/
     box-shadow: -4px -4px 10px rgba(0.3, 0.3, 0.3, 0.3),
-    6px 6px 15px rgba(0, 0, 0, 0.3);
+        6px 6px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.2s ease;
 }
 

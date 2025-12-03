@@ -1,40 +1,40 @@
-import {useState, useEffect, useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import Multiselect from "multiselect-react-dropdown";
-import {saveCollection, updateCollection} from "../../../api/userCollection";
-import {storeUserSettings} from "../../../api/user";
-import {AppContext} from "../../../context/AppContext";
+import { saveCollection, updateCollection } from "../../../api/userCollection";
+import { storeUserSettings } from "../../../api/user";
+import { AppContext } from "../../../context/AppContext";
 import AlertBox from "../../common/Alerts/Alerts";
 import Modal from "react-bootstrap/Modal";
 
 
 const AddCollection = (props) => {
-  const {editMode, collectionToEdit, editBtnText, btnClass, exstingCollectionList, ontologiesListForSelection} = props;
-  
+  const { editMode, collectionToEdit, editBtnText, btnClass, exstingCollectionList, ontologiesListForSelection } = props;
+
   const appContext = useContext(AppContext);
-  
+
   const [selectedOntologies, setSelectedOntologies] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  
+
   const idPostfix = editMode ? collectionToEdit['id'] : '';
-  
-  
+
+
   function handleOntologySelection(selectedList, selectedItem) {
     document.getElementById('collection-ontologies' + idPostfix).style.border = '';
     setSelectedOntologies(selectedList);
   }
-  
-  
+
+
   function onTextInputChange(e) {
     e.target.style.border = '';
     document.getElementById('max-char-message' + idPostfix).style.color = 'black';
     setShowAlert(false);
   }
-  
-  
+
+
   function returnCollectionTitleIfValid() {
     let collectionTitle = document.getElementById('collectionTitle' + idPostfix).value;
-    
+
     if (!editMode) {
       for (let collection of exstingCollectionList) {
         if (collection['title'] === collectionTitle) {
@@ -43,7 +43,7 @@ const AddCollection = (props) => {
         }
       }
     }
-    
+
     if (editMode) {
       for (let collection of exstingCollectionList) {
         if (collection['title'] === collectionTitle && collection['id'] !== collectionToEdit['id']) {
@@ -52,7 +52,7 @@ const AddCollection = (props) => {
         }
       }
     }
-    
+
     if (!collectionTitle || collectionTitle === '') {
       document.getElementById('collectionTitle' + idPostfix).style.border = '1px solid red';
       return false;
@@ -61,15 +61,15 @@ const AddCollection = (props) => {
       document.getElementById('max-char-message' + idPostfix).style.color = 'red';
       return false;
     }
-    
+
     return collectionTitle;
   }
-  
-  
+
+
   async function saveNewCollection() {
     let collectionTitle = returnCollectionTitleIfValid();
     let formIsValid = collectionTitle ? true : false;
-    
+
     if (selectedOntologies.length === 0) {
       document.getElementById('collection-ontologies' + idPostfix).style.border = '1px solid red';
       formIsValid = false;
@@ -95,8 +95,8 @@ const AddCollection = (props) => {
     } else {
       response = await updateCollection(collectionToEdit['id'], collectionData);
       if (response && appContext.userSettings.activeCollection['title'] === collectionToEdit['title']) {
-        let contextObject = {"title": collectionTitle, "ontology_ids": ontologyIds};
-        let userSttings = {...appContext.userSettings};
+        let contextObject = { "title": collectionTitle, "ontology_ids": ontologyIds };
+        let userSttings = { ...appContext.userSettings };
         userSttings.userCollectionEnabled = true;
         userSttings.activeCollection = contextObject;
         appContext.setUserSettings(userSttings);
@@ -104,15 +104,15 @@ const AddCollection = (props) => {
       }
       window.location.reload();
     }
-    
+
   }
-  
-  
+
+
   useEffect(() => {
     if (editMode) {
       let collectionOntologies = [];
       for (let ontologyId of collectionToEdit['ontology_ids']) {
-        let opt = {'text': '', 'id': ''};
+        let opt = { 'text': '', 'id': '' };
         opt['text'] = ontologyId;
         opt['id'] = ontologyId;
         collectionOntologies.push(opt);
@@ -120,8 +120,8 @@ const AddCollection = (props) => {
       setSelectedOntologies(collectionOntologies);
     }
   }, []);
-  
-  
+
+
   const modalId = editMode ? 'editCollectionModal' + idPostfix : 'newCollectionModal';
   return (
     <>
@@ -132,7 +132,7 @@ const AddCollection = (props) => {
       >
         {!editMode ? "New Collection" : editBtnText}
       </button>
-      
+
       <Modal show={showModal} id={modalId}>
         <Modal.Header>
           <h5 className="modal-title" id={modalId + "Label"}>{!editMode ? "New Collection" : "Edit Collection"}</h5>
@@ -191,14 +191,14 @@ const AddCollection = (props) => {
                 placeholder="Enter a Description"
                 defaultValue={editMode ? collectionToEdit['description'] : ""}
               >
-                  </textarea>
+              </textarea>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
           <div className="col-auto mr-auto">
             <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
-                    onClick={() => setShowModal(false)}>Close
+              onClick={() => setShowModal(false)}>Close
             </button>
           </div>
           <button type="button" className="btn btn-secondary" onClick={saveNewCollection}>Save</button>

@@ -1,4 +1,4 @@
-import { TsClass } from "../../concepts";
+import { TsTerm } from "../../concepts";
 
 export type OntologyData = {
   ontologyId?: string,
@@ -119,7 +119,7 @@ export type ParentNode = {
 }
 
 export type TermListData = {
-  results?: Array<TsClass>,
+  results?: Array<TsTerm>,
   totalTermsCount?: number | string
 }
 

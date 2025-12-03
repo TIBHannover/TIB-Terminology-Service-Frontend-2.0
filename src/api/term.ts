@@ -2,10 +2,11 @@ import { getCallSetting } from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
   OntologyTermDataV2,
-  TermListData
+  TermListData,
+  OntologyTermData
 } from "./types/ontologyTypes";
 import { Ols3ApiResponse } from "./types/common";
-import { TsClass, TsProperty, TsTerm, TsIndividual, TermFactory } from "../concepts";
+import { TsTerm, TermFactory } from "../concepts";
 
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -59,16 +60,11 @@ class TermApi {
       let urlJson = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=${this.lang}`;
       let res = await fetch(urlJson, getCallSetting);
       this.term = await res.json();
+      let instancesList: OntologyTermData[] = [];
       if (this.termType === CLASS_TYPE_ID) {
-        let instancesList = await this.getIndividualInstancesForClass();
-        let tsClass = new TsClass(this.term, instancesList);
-        return tsClass;
-      } else if (this.termType === PROPERTY_TYPE_ID) {
-        let tsProp = new TsProperty(this.term);
-        return tsProp;
+        instancesList = await this.getIndividualInstancesForClass();
       }
-      let indiv = new TsIndividual(this.term);
-      return indiv;
+      return TermFactory.createTermForTS(this.term, instancesList);
     } catch (e) {
       this.term = {};
       return null;
@@ -88,7 +84,7 @@ class TermApi {
       }
       let refinedResults = [];
       for (let term of result) {
-        let termObject = new TsClass(term, []);
+        let termObject = TermFactory.createTermForTS(term, []);
         refinedResults.push(termObject);
       }
       return { "results": refinedResults, "totalTermsCount": totalTermsCount };

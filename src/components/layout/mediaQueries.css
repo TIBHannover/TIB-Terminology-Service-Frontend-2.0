@@ -114,10 +114,6 @@
         width: 80%;
     }
 
-    body .tree-action-button-area {
-        margin-top: -400px;
-    }
-
     body .site-footer {
         font-size: 10px;
     }
@@ -289,9 +285,6 @@
         width: 80%;
     }
 
-    body .tree-action-button-area {
-        right: 40px;
-    }
 
     body .site-footer {
         font-size: 10px;

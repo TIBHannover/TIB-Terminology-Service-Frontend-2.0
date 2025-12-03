@@ -9,6 +9,7 @@ import SkosHelper from "./SkosHelpers";
 import KeyboardNavigator from "./KeyboardNavigation";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import JumpTo from "../../common/JumpTo/JumpTo";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 
@@ -356,62 +357,42 @@ const Tree = (props) => {
   function createTreeActionButtons() {
     return [
       <div className='row tree-action-button-area'>
-        <div className="col-sm-12 text-end">
-          <div className='row tree-action-btn-holder'>
-            <div className="col-sm-12">
-              {props.showListSwitchEnabled &&
-                // Used for individuals
-                <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
-                  Show In List
-                </button>
-              }
-            </div>
-          </div>
-          <div className='row tree-action-btn-holder'>
-            <div className="col-sm-12">
-              {!props.isIndividual && props.selectedNodeIri !== "" &&
-                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-reset'
-                  onClick={resetTree}>Reset</button>
-              }
-            </div>
-          </div>
-          {props.componentIdentity !== "individuals" &&
-            <div className='row tree-action-btn-holder'>
-              <div className="col-sm-12">
-                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete'
-                  onClick={showObsoletes}>
-                  {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
-                </button>
-              </div>
-            </div>
+        <div className="col-sm-12 d-flex flex-row gap-2">
+          {props.showListSwitchEnabled &&
+            // Used for individuals
+            <button className='btn btn-secondary btn-sm tree-action-btn' onClick={props.individualViewChanger}>
+              Show In List
+            </button>
           }
-          <div className='row tree-action-btn-holder'>
-            <div className="col-sm-12">
-              {subOrFullTreeBtnShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree'
-                  onClick={reduceTree}>
-                  Sub Tree
-                </button>
-              }
-            </div>
-          </div>
-          <div className='row tree-action-btn-holder'>
-            <div className="col-sm-12">
-              {siblingsButtonShow && !props.isIndividual &&
-                <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings'
-                  onClick={() => {
-                    setBtnLoading(true);
-                    handleSiblings().then(() => {
-                      setIsLoading(false)
-                    })
-                  }}>
-                  {!btnLoading && !siblingsVisible && "Show Siblings"}
-                  {!btnLoading && siblingsVisible && "Hide Siblings"}
-                  {btnLoading && <div className="isLoading-btn"></div>}
-                </button>
-              }
-            </div>
-          </div>
+          {!props.isIndividual && props.selectedNodeIri !== "" &&
+            <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-reset'
+              onClick={resetTree}>Reset</button>
+          }
+          {props.componentIdentity !== "individuals" &&
+            <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete'
+              onClick={showObsoletes}>
+              {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
+            </button>
+          }
+          {subOrFullTreeBtnShow && !props.isIndividual &&
+            <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree'
+              onClick={reduceTree}>
+              Sub Tree
+            </button>
+          }
+          {siblingsButtonShow && !props.isIndividual &&
+            <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings'
+              onClick={() => {
+                setBtnLoading(true);
+                handleSiblings().then(() => {
+                  setIsLoading(false)
+                })
+              }}>
+              {!btnLoading && !siblingsVisible && "Show Siblings"}
+              {!btnLoading && siblingsVisible && "Hide Siblings"}
+              {btnLoading && <div className="isLoading-btn"></div>}
+            </button>
+          }
         </div>
       </div>
     ];
@@ -464,8 +445,26 @@ const Tree = (props) => {
 
   return (
     <div className="col-sm-12" onClick={(e) => processClick(e)}>
+      <div className="tree-action-area-container">
+        <div className="row">
+          <div className="col-sm-12">
+            <JumpTo
+              targetType={props.componentIdentity}
+              label={"Jump to"}
+              handleJumtoSelection={props.handleJumtoSelection}
+              obsoletes={false}
+            />
+
+          </div>
+        </div>
+        <div className="row position-sticky top-0 start-0 w-100 z-50">
+          <div className="col-sm-12">
+            {!isLoading && !noNodeExist && createTreeActionButtons()}
+          </div>
+        </div>
+      </div>
+      <hr />
       {isLoading && <div className="isLoading"></div>}
-      {!isLoading && !noNodeExist && createTreeActionButtons()}
       {!isLoading && !noNodeExist &&
         <div className='row'>
           {!treeDomContent._html_

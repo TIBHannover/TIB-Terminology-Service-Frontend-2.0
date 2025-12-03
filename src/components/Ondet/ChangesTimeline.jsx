@@ -1,5 +1,5 @@
-import {Button, Card, Modal, Spinner} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import { Button, Card, Modal, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
@@ -7,6 +7,8 @@ import "../layout/diff2html_table_row_fixed.css"
 import DOMPurify from "dompurify";
 import PropTypes from 'prop-types';
 import OndetApi from "../../api/ondet";
+import { OntologyPageContext } from "../../context/OntologyPageContext";
+import { useContext } from "react";
 
 const ROBOT_DIFF_STATIC_HEADER_REGEX = /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
 
@@ -16,12 +18,13 @@ const customMarkdownComponents = {
     h3: 'h6',
     h4: 'p',
     a(props) {
-        const {node, ...rest} = props
-        return <a href style={{'font-size': '14px'}} {...rest} />
+        const { node, ...rest } = props
+        return <a href style={{ 'font-size': '14px' }} {...rest} />
     }
 };
 
-const ChangesTimeline = ({ontologyRawUrl}) => {
+const ChangesTimeline = ({ ontologyRawUrl }) => {
+    const ontologyPageContext = useContext(OntologyPageContext);
     const [ontologyCommits, setOntologyCommits] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -106,7 +109,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                 groupedChanges[ppLabel] = [];
             }
 
-            groupedChanges[ppLabel].push({s, p, o});
+            groupedChanges[ppLabel].push({ s, p, o });
         });
 
         Object.entries(groupedChanges).forEach(([ppLabel, triples]) => {
@@ -123,6 +126,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
     };
 
     const handleOpen = () => {
+        ontologyPageContext.handleFullScreen();
         setOpen(true);
     };
 
@@ -132,11 +136,11 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
 
     return (
         <div className="tree-view-container resizable-container">
-            {commitsFetched && <Spinner animation="border" variant="primary"/>}
+            {commitsFetched && <Spinner animation="border" variant="primary" />}
             {!commitsFetched && ontologyCommits.length <= 1 && (
                 <>
                     <h5>Ontology was not added into OnDeT even though it is in supported GIT-repository.
-                        <br/>
+                        <br />
                         We are currently investigating the cause.
                     </h5>
                 </>
@@ -192,7 +196,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                             <div>
                                 <p>
                                     After you choose one of the items from the timeline on the left
-                                    <br/>
+                                    <br />
                                     You will see it's value here.
                                 </p>
                             </div>
@@ -202,7 +206,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                                 <div className='sticky-top text-center'>
                                     This view displays semantic differences calculated by
                                     COntoDiff and ROBOT DIFF.
-                                    <br/>
+                                    <br />
                                     If you want
                                     <Button variant="link" onClick={handleOpen}>
                                         {" "}
@@ -239,7 +243,7 @@ const ChangesTimeline = ({ontologyRawUrl}) => {
                             <Modal.Title>Git Diff</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <div dangerouslySetInnerHTML={{__html: gitDiffHtml}}/>
+                            <div dangerouslySetInnerHTML={{ __html: gitDiffHtml }} />
                         </Modal.Body>
                     </Modal>
                 </>

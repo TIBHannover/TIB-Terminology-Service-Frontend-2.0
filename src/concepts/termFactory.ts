@@ -13,11 +13,11 @@ export class TermFactory {
       type = termData.type[0];
     }
     switch (type) {
-      case "class":
+      case "class" || "classes":
         return new TsClass(termData, instancesList);
-      case "property":
+      case "property" || "properties":
         return new TsProperty(termData);
-      case "individual":
+      case "individual" || "individuals":
         return new TsIndividual(termData);
       default:
         return new TsTerm(termData)
