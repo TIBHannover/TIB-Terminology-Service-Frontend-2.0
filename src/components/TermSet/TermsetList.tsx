@@ -106,7 +106,7 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
           <>
             <Link
               to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + termset.id + "/edit" + fromParam}
-              className="btn btn-sm borderless-btn"
+              className="btn borderless-btn bg-white"
               style={{ marginTop: "1px" }}
             >
               <i className="fa fa-edit fa-borderless edit-termset-icon"></i>
@@ -127,6 +127,12 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
             />
           </>
         }
+        <div className="row">
+          <div className="col-12 d-flex flex-column">
+            <small>{termset.created_at.split("T")[0]}</small>
+            <small>{termset.description}</small>
+          </div>
+        </div>
       </div>
     </div>
   );

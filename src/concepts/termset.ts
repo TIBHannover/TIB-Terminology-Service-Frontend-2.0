@@ -7,6 +7,7 @@ export class TsTermset {
   private _description: string;
   private _visibility: string;
   private _terms: OntologyTermDataV2[];
+  private _created_at: string;
 
   constructor(termset: TermSet) {
     this.termsetData = termset;
@@ -14,6 +15,7 @@ export class TsTermset {
     this._name = this.termsetData.name;
     this._visibility = this.termsetData.visibility;
     this._terms = this.termsetData.terms.map(twrapper => twrapper.json ?? {});
+    this._created_at = this.termsetData.created_at;
   }
 
   get id(): string {
@@ -33,7 +35,7 @@ export class TsTermset {
   }
 
   get created_at(): string {
-    return this.termsetData.created_at;
+    return this._created_at;
   }
 
   get updated_at(): string | undefined {

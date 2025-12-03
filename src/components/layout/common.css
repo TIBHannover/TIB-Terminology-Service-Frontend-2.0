@@ -79,6 +79,11 @@ body .close-btn-message-modal,
     color: #404040;
 }
 
+body .borderless-btn {
+    border: none;
+    text-decoration: none !important;
+}
+
 body .borderless-btn:active,
 body .borderless-btn:focus {
     border: none;
