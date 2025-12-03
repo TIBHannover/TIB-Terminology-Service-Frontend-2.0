@@ -15,4 +15,6 @@ export type AddTermModalComProps = {
 
 
 export type TermsetPageComProps = RouteComponentProps<{ termsetId: string }>;
-export type TermsetEditComProps = RouteComponentProps<{ termsetId: string }>;
+export type TermsetEditComProps = RouteComponentProps<{ termsetId?: string }> & {
+  mode?: "create" | "edit";
+};

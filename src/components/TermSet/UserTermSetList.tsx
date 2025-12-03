@@ -8,7 +8,7 @@ const UserTermSetList = () => {
   const appContext = useContext(AppContext);
 
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
-    return "";
+    return (<></>);
   }
 
   return (
@@ -18,6 +18,7 @@ const UserTermSetList = () => {
         termsets={appContext.userTermsets}
         redirectAfterDeleteEndpoint={"/mytermsets"}
         backBtnText="My termset list"
+        from={"mytermsets"}
       />
     </>
   )

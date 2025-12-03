@@ -3,7 +3,7 @@ import { useState, useContext, useRef } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import { olsSearch } from "../../api/search";
 import { AppContext } from "../../context/AppContext";
-import { updateTermset, getTermset } from "../../api/term_set";
+import { updateTermset, getTermset, createTermset } from "../../api/term_set";
 import FormLib from "../../Libs/FormLib";
 import AlertBox from "../common/Alerts/Alerts";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +12,9 @@ import { Link } from "react-router-dom";
 import { TermsetEditComProps } from "./types";
 import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
 import { TermFactory } from "../../concepts";
+import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
+import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
+import { withRouter } from "react-router-dom";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -33,6 +36,10 @@ type MultiSelectOption = {
 
 const EditTermset = (props: TermsetEditComProps) => {
   const termsetId = props.match.params.termsetId;
+  const mode = props.mode ?? "edit";
+
+  const urlFactory = new CommonUrlFactory();
+  const from = urlFactory.getParam({ name: SiteUrlParamNames.From });
 
   const appContext = useContext(AppContext);
 
@@ -51,8 +58,9 @@ const EditTermset = (props: TermsetEditComProps) => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["termset", termsetId],
-    queryFn: () => getTermset(termsetId),
-    retry: 1
+    queryFn: () => getTermset(termsetId ?? ""),
+    retry: 1,
+    enabled: mode === "edit"
   });
 
 
@@ -91,7 +99,7 @@ const EditTermset = (props: TermsetEditComProps) => {
   }
 
 
-  function submit() {
+  function submitEdit() {
     if (!data) {
       return;
     }
@@ -126,13 +134,47 @@ const EditTermset = (props: TermsetEditComProps) => {
     });
   }
 
+  function submitCreate() {
+    let name = FormLib.getFieldByIdIfValid("termsetTitle");
+    let description = document.getElementById("termsetDescription") as HTMLTextAreaElement;
+    console.log(description.value);
+    if (!name) {
+      return;
+    }
+    if (appContext.userTermsets.find((tset) => tset.name === name)) {
+      setTermsetNameNotValid(true);
+      return;
+    }
+
+    let termsetData = {
+      name: name,
+      visibility: VISIBILITY_VALUES[newTermsetVisibility],
+      description: description ? description.value : "",
+      terms: selectedTermsJson
+    };
+
+    createTermset(termsetData).then((newTermset) => {
+      if (newTermset) {
+        let userTermsets = [...appContext.userTermsets];
+        userTermsets.push(newTermset);
+        userTermsets.sort((s1, s2) => s1.name.localeCompare(s2.name));
+        appContext.setUserTermsets(userTermsets);
+        setSubmited(true);
+        setAddedSuccess(true);
+        return true;
+      }
+      setSubmited(true);
+      setAddedSuccess(false);
+    });
+  }
+
   const backBtn = (
     <div className="row mt-4 mb-4">
       <div className="col-12">
         <Link className="btn-secondary p-1 text-white"
-          to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}>
+          to={process.env.REACT_APP_PROJECT_SUB_PATH + (from !== "browse" ? "/mytermsets" : "/termsets")}>
           <i className="bi bi-arrow-left me-1"></i>
-          My termset list
+          termset list
         </Link>
       </div>
     </div>
@@ -149,10 +191,10 @@ const EditTermset = (props: TermsetEditComProps) => {
             alertColumnClass="col-sm-12"
           />
         </div>
-        {backBtn}
+        {mode === "edit" && backBtn}
       </>
     );
-  } else if (submited && addedSuccess) {
+  } else if (submited && !addedSuccess) {
     return (
       <>
         <div className="row user-info-panel">
@@ -162,32 +204,32 @@ const EditTermset = (props: TermsetEditComProps) => {
             alertColumnClass="col-sm-12"
           />
         </div>
-        {backBtn}
+        {mode === "edit" && backBtn}
       </>
     )
   }
 
 
-  if (!data && !isError) {
+  if (mode === "edit" && !data && !isError) {
     return (
       <div className="justify-content-center ontology-page-container">
         <div className="isLoading"></div>
       </div>
     );
-  } else if (!data && isError) {
+  } else if (mode === "edit" && !data && isError) {
     return (
       <div className="justify-content-center ontology-page-container">
         <NotFoundErrorPage />
       </div>
     );
-  } else if (data && !appContext.userTermsets.find((tset) => tset.name === data.name)) {
+  } else if (mode === "edit" && data && !appContext.userTermsets.find((tset) => tset.name === data.name)) {
     // non owner is not allowed to visit the edit page
     return (
       <div className="justify-content-center ontology-page-container">
         <NotFoundErrorPage />
       </div>
     );
-  } else if (data && !dataLoaded) {
+  } else if (mode === "edit" && data && !dataLoaded) {
     // load the terms in the multi select input
     let options: MultiSelectOption[] = [];
     let termsJson = [];
@@ -209,7 +251,7 @@ const EditTermset = (props: TermsetEditComProps) => {
 
   return (
     <div className="row user-info-panel">
-      {backBtn}
+      {mode === "edit" && backBtn}
       <div className="row mb-4">
         <div className="col-sm-12">
           <label className="required_input" htmlFor={"termsetTitle"}>Termset Name</label>
@@ -218,7 +260,7 @@ const EditTermset = (props: TermsetEditComProps) => {
             className="form-control"
             id={"termsetTitle"}
             placeholder="Enter a Name"
-            defaultValue={data?.name}
+            defaultValue={mode === "edit" ? data?.name : ""}
             onClick={(e: React.MouseEvent<HTMLInputElement>) => {
               setTermsetNameNotValid(false);
               e.currentTarget.style.borderColor = "";
@@ -236,7 +278,7 @@ const EditTermset = (props: TermsetEditComProps) => {
             options={VISIBILITY_FOR_DROPDOWN}
             dropDownId="termset_visibility_dropdown"
             dropDownTitle="Visibility"
-            defaultValue={VISIBILITY_VALUES.findIndex((val) => val === data?.visibility)}
+            defaultValue={mode === "edit" ? VISIBILITY_VALUES.findIndex((val) => val === data?.visibility) : 0}
             dropDownChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) => {
               setNewTermsetVisibility(parseInt(e.currentTarget.value))
             }}
@@ -271,14 +313,16 @@ const EditTermset = (props: TermsetEditComProps) => {
             id={"termsetDescription"}
             rows={5}
             placeholder="Enter a Description"
-            defaultValue={data?.description}
+            defaultValue={mode === "edit" ? data?.description : ""}
           >
           </textarea>
         </div>
       </div>
       <div className="row">
         <div className="col-sm-12">
-          <button className="btn btn-secondary" onClick={submit}>Update</button>
+          <button className="btn btn-secondary" onClick={mode === "edit" ? submitEdit : submitCreate}>
+            {mode === "edit" ? "Update" : "Create"}
+          </button>
         </div>
       </div>
     </div>
@@ -286,4 +330,4 @@ const EditTermset = (props: TermsetEditComProps) => {
 
 }
 
-export default EditTermset;
+export default withRouter(EditTermset);

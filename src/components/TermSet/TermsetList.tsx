@@ -3,11 +3,11 @@ import "../layout/termset.css";
 import { Link } from 'react-router-dom';
 import { DeleteModal } from "../common/DeleteModal/DeleteModal";
 import { getTsPluginHeaders } from "../../api/header";
-import CreateTermsetPage from "./CreateTermset";
 import { TsTermset } from "../../concepts";
 import Pagination from "../common/Pagination/Pagination";
 import { AppContext } from "../../context/AppContext";
 import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
+import EditTermset from "./EditTermset";
 
 type CmpProps = {
   termsets: TsTermset[];
@@ -57,7 +57,7 @@ const TermSetList = (props: CmpProps) => {
         </div>
       </div>
       {createMode &&
-        <CreateTermsetPage />
+        <EditTermset mode={"create"} />
       }
       {!createMode && termsets.slice((page - 1) * pageSize, page * pageSize).map((tset) => {
         return (
@@ -87,14 +87,14 @@ const TermSetList = (props: CmpProps) => {
 
 
 const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: string, from?: string }) => {
-  const { termset, redirectAfterDeleteEndpoint } = props;
+  const { termset, redirectAfterDeleteEndpoint, from } = props;
   let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
   const callHeader = getTsPluginHeaders({ withAccessToken: true });
   let redirectAfterDeleteUrl = process.env.REACT_APP_PROJECT_SUB_PATH + redirectAfterDeleteEndpoint;
   const appContext = useContext(AppContext);
 
   const canEdit = appContext.user.id === termset.creator;
-  const fromParam = props.from ? (`?${SiteUrlParamNames.From}=${props.from}`) : "";
+  const fromParam = from ? (`?${SiteUrlParamNames.From}=${from}`) : "";
 
   return (
     <div className="row">
@@ -105,7 +105,7 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
         {canEdit &&
           <>
             <Link
-              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + termset.id + "/edit"}
+              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + termset.id + "/edit" + fromParam}
               className="btn btn-sm borderless-btn"
               style={{ marginTop: "1px" }}
             >

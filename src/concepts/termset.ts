@@ -10,7 +10,7 @@ export class TsTermset {
 
   constructor(termset: TermSet) {
     this.termsetData = termset;
-    this._description = this.description;
+    this._description = this.termsetData.description ?? "";
     this._name = this.termsetData.name;
     this._visibility = this.termsetData.visibility;
     this._terms = this.termsetData.terms.map(twrapper => twrapper.json ?? {});
