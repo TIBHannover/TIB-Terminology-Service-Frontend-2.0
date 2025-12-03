@@ -277,35 +277,49 @@ const TermSetPage = (props: TermsetPageComProps) => {
             <Link className="btn-secondary p-1 text-white"
               to={process.env.REACT_APP_PROJECT_SUB_PATH + (from !== "browse" ? "/mytermsets" : "/termsets")}>
               <i className="bi bi-arrow-left mr-1"></i>
-              My termset list
+              termset list
             </Link>
           </div>
-          {appContext.userTermsets.find((tset) => tset.id === data?.id) &&
-            <div className="col-sm-6 float-right">
-              <div className="visibility-tag">visibility: {data ? data.visibility : ""}</div>
-            </div>
-          }
+
         </div>
         <br />
-        <div className="row">
-          <div className="col-sm-12 text-center">
-            <h2><b>{data ? data.name : ""}</b></h2>
-            <small>{data ? data.description : ""}</small>
+        <div className="row bg-white p-2 rounded">
+          <div className="col-sm-8">
+            <div className="d-flex flex-row gap-2">
+              <p className="fs-4 fw-bold">{data ? data.name : ""}</p>
+              {appContext.userTermsets.find((tset) => tset.id === data?.id) &&
+                <span className="visibility-tag">{data ? data.visibility : ""}</span>
+              }
+            </div>
+            <p>{data ? data.description : ""}</p>
+          </div>
+          <div className="col-sm-4">
+            <div className="d-flex flex-row gap-2  justify-content-end">
+              <div>
+                <button className="btn-secondary text-white borderless-btn" onClick={downloadJsonOnClick}>
+                  <i className="bi bi-download ms-1"></i>
+                  JSON
+                </button>
+              </div>
+              <div>
+                <button className="btn-secondary text-white borderless-btn" onClick={downloadCsvOnClick}>
+                  <i className="bi bi-download ms-1"></i>
+                  CSV
+                </button>
+              </div>
+              {appContext.user && appContext.userTermsets.find((tset) => tset.id === data?.id) &&
+                // only owner can see this button
+                <div>
+                  <AddTermModal termset={data ?? undefined} modalId={"add-term-modal"}></AddTermModal>
+                </div>
+              }
+            </div>
+
           </div>
         </div>
         <br /><br />
         <div className="row" id="termset-page-action-bar">
-          <div className="col-sm-2 mt-1">
-            <button className="btn-secondary text-white me-2" onClick={downloadJsonOnClick}>
-              <i className="bi bi-download ms-1"></i>
-              JSON
-            </button>
-            <button className="btn-secondary text-white" onClick={downloadCsvOnClick}>
-              <i className="bi bi-download ms-1"></i>
-              CSV
-            </button>
-          </div>
-          <div className="col-sm-3 mt-1">
+          <div className="col-sm-4 mt-1">
             <label htmlFor="search-input-for-termset" className={"inline-label"}>
               Search
               <i className="bi bi-question-circle-fill me-1 ms-1"
@@ -319,7 +333,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
               placeholder="type a label ..."
             />
           </div>
-          <div className="col-sm-2">
+          <div className="col-sm-4">
             <DropDown
               options={PAGE_SIZES_FOR_DROPDOWN}
               dropDownId="list-result-per-page"
@@ -331,24 +345,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
               }}
             />
           </div>
-          <div className="col-sm-2 text-right mt-1">
-            <Pagination
-              clickHandler={(newPage: string) => {
-                setPage(parseInt(newPage) - 1)
-              }}
-              count={Math.ceil(totalTermsCount / size)}
-              initialPageNumber={page + 1}
-            />
-          </div>
-          {appContext.user && appContext.userTermsets.find((tset) => tset.id === data?.id) &&
-            // only owner can see this button
-            <div className="col-sm-3 text-end mt-2">
-              <AddTermModal termset={data ?? undefined} modalId={"add-term-modal"}></AddTermModal>
-            </div>
-          }
-        </div>
-        <div className="row">
-          <div className="col-sm-12 pl-4">
+          <div className="col-sm-2 pt-2">
             <b>
               {
                 (totalTermsCount !== 0 ? page * size + 1 : 0)
@@ -360,6 +357,16 @@ const TermSetPage = (props: TermsetPageComProps) => {
               }
             </b>
           </div>
+          <div className="col-sm-2 text-right mt-1">
+            <Pagination
+              clickHandler={(newPage: string) => {
+                setPage(parseInt(newPage) - 1)
+              }}
+              count={Math.ceil(totalTermsCount / size)}
+              initialPageNumber={page + 1}
+            />
+          </div>
+
         </div>
         <div className="row class-list-tablle-holder">
           <TermTable
