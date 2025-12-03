@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { TsTermset } from "../../concepts";
 
 
-const BrowesTermSetList = () => {
+const BrowseTermSetList = () => {
 
   const [termsets, setTermsets] = useState<TsTermset[]>([]);
 
@@ -22,15 +22,15 @@ const BrowesTermSetList = () => {
 
   return (
     <>
-      <p className="fs-2 fw-bold">Browes termsets</p>
+      <p className="fs-2 fw-bold">Browse termsets</p>
       <TermsetList
         termsets={termsets}
         redirectAfterDeleteEndpoint={"/termsets"}
         backBtnText="termset list"
-        from={"browes"}
+        from={"browse"}
       />
     </>
   )
 }
 
-export default BrowesTermSetList;
+export default BrowseTermSetList;

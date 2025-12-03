@@ -275,7 +275,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
         <div className="row">
           <div className="col-6">
             <Link className="btn-secondary p-1 text-white"
-              to={process.env.REACT_APP_PROJECT_SUB_PATH + (from !== "browes" ? "/mytermsets" : "/termsets")}>
+              to={process.env.REACT_APP_PROJECT_SUB_PATH + (from !== "browse" ? "/mytermsets" : "/termsets")}>
               <i className="bi bi-arrow-left mr-1"></i>
               My termset list
             </Link>
