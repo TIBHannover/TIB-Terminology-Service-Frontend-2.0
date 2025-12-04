@@ -127,7 +127,8 @@ body .adv-search-container {
     background-color: #404040;
     color: white;
     border-radius: 5px;
-    height: 50px;
+    height: 35px;
+    padding: 5px;
 }
 
 .custom-collection-btn .fa {
