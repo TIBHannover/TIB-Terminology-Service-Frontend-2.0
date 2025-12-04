@@ -3,6 +3,7 @@ import { getTsPluginHeaders } from "./header";
 import { TermSet, NewTermSetFormData } from "./types/termsetTypes";
 import { OntologyTermDataV2 } from "./types/ontologyTypes";
 import { TsTermset } from "../concepts";
+import { resolve } from "path";
 
 
 export async function getUserTermsetList(userId: string): Promise<TsTermset[]> {
@@ -71,27 +72,29 @@ export async function getAllTermsetList(): Promise<TsTermset[]> {
 
 
 export async function getTermset(termsetId: string): Promise<TsTermset | null> {
-  try {
-    type RespType = {
-      _result: {
-        term_set: TermSet
+  let p = new Promise<TsTermset | null>(async (resolve, reject) => {
+    try {
+      type RespType = {
+        _result: {
+          term_set: TermSet
+        }
       }
+      let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+      let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/" + termsetId + "/";
+      let result = await fetch(url, { headers: headers })
+      if (!result.ok) {
+        const error = new Error("Fetch failed");
+        (error as any).status = result.status;
+        reject(error);
+      }
+      let termset = await result.json() as RespType;
+      let tsTermset = new TsTermset(termset["_result"]["term_set"]);
+      resolve(tsTermset);
+    } catch (error) {
+      reject(error);
     }
-    let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/" + termsetId + "/";
-    let result = await fetch(url, { headers: headers })
-    if (!result.ok) {
-      const error = new Error("Fetch failed");
-      (error as any).status = result.status;
-      throw error;
-    }
-    let termset = await result.json() as RespType;
-    let tsTermset = new TsTermset(termset["_result"]["term_set"]);
-    return tsTermset;
-  } catch (error) {
-    // throw error;
-    return null;
-  }
+  });
+  return p;
 }
 
 

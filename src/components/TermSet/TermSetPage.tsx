@@ -286,12 +286,13 @@ const TermSetPage = (props: TermsetPageComProps) => {
         <div className="row bg-white p-2 rounded">
           <div className="col-sm-8">
             <div className="d-flex flex-row gap-2">
-              <p className="fs-4 fw-bold">{data ? data.name : ""}</p>
+              <p className="fs-4 fw-bold mb-0">{data ? data.name : ""}</p>
               {appContext.userTermsets.find((tset) => tset.id === data?.id) &&
                 <span className="visibility-tag">{data ? data.visibility : ""}</span>
               }
             </div>
-            <p>{data ? data.description : ""}</p>
+            <small>{data ? data.created_at.split("T")[0] + " by " + data.creator_name : ""}</small>
+            <p className="mt-2">{data ? data.description : ""}</p>
           </div>
           <div className="col-sm-4">
             <div className="d-flex flex-row gap-2  justify-content-end">

@@ -7,6 +7,7 @@ export type TermSet = {
   description?: string,
   creator: string,
   created_at: string,
+  creator_name?: string,
   updated_at?: string,
   visibility: string,
   terms: OntologyTermDataV2[];

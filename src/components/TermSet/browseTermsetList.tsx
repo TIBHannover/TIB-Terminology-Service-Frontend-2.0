@@ -22,7 +22,11 @@ const BrowseTermSetList = () => {
 
   return (
     <>
-      <p className="fs-2 fw-bold">Browse termsets</p>
+      <div className="row">
+        <div className="col-sm-12">
+          <p className="fs-2 fw-bold">Browse termsets</p>
+        </div>
+      </div>
       <TermsetList
         termsets={termsets}
         redirectAfterDeleteEndpoint={"/termsets"}
