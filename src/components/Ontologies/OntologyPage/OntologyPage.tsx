@@ -180,11 +180,7 @@ const OntologyPage = (props: CmpPropp) => {
 
   function handleFullScreen() {
     let contentToFullScreen = document.getElementById("content-for-fullscreen");
-    if (contentToFullScreen && !document.fullscreenElement) {
-      contentToFullScreen.requestFullscreen();
-      setFullscreenMode(true);
-      contentToFullScreen.style.paddingTop = '50px';
-    } else if (document.exitFullscreen && contentToFullScreen) {
+    if (document.exitFullscreen && contentToFullScreen && fullscreenMode) {
       document.exitFullscreen();
       setFullscreenMode(false);
       contentToFullScreen.style.paddingTop = '0';
@@ -226,6 +222,7 @@ const OntologyPage = (props: CmpPropp) => {
       ontoLang: ontoLang,
       setOntoLang: setOntoLang,
       fullScreenMode: fullscreenMode,
+      setFullscreenMode: setFullscreenMode,
       handleFullScreen: handleFullScreen
     };
 

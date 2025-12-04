@@ -58,6 +58,20 @@ export const OntologyPageHeadSection = () => {
     let temp = { "label": lang, "value": lang };
     langOptions.push(temp);
   }
+
+  function handleFullScreen() {
+    let contentToFullScreen = document.getElementById("content-for-fullscreen");
+    if (contentToFullScreen && !document.fullscreenElement) {
+      contentToFullScreen.requestFullscreen();
+      ontologyPageContext.setFullscreenMode(true);
+      contentToFullScreen.style.paddingTop = '50px';
+    } else if (document.exitFullscreen && contentToFullScreen) {
+      document.exitFullscreen();
+      ontologyPageContext.setFullscreenMode(false);
+      contentToFullScreen.style.paddingTop = '0';
+    }
+  }
+
   return (
     <div className='row ontology-page-headbar'>
       <div className='col-sm-8 pb-0'>
@@ -80,7 +94,7 @@ export const OntologyPageHeadSection = () => {
             </form>
           </div>
           <div className='pt-1'>
-            <button className='btn btn-sm' onClick={ontologyPageContext.handleFullScreen}>
+            <button className='btn btn-sm' onClick={handleFullScreen}>
               {!ontologyPageContext.fullScreenMode && <i class="fas fa-expand fs-6 mt-1" title='Full screen'></i>}
               {ontologyPageContext.fullScreenMode && <i class="fas fa-compress fs-6 mt-1" title='Exit full screen'></i>}
             </button>

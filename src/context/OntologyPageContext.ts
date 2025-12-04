@@ -13,6 +13,7 @@ type Blueprint = {
   ontoLang: string,
   setOntoLang: React.Dispatch<React.SetStateAction<string>>
   fullScreenMode: boolean,
+  setFullscreenMode: React.Dispatch<React.SetStateAction<boolean>>,
   handleFullScreen: () => void
 }
 
@@ -26,6 +27,7 @@ const blueprint: Blueprint = {
   ontoLang: "en",
   setOntoLang: function setOntoLang() { },
   fullScreenMode: false,
+  setFullscreenMode: function setFullscreenMode() { },
   handleFullScreen: function handleFullScreen() { }
 }
 
