@@ -7,6 +7,7 @@ export const SortBy = 'sortedBy';
 export const SubTabInTermTable = 'subtab';
 export const CollectionId = 'col';
 export const Lang = 'lang';
+export const From = 'from';
 
 // Search related
 export const SearchQuery = 'q';
@@ -19,6 +20,7 @@ export const SearchUnderAll = 'searchunderall';
 export const SearchIn = 'searchin';
 export const AdvOntology = 'advontology';
 export const IncludeImported = 'includeimported';
+export const FromOntologyPage = 'fromOntologyPage';
 
 
 // Note related

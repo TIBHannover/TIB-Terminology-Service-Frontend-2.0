@@ -1,4 +1,5 @@
-import {TermMultiSelectOption} from "./common";
+import { TermMultiSelectOption } from "./common";
+import { TsTerm } from "../../concepts";
 
 
 export type SearchApiInput = {
@@ -14,7 +15,8 @@ export type SearchApiInput = {
     isLeaf?: boolean,
     searchInValues?: string[],
     searchUnderIris?: string[],
-    searchUnderAllIris?: string[]
+    searchUnderAllIris?: string[],
+    fromOntologyPage?: boolean
 };
 
 
@@ -30,23 +32,19 @@ export type SuggestAndSelectApiInput = {
 
 
 export type SearchApiResponse = {
-    responseHeader: any,
-    response: {
-        numFound: number,
-        start: number,
-        docs: SearchSingleResult[]
-    },
-    highlighting: any,
-    facet_counts: {
-        facet_fields: any,
-        facet_ranges: any,
-        facet_queries: any,
-        facet_dates: any,
-        facet_intervals: any,
-        facet_heatmaps: any
-    },
-    expanded: any
-};
+    numElements: number,
+    page: number,
+    totalPages: number,
+    totalElements: number,
+    elements: TsTerm[],
+    facetFieldsToCounts: SearchResultFacet
+}
+
+
+export type SearchResultFacet = {
+    type?: any,
+    ontologyId?: any
+}
 
 
 export interface BaseSearchSingleResult {

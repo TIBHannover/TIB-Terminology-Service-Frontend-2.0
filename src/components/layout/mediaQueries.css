@@ -12,8 +12,8 @@
     }
 
     body .collection-logo-in-list {
-        width: 200px;
-        height: 150px;
+        width: 135px;
+        height: 135px;
     }
 
     button {
@@ -114,10 +114,6 @@
         width: 80%;
     }
 
-    body .tree-action-button-area {
-        margin-top: -400px;
-    }
-
     body .site-footer {
         font-size: 10px;
     }
@@ -150,8 +146,8 @@
     }
 
     body .collection-logo-in-list {
-        width: 200px;
-        height: 150px;
+        width: 125px;
+        height: 125px;
     }
 
     body .pagination-holder {
@@ -289,9 +285,6 @@
         width: 80%;
     }
 
-    body .tree-action-button-area {
-        right: 40px;
-    }
 
     body .site-footer {
         font-size: 10px;

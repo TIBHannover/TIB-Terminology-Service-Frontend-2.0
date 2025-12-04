@@ -1,4 +1,4 @@
-import {Helmet, HelmetProvider} from 'react-helmet-async';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CommonUrlFactory from '../UrlFactory/CommonUrlFactory';
 
 
@@ -42,7 +42,7 @@ class Toolkit {
     }
 
 
-    static transformLinksInStringToAnchor(text: string) {
+    static transformLinksInStringToAnchor(text: string): string {
         try {
             if (typeof (text) !== "string") {
                 return text;
@@ -73,7 +73,7 @@ class Toolkit {
     }
 
 
-    static getVarInLocalSrorageIfExist(varName: string, defaultValue: string) {
+    static getVarInLocalSrorageIfExist(varName: string, defaultValue: string | boolean) {
         return localStorage.getItem(varName) ?? defaultValue;
     }
 
@@ -94,7 +94,7 @@ class Toolkit {
         localStorage.setItem("obsoletes", obsoletesValue);
         // @ts-ignore
         document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
-        urlFacory.setObsoletes({value: obsoletesValue});
+        urlFacory.setObsoletes({ value: obsoletesValue });
         return true;
     }
 
@@ -128,7 +128,7 @@ class Toolkit {
         let langs = ["ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "hr", "hu", "it", "ja", "la", "lt", "lv", "nl", "no", "pl", "pt", "ro", "sk", "sl", "sv", "zh", "zh-tw"];
         let result = [];
         for (let l of langs) {
-            result.push({"label": l, "value": l});
+            result.push({ "label": l, "value": l });
         }
         return result;
     }
@@ -157,7 +157,7 @@ class Toolkit {
 
     static async downloadJsonFile(fileName: string, content: string) {
         try {
-            const blob = new Blob([content], {type: 'application/json'});
+            const blob = new Blob([content], { type: 'application/json' });
             const href = await URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = href;

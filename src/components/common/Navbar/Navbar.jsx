@@ -1,13 +1,13 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 const SiteNavbar = () => {
-  
+
   const urlPath = window.location.pathname;
   let basePath = process.env.REACT_APP_PROJECT_SUB_PATH;
-  
+
   function handleClick(e) {
     let clickedElement = document.getElementsByClassName("nav-clicked");
     if (clickedElement.length !== 0) {
@@ -15,8 +15,8 @@ const SiteNavbar = () => {
     }
     e.target.classList.add("nav-clicked");
   }
-  
-  
+
+
   return (
     <div className='mt-0'>
       <Navbar collapseOnSelect expand="lg" className="site-navbar">
@@ -28,51 +28,51 @@ const SiteNavbar = () => {
             <Nav className="ms-auto flex-wrap">
               <Nav.Link key={1}>
                 <Link onClick={handleClick}
-                      className={"nav-link navbar-item " + ((urlPath === "/ts" || urlPath === "/ts/") ? "nav-clicked" : "")}
-                      to={basePath + "/"}>Home</Link>
+                  className={"nav-link navbar-item " + ((urlPath === "/ts" || urlPath === "/ts/") ? "nav-clicked" : "")}
+                  to={basePath + "/"}>Home</Link>
               </Nav.Link>
               {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
                 <Nav.Link key={2}>
                   <Link onClick={handleClick}
-                        className={"nav-link navbar-item stour-collections-navbar-item  " + (urlPath.includes("/collections") ? "nav-clicked" : "")}
-                        to={basePath + "/collections"}>Collections</Link>
+                    className={"nav-link navbar-item stour-collections-navbar-item  " + (urlPath.includes("/collections") ? "nav-clicked" : "")}
+                    to={basePath + "/collections"}>Collections</Link>
                 </Nav.Link>
               }
               <Nav.Link className="nav-item second-step" key={3}>
                 <Link onClick={handleClick}
-                      className={"nav-link navbar-item stour-ontologies-navbar-item  " + (urlPath.includes("/ontologies") ? "nav-clicked" : "")}
-                      to={basePath + "/ontologies"}>Ontologies</Link>
+                  className={"nav-link navbar-item stour-ontologies-navbar-item  " + (urlPath.includes("/ontologies") ? "nav-clicked" : "")}
+                  to={basePath + "/ontologies"}>Ontologies</Link>
               </Nav.Link>
-              <Nav.Link key={4}>
-                <Link onClick={handleClick}
-                      className={"nav-link navbar-item stour-help-navbar-item  " + (urlPath.includes("/help") ? "nav-clicked" : "")}
-                      to={basePath + "/help"}>Help</Link>
-              </Nav.Link>
-              {process.env.REACT_APP_PROJECT_ID !== "nfdi4ing" &&
+              {process.env.REACT_APP_TERMSET_FEATURE === "true" &&
                 <Nav.Link key={5}>
                   <Link onClick={handleClick}
-                        className={"nav-link navbar-item stour-api-navbar-item " + (urlPath.includes("/api") ? "nav-clicked" : "")}
-                        to={basePath + "/api"}>API</Link>
+                    className={"nav-link navbar-item " + (urlPath.includes("/termsets") ? "nav-clicked" : "")}
+                    to={basePath + "/termsets"}>Termsets</Link>
                 </Nav.Link>
               }
+              <Nav.Link key={4}>
+                <Link onClick={handleClick}
+                  className={"nav-link navbar-item stour-help-navbar-item  " + (urlPath.includes("/help") ? "nav-clicked" : "")}
+                  to={basePath + "/help"}>Help</Link>
+              </Nav.Link>
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <Nav.Link key={6}>
                   <Link onClick={handleClick}
-                        className={"nav-link navbar-item " + (urlPath.includes("/docs") ? "nav-clicked" : "")}
-                        to={basePath + "/docs"}>Documentation</Link>
+                    className={"nav-link navbar-item " + (urlPath.includes("/docs") ? "nav-clicked" : "")}
+                    to={basePath + "/docs"}>Documentation</Link>
                 </Nav.Link>
               }
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <Nav.Link key={7}>
                   <Link onClick={handleClick}
-                        className={"nav-link navbar-item " + (urlPath.includes("/usage") ? "nav-clicked" : "")}
-                        to={basePath + "/usage"}>Usage</Link>
+                    className={"nav-link navbar-item " + (urlPath.includes("/usage") ? "nav-clicked" : "")}
+                    to={basePath + "/usage"}>Usage</Link>
                 </Nav.Link>
               }
               <Nav.Link key={8}>
                 <Link onClick={handleClick}
-                      className={"nav-link navbar-item stour-about-navbar-item  " + (urlPath.includes("/about") ? "nav-clicked" : "")}
-                      to={basePath + "/about"}>About</Link>
+                  className={"nav-link navbar-item stour-about-navbar-item  " + (urlPath.includes("/about") ? "nav-clicked" : "")}
+                  to={basePath + "/about"}>About</Link>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -80,7 +80,7 @@ const SiteNavbar = () => {
       </Navbar>
     </div>
   )
-  
+
 }
 
 export default SiteNavbar;

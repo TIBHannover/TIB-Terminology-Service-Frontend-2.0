@@ -6,12 +6,12 @@ const OntologyStatsBox = () => {
   const ontology = ontologyPageContext.ontology;
 
   if (!ontology || ontology === null) {
-    return "";
+    return <></>;
   }
 
   return (
     <div id="stats-table-wrapper">
-      <h4>Metrics</h4>
+      <p className="fs-5 fw-bold">Metrics</p>
       <table className="ontology-metric-table stour-overview-page-stats">
         <tbody>
           <tr>

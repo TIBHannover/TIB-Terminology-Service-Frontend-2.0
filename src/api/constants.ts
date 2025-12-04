@@ -7,6 +7,6 @@ export const getCallSetting: RequestInit = {
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'user-agent': process.env.REACT_APP_HEADER_INFO_TIB
+    'caller': process.env.REACT_APP_HEADER_INFO_TIB ?? 'TIBCENTRAL'
   } as HeadersInit
 };

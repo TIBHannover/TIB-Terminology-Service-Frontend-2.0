@@ -1,57 +1,58 @@
-import {useEffect, useContext, useState} from "react";
+import { useEffect, useContext, useState } from "react";
 import DropDown from "../../../common/DropDown/DropDown";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import JumpTo from "../../../common/JumpTo/JumpTo";
 import * as constantsVars from '../Constants';
 import TermLib from "../../../../Libs/TermLib";
-import {OntologyPageContext} from "../../../../context/OntologyPageContext";
-import {NoteContext} from "../../../../context/NoteContext";
+import { OntologyPageContext } from "../../../../context/OntologyPageContext";
+import { NoteContext } from "../../../../context/NoteContext";
 import Modal from "react-bootstrap/Modal";
 import Login from "../../../User/Login/TS/Login";
-import {AppContext} from "../../../../context/AppContext";
+import { AppContext } from "../../../../context/AppContext";
 
 
 export const NoteCreationRender = (props) => {
-  
+
   const ontologyPageContext = useContext(OntologyPageContext);
   const noteContext = useContext(NoteContext);
   const appContext = useContext(AppContext);
-  
+
   const [showModal, setShowModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
-  
+
   useEffect(() => {
     if (props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")) {
       document.getElementById("publish_note_to_parent_checkbox").checked = true;
     }
   }, []);
-  
-  
+
+
   return (
     <>
       <div className="row">
         <div className={"col-sm-12 " + (props.mode === "newNote" ? "text-end" : "")}>
           <button type="button"
-                  className={props.mode === "newNote"
-                    ? "btn btn-secondary stour-onto-note-add-btn"
-                    : "btn btn-sm borderless-btn note-action-menu-btn"
-                  }
-                  onClick={() => {
-                    if (appContext.user) {
-                      setShowModal(true);
-                    } else {
-                      setLoginModal(true);
-                      setTimeout(() => setLoginModal(false), 1000);
-                    }
-                  }}
+            className={props.mode === "newNote"
+              ? "btn btn-secondary stour-onto-note-add-btn"
+              : "btn btn-sm borderless-btn note-action-menu-btn"
+            }
+            onClick={() => {
+              ontologyPageContext.handleFullScreen();
+              if (appContext.user) {
+                setShowModal(true);
+              } else {
+                setLoginModal(true);
+                setTimeout(() => setLoginModal(false), 1000);
+              }
+            }}
           >
             {props.mode === "newNote" ? "Add Note" : "Edit"}
           </button>
         </div>
       </div>
-      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
+      <Login isModal={true} showModal={loginModal} withoutButton={true} />
       <Modal show={showModal} fullscreen={true} id={"edit-note-modal" + props.targetNoteId}
-             key={"edit-note-modal" + props.targetNoteId}>
+        key={"edit-note-modal" + props.targetNoteId}>
         <Modal.Header className="row">
           <div className="col-sm-12">
             <div className="row">
@@ -174,13 +175,13 @@ export const NoteCreationRender = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <button type="button" className="btn btn-secondary submit-term-request-modal-btn"
-                  onClick={() => {
-                    props.submit();
-                  }}>Submit
+            onClick={() => {
+              props.submit();
+            }}>Submit
           </button>
         </Modal.Footer>
       </Modal>
     </>
   );
-  
+
 }

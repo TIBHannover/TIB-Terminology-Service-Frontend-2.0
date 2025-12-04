@@ -11,6 +11,7 @@
     width: 133%;
     left: 50%;
     margin-left: -17%;
+    background-color: #ECF0F0;
 }
 
 .ontology-page-container .header-collapse-btn {
@@ -23,6 +24,7 @@
     border-left: 20px solid transparent;
     cursor: pointer;
     text-align: center;
+    margin-top: -40px;
 }
 
 .ontology-page-container .header-collpase-icon {
@@ -44,17 +46,6 @@
 .ontology-page-container .ont-info-bar-title {
     color: black;
     font-weight: bold;
-}
-
-.ontology-page-container .ontology-detail-page-container,
-.ontology-page-container .tree-view-container {
-    background-color: white;
-    margin-top: 0px;
-    padding-top: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-left: -15px;
-    margin-right: -15px;
 }
 
 .ontology-detail-table,
@@ -89,10 +80,11 @@ th {
     border: none;
 }
 
-.ontology-page-container .download-ontology-btn {
-    margin-right: 20px;
-    background-color: #404040;
+body .ontology-page-headbar {
+    background-color: white;
     font-size: 14px;
+    position: relative;
+    top: -5px;
 }
 
 .ontology-overview-table-id-column {
@@ -117,12 +109,43 @@ th {
     margin-bottom: 20px;
 }
 
-.ontology-detail-nav-item > .nav-link {
+.ontology-detail-nav-item {
+    padding: 5px;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.nav-item-active {
+    background-color: #0E6668;
+}
+
+.nav-item-active:hover {
+    background-color: #0E6668 !important;
+}
+
+.nav-item-active>.nav-link {
+    color: white !important;
+    text-decoration: none;
+}
+
+.nav-item-active>.nav-link:hover {
+    color: white !important;
+    text-decoration: none;
+}
+
+.ontology-detail-nav-item:hover {
+    background-color: #f2f2f2;
+}
+
+.ontology-detail-nav-item>.nav-link {
     color: #0e6668;
     text-decoration: none;
 }
 
-.ontology-detail-nav-item > .nav-link:hover {
+.ontology-detail-nav-item>.nav-link:hover {
     color: #0e6668;
 }
 
@@ -137,4 +160,30 @@ th {
 #collectionSuggestionModalDialog {
     max-width: 50% !important;
     margin: auto !important;
+}
+
+/* Ontology Adopters (simple list look) ichrak part */
+.adopters-panel {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.adopters-row {
+    padding: 10px 12px;
+    border-bottom: 1px dotted #e5e7eb;
+    line-height: 1.5;
+}
+
+.adopters-row:last-child {
+    border-bottom: 0;
+}
+
+.adopters-key {
+    font-weight: 600;
+    text-transform: lowercase;
+}
+
+.adopters-modal .modal-body {
+    padding: 16px;
 }

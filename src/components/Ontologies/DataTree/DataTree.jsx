@@ -1,10 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
 import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
-import JumpTo from '../../common/JumpTo/JumpTo';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
 import { OntologyPageContext } from '../../../context/OntologyPageContext';
@@ -106,16 +104,6 @@ const DataTree = (props) => {
   return (
     <div className="tree-view-container resizable-container">
       <div className="tree-page-left-part" id="page-left-pane">
-        <div className='row autosuggest-sticky'>
-          <div className='col-sm-10 stour-tree-jumpto-box'>
-            <JumpTo
-              targetType={props.componentIdentity}
-              label={"Jump to"}
-              handleJumtoSelection={handleJumtoSelection}
-              obsoletes={false}
-            />
-          </div>
-        </div>
         <div className='tree-container'>
           {!loading && (props.rootNodes.length !== 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length !== 0 && props.componentIdentity !== "properties")) &&
             <Tree
@@ -129,6 +117,7 @@ const DataTree = (props) => {
               individualViewChanger={""}
               handleResetTreeInParent={handleResetTreeEvent}
               jumpToIri={jumpToIri}
+              handleJumtoSelection={handleJumtoSelection}
             />
           }
           {!loading && props.rootNodes.length === 0 || (ontologyPageContext.isSkos && props.rootNodesForSkos.length === 0 && props.componentIdentity !== "properties") &&
@@ -166,12 +155,6 @@ const DataTree = (props) => {
   );
 }
 
-
-DataTree.propTypes = {
-  rootNodes: PropTypes.array.isRequired,
-  obsoleteTerms: PropTypes.array,
-  componentIdentity: PropTypes.string.isRequired,
-};
 
 
 export default DataTree;

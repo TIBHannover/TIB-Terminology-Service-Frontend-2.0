@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { AppContext } from "../../../context/AppContext";
 import AlertBox from "../Alerts/Alerts";
-import { sendResolveRequest } from "../../../api/tsMicroBackendCalls";
+import { sendResolveRequest } from "../../../api/report";
 
 
 
@@ -10,23 +10,23 @@ const ResolveReportActionsForAdmins = (props) => {
     const appContext = useContext(AppContext);
 
 
-    async function sendResolveCommand(e){
-        let resolveAction = e.target.value;        
+    async function sendResolveCommand(e) {
+        let resolveAction = e.target.value;
         let redirectAfterDeleteEndpoint = window.location.href;
         let locationObject = window.location;
         let searchParams = new URLSearchParams(window.location.search);
-        if (redirectAfterDeleteEndpoint.includes("noteId=")){
+        if (redirectAfterDeleteEndpoint.includes("noteId=")) {
             // we are on the note page                
-            searchParams.delete('noteId');                 
-        }        
-        redirectAfterDeleteEndpoint = locationObject.pathname + "?" +  searchParams.toString();
+            searchParams.delete('noteId');
+        }
+        redirectAfterDeleteEndpoint = locationObject.pathname + "?" + searchParams.toString();
         let resolveStatus = await sendResolveRequest({
             objectType: props.objectType,
             objectId: props.objectId,
             action: resolveAction,
             creatorUsername: props.creatorUsername
         });
-        if(resolveStatus){
+        if (resolveStatus) {
             window.location.replace(redirectAfterDeleteEndpoint);
         }
 
@@ -34,13 +34,13 @@ const ResolveReportActionsForAdmins = (props) => {
 
 
 
-    if(!appContext.isUserSystemAdmin || !props.reportStatus){
+    if (!appContext.isUserSystemAdmin || !props.reportStatus) {
         return "";
     }
 
     return (
         <>
-            <AlertBox 
+            <AlertBox
                 type="danger"
                 message="Attention! This Content is Reported and needs action!"
             />
@@ -49,7 +49,7 @@ const ResolveReportActionsForAdmins = (props) => {
                     <button className="btn btn-danger mr-2" value="delete" onClick={sendResolveCommand}>delete</button>
                     <button className="btn btn-danger mr-2" value="delete-block" onClick={sendResolveCommand}>delete And block user</button>
                     <button className="btn btn-success" value="none" onClick={sendResolveCommand}>False Report</button>
-                </div>            
+                </div>
             </div>
             <br></br>
         </>

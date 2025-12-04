@@ -12,7 +12,7 @@ class TermLib {
     if (!ontology_name) {
       return null;
     }
-    
+
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -24,7 +24,7 @@ class TermLib {
     } else if (type === "individual" || type === "individuals") {
       targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
     }
-    
+
     return [
       <a
         href={targetHref}
@@ -35,7 +35,7 @@ class TermLib {
       </a>,
     ];
   }
-  
+
   static createTermUrlWithOntologyPrefix(
     {
       ontology_name,
@@ -46,7 +46,7 @@ class TermLib {
     if (!ontology_name) {
       return null;
     }
-    
+
     let targetHref =
       process.env.REACT_APP_PROJECT_SUB_PATH +
       "/ontologies/" +
@@ -64,8 +64,9 @@ class TermLib {
       </a>,
     ];
   }
-  
-  static createAlsoInTags(term, termType) {
+
+
+  static createAlsoInTags(term) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
       for (let ontologyId of term.alsoIn) {
@@ -74,16 +75,16 @@ class TermLib {
             TermLib.createOntologyTagWithTermURL(
               ontologyId,
               term.iri,
-              termType,
+              term.type,
             ),
           );
         }
       }
       return alsoInList;
     }
-    return null;
+    return [];
   }
-  
+
   static createTermDiscription(term) {
     if (term.isIndividual && term.description) {
       // individual description structure is different
@@ -103,14 +104,14 @@ class TermLib {
             for (let key in ax) {
               defArr.push(
                 <>
-                  <br/>
+                  <br />
                   <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
                 </>
               );
               if (Array.isArray(ax[key]) && ax[key].length > 1) {
-                defArr.push(<>{ax[key].join(", ")}<br/></>);
+                defArr.push(<>{ax[key].join(", ")}<br /></>);
               } else {
-                defArr.push(<>{ax[key]}<br/></>);
+                defArr.push(<>{ax[key]}<br /></>);
               }
             }
           }
@@ -121,10 +122,10 @@ class TermLib {
       }
       return result;
     }
-    
+
     return null;
   }
-  
+
   static createInstancesListForClass(term) {
     // instances are the individuals which are a type of this class.
     if (!term.instancesList) {
@@ -148,7 +149,31 @@ class TermLib {
     }
     return result;
   }
-  
+
+
+  static createListOfClasses(classList) {
+    // render a list of classes as a list
+    // classList is list of object with props: {ontologyId:"", iri:"", label:""}
+    let result = [];
+    for (let cl of classList) {
+      let classUrl =
+        process.env.REACT_APP_PROJECT_SUB_PATH +
+        "/ontologies/" +
+        cl["ontologyId"] +
+        "/terms?iri=" +
+        encodeURIComponent(cl["iri"]);
+      result.push(
+        <>
+          <a href={classUrl} target="_blank">
+            {cl["label"]}
+          </a>
+          <br />
+        </>,
+      );
+    }
+    return result;
+  }
+
   static extractLabel(term) {
     try {
       if (term.label instanceof String || typeof term.label === "string") {
@@ -166,16 +191,16 @@ class TermLib {
       return "N/A";
     }
   }
-  
+
   static termHasChildren(term) {
     return term.hasHierarchicalChildren || term.hasDirectChildren;
   }
-  
+
   static makeTermIdForTree(term) {
     let id = term.iri + "___" + Math.random().toString(36).substring(2, 20);
     return id;
   }
-  
+
   static getTermType(term) {
     if (!term.type) {
       return "";
@@ -185,7 +210,7 @@ class TermLib {
     }
     return term.type[0];
   }
-  
+
   static gerTermSynonyms(term) {
     if (!term.synonym) {
       return;
@@ -204,7 +229,7 @@ class TermLib {
     }
     return result;
   }
-  
+
   static getContributors(term) {
     if (term["annotation"]?.["contributor"]) {
       return term["annotation"]["contributor"];
@@ -216,7 +241,7 @@ class TermLib {
       return "N/A";
     }
   }
-  
+
   static getAnnotations(term) {
     let annotations = {};
     for (let key in term) {
@@ -236,6 +261,22 @@ class TermLib {
       }
     }
     return annotations;
+  }
+
+
+  static getAnnotationDefinition(definitionList) {
+    if (!definitionList) {
+      return [];
+    }
+    let results = [];
+    for (let def of definitionList) {
+      if (typeof def === "string") {
+        results.push(def);
+      } else if ("value" in def) {
+        results.push(def.value);
+      }
+    }
+    return results;
   }
 }
 

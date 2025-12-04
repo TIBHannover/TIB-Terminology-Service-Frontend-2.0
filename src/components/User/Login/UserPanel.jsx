@@ -1,29 +1,29 @@
-import {useContext} from "react";
-import {AppContext} from "../../../context/AppContext";
+import { useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
 import Auth from "../../../Libs/AuthLib";
 import Login from "./TS/Login";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
 const UserPanel = (props) => {
-  
+
   const appContext = useContext(AppContext);
-  
-  
+
+
   if (process.env.REACT_APP_AUTH_FEATURE !== "true") {
     return null;
   }
-  
+
   return (
     <span>
       {!appContext.user &&
-        <Login isModal={props.isModal}/>
+        <Login isModal={props.isModal} />
       }
       {appContext.user &&
         <Dropdown>
           <Dropdown.Toggle className="btn btn-secondary user-profile-dropdown stour-login-in-header mt-3"
-                           type="button" id="userProfileDropdown">
+            type="button" id="userProfileDropdown">
             {appContext.user.fullName}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -47,7 +47,7 @@ const UserPanel = (props) => {
                 className="user-panel-item"
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"}
               >
-                Termsets
+                My Termsets
               </Dropdown.Item>
             }
             {localStorage.getItem('authProvider') === 'github' && process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE === "true" &&

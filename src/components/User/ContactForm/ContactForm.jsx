@@ -7,10 +7,12 @@ import AlertBox from "../../common/Alerts/Alerts";
 import FormLib from "../../../Libs/FormLib";
 
 
-const ContactForm = () => {
+const ContactForm = (props) => {
+
+  const { appErrorUrl, appErrorContent } = props;
 
   const [editorState, setEditorState] = useState(null);
-  const [contactType, setContactType] = useState(0);
+  const [contactType, setContactType] = useState(!appErrorUrl ? 0 : "2");
   const [typeHintTextShow, setTypeHintTextShow] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
@@ -40,11 +42,11 @@ const ContactForm = () => {
   function submit() {
     let formIsValid = true;
     let title = FormLib.getFieldByIdIfValid('contact-form-title');
-    let username = FormLib.getFieldByIdIfValid('contact-form-username');
-    let email = FormLib.getFieldByIdIfValid('contact-form-email');
+    let username = !appErrorUrl ? FormLib.getFieldByIdIfValid('contact-form-username') : "";
+    let email = !appErrorUrl ? FormLib.getFieldByIdIfValid('contact-form-email') : "";
     let safeAnswer = FormLib.getFieldByIdIfValid('contact-form-safe-q');
-    let content = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
-    formIsValid = title && username && email && safeAnswer && content;
+    let content = !appErrorUrl ? FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor') : appErrorContent;
+    formIsValid = !appErrorUrl ? (title && username && email && safeAnswer && content) : safeAnswer;
     if (parseInt(contactType) === 0) {
       setTypeHintTextShow(true);
       formIsValid = false;
@@ -54,7 +56,7 @@ const ContactForm = () => {
       return;
     }
 
-    content = createHtmlFromEditorJson(content);
+    content = !appErrorUrl ? createHtmlFromEditorJson(content) : content;
     let data = {
       title: title,
       description: content,
@@ -62,7 +64,8 @@ const ContactForm = () => {
       email: email,
       safeAnswer: safeAnswer,
       safeQuestion: randomNum1 + "+" + randomNum2,
-      type: contactType
+      type: contactType,
+      appError: !!appErrorUrl
     };
 
     sendContactFrom(data).then(success => {
@@ -79,7 +82,7 @@ const ContactForm = () => {
 
 
   if (process.env.REACT_APP_CONTACT_FORM !== "true") {
-    return "";
+    return <></>;
   }
 
   return (
@@ -126,58 +129,67 @@ const ContactForm = () => {
             <br></br>
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input" htmlFor="contact-form-title">Title</label>
+                <label className={!appErrorUrl ? "required_input" : ""} htmlFor="contact-form-title">
+                  {!appErrorUrl ? "Title" : "Error happened while visiting"}
+                </label>
                 <input
                   type="text"
                   onChange={() => { document.getElementById('contact-form-title').style.borderColor = ''; }}
                   class="form-control"
                   id="contact-form-title"
-                  placeholder="Enter title for your query">
+                  placeholder="Enter title for your query"
+                  defaultValue={appErrorUrl ?? ""}
+                  readOnly={appErrorUrl ? true : false}
+                  disabled={appErrorUrl ? true : false}
+                >
                 </input>
               </div>
             </div>
             <br></br>
-            <div className="row">
-              <div className="col-sm-8">
-                <TextEditor
-                  editorState={editorState}
-                  textChangeHandlerFunction={onTextAreaChange}
-                  wrapperClassName=""
-                  editorClassName=""
-                  placeholder="Enter your query here"
-                  textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
-                  wrapperId="contact-form-text-editor"
-                />
+            {!appErrorUrl &&
+              <div className="row">
+                <div className="col-sm-8">
+                  <TextEditor
+                    editorState={editorState}
+                    textChangeHandlerFunction={onTextAreaChange}
+                    wrapperClassName=""
+                    editorClassName=""
+                    placeholder="Enter your query here"
+                    textSizeOptions={['Normal', 'H3', 'H4', 'H5', 'H6', 'Blockquote', 'Code']}
+                    wrapperId="contact-form-text-editor"
+                  />
+                </div>
               </div>
-            </div>
-            <br></br>
-            <div className="row">
-              <div className="col-sm-8">
-                <label className="required_input" htmlFor="contact-form-username">Your Name</label>
-                <input
-                  type="text"
-                  onChange={() => { document.getElementById('contact-form-username').style.borderColor = ''; }}
-                  class="form-control"
-                  id="contact-form-username"
-                  placeholder="Please enter your fullname">
-                </input>
+            }
+            {!appErrorUrl &&
+              <div className="row mt-4">
+                <div className="col-sm-8">
+                  <label className="required_input" htmlFor="contact-form-username">Your Name</label>
+                  <input
+                    type="text"
+                    onChange={() => { document.getElementById('contact-form-username').style.borderColor = ''; }}
+                    class="form-control"
+                    id="contact-form-username"
+                    placeholder="Please enter your fullname">
+                  </input>
+                </div>
               </div>
-            </div>
-            <br></br>
-            <div className="row">
-              <div className="col-sm-8">
-                <label className="required_input" htmlFor="contact-form-email">Email</label>
-                <input
-                  type="text"
-                  onChange={() => { document.getElementById('contact-form-email').style.borderColor = ''; }}
-                  class="form-control"
-                  id="contact-form-email"
-                  placeholder="Please enter your email">
-                </input>
+            }
+            {!appErrorUrl &&
+              <div className="row mt-4">
+                <div className="col-sm-8">
+                  <label className="required_input" htmlFor="contact-form-email">Email</label>
+                  <input
+                    type="text"
+                    onChange={() => { document.getElementById('contact-form-email').style.borderColor = ''; }}
+                    class="form-control"
+                    id="contact-form-email"
+                    placeholder="Please enter your email">
+                  </input>
+                </div>
               </div>
-            </div>
-            <br></br>
-            <div className="row">
+            }
+            <div className="row mt-4">
               <div className="col-sm-6">
                 <label className="required_input" htmlFor="contact-form-safe-q">What is {randomNum1 + " + " + randomNum2}</label>
                 <input

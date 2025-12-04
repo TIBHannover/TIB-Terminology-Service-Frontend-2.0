@@ -66,7 +66,18 @@ export type ContactFormData = {
 }
 
 
+export type ContentReport = {
+    reporter_username: string,
+    report_date: string,
+    report_reason: string,
+    reported_content_type: string,
+    reported_content_url: string
+}
+
+
 type UserCollection = {
     title: string,
     ontology_ids: string[]
 }
+
+

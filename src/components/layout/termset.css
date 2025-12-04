@@ -37,11 +37,12 @@ body .search-input-termset::placeholder {
 .visibility-tag {
     background-color: #0E6668;
     color: white;
-    width: 200px;
     border-radius: 5px;
     text-align: center;
     float: right;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
+    height: fit-content;
+    padding: 3px;
+    margin-top: 5px;
 }
-

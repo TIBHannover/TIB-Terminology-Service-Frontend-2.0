@@ -1,10 +1,10 @@
 {
-    "Detail":{
+  "Detail":{
         "id":"detail",
         "keyForRenderAsComponent": "NodePage",
         "keyForRenderAsTabItem": "detail-tab",
         "tabId": 0,
-        "tabTitle": "Detail",
+         "tabTitle": "Detail",
         "urlEndPoint": "detail"
     },
     "Notes":{

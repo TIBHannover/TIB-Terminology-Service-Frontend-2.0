@@ -62,7 +62,6 @@ export default class TreeHelper {
 
   static async expandNode({ e, ontologyId, childExtractName, isSkos, lang }) {
     let targetNodeIri = e.dataset.iri;
-    let targetNodeId = e.dataset.id;
     let Id = e.id;
     let treeNode = new TreeNodeController();
     if (document.getElementById(Id).classList.contains("closed")) {
@@ -70,12 +69,11 @@ export default class TreeHelper {
       let res = [];
       if (isSkos) {
         let skosApi = new SkosApi({ ontologyId: ontologyId, iri: targetNodeIri, lang: lang });
-        await skosApi.fetchChildrenForSkosTerm();
-        res = skosApi.childrenForSkosTerm;
+        res = await skosApi.fetchChildrenForSkosTerm();
       }
       else {
         let termApi = new TermApi(ontologyId, targetNodeIri, childExtractName, lang);
-        res = await termApi.getChildrenJsTree(targetNodeId);
+        res = await termApi.getChildrenJsTree();
       }
       TreeHelper.sortTermsInTree(res);
       let ul = document.createElement("ul");
@@ -124,7 +122,7 @@ export default class TreeHelper {
       let Iri = document.getElementById(parentId);
       Iri = Iri.dataset.iri;
       let termApi = new TermApi(ontologyId, Iri, childExtractName);
-      let res = await termApi.getChildrenJsTree(parentId);
+      let res = await termApi.getChildrenJsTree();
       TreeHelper.sortTermsInTree(res);
       for (let i = 0; i < res.length; i++) {
         if (res[i].iri === node.parentNode.dataset.iri) {
@@ -174,16 +172,16 @@ export default class TreeHelper {
       return false;
     }
     let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
-    await termApi.fetchTerm();
-    return termApi.term.hasHierarchicalChildren || termApi.hasDirectChildren;
+    let tsTerm = await termApi.fetchTerm();
+    return tsTerm.hasHierarchicalChildren || tsTerm.hasDirectChildren;
   }
 
 
   static async nodeIsRoot(ontology, nodeIri, mode) {
     let termType = mode === 'terms' ? "classes" : "properties";
     let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
-    await termApi.fetchTerm();
-    return !termApi.term.hasDirectParents && !termApi.term.hasHierarchicalParents;
+    let tsTerm = await termApi.fetchTerm();
+    return !tsTerm.hasDirectParents && !tsTerm.hasHierarchicalParents;
   }
 
 
@@ -255,10 +253,26 @@ export default class TreeHelper {
 
 
   static buildTermTreeFromFlatList(terms) {
+    function getParentIris(parentIrisList) {
+      let parentIris = [];
+      if (!parentIrisList) {
+        return [];
+      }
+      for (let parentIri of parentIrisList) {
+        if (typeof parentIri === "string") {
+          parentIris.push(parentIri);
+        } else if ("value" in parentIri) {
+          parentIris.push(parentIri.value);
+        }
+      }
+      return parentIris;
+    }
+
     for (let term of terms) {
       for (let potentialChild of terms) {
-        let parentsIris = potentialChild.type[0] === "class" ? potentialChild["hierarchicalParent"] : potentialChild["directParent"];
-        if (!parentsIris) {
+        let parentsIrisList = potentialChild.type[0] === "class" ? potentialChild["hierarchicalParent"] : potentialChild["directParent"];
+        let parentsIris = getParentIris(parentsIrisList);
+        if (!parentsIris.length) {
           // Thing class
           continue;
         }
@@ -270,12 +284,9 @@ export default class TreeHelper {
           }
         }
       }
-    }
-    for (let term of terms) {
-      if (term.childrenList === undefined) {
+      if (!term.childrenList) {
         term.childrenList = [];
       }
-      term.id = TermLib.makeTermIdForTree(term);
     }
     return terms.filter((term) => !term.hasHierarchicalParents && !term.hasDirectParents);
   }
