@@ -15,6 +15,7 @@ import { TermFactory } from "../../concepts";
 import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
 import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 import { withRouter } from "react-router-dom";
+import Login from "../User/Login/TS/Login";
 
 
 const VISIBILITY_ONLY_ME = 1;
@@ -179,6 +180,10 @@ const EditTermset = (props: TermsetEditComProps) => {
       </div>
     </div>
   );
+
+  if (!appContext.user) {
+    return (<Login isModal={false}></Login>);
+  }
 
 
   if (submited && addedSuccess) {

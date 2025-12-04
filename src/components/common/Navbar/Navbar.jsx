@@ -43,18 +43,18 @@ const SiteNavbar = () => {
                   className={"nav-link navbar-item stour-ontologies-navbar-item  " + (urlPath.includes("/ontologies") ? "nav-clicked" : "")}
                   to={basePath + "/ontologies"}>Ontologies</Link>
               </Nav.Link>
+              {process.env.REACT_APP_TERMSET_FEATURE === "true" &&
+                <Nav.Link key={5}>
+                  <Link onClick={handleClick}
+                    className={"nav-link navbar-item " + (urlPath.includes("/termsets") ? "nav-clicked" : "")}
+                    to={basePath + "/termsets"}>Termsets</Link>
+                </Nav.Link>
+              }
               <Nav.Link key={4}>
                 <Link onClick={handleClick}
                   className={"nav-link navbar-item stour-help-navbar-item  " + (urlPath.includes("/help") ? "nav-clicked" : "")}
                   to={basePath + "/help"}>Help</Link>
               </Nav.Link>
-              {process.env.REACT_APP_TERMSET_FEATURE === "true" &&
-                <Nav.Link key={5}>
-                  <Link onClick={handleClick}
-                    className={"nav-link navbar-item stour-api-navbar-item " + (urlPath.includes("/api") ? "nav-clicked" : "")}
-                    to={basePath + "/termsets"}>Termsets</Link>
-                </Nav.Link>
-              }
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <Nav.Link key={6}>
                   <Link onClick={handleClick}

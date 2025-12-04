@@ -113,15 +113,17 @@ const TermSetList = (props: CmpProps) => {
         );
       })
       }
-      <div className="row">
-        <div className="col-sm-12 text-center">
-          <Pagination
-            clickHandler={handlePagination}
-            count={Math.ceil(filteredTermsets.length / pageSize)}
-            initialPageNumber={page}
-          />
+      {!createMode &&
+        <div className="row">
+          <div className="col-sm-12 text-center">
+            <Pagination
+              clickHandler={handlePagination}
+              count={Math.ceil(filteredTermsets.length / pageSize)}
+              initialPageNumber={page}
+            />
+          </div>
         </div>
-      </div>
+      }
     </>
   )
 }
