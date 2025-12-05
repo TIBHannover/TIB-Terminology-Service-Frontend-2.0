@@ -61,9 +61,9 @@ class TreeNodeController {
 
     let node = React.createElement(this.nodeRootElementName, {
       "data-iri": this.nodeIri,
-      "data-id": nodeObject.id + "___" + Math.random().toString(36).substring(2, 20),
+      "data-id": nodeObject.id,
       "className": this.classes,
-      "id": nodeObject.id + "___" + Math.random().toString(36).substring(2, 20)
+      "id": nodeObject.id
     }
       , this.iconInTree, this.textDivContainer, this.children
     );
@@ -88,9 +88,9 @@ class TreeNodeController {
     this.textDivContainer = document.createElement("div");
     this.textDivContainer.classList.add("tree-text-container");
     let node = document.createElement(this.nodeRootElementName);
-    node.setAttribute("id", nodeObject.id + "___" + Math.random().toString(36).substring(2, 20));
+    node.setAttribute("id", nodeObject.id);
     node.setAttribute("data-iri", nodeObject.iri);
-    node.setAttribute("data-id", nodeObject.id + "___" + Math.random().toString(36).substring(2, 20));
+    node.setAttribute("data-id", nodeObject.id);
     node.classList.add(this.classes);
     if (nodeIsClicked) {
       this.textDivContainer.classList.add("clicked");

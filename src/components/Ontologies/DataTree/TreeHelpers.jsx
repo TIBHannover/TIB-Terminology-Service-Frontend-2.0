@@ -64,7 +64,7 @@ export default class TreeHelper {
     let targetNodeIri = e.dataset.iri;
     let Id = e.id;
     let treeNode = new TreeNodeController();
-    if (document.getElementById(Id).classList.contains("closed")) {
+    if (e.classList.contains("closed")) {
       // expand node
       let res = [];
       if (isSkos) {
@@ -83,19 +83,19 @@ export default class TreeHelper {
         let listItem = treeNode.buildNodeWithTradionalJs({ nodeObject: node, isSkos: isSkos, lang: lang });
         ul.appendChild(listItem);
       }
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-plus");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-minus");
-      document.getElementById(Id).classList.remove("closed");
-      document.getElementById(Id).classList.add("opened");
-      document.getElementById(Id).appendChild(ul);
+      e.getElementsByTagName("i")[0].classList.remove("fa-plus");
+      e.getElementsByTagName("i")[0].classList.add("fa-minus");
+      e.classList.remove("closed");
+      e.classList.add("opened");
+      e.appendChild(ul);
     }
     else if (!document.getElementById(Id).classList.contains("leaf-node")) {
       // close an already expanded node
-      document.getElementById(Id).classList.remove("opened");
-      document.getElementById(Id).classList.add("closed");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.remove("fa-minus");
-      document.getElementById(Id).getElementsByTagName("i")[0].classList.add("fa-plus");
-      document.getElementById("children_for_" + Id).remove();
+      e.classList.remove("opened");
+      e.classList.add("closed");
+      e.getElementsByTagName("i")[0].classList.remove("fa-minus");
+      e.getElementsByTagName("i")[0].classList.add("fa-plus");
+      e.querySelector(`[id="children_for_${Id}"]`).remove();
     }
 
   }
