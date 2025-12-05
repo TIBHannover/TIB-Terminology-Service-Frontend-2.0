@@ -47,7 +47,6 @@ const AppRouter = () => {
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList} />
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"}
         component={OntologyPage} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"} component={Documentation} />
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation} />
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint} />

@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function renderHelpPage() {
   let content = [
@@ -7,7 +7,7 @@ export function renderHelpPage() {
       <p>For feedback, enquiries or suggestion about TIB Terminology Service:
         <b>
           <Link
-            className="btn-secondary btn btn-sm ms-1 pt-0 pb-0 pl-1 pr-1"
+            className="btn-secondary ms-1 pt-0 pb-0 pl-1 pr-1"
             to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}
           >
             Contact us
@@ -17,16 +17,16 @@ export function renderHelpPage() {
       <p>To request a new terminology:
         <b>
           <Link
-            className="btn-secondary btn btn-sm pt-0 pb-0 pl-1 pr-1"
+            className="btn-secondary ms-1 pt-0 pb-0 pl-1 pr-1"
             to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}
           >
             Ontology suggestion
           </Link>
         </b> (requires sign-in)
       </p>
-      <br/>
+      <br />
       <h3>Frequently Asked Questions (FAQ)</h3>
-      <br/>
+      <br />
       <h4>1 What is terminology ?</h4>
       <p>A terminology is a structured system of concepts representing a knowledge system and the means to express them.
         They are an essential condition for communication, e.g. in academic research.</p>
@@ -53,9 +53,10 @@ export function renderHelpPage() {
         (see
         <b>
           <a
-            href={'https://service.tib.eu/ts4tib/swagger-ui.html'}
+            href={"https://api.terminology.tib.eu/swagger-ui/index.html"}
             target="_blank"
             rel="noopener noreferrer"
+            className="ms-1"
           >Documentation
           </a>
         </b>
@@ -66,7 +67,7 @@ export function renderHelpPage() {
       <h4>4 I do not find the terms I need - what can I do now ?</h4>
       <p>If you want to suggest a new terminology to be added to TIB Terminology Service use:
         <Link
-          className="btn btn-secondary btn-sm pt-0 pb-0 pl-1 pr-1"
+          className="btn btn-secondary ms-1 pt-0 pb-0 pl-1 pr-1"
           to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}
         >
           Ontology suggestion
@@ -90,7 +91,7 @@ export function renderHelpPage() {
         ingest and require further processing.</p>
       <p>Make a request at <b>
         <Link
-          className="btn btn-secondary btn-sm pt-0 pb-0 pl-1 pr-1"
+          className="btn btn-secondary ms-1 pt-0 pb-0 pl-1 pr-1"
           to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}
         >Ontology suggestion
         </Link>
@@ -112,12 +113,12 @@ export function renderHelpPage() {
         <li><b><a href={"https://www.electropedia.org/"} target="_blank" rel="nofollow noreferrer">Electropedia</a></b>
         </li>
         <li><b><a href={"https://www.din.de/de/service-fuer-anwender/terminologie/din-term"}
-                  target="_blank" rel="nofollow noreferrer">DIN-TERMinologieportal</a></b> (search for terms and
+          target="_blank" rel="nofollow noreferrer">DIN-TERMinologieportal</a></b> (search for terms and
           definitions from German
           standards, requires registration)
         </li>
         <li><b><a href={"https://www.din.de/de/service-fuer-anwender/terminologie/din-termonline"} target="_blank"
-                  rel="nofollow noreferrer">DINTerm
+          rel="nofollow noreferrer">DINTerm
           Online</a></b> (search for terms and approved translations, available without registration)
         </li>
       </ul>
@@ -133,10 +134,10 @@ export function renderHelpPage() {
         <li><b><a href={"https://bioregistry.io"} target="_blank" rel="nofollow noreferrer">The Bioregistry</a></b></li>
       </ul>
       <p>A list of further services is provided by <a href={"https://bartoc.org/registries"} target="_blank"
-                                                      rel="nofollow noreferrer">Bartoc</a>.
+        rel="nofollow noreferrer">Bartoc</a>.
       </p>
     </div>
   ];
-  
+
   return content;
 }

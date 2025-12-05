@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Footer = () => (
   <div className="row site-footer">
@@ -9,13 +9,13 @@ const Footer = () => (
         rel="noopener noreferrer"
       >
         <img src={"/dfg_logo_schriftzug_weiss_foerderung_en.gif"}
-             alt="dfg-logo" className="footer-logo"
-             loading="lazy"/>
+          alt="dfg-logo" className="footer-logo"
+          loading="lazy" />
       </a>
     </div>
     <div className="col-sm-2">
       <p>ABOUT</p>
-      <hr className="me-5"/>
+      <hr className="me-5" />
       <ul className="footer-list">
         <li>
           <Link
@@ -45,11 +45,11 @@ const Footer = () => (
     </div>
     <div className="col-sm-2">
       <p>RESOURCES</p>
-      <hr className="me-5"/>
+      <hr className="me-5" />
       <ul className="footer-list">
         <li>
           <Link
-            to={process.env.REACT_APP_PROJECT_SUB_PATH + "/api"}
+            to={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"}
             className="footer-link"
           >
             Documentation
@@ -77,7 +77,7 @@ const Footer = () => (
     </div>
     <div className="col-sm-4">
       <p>PROVIDED BY</p>
-      <hr className="me-5"/>
+      <hr className="me-5" />
       <a
         href="https://www.tib.eu/en/"
         target="_blank"
