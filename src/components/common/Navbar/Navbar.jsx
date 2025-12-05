@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { NavDropdown } from 'react-bootstrap';
 
 const SiteNavbar = () => {
 
@@ -13,7 +14,7 @@ const SiteNavbar = () => {
     if (clickedElement.length !== 0) {
       clickedElement[0].classList.remove("nav-clicked");
     }
-    e.target.classList.add("nav-clicked");
+    e.currentTarget.classList.add("nav-clicked");
   }
 
 
@@ -50,11 +51,6 @@ const SiteNavbar = () => {
                     to={basePath + "/termsets"}>Termsets</Link>
                 </Nav.Link>
               }
-              <Nav.Link key={4}>
-                <Link onClick={handleClick}
-                  className={"nav-link navbar-item stour-help-navbar-item  " + (urlPath.includes("/help") ? "nav-clicked" : "")}
-                  to={basePath + "/help"}>Help</Link>
-              </Nav.Link>
               {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
                 <Nav.Link key={6}>
                   <Link onClick={handleClick}
@@ -69,11 +65,37 @@ const SiteNavbar = () => {
                     to={basePath + "/usage"}>Usage</Link>
                 </Nav.Link>
               }
-              <Nav.Link key={8}>
-                <Link onClick={handleClick}
-                  className={"nav-link navbar-item stour-about-navbar-item  " + (urlPath.includes("/about") ? "nav-clicked" : "")}
-                  to={basePath + "/about"}>About</Link>
-              </Nav.Link>
+              <NavDropdown
+                title="info"
+                id="site-navbar-info-dropdown"
+                className={"nav-link navbar-item nav-dropdown-title " + (urlPath.includes("/about") || urlPath.includes("/help") || urlPath.includes("/docs") || urlPath.includes("/contact") ? "nav-clicked" : "")} onClick={handleClick}
+              >
+                <NavDropdown.Item key={"1"}>
+                  <Link
+                    className={"nav-link navbar-item-dropdown stour-about-navbar-item"}
+                    to={basePath + "/about"}>About
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item key={"2"}>
+                  <Link
+                    className={"nav-link navbar-item-dropdown  stour-help-navbar-item"}
+                    to={basePath + "/help"}>Help
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  <Link
+                    className={"nav-link navbar-item-dropdown  stour-help-navbar-item"}
+                    to={basePath + "/docs"}>Documentation
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item>
+                  <Link
+                    className={"nav-link navbar-item-dropdown  stour-help-navbar-item"}
+                    to={basePath + "/contact"}>Contact us
+                  </Link>
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

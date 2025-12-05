@@ -356,6 +356,25 @@ body .site-navbar {
     text-decoration: underline;
 }
 
+body .nav-dropdown-title .dropdown-toggle,
+body .nav-dropdown-title .dropdown-toggle:hover,
+body .nav-dropdown-title .dropdown-toggle:focus,
+body .nav-dropdown-title .dropdown-toggle:active,
+body .nav-dropdown-title .dropdown-toggle:visited {
+    color: white;
+}
+
+body .nav-dropdown-title .navbar-item-dropdown,
+body .nav-dropdown-title .navbar-item-dropdown:hover {
+    color: black;
+    text-decoration: none !important;
+    font-size: 13px;
+}
+
+body .nav-dropdown-title .dropdown-item:hover {
+    text-decoration: none !important;
+}
+
 body .navbar-collapse-btn {
     background-color: black;
     color: white;
