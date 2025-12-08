@@ -106,6 +106,8 @@ export class TsTerm {
             result.push(defArr);
           } else if (typeof desc.value === "string" || Array.isArray(desc.value)) {
             result.push(desc);
+          } else if (typeof desc === "string" || Array.isArray(desc)) {
+            result.push(desc);
           }
         }
         return result;
