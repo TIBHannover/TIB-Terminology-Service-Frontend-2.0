@@ -137,21 +137,24 @@ export class TsClass extends TsTerm {
       }
       let ul = document.createElement('ul');
       for (let i = 0; i < data.length; i++) {
-        if (typeof (data[i]) === "string") {
-          let parentIri = data[i];
-          if (!this.term['linkedEntities'][parentIri]) {
+        let subClassData = data[i];
+        if (typeof subClassData === "object" && subClassData.value) {
+          subClassData = subClassData.value;
+        }
+        if (typeof (subClassData) === "string") {
+          if (!this.term['linkedEntities'][subClassData]) {
             continue;
           }
-          let parentLabel = this.term['linkedEntities'][parentIri]['label'][0];
+          let parentLabel = this.term['linkedEntities'][subClassData]['label'][0];
           let parentLi = document.createElement('li');
-          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
+          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(subClassData)}`;
           let parentAnchor = buildHtmlAnchor(parentUrl, parentLabel);
           parentLi.appendChild(parentAnchor);
           ul.appendChild(parentLi);
           continue;
         }
         let li = document.createElement('li');
-        let content = this.recSubClass(data[i])!;
+        let content = this.recSubClass(subClassData)!;
         li.appendChild(content);
         ul.appendChild(li);
       }
@@ -159,7 +162,7 @@ export class TsClass extends TsTerm {
       return ul.outerHTML;
 
     } catch (e) {
-      console.log(e)
+      // console.log(e)
       return;
     }
   }
