@@ -4,7 +4,11 @@ import { TableMetadata } from "../types";
 import { TsClass, TsIndividual, TsProperty, TsTerm, TsSkosTerm } from "../../../../concepts";
 
 
-
+const annotationKeyMap: Record<string, string> = {
+  "InChi": "InChI",
+  "inchi key string": "InChIKey",
+  "smiles string": "SMILES",
+};
 
 function createBaseMetadata(term: TsTerm): TableMetadata {
   let metadata: TableMetadata = {}
@@ -40,6 +44,13 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
     if (key === 'definition' || key === "has_dbxref") {
       continue;
     }
+    let annotKey = key as string;
+    if (!annotationKeyMap[annotKey]) {
+      annotKey = annotKey.replace(/([a-z])([A-Z])/g, '$1 $2')
+      annotKey = annotKey.replaceAll("_", " ");
+    } else {
+      annotKey = annotationKeyMap[key] ?? key as string;
+    }
     if (Array.isArray(term.annotation[key])) {
       let res: string[] = [];
       term.annotation[key].map((value: any) => {
@@ -49,11 +60,11 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
           res.push(Toolkit.transformLinksInStringToAnchor(value));
         }
       });
-      metadata[key] = { "value": res, "isLink": false };
+      metadata[annotKey] = { "value": res, "isLink": false };
     } else if (typeof (term.annotation[key]) === "object" && term.annotation[key].value) {
-      metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false };
+      metadata[annotKey] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key].value), "isLink": false };
     } else {
-      metadata[key] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false };
+      metadata[annotKey] = { "value": Toolkit.transformLinksInStringToAnchor(term.annotation[key]), "isLink": false };
     }
   }
 }
@@ -82,7 +93,7 @@ export function classMetaData(term: TsClass) {
             ${term.annotation["has_dbxref"].map((xref: string) => `<li>${xref}</li>`).join('')}
         </ul>
       `;
-    metadata["has_dbxref"] = { value: xrefContent, isLink: false };
+    metadata["has dbxref"] = { value: xrefContent, isLink: false };
   }
   return metadata;
 }
@@ -137,7 +148,7 @@ export function skosTermMetaData(term: TsSkosTerm) {
             ${term.annotation["has_dbxref"].map((xref: string) => `<li>${xref}</li>`).join('')}
         </ul>
       `;
-    metadata["has_dbxref"] = { value: xrefContent, isLink: false };
+    metadata["has dbxref"] = { value: xrefContent, isLink: false };
   }
   return metadata;
 }
