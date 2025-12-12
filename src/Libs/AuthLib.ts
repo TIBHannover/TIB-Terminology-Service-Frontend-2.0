@@ -24,7 +24,7 @@ class Auth {
                     localStorage.setItem('user', JSON.stringify(userData));
                     let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
                     if (redirectUrl) {
-                        // window.location.replace(redirectUrl);
+                        window.location.replace(redirectUrl);
                     }
                     return true;
                 }
