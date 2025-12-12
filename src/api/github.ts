@@ -46,7 +46,7 @@ export async function getGitRepoTemplates(props: { repoUrl: string, gitUsername:
         let headers = getTsPluginHeaders({ withAccessToken: true, isJson: true });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/get_issue_templates/';
         let formData = { "repo_url": repoUrl, "username": gitUsername };
-        let resp = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(formData) });
+        let resp = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(formData), credentials: "include" });
         if (!resp.ok) {
             return false;
         }
@@ -78,7 +78,7 @@ export async function submitGitIssue(props: { repoUrl: string, gitUsername: stri
         };
         let headers = getTsPluginHeaders({ withAccessToken: true });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/github/submit_issue/';
-        let resp = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(data) });
+        let resp = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(data), credentials: "include" });
         if (!resp.ok) {
             return false;
         }

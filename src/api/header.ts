@@ -1,5 +1,5 @@
-import {TsPluginHeader, GetHeaderFuncParams} from "./types/headerTypes";
-import {UserModelType} from "./types/userTypes";
+import { TsPluginHeader, GetHeaderFuncParams } from "./types/headerTypes";
+import { UserModelType } from "./types/userTypes";
 
 
 export function getTsPluginHeaders(params: GetHeaderFuncParams): TsPluginHeader {
@@ -13,7 +13,7 @@ export function getTsPluginHeaders(params: GetHeaderFuncParams): TsPluginHeader 
     header["X-TS-Auth-Provider"] = localStorage.getItem('authProvider');
 
     if (withAccessToken) {
-        header["Authorization"] = `Bearer ${user?.jwt}`;
+        header["X-CSRF-Token"] = user?.csrf ?? "";
     }
     if (isJson) {
         header['Content-Type'] = 'application/json';

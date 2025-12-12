@@ -106,7 +106,7 @@ const UserCollection = () => {
           />
           <AddCollection
             editMode={true}
-            editBtnText={<i className="fa fa-edit fa-borderless"></i>}
+            editBtnText={<i className="fa fa-edit"></i>}
             collectionToEdit={collection}
             btnClass="extra-sm-btn ms-2"
             exstingCollectionList={collections}

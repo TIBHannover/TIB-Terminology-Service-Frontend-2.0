@@ -1,27 +1,27 @@
-import {useState, useContext} from "react";
+import { useState, useContext } from "react";
 import AlertBox from "../Alerts/Alerts";
-import {AppContext} from "../../../context/AppContext";
+import { AppContext } from "../../../context/AppContext";
 import Modal from "react-bootstrap/Modal";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Login from "../../User/Login/TS/Login";
 
 
 export const ReportModalBtn = (props) => {
-  
+
   const appContext = useContext(AppContext);
-  
+
   return (
     <button type="button"
-            className="btn btn-sm borderless-btn note-action-menu-btn"
-            data-target={"#reportModal" + props.modalId}
-            onClick={() => {
-              if (appContext.user) {
-                props.setShowModal(true);
-              } else {
-                props.setLoginModal(true);
-                setTimeout(() => props.setLoginModal(false), 1000);
-              }
-            }}
+      className="btn btn-sm borderless-btn note-action-menu-btn"
+      data-target={"#reportModal" + props.modalId}
+      onClick={() => {
+        if (appContext.user) {
+          props.setShowModal(true);
+        } else {
+          props.setLoginModal(true);
+          setTimeout(() => props.setLoginModal(false), 1000);
+        }
+      }}
     >
       Report
     </button>
@@ -30,16 +30,16 @@ export const ReportModalBtn = (props) => {
 
 
 export const ReportModal = (props) => {
-  
+
   const [submited, setSubmited] = useState(false);
   const [reportSuccess, setReportSuccess] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
-  
+
   const report = async () => {
     try {
       props.formData['content'] = document.getElementById("reportReason" + props.modalId).value;
-      let postConfig = {method: 'POST', headers: props.callHeaders, body: JSON.stringify(props.formData)};
+      let postConfig = { method: 'POST', headers: props.callHeaders, body: JSON.stringify(props.formData), credentials: "include" };
       let result = await fetch(props.reportEndpoint, postConfig);
       setSubmited(true);
       setReportSuccess(result.ok)
@@ -48,12 +48,12 @@ export const ReportModal = (props) => {
       setReportSuccess(false);
     }
   }
-  
-  
+
+
   return (
     <div>
-      <ReportModalBtn modalId={props.modalId} setShowModal={setShowModal} setLoginModal={setLoginModal}/>
-      <Login isModal={true} showModal={loginModal} withoutButton={true}/>
+      <ReportModalBtn modalId={props.modalId} setShowModal={setShowModal} setLoginModal={setLoginModal} />
+      <Login isModal={true} showModal={loginModal} withoutButton={true} />
       <Modal show={showModal} id={"reportModal" + props.modalId}>
         <Modal.Header className="row">
           <div className="col-sm-6">
@@ -102,7 +102,7 @@ export const ReportModal = (props) => {
       </Modal>
     </div>
   );
-  
+
 }
 
 

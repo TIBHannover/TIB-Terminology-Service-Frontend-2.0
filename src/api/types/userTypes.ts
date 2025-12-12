@@ -1,4 +1,4 @@
-import {SearchSetting} from "./searchApiTypes"
+import { SearchSetting } from "./searchApiTypes"
 
 
 export type LoginResponse = {
@@ -12,6 +12,7 @@ export type LoginResponse = {
     login?: string,
     orcid_id?: string,
     settings?: object,
+    csrf_token?: string
 }
 
 
@@ -35,7 +36,7 @@ export type UserModelType = {
     orcidId?: string,
     systemAdmin?: boolean,
     settings?: UserSettings,
-    jwt?: string,
+    csrf?: string,
 }
 
 

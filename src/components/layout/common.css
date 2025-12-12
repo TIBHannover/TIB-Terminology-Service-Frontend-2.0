@@ -70,7 +70,8 @@ body .btn-sm,
     color: white;
 }
 
-body .btn-danger {
+body .btn-danger,
+body .btn-danger:hover {
     background-color: red;
 }
 
@@ -676,7 +677,8 @@ body .result-card {
     padding: 5px;
 }
 
-body .extra-sm-btn {
+body .extra-sm-btn,
+body .extra-sm-btn:hover {
     font-size: 2px;
     padding: 1px;
 }

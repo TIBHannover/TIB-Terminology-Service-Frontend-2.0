@@ -1,7 +1,7 @@
 import UserModel from "../components/User/Model/user";
-import {runLogin, isLogin} from "../api/user";
-import {LoginResponse} from "../api/types/userTypes";
-import {jwtDecode} from "jwt-decode";
+import { runLogin, isLogin } from "../api/user";
+import { LoginResponse } from "../api/types/userTypes";
+
 
 
 class Auth {
@@ -14,9 +14,9 @@ class Auth {
             if (code.includes("&")) {
                 code = code.split('&')[0];
             }
-            runLogin(code).then((jwtToken) => {
-                if (jwtToken) {
-                    let userData = Auth.createUserDataObjectFromAuthResponse(jwtToken);
+            runLogin(code).then((payload) => {
+                if (payload) {
+                    let userData = Auth.createUserDataObjectFromAuthResponse(payload);
                     if (!userData) {
                         Auth.disableLoginAnimation();
                         return false;
@@ -36,12 +36,11 @@ class Auth {
     }
 
 
-    static createUserDataObjectFromAuthResponse(jwtToken: string): UserModel | null {
+    static createUserDataObjectFromAuthResponse(response: LoginResponse): UserModel | null {
         try {
-            let response = jwtDecode(jwtToken) as LoginResponse;
             let authProvider = localStorage.getItem('authProvider');
             let user = new UserModel();
-            user.setJwt(jwtToken);
+            user.setCsrf(response.csrf_token ?? "");
             user.setId(response["id"])
             user.setToken(response["token"]);
             user.setFullName(response["name"]);
@@ -50,9 +49,9 @@ class Auth {
             user.setSettings(response["settings"]);
             user.setAuthProvider(authProvider);
             if (authProvider === 'github') {
-                user.setGitInfo({company: response["company"], homeUrl: response["github_home"]});
+                user.setGitInfo({ company: response["company"], homeUrl: response["github_home"] });
             } else if (authProvider === "orcid") {
-                user.setOrcidInfo({orcidId: response["orcid_id"]});
+                user.setOrcidInfo({ orcidId: response["orcid_id"] });
             }
             return user;
         } catch (e) {
@@ -98,7 +97,7 @@ class Auth {
         if (userObjInStore) {
             user = JSON.parse(userObjInStore)
         }
-        if (user && user.token) {
+        if (user && user?.csrf) {
             let validation = await isLogin();
             if (validation) {
                 return user;
