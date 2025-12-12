@@ -1,5 +1,5 @@
 import UserModel from "../components/User/Model/user";
-import { runLogin, isLogin } from "../api/user";
+import { runLogin, isLogin, logout } from "../api/user";
 import { LoginResponse } from "../api/types/userTypes";
 
 
@@ -108,11 +108,13 @@ class Auth {
 
 
     static runLogout(): void {
-        localStorage.removeItem("user");
-        let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
-        if (redirectUrl) {
-            window.location.replace(redirectUrl);
-        }
+        logout().then(() => {
+            localStorage.removeItem("user");
+            let redirectUrl = localStorage.getItem("redirectUrl") ? localStorage.getItem("redirectUrl") : process.env.REACT_APP_PROJECT_SUB_PATH;
+            if (redirectUrl) {
+                window.location.replace(redirectUrl);
+            }
+        });
     }
 
 }

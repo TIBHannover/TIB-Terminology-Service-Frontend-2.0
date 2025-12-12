@@ -69,7 +69,6 @@ const UserPanel = (props) => {
               </Dropdown.Item>
             }
             <Dropdown.Item
-              as={Link}
               className="user-panel-item"
               onClick={() => {
                 Auth.runLogout();

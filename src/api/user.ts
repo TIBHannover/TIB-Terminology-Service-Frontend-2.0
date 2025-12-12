@@ -29,6 +29,22 @@ export async function runLogin(authCode: string): Promise<LoginResponse | null> 
 }
 
 
+export async function logout(): Promise<boolean> {
+    try {
+        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
+        let result: any = await fetch(baseUrl + "/user/logout/", { method: "GET", headers: headers, credentials: "include" });
+        result = await result.json();
+        result = result['_result'];
+        if (result) {
+            return true;
+        }
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
+
+
 export async function isLogin(): Promise<boolean> {
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
