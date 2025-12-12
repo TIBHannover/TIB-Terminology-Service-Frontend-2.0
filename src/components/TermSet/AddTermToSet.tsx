@@ -334,6 +334,10 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
     title = "Check the existing termsets for this term.";
   }
 
+  if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
+    return <></>;
+  }
+
   return (
     <>
       <button
