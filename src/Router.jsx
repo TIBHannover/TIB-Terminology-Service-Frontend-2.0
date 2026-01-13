@@ -24,6 +24,7 @@ import UserTermSetList from "./components/TermSet/UserTermSetList";
 import EditTermset from "./components/TermSet/EditTermset";
 import NotFoundPage from "./errors/notFound";
 import BrowseTermSetList from "./components/TermSet/browseTermsetList";
+import UserApiKey from "./components/User/APIKEY/ApiKey";
 
 
 const AppRouter = () => {
@@ -33,6 +34,7 @@ const AppRouter = () => {
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home} />
       <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={UserPanel} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile} />
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"} component={UserApiKey} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}
         component={SubmitedIssueRequests} />
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel} />

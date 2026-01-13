@@ -2,7 +2,8 @@ import {
     UserSettings,
     SearchSettingPayload,
     SearchSettingApiResponse,
-    ContactFormData
+    ContactFormData,
+    ApiKey
 } from "./types/userTypes";
 import { TsPluginHeader } from "./types/headerTypes";
 import { getTsPluginHeaders } from "./header";
@@ -178,6 +179,100 @@ export async function sendContactFrom(data: ContactFormData): Promise<boolean> {
             body: JSON.stringify(data)
         });
         if (result.status === 200) {
+            return true;
+        }
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+export async function fetchUserApiKeys(): Promise<ApiKey[]> {
+    type _resp = {
+        _result: {
+            api_keys: ApiKey[]
+        }
+    }
+    try {
+        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+        let result: any = await fetch(baseUrl + "/apikey/get/", { method: "GET", headers: headers, credentials: "include" });
+        result = await result.json() as _resp;
+        result = result['_result']['api_keys'];
+        if (result) {
+            return result;
+        }
+        return [];
+    } catch (e) {
+        return [];
+    }
+}
+
+export async function createApiKey(data: { name: string, description: string, title: string, expires_at: string }): Promise<string> {
+    type _resp = {
+        _result: {
+            api_key: ApiKey,
+            token: string
+        }
+    }
+    try {
+        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+        let result: any = await fetch(baseUrl + "/apikey/create/", {
+            method: "POST",
+            credentials: "include",
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        result = await result.json() as _resp;
+        result = result['_result'];
+        if (result) {
+            return result.token;
+        }
+        return "";
+    } catch (e) {
+        return "";
+    }
+}
+
+export async function updateApiKey(data: { id: string, name: string, description: string, title: string, expires_at: string }): Promise<ApiKey | null> {
+    type _resp = {
+        _result: {
+            updated: ApiKey
+        }
+    }
+    try {
+        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+        let result: any = await fetch(baseUrl + "/apikey/update/", {
+            method: "PUT",
+            credentials: "include",
+            headers: headers,
+            body: JSON.stringify(data)
+        });
+        result = await result.json() as _resp;
+        result = result['_result']['updated'];
+        return result;
+    } catch (e) {
+        return null;
+    }
+}
+
+export async function deleteApiKey(id: string): Promise<boolean> {
+    type _resp = {
+        _result: {
+            deleted: boolean
+        }
+    }
+    try {
+        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+        let result: any = await fetch(baseUrl + "/apikey/delete/", {
+            method: "DELETE",
+            credentials: "include",
+            headers: headers,
+            body: JSON.stringify({ id: id })
+        });
+        result = await result.json() as _resp;
+        result = result['_result']['deleted'];
+        if (result) {
             return true;
         }
         return false;

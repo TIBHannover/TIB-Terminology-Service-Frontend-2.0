@@ -1,5 +1,24 @@
 import { SearchSetting } from "./searchApiTypes"
 
+export type User = {
+    id: string | number,
+    username: string,
+    name: string,
+    created_at: string,
+    updated_at?: string,
+    auth_provider: string,
+    client_ts: string,
+    user_extra?: any,
+    is_active: boolean,
+    is_blocked: boolean,
+}
+
+export type ApiKey = {
+    description: string,
+    title: string,
+    expires_at: string,
+    owner: User
+}
 
 export type LoginResponse = {
     id?: string
