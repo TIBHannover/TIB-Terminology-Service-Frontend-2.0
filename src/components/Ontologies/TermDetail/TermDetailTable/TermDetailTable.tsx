@@ -3,7 +3,6 @@ import AlertBox from '../../../common/Alerts/Alerts';
 import CopyLinkButton from '../../../common/CopyButton/CopyButton';
 import { CopyLinkButtonMarkdownFormat } from '../../../common/CopyButton/CopyButton';
 import Toolkit from '../../../../Libs/Toolkit';
-import PropTypes from 'prop-types';
 import { TermDetailTableComProp, TableMetadata } from '../types';
 import { TsClass, TsIndividual, TsProperty, TsSkosTerm } from '../../../../concepts';
 
@@ -92,6 +91,8 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
       return (<a href={metadataValue} target='_blank' rel="noreferrer">{metadataValue}</a>)
     } else if (["Type", "Imported From", "Also In", "Instances", "Instance of", "Domain", "Range", "Description"].includes(metadataLabel)) {
       return metadataValue;
+    } else if (Array.isArray(metadataValue)) {
+      return (<span dangerouslySetInnerHTML={{ __html: metadataValue.join("<br/>") }}></span>)
     }
 
     return (<span dangerouslySetInnerHTML={{ __html: metadataValue }}></span>)
@@ -118,15 +119,5 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     </div>
   )
 }
-
-
-TermDetailTable.propTypes = {
-  iri: PropTypes.string.isRequired,
-  componentIdentity: PropTypes.string.isRequired,
-  extractKey: PropTypes.string.isRequired,
-  isIndividual: PropTypes.bool.isRequired,
-  node: PropTypes.object.isRequired
-}
-
 
 export default TermDetailTable;

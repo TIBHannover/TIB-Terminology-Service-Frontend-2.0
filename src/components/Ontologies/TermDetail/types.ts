@@ -32,6 +32,7 @@ export type TermDetailTableComProp = {
   componentIdentity: string;
   extractKey: string;
   node?: TsTerm;
+  isIndividual?: boolean;
 }
 
 export type TableMetadata = {
