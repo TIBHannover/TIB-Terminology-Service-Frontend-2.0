@@ -196,7 +196,7 @@ export async function fetchUserApiKeys(): Promise<ApiKey[]> {
     }
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/apikey/get/", { method: "GET", headers: headers, credentials: "include" });
+        let result: any = await fetch(baseUrl + "/user/apikey/get/", { method: "GET", headers: headers, credentials: "include" });
         result = await result.json() as _resp;
         result = result['_result']['api_keys'];
         if (result) {
@@ -217,7 +217,7 @@ export async function createApiKey(data: { name: string, description: string, ti
     }
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/apikey/create/", {
+        let result: any = await fetch(baseUrl + "/user/apikey/create/", {
             method: "POST",
             credentials: "include",
             headers: headers,
@@ -242,7 +242,7 @@ export async function updateApiKey(data: { id: string, name: string, description
     }
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/apikey/update/", {
+        let result: any = await fetch(baseUrl + "/user/apikey/update/", {
             method: "PUT",
             credentials: "include",
             headers: headers,
@@ -264,7 +264,7 @@ export async function deleteApiKey(id: string): Promise<boolean> {
     }
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/apikey/delete/", {
+        let result: any = await fetch(baseUrl + "/user/apikey/delete/", {
             method: "DELETE",
             credentials: "include",
             headers: headers,

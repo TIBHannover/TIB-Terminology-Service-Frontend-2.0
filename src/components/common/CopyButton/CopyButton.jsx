@@ -10,6 +10,7 @@ const CopyLinkButton = (props) => {
       aria-label="Copy to clipboard"
       className="btn btn-sm copy-link-icon-btn borderless-btn"
       key={"copy-btn"}
+      title={props.tooltipText}
       onClick={() => {
         navigator.clipboard.writeText(props.valueToCopy);
         setCopied(true);

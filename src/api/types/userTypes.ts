@@ -17,6 +17,7 @@ export type ApiKey = {
     description: string,
     title: string,
     expires_at: string,
+    name?: string,
     owner: User
 }
 
