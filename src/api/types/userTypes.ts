@@ -13,7 +13,7 @@ export type User = {
     is_blocked: boolean,
 }
 
-export type ApiKey = {
+export type ApiKey = User & {
     description: string,
     title: string,
     expires_at: string,

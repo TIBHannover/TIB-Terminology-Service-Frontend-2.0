@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchUserApiKeys } from "../../../api/user";
+import { fetchUserApiKeys, deleteApiKey } from "../../../api/user";
 import { ApiKey } from "../../../api/types/userTypes";
 import CreateApiKey from "./CreateApiKey";
 
@@ -7,12 +7,38 @@ import CreateApiKey from "./CreateApiKey";
 const UserApiKey = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [showCreateApiKey, setShowCreateApiKey] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     fetchUserApiKeys().then(res => {
       setApiKeys(res);
     });
   }, []);
+
+  useEffect(() => {
+    if (showCreateApiKey) {
+      return;
+    }
+    fetchUserApiKeys().then(res => {
+      setApiKeys(res);
+    });
+  }, [showCreateApiKey, deleted]);
+
+
+  function deleteKey(e: React.MouseEvent<HTMLElement>) {
+    let id = e.currentTarget.dataset.id;
+    if (!id) {
+      return;
+    }
+    deleteApiKey(id).then((result) => {
+      if (result) {
+        setDeleted(true);
+        setTimeout(() => {
+          setDeleted(false);
+        }, 1000);
+      }
+    });
+  }
 
 
 
@@ -32,18 +58,25 @@ const UserApiKey = () => {
             <table className="table table-striped">
               <tbody>
                 <tr>
+                  <th scope="col" className="col-1"></th>
                   <th scope="col" className="col-3">Title</th>
+                  <th scope="col" className="col-3">name</th>
                   <th scope="col" className="col-5">Description</th>
-                  <th scope="col" className="col-2">name</th>
-                  <th scope="col" className="col-2">expires_at</th>
                 </tr>
                 {apiKeys.map((key: ApiKey) => {
                   return (
                     <tr>
-                      <td scope="col" className="col-6">{key.title}</td>
-                      <td scope="col" className="col-2">{key.description}</td>
-                      <td scope="col" className="col-2">{key.name || "same as username"}</td>
-                      <td scope="col" className="col-2">{key.expires_at}</td>
+                      <td scope="col" className="col-1">
+                        <i
+                          className="bi bi-file-minus-fill"
+                          title="remove this key"
+                          data-id={key.id}
+                          onClick={deleteKey}
+                        />
+                      </td>
+                      <td scope="col" className="col-3">{key.title}</td>
+                      <td scope="col" className="col-3">{key.name || "same as username"}</td>
+                      <td scope="col" className="col-5">{key.description}</td>
                     </tr>
                   )
                 })}
