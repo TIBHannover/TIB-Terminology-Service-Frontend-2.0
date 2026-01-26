@@ -136,7 +136,7 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
   let redirectAfterDeleteUrl = process.env.REACT_APP_PROJECT_SUB_PATH + redirectAfterDeleteEndpoint;
   const appContext = useContext(AppContext);
 
-  const canEdit = appContext?.user?.id === termset.creator;
+  const canEdit = appContext?.user?.id === termset.creator?.id;
   const fromParam = from ? (`?${SiteUrlParamNames.From}=${from}`) : "";
 
   return (

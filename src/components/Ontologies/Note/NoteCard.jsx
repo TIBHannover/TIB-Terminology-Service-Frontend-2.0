@@ -13,6 +13,7 @@ import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
 import { getTsPluginHeaders } from "../../../api/header";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { AppContext } from "../../../context/AppContext";
 
 
 const VISIBILITY_HELP = {
@@ -81,7 +82,7 @@ export const NoteCardHeader = (props) => {
   */
 
   const ontologyPageContext = useContext(OntologyPageContext);
-  const noteContext = useContext(NoteContext);
+  const appContext = useContext(AppContext);
 
   const noteUrlFactory = new NoteUrlFactory();
 
@@ -103,6 +104,7 @@ export const NoteCardHeader = (props) => {
   reportFormData["objectId"] = note['id'];
   reportFormData["objectType"] = 'note';
   reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
+  let can_edit = appContext?.user?.id === note['created_by']?.id;
 
   let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({ page: 1, size: 10 });
 
@@ -164,7 +166,7 @@ export const NoteCardHeader = (props) => {
                     key={"reportNote" + note['id']}
                   />
                 </Dropdown.Item>
-                {note['can_edit'] && !note['imported'] &&
+                {can_edit && !note['imported'] &&
                   <>
                     <div className="dropdown-divider"></div>
                     <Dropdown.Item className="note-dropdown-item">
