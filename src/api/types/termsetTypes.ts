@@ -1,13 +1,13 @@
 import { OntologyTermDataV2 } from "./ontologyTypes"
+import { ApiKey } from "./userTypes";
 
 
 export type TermSet = {
   id: string,
   name: string,
   description?: string,
-  creator: string,
   created_at: string,
-  creator_name?: string,
+  creator?: ApiKey,
   updated_at?: string,
   visibility: string,
   terms: OntologyTermDataV2[];

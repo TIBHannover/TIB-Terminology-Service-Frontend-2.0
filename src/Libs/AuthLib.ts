@@ -1,6 +1,6 @@
 import UserModel from "../components/User/Model/user";
 import { runLogin, isLogin, logout } from "../api/user";
-import { LoginResponse } from "../api/types/userTypes";
+import { LoginResponse, ApiKey } from "../api/types/userTypes";
 
 
 
@@ -85,6 +85,17 @@ class Auth {
             return internalUserName;
         }
         return username.join('');
+    }
+
+
+    static extractUserName(user: ApiKey): string {
+        if (!user) {
+            return "";
+        } else if (user.owner && user.name) {
+            return user.name;
+        } else {
+            return user.username;
+        }
     }
 
 

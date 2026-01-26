@@ -1,5 +1,6 @@
 import { TermSet } from "../api/types/termsetTypes";
 import { OntologyTermDataV2 } from "../api/types/ontologyTypes";
+import { ApiKey } from "../api/types/userTypes";
 
 export class TsTermset {
   termsetData: TermSet;
@@ -8,7 +9,7 @@ export class TsTermset {
   private _visibility: string;
   private _terms: OntologyTermDataV2[];
   private _created_at: string;
-  private _creator_name: string;
+  private _creator: ApiKey | undefined;
 
   constructor(termset: TermSet) {
     this.termsetData = termset;
@@ -17,7 +18,7 @@ export class TsTermset {
     this._visibility = this.termsetData.visibility;
     this._terms = this.termsetData.terms.map(twrapper => twrapper.json ?? {});
     this._created_at = this.termsetData.created_at;
-    this._creator_name = this.termsetData.creator_name ?? "";
+    this._creator = this.termsetData.creator ?? undefined;
   }
 
   get id(): string {
@@ -32,15 +33,18 @@ export class TsTermset {
     return this._description ?? "";
   }
 
-  get creator(): string {
-    return this.termsetData.creator;
+  get creator(): ApiKey | undefined {
+    return this.termsetData.creator ?? undefined;
   }
 
   get creator_name(): string {
-    if (this._creator_name.includes("_")) {
-      return this._creator_name.split("_").slice(1).join("");
+    if (!this._creator?.username) {
+      return "";
+    } else if (this._creator.owner && this._creator.name) {
+      return this._creator.name;
+    } else {
+      return this._creator.username;
     }
-    return this._creator_name;
   }
 
   get created_at(): string {

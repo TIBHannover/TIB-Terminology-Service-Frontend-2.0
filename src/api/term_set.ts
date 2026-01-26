@@ -30,7 +30,7 @@ export async function getUserTermsetList(userId: string): Promise<TsTermset[]> {
       }
       return tsTermsets;
     }
-    let userTermSets: TermSet[] = termSetList["_result"]["term_sets"].filter((tset) => tset.creator === userId);
+    let userTermSets: TermSet[] = termSetList["_result"]["term_sets"].filter((tset) => tset.creator?.id === userId);
     userTermSets.sort((s1, s2) => s1.name.localeCompare(s2.name));
     let tsTermsets: TsTermset[] = [];
     for (let ts of userTermSets) {
