@@ -35,6 +35,7 @@ type CmpProps = {
   ontologies: TsOntology[];
   ontologiesHiddenStatus: boolean[];
   isLoaded: boolean;
+  filterTags: JSX.Element[];
 };
 
 
@@ -149,6 +150,11 @@ export const OntologyListRender = (props: CmpProps) => {
             <br></br>
           </>
         }
+        <div className='row mb-4'>
+          <div className='col-sm-12'>
+            {props.filterTags}
+          </div>
+        </div>
 
         <div className='row'>
           <div className='col-sm-6 text-right zero-padding-col'>

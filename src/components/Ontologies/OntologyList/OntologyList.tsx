@@ -37,6 +37,7 @@ const OntologyList = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
+  const [filterTags, setFilterTags] = useState<JSX.Element[]>([]);
 
   localStorage.setItem('language', "en");
 
@@ -302,6 +303,46 @@ const OntologyList = () => {
   }
 
 
+  function handleRemoveTagClick(e: React.MouseEvent<HTMLElement>) {
+    try {
+      let tagType = (e.target as HTMLElement).dataset.type;
+      let tagValue = (e.target as HTMLElement).dataset.value;
+      let selectionEvent = { target: { checked: false, value: tagValue } } as unknown as React.MouseEvent<HTMLInputElement>;
+      if (document.getElementById('search-checkbox-' + tagValue)) {
+        (document.getElementById('search-checkbox-' + tagValue) as HTMLInputElement).checked = false;
+      }
+      if (tagType === "collection") {
+        handleFacetCollection(selectionEvent);
+      } else if (tagType === "subject") {
+        handleFacetSubject(selectionEvent);
+      }
+    } catch (e) {
+      // console.info(e);
+      return;
+    }
+  }
+
+  function createFilterTags() {
+    let tagsList = [];
+    for (let col of selectedCollections) {
+      let newTag = <div className='search-filter-tags' key={col}>{col} <i onClick={handleRemoveTagClick}
+        data-type={"collection"} data-value={col}
+        className="fa fa-close remove-tag-icon"></i>
+      </div>;
+      tagsList.push(newTag);
+    }
+    for (let subj of selectedSubjects) {
+      let newTag = <div className='search-filter-tags' key={subj}>{subj} <i onClick={handleRemoveTagClick}
+        data-type={"subject"}
+        data-value={subj}
+        className="fa fa-close remove-tag-icon"></i>
+      </div>;
+      tagsList.push(newTag);
+    }
+    setFilterTags(tagsList);
+  }
+
+
 
   function updateUrl() {
     let ontologyListUrl = new OntologyListUrlFactory();
@@ -329,6 +370,7 @@ const OntologyList = () => {
     if (isLoaded) {
       updateUrl();
       runFilter();
+      createFilterTags();
     }
   }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections, isLoaded, selectedSubjects]);
 
@@ -376,6 +418,7 @@ const OntologyList = () => {
                   ontologies={ontologies}
                   ontologiesHiddenStatus={ontologiesHiddenStatus}
                   isLoaded={isLoaded}
+                  filterTags={filterTags}
                 />
               </div>
             </div>
