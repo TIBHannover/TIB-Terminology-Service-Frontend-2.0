@@ -8,6 +8,9 @@ import { AppContext } from "../../../context/AppContext";
 
 import OntologyAdopters from './widgets/OntologyAdopters';
 
+// ADDED: new modal component
+import OntologyAdoptRequest from './widgets/OntologyAdoptRequest.jsx';
+
 const OntologyOverview = () => {
   /*
     This component is responsible for rendering the overview page of an ontology.
@@ -15,6 +18,8 @@ const OntologyOverview = () => {
 
   const ontologyPageContext = useContext(OntologyPageContext);
   const appContext = useContext(AppContext);
+ 
+
 
   const [showCollectionSuggestionModal, setShowCollectionSuggestionModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
@@ -27,8 +32,11 @@ const OntologyOverview = () => {
     Array.isArray(ontology.ontologyJsonData?.ontology_use) &&
     ontology.ontologyJsonData.ontology_use.some((u) => u && u.usedBy);
 
-  // new state to control the adopters modal
+  // existing adopters modal
   const [showOntologyAdopters, setShowOntologyAdopters] = useState(false);
+
+  // ADDED: new state to control adopt request modal
+  const [showOntologyAdoptRequest, setShowOntologyAdoptRequest] = useState(false);
 
   let ontoPageHeader = document.getElementById('ontology-page-header');
   if (ontoPageHeader) {
@@ -57,26 +65,50 @@ const OntologyOverview = () => {
             </div>
           </div>
           <br />
+
           {process.env.REACT_APP_PROJECT_ID === "general" && process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true" &&
-            <div className='row'>
-              <div className='col-sm-12'>
-                <button
-                  type="button"
-                  className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
-                  onClick={() => {
-                    ontologyPageContext.handleFullScreen();
-                    if (appContext.user) {
-                      setShowCollectionSuggestionModal(true);
-                    } else {
-                      setLoginModal(true);
-                      setTimeout(() => setLoginModal(false), 1000);
-                    }
-                  }}
-                >
-                  Add to Collection
-                </button>
+            <>
+              <div className='row'>
+                <div className='col-sm-12'>
+                  <button
+                    type="button"
+                    className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
+                    onClick={() => {
+                      ontologyPageContext.handleFullScreen();
+                      if (appContext.user) {
+                        setShowCollectionSuggestionModal(true);
+                      } else {
+                        setLoginModal(true);
+                        setTimeout(() => setLoginModal(false), 1000);
+                      }
+                    }}
+                  >
+                    Add to Collection
+                  </button>
+                </div>
               </div>
-            </div>
+
+              {/* ADDED: new button under Add to Collection */}
+              <div className='row' style={{ marginTop: 10 }}>
+                <div className='col-sm-12'>
+                  <button
+                    type="button"
+                    className={"btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"}
+                    onClick={() => {
+                      ontologyPageContext.handleFullScreen();
+                      if (appContext.user) {
+                        setShowOntologyAdoptRequest(true);
+                      } else {
+                        setLoginModal(true);
+                        setTimeout(() => setLoginModal(false), 1000);
+                      }
+                    }}
+                  >
+                    Add Ontology Adopter
+                  </button>
+                </div>
+              </div>
+            </>
           }
 
           {/* Ontology adopters button (only when feature flag is on AND there is at least one adopter) */}
@@ -102,6 +134,12 @@ const OntologyOverview = () => {
       <CollectionSuggestion
         showModal={showCollectionSuggestionModal}
         setShowModal={setShowCollectionSuggestionModal}
+      />
+
+      {/* ADDED: mount adopt request modal */}
+      <OntologyAdoptRequest
+        showModal={showOntologyAdoptRequest}
+        setShowModal={setShowOntologyAdoptRequest}
       />
 
       {/* Mount the modal only when the flag is on AND there are adopters */}
