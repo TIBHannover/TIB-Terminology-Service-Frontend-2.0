@@ -138,7 +138,6 @@ const EditTermset = (props: TermsetEditComProps) => {
   function submitCreate() {
     let name = FormLib.getFieldByIdIfValid("termsetTitle");
     let description = document.getElementById("termsetDescription") as HTMLTextAreaElement;
-    console.log(description.value);
     if (!name) {
       return;
     }

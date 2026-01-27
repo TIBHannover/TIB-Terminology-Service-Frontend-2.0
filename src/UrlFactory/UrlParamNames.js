@@ -3,6 +3,7 @@ export const Obsoletes = 'obsoletes';
 export const Page = 'page';
 export const Size = 'size';
 export const Collection = 'collection';
+export const Subject = 'subject';
 export const SortBy = 'sortedBy';
 export const SubTabInTermTable = 'subtab';
 export const CollectionId = 'col';

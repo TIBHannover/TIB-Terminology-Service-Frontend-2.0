@@ -7,6 +7,7 @@ class OntologyListUrlFactory {
   constructor() {
     let url = new URL(window.location);
     this.collections = url.searchParams.getAll(SiteUrlParamNames.Collection);
+    this.subjects = url.searchParams.getAll(SiteUrlParamNames.Subject);
     this.sortedBy = url.searchParams.get(SiteUrlParamNames.SortBy);
     this.page = url.searchParams.get(SiteUrlParamNames.Page);
     this.size = url.searchParams.get(SiteUrlParamNames.Size);
@@ -16,7 +17,7 @@ class OntologyListUrlFactory {
   }
 
 
-  update({ keywordFilter, collections, sortedBy, page, size, andOpValue }) {
+  update({ keywordFilter, collections, subjects, sortedBy, page, size, andOpValue }) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.KeywordFilter);
 
@@ -27,6 +28,10 @@ class OntologyListUrlFactory {
     currentUrlParams.delete(SiteUrlParamNames.Collection);
     for (let col of collections) {
       currentUrlParams.append(SiteUrlParamNames.Collection, col);
+    }
+    currentUrlParams.delete(SiteUrlParamNames.Subject);
+    for (let subj of subjects) {
+      currentUrlParams.append(SiteUrlParamNames.Subject, subj);
     }
     currentUrlParams.set(SiteUrlParamNames.AndOptUrl, andOpValue);
     currentUrlParams.set(SiteUrlParamNames.SortBy, sortedBy);

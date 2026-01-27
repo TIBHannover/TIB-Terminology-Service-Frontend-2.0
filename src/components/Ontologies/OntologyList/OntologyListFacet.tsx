@@ -1,11 +1,24 @@
 import { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
 
+type OntologyListFacetProps = {
+  enteredKeyword: string;
+  filterWordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSwitchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFacetCollection: (e: React.MouseEvent<HTMLInputElement>) => void;
+  handleFacetSubject: (e: React.MouseEvent<HTMLInputElement>) => void;
+  selectedCollections: string[];
+  selectedSubjects: string[];
+  allCollections: Record<string, number>;
+  allSubjects: Record<string, number>;
+}
 
-export const OntologyListFacet = (props) => {
+
+export const OntologyListFacet = (props: OntologyListFacetProps) => {
 
   const appContext = useContext(AppContext);
-  const [collectionBoxes, setCollectionBoxes] = useState('');
+  const [collectionBoxes, setCollectionBoxes] = useState<JSX.Element[]>([]);
+  const [subjectBoxes, setSubjectBoxes] = useState<JSX.Element[]>([]);
 
 
   function createCollectionsCheckBoxes() {
@@ -23,8 +36,7 @@ export const OntologyListFacet = (props) => {
                 key={col}
                 onClick={props.handleFacetCollection}
                 checked={props.selectedCollections.includes(col)}
-                onChange={() => {
-                }}
+                onChange={() => { }}
               />
               <label className="form-check-label" htmlFor={"col-checkbox-" + col}>
                 {col}
@@ -40,15 +52,48 @@ export const OntologyListFacet = (props) => {
     setCollectionBoxes(result);
   }
 
+  function createSubjectsCheckBoxes() {
+    let result = [];
+    for (let subj in props.allSubjects) {
+      result.push(
+        <div className="row facet-item-row">
+          <div className='col-sm-9'>
+            <div className="form-check">
+              <input
+                className="form-check-input subject-checkbox"
+                type="checkbox"
+                value={subj}
+                id={"subj-checkbox-" + subj}
+                key={subj}
+                onClick={props.handleFacetSubject}
+                checked={props.selectedSubjects.includes(subj)}
+                onChange={() => { }}
+              />
+              <label className="form-check-label" htmlFor={"subj-checkbox-" + subj}>
+                {subj}
+              </label>
+            </div>
+          </div>
+          <div className='col-sm-3'>
+            <span className="facet-result-count" id={"result-count-" + subj}>{props.allSubjects[subj]}</span>
+          </div>
+        </div>
+      );
+    }
+    setSubjectBoxes(result);
+  }
+
 
   useEffect(() => {
     createCollectionsCheckBoxes();
+    createSubjectsCheckBoxes();
   }, []);
 
 
   useEffect(() => {
     createCollectionsCheckBoxes();
-  }, [props.selectedCollections, props.allCollections]);
+    createSubjectsCheckBoxes();
+  }, [props.selectedCollections, props.allCollections, props.allSubjects]);
 
 
   return (
@@ -104,9 +149,14 @@ export const OntologyListFacet = (props) => {
                 </>
               }
             </div>
-
           </div>
         }
+        <div className='row ontology-list-facet-section-box stour-onto-list-filter-collectin'>
+          <div className="col-sm-12 facet-box">
+            <h4 className='h-headers ontology-list-facet-header text-center'>Filter by Subject</h4>
+            {subjectBoxes}
+          </div>
+        </div>
       </div>
     </div>
   );

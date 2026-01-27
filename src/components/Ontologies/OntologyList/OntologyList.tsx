@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import '../../layout/facet.css';
 import '../../layout/ontologyList.css';
-import { getCollectionStatFromOntoList } from '../../../api/collection';
+import { getCollectionStatFromOntoList, getSubjectStatFromOntoList } from '../../../api/collection';
 import OntologyApi from '../../../api/ontology';
 import { OntologyListRender } from './OntologyListRender';
 import { OntologyListFacet } from './OntologyListFacet';
@@ -34,6 +34,7 @@ const OntologyList = () => {
   const [unFilteredOntologies, setUnFilteredOntologies] = useState<TsOntology[]>([]);
   const [sortField, setSortField] = useState(TITLE_SORT_KEY);
   const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [keywordFilterString, setKeywordFilterString] = useState("");
   const [exclusiveCollections, setExclusiveCollections] = useState(false);
 
@@ -47,11 +48,16 @@ const OntologyList = () => {
 
 
   let allCollectionWithStats: { [key: string]: number } = {};
+  let allSubjectWithStats: { [key: string]: number } = {};
   if (process.env.REACT_APP_PROJECT_NAME === "" && ontologyListQuery.data) {
     // Only for TIB General
     allCollectionWithStats = getCollectionStatFromOntoList(ontologyListQuery.data);
   }
   const allCollections = allCollectionWithStats;
+
+  if (ontologyListQuery.data) {
+    allSubjectWithStats = getSubjectStatFromOntoList(ontologyListQuery.data);
+  }
 
   async function setComponentData() {
     try {
@@ -86,15 +92,18 @@ const OntologyList = () => {
 
   function setStateBasedOnUrlParams() {
     let ontologyListUrlFactory = new OntologyListUrlFactory();
-    let collectionsInUrl = ontologyListUrlFactory.collections
+    let collectionsInUrl = ontologyListUrlFactory.collections;
+    let subjectsInUrl = ontologyListUrlFactory.subjects;
     let sortByInUrl = ontologyListUrlFactory.sortedBy;
     let keywordFilterInUrl = ontologyListUrlFactory.keywordFilter;
     collectionsInUrl = collectionsInUrl ? collectionsInUrl : [...selectedCollections];
+    subjectsInUrl = subjectsInUrl ? subjectsInUrl : [...selectedSubjects];
     keywordFilterInUrl = keywordFilterInUrl ? keywordFilterInUrl : keywordFilterString;
     sortByInUrl = sortByInUrl ? sortByInUrl : sortField;
     let pageInUrl = ontologyListUrlFactory.page ? Number(ontologyListUrlFactory.page) : pageNumber;
     let sizeInUrl = ontologyListUrlFactory.size ? Number(ontologyListUrlFactory.size) : pageSize;
     setSelectedCollections(collectionsInUrl);
+    setSelectedSubjects(subjectsInUrl);
     setKeywordFilterString(keywordFilterInUrl);
     setSortField(sortByInUrl);
     setPageNumber(pageInUrl);
@@ -206,10 +215,11 @@ const OntologyList = () => {
   }
 
 
-  function handleFacetCollection(e: React.ChangeEvent<HTMLInputElement>) {
-    let collection = e.target.value.trim();
+  function handleFacetCollection(e: React.MouseEvent<HTMLInputElement>) {
+    const target = e.target as HTMLInputElement;
+    let collection = target.value.trim();
     let currentSelectedCollections = [...selectedCollections];
-    if (e.target.checked) {
+    if (target.checked) {
       currentSelectedCollections.push(collection);
     }
     else {
@@ -217,6 +227,21 @@ const OntologyList = () => {
       currentSelectedCollections.splice(index, 1);
     }
     setSelectedCollections(currentSelectedCollections);
+    setPageNumber(1);
+  }
+
+  function handleFacetSubject(e: React.MouseEvent<HTMLInputElement>) {
+    const target = e.target as HTMLInputElement;
+    let subject = target.value.trim();
+    let currentSelectedSubjects = [...selectedSubjects];
+    if (target.checked) {
+      currentSelectedSubjects.push(subject);
+    }
+    else {
+      let index = currentSelectedSubjects.indexOf(subject);
+      currentSelectedSubjects.splice(index, 1);
+    }
+    setSelectedSubjects(currentSelectedSubjects);
     setPageNumber(1);
   }
 
@@ -259,6 +284,18 @@ const OntologyList = () => {
       }
       ontologiesList = collectionFilteredOntologies;
     }
+    if (selectedSubjects.length !== 0) {
+      let subjectFilteredOntologies = [];
+      for (let onto of ontologiesList) {
+        for (let subj of selectedSubjects) {
+          if (onto.subjects.includes(subj)) {
+            subjectFilteredOntologies.push(onto);
+            break;
+          }
+        }
+      }
+      ontologiesList = subjectFilteredOntologies;
+    }
 
     ontologiesList = sortArrayOfOntologiesBasedOnKey(ontologiesList, sortField);
     setOntologies(ontologiesList);
@@ -271,6 +308,7 @@ const OntologyList = () => {
     ontologyListUrl.update({
       keywordFilter: keywordFilterString,
       collections: selectedCollections,
+      subjects: selectedSubjects,
       sortedBy: sortField,
       page: pageNumber,
       size: pageSize,
@@ -292,7 +330,7 @@ const OntologyList = () => {
       updateUrl();
       runFilter();
     }
-  }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections, isLoaded]);
+  }, [pageNumber, pageSize, keywordFilterString, selectedCollections, sortField, exclusiveCollections, isLoaded, selectedSubjects]);
 
 
   useEffect(() => {
@@ -318,8 +356,11 @@ const OntologyList = () => {
                   filterWordChange={filterWordChange}
                   onSwitchChange={handleSwitchange}
                   handleFacetCollection={handleFacetCollection}
+                  handleFacetSubject={handleFacetSubject}
                   selectedCollections={selectedCollections}
+                  selectedSubjects={selectedSubjects}
                   allCollections={allCollections}
+                  allSubjects={allSubjectWithStats}
 
                 />
               </div>
