@@ -241,7 +241,7 @@ const SearchResult = () => {
   function handleOntologyFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedOntologiesList = [...selectedOntologies];
-    let targetOntologyId = e.target.value.toLowerCase();
+    let targetOntologyId = e.target.value;
     if (e.target.checked) {
       searchUrlFactory.updateUrlForFacetSelection({
         fieldNameInUrl: SiteUrlParamNames.Ontology,
