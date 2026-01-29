@@ -113,8 +113,6 @@ const SearchResult = () => {
 
       Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
         let result = values[0] as SearchApiResponse;
-        console.log(searchParams);
-        console.log(result);
         setSearchResult(result['elements'] as Array<TsTerm>);
         setLoading(false);
         let resultForFacetTypeCount = values[1] as SearchApiResponse;
