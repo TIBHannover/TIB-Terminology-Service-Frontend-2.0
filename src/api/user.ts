@@ -17,7 +17,7 @@ export async function runLogin(authCode: string): Promise<LoginResponse | null> 
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: false });
         headers["X-TS-Auth-APP-Code"] = authCode;
-        let result: any = await fetch(baseUrl + "/user/login/", { method: "GET", headers: headers, credentials: "include" });
+        let result: any = await fetch(baseUrl + "/user/login/", { method: "GET", headers: headers });
         result = await result.json();
         result = result['_result'];
         if (result && result["issue"]) {
@@ -33,7 +33,7 @@ export async function runLogin(authCode: string): Promise<LoginResponse | null> 
 export async function logout(): Promise<boolean> {
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/user/logout/", { method: "GET", headers: headers, credentials: "include" });
+        let result: any = await fetch(baseUrl + "/user/logout/", { method: "GET", headers: headers });
         result = await result.json();
         result = result['_result'];
         if (result) {
@@ -49,7 +49,7 @@ export async function logout(): Promise<boolean> {
 export async function isLogin(): Promise<boolean> {
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
-        let result: any = await fetch(baseUrl + '/user/validate_login/', { method: "GET", headers: headers, credentials: "include" });
+        let result: any = await fetch(baseUrl + '/user/validate_login/', { method: "GET", headers: headers });
         if (result.status !== 200) {
             return false;
         }
@@ -70,7 +70,6 @@ export async function storeUserSettings(settings: UserSettings): Promise<boolean
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/settings/", {
             method: "POST",
-            credentials: "include",
             headers: headers,
             body: JSON.stringify(settings)
         });
@@ -97,7 +96,6 @@ export async function storeSearchSettings(settingData: SearchSettingPayload): Pr
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/search_setting/", {
             method: "POST",
-            credentials: "include",
             headers: headers,
             body: JSON.stringify(settingData)
         });
@@ -116,7 +114,7 @@ export async function storeSearchSettings(settingData: SearchSettingPayload): Pr
 export async function fetchSearchSettings(): Promise<Array<SearchSettingApiResponse> | []> {
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: false, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/user/search_setting/", { method: "GET", headers: headers, credentials: "include" });
+        let result: any = await fetch(baseUrl + "/user/search_setting/", { method: "GET", headers: headers });
         result = await result.json();
         result = result['_result']['settings'];
         if (result) {
@@ -134,7 +132,6 @@ export async function updateSearchSettings(settingId: string | number, settingDa
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/search_setting/" + settingId + '/', {
             method: "PUT",
-            credentials: "include",
             headers: headers,
             body: JSON.stringify(settingData)
         });
@@ -155,7 +152,6 @@ export async function deleteSearchSetting(settingId: string | number): Promise<b
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/search_setting/" + settingId + '/', {
             method: "DELETE",
-            credentials: "include",
             headers: headers
         });
         result = await result.json();
@@ -196,7 +192,7 @@ export async function fetchUserApiKeys(): Promise<ApiKey[]> {
     }
     try {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
-        let result: any = await fetch(baseUrl + "/user/apikey/get/", { method: "GET", headers: headers, credentials: "include" });
+        let result: any = await fetch(baseUrl + "/user/apikey/get/", { method: "GET", headers: headers });
         result = await result.json() as _resp;
         result = result['_result']['api_keys'];
         if (result) {
@@ -219,7 +215,6 @@ export async function createApiKey(data: { name: string, description: string, ti
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/apikey/create/", {
             method: "POST",
-            credentials: "include",
             headers: headers,
             body: JSON.stringify(data)
         });
@@ -244,7 +239,6 @@ export async function updateApiKey(data: { id: string, name: string, description
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/apikey/update/", {
             method: "PUT",
-            credentials: "include",
             headers: headers,
             body: JSON.stringify(data)
         });
@@ -266,7 +260,6 @@ export async function deleteApiKey(id: string): Promise<boolean> {
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let result: any = await fetch(baseUrl + "/user/apikey/delete/", {
             method: "DELETE",
-            credentials: "include",
             headers: headers,
             body: JSON.stringify({ id: id })
         });

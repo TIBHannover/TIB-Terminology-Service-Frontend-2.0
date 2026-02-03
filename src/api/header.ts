@@ -14,6 +14,7 @@ export function getTsPluginHeaders(params: GetHeaderFuncParams): TsPluginHeader 
 
     if (withAccessToken) {
         header["X-CSRF-Token"] = user?.csrf ?? "";
+        header["X-Auth-Token"] = user?.jwt ?? "";
     }
     if (isJson) {
         header['Content-Type'] = 'application/json';

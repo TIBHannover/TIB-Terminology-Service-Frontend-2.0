@@ -128,7 +128,7 @@ export async function runShapeTest(ontologyPurl: string): Promise<OntologyShapeT
     try {
         let headers = getTsPluginHeaders({ withAccessToken: true, isJson: false });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/testshape?purl=' + ontologyPurl;
-        let result = await fetch(url, { method: 'GET', headers: headers, credentials: "include" });
+        let result = await fetch(url, { method: 'GET', headers: headers });
         if (!result.ok) {
             return false;
         }
@@ -150,7 +150,7 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
         }
         let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create/';
-        let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(form), credentials: "include" });
+        let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(form) });
         if (result.status === 200) {
             result = await result.json();
             result = result['_result']['response'];
@@ -167,7 +167,7 @@ export async function checkSuggestionExist(purl: string): Promise<boolean> {
     try {
         let headers = getTsPluginHeaders({ withAccessToken: true, isJson: false });
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/suggestion_exist?purl=' + purl;
-        let result = await fetch(url, { method: 'GET', headers: headers, credentials: "include" });
+        let result = await fetch(url, { method: 'GET', headers: headers });
         if (result.status !== 200) {
             return false;
         }

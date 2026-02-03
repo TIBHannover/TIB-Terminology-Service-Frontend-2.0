@@ -32,7 +32,8 @@ export type LoginResponse = {
     login?: string,
     orcid_id?: string,
     settings?: object,
-    csrf_token?: string
+    csrf_token?: string,
+    jwt?: string,
 }
 
 
@@ -57,6 +58,7 @@ export type UserModelType = {
     systemAdmin?: boolean,
     settings?: UserSettings,
     csrf?: string,
+    jwt?: string,
 }
 
 

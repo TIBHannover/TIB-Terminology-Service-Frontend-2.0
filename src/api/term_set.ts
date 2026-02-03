@@ -14,7 +14,7 @@ export async function getUserTermsetList(userId: string): Promise<TsTermset[]> {
     }
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/";
-    let result = await fetch(url, { headers: headers, credentials: "include" })
+    let result = await fetch(url, { headers: headers })
     if (!result.ok) {
       return [];
     }
@@ -53,7 +53,7 @@ export async function getAllTermsetList(): Promise<TsTermset[]> {
     }
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/";
-    let result = await fetch(url, { headers: headers, credentials: "include" })
+    let result = await fetch(url, { headers: headers })
     if (!result.ok) {
       return [];
     }
@@ -80,7 +80,7 @@ export async function getTermset(termsetId: string): Promise<TsTermset | null> {
       }
       let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
       let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/" + termsetId + "/";
-      let result = await fetch(url, { headers: headers, credentials: "include" })
+      let result = await fetch(url, { headers: headers })
       if (!result.ok) {
         const error = new Error("Fetch failed");
         (error as any).status = result.status;
@@ -106,7 +106,7 @@ export async function createTermset(termset: NewTermSetFormData): Promise<TsTerm
     }
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/create/";
-    let result = await fetch(url, { method: "POST", headers: headers, body: JSON.stringify(termset), credentials: "include" })
+    let result = await fetch(url, { method: "POST", headers: headers, body: JSON.stringify(termset) })
     if (!result.ok) {
       return null;
     }
@@ -138,7 +138,7 @@ export async function updateTermset(termset: TsTermset): Promise<TsTermset | nul
     };
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/update/" + termset.id + "/";
-    let result = await fetch(url, { method: "PUT", headers: headers, body: JSON.stringify(termsetJson), credentials: "include" })
+    let result = await fetch(url, { method: "PUT", headers: headers, body: JSON.stringify(termsetJson) })
     if (!result.ok) {
       return null;
     }
@@ -161,7 +161,7 @@ export async function addTermToMultipleSets(setIds: string[], term: OntologyTerm
 
     let calls = setIds.map((id) => {
       let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/" + id + "/add_term/";
-      return fetch(url, { method: "PUT", headers: headers, body: JSON.stringify({ "term": term }), credentials: "include" }).then((res) => {
+      return fetch(url, { method: "PUT", headers: headers, body: JSON.stringify({ "term": term }) }).then((res) => {
         if (!res.ok) {
           return false;
         }
@@ -190,7 +190,7 @@ export async function removeTermFromSet(termsetId: string, termId: string): Prom
     }
     let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/" + termsetId + "/remove_term?termId=" + encodeURIComponent(termId);
-    let result = await fetch(url, { method: "DELETE", headers: headers, credentials: "include" })
+    let result = await fetch(url, { method: "DELETE", headers: headers })
     if (!result.ok) {
       return false;
     }

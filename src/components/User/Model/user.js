@@ -9,6 +9,7 @@ class UserModel {
     this.gitHomeUrl = "";
     this.orcidId = "";
     this.csrf = "";
+    this.jwt = "";
     this.systemAdmin = false;
     this.settings = {
       userCollectionEnabled: false,
@@ -25,6 +26,10 @@ class UserModel {
 
   setCsrf(token) {
     this.csrf = token;
+  }
+
+  setJwt(token) {
+    this.jwt = token;
   }
 
   setToken(token) {

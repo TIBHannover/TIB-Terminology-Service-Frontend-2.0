@@ -18,7 +18,7 @@ export async function sendResolveRequest(props: { objectType: string, objectId: 
       creatorUsername: creatorUsername
     };
     let resolveUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/resolve/';
-    let resp = await fetch(resolveUrl, { method: 'POST', headers: headers, body: JSON.stringify(formData), credentials: "include" });
+    let resp = await fetch(resolveUrl, { method: 'POST', headers: headers, body: JSON.stringify(formData) });
     if (!resp.ok) {
       return false;
     }
@@ -41,7 +41,7 @@ export async function getReportList(): Promise<ContentReport[]> {
     };
     let headers = getTsPluginHeaders({ withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/list/';
-    let resp = await fetch(url, { method: 'GET', headers: headers, credentials: "include" });
+    let resp = await fetch(url, { method: 'GET', headers: headers });
     if (!resp.ok) {
       return [];
     }

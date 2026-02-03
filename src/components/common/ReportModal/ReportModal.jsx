@@ -39,7 +39,7 @@ export const ReportModal = (props) => {
   const report = async () => {
     try {
       props.formData['content'] = document.getElementById("reportReason" + props.modalId).value;
-      let postConfig = { method: 'POST', headers: props.callHeaders, body: JSON.stringify(props.formData), credentials: "include" };
+      let postConfig = { method: 'POST', headers: props.callHeaders, body: JSON.stringify(props.formData) };
       let result = await fetch(props.reportEndpoint, postConfig);
       setSubmited(true);
       setReportSuccess(result.ok)
