@@ -204,8 +204,8 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
                         {selectedItem && !loading && (
                             <>
                                 <div className='sticky-top text-center'>
-                                    This view displays semantic differences calculated by
-                                    COntoDiff and ROBOT DIFF.
+                                    {/* This view displays semantic differences calculated by COntoDiff and ROBOT DIFF. */}
+                                    This view displays semantic differences calculated by ROBOT DIFF.
                                     <br />
                                     If you want
                                     <Button variant="link" onClick={handleOpen}>
@@ -214,7 +214,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
                                     </Button>
                                 </div>
                                 <div className="d-flex">
-                                    <div className="col-sm-6">
+                                    <div className="col-sm-12">
                                         <div className='row sticky-top text-center'>
                                             <h3>ROBOT Diff</h3>
                                         </div>
@@ -225,7 +225,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
                                         </div>
                                     </div>
 
-                                    <div className="col-sm-6">
+                                    {/* <div className="col-sm-6">
                                         <div className='row sticky-top text-center'>
                                             <h3>COnto Diff</h3>
                                         </div>
@@ -233,7 +233,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
                                             <ReactMarkdown
                                                 components={customMarkdownComponents}>{contoMarkdown}</ReactMarkdown>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </>
                         )}
