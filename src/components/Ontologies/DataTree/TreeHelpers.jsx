@@ -67,7 +67,7 @@ export default class TreeHelper {
     if (e.classList.contains("closed")) {
       // expand node
       let res = [];
-      if (isSkos) {
+      if (isSkos && childExtractName !== "properties") {
         let skosApi = new SkosApi({ ontologyId: ontologyId, iri: targetNodeIri, lang: lang });
         res = await skosApi.fetchChildrenForSkosTerm();
       }
