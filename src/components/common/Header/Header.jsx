@@ -40,7 +40,7 @@ const SiteLogo = () => {
             <Link className="main-title" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>
               <img src={"/TIB_Logo_W_W.SVG"} alt="tib logo" height={60}
                 width={80} loading="lazy" />
-
+              <h5>Terminology Service</h5>
             </Link>
           </span>
         }
@@ -48,6 +48,7 @@ const SiteLogo = () => {
           <span>
             <Link className="main-title" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>
               <img src="/site_logo.png" alt="site_logo" className='site-logo-image' loading="lazy" />
+              <h5>Terminology Service</h5>
             </Link>
           </span>
         }
@@ -55,6 +56,7 @@ const SiteLogo = () => {
           <span>
             <Link className="main-title" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>
               <img src="/site_logo.webp" alt="site_logo" className='site-logo-image' loading="lazy" />
+              <h5>Terminology Service</h5>
             </Link>
           </span>
         }
