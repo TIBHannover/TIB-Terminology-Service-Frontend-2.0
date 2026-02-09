@@ -32,7 +32,7 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
     <button
       type="button"
       aria-label="Copy to clipboard the term label in markdown format"
-      className="btn btn-secondary btn-sm copy-link-btn"
+      className="btn btn-secondary btn-sm copy-link-btn ml-1"
       key={"copy-btn"}
       onClick={() => {
         let copyValue = document.createElement('a');
