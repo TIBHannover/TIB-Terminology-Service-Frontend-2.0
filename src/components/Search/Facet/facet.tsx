@@ -27,6 +27,7 @@ const Facet = (props: FacetProps) => {
 
   const [resultTypes, setResultTypes] = useState<Record<string, number>>({});
   const [ontologyFacetData, setOntologyFacetData] = useState<Record<string, number>>({});
+  const [filteredOntologyFacetData, setFilteredOntologyFacetData] = useState<Record<string, number>>({});
   const [ontologyListShowAll, setOntologyListShowAll] = useState(false);
   const [countOfShownOntologies, setCountOfShownOntologies] = useState(DEFAULT_NUMBER_OF_SHOWN_ONTOLOGIES);
   const [showMoreLessOntologiesText, setShowMoreLessOntologiesText] = useState("+ Show More");
@@ -56,6 +57,7 @@ const Facet = (props: FacetProps) => {
 
       setResultTypes(facetData["type"] ?? {});
       setOntologyFacetData(ontologyFacetData);
+      setFilteredOntologyFacetData(ontologyFacetData);
     }
   }
 
@@ -66,15 +68,15 @@ const Facet = (props: FacetProps) => {
     let result = [];
     let counter = 1;
 
-    for (let ontologyId in ontologyFacetData) {
+    for (let ontologyId in filteredOntologyFacetData) {
       if (counter > countOfShownOntologies && !ontologyListShowAll) {
         break;
       }
-      if (ontologyFacetData[ontologyId] !== 0) {
+      if (filteredOntologyFacetData[ontologyId] !== 0) {
         result.push(
           <FacetCheckBox
             key={ontologyId}
-            data={ontologyFacetData}
+            data={filteredOntologyFacetData}
             facetFieldName={ontologyId}
             className={"search-facet-checkbox ontology-facet-checkbox"}
             idPrefix={"search-checkbox-"}
@@ -91,7 +93,18 @@ const Facet = (props: FacetProps) => {
 
   function handleOntoListFilter(e: React.ChangeEvent<HTMLInputElement>) {
     let filterText = e.target.value;
-
+    if (!filterText) {
+      setFilteredOntologyFacetData(ontologyFacetData);
+      return;
+    }
+    let allOntologies = { ...ontologyFacetData };
+    let filteredOntoList: Record<string, number> = {};
+    for (let onto in allOntologies) {
+      if (onto.toLowerCase().includes(filterText.toLowerCase())) {
+        filteredOntoList[onto] = allOntologies[onto];
+      }
+    }
+    setFilteredOntologyFacetData(filteredOntoList);
   }
 
 
@@ -216,7 +229,7 @@ const Facet = (props: FacetProps) => {
   useEffect(() => {
     createOntologiesCheckboxList();
     updateCountOfShownOntologies();
-  }, [ontologyFacetData]);
+  }, [filteredOntologyFacetData]);
 
 
   useEffect(() => {
@@ -259,7 +272,13 @@ const Facet = (props: FacetProps) => {
           </div>
           <h4>{"Ontologies"}</h4>
           <div className="facet-box">
-            <input type="text" id="filter-onto-list" />
+            <input
+              type="text"
+              id="filter-onto-list"
+              onChange={handleOntoListFilter}
+              className="form-control form-control-sm mb-4"
+              placeholder="Filter ontologies by keyword"
+            />
             {ontologyCheckBoxesToRender}
             {showMoreIsNeededForOntologies &&
               <div className="text-center" id="search-facet-show-more-ontology-btn">
