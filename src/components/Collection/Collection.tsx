@@ -9,6 +9,23 @@ import * as SiteUrlParamNames from '../../UrlFactory/UrlParamNames';
 import { Link } from 'react-router-dom';
 
 
+type CollectionJsonData = {
+  id: string,
+  html_id: string,
+  name: string,
+  text: string,
+  logo: string,
+  ontology_list_url: string,
+  project_homepage?: string,
+  domain_ts_link?: string,
+  logo_width?: number,
+  logo_height?: number,
+  selection_criteria?: string
+}
+
+type CollectionsData = Record<string, CollectionJsonData>
+
+
 const Collections = () => {
 
   const collectionsWithOntologiesQuery = useQuery({
@@ -16,7 +33,7 @@ const Collections = () => {
     queryFn: getCollectionsAndThierOntologies
   });
 
-  let collectionOntologiesData = {};
+  let collectionOntologiesData: { [key: string]: JSX.Element[] } = {};
   if (collectionsWithOntologiesQuery.data) {
     let collectionsWithTheirOntologies = collectionsWithOntologiesQuery.data;
     for (let col in collectionsWithTheirOntologies) {
@@ -24,12 +41,12 @@ const Collections = () => {
       for (let onto of collectionsWithTheirOntologies[col]) {
         collectionOntologiesData[col].push(
           <Link
-            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto["ontologyId"]}
+            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto.ontologyId}
             className='ontologies-link-tag'
             onClick={() => {
               Toolkit.selectSiteNavbarOption("Ontologies")
             }}>
-            {onto["ontologyId"]}
+            {onto.ontologyId}
           </Link>
         );
       }
@@ -38,8 +55,8 @@ const Collections = () => {
   const collectionOntologies = collectionOntologiesData;
 
 
-  function createCollectionCard(collectionId, collectionJson) {
-    let card = [
+  function createCollectionCard(collectionId: string, collectionJson: CollectionJsonData): JSX.Element {
+    return (
       <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
         <div className='col-sm-3 text-center' key={collectionId + "_logo"}>
           <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]}
@@ -61,7 +78,7 @@ const Collections = () => {
           </div>
           <div className='row' key={collectionId + "_content"}>
             <div className='col-sm-12'>
-              <p align="justify">
+              <p className="text-justify">
                 <div dangerouslySetInnerHTML={{ __html: collectionJson["text"] }}></div>
               </p>
             </div>
@@ -108,17 +125,17 @@ const Collections = () => {
           </div>
         </div>
       </div>
-    ];
+    );
 
-    return card;
   }
 
 
   function createCollectionList() {
-    let result = [];
-    for (let col in collectionsInfoJson) {
-      result.push(createCollectionCard(col, collectionsInfoJson[col]));
-    }
+    let result: JSX.Element[] = [];
+    let collectionsInfo = collectionsInfoJson as CollectionsData;
+    Object.entries(collectionsInfo).forEach(([col, collectionJson]) => {
+      result.push(createCollectionCard(col, collectionJson));
+    });
 
     return result;
   }
@@ -127,8 +144,8 @@ const Collections = () => {
   useEffect(() => {
     let urlFactory = new CommonUrlFactory();
     let targetCollectionId = urlFactory.getParam({ name: SiteUrlParamNames.CollectionId });
-    if (targetCollectionId) {
-      document.getElementById("section_" + targetCollectionId).scrollIntoView();
+    if (targetCollectionId && document.getElementById("section_" + targetCollectionId)) {
+      document.getElementById("section_" + targetCollectionId)!.scrollIntoView();
     }
   }, []);
 
