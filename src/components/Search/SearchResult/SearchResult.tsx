@@ -213,10 +213,10 @@ const SearchResult = () => {
   }
 
 
-  function handleTypeFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
-    let targetType = e.target.value;
+  function handleTypeFacetSelection(e: React.MouseEvent<HTMLInputElement>) {
+    let targetType = (e.target as HTMLInputElement).value;
     let selectedTypeList = [...selectedTypes];
-    if (e.target.checked) {
+    if ((e.target as HTMLInputElement).checked) {
       searchUrlFactory.updateUrlForFacetSelection({
         fieldNameInUrl: SiteUrlParamNames.TermType,
         action: "add",
@@ -238,11 +238,11 @@ const SearchResult = () => {
   }
 
 
-  function handleOntologyFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleOntologyFacetSelection(e: React.MouseEvent<HTMLInputElement>) {
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedOntologiesList = [...selectedOntologies];
-    let targetOntologyId = e.target.value;
-    if (e.target.checked) {
+    let targetOntologyId = (e.target as HTMLInputElement).value;
+    if ((e.target as HTMLInputElement).checked) {
       searchUrlFactory.updateUrlForFacetSelection({
         fieldNameInUrl: SiteUrlParamNames.Ontology,
         action: "add",
@@ -264,11 +264,11 @@ const SearchResult = () => {
   }
 
 
-  function handleCollectionFacetSelection(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleCollectionFacetSelection(e: React.MouseEvent<HTMLInputElement>) {
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
     let selectedCollectionsList = [...selectedCollections];
-    let targetCollection = e.target.value.trim();
-    if (e.target.checked) {
+    let targetCollection = (e.target as HTMLInputElement).value.trim();
+    if ((e.target as HTMLInputElement).checked) {
       selectedCollectionsList.push(targetCollection);
       searchUrlFactory.updateUrlForFacetSelection({
         fieldNameInUrl: SiteUrlParamNames.Collection,
@@ -315,7 +315,7 @@ const SearchResult = () => {
     try {
       let tagType = (e.target as HTMLElement).dataset.type;
       let tagValue = (e.target as HTMLElement).dataset.value;
-      let selectionEvent = { target: { checked: false, value: tagValue } } as unknown as React.ChangeEvent<HTMLInputElement>;
+      let selectionEvent = { target: { checked: false, value: tagValue } } as unknown as React.MouseEvent<HTMLInputElement>;
       if (document.getElementById('search-checkbox-' + tagValue)) {
         (document.getElementById('search-checkbox-' + tagValue) as HTMLInputElement).checked = false;
       }

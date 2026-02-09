@@ -42,8 +42,8 @@ export type SearchApiResponse = {
 
 
 export type SearchResultFacet = {
-    type?: any,
-    ontologyId?: any
+    type?: Record<string, number>,
+    ontologyId?: Record<string, number>
 }
 
 
