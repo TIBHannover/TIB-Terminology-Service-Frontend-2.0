@@ -7,16 +7,17 @@ import RenderHomePage from './HomePageContent';
 
 const Home = () => {
 
-  const [statsResult, setStatsResult] = useState([]);
+  const [statsResult, setStatsResult] = useState<Record<string, number>>({});
 
   async function fetchStats() {
     try {
-      let res = await fetch(process.env.REACT_APP_STATS_API_URL, getCallSetting)
-      res = (await res.json());
-      setStatsResult(res);
+      let res = await fetch(process.env.REACT_APP_STATS_API_URL as string, getCallSetting)
+      let stats: Record<string, number> = {};
+      stats = await res.json();
+      setStatsResult(stats);
 
     } catch (e) {
-      setStatsResult([]);
+      setStatsResult({});
     }
   }
 

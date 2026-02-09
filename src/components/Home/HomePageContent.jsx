@@ -2,7 +2,7 @@ import collectionsInfoJson from '../../assets/collectionsText.json';
 import { Link } from 'react-router-dom';
 
 const RenderHomePage = () => {
-  return [
+  return (
     <div className="general-home-page-content">
       <br />
       <div className="row">
@@ -33,8 +33,8 @@ const RenderHomePage = () => {
           );
         })}
       </div>
-    </div>,
-  ];
+    </div>
+  );
 }
 
 

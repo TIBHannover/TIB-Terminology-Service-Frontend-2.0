@@ -4,7 +4,7 @@ import { useEffect } from "react";
 const TermsOfUse = () => {
 
     useEffect(() => {
-        let url = new URL(window.location);
+        let url = new URL(window.location.href);
         let currentParams = url.searchParams;
         let targetSectionId = currentParams.get('section');
         if (targetSectionId) {
@@ -17,7 +17,7 @@ const TermsOfUse = () => {
 
 
     return (
-        <div class="sc-ksJisA bIzESj"><h2>Terms of Use Terminology Service (TS)</h2>
+        <div className="sc-ksJisA bIzESj"><h2>Terms of Use Terminology Service (TS)</h2>
             <strong>Status: May 2024</strong>
             <p>
                 <br />
