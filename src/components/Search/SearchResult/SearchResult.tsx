@@ -52,13 +52,13 @@ const SearchResult = () => {
   const [filterTags, setFilterTags] = useState<ReactElement[]>([]);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState(language);
+  const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");
 
 
   const PAGE_SIZES_FOR_DROPDOWN = [{ label: "10", value: 10 }, { label: "20", value: 20 }, {
     label: "30",
     value: 30
   }, { label: "40", value: 40 }];
-  const searchQuery = searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "";
   const exact = searchUrlFactory.exact === "true";
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
@@ -376,11 +376,14 @@ const SearchResult = () => {
     setSearchResult([]);
     search();
     createFilterTags();
-  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, location.search]);
+  }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, searchQuery]);
 
   useEffect(() => {
-    setPageNumber(1);
-  }, [searchQuery]);
+    if(searchUrlFactory.searchQuery !== searchQuery){
+      setSearchQuery(searchUrlFactory.searchQuery ?? "");
+      setPageNumber(1);
+    }
+  }, [location.search]);
 
 
   return (
