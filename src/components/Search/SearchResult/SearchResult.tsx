@@ -378,6 +378,10 @@ const SearchResult = () => {
     createFilterTags();
   }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, location.search]);
 
+  useEffect(() => {
+    setPageNumber(1);
+  }, [searchQuery]);
+
 
   return (
     <div className='row justify-content-center search-result-container' id="searchterm-wrapper">
