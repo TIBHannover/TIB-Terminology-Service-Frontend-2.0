@@ -56,7 +56,7 @@ const SearchForm = () => {
       return true;
     }
     setSearchQuery(searchQuery);
-    inputForAutoComplete['searchQuery'] = searchQuery;
+    inputForAutoComplete['searchQuery'] = searchQuery.trim();
     inputForAutoComplete['obsoletes'] = Toolkit.getObsoleteFlagValue();
     if (appContext.userSettings.userCollectionEnabled) {
       inputForAutoComplete['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
@@ -100,7 +100,7 @@ const SearchForm = () => {
   function setSearchUrl(label) {
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     return searchUrlFactory.createSearchUrlForAutoSuggestItem({
-      label: label,
+      label: label.trim(),
       ontologyId: ontologyId,
       obsoleteFlag: obsoletesFlag,
       exact: exact,
