@@ -15,7 +15,7 @@ import UserProfile from './components/User/Profile/Profile';
 import RequireLoginRoute from './components/User/Login/RequireLoginRoute';
 import UserPanel from "./components/User/Login/UserPanel";
 import ReportPanel from "./components/User/Admin/ReportPanel";
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import UserCollection from "./components/User/Collection/Collection";
 import ContactForm from "./components/User/ContactForm/ContactForm";
 import OntologySuggestion from "./components/Ontologies/OntologySuggestion/OntologySuggestion";
@@ -25,45 +25,50 @@ import EditTermset from "./components/TermSet/EditTermset";
 import NotFoundPage from "./errors/notFound";
 import BrowseTermSetList from "./components/TermSet/browseTermsetList";
 import UserApiKey from "./components/User/APIKEY/ApiKey";
+import CollectionPage from "./components/Collection/CollectionPage";
 
 
 const AppRouter = () => {
-
+  
   return (
     <Switch>
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home} />
-      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={UserPanel} />
-      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile} />
-      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"} component={UserApiKey} />
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/"} component={Home}/>
+      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/login"} component={UserPanel}/>
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"} component={UserProfile}/>
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"} component={UserApiKey}/>
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"}
-        component={SubmitedIssueRequests} />
-      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel} />
-      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"} component={UserTermSetList} />
+                         component={SubmitedIssueRequests}/>
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/reports"} component={ReportPanel}/>
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mytermsets"} component={UserTermSetList}/>
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId/edit"}
-        component={EditTermset} />
-      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId"} component={TermSetPage} />
-      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets"} component={BrowseTermSetList} />
-      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection} />
+                         component={EditTermset}/>
+      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId"} component={TermSetPage}/>
+      <Route path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets"} component={BrowseTermSetList}/>
+      <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"} component={UserCollection}/>
       <RequireLoginRoute path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}
-        component={OntologySuggestion} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList} />
+                         component={OntologySuggestion}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies"} component={OntologyList}/>
       <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/:ontologyId/:tab?"}
-        component={OntologyPage} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help} />
-      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"} component={ContactForm} />
+             component={OntologyPage}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/docs"} component={Documentation}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/search"} component={SearchResult}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/imprint"} component={Imprint}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/PrivacyPolicy"} component={PrivacyPolicy}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse"} component={TermsOfUse}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/about"} component={About}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/help"} component={Help}/>
+      <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"} component={ContactForm}/>
       {process.env.REACT_APP_COLLECTION_TAB_SHOW === "true" &&
-        <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections} />
+        <>
+          <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections/:collectionId"}
+                 component={CollectionPage}/>
+          <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/collections"} component={Collections}/>
+        </>
       }
       {process.env.REACT_APP_PROJECT_ID === "nfdi4ing" &&
-        <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage} />
+        <Route exact path={process.env.REACT_APP_PROJECT_SUB_PATH + "/usage"} component={UsagePage}/>
       }
-      <Route component={NotFoundPage} />
+      <Route component={NotFoundPage}/>
     </Switch>
   );
 }
