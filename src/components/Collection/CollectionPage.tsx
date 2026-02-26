@@ -38,7 +38,17 @@ const CollectionPage = (props: CmpProps) => {
 
     return (
         <div className="row bg-white p-4">
-            <h3>Collection {collection?.name}</h3>
+            <div className="col-12">
+                {/*<p className="fs-3 fw-bold text-center">{collection?.name}</p>*/}
+            </div>
+            <div className="row">
+                <div className="col-4">
+                    <img className="img-fluid" src={collection?.logo} alt={collection?.name}/>
+                </div>
+                <div className="col-8">
+                    <div dangerouslySetInnerHTML={{__html: collection?.text ?? ""}}></div>
+                </div>
+            </div>
         </div>
     );
 }

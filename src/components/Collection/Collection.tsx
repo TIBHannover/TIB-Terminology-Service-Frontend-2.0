@@ -43,6 +43,8 @@ const Collections = () => {
 
 
     function createCollectionCard(collectionId: string, collectionJson: CollectionJsonData): JSX.Element {
+        let collectionPageUrl = process.env.REACT_APP_PROJECT_SUB_PATH + "/collections/";
+        collectionPageUrl += collectionJson.id.replaceAll(" ", "_").toLowerCase();
         return (
             <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
                 <div className='col-sm-3 text-center' key={collectionId + "_logo"}>
@@ -60,7 +62,9 @@ const Collections = () => {
                 <div className='col-sm-9 collection-content'>
                     <div className='row' key={collectionId + "_name"}>
                         <div className='col-sm-12'>
-                            <h4>{collectionJson["name"]}</h4>
+                            <Link to={collectionPageUrl}>
+                                <h4>{collectionJson["name"]}</h4>
+                            </Link>
                         </div>
                     </div>
                     <div className='row' key={collectionId + "_content"}>
