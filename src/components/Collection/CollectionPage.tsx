@@ -7,12 +7,16 @@ import Nav from "react-bootstrap/Nav";
 import OntologyApi from "../../api/ontology";
 import {TsOntology} from "../../concepts";
 import "../layout/ontologyList.css";
+import {getBioregistryCollection} from "../../api/collection";
+import {BioregistryCollection} from "../../api/types/collectionTypes";
+import ReactMarkdown from "react-markdown";
 
 
 type CmpProps = RouteComponentProps<{ collectionId: string }>;
 type CollectionsData = Record<string, CollectionJsonData>;
 
 const ABOUT_TAB_ID = "about";
+const BIOREGISTRY_TAB_ID = "bioregistry";
 const ONTOLOGIES_TAB_ID = "ontologies";
 const API_TAB_ID = "api";
 
@@ -24,10 +28,11 @@ const CollectionPage = (props: CmpProps) => {
     const [loading, setLoading] = useState(true);
     const [activeTabId, setActiveTabId] = useState<string>(ABOUT_TAB_ID);
     const [ontologyList, setOntologyList] = useState<TsOntology[]>([]);
+    const [bioregistryCollection, setBioregistryCollection] = useState<BioregistryCollection>({});
 
     function renderAboutSection() {
         return (
-            <>
+            <div>
                 <div dangerouslySetInnerHTML={{__html: collection?.text ?? ""}}></div>
                 {collection?.selection_criteria &&
                   <div className="row mt-4">
@@ -37,7 +42,7 @@ const CollectionPage = (props: CmpProps) => {
                     </div>
                   </div>
                 }
-            </>
+            </div>
         );
     }
 
@@ -99,6 +104,113 @@ const CollectionPage = (props: CmpProps) => {
         return result;
     }
 
+    function renderBioregistryInfo() {
+        function renderAuthors() {
+            if (!bioregistryCollection.authors) {
+                return <></>;
+            }
+            return (
+                <div className="mt-2 border-1 bg-light rounded p-2">
+                    <p>Authors: </p>
+                    {bioregistryCollection.authors.map((author, index) => {
+                        return (
+                            <div className="mt-1">
+                                <p className="d-inline fw-bold">{author.name}</p>
+                                {author.orcid &&
+                                  <a href={"https://orcid.org/" + author.orcid} target="_blank"
+                                     rel="noopener noreferrer">
+                                    <i className="fa-brands fa-orcid fs-5 ms-2"></i>
+                                  </a>
+                                }
+                                {author.email &&
+                                  <a href={"mailto:" + author.email} target="_blank" rel="noopener noreferrer">
+                                    <i className="fa-solid fa-envelope fs-5 ms-2"></i>
+                                  </a>
+                                }
+                                {author.github &&
+                                  <a href={"https://github.com/" + author.github} target="_blank">
+                                    <i className="fa-brands fa-github fs-5 ms-2"></i>
+                                  </a>
+                                }
+                            </div>
+                        )
+                    })}
+                </div>
+            )
+        }
+
+        function renderOrgs() {
+            if (!bioregistryCollection.organizations) {
+                return <></>
+            }
+            return (
+                <div className="mt-2 border-1 bg-light rounded p-2">
+                    <p>Organizations: </p>
+                    {bioregistryCollection.organizations.map((org, index) => {
+                        return (
+                            <div className="mt-1">
+                                <p className="d-inline fw-bold me-2">{org.name}</p>
+                                {org.ror &&
+                                  <a href={"https://ror.org/" + org.ror} target="_blank" rel="noopener noreferrer">
+                                    ror
+                                  </a>
+                                }
+                                {org.wikidata &&
+                                  <a href={"https://www.wikidata.org/wiki/" + org.wikidata} target="_blank"
+                                     rel="noopener noreferrer" className="ms-2">
+                                    wikidata
+                                  </a>
+                                }
+                            </div>
+                        )
+                    })}
+                </div>
+            )
+        }
+
+        function renderReferences() {
+            if (!bioregistryCollection.references) {
+                return <></>
+            }
+            return (
+                <div className="mt-2 border-1 bg-light rounded p-2">
+                    <p>References: </p>
+                    <ul>
+                        {bioregistryCollection.references.map((ref, index) => {
+                            return (
+                                <li><a href={ref} target="_blank" rel="noopener noreferrer">{ref}</a></li>
+                            )
+                        })}
+                    </ul>
+                </div>
+            )
+        }
+
+        if (!bioregistryCollection.name) {
+            return <div>No bioregistry info available</div>;
+        }
+        return (
+            <div className="row">
+                <div className="col-sm-12">
+                    <div>
+                        <p className="d-inline">Bioregistry identifier: </p>
+                        <p className="d-inline fw-bold">{bioregistryCollection.identifier}</p>
+                    </div>
+                    {bioregistryCollection.description &&
+                      <div className="mt-2 p-4 border-1 bg-light rounded">
+                        <p className="text-justify">
+                          <ReactMarkdown>{bioregistryCollection.description}</ReactMarkdown>
+                        </p>
+                      </div>
+                    }
+                    {renderAuthors()}
+                    {renderOrgs()}
+                    {renderReferences()}
+                </div>
+            </div>
+        );
+    }
+
     useEffect(() => {
         let processedCollectionId = collectionIdFromUrl.split("_").join(" ");
         let collectionIds = Object.keys(CollectionsMetadata);
@@ -117,6 +229,9 @@ const CollectionPage = (props: CmpProps) => {
             const ontoApi = new OntologyApi({});
             ontoApi.fetchOntologyList(collection?.id).then((ontologies) => {
                 setOntologyList(ontologies);
+            });
+            getBioregistryCollection(collection.id).then((bioregistryCollection) => {
+                setBioregistryCollection(bioregistryCollection);
             });
         }
     }, [collection]);
@@ -158,18 +273,23 @@ const CollectionPage = (props: CmpProps) => {
                         variant="tabs"
                         defaultActiveKey={activeTabId}
                         onSelect={(key) => setActiveTabId(key as string)}
+                        className="mb-3"
                     >
                         <Nav.Item>
                             <Nav.Link eventKey="about">About</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="ontologies">Ontologies</Nav.Link>
+                            <Nav.Link eventKey="bioregistry">Bioregistry Info</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="ontologies">Ontologies ({ontologyList.length})</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="api">API</Nav.Link>
                         </Nav.Item>
                     </Nav>
                     {activeTabId === ABOUT_TAB_ID && renderAboutSection()}
+                    {activeTabId === BIOREGISTRY_TAB_ID && renderBioregistryInfo()}
                     {activeTabId === ONTOLOGIES_TAB_ID &&
                       <div className="row p-4 bg-light">
                           {renderOntologyList()}

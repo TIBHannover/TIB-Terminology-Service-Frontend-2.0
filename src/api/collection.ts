@@ -1,5 +1,6 @@
 import OntologyApi from "./ontology";
-import { TsOntology } from "../concepts";
+import {TsOntology} from "../concepts";
+import {BioregistryCollection} from "./types/collectionTypes";
 
 
 export function getCollectionStatFromOntoList(ontoList: TsOntology[]): { [key: string]: number } {
@@ -59,4 +60,29 @@ export async function getCollectionsAndThierOntologies(): Promise<{ [key: string
         }
     }
     return result;
+}
+
+export async function getBioregistryCollection(collectionName: string): Promise<BioregistryCollection> {
+    type Resp = {
+        _result: {
+            collections: Record<string, BioregistryCollection>;
+        }
+    }
+    try {
+        let result = await fetch(process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/collection/bioregistry_collections/");
+        if (!result.ok) {
+            return {};
+        }
+        let collections = await result.json() as Resp;
+        for (let colId in collections["_result"]["collections"]) {
+            let col = collections["_result"]["collections"][colId];
+            if (col.name?.toLowerCase().includes(collectionName.toLowerCase())) {
+                return col;
+            }
+        }
+        return {};
+
+    } catch {
+        return {};
+    }
 }
