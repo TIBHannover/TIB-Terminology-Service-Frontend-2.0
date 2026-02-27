@@ -15,6 +15,13 @@ import CopyLinkButton from "../common/CopyButton/CopyButton";
 
 type CmpProps = RouteComponentProps<{ collectionId: string }>;
 type CollectionsData = Record<string, CollectionJsonData>;
+type stats = {
+    numberOfClasses: number;
+    numberOfProperties: number;
+    numberOfOntologies: number;
+    numberOfIndividuals: number;
+    lastModified: string;
+};
 
 const ABOUT_TAB_ID = "about";
 const BIOREGISTRY_TAB_ID = "bioregistry";
@@ -30,6 +37,14 @@ const CollectionPage = (props: CmpProps) => {
     const [activeTabId, setActiveTabId] = useState<string>(ABOUT_TAB_ID);
     const [ontologyList, setOntologyList] = useState<TsOntology[]>([]);
     const [bioregistryCollection, setBioregistryCollection] = useState<BioregistryCollection>({});
+    const [stats, setStats] = useState<stats>({
+        numberOfClasses: 0,
+        numberOfProperties: 0,
+        numberOfOntologies: 0,
+        numberOfIndividuals: 0,
+        lastModified: "",
+    });
+
 
     function renderAboutSection() {
         return (
@@ -265,6 +280,11 @@ const CollectionPage = (props: CmpProps) => {
             getBioregistryCollection(collection.id).then((bioregistryCollection) => {
                 setBioregistryCollection(bioregistryCollection);
             });
+            fetch(process.env.REACT_APP_API_URL + "/v2/statsby?schema=collection&classification=" + collection.id).then((response) => {
+                response.json().then((data: stats) => {
+                    setStats(data);
+                });
+            });
         }
     }, [collection]);
 
@@ -298,6 +318,22 @@ const CollectionPage = (props: CmpProps) => {
                            rel="noopener noreferrer">{collection?.domain_ts_link}</a>
                       </div>
                     }
+                    <div className="p-1">
+                        <p className="fw-bold d-inline me-1">Number of ontologies: </p>
+                        <p className="d-inline me-1">{stats.numberOfOntologies}</p>
+                    </div>
+                    <div className="p-1">
+                        <p className="fw-bold d-inline me-1">Number of classes: </p>
+                        <p className="d-inline me-1">{stats.numberOfClasses}</p>
+                    </div>
+                    <div className="p-1">
+                        <p className="fw-bold d-inline me-1">Number of properties: </p>
+                        <p className="d-inline me-1">{stats.numberOfProperties}</p>
+                    </div>
+                    <div className="p-1">
+                        <p className="fw-bold d-inline me-1">Number of individuals: </p>
+                        <p className="d-inline me-1">{stats.numberOfIndividuals}</p>
+                    </div>
 
                 </div>
                 <div className="col-8">
