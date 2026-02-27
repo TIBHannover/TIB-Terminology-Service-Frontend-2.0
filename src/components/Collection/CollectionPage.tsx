@@ -10,6 +10,7 @@ import "../layout/ontologyList.css";
 import {getBioregistryCollection} from "../../api/collection";
 import {BioregistryCollection} from "../../api/types/collectionTypes";
 import ReactMarkdown from "react-markdown";
+import CopyLinkButton from "../common/CopyButton/CopyButton";
 
 
 type CmpProps = RouteComponentProps<{ collectionId: string }>;
@@ -211,6 +212,37 @@ const CollectionPage = (props: CmpProps) => {
         );
     }
 
+    function renderApiDoc() {
+        let collectionUrlPostfix = `schema=collection&classification=${collection?.id}&option=COMPOSITE`;
+        let searchEndpoint = `${process.env.REACT_APP_API_URL}/v2/entities?search=data&page=0&size=10&lang=en&exclusive=true&facetFields=type+ontologyId&${collectionUrlPostfix}`;
+        let ontologiesListEndpoint = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000&${collectionUrlPostfix}`;
+        let statsEndpoint = `${process.env.REACT_APP_API_URL}/v2/statsby?schema=collection&classification=NFDI4CHEM`;
+        return (
+            <div className="row">
+                <div className="col-sm-12">
+                    <p>Search (query: <b>data</b>)</p>
+                    <div className="mt-2 p-4 border-1 bg-light rounded overflow-auto text-nowrap">
+                        <CopyLinkButton valueToCopy={searchEndpoint}/>
+                        <a href={searchEndpoint} target="_blank" rel="noopener noreferrer"
+                           className="ms-2">{searchEndpoint}</a>
+                    </div>
+                    <p className="mt-4">Ontologies list</p>
+                    <div className="p-4 border-1 bg-light rounded overflow-auto text-nowrap">
+                        <CopyLinkButton valueToCopy={ontologiesListEndpoint}/>
+                        <a href={ontologiesListEndpoint} target="_blank" rel="noopener noreferrer"
+                           className="ms-2">{ontologiesListEndpoint}</a>
+                    </div>
+                    <p className="mt-4">Stats</p>
+                    <div className="p-4 border-1 bg-light rounded overflow-auto text-nowrap">
+                        <CopyLinkButton valueToCopy={statsEndpoint}/>
+                        <a href={statsEndpoint} target="_blank" rel="noopener noreferrer"
+                           className="ms-2">{statsEndpoint}</a>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     useEffect(() => {
         let processedCollectionId = collectionIdFromUrl.split("_").join(" ");
         let collectionIds = Object.keys(CollectionsMetadata);
@@ -295,6 +327,7 @@ const CollectionPage = (props: CmpProps) => {
                           {renderOntologyList()}
                       </div>
                     }
+                    {activeTabId === API_TAB_ID && renderApiDoc()}
 
                 </div>
             </div>
