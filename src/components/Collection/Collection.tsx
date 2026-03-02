@@ -53,7 +53,7 @@ const Collections = () => {
                         <img
                             className='collection-logo-in-list img-fluid '
                             alt="logo"
-                            src={collectionJson["logo"]}
+                            src={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["logo"]}
                             width={collectionJson["logo_width"] ?? 250}
                             height={collectionJson["logo_height"] ?? 130}
                         />
