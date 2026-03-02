@@ -334,28 +334,7 @@ body .site-navbar {
     background: transparent;
 }
 
-.navbar-item {
-    text-transform: uppercase;
-    outline: none;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-}
 
-.navbar-item:hover {
-    color: white;
-    text-decoration: underline;
-}
-
-.navbar-item:visited {
-    color: white;
-    text-decoration: underline;
-}
-
-.navbar-item:focus {
-    color: white;
-    text-decoration: underline;
-}
 
 body .nav-dropdown-title .dropdown-toggle,
 body .nav-dropdown-title .dropdown-toggle:hover,
@@ -795,3 +774,23 @@ body .site-tour-btn:hover {
     margin-top: 4px;
     padding: 3px;
 }
+
+body .nav-link, body .nav-link:hover{
+    /* Bootstrap Nav.Item */
+    color: #0E6668;
+    text-decoration: none;
+}
+
+.site-navbar .navbar-item {
+    text-transform: uppercase;
+    outline: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.site-navbar .navbar-item:hover, .site-navbar .navbar-item:visited, .site-navbar .navbar-item:focus {
+    color: white;
+    text-decoration: underline;
+}
+
