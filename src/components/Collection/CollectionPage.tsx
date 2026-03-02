@@ -255,7 +255,7 @@ const CollectionPage = (props: CmpProps) => {
         <div className="row bg-white p-4">
             <div className="row mb-3">
                 <div className="col-4">
-                    <img className="img-fluid" src={process.env.REACT_APP_PROJECT_SUB_PATH + collection?.logo} alt={collection?.name}/>
+                    <img className="img-fluid" src={process.env.REACT_APP_PROJECT_SUB_PATH! + collection?.logo} alt={collection?.name}/>
                     <hr/>
                     <div className="p-1">
                         <p className="fw-bold d-inline me-1">Homepage: </p>
