@@ -170,6 +170,20 @@ class Toolkit {
         }
     }
 
+    static numberPrettifier(num: number): string{
+        if(num < 1000){
+            return num.toString();
+        }
+        let result = "";
+       while(num >= 1000){
+           let res = num % 1000;
+           num = Math.floor(num / 1000);
+           result += "," + res;
+       }
+       result = num + result;
+       return result;
+    }
+
 
 }
 

@@ -12,6 +12,7 @@ import {BioregistryCollection} from "../../api/types/collectionTypes";
 import ReactMarkdown from "react-markdown";
 import CopyLinkButton from "../common/CopyButton/CopyButton";
 import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
+import Toolkit from "../../Libs/Toolkit";
 
 
 type CmpProps = RouteComponentProps<{ collectionId: string }>;
@@ -166,19 +167,19 @@ const CollectionPage = (props: CmpProps) => {
             <>
                 <div className="p-1">
                     <p className="fw-bold d-inline me-1">Number of ontologies: </p>
-                    <p className="d-inline me-1">{stats.numberOfOntologies}</p>
+                    <p className="d-inline me-1">{Toolkit.numberPrettifier(stats.numberOfOntologies)}</p>
                 </div>
                 <div className="p-1">
                     <p className="fw-bold d-inline me-1">Number of classes: </p>
-                    <p className="d-inline me-1">{stats.numberOfClasses}</p>
+                    <p className="d-inline me-1">{Toolkit.numberPrettifier(stats.numberOfClasses)}</p>
                 </div>
                 <div className="p-1">
                     <p className="fw-bold d-inline me-1">Number of properties: </p>
-                    <p className="d-inline me-1">{stats.numberOfProperties}</p>
+                    <p className="d-inline me-1">{Toolkit.numberPrettifier(stats.numberOfProperties)}</p>
                 </div>
                 <div className="p-1">
                     <p className="fw-bold d-inline me-1">Number of individuals: </p>
-                    <p className="d-inline me-1">{stats.numberOfIndividuals}</p>
+                    <p className="d-inline me-1">{Toolkit.numberPrettifier(stats.numberOfIndividuals)}</p>
                 </div>
             </>
         );
