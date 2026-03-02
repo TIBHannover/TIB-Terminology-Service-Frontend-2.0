@@ -11,6 +11,8 @@ import {getBioregistryCollection} from "../../api/collection";
 import {BioregistryCollection} from "../../api/types/collectionTypes";
 import ReactMarkdown from "react-markdown";
 import CopyLinkButton from "../common/CopyButton/CopyButton";
+import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
+import commonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 
 
 type CmpProps = RouteComponentProps<{ collectionId: string }>;
@@ -27,14 +29,21 @@ const ABOUT_TAB_ID = "about";
 const BIOREGISTRY_TAB_ID = "bioregistry";
 const ONTOLOGIES_TAB_ID = "ontologies";
 const API_TAB_ID = "api";
+const TABS_LIST = [ABOUT_TAB_ID, BIOREGISTRY_TAB_ID, ONTOLOGIES_TAB_ID, API_TAB_ID];
 
 const CollectionPage = (props: CmpProps) => {
     const collectionIdFromUrl = props.match.params.collectionId;
     const CollectionsMetadata = collectionsInfoJson as CollectionsData;
 
+    const urlFactory = new CommonUrlFactory();
+    let tabFromUrl = urlFactory.getParam({name: "tab"}) ?? ABOUT_TAB_ID;
+    if(!TABS_LIST.includes(tabFromUrl)){
+        tabFromUrl = ABOUT_TAB_ID;
+    }
+
     const [collection, setCollection] = useState<CollectionJsonData | undefined>(undefined);
     const [loading, setLoading] = useState(true);
-    const [activeTabId, setActiveTabId] = useState<string>(ABOUT_TAB_ID);
+    const [activeTabId, setActiveTabId] = useState<string>(tabFromUrl);
     const [ontologyList, setOntologyList] = useState<TsOntology[]>([]);
     const [bioregistryCollection, setBioregistryCollection] = useState<BioregistryCollection>({});
     const [stats, setStats] = useState<stats>({
@@ -181,7 +190,10 @@ const CollectionPage = (props: CmpProps) => {
             <Nav
                 variant="tabs"
                 defaultActiveKey={activeTabId}
-                onSelect={(key) => setActiveTabId(key as string)}
+                onSelect={(key) => {
+                    urlFactory.setParam({name: "tab", value: key as string});
+                    setActiveTabId(key as string);
+                }}
                 className="mb-3"
             >
                 <Nav.Item>
