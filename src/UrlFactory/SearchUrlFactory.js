@@ -31,6 +31,7 @@ class SearchUrlFactory {
     searchUrl.pathname = process.env.REACT_APP_PROJECT_SUB_PATH + "/search";
     searchUrl.searchParams.delete(SiteUrlParamNames.Iri);
     searchUrl.searchParams.delete(SiteUrlParamNames.IssueType);
+    searchUrl.searchParams.delete("tab"); // if set on the collection page
     searchUrl.searchParams.set(SiteUrlParamNames.SearchQuery, label);
     searchUrl.searchParams.set(SiteUrlParamNames.Page, 1);
     ontologyId && searchUrl.searchParams.set(SiteUrlParamNames.Ontology, ontologyId);
