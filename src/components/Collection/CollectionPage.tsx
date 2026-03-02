@@ -12,7 +12,6 @@ import {BioregistryCollection} from "../../api/types/collectionTypes";
 import ReactMarkdown from "react-markdown";
 import CopyLinkButton from "../common/CopyButton/CopyButton";
 import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
-import commonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 
 
 type CmpProps = RouteComponentProps<{ collectionId: string }>;
@@ -135,7 +134,7 @@ const CollectionPage = (props: CmpProps) => {
         let collectionUrlPostfix = `schema=collection&classification=${collection?.id}&option=COMPOSITE`;
         let searchEndpoint = `${process.env.REACT_APP_API_URL}/v2/entities?search=data&page=0&size=10&lang=en&exclusive=true&facetFields=type+ontologyId&${collectionUrlPostfix}`;
         let ontologiesListEndpoint = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000&${collectionUrlPostfix}`;
-        let statsEndpoint = `${process.env.REACT_APP_API_URL}/v2/statsby?schema=collection&classification=NFDI4CHEM`;
+        let statsEndpoint = `${process.env.REACT_APP_API_URL}/v2/statsby?schema=collection&classification=${collection?.id}`;
         return (
             <div className="row">
                 <div className="col-sm-12">
