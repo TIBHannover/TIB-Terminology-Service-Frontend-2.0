@@ -37,7 +37,7 @@ const CollectionPage = (props: CmpProps) => {
 
     const urlFactory = new CommonUrlFactory();
     let tabFromUrl = urlFactory.getParam({name: "tab"}) ?? ABOUT_TAB_ID;
-    if(!TABS_LIST.includes(tabFromUrl)){
+    if (!TABS_LIST.includes(tabFromUrl)) {
         tabFromUrl = ABOUT_TAB_ID;
     }
 
@@ -130,7 +130,6 @@ const CollectionPage = (props: CmpProps) => {
     }
 
 
-
     function renderApiDoc() {
         let collectionUrlPostfix = `schema=collection&classification=${collection?.id}&option=COMPOSITE`;
         let searchEndpoint = `${process.env.REACT_APP_API_URL}/v2/entities?search=data&page=0&size=10&lang=en&exclusive=true&facetFields=type+ontologyId&${collectionUrlPostfix}`;
@@ -185,8 +184,8 @@ const CollectionPage = (props: CmpProps) => {
         );
     }
 
-    function renderTabs(){
-        return(
+    function renderTabs() {
+        return (
             <Nav
                 variant="tabs"
                 defaultActiveKey={activeTabId}
@@ -200,7 +199,13 @@ const CollectionPage = (props: CmpProps) => {
                     <Nav.Link eventKey="about">About</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="bioregistry">Bioregistry Info</Nav.Link>
+                    <Nav.Link
+                        eventKey="bioregistry"
+                        title="The Semantic Farm is an open source, domain-agnostic, community curated semantic space registry, meta-registry, and compact identifier resolver. "
+                    >
+                        Semantic
+                        Farm
+                    </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link eventKey="ontologies">Ontologies ({ontologyList.length})</Nav.Link>
@@ -255,7 +260,8 @@ const CollectionPage = (props: CmpProps) => {
         <div className="row bg-white p-4">
             <div className="row mb-3">
                 <div className="col-4">
-                    <img className="img-fluid" src={process.env.REACT_APP_PROJECT_SUB_PATH! + collection?.logo} alt={collection?.name}/>
+                    <img className="img-fluid" src={process.env.REACT_APP_PROJECT_SUB_PATH! + collection?.logo}
+                         alt={collection?.name}/>
                     <hr/>
                     <div className="p-1">
                         <p className="fw-bold d-inline me-1">Homepage: </p>
@@ -274,7 +280,8 @@ const CollectionPage = (props: CmpProps) => {
                 <div className="col-8">
                     {renderTabs()}
                     {activeTabId === ABOUT_TAB_ID && renderAboutSection()}
-                    {activeTabId === BIOREGISTRY_TAB_ID && <BioregistryPage bioregistryCollection={bioregistryCollection}/>}
+                    {activeTabId === BIOREGISTRY_TAB_ID &&
+                      <BioregistryPage bioregistryCollection={bioregistryCollection}/>}
                     {activeTabId === ONTOLOGIES_TAB_ID &&
                       <div className="row p-4 bg-light">
                           {renderOntologyList()}
@@ -290,7 +297,7 @@ const CollectionPage = (props: CmpProps) => {
 }
 
 
-const BioregistryPage = (props:{bioregistryCollection: BioregistryCollection}) => {
+const BioregistryPage = (props: { bioregistryCollection: BioregistryCollection }) => {
     const {bioregistryCollection} = props;
 
     function renderAuthors() {
@@ -380,9 +387,17 @@ const BioregistryPage = (props:{bioregistryCollection: BioregistryCollection}) =
     return (
         <div className="row">
             <div className="col-sm-12">
-                <div>
-                    <p className="d-inline">Bioregistry identifier: </p>
-                    <p className="d-inline fw-bold">{bioregistryCollection.identifier}</p>
+                <div className="row">
+                    <div className="col-sm-6">
+                        <p className="d-inline">Bioregistry identifier: </p>
+                        <p className="d-inline fw-bold">{bioregistryCollection.identifier}</p>
+                    </div>
+                    <div className="col-sm-6 text-end">
+                        <a href="https://semantic.farm/" target="_blank" rel="noopener noreferrer">
+                            <small>About Semantic Farm</small>
+                            <i className="fa fa-external-link border-0" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
                 {bioregistryCollection.description &&
                   <div className="mt-2 p-4 border-1 bg-light rounded">
