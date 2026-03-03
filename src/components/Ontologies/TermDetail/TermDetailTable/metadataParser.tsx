@@ -129,7 +129,6 @@ export function propertyMetaData(term: TsProperty) {
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }
-
   return metadata;
 }
 

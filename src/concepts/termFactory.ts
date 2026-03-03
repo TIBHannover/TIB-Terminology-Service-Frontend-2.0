@@ -9,18 +9,17 @@ export class TermFactory {
 
   static createTermForTS(termData: OntologyTermDataV2, instancesList: OntologyTermData[] = []) {
     let type = "";
-    if (termData.type && termData.type.length > 1) {
+    if (termData.type && termData.type.length > 0) {
       type = termData.type[0];
     }
-    switch (type) {
-      case "class" || "classes":
-        return new TsClass(termData, instancesList);
-      case "property" || "properties":
-        return new TsProperty(termData);
-      case "individual" || "individuals":
-        return new TsIndividual(termData);
-      default:
-        return new TsTerm(termData)
+    if(["class", "classes"].includes(type)){
+      return new TsClass(termData, instancesList);
+    }else if(["property", "properties", "dataProperty", "objectProperty", "annotationProperty"].includes(type)){
+      return new TsProperty(termData);
+    }else if(["individual", "individuals"].includes(type)){
+      return new TsIndividual(termData);
+    }else{
+      return new TsTerm(termData)
     }
   }
 }
