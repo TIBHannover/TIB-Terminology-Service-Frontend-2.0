@@ -17,6 +17,7 @@ import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import ChangesTimeline from "../../Ondet/ChangesTimeline";
+import PublicationsLinks from "../PublicationsLinks/PublicationsLinks";
 import {RouteComponentProps} from 'react-router-dom';
 import {TsOntology, TsClass, TsProperty, TsSkosTerm} from '../../../concepts';
 
@@ -29,6 +30,7 @@ const TERM_LIST_TAB_ID = 4;
 const NOTES_TAB_ID = 5;
 const GIT_ISSUE_LIST_ID = 6;
 const ONDET_TAB_ID = 7;
+const PUBLICATIONS_LINKS_TAB_ID = 8;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
     "": OVERVIEW_TAB_ID,
@@ -38,7 +40,8 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
     "termList": TERM_LIST_TAB_ID,
     "notes": NOTES_TAB_ID,
     "gitpanel": GIT_ISSUE_LIST_ID,
-    "ondet": ONDET_TAB_ID
+    "ondet": ONDET_TAB_ID,
+    "publications": PUBLICATIONS_LINKS_TAB_ID,
 }
 
 type CmpPropp = RouteComponentProps<{ ontologyId: string, tab?: string }>;
@@ -302,6 +305,26 @@ const OntologyPage = (props: CmpPropp) => {
                                                 try {
                                                     const fileUrl = new URL(ontology.versionedUrl);
 
+                                                    return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
+                                                        ? <ChangesTimeline ontologyRawUrl={ontology.versionedUrl}/>
+                                                        : errorMessage;
+                                                } catch (error) {
+                                                    return errorMessage;
+                                                }
+                                            })()
+                                        }
+                                        {!waiting && activeTab === PUBLICATIONS_LINKS_TAB_ID &&
+                                          <PublicationsLinks/>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </OntologyPageContext.Provider>
+            </div>
+        )
+    }
                                                     return (fileUrl.host === "raw.githubusercontent.com" || fileUrl.host === "gitlab.com")
                                                         ? <ChangesTimeline ontologyRawUrl={ontology.versionedUrl}/>
                                                         : errorMessage;
