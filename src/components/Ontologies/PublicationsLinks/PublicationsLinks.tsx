@@ -4,6 +4,7 @@ import {OntologyPageContext} from "../../../context/OntologyPageContext";
 import {AppContext} from "../../../context/AppContext";
 import {Publication} from "../../../api/types/publicationsLinks";
 import {TextInput} from "../../common/Input/Input";
+import "../../layout/publicationLink.css";
 
 
 const PublicationsLinks = () => {
@@ -55,6 +56,36 @@ const PublicationsLinks = () => {
         );
     }
 
+    function renderPublicationList() {
+        return (
+            <>
+                {publicationsLinks.map((pub: Publication) => {
+                    return (
+                        <div className="row publication-card">
+                            <div className="col-sm-12">
+                                <p className="fs-6">{pub.citation}</p>
+                                <a href={"https://doi.org/" + pub.doi} target="_blank"
+                                   rel="noreferrer nofollow">
+                                    {pub.doi}
+                                    <i className="fa fa-solid fa-up-right-from-square border-0"></i>
+                                </a>
+                            </div>
+                        </div>
+                    )
+                })}
+            </>
+        );
+    }
+
+    useEffect(() => {
+        getPublicationsLinks(ontologyPageContext.ontology.ontologyId).then((pubList: Publication[]) => {
+            setPublicationsLinks(pubList);
+            setLoading(false);
+        }).catch((error: any) => {
+            setLoading(false);
+        });
+    }, []);
+
 
     if (process.env.REACT_APP_PUBLICATION_LINKS !== "true") {
         return <></>;
@@ -63,19 +94,26 @@ const PublicationsLinks = () => {
     return (
         <div className="row">
             <div className="col-sm-12">
-                <h4>Publications</h4>
+                <div className="row">
+                    <div className="col-sm-9">
+                        <h4 className="mb-3"><b>Related publications</b></h4>
+                    </div>
+                    <div className="col-sm-3 text-end">
+                        <button className="btn btn-secondary" onClick={() => {
+                            setCreationMode(true);
+                        }}><i className="fa fa-plus border-0"></i> Publication to this ontology
+                        </button>
+                    </div>
+                </div>
                 {creationMode && renderPublicationCreationForm()}
                 {!creationMode &&
                   <div className="row">
                     <div className="col-sm-9">
-                      List
+                        {loading && <div className="isLoading"></div>}
+                        {!loading && publicationsLinks.length === 0 && <p>No publications found</p>}
+                        {!loading && publicationsLinks.length > 0 && renderPublicationList()}
                     </div>
-                    <div className="col-sm-3">
-                      <button className="btn btn-secondary" onClick={() => {
-                          setCreationMode(true);
-                      }}><i className="fa fa-plus border-0"></i> Publication to this ontology
-                      </button>
-                    </div>
+
                   </div>
                 }
             </div>
