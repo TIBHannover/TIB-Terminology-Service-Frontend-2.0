@@ -5,6 +5,8 @@ import {AppContext} from "../../../context/AppContext";
 import {Publication} from "../../../api/types/publicationsLinks";
 import {TextInput} from "../../common/Input/Input";
 import "../../layout/publicationLink.css";
+import {DeleteModal} from "../../common/DeleteModal/DeleteModal";
+import {getTsPluginHeaders} from "../../../api/header";
 
 
 const PublicationsLinks = () => {
@@ -57,18 +59,37 @@ const PublicationsLinks = () => {
     }
 
     function renderPublicationList() {
+        const callHeader = getTsPluginHeaders({withAccessToken: true});
+        let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/pub_link/delete/";
+        let redirectAfterDeleteUrl = process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/" + ontologyPageContext.ontology.ontologyId + "/publications/";
         return (
             <>
                 {publicationsLinks.map((pub: Publication) => {
                     return (
                         <div className="row publication-card">
-                            <div className="col-sm-12">
+                            <div className="col-sm-11">
                                 <p className="fs-6">{pub.citation}</p>
                                 <a href={"https://doi.org/" + pub.doi} target="_blank"
                                    rel="noreferrer nofollow">
                                     {pub.doi}
                                     <i className="fa fa-solid fa-up-right-from-square border-0"></i>
                                 </a>
+                            </div>
+                            <div className="col-sm-1 text-end">
+                                <DeleteModal
+                                    modalId={String(pub.id) ?? ""}
+                                    callHeaders={callHeader}
+                                    deleteEndpoint={deleteEndpoint + pub.id + "/"}
+                                    afterDeleteRedirectUrl={redirectAfterDeleteUrl}
+                                    key={"deletePublink" + pub.id}
+                                    afterDeleteProcess={() => {
+                                    }}
+                                    objectToDelete={pub}
+                                    method="DELETE"
+                                    //@ts-ignore
+                                    btnText={<i className="fa fa-close fa-borderless"></i>}
+                                    btnClass="extra-sm-btn ml-2"
+                                />
                             </div>
                         </div>
                     )
