@@ -14,6 +14,7 @@ const PublicationsLinks = () => {
     const [publicationsLinks, setPublicationsLinks] = useState<Publication[]>([]);
     const [creationMode, setCreationMode] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [enteredDoi, setEnteredDoi] = useState("");
 
 
     function renderPublicationCreationForm() {
@@ -33,13 +34,20 @@ const PublicationsLinks = () => {
                             defaultValue=""
                             label="Publication DOI"
                             required={true}
-                            onchange={() => {
+                            onchange={(e: React.ChangeEvent<Element>) => {
+                                let value = (e.target as HTMLInputElement).value;
+                                setEnteredDoi(value);
                             }}
                         />
                     </div>
                     <div className="col-sm-4 mt-4">
                         <button className="btn btn-secondary" onClick={() => {
-                        }}>Add
+                            createPublicationLink(ontologyPageContext.ontology.ontologyId, enteredDoi).then((pub: Publication) => {
+                                console.log("created publication", pub);
+                            })
+                        }}
+                        >
+                            Add
                         </button>
                     </div>
                 </div>
