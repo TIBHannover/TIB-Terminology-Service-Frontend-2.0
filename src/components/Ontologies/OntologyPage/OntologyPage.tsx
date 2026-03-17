@@ -313,7 +313,7 @@ const OntologyPage = (props: CmpPropp) => {
                                                 }
                                             })()
                                         }
-                                        {!waiting && activeTab === PUBLICATIONS_LINKS_TAB_ID &&
+                                        {!waiting && activeTab === PUBLICATIONS_LINKS_TAB_ID && process.env.REACT_APP_PUBLICATION_LINKS === "true" &&
                                           <PublicationsLinks/>
                                         }
                                     </div>
