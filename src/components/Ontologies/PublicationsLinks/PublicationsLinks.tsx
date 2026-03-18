@@ -110,23 +110,24 @@ const PublicationsLinks = () => {
                                     <i className="fa fa-solid fa-up-right-from-square border-0"></i>
                                 </a>
                             </div>
-                            <div className="col-sm-1 text-end">
+                            {appContext.user && appContext.user.id === pub.creator &&
+                              <div className="col-sm-1 text-end">
                                 <DeleteModal
-                                    modalId={String(pub.id) ?? ""}
-                                    callHeaders={callHeader}
-                                    deleteEndpoint={deleteEndpoint + pub.id + "/"}
-                                    afterDeleteRedirectUrl={redirectAfterDeleteUrl}
-                                    key={"deletePublink" + pub.id}
-                                    afterDeleteProcess={() => {
-                                    }}
-                                    objectToDelete={pub}
-                                    method="DELETE"
+                                  modalId={String(pub.id) ?? ""}
+                                  callHeaders={callHeader}
+                                  deleteEndpoint={deleteEndpoint + pub.id + "/"}
+                                  afterDeleteRedirectUrl={redirectAfterDeleteUrl}
+                                  key={"deletePublink" + pub.id}
+                                  afterDeleteProcess={() => {
+                                  }}
+                                  objectToDelete={pub}
+                                  method="DELETE"
                                     //@ts-ignore
-                                    btnText={<i className="fa fa-close fa-borderless"></i>}
-                                    btnClass="extra-sm-btn ml-2"
+                                  btnText={<i className="fa fa-close fa-borderless"></i>}
+                                  btnClass="extra-sm-btn ml-2"
                                 />
-                            </div>
-
+                              </div>
+                            }
                         </div>
                     )
                 })}

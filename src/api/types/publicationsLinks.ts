@@ -1,4 +1,5 @@
 export type Publication = {
+    creator?: string,
     id?: number,
     doi?: string,
     citation?: string,
