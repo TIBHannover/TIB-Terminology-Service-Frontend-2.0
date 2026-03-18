@@ -8,6 +8,7 @@ import "../../layout/publicationLink.css";
 import {DeleteModal} from "../../common/DeleteModal/DeleteModal";
 import {getTsPluginHeaders} from "../../../api/header";
 import AlertBox from "../../common/Alerts/Alerts";
+import Login from "../../User/Login/TS/Login";
 
 
 const PublicationsLinks = () => {
@@ -22,6 +23,7 @@ const PublicationsLinks = () => {
     const [showCreationSuccessMessage, setShowCreationSuccessMessage] = useState(false);
     const [creationError, setCreationError] = useState("");
     const [creationLoading, setCreationLoading] = useState(false);
+    const [loginModal, setLoginModal] = useState(false);
 
 
     async function handlePublicationCreation() {
@@ -158,8 +160,15 @@ const PublicationsLinks = () => {
                     </div>
                     <div className="col-sm-3 text-end">
                         <button className="btn btn-secondary" onClick={() => {
+                            if (!appContext.user) {
+                                setLoginModal(true);
+                                setTimeout(() => setLoginModal(false), 1000);
+                                return;
+                            }
                             setCreationMode(true);
-                        }}><i className="fa fa-plus border-0"></i> Publication to this ontology
+                        }}
+                        >
+                            <i className="fa fa-plus border-0"></i> Publication to this ontology
                         </button>
                     </div>
                 </div>
@@ -178,6 +187,9 @@ const PublicationsLinks = () => {
                   </div>
                 }
             </div>
+            {!appContext.user &&
+              <Login isModal={true} showModal={loginModal} withoutButton={true}/>
+            }
         </div>
     );
 }
