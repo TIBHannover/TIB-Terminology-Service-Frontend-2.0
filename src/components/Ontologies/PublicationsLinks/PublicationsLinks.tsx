@@ -7,6 +7,7 @@ import {TextInput} from "../../common/Input/Input";
 import "../../layout/publicationLink.css";
 import {DeleteModal} from "../../common/DeleteModal/DeleteModal";
 import {getTsPluginHeaders} from "../../../api/header";
+import AlertBox from "../../common/Alerts/Alerts";
 
 
 const PublicationsLinks = () => {
@@ -18,7 +19,38 @@ const PublicationsLinks = () => {
     const [creationMode, setCreationMode] = useState(false);
     const [loading, setLoading] = useState(true);
     const [enteredDoi, setEnteredDoi] = useState("");
+    const [showCreationSuccessMessage, setShowCreationSuccessMessage] = useState(false);
+    const [creationError, setCreationError] = useState("");
+    const [creationLoading, setCreationLoading] = useState(false);
 
+
+    async function handlePublicationCreation() {
+        if (!enteredDoi) {
+            let doiInput = document.getElementById("pub-doi") as HTMLInputElement;
+            doiInput.style.borderColor = "red";
+            return;
+        }
+        setCreationLoading(true);
+        let pub = await createPublicationLink(ontologyPageContext.ontology.ontologyId, enteredDoi);
+        if (pub.id) {
+            setCreationMode(false);
+            setShowCreationSuccessMessage(true);
+            setCreationError("");
+            setPublicationsLinks([...publicationsLinks, pub]);
+            setEnteredDoi("");
+            setCreationLoading(false);
+            setTimeout(() => {
+                setShowCreationSuccessMessage(false);
+            }, 2000);
+        } else {
+            setCreationError(pub.fetchError ?? "");
+            setShowCreationSuccessMessage(false);
+            setCreationLoading(false);
+            setTimeout(() => {
+                setCreationError("");
+            }, 4000);
+        }
+    }
 
     function renderPublicationCreationForm() {
         return (
@@ -29,6 +61,9 @@ const PublicationsLinks = () => {
                         </button>
                     </div>
                 </div>
+                {creationError &&
+                  <AlertBox message={"Error: " + creationError} type="danger"/>
+                }
                 <div className="row">
                     <div className="col-sm-8">
                         <TextInput
@@ -39,18 +74,18 @@ const PublicationsLinks = () => {
                             required={true}
                             onchange={(e: React.ChangeEvent<Element>) => {
                                 let value = (e.target as HTMLInputElement).value;
+                                (e.target as HTMLInputElement).style.borderColor = "";
                                 setEnteredDoi(value);
+                                setCreationError("");
                             }}
                         />
                     </div>
                     <div className="col-sm-4 mt-4">
-                        <button className="btn btn-secondary" onClick={() => {
-                            createPublicationLink(ontologyPageContext.ontology.ontologyId, enteredDoi).then((pub: Publication) => {
-                                console.log("created publication", pub);
-                            })
-                        }}
-                        >
+                        <button className="btn btn-secondary" onClick={handlePublicationCreation}>
                             Add
+                            {creationLoading &&
+                              <div className="isLoading-btn"></div>
+                            }
                         </button>
                     </div>
                 </div>
@@ -91,6 +126,7 @@ const PublicationsLinks = () => {
                                     btnClass="extra-sm-btn ml-2"
                                 />
                             </div>
+
                         </div>
                     )
                 })}
@@ -113,9 +149,9 @@ const PublicationsLinks = () => {
     }
 
     return (
-        <div className="row">
+        <div className="row publication-links-container">
             <div className="col-sm-12">
-                <div className="row">
+                <div className="row mb-3">
                     <div className="col-sm-9">
                         <h4 className="mb-3"><b>Related publications</b></h4>
                     </div>
@@ -127,6 +163,9 @@ const PublicationsLinks = () => {
                     </div>
                 </div>
                 {creationMode && renderPublicationCreationForm()}
+                {showCreationSuccessMessage &&
+                  <AlertBox message="Publication has been added." type="success"/>
+                }
                 {!creationMode &&
                   <div className="row">
                     <div className="col-sm-9">

@@ -15,7 +15,7 @@ export async function createPublicationLink(ontology_id: string, doi: string): P
             body: JSON.stringify({ontology_id: ontology_id, doi: doi})
         });
         if (!resp.ok) {
-            return {};
+            return {fetchError: await resp.text()};
         }
         let data = (await resp.json()) as apiResp;
         if (data["_result"]["created"]) {
