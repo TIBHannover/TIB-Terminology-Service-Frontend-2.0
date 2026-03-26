@@ -52,13 +52,14 @@ const SearchResult = () => {
     const [loading, setLoading] = useState(true);
     const [lang, setLang] = useState(language);
     const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");
+    const [obsoletes, setObsolete] = useState(searchUrlFactory.obsoletes ? searchUrlFactory.obsoletes === "true" : Toolkit.getObsoleteFlagValue());
+    const [exact, setExact] = useState(searchUrlFactory.exact === "true")
 
 
     const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value: 10}, {label: "20", value: 20}, {
         label: "30",
         value: 30
     }, {label: "40", value: 40}];
-    const exact = searchUrlFactory.exact === "true";
     const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
     const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
@@ -86,7 +87,6 @@ const SearchResult = () => {
         searchUrlFactory.setIncludeImported({includeImported: appContext.includeImportedTerms});
 
         try {
-            let obsoletes = Toolkit.getObsoleteFlagValue();
             let searchParams = {
                 searchQuery: searchQuery,
                 page: pageNumber,
@@ -409,13 +409,16 @@ const SearchResult = () => {
         setSearchResult([]);
         search();
         createFilterTags();
-    }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, searchQuery]);
+    }, [pageNumber, pageSize, selectedOntologies, selectedTypes, selectedCollections, lang, searchQuery, obsoletes, exact]);
 
     useEffect(() => {
-        if (searchUrlFactory.searchQuery !== searchQuery) {
-            setSearchQuery(searchUrlFactory.searchQuery ?? "");
+        let newSearchUrlFactory = new SearchUrlFactory();
+        if (newSearchUrlFactory.searchQuery !== searchQuery) {
+            setSearchQuery(newSearchUrlFactory.searchQuery ?? "");
             setPageNumber(1);
         }
+        setObsolete(newSearchUrlFactory.obsoletes ? newSearchUrlFactory.obsoletes === "true" : Toolkit.getObsoleteFlagValue());
+        setExact(newSearchUrlFactory.exact === "true");
     }, [location.search]);
 
 
