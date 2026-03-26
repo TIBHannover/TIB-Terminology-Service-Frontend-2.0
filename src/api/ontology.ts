@@ -1,14 +1,14 @@
-import { getCallSetting } from "./constants";
+import {getCallSetting} from "./constants";
 import {
     OntologyData,
     OntologyShapeTestResult,
     OntologySuggestionData,
     OntologyPurlValidationRes
 } from "./types/ontologyTypes";
-import { getTsPluginHeaders } from "./header";
-import { TsPluginHeader } from "./types/headerTypes";
-import { TsOntology, TsClass, TsProperty } from "../concepts";
-import { OntologyTermDataV2 } from "./types/ontologyTypes";
+import {getTsPluginHeaders} from "./header";
+import {TsPluginHeader} from "./types/headerTypes";
+import {TsOntology, TsClass, TsProperty} from "../concepts";
+import {OntologyTermDataV2} from "./types/ontologyTypes";
 
 
 type constructorProps = { ontologyId?: string, lang?: string };
@@ -18,7 +18,7 @@ class OntologyApi {
     ontologyId: string = "";
     lang: string = "en";
 
-    constructor({ ontologyId, lang }: constructorProps) {
+    constructor({ontologyId, lang}: constructorProps) {
         this.ontologyId = ontologyId ?? "";
         this.lang = lang ?? "en";
     }
@@ -76,7 +76,7 @@ class OntologyApi {
 
     async fetchRootClasses(): Promise<{ roots: TsClass[], obsoletes: TsClass[] }> {
         try {
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
             let result = await fetch(url, getCallSetting);
             let respData = await result.json();
             let terms = respData['elements'] as OntologyTermDataV2[];
@@ -91,16 +91,16 @@ class OntologyApi {
                     obsoleteClasses.push(classObj);
                 }
             }
-            return { roots: rootClasses, obsoletes: obsoleteClasses };
+            return {roots: rootClasses, obsoletes: obsoleteClasses};
         } catch (e) {
-            return { roots: [], obsoletes: [] };
+            return {roots: [], obsoletes: []};
         }
     }
 
 
     async fetchRootProperties(): Promise<{ roots: TsProperty[], obsoletes: TsProperty[] }> {
         try {
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
             let result = await fetch(url, getCallSetting);
             let respData = await result.json();
             let terms = respData['elements'] as OntologyTermDataV2[];
@@ -115,9 +115,9 @@ class OntologyApi {
                     obsoleteProperties.push(propObj);
                 }
             }
-            return { roots: rootProperties, obsoletes: obsoleteProperties };
+            return {roots: rootProperties, obsoletes: obsoleteProperties};
         } catch (e) {
-            return { roots: [], obsoletes: [] };
+            return {roots: [], obsoletes: []};
         }
     }
 
@@ -126,9 +126,9 @@ class OntologyApi {
 
 export async function runShapeTest(ontologyPurl: string): Promise<OntologyShapeTestResult | boolean> {
     try {
-        let headers = getTsPluginHeaders({ withAccessToken: true, isJson: false });
+        let headers = getTsPluginHeaders({withAccessToken: true, isJson: false});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/testshape?purl=' + ontologyPurl;
-        let result = await fetch(url, { method: 'GET', headers: headers });
+        let result = await fetch(url, {method: 'GET', headers: headers});
         if (!result.ok) {
             return false;
         }
@@ -148,9 +148,9 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
             // @ts-ignore
             form[key] = formDataAny[key];
         }
-        let headers: TsPluginHeader = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+        let headers: TsPluginHeader = getTsPluginHeaders({isJson: true, withAccessToken: true});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/create/';
-        let result: any = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(form) });
+        let result: any = await fetch(url, {method: 'POST', headers: headers, body: JSON.stringify(form)});
         if (result.status === 200) {
             result = await result.json();
             result = result['_result']['response'];
@@ -165,9 +165,9 @@ export async function submitOntologySuggestion(formData: OntologySuggestionData)
 
 export async function checkSuggestionExist(purl: string): Promise<boolean> {
     try {
-        let headers = getTsPluginHeaders({ withAccessToken: true, isJson: false });
+        let headers = getTsPluginHeaders({withAccessToken: true, isJson: false});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/suggestion_exist?purl=' + purl;
-        let result = await fetch(url, { method: 'GET', headers: headers });
+        let result = await fetch(url, {method: 'GET', headers: headers});
         if (result.status !== 200) {
             return false;
         }
@@ -182,17 +182,17 @@ export async function checkSuggestionExist(purl: string): Promise<boolean> {
 
 export async function checkOntologyPurlIsValidUrl(purl: string): Promise<OntologyPurlValidationRes> {
     try {
-        let headers = getTsPluginHeaders({ withAccessToken: false, isJson: false });
+        let headers = getTsPluginHeaders({withAccessToken: false, isJson: false});
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/purl_is_valid?purl=' + purl;
-        let result = await fetch(url, { method: 'GET', headers: headers });
+        let result = await fetch(url, {method: 'GET', headers: headers});
         if (result.status !== 200) {
-            return { "valid": false, "reason": "unknown" };
+            return {"valid": false, "reason": "unknown"};
         }
         let data = await result.json();
         return data['_result'];
 
     } catch (e) {
-        return { "valid": false, "reason": "unknown" };
+        return {"valid": false, "reason": "unknown"};
     }
 }
 
