@@ -1,52 +1,52 @@
-import { useState, useEffect, useRef, useContext } from 'react';
-import { useHistory, useLocation } from 'react-router-dom'
+import {useState, useEffect, useRef, useContext} from 'react';
+import {useHistory, useLocation} from 'react-router-dom'
 import RenderSearchForm from './RenderSearchForm';
 import AdvancedSearch from './AdvancedSearch';
-import { keyboardNavigationForJumpto } from './KeyboardNavigation';
-import { getJumpToResult, getAutoCompleteResult } from '../../../api/search';
+import {keyboardNavigationForJumpto} from './KeyboardNavigation';
+import {getJumpToResult, getAutoCompleteResult} from '../../../api/search';
 import Toolkit from '../../../Libs/Toolkit';
 import OntologyLib from '../../../Libs/OntologyLib';
 import '../../layout/jumpTo.css';
 import '../../layout/searchBar.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
-import { AppContext } from '../../../context/AppContext';
-import { storeUserSettings } from '../../../api/user';
+import {AppContext} from '../../../context/AppContext';
+import {storeUserSettings} from '../../../api/user';
 import SearchLib from '../../../Libs/searchLib';
 
 
 const SearchForm = () => {
-
+  
   /* 
     The search form component is used to render the search form and handle the search input. 
     It also handles the search input change, search input keydown, search trigger, 
     exact checkbox click, obsoletes checkbox click, advanced search toggle, 
     and search url creation.
   */
-
+  
   const appContext = useContext(AppContext);
   const navigator = useHistory();
   const location = useLocation();
-
+  
   const searchUrlFactory = new SearchUrlFactory();
-
+  
   let advSearchEnabledLoad = searchUrlFactory.advancedSearchEnabled === "true" ? true : appContext.userSettings.advancedSearchEnabled;
   advSearchEnabledLoad = advSearchEnabledLoad ? true : false;
-
+  
   const [searchQuery, setSearchQuery] = useState(searchUrlFactory.searchQuery ? searchUrlFactory.searchQuery : "");
   const [ontologyId, setOntologyId] = useState(OntologyLib.getCurrentOntologyIdFromUrlPath());
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [jumpToResult, setJumpToResult] = useState([]);
   const [advSearchEnabled, setAdvSearchEnabled] = useState(advSearchEnabledLoad);
-
+  
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
   const exact = (searchUrlFactory.exact === "true");
-
+  
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
-
-
+  
+  
   async function handleSearchInputChange(e) {
     let inputForAutoComplete = {};
     let searchQuery = e.target.value;
@@ -77,7 +77,7 @@ const SearchForm = () => {
     }
     inputForAutoComplete['searchUnderIris'] = searchUnderIris;
     inputForAutoComplete['searchUnderAllIris'] = searchUnderAllIris;
-
+    
     let [autoCompleteResult, jumpToResult] = await Promise.all([
       getAutoCompleteResult(inputForAutoComplete, resultCount),
       getJumpToResult(inputForAutoComplete, resultCount)
@@ -85,8 +85,8 @@ const SearchForm = () => {
     setJumpToResult(!ontologyId ? jumpToResult : []);
     setAutoCompleteResult(autoCompleteResult);
   }
-
-
+  
+  
   function handleKeyDown(e) {
     if (document.getElementsByClassName("selected-by-arrow-key").length !== 0) {
       return;
@@ -95,8 +95,8 @@ const SearchForm = () => {
       triggerSearch();
     }
   }
-
-
+  
+  
   function setSearchUrl(label) {
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     return searchUrlFactory.createSearchUrlForAutoSuggestItem({
@@ -107,8 +107,8 @@ const SearchForm = () => {
       fromOntologyPage: !!ontologyId
     });
   }
-
-
+  
+  
   function triggerSearch() {
     if (searchQuery.length === 0) {
       return true;
@@ -118,8 +118,8 @@ const SearchForm = () => {
     setJumpToResult([]);
     navigator.push(searchUrl);
   }
-
-
+  
+  
   function handleJumptoAutocompleteClick(e) {
     let selectedQuery = e.currentTarget.getAttribute("data-value");
     if (selectedQuery) {
@@ -129,40 +129,40 @@ const SearchForm = () => {
     setAutoCompleteResult([]);
     setJumpToResult([]);
   }
-
-
+  
+  
   function closeResultBoxWhenClickedOutside(e) {
     if (!autoCompleteRef.current?.contains(e.target) && !jumptToRef.current?.contains(e.target)) {
       setAutoCompleteResult([]);
       setJumpToResult([]);
     }
   }
-
-
+  
+  
   function handleExactCheckboxClick(e) {
-    searchUrlFactory.setExact({ exact: e.target.checked });
+    searchUrlFactory.setExact({exact: e.target.checked});
   }
-
+  
   function handleIncludeImprtedCheckboxClick(e) {
-    searchUrlFactory.setIncludeImported({ includeImported: e.target.checked });
+    searchUrlFactory.setIncludeImported({includeImported: e.target.checked});
     appContext.setIncludeImportedTerms(e.target.checked);
   }
-
+  
   function handleObsoletesCheckboxClick(e) {
     Toolkit.setObsoleteInStorageAndUrl(e.target.checked);
   }
-
-
+  
+  
   async function handleAdvancedSearchToggle() {
-    searchUrlFactory.setAdvancedSearchEnabled({ enabled: !advSearchEnabled });
+    searchUrlFactory.setAdvancedSearchEnabled({enabled: !advSearchEnabled});
     setAdvSearchEnabled(!advSearchEnabled);
-    let userSettings = { ...appContext.userSettings };
+    let userSettings = {...appContext.userSettings};
     userSettings.advancedSearchEnabled = !advSearchEnabled;
     appContext.setUserSettings(userSettings);
     await storeUserSettings(userSettings);
   }
-
-
+  
+  
   useEffect(() => {
     document.getElementById("s-field").value = searchUrlFactory.decodeSearchQuery();
     document.addEventListener('mousedown', closeResultBoxWhenClickedOutside, true);
@@ -178,18 +178,18 @@ const SearchForm = () => {
       document.removeEventListener("keydown", keyboardNavigationForJumpto, false);
     }
   }, []);
-
+  
   useEffect(() => {
     if (appContext.userSettings.advancedSearchEnabled) {
       setAdvSearchEnabled(appContext.userSettings.advancedSearchEnabled);
     }
   }, [appContext.userSettings.advancedSearchEnabled]);
-
+  
   useEffect(() => {
     setOntologyId(OntologyLib.getCurrentOntologyIdFromUrlPath());
   }, [location.pathname]);
-
-
+  
+  
   return (
     <>
       <RenderSearchForm
@@ -209,7 +209,7 @@ const SearchForm = () => {
         handleAdvancedSearchToggle={handleAdvancedSearchToggle}
         optionClickCallback={handleJumptoAutocompleteClick}
       />
-      <AdvancedSearch advSearchEnabled={advSearchEnabled} />
+      <AdvancedSearch advSearchEnabled={advSearchEnabled}/>
     </>
   );
 }

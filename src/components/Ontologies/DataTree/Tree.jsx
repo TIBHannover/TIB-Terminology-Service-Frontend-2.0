@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import PropTypes from 'prop-types';
 import 'font-awesome/css/font-awesome.min.css';
 import TermApi from "../../../api/term";
@@ -7,7 +7,7 @@ import Toolkit from "../../../Libs/Toolkit";
 import TreeHelper from "./TreeHelpers";
 import SkosHelper from "./SkosHelpers";
 import KeyboardNavigator from "./KeyboardNavigation";
-import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import {OntologyPageContext} from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
@@ -29,12 +29,12 @@ const Tree = (props) => {
       Context:
           The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
   */
-
-
+  
+  
   const ontologyPageContext = useContext(OntologyPageContext);
   const lastState = ontologyPageContext.tabLastStates[props.componentIdentity];
   const urlFacory = new CommonUrlFactory();
-
+  
   const [treeDomContent, setTreeDomContent] = useState('');
   const [childExtractName, setChildExtractName] = useState(props.componentIdentity);
   const [resetTreeFlag, setResetTreeFlag] = useState(false);
@@ -49,8 +49,8 @@ const Tree = (props) => {
   const [keyboardNavigationManager, setKeyboardNavigationManager] = useState(new KeyboardNavigator(null, selectNode, expandNodeHandler));
   const [firstTimeLoad, setFirstTimeLoad] = useState(lastState ? true : false);
   const [btnLoading, setBtnLoading] = useState(false);
-
-
+  
+  
   function saveComponentStateInParent() {
     // Used when user changes the tabs to avoid component running on each tab change and load the last state.        
     const states = JSON.stringify({
@@ -64,15 +64,15 @@ const Tree = (props) => {
       isLoading,
       noNodeExist
     });
-
+    
     const componentHTML = document.getElementById('tree-root-ul')?.innerHTML;
     if (props.componentIdentity !== "individuals" && componentHTML) {
-      ontologyPageContext.storeState({ "_html_": componentHTML }, states, props.componentIdentity, props.selectedNodeIri);
+      ontologyPageContext.storeState({"_html_": componentHTML}, states, props.componentIdentity, props.selectedNodeIri);
     }
     return true;
   }
-
-
+  
+  
   function setComponentData() {
     let extractName = props.componentIdentity;
     if (props.rootNodes.length != 0 || resetTreeFlag || reload) {
@@ -84,8 +84,8 @@ const Tree = (props) => {
       setNoNodeExist(true);
     }
   }
-
-
+  
+  
   async function buildTheTree() {
     let target = props.selectedNodeIri;
     target = target ? target.trim() : null;
@@ -98,7 +98,7 @@ const Tree = (props) => {
     let childrenList = [];
     let selectedItemId = "";
     let showNodeDetailPage = false;
-
+    
     if (firstTimeLoad && lastState && lastState.html && !props.isIndividual) {
       loadTheTreeLastState();
       return true;
@@ -150,17 +150,17 @@ const Tree = (props) => {
             });
             childrenList.push(node);
           }
-
+          
           if (obsoletesShown) {
             [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, target);
           }
-
-          treeList = React.createElement("ul", { className: "tree-node-ul", id: "tree-root-ul" }, childrenList);
+          
+          treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
         }
       }
-
+      
     }
-
+    
     setTreeDomContent(treeList);
     setReload(false);
     setSiblingsVisible(siblingsVisible);
@@ -169,8 +169,8 @@ const Tree = (props) => {
     keyboardNavigationManager.updateSelectedNodeId(selectedItemId);
     ontologyPageContext.storeIriForComponent(target, props.componentIdentity);
   }
-
-
+  
+  
   function loadTheTreeLastState() {
     let lastStates = JSON.parse(lastState.states);
     setTreeDomContent(lastState.html);
@@ -183,7 +183,7 @@ const Tree = (props) => {
     setNoNodeExist(lastStates.noNodeExist);
     setFirstTimeLoad(false);
     if (lastState.lastIri) {
-      urlFacory.setIri({ newIri: lastState.lastIri });
+      urlFacory.setIri({newIri: lastState.lastIri});
       ontologyPageContext.storeIriForComponent(lastState.lastIri, props.componentIdentity);
       props.handleNodeSelectionInDataTree(lastState.lastIri, true);
       return true;
@@ -191,8 +191,8 @@ const Tree = (props) => {
     props.handleNodeSelectionInDataTree("", false);
     return true;
   }
-
-
+  
+  
   function buildTheTreeFirstLayer(rootNodes, targetSelectedNodeIri = false) {
     let childrenList = [];
     let selectedItemId = 0;
@@ -217,12 +217,12 @@ const Tree = (props) => {
     if (obsoletesShown) {
       [childrenList, selectedItemId] = TreeHelper.renderObsoletes(props.obsoleteTerms, childrenList, i, targetSelectedNodeIri);
     }
-
-    let treeList = React.createElement("ul", { className: "tree-node-ul", id: "tree-root-ul" }, childrenList);
-    return { "treeDomContent": treeList, "selectedItemId": selectedItemId };
+    
+    let treeList = React.createElement("ul", {className: "tree-node-ul", id: "tree-root-ul"}, childrenList);
+    return {"treeDomContent": treeList, "selectedItemId": selectedItemId};
   }
-
-
+  
+  
   function resetTree() {
     urlFacory.resetUrl();
     props.handleResetTreeInParent();
@@ -235,8 +235,8 @@ const Tree = (props) => {
     setSubTreeMode(false);
     keyboardNavigationManager.updateSelectedNodeId(null);
   }
-
-
+  
+  
   async function handleSiblings() {
     try {
       if (!siblingsVisible) {
@@ -250,10 +250,10 @@ const Tree = (props) => {
       setBtnLoading(false);
       console.info(e);
     }
-
+    
   }
-
-
+  
+  
   async function showSiblings() {
     let targetNodes = document.getElementsByClassName("targetNodeByIri");
     if (ontologyPageContext.isSkos && props.componentIdentity !== "properties") {
@@ -264,21 +264,21 @@ const Tree = (props) => {
       await TreeHelper.showSiblings(targetNodes, ontologyPageContext.ontology.ontologyId, childExtractName);
     }
   }
-
+  
   async function hideSiblings() {
     let targetNodes = document.getElementsByClassName("targetNodeByIri");
     if (ontologyPageContext.isSkos && props.componentIdentity !== "properties") {
       SkosHelper.showHidesiblingsForSkos(false, ontologyPageContext.ontology.ontologyId, props.selectedNodeIri);
     }
-
+    
     if (await TreeHelper.nodeIsRoot(ontologyPageContext.ontology.ontologyId, targetNodes[0].parentNode.dataset.iri, props.componentIdentity)) {
       TreeHelper.hideSiblingsForRootNode(targetNodes[0].parentNode.dataset.iri);
     } else {
       TreeHelper.hideSiblings(targetNodes);
     }
   }
-
-
+  
+  
   function reduceTree() {
     let showSubtreeFlag = subTreeMode;
     setSubTreeMode(!showSubtreeFlag);
@@ -287,8 +287,8 @@ const Tree = (props) => {
     setIsLoading(true);
     setReload(true);
   }
-
-
+  
+  
   function showObsoletes() {
     Toolkit.setObsoleteInStorageAndUrl(!obsoletesShown);
     setReload(true);
@@ -296,8 +296,8 @@ const Tree = (props) => {
     setTreeDomContent("");
     setObsoletesShown(!obsoletesShown);
   }
-
-
+  
+  
   function processClick(e) {
     if (props.isIndividual && !ontologyPageContext.isSkos) {
       return;
@@ -312,8 +312,8 @@ const Tree = (props) => {
       expandNodeHandler(e.target.parentNode);
     }
   }
-
-
+  
+  
   function selectNode(target) {
     if (props.isIndividual && !ontologyPageContext.isSkos) {
       return true;
@@ -334,14 +334,14 @@ const Tree = (props) => {
       setSubOrFullTreeBtnShow(true);
       setSubTreeMode(false);
       keyboardNavigationManager.updateSelectedNodeId(clickedNodeId);
-      urlFacory.setIri({ newIri: clickedNodeIri });
-      urlFacory.deleteParam({ name: SiteUrlParamNames.NoteId });
-      urlFacory.deleteParam({ name: SiteUrlParamNames.SubTabInTermTable });
+      urlFacory.setIri({newIri: clickedNodeIri});
+      urlFacory.deleteParam({name: SiteUrlParamNames.NoteId});
+      urlFacory.deleteParam({name: SiteUrlParamNames.SubTabInTermTable});
       ontologyPageContext.storeIriForComponent(clickedNodeIri, props.componentIdentity);
     }
   }
-
-
+  
+  
   async function expandNodeHandler(targetEvent) {
     await TreeHelper.expandNode({
       e: targetEvent,
@@ -352,8 +352,8 @@ const Tree = (props) => {
     });
     saveComponentStateInParent();
   }
-
-
+  
+  
   function createTreeActionButtons() {
     return [
       <div className='row tree-action-button-area'>
@@ -366,28 +366,28 @@ const Tree = (props) => {
           }
           {!props.isIndividual && props.selectedNodeIri !== "" &&
             <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-reset'
-              onClick={resetTree}>Reset</button>
+                    onClick={resetTree}>Reset</button>
           }
           {props.componentIdentity !== "individuals" &&
             <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete'
-              onClick={showObsoletes}>
+                    onClick={showObsoletes}>
               {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
             </button>
           }
           {subOrFullTreeBtnShow && !props.isIndividual &&
             <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree'
-              onClick={reduceTree}>
+                    onClick={reduceTree}>
               Sub Tree
             </button>
           }
           {siblingsButtonShow && !props.isIndividual &&
             <button className='btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-siblings'
-              onClick={() => {
-                setBtnLoading(true);
-                handleSiblings().then(() => {
-                  setIsLoading(false)
-                })
-              }}>
+                    onClick={() => {
+                      setBtnLoading(true);
+                      handleSiblings().then(() => {
+                        setIsLoading(false)
+                      })
+                    }}>
               {!btnLoading && !siblingsVisible && "Show Siblings"}
               {!btnLoading && siblingsVisible && "Hide Siblings"}
               {btnLoading && <div className="isLoading-btn"></div>}
@@ -397,13 +397,13 @@ const Tree = (props) => {
       </div>
     ];
   }
-
-
+  
+  
   const handleKeyDown = (event) => {
     keyboardNavigationManager.run(event);
   };
-
-
+  
+  
   useEffect(() => {
     setComponentData();
     buildTheTree();
@@ -411,22 +411,22 @@ const Tree = (props) => {
       document.getElementsByClassName('tree-container')[0].style.marginTop = '120px';
     }
     document.addEventListener("keydown", handleKeyDown, false);
-
-
+    
+    
     return () => {
       document.removeEventListener("keydown", handleKeyDown, false);
     };
   }, []);
-
-
+  
+  
   useEffect(() => {
     buildTheTree();
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
   }, [resetTreeFlag, reload, props.rootNodesForSkos]);
-
-
+  
+  
   useEffect(() => {
     if (props.jumpToIri) {
       setIsLoading(true);
@@ -436,13 +436,13 @@ const Tree = (props) => {
       setReload(true);
     }
   }, [props.jumpToIri]);
-
-
+  
+  
   useEffect(() => {
     saveComponentStateInParent();
   }, [obsoletesShown, siblingsVisible, subTreeMode]);
-
-
+  
+  
   return (
     <div className="col-sm-12" onClick={(e) => processClick(e)}>
       <div className="tree-action-area-container">
@@ -452,9 +452,9 @@ const Tree = (props) => {
               targetType={props.componentIdentity}
               label={"Jump to"}
               handleJumtoSelection={props.handleJumtoSelection}
-              obsoletes={false}
+              obsoletes={Toolkit.getObsoleteFlagValue()}
             />
-
+          
           </div>
         </div>
         <div className="row position-sticky top-0 start-0 w-100 z-50">
@@ -463,16 +463,16 @@ const Tree = (props) => {
           </div>
         </div>
       </div>
-      <hr />
+      <hr/>
       {isLoading && <div className="isLoading"></div>}
       {!isLoading && !noNodeExist &&
         <div className='row'>
           {!treeDomContent._html_
             ? <div className='col-sm-12 tree'>{treeDomContent}</div>
-            : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{ __html: treeDomContent._html_ }}></div>
+            : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{__html: treeDomContent._html_}}></div>
           }
         </div>
-
+        
       }
     </div>
   );

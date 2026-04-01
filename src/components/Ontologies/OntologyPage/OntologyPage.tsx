@@ -17,7 +17,7 @@ import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 import ChangesTimeline from "../../Ondet/ChangesTimeline";
-import {RouteComponentProps} from 'react-router';
+import {RouteComponentProps} from 'react-router-dom';
 import {TsOntology, TsClass, TsProperty, TsSkosTerm} from '../../../concepts';
 import PublicationsLinks from "../PublicationsLinks/PublicationsLinks";
 
@@ -192,7 +192,7 @@ const OntologyPage = (props: CmpPropp) => {
 
     function handleFullScreen() {
         let contentToFullScreen = document.getElementById("content-for-fullscreen");
-        if (document.exitFullscreen && contentToFullScreen && fullscreenMode) {
+        if (contentToFullScreen && fullscreenMode) {
             document.exitFullscreen();
             setFullscreenMode(false);
             contentToFullScreen.style.paddingTop = '0';
