@@ -309,7 +309,7 @@ body .cc_more_info {
 }
 
 
-.site-header-top-row>a {
+.site-header-top-row > a {
     text-decoration: none;
     color: white;
 }
@@ -414,7 +414,6 @@ body .isLoading-small {
 }
 
 body .isLoading-btn {
-    margin: auto;
     border: 7px solid #ffffff;
     border-radius: 50%;
     border-top: 7px solid #404040;
@@ -422,6 +421,8 @@ body .isLoading-btn {
     height: 20px;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-left: 5px;
 }
 
 body .isLoading-inline-small {
@@ -753,7 +754,7 @@ body .site-tour-btn {
     /*box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.2),*/
     /*5px 5px 15px rgba(0, 0, 0, 0.3);*/
     box-shadow: -4px -4px 10px rgba(0.3, 0.3, 0.3, 0.3),
-        6px 6px 15px rgba(0, 0, 0, 0.3);
+    6px 6px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.2s ease;
 }
 

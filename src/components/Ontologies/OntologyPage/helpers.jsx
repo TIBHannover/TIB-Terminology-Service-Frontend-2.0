@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom';
-import { OntologyPageContext } from '../../../context/OntologyPageContext';
-import { useContext } from 'react';
+import {Link} from 'react-router-dom';
+import {OntologyPageContext} from '../../../context/OntologyPageContext';
+import {useContext} from 'react';
 import DropDown from '../../common/DropDown/DropDown';
-import { useState } from 'react';
 
 
 export const OntologyPageTabs = (props) => {
@@ -10,7 +9,7 @@ export const OntologyPageTabs = (props) => {
       Renders tabs for the Ontology page.
       The tab metadata comes from listOfComponentsAsTabs.json
   */
-
+  
   const ontologyPageContext = useContext(OntologyPageContext);
   let result = [];
   for (let configItemKey in props.tabMetadataJson) {
@@ -21,10 +20,16 @@ export const OntologyPageTabs = (props) => {
     if (process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true" && configItemKey === "IssueList") {
       continue;
     }
+    if (process.env.REACT_APP_PUBLICATION_LINKS !== "true" && configItemKey === "Publications") {
+      continue;
+    }
+    if (process.env.REACT_APP_LINKED_DATASETS !== "true" && configItemKey === "LinkedDatasets") {
+      continue;
+    }
     let activeClassName = (props.activeTabId === parseInt(configObject['tabId'])) ? "nav-item-active" : "";
     result.push(
       <div className={"ontology-detail-nav-item " + activeClassName + " stour-" + configObject['id']}
-        key={configObject['keyForRenderAsTabItem']}>
+           key={configObject['keyForRenderAsTabItem']}>
         <Link
           onClick={props.tabChangeHandler}
           data-value={configObject['tabId']}
@@ -37,13 +42,13 @@ export const OntologyPageTabs = (props) => {
       </div>
     );
   }
-
+  
   return (
     <>
       <div className="row h-100">
         <div className="col-12 d-flex flex-column">
           {result}
-
+        
         </div>
       </div>
     </>
@@ -55,10 +60,10 @@ export const OntologyPageHeadSection = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
   let langOptions = [];
   for (let lang of ontologyPageContext.ontology.language ?? []) {
-    let temp = { "label": lang, "value": lang };
+    let temp = {"label": lang, "value": lang};
     langOptions.push(temp);
   }
-
+  
   function handleFullScreen() {
     let contentToFullScreen = document.getElementById("content-for-fullscreen");
     if (contentToFullScreen && !document.fullscreenElement) {
@@ -71,7 +76,7 @@ export const OntologyPageHeadSection = () => {
       contentToFullScreen.style.paddingTop = '0';
     }
   }
-
+  
   return (
     <div className='row ontology-page-headbar'>
       <div className='col-sm-8 pb-0'>
@@ -101,7 +106,7 @@ export const OntologyPageHeadSection = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
@@ -141,5 +146,5 @@ function collpaseSiteHeader() {
     collapseIconContainer.classList.remove('show-header-arrow-down');
     collapseButton.style.marginTop = "-40px";
   }
-
+  
 }
