@@ -11,13 +11,26 @@ const LinkedDatasets = () => {
     const [datasetLinksMap, setDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(20);
+
+    /*
+    * ToDos:
+    * - pagination
+    * - filter by dataset title
+    * - filter by dataset curie
+    * - filter by repo name
+    * - resolve term/prop/indiv pages via curie (if curie given then call api to get iri)
+    * - metadata widget?
+    * */
 
     function renderDatasetLinks() {
         if (datasetLinksMap.size === 0) {
             return <p>No dataset links found</p>
         }
         let results = [];
-        for (let [datasetTitle, dls] of datasetLinksMap) {
+        for (let datasetTitle of Array.from(datasetLinksMap.keys()).slice((page - 1) * size, page * size)) {
+            let dls = datasetLinksMap.get(datasetTitle)!;
             results.push(
                 <tr>
                     <td>
@@ -26,7 +39,13 @@ const LinkedDatasets = () => {
                             {datasetTitle}
                         </a>
                     </td>
-                    <td>{dls.map((dl: DatasetLink) => `${dl.curie}  `)}</td>
+                    <td>
+                        {dls.map((dl: DatasetLink) =>
+                            <a href="#" target="_blank" rel="noopener noreferrer">
+                                <span className="term-button">{dl.curie}</span>
+                            </a>
+                        )}
+                    </td>
                 </tr>
             );
         }
@@ -50,7 +69,7 @@ const LinkedDatasets = () => {
     return (
         <div>
             <h1>LinkedDatasets</h1>
-            <Table striped bordered>
+            <Table striped bordered responsive>
                 <thead>
                 <tr>
                     <th>Dataset</th>
