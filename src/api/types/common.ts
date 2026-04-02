@@ -6,3 +6,8 @@ export type TermMultiSelectOption = {
 export type Ols3ApiResponse = {
     _embedded: any
 }
+
+export type ErrorObject = {
+    value: boolean,
+    message?: string
+}
