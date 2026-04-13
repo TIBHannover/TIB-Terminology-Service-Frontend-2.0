@@ -49,10 +49,6 @@ const OntologyAdoptRequest = (props) => {
   function submit() {
     let username = FormLib.getFieldByIdIfValid("adopt-username");
     let email = FormLib.getFieldByIdIfValid("adopt-email");
-    let reason = FormLib.getTextEditorValueIfValid(
-      editorState,
-      "adopt-form-text-editor"
-    );
 
     if (
       !username ||
@@ -68,13 +64,9 @@ const OntologyAdoptRequest = (props) => {
 
     setLoading(true);
 
-    reason = editorState.getCurrentContent();
-    reason = draftToMarkdown(convertToRaw(reason));
-
     const form = {
       username,
       email,
-      reason,
       name: ontoPageContext.ontology?.ontologyId,
       purl: ontoPageContext.ontology?.iri,
 
@@ -156,20 +148,6 @@ const OntologyAdoptRequest = (props) => {
             </div>
             <br />
 
-            <div className="row">
-              <div className="col-sm-8">
-                <label className="required_input">Reason</label>
-                <div style={{ maxHeight: "220px", overflow: "auto" }}>
-                  <TextEditor
-                    editorState={editorState}
-                    textChangeHandlerFunction={onTextEditorChange}
-                    placeholder="Please briefly describe your request."
-                    textSizeOptions={["Normal"]}
-                    wrapperId="adopt-form-text-editor"
-                  />
-                </div>
-              </div>
-            </div>
             <br />
 
             <div className="row">
