@@ -6,7 +6,8 @@ import TextEditor from "../../../common/TextEditor/TextEditor";
 import draftToMarkdown from "draftjs-to-markdown";
 import { convertToRaw } from "draft-js";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
-import { submitOntologySuggestion } from "../../../../api/ontology";
+// import { submitOntologySuggestion } from "../../../../api/ontology";
+import { submitAdopterRequest } from "../../../../api/ontology";
 
 const ADOPTER_TYPES = [
   "project",
@@ -47,13 +48,20 @@ const OntologyAdoptRequest = (props) => {
   }
 
   function submit() {
+    console.log("SUBMIT CLICKED");
     let username = FormLib.getFieldByIdIfValid("adopt-username");
     let email = FormLib.getFieldByIdIfValid("adopt-email");
-
+    console.log({
+  username,
+  email,
+  adopterType,
+  adopterName,
+  usageDescription,
+  usageChannel
+});
     if (
       !username ||
       !email ||
-      !editorState ||
       !adopterType ||
       !adopterName ||
       !usageDescription ||
@@ -87,7 +95,9 @@ const OntologyAdoptRequest = (props) => {
       usage_channel: usageChannel,
     };
 
-    submitOntologySuggestion(form).then((result) => {
+    console.log("CALLING API...");
+submitAdopterRequest(form).then((result) => {
+  console.log("API RESULT:", result);
       setFormSubmitSuccess(result);
       setFormSubmitted(true);
       setSubmitWait(false);

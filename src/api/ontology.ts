@@ -203,5 +203,34 @@ export async function checkOntologyPurlIsValidUrl(purl: string): Promise<Ontolog
     }
 }
 
+// adopters ichrak 
+export async function submitAdopterRequest(formData: any): Promise<boolean> {
+    try {
+        let form: any = {};
+        let formDataAny: any = formData;
+        for (let key in formDataAny) {
+            form[key] = formDataAny[key];
+        }
+
+        let headers = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/adopter_create/';
+
+        let result: any = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(form)
+        });
+
+        if (result.status === 200) {
+            result = await result.json();
+            return result['_result']['response'];
+        }
+
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
 
 export default OntologyApi;
