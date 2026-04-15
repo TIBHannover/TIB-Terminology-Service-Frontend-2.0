@@ -2,7 +2,6 @@ import {Link} from 'react-router-dom';
 import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import {useContext} from 'react';
 import DropDown from '../../common/DropDown/DropDown';
-import {useState} from 'react';
 
 
 export const OntologyPageTabs = (props) => {
@@ -22,6 +21,9 @@ export const OntologyPageTabs = (props) => {
       continue;
     }
     if (process.env.REACT_APP_PUBLICATION_LINKS !== "true" && configItemKey === "Publications") {
+      continue;
+    }
+    if (process.env.REACT_APP_LINKED_DATASETS !== "true" && configItemKey === "LinkedDatasets") {
       continue;
     }
     let activeClassName = (props.activeTabId === parseInt(configObject['tabId'])) ? "nav-item-active" : "";

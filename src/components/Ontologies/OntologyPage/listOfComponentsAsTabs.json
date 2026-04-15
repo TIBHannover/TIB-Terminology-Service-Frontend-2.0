@@ -70,5 +70,13 @@
     "tabId": 8,
     "tabTitle": "Publications",
     "urlEndPoint": "/publications"
+  },
+  "LinkedDatasets": {
+    "id": "linkedDatasets",
+    "keyForRenderAsComponent": "linkedDatasets",
+    "keyForRenderAsTabItem": "linkedDatasets-tab",
+    "tabId": 9,
+    "tabTitle": "Linked Datasets",
+    "urlEndPoint": "/linkedDatasets"
   }
 }
