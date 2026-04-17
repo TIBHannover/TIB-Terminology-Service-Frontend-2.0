@@ -309,7 +309,7 @@ body .cc_more_info {
 }
 
 
-.site-header-top-row>a {
+.site-header-top-row > a {
     text-decoration: none;
     color: white;
 }
@@ -484,6 +484,12 @@ body .fa-copy {
 
 body .fa-orcid {
     font-size: 30px;
+}
+
+body .small-orcid-icon {
+    font-size: 20px !important;
+    color: #A5CD39 !important;
+    margin-left: 5px;
 }
 
 body .fa-github,
@@ -753,7 +759,7 @@ body .site-tour-btn {
     /*box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.2),*/
     /*5px 5px 15px rgba(0, 0, 0, 0.3);*/
     box-shadow: -4px -4px 10px rgba(0.3, 0.3, 0.3, 0.3),
-        6px 6px 15px rgba(0, 0, 0, 0.3);
+    6px 6px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.2s ease;
 }
 
