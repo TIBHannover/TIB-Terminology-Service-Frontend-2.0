@@ -14,6 +14,7 @@ const OntologyInfoTable = () => {
     const [showExtraAnotation, setShowExtraAnotation] = useState(false);
     const [showExtraAnotationBtnText, setShowExtraAnotationBtnText] = useState("+ Show more information");
     const [creators, setCreators] = useState<ReactElement>();
+    const [annotations, setAnnotations] = useState<JSX.Element[]>([]);
 
 
     function handleOntologyShowMoreClick() {
@@ -28,19 +29,20 @@ const OntologyInfoTable = () => {
     }
 
 
-    function createAnnotations() {
+    async function createAnnotations() {
         let annotations = [];
         for (let prop in ontology.annotations) {
-            let value = "";
+            let value: string[] = [];
             if (typeof ontology.annotations[prop] === "string") {
-                value = ontology.annotations[prop];
+                value = [ontology.annotations[prop]];
             } else {
-                value = ontology.annotations[prop].join(',\n')
+                value = ontology.annotations[prop];
             }
+            let valuesAsElements = await OntologyLib.formatCreator(value);
             annotations.push(
                 <tr>
                     <td className='node-metadata-label'><b>{prop}</b></td>
-                    <td className='node-metadata-value'>{value}</td>
+                    <td className='node-metadata-value'>{valuesAsElements}</td>
                 </tr>
             );
         }
@@ -52,8 +54,8 @@ const OntologyInfoTable = () => {
                 </tr>
             );
         }
+        setAnnotations(annotations);
 
-        return annotations;
     };
 
     function createImports(ontologiesIds: string[]) {
@@ -251,7 +253,8 @@ const OntologyInfoTable = () => {
     }
 
     useEffect(() => {
-        OntologyLib.formatCreator(ontology).then((resp: ReactElement) => setCreators(resp));
+        OntologyLib.formatCreator(ontology.creator).then((resp: ReactElement) => setCreators(resp));
+        createAnnotations();
     }, []);
 
 
@@ -264,7 +267,7 @@ const OntologyInfoTable = () => {
                 <tr>
                   <td colSpan={3} id="annotation-heading"><b>Additional information from Ontology source</b></td>
                 </tr>
-                {createAnnotations()}
+                {annotations}
                 </tbody>
               </table>}
             <div className="text-center " id="search-facet-show-more-ontology-btn">

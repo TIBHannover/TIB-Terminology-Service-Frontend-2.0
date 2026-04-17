@@ -16,9 +16,9 @@ class OntologyLib {
         return ontologyIdInUrl;
     }
 
-    static async formatCreator(ontology: TsOntology): Promise<ReactElement> {
+    static async formatCreator(creators: string[]): Promise<ReactElement> {
         let creatorsElements: ReactElement[] = [];
-        for (let cr of ontology.creator) {
+        for (let cr of creators) {
             if (cr.includes("orcid.org/")) {
                 let orcidId = cr.split("orcid.org/")[1];
                 orcidId = orcidId.trim();
