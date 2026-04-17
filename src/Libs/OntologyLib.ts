@@ -19,6 +19,9 @@ class OntologyLib {
     static async formatCreator(creators: string[]): Promise<ReactElement> {
         let creatorsElements: ReactElement[] = [];
         for (let cr of creators) {
+            if (!cr) {
+                continue;
+            }
             if (cr.includes("orcid.org/")) {
                 let orcidId = cr.split("orcid.org/")[1];
                 orcidId = orcidId.trim();
@@ -36,7 +39,7 @@ class OntologyLib {
                 }, `${person.name} ${person.family}`, icon);
                 creatorsElements.push(anchor);
             } else {
-                creatorsElements.push(createElement("p", {}, cr));
+                creatorsElements.push(createElement("p", {className: "d-inline me-3"}, cr, ","));
             }
         }
         return createElement("div", {}, [...creatorsElements]);
