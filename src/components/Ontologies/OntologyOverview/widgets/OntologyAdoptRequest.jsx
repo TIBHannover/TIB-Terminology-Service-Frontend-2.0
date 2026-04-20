@@ -106,10 +106,14 @@ submitAdopterRequest(form).then((result) => {
   return (
     <Modal show={props.showModal} fullscreen={true}>
       <Modal.Header>
-        <h5 className="modal-title">Ontology adoption request</h5>
+        <h5 className="modal-title">Ontology adoption request</h5> 
+        
       </Modal.Header>
 
       <Modal.Body>
+        <div className="text-danger mb-2" style={{ fontSize: "12px" }}>
+  * Required fields
+</div>
         {!submitWait && formSubmitSuccess && formSubmitted && (
           <AlertBox
             type="success"
