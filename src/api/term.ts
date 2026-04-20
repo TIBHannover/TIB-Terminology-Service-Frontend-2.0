@@ -1,12 +1,12 @@
-import { getCallSetting } from "./constants";
+import {getCallSetting} from "./constants";
 import Toolkit from "../Libs/Toolkit";
 import {
-  OntologyTermDataV2,
-  TermListData,
-  OntologyTermData
+    OntologyTermDataV2,
+    TermListData,
+    OntologyTermData
 } from "./types/ontologyTypes";
-import { Ols3ApiResponse } from "./types/common";
-import { TsTerm, TermFactory } from "../concepts";
+import {Ols3ApiResponse} from "./types/common";
+import {TsTerm, TermFactory} from "../concepts";
 
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -18,178 +18,201 @@ const INDIVIDUAL_TYPE_ID = "individuals";
 
 class TermApi {
 
-  ontologyId: string = "";
-  iri: string = "";
-  term: OntologyTermDataV2 = {};
-  termType: string = "";
-  lang: string = "en";
+    ontologyId: string = "";
+    iri: string = "";
+    term: OntologyTermDataV2 = {};
+    termType: string = "";
+    lang: string = "en";
 
 
-  constructor(ontologyId?: string, iri?: string, termType?: string, language?: string) {
-    this.ontologyId = ontologyId ? ontologyId : "";
-    iri = iri ? iri : "";
-    this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
-    this.setTermType(termType);
-    this.term = {}; // this holds the term data from ols api.
-    this.lang = language ? language : "en";
+    constructor(ontologyId?: string, iri?: string, termType?: string, language?: string) {
+        this.ontologyId = ontologyId ? ontologyId : "";
+        iri = iri ? iri : "";
+        this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
+        this.setTermType(termType);
+        this.term = {}; // this holds the term data from ols api.
+        this.lang = language ? language : "en";
 
-  }
-
-
-  setTermType(termType?: string): void {
-    if (termType === "term" || termType === "class" || termType === "terms") {
-      this.termType = CLASS_TYPE_ID;
-    } else if (termType === "property") {
-      this.termType = PROPERTY_TYPE_ID;
-    } else if (termType === "individual") {
-      this.termType = INDIVIDUAL_TYPE_ID;
-    } else {
-      this.termType = termType ? termType : "";
-    }
-  }
-
-
-  async fetchTerm(): Promise<TsTerm | null> {
-    try {
-      if (this.iri === "%20") {
-        // empty iri
-        this.term = {};
-        return null;
-      }
-
-      let urlJson = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=${this.lang}`;
-      let res = await fetch(urlJson, getCallSetting);
-      this.term = await res.json();
-      let instancesList: OntologyTermData[] = [];
-      if (this.termType === CLASS_TYPE_ID) {
-        instancesList = await this.getIndividualInstancesForClass();
-      }
-      return TermFactory.createTermForTS(this.term, instancesList);
-    } catch (e) {
-      this.term = {};
-      return null;
     }
 
-  }
 
-
-  async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE, obsoletes: boolean = false): Promise<TermListData | []> {
-    try {
-      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/${this.termType}?lang=${this.lang}&page=${page}&size=${size}&includeObsoleteEntities=${obsoletes}`;
-      let result = await (await fetch(url, getCallSetting)).json();
-      let totalTermsCount = result['totalElements'];
-      result = result['elements'];
-      if (!result) {
-        return [];
-      }
-      let refinedResults = [];
-      for (let term of result) {
-        let termObject = TermFactory.createTermForTS(term, []);
-        refinedResults.push(termObject);
-      }
-      return { "results": refinedResults, "totalTermsCount": totalTermsCount };
-    } catch (e) {
-      //throw (e)
-      return [];
-    }
-  }
-
-
-
-  async getIndividualInstancesForClass(): Promise<any> {
-    try {
-      let baseUrl = process.env.REACT_APP_API_BASE_URL;
-      let callUrl = baseUrl + "/" + this.ontologyId + "/terms/" + this.iri + "/instances";
-      let result = await fetch(callUrl, getCallSetting);
-      let apiResult: Ols3ApiResponse = await result.json();
-      let indvResult = apiResult['_embedded'];
-      if (!indvResult || typeof (indvResult['individuals']) === "undefined") {
-        return null;
-      }
-      return indvResult['individuals'];
-    } catch (e) {
-      return null;
-    }
-  }
-
-
-  async getNodeJsTree(): Promise<TsTerm[]> {
-    try {
-      let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-      let parentPath = this.termType === CLASS_TYPE_ID ? "hierarchicalAncestors" : "ancestors";
-      let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${parentPath}?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
-      let listOfNodes = await (await fetch(url, getCallSetting)).json();
-      let nodesList = listOfNodes["elements"] ?? [];
-      if (nodesList.length === 0) {
-        // fallback: the target is individual on a class tree
-        let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/individuals/${this.iri}/ancestors?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
-        let listOfNodes = await (await fetch(url, getCallSetting)).json();
-        let results: TsTerm[] = [];
-        for (let node of listOfNodes["elements"] ?? []) {
-          let tsTerm = TermFactory.createTermForTS(node);
-          results.push(tsTerm);
+    setTermType(termType?: string): void {
+        if (termType === "term" || termType === "class" || termType === "terms") {
+            this.termType = CLASS_TYPE_ID;
+        } else if (termType === "property") {
+            this.termType = PROPERTY_TYPE_ID;
+        } else if (termType === "individual") {
+            this.termType = INDIVIDUAL_TYPE_ID;
+        } else {
+            this.termType = termType ? termType : "";
         }
-        return results;
-      }
-      let results: TsTerm[] = [];
-      for (let node of nodesList) {
-        let tsTerm = TermFactory.createTermForTS(node);
-        results.push(tsTerm);
-      }
-      return results;
-    } catch (e) {
-      return [];
-    }
-  }
-
-
-  async getChildrenJsTree(lang: string = "en"): Promise<TsTerm[]> {
-    const getChildren = async (lang: string) => {
-      let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-      let path = this.termType === CLASS_TYPE_ID ? "hierarchicalChildren" : "children";
-      let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
-      let res = await (await fetch(url, getCallSetting)).json();
-      let nodesList = res["elements"] ?? [];
-      let results: TsTerm[] = [];
-      for (let node of nodesList) {
-        let tsTerm = TermFactory.createTermForTS(node);
-        results.push(tsTerm);
-      }
-      return results;
     }
 
-    const getHierarchicalChilren = async (lang: string) => {
-      if (this.termType === CLASS_TYPE_ID) {
-        let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-        let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/classes/${this.iri}/individuals?size=1000&lang=${lang}`;
-        let res = await (await fetch(url, getCallSetting)).json();
-        let results: TsTerm[] = [];
-        for (let node of res["elements"] ?? []) {
-          let tsTerm = TermFactory.createTermForTS(node);
-          results.push(tsTerm);
+
+    async fetchTerm(): Promise<TsTerm | null> {
+        try {
+            if (this.iri === "%20") {
+                // empty iri
+                this.term = {};
+                return null;
+            }
+
+            let urlJson = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/entities/${this.iri}?lang=${this.lang}`;
+            let res = await fetch(urlJson, getCallSetting);
+            this.term = await res.json();
+            let instancesList: OntologyTermData[] = [];
+            if (this.termType === CLASS_TYPE_ID) {
+                instancesList = await this.getIndividualInstancesForClass();
+            }
+            return TermFactory.createTermForTS(this.term, instancesList);
+        } catch (e) {
+            this.term = {};
+            return null;
         }
-        return results;
-      }
-      return [];
+
     }
 
-    let [children, hierarchialChildren] = await Promise.all([getChildren(lang), getHierarchicalChilren(lang)]);
 
-    return [...children, ...hierarchialChildren];
-  }
-
-
-
-  async fetchGraphData(): Promise<any> {
-    try {
-      let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/terms/${this.iri}/graph?lang=${this.lang}`;
-      let graphData = await fetch(url, getCallSetting);
-      graphData = await graphData.json();
-      return graphData;
-    } catch (e) {
-      return null;
+    async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE, obsoletes: boolean = false): Promise<TermListData | []> {
+        try {
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/${this.termType}?lang=${this.lang}&page=${page}&size=${size}&includeObsoleteEntities=${obsoletes}`;
+            let result = await (await fetch(url, getCallSetting)).json();
+            let totalTermsCount = result['totalElements'];
+            result = result['elements'];
+            if (!result) {
+                return [];
+            }
+            let refinedResults = [];
+            for (let term of result) {
+                let termObject = TermFactory.createTermForTS(term, []);
+                refinedResults.push(termObject);
+            }
+            return {"results": refinedResults, "totalTermsCount": totalTermsCount};
+        } catch (e) {
+            //throw (e)
+            return [];
+        }
     }
-  }
+
+
+    async getIndividualInstancesForClass(): Promise<any> {
+        try {
+            let baseUrl = process.env.REACT_APP_API_BASE_URL;
+            let callUrl = baseUrl + "/" + this.ontologyId + "/terms/" + this.iri + "/instances";
+            let result = await fetch(callUrl, getCallSetting);
+            let apiResult: Ols3ApiResponse = await result.json();
+            let indvResult = apiResult['_embedded'];
+            if (!indvResult || typeof (indvResult['individuals']) === "undefined") {
+                return null;
+            }
+            return indvResult['individuals'];
+        } catch (e) {
+            return null;
+        }
+    }
+
+
+    async getNodeJsTree(): Promise<TsTerm[]> {
+        try {
+            let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
+            let parentPath = this.termType === CLASS_TYPE_ID ? "hierarchicalAncestors" : "ancestors";
+            let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${parentPath}?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+            let listOfNodes = await (await fetch(url, getCallSetting)).json();
+            let nodesList = listOfNodes["elements"] ?? [];
+            if (nodesList.length === 0) {
+                // fallback: the target is individual on a class tree
+                let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/individuals/${this.iri}/ancestors?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+                let listOfNodes = await (await fetch(url, getCallSetting)).json();
+                let results: TsTerm[] = [];
+                for (let node of listOfNodes["elements"] ?? []) {
+                    let tsTerm = TermFactory.createTermForTS(node);
+                    results.push(tsTerm);
+                }
+                return results;
+            }
+            let results: TsTerm[] = [];
+            for (let node of nodesList) {
+                let tsTerm = TermFactory.createTermForTS(node);
+                results.push(tsTerm);
+            }
+            return results;
+        } catch (e) {
+            return [];
+        }
+    }
+
+
+    async getChildrenJsTree(lang: string = "en"): Promise<TsTerm[]> {
+        const getChildren = async (lang: string) => {
+            let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
+            let path = this.termType === CLASS_TYPE_ID ? "hierarchicalChildren" : "children";
+            let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
+            let res = await (await fetch(url, getCallSetting)).json();
+            let nodesList = res["elements"] ?? [];
+            let results: TsTerm[] = [];
+            for (let node of nodesList) {
+                let tsTerm = TermFactory.createTermForTS(node);
+                results.push(tsTerm);
+            }
+            return results;
+        }
+
+        const getHierarchicalChilren = async (lang: string) => {
+            if (this.termType === CLASS_TYPE_ID) {
+                let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
+                let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/classes/${this.iri}/individuals?size=1000&lang=${lang}`;
+                let res = await (await fetch(url, getCallSetting)).json();
+                let results: TsTerm[] = [];
+                for (let node of res["elements"] ?? []) {
+                    let tsTerm = TermFactory.createTermForTS(node);
+                    results.push(tsTerm);
+                }
+                return results;
+            }
+            return [];
+        }
+
+        let [children, hierarchialChildren] = await Promise.all([getChildren(lang), getHierarchicalChilren(lang)]);
+
+        return [...children, ...hierarchialChildren];
+    }
+
+
+    async fetchGraphData(): Promise<any> {
+        try {
+            let url = `${process.env.REACT_APP_API_URL}/ontologies/${this.ontologyId}/terms/${this.iri}/graph?lang=${this.lang}`;
+            let graphData = await fetch(url, getCallSetting);
+            graphData = await graphData.json();
+            return graphData;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    async getTermIriByCurie(curie: string): Promise<string> {
+        try {
+            type ApiResult = {
+                elements: OntologyTermDataV2[];
+            }
+            if (!curie.includes("%")) {
+                curie = encodeURIComponent(curie);
+            }
+            let url = `${process.env.REACT_APP_API_URL}/v2/entities?page=0&size=20&lang=en&exclusive=false&option=LINEAR&searchFields=curie&boostFields=curie%5E100&exactMatch=false&includeObsoleteEntities=false`;
+            url += `&search=${curie}&ontology=${this.ontologyId}`;
+            let result = await (await fetch(url, getCallSetting)).json() as ApiResult;
+            let terms = result.elements;
+            curie = decodeURIComponent(curie);
+            for (let term of terms) {
+                let tsTerm = new TsTerm(term);
+                if (tsTerm.curie === curie) {
+                    return tsTerm.iri;
+                }
+            }
+            return "";
+        } catch (e) {
+            return "";
+        }
+    }
 }
 
 
