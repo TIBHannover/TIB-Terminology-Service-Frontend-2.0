@@ -31,6 +31,7 @@ const LinkedDatasets = () => {
         let results = [];
         for (let datasetTitle of Array.from(datasetLinksMap.keys()).slice((page - 1) * size, page * size)) {
             let dls = datasetLinksMap.get(datasetTitle)!;
+            let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
             results.push(
                 <tr>
                     <td>
@@ -41,7 +42,8 @@ const LinkedDatasets = () => {
                     </td>
                     <td>
                         {dls.map((dl: DatasetLink) =>
-                            <a href="#" target="_blank" rel="noopener noreferrer">
+                            <a href={targetHref + encodeURIComponent(dl.curie ?? "")} target="_blank"
+                               rel="noopener noreferrer">
                                 <span className="term-button">{dl.curie}</span>
                             </a>
                         )}
