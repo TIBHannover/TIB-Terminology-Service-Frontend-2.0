@@ -35,7 +35,6 @@ const OntologyAdoptRequest = (props) => {
   const [adopterAltName, setAdopterAltName] = useState("");
   const [adopterPid, setAdopterPid] = useState("");
   const [adopterHomepage, setAdopterHomepage] = useState("");
-  const [adopterDescription, setAdopterDescription] = useState("");
   const [providerName, setProviderName] = useState("");
   const [providerPid, setProviderPid] = useState("");
   const [usageDescription, setUsageDescription] = useState("");
@@ -88,7 +87,6 @@ const OntologyAdoptRequest = (props) => {
       adopter_alt_name: adopterAltName,
       adopter_pid: adopterPid,
       adopter_homepage: adopterHomepage,
-      adopter_description: adopterDescription,
       provider_name: providerName,
       provider_pid: providerPid,
       usage_description: usageDescription,
@@ -231,19 +229,6 @@ submitAdopterRequest(form).then((result) => {
                   className="form-control"
                   value={adopterHomepage}
                   onChange={(e) => setAdopterHomepage(e.target.value)}
-                />
-              </div>
-            </div>
-            <br />
-
-            <div className="row">
-              <div className="col-sm-8">
-                <label>Description of the terminology adopter (in English)</label>
-                <textarea
-                  className="form-control"
-                  rows={3}
-                  value={adopterDescription}
-                  onChange={(e) => setAdopterDescription(e.target.value)}
                 />
               </div>
             </div>
