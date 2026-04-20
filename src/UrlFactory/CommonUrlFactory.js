@@ -51,6 +51,11 @@ class CommonUrlFactory {
     return currentParams.get(SiteUrlParamNames.Iri);
   }
   
+  getCurie() {
+    let url = new URL(window.location);
+    let currentParams = url.searchParams;
+    return currentParams.get(SiteUrlParamNames.Curie);
+  }
   
   setIri({newIri}) {
     let url = new URL(window.location);
