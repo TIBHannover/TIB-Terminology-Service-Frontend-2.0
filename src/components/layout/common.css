@@ -487,6 +487,12 @@ body .fa-orcid {
     font-size: 30px;
 }
 
+body .small-orcid-icon {
+    font-size: 20px !important;
+    color: #A5CD39 !important;
+    margin-left: 5px;
+}
+
 body .fa-github,
 .fa-gitlab {
     border: none;
