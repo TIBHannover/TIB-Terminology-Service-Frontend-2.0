@@ -6,6 +6,7 @@ import {DatasetLink} from "../../../api/types/datasetLinks";
 import {ErrorObject} from "../../../api/types/common";
 import DropDown from "../../common/DropDown/DropDown";
 import {DropDownOption} from "../../common/DropDown/DropDown";
+import Pagination from "../../common/Pagination/Pagination";
 
 const LinkedDatasets = () => {
     /*
@@ -118,6 +119,20 @@ const LinkedDatasets = () => {
                             dropDownId="dataset-links-page-size"
                             dropDownTitle="Page size"
                         />
+                    </div>
+                    <div className="col-sm-3">
+                        <Pagination
+                            clickHandler={(newPage: number) => {
+                                setPage(newPage);
+                            }}
+                            count={datasetLinksMap.size}
+                            initialPageNumber={1}
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <b>{`Showing ${(page - 1) * size + 1} - ${page * size} out of ${datasetLinksMap.size} dataset links.`}</b>
                     </div>
                 </div>
                 <Table striped bordered responsive>
