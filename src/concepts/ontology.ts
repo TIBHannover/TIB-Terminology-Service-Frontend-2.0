@@ -214,14 +214,32 @@ export class TsOntology {
 
 
     private processCreators(ontology: OntologyData): string[] {
-        let creators = ontology["http://purl.org/dc/terms/creator"] || ontology["http://purl.org/dc/elements/1.1/creator"] || ontology['creator'];
-        if (!creators || creators.length === 0) {
+        try {
+            let creators = ontology["http://purl.org/dc/terms/creator"] || ontology["http://purl.org/dc/elements/1.1/creator"] || ontology['creator'];
+            let processed_creators: string[] = [];
+            if (!creators || creators.length === 0) {
+                return [];
+            }
+            if (typeof creators === "string") {
+                processed_creators.push(creators);
+                return processed_creators;
+            }
+            if (Array.isArray(creators)) {
+                creators.forEach((creator: string | Record<any, any> | null) => {
+                    if (!creator) {
+                        return;
+                    }
+                    if (typeof creator === "string") {
+                        processed_creators.push(creator);
+                    } else if (creator["http://xmlns.com/foaf/0.1/name"]) {
+                        processed_creators.push(creator["http://xmlns.com/foaf/0.1/name"]);
+                    }
+                })
+            }
+            return processed_creators;
+        } catch (e) {
             return [];
         }
-        if (typeof creators === "string") {
-            return [creators];
-        }
-        return creators;
     }
 
 

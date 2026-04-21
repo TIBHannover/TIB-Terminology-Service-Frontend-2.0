@@ -32,13 +32,19 @@ const OntologyInfoTable = () => {
     async function createAnnotations() {
         let annotations = [];
         for (let prop in ontology.annotations) {
-            let value: string[] = [];
+            let value: string[] | ReactElement = [];
             if (typeof ontology.annotations[prop] === "string") {
                 value = [ontology.annotations[prop]];
             } else {
                 value = ontology.annotations[prop];
             }
-            let valuesAsElements = await OntologyLib.formatCreator(value);
+            let valuesAsElements = value;
+            if (prop.includes("creator")) {
+                continue;
+            }
+            if (prop.includes("contributor")) {
+                valuesAsElements = await OntologyLib.formatCreator(valuesAsElements as string[]);
+            }
             annotations.push(
                 <tr>
                     <td className='node-metadata-label'><b>{prop}</b></td>
