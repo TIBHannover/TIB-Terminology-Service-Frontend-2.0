@@ -4,16 +4,10 @@ import {getDatasetLinks} from "../../../api/dataset_links";
 import {OntologyPageContext} from "../../../context/OntologyPageContext";
 import {DatasetLink} from "../../../api/types/datasetLinks";
 import {ErrorObject} from "../../../api/types/common";
+import DropDown from "../../common/DropDown/DropDown";
+import {DropDownOption} from "../../common/DropDown/DropDown";
 
 const LinkedDatasets = () => {
-    const ontologyPageContext = useContext(OntologyPageContext);
-
-    const [datasetLinksMap, setDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const [page, setPage] = useState(1);
-    const [size, setSize] = useState(20);
-
     /*
     * ToDos:
     * - pagination
@@ -23,6 +17,18 @@ const LinkedDatasets = () => {
     * - resolve term/prop/indiv pages via curie (if curie given then call api to get iri)
     * - metadata widget?
     * */
+    const ontologyPageContext = useContext(OntologyPageContext);
+
+    const DEFAULT_PAGE_SIZE = 20;
+    const DEFAULT_GROUP_BY = "dataset";
+
+    const [datasetLinksMap, setDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(DEFAULT_PAGE_SIZE);
+    const [datasetRepos, setDatasetRepos] = useState<DropDownOption[]>([]);
+
 
     function renderDatasetLinks() {
         if (datasetLinksMap.size === 0) {
@@ -66,6 +72,15 @@ const LinkedDatasets = () => {
                 setError(true);
                 return;
             }
+            let reposOptions: DropDownOption[] = [];
+            let repoTitles: string[] = [];
+            repoTitles = [...dlsMap.values()].flat().map((obj: DatasetLink) => obj.repo_name) as string[];
+            let id = 1;
+            reposOptions.push({value: 0, label: "All"});
+            for (let title of new Set(repoTitles)) {
+                reposOptions.push({value: id++, label: title});
+            }
+            setDatasetRepos(reposOptions);
             setDatasetLinksMap(dlsMap);
             setLoading(false);
         });
@@ -73,19 +88,51 @@ const LinkedDatasets = () => {
 
 
     return (
-        <div>
-            <h1>LinkedDatasets</h1>
-            <Table striped bordered responsive>
-                <thead>
-                <tr>
-                    <th>Dataset</th>
-                    <th>Linked terms</th>
-                </tr>
-                </thead>
-                <tbody>
-                {!loading && !error && renderDatasetLinks()}
-                </tbody>
-            </Table>
+        <div className="row">
+            <div className="col-sm-12">
+                <h1>LinkedDatasets</h1>
+                <div className="row mb-3 mt-3">
+                    <div className="col-sm-3">
+                        <DropDown
+                            defaultValue={DEFAULT_GROUP_BY}
+                            options={[{value: DEFAULT_GROUP_BY, label: "Dataset"}, {value: "2", label: "Term"}]}
+                            dropDownId="dataset-links-group-by"
+                            dropDownTitle="Group by"
+                        />
+                    </div>
+                    <div className="col-sm-3">
+                        <DropDown
+                            defaultValue={0}
+                            options={datasetRepos}
+                            dropDownId="dataset-repos-filter"
+                            dropDownTitle="Repository"
+                        />
+                    </div>
+                    <div className="col-sm-3">
+                        <DropDown
+                            defaultValue={DEFAULT_PAGE_SIZE}
+                            options={[{value: DEFAULT_PAGE_SIZE, label: DEFAULT_PAGE_SIZE}, {value: "2", label: "30"}, {
+                                value: "3",
+                                label: "40"
+                            }]}
+                            dropDownId="dataset-links-page-size"
+                            dropDownTitle="Page size"
+                        />
+                    </div>
+                </div>
+                <Table striped bordered responsive>
+                    <thead>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Linked terms</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {!loading && !error && renderDatasetLinks()}
+                    </tbody>
+                </Table>
+            </div>
+
         </div>
     );
 }

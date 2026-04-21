@@ -2,7 +2,7 @@ import {ChangeEventHandler, ReactNode} from "react";
 
 type DropDownValue = string | number | readonly string[] | undefined;
 
-interface DropDownOption {
+export interface DropDownOption {
     value: string | number;
     label: ReactNode;
 }
