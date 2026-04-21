@@ -42,7 +42,7 @@ const LinkedDatasets = () => {
                     </td>
                     <td>
                         {dls.map((dl: DatasetLink) =>
-                            <a href={targetHref + encodeURIComponent(dl.curie ?? "")} target="_blank"
+                            <a href={targetHref + encodeURIComponent(dl.curie!)} target="_blank"
                                rel="noopener noreferrer">
                                 <span className="term-button">{dl.curie}</span>
                             </a>

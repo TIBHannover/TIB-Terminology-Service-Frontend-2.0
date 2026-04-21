@@ -35,7 +35,7 @@ const SearchResult = () => {
     const searchUrlFactory = new SearchUrlFactory();
     const commonUrlFactory = new CommonUrlFactory();
 
-    let language = commonUrlFactory.getParam({name: SiteUrlParamNames.Lang}) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
+    let language = commonUrlFactory.getParam({name: SiteUrlParamNames.Lang}) || Toolkit.getVarInLocalSrorageIfExist('language', "en") as string;
 
     const DEFAULT_PAGE_NUMBER = "1";
     const DEFAULT_PAGE_SIZE = "10";
@@ -455,7 +455,7 @@ const SearchResult = () => {
                                     dropDownTitle="Language"
                                     dropdownClassName={"white-dropdown"}
                                     dropDownValue={lang}
-                                    defaultVaue={lang}
+                                    defaultValue={lang}
                                     dropDownChangeHandler={(e: ChangeEvent<HTMLSelectElement>) => {
                                         localStorage.setItem('language', e.target.value);
                                         commonUrlFactory.setParam({name: 'lang', value: e.target.value});
