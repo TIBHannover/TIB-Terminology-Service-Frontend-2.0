@@ -9,11 +9,12 @@ import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import {getTourProfile} from '../../../tours/controller';
 import TermApi from '../../../api/term';
+import {TsClass, TsProperty} from "../../../concepts";
 
 
 type DataTreeProps = {
-    rootNodes: any[];
-    obsoleteTerms: any[];
+    rootNodes: TsClass[] | TsProperty[];
+    obsoleteTerms: TsClass[] | TsProperty[];
     rootNodesForSkos: any[];
     componentIdentity: 'terms' | 'properties';
 };
