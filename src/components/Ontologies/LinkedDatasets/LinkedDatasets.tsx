@@ -57,6 +57,10 @@ const LinkedDatasets = () => {
 
     useEffect(() => {
         let ontologyId = ontologyPageContext.ontology.ontologyId;
+        console.log("ontologyId", ontologyId);
+        if (ontologyId === "nmrcv") {
+            ontologyId = "nmr";
+        }
         getDatasetLinks({ontologyId: ontologyId}).then((dlsMap: Map<string, DatasetLink[]> | ErrorObject) => {
             if ("value" in dlsMap) {
                 setError(true);

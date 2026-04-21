@@ -492,6 +492,7 @@ Tree.propTypes = {
   rootNodeNotExist: PropTypes.bool,
   isIndividual: PropTypes.bool,
   showListSwitchEnabled: PropTypes.bool,
+  handleJumtoSelection: PropTypes.func.isRequired,
 };
 
 

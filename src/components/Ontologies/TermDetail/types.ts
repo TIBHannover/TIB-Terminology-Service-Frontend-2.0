@@ -1,45 +1,46 @@
-import { TsTerm } from "../../../concepts";
+import {TsTerm} from "../../../concepts";
 
 export type TermTabKeys = 'Detail' | 'Notes' | 'GraphView';
 
 export type TermTabMetadata = Record<TermTabKeys, {
-  id: string,
-  keyForRenderAsTabItem: string,
-  tabId: number,
-  tabTitle: string,
-  urlEndPoint: string
+    id: string,
+    keyForRenderAsTabItem: string,
+    tabId: number,
+    tabTitle: string,
+    urlEndPoint: string
 }>;
 
 
 export type TermDetailComPros = {
-  iri: string;
-  extractKey: string;
-  componentIdentity: string;
-  typeForNote: string;
+    iri: string;
+    extractKey: string;
+    componentIdentity: string;
+    typeForNote: string;
+    isIndividual?: boolean;
 }
 
 
 export type RenderTermDetailComProps = {
-  componentIdentity: string,
-  activeTab: number,
-  tabChangeHandler: (e: React.MouseEvent<HTMLAnchorElement>) => void,
-  noteCount: number
+    componentIdentity: string,
+    activeTab: number,
+    tabChangeHandler: (e: React.MouseEvent<HTMLAnchorElement>) => void,
+    noteCount: number
 }
 
 
 export type TermDetailTableComProp = {
-  iri: string;
-  componentIdentity: string;
-  extractKey: string;
-  node?: TsTerm;
-  isIndividual?: boolean;
+    iri: string;
+    componentIdentity: string;
+    extractKey: string;
+    node?: TsTerm;
+    isIndividual?: boolean;
 }
 
 export type TableMetadata = {
-  [key: string]: {
-    value: any,
-    isLink: boolean
-  }
+    [key: string]: {
+        value: any,
+        isLink: boolean
+    }
 }
 
 
