@@ -24,6 +24,7 @@ const LinkedDatasets = () => {
     const DEFAULT_GROUP_BY = "dataset";
 
     const [datasetLinksMap, setDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
+    const [filteredDatasetLinksMap, setFilteredDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [page, setPage] = useState(1);
@@ -32,12 +33,12 @@ const LinkedDatasets = () => {
 
 
     function renderDatasetLinks() {
-        if (datasetLinksMap.size === 0) {
+        if (filteredDatasetLinksMap.size === 0) {
             return <p>No dataset links found</p>
         }
         let results = [];
-        for (let datasetTitle of Array.from(datasetLinksMap.keys()).slice((page - 1) * size, page * size)) {
-            let dls = datasetLinksMap.get(datasetTitle)!;
+        for (let datasetTitle of Array.from(filteredDatasetLinksMap.keys()).slice((page - 1) * size, page * size)) {
+            let dls = filteredDatasetLinksMap.get(datasetTitle)!;
             let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
             results.push(
                 <tr>
@@ -61,10 +62,28 @@ const LinkedDatasets = () => {
         return results;
     }
 
+    function filterByRepo(e: React.ChangeEvent<HTMLSelectElement>) {
+        let repoId = parseInt(e.target.value);
+        if (!repoId) {
+            setFilteredDatasetLinksMap(datasetLinksMap);
+            return;
+        }
+        let repoTitle = datasetRepos.find((option: DropDownOption) => option.value === repoId)?.label;
+        if (!repoTitle) {
+            return;
+        }
+        let filteredMap = new Map();
+        for (let [datasetTitle, dls] of datasetLinksMap) {
+            if (dls.find((dl: DatasetLink) => dl.repo_name === repoTitle)) {
+                filteredMap.set(datasetTitle, dls);
+            }
+        }
+        setFilteredDatasetLinksMap(filteredMap);
+    }
+
 
     useEffect(() => {
         let ontologyId = ontologyPageContext.ontology.ontologyId;
-        console.log("ontologyId", ontologyId);
         if (ontologyId === "nmrcv") {
             ontologyId = "nmr";
         }
@@ -83,6 +102,7 @@ const LinkedDatasets = () => {
             }
             setDatasetRepos(reposOptions);
             setDatasetLinksMap(dlsMap);
+            setFilteredDatasetLinksMap(dlsMap);
             setLoading(false);
         });
     }, []);
@@ -107,6 +127,7 @@ const LinkedDatasets = () => {
                             options={datasetRepos}
                             dropDownId="dataset-repos-filter"
                             dropDownTitle="Repository"
+                            dropDownChangeHandler={filterByRepo}
                         />
                     </div>
                     <div className="col-sm-3">
@@ -125,14 +146,19 @@ const LinkedDatasets = () => {
                             clickHandler={(newPage: number) => {
                                 setPage(newPage);
                             }}
-                            count={datasetLinksMap.size}
+                            count={Math.ceil(filteredDatasetLinksMap.size / size)}
                             initialPageNumber={1}
                         />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-sm-12">
-                        <b>{`Showing ${(page - 1) * size + 1} - ${page * size} out of ${datasetLinksMap.size} dataset links.`}</b>
+                        <b>
+                            {`Showing 
+                            ${(page - 1) * size + 1} - ${page * size < filteredDatasetLinksMap.size ? page * size : filteredDatasetLinksMap.size} 
+                            out of ${filteredDatasetLinksMap.size} 
+                            dataset links.`}
+                        </b>
                     </div>
                 </div>
                 <Table striped bordered responsive>
