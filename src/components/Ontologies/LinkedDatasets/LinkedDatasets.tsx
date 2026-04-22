@@ -28,8 +28,14 @@ const LinkedDatasets = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(DEFAULT_PAGE_SIZE);
+    const [size, setSize] = useState<number>(DEFAULT_PAGE_SIZE);
     const [datasetRepos, setDatasetRepos] = useState<DropDownOption[]>([]);
+
+    const sizeOptions: DropDownOption[] = [{value: DEFAULT_PAGE_SIZE, label: DEFAULT_PAGE_SIZE}, {
+        value: "30",
+        label: "30"
+    }, {value: "40", label: "40"}];
+    const groupByOptions: DropDownOption[] = [{value: DEFAULT_GROUP_BY, label: "Dataset"}, {value: "2", label: "Term"}];
 
 
     function renderDatasetLinks() {
@@ -42,13 +48,13 @@ const LinkedDatasets = () => {
             let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
             results.push(
                 <tr>
-                    <td>
+                    <td className="col-6">
                         <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}${datasetTitle}`} target="_blank"
                            rel="noopener noreferrer">
                             {datasetTitle}
                         </a>
                     </td>
-                    <td>
+                    <td className="col-6">
                         {dls.map((dl: DatasetLink) =>
                             <a href={targetHref + encodeURIComponent(dl.curie!)} target="_blank"
                                rel="noopener noreferrer">
@@ -116,7 +122,7 @@ const LinkedDatasets = () => {
                     <div className="col-sm-3">
                         <DropDown
                             defaultValue={DEFAULT_GROUP_BY}
-                            options={[{value: DEFAULT_GROUP_BY, label: "Dataset"}, {value: "2", label: "Term"}]}
+                            options={groupByOptions}
                             dropDownId="dataset-links-group-by"
                             dropDownTitle="Group by"
                         />
@@ -133,12 +139,13 @@ const LinkedDatasets = () => {
                     <div className="col-sm-3">
                         <DropDown
                             defaultValue={DEFAULT_PAGE_SIZE}
-                            options={[{value: DEFAULT_PAGE_SIZE, label: DEFAULT_PAGE_SIZE}, {value: "2", label: "30"}, {
-                                value: "3",
-                                label: "40"
-                            }]}
+                            options={sizeOptions}
                             dropDownId="dataset-links-page-size"
                             dropDownTitle="Page size"
+                            dropDownChangeHandler={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                setSize(parseInt(e.target.value));
+                                setPage(1);
+                            }}
                         />
                     </div>
                     <div className="col-sm-3">
@@ -170,6 +177,11 @@ const LinkedDatasets = () => {
                     </thead>
                     <tbody>
                     {!loading && !error && renderDatasetLinks()}
+                    {loading && <tr>
+                      <td colSpan={2}>
+                        <div className="isLoading"></div>
+                      </td>
+                    </tr>}
                     </tbody>
                 </Table>
             </div>
