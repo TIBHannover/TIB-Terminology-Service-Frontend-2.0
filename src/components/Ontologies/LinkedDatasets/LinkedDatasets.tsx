@@ -1,8 +1,8 @@
 import Table from 'react-bootstrap/Table';
 import {useState, useEffect, useContext} from "react";
-import {getDatasetLinks} from "../../../api/dataset_links";
+import {getDatasetLinks, getDatasetRepositories} from "../../../api/dataset_links";
 import {OntologyPageContext} from "../../../context/OntologyPageContext";
-import {DatasetLink} from "../../../api/types/datasetLinks";
+import {DatasetLink, GetDatasetLinkServiceResp} from "../../../api/types/datasetLinks";
 import {ErrorObject} from "../../../api/types/common";
 import DropDown from "../../common/DropDown/DropDown";
 import {DropDownOption} from "../../common/DropDown/DropDown";
@@ -24,12 +24,16 @@ const LinkedDatasets = () => {
     const DEFAULT_GROUP_BY = "dataset";
 
     const [datasetLinksMap, setDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
-    const [filteredDatasetLinksMap, setFilteredDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState<number>(DEFAULT_PAGE_SIZE);
     const [datasetRepos, setDatasetRepos] = useState<DropDownOption[]>([]);
+    const [groupBy, setGroupBy] = useState<string>(DEFAULT_GROUP_BY);
+    const [selectedRepo, setSelectedRepo] = useState<number>(0);
+    const [tableContent, setTableContent] = useState<JSX.Element[]>([]);
+    const [dataIsReady, setDataIsReady] = useState<boolean>(false);
+    const [totalDatasetLinksCount, setTotalDatasetLinksCount] = useState<number>(0);
 
     const sizeOptions: DropDownOption[] = [{value: DEFAULT_PAGE_SIZE, label: DEFAULT_PAGE_SIZE}, {
         value: "30",
@@ -39,12 +43,22 @@ const LinkedDatasets = () => {
 
 
     function renderDatasetLinks() {
-        if (filteredDatasetLinksMap.size === 0) {
-            return <p>No dataset links found</p>
+        let content = [];
+        if (datasetLinksMap.size === 0) {
+            content.push(<p>No dataset links found</p>);
+        } else if (groupBy === DEFAULT_GROUP_BY) {
+            content = [...renderByDataset()];
+        } else {
+            content = [...renderByTerm()];
         }
+        setTableContent(content);
+        setLoading(false);
+        return true;
+    }
+
+    function renderByDataset() {
         let results = [];
-        for (let datasetTitle of Array.from(filteredDatasetLinksMap.keys()).slice((page - 1) * size, page * size)) {
-            let dls = filteredDatasetLinksMap.get(datasetTitle)!;
+        for (let [datasetTitle, dls] of datasetLinksMap) {
             let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
             results.push(
                 <tr>
@@ -68,50 +82,108 @@ const LinkedDatasets = () => {
         return results;
     }
 
-    function filterByRepo(e: React.ChangeEvent<HTMLSelectElement>) {
-        let repoId = parseInt(e.target.value);
-        if (!repoId) {
-            setFilteredDatasetLinksMap(datasetLinksMap);
-            return;
+    function renderByTerm() {
+        let results = [];
+        for (let [curie, dls] of datasetLinksMap) {
+            let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
+            results.push(
+                <tr>
+                    <td className="col-6">
+                        <a href={targetHref + encodeURIComponent(curie)} target="_blank"
+                           rel="noopener noreferrer">
+                            <span className="term-button">{curie}</span>
+                        </a>
+                    </td>
+                    <td className="col-6">
+                        {dls.map((dl: DatasetLink) =>
+                            <>
+                                <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}${dl.dataset_title}`}
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    {dl.dataset_title}
+                                </a>
+                                <br/>
+                            </>
+                        )}
+                    </td>
+                </tr>
+            )
         }
-        let repoTitle = datasetRepos.find((option: DropDownOption) => option.value === repoId)?.label;
-        if (!repoTitle) {
-            return;
-        }
-        let filteredMap = new Map();
-        for (let [datasetTitle, dls] of datasetLinksMap) {
-            if (dls.find((dl: DatasetLink) => dl.repo_name === repoTitle)) {
-                filteredMap.set(datasetTitle, dls);
-            }
-        }
-        setFilteredDatasetLinksMap(filteredMap);
+        return results;
+    }
+
+    function handleGroupByChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        let newGroupBy = e.target.value;
+        setGroupBy(newGroupBy);
+        setPage(1);
     }
 
 
-    useEffect(() => {
+    function filterByRepo(e: React.ChangeEvent<HTMLSelectElement>) {
+        let repoId = parseInt(e.target.value);
+        setSelectedRepo(repoId);
+        setPage(1);
+    }
+
+    function fetchData() {
         let ontologyId = ontologyPageContext.ontology.ontologyId;
         if (ontologyId === "nmrcv") {
             ontologyId = "nmr";
         }
-        getDatasetLinks({ontologyId: ontologyId}).then((dlsMap: Map<string, DatasetLink[]> | ErrorObject) => {
-            if ("value" in dlsMap) {
+        let repo = datasetRepos.find((repo: DropDownOption) => repo.value === selectedRepo);
+        getDatasetLinks({
+            ontologyId: ontologyId,
+            page: page,
+            size: size,
+            groupBy: groupBy === DEFAULT_GROUP_BY ? groupBy : "term",
+            repository: repo?.value! > 0 ? repo?.label as string : undefined
+        }).then((resp: GetDatasetLinkServiceResp | ErrorObject) => {
+            if ("value" in resp) {
                 setError(true);
                 return;
             }
+            let dlsMap = resp.linksMap;
+            setDatasetLinksMap(dlsMap);
+            setTotalDatasetLinksCount(resp.total);
+            setDataIsReady(true);
+        });
+    }
+
+    function fetchDatasetRepositories() {
+        let ontologyId = ontologyPageContext.ontology.ontologyId;
+        if (ontologyId === "nmrcv") {
+            ontologyId = "nmr";
+        }
+        getDatasetRepositories(ontologyId).then((resp: string[] | ErrorObject) => {
+            if ("value" in resp) return;
             let reposOptions: DropDownOption[] = [];
-            let repoTitles: string[] = [];
-            repoTitles = [...dlsMap.values()].flat().map((obj: DatasetLink) => obj.repo_name) as string[];
-            let id = 1;
             reposOptions.push({value: 0, label: "All"});
-            for (let title of new Set(repoTitles)) {
+            let id = 1;
+            for (let title of resp) {
                 reposOptions.push({value: id++, label: title});
             }
             setDatasetRepos(reposOptions);
-            setDatasetLinksMap(dlsMap);
-            setFilteredDatasetLinksMap(dlsMap);
-            setLoading(false);
         });
+    }
+
+
+    useEffect(() => {
+        fetchDatasetRepositories();
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        setDatasetLinksMap(new Map());
+        setDataIsReady(false);
+        setLoading(true);
+        fetchData();
+    }, [page, size, groupBy, selectedRepo]);
+
+    useEffect(() => {
+        if (dataIsReady) {
+            renderDatasetLinks();
+        }
+    }, [dataIsReady]);
 
 
     return (
@@ -125,6 +197,7 @@ const LinkedDatasets = () => {
                             options={groupByOptions}
                             dropDownId="dataset-links-group-by"
                             dropDownTitle="Group by"
+                            dropDownChangeHandler={handleGroupByChange}
                         />
                     </div>
                     <div className="col-sm-3">
@@ -153,7 +226,7 @@ const LinkedDatasets = () => {
                             clickHandler={(newPage: number) => {
                                 setPage(newPage);
                             }}
-                            count={Math.ceil(filteredDatasetLinksMap.size / size)}
+                            count={Math.ceil(totalDatasetLinksCount / size)}
                             initialPageNumber={1}
                         />
                     </div>
@@ -162,9 +235,9 @@ const LinkedDatasets = () => {
                     <div className="col-sm-12">
                         <b>
                             {`Showing 
-                            ${(page - 1) * size + 1} - ${page * size < filteredDatasetLinksMap.size ? page * size : filteredDatasetLinksMap.size} 
-                            out of ${filteredDatasetLinksMap.size} 
-                            dataset links.`}
+                            ${(page - 1) * size + 1} - ${page * size < totalDatasetLinksCount ? page * size : totalDatasetLinksCount} 
+                            out of ${totalDatasetLinksCount} 
+                            ${groupBy === DEFAULT_GROUP_BY ? "datasets" : "terms"}.`}
                         </b>
                     </div>
                 </div>
@@ -176,7 +249,7 @@ const LinkedDatasets = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {!loading && !error && renderDatasetLinks()}
+                    {!loading && !error && tableContent}
                     {loading && <tr>
                       <td colSpan={2}>
                         <div className="isLoading"></div>
