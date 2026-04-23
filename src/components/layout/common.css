@@ -802,3 +802,12 @@ body .site-tour-btn:hover {
     margin-top: 4px;
     padding: 3px;
 }
+
+.data-repo-tag {
+    background-color: #0e6668;
+    margin-right: 5px;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+}

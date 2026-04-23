@@ -58,7 +58,7 @@ const LinkedDatasets = () => {
 
     function renderDatasetTableEntry(datasetTitle: string) {
         return (
-            <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}${datasetTitle}`} target="_blank"
+            <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}/dataset/${datasetTitle}`} target="_blank"
                rel="noopener noreferrer">
                 {datasetTitle}
             </a>
@@ -148,28 +148,22 @@ const LinkedDatasets = () => {
         });
     }
 
-    function fetchDatasetRepositories() {
-        let ontologyId = ontologyPageContext.ontology.ontologyId;
-        if (ontologyId === "nmrcv") {
-            ontologyId = "nmr";
+    function loadDatasetRepositoriesOptions() {
+        let reposOptions: DropDownOption[] = [];
+        reposOptions.push({value: 0, label: "All"});
+        let id = 1;
+        for (let title of ontologyPageContext.repositories) {
+            reposOptions.push({value: id++, label: title});
         }
-        getDatasetRepositories(ontologyId).then((resp: string[] | ErrorObject) => {
-            if ("value" in resp) return;
-            let reposOptions: DropDownOption[] = [];
-            reposOptions.push({value: 0, label: "All"});
-            let id = 1;
-            for (let title of resp) {
-                reposOptions.push({value: id++, label: title});
-            }
-            setDatasetRepos(reposOptions);
-        });
+        setDatasetRepos(reposOptions);
     }
 
 
     useEffect(() => {
-        fetchDatasetRepositories();
+        loadDatasetRepositoriesOptions();
         fetchData();
     }, []);
+
 
     useEffect(() => {
         setDatasetLinksMap(new Map());

@@ -21,6 +21,8 @@ import {RouteComponentProps} from 'react-router-dom';
 import {TsOntology, TsClass, TsProperty, TsSkosTerm} from '../../../concepts';
 import PublicationsLinks from "../PublicationsLinks/PublicationsLinks";
 import LinkedDatasets from "../LinkedDatasets/LinkedDatasets";
+import {getDatasetRepositories} from "../../../api/dataset_links";
+import {ErrorObject} from "../../../api/types/common";
 
 
 const OVERVIEW_TAB_ID = 0;
@@ -93,6 +95,7 @@ const OntologyPage = (props: CmpPropp) => {
     const [notesCount, setNotesCount] = useState(0);
     const [ontoLang, setOntoLang] = useState<string>(language);
     const [fullscreenMode, setFullscreenMode] = useState(false);
+    const [repositories, setRepositories] = useState<string[]>([]);
     window.localStorage.setItem("language", ontoLang);
 
 
@@ -114,8 +117,13 @@ const OntologyPage = (props: CmpPropp) => {
             });
             skosIndividuals = await skosApi.fetchRootConcepts();
         }
-
+        let repos = await getDatasetRepositories(ontology.ontologyId);
+        if ("value" in repos) {
+            repos = [];
+        }
+        console.log("repos", repos);
         setOntology(ontology);
+        setRepositories(repos as string[]);
         setObsoleteTerms(ontology.obsoleteClasses);
         setObsoleteProps(ontology.obsoleteProperties);
         setRootTerms(ontology.rootClasses);
@@ -202,7 +210,6 @@ const OntologyPage = (props: CmpPropp) => {
         }
     }
 
-
     useEffect(() => {
         loadOntologyData();
         setCountOfNotes();
@@ -238,7 +245,8 @@ const OntologyPage = (props: CmpPropp) => {
             setOntoLang: setOntoLang,
             fullScreenMode: fullscreenMode,
             setFullscreenMode: setFullscreenMode,
-            handleFullScreen: handleFullScreen
+            handleFullScreen: handleFullScreen,
+            repositories: repositories,
         };
 
         return (

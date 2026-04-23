@@ -1,36 +1,42 @@
-import { createContext } from "react";
-import { TsOntology } from "../concepts";
-import { ComponentIdentity } from "../components/Ontologies/OntologyPage/OntologyPage";
+import {createContext} from "react";
+import {TsOntology} from "../concepts";
+import {ComponentIdentity} from "../components/Ontologies/OntologyPage/OntologyPage";
 
 
 type Blueprint = {
-  ontology: TsOntology,
-  isSkos: boolean,
-  lastVisitedIri: { [key: string]: string },
-  storeIriForComponent: (iri: string, componentId: ComponentIdentity) => void,
-  tabLastStates: { [key: string]: any },
-  storeState: (domContent: string, stateObject: any, componentId: ComponentIdentity, iri: string) => void,
-  ontoLang: string,
-  setOntoLang: React.Dispatch<React.SetStateAction<string>>
-  fullScreenMode: boolean,
-  setFullscreenMode: React.Dispatch<React.SetStateAction<boolean>>,
-  handleFullScreen: () => void
+    ontology: TsOntology,
+    isSkos: boolean,
+    lastVisitedIri: { [key: string]: string },
+    storeIriForComponent: (iri: string, componentId: ComponentIdentity) => void,
+    tabLastStates: { [key: string]: any },
+    storeState: (domContent: string, stateObject: any, componentId: ComponentIdentity, iri: string) => void,
+    ontoLang: string,
+    setOntoLang: React.Dispatch<React.SetStateAction<string>>
+    fullScreenMode: boolean,
+    setFullscreenMode: React.Dispatch<React.SetStateAction<boolean>>,
+    handleFullScreen: () => void,
+    repositories: string[]
 }
 
 const blueprint: Blueprint = {
-  ontology: new TsOntology({}),
-  isSkos: false,
-  lastVisitedIri: { "terms": "", "properties": "", "individuals": "", "termList": "" },
-  storeIriForComponent: function itStoresIriInOntologyPageComponentForEachTab() { /* sets lastVisitedIri  */ },
-  tabLastStates: { "terms": null, "properties": null, "gitIssues": "" },
-  storeState: function saveTabStatesToPreventReloadOnTabChange() { /* sets tabLastStates */ },
-  ontoLang: "en",
-  setOntoLang: function setOntoLang() { },
-  fullScreenMode: false,
-  setFullscreenMode: function setFullscreenMode() { },
-  handleFullScreen: function handleFullScreen() { }
+    ontology: new TsOntology({}),
+    isSkos: false,
+    lastVisitedIri: {"terms": "", "properties": "", "individuals": "", "termList": ""},
+    storeIriForComponent: function itStoresIriInOntologyPageComponentForEachTab() { /* sets lastVisitedIri  */
+    },
+    tabLastStates: {"terms": null, "properties": null, "gitIssues": ""},
+    storeState: function saveTabStatesToPreventReloadOnTabChange() { /* sets tabLastStates */
+    },
+    ontoLang: "en",
+    setOntoLang: function setOntoLang() {
+    },
+    fullScreenMode: false,
+    setFullscreenMode: function setFullscreenMode() {
+    },
+    handleFullScreen: function handleFullScreen() {
+    },
+    repositories: []
 }
-
 
 
 export const OntologyPageContext = createContext(blueprint);

@@ -34,6 +34,9 @@ export async function getDatasetLinks(props: GetDatasetLinksProps): Promise<GetD
 
 export async function getDatasetRepositories(ontologyId: string): Promise<string[] | ErrorObject> {
     try {
+        if (ontologyId === "nmrcv") {
+            ontologyId = "nmr";
+        }
         let baseUrl = `${process.env.REACT_APP_MICRO_BACKEND_ENDPOINT}/ts/repos_list?ontology_id=${ontologyId}`;
         let headers = getTsPluginHeaders({isJson: true, withAccessToken: false});
         let resp = await fetch(baseUrl, {headers: headers});

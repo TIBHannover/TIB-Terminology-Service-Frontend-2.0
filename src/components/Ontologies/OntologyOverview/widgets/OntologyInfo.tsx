@@ -198,6 +198,19 @@ const OntologyInfoTable = () => {
                                 {createImports(ontology.importsFrom)}
                             </td>
                         </tr>
+                        {process.env.REACT_APP_LINKED_DATASETS === "true" && ontologyPageContext.repositories.length !== 0 &&
+                          <tr>
+                            <td className="ontology-overview-table-id-column"><b>Repositories</b></td>
+                            <td>
+                                {ontologyPageContext.repositories.map((rep: string) =>
+                                    <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}/repository/${rep.toLowerCase().replaceAll(" ", "")}`}
+                                       target="_blank" rel="noopener noreferrer">
+                                        <span className="data-repo-tag">{rep}</span>
+                                    </a>
+                                )}
+                            </td>
+                          </tr>
+                        }
                         {process.env.REACT_APP_PROJECT_ID === "general" &&
                           <tr>
                             <td className="ontology-overview-table-id-column"><b>Collections</b></td>
