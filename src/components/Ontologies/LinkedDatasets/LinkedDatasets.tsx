@@ -8,16 +8,21 @@ import DropDown from "../../common/DropDown/DropDown";
 import {DropDownOption} from "../../common/DropDown/DropDown";
 import Pagination from "../../common/Pagination/Pagination";
 
-const LinkedDatasets = () => {
+type CmpProps = {
+    inputCurie?: string;
+}
+
+const LinkedDatasets = (props: CmpProps) => {
     /*
+    Issue: some curies stored by search service are wrong (term ids) like CHMO_0002345 vs CHMO:0002345
     * ToDos:
-    * - pagination
     * - filter by dataset title
     * - filter by dataset curie
-    * - filter by repo name
-    * - resolve term/prop/indiv pages via curie (if curie given then call api to get iri)
     * - metadata widget?
     * */
+
+    const {inputCurie} = props;
+
     const ontologyPageContext = useContext(OntologyPageContext);
 
     const DEFAULT_PAGE_SIZE = 20;
@@ -84,7 +89,8 @@ const LinkedDatasets = () => {
             results.push(
                 <tr>
                     <td className="col-6">{renderDatasetTableEntry(datasetTitle)}</td>
-                    <td className="col-6">{dls.map((dl: DatasetLink) => renderCurieTableEntry(dl.curie!))}</td>
+                    {!inputCurie &&
+                      <td className="col-6">{dls.map((dl: DatasetLink) => renderCurieTableEntry(dl.curie!))}</td>}
                 </tr>
             );
         }
@@ -135,7 +141,8 @@ const LinkedDatasets = () => {
             page: page,
             size: size,
             groupBy: groupBy === DEFAULT_GROUP_BY ? groupBy : "term",
-            repository: repo?.value! > 0 ? repo?.label as string : undefined
+            repository: repo?.value! > 0 ? repo?.label as string : undefined,
+            curie: inputCurie ? inputCurie : undefined,
         }).then((resp: GetDatasetLinkServiceResp | ErrorObject) => {
             if ("value" in resp) {
                 setError(true);
@@ -150,7 +157,7 @@ const LinkedDatasets = () => {
 
     function loadDatasetRepositoriesOptions() {
         let reposOptions: DropDownOption[] = [];
-        reposOptions.push({value: 0, label: "All"});
+        reposOptions.push({value: 0, label: "All Repositories"});
         let id = 1;
         for (let title of ontologyPageContext.repositories) {
             reposOptions.push({value: id++, label: title});
@@ -182,27 +189,28 @@ const LinkedDatasets = () => {
     return (
         <div className="row">
             <div className="col-sm-12">
-                <h1>LinkedDatasets</h1>
                 <div className="row mb-3 mt-3">
-                    <div className="col-sm-3">
+                    {!inputCurie &&
+                      <div className="col-sm-3">
                         <DropDown
-                            defaultValue={DEFAULT_GROUP_BY}
-                            options={groupByOptions}
-                            dropDownId="dataset-links-group-by"
-                            dropDownTitle="Group by"
-                            dropDownChangeHandler={handleGroupByChange}
+                          defaultValue={DEFAULT_GROUP_BY}
+                          options={groupByOptions}
+                          dropDownId="dataset-links-group-by"
+                          dropDownTitle="Group by"
+                          dropDownChangeHandler={handleGroupByChange}
                         />
-                    </div>
-                    <div className="col-sm-3">
+                      </div>
+                    }
+                    <div className={!inputCurie ? "col-sm-3" : "col-sm-4"}>
                         <DropDown
                             defaultValue={0}
                             options={datasetRepos}
                             dropDownId="dataset-repos-filter"
-                            dropDownTitle="Repository"
                             dropDownChangeHandler={filterByRepo}
+                            containerClass="mt-1"
                         />
                     </div>
-                    <div className="col-sm-3">
+                    <div className={!inputCurie ? "col-sm-3" : "col-sm-4 text-center"}>
                         <DropDown
                             defaultValue={DEFAULT_PAGE_SIZE}
                             options={sizeOptions}
@@ -214,7 +222,7 @@ const LinkedDatasets = () => {
                             }}
                         />
                     </div>
-                    <div className="col-sm-3">
+                    <div className={!inputCurie ? "col-sm-3" : "col-sm-4"}>
                         <Pagination
                             clickHandler={(newPage: number) => {
                                 setPage(newPage);
@@ -238,7 +246,7 @@ const LinkedDatasets = () => {
                     <thead>
                     <tr>
                         <th>Dataset</th>
-                        <th>Linked terms</th>
+                        {!inputCurie && <th>Linked terms</th>}
                     </tr>
                     </thead>
                     <tbody>

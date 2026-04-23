@@ -1,26 +1,34 @@
 {
-  "Detail":{
-        "id":"detail",
-        "keyForRenderAsComponent": "NodePage",
-        "keyForRenderAsTabItem": "detail-tab",
-        "tabId": 0,
-         "tabTitle": "Detail",
-        "urlEndPoint": "detail"
-    },
-    "Notes":{
-        "id":"note_tab",
-        "keyForRenderAsComponent": "Notes",
-        "keyForRenderAsTabItem": "note-tab",
-        "tabId": 1,
-        "tabTitle": "Notes",
-        "urlEndPoint": "notes"
-    },
-    "GraphView":{
-        "id":"graph",
-        "keyForRenderAsComponent": "NodeGraph",
-        "keyForRenderAsTabItem": "graph-tab",
-        "tabId": 2,
-        "tabTitle": "Graph View",
-        "urlEndPoint": "graph"
-    }
+  "Detail": {
+    "id": "detail",
+    "keyForRenderAsComponent": "NodePage",
+    "keyForRenderAsTabItem": "detail-tab",
+    "tabId": 0,
+    "tabTitle": "Detail",
+    "urlEndPoint": "detail"
+  },
+  "Notes": {
+    "id": "note_tab",
+    "keyForRenderAsComponent": "Notes",
+    "keyForRenderAsTabItem": "note-tab",
+    "tabId": 1,
+    "tabTitle": "Notes",
+    "urlEndPoint": "notes"
+  },
+  "GraphView": {
+    "id": "graph",
+    "keyForRenderAsComponent": "NodeGraph",
+    "keyForRenderAsTabItem": "graph-tab",
+    "tabId": 2,
+    "tabTitle": "Graph View",
+    "urlEndPoint": "graph"
+  },
+  "LinkedDatasets": {
+    "id": "linked_datasets",
+    "keyForRenderAsComponent": "LinkedDatasets",
+    "keyForRenderAsTabItem": "linked-datasets-tab",
+    "tabId": 3,
+    "tabTitle": "Linked Datasets",
+    "urlEndPoint": "linked_datasets"
+  }
 }
