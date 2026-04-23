@@ -56,26 +56,35 @@ const LinkedDatasets = () => {
         return true;
     }
 
+    function renderDatasetTableEntry(datasetTitle: string) {
+        return (
+            <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}${datasetTitle}`} target="_blank"
+               rel="noopener noreferrer">
+                {datasetTitle}
+            </a>
+        );
+    }
+
+    function renderCurieTableEntry(curie: string) {
+        if (curie.includes("_")) {
+            curie = curie.replace("_", ":");
+        }
+        let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
+        return (
+            <a href={targetHref + encodeURIComponent(curie!)} target="_blank"
+               rel="noopener noreferrer">
+                <span className="term-button">{curie}</span>
+            </a>
+        );
+    }
+
     function renderByDataset() {
         let results = [];
         for (let [datasetTitle, dls] of datasetLinksMap) {
-            let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
             results.push(
                 <tr>
-                    <td className="col-6">
-                        <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}${datasetTitle}`} target="_blank"
-                           rel="noopener noreferrer">
-                            {datasetTitle}
-                        </a>
-                    </td>
-                    <td className="col-6">
-                        {dls.map((dl: DatasetLink) =>
-                            <a href={targetHref + encodeURIComponent(dl.curie!)} target="_blank"
-                               rel="noopener noreferrer">
-                                <span className="term-button">{dl.curie}</span>
-                            </a>
-                        )}
-                    </td>
+                    <td className="col-6">{renderDatasetTableEntry(datasetTitle)}</td>
+                    <td className="col-6">{dls.map((dl: DatasetLink) => renderCurieTableEntry(dl.curie!))}</td>
                 </tr>
             );
         }
@@ -85,23 +94,13 @@ const LinkedDatasets = () => {
     function renderByTerm() {
         let results = [];
         for (let [curie, dls] of datasetLinksMap) {
-            let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
             results.push(
                 <tr>
-                    <td className="col-6">
-                        <a href={targetHref + encodeURIComponent(curie)} target="_blank"
-                           rel="noopener noreferrer">
-                            <span className="term-button">{curie}</span>
-                        </a>
-                    </td>
+                    <td className="col-6">{renderCurieTableEntry(curie)}</td>
                     <td className="col-6">
                         {dls.map((dl: DatasetLink) =>
                             <>
-                                <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}${dl.dataset_title}`}
-                                   target="_blank"
-                                   rel="noopener noreferrer">
-                                    {dl.dataset_title}
-                                </a>
+                                {renderDatasetTableEntry(dl.dataset_title!)}
                                 <br/>
                             </>
                         )}
