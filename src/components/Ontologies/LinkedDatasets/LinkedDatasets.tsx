@@ -7,6 +7,7 @@ import {ErrorObject} from "../../../api/types/common";
 import DropDown from "../../common/DropDown/DropDown";
 import {DropDownOption} from "../../common/DropDown/DropDown";
 import Pagination from "../../common/Pagination/Pagination";
+import AlertBox from "../../common/Alerts/Alerts";
 
 type CmpProps = {
     inputCurie?: string;
@@ -49,9 +50,7 @@ const LinkedDatasets = (props: CmpProps) => {
 
     function renderDatasetLinks() {
         let content = [];
-        if (datasetLinksMap.size === 0) {
-            content.push(<p>No dataset links found</p>);
-        } else if (groupBy === DEFAULT_GROUP_BY) {
+        if (groupBy === DEFAULT_GROUP_BY) {
             content = [...renderByDataset()];
         } else {
             content = [...renderByTerm()];
@@ -185,6 +184,9 @@ const LinkedDatasets = (props: CmpProps) => {
         }
     }, [dataIsReady]);
 
+    if (datasetLinksMap.size === 0) {
+        return (<AlertBox message="No dataset link found." type="info"/>);
+    }
 
     return (
         <div className="row">
