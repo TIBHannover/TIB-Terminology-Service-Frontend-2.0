@@ -184,7 +184,7 @@ const LinkedDatasets = (props: CmpProps) => {
         }
     }, [dataIsReady]);
 
-    if (datasetLinksMap.size === 0) {
+    if (datasetLinksMap.size === 0 && dataIsReady) {
         return (<AlertBox message="No dataset link found." type="info"/>);
     }
 
