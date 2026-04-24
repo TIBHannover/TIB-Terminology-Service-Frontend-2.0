@@ -62,7 +62,7 @@ const Collections = () => {
           <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]}
             className="collection-image-anchor">
             <img
-              className='collection-logo-in-list img-fluid '
+              className='collection-logo-in-list img-fluid p-0'
               alt="logo"
               src={collectionJson["logo"]}
               width={collectionJson["logo_width"] ?? 250}

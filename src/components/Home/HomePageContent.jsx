@@ -45,7 +45,7 @@ const CollectionCard = ({ collectionId }) => {
       {collectionId === "FID BAUdigital" && <div className="alert alert-warning text-danger p-0" style={{ position: 'absolute', zIndex: 10 }}>Deprecated</div>}
       <Link to={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor">
         <img
-          className="img-fluid p-5"
+          className="img-fluid"
           alt="collection_logo"
           src={collectionsInfoJson[collectionId]['logo']}
           loading="lazy"
