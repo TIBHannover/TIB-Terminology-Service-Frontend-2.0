@@ -1,5 +1,5 @@
-const TruncatedText = (props: { text: string, length: number }) => {
-    const {text, length} = props;
+const TruncatedText = (props: { text: string, length: number, pClassName?: string }) => {
+    const {text, length, pClassName} = props;
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         let fullDescp = e.currentTarget.getAttribute("data-value") ?? "";
         let p = e.currentTarget.previousElementSibling;
@@ -16,7 +16,7 @@ const TruncatedText = (props: { text: string, length: number }) => {
     }
     return (
         <>
-            <p className="trunc-text d-inline-block">{text.substring(0, length) + " ... "}</p>
+            <p className={!pClassName ? "trunc-text" : "trunc-text " + pClassName}>{text.substring(0, length) + " ... "}</p>
             <a className="read-more-btn" data-value={text} onClick={handleClick}>
                 [Read more]
             </a>

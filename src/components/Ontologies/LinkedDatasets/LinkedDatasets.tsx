@@ -71,7 +71,7 @@ const LinkedDatasets = (props: CmpProps) => {
                 </a>
                 {datasetDescription &&
                   <div className="mt-2">
-                    <TruncatedText text={datasetDescription} length={50}/>
+                    <TruncatedText text={datasetDescription} length={50} pClassName="d-inline-block"/>
                   </div>
                 }
             </>
