@@ -69,7 +69,7 @@ const LinkedDatasets = (props: CmpProps) => {
         );
     }
 
-    function renderCurieTableEntry(curie: string) {
+    function renderCurieTableEntry(curie: string, label: string) {
         if (curie.includes("_")) {
             curie = curie.replace("_", ":");
         }
@@ -77,7 +77,7 @@ const LinkedDatasets = (props: CmpProps) => {
         return (
             <a href={targetHref + encodeURIComponent(curie!)} target="_blank"
                rel="noopener noreferrer">
-                <span className="term-button">{curie}</span>
+                <span className="term-button">{label}</span>
             </a>
         );
     }
@@ -89,7 +89,8 @@ const LinkedDatasets = (props: CmpProps) => {
                 <tr>
                     <td className="col-6">{renderDatasetTableEntry(datasetTitle)}</td>
                     {!inputCurie &&
-                      <td className="col-6">{dls.map((dl: DatasetLink) => renderCurieTableEntry(dl.curie!))}</td>}
+                      <td
+                        className="col-6">{dls.map((dl: DatasetLink) => renderCurieTableEntry(dl.curie!, dl.term_label!))}</td>}
                 </tr>
             );
         }
@@ -99,9 +100,16 @@ const LinkedDatasets = (props: CmpProps) => {
     function renderByTerm() {
         let results = [];
         for (let [curie, dls] of datasetLinksMap) {
+            let termLabel = "";
+            for (let dl of dls) {
+                if (dl.curie === curie) {
+                    termLabel = dl.term_label!;
+                    break;
+                }
+            }
             results.push(
                 <tr>
-                    <td className="col-6">{renderCurieTableEntry(curie)}</td>
+                    <td className="col-6">{renderCurieTableEntry(curie, termLabel)}</td>
                     <td className="col-6">
                         {dls.map((dl: DatasetLink) =>
                             <>

@@ -18,10 +18,12 @@ export type DatasetLinksApiResp = {
 
 export type DatasetLink = {
     curie?: string,
+    term_label?: string,
     ontology_id?: string
     dataset_title?: string,
     repo_name?: string,
-    created_at?: string
+    created_at?: string,
+    dataset_description?: string,
 }
 
 export type GetDatasetLinkServiceResp = {
