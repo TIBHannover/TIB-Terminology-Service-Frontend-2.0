@@ -8,6 +8,7 @@ import DropDown from "../../common/DropDown/DropDown";
 import {DropDownOption} from "../../common/DropDown/DropDown";
 import Pagination from "../../common/Pagination/Pagination";
 import AlertBox from "../../common/Alerts/Alerts";
+import TruncatedText from "../../common/TruncatedText/TruncatedText";
 
 type CmpProps = {
     inputCurie?: string;
@@ -60,12 +61,20 @@ const LinkedDatasets = (props: CmpProps) => {
         return true;
     }
 
-    function renderDatasetTableEntry(datasetTitle: string) {
+    function renderDatasetTableEntry(datasetTitle: string, datasetDescription?: string) {
         return (
-            <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}/dataset/${datasetTitle}`} target="_blank"
-               rel="noopener noreferrer">
-                {datasetTitle}
-            </a>
+            <>
+                <a href={`${process.env.REACT_APP_NFDI4CHEM_SEARCH_SERVICE_URL}/dataset/${datasetTitle}`}
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    {datasetTitle}
+                </a>
+                {datasetDescription &&
+                  <div className="mt-2">
+                    <TruncatedText text={datasetDescription} length={50}/>
+                  </div>
+                }
+            </>
         );
     }
 
@@ -85,9 +94,16 @@ const LinkedDatasets = (props: CmpProps) => {
     function renderByDataset() {
         let results = [];
         for (let [datasetTitle, dls] of datasetLinksMap) {
+            let datasetDescription = "";
+            for (let dl of dls) {
+                if (dl.dataset_title === datasetTitle) {
+                    datasetDescription = dl.dataset_description ?? "";
+                    break;
+                }
+            }
             results.push(
                 <tr>
-                    <td className="col-6">{renderDatasetTableEntry(datasetTitle)}</td>
+                    <td className="col-6">{renderDatasetTableEntry(datasetTitle, datasetDescription)}</td>
                     {!inputCurie &&
                       <td
                         className="col-6">{dls.map((dl: DatasetLink) => renderCurieTableEntry(dl.curie!, dl.term_label!))}</td>}

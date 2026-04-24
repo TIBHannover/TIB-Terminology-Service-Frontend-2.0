@@ -3,6 +3,7 @@ import Pagination from "../../common/Pagination/Pagination";
 import DropDown from "../../common/DropDown/DropDown";
 import {Link} from 'react-router-dom';
 import {TsOntology} from "../../../concepts";
+import TruncatedText from "../../common/TruncatedText/TruncatedText";
 
 
 const TITLE_SORT_KEY = "title";
@@ -75,24 +76,7 @@ export const OntologyListRender = (props: CmpProps) => {
                               className="ontology-title-text-in-box stour-onto-name"><b>{item.title}</b></Link>
                     </div>
                     <div className="ontology-card-description stour-onto-description">
-                        <p className="trunc-text">{item.description.substring(0, 100) + " ... "}</p>
-                        <a className="read-more-btn" data-value={item.description}
-                           onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                               let fullDescp = e.currentTarget.getAttribute("data-value") ?? "";
-                               let p = e.currentTarget.previousElementSibling;
-                               if (!p) {
-                                   return
-                               }
-                               if (e.currentTarget.textContent === "[Read more]") {
-                                   p.textContent = fullDescp;
-                                   e.currentTarget.textContent = "[Read less]"
-                               } else {
-                                   p.textContent = fullDescp.substring(0, 100) + " ... ";
-                                   e.currentTarget.textContent = "[Read more]"
-                               }
-                           }}
-                        >
-                            [Read more]</a>
+                        <TruncatedText text={item.description} length={100}/>
                     </div>
                     {process.env.REACT_APP_PROJECT_ID === "general" &&
                       <div className='ontology-card-collection-name stour-onto-collection-list'>
