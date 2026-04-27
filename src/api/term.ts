@@ -194,6 +194,9 @@ class TermApi {
             type ApiResult = {
                 elements: OntologyTermDataV2[];
             }
+            if (curie.includes("_")) {
+                curie = curie.split("_").join(":");
+            }
             if (!curie.includes("%")) {
                 curie = encodeURIComponent(curie);
             }
