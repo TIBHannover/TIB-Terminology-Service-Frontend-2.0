@@ -38,3 +38,7 @@ export const IssueType = "issuetype";
 // OntologyList related
 export const KeywordFilter = 'keyword';
 export const AndOptUrl = 'and';
+
+// Dataset Link related
+export const GroupBy = 'groupBy';
+export const Repository = 'repository';

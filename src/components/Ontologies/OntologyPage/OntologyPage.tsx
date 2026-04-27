@@ -121,7 +121,6 @@ const OntologyPage = (props: CmpPropp) => {
         if ("value" in repos) {
             repos = [];
         }
-        console.log("repos", repos);
         setOntology(ontology);
         setRepositories(repos as string[]);
         setObsoleteTerms(ontology.obsoleteClasses);

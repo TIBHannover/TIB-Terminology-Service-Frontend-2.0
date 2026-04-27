@@ -9,6 +9,8 @@ import {DropDownOption} from "../../common/DropDown/DropDown";
 import Pagination from "../../common/Pagination/Pagination";
 import AlertBox from "../../common/Alerts/Alerts";
 import TruncatedText from "../../common/TruncatedText/TruncatedText";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
 
 type CmpProps = {
     inputCurie?: string;
@@ -24,29 +26,38 @@ const LinkedDatasets = (props: CmpProps) => {
     * */
 
     const {inputCurie} = props;
-
+    const urlFactory = new CommonUrlFactory();
     const ontologyPageContext = useContext(OntologyPageContext);
-
     const DEFAULT_PAGE_SIZE = 20;
     const DEFAULT_GROUP_BY = "dataset";
+
+    let groupByFromUrl = urlFactory.getParam({name: SiteUrlParamNames.GroupBy});
+    groupByFromUrl = groupByFromUrl && ["term", DEFAULT_GROUP_BY].includes(groupByFromUrl) ? groupByFromUrl : DEFAULT_GROUP_BY;
+    let sizeFromUrl = urlFactory.getParam({name: SiteUrlParamNames.Size}) ?? DEFAULT_PAGE_SIZE;
+    let pageFromUrl = urlFactory.getParam({name: SiteUrlParamNames.Page}) ?? 1;
+    let repositoryFromUrl = urlFactory.getParam({name: SiteUrlParamNames.Repository});
 
     const [datasetLinksMap, setDatasetLinksMap] = useState<Map<string, DatasetLink[]>>(new Map());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [page, setPage] = useState(1);
-    const [size, setSize] = useState<number>(DEFAULT_PAGE_SIZE);
+    const [page, setPage] = useState(parseInt(pageFromUrl as string));
+    const [size, setSize] = useState<number>(parseInt(sizeFromUrl as string));
     const [datasetRepos, setDatasetRepos] = useState<DropDownOption[]>([]);
-    const [groupBy, setGroupBy] = useState<string>(DEFAULT_GROUP_BY);
+    const [groupBy, setGroupBy] = useState<string>(groupByFromUrl);
     const [selectedRepo, setSelectedRepo] = useState<number>(0);
     const [tableContent, setTableContent] = useState<JSX.Element[]>([]);
     const [dataIsReady, setDataIsReady] = useState<boolean>(false);
     const [totalDatasetLinksCount, setTotalDatasetLinksCount] = useState<number>(0);
+    const [reposReady, setReposReady] = useState<boolean>(false);
 
     const sizeOptions: DropDownOption[] = [{value: DEFAULT_PAGE_SIZE, label: DEFAULT_PAGE_SIZE}, {
         value: "30",
         label: "30"
     }, {value: "40", label: "40"}];
-    const groupByOptions: DropDownOption[] = [{value: DEFAULT_GROUP_BY, label: "Dataset"}, {value: "2", label: "Term"}];
+    const groupByOptions: DropDownOption[] = [{value: DEFAULT_GROUP_BY, label: "Dataset"}, {
+        value: "term",
+        label: "Term"
+    }];
 
 
     function renderDatasetLinks() {
@@ -155,12 +166,22 @@ const LinkedDatasets = (props: CmpProps) => {
         let newGroupBy = e.target.value;
         setGroupBy(newGroupBy);
         setPage(1);
+        urlFactory.setParam({name: SiteUrlParamNames.GroupBy, value: newGroupBy, updateUrl: true});
     }
 
 
     function filterByRepo(e: React.ChangeEvent<HTMLSelectElement>) {
         let repoId = parseInt(e.target.value);
         setSelectedRepo(repoId);
+        if (repoId) {
+            urlFactory.setParam({
+                name: SiteUrlParamNames.Repository,
+                value: datasetRepos.find((repo: DropDownOption) => repo.value === repoId)?.label as string,
+                updateUrl: true,
+            });
+        } else {
+            urlFactory.deleteParam({name: SiteUrlParamNames.Repository});
+        }
         setPage(1);
     }
 
@@ -196,22 +217,26 @@ const LinkedDatasets = (props: CmpProps) => {
         for (let title of ontologyPageContext.repositories) {
             reposOptions.push({value: id++, label: title});
         }
+        setSelectedRepo(reposOptions.find((op: DropDownOption) => op.label === repositoryFromUrl)?.value as number ?? 0);
         setDatasetRepos(reposOptions);
+        setReposReady(true);
     }
 
 
     useEffect(() => {
         loadDatasetRepositoriesOptions();
-        fetchData();
     }, []);
 
 
     useEffect(() => {
+        if (!reposReady) {
+            return;
+        }
         setDatasetLinksMap(new Map());
         setDataIsReady(false);
         setLoading(true);
         fetchData();
-    }, [page, size, groupBy, selectedRepo]);
+    }, [page, size, groupBy, selectedRepo, inputCurie, repositoryFromUrl, reposReady]);
 
     useEffect(() => {
         if (dataIsReady) {
@@ -230,7 +255,7 @@ const LinkedDatasets = (props: CmpProps) => {
                     {!inputCurie &&
                       <div className="col-sm-3">
                         <DropDown
-                          defaultValue={DEFAULT_GROUP_BY}
+                          defaultValue={groupByFromUrl}
                           options={groupByOptions}
                           dropDownId="dataset-links-group-by"
                           dropDownTitle="Group by"
@@ -240,7 +265,7 @@ const LinkedDatasets = (props: CmpProps) => {
                     }
                     <div className={!inputCurie ? "col-sm-3" : "col-sm-4"}>
                         <DropDown
-                            defaultValue={0}
+                            dropDownValue={selectedRepo}
                             options={datasetRepos}
                             dropDownId="dataset-repos-filter"
                             dropDownChangeHandler={filterByRepo}
@@ -249,13 +274,18 @@ const LinkedDatasets = (props: CmpProps) => {
                     </div>
                     <div className={!inputCurie ? "col-sm-3" : "col-sm-4 text-center"}>
                         <DropDown
-                            defaultValue={DEFAULT_PAGE_SIZE}
+                            defaultValue={sizeFromUrl}
                             options={sizeOptions}
                             dropDownId="dataset-links-page-size"
                             dropDownTitle="Page size"
                             dropDownChangeHandler={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                 setSize(parseInt(e.target.value));
                                 setPage(1);
+                                urlFactory.setParam({
+                                    name: SiteUrlParamNames.Size,
+                                    value: e.target.value,
+                                    updateUrl: true
+                                });
                             }}
                         />
                     </div>
@@ -263,9 +293,14 @@ const LinkedDatasets = (props: CmpProps) => {
                         <Pagination
                             clickHandler={(newPage: number) => {
                                 setPage(newPage);
+                                urlFactory.setParam({
+                                    name: SiteUrlParamNames.Page,
+                                    value: newPage.toString(),
+                                    updateUrl: true
+                                });
                             }}
                             count={Math.ceil(totalDatasetLinksCount / size)}
-                            initialPageNumber={1}
+                            initialPageNumber={page}
                         />
                     </div>
                 </div>
