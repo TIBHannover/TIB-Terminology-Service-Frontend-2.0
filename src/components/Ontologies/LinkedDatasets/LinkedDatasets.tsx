@@ -78,13 +78,17 @@ const LinkedDatasets = (props: CmpProps) => {
         );
     }
 
+    function createTermLinkHref(curie: string) {
+        let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
+        return targetHref + encodeURIComponent(curie);
+    }
+
     function renderCurieTableEntry(curie: string, label: string) {
         if (curie.includes("_")) {
             curie = curie.replace("_", ":");
         }
-        let targetHref = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + encodeURIComponent(ontologyPageContext.ontology.ontologyId) + "/terms?curie=";
         return (
-            <a href={targetHref + encodeURIComponent(curie!)} target="_blank"
+            <a href={createTermLinkHref(curie)} target="_blank"
                rel="noopener noreferrer">
                 <span className="term-button">{label}</span>
             </a>
@@ -115,6 +119,7 @@ const LinkedDatasets = (props: CmpProps) => {
 
     function renderByTerm() {
         let results = [];
+        let truncateLimit = 5;
         for (let [curie, dls] of datasetLinksMap) {
             let termLabel = "";
             for (let dl of dls) {
@@ -127,12 +132,18 @@ const LinkedDatasets = (props: CmpProps) => {
                 <tr>
                     <td className="col-6">{renderCurieTableEntry(curie, termLabel)}</td>
                     <td className="col-6">
-                        {dls.map((dl: DatasetLink) =>
-                            <>
+                        {dls.map((dl: DatasetLink, index: number) =>
+                            <div key={index} className={index + 1 > truncateLimit ? "d-none" : ""}>
                                 {renderDatasetTableEntry(dl.dataset_title!)}
-                                <br/>
-                            </>
+                            </div>
                         )}
+                        {dls.length > truncateLimit &&
+                          <a href={createTermLinkHref(curie) + "&subtab=linked_datasets"} target="_blank"
+                             rel="noopener noreferrer"
+                             className="btn-secondary mt-2">
+                              {`Check ${dls.length - truncateLimit} more datasets.`}
+                          </a>
+                        }
                     </td>
                 </tr>
             )
