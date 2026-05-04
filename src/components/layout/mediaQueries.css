@@ -184,9 +184,6 @@
         font-size: 11px;
     }
 
-    /*body .user-profile-dropdown {*/
-    /*    !*margin-right: -150px;*!*/
-    /*}*/
     body .react-autosuggest__input,
     body .react-autosuggest__suggestions-container--open {
         width: 90%;
@@ -263,7 +260,7 @@
     }
 
     body .fa {
-        font-size: 9px;
+        font-size: 18px;
     }
 
     body .graph-container {
@@ -446,12 +443,262 @@
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1024px) {
+    body .application-content {
+        width: 95%;
+    }
+
+    body .header-wrapper {
+        padding: 8px 10px 12px;
+    }
+
+    body .site-header-primary-row {
+        flex-wrap: nowrap;
+        row-gap: 0;
+    }
+
+    body .site-header-logo-col,
+    body .site-header-nav-col,
+    body .site-header-user-col {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    body .site-header-logo-col {
+        flex: 1 1 auto;
+        width: auto;
+        justify-content: flex-start;
+        padding-right: 4px;
+    }
+
+    body .site-header-nav-col {
+        flex: 0 0 auto;
+        width: auto;
+        justify-content: flex-end;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    body .site-header-user-col {
+        flex: 0 0 auto;
+        width: auto;
+        justify-content: flex-end;
+        padding-left: 4px;
+    }
+
+    body .site-header-nav-logo-holder {
+        margin-bottom: 0;
+        width: 100%;
+    }
+
+    body .site-header-nav-logo-holder > div,
+    body .site-header-nav-logo-holder span,
+    body .main-title {
+        display: block;
+        min-width: 0;
+        width: 100%;
+    }
+
+    body .site_logo_image {
+        width: auto;
+        max-width: 100%;
+        max-height: 46px;
+        padding-top: 0;
+    }
+
+    body .site-navbar {
+        margin-top: 0;
+        padding: 0;
+        position: relative;
+    }
+
+    body .site-navbar .container {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    body .navbar-burger-menu {
+        margin: 0;
+        min-width: 34px;
+        min-height: 34px;
+        padding: 5px 8px;
+        box-shadow: none !important;
+    }
+
+    body .navbar-burger-menu:hover,
+    body .navbar-burger-menu:focus,
+    body .navbar-burger-menu:active,
+    body .login-btn-header:hover,
+    body .login-btn-header:focus,
+    body .login-btn-header:active {
+        box-shadow: none !important;
+    }
+
+    body .site-navbar .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 20;
+        min-width: 190px;
+        margin-top: 8px;
+        padding: 8px 10px;
+        background-color: #0e6668;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    body .site-navbar .navbar-nav {
+        align-items: flex-start;
+        margin-right: 0;
+    }
+
+    body .site-navbar .nav-dropdown-title {
+        align-self: flex-start;
+        text-align: left;
+    }
+
+    body .navbar-item {
+        float: none;
+        font-size: 0.72rem !important;
+        line-height: 1.4;
+        padding: 4px 0;
+    }
+
+    body .nav-dropdown-title .dropdown-toggle {
+        display: inline-block;
+        font-size: 0.72rem !important;
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    body .nav-dropdown-title .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        text-align: left;
+    }
+
+    body .site-header-user-col .mt-3 {
+        margin-top: 0 !important;
+    }
+
     body .user-profile-dropdown {
         margin-right: 0px;
+        width: 100% !important;
+        max-width: 92px;
+        min-height: 34px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    body .login-btn-header {
+        width: 72px !important;
+        min-height: 34px;
+        margin-top: 0 !important;
+        padding: 5px 8px;
+        white-space: nowrap;
+        box-shadow: none !important;
+    }
+
+    body .orcid-login-btn .fa-orcid {
+        font-size: 18px;
+    }
+
+    body .ontologies-link-tag {
+        font-size: 12px;
+    }
+
+    body .site-header-searchbox-holder {
+        margin-top: 16px;
+        margin-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    body .search-bar-container {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    body .search-bar-container .input-group {
+        flex-wrap: nowrap;
+    }
+
+    body .search-input {
+        min-width: 0;
+    }
+
+    body .site-header-search-filters-container {
+        margin: 8px 0 0;
+        row-gap: 6px;
+    }
+
+    body .search-form-checkbox-holders,
+    body .adv-search-title-holder {
+        display: flex;
+        align-items: center;
+        min-height: 28px;
+        text-align: left;
+        width: 100%;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    body .adv-search-title-holder .row,
+    body .adv-search-title-holder .col-sm-12 {
+        width: 100%;
+    }
+
+    body .adv-search-title-holder .form-switch {
+        display: flex;
+        align-items: center;
     }
 
     body .search-overlay-box {
         width: 92%;
+    }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 768px) {
+    body .site-header-search-filters-container {
+        flex-wrap: nowrap;
+    }
+
+    body .search-form-checkbox-holders,
+    body .adv-search-title-holder {
+        width: auto;
+        min-height: 28px;
+        padding-left: 4px;
+        padding-right: 4px;
+        white-space: nowrap;
+    }
+
+    body .stour-searchbox-exactmatch {
+        flex: 0 0 20%;
+    }
+
+    body .stour-searchbox-obsolete {
+        flex: 0 0 23%;
+    }
+
+    body .stour-searchbox-include-imported {
+        flex: 0 0 31%;
+    }
+
+    body .stour-searchbox-advanced {
+        flex: 0 0 26%;
+    }
+}
+
+@media only screen and (max-width: 699px) {
+    body .ontology-list-results-column {
+        order: 1;
+    }
+
+    body .ontology-list-facet-column {
+        order: 2;
     }
 }

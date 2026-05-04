@@ -20,7 +20,7 @@ const SiteNavbar = () => {
 
   return (
     <div className='mt-0'>
-      <Navbar collapseOnSelect expand="lg" className="site-navbar">
+      <Navbar collapseOnSelect expand="xl" className="site-navbar">
         <Container>
           <Navbar.Toggle aria-controls="siteMainNavbar" className="ms-auto  navbar-burger-menu">
             <i className="fa fa-bars collpase-btn-content"></i>

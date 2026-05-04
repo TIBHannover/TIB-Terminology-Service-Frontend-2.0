@@ -392,7 +392,7 @@ const OntologyList = () => {
           {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
           {isLoaded &&
             <div className='row'>
-              <div className='col-sm-4'>
+              <div className='col-sm-4 ontology-list-facet-column'>
                 <OntologyListFacet
                   enteredKeyword={keywordFilterString}
                   filterWordChange={filterWordChange}
@@ -406,7 +406,7 @@ const OntologyList = () => {
 
                 />
               </div>
-              <div className='col-sm-8'>
+              <div className='col-sm-8 ontology-list-results-column'>
                 <OntologyListRender
                   handlePagination={handlePagination}
                   pageCount={Math.ceil(ontologies.length / pageSize)}

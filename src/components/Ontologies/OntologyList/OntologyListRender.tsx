@@ -157,7 +157,7 @@ export const OntologyListRender = (props: CmpProps) => {
         </div>
 
         <div className='row'>
-          <div className='col-sm-6 text-right zero-padding-col'>
+          <div className='col-6 col-sm-6 text-right zero-padding-col'>
             <DropDown
               options={PAGE_SIZES_FOR_DROPDOWN}
               dropDownId="list-result-per-page"
@@ -167,7 +167,7 @@ export const OntologyListRender = (props: CmpProps) => {
               dropdownClassName={"white-dropdown"}
             />
           </div>
-          <div className='col-sm-6 text-end zero-padding-col stour-onto-list-sort'>
+          <div className='col-6 col-sm-6 text-end zero-padding-col stour-onto-list-sort'>
             <DropDown
               options={SORT_DROPDONW_OPTIONS}
               dropDownId="ontology-list-sorting"
