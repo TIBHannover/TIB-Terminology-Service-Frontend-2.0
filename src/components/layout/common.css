@@ -801,3 +801,8 @@ body .site-tour-btn:hover {
     margin-top: 4px;
     padding: 3px;
 }
+
+.site_logo_image {
+    width: 70%;
+    height: auto;
+}
