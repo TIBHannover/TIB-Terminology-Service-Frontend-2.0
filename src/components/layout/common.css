@@ -805,4 +805,5 @@ body .site-tour-btn:hover {
 .site_logo_image {
     width: 70%;
     height: auto;
+    padding-top: 15px;
 }
