@@ -1,7 +1,7 @@
 import SiteNavbar from '../Navbar/Navbar';
 import SearchForm from '../../Search/SearchForm/SearchForm';
 import UserPanel from '../../User/Login/UserPanel';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function Header() {
@@ -11,12 +11,12 @@ function Header() {
         <div className="col-sm-12">
           <div className='row site-header-primary-row align-items-center'>
             <div className='col-7 col-md-3 site-header-logo-col'>
-              <SiteLogo/>
+              <SiteLogo />
             </div>
             <div className='col-2 col-md-6 site-header-nav-col'>
               <div className="row">
                 <div className='col-sm-12'>
-                  <SiteNavbar/>
+                  <SiteNavbar />
                 </div>
               </div>
             </div>
@@ -24,7 +24,7 @@ function Header() {
               <UserPanel isModal={true}></UserPanel>
             </div>
           </div>
-          <SearchForm/>
+          <SearchForm />
         </div>
       </div>
     </>
@@ -36,15 +36,15 @@ const SiteLogo = () => {
     <div className='row site-header-nav-logo-holder'>
       <div className=''>
         <span>
-            <Link className="main-title" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>
-              <img
-                src={process.env.REACT_APP_SITE_LOGO}
-                alt="site logo"
-                loading="lazy"
-                className="site_logo_image"
-              />
-              {process.env.REACT_APP_SITE_LOGO_TEXT && <h5>{process.env.REACT_APP_SITE_LOGO_TEXT}</h5>}
-            </Link>
+          <Link className="main-title" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>
+            <embed
+              src={process.env.REACT_APP_SITE_LOGO}
+              alt="site logo"
+              loading="lazy"
+              className="site_logo_image"
+            />
+            {process.env.REACT_APP_SITE_LOGO_TEXT && <h5>{process.env.REACT_APP_SITE_LOGO_TEXT}</h5>}
+          </Link>
         </span>
       </div>
     </div>
