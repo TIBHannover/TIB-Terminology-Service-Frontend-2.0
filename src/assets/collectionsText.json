@@ -166,6 +166,18 @@
     "logo_width": 300,
     "logo_height": 150
   },
+  "NFDIxCS": {
+    "id": "NFDIxCS",
+    "html_id": "NFDIxCS",
+    "name": "NFDIxCS Project",
+    "text": "The NFDIxCS collection provides a wide range of ontologies relevant for different areas of computer science research. It includes vocabularies to describe important concepts in different research areas of computer science, including research practices, experiments, data, software, and artifacts. Using well-defined vocabularies (as defined in these ontologies) is crucial for describing metadata of computer science research.",
+    "logo": "/NFDIxCS.svg",
+    "ontology_list_url": "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=NFDIxCS",
+    "project_homepage": "https://nfdixcs.org/",
+    "domain_ts_link": "",
+    "logo_width": 300,
+    "logo_height": 150
+  },
   "Miscellaneous": {
     "id": "Miscellaneous",
     "html_id": "Miscellaneous",
