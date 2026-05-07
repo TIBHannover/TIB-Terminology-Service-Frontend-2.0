@@ -365,52 +365,53 @@ const OntologyList = () => {
     }, [ontologies]);
 
 
-    if (error) {
-        return <div>Error: Something Went Wrong!</div>
-    }
-    return (
-        <>
-            {Toolkit.createHelmet("Ontologies")}
-            <div className='row justify-content-center ontology-list-container' id="ontologyList-wrapper-div">
-                <div className='col-sm-11'>
-                    {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
-                    {isLoaded &&
-                      <div className='row'>
-                        <div className='col-sm-4'>
-                          <OntologyListFacet
-                            enteredKeyword={keywordFilterString}
-                            filterWordChange={filterWordChange}
-                            onSwitchChange={handleSwitchange}
-                            handleFacetCollection={handleFacetCollection}
-                            handleFacetSubject={handleFacetSubject}
-                            selectedCollections={selectedCollections}
-                            selectedSubjects={selectedSubjects}
-                            allCollections={allCollections}
-                            allSubjects={allSubjectWithStats}
 
-                          />
-                        </div>
-                        <div className='col-sm-8'>
-                          <OntologyListRender
-                            handlePagination={handlePagination}
-                            pageCount={Math.ceil(ontologies.length / pageSize)}
-                            pageNumber={pageNumber}
-                            pageSize={pageSize}
-                            handlePageSizeDropDownChange={handlePageSizeDropDownChange}
-                            sortField={sortField}
-                            handleSortChange={handleSortChange}
-                            ontologies={ontologies}
-                            ontologiesHiddenStatus={ontologiesHiddenStatus}
-                            isLoaded={isLoaded}
-                            filterTags={filterTags}
-                          />
-                        </div>
-                      </div>
-                    }
-                </div>
+  if (error) {
+    return <div>Error: Something Went Wrong!</div>
+  }
+  return (
+    <>
+      {Toolkit.createHelmet("Ontologies")}
+      <div className='row justify-content-center ontology-list-container' id="ontologyList-wrapper-div">
+        <div className='col-sm-11'>
+          {!isLoaded && <div className="is-loading-term-list isLoading"></div>}
+          {isLoaded &&
+            <div className='row'>
+              <div className='col-sm-4 ontology-list-facet-column'>
+                <OntologyListFacet
+                  enteredKeyword={keywordFilterString}
+                  filterWordChange={filterWordChange}
+                  onSwitchChange={handleSwitchange}
+                  handleFacetCollection={handleFacetCollection}
+                  handleFacetSubject={handleFacetSubject}
+                  selectedCollections={selectedCollections}
+                  selectedSubjects={selectedSubjects}
+                  allCollections={allCollections}
+                  allSubjects={allSubjectWithStats}
+
+                />
+              </div>
+              <div className='col-sm-8 ontology-list-results-column'>
+                <OntologyListRender
+                  handlePagination={handlePagination}
+                  pageCount={Math.ceil(ontologies.length / pageSize)}
+                  pageNumber={pageNumber}
+                  pageSize={pageSize}
+                  handlePageSizeDropDownChange={handlePageSizeDropDownChange}
+                  sortField={sortField}
+                  handleSortChange={handleSortChange}
+                  ontologies={ontologies}
+                  ontologiesHiddenStatus={ontologiesHiddenStatus}
+                  isLoaded={isLoaded}
+                  filterTags={filterTags}
+                />
+              </div>
             </div>
-        </>
-    )
+          }
+        </div>
+      </div>
+    </>
+  )
 }
 
 

@@ -154,6 +154,30 @@
     "logo_width": 200,
     "logo_height": 200
   },
+  "MaRDI": {
+    "id": "MaRDI",
+    "html_id": "MaRDI",
+    "name": "Collection of the Mathematical Research Data Initiative (MaRDI)",
+    "text": "The MaRDI Terminology Service is a repository of ontologies for applied mathematics and related domains, providing a single point of access to the most recent ontology versions. Users can browse or search the ontologies and explore their terms and relationships. The Terminology Service (TS) can be accessed either by humans through its website or by machines via the TS API. The service is developed and maintained by TIB – the Leibniz Information Centre for Science and Technology. It forms part of the MaRDI consortium’s service portfolio within the National Research Data Infrastructure (NFDI).",
+    "logo": "/MaRDI.png",
+    "ontology_list_url": "/ontologies?collection=MaRDI&and=false&page=1",
+    "project_homepage": "https://www.mardi4nfdi.de/",
+    "domain_ts_link": "",
+    "logo_width": 300,
+    "logo_height": 150
+  },
+  "NFDIxCS": {
+    "id": "NFDIxCS",
+    "html_id": "NFDIxCS",
+    "name": "NFDIxCS Project",
+    "text": "The NFDIxCS collection provides a wide range of ontologies relevant for different areas of computer science research. It includes vocabularies to describe important concepts in different research areas of computer science, including research practices, experiments, data, software, and artifacts. Using well-defined vocabularies (as defined in these ontologies) is crucial for describing metadata of computer science research.",
+    "logo": "/NFDIxCS.svg",
+    "ontology_list_url": "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=NFDIxCS",
+    "project_homepage": "https://nfdixcs.org/",
+    "domain_ts_link": "",
+    "logo_width": 300,
+    "logo_height": 150
+  },
   "Miscellaneous": {
     "id": "Miscellaneous",
     "html_id": "Miscellaneous",

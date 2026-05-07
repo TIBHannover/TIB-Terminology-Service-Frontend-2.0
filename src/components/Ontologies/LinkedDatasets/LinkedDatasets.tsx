@@ -101,7 +101,7 @@ const LinkedDatasets = (props: CmpProps) => {
         return (
             <a href={createTermLinkHref(curie)} target="_blank"
                rel="noopener noreferrer">
-                <span className="term-button">{label}</span>
+                <span className="term-button linked-datasets-term-tag">{label}</span>
             </a>
         );
     }
@@ -314,7 +314,7 @@ const LinkedDatasets = (props: CmpProps) => {
                         </b>
                     </div>
                 </div>
-                <Table striped bordered responsive>
+                <Table striped bordered responsive className="linked-datasets-table">
                     <thead>
                     <tr>
                         <th>Dataset</th>

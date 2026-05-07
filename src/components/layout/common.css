@@ -770,6 +770,18 @@ body .site-tour-btn:hover {
     color: white;
 }
 
+@media (max-width: 1024px) {
+    body .site-tour-btn {
+        width: 64px;
+        height: 64px;
+        border-top-left-radius: 64px;
+        padding: 19px 6px 0 0;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1;
+    }
+}
+
 #site-warning-banner {
     margin-top: -10px;
 }
@@ -802,6 +814,13 @@ body .site-tour-btn:hover {
     margin-top: 4px;
     padding: 3px;
 }
+
+.site_logo_image {
+    width: 70%;
+    height: auto;
+    padding-top: 15px;
+}
+
 
 .data-repo-tag {
     background-color: #0e6668;

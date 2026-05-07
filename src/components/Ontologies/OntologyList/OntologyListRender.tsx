@@ -144,39 +144,39 @@ export const OntologyListRender = (props: CmpProps) => {
                     </div>
                 </div>
 
-                <div className='row'>
-                    <div className='col-sm-6 text-right zero-padding-col'>
-                        <DropDown
-                            options={PAGE_SIZES_FOR_DROPDOWN}
-                            dropDownId="list-result-per-page"
-                            dropDownTitle="page size"
-                            dropDownValue={props.pageSize}
-                            dropDownChangeHandler={props.handlePageSizeDropDownChange}
-                            dropdownClassName={"white-dropdown"}
-                        />
-                    </div>
-                    <div className='col-sm-6 text-end zero-padding-col stour-onto-list-sort'>
-                        <DropDown
-                            options={SORT_DROPDONW_OPTIONS}
-                            dropDownId="ontology-list-sorting"
-                            dropDownTitle="sorted by"
-                            dropDownValue={props.sortField}
-                            dropDownChangeHandler={props.handleSortChange}
-                            dropdownClassName={"white-dropdown"}
-                        />
-                    </div>
-                </div>
-                <div className='row'>
-                    <div className='col-sm-12'>
-                        {ontologyListContent}
-                    </div>
-                </div>
-                <Pagination
-                    clickHandler={props.handlePagination}
-                    count={props.pageCount}
-                    initialPageNumber={props.pageNumber}
-                />
-            </div>
+        <div className='row'>
+          <div className='col-6 col-sm-6 text-right zero-padding-col'>
+            <DropDown
+              options={PAGE_SIZES_FOR_DROPDOWN}
+              dropDownId="list-result-per-page"
+              dropDownTitle="page size"
+              dropDownValue={props.pageSize}
+              dropDownChangeHandler={props.handlePageSizeDropDownChange}
+              dropdownClassName={"white-dropdown"}
+            />
+          </div>
+          <div className='col-6 col-sm-6 text-end zero-padding-col stour-onto-list-sort'>
+            <DropDown
+              options={SORT_DROPDONW_OPTIONS}
+              dropDownId="ontology-list-sorting"
+              dropDownTitle="sorted by"
+              dropDownValue={props.sortField}
+              dropDownChangeHandler={props.handleSortChange}
+              dropdownClassName={"white-dropdown"}
+            />
+          </div>
         </div>
-    );
+        <div className='row'>
+          <div className='col-sm-12'>
+            {ontologyListContent}
+          </div>
+        </div>
+        <Pagination
+          clickHandler={props.handlePagination}
+          count={props.pageCount}
+          initialPageNumber={props.pageNumber}
+        />
+      </div>
+    </div>
+  );
 }
