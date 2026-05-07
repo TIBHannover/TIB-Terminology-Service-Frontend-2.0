@@ -1295,6 +1295,15 @@ button {
     width: 92%;
 }
 
+.ontology-detail-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.ontology-detail-table {
+    width: 100%;
+}
+
 .ontology-detail-table td,
 th {
     /*
@@ -1304,6 +1313,9 @@ th {
     border: 1px solid #dad2d2;
     text-align: left;
     padding: 8px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .ontology-metric-table td,

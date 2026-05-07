@@ -694,6 +694,11 @@
 }
 
 @media only screen and (max-width: 699px) {
+    .ontology-page-container {
+        width: 100% !important;
+        margin: auto !important;
+    }
+
     body .ontology-list-results-column {
         order: 1;
     }
