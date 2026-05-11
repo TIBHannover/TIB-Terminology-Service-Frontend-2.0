@@ -20,6 +20,59 @@ const ADOPTER_TYPES = [
   "application",
 ];
 
+const HelpIcon = ({ text }) => {
+  const [show, setShow] = useState(false);
+
+  return (
+    <span
+      style={{
+        position: "relative",
+        display: "inline-block",
+        marginLeft: "6px",
+      }}
+    >
+      <span
+        onClick={() => setShow(!show)}
+        style={{
+          color: "#0d6efd",
+          cursor: "pointer",
+          fontWeight: "bold",
+          border: "1px solid #0d6efd",
+          borderRadius: "50%",
+          width: "16px",
+          height: "16px",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "11px",
+        }}
+      >
+        ?
+      </span>
+
+      {show && (
+        <div
+          style={{
+            position: "absolute",
+            top: "22px",
+            left: "0",
+            zIndex: 9999,
+            width: "280px",
+            background: "white",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            padding: "10px",
+            fontSize: "12px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+          }}
+        >
+          {text}
+        </div>
+      )}
+    </span>
+  );
+};
+
 const OntologyAdoptRequest = (props) => {
   const ontoPageContext = useContext(OntologyPageContext);
 
@@ -48,16 +101,19 @@ const OntologyAdoptRequest = (props) => {
 
   function submit() {
     console.log("SUBMIT CLICKED");
+
     let username = FormLib.getFieldByIdIfValid("adopt-username");
     let email = FormLib.getFieldByIdIfValid("adopt-email");
+
     console.log({
-  username,
-  email,
-  adopterType,
-  adopterName,
-  usageDescription,
-  usageChannel
-});
+      username,
+      email,
+      adopterType,
+      adopterName,
+      usageDescription,
+      usageChannel
+    });
+
     if (
       !username ||
       !email ||
@@ -79,7 +135,7 @@ const OntologyAdoptRequest = (props) => {
 
       // IMPORTANT: keep using existing endpoint for now
       // colleague wants separate endpoint later, but this keeps UI working today
-      collection_ids: "", // not used for adopt request
+      collection_ids: "",
       collection_suggestion: true,
 
       adopter_type: adopterType,
@@ -94,8 +150,10 @@ const OntologyAdoptRequest = (props) => {
     };
 
     console.log("CALLING API...");
-submitAdopterRequest(form).then((result) => {
-  console.log("API RESULT:", result);
+
+    submitAdopterRequest(form).then((result) => {
+      console.log("API RESULT:", result);
+
       setFormSubmitSuccess(result);
       setFormSubmitted(true);
       setSubmitWait(false);
@@ -106,14 +164,14 @@ submitAdopterRequest(form).then((result) => {
   return (
     <Modal show={props.showModal} fullscreen={true}>
       <Modal.Header>
-        <h5 className="modal-title">Ontology adoption request</h5> 
-        
+        <h5 className="modal-title">Ontology adoption request</h5>
       </Modal.Header>
 
       <Modal.Body>
         <div className="text-danger mb-2" style={{ fontSize: "12px" }}>
-  * Required fields
-</div>
+          * Required fields
+        </div>
+
         {!submitWait && formSubmitSuccess && formSubmitted && (
           <AlertBox
             type="success"
@@ -135,6 +193,7 @@ submitAdopterRequest(form).then((result) => {
                 <label className="required_input" htmlFor="adopt-username">
                   Your name
                 </label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -143,6 +202,7 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
@@ -150,6 +210,7 @@ submitAdopterRequest(form).then((result) => {
                 <label className="required_input" htmlFor="adopt-email">
                   Email
                 </label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -158,8 +219,8 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
-            <br />
 
+            <br />
             <br />
 
             <div className="row">
@@ -167,19 +228,23 @@ submitAdopterRequest(form).then((result) => {
                 <h6>Ontology adopter information</h6>
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
                 <label className="required_input">
                   Type of adopter using the terminology
+                  <HelpIcon text="Please tell us as specifically as possible whether the ontology is used in an institution, an application, a service, etc." />
                 </label>
+
                 <select
                   className="form-control"
                   value={adopterType}
                   onChange={(e) => setAdopterType(e.target.value)}
                 >
                   <option value="">Select…</option>
+
                   {ADOPTER_TYPES.map((t) => (
                     <option key={t} value={t}>
                       {t}
@@ -188,11 +253,16 @@ submitAdopterRequest(form).then((result) => {
                 </select>
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input">Name of the terminology adopter</label>
+                <label className="required_input">
+                  Name of the terminology adopter
+                  <HelpIcon text="Please add the official name of the adopter." />
+                </label>
+
                 <input
                   className="form-control"
                   value={adopterName}
@@ -200,11 +270,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label>Alternative/short name (if applicable)</label>
+                <label>
+                  Alternative/short name (if applicable)
+                  <HelpIcon text="If applicable, please add abbreviations for the adopter name." />
+                </label>
+
                 <input
                   className="form-control"
                   value={adopterAltName}
@@ -212,11 +287,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label>PID of the terminology adopter (e.g., ROR, DOI; if available)</label>
+                <label>
+                  PID of the terminology adopter (e.g., ROR, DOI; if available)
+                  <HelpIcon text="If available, please add a DOI, ROR, or another persistent identifier." />
+                </label>
+
                 <input
                   className="form-control"
                   value={adopterPid}
@@ -224,11 +304,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label>Homepage of the terminology adopter (if available)</label>
+                <label>
+                  Homepage of the terminology adopter (if available)
+                  <HelpIcon text="Please add the homepage URL if available." />
+                </label>
+
                 <input
                   className="form-control"
                   value={adopterHomepage}
@@ -236,11 +321,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label>Name of the provider or affiliation of the terminology adopter</label>
+                <label>
+                  Name of the provider or affiliation of the terminology adopter
+                  <HelpIcon text="Please add the provider or affiliation name if applicable." />
+                </label>
+
                 <input
                   className="form-control"
                   value={providerName}
@@ -248,11 +338,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label>PID of the provider/affiliation (e.g., ROR; if available)</label>
+                <label>
+                  PID of the provider/affiliation (e.g., ROR; if available)
+                  <HelpIcon text="Please add provider PID such as DOI or ROR if available." />
+                </label>
+
                 <input
                   className="form-control"
                   value={providerPid}
@@ -260,11 +355,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input">How is the terminology used? (in English)</label>
+                <label className="required_input">
+                  How is the terminology used? (in English)
+                  <HelpIcon text="Please provide a short explanation about how the terminology is used." />
+                </label>
+
                 <textarea
                   className="form-control"
                   rows={3}
@@ -273,11 +373,16 @@ submitAdopterRequest(form).then((result) => {
                 />
               </div>
             </div>
+
             <br />
 
             <div className="row">
               <div className="col-sm-8">
-                <label className="required_input">The terminology will be used via</label>
+                <label className="required_input">
+                  The terminology will be used via
+                  <HelpIcon text="Choose whether the terminology will be used through UI, API, or both." />
+                </label>
+
                 <select
                   className="form-control"
                   value={usageChannel}
@@ -290,6 +395,7 @@ submitAdopterRequest(form).then((result) => {
                 </select>
               </div>
             </div>
+
             <br />
           </>
         )}
