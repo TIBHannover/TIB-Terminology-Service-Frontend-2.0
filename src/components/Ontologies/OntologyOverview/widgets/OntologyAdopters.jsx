@@ -177,10 +177,10 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               )}
 
               // no contacts should be shown
-              //{contacts.length > 0 && (
-                //<Row label="Contact">
-                  //{listWithCommas(contacts)}
-                //</Row>
+              // {contacts.length > 0 && (
+                // <Row label="Contact">
+                  // {listWithCommas(contacts)}
+                // </Row>
              // )}
 
               {u.usageReportMetadata?.source && (
