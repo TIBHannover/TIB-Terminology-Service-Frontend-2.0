@@ -235,7 +235,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label className="required_input">
                   Type of adopter using the terminology
-                  <HelpIcon text="Please tell us as specifically as possible whether the ontology is used in an institution, an application, a service, etc." />
+                  <HelpIcon text="Please tell us as specifically as possible whether the ontology is used in an institution, an application, a service, etc. (see the list). For example, if the terminology is used in a repository belonging to an institution, choose 'repository' from the list and specify the institution later. If you only want to inform us that the terminology is used by an institution, skip questions 6 and 7." />
                 </label>
 
                 <select
@@ -260,7 +260,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label className="required_input">
                   Name of the terminology adopter
-                  <HelpIcon text="Please add the official name of the adopter." />
+                  <HelpIcon text="Please add the official name of the adopter, e.g. 'Repository of the Unknown University'." />
                 </label>
 
                 <input
@@ -277,7 +277,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label>
                   Alternative/short name (if applicable)
-                  <HelpIcon text="If applicable, please add abbreviations for the adopter name." />
+                  <HelpIcon text=" If applicable, please add any commonly known abbreviations for the adopter’s name, e.g. 'Repo_UU'." />
                 </label>
 
                 <input
@@ -294,7 +294,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label>
                   PID of the terminology adopter (e.g., ROR, DOI; if available)
-                  <HelpIcon text="If available, please add a DOI, ROR, or another persistent identifier." />
+                  <HelpIcon text="If your adopter has a Persistent Identifier such as a DOI or a ROR then please add it, e.g.  https://ror.org/000xx000." />
                 </label>
 
                 <input
@@ -311,7 +311,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label>
                   Homepage of the terminology adopter (if available)
-                  <HelpIcon text="Please add the homepage URL if available." />
+                  <HelpIcon text="If your adopter has a homepage  then please add it, e.g. https://Repo_UU.org" />
                 </label>
 
                 <input
@@ -328,7 +328,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label>
                   Name of the provider or affiliation of the terminology adopter
-                  <HelpIcon text="Please add the provider or affiliation name if applicable." />
+                  <HelpIcon text="If your adopter is not an institution, then add the name of the provider or affiliation of the adopter, e.g. 'Unknown University'." />
                 </label>
 
                 <input
@@ -345,7 +345,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label>
                   PID of the provider/affiliation (e.g., ROR; if available)
-                  <HelpIcon text="Please add provider PID such as DOI or ROR if available." />
+                  <HelpIcon text="If your adopter’s provider  or affiliation has a Persistent Identifier such as a DOI or a ROR then please add it, e.g. https://ror.org999xx000".  />
                 </label>
 
                 <input
@@ -362,7 +362,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label className="required_input">
                   How is the terminology used? (in English)
-                  <HelpIcon text="Please provide a short explanation about how the terminology is used." />
+                  <HelpIcon text="Please provide a short explanation  such as ‘This terminology will be used to annotate descriptions of datasets in the repository of the Unknown University. This will facilitate the search for datasets…'." />
                 </label>
 
                 <textarea
@@ -380,7 +380,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label className="required_input">
                   The terminology will be used via
-                  <HelpIcon text="Choose whether the terminology will be used through UI, API, or both." />
+                  <HelpIcon text="Will  you use TIB TS’s API to access the terminology? If you do so,  please choose TIB Terminology Service API (API) or Terminology Service User Interface (UI), otherwise choose  both (UI and API)." />
                 </label>
 
                 <select
@@ -389,8 +389,8 @@ const OntologyAdoptRequest = (props) => {
                   onChange={(e) => setUsageChannel(e.target.value)}
                 >
                   <option value="">Select…</option>
-                  <option value="UI">TIB Terminology Service UI</option>
                   <option value="API">API</option>
+                  <option value="UI">TIB Terminology Service UI</option>
                   <option value="UI+API">UI and API</option>
                 </select>
               </div>
