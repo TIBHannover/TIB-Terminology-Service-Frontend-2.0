@@ -20,6 +20,26 @@
     width: 100%;
 }
 
+@media only screen and (min-width: 768px) {
+    .tree-view-container .node-table-container {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .tree-view-container .node-table-container > .row,
+    .tree-view-container .node-table-container .node-detail-table-row > .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .tree-view-container .node-table-container .node-metadata-value,
+    .tree-view-container .node-table-container .node-metadata-value a,
+    .tree-view-container .node-table-container .node-metadata-value span {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+}
+
 .tree-container {
     margin-top: 20px;
 }

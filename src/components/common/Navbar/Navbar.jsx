@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -6,6 +7,7 @@ import { NavDropdown } from 'react-bootstrap';
 
 const SiteNavbar = () => {
 
+  const [showInfoDropdown, setShowInfoDropdown] = useState(false);
   const urlPath = window.location.pathname;
   let basePath = process.env.REACT_APP_PROJECT_SUB_PATH;
 
@@ -15,6 +17,12 @@ const SiteNavbar = () => {
       clickedElement[0].classList.remove("nav-clicked");
     }
     e.currentTarget.classList.add("nav-clicked");
+  }
+
+  function handleInfoDropdownBlur(e) {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setShowInfoDropdown(false);
+    }
   }
 
 
@@ -68,28 +76,33 @@ const SiteNavbar = () => {
               <NavDropdown
                 title="info"
                 id="site-navbar-info-dropdown"
+                show={showInfoDropdown}
+                onMouseEnter={() => setShowInfoDropdown(true)}
+                onMouseLeave={() => setShowInfoDropdown(false)}
+                onFocus={() => setShowInfoDropdown(true)}
+                onBlur={handleInfoDropdownBlur}
                 className={"nav-link navbar-item nav-dropdown-title " + (urlPath.includes("/about") || urlPath.includes("/help") || urlPath.includes("/docs") || urlPath.includes("/contact") ? "nav-clicked" : "")} onClick={handleClick}
               >
-                <NavDropdown.Item key={"1"}>
+                <NavDropdown.Item key={"1"} onClick={() => setShowInfoDropdown(false)}>
                   <Link
                     className={"nav-link navbar-item-dropdown stour-about-navbar-item"}
                     to={basePath + "/about"}>About
                   </Link>
                 </NavDropdown.Item>
-                <NavDropdown.Item key={"2"}>
+                <NavDropdown.Item key={"2"} onClick={() => setShowInfoDropdown(false)}>
                   <Link
                     className={"nav-link navbar-item-dropdown  stour-help-navbar-item"}
                     to={basePath + "/help"}>Help
                   </Link>
                 </NavDropdown.Item>
-                <NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setShowInfoDropdown(false)}>
                   <Link
                     className={"nav-link navbar-item-dropdown  stour-help-navbar-item"}
                     to={basePath + "/docs"}>Documentation
                   </Link>
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setShowInfoDropdown(false)}>
                   <Link
                     className={"nav-link navbar-item-dropdown  stour-help-navbar-item"}
                     to={basePath + "/contact"}>Contact us
