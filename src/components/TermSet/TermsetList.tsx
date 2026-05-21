@@ -96,7 +96,7 @@ const TermSetList = (props: CmpProps) => {
         <EditTermset mode={"create"} />
       }
       {isLoading &&
-        <div className="justify-content-center ontology-page-container">
+        <div className="justify-content-center ontology-page-container termset-loading-container">
           <div className="isLoading"></div>
         </div>
       }
@@ -154,7 +154,7 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
               <>
                 <Link
                   to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + termset.id + "/edit" + fromParam}
-                  className="btn borderless-btn bg-white"
+                  className="btn borderless-btn termset-card-action-btn"
                   style={{ marginTop: "1px" }}
                 >
                   <i className="fa fa-edit fa-borderless edit-termset-icon"></i>
