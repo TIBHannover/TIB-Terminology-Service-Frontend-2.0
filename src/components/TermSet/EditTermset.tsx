@@ -85,7 +85,7 @@ const EditTermset = (props: TermsetEditComProps) => {
       inputQuery['ontologyIds'] = appContext.userSettings.activeCollection.ontology_ids.join(',');
     }
     let searchResult = await olsSearch(inputQuery, true);
-    let terms = "elements" in searchResult ? searchResult.elements : searchResult;
+    let terms = searchResult ? searchResult.elements : [];
     let options: MultiSelectOption[] = [];
     //@ts-ignore
     for (let term of terms) {

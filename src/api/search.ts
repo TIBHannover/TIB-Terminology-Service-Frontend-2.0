@@ -10,7 +10,7 @@ import Toolkit from "../Libs/Toolkit";
 import { TermFactory } from "../concepts";
 
 
-export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {
+export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | undefined> {
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
@@ -51,7 +51,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     }
     return result;
   } catch (e) {
-    return [];
+    return;
   }
 }
 

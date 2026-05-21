@@ -20,6 +20,7 @@ import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
 import { TsTerm } from '../../../concepts';
 import { SearchApiResponse, SearchResultFacet } from '../../../api/types/searchApiTypes';
 import { TsOntology } from '../../../concepts';
+import { allowedNodeEnvironmentFlags } from 'process';
 
 
 const SearchResult = () => {
@@ -105,22 +106,34 @@ const SearchResult = () => {
 
             // This part is for updating the facet counts.
             // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.
-            let searchParamsForTypeCount = { ...searchParams };
-            searchParamsForTypeCount.selectedTypes = [];
-            let searchParamsForOntoCount = { ...searchParams };
-            searchParamsForOntoCount.selectedOntologies = [];
+            // let searchParamsForTypeCount = { ...searchParams };
+            // searchParamsForTypeCount.selectedTypes = [];
+            // let searchParamsForOntoCount = { ...searchParams };
+            // searchParamsForOntoCount.selectedOntologies = [];
+            //
+            // Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
+            //     let result = values[0] as SearchApiResponse;
+            //     setSearchResult(result['elements'] as Array<TsTerm>);
+            //     setLoading(false);
+            //     let resultForFacetTypeCount = values[1] as SearchApiResponse;
+            //     let resultForFacetOntoCount = values[2] as SearchApiResponse;
+            //     result['facetFieldsToCounts']['type'] = resultForFacetTypeCount['facetFieldsToCounts']['type'];
+            //     result['facetFieldsToCounts']['ontologyId'] = resultForFacetOntoCount['facetFieldsToCounts']['ontologyId'];
+            //     setTotalResultsCount(result.totalElements);
+            //     setFacetFields(result.facetFieldsToCounts);
+            //
+            // });
 
-            Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
-                let result = values[0] as SearchApiResponse;
+            olsSearch(searchParams).then((result) => {
+                if (!result) {
+                    return;
+                }
                 setSearchResult(result['elements'] as Array<TsTerm>);
                 setLoading(false);
-                let resultForFacetTypeCount = values[1] as SearchApiResponse;
-                let resultForFacetOntoCount = values[2] as SearchApiResponse;
-                result['facetFieldsToCounts']['type'] = resultForFacetTypeCount['facetFieldsToCounts']['type'];
-                result['facetFieldsToCounts']['ontologyId'] = resultForFacetOntoCount['facetFieldsToCounts']['ontologyId'];
+                result['facetFieldsToCounts']['type'] = result['facetFieldsToCounts']['type'];
+                result['facetFieldsToCounts']['ontologyId'] = result['facetFieldsToCounts']['ontologyId'];
                 setTotalResultsCount(result.totalElements);
                 setFacetFields(result.facetFieldsToCounts);
-
             });
 
         } catch (e) {
