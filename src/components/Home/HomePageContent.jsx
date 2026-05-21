@@ -24,7 +24,7 @@ const RenderHomePage = () => {
         </div>
       </div>
       <br></br>
-      <div className="row">
+      <div className="row home-collection-grid">
         {Object.keys(collectionsInfoJson).map((collectionId, index) => {
           return (
             <div className={"col-12 col-md-6 col-lg-4 mb-3 " + (index === 0 ? "stour-collection-box-in-home" : "")}>

@@ -42,7 +42,7 @@ const Collections = () => {
         collectionOntologiesData[col].push(
           <Link
             to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto.ontologyId}
-            className='ontologies-link-tag'
+            className="ontologies-link-tag ontology-button"
             onClick={() => {
               Toolkit.selectSiteNavbarOption("Ontologies")
             }}>
@@ -53,6 +53,7 @@ const Collections = () => {
     }
   }
   const collectionOntologies = collectionOntologiesData;
+  const ontologiesAreLoading = collectionsWithOntologiesQuery.isLoading && !collectionsWithOntologiesQuery.data;
 
 
   function createCollectionCard(collectionId: string, collectionJson: CollectionJsonData): JSX.Element {
@@ -111,7 +112,13 @@ const Collections = () => {
           }
           <div className='row' key={collectionId + "_ontoList"}>
             <div className='col-sm-12 collection-ontologies-text'>
-              <b>Ontologies:</b>{collectionOntologies[collectionId] || ""}
+              <b>Ontologies:</b>
+              <span className="collection-ontologies-list">
+                {ontologiesAreLoading &&
+                  <span className="collection-ontologies-loading">Loading ontologies ...</span>
+                }
+                {!ontologiesAreLoading && (collectionOntologies[collectionId] || "")}
+              </span>
               <Link
                 className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 pl-1 pr-1 ms-0 "
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}

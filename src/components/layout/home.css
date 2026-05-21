@@ -24,6 +24,28 @@
   padding: 20px;
 }
 
+.home-collection-grid .collection-card {
+  animation: collectionCardAppear 520ms ease-out both;
+}
+
+@keyframes collectionCardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-collection-grid .collection-card {
+    animation: none;
+  }
+}
+
 .home-page-stats-container {
   padding-top: 60px;
   padding-bottom: 8%;
