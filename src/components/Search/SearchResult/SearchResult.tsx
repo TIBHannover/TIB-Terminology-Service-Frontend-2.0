@@ -1,25 +1,25 @@
-import {useState, useEffect, useContext, ReactNode, ReactElement, ChangeEvent} from 'react';
-import {useLocation, Link} from 'react-router-dom'
-import {olsSearch} from '../../../api/search';
+import { useState, useEffect, useContext, ReactNode, ReactElement, ChangeEvent } from 'react';
+import { useLocation, Link } from 'react-router-dom'
+import { olsSearch } from '../../../api/search';
 import Facet from '../Facet/facet';
 import Pagination from "../../common/Pagination/Pagination";
 import TermLib from '../../../Libs/TermLib';
 import Toolkit from '../../../Libs/Toolkit';
 import DropDown from '../../common/DropDown/DropDown';
 import SearchLib from '../../../Libs/searchLib';
-import {getCollectionsAndThierOntologies} from '../../../api/collection';
+import { getCollectionsAndThierOntologies } from '../../../api/collection';
 import '../../layout/searchResult.css';
 import '../../layout/facet.css';
 import SearchUrlFactory from '../../../UrlFactory/SearchUrlFactory';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
-import {AppContext} from '../../../context/AppContext';
-import {useQuery} from '@tanstack/react-query';
+import { AppContext } from '../../../context/AppContext';
+import { useQuery } from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
-import {AddToTermsetModal} from "../../TermSet/AddTermToSet";
-import {TsTerm} from '../../../concepts';
-import {SearchApiResponse, SearchResultFacet} from '../../../api/types/searchApiTypes';
-import {TsOntology} from '../../../concepts';
+import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
+import { TsTerm } from '../../../concepts';
+import { SearchApiResponse, SearchResultFacet } from '../../../api/types/searchApiTypes';
+import { TsOntology } from '../../../concepts';
 
 
 const SearchResult = () => {
@@ -35,7 +35,7 @@ const SearchResult = () => {
     const searchUrlFactory = new SearchUrlFactory();
     const commonUrlFactory = new CommonUrlFactory();
 
-    let language = commonUrlFactory.getParam({name: SiteUrlParamNames.Lang}) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
+    let language = commonUrlFactory.getParam({ name: SiteUrlParamNames.Lang }) || Toolkit.getVarInLocalSrorageIfExist('language', false) || "en";
 
     const DEFAULT_PAGE_NUMBER = "1";
     const DEFAULT_PAGE_SIZE = "10";
@@ -44,7 +44,7 @@ const SearchResult = () => {
     const [selectedOntologies, setSelectedOntologies] = useState(SearchLib.getFilterAndAdvancedOntologyIdsFromUrl());
     const [selectedTypes, setSelectedTypes] = useState(searchUrlFactory.types);
     const [selectedCollections, setSelectedCollections] = useState(searchUrlFactory.collections);
-    const [facetFields, setFacetFields] = useState<SearchResultFacet>({type: {}, ontologyId: {}});
+    const [facetFields, setFacetFields] = useState<SearchResultFacet>({ type: {}, ontologyId: {} });
     const [pageNumber, setPageNumber] = useState(parseInt(searchUrlFactory.page ? searchUrlFactory.page : DEFAULT_PAGE_NUMBER));
     const [pageSize, setPageSize] = useState(parseInt(searchUrlFactory.size ? searchUrlFactory.size : DEFAULT_PAGE_SIZE));
     const [totalResultsCount, setTotalResultsCount] = useState<number>(0);
@@ -56,10 +56,10 @@ const SearchResult = () => {
     const [exact, setExact] = useState(searchUrlFactory.exact === "true")
 
 
-    const PAGE_SIZES_FOR_DROPDOWN = [{label: "10", value: 10}, {label: "20", value: 20}, {
+    const PAGE_SIZES_FOR_DROPDOWN = [{ label: "10", value: 10 }, { label: "20", value: 20 }, {
         label: "30",
         value: 30
-    }, {label: "40", value: 40}];
+    }, { label: "40", value: 40 }];
     const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
     const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
@@ -84,7 +84,7 @@ const SearchResult = () => {
             ontologies = [...appContext.userSettings.activeCollection.ontology_ids];
         }
 
-        searchUrlFactory.setIncludeImported({includeImported: appContext.includeImportedTerms});
+        searchUrlFactory.setIncludeImported({ includeImported: appContext.includeImportedTerms });
 
         try {
             let searchParams = {
@@ -105,9 +105,9 @@ const SearchResult = () => {
 
             // This part is for updating the facet counts.
             // First we search only with selected ontologies to set types counts and then search with selected types to set ontologies counts.
-            let searchParamsForTypeCount = {...searchParams};
+            let searchParamsForTypeCount = { ...searchParams };
             searchParamsForTypeCount.selectedTypes = [];
-            let searchParamsForOntoCount = {...searchParams};
+            let searchParamsForOntoCount = { ...searchParams };
             searchParamsForOntoCount.selectedOntologies = [];
 
             Promise.all([olsSearch(searchParams), olsSearch(searchParamsForTypeCount), olsSearch(searchParamsForOntoCount)]).then((values) => {
@@ -195,21 +195,21 @@ const SearchResult = () => {
                         <div className="searchresult-ontology">
                             <span><b>Ontology: </b></span>
                             <Link className='btn btn-default ontology-button'
-                                  to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i].ontologyId}>
+                                to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + searchResult[i].ontologyId}>
                                 {searchResult[i].ontologyId}
                             </Link>
                         </div>
-                        <br/>
+                        <br />
                         {alsoInList.length !== 0 &&
-                          <div className="also-in-design">
-                            <b>Also in:</b> {alsoInList}
-                          </div>
+                            <div className="also-in-design">
+                                <b>Also in:</b> {alsoInList}
+                            </div>
                         }
 
                     </div>
                     <div className="col-sm-2 float-right">
                         <AddToTermsetModal modalId={"term-in-tree-" + i} term={searchResult[i]}
-                                           btnClass="btn-sm action-btn"/>
+                            btnClass="btn-sm action-btn" />
                     </div>
                 </div>
             );
@@ -221,13 +221,13 @@ const SearchResult = () => {
     function handlePageSizeDropDownChange(e: React.ChangeEvent<HTMLSelectElement>) {
         let size = parseInt(e.target.value);
         setPageSize(size);
-        commonUrlFactory.setParam({name: SiteUrlParamNames.Size, value: size});
+        commonUrlFactory.setParam({ name: SiteUrlParamNames.Size, value: size });
     }
 
 
     function handlePagination(value: number) {
         setPageNumber(value);
-        commonUrlFactory.setParam({name: SiteUrlParamNames.Page, value: value});
+        commonUrlFactory.setParam({ name: SiteUrlParamNames.Page, value: value });
     }
 
 
@@ -265,7 +265,7 @@ const SearchResult = () => {
 
 
     function handleOntologyFacetSelection(e: React.MouseEvent<HTMLInputElement>) {
-        commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
+        commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
         let selectedOntologiesList = [...selectedOntologies];
         let targetOntologyId = (e.target as HTMLInputElement).value;
         if ((e.target as HTMLInputElement).checked) {
@@ -291,7 +291,7 @@ const SearchResult = () => {
 
 
     function handleCollectionFacetSelection(e: React.MouseEvent<HTMLInputElement>) {
-        commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
+        commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
         let selectedCollectionsList = [...selectedCollections];
         let targetCollection = (e.target as HTMLInputElement).value.trim();
         if ((e.target as HTMLInputElement).checked) {
@@ -332,7 +332,7 @@ const SearchResult = () => {
         setPageSize(10);
         setFilterTags([]);
         localStorage.setItem('language', "en");
-        commonUrlFactory.deleteParam({name: SiteUrlParamNames.Lang});
+        commonUrlFactory.deleteParam({ name: SiteUrlParamNames.Lang });
         setLang("en");
     }
 
@@ -358,8 +358,8 @@ const SearchResult = () => {
                 handleCollectionFacetSelection(selectionEvent);
             }
             localStorage.setItem('language', "en");
-            commonUrlFactory.deleteParam({name: SiteUrlParamNames.Lang});
-            commonUrlFactory.deleteParam({name: SiteUrlParamNames.FromOntologyPage});
+            commonUrlFactory.deleteParam({ name: SiteUrlParamNames.Lang });
+            commonUrlFactory.deleteParam({ name: SiteUrlParamNames.FromOntologyPage });
             setLang("en");
         } catch (e) {
             // console.info(e);
@@ -372,8 +372,8 @@ const SearchResult = () => {
         let tagsList = [];
         for (let type of selectedTypes) {
             let newTag = <div className='search-filter-tags' key={type}>{type} <i onClick={handleRemoveTagClick}
-                                                                                  data-type={"type"} data-value={type}
-                                                                                  className="fa fa-close remove-tag-icon"></i>
+                data-type={"type"} data-value={type}
+                className="fa fa-close remove-tag-icon"></i>
             </div>;
             tagsList.push(newTag);
         }
@@ -429,23 +429,23 @@ const SearchResult = () => {
                 <div className='row'>
                     <div className='col-sm-4'>
                         {searchResult.length > 0 && !loading &&
-                          <Facet
-                            facetData={facetFields}
-                            handleChange={search}
-                            selectedCollections={selectedCollections}
-                            selectedOntologies={selectedOntologies}
-                            selectedTypes={selectedTypes}
-                            allCollections={allCollectionIds}
-                            handleOntologyCheckBoxClick={handleOntologyFacetSelection}
-                            handleTypesCheckBoxClick={handleTypeFacetSelection}
-                            handleCollectionsCheckboxClick={handleCollectionFacetSelection}
-                            clearFacet={clearFilters}
-                          />
+                            <Facet
+                                facetData={facetFields}
+                                handleChange={search}
+                                selectedCollections={selectedCollections}
+                                selectedOntologies={selectedOntologies}
+                                selectedTypes={selectedTypes}
+                                allCollections={allCollectionIds}
+                                handleOntologyCheckBoxClick={handleOntologyFacetSelection}
+                                handleTypesCheckBoxClick={handleTypeFacetSelection}
+                                handleCollectionsCheckboxClick={handleCollectionFacetSelection}
+                                clearFacet={clearFilters}
+                            />
                         }
                     </div>
                     <div className='col-sm-8' id="search-list-grid">
                         {searchResult.length > 0 &&
-                          <h3 className="text-dark">{`${totalResultsCount} results found for "${searchQuery}"`}</h3>}
+                            <h3 className="text-dark">{`${totalResultsCount} results found for "${searchQuery}"`}</h3>}
                         <div>{filterTags}</div>
                         <div className='row'>
                             <div className='col-sm-8 text-end zero-padding-col'>
@@ -458,7 +458,7 @@ const SearchResult = () => {
                                     defaultVaue={lang}
                                     dropDownChangeHandler={(e: ChangeEvent<HTMLSelectElement>) => {
                                         localStorage.setItem('language', e.target.value);
-                                        commonUrlFactory.setParam({name: 'lang', value: e.target.value});
+                                        commonUrlFactory.setParam({ name: 'lang', value: e.target.value });
                                         setLang(e.target.value);
                                     }}
                                 />
@@ -477,14 +477,14 @@ const SearchResult = () => {
 
                         {searchResult.length > 0 && createSearchResultList()}
                         {searchResult.length > 0 &&
-                          <Pagination
-                            clickHandler={handlePagination}
-                            count={pageCount()}
-                            initialPageNumber={pageNumber}
-                          />
+                            <Pagination
+                                clickHandler={handlePagination}
+                                count={pageCount()}
+                                initialPageNumber={pageNumber}
+                            />
                         }
                         {!loading && searchResult.length === 0 &&
-                          <h3 className="text-dark">{'No search results for "' + searchQuery + '"'}</h3>}
+                            <h3 className="text-dark">{'No search results for "' + searchQuery + '"'}</h3>}
                     </div>
                 </div>
                 <div className='row text-center'>
