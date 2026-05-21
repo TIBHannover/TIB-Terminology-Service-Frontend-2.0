@@ -23,8 +23,30 @@ body .collection-ontologies-loading {
   margin-left: 10px;
 }
 
+body .collection-ontologies-toggle {
+  background: transparent;
+  border: none;
+  color: #0e6668;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 10px;
+  padding: 0;
+}
+
+body .collection-ontologies-toggle:hover {
+  text-decoration: underline;
+}
+
+body .collection-suggest-ontology-btn {
+  display: block;
+  margin-top: 8px;
+  width: fit-content;
+}
+
 body .collection-card-row {
-  align-items: center;
+  align-items: flex-start;
   animation: collectionListCardAppear 520ms ease-out both;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)) !important;
   backdrop-filter: blur(18px) saturate(160%);
@@ -40,6 +62,12 @@ body .collection-card-row {
 
 body .collections-info-container {
   padding-top: 25px;
+}
+
+body .collection-card-row > .col-sm-3 {
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
 }
 
 body .collection-logo-in-list {

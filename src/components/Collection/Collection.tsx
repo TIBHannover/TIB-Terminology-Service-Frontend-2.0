@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import '../layout/collectionList.css';
 import { getCollectionsAndThierOntologies } from '../../api/collection';
@@ -25,6 +25,38 @@ type CollectionJsonData = {
 
 type CollectionsData = Record<string, CollectionJsonData>
 
+const DEFAULT_VISIBLE_ONTOLOGIES = 8;
+
+type CollectionOntologyListProps = {
+  ontologies: JSX.Element[];
+  isLoading: boolean;
+}
+
+const CollectionOntologyList = ({ ontologies, isLoading }: CollectionOntologyListProps) => {
+  const [showAll, setShowAll] = useState(false);
+  const visibleOntologies = showAll ? ontologies : ontologies.slice(0, DEFAULT_VISIBLE_ONTOLOGIES);
+  const hiddenCount = ontologies.length - DEFAULT_VISIBLE_ONTOLOGIES;
+
+  if (isLoading) {
+    return <span className="collection-ontologies-loading">Loading ontologies ...</span>;
+  }
+
+  return (
+    <>
+      {visibleOntologies}
+      {hiddenCount > 0 &&
+        <button
+          type="button"
+          className="collection-ontologies-toggle"
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? "Show less" : "Show more"}
+        </button>
+      }
+    </>
+  );
+}
+
 
 const Collections = () => {
 
@@ -41,6 +73,7 @@ const Collections = () => {
       for (let onto of collectionsWithTheirOntologies[col]) {
         collectionOntologiesData[col].push(
           <Link
+            key={onto.ontologyId}
             to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto.ontologyId}
             className="ontologies-link-tag ontology-button"
             onClick={() => {
@@ -112,15 +145,15 @@ const Collections = () => {
           }
           <div className='row' key={collectionId + "_ontoList"}>
             <div className='col-sm-12 collection-ontologies-text'>
-              <b>Ontologies:</b>
+              <b>Ontologies {!ontologiesAreLoading && "(" + (collectionOntologies[collectionId] || []).length + ")"}:</b>
               <span className="collection-ontologies-list">
-                {ontologiesAreLoading &&
-                  <span className="collection-ontologies-loading">Loading ontologies ...</span>
-                }
-                {!ontologiesAreLoading && (collectionOntologies[collectionId] || "")}
+                <CollectionOntologyList
+                  ontologies={collectionOntologies[collectionId] || []}
+                  isLoading={ontologiesAreLoading}
+                />
               </span>
               <Link
-                className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 pl-1 pr-1 ms-0 "
+                className="btn btn-sm btn-secondary collection-suggest-ontology-btn"
                 to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
                 onClick={() => {
                   Toolkit.selectSiteNavbarOption("Ontologies")
