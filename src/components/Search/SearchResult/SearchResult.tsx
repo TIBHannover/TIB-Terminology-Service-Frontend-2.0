@@ -18,9 +18,8 @@ import { useQuery } from '@tanstack/react-query';
 import CopyLinkButton from '../../common/CopyButton/CopyButton';
 import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
 import { TsTerm } from '../../../concepts';
-import { SearchApiResponse, SearchResultFacet } from '../../../api/types/searchApiTypes';
+import { SearchResultFacet } from '../../../api/types/searchApiTypes';
 import { TsOntology } from '../../../concepts';
-import { allowedNodeEnvironmentFlags } from 'process';
 
 
 const SearchResult = () => {
