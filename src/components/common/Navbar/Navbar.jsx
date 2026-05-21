@@ -81,7 +81,7 @@ const SiteNavbar = () => {
                 onMouseLeave={() => setShowInfoDropdown(false)}
                 onFocus={() => setShowInfoDropdown(true)}
                 onBlur={handleInfoDropdownBlur}
-                className={"nav-link navbar-item nav-dropdown-title " + (urlPath.includes("/about") || urlPath.includes("/help") || urlPath.includes("/docs") || urlPath.includes("/contact") ? "nav-clicked" : "")} onClick={handleClick}
+                className={"nav-link navbar-item nav-dropdown-title stour-info-navbar-item " + (urlPath.includes("/about") || urlPath.includes("/help") || urlPath.includes("/docs") || urlPath.includes("/contact") ? "nav-clicked" : "")} onClick={handleClick}
               >
                 <NavDropdown.Item key={"1"} onClick={() => setShowInfoDropdown(false)}>
                   <Link
