@@ -111,7 +111,7 @@ const OntologyAdoptRequest = (props) => {
       adopterType,
       adopterName,
       usageDescription,
-      usageChannel
+      usageChannel,
     });
 
     if (
@@ -345,7 +345,7 @@ const OntologyAdoptRequest = (props) => {
               <div className="col-sm-8">
                 <label>
                   PID of the provider/affiliation (e.g., ROR; if available)
-                  <HelpIcon text="If your adopter’s provider  or affiliation has a Persistent Identifier such as a DOI or a ROR then please add it, e.g. https://ror.org999xx000".  />
+                  <HelpIcon text="If your adopter’s provider  or affiliation has a Persistent Identifier such as a DOI or a ROR then please add it, e.g. https://ror.org999xx000" />
                 </label>
 
                 <input

@@ -32,7 +32,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
   const adopters = useMemo(() => {
     if (!Array.isArray(onto?.ontology_use)) return [];
     return onto.ontology_use.filter(
-      (u) => u && (u.usedBy || u.usageDescription)
+      (u) => u && (u.usedBy || u.usageDescription),
     );
   }, [onto]);
 
@@ -50,9 +50,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
         {adopters.map((u, idx) => {
           const used = u.usedBy || {};
 
-          const prov = Array.isArray(used.provider)
-            ? used.provider
-            : [];
+          const prov = Array.isArray(used.provider) ? used.provider : [];
 
           const contacts = Array.isArray(used.contact)
             ? used.contact.map((c) => c?.mail).filter(Boolean)
@@ -75,10 +73,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
             .filter((v, i, arr) => arr.indexOf(v) === i);
 
           // gather usage descriptions
-          const usageDescs = [
-            u?.usageDescription,
-            used?.usageDescription,
-          ]
+          const usageDescs = [u?.usageDescription, used?.usageDescription]
             .filter(Boolean)
             .filter((x) => x.description)
             .map((x) => ({
@@ -91,9 +86,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               {usageDescs.length > 0 && (
                 <div className="mb-2">
                   {usageDescs.map((ud, i) => (
-                    <div key={i}>
-                      {ud.description}
-                    </div>
+                    <div key={i}>{ud.description}</div>
                   ))}
                 </div>
               )}
@@ -109,16 +102,12 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               {ids.length > 0 && (
                 <>
                   <Row label="Identifier">
-                    <LinkOrText href={ids[0]}>
-                      {ids[0]}
-                    </LinkOrText>
+                    <LinkOrText href={ids[0]}>{ids[0]}</LinkOrText>
                   </Row>
 
                   {ids.slice(1).map((d, i) => (
                     <Row key={i} label="Additional Identifier">
-                      <LinkOrText href={d}>
-                        {d}
-                      </LinkOrText>
+                      <LinkOrText href={d}>{d}</LinkOrText>
                     </Row>
                   ))}
                 </>
@@ -126,9 +115,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
 
               {used.homepage && (
                 <div className="mb-2">
-                  <LinkOrText href={used.homepage}>
-                    {used.homepage}
-                  </LinkOrText>
+                  <LinkOrText href={used.homepage}>{used.homepage}</LinkOrText>
                 </div>
               )}
 
@@ -144,14 +131,10 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
                       ];
 
                       const pIds = pIdSources
-                        .flatMap((x) =>
-                          Array.isArray(x) ? x : x ? [x] : []
-                        )
+                        .flatMap((x) => (Array.isArray(x) ? x : x ? [x] : []))
                         .map(String)
                         .filter(Boolean)
-                        .filter(
-                          (v, j, arr) => arr.indexOf(v) === j
-                        );
+                        .filter((v, j, arr) => arr.indexOf(v) === j);
 
                       return (
                         <span key={`${p.label}-${i}`}>
@@ -165,23 +148,16 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
                                   <LinkOrText key={id} href={id}>
                                     {id}
                                   </LinkOrText>
-                                ))
+                                )),
                               )}
                             </>
                           )}
                         </span>
                       );
-                    })
+                    }),
                   )}
                 </Row>
               )}
-
-              // no contacts should be shown
-              // {contacts.length > 0 && (
-                // <Row label="Contact">
-                  // {listWithCommas(contacts)}
-                // </Row>
-             // )}
 
               {u.usageReportMetadata?.source && (
                 <Row label="Source">
@@ -192,9 +168,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               )}
 
               {u.usageReportMetadata?.created && (
-                <Row label="Created">
-                  {u.usageReportMetadata.created}
-                </Row>
+                <Row label="Created">{u.usageReportMetadata.created}</Row>
               )}
             </div>
           );
