@@ -294,8 +294,7 @@ const OntologyPage = (props: CmpPropp) => {
                                           <IssueList componentIdentity={'gitIssues'} key={'gitIssueList'}/>
                                         }
 
-                                        {
-                                            !waiting && activeTab === ONDET_TAB_ID && (() => {
+                                        {!waiting && activeTab === ONDET_TAB_ID && (() => {
                                                 const errorMessage = <p><h5>Ontology is not in OnDeT, since it is not hosted
                                                     on Github or Gitlab</h5></p>;
 
