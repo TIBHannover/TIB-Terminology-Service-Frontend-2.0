@@ -328,7 +328,11 @@ const CollectionPage = (props: CmpProps) => {
         <div className="col-4">
           <img
             className="img-fluid"
-            src={process.env.REACT_APP_PROJECT_SUB_PATH! + collection?.logo}
+            src={
+              process.env.REACT_APP_PROJECT_SUB_PATH?.includes("terminology")
+                ? process.env.REACT_APP_PROJECT_SUB_PATH! + collection?.logo
+                : collection?.logo
+            }
             alt={collection?.name}
           />
           <hr />
