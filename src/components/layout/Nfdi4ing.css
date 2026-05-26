@@ -1297,7 +1297,12 @@ button {
 
 .ontology-detail-table-wrapper {
     width: 100%;
-    overflow-x: auto;
+    overflow-x: hidden;
+}
+
+.ontology-detail-table-wrapper > .row {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .ontology-detail-table {

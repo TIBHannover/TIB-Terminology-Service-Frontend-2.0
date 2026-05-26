@@ -18,6 +18,7 @@ type InputProp = {
     terms: Map<string, Term>[], // !Attention!: id of this map has to be the id field in the Column
     tableIsLoading: boolean, // get the loading status from the parent component who provides the data
     setTableIsLoading: (isLoading: boolean) => void, // set the table is loading when an event is triggered inside the table
+    controlsAfterColumnTags?: ReactNode,
 }
 
 
@@ -157,9 +158,9 @@ const TermTable = (props: InputProp) => {
     }, [terms, colVis]);
 
 
-    return (
+    const table = (
         <table className="table table-striped term-list-table term-table" id="class-list-table">
-            {columns && createShowColumnsTags()}
+            {!props.controlsAfterColumnTags && columns && createShowColumnsTags()}
             {columns && createTableHeader()}
             <tbody>
                 {tableIsLoading && <div className="is-loading-term-list isLoading"></div>}
@@ -167,6 +168,18 @@ const TermTable = (props: InputProp) => {
             </tbody>
         </table>
     );
+
+    if (props.controlsAfterColumnTags) {
+        return (
+            <>
+                {columns && createShowColumnsTags()}
+                {props.controlsAfterColumnTags}
+                {table}
+            </>
+        );
+    }
+
+    return table;
 }
 
 

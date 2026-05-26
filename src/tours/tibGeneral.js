@@ -72,16 +72,8 @@ export function headerTourStepsTibGeneral() {
       content: "Checkout the list of available ontologies.",
     },
     {
-      selector: tourSelectorPrefix + 'help-navbar-item',
-      content: "Need help? Here you can find the most frequent questions and answers regarding TIB Terminology Service.",
-    },
-    {
-      selector: tourSelectorPrefix + 'api-navbar-item',
-      content: "You plan to use API? Check this for the detailed documentation.",
-    },
-    {
-      selector: tourSelectorPrefix + 'about-navbar-item',
-      content: "Read more about TIB Terminology Service.",
+      selector: tourSelectorPrefix + 'info-navbar-item',
+      content: "Use INFO to learn more about TIB Terminology Service: read About, find Help and frequently asked questions, open the Documentation including API details, or contact us.",
     },
   ];
   return steps;

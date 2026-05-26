@@ -1,3 +1,4 @@
+import "../layout/termset.css";
 import { useState, useEffect, useContext } from "react";
 import { getTermset } from "../../api/term_set";
 import { useQuery } from "@tanstack/react-query";
@@ -251,13 +252,67 @@ const TermSetPage = (props: TermsetPageComProps) => {
   }, [page, size]);
 
 
+  function renderTermsetActionBar() {
+    return (
+      <div className="row termset-table-action-row" id="termset-page-action-bar">
+        <div className="col-sm-4 mt-1">
+          <label htmlFor="search-input-for-termset" className={"inline-label"}>
+            Search
+            <i className="bi bi-question-circle-fill me-1 ms-1"
+              title="Search the table based on term label"></i>
+          </label>
+          <input
+            className={"form-control search-input-termset"}
+            type={"text"}
+            id={"search-input-for-termset"}
+            onChange={searchInputChangeHandler}
+            placeholder="type a label ..."
+          />
+        </div>
+        <div className="col-sm-4">
+          <DropDown
+            options={PAGE_SIZES_FOR_DROPDOWN}
+            dropDownId="list-result-per-page"
+            containerClass="result-per-page-dropdown-container"
+            dropDownTitle="size"
+            dropDownValue={size}
+            dropDownChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSize(parseInt(e.currentTarget.value))
+            }}
+          />
+        </div>
+        <div className="col-sm-2">
+          <b>
+            {
+              (totalTermsCount !== 0 ? page * size + 1 : 0)
+              + " - "
+              + ((page + 1) * size < totalTermsCount ? (page + 1) * size : totalTermsCount)
+              + " of "
+              + totalTermsCount
+              + " terms"
+            }
+          </b>
+        </div>
+        <div className="col-sm-2 text-right mt-1">
+          <Pagination
+            clickHandler={(newPage: string) => {
+              setPage(parseInt(newPage) - 1)
+            }}
+            count={Math.ceil(totalTermsCount / size)}
+            initialPageNumber={page + 1}
+          />
+        </div>
+      </div>
+    );
+  }
+
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return "";
   }
 
   if (!data && !isError) {
     return (
-      <div className="justify-content-center ontology-page-container">
+      <div className="justify-content-center ontology-page-container termset-loading-container">
         <div className="isLoading"></div>
       </div>
     );
@@ -283,7 +338,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
 
         </div>
         <br />
-        <div className="row bg-white p-2 rounded">
+        <div className="row bg-white p-2 rounded termset-detail-header">
           <div className="col-sm-8">
             <div className="d-flex flex-row gap-2">
               <p className="fs-4 fw-bold mb-0">{data ? data.name : ""}</p>
@@ -319,61 +374,12 @@ const TermSetPage = (props: TermsetPageComProps) => {
           </div>
         </div>
         <br /><br />
-        <div className="row" id="termset-page-action-bar">
-          <div className="col-sm-4 mt-1">
-            <label htmlFor="search-input-for-termset" className={"inline-label"}>
-              Search
-              <i className="bi bi-question-circle-fill me-1 ms-1"
-                title="Search the table based on term label"></i>
-            </label>
-            <input
-              className={"form-control search-input-termset"}
-              type={"text"}
-              id={"search-input-for-termset"}
-              onChange={searchInputChangeHandler}
-              placeholder="type a label ..."
-            />
-          </div>
-          <div className="col-sm-4">
-            <DropDown
-              options={PAGE_SIZES_FOR_DROPDOWN}
-              dropDownId="list-result-per-page"
-              containerClass="result-per-page-dropdown-container"
-              dropDownTitle="size"
-              dropDownValue={size}
-              dropDownChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setSize(parseInt(e.currentTarget.value))
-              }}
-            />
-          </div>
-          <div className="col-sm-2 pt-2">
-            <b>
-              {
-                (totalTermsCount !== 0 ? page * size + 1 : 0)
-                + " - "
-                + ((page + 1) * size < totalTermsCount ? (page + 1) * size : totalTermsCount)
-                + " of "
-                + totalTermsCount
-                + " terms"
-              }
-            </b>
-          </div>
-          <div className="col-sm-2 text-right mt-1">
-            <Pagination
-              clickHandler={(newPage: string) => {
-                setPage(parseInt(newPage) - 1)
-              }}
-              count={Math.ceil(totalTermsCount / size)}
-              initialPageNumber={page + 1}
-            />
-          </div>
-
-        </div>
-        <div className="row class-list-tablle-holder">
+        <div className="row class-list-tablle-holder termset-detail-table-panel">
           <TermTable
             columns={tableColumns}
             terms={rowDataForTable}
             tableIsLoading={isLoading}
+            controlsAfterColumnTags={renderTermsetActionBar()}
             setTableIsLoading={() => {
             }}
           />

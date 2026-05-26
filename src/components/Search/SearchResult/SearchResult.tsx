@@ -440,7 +440,7 @@ const SearchResult = () => {
             <div className='col-sm-11'>
                 <div className='row'>
                     <div className='col-sm-4'>
-                        {searchResult.length > 0 && !loading &&
+                        {!loading &&
                             <Facet
                                 facetData={facetFields}
                                 handleChange={search}

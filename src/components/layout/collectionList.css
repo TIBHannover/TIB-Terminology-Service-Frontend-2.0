@@ -3,15 +3,125 @@ body .collection-ontologies-text {
 }
 
 body .ontologies-link-tag {
+  animation: collectionOntologyTagAppear 420ms ease-out both;
+  display: inline-block;
   margin-left: 10px;
-  font-size: 16px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+body .collection-ontologies-list {
+  display: inline-block;
+  min-height: 28px;
+}
+
+body .collection-ontologies-loading {
+  animation: collectionOntologyLoadingPulse 1.2s ease-in-out infinite;
+  color: #5f6469;
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+body .collection-ontologies-toggle {
+  background: transparent;
+  border: none;
+  color: #0e6668;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 10px;
+  padding: 0;
+}
+
+body .collection-ontologies-toggle:hover {
+  text-decoration: underline;
+}
+
+body .collection-suggest-ontology-btn {
+  display: block;
+  margin-top: 8px;
+  width: fit-content;
 }
 
 body .collection-card-row {
-  margin-bottom: 80px;
+  align-items: flex-start;
+  animation: collectionListCardAppear 520ms ease-out both;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16),
+  inset 0 1px 0 rgba(255, 255, 255, 0.72),
+  inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+  margin-bottom: 28px;
+  padding: 24px;
 }
 
 body .collections-info-container {
   padding-top: 25px;
+}
+
+body .collection-card-row > .col-sm-3 {
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+}
+
+body .collection-logo-in-list {
+  object-fit: contain;
+}
+
+@media only screen and (max-width: 1500px) and (min-width: 1300px) and (max-height: 950px) {
+  body .collection-logo-in-list {
+    height: 190px;
+    max-width: 100%;
+    width: 220px;
+  }
+}
+
+@keyframes collectionListCardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes collectionOntologyTagAppear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes collectionOntologyLoadingPulse {
+  0%,
+  100% {
+    opacity: 0.56;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body .collection-card-row,
+  body .ontologies-link-tag,
+  body .collection-ontologies-loading {
+    animation: none;
+  }
 }
 

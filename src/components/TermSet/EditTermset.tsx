@@ -1,3 +1,4 @@
+import "../layout/termset.css";
 import DropDown from "../common/DropDown/DropDown";
 import { useState, useContext, useRef } from "react";
 import Multiselect from "multiselect-react-dropdown";
@@ -188,7 +189,7 @@ const EditTermset = (props: TermsetEditComProps) => {
   if (submited && addedSuccess) {
     return (
       <>
-        <div className="row user-info-panel">
+        <div className="row user-info-panel termset-form-panel">
           <AlertBox
             type="success"
             message="Added successfully!"
@@ -201,7 +202,7 @@ const EditTermset = (props: TermsetEditComProps) => {
   } else if (submited && !addedSuccess) {
     return (
       <>
-        <div className="row user-info-panel">
+        <div className="row user-info-panel termset-form-panel">
           <AlertBox
             type="danger"
             message="Something went wrong. Please try again!"
@@ -216,7 +217,7 @@ const EditTermset = (props: TermsetEditComProps) => {
 
   if (mode === "edit" && !data && !isError) {
     return (
-      <div className="justify-content-center ontology-page-container">
+      <div className="justify-content-center ontology-page-container termset-loading-container">
         <div className="isLoading"></div>
       </div>
     );
@@ -254,7 +255,7 @@ const EditTermset = (props: TermsetEditComProps) => {
 
 
   return (
-    <div className="row user-info-panel">
+    <div className="row user-info-panel termset-form-panel">
       {mode === "edit" && backBtn}
       <div className="row mb-4">
         <div className="col-sm-12">
