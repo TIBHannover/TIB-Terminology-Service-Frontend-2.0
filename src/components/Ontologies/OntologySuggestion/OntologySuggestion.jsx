@@ -390,7 +390,7 @@ const OntologySuggestion = () => {
               suggestion</a>
           }
           {progressStep === USER_FORM_STEP && noErrorsAndLoading() && !(ontologyExist && !collectionSuggestMode) &&
-            <button type="button" className="btn btn-secondary" onClick={submit}>Submit</button>
+            <button type="button" className="btn btn-secondary ms-2" onClick={submit}>Submit</button>
           }
           {(progressStep !== USER_FORM_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
             <>

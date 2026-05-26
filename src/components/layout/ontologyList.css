@@ -10,6 +10,17 @@
     color: #42484e;
 }
 
+.ontology-list-container .stour-ontology-card-in-list {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)) !important;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+}
+
 .ontology-card-description {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -52,11 +63,35 @@
     width: 100%;
 }
 
+.ontology-list-container .ontology-list-facet-section-box .facet-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)) !important;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+}
+
 #lastUpdateRange {
     margin-left: 10px;
 }
 
 #ontology-list-search-label {
-    background-color: #0e6668;
+    background-color: #0E6668;
+    border-color: rgba(255, 255, 255, 0.55);
     color: white;
+}
+
+#ontology-list-search-input {
+    background-color: rgba(255, 255, 255, 0.44);
+    border-color: rgba(255, 255, 255, 0.55);
+    color: #42484e;
+}
+
+#ontology-list-search-input:focus {
+    background-color: rgba(255, 255, 255, 0.58);
+    border-color: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 0 0 0.2rem rgba(14, 102, 104, 0.16);
 }

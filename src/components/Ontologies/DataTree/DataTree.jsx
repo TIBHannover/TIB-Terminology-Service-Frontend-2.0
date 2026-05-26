@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import TermDetail from '../TermDetail/TermDetail';
-import { MatomoWrapper } from '../../Matomo/MatomoWrapper';
+import {MatomoWrapper} from '../../Matomo/MatomoWrapper';
 import Tree from './Tree';
 import PaneResize from '../../common/PaneResize/PaneResize';
 import '../../layout/tree.css';
-import { OntologyPageContext } from '../../../context/OntologyPageContext';
+import {OntologyPageContext} from '../../../context/OntologyPageContext';
 import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
-import { getTourProfile } from '../../../tours/controller';
-
+import {getTourProfile} from '../../../tours/controller';
+import TermApi from '../../../api/term';
 
 
 const DataTree = (props) => {
@@ -22,10 +22,10 @@ const DataTree = (props) => {
     Context:
       The component needs OntologyPage context. Look at src/context/OntologyPageContext.js
   */
-
-
+  
+  
   const ontologyPageContext = useContext(OntologyPageContext);
-
+  
   const [selectedNodeIri, setSelectedNodeIri] = useState('');
   const [showDetailTable, setShowDetailTable] = useState(false);
   const [isTermTree, setIsTermTree] = useState(false);
@@ -33,35 +33,35 @@ const DataTree = (props) => {
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
   const [jumpToIri, setJumpToIri] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   const urlFacory = new CommonUrlFactory();
-
-
+  
+  
   function handleTreeNodeSelection(selectedNodeIri, showDetailTable) {
     setSelectedNodeIri(selectedNodeIri);
     setShowDetailTable(showDetailTable);
     setJumpToIri(null);
   }
-
-
+  
+  
   function handleResetTreeEvent() {
     paneResizeClass.resetTheWidthToOrignial();
     setSelectedNodeIri("");
     setShowDetailTable(false);
     setJumpToIri(null);
   }
-
-
+  
+  
   function handleJumtoSelection(selectedTerm) {
     if (selectedTerm) {
       setJumpToIri(selectedTerm['iri']);
       setSelectedNodeIri(selectedTerm['iri']);
       setShowDetailTable(true);
-      urlFacory.setIri({ newIri: selectedTerm['iri'] });
+      urlFacory.setIri({newIri: selectedTerm['iri']});
     }
   }
-
-
+  
+  
   useEffect(() => {
     paneResizeClass.setOriginalWidthForLeftPanes();
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
@@ -69,20 +69,34 @@ const DataTree = (props) => {
     document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
     let termTree = (props.componentIdentity === "terms") ? true : false;
     let iriInUrl = urlFacory.getIri();
+    let curieInUrl = urlFacory.getCurie();
     if (iriInUrl) {
       setSelectedNodeIri(iriInUrl);
       setShowDetailTable(true);
-    }
-    else if (ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== "") {
+      setLoading(false);
+    } else if (curieInUrl) {
+      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, curieInUrl, props.componentIdentity, ontologyPageContext.ontoLang);
+      setLoading(true);
+      termApi.getTermIriByCurie(curieInUrl).then((iri) => {
+        setSelectedNodeIri(iri);
+        setShowDetailTable(true);
+        urlFacory.deleteParam({name: 'curie'})
+        urlFacory.setIri({newIri: iri});
+        setLoading(false);
+      });
+      
+    } else if (ontologyPageContext.lastVisitedIri[props.componentIdentity] && ontologyPageContext.lastVisitedIri[props.componentIdentity] !== "") {
       setSelectedNodeIri(ontologyPageContext.lastVisitedIri[props.componentIdentity]);
       setShowDetailTable(true);
-      urlFacory.setIri({ newIri: ontologyPageContext.lastVisitedIri[props.componentIdentity] })
+      urlFacory.setIri({newIri: ontologyPageContext.lastVisitedIri[props.componentIdentity]});
+      setLoading(false);
+    } else {
+      setLoading(false);
     }
-
+    
     setIsTermTree(termTree);
     setIsPropertyTree(!termTree);
-    setLoading(false);
-
+    
     let tourP = getTourProfile();
     if (
       process.env.REACT_APP_SITE_TOUR === "true" &&
@@ -92,15 +106,15 @@ const DataTree = (props) => {
         document.getElementById('tour-trigger-btn').click();
       }
     }
-
+    
     return () => {
       document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
       document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
       document.body.addEventListener("mouseup", paneResizeClass.releaseMouseFromResize);
     };
   }, []);
-
-
+  
+  
   return (
     <div className="tree-view-container resizable-container">
       <div className="tree-page-left-part" id="page-left-pane">
@@ -154,7 +168,6 @@ const DataTree = (props) => {
     </div>
   );
 }
-
 
 
 export default DataTree;

@@ -83,12 +83,19 @@ class OntologyApi {
             let result = await fetch(url, getCallSetting);
             let respData = await result.json();
             let terms = respData['elements'] as OntologyTermDataV2[];
+            url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
+            result = await fetch(url, getCallSetting);
+            respData = await result.json();
+            let withObsoleteTerms = respData['elements'] as OntologyTermDataV2[];
+            terms = [...terms, ...withObsoleteTerms];
             let rootClasses: TsClass[] = [];
             let obsoleteClasses: TsClass[] = [];
             for (let term of terms) {
                 if (!term.isObsolete) {
                     let classObj = new TsClass(term, []);
-                    rootClasses.push(classObj);
+                    if (!rootClasses.find(c => c.iri === classObj.iri)) {
+                        rootClasses.push(classObj);
+                    }
                 } else {
                     let classObj = new TsClass(term, []);
                     obsoleteClasses.push(classObj);
@@ -103,7 +110,7 @@ class OntologyApi {
 
     async fetchRootProperties(): Promise<{ roots: TsProperty[], obsoletes: TsProperty[] }> {
         try {
-            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+            let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
             let result = await fetch(url, getCallSetting);
             let respData = await result.json();
             let terms = respData['elements'] as OntologyTermDataV2[];
@@ -199,5 +206,34 @@ export async function checkOntologyPurlIsValidUrl(purl: string): Promise<Ontolog
     }
 }
 
+// adopters ichrak 
+export async function submitAdopterRequest(formData: any): Promise<boolean> {
+    try {
+        let form: any = {};
+        let formDataAny: any = formData;
+        for (let key in formDataAny) {
+            form[key] = formDataAny[key];
+        }
+
+        let headers = getTsPluginHeaders({ isJson: true, withAccessToken: true });
+
+        let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/ontologysuggestion/adopter_create/';
+
+        let result: any = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(form)
+        });
+
+        if (result.status === 200) {
+            result = await result.json();
+            return result['_result']['response'];
+        }
+
+        return false;
+    } catch (e) {
+        return false;
+    }
+}
 
 export default OntologyApi;

@@ -1,16 +1,16 @@
-import { useState } from "react";
+import {useState} from "react";
 
 
 const CopyLinkButton = (props) => {
   const [copied, setCopied] = useState(false);
-
+  
   return (
     <button
       type="button"
       aria-label="Copy to clipboard"
       className="btn btn-sm copy-link-icon-btn borderless-btn"
       key={"copy-btn"}
-      title={props.tooltipText}
+      title={props.tooltipText ?? "Copy to clipboard"}
       onClick={() => {
         navigator.clipboard.writeText(props.valueToCopy);
         setCopied(true);
@@ -27,7 +27,7 @@ const CopyLinkButton = (props) => {
 
 export const CopyLinkButtonMarkdownFormat = (props) => {
   const [copied, setCopied] = useState(false);
-
+  
   return (
     <button
       type="button"

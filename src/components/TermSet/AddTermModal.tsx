@@ -4,12 +4,10 @@ import Multiselect from "multiselect-react-dropdown";
 import { AppContext } from "../../context/AppContext";
 import { olsSearch } from "../../api/search";
 import { SearchApiInput } from "../../api/types/searchApiTypes";
-import TermLib from "../../Libs/TermLib";
 import { updateTermset } from "../../api/term_set";
 import TermApi from "../../api/term";
 import Modal from "react-bootstrap/Modal";
 import { AddTermModalComProps } from "./types";
-import { BaseSearchSingleResult } from "../../api/types/searchApiTypes";
 
 
 type MultiSelectOption = {
@@ -93,7 +91,7 @@ export const AddTermModal = (props: AddTermModalComProps) => {
     }
     //@ts-ignore
     let searchRes = await olsSearch(inputQuery);
-    let terms = !Array.isArray(searchRes) ? searchRes.elements : [];
+    let terms = searchRes ? searchRes.elements : [];
     let options: MultiSelectOption[] = [];
     for (let term of terms) {
       let opt = { text: "", iri: "", ontologyId: "" };

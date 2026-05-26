@@ -24,10 +24,10 @@ const RenderHomePage = () => {
         </div>
       </div>
       <br></br>
-      <div className="row">
+      <div className="row home-collection-grid">
         {Object.keys(collectionsInfoJson).map((collectionId, index) => {
           return (
-            <div className={"col-12 col-lg-4 mb-3 " + (index === 0 ? "stour-collection-box-in-home" : "")}>
+            <div className={"col-12 col-md-6 col-lg-4 mb-3 " + (index === 0 ? "stour-collection-box-in-home" : "")}>
               <CollectionCard collectionId={collectionId} />
             </div>
           );
@@ -45,7 +45,7 @@ const CollectionCard = ({ collectionId }) => {
       {collectionId === "FID BAUdigital" && <div className="alert alert-warning text-danger p-0" style={{ position: 'absolute', zIndex: 10 }}>Deprecated</div>}
       <Link to={subPath + collectionsInfoJson[collectionId]['ontology_list_url']} className="collection-image-anchor">
         <img
-          className="img-fluid p-5"
+          className="img-fluid"
           alt="collection_logo"
           src={collectionsInfoJson[collectionId]['logo']}
           loading="lazy"
@@ -68,5 +68,3 @@ const CollectionCard = ({ collectionId }) => {
 }
 
 export default RenderHomePage;
-
-

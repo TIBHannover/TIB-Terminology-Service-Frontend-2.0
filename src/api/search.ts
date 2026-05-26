@@ -10,18 +10,19 @@ import Toolkit from "../Libs/Toolkit";
 import { TermFactory } from "../concepts";
 
 
-export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | []> {
+export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean = false): Promise<SearchApiResponse | undefined> {
   try {
     let lang = Toolkit.getVarInLocalSrorageIfExist('language', 'en');
     let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
     let query = encodeURIComponent(inputData.searchQuery);
     let page = inputData.page ? inputData.page - 1 : 0;
     let size = inputData.size ? inputData.size : 10;
+    let ontologies = inputData.selectedOntologies?.map(oId => oId.toLowerCase());
     let searchUrl: string = apiBaseUrl + `/v2/entities?search=${query}&page=${page}&size=${size}&lang=${lang}&exclusive=true`;
     searchUrl = !inputData.includeImported && !inputData.fromOntologyPage ? (searchUrl + "&isDefiningOntology=true") : searchUrl;
     // searchUrl = jumpToMode ? (searchUrl + "&boostFields=label^3") : searchUrl;
     searchUrl = !jumpToMode ? (searchUrl + "&facetFields=type+ontologyId") : searchUrl;
-    searchUrl = inputData?.selectedOntologies?.length ? (searchUrl + `&ontology=${inputData?.selectedOntologies?.join(',')}`) : searchUrl;
+    searchUrl = ontologies?.length ? (searchUrl + `&ontology=${ontologies.join(',')}`) : searchUrl;
     searchUrl = inputData?.selectedTypes?.length ? (searchUrl + `&type=${inputData?.selectedTypes?.join(',')}`) : searchUrl;
     searchUrl = inputData?.searchInValues?.length ? (searchUrl + `&searchFields=${inputData?.searchInValues?.join('+')}`) : searchUrl;
     searchUrl = inputData?.searchUnderIris?.length ? (searchUrl + `&childrenOf=${inputData?.searchUnderIris?.join(',')}`) : searchUrl;
@@ -32,7 +33,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     if (process.env.REACT_APP_PROJECT_NAME === "" && inputData?.selectedCollections?.length) {
       // If TIB General. Set collections if exist in filter
       searchUrl += `&schema=collection&classification=${inputData?.selectedCollections?.join(',')}&option=COMPOSITE`;
-    } else if (inputData?.selectedOntologies?.length === 0 && process.env.REACT_APP_PROJECT_NAME !== "") {
+    } else if (!ontologies?.length && process.env.REACT_APP_PROJECT_NAME !== "") {
       // Projects such as NFDI4CHEM. pre-set the target collection on each search
       // This should NOT be included when ontologies are selected.
       searchUrl += `&schema=collection&classification=${process.env.REACT_APP_PROJECT_NAME}&option=COMPOSITE`;
@@ -50,7 +51,7 @@ export async function olsSearch(inputData: SearchApiInput, jumpToMode: boolean =
     }
     return result;
   } catch (e) {
-    return [];
+    return;
   }
 }
 

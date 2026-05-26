@@ -1,4 +1,5 @@
 export const Iri = 'iri';
+export const Curie = 'curie';
 export const Obsoletes = 'obsoletes';
 export const Page = 'page';
 export const Size = 'size';
