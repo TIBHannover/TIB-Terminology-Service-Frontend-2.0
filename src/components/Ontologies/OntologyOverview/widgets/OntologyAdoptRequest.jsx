@@ -16,7 +16,6 @@ const ADOPTER_TYPES = [
   "software",
   "standard",
   "repository/portal",
-  "data standard",
   "application",
 ];
 
