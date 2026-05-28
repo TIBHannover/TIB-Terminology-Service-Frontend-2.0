@@ -37,7 +37,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
   }, [onto]);
 
   return (
-    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+    <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
       <Modal.Header closeButton>
         <h5 className="modal-title">Ontology adopters</h5>
       </Modal.Header>
@@ -48,6 +48,7 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
         )}
 
         {adopters.map((u, idx) => {
+          console.log(u);
           const used = u.usedBy || {};
 
           const prov = Array.isArray(used.provider) ? used.provider : [];
@@ -98,7 +99,10 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
                 </Row>
               )}
 
-              {/* Identifiers */}
+              {u?.usedBy?.description && (
+                <Row label="Description">{u.usedBy.description}</Row>
+              )}
+
               {ids.length > 0 && (
                 <>
                   <Row label="Identifier">
@@ -114,9 +118,9 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               )}
 
               {used.homepage && (
-                <div className="mb-2">
+                <Row label="Homepage">
                   <LinkOrText href={used.homepage}>{used.homepage}</LinkOrText>
-                </div>
+                </Row>
               )}
 
               {prov.length > 0 && (

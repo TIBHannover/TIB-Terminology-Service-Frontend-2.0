@@ -2,11 +2,7 @@ import { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import AlertBox from "../../../common/Alerts/Alerts";
 import FormLib from "../../../../Libs/FormLib";
-import TextEditor from "../../../common/TextEditor/TextEditor";
-import draftToMarkdown from "draftjs-to-markdown";
-import { convertToRaw } from "draft-js";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
-// import { submitOntologySuggestion } from "../../../../api/ontology";
 import { submitAdopterRequest } from "../../../../api/ontology";
 
 const ADOPTER_TYPES = [
@@ -75,7 +71,6 @@ const HelpIcon = ({ text }) => {
 const OntologyAdoptRequest = (props) => {
   const ontoPageContext = useContext(OntologyPageContext);
 
-  const [editorState, setEditorState] = useState(null);
   const [submitWait, setSubmitWait] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
@@ -92,26 +87,11 @@ const OntologyAdoptRequest = (props) => {
   const [usageDescription, setUsageDescription] = useState("");
   const [usageChannel, setUsageChannel] = useState("");
 
-  function onTextEditorChange(newEditorState) {
-    const editor = document.getElementsByClassName("rdw-editor-main")[0];
-    if (editor) editor.style.border = "";
-    setEditorState(newEditorState);
-  }
 
   function submit() {
-    console.log("SUBMIT CLICKED");
 
     let username = FormLib.getFieldByIdIfValid("adopt-username");
     let email = FormLib.getFieldByIdIfValid("adopt-email");
-
-    console.log({
-      username,
-      email,
-      adopterType,
-      adopterName,
-      usageDescription,
-      usageChannel,
-    });
 
     if (
       !username ||

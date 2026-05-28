@@ -64,7 +64,25 @@ const OntologyOverview = () => {
               </a>
             </div>
           </div>
-          <br />
+          {/* Ontology adopters button (only when feature flag is on AND there is at least one adopter) */}
+          {process.env.REACT_APP_SHOW_ONTOLOGY_ADOPTERS === "true" &&
+            hasAdopters && (
+              <div className="row" style={{ marginTop: 10 }}>
+                <div className="col-sm-12">
+                  <button
+                    type="button"
+                    className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
+                    onClick={() => {
+                      ontologyPageContext.handleFullScreen();
+                      setShowOntologyAdopters(true);
+                    }}
+                  >
+                    Show Ontology adopters
+                  </button>
+                </div>
+              </div>
+            )}
+          <hr />
 
           {process.env.REACT_APP_PROJECT_ID === "general" &&
             process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true" && (
@@ -116,24 +134,7 @@ const OntologyOverview = () => {
               </>
             )}
 
-          {/* Ontology adopters button (only when feature flag is on AND there is at least one adopter) */}
-          {process.env.REACT_APP_SHOW_ONTOLOGY_ADOPTERS === "true" &&
-            hasAdopters && (
-              <div className="row" style={{ marginTop: 10 }}>
-                <div className="col-sm-12">
-                  <button
-                    type="button"
-                    className="btn btn-secondary w-75 download-ontology-btn stour-overview-page-add-to-collection"
-                    onClick={() => {
-                      ontologyPageContext.handleFullScreen();
-                      setShowOntologyAdopters(true);
-                    }}
-                  >
-                    Ontology adopters
-                  </button>
-                </div>
-              </div>
-            )}
+
         </div>
       </div>
 
