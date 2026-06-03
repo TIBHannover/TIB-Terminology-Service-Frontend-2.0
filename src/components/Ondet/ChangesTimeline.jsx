@@ -4,11 +4,11 @@ import ReactMarkdown from "react-markdown";
 import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
 import "../layout/diff2html_table_row_fixed.css"
-import DOMPurify from "dompurify";
 import PropTypes from 'prop-types';
 import OndetApi from "../../api/ondet";
 import { OntologyPageContext } from "../../context/OntologyPageContext";
 import { useContext } from "react";
+import Toolkit from "../../Libs/Toolkit";
 
 const ROBOT_DIFF_STATIC_HEADER_REGEX = /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
 
@@ -54,7 +54,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
 
         setContoMarkdown(getContoDiff(data.difference));
         setRobotMarkdown(getRobotDiff(data.markdown));
-        setGitDiffHtml(getSanitisiedGitDiff(data.gitDiff));
+        setGitDiffHtml(Diff2Html.html(data.gitDiff, {}));
 
         setLoading(false);
     };
@@ -76,11 +76,6 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
         } else {
             return "### Robot was not able to calculate the differences";
         }
-    }
-
-    const getSanitisiedGitDiff = (gitDiff) => {
-        const diff2Html = Diff2Html.html(gitDiff, {});
-        return DOMPurify.sanitize(diff2Html);
     }
 
     const formatUriFragment = (uri) => {
@@ -243,7 +238,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
                             <Modal.Title>Git Diff</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <div dangerouslySetInnerHTML={{ __html: gitDiffHtml }} />
+                            {Toolkit.renderDangerousHtml(gitDiffHtml)}
                         </Modal.Body>
                     </Modal>
                 </>

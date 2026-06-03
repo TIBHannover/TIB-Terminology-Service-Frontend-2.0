@@ -2,6 +2,7 @@ import NoteCommentList from "../NoteCommentList";
 import {NoteCardHeader} from "../NoteCard";
 import {buildNoteAboutPart} from "../helpers";
 import ResolveReportActionsForAdmins from "../../../common/ResolveReportActions/ResolveReportAction";
+import Toolkit from "../../../../Libs/Toolkit";
 
 
 export const NoteDetailRender = (props) => {
@@ -30,7 +31,7 @@ export const NoteDetailRender = (props) => {
               </small>
               <hr></hr>
               <p className="card-text">
-                <div dangerouslySetInnerHTML={{__html: props.noteContent}}></div>
+                {Toolkit.renderDangerousHtml(props.noteContent)}
               </p>
             </div>
           </div>

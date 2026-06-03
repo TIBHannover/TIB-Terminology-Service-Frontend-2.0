@@ -469,7 +469,7 @@ const Tree = (props) => {
         <div className='row'>
           {!treeDomContent._html_
             ? <div className='col-sm-12 tree'>{treeDomContent}</div>
-            : <div className='col-sm-12 tree' dangerouslySetInnerHTML={{__html: treeDomContent._html_}}></div>
+            : Toolkit.renderDangerousHtml(treeDomContent._html_, { className: 'col-sm-12 tree' })
           }
         </div>
         

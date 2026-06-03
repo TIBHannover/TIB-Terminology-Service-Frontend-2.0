@@ -62,16 +62,12 @@ const CollectionPage = (props: CmpProps) => {
   function renderAboutSection() {
     return (
       <div>
-        <div dangerouslySetInnerHTML={{ __html: collection?.text ?? "" }}></div>
+        {Toolkit.renderDangerousHtml(collection?.text)}
         {collection?.selection_criteria && (
           <div className="row mt-4">
             <div className="col-12">
               <p className="fs-4 fw-bold">Selection criteria</p>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: collection?.selection_criteria ?? "",
-                }}
-              ></div>
+              {Toolkit.renderDangerousHtml(collection?.selection_criteria)}
             </div>
           </div>
         )}

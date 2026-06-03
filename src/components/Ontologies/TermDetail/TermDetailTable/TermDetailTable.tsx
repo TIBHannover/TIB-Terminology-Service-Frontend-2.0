@@ -102,10 +102,10 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
         } else if (["Type", "Imported From", "Also In", "Instances", "Instance of", "Domain", "Range", "Description"].includes(metadataLabel)) {
             return metadataValue;
         } else if (Array.isArray(metadataValue)) {
-            return (<span dangerouslySetInnerHTML={{__html: metadataValue.join("<br/>")}}></span>)
+            return Toolkit.renderDangerousHtml(metadataValue.join("<br/>"), {}, "span")
         }
 
-        return (<span dangerouslySetInnerHTML={{__html: metadataValue}}></span>)
+        return Toolkit.renderDangerousHtml(metadataValue, {}, "span")
     }
 
 

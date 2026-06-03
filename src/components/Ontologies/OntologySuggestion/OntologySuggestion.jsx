@@ -418,7 +418,7 @@ const OntologyExtraMetadataForm = () => {
       let errorContent = Toolkit.transformLinksInStringToAnchor(error['text']);
       result.push(
         <>
-          <div className="p-2 alert alert-danger" dangerouslySetInnerHTML={{ __html: errorContent }}></div>
+          {Toolkit.renderDangerousHtml(errorContent, { className: "p-2 alert alert-danger" })}
           <label htmlFor={"missing-metadata-" + error['about']}>{error['about']}</label>
           <input
             type="text"
@@ -455,7 +455,7 @@ const OntologyExtraMetadataForm = () => {
     return componentContext.validationResult.info.map((i) => {
       let infoContent = Toolkit.transformLinksInStringToAnchor(i);
       return (<>
-        <div className="p-2 alert alert-info" dangerouslySetInnerHTML={{ __html: infoContent }}></div>
+        {Toolkit.renderDangerousHtml(infoContent, { className: "p-2 alert alert-info" })}
         <br></br></>)
     });
   }

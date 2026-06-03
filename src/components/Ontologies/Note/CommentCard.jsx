@@ -42,7 +42,7 @@ export const CommentCard = (props) => {
       />
       <div className="card-body">
         <p className="card-text">
-          <div dangerouslySetInnerHTML={{__html: commnetContent}}></div>
+          {Toolkit.renderDangerousHtml(commnetContent)}
         </p>
       </div>
     </div>

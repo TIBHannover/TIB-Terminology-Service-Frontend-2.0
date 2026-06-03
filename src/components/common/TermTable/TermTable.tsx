@@ -1,4 +1,5 @@
 import { useState, useEffect, ReactNode } from "react";
+import Toolkit from "../../../Libs/Toolkit";
 
 
 type Column = {
@@ -10,7 +11,7 @@ type Column = {
 type Term = {
     value: string,
     valueLink: string,
-    valueIsHtml: boolean, // value is html and needs dangerouslySetInnerHTML
+    valueIsHtml: boolean, // value is html and is rendered through Toolkit
 }
 
 type InputProp = {
@@ -81,8 +82,7 @@ const TermTable = (props: InputProp) => {
                     )
                 } else if (term.get(col.id)!.valueIsHtml) {
                     oneRow.push(
-                        <td className="table-body-cell"><span
-                            dangerouslySetInnerHTML={{ __html: term.get(col.id)!.value }} /></td>
+                        <td className="table-body-cell">{Toolkit.renderDangerousHtml(term.get(col.id)!.value, {}, "span")}</td>
                     );
                 } else {
                     oneRow.push(

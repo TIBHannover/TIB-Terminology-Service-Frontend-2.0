@@ -21,7 +21,7 @@ const ReportPanel = () => {
                             <li key={1}>{`Type: ${rep['reported_content_type']}`}</li>
                             <li key={2}>{`Date: ${rep['report_date']}`}</li>
                             <li key={3}>{`By: ${rep['reporter_username']}`}</li>
-                            <li key={4} dangerouslySetInnerHTML={{ __html: `Link: <a href='${rep['reported_content_url']}' target='_blank'>${rep['reported_content_url']}</a>` }}></li>
+                            <li key={4}>Link: <a href={rep["reported_content_url"]} target="_blank" rel="noreferrer">{rep["reported_content_url"]}</a></li>
                             <li key={5}>{`Reason: ${rep['report_reason']}`}</li>
                         </ul>
                     </div>

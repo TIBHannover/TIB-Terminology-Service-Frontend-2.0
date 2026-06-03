@@ -129,9 +129,7 @@ const Collections = () => {
           <div className="row" key={collectionId + "_content"}>
             <div className="col-sm-12">
               <p className="text-justify">
-                <div
-                  dangerouslySetInnerHTML={{ __html: collectionJson["text"] }}
-                ></div>
+                {Toolkit.renderDangerousHtml(collectionJson["text"])}
               </p>
             </div>
           </div>
@@ -167,11 +165,7 @@ const Collections = () => {
             <div className="row" key={collectionId + "_ontoList"}>
               <div className="col-sm-12 collection-ontologies-text">
                 <b>Ontology Selection Criteria:</b>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: collectionJson["selection_criteria"],
-                  }}
-                ></div>
+                {Toolkit.renderDangerousHtml(collectionJson["selection_criteria"])}
               </div>
             </div>
           )}

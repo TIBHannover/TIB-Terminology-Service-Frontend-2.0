@@ -1,4 +1,5 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import DOMPurify from 'dompurify';
 import CommonUrlFactory from '../UrlFactory/CommonUrlFactory';
 
 
@@ -11,6 +12,11 @@ const urlFacory = new CommonUrlFactory();
 
 
 class Toolkit {
+
+    static renderDangerousHtml(htmlContent: string | null | undefined, props: GenericObject = {}, tagName: keyof JSX.IntrinsicElements = "div"): JSX.Element {
+        const Tag = tagName;
+        return <Tag {...props} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlContent ?? "", { USE_PROFILES: { html: true } }) }} />;
+    }
 
     static createHelmet(helmetString: string): JSX.Element[] {
         return [
