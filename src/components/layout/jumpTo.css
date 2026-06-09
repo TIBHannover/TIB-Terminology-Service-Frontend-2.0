@@ -27,7 +27,6 @@ body .autosuggest-jumpto-container label {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: white;
   padding: 4px 4px;
   margin-left: 1px;
   z-index: 1;
