@@ -190,7 +190,7 @@ const TermDetail = (props: TermDetailComPros) => {
         href={showDataAsJsonBtnHref}
         target="_blank"
         rel="noreferrer"
-        className="borderless-btn"
+        className="borderless-btn rounded-1"
         title="Show JSON"
       >
         <i className="bi bi-filetype-json"></i>
