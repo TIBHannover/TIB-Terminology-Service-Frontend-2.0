@@ -23,7 +23,8 @@ export type RenderTermDetailComProps = {
   componentIdentity: string,
   activeTab: number,
   tabChangeHandler: (e: React.MouseEvent<HTMLAnchorElement>) => void,
-  noteCount: number
+  noteCount: number,
+  tabListRef?: React.RefObject<HTMLUListElement>
 }
 
 
@@ -41,5 +42,4 @@ export type TableMetadata = {
     isLink: boolean
   }
 }
-
 
