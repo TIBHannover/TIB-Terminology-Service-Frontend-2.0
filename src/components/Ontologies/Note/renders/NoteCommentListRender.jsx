@@ -19,7 +19,7 @@ export const NoteCommentListRender = (props) => {
   
   
   function createCommentList() {
-    let comments = props.note['comments'] ? props.note['comments'] : [];
+    let comments = props.note.comments ? props.note.comments : [];
     let result = [];
     for (let comment of comments) {
       result.push(

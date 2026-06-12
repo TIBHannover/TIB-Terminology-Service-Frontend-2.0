@@ -1,6 +1,7 @@
 export * from "./class";
 export * from "./individual";
 export * from "./ontology";
+export * from "./note";
 export * from "./property";
 export * from "./term";
 export * from "./termFactory";

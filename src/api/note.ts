@@ -13,6 +13,7 @@ import {
 } from "./types/noteTypes";
 import { getTsPluginHeaders } from "./header";
 import { TsPluginHeader } from "./types/headerTypes";
+import { TsNote } from "../concepts";
 
 
 export async function submitNote(noteData: NewNoteRequest, editMode: boolean = false): Promise<object | boolean> {
@@ -69,6 +70,7 @@ export async function getNoteList(params: NoteListParams): Promise<NoteListRespo
         }
       })
     );
+    notes['notes'] = notes['notes'].map((note) => new TsNote(note));
     return notes;
   } catch (e) {
     return null;
@@ -97,7 +99,7 @@ export async function getNoteDetail(params: GetNoteDetailParams): Promise<NoteDe
       let tsTerm = await termApi.fetchTerm();
       note['semantic_component_label'] = tsTerm?.label;
     }
-    noteResp['note'] = note;
+    noteResp['note'] = new TsNote(note);
     return noteResp;
 
   } catch (e) {

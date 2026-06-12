@@ -78,12 +78,12 @@ const NoteList = (props) => {
     getNoteList({ ontologyId: ontologyId, type: type, pageNumber: pageNumber, pageSize: pageSize, targetTerm: props.term, onlyOntologyOriginalNotes: onlyOntologyOriginalNotes })
       .then((notes) => {
         if (notes) {
-          let allNotes = notes['notes'];
-          let noteStats = notes['stats'];
+          let allNotes = notes.notes;
+          let noteStats = notes.stats;
           setNoteList(allNotes);
           setShowNoteDetailPage(false);
-          setNoteTotalPageCount(noteStats['totalPageCount']);
-          setNumberOfPinned(noteStats['number_of_pinned']);
+          setNoteTotalPageCount(noteStats.totalPageCount);
+          setNumberOfPinned(noteStats.number_of_pinned);
           setComponentIsLoading(false);
         }
       });

@@ -6,19 +6,19 @@ import {NoteContext} from "../../../context/NoteContext";
 
 
 export function buildNoteAboutPart(note) {
-  let url = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + note['ontology_id'];
+  let url = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + note.ontology_id;
   let label = "";
-  if (note['semantic_component_type'] === "ontology") {
-    label = note['ontology_id'];
-  } else if (note['semantic_component_type'] === "class") {
-    url += ('/terms?iri=' + encodeURIComponent(note['semantic_component_iri']))
-    label = note['semantic_component_label'];
-  } else if (note['semantic_component_type'] === "property") {
-    url += ('/props?iri=' + encodeURIComponent(note['semantic_component_iri']))
-    label = note['semantic_component_label'];
+  if (note.semantic_component_type === "ontology") {
+    label = note.ontology_id;
+  } else if (note.semantic_component_type === "class") {
+    url += ('/terms?iri=' + encodeURIComponent(note.semantic_component_iri))
+    label = note.semantic_component_label;
+  } else if (note.semantic_component_type === "property") {
+    url += ('/props?iri=' + encodeURIComponent(note.semantic_component_iri))
+    label = note.semantic_component_label;
   } else {
-    url += ('/individuals?iri=' + encodeURIComponent(note['semantic_component_iri']))
-    label = note['semantic_component_label'];
+    url += ('/individuals?iri=' + encodeURIComponent(note.semantic_component_iri))
+    label = note.semantic_component_label;
   }
   
   return (
@@ -37,11 +37,11 @@ export const PinnModalBtn = (props) => {
     return "";
   }
   
-  if (props.note['visibility'] === "me") {
+  if (props.note.visibility === "me") {
     return "";
   }
   
-  if (parseInt(noteContext.numberOfpinned) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES) && !props.note['pinned']) {
+  if (parseInt(noteContext.numberOfpinned) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES) && !props.note.pinned) {
     return "";
   }
   
@@ -50,7 +50,7 @@ export const PinnModalBtn = (props) => {
             className="btn btn-sm borderless-btn note-action-menu-btn"
             onClick={props.setShowModal}
     >
-      {props.note['pinned'] ? "Unpin" : "Pin"}
+      {props.note.pinned ? "Unpin" : "Pin"}
     </button>
   );
   
@@ -62,9 +62,9 @@ export const PinnModal = (props) => {
   const [showModal, setShowModal] = useState(false);
   let data = {};
   const note = props.note;
-  data["ontology"] = note['ontology_id'];
-  data["note_id"] = note['id'];
-  data["pinned"] = `${!Boolean(note['pinned'])}`;
+  data["ontology"] = note.ontology_id;
+  data["note_id"] = note.id;
+  data["pinned"] = `${!Boolean(note.pinned)}`;
   
   
   async function pinNote() {
@@ -80,7 +80,7 @@ export const PinnModal = (props) => {
   return (
     <div>
       <PinnModalBtn
-        key={"pinBtnNode" + note['id']}
+        key={"pinBtnNode" + note.id}
         note={note}
         setShowModal={setShowModal}
       />
@@ -100,13 +100,13 @@ export const PinnModal = (props) => {
         <Modal.Body>
           {!submited &&
             <span>
-                  Are you sure you want to {props.note['pinned'] ? "Unpin" : "Pin"} this note?
+                  Are you sure you want to {props.note.pinned ? "Unpin" : "Pin"} this note?
                 </span>
           }
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
           {!submited && <button type="button" className="btn btn-secondary" onClick={pinNote}>
-            {props.note['pinned'] ? "Unpin" : "Pin"}
+            {props.note.pinned ? "Unpin" : "Pin"}
           </button>}
         </Modal.Footer>
       </Modal>

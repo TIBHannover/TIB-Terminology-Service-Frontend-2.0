@@ -36,11 +36,12 @@ const NoteDetail = () => {
             if(result === '404'){
                 setNoteNotFound(true);                
             }            
-            else{    
-                setNote(result['note']);
-                noteContext.setSelectedNote(result['note']);
-                setNoteContent(createHtmlFromEditorJson(result['note']['content']));                
-                noteContext.setNumberOfPinned(result['number_of_pinned']);
+            else{
+                const note = result.note;
+                setNote(note);
+                noteContext.setSelectedNote(note);
+                setNoteContent(createHtmlFromEditorJson(note.content));
+                noteContext.setNumberOfPinned(result.number_of_pinned);
                 setNoteNotFound(false);                
             }
         });

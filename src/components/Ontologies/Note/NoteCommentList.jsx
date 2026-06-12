@@ -69,7 +69,7 @@ const NoteCommentList = (props) => {
       return;
     }
 
-    let data = { 'noteId': props.note['id'], 'content': commentContent };
+    let data = { 'noteId': props.note.id, 'content': commentContent };
     submitNoteComment(data).then((result) => {
       if (result) {
         setNoteId(null);
@@ -167,5 +167,4 @@ NoteCommentList.propsTypes = {
 
 
 export default NoteCommentList;
-
 

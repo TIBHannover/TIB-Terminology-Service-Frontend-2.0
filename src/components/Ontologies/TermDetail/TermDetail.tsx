@@ -73,7 +73,7 @@ const TermDetail = (props: TermDetailComPros) => {
           onlyOntologyOriginalNotes: false,
         });
         countOfNotes = notes
-          ? (notes["stats"]["total_number_of_records"] as number)
+          ? (notes.stats.total_number_of_records as number)
           : 0;
       }
       setNotesCount(countOfNotes);

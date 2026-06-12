@@ -16,16 +16,16 @@ export const NoteDetailRender = (props) => {
               <NoteCardHeader note={props.note}/>
             </div>
             <div className="card-body">
-              <h4 className="card-title note-list-title">{props.note['title']}</h4>
+              <h4 className="card-title note-list-title">{props.note.title}</h4>
               <ResolveReportActionsForAdmins
                 objectType="note"
-                objectId={props.note['id']}
-                reportStatus={props.note['is_reported']}
-                creatorUsername={props.note['created_by']}
+                objectId={props.note.id}
+                reportStatus={props.note.is_reported}
+                creatorUsername={props.note.created_by}
               />
               <small>
                 <ul className="">
-                  <li>type: {props.note['semantic_component_type']}</li>
+                  <li>type: {props.note.semantic_component_type}</li>
                   <li>About: {buildNoteAboutPart(props.note)}</li>
                 </ul>
               </small>
