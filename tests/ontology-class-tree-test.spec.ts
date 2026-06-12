@@ -33,14 +33,9 @@ test(`Ontology (${TEST_ONTOLOGY}) class tree jump to assay`, async ({
   const jumpToInput = page.getByPlaceholder("type your target term ...");
   await expect(jumpToInput).toBeVisible();
   await jumpToInput.fill(TEST_ASSAY_CLASS_LABEL);
-  // await page.getByRole("option", { name: TEST_ASSAY_CLASS_LABEL }).waitFor();
-  // await page.getByRole("option", { name: TEST_ASSAY_CLASS_LABEL }).click();
-  // const listbox = page.getByRole("listbox");
   await jumpToInput.click();
   await jumpToInput.fill(TEST_ASSAY_CLASS_LABEL);
   await page.waitForTimeout(1000);
-  // await expect(listbox).toBeVisible();
-
   await page.getByText(TEST_ASSAY_CLASS_LABEL, { exact: true }).click();
   await page.waitForTimeout(1500);
   const assayTreeNodeLi = page.locator(`[data-iri="${TEST_ASSAY_CLASS_IRI}"]`);
