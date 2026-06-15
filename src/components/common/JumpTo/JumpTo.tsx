@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
-import Autosuggest from 'react-autosuggest';
+import Autosuggest from "react-autosuggest";
 import { getJumpToResult } from "../../../api/search";
-import '../../layout/jumpTo.css';
-import '../../layout/reactAutoSuggestLib.css';
+import "../../layout/jumpTo.css";
+import "../../layout/reactAutoSuggestLib.css";
 
 type JumpToSuggestion = {
   iri: string;
@@ -13,82 +13,102 @@ type JumpToSuggestion = {
 type JumpToProps = {
   targetType: string;
   label?: string;
-  handleJumtoSelection: (selectedTerm: JumpToSuggestion | { iri: null; label: null } | null) => void | Promise<void>;
+  handleJumtoSelection: (
+    selectedTerm: JumpToSuggestion | { iri: null; label: null } | null,
+  ) => void | Promise<void>;
   obsoletes?: boolean;
   initialInput?: string | null;
   id?: string;
 };
 
-
-const TYPE_MAPP = { "terms": "class", "properties": "property", "individuals": "individual" };
-
+const TYPE_MAPP = {
+  terms: "class",
+  properties: "property",
+  individuals: "individual",
+};
 
 const JumpTo = (props: JumpToProps) => {
-
   const ontologyPageContext = useContext(OntologyPageContext);
 
-  const [enteredTerm, setEnteredTerm] = useState(props.initialInput ? props.initialInput : "");
+  const [enteredTerm, setEnteredTerm] = useState(
+    props.initialInput ? props.initialInput : "",
+  );
   const [resultList, setResultList] = useState<JumpToSuggestion[]>([]);
-  const [selectedTerm, setSelectedTerm] = useState<JumpToSuggestion | { iri: null; label: null }>({ "iri": null, "label": null });
+  const [selectedTerm, setSelectedTerm] = useState<
+    JumpToSuggestion | { iri: null; label: null }
+  >({ iri: null, label: null });
+  const autosuggestId = props.id ? props.id : "jumpto_auto_suggest";
 
-  const getAutoCompleteValue = (suggestion: JumpToSuggestion) => suggestion.label;
+  const getAutoCompleteValue = (suggestion: JumpToSuggestion) =>
+    suggestion.label;
   const rendetAutoCompleteItem = (suggestion: JumpToSuggestion) => (
-    <div>
-      {suggestion.label}
-    </div>
+    <div>{suggestion.label}</div>
   );
 
   const value = enteredTerm;
   const inputPropsAutoSuggest = {
-    placeholder: 'type your target term ...',
+    placeholder: "type your target term ...",
     value,
-    onChange: onAutoCompleteTextBoxChange
+    onChange: onAutoCompleteTextBoxChange,
   };
 
-
-  function onAutoCompleteTextBoxChange(event: unknown, { newValue }: { newValue: string }) {
+  function onAutoCompleteTextBoxChange(
+    event: unknown,
+    { newValue }: { newValue: string },
+  ) {
     setEnteredTerm(newValue);
   }
-
 
   async function onAutoCompleteChange({ value }: { value: string }) {
     let enteredTerm = value;
     let type = TYPE_MAPP[props.targetType as keyof typeof TYPE_MAPP];
     if (enteredTerm.length > 0) {
       let inputForAutoComplete: any = {};
-      inputForAutoComplete['searchQuery'] = value;
-      inputForAutoComplete['ontologyIds'] = ontologyPageContext.ontology.ontologyId;
-      inputForAutoComplete['types'] = type;
-      inputForAutoComplete['obsoletes'] = props.obsoletes;
-      let autoCompleteResult = await getJumpToResult(inputForAutoComplete, 10, ontologyPageContext.ontoLang);
+      inputForAutoComplete["searchQuery"] = value;
+      inputForAutoComplete["ontologyIds"] =
+        ontologyPageContext.ontology.ontologyId;
+      inputForAutoComplete["types"] = type;
+      inputForAutoComplete["obsoletes"] = props.obsoletes;
+      let autoCompleteResult = await getJumpToResult(
+        inputForAutoComplete,
+        10,
+        ontologyPageContext.ontoLang,
+      );
       setResultList(autoCompleteResult as JumpToSuggestion[]);
     }
   }
-
 
   function clearAutoComplete() {
     setResultList([]);
     props.handleJumtoSelection(null);
   }
 
-
   function onAutoCompleteSelecteion(
     event: unknown,
-    { suggestionIndex }: { suggestionIndex: number }
+    { suggestionIndex }: { suggestionIndex: number },
   ) {
     let autoCompleteSelectedTerm = { ...selectedTerm };
-    autoCompleteSelectedTerm['iri'] = resultList[suggestionIndex]['iri'];
-    autoCompleteSelectedTerm['label'] = resultList[suggestionIndex]['label'];
+    autoCompleteSelectedTerm["iri"] = resultList[suggestionIndex]["iri"];
+    autoCompleteSelectedTerm["label"] = resultList[suggestionIndex]["label"];
     setSelectedTerm(autoCompleteSelectedTerm);
     props.handleJumtoSelection(autoCompleteSelectedTerm);
+    setTimeout(() => {
+      const autosuggestInput = document
+        .getElementById(autosuggestId)
+        ?.getElementsByClassName("react-autosuggest__input")[0] as
+        | HTMLElement
+        | undefined;
+      autosuggestInput?.blur();
+      (document.activeElement as HTMLElement | null)?.blur();
+    }, 0);
   }
-
-
 
   return (
     <div className="row">
       <div className="col-sm-12 autosuggest-jumpto-container">
-        {props.label && <label htmlFor="jumpto-autosuggest-box">{props.label}</label>}
+        {props.label && (
+          <label htmlFor="jumpto-autosuggest-box">{props.label}</label>
+        )}
         <Autosuggest
           suggestions={resultList}
           onSuggestionsFetchRequested={onAutoCompleteChange}
@@ -97,12 +117,11 @@ const JumpTo = (props: JumpToProps) => {
           renderSuggestion={rendetAutoCompleteItem}
           onSuggestionSelected={onAutoCompleteSelecteion}
           inputProps={inputPropsAutoSuggest}
-          id={props.id ? props.id : "jumpto_auto_suggest"}
+          id={autosuggestId}
         />
       </div>
     </div>
   );
-}
-
+};
 
 export default JumpTo;

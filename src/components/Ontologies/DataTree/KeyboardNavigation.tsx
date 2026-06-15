@@ -23,18 +23,28 @@ class KeyboardNavigator {
     this.selectedNodeId = newId === null ? null : String(newId);
   }
 
+  jumpToSuggestionsAreOpen() {
+    const openContainers = Array.from(
+      document.getElementsByClassName(
+        "react-autosuggest__suggestions-container--open",
+      ),
+    ) as HTMLElement[];
+
+    return openContainers.some((container) => {
+      const style = window.getComputedStyle(container);
+      return (
+        style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        container.getClientRects().length > 0 &&
+        container.querySelector(".react-autosuggest__suggestion")
+      );
+    });
+  }
+
   run(event: KeyboardEvent) {
     let treeNodeManager = new TreeNodeController();
-    let jumtoItems = document.getElementsByClassName("autocomplete-item");
     let reactour = document.getElementsByClassName("reactour__helper");
-    let autosuggest = document.getElementsByClassName(
-      "react-autosuggest__suggestions-list",
-    );
-    if (
-      jumtoItems.length !== 0 ||
-      reactour.length !== 0 ||
-      autosuggest.length !== 0
-    ) {
+    if (reactour.length !== 0 || this.jumpToSuggestionsAreOpen()) {
       // do not perform when Jumpto box is open OR site tour is open
       return true;
     }
@@ -49,6 +59,7 @@ class KeyboardNavigator {
         // No term is selected yet. Pick the first one
         this.node = treeNodeManager.getFirstNodeInTree();
         this.afterRunEventFunction(this.node);
+        treeNodeManager.scrollElementIntoTreePane(this.node);
       } else if (this.selectedNodeId && event.key === "ArrowDown") {
         // select the next node. It is either the next siblings or the node first child
         this.node = document.getElementById(this.selectedNodeId);
@@ -66,7 +77,7 @@ class KeyboardNavigator {
         } else if (!treeNodeManager.isNodeLeaf(this.node)) {
           let childNode = treeNodeManager.getFirstChildLabelText(this.node.id);
           this.afterRunEventFunction(childNode);
-          treeNodeManager.scrollToNode(this.selectedNodeId);
+          treeNodeManager.scrollElementIntoTreePane(childNode);
         }
       } else if (this.selectedNodeId && event.key === "ArrowLeft") {
         // Move the selection to the parent. If it is already moved, close the parent.
@@ -78,7 +89,7 @@ class KeyboardNavigator {
         } else if (parentNode.tagName === "LI") {
           parentNode = treeNodeManager.getNodeLabelTextById(parentNode.id);
           this.afterRunEventFunction(parentNode);
-          treeNodeManager.scrollToNode(this.selectedNodeId);
+          treeNodeManager.scrollElementIntoTreePane(parentNode);
         }
       }
     } catch (e) {
@@ -95,7 +106,7 @@ class KeyboardNavigator {
         parentNode.id,
       );
       this.afterRunEventFunction(parentNodeLabelText);
-      treeNodeManager.scrollToNode(parentNode.id);
+      treeNodeManager.scrollElementIntoTreePane(parentNodeLabelText);
     } else if (
       treeNodeManager.isNodeClosed(this.node.previousSibling) ||
       treeNodeManager.isNodeLeaf(this.node.previousSibling)
@@ -128,7 +139,7 @@ class KeyboardNavigator {
         (lastChild as HTMLElement).id,
       );
       this.afterRunEventFunction(lastChildNode);
-      treeNodeManager.scrollToPreviousNode(this.selectedNodeId);
+      treeNodeManager.scrollElementIntoTreePane(lastChildNode);
     }
   }
 
@@ -138,7 +149,7 @@ class KeyboardNavigator {
     if (treeNodeManager.isNodeExpanded(this.node)) {
       let firstChildNode = treeNodeManager.getFirstChildLabelText(this.node.id);
       this.afterRunEventFunction(firstChildNode);
-      treeNodeManager.scrollToNode(this.selectedNodeId);
+      treeNodeManager.scrollElementIntoTreePane(firstChildNode);
     } else if (this.node.nextSibling) {
       let nextNode = treeNodeManager.getNodeNextSiblings(this.node.id);
       this.afterRunEventFunction(nextNode);
@@ -152,7 +163,7 @@ class KeyboardNavigator {
         parentNode.id,
       );
       this.afterRunEventFunction(parentNodeNextSiblings);
-      treeNodeManager.scrollToNode(this.selectedNodeId);
+      treeNodeManager.scrollElementIntoTreePane(parentNodeNextSiblings);
     }
   }
 }

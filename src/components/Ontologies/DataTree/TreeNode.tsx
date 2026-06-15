@@ -212,37 +212,47 @@ class TreeNodeController {
     }
   }
 
+  getTreeScrollContainer(): HTMLElement | null {
+    return (
+      (document.getElementsByClassName("tree-page-left-part")[0] as
+        | HTMLElement
+        | undefined) ?? null
+    );
+  }
+
+  scrollElementIntoTreePane(element: HTMLElement | null) {
+    const container = this.getTreeScrollContainer();
+    if (!container || !element) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    const margin = 48;
+
+    if (elementRect.top < containerRect.top + margin) {
+      container.scrollTop -= containerRect.top + margin - elementRect.top;
+    } else if (elementRect.bottom > containerRect.bottom - margin) {
+      container.scrollTop +=
+        elementRect.bottom - (containerRect.bottom - margin);
+    }
+  }
+
   scrollToNode(id: string | null) {
     if (!id) return;
-    let position = document.getElementById(id)?.offsetTop ?? 0;
-    (
-      document.getElementsByClassName("tree-page-left-part")[0] as
-        | HTMLElement
-        | undefined
-    )?.scrollTo({
-      top: position,
-    });
+    this.scrollElementIntoTreePane(document.getElementById(id));
   }
 
   scrollToNextNode(id: string | null) {
     if (!id) return;
-    (
-      document.getElementById(id)?.nextSibling as HTMLElement | null
-    )?.scrollIntoView();
+    this.scrollElementIntoTreePane(
+      document.getElementById(id)?.nextSibling as HTMLElement | null,
+    );
   }
 
   scrollToPreviousNode(id: string | null) {
     if (!id) return;
-    let position =
-      (document.getElementById(id)?.previousSibling as HTMLElement | null)
-        ?.offsetTop ?? 0;
-    (
-      document.getElementsByClassName("tree-page-left-part")[0] as
-        | HTMLElement
-        | undefined
-    )?.scrollTo({
-      top: position,
-    });
+    this.scrollElementIntoTreePane(
+      document.getElementById(id)?.previousSibling as HTMLElement | null,
+    );
   }
 
   getClickedNodeDiv(node: any): HTMLElement | null {
