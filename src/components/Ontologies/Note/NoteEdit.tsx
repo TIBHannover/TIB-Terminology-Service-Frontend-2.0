@@ -6,11 +6,17 @@ import { NoteCreationRender } from "./renders/NoteCreationRender";
 import TermApi from "../../../api/term";
 import { AppContext } from "../../../context/AppContext";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
-import PropTypes from 'prop-types';
 import FormLib from "../../../Libs/FormLib";
+import type {
+  EditorStateValue,
+  InputChangeEvent,
+  NoteEditProps,
+  SelectChangeEvent,
+  SelectedTerm,
+} from "./types";
 
 
-const NoteEdit = (props) => {
+const NoteEdit = (props: NoteEditProps) => {
 
   /* 
       This component is responsible for rendering the note edit form.
@@ -22,36 +28,42 @@ const NoteEdit = (props) => {
   const appContext = useContext(AppContext);
   const ontologyPageContext = useContext(OntologyPageContext);
 
-  const [targetArtifact, setTargetArtifact] = useState(constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.note.semantic_component_type));
-  const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_VALUES.indexOf(props.note.visibility));
-  const [editorState, setEditorState] = useState(createTextEditorStateFromJson(props.note.content));
-  const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState({
+  const [targetArtifact, setTargetArtifact] = useState<number | string>(constantsVars.NOTE_COMPONENT_VALUES.indexOf(props.note.semantic_component_type ?? ""));
+  const [visibility, setVisibility] = useState<number | string>(constantsVars.VISIBILITY_VALUES.indexOf(props.note.visibility));
+  const [editorState, setEditorState] = useState<EditorStateValue>(createTextEditorStateFromJson(props.note.content));
+  const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState<SelectedTerm>({
     "iri": props.note.semantic_component_iri,
     "label": props.note.semantic_component_label
   });
   const [noteTitle, setNoteTitle] = useState(props.note.title);
-  const [parentOntology, setParentOntology] = useState(props.note.parent_ontology ? props.note.parent_ontology : null);
+  const [parentOntology, setParentOntology] = useState<string | null>(props.note.parent_ontology ? props.note.parent_ontology : null);
   const [publishToParent, setPublishToParent] = useState(props.note.parent_ontology ? true : false);
 
 
-  function onTextInputChange(e) {
-    document.getElementById("noteTitle" + props.note.id).style.borderColor = '';
-    setNoteTitle(document.getElementById('noteTitle' + props.note.id).value);
+  function onTextInputChange(e?: InputChangeEvent) {
+    const noteTitleElement = document.getElementById("noteTitle" + props.note.id) as HTMLInputElement | null;
+    if (noteTitleElement) {
+      noteTitleElement.style.borderColor = '';
+      setNoteTitle(noteTitleElement.value);
+    }
   }
 
 
-  function onTextAreaChange(newEditorState) {
-    document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+  function onTextAreaChange(newEditorState: EditorStateValue) {
+    const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+    if (editorElement) {
+      editorElement.style.border = '';
+    }
     setEditorState(newEditorState);
   };
 
 
-  function changeArtifactType(e) {
+  function changeArtifactType(e: SelectChangeEvent) {
     setTargetArtifact(e.target.value);
   }
 
 
-  function changeVisibility(e) {
+  function changeVisibility(e: SelectChangeEvent) {
     setVisibility(e.target.value);
   }
 
@@ -61,11 +73,14 @@ const NoteEdit = (props) => {
     let noteTitle = FormLib.getFieldByIdIfValid("noteTitle" + props.note.id);
     let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];
     let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];
-    let noteContent = FormLib.getTextEditorValueIfValid(editorState, "noteContent" + props.note.id);
-    formIsValid = noteTitle && noteContent;
+    let noteContent = FormLib.getTextEditorValueIfValid(editorState as object, "noteContent" + props.note.id);
+    formIsValid = Boolean(noteTitle && noteContent);
 
-    if (parseInt(targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri) {
-      document.getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
+    if (parseInt(String(targetArtifact)) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri) {
+      const autoSuggestInput = document.getElementsByClassName('react-autosuggest__input')[0] as HTMLElement | undefined;
+      if (autoSuggestInput) {
+        autoSuggestInput.style.border = '1px solid red';
+      }
       formIsValid = false;
     }
 
@@ -73,15 +88,15 @@ const NoteEdit = (props) => {
       return;
     }
 
-    if (parseInt(targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID) {
+    if (parseInt(String(targetArtifact)) === constantsVars.ONTOLOGY_COMPONENT_ID) {
       selectedTargetTermIri = props.note.ontology_id;
       selectedTargetTermLabel = props.note.ontology_id;
     }
 
 
-    let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifact];
+    let targetArtifactType = constantsVars.NOTE_COMPONENT_VALUES[Number(targetArtifact)];
 
-    let data = {};
+    let data: any = {};
     data["noteId"] = props.note.id;
     data["title"] = noteTitle;
     data["semantic_component_iri"] = selectedTargetTermIri;
@@ -89,7 +104,7 @@ const NoteEdit = (props) => {
     data["ontology_id"] = props.note.ontology_id;
     data["semantic_component_type"] = targetArtifactType;
     data["semantic_component_label"] = selectedTargetTermLabel;
-    data["visibility"] = constantsVars.VISIBILITY_VALUES[visibility];
+    data["visibility"] = constantsVars.VISIBILITY_VALUES[Number(visibility)];
     if (publishToParent && parentOntology) {
       data["parentOntology"] = parentOntology;
     }
@@ -99,7 +114,7 @@ const NoteEdit = (props) => {
   }
 
 
-  function closeModal(reloadPage = false) {
+  function closeModal(reloadPage: boolean | string | object = false) {
     setEditorState(null);
     setSelectedTermFromAutoComplete({ "iri": null, "label": null });
     if (reloadPage) {
@@ -109,25 +124,25 @@ const NoteEdit = (props) => {
     }
   }
 
-  async function handleJumtoSelection(selectedTerm) {
+  async function handleJumtoSelection(selectedTerm: SelectedTerm | null) {
     if (selectedTerm) {
-      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifact]);
+      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'] ?? undefined, constantsVars.TERM_TYPES[Number(targetArtifact)]);
       let tsTerm = await termApi.fetchTerm();
       setSelectedTermFromAutoComplete(selectedTerm);
-      setParentOntology(tsTerm.originalOntology);
+      setParentOntology(tsTerm?.originalOntology ?? null);
     }
   }
 
 
-  function handlePublishToParentCheckbox(e) {
+  function handlePublishToParentCheckbox(e: InputChangeEvent) {
     setPublishToParent(e.target.checked);
   }
 
 
   useEffect(() => {
-    let termApi = new TermApi(props.note.ontology_id, props.note.semantic_component_iri, constantsVars.TERM_TYPES[targetArtifact]);
-    termApi.fetchTerm().then(tsTerm => {
-      setParentOntology(tsTerm.originalOntology);
+    let termApi = new TermApi(props.note.ontology_id, props.note.semantic_component_iri, constantsVars.TERM_TYPES[Number(targetArtifact)]);
+    termApi.fetchTerm().then((tsTerm) => {
+      setParentOntology(tsTerm?.originalOntology ?? null);
       setSelectedTermFromAutoComplete({
         "iri": props.note.semantic_component_iri,
         "label": props.note.semantic_component_label
@@ -141,7 +156,7 @@ const NoteEdit = (props) => {
     return null;
   }
   if (!appContext.user) {
-    return "";
+    return null;
   }
 
   return (
@@ -161,18 +176,12 @@ const NoteEdit = (props) => {
       submit={edit}
       targetNoteId={props.note.id}
       handleJumtoSelection={handleJumtoSelection}
-      componentIdentity={constantsVars.TERM_TYPES[targetArtifact]}
+      componentIdentity={constantsVars.TERM_TYPES[Number(targetArtifact)]}
       parentOntology={parentOntology}
       selectedTerm={selectedTermFromAutoComplete}
       handlePublishToParentCheckbox={handlePublishToParentCheckbox}
     />
   );
 }
-
-NoteEdit.propTypes = {
-  note: PropTypes.object.isRequired,
-  term: PropTypes.string.isRequired
-};
-
 
 export default NoteEdit;

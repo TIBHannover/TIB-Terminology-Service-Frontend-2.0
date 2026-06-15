@@ -8,6 +8,7 @@ import AlertBox from "../../../common/Alerts/Alerts";
 import NoteCard from "../NoteCard";
 import {NoteContext} from "../../../../context/NoteContext";
 import NoteUrlFactory from "../../../../UrlFactory/NoteUrlFactory";
+import type { NoteContextValue, NoteListRenderProps, RowContent } from "../types";
 
 
 const ALL_TYPE = 0
@@ -24,11 +25,11 @@ const COMPONENT_TYPES_FOR_DROPDOWN = [
 ];
 
 
-export const NoteListRender = (props) => {
+export const NoteListRender = (props: NoteListRenderProps) => {
   
-  const noteContext = useContext(NoteContext);
+  const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
   
-  const [renderContent, setRenderContent] = useState("");
+  const [renderContent, setRenderContent] = useState<RowContent>("");
   
   const noteUrlFactory = new NoteUrlFactory();
   
@@ -36,10 +37,10 @@ export const NoteListRender = (props) => {
   function createNotesList() {
     let notes = props.notesList;
     let noteExist = true;
-    let result = [];
+    let result: JSX.Element[] = [];
     for (let note of notes) {
       result.push(
-        <NoteCard note={note}/>
+        <NoteCard note={note} key={note.id}/>
       );
     }
     
@@ -50,7 +51,7 @@ export const NoteListRender = (props) => {
           <br></br>
           <AlertBox
             type="info"
-            alertColumnclassName="col-sm-12"
+            alertColumnClass="col-sm-12"
             message="This Ontology does not have any note yet."
           />
         </span>
@@ -73,14 +74,14 @@ export const NoteListRender = (props) => {
         <AlertBox
           type="success"
           message="Your Note is submitted successfully! "
-          alertColumnclassName="col-sm-12"
+          alertColumnClass="col-sm-12"
         />
       }
       {props.noteSubmited && !props.noteSubmitSeccuess &&
         <AlertBox
           type="danger"
           message="Something went wrong. Please try again!"
-          alertColumnclassName="col-sm-12"
+          alertColumnClass="col-sm-12"
         />
       }
       {!props.noteDetailPage && !props.componentIsLoading &&

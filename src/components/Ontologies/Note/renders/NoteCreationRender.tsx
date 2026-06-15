@@ -9,12 +9,13 @@ import { NoteContext } from "../../../../context/NoteContext";
 import Modal from "react-bootstrap/Modal";
 import Login from "../../../User/Login/TS/Login";
 import { AppContext } from "../../../../context/AppContext";
+import type { NoteContextValue, NoteCreationRenderProps } from "../types";
 
 
-export const NoteCreationRender = (props) => {
+export const NoteCreationRender = (props: NoteCreationRenderProps) => {
 
   const ontologyPageContext = useContext(OntologyPageContext);
-  const noteContext = useContext(NoteContext);
+  const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
   const appContext = useContext(AppContext);
 
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +23,10 @@ export const NoteCreationRender = (props) => {
 
   useEffect(() => {
     if (props.parentOntology && props.mode !== "newNote" && document.getElementById("publish_note_to_parent_checkbox")) {
-      document.getElementById("publish_note_to_parent_checkbox").checked = true;
+      const publishCheckbox = document.getElementById("publish_note_to_parent_checkbox") as HTMLInputElement | null;
+      if (publishCheckbox) {
+        publishCheckbox.checked = true;
+      }
     }
   }, []);
 
@@ -97,10 +101,10 @@ export const NoteCreationRender = (props) => {
           <br></br>
           <div className="row">
             <div className="col-sm-8">
-              {parseInt(props.targetArtifact) === constantsVars.ONTOLOGY_COMPONENT_ID &&
+              {parseInt(String(props.targetArtifact)) === constantsVars.ONTOLOGY_COMPONENT_ID &&
                 <p>About: <b>{ontologyPageContext.ontology.ontologyId}</b></p>
               }
-              {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
+              {parseInt(String(props.targetArtifact)) !== constantsVars.ONTOLOGY_COMPONENT_ID &&
                 <div>
                   <JumpTo
                     targetType={props.componentIdentity}
@@ -116,7 +120,7 @@ export const NoteCreationRender = (props) => {
             </div>
           </div>
           <br></br>
-          {parseInt(props.targetArtifact) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
+          {parseInt(String(props.targetArtifact)) !== constantsVars.ONTOLOGY_COMPONENT_ID && props.parentOntology &&
             <>
               <div className="row">
                 <div className="col-sm-10">
@@ -149,8 +153,8 @@ export const NoteCreationRender = (props) => {
               <input
                 type="text"
                 value={props.noteTitle}
-                onChange={() => {
-                  props.onTextInputChange()
+                onChange={(event) => {
+                  props.onTextInputChange(event)
                 }}
                 className="form-control"
                 id={"noteTitle" + props.targetNoteId}

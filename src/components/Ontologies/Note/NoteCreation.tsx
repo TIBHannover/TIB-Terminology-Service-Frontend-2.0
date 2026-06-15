@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { getTextEditorContent } from "../../common/TextEditor/TextEditor";
 import * as constantsVars from './Constants';
 import { submitNote } from "../../../api/note";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
@@ -7,12 +6,18 @@ import TermApi from "../../../api/term";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
-import Login from "../../User/Login/TS/Login";
-import PropTypes from 'prop-types';
 import FormLib from "../../../Libs/FormLib";
+import type {
+  EditorStateValue,
+  InputChangeEvent,
+  NoteContextValue,
+  NoteCreationProps,
+  SelectChangeEvent,
+  SelectedTerm,
+} from "./types";
 
 
-const NoteCreation = (props) => {
+const NoteCreation = (props: NoteCreationProps) => {
   /* 
       This component is responsible for rendering the note creation form.
       It uses the AppContext to get the user information.
@@ -20,52 +25,58 @@ const NoteCreation = (props) => {
 
   */
 
-  const noteContext = useContext(NoteContext);
+  const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
   const appContext = useContext(AppContext);
   const ontologyPageContext = useContext(OntologyPageContext);
 
-  let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree);
+  let targetType = constantsVars.NOTE_COMPONENT_VALUES.indexOf(noteContext.selectedTermTypeInTree ?? "");
   targetType = targetType !== -1 ? targetType : 1;
   let selectedTerm = noteContext.selectedTermInTree
     ? { "iri": noteContext.selectedTermInTree['iri'], "label": noteContext.selectedTermInTree['label'] }
     : { "iri": null, "label": null };
 
 
-  const [targetArtifactType, setTargetArtifactType] = useState(targetType);
-  const [visibility, setVisibility] = useState(constantsVars.VISIBILITY_ONLY_ME);
-  const [editorState, setEditorState] = useState(null);
-  const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState(selectedTerm);
-  const [parentOntology, setParentOntology] = useState(null);
+  const [targetArtifactType, setTargetArtifactType] = useState<number | string>(targetType);
+  const [visibility, setVisibility] = useState<number | string>(constantsVars.VISIBILITY_ONLY_ME);
+  const [editorState, setEditorState] = useState<EditorStateValue>(null);
+  const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] = useState<SelectedTerm>(selectedTerm);
+  const [parentOntology, setParentOntology] = useState<string | null>(null);
   const [publishToParent, setPublishToParent] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const noteIdForRender = "-add-note";
 
 
   function onTextInputChange() {
-    document.getElementById("noteTitle" + noteIdForRender).style.borderColor = '';
-    setNoteTitle(document.getElementById('noteTitle' + noteIdForRender).value);
+    const noteTitleElement = document.getElementById("noteTitle" + noteIdForRender) as HTMLInputElement | null;
+    if (noteTitleElement) {
+      noteTitleElement.style.borderColor = '';
+      setNoteTitle(noteTitleElement.value);
+    }
   }
 
 
-  function onTextAreaChange(newEditorState) {
-    document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+  function onTextAreaChange(newEditorState: EditorStateValue) {
+    const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+    if (editorElement) {
+      editorElement.style.border = '';
+    }
     setEditorState(newEditorState);
   };
 
 
-  function changeArtifactType(e) {
+  function changeArtifactType(e: SelectChangeEvent) {
     setTargetArtifactType(e.target.value);
     setParentOntology(null);
     setSelectedTermFromAutoComplete({ "iri": null, "label": null });
   }
 
 
-  function changeVisibility(e) {
+  function changeVisibility(e: SelectChangeEvent) {
     setVisibility(e.target.value);
   }
 
 
-  function closeModal(newNoteId = true) {
+  function closeModal(newNoteId: boolean | string | object = true) {
     setEditorState(null);
     setSelectedTermFromAutoComplete({ "iri": null, "label": null });
     setParentOntology(null);
@@ -77,11 +88,14 @@ const NoteCreation = (props) => {
     let noteTitle = FormLib.getFieldByIdIfValid('noteTitle' + noteIdForRender);
     let selectedTargetTermIri = selectedTermFromAutoComplete['iri'];
     let selectedTargetTermLabel = selectedTermFromAutoComplete['label'];
-    let noteContent = FormLib.getTextEditorValueIfValid(editorState, "noteContent" + noteIdForRender);
-    formIsValid = noteTitle && noteContent;
+    let noteContent = FormLib.getTextEditorValueIfValid(editorState as object, "noteContent" + noteIdForRender);
+    formIsValid = Boolean(noteTitle && noteContent);
 
-    if (parseInt(targetArtifactType) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri) {
-      document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '1px solid red';
+    if (parseInt(String(targetArtifactType)) !== constantsVars.ONTOLOGY_COMPONENT_ID && !selectedTargetTermIri) {
+      const autoSuggestInput = document.getElementById("edit-note-modal" + noteIdForRender)?.getElementsByClassName('react-autosuggest__input')[0] as HTMLElement | undefined;
+      if (autoSuggestInput) {
+        autoSuggestInput.style.border = '1px solid red';
+      }
       formIsValid = false;
     }
 
@@ -89,28 +103,28 @@ const NoteCreation = (props) => {
       return;
     }
 
-    if (parseInt(targetArtifactType) === constantsVars.ONTOLOGY_COMPONENT_ID) {
+    if (parseInt(String(targetArtifactType)) === constantsVars.ONTOLOGY_COMPONENT_ID) {
       selectedTargetTermIri = ontologyPageContext.ontology.ontologyId;
       selectedTargetTermLabel = ontologyPageContext.ontology.ontologyId;
     }
 
 
-    let targetType = constantsVars.NOTE_COMPONENT_VALUES[targetArtifactType];
+    let targetType = constantsVars.NOTE_COMPONENT_VALUES[Number(targetArtifactType)];
 
     if (noteContext.selectedTermInTree) {
       // Note creation for an specific term in from term detail tabel
       selectedTargetTermIri = noteContext.selectedTermInTree['iri'];
       selectedTargetTermLabel = noteContext.selectedTermInTree['label'];
-      targetType = noteContext.selectedTermTypeInTree;
+      targetType = noteContext.selectedTermTypeInTree ?? targetType;
     }
-    let data = {};
+    let data: any = {};
     data["title"] = noteTitle;
     data["semantic_component_iri"] = selectedTargetTermIri;
     data["semantic_component_label"] = selectedTargetTermLabel;
     data["content"] = noteContent;
     data["ontology_id"] = ontologyPageContext.ontology.ontologyId;
     data["semantic_component_type"] = targetType;
-    data["visibility"] = constantsVars.VISIBILITY_VALUES[visibility];
+    data["visibility"] = constantsVars.VISIBILITY_VALUES[Number(visibility)];
     if (publishToParent && parentOntology) {
       data["parentOntology"] = parentOntology;
     }
@@ -121,27 +135,30 @@ const NoteCreation = (props) => {
   }
 
 
-  async function handleJumtoSelection(selectedTerm) {
+  async function handleJumtoSelection(selectedTerm: SelectedTerm | null) {
     if (selectedTerm) {
-      document.getElementById("edit-note-modal" + noteIdForRender).getElementsByClassName('react-autosuggest__input')[0].style.border = '';
-      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
+      const autoSuggestInput = document.getElementById("edit-note-modal" + noteIdForRender)?.getElementsByClassName('react-autosuggest__input')[0] as HTMLElement | undefined;
+      if (autoSuggestInput) {
+        autoSuggestInput.style.border = '';
+      }
+      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, selectedTerm['iri'] ?? undefined, constantsVars.TERM_TYPES[Number(targetArtifactType)]);
       let tsTerm = await termApi.fetchTerm();
       setSelectedTermFromAutoComplete(selectedTerm);
-      setParentOntology(tsTerm.originalOntology);
+      setParentOntology(tsTerm?.originalOntology ?? null);
     }
   }
 
 
-  function handlePublishToParentCheckbox(e) {
+  function handlePublishToParentCheckbox(e: InputChangeEvent) {
     setPublishToParent(e.target.checked);
   }
 
 
   useEffect(() => {
     if (noteContext.selectedTermInTree) {
-      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'], constantsVars.TERM_TYPES[targetArtifactType]);
-      termApi.fetchTerm().then(tsTerm => {
-        setParentOntology(tsTerm.originalOntology);
+      let termApi = new TermApi(ontologyPageContext.ontology.ontologyId, noteContext.selectedTermInTree['iri'] ?? undefined, constantsVars.TERM_TYPES[Number(targetArtifactType)]);
+      termApi.fetchTerm().then((tsTerm) => {
+        setParentOntology(tsTerm?.originalOntology ?? null);
       });
     }
   }, [noteContext.selectedTermInTree]);
@@ -167,18 +184,13 @@ const NoteCreation = (props) => {
       targetNoteId={noteIdForRender}
       mode={"newNote"}
       handleJumtoSelection={handleJumtoSelection}
-      componentIdentity={constantsVars.TERM_TYPES[targetArtifactType]}
+      componentIdentity={constantsVars.TERM_TYPES[Number(targetArtifactType)]}
       parentOntology={parentOntology}
       selectedTerm={selectedTermFromAutoComplete}
       handlePublishToParentCheckbox={handlePublishToParentCheckbox}
     />
   );
 
-}
-
-
-NoteCreation.propTypes = {
-  targetArtifactType: PropTypes.string,
 }
 
 export default NoteCreation;

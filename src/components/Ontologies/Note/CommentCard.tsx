@@ -5,21 +5,21 @@ import {CopiedSuccessAlert} from "../../common/Alerts/Alerts";
 import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
 import {ReportModal} from "../../common/ReportModal/ReportModal";
 import {OntologyPageContext} from "../../../context/OntologyPageContext";
-import {AppContext} from "../../../context/AppContext";
-import {NoteContext} from "../../../context/NoteContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
 import {getTsPluginHeaders} from "../../../api/header";
 import Dropdown from 'react-bootstrap/Dropdown';
+import type { CommentCardHeaderProps, CommentCardProps, NoteComment } from "./types";
 
+const ResolveReportActionsForAdminsComponent = ResolveReportActionsForAdmins as any;
 
 const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete/';
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create/';
 
 
-export const CommentCard = (props) => {
+export const CommentCard = (props: CommentCardProps) => {
   /*
       This component is responsible for rendering the comment card.
       It uses the OntologyPageContext to get the ontology information.
@@ -34,7 +34,7 @@ export const CommentCard = (props) => {
       <div className="card-header">
         <CommentCardHeader comment={props.comment} editHandlerFunc={props.commentEditHandler}/>
       </div>
-      <ResolveReportActionsForAdmins
+      <ResolveReportActionsForAdminsComponent
         objectType="comment"
         objectId={props.comment['id']}
         reportStatus={props.comment['is_reported']}
@@ -50,32 +50,32 @@ export const CommentCard = (props) => {
 }
 
 
-export const CommentCardHeader = (props) => {
+export const CommentCardHeader = (props: CommentCardHeaderProps) => {
   
   const ontologyPageContext = useContext(OntologyPageContext);
   
   const noteUrlFactory = new NoteUrlFactory();
   
-  const [comment, setComment] = useState({});
+  const [comment, setComment] = useState<NoteComment>(props.comment);
   const [linkCopied, setLinkCopied] = useState(false);
   
   useEffect(() => {
     setComment(props.comment);
   }, [props.comment]);
   
-  let deleteFormData = {};
+  let deleteFormData: Record<string, string> = {};
   deleteFormData["objectId"] = comment['id'];
   deleteFormData["objectType"] = 'comment';
   deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
   
-  let reportFormData = {};
+  let reportFormData: Record<string, string> = {};
   reportFormData["objectId"] = comment['id'];
   reportFormData["objectType"] = 'comment';
   reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
   
   let redirectAfterDeleteEndpoint = noteUrlFactory.getCommentDeleteRedirectLink();
   
-  return [
+  return (
     <div className="row" key={"c-" + comment['id']}>
       <div className="col-sm-9">
         <small>
@@ -155,7 +155,7 @@ export const CommentCardHeader = (props) => {
       
       <Login isModal={true} customModalId="loginModalReport" withoutButton={true}/>
     </div>
-  ];
+  );
 }
 
 

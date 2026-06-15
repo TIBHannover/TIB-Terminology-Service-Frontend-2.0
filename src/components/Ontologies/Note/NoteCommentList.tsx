@@ -5,12 +5,12 @@ import { NoteCommentListRender } from "./renders/NoteCommentListRender";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
-import PropTypes from 'prop-types';
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import type { ButtonClickEvent, EditorStateValue, NoteCommentListProps } from "./types";
 
 
 
-const NoteCommentList = (props) => {
+const NoteCommentList = (props: NoteCommentListProps) => {
   /* 
       This component is responsible for rendering the list of comments for the note.
       It uses the OntologyPageContext to get the ontology information.
@@ -20,8 +20,8 @@ const NoteCommentList = (props) => {
 
   const ontologyPageContext = useContext(OntologyPageContext);
 
-  const [commentEditorState, setCommentEditorState] = useState(createTextEditorEmptyText());
-  const [noteId, setNoteId] = useState(null);
+  const [commentEditorState, setCommentEditorState] = useState<EditorStateValue>(createTextEditorEmptyText());
+  const [noteId, setNoteId] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [editCommentId, setEditCommentId] = useState(-1);
 
@@ -29,22 +29,25 @@ const NoteCommentList = (props) => {
   const commonUrlFactory = new CommonUrlFactory();
 
 
-  function onTextAreaChange(newEditorState) {
-    document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+  function onTextAreaChange(newEditorState: EditorStateValue) {
+    const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+    if (editorElement) {
+      editorElement.style.border = '';
+    }
     setCommentEditorState(newEditorState);
   }
 
 
-  function handleEditButton(e) {
-    let commentId = e.target.getAttribute('data-id');
-    let commentContent = e.target.getAttribute('data-content');
+  function handleEditButton(e: ButtonClickEvent) {
+    let commentId = e.currentTarget.getAttribute('data-id');
+    let commentContent = e.currentTarget.getAttribute('data-content');
     if (commentContent) {
       let content = createTextEditorStateFromJson(commentContent);
-      let editorBox = document.getElementsByClassName("note-comment-editor-warpper")[0];
-      editorBox.scrollIntoView();
+      let editorBox = document.getElementsByClassName("note-comment-editor-warpper")[0] as HTMLElement | undefined;
+      editorBox?.scrollIntoView();
       setCommentEditorState(content);
       setEditMode(true);
-      setEditCommentId(commentId);
+      setEditCommentId(commentId ? parseInt(commentId) : -1);
     }
   }
 
@@ -53,7 +56,10 @@ const NoteCommentList = (props) => {
     let commentContent = "";
     let formIsValid = true;
     if (!commentEditorState) {
-      document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+      const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+      if (editorElement) {
+        editorElement.style.border = '1px solid red';
+      }
       formIsValid = false;
     }
     else {
@@ -61,7 +67,10 @@ const NoteCommentList = (props) => {
     }
 
     if (!commentContent || commentContent.trim() === "") {
-      document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+      const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+      if (editorElement) {
+        editorElement.style.border = '1px solid red';
+      }
       formIsValid = false;
     }
 
@@ -84,7 +93,10 @@ const NoteCommentList = (props) => {
     let commentContent = "";
     let formIsValid = true;
     if (!commentEditorState) {
-      document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+      const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+      if (editorElement) {
+        editorElement.style.border = '1px solid red';
+      }
       formIsValid = false;
     }
     else {
@@ -92,7 +104,10 @@ const NoteCommentList = (props) => {
     }
 
     if (!commentContent || commentContent.trim() === "") {
-      document.getElementsByClassName('rdw-editor-main')[0].style.border = '1px solid red';
+      const editorElement = document.getElementsByClassName('rdw-editor-main')[0] as HTMLElement | undefined;
+      if (editorElement) {
+        editorElement.style.border = '1px solid red';
+      }
       formIsValid = false;
     }
 
@@ -101,7 +116,7 @@ const NoteCommentList = (props) => {
     }
 
     let data = { 'comment_id': editCommentId, 'content': commentContent, 'ontology_id': ontologyPageContext.ontology.ontologyId };
-    editNoteComment(data).then((result) => {
+    editNoteComment(data as any).then((result) => {
       if (result) {
         setNoteId(null);
         setCommentEditorState(null);
@@ -126,10 +141,11 @@ const NoteCommentList = (props) => {
     let commentBox = document.getElementById("comment-card-" + commentId);
     if (commentBox) {
       commentBox.style.border = '2px solid red';
+      const selectedCommentBox = commentBox;
       setTimeout(() => {
-        commentBox.style.borderColor = '';
+        selectedCommentBox.style.borderColor = '';
       }, 5000);
-      commentBox.scrollIntoView();
+      selectedCommentBox.scrollIntoView();
     }
   }
 
@@ -158,13 +174,4 @@ const NoteCommentList = (props) => {
   );
 }
 
-
-NoteCommentList.propsTypes = {
-  note: PropTypes.object.isRequired,
-  noteDetailReloader: PropTypes.func.isRequired
-}
-
-
-
 export default NoteCommentList;
-

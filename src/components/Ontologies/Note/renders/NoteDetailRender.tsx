@@ -3,9 +3,11 @@ import {NoteCardHeader} from "../NoteCard";
 import {buildNoteAboutPart} from "../helpers";
 import ResolveReportActionsForAdmins from "../../../common/ResolveReportActions/ResolveReportAction";
 import Toolkit from "../../../../Libs/Toolkit";
+import type { NoteDetailRenderProps } from "../types";
 
+const ResolveReportActionsForAdminsComponent = ResolveReportActionsForAdmins as any;
 
-export const NoteDetailRender = (props) => {
+export const NoteDetailRender = (props: NoteDetailRenderProps) => {
   
   function create_note_card() {
     return [
@@ -17,7 +19,7 @@ export const NoteDetailRender = (props) => {
             </div>
             <div className="card-body">
               <h4 className="card-title note-list-title">{props.note.title}</h4>
-              <ResolveReportActionsForAdmins
+              <ResolveReportActionsForAdminsComponent
                 objectType="note"
                 objectId={props.note.id}
                 reportStatus={props.note.is_reported}

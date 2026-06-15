@@ -4,13 +4,14 @@ import {RowWithSingleColumn} from "../../../common/Grid/BootstrapGrid";
 import CommentCard from "../CommentCard";
 import {AppContext} from "../../../../context/AppContext";
 import Login from "../../../User/Login/TS/Login";
+import type { NoteCommentListRenderProps, RowContent } from "../types";
 
 
-export const NoteCommentListRender = (props) => {
+export const NoteCommentListRender = (props: NoteCommentListRenderProps) => {
   
   const appContext = useContext(AppContext);
   
-  const [commentListToRener, setCommentListToRener] = useState("");
+  const [commentListToRener, setCommentListToRener] = useState<RowContent>("");
   const [loginModal, setLoginModal] = useState(false);
   
   useEffect(() => {
@@ -20,7 +21,7 @@ export const NoteCommentListRender = (props) => {
   
   function createCommentList() {
     let comments = props.note.comments ? props.note.comments : [];
-    let result = [];
+    let result: JSX.Element[] = [];
     for (let comment of comments) {
       result.push(
         <RowWithSingleColumn

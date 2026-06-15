@@ -14,6 +14,7 @@ import Toolkit from "../../../Libs/Toolkit";
 import { getTsPluginHeaders } from "../../../api/header";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { AppContext } from "../../../context/AppContext";
+import type { Note, NoteCardHeaderProps, NoteCardProps, NoteContextValue } from "./types";
 
 
 const VISIBILITY_HELP = {
@@ -26,12 +27,12 @@ const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/del
 const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create/';
 
 
-export const NoteCard = (props) => {
+export const NoteCard = (props: NoteCardProps) => {
   /*
       This component is responsible for rendering the note card.        
   */
 
-  const noteContext = useContext(NoteContext);
+  const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
 
   const noteUrlFactory = new NoteUrlFactory();
 
@@ -52,7 +53,7 @@ export const NoteCard = (props) => {
                 <h6 className="card-title stour-onto-note-list-card-title">
                   <Link to={noteUrl}
                     className="note-list-title custom-truncate"
-                    value={props.note.id}
+                    data-value={props.note.id}
                     onClick={noteContext.noteSelectHandler}
                   >
                     {props.note.title}
@@ -76,7 +77,7 @@ export const NoteCard = (props) => {
 }
 
 
-export const NoteCardHeader = (props) => {
+export const NoteCardHeader = (props: NoteCardHeaderProps) => {
   /*
       This component is responsible for rendering the note card header.        
   */
@@ -86,7 +87,7 @@ export const NoteCardHeader = (props) => {
 
   const noteUrlFactory = new NoteUrlFactory();
 
-  const [note, setNote] = useState({});
+  const [note, setNote] = useState<Note>(props.note);
   const [linkCopied, setLinkCopied] = useState(false);
 
   useEffect(() => {
@@ -95,25 +96,25 @@ export const NoteCardHeader = (props) => {
     , [props.note]);
 
 
-  let deleteFormData = {};
+  let deleteFormData: Record<string, string> = {};
   deleteFormData["objectId"] = note.id;
   deleteFormData["objectType"] = 'note';
   deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
 
-  let reportFormData = {};
+  let reportFormData: Record<string, string> = {};
   reportFormData["objectId"] = note.id;
   reportFormData["objectType"] = 'note';
   reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
-  let can_edit = appContext?.user?.id === note.created_by?.id;
+  let can_edit = appContext?.user?.id === (note.created_by as any)?.id;
 
   let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({ page: 1, size: 10 });
 
-  return [
+  return (
     <div className="row" key={"note-" + note.id}>
       <div className="col-sm-9 stour-onto-note-list-card-meta">
         <small>
           {"Opened on " + Toolkit.formatDateTime(note.created_at) + " by "}
-          <b>{Auth.extractUserName(note.created_by)}</b>
+          <b>{Auth.extractUserName(note.created_by as any)}</b>
         </small>
         {note.pinned && !note.imported &&
           // Pinned Imported notes from child should not be pinned in parent
@@ -136,7 +137,7 @@ export const NoteCardHeader = (props) => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item className="note-dropdown-item">
-                  <div title={VISIBILITY_HELP[note.visibility]}>
+                  <div title={VISIBILITY_HELP[note.visibility as keyof typeof VISIBILITY_HELP]}>
                     <small><i className="fa fa-solid fa-eye ms-0 me-1 "></i>{note.visibility}</small>
                   </div>
                 </Dropdown.Item>
@@ -203,7 +204,7 @@ export const NoteCardHeader = (props) => {
       </div>
       <Login isModal={true} customModalId="loginModalReport" withoutButton={true} />
     </div>
-  ];
+  );
 }
 
 

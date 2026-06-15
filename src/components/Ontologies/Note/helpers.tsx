@@ -3,9 +3,10 @@ import {pinnNote} from "../../../api/note";
 import Modal from "react-bootstrap/Modal";
 import {Link} from "react-router-dom";
 import {NoteContext} from "../../../context/NoteContext";
+import type { Note, NoteContextValue, PinnModalBtnProps, PinnModalProps } from "./types";
 
 
-export function buildNoteAboutPart(note) {
+export function buildNoteAboutPart(note: Note | Record<string, any>) {
   let url = process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + note.ontology_id;
   let label = "";
   if (note.semantic_component_type === "ontology") {
@@ -29,26 +30,26 @@ export function buildNoteAboutPart(note) {
 }
 
 
-export const PinnModalBtn = (props) => {
+export const PinnModalBtn = (props: PinnModalBtnProps) => {
   
-  const noteContext = useContext(NoteContext);
+  const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
   
   if (!noteContext.isAdminForOntology) {
-    return "";
+    return null;
   }
   
   if (props.note.visibility === "me") {
-    return "";
+    return null;
   }
   
-  if (parseInt(noteContext.numberOfpinned) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES) && !props.note.pinned) {
-    return "";
+  if (parseInt(String(noteContext.numberOfPinned)) === parseInt(process.env.REACT_APP_MAX_PIN_NOTES ?? "0") && !props.note.pinned) {
+    return null;
   }
   
   return (
     <button type="button"
             className="btn btn-sm borderless-btn note-action-menu-btn"
-            onClick={props.setShowModal}
+            onClick={() => props.setShowModal(true)}
     >
       {props.note.pinned ? "Unpin" : "Pin"}
     </button>
@@ -57,10 +58,10 @@ export const PinnModalBtn = (props) => {
 }
 
 
-export const PinnModal = (props) => {
+export const PinnModal = (props: PinnModalProps) => {
   const [submited, setSubmited] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  let data = {};
+  let data: any = {};
   const note = props.note;
   data["ontology"] = note.ontology_id;
   data["note_id"] = note.id;

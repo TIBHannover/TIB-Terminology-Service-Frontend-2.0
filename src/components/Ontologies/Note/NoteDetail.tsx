@@ -7,6 +7,8 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import type { NoteDetailResponse } from "../../../api/types/noteTypes";
+import type { Note, NoteContextValue } from "./types";
 
 
 
@@ -20,9 +22,9 @@ const NoteDetail = () => {
     */
 
     const ontologyPageContext = useContext(OntologyPageContext);
-    const noteContext = useContext(NoteContext);
+    const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
 
-    const [note, setNote] = useState({});
+    const [note, setNote] = useState<Note>({} as Note);
     const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
     const [noteNotFound, setNoteNotFound] = useState(false);
     const [currentUrl, setCurrentUrl] = useState(window.location.href);    
@@ -32,16 +34,20 @@ const NoteDetail = () => {
 
     function getTheNote(){
         let noteId = noteContext.selectedNoteId;        
-        getNoteDetail({noteId: noteId, ontologyId:ontologyPageContext.ontology.ontologyId}).then((result) => {
+        getNoteDetail({noteId: String(noteId), ontologyId:ontologyPageContext.ontology.ontologyId}).then((result: NoteDetailResponse | {} | "404") => {
             if(result === '404'){
                 setNoteNotFound(true);                
             }            
             else{
-                const note = result.note;
+                const note = (result as NoteDetailResponse).note;
+                if (!note) {
+                    setNoteNotFound(true);
+                    return;
+                }
                 setNote(note);
                 noteContext.setSelectedNote(note);
                 setNoteContent(createHtmlFromEditorJson(note.content));
-                noteContext.setNumberOfPinned(result.number_of_pinned);
+                noteContext.setNumberOfPinned((result as NoteDetailResponse).number_of_pinned ?? 0);
                 setNoteNotFound(false);                
             }
         });
@@ -49,7 +55,7 @@ const NoteDetail = () => {
     
     function reloadNoteDetail(){        
         commonUrlFactory.deleteParam({name: SiteUrlParamNames.CommentId});
-        setNote({});
+        setNote({} as Note);
         setCurrentUrl(commonUrlFactory.getCurrentUrl()); 
     }
 
