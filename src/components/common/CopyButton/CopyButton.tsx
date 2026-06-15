@@ -1,7 +1,17 @@
 import {useState} from "react";
 
+type CopyLinkButtonProps = {
+  tooltipText?: string;
+  valueToCopy: string;
+};
 
-const CopyLinkButton = (props) => {
+type CopyLinkButtonMarkdownFormatProps = {
+  url?: string;
+  label: string;
+  tooltipText?: string;
+};
+
+const CopyLinkButton = (props: CopyLinkButtonProps) => {
   const [copied, setCopied] = useState(false);
   
   return (
@@ -25,7 +35,7 @@ const CopyLinkButton = (props) => {
 }
 
 
-export const CopyLinkButtonMarkdownFormat = (props) => {
+export const CopyLinkButtonMarkdownFormat = (props: CopyLinkButtonMarkdownFormatProps) => {
   const [copied, setCopied] = useState(false);
   
   return (
@@ -36,7 +46,7 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
       key={"copy-btn"}
       onClick={() => {
         let copyValue = document.createElement('a');
-        copyValue.href = props.url;
+        copyValue.href = props.url ?? "";
         copyValue.textContent = props.label;
         let holderDiv = document.createElement('div');
         holderDiv.style.position = "absolute";
@@ -45,10 +55,12 @@ export const CopyLinkButtonMarkdownFormat = (props) => {
         let range = document.createRange();
         range.selectNode(holderDiv);
         let selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-        document.execCommand("copy");
-        selection.removeAllRanges();
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+          document.execCommand("copy");
+          selection.removeAllRanges();
+        }
         document.body.removeChild(holderDiv);
         setCopied(true);
         setTimeout(() => {

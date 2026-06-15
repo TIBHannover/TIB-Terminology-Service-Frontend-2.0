@@ -1,5 +1,21 @@
+type GraphEdgeData = {
+    source: string;
+    target: string;
+    uri: string;
+    label: string;
+};
+
 class GraphEdge{
-    constructor({edge}){
+    id: string;
+    from: string;
+    to: string;
+    label: string;
+    arrows: object;
+    width: number;
+    color: object;
+    font: object;
+
+    constructor({edge}: { edge: GraphEdgeData }){
         this.id = edge['source'] + edge['target'] + "&uri=" + edge['uri'];
         this.from = edge['source'];
         this.to = edge['target'];

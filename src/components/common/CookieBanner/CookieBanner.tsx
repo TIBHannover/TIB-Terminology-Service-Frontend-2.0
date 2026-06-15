@@ -7,7 +7,7 @@ const CookieBanner = () => {
   
   function handleClick() {
     setCookieShow(false);
-    window.localStorage.setItem("cookie-show", false);
+    window.localStorage.setItem("cookie-show", "false");
   }
   
   function showCookiePopup() {
@@ -27,7 +27,7 @@ const CookieBanner = () => {
   
   return (
     <div>
-      {cookieShow ? showCookiePopup() : ""}
+      {cookieShow ? showCookiePopup() : null}
     </div>
   )
 }

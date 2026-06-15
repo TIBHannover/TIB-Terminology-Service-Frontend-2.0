@@ -1,5 +1,16 @@
+type GraphNodeData = {
+    iri: string;
+    label: string;
+};
+
 class GraphNode{
-    constructor({node}){
+    id: string;
+    label: string;
+    color: object;
+    shape: string;
+    font: object;
+
+    constructor({node}: { node: GraphNodeData }){
         this.id = node['iri'];
         this.label= node['label'];
         this.color = {

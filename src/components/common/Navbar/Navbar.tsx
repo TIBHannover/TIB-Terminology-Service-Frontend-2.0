@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { NavDropdown } from 'react-bootstrap';
+import type { FocusEvent, MouseEvent } from 'react';
 
 const SiteNavbar = () => {
 
@@ -11,7 +12,7 @@ const SiteNavbar = () => {
   const urlPath = window.location.pathname;
   let basePath = process.env.REACT_APP_PROJECT_SUB_PATH;
 
-  function handleClick(e) {
+  function handleClick(e: MouseEvent<HTMLElement>) {
     let clickedElement = document.getElementsByClassName("nav-clicked");
     if (clickedElement.length !== 0) {
       clickedElement[0].classList.remove("nav-clicked");
@@ -19,7 +20,7 @@ const SiteNavbar = () => {
     e.currentTarget.classList.add("nav-clicked");
   }
 
-  function handleInfoDropdownBlur(e) {
+  function handleInfoDropdownBlur(e: FocusEvent<HTMLElement>) {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setShowInfoDropdown(false);
     }

@@ -1,8 +1,21 @@
 import React from 'react';
 import '../../layout/pagination.css';
 
-class Pagination extends React.Component {
-    constructor(props) {
+type PaginationProps = {
+    clickHandler: (value: any) => void;
+    count: number | string;
+    initialPageNumber: number | string;
+};
+
+type PaginationState = {
+    activePageNumber: number;
+    pageCount: number;
+    listOfPageNumbersToRender: number[];
+    middleButonsHtml: React.ReactNode;
+};
+
+class Pagination extends React.Component<PaginationProps, PaginationState> {
+    constructor(props: PaginationProps) {
         super(props);
         this.state = ({
             activePageNumber: 1,
@@ -51,7 +64,7 @@ class Pagination extends React.Component {
 
 
     createMiddleButtons() {
-        let result = [];
+        let result: React.ReactNode[] = [];
         let numbersToRender = this.state.listOfPageNumbersToRender;
         let activeNumber = this.state.activePageNumber;
         for (let number of numbersToRender) {
@@ -69,19 +82,20 @@ class Pagination extends React.Component {
     }
 
 
-    paginationClickHandler(e) {
+    paginationClickHandler(e: React.MouseEvent<HTMLElement>) {
         let activePageNumber = this.state.activePageNumber;
-        if (e.target.classList.contains('pagination-end')) {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains('pagination-end')) {
             activePageNumber = this.nextButtonClickedValue();
         }
-        else if (e.target.classList.contains('pagination-start')) {
+        else if (target.classList.contains('pagination-start')) {
             activePageNumber = this.previousButtonClickedValue();
         }
         else {
-            activePageNumber = this.middleButtonClickedValue(e.target);
+            activePageNumber = this.middleButtonClickedValue(target);
         }
         this.setState({
-            activePageNumber: parseInt(activePageNumber)
+            activePageNumber: parseInt(String(activePageNumber))
         }, () => {
             this.setTheListOfPageNumbersToRender();
             this.props.clickHandler(activePageNumber);
@@ -89,7 +103,7 @@ class Pagination extends React.Component {
     }
 
     previousButtonClickedValue() {
-        let activePageNumber = parseInt(this.state.activePageNumber);
+        let activePageNumber = parseInt(String(this.state.activePageNumber));
         if (activePageNumber > 1) {
             return activePageNumber - 1;
         }
@@ -98,40 +112,40 @@ class Pagination extends React.Component {
 
 
     nextButtonClickedValue() {
-        let activePageNumber = parseInt(this.state.activePageNumber);
-        if (activePageNumber < parseInt(this.props.count)) {
+        let activePageNumber = parseInt(String(this.state.activePageNumber));
+        if (activePageNumber < parseInt(String(this.props.count))) {
             return activePageNumber + 1;
         }
         return activePageNumber;
     }
 
 
-    middleButtonClickedValue(element) {
+    middleButtonClickedValue(element: HTMLElement) {
         if (element.nodeName === "LI") {
-            return element.value;
+            return Number((element as HTMLLIElement).value);
         }
-        return element.parentNode.value;
+        return Number((element.parentNode as HTMLLIElement).value);
     }
 
 
     componentDidMount() {
         this.setState({
-            activePageNumber: this.props.initialPageNumber,
-            pageCount: this.props.count
+            activePageNumber: parseInt(String(this.props.initialPageNumber)),
+            pageCount: parseInt(String(this.props.count))
         }, () => {
             this.setTheListOfPageNumbersToRender();
         });
     }
 
     componentDidUpdate() {
-        let inCommingPageCount = parseInt(this.props.count);
-        let currentPageCount = parseInt(this.state.pageCount);
-        let inCommingPageNumber = parseInt(this.props.initialPageNumber);
-        let currentPageNumber = parseInt(this.state.activePageNumber);
+        let inCommingPageCount = parseInt(String(this.props.count));
+        let currentPageCount = parseInt(String(this.state.pageCount));
+        let inCommingPageNumber = parseInt(String(this.props.initialPageNumber));
+        let currentPageNumber = parseInt(String(this.state.activePageNumber));
         if (inCommingPageCount !== currentPageCount || inCommingPageNumber !== currentPageNumber) {
             this.setState({
-                pageCount: parseInt(this.props.count),
-                activePageNumber: parseInt(this.props.initialPageNumber)
+                pageCount: parseInt(String(this.props.count)),
+                activePageNumber: parseInt(String(this.props.initialPageNumber))
             }, () => { this.setTheListOfPageNumbersToRender() });
         }
     }

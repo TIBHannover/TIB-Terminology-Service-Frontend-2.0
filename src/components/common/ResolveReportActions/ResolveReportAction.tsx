@@ -1,17 +1,23 @@
 import { useContext } from "react"
+import type { MouseEvent } from "react";
 import { AppContext } from "../../../context/AppContext";
 import AlertBox from "../Alerts/Alerts";
 import { sendResolveRequest } from "../../../api/report";
 
+type ResolveReportActionsForAdminsProps = {
+    objectType: string;
+    objectId: string;
+    reportStatus?: boolean;
+    creatorUsername: string;
+};
 
-
-const ResolveReportActionsForAdmins = (props) => {
+const ResolveReportActionsForAdmins = (props: ResolveReportActionsForAdminsProps) => {
 
     const appContext = useContext(AppContext);
 
 
-    async function sendResolveCommand(e) {
-        let resolveAction = e.target.value;
+    async function sendResolveCommand(e: MouseEvent<HTMLButtonElement>) {
+        let resolveAction = e.currentTarget.value;
         let redirectAfterDeleteEndpoint = window.location.href;
         let locationObject = window.location;
         let searchParams = new URLSearchParams(window.location.search);
@@ -35,7 +41,7 @@ const ResolveReportActionsForAdmins = (props) => {
 
 
     if (!appContext.isUserSystemAdmin || !props.reportStatus) {
-        return "";
+        return null;
     }
 
     return (

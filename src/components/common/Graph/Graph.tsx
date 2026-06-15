@@ -7,20 +7,31 @@ import GraphNode from './Node';
 import GraphEdge from './Edge';
 import {OntologyPageContext} from "../../../context/OntologyPageContext";
 
+type GraphProps = {
+  componentIdentity: string;
+  isSkos?: boolean;
+  ontologyId: string;
+  termIri: string;
+};
 
-const Graph = (props) => {
+type GraphData = {
+  nodes: Array<any>;
+  edges: Array<any>;
+};
+
+const Graph = (props: GraphProps) => {
   
   const ontoContext = useContext(OntologyPageContext);
   
-  const [selectedNodes, setSelectedNodes] = useState([]);
-  const [selectedEdges, setSelectedEdges] = useState([]);
-  const [message, setMessage] = useState(null);
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
+  const [selectedEdges, setSelectedEdges] = useState<string[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
   
   
-  const nodes = useRef(new DataSet([]));
-  const edges = useRef(new DataSet([]));
-  const graphNetwork = useRef({});
-  const container = useRef(null);
+  const nodes = useRef<any>(new DataSet([]));
+  const edges = useRef<any>(new DataSet([]));
+  const graphNetwork = useRef<any>(null);
+  const container = useRef<HTMLDivElement | null>(null);
   
   const subClassRelationUri = "http://www.w3.org/2000/01/rdf-schema#subClassOf";
   
@@ -48,14 +59,14 @@ const Graph = (props) => {
   };
   
   
-  async function fetchGraphData(ontologyId, targetIri, reset = false) {
-    let graphData = null;
+  async function fetchGraphData(ontologyId: string, targetIri: string, reset = false) {
+    let graphData: GraphData | null = null;
     if (props.componentIdentity === "terms") {
       let termApi = new TermApi(ontologyId, targetIri, "class", ontoContext.ontoLang);
-      graphData = await termApi.fetchGraphData();
+      graphData = await termApi.fetchGraphData() as GraphData | null;
     } else if (props.componentIdentity === "individuals" && props.isSkos) {
-      let skosApi = new SkosApi({ontologyId: ontologyId, iri: targetIri, lang: ontoContext.ontoLang});
-      graphData = await skosApi.fetchGraphData();
+      let skosApi = new SkosApi({ontologyId: ontologyId, iri: targetIri, lang: ontoContext.ontoLang} as any);
+      graphData = await skosApi.fetchGraphData() as GraphData | null;
     }
     
     if (reset) {
@@ -135,6 +146,9 @@ const Graph = (props) => {
   
   useEffect(() => {
     let data = {nodes: nodes.current, edges: edges.current};
+    if (!container.current) {
+      return;
+    }
     graphNetwork.current = new Network(container.current, data, options);
     fetchGraphData(props.ontologyId, props.termIri);
   }, []);
@@ -147,14 +161,14 @@ const Graph = (props) => {
   
   useEffect(() => {
     if (graphNetwork.current) {
-      graphNetwork.current.on("doubleClick", function (params) {
+      graphNetwork.current.on("doubleClick", function (params: any) {
         if (params.nodes.length > 0) {
           let nodeIri = params.nodes[0];
           fetchGraphData(props.ontologyId, nodeIri);
         }
       });
       
-      graphNetwork.current.on("click", function (params) {
+      graphNetwork.current.on("click", function (params: any) {
         setMessage(null);
         if (params.event.tapCount === 1) {
           // single click. Needed to differentiate it from double click

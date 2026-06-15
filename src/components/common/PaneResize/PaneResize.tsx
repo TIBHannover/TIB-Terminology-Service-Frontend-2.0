@@ -30,6 +30,10 @@
 
 
 class PaneResize {
+  lastPagePositionX: number;
+  isResizeOn: boolean;
+  originalLeftPaneWidth: number;
+  lastResizeTime: number;
   
   constructor() {
     this.lastPagePositionX = 0;
@@ -40,7 +44,7 @@ class PaneResize {
   
   
   setOriginalWidthForLeftPanes() {
-    this.originalLeftPaneWidth = document.getElementById("page-left-pane").offsetWidth;
+    this.originalLeftPaneWidth = document.getElementById("page-left-pane")?.offsetWidth ?? 0;
   }
   
   
@@ -50,8 +54,8 @@ class PaneResize {
     ];
   }
   
-  onMouseDown(event) {
-    let targetElement = event.target;
+  onMouseDown(event: MouseEvent) {
+    let targetElement = event.target as HTMLElement;
     if (!targetElement.classList.contains('page-resize-vertical-line')) {
       return null;
     }
@@ -60,7 +64,7 @@ class PaneResize {
   }
   
   
-  moveToResize(event) {
+  moveToResize(event: MouseEvent) {
     if (!this.isResizeOn || (Date.now() - this.lastPagePositionX < 200)) {
       return null;
     }
@@ -69,8 +73,11 @@ class PaneResize {
       let addedWidth = event.clientX - this.lastPagePositionX;
       let pageLeftPane = document.getElementById("page-left-pane");
       let pageRightPane = document.getElementById("page-right-pane");
-      let currentWidthLeft = parseInt(pageLeftPane.offsetWidth);
-      let currentWidthRight = parseInt(pageRightPane.offsetWidth);
+      if (!pageLeftPane || !pageRightPane) {
+        return;
+      }
+      let currentWidthLeft = pageLeftPane.offsetWidth;
+      let currentWidthRight = pageRightPane.offsetWidth;
       pageLeftPane.style.width = (currentWidthLeft + addedWidth) + "px";
       pageRightPane.style.width = (currentWidthRight - addedWidth) + "px";
       this.lastPagePositionX = event.clientX;
@@ -82,15 +89,16 @@ class PaneResize {
       }
       let graphContainer = document.getElementsByClassName('graph-container');
       if (graphContainer.length === 1) {
-        let currentGraphWidth = parseInt(graphContainer[0].offsetWidth);
-        graphContainer[0].style.width = (currentGraphWidth - addedWidth) + "px";
+        const graphElement = graphContainer[0] as HTMLElement;
+        let currentGraphWidth = graphElement.offsetWidth;
+        graphElement.style.width = (currentGraphWidth - addedWidth) + "px";
       }
     });
     
   }
   
   
-  releaseMouseFromResize(event) {
+  releaseMouseFromResize(event: MouseEvent) {
     if (!this.isResizeOn) {
       return null;
     }
@@ -100,7 +108,9 @@ class PaneResize {
   
   resetTheWidthToOrignial() {
     let pageLeftPane = document.getElementById("page-left-pane");
-    pageLeftPane.style.width = this.originalLeftPaneWidth + "px";
+    if (pageLeftPane) {
+      pageLeftPane.style.width = this.originalLeftPaneWidth + "px";
+    }
     ;
     this.lastPagePositionX = 0;
     this.isResizeOn = false;

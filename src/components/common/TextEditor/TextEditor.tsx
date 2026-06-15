@@ -3,18 +3,24 @@ import { convertToRaw, EditorState, convertFromRaw, ContentState } from 'draft-j
 import draftToHtml from 'draftjs-to-html';
 import DOMPurify from 'dompurify';
 
+type TextEditorProps = {
+    editorState: any;
+    textChangeHandlerFunction: (editorState: any) => void;
+    wrapperClassName?: string;
+    editorClassName?: string;
+    placeholder?: string;
+    wrapperId?: string;
+    textSizeOptions: string[];
+};
 
+const TextEditor = (props: TextEditorProps) =>{
 
-const TextEditor = (props) =>{
-
-    function onModalClick(e){
+    function onModalClick(){
         setTimeout(() => {
             /*  Auto focus on the insert link part when link option is open in toolbar.
                 Time out is needed since it takes abit to load the link view after clicking.
             */
-            if(document.getElementById('linkTarget')){
-                document.getElementById('linkTarget').focus();
-            }
+            (document.getElementById('linkTarget') as HTMLElement | null)?.focus();
         }, 200);        
     }
 
@@ -50,13 +56,13 @@ const TextEditor = (props) =>{
 
 
 
-export function getTextEditorContent(editorState){
+export function getTextEditorContent(editorState: any){
     let content = editorState.getCurrentContent();  
     return JSON.stringify(convertToRaw(content)); 
 }
 
 
-export function createTextEditorStateFromJson(jsonInput){    
+export function createTextEditorStateFromJson(jsonInput: string){    
     try{
         return EditorState.createWithContent(convertFromRaw(JSON.parse(jsonInput)));      
     }
@@ -68,7 +74,7 @@ export function createTextEditorStateFromJson(jsonInput){
 
 
 
-export function createHtmlFromEditorJson(jsonInput){
+export function createHtmlFromEditorJson(jsonInput: string){
     try{
         let editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(jsonInput)));                       
         let noteContent = convertToRaw(editorState.getCurrentContent());

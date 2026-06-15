@@ -39,8 +39,6 @@ const SiteLogo = () => {
           <Link className="main-title" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/"}>
             <embed
               src={process.env.REACT_APP_SITE_LOGO}
-              alt="site logo"
-              loading="lazy"
               className="site_logo_image"
             />
             {process.env.REACT_APP_SITE_LOGO_TEXT && <h5>{process.env.REACT_APP_SITE_LOGO_TEXT}</h5>}

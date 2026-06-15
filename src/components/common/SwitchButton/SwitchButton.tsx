@@ -1,15 +1,29 @@
-const SwitchButton = (props) => {
+import type { ChangeEvent } from "react";
+
+type SwitchButtonProps = {
+  id?: string;
+  label?: string;
+  smallText?: string;
+  className: string;
+  onChange?: (event: any) => void | Promise<void>;
+  checked?: boolean;
+  dataId?: string | number;
+  inLine?: boolean;
+};
+
+const SwitchButton = (props: SwitchButtonProps) => {
   
   const {id, label, smallText, className, onChange, checked, dataId, inLine} = props;
   
   
-  function handleSwitchChange(e) {
+  function handleSwitchChange(e: ChangeEvent<HTMLInputElement>) {
     let isChecked = e.target.checked;
     if (isChecked) {
       let allCollectionCheckboxes = document.getElementsByClassName(className);
       for (let checkbox of allCollectionCheckboxes) {
-        if (checkbox.dataset.id !== e.target.dataset.id) {
-          checkbox.checked = false;
+        const checkboxInput = checkbox as HTMLInputElement;
+        if (checkboxInput.dataset.id !== e.target.dataset.id) {
+          checkboxInput.checked = false;
         }
       }
     }

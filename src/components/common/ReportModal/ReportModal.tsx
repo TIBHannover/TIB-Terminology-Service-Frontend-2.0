@@ -5,8 +5,20 @@ import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import Login from "../../User/Login/TS/Login";
 
+type ReportModalBtnProps = {
+  modalId: string | number;
+  setShowModal: (showModal: boolean) => void;
+  setLoginModal: (showModal: boolean) => void;
+};
 
-export const ReportModalBtn = (props) => {
+type ReportModalProps = {
+  modalId: string | number;
+  formData: Record<string, any>;
+  callHeaders?: HeadersInit;
+  reportEndpoint: string;
+};
+
+export const ReportModalBtn = (props: ReportModalBtnProps) => {
 
   const appContext = useContext(AppContext);
 
@@ -29,7 +41,7 @@ export const ReportModalBtn = (props) => {
 }
 
 
-export const ReportModal = (props) => {
+export const ReportModal = (props: ReportModalProps) => {
 
   const [submited, setSubmited] = useState(false);
   const [reportSuccess, setReportSuccess] = useState(false);
@@ -38,7 +50,7 @@ export const ReportModal = (props) => {
 
   const report = async () => {
     try {
-      props.formData['content'] = document.getElementById("reportReason" + props.modalId).value;
+      props.formData['content'] = (document.getElementById("reportReason" + props.modalId) as HTMLTextAreaElement | null)?.value;
       let postConfig = { method: 'POST', headers: props.callHeaders, body: JSON.stringify(props.formData) };
       let result = await fetch(props.reportEndpoint, postConfig);
       setSubmited(true);
@@ -73,7 +85,7 @@ export const ReportModal = (props) => {
               <div className="mb-3">
                 <label htmlFor={"reportReason" + props.modalId} className="form-label">Please describe briefly the
                   reason for this report</label>
-                <textarea className="form-control" id={"reportReason" + props.modalId} rows="3"></textarea>
+                <textarea className="form-control" id={"reportReason" + props.modalId} rows={3}></textarea>
               </div>
               <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/TermsOfUse?section=3"}>Terms of
                 Use</Link>
@@ -83,14 +95,14 @@ export const ReportModal = (props) => {
             <AlertBox
               type="success"
               message="Thank you for the Report! We will examine it as soon as possible."
-              alertColumnclassName="col-sm-12"
+              alertColumnClass="col-sm-12"
             />
           }
           {submited && !reportSuccess &&
             <AlertBox
               type="danger"
               message="Something went wrong. Please try again!"
-              alertColumnclassName="col-sm-12"
+              alertColumnClass="col-sm-12"
             />
           }
         </Modal.Body>
@@ -107,5 +119,4 @@ export const ReportModal = (props) => {
 
 
 export default ReportModalBtn;
-
 
