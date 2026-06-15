@@ -16,7 +16,7 @@ export class TsTermset {
     this._description = this.termsetData.description ?? "";
     this._name = this.termsetData.name;
     this._visibility = this.termsetData.visibility;
-    this._terms = this.termsetData.terms.map(twrapper => twrapper.json ?? {});
+    this._terms = this.termsetData.terms.map((twrapper) => twrapper.json ?? {});
     this._created_at = this.termsetData.created_at;
     this._creator = this.termsetData.creator ?? undefined;
   }
@@ -82,6 +82,4 @@ export class TsTermset {
   set terms(input: OntologyTermDataV2[]) {
     this._terms = input;
   }
-
 }
-

@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export const NotFoundErrorPage = () => {
   return (
     <div className="row">
@@ -9,7 +8,7 @@ export const NotFoundErrorPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export const GeneralErrorPage = () => {
   return (
@@ -19,4 +18,4 @@ export const GeneralErrorPage = () => {
       </div>
     </div>
   );
-}
+};

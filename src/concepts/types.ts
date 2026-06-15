@@ -1,5 +1,5 @@
 export type PropDomainRangeObj = {
-  ontologyId: string,
-  iri: string,
-  label: string
-}
+  ontologyId: string;
+  iri: string;
+  label: string;
+};

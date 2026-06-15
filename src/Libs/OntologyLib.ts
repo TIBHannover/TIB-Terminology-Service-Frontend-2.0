@@ -3,57 +3,66 @@ import { createElement, ReactElement } from "react";
 import Toolkit from "./Toolkit";
 
 class OntologyLib {
-
-    static getCurrentOntologyIdFromUrlPath() {
-        let currentUrlPath = window.location.pathname.split("ontologies/");
-        let ontologyIdInUrl = "";
-        if (currentUrlPath.length === 2 && currentUrlPath[1] !== "") {
-            ontologyIdInUrl = currentUrlPath[1].includes("/")
-                ? currentUrlPath[1].split("/")[0].trim()
-                : currentUrlPath[1].trim();
-        }
-        return ontologyIdInUrl;
+  static getCurrentOntologyIdFromUrlPath() {
+    let currentUrlPath = window.location.pathname.split("ontologies/");
+    let ontologyIdInUrl = "";
+    if (currentUrlPath.length === 2 && currentUrlPath[1] !== "") {
+      ontologyIdInUrl = currentUrlPath[1].includes("/")
+        ? currentUrlPath[1].split("/")[0].trim()
+        : currentUrlPath[1].trim();
     }
+    return ontologyIdInUrl;
+  }
 
-    static async formatCreator(creators: string[]): Promise<ReactElement> {
-        let creatorsElements: ReactElement[] = [];
-        for (let cr of creators) {
-            if (!cr) {
-                continue;
-            }
-            if (cr.includes("orcid.org/")) {
-                let orcidId = cr.split("orcid.org/")[1];
-                orcidId = orcidId.trim();
-                let person = await resolveOrcidId(orcidId);
-                if (!person.name) {
-                    creatorsElements.push(createElement("p", {}, cr));
-                    continue;
-                }
-                let icon = createElement("i", { className: "fa-brands fa-orcid small-orcid-icon" });
-                let anchor = createElement("a", {
-                    href: person.profile,
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                    className: "me-4"
-                }, `${person.name} ${person.family}`, icon);
-                creatorsElements.push(anchor);
-            } else if (cr.includes("http")) {
-                let anchor = createElement("a", {
-                    href: cr,
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                    className: "me-4"
-                }, cr);
-                creatorsElements.push(anchor);
-            } else {
-                creatorsElements.push(createElement("p", { className: "d-inline me-3" }, cr, ","));
-            }
+  static async formatCreator(creators: string[]): Promise<ReactElement> {
+    let creatorsElements: ReactElement[] = [];
+    for (let cr of creators) {
+      if (!cr) {
+        continue;
+      }
+      if (cr.includes("orcid.org/")) {
+        let orcidId = cr.split("orcid.org/")[1];
+        orcidId = orcidId.trim();
+        let person = await resolveOrcidId(orcidId);
+        if (!person.name) {
+          creatorsElements.push(createElement("p", {}, cr));
+          continue;
         }
-        return createElement("div", {}, [...creatorsElements]);
-
+        let icon = createElement("i", {
+          className: "fa-brands fa-orcid small-orcid-icon",
+        });
+        let anchor = createElement(
+          "a",
+          {
+            href: person.profile,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "me-4",
+          },
+          `${person.name} ${person.family}`,
+          icon,
+        );
+        creatorsElements.push(anchor);
+      } else if (cr.includes("http")) {
+        let anchor = createElement(
+          "a",
+          {
+            href: cr,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "me-4",
+          },
+          cr,
+        );
+        creatorsElements.push(anchor);
+      } else {
+        creatorsElements.push(
+          createElement("p", { className: "d-inline me-3" }, cr, ","),
+        );
+      }
     }
-
+    return createElement("div", {}, [...creatorsElements]);
+  }
 }
-
 
 export default OntologyLib;

@@ -1,30 +1,32 @@
 import { useEffect, useState, useContext } from "react";
-import { createLabelTags, createIssueDescription, createIssueTitle, setTypeRadioBtn } from './helper';
+import {
+  createLabelTags,
+  createIssueDescription,
+  createIssueTitle,
+  setTypeRadioBtn,
+} from "./helper";
 import { getOntologyGithubIssueList } from "../../../api/github";
 import DropDown from "../../common/DropDown/DropDown";
-import TermRequest from '../TermRequest/TermRequest';
-import '../../layout/githubPanel.css';
+import TermRequest from "../TermRequest/TermRequest";
+import "../../layout/githubPanel.css";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import IssueListUrlFactory from "../../../UrlFactory/IssueListUrlFactory";
 import AlertBox from "../../common/Alerts/Alerts";
 import { getTourProfile } from "../../../tours/controller";
 
-
 const OPEN_ISSUE_ID = 1;
 const CLOSE_ISSUE_ID = 2;
 const ALL_ISSUE_ID = 3;
-const ISSUE_STATES_VALUES = ["", "open", "closed", "all"]
+const ISSUE_STATES_VALUES = ["", "open", "closed", "all"];
 const ISSUE_STATES_FOR_DROPDOWN = [
   { label: "Open", value: OPEN_ISSUE_ID },
   { label: "All", value: ALL_ISSUE_ID },
-  { label: "Closed", value: CLOSE_ISSUE_ID }
+  { label: "Closed", value: CLOSE_ISSUE_ID },
 ];
 
 const resultCountPerPage = 10;
 
-
 const IssueList = (props) => {
-
   /* 
       This component is responsible for rendering the list of issues for the ontology.
       It uses the IssueListUrlFactory to get the selected state id, page number and issue type from the url.
@@ -38,11 +40,16 @@ const IssueList = (props) => {
   const [waiting, setWaiting] = useState(true);
   const [noTrackerOnto, setNoTrackerOnto] = useState(false);
   const [contentForRender, setContentForRender] = useState([]);
-  const [selectedStateId, setSelectedStateId] = useState(urlFactory.selectedStateId ? urlFactory.selectedStateId : OPEN_ISSUE_ID);
-  const [pageNumber, setPageNumber] = useState(urlFactory.pageNumber ? urlFactory.pageNumber : 1);
+  const [selectedStateId, setSelectedStateId] = useState(
+    urlFactory.selectedStateId ? urlFactory.selectedStateId : OPEN_ISSUE_ID,
+  );
+  const [pageNumber, setPageNumber] = useState(
+    urlFactory.pageNumber ? urlFactory.pageNumber : 1,
+  );
   const [noMoreIssuesExist, setNoMoreIssuesExist] = useState(false);
-  const [selectedType, setSelectedType] = useState(urlFactory.selectedType ? urlFactory.selectedType : "issue");
-
+  const [selectedType, setSelectedType] = useState(
+    urlFactory.selectedType ? urlFactory.selectedType : "issue",
+  );
 
   async function createIssueList() {
     let ontology = ontologyPageContext.ontology;
@@ -54,7 +61,13 @@ const IssueList = (props) => {
     let listOfIssues = [];
     setTypeRadioBtn(selectedType);
     let issueStateValue = ISSUE_STATES_VALUES[selectedStateId];
-    listOfIssues = await getOntologyGithubIssueList(issueTrackerUrl, issueStateValue, selectedType, resultCountPerPage, pageNumber);
+    listOfIssues = await getOntologyGithubIssueList(
+      issueTrackerUrl,
+      issueStateValue,
+      selectedType,
+      resultCountPerPage,
+      pageNumber,
+    );
     if (listOfIssues.length === 0) {
       setNoMoreIssuesExist(true);
       setWaiting(false);
@@ -67,11 +80,11 @@ const IssueList = (props) => {
         <div className="row">
           <div className="col-sm-12 git-issue-card">
             {createIssueTitle(issue)}
-            {createLabelTags(issue['labels'])}
+            {createLabelTags(issue["labels"])}
             <br />
             {createIssueDescription(issue)}
           </div>
-        </div>
+        </div>,
       );
     }
 
@@ -80,7 +93,6 @@ const IssueList = (props) => {
     setWaiting(false);
   }
 
-
   function handleIssueStateChange(e) {
     let selectedIssueStateId = parseInt(e.target.value);
     setSelectedStateId(selectedIssueStateId);
@@ -88,7 +100,6 @@ const IssueList = (props) => {
     setPageNumber(1);
     localStorage.setItem("selectedIssueStateId", selectedIssueStateId);
   }
-
 
   function handlePagination(e) {
     let paginationDirection = e.target.dataset.value;
@@ -99,9 +110,7 @@ const IssueList = (props) => {
       setPageNumber(parseInt(pageNumber) + 1);
       setWaiting(true);
     }
-
   }
-
 
   function handleTypeChange(e) {
     setSelectedType(e.target.value);
@@ -109,37 +118,49 @@ const IssueList = (props) => {
     setWaiting(true);
   }
 
-
   function createPagination() {
     return [
-      <ul className='pagination-holder'>
-        <li className='pagination-btn pagination-start' key={1}>
-          <a className='pagination-link' data-value={'minus'} onClick={handlePagination}>Previous</a>
+      <ul className="pagination-holder">
+        <li className="pagination-btn pagination-start" key={1}>
+          <a
+            className="pagination-link"
+            data-value={"minus"}
+            onClick={handlePagination}
+          >
+            Previous
+          </a>
         </li>
-        <li className='pagination-btn pagination-end' key={2}>
-          <a className='pagination-link' data-value={'plus'} onClick={handlePagination}>Next</a>
+        <li className="pagination-btn pagination-end" key={2}>
+          <a
+            className="pagination-link"
+            data-value={"plus"}
+            onClick={handlePagination}
+          >
+            Next
+          </a>
         </li>
-      </ul>
+      </ul>,
     ];
   }
-
 
   useEffect(() => {
     createIssueList();
     let tourP = getTourProfile();
     if (!tourP.ontoGithubPage && process.env.REACT_APP_SITE_TOUR === "true") {
-      if (document.getElementById('tour-trigger-btn')) {
-        document.getElementById('tour-trigger-btn').click();
+      if (document.getElementById("tour-trigger-btn")) {
+        document.getElementById("tour-trigger-btn").click();
       }
     }
   }, []);
 
-
   useEffect(() => {
-    urlFactory.update({ pageNumber: pageNumber, stateId: selectedStateId, issueType: selectedType });
+    urlFactory.update({
+      pageNumber: pageNumber,
+      stateId: selectedStateId,
+      issueType: selectedType,
+    });
     createIssueList();
   }, [pageNumber, selectedStateId, selectedType]);
-
 
   if (process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true") {
     return null;
@@ -168,31 +189,41 @@ const IssueList = (props) => {
           </div>
           <div className="col-sm-3 stour-github-issue-type-radio">
             <div className="form-check-inline form-check-inline-github-issue">
-              <input type="radio" id="issue_radio"
-                className="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio"
-                value={"issue"} onChange={handleTypeChange} />
-              <label className="form-check-label ms-2" htmlFor="issue_radio">Issue</label>
+              <input
+                type="radio"
+                id="issue_radio"
+                className="form-check-input form-check-input-github-issue custom-radio-btn-input"
+                name="typeRadio"
+                value={"issue"}
+                onChange={handleTypeChange}
+              />
+              <label className="form-check-label ms-2" htmlFor="issue_radio">
+                Issue
+              </label>
             </div>
             <div className="form-check-inline form-check-inline-github-issue">
-              <input type="radio" id="pr_radio"
-                className="form-check-input form-check-input-github-issue custom-radio-btn-input" name="typeRadio"
-                value={"pr"} onChange={handleTypeChange} />
-              <label className="form-check-label ms-2" htmlFor="pr_radio">Pull Request</label>
+              <input
+                type="radio"
+                id="pr_radio"
+                className="form-check-input form-check-input-github-issue custom-radio-btn-input"
+                name="typeRadio"
+                value={"pr"}
+                onChange={handleTypeChange}
+              />
+              <label className="form-check-label ms-2" htmlFor="pr_radio">
+                Pull Request
+              </label>
             </div>
           </div>
-          <div className="col-sm-3">
-            {createPagination()}
-          </div>
+          <div className="col-sm-3">{createPagination()}</div>
         </div>
         <div className="row">
           <div className="col-sm-9">
             {waiting && <div className="isLoading"></div>}
             {!waiting && !noMoreIssuesExist && contentForRender}
-            {!waiting && noMoreIssuesExist &&
-              <div className="alert alert-info">
-                No Result.
-              </div>
-            }
+            {!waiting && noMoreIssuesExist && (
+              <div className="alert alert-info">No Result.</div>
+            )}
           </div>
 
           <div className="col-sm-3">
@@ -205,9 +236,7 @@ const IssueList = (props) => {
         </div>
       </div>
     </div>
-
   );
-}
-
+};
 
 export default IssueList;

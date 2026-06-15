@@ -8,7 +8,9 @@ export class TsSkosTerm extends TsTerm {
   }
 
   get hasChildren(): boolean {
-    return this.term[TsSkosTerm.narrowerPred] && this.term[TsSkosTerm.narrowerPred].length;
+    return (
+      this.term[TsSkosTerm.narrowerPred] &&
+      this.term[TsSkosTerm.narrowerPred].length
+    );
   }
 }
-

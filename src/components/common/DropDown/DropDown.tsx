@@ -1,4 +1,3 @@
-
 type DropDownOption = {
   label: string;
   value: string | number | boolean | undefined;
@@ -30,25 +29,38 @@ const DropDown = (props: DropDownProps) => {
     dropDownChangeHandler,
     defaultValue,
     defaultVaue,
-    tooltipText } = props;
+    tooltipText,
+  } = props;
   const resolvedDefaultValue = defaultValue ?? defaultVaue;
 
   let optionsRendered: JSX.Element[] = [];
   for (let item of options) {
     optionsRendered.push(
-      <option value={String(item.value)} key={String(item.value)}>{item.label}</option>
+      <option value={String(item.value)} key={String(item.value)}>
+        {item.label}
+      </option>,
     );
   }
 
   return (
-    <div className={"site-dropdown-container " + containerClass} title={tooltipText ?? ""}>
-      <label htmlFor={dropDownId} className={'col-form-label ' + (mandatory ? "required_input" : "")}>
+    <div
+      className={"site-dropdown-container " + containerClass}
+      title={tooltipText ?? ""}
+    >
+      <label
+        htmlFor={dropDownId}
+        className={"col-form-label " + (mandatory ? "required_input" : "")}
+      >
         {dropDownTitle}
       </label>
       <select
-        className={'site-dropdown-menu ' + dropdownClassName}
+        className={"site-dropdown-menu " + dropdownClassName}
         id={dropDownId}
-        defaultValue={resolvedDefaultValue === undefined ? undefined : String(resolvedDefaultValue)}
+        defaultValue={
+          resolvedDefaultValue === undefined
+            ? undefined
+            : String(resolvedDefaultValue)
+        }
         value={dropDownValue === undefined ? undefined : String(dropDownValue)}
         onChange={dropDownChangeHandler}
       >
@@ -56,7 +68,6 @@ const DropDown = (props: DropDownProps) => {
       </select>
     </div>
   );
-}
-
+};
 
 export default DropDown;

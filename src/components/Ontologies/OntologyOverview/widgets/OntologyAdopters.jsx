@@ -37,7 +37,12 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
   }, [onto]);
 
   return (
-    <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
+    <Modal
+      show={showModal}
+      onHide={() => setShowModal(false)}
+      centered
+      size="lg"
+    >
       <Modal.Header closeButton>
         <h5 className="modal-title">Ontology adopters</h5>
       </Modal.Header>

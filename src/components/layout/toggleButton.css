@@ -1,81 +1,81 @@
 .toggleButtonLabel {
-    position: relative;
-    display: inline-block;
-    width: 100px;
-    height: 49px;
-    margin-bottom: 0;     
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 49px;
+  margin-bottom: 0;
 }
 
 .truncate-toggleButtonLabel {
-    width: 100px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-  
-.toggleButtonLabel input {
-    display:none;
-}
-  
-.toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #c4bebe;    
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-  
-.toggle-slider:before {
-    /* The slider button */
-    position: absolute;
-    content: "";
-    height: 49px;
-    width: 22px;
-    left: 0px;
-    top: 0px;
-    bottom: 0px;
-    background-color: #404040;
-    -webkit-transition: .4s;
-    transition: .4s;
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-  
+.toggleButtonLabel input {
+  display: none;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #c4bebe;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.toggle-slider:before {
+  /* The slider button */
+  position: absolute;
+  content: "";
+  height: 49px;
+  width: 22px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: #404040;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
 input:checked + .toggle-slider {
-    background-color: #404040;
+  background-color: #404040;
 }
 
 input:checked + .toggle-slider::before {
-    background-color: #c4bebe;
-}
-  
-input:checked + .toggle-slider:before {
-    transform: translateX(78px); /* how much the slider shifts to left */
-    -webkit-transform: translateX(78px);
-    -ms-transform: translateX(78px);    
-}
-  
-.toggleButton-on{    
-    left: 60%;
-    color: white;
+  background-color: #c4bebe;
 }
 
-.toggleButton-off{
-    left: 60%;    
-    color: white;
+input:checked + .toggle-slider:before {
+  transform: translateX(78px); /* how much the slider shifts to left */
+  -webkit-transform: translateX(78px);
+  -ms-transform: translateX(78px);
 }
-  
-.toggleButton-on, .toggleButton-off{    
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 50%;    
-    font-size: 14px;
-    font-family: Verdana, sans-serif;
+
+.toggleButton-on {
+  left: 60%;
+  color: white;
 }
-  
-input:checked + .toggle-slider .toggleButton-on{
-    display: block;
+
+.toggleButton-off {
+  left: 60%;
+  color: white;
+}
+
+.toggleButton-on,
+.toggleButton-off {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  font-size: 14px;
+  font-family: Verdana, sans-serif;
+}
+
+input:checked + .toggle-slider .toggleButton-on {
+  display: block;
 }

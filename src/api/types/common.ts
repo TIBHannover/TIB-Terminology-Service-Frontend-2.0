@@ -1,8 +1,8 @@
 export type TermMultiSelectOption = {
-    text: string,
-    iri: string
-}
+  text: string;
+  iri: string;
+};
 
 export type Ols3ApiResponse = {
-    _embedded: any
-}
+  _embedded: any;
+};

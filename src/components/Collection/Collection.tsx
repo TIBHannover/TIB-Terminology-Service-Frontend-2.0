@@ -165,7 +165,9 @@ const Collections = () => {
             <div className="row" key={collectionId + "_ontoList"}>
               <div className="col-sm-12 collection-ontologies-text">
                 <b>Ontology Selection Criteria:</b>
-                {Toolkit.renderDangerousHtml(collectionJson["selection_criteria"])}
+                {Toolkit.renderDangerousHtml(
+                  collectionJson["selection_criteria"],
+                )}
               </div>
             </div>
           )}

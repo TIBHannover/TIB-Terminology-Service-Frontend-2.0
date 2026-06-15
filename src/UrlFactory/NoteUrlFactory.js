@@ -1,13 +1,10 @@
-import {createBrowserHistory} from 'history';
-import * as SiteUrlParamNames from './UrlParamNames';
-
-
-  
+import { createBrowserHistory } from "history";
+import * as SiteUrlParamNames from "./UrlParamNames";
 
 class NoteUrlFactory {
   constructor() {
     this.baseUrl = window.location.pathname;
-    let url = new URL(window.location); 
+    let url = new URL(window.location);
     this.history = createBrowserHistory();
     this.page = url.searchParams.get(SiteUrlParamNames.Page);
     this.size = url.searchParams.get(SiteUrlParamNames.Size);
@@ -17,78 +14,75 @@ class NoteUrlFactory {
     this.commentId = url.searchParams.get(SiteUrlParamNames.CommentId);
   }
 
-
-  setNoteId({noteId}){
-    let currentUrlParams = new URLSearchParams(window.location.search);  
+  setNoteId({ noteId }) {
+    let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.set(SiteUrlParamNames.NoteId, noteId);
-    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());           
+    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
 
-
-  update({page, size, originalNotes, noteType}){
+  update({ page, size, originalNotes, noteType }) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.set(SiteUrlParamNames.Page, page);
     currentUrlParams.set(SiteUrlParamNames.Size, size);
     currentUrlParams.set(SiteUrlParamNames.OriginalNotes, originalNotes);
-    currentUrlParams.set(SiteUrlParamNames.NoteType, noteType);    
-    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());     
+    currentUrlParams.set(SiteUrlParamNames.NoteType, noteType);
+    this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
 
-
-
-  getCurrentNoteLink({noteId, fullLink=false}){
-    let searchParams = new URLSearchParams(window.location.search);        
+  getCurrentNoteLink({ noteId, fullLink = false }) {
+    let searchParams = new URLSearchParams(window.location.search);
     searchParams.set(SiteUrlParamNames.NoteId, noteId);
     searchParams.delete(SiteUrlParamNames.Page);
     searchParams.delete(SiteUrlParamNames.Size);
     searchParams.delete(SiteUrlParamNames.NoteType);
     searchParams.delete(SiteUrlParamNames.CommentId);
-    if(fullLink){
-        return window.location.origin + window.location.pathname + "?" +  searchParams.toString();
+    if (fullLink) {
+      return (
+        window.location.origin +
+        window.location.pathname +
+        "?" +
+        searchParams.toString()
+      );
     }
-    return window.location.pathname + "?" +  searchParams.toString();
+    return window.location.pathname + "?" + searchParams.toString();
   }
 
-
-
-  getCommentLink({commentId}){
-    let searchParams = new URLSearchParams(window.location.search);        
+  getCommentLink({ commentId }) {
+    let searchParams = new URLSearchParams(window.location.search);
     searchParams.set(SiteUrlParamNames.CommentId, commentId);
-    return window.location.origin + window.location.pathname + "?" +  searchParams.toString();
+    return (
+      window.location.origin +
+      window.location.pathname +
+      "?" +
+      searchParams.toString()
+    );
   }
 
-
-
-  getNoteListLink({page, size}){
+  getNoteListLink({ page, size }) {
     let currentUrl = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;
     searchParams.set(SiteUrlParamNames.Page, page);
-    searchParams.set(SiteUrlParamNames.Size, size);   
-    if (currentUrl.includes(SiteUrlParamNames.NoteId)){
-        // we are on the note page                
-        searchParams.delete(SiteUrlParamNames.NoteId);                 
+    searchParams.set(SiteUrlParamNames.Size, size);
+    if (currentUrl.includes(SiteUrlParamNames.NoteId)) {
+      // we are on the note page
+      searchParams.delete(SiteUrlParamNames.NoteId);
     }
-    return locationObject.pathname + "?" +  searchParams.toString();
+    return locationObject.pathname + "?" + searchParams.toString();
   }
 
-
-  getCommentDeleteRedirectLink(){
-    let searchParams = new URLSearchParams(window.location.search);        
+  getCommentDeleteRedirectLink() {
+    let searchParams = new URLSearchParams(window.location.search);
     searchParams.delete(SiteUrlParamNames.CommentId);
-    return window.location.pathname + "?" +  searchParams.toString();
+    return window.location.pathname + "?" + searchParams.toString();
   }
 
-
-  getBAckToListLink(){
-    let searchParams = new URLSearchParams(window.location.search);   
-    searchParams.delete(SiteUrlParamNames.NoteId);     
-    searchParams.delete(SiteUrlParamNames.CommentId);           
-    return window.location.pathname + "?" +  searchParams.toString();
+  getBAckToListLink() {
+    let searchParams = new URLSearchParams(window.location.search);
+    searchParams.delete(SiteUrlParamNames.NoteId);
+    searchParams.delete(SiteUrlParamNames.CommentId);
+    return window.location.pathname + "?" + searchParams.toString();
   }
-
-
-
 }
 
 export default NoteUrlFactory;

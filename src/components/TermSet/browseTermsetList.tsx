@@ -1,13 +1,10 @@
-
 import "../layout/termset.css";
 import TermsetList from "./TermsetList";
 import { getAllTermsetList } from "../../api/term_set";
 import { useEffect, useState } from "react";
 import { TsTermset } from "../../concepts";
 
-
 const BrowseTermSetList = () => {
-
   const [termsets, setTermsets] = useState<TsTermset[]>([]);
 
   useEffect(() => {
@@ -34,7 +31,7 @@ const BrowseTermSetList = () => {
         from={"browse"}
       />
     </>
-  )
-}
+  );
+};
 
 export default BrowseTermSetList;

@@ -1,21 +1,21 @@
 import NoteCommentList from "../NoteCommentList";
-import {NoteCardHeader} from "../NoteCard";
-import {buildNoteAboutPart} from "../helpers";
+import { NoteCardHeader } from "../NoteCard";
+import { buildNoteAboutPart } from "../helpers";
 import ResolveReportActionsForAdmins from "../../../common/ResolveReportActions/ResolveReportAction";
 import Toolkit from "../../../../Libs/Toolkit";
 import type { NoteDetailRenderProps } from "../types";
 
-const ResolveReportActionsForAdminsComponent = ResolveReportActionsForAdmins as any;
+const ResolveReportActionsForAdminsComponent =
+  ResolveReportActionsForAdmins as any;
 
 export const NoteDetailRender = (props: NoteDetailRenderProps) => {
-  
   function create_note_card() {
     return [
       <div className="row">
         <div className="col-sm-12">
           <div className="card">
             <div className="card-header">
-              <NoteCardHeader note={props.note}/>
+              <NoteCardHeader note={props.note} />
             </div>
             <div className="card-body">
               <h4 className="card-title note-list-title">{props.note.title}</h4>
@@ -38,19 +38,17 @@ export const NoteDetailRender = (props: NoteDetailRenderProps) => {
             </div>
           </div>
         </div>
-      </div>
+      </div>,
     ];
   }
-  
-  
+
   return (
     <span>
-            {create_note_card()}
+      {create_note_card()}
       <NoteCommentList
         note={props.note}
         noteDetailReloader={props.reloadNoteDetail}
       />
-        </span>
+    </span>
   );
-  
-}
+};

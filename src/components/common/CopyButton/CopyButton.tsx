@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 type CopyLinkButtonProps = {
   tooltipText?: string;
@@ -13,7 +13,7 @@ type CopyLinkButtonMarkdownFormatProps = {
 
 const CopyLinkButton = (props: CopyLinkButtonProps) => {
   const [copied, setCopied] = useState(false);
-  
+
   return (
     <button
       type="button"
@@ -29,15 +29,17 @@ const CopyLinkButton = (props: CopyLinkButtonProps) => {
         }, 1000);
       }}
     >
-      <i className="fa fa-solid fa-copy"></i> {copied && <i className="fa fa-check" aria-hidden="true"></i>}
+      <i className="fa fa-solid fa-copy"></i>{" "}
+      {copied && <i className="fa fa-check" aria-hidden="true"></i>}
     </button>
   );
-}
+};
 
-
-export const CopyLinkButtonMarkdownFormat = (props: CopyLinkButtonMarkdownFormatProps) => {
+export const CopyLinkButtonMarkdownFormat = (
+  props: CopyLinkButtonMarkdownFormatProps,
+) => {
   const [copied, setCopied] = useState(false);
-  
+
   return (
     <button
       type="button"
@@ -45,10 +47,10 @@ export const CopyLinkButtonMarkdownFormat = (props: CopyLinkButtonMarkdownFormat
       className="btn btn-secondary btn-sm copy-link-btn ml-1"
       key={"copy-btn"}
       onClick={() => {
-        let copyValue = document.createElement('a');
+        let copyValue = document.createElement("a");
         copyValue.href = props.url ?? "";
         copyValue.textContent = props.label;
-        let holderDiv = document.createElement('div');
+        let holderDiv = document.createElement("div");
         holderDiv.style.position = "absolute";
         holderDiv.appendChild(copyValue);
         document.body.appendChild(holderDiv);
@@ -71,10 +73,10 @@ export const CopyLinkButtonMarkdownFormat = (props: CopyLinkButtonMarkdownFormat
       data-placement="left"
       title={props.tooltipText}
     >
-      copy label as link {copied && <i className="fa fa-check" aria-hidden="true"></i>}
+      copy label as link{" "}
+      {copied && <i className="fa fa-check" aria-hidden="true"></i>}
     </button>
   );
-}
-
+};
 
 export default CopyLinkButton;

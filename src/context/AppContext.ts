@@ -2,19 +2,17 @@ import { createContext } from "react";
 import { TsTermset } from "../concepts";
 import { CollectionDataResponse } from "../api/types/collectionTypes";
 
-
 type Blueprint = {
-  user: any,
-  isUserSystemAdmin: boolean,
-  reportsListForAdmin: Array<any>,
-  userSettings: any,
-  setUserSettings: (userSettings: any) => void,
-  userTermsets: Array<any>,
-  setUserTermsets: (termsets: Array<any>) => void,
-  includeImportedTerms: boolean,
-  setIncludeImportedTerms: (includeImportedTerms: boolean) => void
-}
-
+  user: any;
+  isUserSystemAdmin: boolean;
+  reportsListForAdmin: Array<any>;
+  userSettings: any;
+  setUserSettings: (userSettings: any) => void;
+  userTermsets: Array<any>;
+  setUserTermsets: (termsets: Array<any>) => void;
+  includeImportedTerms: boolean;
+  setIncludeImportedTerms: (includeImportedTerms: boolean) => void;
+};
 
 const blueprint: Blueprint = {
   user: null,
@@ -47,8 +45,7 @@ const blueprint: Blueprint = {
     /* set user term sets*/
   },
   includeImportedTerms: true,
-  setIncludeImportedTerms: () => { }
+  setIncludeImportedTerms: () => {},
 };
 
 export const AppContext = createContext(blueprint);
-

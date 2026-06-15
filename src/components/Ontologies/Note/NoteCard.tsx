@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { buildNoteAboutPart, PinnModal } from "./helpers";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import Auth from "../../../Libs/AuthLib";
 import { DeleteModal } from "../../common/DeleteModal/DeleteModal";
 import { ReportModal } from "../../common/ReportModal/ReportModal";
@@ -12,20 +12,25 @@ import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
 import { getTsPluginHeaders } from "../../../api/header";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 import { AppContext } from "../../../context/AppContext";
-import type { Note, NoteCardHeaderProps, NoteCardProps, NoteContextValue } from "./types";
-
+import type {
+  Note,
+  NoteCardHeaderProps,
+  NoteCardProps,
+  NoteContextValue,
+} from "./types";
 
 const VISIBILITY_HELP = {
-  "me": "Only you can see this Note.",
-  "internal": "Only the registered users in TS can see this Note.",
-  "public": "Everyone on the Internet can see this Note."
-}
+  me: "Only you can see this Note.",
+  internal: "Only the registered users in TS can see this Note.",
+  public: "Everyone on the Internet can see this Note.",
+};
 
-const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete/';
-const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create/';
-
+const deleteEndpoint =
+  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/note/delete/";
+const reportEndpoint =
+  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/report/create/";
 
 export const NoteCard = (props: NoteCardProps) => {
   /*
@@ -43,15 +48,14 @@ export const NoteCard = (props: NoteCardProps) => {
       <div className="col-sm-12">
         <div className="card note-list-card stour-onto-note-list-card">
           <div className="card-header">
-            <NoteCardHeader
-              note={props.note}
-            />
+            <NoteCardHeader note={props.note} />
           </div>
           <div className="card-body">
             <div className="row">
               <div className="col-sm-6">
                 <h6 className="card-title stour-onto-note-list-card-title">
-                  <Link to={noteUrl}
+                  <Link
+                    to={noteUrl}
                     className="note-list-title custom-truncate"
                     data-value={props.note.id}
                     onClick={noteContext.noteSelectHandler}
@@ -62,11 +66,14 @@ export const NoteCard = (props: NoteCardProps) => {
               </div>
               <div className="col-sm-5 stour-onto-note-list-card-about">
                 <small>
-                  About ({props.note.semantic_component_type}): {buildNoteAboutPart(props.note)}
+                  About ({props.note.semantic_component_type}):{" "}
+                  {buildNoteAboutPart(props.note)}
                 </small>
               </div>
               <div className="col-sm-1 text-right">
-                <i className="fa fa-comment" aria-hidden="true"><small>{props.note.comments_count}</small></i>
+                <i className="fa fa-comment" aria-hidden="true">
+                  <small>{props.note.comments_count}</small>
+                </i>
               </div>
             </div>
           </div>
@@ -74,8 +81,7 @@ export const NoteCard = (props: NoteCardProps) => {
       </div>
     </div>
   );
-}
-
+};
 
 export const NoteCardHeader = (props: NoteCardHeaderProps) => {
   /*
@@ -91,23 +97,24 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
   const [linkCopied, setLinkCopied] = useState(false);
 
   useEffect(() => {
-    setNote(props.note)
-  }
-    , [props.note]);
-
+    setNote(props.note);
+  }, [props.note]);
 
   let deleteFormData: Record<string, string> = {};
   deleteFormData["objectId"] = note.id;
-  deleteFormData["objectType"] = 'note';
+  deleteFormData["objectType"] = "note";
   deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
 
   let reportFormData: Record<string, string> = {};
   reportFormData["objectId"] = note.id;
-  reportFormData["objectType"] = 'note';
+  reportFormData["objectType"] = "note";
   reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
   let can_edit = appContext?.user?.id === (note.created_by as any)?.id;
 
-  let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({ page: 1, size: 10 });
+  let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({
+    page: 1,
+    size: 10,
+  });
 
   return (
     <div className="row" key={"note-" + note.id}>
@@ -116,14 +123,16 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
           {"Opened on " + Toolkit.formatDateTime(note.created_at) + " by "}
           <b>{Auth.extractUserName(note.created_by as any)}</b>
         </small>
-        {note.pinned && !note.imported &&
+        {note.pinned && !note.imported && (
           // Pinned Imported notes from child should not be pinned in parent
           <div className="pinned-message-icon">Pinned</div>
-        }
-        {note.imported &&
+        )}
+        {note.imported && (
           // if the current ontology is not equal to the note ontology, then the note is imported.
-          <div className="note-imported-message-icon">Imported from {note.ontology_id}</div>
-        }
+          <div className="note-imported-message-icon">
+            Imported from {note.ontology_id}
+          </div>
+        )}
         {linkCopied && <CopiedSuccessAlert message="link copied" />}
       </div>
       <div className="col-sm-3">
@@ -132,13 +141,24 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
             <Dropdown>
               <Dropdown.Toggle
                 className="btn btn-secondary note-dropdown-toggle btn-sm note-dropdown-btn borderless-btn"
-                type="button" id="dropdownMenu2">
+                type="button"
+                id="dropdownMenu2"
+              >
                 <i className="fa fa-ellipsis-h"></i>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item className="note-dropdown-item">
-                  <div title={VISIBILITY_HELP[note.visibility as keyof typeof VISIBILITY_HELP]}>
-                    <small><i className="fa fa-solid fa-eye ms-0 me-1 "></i>{note.visibility}</small>
+                  <div
+                    title={
+                      VISIBILITY_HELP[
+                        note.visibility as keyof typeof VISIBILITY_HELP
+                      ]
+                    }
+                  >
+                    <small>
+                      <i className="fa fa-solid fa-eye ms-0 me-1 "></i>
+                      {note.visibility}
+                    </small>
                   </div>
                 </Dropdown.Item>
                 <div className="dropdown-divider"></div>
@@ -147,7 +167,10 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
                     type="button"
                     className="btn btn-sm note-action-menu-btn borderless-btn ms-0"
                     onClick={() => {
-                      let noteLink = noteUrlFactory.getCurrentNoteLink({ noteId: note.id, fullLink: true });
+                      let noteLink = noteUrlFactory.getCurrentNoteLink({
+                        noteId: note.id,
+                        fullLink: true,
+                      });
                       navigator.clipboard.writeText(noteLink);
                       setLinkCopied(true);
                       setTimeout(() => {
@@ -167,28 +190,31 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
                     key={"reportNote" + note.id}
                   />
                 </Dropdown.Item>
-                {can_edit && !note.imported &&
+                {can_edit && !note.imported && (
                   <>
                     <div className="dropdown-divider"></div>
                     <Dropdown.Item className="note-dropdown-item">
                       <PinnModal
                         note={note}
                         modalId={note.id}
-                        callHeaders={getTsPluginHeaders({ withAccessToken: true, isJson: true })}
+                        callHeaders={getTsPluginHeaders({
+                          withAccessToken: true,
+                          isJson: true,
+                        })}
                         key={"pinnModal" + note.id}
                       />
                     </Dropdown.Item>
                     <Dropdown.Item className="note-dropdown-item">
-                      <NoteEdit
-                        note={note}
-                        key={"editNode" + note.id}
-                      />
+                      <NoteEdit note={note} key={"editNode" + note.id} />
                     </Dropdown.Item>
                     <Dropdown.Item className="note-dropdown-item">
                       <DeleteModal
                         modalId={note.id}
                         formData={JSON.stringify(deleteFormData)}
-                        callHeaders={getTsPluginHeaders({ withAccessToken: true, isJson: true })}
+                        callHeaders={getTsPluginHeaders({
+                          withAccessToken: true,
+                          isJson: true,
+                        })}
                         deleteEndpoint={deleteEndpoint}
                         afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
                         key={"deleteNode" + note.id}
@@ -196,16 +222,19 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
                       />
                     </Dropdown.Item>
                   </>
-                }
+                )}
               </Dropdown.Menu>
             </Dropdown>
           </div>
         </div>
       </div>
-      <Login isModal={true} customModalId="loginModalReport" withoutButton={true} />
+      <Login
+        isModal={true}
+        customModalId="loginModalReport"
+        withoutButton={true}
+      />
     </div>
   );
-}
-
+};
 
 export default NoteCard;

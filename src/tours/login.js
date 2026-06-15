@@ -1,11 +1,9 @@
-
-const tourSelectorPrefix = '.stour-';
-
+const tourSelectorPrefix = ".stour-";
 
 export function loginInHeaderTourSteps(isUserLogin) {
   const steps = [
     {
-      selector: tourSelectorPrefix + 'login-in-header',
+      selector: tourSelectorPrefix + "login-in-header",
       content: () => {
         if (isUserLogin) {
           return (
@@ -20,16 +18,18 @@ export function loginInHeaderTourSteps(isUserLogin) {
         return (
           <>
             <span>
-              TIB Terminology Service can be used freely and without authentication.
-              There are features like personal collections, adding notes, ontology suggestions, or term requests which increase your experience even more but require login.
+              TIB Terminology Service can be used freely and without
+              authentication. There are features like personal collections,
+              adding notes, ontology suggestions, or term requests which
+              increase your experience even more but require login.
             </span>
             <br />
             <span>You can authenticate via:</span>
             <li>GitHub</li>
             <li>ORCID</li>
           </>
-        )
-      }
+        );
+      },
     },
   ];
   return steps;

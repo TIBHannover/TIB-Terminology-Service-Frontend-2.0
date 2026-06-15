@@ -87,9 +87,7 @@ const OntologyAdoptRequest = (props) => {
   const [usageDescription, setUsageDescription] = useState("");
   const [usageChannel, setUsageChannel] = useState("");
 
-
   function submit() {
-
     let username = FormLib.getFieldByIdIfValid("adopt-username");
     let email = FormLib.getFieldByIdIfValid("adopt-email");
 

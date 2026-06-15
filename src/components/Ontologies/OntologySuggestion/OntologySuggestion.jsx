@@ -8,17 +8,16 @@ import {
   submitOntologySuggestion,
   runShapeTest,
   checkSuggestionExist,
-  checkOntologyPurlIsValidUrl
+  checkOntologyPurlIsValidUrl,
 } from "../../../api/ontology";
-import draftToMarkdown from 'draftjs-to-markdown';
-import { convertToRaw } from 'draft-js';
+import draftToMarkdown from "draftjs-to-markdown";
+import { convertToRaw } from "draft-js";
 import { getCollectionsAndThierOntologies } from "../../../api/collection";
 import { useQuery } from "@tanstack/react-query";
-import Multiselect from 'multiselect-react-dropdown';
+import Multiselect from "multiselect-react-dropdown";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
-import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
+import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
 import { Link } from "react-router-dom";
-
 
 const ONTOLOGY_SUGGESTION_INTRO_STEP = 0;
 const ONTOLOGY_MAIN_METADATA_SETP = 1;
@@ -26,10 +25,11 @@ const ONTOLOGY_EXTRA_METADATA_STEP = 2;
 const USER_FORM_STEP = 3;
 const PROGRESS_BAR_INCREMENT_PERCENTAGE = 25;
 
-
 const OntologySuggestion = () => {
   const urlManager = new CommonUrlFactory();
-  const inputCollectionId = urlManager.getParam({ name: SiteUrlParamNames.CollectionId });
+  const inputCollectionId = urlManager.getParam({
+    name: SiteUrlParamNames.CollectionId,
+  });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
@@ -37,14 +37,21 @@ const OntologySuggestion = () => {
   const [runningTest, setRunningTest] = useState(false);
   const [testFailed, setTestFailed] = useState(false);
   const [editorState, setEditorState] = useState(null);
-  const [progressStep, setProgressStep] = useState(ONTOLOGY_SUGGESTION_INTRO_STEP);
+  const [progressStep, setProgressStep] = useState(
+    ONTOLOGY_SUGGESTION_INTRO_STEP,
+  );
   const [progressBarValue, setProgressBarValue] = useState(1);
-  const [shapeValidationError, setShapeValidationError] = useState({ "error": [], "info": [] });
+  const [shapeValidationError, setShapeValidationError] = useState({
+    error: [],
+    info: [],
+  });
   const [shapeTestIsReady, setShapeTestIsReady] = useState(false);
   const [ontologyExist, setOntologyExist] = useState(false);
   const [existingOntologyId, setExistingOntologyId] = useState("");
   const [existingCollections, setExistingCollections] = useState([]);
-  const [selectedCollections, setSelectedCollections] = useState(inputCollectionId ? [inputCollectionId] : []);
+  const [selectedCollections, setSelectedCollections] = useState(
+    inputCollectionId ? [inputCollectionId] : [],
+  );
   const [collectionSuggestMode, setCollectionSuggestMode] = useState(false);
   const [missingCollectionIds, setMissingCollectionIds] = useState([]);
   const [suggestionExist, setSuggestionExist] = useState(false);
@@ -52,19 +59,19 @@ const OntologySuggestion = () => {
   const [queryEnabled, setQueryEnabled] = useState(true);
   const [nextBtnLoading, setNextBtnLoading] = useState(false);
   const [form, setForm] = useState({
-    "username": "",
-    "email": "",
-    "reason": "",
-    "name": "",
-    "purl": "",
-    "collection_ids": inputCollectionId ? inputCollectionId : "",
-    "collection_suggestion": false
+    username: "",
+    email: "",
+    reason: "",
+    name: "",
+    purl: "",
+    collection_ids: inputCollectionId ? inputCollectionId : "",
+    collection_suggestion: false,
   });
 
   const collectionWithOntologyListQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirOntologies'],
+    queryKey: ["allCollectionsWithTheirOntologies"],
     queryFn: getCollectionsAndThierOntologies,
-    enabled: queryEnabled
+    enabled: queryEnabled,
   });
 
   let collectionIds = [];
@@ -75,12 +82,10 @@ const OntologySuggestion = () => {
   }
   const collections = collectionIds;
 
-
   function onTextEditorChange(newEditorState) {
-    document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+    document.getElementsByClassName("rdw-editor-main")[0].style.border = "";
     setEditorState(newEditorState);
-  };
-
+  }
 
   async function shapeTest(purl) {
     if (!shapeTestIsReady) {
@@ -92,9 +97,14 @@ const OntologySuggestion = () => {
         setShapeTestIsReady(true);
         return;
       }
-      if (validationResult.error.length === 0 && validationResult.info.length === 0) {
-        setShapeValidationError({ "error": [], "info": [] });
-        setProgressBarValue(progressBarValue + 2 * PROGRESS_BAR_INCREMENT_PERCENTAGE);
+      if (
+        validationResult.error.length === 0 &&
+        validationResult.info.length === 0
+      ) {
+        setShapeValidationError({ error: [], info: [] });
+        setProgressBarValue(
+          progressBarValue + 2 * PROGRESS_BAR_INCREMENT_PERCENTAGE,
+        );
         setProgressStep(USER_FORM_STEP);
         setRunningTest(false);
         setShapeTestIsReady(true);
@@ -106,7 +116,6 @@ const OntologySuggestion = () => {
     }
   }
 
-
   async function runOntologyMainMetaDataValidation(ontoPurl) {
     let ontoExist = false;
     let existingOnto = "";
@@ -117,14 +126,14 @@ const OntologySuggestion = () => {
       selectedCollectionIds = selectedCollections;
     } else {
       // on projects frontend. Collection is preselected for the app.
-      selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME)
+      selectedCollectionIds.push(process.env.REACT_APP_PROJECT_NAME);
     }
     for (let col in collectionWithOntologyListQuery.data) {
       // find the collection ids that contains the provided ontology purl
       let ontologies = collectionWithOntologyListQuery.data[col];
       for (let onto of ontologies) {
-        if (onto['ontologyPurl'] === ontoPurl) {
-          existingOnto = onto['ontologyId'];
+        if (onto["ontologyPurl"] === ontoPurl) {
+          existingOnto = onto["ontologyId"];
           existingCollectionsList.push(col);
           ontoExist = true;
         }
@@ -164,12 +173,11 @@ const OntologySuggestion = () => {
     let suggestionAlreadyExist = await checkSuggestionExist(ontoPurl);
     if (suggestionAlreadyExist) {
       setSuggestionExist(true);
-      return
+      return;
     }
 
     await shapeTest(ontoPurl);
     return true;
-
   }
 
   async function ontologyPurlIsValid(ontoPurl) {
@@ -181,7 +189,7 @@ const OntologySuggestion = () => {
 
     let purlIsValidRes = await checkOntologyPurlIsValidUrl(ontoPurl);
     if (!purlIsValidRes["valid"]) {
-      document.getElementById('onto-suggest-purl').style.borderColor = 'red';
+      document.getElementById("onto-suggest-purl").style.borderColor = "red";
       setPurlIsNotValidMessage(purlIsValidRes["reason"]);
       return false;
     }
@@ -189,20 +197,19 @@ const OntologySuggestion = () => {
     return true;
   }
 
-
   async function onNextClick() {
     setNextBtnLoading(true);
     if (progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP) {
       setProgressBarValue(progressBarValue + PROGRESS_BAR_INCREMENT_PERCENTAGE);
       setProgressStep(ONTOLOGY_MAIN_METADATA_SETP);
     } else if (progressStep === ONTOLOGY_MAIN_METADATA_SETP) {
-      let name = FormLib.getFieldByIdIfValid('onto-suggest-name');
-      let purl = FormLib.getFieldByIdIfValid('onto-suggest-purl');
+      let name = FormLib.getFieldByIdIfValid("onto-suggest-name");
+      let purl = FormLib.getFieldByIdIfValid("onto-suggest-purl");
       if (!name || !purl) {
         setNextBtnLoading(false);
         return;
       }
-      if (!await ontologyPurlIsValid(purl)) {
+      if (!(await ontologyPurlIsValid(purl))) {
         setNextBtnLoading(false);
         return;
       }
@@ -216,11 +223,13 @@ const OntologySuggestion = () => {
     setNextBtnLoading(false);
   }
 
-
   function submit() {
-    let username = FormLib.getFieldByIdIfValid('onto-suggest-username');
-    let email = FormLib.getFieldByIdIfValid('onto-suggest-email');
-    let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
+    let username = FormLib.getFieldByIdIfValid("onto-suggest-username");
+    let email = FormLib.getFieldByIdIfValid("onto-suggest-email");
+    let reason = FormLib.getTextEditorValueIfValid(
+      editorState,
+      "contact-form-text-editor",
+    );
     if (!username || !email || !reason) {
       return;
     }
@@ -238,7 +247,6 @@ const OntologySuggestion = () => {
     });
   }
 
-
   function noErrorsAndLoading() {
     return !formSubmitted && !submitWait && !runningTest && !suggestionExist;
   }
@@ -248,7 +256,6 @@ const OntologySuggestion = () => {
       setQueryEnabled(false);
     }
   }, [collectionWithOntologyListQuery.data]);
-
 
   const contextData = {
     editorState: editorState,
@@ -266,12 +273,17 @@ const OntologySuggestion = () => {
     purlIsNotValidMessage: purlIsNotValidMessage,
     setPurlIsNotValidMessage: setPurlIsNotValidMessage,
     testFailed: testFailed,
-    onTextEditorChange: onTextEditorChange
-  }
+    onTextEditorChange: onTextEditorChange,
+  };
 
-  const submitedSeccessfully = formSubmitted && formSubmitSuccess && !submitWait;
+  const submitedSeccessfully =
+    formSubmitted && formSubmitSuccess && !submitWait;
   const submitedFailed = formSubmitted && !formSubmitSuccess && !submitWait;
-  const showNewSuggestionBtn = (submitedSeccessfully || submitedFailed || (ontologyExist && !collectionSuggestMode) || suggestionExist);
+  const showNewSuggestionBtn =
+    submitedSeccessfully ||
+    submitedFailed ||
+    (ontologyExist && !collectionSuggestMode) ||
+    suggestionExist;
 
   if (process.env.REACT_APP_ONTOLOGY_SUGGESTION !== "true") {
     return "";
@@ -281,21 +293,32 @@ const OntologySuggestion = () => {
     <OntologySuggestionContext.Provider value={contextData}>
       <div className="row">
         <div className="col-sm-12 user-info-panel">
-          <h4><b>Suggest your Ontology {inputCollectionId ? `for ${inputCollectionId}` : ""}</b></h4>
+          <h4>
+            <b>
+              Suggest your Ontology{" "}
+              {inputCollectionId ? `for ${inputCollectionId}` : ""}
+            </b>
+          </h4>
           <div className="progress">
-            <div className="progress-bar" role="progressbar" style={{ width: progressBarValue + "%" }}
-              aria-valuenow={progressBarValue} aria-valuemin="0" aria-valuemax="100"></div>
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{ width: progressBarValue + "%" }}
+              aria-valuenow={progressBarValue}
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
           </div>
           <br></br>
-          {submitedSeccessfully &&
+          {submitedSeccessfully && (
             <>
               <AlertBox
                 type="success"
                 message="Thank you! Your query has been submitted successfully. We will inform you about our decision via email."
               />
             </>
-          }
-          {submitedFailed &&
+          )}
+          {submitedFailed && (
             <>
               <AlertBox
                 type="danger"
@@ -305,15 +328,18 @@ const OntologySuggestion = () => {
                     <br />
                     <br />
                     You can report this incident to us via:
-                    <Link className="btn btn-secondary ms-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
+                    <Link
+                      className="btn btn-secondary ms-2"
+                      to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}
+                    >
                       Contact us
                     </Link>
                   </div>
                 }
               />
             </>
-          }
-          {submitWait &&
+          )}
+          {submitWait && (
             <div className="row">
               <div className="col-12 text-center">
                 <div className="spinner-border text-dark" role="status">
@@ -322,8 +348,8 @@ const OntologySuggestion = () => {
                 <div className="">Please wait ...</div>
               </div>
             </div>
-          }
-          {runningTest &&
+          )}
+          {runningTest && (
             <div className="row">
               <div className="col-12 text-center">
                 <div className="spinner-border text-dark" role="status">
@@ -332,26 +358,27 @@ const OntologySuggestion = () => {
                 <div className="">Testing the ontology metadata ...</div>
               </div>
             </div>
-          }
-          {testFailed && progressStep === ONTOLOGY_EXTRA_METADATA_STEP &&
+          )}
+          {testFailed && progressStep === ONTOLOGY_EXTRA_METADATA_STEP && (
             <>
               <AlertBox
                 type="danger"
                 message={
                   <div className="text-center">
-                    The ontology metadata test cannot be performed on this ontology.
+                    The ontology metadata test cannot be performed on this
+                    ontology.
                     <br />
                     <br />
                     <p className="text-center">
-                      <b>Attention</b> You can skip this step by clicking <b>Next</b> and submit the ontology without a
-                      test report.
+                      <b>Attention</b> You can skip this step by clicking{" "}
+                      <b>Next</b> and submit the ontology without a test report.
                     </p>
                   </div>
                 }
               />
             </>
-          }
-          {suggestionExist &&
+          )}
+          {suggestionExist && (
             <>
               <AlertBox
                 type="info"
@@ -361,52 +388,74 @@ const OntologySuggestion = () => {
                         "
               />
             </>
-          }
-          {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading() &&
-            <Intro />
-          }
-          {progressStep === ONTOLOGY_MAIN_METADATA_SETP && noErrorsAndLoading() &&
-            <OntologyMainMetaDataForm />
-          }
-          {progressStep === ONTOLOGY_EXTRA_METADATA_STEP && noErrorsAndLoading() &&
-            <OntologyExtraMetadataForm />
-          }
-          {progressStep === USER_FORM_STEP && noErrorsAndLoading() &&
+          )}
+          {progressStep === ONTOLOGY_SUGGESTION_INTRO_STEP &&
+            noErrorsAndLoading() && <Intro />}
+          {progressStep === ONTOLOGY_MAIN_METADATA_SETP &&
+            noErrorsAndLoading() && <OntologyMainMetaDataForm />}
+          {progressStep === ONTOLOGY_EXTRA_METADATA_STEP &&
+            noErrorsAndLoading() && <OntologyExtraMetadataForm />}
+          {progressStep === USER_FORM_STEP && noErrorsAndLoading() && (
             <UserForm />
-          }
+          )}
           <br></br>
-          {(progressStep !== ONTOLOGY_SUGGESTION_INTRO_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
-            <button type="button" className="btn btn-secondary mr-3" onClick={() => {
-              let nextStep = progressStep - 1;
-              setProgressBarValue(progressBarValue - PROGRESS_BAR_INCREMENT_PERCENTAGE);
-              setProgressStep(nextStep)
-            }}
-            >
-              Previous
-            </button>
-          }
-          {showNewSuggestionBtn &&
-            <a className="btn btn-secondary" href={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"}>New
-              suggestion</a>
-          }
-          {progressStep === USER_FORM_STEP && noErrorsAndLoading() && !(ontologyExist && !collectionSuggestMode) &&
-            <button type="button" className="btn btn-secondary ms-2" onClick={submit}>Submit</button>
-          }
-          {(progressStep !== USER_FORM_STEP && noErrorsAndLoading()) && !(ontologyExist && !collectionSuggestMode) &&
-            <>
-              <button type="button" className="btn btn-secondary ms-4" onClick={onNextClick}
+          {progressStep !== ONTOLOGY_SUGGESTION_INTRO_STEP &&
+            noErrorsAndLoading() &&
+            !(ontologyExist && !collectionSuggestMode) && (
+              <button
+                type="button"
+                className="btn btn-secondary mr-3"
+                onClick={() => {
+                  let nextStep = progressStep - 1;
+                  setProgressBarValue(
+                    progressBarValue - PROGRESS_BAR_INCREMENT_PERCENTAGE,
+                  );
+                  setProgressStep(nextStep);
+                }}
               >
-                Next
-                {nextBtnLoading && <div className="isLoading-btn"></div>}
+                Previous
               </button>
-            </>
-          }
+            )}
+          {showNewSuggestionBtn && (
+            <a
+              className="btn btn-secondary"
+              href={
+                process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion"
+              }
+            >
+              New suggestion
+            </a>
+          )}
+          {progressStep === USER_FORM_STEP &&
+            noErrorsAndLoading() &&
+            !(ontologyExist && !collectionSuggestMode) && (
+              <button
+                type="button"
+                className="btn btn-secondary ms-2"
+                onClick={submit}
+              >
+                Submit
+              </button>
+            )}
+          {progressStep !== USER_FORM_STEP &&
+            noErrorsAndLoading() &&
+            !(ontologyExist && !collectionSuggestMode) && (
+              <>
+                <button
+                  type="button"
+                  className="btn btn-secondary ms-4"
+                  onClick={onNextClick}
+                >
+                  Next
+                  {nextBtnLoading && <div className="isLoading-btn"></div>}
+                </button>
+              </>
+            )}
         </div>
       </div>
     </OntologySuggestionContext.Provider>
   );
-}
-
+};
 
 const OntologyExtraMetadataForm = () => {
   const [infoIsExpanded, setInfoIsExpanded] = useState(false);
@@ -415,27 +464,30 @@ const OntologyExtraMetadataForm = () => {
   function renderErrosWithTheirInputFields() {
     let result = [];
     for (let error of componentContext.validationResult.error) {
-      let errorContent = Toolkit.transformLinksInStringToAnchor(error['text']);
+      let errorContent = Toolkit.transformLinksInStringToAnchor(error["text"]);
       result.push(
         <>
-          {Toolkit.renderDangerousHtml(errorContent, { className: "p-2 alert alert-danger" })}
-          <label htmlFor={"missing-metadata-" + error['about']}>{error['about']}</label>
+          {Toolkit.renderDangerousHtml(errorContent, {
+            className: "p-2 alert alert-danger",
+          })}
+          <label htmlFor={"missing-metadata-" + error["about"]}>
+            {error["about"]}
+          </label>
           <input
             type="text"
             onChange={(e) => {
-              e.target.style.borderColor = '';
+              e.target.style.borderColor = "";
               let form = componentContext.form;
-              form[error['about']] = e.target.value;
+              form[error["about"]] = e.target.value;
               componentContext.setForm(form);
             }}
             className="form-control"
-            id={"missing-metadata-" + error['about']}
-            defaultValue={componentContext.form[error['about']]}
-          >
-          </input>
+            id={"missing-metadata-" + error["about"]}
+            defaultValue={componentContext.form[error["about"]]}
+          ></input>
           <br></br>
           <br></br>
-        </>
+        </>,
       );
     }
 
@@ -444,22 +496,25 @@ const OntologyExtraMetadataForm = () => {
         <AlertBox
           type="info"
           message="No issue found with this ontology's shape."
-        />
+        />,
       );
     }
     return result;
   }
 
-
   function renderInfo() {
     return componentContext.validationResult.info.map((i) => {
       let infoContent = Toolkit.transformLinksInStringToAnchor(i);
-      return (<>
-        {Toolkit.renderDangerousHtml(infoContent, { className: "p-2 alert alert-info" })}
-        <br></br></>)
+      return (
+        <>
+          {Toolkit.renderDangerousHtml(infoContent, {
+            className: "p-2 alert alert-info",
+          })}
+          <br></br>
+        </>
+      );
     });
   }
-
 
   if (componentContext.ontologyExist) {
     return (
@@ -470,7 +525,13 @@ const OntologyExtraMetadataForm = () => {
         />
         Check: &nbsp;
         <b>
-          <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + componentContext.existingOntologyId}>
+          <Link
+            to={
+              process.env.REACT_APP_PROJECT_SUB_PATH +
+              "/ontologies/" +
+              componentContext.existingOntologyId
+            }
+          >
             {componentContext.existingOntologyId}
           </Link>
         </b>
@@ -480,26 +541,36 @@ const OntologyExtraMetadataForm = () => {
           {componentContext.existingCollections.map((colId) => {
             return (
               <li>
-                <Link href={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies?collection=' + colId}>
+                <Link
+                  href={
+                    process.env.REACT_APP_PROJECT_SUB_PATH +
+                    "/ontologies?collection=" +
+                    colId
+                  }
+                >
                   {colId}
                 </Link>
-              </li>)
+              </li>
+            );
           })}
         </ul>
         <br />
-        {componentContext.missingCollectionIds.length !== 0 &&
+        {componentContext.missingCollectionIds.length !== 0 && (
           <>
-            <h5><b>Missing from your selected collection(s)</b></h5>
+            <h5>
+              <b>Missing from your selected collection(s)</b>
+            </h5>
             <ul>
               {componentContext.missingCollectionIds.map((colId) => {
-                return (<li>{colId}</li>)
+                return <li>{colId}</li>;
               })}
             </ul>
             Would you like to add this ontology to these collection(s)? &nbsp;
             <b>If yes, click on the Next button</b>
           </>
-        }
-        <br /><br />
+        )}
+        <br />
+        <br />
       </>
     );
   }
@@ -507,35 +578,53 @@ const OntologyExtraMetadataForm = () => {
   if (!componentContext.testFailed) {
     return (
       <>
-        <h5><b>Missing metadata</b></h5>
+        <h5>
+          <b>Missing metadata</b>
+        </h5>
         <p>
-          The following metadata are missing from the ontology. Please consider adding them.
+          The following metadata are missing from the ontology. Please consider
+          adding them.
         </p>
         <p>
-          <b>Attention</b> You can skip this step and submit the ontology without adding the missing metadata.
-          However, <b>the chance of your ontology getting indexed in TIB TS will be lower.</b>
+          <b>Attention</b> You can skip this step and submit the ontology
+          without adding the missing metadata. However,{" "}
+          <b>
+            the chance of your ontology getting indexed in TIB TS will be lower.
+          </b>
         </p>
         <br></br>
         {renderErrosWithTheirInputFields()}
         <br></br>
-        <button type="button" className="btn btn-sm btn-secondary mb-2"
-          onClick={() => setInfoIsExpanded(!infoIsExpanded)}>
-          {!infoIsExpanded && <><i className="fa fa-angle-double-down fa-borderless fs-6"></i>More</>}
-          {infoIsExpanded && <><i className="fa fa-angle-double-up fa-borderless fs-6"></i>Less</>}
+        <button
+          type="button"
+          className="btn btn-sm btn-secondary mb-2"
+          onClick={() => setInfoIsExpanded(!infoIsExpanded)}
+        >
+          {!infoIsExpanded && (
+            <>
+              <i className="fa fa-angle-double-down fa-borderless fs-6"></i>More
+            </>
+          )}
+          {infoIsExpanded && (
+            <>
+              <i className="fa fa-angle-double-up fa-borderless fs-6"></i>Less
+            </>
+          )}
         </button>
-        {infoIsExpanded &&
+        {infoIsExpanded && (
           <>
-            <h5><b>Warnings (no action needed)</b></h5>
+            <h5>
+              <b>Warnings (no action needed)</b>
+            </h5>
             {renderInfo()}
           </>
-        }
+        )}
         <hr></hr>
       </>
     );
   }
   return "";
-}
-
+};
 
 const Intro = () => {
   return (
@@ -550,18 +639,22 @@ const Intro = () => {
       <p>
         <b>Attention</b>
         <br></br>
-        The ontology you are suggesting will be validated against the following SHACL shape. This shape tests
-        whether the ontology contains a rich set of metadata or not. <br></br>
-        <a href="https://www.purl.org/ontologymetadata/shape/20240502" target="_blank" className="ms-1"
-          rel="noopener noreferrer">
+        The ontology you are suggesting will be validated against the following
+        SHACL shape. This shape tests whether the ontology contains a rich set
+        of metadata or not. <br></br>
+        <a
+          href="https://www.purl.org/ontologymetadata/shape/20240502"
+          target="_blank"
+          className="ms-1"
+          rel="noopener noreferrer"
+        >
           https://www.purl.org/ontologymetadata/shape/20240502
         </a>
       </p>
       <p>Click next to start</p>
     </>
   );
-}
-
+};
 
 const UserForm = () => {
   const componentContext = useContext(OntologySuggestionContext);
@@ -569,11 +662,13 @@ const UserForm = () => {
     <>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" htmlFor="onto-suggest-username">Your name</label>
+          <label className="required_input" htmlFor="onto-suggest-username">
+            Your name
+          </label>
           <input
             type="text"
             onChange={(e) => {
-              e.target.style.borderColor = '';
+              e.target.style.borderColor = "";
               let form = componentContext.form;
               form.username = e.target.value;
               componentContext.setForm(form);
@@ -582,19 +677,24 @@ const UserForm = () => {
             id="onto-suggest-username"
             placeholder="Enter your fullname. E.g., John Doe"
             defaultValue={componentContext.form.username}
-          >
-          </input>
+          ></input>
         </div>
       </div>
       <br></br>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" htmlFor="onto-suggest-email">Email</label>
-          <small> (we use this email to inform you about our decision regarding indexing your ontology.)</small>
+          <label className="required_input" htmlFor="onto-suggest-email">
+            Email
+          </label>
+          <small>
+            {" "}
+            (we use this email to inform you about our decision regarding
+            indexing your ontology.)
+          </small>
           <input
             type="text"
             onChange={(e) => {
-              e.target.style.borderColor = '';
+              e.target.style.borderColor = "";
               let form = componentContext.form;
               form.email = e.target.value;
               componentContext.setForm(form);
@@ -603,8 +703,7 @@ const UserForm = () => {
             id="onto-suggest-email"
             placeholder="Enter your email"
             defaultValue={componentContext.form.email}
-          >
-          </input>
+          ></input>
         </div>
       </div>
       <br></br>
@@ -617,15 +716,14 @@ const UserForm = () => {
             wrapperClassName=""
             editorClassName=""
             placeholder="Please briefly describe the ontology and its purpose and why it should get indexed in TIB TS."
-            textSizeOptions={['Normal']}
+            textSizeOptions={["Normal"]}
             wrapperId="contact-form-text-editor"
           />
         </div>
       </div>
     </>
   );
-}
-
+};
 
 const OntologyMainMetaDataForm = () => {
   const componentContext = useContext(OntologySuggestionContext);
@@ -642,35 +740,43 @@ const OntologyMainMetaDataForm = () => {
     componentContext.setSelectedCollections(selectedList);
   }
 
-
   return (
     <>
-      {componentContext.purlIsNotValidMessage &&
+      {componentContext.purlIsNotValidMessage && (
         <div className="row">
           <div className="col-sm-12">
-            <AlertBox type="danger" message={
-              <div className="text-center">
-                We cannot proceed with your request.
-                <br />
-                <br />
-                Reason: {componentContext.purlIsNotValidMessage}
-                <br />
-                If you believe the PURL is correct, then please report this issue via:
-                <Link className="btn btn-secondary ms-2" to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}>
-                  Contact us
-                </Link>
-              </div>
-            }></AlertBox>
+            <AlertBox
+              type="danger"
+              message={
+                <div className="text-center">
+                  We cannot proceed with your request.
+                  <br />
+                  <br />
+                  Reason: {componentContext.purlIsNotValidMessage}
+                  <br />
+                  If you believe the PURL is correct, then please report this
+                  issue via:
+                  <Link
+                    className="btn btn-secondary ms-2"
+                    to={process.env.REACT_APP_PROJECT_SUB_PATH + "/contact"}
+                  >
+                    Contact us
+                  </Link>
+                </div>
+              }
+            ></AlertBox>
           </div>
         </div>
-      }
+      )}
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" htmlFor="onto-suggest-name">Ontology name</label>
+          <label className="required_input" htmlFor="onto-suggest-name">
+            Ontology name
+          </label>
           <input
             type="text"
             onChange={(e) => {
-              e.target.style.borderColor = '';
+              e.target.style.borderColor = "";
               let form = componentContext.form;
               form.name = e.target.value;
               componentContext.setForm(form);
@@ -679,18 +785,19 @@ const OntologyMainMetaDataForm = () => {
             id="onto-suggest-name"
             placeholder="Enter the ontology's name"
             defaultValue={componentContext.form.name}
-          >
-          </input>
+          ></input>
         </div>
       </div>
       <br></br>
       <div className="row">
         <div className="col-sm-8">
-          <label className="required_input" htmlFor="onto-suggest-purl">Ontology purl</label>
+          <label className="required_input" htmlFor="onto-suggest-purl">
+            Ontology purl
+          </label>
           <input
             type="text"
             onChange={(e) => {
-              e.target.style.borderColor = '';
+              e.target.style.borderColor = "";
               let form = componentContext.form;
               form.purl = e.target.value;
               componentContext.setForm(form);
@@ -700,34 +807,33 @@ const OntologyMainMetaDataForm = () => {
             id="onto-suggest-purl"
             placeholder="Enter the ontology's PURL"
             defaultValue={componentContext.form.purl}
-          >
-          </input>
+          ></input>
         </div>
       </div>
-      {process.env.REACT_APP_PROJECT_ID === "general" && !componentContext.inputCollectionId &&
-        <>
-          <br></br>
-          <div className="row">
-            <div className="col-sm-8">
-              <label>Collection in TIB (optional)</label>
-              <Multiselect
-                isObject={false}
-                options={componentContext.collections}
-                selectedValues={componentContext.selectedCollections}
-                onSelect={onSelectRemoveCollection}
-                onRemove={onSelectRemoveCollection}
-                avoidHighlightFirstOption={true}
-                closeIcon={"cancel"}
-                id="onto-suggest-collection"
-                placeholder="Click here to select collections"
-              />
+      {process.env.REACT_APP_PROJECT_ID === "general" &&
+        !componentContext.inputCollectionId && (
+          <>
+            <br></br>
+            <div className="row">
+              <div className="col-sm-8">
+                <label>Collection in TIB (optional)</label>
+                <Multiselect
+                  isObject={false}
+                  options={componentContext.collections}
+                  selectedValues={componentContext.selectedCollections}
+                  onSelect={onSelectRemoveCollection}
+                  onRemove={onSelectRemoveCollection}
+                  avoidHighlightFirstOption={true}
+                  closeIcon={"cancel"}
+                  id="onto-suggest-collection"
+                  placeholder="Click here to select collections"
+                />
+              </div>
             </div>
-          </div>
-        </>
-      }
+          </>
+        )}
     </>
   );
-}
-
+};
 
 export default OntologySuggestion;

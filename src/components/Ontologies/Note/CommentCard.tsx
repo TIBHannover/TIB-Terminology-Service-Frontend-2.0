@@ -1,23 +1,29 @@
-import {useState, useEffect, useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import Auth from "../../../Libs/AuthLib";
-import {DeleteModal} from "../../common/DeleteModal/DeleteModal";
-import {CopiedSuccessAlert} from "../../common/Alerts/Alerts";
-import {createHtmlFromEditorJson} from "../../common/TextEditor/TextEditor";
-import {ReportModal} from "../../common/ReportModal/ReportModal";
-import {OntologyPageContext} from "../../../context/OntologyPageContext";
+import { DeleteModal } from "../../common/DeleteModal/DeleteModal";
+import { CopiedSuccessAlert } from "../../common/Alerts/Alerts";
+import { createHtmlFromEditorJson } from "../../common/TextEditor/TextEditor";
+import { ReportModal } from "../../common/ReportModal/ReportModal";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import ResolveReportActionsForAdmins from "../../common/ResolveReportActions/ResolveReportAction";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
-import {getTsPluginHeaders} from "../../../api/header";
-import Dropdown from 'react-bootstrap/Dropdown';
-import type { CommentCardHeaderProps, CommentCardProps, NoteComment } from "./types";
+import { getTsPluginHeaders } from "../../../api/header";
+import Dropdown from "react-bootstrap/Dropdown";
+import type {
+  CommentCardHeaderProps,
+  CommentCardProps,
+  NoteComment,
+} from "./types";
 
-const ResolveReportActionsForAdminsComponent = ResolveReportActionsForAdmins as any;
+const ResolveReportActionsForAdminsComponent =
+  ResolveReportActionsForAdmins as any;
 
-const deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/note/delete/';
-const reportEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + '/report/create/';
-
+const deleteEndpoint =
+  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/note/delete/";
+const reportEndpoint =
+  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/report/create/";
 
 export const CommentCard = (props: CommentCardProps) => {
   /*
@@ -26,19 +32,22 @@ export const CommentCard = (props: CommentCardProps) => {
       It uses the AppContext to get the user information.        
       It uses the ResolveReportActionsForAdmins component to render the report actions for the admins.        
   */
-  
-  let commnetContent = createHtmlFromEditorJson(props.comment['content']);
-  
+
+  let commnetContent = createHtmlFromEditorJson(props.comment["content"]);
+
   return (
-    <div className="card" id={"comment-card-" + props.comment['id']}>
+    <div className="card" id={"comment-card-" + props.comment["id"]}>
       <div className="card-header">
-        <CommentCardHeader comment={props.comment} editHandlerFunc={props.commentEditHandler}/>
+        <CommentCardHeader
+          comment={props.comment}
+          editHandlerFunc={props.commentEditHandler}
+        />
       </div>
       <ResolveReportActionsForAdminsComponent
         objectType="comment"
-        objectId={props.comment['id']}
-        reportStatus={props.comment['is_reported']}
-        creatorUsername={props.comment['created_by']}
+        objectId={props.comment["id"]}
+        reportStatus={props.comment["is_reported"]}
+        creatorUsername={props.comment["created_by"]}
       />
       <div className="card-body">
         <p className="card-text">
@@ -47,49 +56,49 @@ export const CommentCard = (props: CommentCardProps) => {
       </div>
     </div>
   );
-}
-
+};
 
 export const CommentCardHeader = (props: CommentCardHeaderProps) => {
-  
   const ontologyPageContext = useContext(OntologyPageContext);
-  
+
   const noteUrlFactory = new NoteUrlFactory();
-  
+
   const [comment, setComment] = useState<NoteComment>(props.comment);
   const [linkCopied, setLinkCopied] = useState(false);
-  
+
   useEffect(() => {
     setComment(props.comment);
   }, [props.comment]);
-  
+
   let deleteFormData: Record<string, string> = {};
-  deleteFormData["objectId"] = comment['id'];
-  deleteFormData["objectType"] = 'comment';
+  deleteFormData["objectId"] = comment["id"];
+  deleteFormData["objectType"] = "comment";
   deleteFormData["ontology_id"] = ontologyPageContext.ontology.ontologyId;
-  
+
   let reportFormData: Record<string, string> = {};
-  reportFormData["objectId"] = comment['id'];
-  reportFormData["objectType"] = 'comment';
+  reportFormData["objectId"] = comment["id"];
+  reportFormData["objectType"] = "comment";
   reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
-  
-  let redirectAfterDeleteEndpoint = noteUrlFactory.getCommentDeleteRedirectLink();
-  
+
+  let redirectAfterDeleteEndpoint =
+    noteUrlFactory.getCommentDeleteRedirectLink();
+
   return (
-    <div className="row" key={"c-" + comment['id']}>
+    <div className="row" key={"c-" + comment["id"]}>
       <div className="col-sm-9">
         <small>
-          {"Opened on " + Toolkit.formatDateTime(comment['created_at']) + " by "}
-          <b>{Auth.getUserName(comment['created_by'])}</b>
+          {"Opened on " +
+            Toolkit.formatDateTime(comment["created_at"]) +
+            " by "}
+          <b>{Auth.getUserName(comment["created_by"])}</b>
         </small>
-        {linkCopied && <CopiedSuccessAlert message="link copied"/>}
+        {linkCopied && <CopiedSuccessAlert message="link copied" />}
       </div>
       <div className="col-sm-3">
         <div className="row">
           <div className="col-sm-12 text-end note-header-container">
             <Dropdown className="custom-dropdown">
-              <Dropdown.Toggle
-                className="btn btn-secondary note-dropdown-toggle btn-sm note-dropdown-btn borderless-btn">
+              <Dropdown.Toggle className="btn btn-secondary note-dropdown-toggle btn-sm note-dropdown-btn borderless-btn">
                 <i className="fa fa-ellipsis-h ms-0"></i>
               </Dropdown.Toggle>
               <Dropdown.Menu className="note-dropdown-menu">
@@ -98,7 +107,9 @@ export const CommentCardHeader = (props: CommentCardHeaderProps) => {
                     type="button"
                     className="btn btn-sm note-action-menu-btn borderless-btn"
                     onClick={() => {
-                      let url = noteUrlFactory.getCommentLink({commentId: comment['id']});
+                      let url = noteUrlFactory.getCommentLink({
+                        commentId: comment["id"],
+                      });
                       navigator.clipboard.writeText(url);
                       setLinkCopied(true);
                       setTimeout(() => {
@@ -111,52 +122,57 @@ export const CommentCardHeader = (props: CommentCardHeaderProps) => {
                 </Dropdown.Item>
                 <Dropdown.Item className="note-dropdown-item">
                   <ReportModal
-                    modalId={comment['id']}
+                    modalId={comment["id"]}
                     formData={reportFormData}
-                    callHeaders={getTsPluginHeaders({withAccessToken: true})}
+                    callHeaders={getTsPluginHeaders({ withAccessToken: true })}
                     reportEndpoint={reportEndpoint}
-                    key={"reportComment" + comment['id']}
+                    key={"reportComment" + comment["id"]}
                   />
                 </Dropdown.Item>
-                {comment['can_edit'] &&
+                {comment["can_edit"] && (
                   <>
                     <div className="dropdown-divider"></div>
                     <Dropdown.Item className="note-dropdown-item">
                       <button
                         type="button"
                         className="btn btn-sm note-action-menu-btn borderless-btn"
-                        data-id={comment['id']}
-                        data-content={comment['content']}
+                        data-id={comment["id"]}
+                        data-content={comment["content"]}
                         onClick={props.editHandlerFunc}
-                        key={"commentEdit" + comment['id']}
+                        key={"commentEdit" + comment["id"]}
                       >
                         Edit
                       </button>
                     </Dropdown.Item>
                     <Dropdown.Item className="note-dropdown-item">
                       <DeleteModal
-                        modalId={"_comment-" + comment['id']}
+                        modalId={"_comment-" + comment["id"]}
                         formData={JSON.stringify(deleteFormData)}
-                        callHeaders={getTsPluginHeaders({withAccessToken: true, isJson: true})}
+                        callHeaders={getTsPluginHeaders({
+                          withAccessToken: true,
+                          isJson: true,
+                        })}
                         deleteEndpoint={deleteEndpoint}
                         afterDeleteRedirectUrl={redirectAfterDeleteEndpoint}
-                        key={"commentDelModal" + comment['id']}
+                        key={"commentDelModal" + comment["id"]}
                         method="DELETE"
                       />
                     </Dropdown.Item>
                   </>
-                }
+                )}
               </Dropdown.Menu>
             </Dropdown>
           </div>
         </div>
       </div>
-      
-      
-      <Login isModal={true} customModalId="loginModalReport" withoutButton={true}/>
+
+      <Login
+        isModal={true}
+        customModalId="loginModalReport"
+        withoutButton={true}
+      />
     </div>
   );
-}
-
+};
 
 export default CommentCard;

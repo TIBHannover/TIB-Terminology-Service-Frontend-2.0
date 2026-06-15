@@ -4,14 +4,12 @@ import Toolkit from "../../../Libs/Toolkit";
 import { RenderTermList } from "./RenderTermList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import TermListUrlFactory from "../../../UrlFactory/TermListUrlFactory";
-import PropTypes from 'prop-types';
-import '../../layout/termList.css';
+import PropTypes from "prop-types";
+import "../../layout/termList.css";
 import { getTourProfile } from "../../../tours/controller";
-
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_NUMBER = 1;
-
 
 const TermList = (props) => {
   /* 
@@ -23,57 +21,63 @@ const TermList = (props) => {
   const termListUrlFactory = new TermListUrlFactory();
 
   let iriInUrl = termListUrlFactory.iri;
-  let pageNumberInUrl = !termListUrlFactory.page ? DEFAULT_PAGE_NUMBER : parseInt(termListUrlFactory.page);
-  let internalSize = Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
-  let sizeInUrl = !termListUrlFactory.size ? internalSize : parseInt(termListUrlFactory.size);
+  let pageNumberInUrl = !termListUrlFactory.page
+    ? DEFAULT_PAGE_NUMBER
+    : parseInt(termListUrlFactory.page);
+  let internalSize = Toolkit.getVarInLocalSrorageIfExist(
+    "termListPageSize",
+    DEFAULT_PAGE_SIZE,
+  );
+  let sizeInUrl = !termListUrlFactory.size
+    ? internalSize
+    : parseInt(termListUrlFactory.size);
 
   const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
   const [pageSize, setPageSize] = useState(sizeInUrl);
-  const [listOfTerms, setListOfTerms] = useState(['loading']);
+  const [listOfTerms, setListOfTerms] = useState(["loading"]);
   const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);
   const [mode, setMode] = useState("terms");
   const [iri, setIri] = useState(iriInUrl);
   const [tableIsLoading, setTableIsLoading] = useState(true);
   const [obsoletes, setObsoletes] = useState(Toolkit.getObsoleteFlagValue());
 
-
   async function loadComponent() {
     let ontologyId = ontologyPageContext.ontology.ontologyId;
-    let listOfTermsAndStats = { "results": [], "totalTermsCount": 0 };
+    let listOfTermsAndStats = { results: [], totalTermsCount: 0 };
     let termApi = new TermApi(ontologyId, iri, mode);
     if (!iri) {
-      listOfTermsAndStats = await termApi.fetchListOfTerms(pageNumber, pageSize, obsoletes);
+      listOfTermsAndStats = await termApi.fetchListOfTerms(
+        pageNumber,
+        pageSize,
+        obsoletes,
+      );
     } else {
       let tsTerm = await termApi.fetchTerm();
       listOfTermsAndStats["results"] = [tsTerm];
       listOfTermsAndStats["totalTermsCount"] = 1;
     }
 
-    setListOfTerms(listOfTermsAndStats['results']);
-    setTotalNumberOfTerms(listOfTermsAndStats['totalTermsCount']);
+    setListOfTerms(listOfTermsAndStats["results"]);
+    setTotalNumberOfTerms(listOfTermsAndStats["totalTermsCount"]);
     storePageSizeInLocalStorage(pageSize);
   }
 
-
   function storePageSizeInLocalStorage(size) {
     if (parseInt(size) !== 1) {
-      localStorage.setItem('termListPageSize', size);
+      localStorage.setItem("termListPageSize", size);
     }
   }
-
 
   function pageCount() {
     if (isNaN(Math.ceil(totalNumberOfTerms / pageSize))) {
       return 0;
     }
-    return (Math.ceil(totalNumberOfTerms / pageSize))
+    return Math.ceil(totalNumberOfTerms / pageSize);
   }
-
 
   function handlePagination(value) {
     setPageNumber(parseInt(value) - 1);
   }
-
 
   function handlePageSizeDropDownChange(e) {
     let size = parseInt(e.target.value);
@@ -81,18 +85,19 @@ const TermList = (props) => {
     storePageSizeInLocalStorage(size);
   }
 
-
   function resetList() {
-    let size = Toolkit.getVarInLocalSrorageIfExist('termListPageSize', DEFAULT_PAGE_SIZE);
+    let size = Toolkit.getVarInLocalSrorageIfExist(
+      "termListPageSize",
+      DEFAULT_PAGE_SIZE,
+    );
     setIri(null);
     setPageNumber(0);
     setPageSize(size);
     storePageSizeInLocalStorage(pageSize);
   }
 
-
   function hideHiddenColumnsOnLoad() {
-    let tableHeaders = document.getElementsByTagName('th');
+    let tableHeaders = document.getElementsByTagName("th");
     for (let th of tableHeaders) {
       if (th.style.display === "none") {
         let targetCells = document.getElementsByClassName(th.className);
@@ -103,20 +108,17 @@ const TermList = (props) => {
     }
   }
 
-
   function handleJumtoSelection(selectedTerm) {
     if (selectedTerm) {
-      setIri(selectedTerm['iri']);
+      setIri(selectedTerm["iri"]);
     }
   }
-
 
   function obsoletesCheckboxHandler(e) {
     Toolkit.setObsoleteInStorageAndUrl(e.target.checked);
     setObsoletes(e.target.checked);
     setPageNumber(0);
   }
-
 
   useEffect(() => {
     hideHiddenColumnsOnLoad();
@@ -125,23 +127,30 @@ const TermList = (props) => {
       document.getElementById("obsolte_check_term_list").checked = true;
     }
     let tourP = getTourProfile();
-    if (!tourP.ontoClassListPage && process.env.REACT_APP_SITE_TOUR === "true" && document.getElementById('tour-trigger-btn')) {
-      document.getElementById('tour-trigger-btn').click();
+    if (
+      !tourP.ontoClassListPage &&
+      process.env.REACT_APP_SITE_TOUR === "true" &&
+      document.getElementById("tour-trigger-btn")
+    ) {
+      document.getElementById("tour-trigger-btn").click();
     }
   }, []);
 
-
   useEffect(() => {
     setTableIsLoading(true);
-    setListOfTerms(['loading']);
+    setListOfTerms(["loading"]);
     loadComponent();
     hideHiddenColumnsOnLoad();
     if (obsoletes && document.getElementById("obsolte_check_term_list")) {
       document.getElementById("obsolte_check_term_list").checked = true;
     }
-    termListUrlFactory.update({ iri: iri, page: pageNumber + 1, size: pageSize, obsoletes: obsoletes });
+    termListUrlFactory.update({
+      iri: iri,
+      page: pageNumber + 1,
+      size: pageSize,
+      obsoletes: obsoletes,
+    });
   }, [pageNumber, pageSize, iri, obsoletes]);
-
 
   return (
     <RenderTermList
@@ -162,12 +171,10 @@ const TermList = (props) => {
       isObsolete={obsoletes}
     />
   );
-
-}
+};
 
 TermList.propTypes = {
-  componentIdentity: PropTypes.string.isRequired
-}
-
+  componentIdentity: PropTypes.string.isRequired,
+};
 
 export default TermList;

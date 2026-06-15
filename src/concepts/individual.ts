@@ -1,9 +1,7 @@
 import { createElement } from "react";
 import { TsTerm } from "./term";
 
-
 export class TsIndividual extends TsTerm {
-
   get type(): string {
     return "individual";
   }
@@ -18,10 +16,20 @@ export class TsIndividual extends TsTerm {
       for (let parentIri of this.directParent) {
         let parentClassUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(parentIri)}`;
         links.push(
-          createElement('span', {},
-            createElement('a', { rel: "noopener noreferrer", target: "_blank", href: parentClassUrl }, this.term?.['linkedEntities']?.[parentIri]?.["label"]?.[0]),
-            createElement('br')
-          )
+          createElement(
+            "span",
+            {},
+            createElement(
+              "a",
+              {
+                rel: "noopener noreferrer",
+                target: "_blank",
+                href: parentClassUrl,
+              },
+              this.term?.["linkedEntities"]?.[parentIri]?.["label"]?.[0],
+            ),
+            createElement("br"),
+          ),
         );
       }
       return links;
@@ -29,6 +37,3 @@ export class TsIndividual extends TsTerm {
     return "";
   }
 }
-
-
-

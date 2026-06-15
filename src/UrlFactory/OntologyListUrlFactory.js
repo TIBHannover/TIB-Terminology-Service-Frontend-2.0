@@ -1,7 +1,5 @@
 import { createBrowserHistory } from "history";
-import * as SiteUrlParamNames from './UrlParamNames';
-
-
+import * as SiteUrlParamNames from "./UrlParamNames";
 
 class OntologyListUrlFactory {
   constructor() {
@@ -16,8 +14,15 @@ class OntologyListUrlFactory {
     this.history = createBrowserHistory();
   }
 
-
-  update({ keywordFilter, collections, subjects, sortedBy, page, size, andOpValue }) {
+  update({
+    keywordFilter,
+    collections,
+    subjects,
+    sortedBy,
+    page,
+    size,
+    andOpValue,
+  }) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.KeywordFilter);
 
@@ -40,6 +45,5 @@ class OntologyListUrlFactory {
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
 }
-
 
 export default OntologyListUrlFactory;

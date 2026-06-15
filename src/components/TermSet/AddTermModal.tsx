@@ -9,12 +9,11 @@ import TermApi from "../../api/term";
 import Modal from "react-bootstrap/Modal";
 import { AddTermModalComProps } from "./types";
 
-
 type MultiSelectOption = {
   text?: string;
   iri?: string;
   ontologyId?: string;
-}
+};
 
 export const AddTermModal = (props: AddTermModalComProps) => {
   const { termset, modalId } = props;
@@ -28,9 +27,7 @@ export const AddTermModal = (props: AddTermModalComProps) => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-
   const searchUnderRef = useRef(null);
-
 
   async function submitNewTermsToSet() {
     if (!selectedTerms || !termset) {
@@ -39,7 +36,7 @@ export const AddTermModal = (props: AddTermModalComProps) => {
     setSubmitLoading(true);
     let selectedTermsV2 = [];
     for (let term of selectedTerms) {
-      let termApi = new TermApi(term['ontologyId'], term['iri']);
+      let termApi = new TermApi(term["ontologyId"], term["iri"]);
       await termApi.fetchTerm();
       selectedTermsV2.push(termApi.term);
     }
@@ -47,7 +44,9 @@ export const AddTermModal = (props: AddTermModalComProps) => {
     updateTermset(termset).then((updatedTermset) => {
       if (updatedTermset) {
         let userTermsets = [...appContext.userTermsets];
-        let tsInex = userTermsets.findIndex(tset => tset.id === updatedTermset.id);
+        let tsInex = userTermsets.findIndex(
+          (tset) => tset.id === updatedTermset.id,
+        );
         userTermsets.splice(tsInex, 1);
         userTermsets.push(updatedTermset);
         appContext.setUserTermsets(userTermsets);
@@ -64,7 +63,6 @@ export const AddTermModal = (props: AddTermModalComProps) => {
   function onTermSelect(selectedTerms: MultiSelectOption[]) {
     setSelectedTerms(selectedTerms);
   }
-
 
   async function onSearchTermChange(query: string) {
     setLoading(true);
@@ -84,10 +82,11 @@ export const AddTermModal = (props: AddTermModalComProps) => {
       searchInValues: ["label"],
       searchUnderIris: [],
       searchUnderAllIris: [],
-      fromOntologyPage: false
+      fromOntologyPage: false,
     };
     if (appContext.userSettings.userCollectionEnabled) {
-      inputQuery["selectedOntologies"] = appContext.userSettings.activeCollection.ontology_ids;
+      inputQuery["selectedOntologies"] =
+        appContext.userSettings.activeCollection.ontology_ids;
     }
     //@ts-ignore
     let searchRes = await olsSearch(inputQuery);
@@ -95,15 +94,14 @@ export const AddTermModal = (props: AddTermModalComProps) => {
     let options: MultiSelectOption[] = [];
     for (let term of terms) {
       let opt = { text: "", iri: "", ontologyId: "" };
-      opt['text'] = `${term.ontologyId}:${term.label} (${term.type})`;
-      opt['iri'] = term.iri;
-      opt['ontologyId'] = term.ontologyId;
+      opt["text"] = `${term.ontologyId}:${term.label} (${term.type})`;
+      opt["iri"] = term.iri;
+      opt["ontologyId"] = term.ontologyId;
       options.push(opt);
     }
     setLoading(false);
     setTermListOptions(options);
   }
-
 
   function closeModal() {
     setAddedSuccess(false);
@@ -112,14 +110,13 @@ export const AddTermModal = (props: AddTermModalComProps) => {
     setShowModal(false);
   }
 
-
   return (
     <>
       <button
         className={"btn-secondary text-white borderless-btn"}
         aria-label="add this term to termset"
         onClick={() => {
-          setShowModal(true)
+          setShowModal(true);
         }}
       >
         <i className="bi bi-plus-square"></i>
@@ -128,19 +125,26 @@ export const AddTermModal = (props: AddTermModalComProps) => {
       <Modal show={showModal} id={"addToTermsetModal-" + modalId}>
         <Modal.Header className="row">
           <div className="col-6">
-            <h5 className="modal-title"
-              id={"addToTermsetModal-" + modalId}>{`Add terms to this set`}</h5>
+            <h5
+              className="modal-title"
+              id={"addToTermsetModal-" + modalId}
+            >{`Add terms to this set`}</h5>
           </div>
           <div className="col-6 text-end">
-            {!submited &&
-              <button onClick={closeModal} type="button" className="close bg-white" aria-label="Close">
+            {!submited && (
+              <button
+                onClick={closeModal}
+                type="button"
+                className="close bg-white"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
-            }
+            )}
           </div>
         </Modal.Header>
         <Modal.Body>
-          {!submited &&
+          {!submited && (
             <Multiselect
               isObject={true}
               options={termListOptions}
@@ -156,33 +160,34 @@ export const AddTermModal = (props: AddTermModalComProps) => {
               placeholder={"class, property, individual"}
               ref={searchUnderRef}
             />
-          }
-          {submited && addedSuccess &&
+          )}
+          {submited && addedSuccess && (
             <AlertBox
               type="success"
               message="Added successfully!"
               alertColumnClass="col-sm-12"
             />
-          }
-          {submited && !addedSuccess &&
+          )}
+          {submited && !addedSuccess && (
             <AlertBox
               type="danger"
               message="Something went wrong. Please try again!"
               alertColumnClass="col-sm-12"
             />
-          }
+          )}
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          {!submited &&
+          {!submited && (
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={submitNewTermsToSet}>
+              onClick={submitNewTermsToSet}
+            >
               {"Add"}
               {submitLoading && <div className="isLoading-btn"></div>}
             </button>
-          }
-          {submited &&
+          )}
+          {submited && (
             <button
               type="button"
               className="btn btn-secondary"
@@ -193,9 +198,9 @@ export const AddTermModal = (props: AddTermModalComProps) => {
             >
               Close
             </button>
-          }
+          )}
         </Modal.Footer>
       </Modal>
     </>
   );
-}
+};

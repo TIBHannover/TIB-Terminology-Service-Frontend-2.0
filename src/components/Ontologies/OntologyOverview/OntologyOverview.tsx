@@ -133,8 +133,6 @@ const OntologyOverview = () => {
                 </div>
               </>
             )}
-
-
         </div>
       </div>
 

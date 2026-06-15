@@ -9,10 +9,12 @@ export type NoteComment = CommentData & {
   can_edit?: boolean;
 };
 
-export type SelectedTerm = Pick<TsTerm, "iri" | "label"> | {
-  iri: string | null | undefined;
-  label: string | null | undefined;
-};
+export type SelectedTerm =
+  | Pick<TsTerm, "iri" | "label">
+  | {
+      iri: string | null | undefined;
+      label: string | null | undefined;
+    };
 
 export type EditorStateValue = unknown;
 

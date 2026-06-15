@@ -1,5 +1,3 @@
-
-
 export const LoginLoadingAnimation = () => {
   return (
     <div className="overlay" id="login-loading">
@@ -10,9 +8,11 @@ export const LoginLoadingAnimation = () => {
           </div>
         </div>
         <div className="row login-load-text">
-          <h2><strong>Login ...</strong></h2>
+          <h2>
+            <strong>Login ...</strong>
+          </h2>
         </div>
       </div>
     </div>
   );
-}
+};

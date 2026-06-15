@@ -1,13 +1,10 @@
 import { getCallSetting, size } from "./constants";
 
-
 type AnswerForPageCount = {
   page: {
-    totalElements: number
-  }
-}
-
-
+    totalElements: number;
+  };
+};
 
 export async function getPageCount(apiEndpoint: string): Promise<number> {
   /**
@@ -15,10 +12,9 @@ export async function getPageCount(apiEndpoint: string): Promise<number> {
    */
   let result = await fetch(apiEndpoint, getCallSetting);
   let answer: AnswerForPageCount = await result.json();
-  return Math.ceil(answer['page']['totalElements'] / size);
+  return Math.ceil(answer["page"]["totalElements"] / size);
 }
 
-
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

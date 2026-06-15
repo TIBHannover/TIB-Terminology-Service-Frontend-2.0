@@ -12,10 +12,9 @@ type SwitchButtonProps = {
 };
 
 const SwitchButton = (props: SwitchButtonProps) => {
-  
-  const {id, label, smallText, className, onChange, checked, dataId, inLine} = props;
-  
-  
+  const { id, label, smallText, className, onChange, checked, dataId, inLine } =
+    props;
+
   function handleSwitchChange(e: ChangeEvent<HTMLInputElement>) {
     let isChecked = e.target.checked;
     if (isChecked) {
@@ -29,10 +28,12 @@ const SwitchButton = (props: SwitchButtonProps) => {
     }
     onChange && onChange(e);
   }
-  
-  
+
   return (
-    <div className={"form-switch" + (inLine ? " d-inline" : "")} key={"key_" + id}>
+    <div
+      className={"form-switch" + (inLine ? " d-inline" : "")}
+      key={"key_" + id}
+    >
       <input
         className={"form-check-input " + className}
         type="checkbox"
@@ -44,10 +45,10 @@ const SwitchButton = (props: SwitchButtonProps) => {
       />
       <label className="form-check-label ms-2" htmlFor={id}>
         {label}&nbsp;
-        {smallText && (<small>{smallText}</small>)}
+        {smallText && <small>{smallText}</small>}
       </label>
     </div>
-  )
-}
+  );
+};
 
 export default SwitchButton;

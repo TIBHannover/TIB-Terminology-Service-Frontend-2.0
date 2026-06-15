@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import "../layout/termset.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { DeleteModal } from "../common/DeleteModal/DeleteModal";
 import { getTsPluginHeaders } from "../../api/header";
 import { TsTermset } from "../../concepts";
@@ -16,12 +16,12 @@ type CmpProps = {
   from?: string;
 };
 
-
 const TermSetList = (props: CmpProps) => {
   const { termsets, redirectAfterDeleteEndpoint, backBtnText, from } = props;
 
   const [createMode, setCreateMode] = useState(false);
-  const [filteredTermsets, setFilteredTermsets] = useState<TsTermset[]>(termsets);
+  const [filteredTermsets, setFilteredTermsets] =
+    useState<TsTermset[]>(termsets);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const pageSize = 10;
@@ -38,7 +38,7 @@ const TermSetList = (props: CmpProps) => {
           return true;
         }
         return false;
-      })
+      });
       setFilteredTermsets(filteredTermsets);
       setPage(1);
     } else {
@@ -52,7 +52,6 @@ const TermSetList = (props: CmpProps) => {
     setIsLoading(false);
   }, [termsets]);
 
-
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
     return <></>;
   }
@@ -60,7 +59,7 @@ const TermSetList = (props: CmpProps) => {
   return (
     <>
       <div className="row mb-4">
-        {!createMode &&
+        {!createMode && (
           <div className="col-sm-10 ps-0">
             <input
               type="text"
@@ -71,49 +70,50 @@ const TermSetList = (props: CmpProps) => {
               onChange={filterTermsetList}
             />
           </div>
-        }
+        )}
         <div className={"col-sm-2 " + (!createMode ? "text-end" : "")}>
-          <button className="btn btn-secondary create-termset-btn"
+          <button
+            className="btn btn-secondary create-termset-btn"
             onClick={() => {
               setCreateMode(!createMode);
-            }}>
-            {!createMode &&
+            }}
+          >
+            {!createMode && (
               <>
                 <i className="bi bi-plus-square me-2"></i>
                 Termset
               </>
-            }
-            {createMode &&
+            )}
+            {createMode && (
               <>
                 <i className="bi bi-arrow-left me-1"></i>
                 {backBtnText}
               </>
-            }
+            )}
           </button>
         </div>
       </div>
-      {createMode &&
-        <EditTermset mode={"create"} />
-      }
-      {isLoading &&
+      {createMode && <EditTermset mode={"create"} />}
+      {isLoading && (
         <div className="justify-content-center ontology-page-container termset-loading-container">
           <div className="isLoading"></div>
         </div>
-      }
-      {!createMode && filteredTermsets.slice((page - 1) * pageSize, page * pageSize).map((tset) => {
-        return (
-          <>
-            <TermsetCard
-              termset={tset}
-              redirectAfterDeleteEndpoint={redirectAfterDeleteEndpoint}
-              from={from}
-            />
-
-          </>
-        );
-      })
-      }
+      )}
       {!createMode &&
+        filteredTermsets
+          .slice((page - 1) * pageSize, page * pageSize)
+          .map((tset) => {
+            return (
+              <>
+                <TermsetCard
+                  termset={tset}
+                  redirectAfterDeleteEndpoint={redirectAfterDeleteEndpoint}
+                  from={from}
+                />
+              </>
+            );
+          })}
+      {!createMode && (
         <div className="row">
           <div className="col-sm-12 text-center">
             <Pagination
@@ -123,37 +123,55 @@ const TermSetList = (props: CmpProps) => {
             />
           </div>
         </div>
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
-
-const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: string, from?: string }) => {
+const TermsetCard = (props: {
+  termset: TsTermset;
+  redirectAfterDeleteEndpoint: string;
+  from?: string;
+}) => {
   const { termset, redirectAfterDeleteEndpoint, from } = props;
-  let deleteEndpoint = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
+  let deleteEndpoint =
+    process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/delete/";
   const callHeader = getTsPluginHeaders({ withAccessToken: true });
-  let redirectAfterDeleteUrl = process.env.REACT_APP_PROJECT_SUB_PATH + redirectAfterDeleteEndpoint;
+  let redirectAfterDeleteUrl =
+    process.env.REACT_APP_PROJECT_SUB_PATH + redirectAfterDeleteEndpoint;
   const appContext = useContext(AppContext);
 
   const canEdit = appContext?.user?.id === termset.creator?.id;
-  const fromParam = from ? (`?${SiteUrlParamNames.From}=${from}`) : "";
+  const fromParam = from ? `?${SiteUrlParamNames.From}=${from}` : "";
 
   return (
     <div className="row">
       <div className="col-sm-12 term-set-card">
         <div className="row">
           <div className="col-sm-6">
-            <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + termset.id + fromParam} style={{ marginTop: "2px" }}>
+            <Link
+              to={
+                process.env.REACT_APP_PROJECT_SUB_PATH +
+                "/termsets/" +
+                termset.id +
+                fromParam
+              }
+              style={{ marginTop: "2px" }}
+            >
               <p className="fw-bold fs-6 d-inline">{termset.name}</p>
             </Link>
-
           </div>
           <div className="col-sm-6 text-end">
-            {canEdit &&
+            {canEdit && (
               <>
                 <Link
-                  to={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/" + termset.id + "/edit" + fromParam}
+                  to={
+                    process.env.REACT_APP_PROJECT_SUB_PATH +
+                    "/termsets/" +
+                    termset.id +
+                    "/edit" +
+                    fromParam
+                  }
                   className="btn borderless-btn termset-card-action-btn"
                   style={{ marginTop: "1px" }}
                 >
@@ -165,8 +183,7 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
                   deleteEndpoint={deleteEndpoint + termset.id + "/"}
                   afterDeleteRedirectUrl={redirectAfterDeleteUrl}
                   key={"deleteCollection" + termset.id}
-                  afterDeleteProcess={() => {
-                  }}
+                  afterDeleteProcess={() => {}}
                   objectToDelete={termset}
                   method="DELETE"
                   //@ts-ignore
@@ -174,12 +191,14 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
                   btnClass="extra-sm-btn ml-2"
                 />
               </>
-            }
+            )}
           </div>
         </div>
         <div className="row">
           <div className="col-12 d-flex flex-column">
-            <small>{termset.created_at.split("T")[0] + " by " + termset.creator_name}</small>
+            <small>
+              {termset.created_at.split("T")[0] + " by " + termset.creator_name}
+            </small>
             <small>{termset.description}</small>
           </div>
         </div>
@@ -187,6 +206,5 @@ const TermsetCard = (props: { termset: TsTermset, redirectAfterDeleteEndpoint: s
     </div>
   );
 };
-
 
 export default TermSetList;

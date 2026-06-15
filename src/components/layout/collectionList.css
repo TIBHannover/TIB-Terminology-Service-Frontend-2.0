@@ -48,14 +48,19 @@ body .collection-suggest-ontology-btn {
 body .collection-card-row {
   align-items: flex-start;
   animation: collectionListCardAppear 520ms ease-out both;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.38)
+  ) !important;
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.55) !important;
   border-radius: 8px;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16),
-  inset 0 1px 0 rgba(255, 255, 255, 0.72),
-  inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
   margin-bottom: 28px;
   padding: 24px;
 }
@@ -124,4 +129,3 @@ body .collection-logo-in-list {
     animation: none;
   }
 }
-

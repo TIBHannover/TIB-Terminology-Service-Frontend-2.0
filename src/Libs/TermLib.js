@@ -36,13 +36,12 @@ class TermLib {
     ];
   }
 
-  static createTermUrlWithOntologyPrefix(
-    {
-      ontology_name,
-      termIri,
-      termLabel,
-      type,
-    }) {
+  static createTermUrlWithOntologyPrefix({
+    ontology_name,
+    termIri,
+    termLabel,
+    type,
+  }) {
     if (!ontology_name) {
       return null;
     }
@@ -64,7 +63,6 @@ class TermLib {
       </a>,
     ];
   }
-
 
   static createAlsoInTags(term) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
@@ -100,18 +98,30 @@ class TermLib {
           let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
           let defArr = [];
           defArr.push(defText);
-          for (let ax of (desc.axioms ?? [])) {
+          for (let ax of desc.axioms ?? []) {
             for (let key in ax) {
               defArr.push(
                 <>
                   <br />
-                  <span className="node-metadata-label">{term["linkedEntities"]?.[key]?.label[0] + ": "}</span>
-                </>
+                  <span className="node-metadata-label">
+                    {term["linkedEntities"]?.[key]?.label[0] + ": "}
+                  </span>
+                </>,
               );
               if (Array.isArray(ax[key]) && ax[key].length > 1) {
-                defArr.push(<>{ax[key].join(", ")}<br /></>);
+                defArr.push(
+                  <>
+                    {ax[key].join(", ")}
+                    <br />
+                  </>,
+                );
               } else {
-                defArr.push(<>{ax[key]}<br /></>);
+                defArr.push(
+                  <>
+                    {ax[key]}
+                    <br />
+                  </>,
+                );
               }
             }
           }
@@ -149,7 +159,6 @@ class TermLib {
     }
     return result;
   }
-
 
   static createListOfClasses(classList) {
     // render a list of classes as a list
@@ -262,7 +271,6 @@ class TermLib {
     }
     return annotations;
   }
-
 
   static getAnnotationDefinition(definitionList) {
     if (!definitionList) {

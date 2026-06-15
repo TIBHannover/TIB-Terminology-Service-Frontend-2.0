@@ -6,12 +6,11 @@ import { getCollectionsAndThierOntologies } from "../../../../api/collection";
 import { submitOntologySuggestion } from "../../../../api/ontology";
 import TextEditor from "../../../common/TextEditor/TextEditor";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
-import draftToMarkdown from 'draftjs-to-markdown';
-import { convertToRaw } from 'draft-js';
+import draftToMarkdown from "draftjs-to-markdown";
+import { convertToRaw } from "draft-js";
 import AlertBox from "../../../common/Alerts/Alerts";
 import FormLib from "../../../../Libs/FormLib";
 import Modal from "react-bootstrap/Modal";
-
 
 const CollectionSuggestion = (props) => {
   const appContext = useContext(AppContext);
@@ -24,41 +23,51 @@ const CollectionSuggestion = (props) => {
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
   const collectionWithOntologyListQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirOntologies'],
-    queryFn: getCollectionsAndThierOntologies
+    queryKey: ["allCollectionsWithTheirOntologies"],
+    queryFn: getCollectionsAndThierOntologies,
   });
 
   let collectionIds = [];
   if (collectionWithOntologyListQuery.data) {
     for (let col in collectionWithOntologyListQuery.data) {
-      if (!collectionWithOntologyListQuery.data[col].find((onto) => onto.ontologyId === ontoPageContext.ontology.ontologyId)) {
+      if (
+        !collectionWithOntologyListQuery.data[col].find(
+          (onto) => onto.ontologyId === ontoPageContext.ontology.ontologyId,
+        )
+      ) {
         collectionIds.push(col);
       }
     }
   }
   const collections = collectionIds;
 
-
   function onSelectRemoveCollection(selectedList, selectedItem) {
     setSelectedCollections(selectedList);
   }
 
   function onTextEditorChange(newEditorState) {
-    document.getElementsByClassName('rdw-editor-main')[0].style.border = '';
+    document.getElementsByClassName("rdw-editor-main")[0].style.border = "";
     setEditorState(newEditorState);
-  };
-
+  }
 
   function submit() {
-    let username = FormLib.getFieldByIdIfValid('col-suggest-username');
-    let email = FormLib.getFieldByIdIfValid('col-suggest-email');
-    let reason = FormLib.getTextEditorValueIfValid(editorState, 'contact-form-text-editor');
+    let username = FormLib.getFieldByIdIfValid("col-suggest-username");
+    let email = FormLib.getFieldByIdIfValid("col-suggest-email");
+    let reason = FormLib.getTextEditorValueIfValid(
+      editorState,
+      "contact-form-text-editor",
+    );
     if (selectedCollections.length === 0) {
-      document.getElementsByClassName('searchWrapper')[0].style.borderColor = 'red';
+      document.getElementsByClassName("searchWrapper")[0].style.borderColor =
+        "red";
     }
-    if (!username || !email || !editorState || selectedCollections.length === 0) {
+    if (
+      !username ||
+      !email ||
+      !editorState ||
+      selectedCollections.length === 0
+    ) {
       return;
     }
     setLoading(true);
@@ -69,14 +78,14 @@ const CollectionSuggestion = (props) => {
     reason = editorState.getCurrentContent();
     reason = draftToMarkdown(convertToRaw(reason));
     const form = {
-      "username": username,
-      "email": email,
-      "reason": reason,
-      "name": ontoPageContext.ontology?.ontologyId,
-      "purl": ontoPageContext.ontology?.iri,
-      "collection_ids": collectionIds.slice(0, -1),
-      "collection_suggestion": true
-    }
+      username: username,
+      email: email,
+      reason: reason,
+      name: ontoPageContext.ontology?.ontologyId,
+      purl: ontoPageContext.ontology?.iri,
+      collection_ids: collectionIds.slice(0, -1),
+      collection_suggestion: true,
+    };
 
     submitOntologySuggestion(form).then((result) => {
       setFormSubmitSuccess(result);
@@ -84,9 +93,7 @@ const CollectionSuggestion = (props) => {
       setSubmitWait(false);
       setLoading(false);
     });
-
   }
-
 
   if (!appContext.user) {
     return <></>;
@@ -94,25 +101,26 @@ const CollectionSuggestion = (props) => {
 
   return (
     <>
-
       <Modal show={props.showModal} fullscreen={true}>
         <Modal.Header>
-          <h5 className="modal-title" id={"collectionSuggestionModalLabel"}>{"Collection Suggestion"}</h5>
+          <h5 className="modal-title" id={"collectionSuggestionModalLabel"}>
+            {"Collection Suggestion"}
+          </h5>
         </Modal.Header>
         <Modal.Body>
-          {!submitWait && formSubmitSuccess && formSubmitted &&
+          {!submitWait && formSubmitSuccess && formSubmitted && (
             <AlertBox
               type="success"
               message="Thank you! Your query has been submitted successfully. We will inform you about our decision via email."
             />
-          }
-          {!submitWait && !formSubmitSuccess && formSubmitted &&
+          )}
+          {!submitWait && !formSubmitSuccess && formSubmitted && (
             <AlertBox
               type="danger"
               message="Sorry! Something went wrong. Please try again later."
             />
-          }
-          {submitWait && !formSubmitted &&
+          )}
+          {submitWait && !formSubmitted && (
             <div className="row">
               <div className="col-12 text-center">
                 <div className="spinner-border text-dark" role="status">
@@ -121,12 +129,14 @@ const CollectionSuggestion = (props) => {
                 <div className="">Please wait ...</div>
               </div>
             </div>
-          }
-          {!submitWait && !formSubmitted &&
+          )}
+          {!submitWait && !formSubmitted && (
             <>
               <div className="row">
                 <div className="col-sm-8">
-                  <label className="required_input">Please choose the target collection(s)</label>
+                  <label className="required_input">
+                    Please choose the target collection(s)
+                  </label>
                   <Multiselect
                     isObject={false}
                     options={collections}
@@ -143,35 +153,43 @@ const CollectionSuggestion = (props) => {
               <br />
               <div className="row">
                 <div className="col-sm-8">
-                  <label className="required_input" htmlFor="col-suggest-username">Your name</label>
+                  <label
+                    className="required_input"
+                    htmlFor="col-suggest-username"
+                  >
+                    Your name
+                  </label>
                   <input
                     type="text"
                     onChange={(e) => {
-                      e.target.style.borderColor = '';
+                      e.target.style.borderColor = "";
                     }}
                     className="form-control"
                     id="col-suggest-username"
                     placeholder="Enter your fullname. E.g., John Doe"
-                  >
-                  </input>
+                  ></input>
                 </div>
               </div>
               <br />
               <div className="row">
                 <div className="col-sm-8">
-                  <label className="required_input" htmlFor="col-suggest-email">Email</label>
-                  <small> (we use this email to inform you about our decision regarding adding this ontology to the
-                    chosen collections.)</small>
+                  <label className="required_input" htmlFor="col-suggest-email">
+                    Email
+                  </label>
+                  <small>
+                    {" "}
+                    (we use this email to inform you about our decision
+                    regarding adding this ontology to the chosen collections.)
+                  </small>
                   <input
                     type="text"
                     onChange={(e) => {
-                      e.target.style.borderColor = '';
+                      e.target.style.borderColor = "";
                     }}
                     className="form-control"
                     id="col-suggest-email"
                     placeholder="Enter your email"
-                  >
-                  </input>
+                  ></input>
                 </div>
               </div>
               <br />
@@ -184,31 +202,39 @@ const CollectionSuggestion = (props) => {
                     wrapperClassName=""
                     editorClassName=""
                     placeholder="Please briefly describe why this ontology needs to be part of the target collections."
-                    textSizeOptions={['Normal']}
+                    textSizeOptions={["Normal"]}
                     wrapperId="contact-form-text-editor"
                   />
                 </div>
               </div>
               <br />
             </>
-          }
+          )}
         </Modal.Body>
         <Modal.Footer>
           <div className="col-auto mr-auto">
-            <button type="button" className="btn btn-secondary close-btn-message-modal float-right"
-              onClick={() => props.setShowModal(false)}>Close
+            <button
+              type="button"
+              className="btn btn-secondary close-btn-message-modal float-right"
+              onClick={() => props.setShowModal(false)}
+            >
+              Close
             </button>
           </div>
-          {!submitWait && !formSubmitted &&
-            <button type="button" className="btn btn-secondary" onClick={submit}>
+          {!submitWait && !formSubmitted && (
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={submit}
+            >
               {loading && <div className="isLoading-btn"></div>}
               {!loading && "Submit"}
             </button>
-          }
+          )}
         </Modal.Footer>
       </Modal>
     </>
   );
-}
+};
 
 export default CollectionSuggestion;

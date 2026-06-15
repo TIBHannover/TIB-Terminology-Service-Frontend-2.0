@@ -2,25 +2,21 @@ type AlertBoxProps = {
   message: string;
   alertColumnClass?: string;
   type: "danger" | "success" | "warning" | "info";
-}
+};
 
 type CopiedSuccessAlertProps = {
   message: string;
-}
-
+};
 
 export const AlertBox = (props: AlertBoxProps) => {
   return (
     <div className="row text-center">
       <div className={props.alertColumnClass}>
-        <div className={"alert alert-" + props.type}>
-          {props.message}
-        </div>
+        <div className={"alert alert-" + props.type}>{props.message}</div>
       </div>
     </div>
   );
-}
-
+};
 
 export const CopiedSuccessAlert = (props: CopiedSuccessAlertProps) => {
   return (
@@ -29,7 +25,6 @@ export const CopiedSuccessAlert = (props: CopiedSuccessAlertProps) => {
       <small>{props.message}</small>
     </div>
   );
-}
-
+};
 
 export default AlertBox;

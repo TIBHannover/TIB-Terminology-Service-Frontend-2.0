@@ -40,7 +40,6 @@ class UserModel {
     this.username = username;
   }
 
-
   setAuthProvider(providerName) {
     this.authProvider = providerName;
   }

@@ -37,7 +37,10 @@ export type DataTreeProps = {
 
 export type TreeProps = DataTreeProps & {
   selectedNodeIri?: string;
-  handleNodeSelectionInDataTree: (selectedNodeIri: string, showDetailTable: boolean) => void;
+  handleNodeSelectionInDataTree: (
+    selectedNodeIri: string,
+    showDetailTable: boolean,
+  ) => void;
   individualViewChanger?: React.MouseEventHandler<HTMLButtonElement> | "";
   handleResetTreeInParent: () => void;
   jumpToIri?: string | null;
@@ -47,9 +50,11 @@ export type TreeProps = DataTreeProps & {
   showListSwitchEnabled?: boolean;
 };
 
-export type TreeDomContent = ReactNode | {
-  _html_: string;
-};
+export type TreeDomContent =
+  | ReactNode
+  | {
+      _html_: string;
+    };
 
 export type BuildTreeResult = {
   treeDomContent: ReactNode;

@@ -8,9 +8,12 @@ const Footer = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img src={"/dfg_logo_schriftzug_weiss_foerderung_en.gif"}
-          alt="dfg-logo" className="footer-logo"
-          loading="lazy" />
+        <img
+          src={"/dfg_logo_schriftzug_weiss_foerderung_en.gif"}
+          alt="dfg-logo"
+          className="footer-logo"
+          loading="lazy"
+        />
       </a>
     </div>
     <div className="col-sm-2">

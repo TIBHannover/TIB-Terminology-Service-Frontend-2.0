@@ -1,6 +1,4 @@
-
 const LoadingPage = () => {
-
   return (
     <div className="row" style={{ marginTop: "20%" }}>
       <div className="col-12 text-center">
@@ -9,8 +7,6 @@ const LoadingPage = () => {
       </div>
     </div>
   );
-
-
-}
+};
 
 export default LoadingPage;
