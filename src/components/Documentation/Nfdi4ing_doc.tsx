@@ -16,11 +16,11 @@ export function nfdi4IngDoc() {
         <div className="col-sm-12">
           {/* accordion-1 start */}
           <div id="usage-accordion-1">
-            <div class="card">
-              <div class="card-header" id="usage-heading-8">
-                <h5 class="mb-0">
+            <div className="card">
+              <div className="card-header" id="usage-heading-8">
+                <h5 className="mb-0">
                   <button
-                    class="btn btn-link collpase-text-btn"
+                    className="btn btn-link collpase-text-btn"
                     data-toggle="collapse"
                     data-target="#usage-collapse-1"
                     aria-expanded="false"
@@ -32,11 +32,11 @@ export function nfdi4IngDoc() {
               </div>
               <div
                 id="usage-collapse-1"
-                class="collapse"
+                className="collapse"
                 aria-labelledby="usage-heading-1"
                 data-parent="#usage-accordion-1"
               >
-                <div class="card-body">
+                <div className="card-body">
                   <p className="justify">
                     There are two main ways of browsing the Terminology Service
                     . You can either browse the available ontologies via the
@@ -64,11 +64,11 @@ export function nfdi4IngDoc() {
           <br></br>
           {/* accordion-2 start */}
           <div id="usage-accordion-2">
-            <div class="card">
-              <div class="card-header" id="usage-heading-8">
-                <h5 class="mb-0">
+            <div className="card">
+              <div className="card-header" id="usage-heading-8">
+                <h5 className="mb-0">
                   <button
-                    class="btn btn-link collpase-text-btn"
+                    className="btn btn-link collpase-text-btn"
                     data-toggle="collapse"
                     data-target="#usage-collapse-2"
                     aria-expanded="false"
@@ -80,11 +80,11 @@ export function nfdi4IngDoc() {
               </div>
               <div
                 id="usage-collapse-2"
-                class="collapse"
+                className="collapse"
                 aria-labelledby="usage-heading-2"
                 data-parent="#usage-accordion-2"
               >
-                <div class="card-body">
+                <div className="card-body">
                   <p className="justify">
                     The main REST API of TIB Central Terminology Service enables
                     to search all the terminologies maintained by TIB in

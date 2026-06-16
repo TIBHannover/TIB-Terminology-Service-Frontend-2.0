@@ -4,11 +4,11 @@ export function nfdi4IngHelp() {
       <h2>Frequently Asked Questions about the NFDI4Ing Terminology Service</h2>
       {/* accordion-1 start */}
       <div id="usage-accordion-1">
-        <div class="card">
-          <div class="card-header" id="usage-heading-1">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-1">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-1"
                 aria-expanded="false"
@@ -21,11 +21,11 @@ export function nfdi4IngHelp() {
 
           <div
             id="usage-collapse-1"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-1"
             data-parent="#usage-accordion-1"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 Every field of expertise - be it a science, be it a trade, be it
                 a craft – comes with its own body of knowledge, comprised of
@@ -44,11 +44,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-2 start */}
       <div id="usage-accordion-2">
-        <div class="card">
-          <div class="card-header" id="usage-heading-2">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-2">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-2"
                 aria-expanded="false"
@@ -61,11 +61,11 @@ export function nfdi4IngHelp() {
 
           <div
             id="usage-collapse-2"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-2"
             data-parent="#usage-accordion-2"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 Concise terminology usually plays an important role in data
                 interpretation and in “writing up the research”. However, it is
@@ -91,11 +91,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-3 start */}
       <div id="usage-accordion-3">
-        <div class="card">
-          <div class="card-header" id="usage-heading-3">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-3">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-3"
                 aria-expanded="false"
@@ -108,11 +108,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-3"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-3"
             data-parent="#usage-accordion-3"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 NFDI4Ing’s Terminology Service provides domain-specific
                 concepts, their terms and relations to other concepts, their
@@ -158,11 +158,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-4 start */}
       <div id="usage-accordion-4">
-        <div class="card">
-          <div class="card-header" id="usage-heading-4">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-4">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-4"
                 aria-expanded="false"
@@ -174,11 +174,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-4"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-4"
             data-parent="#usage-accordion-4"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 Please get in touch with us to let us know your demand. Write a
                 mail to felix.engel [AT] tib.eu or leave an issue at our{" "}
@@ -204,11 +204,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-5 start */}
       <div id="usage-accordion-5">
-        <div class="card">
-          <div class="card-header" id="usage-heading-5">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-5">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-5"
                 aria-expanded="false"
@@ -220,11 +220,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-5"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-5"
             data-parent="#usage-accordion-5"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 NFDI4Ing’s Terminology Service is a repository software that was
                 designed to ingest terminologies employing these standards and
@@ -244,11 +244,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-6 start */}
       <div id="usage-accordion-6">
-        <div class="card">
-          <div class="card-header" id="usage-heading-6">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-6">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-6"
                 aria-expanded="false"
@@ -260,11 +260,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-6"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-6"
             data-parent="#usage-accordion-6"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 Yes, there are. There are a several terminology portals offered
                 by standardization bodies like ISO, DIN or IEC where you can
@@ -364,11 +364,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-7 start */}
       <div id="usage-accordion-7">
-        <div class="card">
-          <div class="card-header" id="usage-heading-7">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-7">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-7"
                 aria-expanded="false"
@@ -381,11 +381,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-7"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-7"
             data-parent="#usage-accordion-7"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 Ontologies will realise a machine-processable expression of the
                 semantics of established domain concepts. They will be applied
@@ -404,11 +404,11 @@ export function nfdi4IngHelp() {
       <br></br>
       {/* accordion-8 start */}
       <div id="usage-accordion-8">
-        <div class="card">
-          <div class="card-header" id="usage-heading-8">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-8">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-8"
                 aria-expanded="false"
@@ -420,11 +420,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-8"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-8"
             data-parent="#usage-accordion-8"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 <ul>
                   <li>
@@ -483,11 +483,11 @@ export function nfdi4IngHelp() {
       <br />
       {/* accordion-9 start */}
       <div id="usage-accordion-9">
-        <div class="card">
-          <div class="card-header" id="usage-heading-9">
-            <h5 class="mb-0">
+        <div className="card">
+          <div className="card-header" id="usage-heading-9">
+            <h5 className="mb-0">
               <button
-                class="btn btn-link collpase-text-btn"
+                className="btn btn-link collpase-text-btn"
                 data-toggle="collapse"
                 data-target="#usage-collapse-9"
                 aria-expanded="false"
@@ -499,11 +499,11 @@ export function nfdi4IngHelp() {
           </div>
           <div
             id="usage-collapse-9"
-            class="collapse"
+            className="collapse"
             aria-labelledby="usage-heading-9"
             data-parent="#usage-accordion-9"
           >
-            <div class="card-body">
+            <div className="card-body">
               <p className="justify">
                 <ul>
                   <li>

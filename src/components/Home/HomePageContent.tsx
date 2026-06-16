@@ -1,5 +1,8 @@
 import collectionsInfoJson from "../../assets/collectionsText.json";
 import { Link } from "react-router-dom";
+import { CollectionJsonData } from "../Collection/types";
+
+type CollectionsData = Record<string, CollectionJsonData>;
 
 const RenderHomePage = () => {
   return (
@@ -43,8 +46,9 @@ const RenderHomePage = () => {
   );
 };
 
-const CollectionCard = ({ collectionId }) => {
+const CollectionCard = ({ collectionId }: { collectionId: string }) => {
   let subPath = process.env.REACT_APP_PROJECT_SUB_PATH;
+  const collectionsInfo = collectionsInfoJson as CollectionsData;
   return (
     <div className="collection-card text-center">
       {collectionId === "FID BAUdigital" && (
@@ -56,27 +60,27 @@ const CollectionCard = ({ collectionId }) => {
         </div>
       )}
       <Link
-        to={subPath + collectionsInfoJson[collectionId]["ontology_list_url"]}
+        to={subPath + collectionsInfo[collectionId]["ontology_list_url"]}
         className="collection-image-anchor"
       >
         <img
           className="img-fluid"
           alt="collection_logo"
-          src={collectionsInfoJson[collectionId]["logo"]}
+          src={collectionsInfo[collectionId]["logo"]}
           loading="lazy"
           style={{
-            height: collectionsInfoJson[collectionId]["logo_height"] ?? 200,
-            width: collectionsInfoJson[collectionId]["logo_width"] ?? 300,
+            height: collectionsInfo[collectionId]["logo_height"] ?? 200,
+            width: collectionsInfo[collectionId]["logo_width"] ?? 300,
           }}
         />
       </Link>
       <div className="collection-card-text">
-        <p className="trunc">{collectionsInfoJson[collectionId]["text"]}</p>
+        <p className="trunc">{collectionsInfo[collectionId]["text"]}</p>
         <Link
           to={
             subPath +
             "/collections?col=" +
-            collectionsInfoJson[collectionId]["html_id"]
+            collectionsInfo[collectionId]["html_id"]
           }
           className="show-more-text-link"
         >

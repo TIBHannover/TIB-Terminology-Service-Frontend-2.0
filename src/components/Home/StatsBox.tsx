@@ -1,4 +1,4 @@
-export function createStatsBox(statsResult) {
+export function createStatsBox(statsResult: Record<string, number>) {
   let box = [
     <div className="col-sm-12 stats-box">
       <h3 className="font-weight-bold">Terminology Service Statistics</h3>
