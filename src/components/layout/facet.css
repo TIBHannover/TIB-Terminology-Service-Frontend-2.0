@@ -23,6 +23,14 @@ body .facet-item-row {
   margin-bottom: 10px;
 }
 
+body .facet-item-label {
+  cursor: pointer;
+}
+
+body .facet-item-text {
+  cursor: pointer;
+}
+
 body .facet-item-row:hover {
   background-color: rgba(119, 122, 121, 0.192);
   border-radius: 15px;

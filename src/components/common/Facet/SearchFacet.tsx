@@ -33,9 +33,13 @@ export const FacetCheckBox = (
 ) => {
   const facetFieldName = props.facetFieldName;
   return (
-    <div className="row facet-item-row" key={facetFieldName}>
-      <div className="col-sm-9">
-        <div className="form-check">
+    <label
+      className="row facet-item-row facet-item-label"
+      htmlFor={props.idPrefix + facetFieldName}
+      key={facetFieldName}
+    >
+      <span className={props.disableCount ? "col-sm-12" : "col-sm-9"}>
+        <span className="form-check mb-0">
           <input
             className={"form-check-input " + (props.className ?? "")}
             type="checkbox"
@@ -46,25 +50,22 @@ export const FacetCheckBox = (
             checked={props.selectedFacetFields.includes(facetFieldName)}
             onChange={() => {}}
           />
-          <label
-            className="form-check-label"
-            htmlFor={props.idPrefix + facetFieldName}
-          >
+          <span className="form-check-label facet-item-text">
             {facetFieldName}
-          </label>
-        </div>
-      </div>
+          </span>
+        </span>
+      </span>
       {!props.disableCount && (
-        <div className="col-sm-3">
-          <div
+        <span className="col-sm-3">
+          <span
             className="facet-result-count"
             id={"facet-count-" + facetFieldName}
           >
             {props.data[facetFieldName]}
-          </div>
-        </div>
+          </span>
+        </span>
       )}
-    </div>
+    </label>
   );
 };
 
