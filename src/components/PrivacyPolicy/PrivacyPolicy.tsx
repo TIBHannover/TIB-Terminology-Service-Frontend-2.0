@@ -1,6 +1,8 @@
+import "../layout/documentationPage.css";
+
 const PrivacyPolicy = () => {
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-center doc-design">
       <div className="col-sm-8">
         <h2>Privacy Policy</h2>
         <p>

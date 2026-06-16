@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import "../layout/documentationPage.css";
 
 const TermsOfUse = () => {
   useEffect(() => {
@@ -14,7 +15,7 @@ const TermsOfUse = () => {
   }, []);
 
   return (
-    <div className="sc-ksJisA bIzESj">
+    <div className="sc-ksJisA bIzESj static-page-glass">
       <h2>Terms of Use Terminology Service (TS)</h2>
       <strong>Status: May 2024</strong>
       <p>

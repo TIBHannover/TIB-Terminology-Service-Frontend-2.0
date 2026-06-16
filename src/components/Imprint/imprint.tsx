@@ -1,3 +1,5 @@
+import "../layout/documentationPage.css";
+
 const Imprint = () => {
   return (
     <div className="row justify-content-center doc-design">
