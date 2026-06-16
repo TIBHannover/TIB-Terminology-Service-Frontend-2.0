@@ -244,8 +244,7 @@ const TermDetail = (props: TermDetailComPros) => {
         {!waiting && activeTab === NOTES_TAB_ID && (
           <NoteList
             key={"notesPage"}
-            //@ts-ignore
-            term={targetTerm}
+            term={targetTerm as any}
             termType={props.typeForNote}
           />
         )}
@@ -269,12 +268,12 @@ const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
   function createTabs() {
     let result = [];
     for (let configItemKey in NodePageTabConfig as TermTabMetadata) {
-      //@ts-ignore
-      let configObject = NodePageTabConfig[configItemKey];
+      let configObject = (NodePageTabConfig as TermTabMetadata)[
+        configItemKey as keyof TermTabMetadata
+      ];
       let linkUrl = UrlFactory.setParam({
         name: SiteUrlParamNames.SubTabInTermTable,
-        //@ts-ignore
-        value: NodePageTabConfig[configItemKey]["urlEndPoint"],
+        value: configObject.urlEndPoint,
         updateUrl: false,
       });
       if (
@@ -304,7 +303,7 @@ const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
             onClick={props.tabChangeHandler}
             data-value={configObject["tabId"]}
             className={
-              props.activeTab === parseInt(configObject["tabId"])
+              props.activeTab === Number(configObject["tabId"])
                 ? "nav-link active"
                 : "nav-link"
             }

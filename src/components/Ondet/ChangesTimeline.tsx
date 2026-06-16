@@ -13,9 +13,9 @@ import Toolkit from "../../Libs/Toolkit";
 const ROBOT_DIFF_STATIC_HEADER_REGEX =
   /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
 
-const ondetApi = new OndetApi({});
+const ondetApi = new (OndetApi as any)({});
 
-const customMarkdownComponents = {
+const customMarkdownComponents: any = {
   h3: "h6",
   h4: "p",
   a(props) {
@@ -108,7 +108,7 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
       groupedChanges[ppLabel].push({ s, p, o });
     });
 
-    Object.entries(groupedChanges).forEach(([ppLabel, triples]) => {
+    Object.entries(groupedChanges).forEach(([ppLabel, triples]: any) => {
       markdownContent += `### ${ppLabel}\n`;
 
       triples.forEach((triple) => {

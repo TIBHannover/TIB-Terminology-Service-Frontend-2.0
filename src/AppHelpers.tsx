@@ -1,12 +1,17 @@
 import AlertBox from "./components/common/Alerts/Alerts";
+import { ReactNode } from "react";
 
-export function InlineWrapperWithMargin({ children }) {
-  return [
+export function InlineWrapperWithMargin({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return (
     <div className="row">
       <div className="col-sm-6 skeleton-loading-box">{children}</div>
       <div className="col-sm-6 skeleton-loading-box">{children}</div>
-    </div>,
-  ];
+    </div>
+  );
 }
 
 export function setSiteTitleAndFavIcon() {

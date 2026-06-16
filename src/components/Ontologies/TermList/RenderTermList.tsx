@@ -19,7 +19,7 @@ const PAGE_SIZES_FOR_DROPDOWN = [
 
 export const RenderTermList = (props) => {
   const [rowDataForTable, setRowDataForTable] = useState([]);
-  const [columnDataForTable, setColumnDataForTable] = useState();
+  const [columnDataForTable, setColumnDataForTable] = useState<any>();
   const [noResultFlag, setNoResultFlag] = useState(false);
   const [termsetModals, setTermsetModals] = useState([]);
 

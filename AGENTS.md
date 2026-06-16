@@ -3,7 +3,7 @@
 before starting:
 - Read `.codex/instructions.md`
 - Do not read `.codex/specs/completed` 
-- Load `.codex/config.toml` into your `.env` file
+- Do not read anything from `public/`. Completely ignore it.
 
 Tasks workflow:
 - Always look at the `.codex/specs/new` unless you are instructed to do otherwise

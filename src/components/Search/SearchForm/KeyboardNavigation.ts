@@ -90,8 +90,9 @@ function getNextSiblings() {
 }
 
 function getPreviousSiblings() {
-  let naviationalItems = document.getElementsByClassName("item-for-navigation");
-  naviationalItems = [].slice.call(naviationalItems);
+  let naviationalItems: any[] = Array.prototype.slice.call(
+    document.getElementsByClassName("item-for-navigation"),
+  );
   naviationalItems = naviationalItems.reverse();
   let lastSelectedIndexObserved = false;
   for (let item of naviationalItems) {

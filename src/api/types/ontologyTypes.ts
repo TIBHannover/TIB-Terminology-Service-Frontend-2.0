@@ -120,13 +120,13 @@ export type TermListData = {
 export type OntologySuggestionData = {
   username: string;
   email: string;
-  reason: string;
+  reason: string | false;
   name: string;
   purl: string;
   ontologyFile?: string;
-  collection_ids?: string;
+  collection_ids?: string | string[];
   collection_suggestion?: boolean;
-  [key: string]: string | boolean | undefined;
+  [key: string]: string | boolean | string[] | undefined;
 };
 
 export type OntologyShapeTestResult = {

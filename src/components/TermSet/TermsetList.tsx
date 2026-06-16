@@ -186,7 +186,6 @@ const TermsetCard = (props: {
                   afterDeleteProcess={() => {}}
                   objectToDelete={termset}
                   method="DELETE"
-                  //@ts-ignore
                   btnText={<i className="fa fa-close fa-borderless"></i>}
                   btnClass="extra-sm-btn ml-2"
                 />

@@ -1,10 +1,21 @@
 import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from "./UrlParamNames";
 
+type NoteUrlFactoryParams = Record<string, any>;
+
 class NoteUrlFactory {
+  baseUrl: string;
+  history: ReturnType<typeof createBrowserHistory>;
+  page: string | null;
+  size: string | null;
+  originalNotes: string | null;
+  noteType: string | null;
+  noteId: string | null;
+  commentId: string | null;
+
   constructor() {
     this.baseUrl = window.location.pathname;
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     this.history = createBrowserHistory();
     this.page = url.searchParams.get(SiteUrlParamNames.Page);
     this.size = url.searchParams.get(SiteUrlParamNames.Size);
@@ -14,13 +25,13 @@ class NoteUrlFactory {
     this.commentId = url.searchParams.get(SiteUrlParamNames.CommentId);
   }
 
-  setNoteId({ noteId }) {
+  setNoteId({ noteId }: NoteUrlFactoryParams) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.set(SiteUrlParamNames.NoteId, noteId);
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
 
-  update({ page, size, originalNotes, noteType }) {
+  update({ page, size, originalNotes, noteType }: NoteUrlFactoryParams) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.set(SiteUrlParamNames.Page, page);
     currentUrlParams.set(SiteUrlParamNames.Size, size);
@@ -29,7 +40,7 @@ class NoteUrlFactory {
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }
 
-  getCurrentNoteLink({ noteId, fullLink = false }) {
+  getCurrentNoteLink({ noteId, fullLink = false }: NoteUrlFactoryParams) {
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.set(SiteUrlParamNames.NoteId, noteId);
     searchParams.delete(SiteUrlParamNames.Page);
@@ -47,7 +58,7 @@ class NoteUrlFactory {
     return window.location.pathname + "?" + searchParams.toString();
   }
 
-  getCommentLink({ commentId }) {
+  getCommentLink({ commentId }: NoteUrlFactoryParams) {
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.set(SiteUrlParamNames.CommentId, commentId);
     return (
@@ -58,7 +69,7 @@ class NoteUrlFactory {
     );
   }
 
-  getNoteListLink({ page, size }) {
+  getNoteListLink({ page, size }: NoteUrlFactoryParams) {
     let currentUrl = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
     let locationObject = window.location;

@@ -112,11 +112,11 @@ export const OntologyPageHeadSection = () => {
           <div className="pt-1">
             <button className="btn btn-sm" onClick={handleFullScreen}>
               {!ontologyPageContext.fullScreenMode && (
-                <i class="fas fa-expand fs-6 mt-1" title="Full screen"></i>
+                <i className="fas fa-expand fs-6 mt-1" title="Full screen"></i>
               )}
               {ontologyPageContext.fullScreenMode && (
                 <i
-                  class="fas fa-compress fs-6 mt-1"
+                  className="fas fa-compress fs-6 mt-1"
                   title="Exit full screen"
                 ></i>
               )}

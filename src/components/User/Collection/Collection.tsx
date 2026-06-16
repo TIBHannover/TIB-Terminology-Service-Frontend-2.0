@@ -64,8 +64,7 @@ const UserCollection = () => {
       userSttings.userCollectionEnabled = false;
     }
     appContext.setUserSettings(userSttings);
-    //@ts-ignore
-    await storeUserSettings(userSttings);
+    await storeUserSettings(userSttings as any);
   }
 
   async function disableTheDeletedCollection(
@@ -78,8 +77,7 @@ const UserCollection = () => {
       userSttings.activeCollection = { title: "", ontology_ids: [] };
       userSttings.userCollectionEnabled = false;
       appContext.setUserSettings(userSttings);
-      //@ts-ignore
-      await storeUserSettings(userSttings);
+      await storeUserSettings(userSttings as any);
     }
   }
 
@@ -128,7 +126,6 @@ const UserCollection = () => {
             afterDeleteProcess={disableTheDeletedCollection}
             objectToDelete={collection}
             method="DELETE"
-            //@ts-ignore
             btnText={<i className="fa fa-close fa-borderless"></i>}
             btnClass="extra-sm-btn ms-2"
           />

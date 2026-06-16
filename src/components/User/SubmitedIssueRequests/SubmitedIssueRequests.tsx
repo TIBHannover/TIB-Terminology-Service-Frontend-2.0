@@ -25,19 +25,19 @@ export default function SubmitedIssueRequests() {
             you.
           </b>
         </h5>
-        <table class="table table-striped">
+        <table className="table table-striped">
           <tbody>
             <tr>
-              <th scope="col" class="col-6">
+              <th scope="col" className="col-6">
                 Issue
               </th>
-              <th scope="col" class="col-2">
+              <th scope="col" className="col-2">
                 Issue Type
               </th>
-              <th scope="col" class="col-2">
+              <th scope="col" className="col-2">
                 ontology
               </th>
-              <th scope="col" class="col-2">
+              <th scope="col" className="col-2">
                 Created at
               </th>
             </tr>
@@ -72,15 +72,15 @@ function renderIssueTableRows(issuesList) {
   for (let issue of issuesList) {
     result.push(
       <tr>
-        <td scope="col" class="col-6">
+        <td scope="col" className="col-6">
           <a href={issue["issue_url"]} target="_blank">
             {issue["issue_url"]}
           </a>
         </td>
-        <td scope="col" class="col-2">
+        <td scope="col" className="col-2">
           {ISSUE_TYPE[issue["issue_type"]]}
         </td>
-        <td scope="col" class="col-2">
+        <td scope="col" className="col-2">
           <a
             href={
               process.env.REACT_APP_PROJECT_SUB_PATH +
@@ -92,7 +92,7 @@ function renderIssueTableRows(issuesList) {
             {issue["ontology_id"]}
           </a>
         </td>
-        <td scope="col" class="col-2">
+        <td scope="col" className="col-2">
           {issue["created_at"]}
         </td>
       </tr>,

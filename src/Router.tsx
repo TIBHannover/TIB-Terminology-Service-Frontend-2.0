@@ -28,6 +28,9 @@ import UserApiKey from "./components/User/APIKEY/ApiKey";
 import CollectionPage from "./components/Collection/CollectionPage";
 
 const AppRouter = () => {
+  const TermSetPageComponent = TermSetPage as any;
+  const BrowseTermSetListComponent = BrowseTermSetList as any;
+
   return (
     <Switch>
       <Route
@@ -67,11 +70,11 @@ const AppRouter = () => {
       />
       <Route
         path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets/:termsetId"}
-        component={TermSetPage}
+        component={TermSetPageComponent}
       />
       <Route
         path={process.env.REACT_APP_PROJECT_SUB_PATH + "/termsets"}
-        component={BrowseTermSetList}
+        component={BrowseTermSetListComponent}
       />
       <RequireLoginRoute
         path={process.env.REACT_APP_PROJECT_SUB_PATH + "/mycollections"}

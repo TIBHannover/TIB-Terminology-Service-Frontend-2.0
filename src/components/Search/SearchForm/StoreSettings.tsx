@@ -172,7 +172,7 @@ export const SearchSettingForm = (props) => {
           <textarea
             className="form-control"
             id={"searchSettingDescription"}
-            rows="5"
+            rows={5}
             placeholder="Enter a Description"
           ></textarea>
         </div>

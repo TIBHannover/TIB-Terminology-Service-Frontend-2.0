@@ -76,7 +76,7 @@ const Graph = (props: GraphProps) => {
         iri: targetIri,
         lang: ontoContext.ontoLang,
       } as any);
-      graphData = (await skosApi.fetchGraphData()) as GraphData | null;
+      graphData = (await skosApi.fetchGraphData()) as unknown as GraphData | null;
     }
 
     if (reset) {

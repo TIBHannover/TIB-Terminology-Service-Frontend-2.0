@@ -194,7 +194,7 @@ const RenderSearchForm = (props) => {
                   electric vehicle
                 </Link>
                 ,
-                <Link className="example-link" href="search?q=agent">
+                <Link className="example-link" to="search?q=agent">
                   agent
                 </Link>
               </span>

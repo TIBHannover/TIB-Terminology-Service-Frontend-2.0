@@ -62,7 +62,8 @@ export type UserModelType = {
 export type SearchSettingPayload = {
   title: string;
   description?: string;
-  settings: SearchSetting;
+  setting?: SearchSetting;
+  settings?: SearchSetting;
 };
 
 export type SearchSettingApiResponse = {
@@ -82,7 +83,8 @@ export type ContactFormData = {
   name: string;
   safeQuestion: string;
   safeAnswer: string;
-  type: string;
+  type: string | number;
+  appError?: boolean;
 };
 
 export type ContentReport = {

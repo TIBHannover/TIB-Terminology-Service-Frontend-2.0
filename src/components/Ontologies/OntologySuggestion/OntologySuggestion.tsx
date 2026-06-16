@@ -36,7 +36,7 @@ const OntologySuggestion = () => {
   const [submitWait, setSubmitWait] = useState(false);
   const [runningTest, setRunningTest] = useState(false);
   const [testFailed, setTestFailed] = useState(false);
-  const [editorState, setEditorState] = useState(null);
+  const [editorState, setEditorState] = useState<any>(null);
   const [progressStep, setProgressStep] = useState(
     ONTOLOGY_SUGGESTION_INTRO_STEP,
   );
@@ -48,12 +48,12 @@ const OntologySuggestion = () => {
   const [shapeTestIsReady, setShapeTestIsReady] = useState(false);
   const [ontologyExist, setOntologyExist] = useState(false);
   const [existingOntologyId, setExistingOntologyId] = useState("");
-  const [existingCollections, setExistingCollections] = useState([]);
+  const [existingCollections, setExistingCollections] = useState<any[]>([]);
   const [selectedCollections, setSelectedCollections] = useState(
     inputCollectionId ? [inputCollectionId] : [],
   );
   const [collectionSuggestMode, setCollectionSuggestMode] = useState(false);
-  const [missingCollectionIds, setMissingCollectionIds] = useState([]);
+  const [missingCollectionIds, setMissingCollectionIds] = useState<any[]>([]);
   const [suggestionExist, setSuggestionExist] = useState(false);
   const [purlIsNotValidMessage, setPurlIsNotValidMessage] = useState("");
   const [queryEnabled, setQueryEnabled] = useState(true);
@@ -74,7 +74,7 @@ const OntologySuggestion = () => {
     enabled: queryEnabled,
   });
 
-  let collectionIds = [];
+  let collectionIds: any[] = [];
   if (collectionWithOntologyListQuery.data) {
     for (let col in collectionWithOntologyListQuery.data) {
       collectionIds.push(col);
@@ -90,7 +90,7 @@ const OntologySuggestion = () => {
   async function shapeTest(purl) {
     if (!shapeTestIsReady) {
       setRunningTest(true);
-      let validationResult = await runShapeTest(purl);
+      let validationResult: any = await runShapeTest(purl);
       if (!validationResult || validationResult["shape_test_failed"]) {
         setTestFailed(true);
         setRunningTest(false);
@@ -119,9 +119,9 @@ const OntologySuggestion = () => {
   async function runOntologyMainMetaDataValidation(ontoPurl) {
     let ontoExist = false;
     let existingOnto = "";
-    let existingCollectionsList = [];
-    let selectedCollectionIds = [];
-    let missingCollections = [];
+    let existingCollectionsList: any[] = [];
+    let selectedCollectionIds: any[] = [];
+    let missingCollections: any[] = [];
     if (process.env.REACT_APP_PROJECT_ID === "general") {
       selectedCollectionIds = selectedCollections;
     } else {
@@ -157,7 +157,7 @@ const OntologySuggestion = () => {
       return true;
     } else if (ontoExist && missingCollections.length !== 0) {
       // ontology exist but there are some missing collection ids. suggest add to collection.
-      let formData = form;
+      let formData: any = form;
       formData.collection_suggestion = true;
       formData.collection_ids = missingCollections;
       setForm(formData);
@@ -234,7 +234,7 @@ const OntologySuggestion = () => {
       return;
     }
     setSubmitWait(true);
-    let formData = form;
+    let formData: any = form;
     reason = editorState.getCurrentContent();
     reason = draftToMarkdown(convertToRaw(reason));
     formData.reason = reason;
@@ -262,6 +262,7 @@ const OntologySuggestion = () => {
     form: form,
     setForm: setForm,
     validationResult: shapeValidationError,
+    validationResults: shapeValidationError,
     collections: collections,
     selectedCollections: selectedCollections,
     setSelectedCollections: setSelectedCollections,
@@ -286,7 +287,7 @@ const OntologySuggestion = () => {
     suggestionExist;
 
   if (process.env.REACT_APP_ONTOLOGY_SUGGESTION !== "true") {
-    return "";
+    return null;
   }
 
   return (
@@ -305,8 +306,8 @@ const OntologySuggestion = () => {
               role="progressbar"
               style={{ width: progressBarValue + "%" }}
               aria-valuenow={progressBarValue}
-              aria-valuemin="0"
-              aria-valuemax="100"
+              aria-valuemin={0}
+              aria-valuemax={100}
             ></div>
           </div>
           <br></br>
@@ -542,11 +543,11 @@ const OntologyExtraMetadataForm = () => {
             return (
               <li>
                 <Link
-                  href={
+                  to={
                     process.env.REACT_APP_PROJECT_SUB_PATH +
                     "/ontologies?collection=" +
                     colId
-                  }
+                }
                 >
                   {colId}
                 </Link>
@@ -623,7 +624,7 @@ const OntologyExtraMetadataForm = () => {
       </>
     );
   }
-  return "";
+  return null;
 };
 
 const Intro = () => {

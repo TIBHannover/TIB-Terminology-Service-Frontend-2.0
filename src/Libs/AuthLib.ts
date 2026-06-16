@@ -47,7 +47,7 @@ class Auth {
       user.setFullName(response["name"]);
       user.setUsername(response["ts_username"]);
       user.setSystemAdmin(response["system_admin"]);
-      user.setSettings(response["settings"]);
+      user.setSettings(response["settings"] as any);
       user.setAuthProvider(authProvider);
       if (authProvider === "github") {
         user.setGitInfo({

@@ -356,13 +356,21 @@ export function githubPanelTourSteps() {
   if (document.getElementsByClassName("git-issue-title").length !== 0) {
     steps.push({
       selector: tourSelectorPrefix + "github-issue-title",
-      content:
-        "This is the issue title. Clicking on it will open the issue page on GitHub.",
+      content: () => (
+        <>
+          This is the issue title. Clicking on it will open the issue page on
+          GitHub.
+        </>
+      ),
     });
     steps.push({
       selector: tourSelectorPrefix + "github-issue-number",
-      content:
-        "This is the issue #number, opening date, and the GitHub user who opened it.",
+      content: () => (
+        <>
+          This is the issue #number, opening date, and the GitHub user who
+          opened it.
+        </>
+      ),
     });
   }
 

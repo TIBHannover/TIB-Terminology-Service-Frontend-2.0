@@ -6,7 +6,7 @@ import AlertBox from "../../common/Alerts/Alerts";
 export const RenderIndividualList = (props) => {
   const ontologyPageContext = useContext(OntologyPageContext);
 
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<any>("");
 
   function createIndividualList() {
     let result = [];

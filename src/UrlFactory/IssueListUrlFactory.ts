@@ -3,9 +3,17 @@
 import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from "./UrlParamNames";
 
+type IssueListUrlFactoryParams = Record<string, any>;
+
 class IssueListUrlFactory {
+  selectedStateId: string | null;
+  pageNumber: string | null;
+  selectedType: string | null;
+  history: ReturnType<typeof createBrowserHistory>;
+  baseUrl: string;
+
   constructor() {
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     this.selectedStateId = url.searchParams.get(SiteUrlParamNames.IssueState);
     this.pageNumber = url.searchParams.get(SiteUrlParamNames.Page);
     this.selectedType = url.searchParams.get(SiteUrlParamNames.IssueType);
@@ -13,7 +21,7 @@ class IssueListUrlFactory {
     this.baseUrl = window.location.pathname;
   }
 
-  update({ pageNumber, stateId, issueType }) {
+  update({ pageNumber, stateId, issueType }: IssueListUrlFactoryParams) {
     let currentUrlParams = new URLSearchParams();
     currentUrlParams.set(SiteUrlParamNames.Page, pageNumber);
     currentUrlParams.set(SiteUrlParamNames.IssueState, stateId);

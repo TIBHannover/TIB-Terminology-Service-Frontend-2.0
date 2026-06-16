@@ -220,28 +220,28 @@ const LoadSetting = (props) => {
                 <AlertBox
                   type="danger"
                   message="Are you sure you want to delete this setting? This action is irreversible."
-                  alertColumnclassName="col-sm-12"
+                  alertColumnClass="col-sm-12"
                 />
               )}
               {deleteMode && !editMode && deleteSuccess === true && (
                 <AlertBox
                   type="success"
                   message="Setting deleted successfully."
-                  alertColumnclassName="col-sm-12"
+                  alertColumnClass="col-sm-12"
                 />
               )}
               {deleteMode && !editMode && deleteSuccess === false && (
                 <AlertBox
                   type="danger"
                   message="Setting could not be deleted. Please try again later."
-                  alertColumnclassName="col-sm-12"
+                  alertColumnClass="col-sm-12"
                 />
               )}
               {editMode && !deleteMode && editTitleError && (
                 <AlertBox
                   type="danger"
                   message="Title already exists. Please choose a different title."
-                  alertColumnclassName="col-sm-12"
+                  alertColumnClass="col-sm-12"
                 />
               )}
               {editMode && !deleteMode && editSuccess === null && (
@@ -254,14 +254,14 @@ const LoadSetting = (props) => {
                 <AlertBox
                   type="success"
                   message="Setting updated successfully."
-                  alertColumnclassName="col-sm-12"
+                  alertColumnClass="col-sm-12"
                 />
               )}
               {editMode && !deleteMode && editSuccess === false && (
                 <AlertBox
                   type="danger"
                   message="Setting could not be updated. Please try again later."
-                  alertColumnclassName="col-sm-12"
+                  alertColumnClass="col-sm-12"
                 />
               )}
             </div>

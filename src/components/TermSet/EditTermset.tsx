@@ -93,8 +93,7 @@ const EditTermset = (props: TermsetEditComProps) => {
     let searchResult = await olsSearch(inputQuery, true);
     let terms = searchResult ? searchResult.elements : [];
     let options: MultiSelectOption[] = [];
-    //@ts-ignore
-    for (let term of terms) {
+    for (let term of terms as any[]) {
       let opt: MultiSelectOption = {};
       opt["text"] = `${term.ontologyId}:${term.label} (${term.type})`;
       opt["iri"] = term.iri;

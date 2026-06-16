@@ -303,12 +303,12 @@ const SearchResult = () => {
   ) {
     let size = parseInt(e.target.value);
     setPageSize(size);
-    commonUrlFactory.setParam({ name: SiteUrlParamNames.Size, value: size });
+    commonUrlFactory.setParam({ name: SiteUrlParamNames.Size, value: String(size) });
   }
 
   function handlePagination(value: number) {
     setPageNumber(value);
-    commonUrlFactory.setParam({ name: SiteUrlParamNames.Page, value: value });
+    commonUrlFactory.setParam({ name: SiteUrlParamNames.Page, value: String(value) });
   }
 
   function pageCount() {

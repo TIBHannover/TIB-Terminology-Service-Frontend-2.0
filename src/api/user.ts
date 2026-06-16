@@ -113,7 +113,7 @@ export async function storeUserSettings(
 
 export async function storeSearchSettings(
   settingData: SearchSettingPayload,
-): Promise<SearchSettingApiResponse | boolean> {
+): Promise<SearchSettingApiResponse | boolean | string> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({
       isJson: true,
@@ -161,7 +161,7 @@ export async function fetchSearchSettings(): Promise<
 export async function updateSearchSettings(
   settingId: string | number,
   settingData: SearchSettingPayload,
-): Promise<SearchSettingApiResponse | boolean> {
+): Promise<SearchSettingApiResponse | boolean | string> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({
       isJson: true,

@@ -1,9 +1,20 @@
 import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from "./UrlParamNames";
 
+type OntologyListUrlFactoryParams = Record<string, any>;
+
 class OntologyListUrlFactory {
+  collections: string[];
+  subjects: string[];
+  sortedBy: string | null;
+  page: string | null;
+  size: string | null;
+  keywordFilter: string | null;
+  baseUrl: string;
+  history: ReturnType<typeof createBrowserHistory>;
+
   constructor() {
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     this.collections = url.searchParams.getAll(SiteUrlParamNames.Collection);
     this.subjects = url.searchParams.getAll(SiteUrlParamNames.Subject);
     this.sortedBy = url.searchParams.get(SiteUrlParamNames.SortBy);
@@ -22,7 +33,7 @@ class OntologyListUrlFactory {
     page,
     size,
     andOpValue,
-  }) {
+  }: OntologyListUrlFactoryParams) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.KeywordFilter);
 

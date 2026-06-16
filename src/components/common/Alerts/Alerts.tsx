@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 type AlertBoxProps = {
-  message: string;
+  message: ReactNode;
   alertColumnClass?: string;
   type: "danger" | "success" | "warning" | "info";
 };

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import AlertBox from "../Alerts/Alerts";
 import Modal from "react-bootstrap/Modal";
 
 type DeleteModalButtonProps = {
-  btnText?: Element | string;
+  btnText?: ReactNode;
   btnClass?: string;
   setShowModal: (show: boolean) => void;
 };
@@ -26,13 +26,13 @@ export const DeleteModalBtn = (props: DeleteModalButtonProps) => {
 type DeleteModalProps = {
   modalId: string;
   deleteEndpoint: string;
-  formData: any;
+  formData?: any;
   callHeaders: HeadersInit;
   afterDeleteProcess?: Function;
   objectToDelete?: object;
   afterDeleteRedirectUrl: string;
   method?: string;
-  btnText?: Element | string;
+  btnText?: ReactNode;
   btnClass?: string;
 };
 

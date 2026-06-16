@@ -27,12 +27,12 @@ const TermRequest = (props) => {
   const ontologyPageContext = useContext(OntologyPageContext);
   const appContext = useContext(AppContext);
 
-  const [editorState, setEditorState] = useState(null);
+  const [editorState, setEditorState] = useState<any>(null);
   const [submitFinished, setSubmitFinished] = useState(false);
   const [errorInSubmit, setErrorInSubmit] = useState(false);
   const [newIssueUrl, setNewIssueUrl] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [issueTemplates, setIssueTemplates] = useState([]);
+  const [issueTemplates, setIssueTemplates] = useState<any[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState(0);
   const [issueTitle, setIssueTitle] = useState("");
   const [loginModal, setLoginModal] = useState(false);
@@ -59,7 +59,7 @@ const TermRequest = (props) => {
       repoUrl: ontologyPageContext.ontology.repo_url,
       gitUsername: localStorage.getItem("ts_username"),
     }).then((templates) => {
-      setIssueTemplates(templates);
+      setIssueTemplates((templates || []) as any[]);
     });
   }
 
@@ -68,7 +68,7 @@ const TermRequest = (props) => {
     let result = [];
     let value = 1;
     if (!templates) {
-      return "";
+      return null;
     }
     for (let temp of templates) {
       result.push(
@@ -192,11 +192,11 @@ const TermRequest = (props) => {
   }, []);
 
   if (process.env.REACT_APP_GITHUB_ISSUE_REQUEST_FEATURE !== "true") {
-    return "";
+    return null;
   }
 
   if (appContext.user && localStorage.getItem("authProvider") !== "github") {
-    return "";
+    return null;
   }
 
   return (

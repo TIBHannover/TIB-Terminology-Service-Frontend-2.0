@@ -18,6 +18,7 @@ export type TermDetailComPros = {
   extractKey: string;
   componentIdentity: string;
   typeForNote: string;
+  isIndividual?: boolean;
 };
 
 export type RenderTermDetailComProps = {

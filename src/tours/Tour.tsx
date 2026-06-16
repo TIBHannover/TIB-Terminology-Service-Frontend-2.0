@@ -27,18 +27,18 @@ const ONTOLOGY_LIST_PAGE_ID = "ontologyListPage";
 const SiteTour = () => {
   const appContext = useContext(AppContext);
   const location = useLocation();
-  const [currentPage, setCurrentPage] = useState();
+  const [currentPage, setCurrentPage] = useState<any>();
   const isUserLogin = !!appContext.user;
   const tourP = getTourProfile();
 
   const [isTourOpen, setIsTourOpen] = useState(false);
-  const [tourSteps, setTourSteps] = useState([]);
+  const [tourSteps, setTourSteps] = useState<any[]>([]);
 
   function whichPage() {
     let currentUrl = window.location.href;
     let baseUrl =
       window.location.origin + process.env.REACT_APP_PROJECT_SUB_PATH;
-    let urlPath = currentUrl.split(baseUrl);
+    let urlPath: any = currentUrl.split(baseUrl);
     if (urlPath.length >= 1) {
       urlPath = urlPath[urlPath.length - 1];
     } else {
@@ -61,7 +61,7 @@ const SiteTour = () => {
   }
 
   function makeHomePageTourSteps() {
-    let tourSteps = [];
+    let tourSteps: any[] = [];
     if (process.env.REACT_APP_PROJECT_ID === "general") {
       tourSteps = tourWelcomeStep();
       tourSteps = tourSteps.concat(homePageTourStepsTibGeneral());
@@ -86,7 +86,7 @@ const SiteTour = () => {
   }
 
   function makeOntologyPageTourSteps() {
-    let tourSteps = [];
+    let tourSteps: any[] = [];
     let cUrl = window.location.href;
     if (cUrl.includes("/terms")) {
       setTimeout(() => {
@@ -199,7 +199,7 @@ const SiteTour = () => {
 
   if (!currentPage) {
     // do not show the tour button when the page does not need one
-    return "";
+    return null;
   }
 
   return (

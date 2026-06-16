@@ -219,7 +219,7 @@ const AddCollection = (props) => {
               <textarea
                 className="form-control"
                 id={"collectionDescription" + idPostfix}
-                rows="5"
+                rows={5}
                 placeholder="Enter a Description"
                 defaultValue={editMode ? collectionToEdit["description"] : ""}
               ></textarea>

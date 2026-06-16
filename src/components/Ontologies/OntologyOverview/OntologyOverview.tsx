@@ -9,7 +9,7 @@ import { AppContext } from "../../../context/AppContext";
 import OntologyAdopters from "./widgets/OntologyAdopters";
 
 // ADDED: new modal component
-import OntologyAdoptRequest from "./widgets/OntologyAdoptRequest.jsx";
+import OntologyAdoptRequest from "./widgets/OntologyAdoptRequest";
 
 const OntologyOverview = () => {
   /*

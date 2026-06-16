@@ -1,7 +1,12 @@
 import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from "./UrlParamNames";
 
+type UrlParam = { name: string; value: string; updateUrl?: boolean };
+
 class CommonUrlFactory {
+  baseUrl: string;
+  history: ReturnType<typeof createBrowserHistory>;
+
   constructor() {
     this.baseUrl = window.location.pathname;
     this.history = createBrowserHistory();
@@ -16,7 +21,7 @@ class CommonUrlFactory {
     this.history.push(this.baseUrl);
   }
 
-  setParam({ name, value, updateUrl = true }) {
+  setParam({ name, value, updateUrl = true }: UrlParam) {
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.set(name, value);
     let newUrl = this.baseUrl + "?" + searchParams.toString();
@@ -26,39 +31,39 @@ class CommonUrlFactory {
     return newUrl;
   }
 
-  deleteParam({ name }) {
+  deleteParam({ name }: Pick<UrlParam, "name">) {
     let searchParams = new URLSearchParams(window.location.search);
     searchParams.delete(name);
     this.history.push(this.baseUrl + "?" + searchParams.toString());
   }
 
-  getParam({ name }) {
-    let url = new URL(window.location);
+  getParam({ name }: Pick<UrlParam, "name">) {
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     return currentParams.get(name);
   }
 
   getIri() {
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     return currentParams.get(SiteUrlParamNames.Iri);
   }
 
   getCurie() {
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     return currentParams.get(SiteUrlParamNames.Curie);
   }
 
-  setIri({ newIri }) {
-    let url = new URL(window.location);
+  setIri({ newIri }: { newIri: string }) {
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.Iri, newIri);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
 
-  setObsoletes({ value }) {
-    let url = new URL(window.location);
+  setObsoletes({ value }: { value: string }) {
+    let url = new URL(window.location.href);
     url.searchParams.set(SiteUrlParamNames.Obsoletes, value);
     this.history.push(url.toString());
   }

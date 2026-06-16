@@ -1,4 +1,25 @@
+type UserSettings = {
+  userCollectionEnabled: boolean;
+  activeCollection: { title: string; ontology_ids: any[] };
+  advancedSearchEnabled: boolean;
+  activeSearchSetting: Record<string, any>;
+  activeSearchSettingIsModified: boolean;
+};
+
 class UserModel {
+  id: string;
+  token: string;
+  fullName: string;
+  username: string;
+  authProvider: string;
+  company: string;
+  gitHomeUrl: string;
+  orcidId: string;
+  csrf: string;
+  jwt: string;
+  systemAdmin: boolean;
+  settings: UserSettings;
+
   constructor() {
     this.id = "";
     this.token = "";
@@ -20,48 +41,48 @@ class UserModel {
     };
   }
 
-  setId(id) {
+  setId(id: string) {
     this.id = id;
   }
 
-  setCsrf(token) {
+  setCsrf(token: string) {
     this.csrf = token;
   }
 
-  setJwt(token) {
+  setJwt(token: string) {
     this.jwt = token;
   }
 
-  setToken(token) {
+  setToken(token: string) {
     this.token = token;
   }
 
-  setUsername(username) {
+  setUsername(username: string) {
     this.username = username;
   }
 
-  setAuthProvider(providerName) {
+  setAuthProvider(providerName: string) {
     this.authProvider = providerName;
   }
 
-  setFullName(fullName) {
+  setFullName(fullName: string) {
     this.fullName = fullName;
   }
 
-  setGitInfo({ company, homeUrl }) {
+  setGitInfo({ company, homeUrl }: { company: string; homeUrl: string }) {
     this.company = company;
     this.gitHomeUrl = homeUrl;
   }
 
-  setOrcidInfo({ orcidId }) {
+  setOrcidInfo({ orcidId }: { orcidId: string }) {
     this.orcidId = orcidId;
   }
 
-  setSystemAdmin(isAdmin) {
+  setSystemAdmin(isAdmin: boolean) {
     this.systemAdmin = isAdmin;
   }
 
-  setSettings(settings) {
+  setSettings(settings: UserSettings) {
     this.settings = settings;
   }
 }

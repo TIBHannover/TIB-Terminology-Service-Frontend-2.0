@@ -1,6 +1,16 @@
 import { createContext } from "react";
 
-const blueprint = {
+type OntologySuggestionContextData = {
+  [key: string]: any;
+  editorState: any;
+  form: Record<string, any>;
+  setForm: (form: any) => void;
+  onTextEditorChange: (editorState: any) => void;
+  validationResult: { error: any[]; info: any[] };
+  validationResults: { error: any[]; info: any[] };
+};
+
+const blueprint: OntologySuggestionContextData = {
   editorState: null,
   form: {
     username: "",
@@ -12,6 +22,7 @@ const blueprint = {
   },
   setForm: () => {},
   onTextEditorChange: () => {},
+  validationResult: { error: [], info: [] },
   validationResults: { error: [], info: [] },
 };
 

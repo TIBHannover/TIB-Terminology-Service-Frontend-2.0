@@ -1,9 +1,29 @@
 import { createBrowserHistory } from "history";
 import * as SiteUrlParamNames from "./UrlParamNames";
 
+type SearchUrlFactoryParams = Record<string, any>;
+
 class SearchUrlFactory {
+  baseUrl: string;
+  history: ReturnType<typeof createBrowserHistory>;
+  searchQuery: string | null;
+  advancedSearchEnabled: string | null;
+  exact: string | null;
+  includeImported: string | null;
+  ontologies: string[];
+  types: string[];
+  collections: string[];
+  page: string | null;
+  size: string | null;
+  searchIn: string[];
+  searchUnder: string[];
+  searchUnderAll: string[];
+  advOntologies: string[];
+  fromOntologyPage: string | null;
+  obsoletes: string | null;
+
   constructor() {
-    let url = new URL(window.location);
+    let url = new URL(window.location.href);
     this.baseUrl = window.location.pathname;
     this.history = createBrowserHistory();
     this.searchQuery = url.searchParams.get(SiteUrlParamNames.SearchQuery);
@@ -37,14 +57,14 @@ class SearchUrlFactory {
     obsoleteFlag,
     exact,
     fromOntologyPage,
-  }) {
-    let searchUrl = new URL(window.location);
+  }: SearchUrlFactoryParams) {
+    let searchUrl = new URL(window.location.href);
     searchUrl.pathname = process.env.REACT_APP_PROJECT_SUB_PATH + "/search";
     searchUrl.searchParams.delete(SiteUrlParamNames.Iri);
     searchUrl.searchParams.delete(SiteUrlParamNames.IssueType);
     searchUrl.searchParams.delete("tab"); // if set on the collection page
     searchUrl.searchParams.set(SiteUrlParamNames.SearchQuery, label);
-    searchUrl.searchParams.set(SiteUrlParamNames.Page, 1);
+    searchUrl.searchParams.set(SiteUrlParamNames.Page, "1");
     ontologyId &&
       searchUrl.searchParams.set(SiteUrlParamNames.Ontology, ontologyId);
     obsoleteFlag &&
@@ -62,7 +82,7 @@ class SearchUrlFactory {
     searchInValues,
     searchUnderTerms,
     searchUnderAllTerms,
-  }) {
+  }: SearchUrlFactoryParams) {
     let currentUrlParams = new URLSearchParams(window.location.search);
     currentUrlParams.delete(SiteUrlParamNames.SearchIn);
     currentUrlParams.delete(SiteUrlParamNames.SearchUnder);
@@ -108,36 +128,40 @@ class SearchUrlFactory {
     return "";
   }
 
-  setExact({ exact }) {
-    let url = new URL(window.location);
+  setExact({ exact }: SearchUrlFactoryParams) {
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.Exact, exact);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
 
-  setIncludeImported({ includeImported }) {
-    let url = new URL(window.location);
+  setIncludeImported({ includeImported }: SearchUrlFactoryParams) {
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.IncludeImported, includeImported);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
 
-  setAdvancedSearchEnabled({ enabled }) {
-    let url = new URL(window.location);
+  setAdvancedSearchEnabled({ enabled }: SearchUrlFactoryParams) {
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     currentParams.set(SiteUrlParamNames.AdvancedSearchEnabled, enabled);
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
 
-  updateUrlForFacetSelection({ fieldNameInUrl, action, value }) {
-    let url = new URL(window.location);
+  updateUrlForFacetSelection({
+    fieldNameInUrl,
+    action,
+    value,
+  }: SearchUrlFactoryParams) {
+    let url = new URL(window.location.href);
     let currentParams = url.searchParams;
     if (action === "add") {
       currentParams.append(fieldNameInUrl, value);
     } else if (action === "remove") {
-      currentParams.delete(fieldNameInUrl, value);
+      (currentParams as any).delete(fieldNameInUrl, value);
     }
-    currentParams.set(SiteUrlParamNames.Page, 1);
+    currentParams.set(SiteUrlParamNames.Page, "1");
     this.history.push(this.baseUrl + "?" + currentParams.toString());
   }
 
@@ -146,8 +170,8 @@ class SearchUrlFactory {
     currentUrlParams.delete(SiteUrlParamNames.TermType);
     currentUrlParams.delete(SiteUrlParamNames.Ontology);
     currentUrlParams.delete(SiteUrlParamNames.Collection);
-    currentUrlParams.set(SiteUrlParamNames.Page, 1);
-    currentUrlParams.set(SiteUrlParamNames.Size, 10);
+    currentUrlParams.set(SiteUrlParamNames.Page, "1");
+    currentUrlParams.set(SiteUrlParamNames.Size, "10");
     currentUrlParams.delete(SiteUrlParamNames.FromOntologyPage);
     this.history.push(this.baseUrl + "?" + currentUrlParams.toString());
   }

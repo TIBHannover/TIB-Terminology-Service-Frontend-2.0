@@ -103,7 +103,7 @@ class Toolkit {
 
   static getVarInLocalSrorageIfExist(
     varName: string,
-    defaultValue: string | boolean,
+    defaultValue: string | boolean | number,
   ) {
     return localStorage.getItem(varName) ?? defaultValue;
   }
@@ -124,11 +124,10 @@ class Toolkit {
   }
 
   static setObsoleteInStorageAndUrl(obsoletesValue: boolean | string) {
-    // @ts-ignore
-    localStorage.setItem("obsoletes", obsoletesValue);
-    // @ts-ignore
-    document.getElementById("obsoletes-checkbox").checked = obsoletesValue;
-    urlFacory.setObsoletes({ value: obsoletesValue });
+    localStorage.setItem("obsoletes", String(obsoletesValue));
+    (document.getElementById("obsoletes-checkbox") as HTMLInputElement).checked =
+      Boolean(obsoletesValue);
+    urlFacory.setObsoletes({ value: String(obsoletesValue) });
     return true;
   }
 

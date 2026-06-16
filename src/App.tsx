@@ -29,12 +29,13 @@ import "./components/layout/mediaQueries.css";
 import "./components/layout/custom.css";
 
 const App = () => {
+  const SkeletonComponent = Skeleton as any;
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [isBackendDown, setIsBackendDown] = useState(false);
-  const [reportsListForAdmin, setReportsListForAdmin] = useState([]);
-  const [userTermsets, setUserTermsets] = useState([]);
+  const [reportsListForAdmin, setReportsListForAdmin] = useState<any[]>([]);
+  const [userTermsets, setUserTermsets] = useState<any[]>([]);
   const [userSettings, setUserSettings] = useState({
     activeCollection: { title: "", ontology_ids: [] },
     userCollectionEnabled: false,
@@ -130,7 +131,7 @@ const App = () => {
                         id="application_content"
                       >
                         {loading && (
-                          <Skeleton
+                          <SkeletonComponent
                             count={2}
                             wrapper={InlineWrapperWithMargin}
                             inline

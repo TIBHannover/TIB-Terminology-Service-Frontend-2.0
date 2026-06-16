@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 type DropDownOption = {
   label: string;
   value: string | number | boolean | undefined;
@@ -8,7 +10,7 @@ type DropDownProps = {
   options: DropDownOption[];
   dropDownId: string;
   containerClass?: string;
-  dropDownTitle: string;
+  dropDownTitle: ReactNode;
   dropdownClassName?: string;
   dropDownValue?: string | number | boolean;
   dropDownChangeHandler?: (event: any) => void;

@@ -54,7 +54,7 @@ const ContactForm = (props) => {
     formIsValid = !appErrorUrl
       ? title && username && email && safeAnswer && content
       : safeAnswer;
-    if (parseInt(contactType) === 0) {
+    if (parseInt(String(contactType)) === 0) {
       setTypeHintTextShow(true);
       formIsValid = false;
     }
@@ -162,7 +162,7 @@ const ContactForm = (props) => {
                       "contact-form-title",
                     ).style.borderColor = "";
                   }}
-                  class="form-control"
+                  className="form-control"
                   id="contact-form-title"
                   placeholder="Enter title for your query"
                   defaultValue={appErrorUrl ?? ""}
@@ -211,7 +211,7 @@ const ContactForm = (props) => {
                         "contact-form-username",
                       ).style.borderColor = "";
                     }}
-                    class="form-control"
+                    className="form-control"
                     id="contact-form-username"
                     placeholder="Please enter your fullname"
                   ></input>
@@ -234,7 +234,7 @@ const ContactForm = (props) => {
                         "contact-form-email",
                       ).style.borderColor = "";
                     }}
-                    class="form-control"
+                    className="form-control"
                     id="contact-form-email"
                     placeholder="Please enter your email"
                   ></input>
@@ -253,7 +253,7 @@ const ContactForm = (props) => {
                       "contact-form-safe-q",
                     ).style.borderColor = "";
                   }}
-                  class="form-control"
+                  className="form-control"
                   id="contact-form-safe-q"
                 ></input>
               </div>
@@ -263,7 +263,7 @@ const ContactForm = (props) => {
               <div className="col-sm-6">
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  className="btn btn-secondary"
                   onClick={submit}
                 >
                   Submit

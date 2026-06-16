@@ -19,13 +19,13 @@ export type SearchApiInput = {
 };
 
 export type SuggestAndSelectApiInput = {
-  searchQuery: string;
-  ontologyIds: string[];
-  types: string[];
-  obsoletes: boolean;
-  collectionIds: string[];
-  searchUnderIris: string[];
-  searchUnderAllIris: string[];
+  searchQuery?: string;
+  ontologyIds?: string[] | string;
+  types?: string[] | string;
+  obsoletes?: boolean;
+  collectionIds?: string[] | string;
+  searchUnderIris?: string[];
+  searchUnderAllIris?: string[];
 };
 
 export type SearchApiResponse = {

@@ -8,7 +8,7 @@ export function tourWelcomeStep() {
             <span>
               Welcome to TIB Terminology Service. Would you like to take a tour
               in our Service? If yes, please proceed by choosing the next step{" "}
-              <i class="fa fa-solid fa-arrow-right"></i>.
+              <i className="fa fa-solid fa-arrow-right"></i>.
               <br />
               (You can also use left/right arrow keys on your keyboard.)
             </span>

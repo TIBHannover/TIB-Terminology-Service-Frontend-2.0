@@ -13,8 +13,7 @@ export function MatomoWrapper(props: { children: JSX.Element }) {
       return;
     }
     setTimeout(() => {
-      //@ts-ignore
-      trackPageView();
+      (trackPageView as any)();
     }, 1000);
   }, [location.pathname]);
   return props.children;

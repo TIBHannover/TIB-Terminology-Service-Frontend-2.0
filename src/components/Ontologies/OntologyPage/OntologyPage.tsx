@@ -117,8 +117,7 @@ const OntologyPage = (props: CmpPropp) => {
     setObsoleteProps(ontology.obsoleteProperties);
     setRootTerms(ontology.rootClasses);
     setRootProps(ontology.rootProperties);
-    //@ts-ignore
-    setSkosRootIndividuals(skosIndividuals);
+    setSkosRootIndividuals(skosIndividuals as any);
   }
 
   async function setCountOfNotes() {

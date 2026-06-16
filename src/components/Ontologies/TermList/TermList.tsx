@@ -24,17 +24,19 @@ const TermList = (props) => {
   let pageNumberInUrl = !termListUrlFactory.page
     ? DEFAULT_PAGE_NUMBER
     : parseInt(termListUrlFactory.page);
-  let internalSize = Toolkit.getVarInLocalSrorageIfExist(
-    "termListPageSize",
-    DEFAULT_PAGE_SIZE,
+  let internalSize = Number(
+    Toolkit.getVarInLocalSrorageIfExist(
+      "termListPageSize",
+      DEFAULT_PAGE_SIZE,
+    ),
   );
   let sizeInUrl = !termListUrlFactory.size
     ? internalSize
     : parseInt(termListUrlFactory.size);
 
   const [pageNumber, setPageNumber] = useState(pageNumberInUrl - 1);
-  const [pageSize, setPageSize] = useState(sizeInUrl);
-  const [listOfTerms, setListOfTerms] = useState(["loading"]);
+  const [pageSize, setPageSize] = useState<number>(sizeInUrl);
+  const [listOfTerms, setListOfTerms] = useState<any[]>(["loading"]);
   const [totalNumberOfTerms, setTotalNumberOfTerms] = useState(0);
   const [mode, setMode] = useState("terms");
   const [iri, setIri] = useState(iriInUrl);
@@ -43,7 +45,7 @@ const TermList = (props) => {
 
   async function loadComponent() {
     let ontologyId = ontologyPageContext.ontology.ontologyId;
-    let listOfTermsAndStats = { results: [], totalTermsCount: 0 };
+    let listOfTermsAndStats: any = { results: [], totalTermsCount: 0 };
     let termApi = new TermApi(ontologyId, iri, mode);
     if (!iri) {
       listOfTermsAndStats = await termApi.fetchListOfTerms(
@@ -64,7 +66,7 @@ const TermList = (props) => {
 
   function storePageSizeInLocalStorage(size) {
     if (parseInt(size) !== 1) {
-      localStorage.setItem("termListPageSize", size);
+      localStorage.setItem("termListPageSize", String(size));
     }
   }
 
@@ -86,9 +88,11 @@ const TermList = (props) => {
   }
 
   function resetList() {
-    let size = Toolkit.getVarInLocalSrorageIfExist(
-      "termListPageSize",
-      DEFAULT_PAGE_SIZE,
+    let size = Number(
+      Toolkit.getVarInLocalSrorageIfExist(
+        "termListPageSize",
+        DEFAULT_PAGE_SIZE,
+      ),
     );
     setIri(null);
     setPageNumber(0);

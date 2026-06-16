@@ -252,7 +252,7 @@ const AdvancedSearch = (props) => {
   }, [appContext.userSettings.activeSearchSetting]);
 
   if (process.env.REACT_APP_ADVANCED_SEARCH !== "true") {
-    return "";
+    return null;
   }
 
   return (

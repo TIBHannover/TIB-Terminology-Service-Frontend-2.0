@@ -154,10 +154,9 @@ export async function submitOntologySuggestion(
   formData: OntologySuggestionData,
 ): Promise<boolean> {
   try {
-    let form = {};
+    let form: Record<string, any> = {};
     let formDataAny = formData as any;
     for (let key in formDataAny) {
-      // @ts-ignore
       form[key] = formDataAny[key];
     }
     let headers: TsPluginHeader = getTsPluginHeaders({

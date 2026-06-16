@@ -88,8 +88,7 @@ export const AddTermModal = (props: AddTermModalComProps) => {
       inputQuery["selectedOntologies"] =
         appContext.userSettings.activeCollection.ontology_ids;
     }
-    //@ts-ignore
-    let searchRes = await olsSearch(inputQuery);
+    let searchRes = await olsSearch(inputQuery as any);
     let terms = searchRes ? searchRes.elements : [];
     let options: MultiSelectOption[] = [];
     for (let term of terms) {

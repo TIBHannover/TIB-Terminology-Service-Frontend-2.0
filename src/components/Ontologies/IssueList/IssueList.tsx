@@ -39,12 +39,14 @@ const IssueList = (props) => {
 
   const [waiting, setWaiting] = useState(true);
   const [noTrackerOnto, setNoTrackerOnto] = useState(false);
-  const [contentForRender, setContentForRender] = useState([]);
-  const [selectedStateId, setSelectedStateId] = useState(
-    urlFactory.selectedStateId ? urlFactory.selectedStateId : OPEN_ISSUE_ID,
+  const [contentForRender, setContentForRender] = useState<any[]>([]);
+  const [selectedStateId, setSelectedStateId] = useState<number>(
+    urlFactory.selectedStateId
+      ? parseInt(urlFactory.selectedStateId)
+      : OPEN_ISSUE_ID,
   );
-  const [pageNumber, setPageNumber] = useState(
-    urlFactory.pageNumber ? urlFactory.pageNumber : 1,
+  const [pageNumber, setPageNumber] = useState<number>(
+    urlFactory.pageNumber ? parseInt(urlFactory.pageNumber) : 1,
   );
   const [noMoreIssuesExist, setNoMoreIssuesExist] = useState(false);
   const [selectedType, setSelectedType] = useState(
@@ -98,16 +100,16 @@ const IssueList = (props) => {
     setSelectedStateId(selectedIssueStateId);
     setWaiting(true);
     setPageNumber(1);
-    localStorage.setItem("selectedIssueStateId", selectedIssueStateId);
+    localStorage.setItem("selectedIssueStateId", String(selectedIssueStateId));
   }
 
   function handlePagination(e) {
     let paginationDirection = e.target.dataset.value;
     if (paginationDirection === "minus" && pageNumber > 1) {
-      setPageNumber(parseInt(pageNumber) - 1);
+      setPageNumber(pageNumber - 1);
       setWaiting(true);
     } else if (paginationDirection === "plus") {
-      setPageNumber(parseInt(pageNumber) + 1);
+      setPageNumber(pageNumber + 1);
       setWaiting(true);
     }
   }

@@ -1,5 +1,5 @@
 export type CollectionData = {
-  title: string;
+  title: string | false;
   description: string;
   ontology_ids: Array<string>;
 };
