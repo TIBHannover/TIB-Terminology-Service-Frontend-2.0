@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useMatomo } from "@datapunt/matomo-tracker-react";
 import { useEffect } from "react";
 
-export function MatomoWrapper(props) {
+export function MatomoWrapper(props: { children: JSX.Element }) {
   const location = useLocation();
   const { trackPageView, trackEvent } = useMatomo();
   useEffect(() => {
@@ -13,6 +13,7 @@ export function MatomoWrapper(props) {
       return;
     }
     setTimeout(() => {
+      //@ts-ignore
       trackPageView();
     }, 1000);
   }, [location.pathname]);
