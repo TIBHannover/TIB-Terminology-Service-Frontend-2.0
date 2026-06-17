@@ -194,6 +194,7 @@ const TermDetail = (props: TermDetailComPros) => {
         title="Show JSON"
       >
         <i className="bi bi-filetype-json"></i>
+        JSON
       </a>
     </div>
   );

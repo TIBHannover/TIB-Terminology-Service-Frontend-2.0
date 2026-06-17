@@ -408,6 +408,7 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
       >
         {appContext.user && <i className="bi bi-plus-square"></i>}
         {!appContext.user && <i className="bi bi-bookmark"></i>}
+        Set
       </button>
       <Modal show={showModal} id={"addToTermsetModal-" + modalId}>
         <Modal.Header className="row">
