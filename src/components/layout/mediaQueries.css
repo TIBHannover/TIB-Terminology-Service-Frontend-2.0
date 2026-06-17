@@ -17,15 +17,15 @@
   }
 
   button {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
   }
 
   .btn-secondary {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
   }
 
   body {
-    font-size: 14px;
+    font-size: var(--font-size-md);
   }
 
   body h1,
@@ -34,24 +34,24 @@
   h4,
   h5,
   h6 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   body button,
   .btn {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .close {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
 
   body input::-moz-placeholder {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 
   body ::-webkit-input-placeholder {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 
   body .user-profile-dropdown {
@@ -76,7 +76,7 @@
   }
 
   body .nav-link {
-    font-size: 0.8rem;
+    font-size: var(--font-size-md);
   }
 
   .graph-container {
@@ -87,21 +87,21 @@
   .jumpto-badge-onto {
     padding: 5px;
     margin-left: 5px;
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 }
 
 @media only screen and (max-width: 1299px) and (min-width: 1025px) {
   body .nav-link {
-    font-size: 0.8rem;
+    font-size: var(--font-size-md);
   }
 
   body .main-title {
-    font-size: 0.8rem;
+    font-size: var(--font-size-md);
   }
 
   body .user-profile-dropdown {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 }
 
@@ -111,7 +111,7 @@
   }
 
   body .site-footer {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .footer-logo {
@@ -146,11 +146,11 @@
   }
 
   body .pagination-holder {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
   }
 
   body {
-    font-size: 13px;
+    font-size: var(--font-size-md);
   }
 
   body h1,
@@ -159,24 +159,24 @@
   h4,
   h5,
   h6 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   body button,
   .btn {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .close {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
 
   body input::-moz-placeholder {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 
   body input::-webkit-input-placeholder {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 
   body .react-autosuggest__input,
@@ -204,13 +204,13 @@
   .jumpto-badge-onto {
     padding: 2px;
     margin-left: 5px;
-    font-size: 9px;
+    font-size: var(--font-size-xs);
   }
 }
 
 @media only screen and (max-width: 1025px) {
   .site-footer {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   .footer-logo {
@@ -219,15 +219,15 @@
   }
 
   body .main-title {
-    font-size: 0.7rem;
+    font-size: var(--font-size-sm);
   }
 
   body .nav-item:not(.ontology-detail-nav-item) {
-    font-size: 0.5rem !important;
+    font-size: var(--font-size-xxs) !important;
   }
 
   body .navbar-item {
-    font-size: 0.5rem !important;
+    font-size: var(--font-size-xxs) !important;
   }
 
   body .user-profile-dropdown {
@@ -236,13 +236,13 @@
 
   body .btn-secondary:not(.extra-sm-btn):not(.search-btn),
   body .btn:not(.extra-sm-btn):not(.search-btn) {
-    font-size: 8px !important;
+    font-size: var(--font-size-xxs) !important;
     padding: 2px;
     /*width: 50px;*/
   }
 
   body div {
-    font-size: 0.6rem !important;
+    font-size: var(--font-size-xs) !important;
   }
 
   body .tree-text-container {
@@ -254,7 +254,7 @@
   }
 
   body .fa {
-    font-size: 18px;
+    font-size: var(--font-size-lg);
   }
 
   body .graph-container {
@@ -268,7 +268,7 @@
 
 @media only screen and (max-width: 1030px) and (min-width: 901px) {
   body .main-title {
-    font-size: 0.7rem;
+    font-size: var(--font-size-sm);
   }
 
   body .jumpto-wrapper {
@@ -276,7 +276,7 @@
   }
 
   body .site-footer {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .footer-logo {
@@ -315,11 +315,11 @@
   }
 
   body .pagination-link {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body {
-    font-size: 13px;
+    font-size: var(--font-size-md);
   }
 
   body h1,
@@ -328,24 +328,24 @@
   h4,
   h5,
   h6 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   body button,
   .btn {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .close {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
 
   body input::-moz-placeholder {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 
   body input::-webkit-input-placeholder {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 
   body .user-profile-dropdown {
@@ -359,13 +359,13 @@
   .jumpto-badge-onto {
     padding: 2px;
     margin-left: 5px;
-    font-size: 9px;
+    font-size: var(--font-size-xs);
   }
 }
 
 @media only screen and (max-width: 900px) {
   body .main-title {
-    font-size: 0.7rem;
+    font-size: var(--font-size-sm);
   }
 
   body .navbar-item {
@@ -397,7 +397,7 @@
   }
 
   body {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body h1,
@@ -406,24 +406,24 @@
   h4,
   h5,
   h6 {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
   }
 
   body button,
   .btn {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .close {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
 
   body input::-moz-placeholder {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body ::-webkit-input-placeholder {
-    font-size: 10px;
+    font-size: var(--font-size-xs);
   }
 
   body .user-profile-dropdown {
@@ -553,14 +553,14 @@
 
   body .navbar-item {
     float: none;
-    font-size: 0.72rem !important;
+    font-size: var(--font-size-sm) !important;
     line-height: 1.4;
     padding: 4px 0;
   }
 
   body .nav-dropdown-title .dropdown-toggle {
     display: inline-block;
-    font-size: 0.72rem !important;
+    font-size: var(--font-size-sm) !important;
     line-height: 1.4;
     text-align: left;
   }
@@ -595,11 +595,11 @@
   }
 
   body .orcid-login-btn .fa-orcid {
-    font-size: 18px;
+    font-size: var(--font-size-lg);
   }
 
   body .ontologies-link-tag {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
   }
 
   body .site-header-searchbox-holder {

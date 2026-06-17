@@ -185,12 +185,16 @@ const TermDetail = (props: TermDetailComPros) => {
         (isMenuContent ? "term-detail-action-menu" : "term-detail-action-bar")
       }
     >
-      <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm} />
+      <AddToTermsetModal
+        modalId={"term-in-tree"}
+        term={targetTerm}
+        btnClass="term-detail-action-btn"
+      />
       <a
         href={showDataAsJsonBtnHref}
         target="_blank"
         rel="noreferrer"
-        className="borderless-btn rounded-1"
+        className="borderless-btn rounded-1 term-detail-action-btn"
         title="Show JSON"
       >
         <i className="bi bi-filetype-json"></i>

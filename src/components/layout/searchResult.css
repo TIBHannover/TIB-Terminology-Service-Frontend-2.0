@@ -83,7 +83,7 @@
   background-color: white;
   margin-right: 10px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   margin-bottom: 5px;
   margin-top: 10px;
   width: fit-content;
@@ -93,17 +93,17 @@
 .remove-tag-icon {
   margin-left: 2px;
   border: none !important;
-  font-size: 15px !important;
+  font-size: var(--font-size-base) !important;
   cursor: pointer;
 }
 
 .action-btn {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   padding: 2px;
   float: right;
   font-weight: bold;
 }
 
 .action-btn > i {
-  font-size: 9px;
+  font-size: var(--font-size-xs);
 }

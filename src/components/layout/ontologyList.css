@@ -37,7 +37,7 @@
 
 .read-more-btn {
   display: inline-block;
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   padding: 0;
   font-weight: bold;
   position: relative;

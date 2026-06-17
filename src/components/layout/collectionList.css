@@ -7,7 +7,7 @@ body .ontologies-link-tag {
   display: inline-block;
   margin-left: 10px;
   margin-bottom: 6px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 body .collection-ontologies-list {
@@ -19,7 +19,7 @@ body .collection-ontologies-loading {
   animation: collectionOntologyLoadingPulse 1.2s ease-in-out infinite;
   color: #5f6469;
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   margin-left: 10px;
 }
 
@@ -29,7 +29,7 @@ body .collection-ontologies-toggle {
   color: #0e6668;
   cursor: pointer;
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: bold;
   margin-left: 10px;
   padding: 0;

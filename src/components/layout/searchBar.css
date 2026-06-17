@@ -1,5 +1,5 @@
 body .search-input {
-  font-size: 14px;
+  font-size: var(--font-size-md);
   height: 35px;
 }
 
@@ -75,7 +75,7 @@ body .search-input {
 
 .search-form-checkbox-holders {
   text-align: left;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 .search-bar-container {
@@ -132,7 +132,7 @@ body .adv-search-container {
 }
 
 .custom-collection-btn .fa {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 .custom-collection-btn div {

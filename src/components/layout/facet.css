@@ -14,7 +14,7 @@ body .facet-result-count {
   padding: 5px;
   text-align: center;
   font-weight: 700;
-  font-size: 75%;
+  font-size: var(--font-size-xs);
   line-height: 1;
   float: right;
 }
@@ -62,7 +62,7 @@ body .facet-btn {
   background-color: white;
   color: #5f6469;
   font-weight: bold;
-  font-size: 16px;
+  font-size: var(--font-size-base);
 }
 
 body .facet-switch-holder {

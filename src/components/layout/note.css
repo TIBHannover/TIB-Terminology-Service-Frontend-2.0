@@ -103,7 +103,7 @@ body .card-body {
   color: black;
   padding: 5px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 .pinned-message-icon {
@@ -114,7 +114,7 @@ body .card-body {
   width: 60px;
   display: inline-block;
   text-align: center;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
 }
 
 .note-imported-message-icon {
@@ -126,5 +126,5 @@ body .card-body {
   padding-right: 10px;
   display: inline-block;
   text-align: center;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
 }

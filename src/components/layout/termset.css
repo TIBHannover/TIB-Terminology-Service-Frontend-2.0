@@ -37,7 +37,7 @@ body .search-input-termset {
 }
 
 body .search-input-termset::placeholder {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-style: italic;
   color: gray;
 }
@@ -127,7 +127,7 @@ body .search-input-termset::placeholder {
 
 .edit-termset-icon {
   color: black;
-  font-size: 16px !important;
+  font-size: var(--font-size-base) !important;
 }
 
 .visibility-tag {
@@ -136,7 +136,7 @@ body .search-input-termset::placeholder {
   border-radius: 5px;
   text-align: center;
   float: right;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: bold;
   height: fit-content;
   padding: 3px;

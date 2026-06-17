@@ -18,7 +18,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.72),
     inset 0 -1px 0 rgba(255, 255, 255, 0.24);
   padding: 10px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 .collection-logo {
@@ -64,7 +64,7 @@
 
 .show-more-text-link {
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--font-size-md);
 }
 
 .stats-box-text {

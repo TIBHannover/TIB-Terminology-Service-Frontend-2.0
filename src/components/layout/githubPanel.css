@@ -25,7 +25,7 @@ body .git-issue-label-tag {
   display: inline;
   border-radius: 15px;
   padding: 5px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   margin-left: 10px;
 }
 
