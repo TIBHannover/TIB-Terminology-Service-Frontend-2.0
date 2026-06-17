@@ -89,9 +89,9 @@ export const AddTermModal = (props: AddTermModalComProps) => {
         appContext.userSettings.activeCollection.ontology_ids;
     }
     let searchRes = await olsSearch(inputQuery as any);
-    let terms = searchRes ? searchRes.elements : [];
+    let terms = searchRes ? searchRes : [];
     let options: MultiSelectOption[] = [];
-    for (let term of terms) {
+    for (let term of terms as any[]) {
       let opt = { text: "", iri: "", ontologyId: "" };
       opt["text"] = `${term.ontologyId}:${term.label} (${term.type})`;
       opt["iri"] = term.iri;
