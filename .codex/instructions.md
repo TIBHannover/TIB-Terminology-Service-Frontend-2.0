@@ -21,8 +21,10 @@ General:
 - Do not change an existing function or component signiture. 
 - Check `src/components/common/` for reusable components. 
 - Reuse utilities and components as much as possible instead of creating new ones.
+- Do not build the project unless asked to do so. Only check typescript errors and warnings.
 
 CSS and styling:
+- Look for css in `src/components/layout` directory.
 - use bootsrap 5 for styling or raw css. do not use anything else.
 - ignore nfdi4ing.css file
 - put styles always in the "layout" directory

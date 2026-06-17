@@ -9,6 +9,7 @@ type Blueprint = {
   userSettings: any;
   setUserSettings: (userSettings: any) => void;
   userTermsets: Array<any>;
+  userTermsetsLoading: boolean;
   setUserTermsets: (termsets: Array<any>) => void;
   includeImportedTerms: boolean;
   setIncludeImportedTerms: (includeImportedTerms: boolean) => void;
@@ -41,6 +42,7 @@ const blueprint: Blueprint = {
     /* set userSettings */
   },
   userTermsets: [] as TsTermset[],
+  userTermsetsLoading: false,
   setUserTermsets: (termsets: TsTermset[]) => {
     /* set user term sets*/
   },

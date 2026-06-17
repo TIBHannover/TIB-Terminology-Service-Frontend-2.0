@@ -18,6 +18,7 @@ const UserTermSetList = () => {
         redirectAfterDeleteEndpoint={"/mytermsets"}
         backBtnText="My termset list"
         from={"mytermsets"}
+        isLoading={appContext.userTermsetsLoading}
       />
     </>
   );

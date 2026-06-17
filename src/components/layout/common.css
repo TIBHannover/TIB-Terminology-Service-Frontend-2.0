@@ -388,6 +388,13 @@ body .nav-dropdown-title .dropdown-item:hover {
   text-decoration: none !important;
 }
 
+body .nav-dropdown-title .dropdown-item:active,
+body .nav-dropdown-title .dropdown-item:focus {
+  background-color: transparent;
+  color: black;
+  text-decoration: none !important;
+}
+
 body .nav-dropdown-title .dropdown-menu {
   margin-top: -2px;
 }

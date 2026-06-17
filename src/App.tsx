@@ -36,6 +36,9 @@ const App = () => {
   const [isBackendDown, setIsBackendDown] = useState(false);
   const [reportsListForAdmin, setReportsListForAdmin] = useState<any[]>([]);
   const [userTermsets, setUserTermsets] = useState<any[]>([]);
+  const [userTermsetsLoading, setUserTermsetsLoading] = useState(
+    process.env.REACT_APP_AUTH_FEATURE === "true",
+  );
   const [userSettings, setUserSettings] = useState({
     activeCollection: { title: "", ontology_ids: [] },
     userCollectionEnabled: false,
@@ -85,9 +88,13 @@ const App = () => {
           });
         }
 
-        getUserTermsetList(user?.id).then((termsets) => {
-          setUserTermsets(termsets);
-        });
+        getUserTermsetList(user?.id)
+          .then((termsets) => {
+            setUserTermsets(termsets);
+          })
+          .finally(() => {
+            setUserTermsetsLoading(false);
+          });
 
         setUserSettings(settings);
         setShowLoadingPage(false);
@@ -108,6 +115,7 @@ const App = () => {
     userSettings: userSettings,
     setUserSettings: setUserSettings,
     userTermsets: userTermsets,
+    userTermsetsLoading: userTermsetsLoading,
     setUserTermsets: setUserTermsets,
     includeImportedTerms: includeImportedTerms,
     setIncludeImportedTerms: setIncludeImportedTerms,

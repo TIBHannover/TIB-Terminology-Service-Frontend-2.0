@@ -6,11 +6,16 @@ import { TsTermset } from "../../concepts";
 
 const BrowseTermSetList = () => {
   const [termsets, setTermsets] = useState<TsTermset[]>([]);
+  const [termsetsLoading, setTermsetsLoading] = useState(true);
 
   useEffect(() => {
-    getAllTermsetList().then((result) => {
-      setTermsets(result);
-    });
+    getAllTermsetList()
+      .then((result) => {
+        setTermsets(result);
+      })
+      .finally(() => {
+        setTermsetsLoading(false);
+      });
   }, []);
 
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
@@ -29,6 +34,7 @@ const BrowseTermSetList = () => {
         redirectAfterDeleteEndpoint={"/termsets"}
         backBtnText="termset list"
         from={"browse"}
+        isLoading={termsetsLoading}
       />
     </>
   );

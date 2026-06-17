@@ -14,6 +14,7 @@ type CmpProps = {
   redirectAfterDeleteEndpoint: string;
   backBtnText: string;
   from?: string;
+  isLoading?: boolean;
 };
 
 const TermSetList = (props: CmpProps) => {
@@ -23,8 +24,8 @@ const TermSetList = (props: CmpProps) => {
   const [filteredTermsets, setFilteredTermsets] =
     useState<TsTermset[]>(termsets);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
   const pageSize = 10;
+  const isLoading = props.isLoading ?? false;
 
   function handlePagination(value: number) {
     setPage(value);
@@ -49,7 +50,6 @@ const TermSetList = (props: CmpProps) => {
 
   useEffect(() => {
     setFilteredTermsets(termsets);
-    setIsLoading(false);
   }, [termsets]);
 
   if (process.env.REACT_APP_TERMSET_FEATURE !== "true") {
@@ -94,26 +94,27 @@ const TermSetList = (props: CmpProps) => {
         </div>
       </div>
       {createMode && <EditTermset mode={"create"} />}
-      {isLoading && (
+      {!createMode && isLoading && (
         <div className="justify-content-center ontology-page-container termset-loading-container">
           <div className="isLoading"></div>
         </div>
       )}
       {!createMode &&
+        !isLoading &&
         filteredTermsets
           .slice((page - 1) * pageSize, page * pageSize)
           .map((tset) => {
             return (
-              <>
+              <div className="termset-card-fade" key={tset.id}>
                 <TermsetCard
                   termset={tset}
                   redirectAfterDeleteEndpoint={redirectAfterDeleteEndpoint}
                   from={from}
                 />
-              </>
+              </div>
             );
           })}
-      {!createMode && (
+      {!createMode && !isLoading && (
         <div className="row">
           <div className="col-sm-12 text-center">
             <Pagination
@@ -156,7 +157,7 @@ const TermsetCard = (props: {
                 termset.id +
                 fromParam
               }
-              style={{ marginTop: "2px" }}
+              className="termset-card-title-link"
             >
               <p className="fw-bold fs-6 d-inline">{termset.name}</p>
             </Link>
@@ -173,7 +174,6 @@ const TermsetCard = (props: {
                     fromParam
                   }
                   className="btn borderless-btn termset-card-action-btn"
-                  style={{ marginTop: "1px" }}
                 >
                   <i className="fa fa-edit fa-borderless edit-termset-icon"></i>
                 </Link>
