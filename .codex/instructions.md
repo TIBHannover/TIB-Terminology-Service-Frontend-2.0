@@ -31,5 +31,11 @@ CSS and styling:
 - always follow resonsive desing principles
 - never define inline styles. 
 
+Test:
+- Never changing the app while writing tests.
+- Do not use anything starts with `stour` as a selector. This is only fo rthe Tour feature. 
+- Test stragety is `End to End`. Do not focus on unit tests unless asked to do so in the spec or via the prompt.
+- site uses a tour optins that overlay the pages. This conflicts with the test. Disable the tour feature before running the tests. Do it only for test not in the application itself. 
+
 
 
