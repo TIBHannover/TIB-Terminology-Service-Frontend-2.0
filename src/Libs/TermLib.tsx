@@ -1,9 +1,14 @@
+import { TsClass, TsTerm } from "../concepts";
 import Toolkit from "./Toolkit";
 
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 
 class TermLib {
-  static createOntologyTagWithTermURL(ontology_name, termIri, type) {
+  static createOntologyTagWithTermURL(
+    ontology_name: string,
+    termIri: string,
+    type: string,
+  ) {
     /* 
         We need the ontology_name as the input since the function is also used for
         making tag from "imported from" or "Also In". The ontology_name is not necessary equivalent with
@@ -41,6 +46,11 @@ class TermLib {
     termIri,
     termLabel,
     type,
+  }: {
+    ontology_name: string;
+    termIri: string;
+    termLabel: string;
+    type: string;
   }) {
     if (!ontology_name) {
       return null;
@@ -64,7 +74,7 @@ class TermLib {
     ];
   }
 
-  static createAlsoInTags(term) {
+  static createAlsoInTags(term: TsTerm) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];
       for (let ontologyId of term.alsoIn) {
@@ -81,59 +91,6 @@ class TermLib {
       return alsoInList;
     }
     return [];
-  }
-
-  static createTermDiscription(term) {
-    if (term.isIndividual && term.description) {
-      // individual description structure is different
-      let result = [];
-      for (let desc of term.description) {
-        result.push(<p>{desc}</p>);
-      }
-      return result;
-    } else if (term.definition) {
-      let result = [];
-      for (let desc of term.definition) {
-        if (typeof desc === "object" && desc.value) {
-          let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
-          let defArr = [];
-          defArr.push(defText);
-          for (let ax of desc.axioms ?? []) {
-            for (let key in ax) {
-              defArr.push(
-                <>
-                  <br />
-                  <span className="node-metadata-label">
-                    {term["linkedEntities"]?.[key]?.label[0] + ": "}
-                  </span>
-                </>,
-              );
-              if (Array.isArray(ax[key]) && ax[key].length > 1) {
-                defArr.push(
-                  <>
-                    {ax[key].join(", ")}
-                    <br />
-                  </>,
-                );
-              } else {
-                defArr.push(
-                  <>
-                    {ax[key]}
-                    <br />
-                  </>,
-                );
-              }
-            }
-          }
-          result.push(defArr);
-        } else {
-          result.push(desc);
-        }
-      }
-      return result;
-    }
-
-    return null;
   }
 
   static createInstancesListForClass(term) {

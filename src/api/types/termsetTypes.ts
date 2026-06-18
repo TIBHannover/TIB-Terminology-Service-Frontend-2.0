@@ -9,7 +9,7 @@ export type TermSet = {
   creator?: ApiKey;
   updated_at?: string;
   visibility: string;
-  terms: OntologyTermDataV2[];
+  terms: TermWrapperInSet[];
 };
 
 export type NewTermSetFormData = {

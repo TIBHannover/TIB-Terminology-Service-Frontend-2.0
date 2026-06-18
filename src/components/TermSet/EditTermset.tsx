@@ -11,12 +11,11 @@ import { useQuery } from "@tanstack/react-query";
 import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
 import { Link } from "react-router-dom";
 import { TermsetEditComProps } from "./types";
-import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
-import { TermFactory } from "../../concepts";
 import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
 import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 import { withRouter } from "react-router-dom";
 import Login from "../User/Login/TS/Login";
+import { TsTerm } from "../../concepts";
 
 const VISIBILITY_ONLY_ME = 1;
 const VISIBILITY_TS_USRES = 2;
@@ -34,7 +33,7 @@ const VISIBILITY_FOR_DROPDOWN = [
 type MultiSelectOption = {
   text?: string;
   iri?: string;
-  json?: OntologyTermDataV2;
+  term?: TsTerm;
 };
 
 const EditTermset = (props: TermsetEditComProps) => {
@@ -54,16 +53,14 @@ const EditTermset = (props: TermsetEditComProps) => {
   );
   const [selectedTerms, setSelectedTerms] = useState<MultiSelectOption[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTermsJson, setSelectedTermsJson] = useState<
-    OntologyTermDataV2[]
-  >([]);
+  const [selectedTermsJson, setSelectedTermsJson] = useState<TsTerm[]>([]);
   const [submited, setSubmited] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const searchUnderRef = useRef(null);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["termset", termsetId],
     queryFn: () => getTermset(termsetId ?? ""),
     retry: 1,
@@ -71,7 +68,7 @@ const EditTermset = (props: TermsetEditComProps) => {
   });
 
   function onTermSelect(selectedTerms: MultiSelectOption[]) {
-    let termsJson = selectedTerms.map((term) => term.json ?? {});
+    let termsJson = selectedTerms.map((term) => term.term);
     setSelectedTermsJson(termsJson);
   }
 
@@ -164,7 +161,7 @@ const EditTermset = (props: TermsetEditComProps) => {
       name: name,
       visibility: VISIBILITY_VALUES[newTermsetVisibility],
       description: description ? description.value : "",
-      terms: selectedTermsJson,
+      terms: selectedTermsJson.map((term) => term.term),
     };
 
     createTermset(termsetData).then((newTermset) => {
@@ -258,8 +255,7 @@ const EditTermset = (props: TermsetEditComProps) => {
     // load the terms in the multi select input
     let options: MultiSelectOption[] = [];
     let termsJson = [];
-    for (let t of data.terms) {
-      let term = TermFactory.createTermForTS(t);
+    for (let term of data.terms) {
       let opt: MultiSelectOption = {};
       opt["text"] = `${term.ontologyId}:${term.label} (${term.type})`;
       opt["iri"] = term.iri;

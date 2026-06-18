@@ -13,7 +13,7 @@ import { AppContext } from "../../context/AppContext";
 import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
 import { TermsetPageComProps } from "./types";
 import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
-import { TsClass, TsTerm, TermFactory } from "../../concepts";
+import { TsClass, TsTerm } from "../../concepts";
 import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
 
@@ -61,15 +61,14 @@ const TermSetPage = (props: TermsetPageComProps) => {
     retry: 1,
   });
 
-  function createTermListForTable(listOfterms: OntologyTermDataV2[]) {
+  function createTermListForTable(listOfterms: TsTerm[]) {
     if (!data) {
       return;
     }
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/";
     let dataForTable = [];
     listOfterms = listOfterms.slice(page * size, page * size + size);
-    for (let t of listOfterms) {
-      let term = TermFactory.createTermForTS(t);
+    for (let term of listOfterms) {
       let DeleteBtn = (
         <i
           className="bi bi-file-minus-fill"
@@ -153,8 +152,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     }
     let query = e.target.value;
     if (query) {
-      let selectedTerms = data.terms.filter((term: OntologyTermDataV2) => {
-        let t = new TsTerm(term);
+      let selectedTerms = data.terms.filter((t: TsTerm) => {
         if (t.label.toLowerCase().includes(query.toLowerCase())) {
           return true;
         }
@@ -188,8 +186,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
       }
     }
     rows.push(headers);
-    for (let t of data.terms) {
-      let term = TermFactory.createTermForTS(t);
+    for (let term of data.terms) {
       let annotation = term.annotation;
       let row = [];
       row.push(escapeForCSV(term["shortForm"]));
@@ -248,9 +245,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
       removeTermFromSet(termsetId, termId).then((removed) => {
         if (removed) {
           setDataLoaded(false);
-          let i = data.terms.findIndex(
-            (term: OntologyTermDataV2) => term.iri === termId,
-          );
+          let i = data.terms.findIndex((term: TsTerm) => term.iri === termId);
           let usertermsets = [...appContext.userTermsets];
           let termsetInContextIndex = usertermsets.findIndex(
             (tset) => tset.id === termsetId,

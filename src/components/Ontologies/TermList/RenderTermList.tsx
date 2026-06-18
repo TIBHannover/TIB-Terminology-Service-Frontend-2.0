@@ -79,7 +79,7 @@ export const RenderTermList = (props) => {
       termMap.set("shortForm", { value: term["shortForm"], valueLink: "" });
       termMap.set("label", { value: term["label"], valueLink: termTreeUrl });
       termMap.set("decs", {
-        value: TermLib.createTermDiscription(term) ?? annotation?.definition,
+        value: term.definition ?? annotation?.definition,
         valueLink: "",
       });
       termMap.set("altTerm", {

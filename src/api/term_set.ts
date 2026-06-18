@@ -155,7 +155,7 @@ export async function updateTermset(
       created_at: termset.created_at,
       updated_at: termset.updated_at,
       visibility: termset.visibility,
-      terms: termset.terms,
+      terms: termset.olsFormatTermWrappers,
       creator: termset.creator,
     };
     let headers: TsPluginHeader = getTsPluginHeaders({
