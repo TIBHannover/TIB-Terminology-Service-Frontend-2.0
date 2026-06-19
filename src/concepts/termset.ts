@@ -18,9 +18,9 @@ export class TsTermset {
     this._description = this.termsetData.description ?? "";
     this._name = this.termsetData.name;
     this._visibility = this.termsetData.visibility;
-    this._terms = this.termsetData.terms.map((twrapper) =>
-      TermFactory.createTermForTS(twrapper.json),
-    );
+    this._terms = this.termsetData.terms.map((twrapper) => {
+      return TermFactory.createTermForTS(twrapper.json);
+    });
     this._created_at = this.termsetData.created_at;
     this._creator = this.termsetData.creator ?? undefined;
     this._olsFormatTermWrappers = this.termsetData.terms;

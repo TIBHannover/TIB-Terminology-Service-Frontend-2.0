@@ -34,9 +34,6 @@ export const NoteCreationRender = (props: NoteCreationRenderProps) => {
     }
   }, []);
 
-  console.log(props.targetArtifact);
-  console.log(constantsVars.ONTOLOGY_COMPONENT_ID);
-
   return (
     <>
       <div className="row">

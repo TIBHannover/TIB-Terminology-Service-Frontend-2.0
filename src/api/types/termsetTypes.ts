@@ -12,6 +12,10 @@ export type TermSet = {
   terms: TermWrapperInSet[];
 };
 
+export type TermSetUpdateData = Omit<TermSet, "terms"> & {
+  terms: OntologyTermDataV2[];
+};
+
 export type NewTermSetFormData = {
   name: string;
   description?: string;

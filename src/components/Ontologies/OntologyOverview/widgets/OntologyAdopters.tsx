@@ -53,7 +53,6 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
         )}
 
         {adopters.map((u, idx) => {
-          console.log(u);
           const used = u.usedBy || {};
 
           const prov = Array.isArray(used.provider) ? used.provider : [];

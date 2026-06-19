@@ -68,7 +68,7 @@ const EditTermset = (props: TermsetEditComProps) => {
   });
 
   function onTermSelect(selectedTerms: MultiSelectOption[]) {
-    let termsJson = selectedTerms.map((term) => term.term);
+    let termsJson = selectedTerms.map((opt) => opt.term);
     setSelectedTermsJson(termsJson);
   }
 
@@ -94,7 +94,7 @@ const EditTermset = (props: TermsetEditComProps) => {
       let opt: MultiSelectOption = {};
       opt["text"] = `${term.ontologyId}:${term.label} (${term.type})`;
       opt["iri"] = term.iri;
-      opt["json"] = term.term;
+      opt["term"] = term;
       options.push(opt);
     }
     setLoading(false);
@@ -259,9 +259,9 @@ const EditTermset = (props: TermsetEditComProps) => {
       let opt: MultiSelectOption = {};
       opt["text"] = `${term.ontologyId}:${term.label} (${term.type})`;
       opt["iri"] = term.iri;
-      opt["json"] = term.term;
+      opt["term"] = term;
       options.push(opt);
-      termsJson.push(term.term);
+      termsJson.push(term);
     }
     setSelectedTerms(options);
     setSelectedTermsJson(termsJson);

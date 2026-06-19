@@ -1,6 +1,10 @@
 import { TsPluginHeader } from "./types/headerTypes";
 import { getTsPluginHeaders } from "./header";
-import { TermSet, NewTermSetFormData } from "./types/termsetTypes";
+import {
+  TermSet,
+  NewTermSetFormData,
+  TermSetUpdateData,
+} from "./types/termsetTypes";
 import { OntologyTermDataV2 } from "./types/ontologyTypes";
 import { TsTermset } from "../concepts";
 
@@ -148,14 +152,14 @@ export async function updateTermset(
         term_set: TermSet;
       };
     };
-    let termsetJson: TermSet = {
+    let termsetJson: TermSetUpdateData = {
       id: termset.id,
       name: termset.name,
       description: termset.description,
       created_at: termset.created_at,
       updated_at: termset.updated_at,
       visibility: termset.visibility,
-      terms: termset.olsFormatTermWrappers,
+      terms: termset.olsFormatTermWrappers.map((twrapper) => twrapper.json),
       creator: termset.creator,
     };
     let headers: TsPluginHeader = getTsPluginHeaders({

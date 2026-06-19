@@ -126,11 +126,7 @@ const OntologyAdoptRequest = (props) => {
       usage_channel: usageChannel,
     };
 
-    console.log("CALLING API...");
-
     submitAdopterRequest(form).then((result) => {
-      console.log("API RESULT:", result);
-
       setFormSubmitSuccess(result);
       setFormSubmitted(true);
       setSubmitWait(false);
