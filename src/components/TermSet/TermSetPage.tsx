@@ -170,7 +170,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     if (!data) {
       return;
     }
-    const jsonFile = JSON.stringify(data.terms);
+    const jsonFile = JSON.stringify(data.terms.map((tsterm) => tsterm.term));
     await Toolkit.downloadJsonFile(data.name + "_terms.json", jsonFile);
   }
 
