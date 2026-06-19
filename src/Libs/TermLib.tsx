@@ -1,4 +1,4 @@
-import { TsClass, TsTerm } from "../concepts";
+import { TsClass, TsSkosTerm, TsTerm } from "../concepts";
 import Toolkit from "./Toolkit";
 
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
@@ -93,7 +93,7 @@ class TermLib {
     return [];
   }
 
-  static createInstancesListForClass(term) {
+  static createInstancesListForClass(term: TsClass | TsSkosTerm) {
     // instances are the individuals which are a type of this class.
     if (!term.instancesList) {
       return null;
