@@ -71,7 +71,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
     for (let term of listOfterms) {
       let DeleteBtn = (
         <i
-          className="bi bi-file-minus-fill"
+          className="bi bi-file-earmark-excel-fill bg-red"
           title="remove from this termset"
           data-tsetid={data.id}
           data-termid={term.iri}

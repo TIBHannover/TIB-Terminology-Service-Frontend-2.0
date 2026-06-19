@@ -603,10 +603,10 @@ body .fa-info {
   font-size: var(--font-size-md);
 }
 
-body .bi-file-minus-fill {
+body .bi-file-earmark-excel-fill {
   color: red;
   fill: white;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   cursor: pointer;
   margin-left: 3px;
 }

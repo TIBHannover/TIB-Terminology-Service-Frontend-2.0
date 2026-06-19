@@ -326,7 +326,7 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
                   {appContext.user && (
                     <span className="">
                       <i
-                        className="bi bi-file-minus-fill"
+                        className="bi bi-file-earmark-excel-fill"
                         title="remove from this termset"
                         data-tsetid={tset.id}
                         onClick={removeTerm}
