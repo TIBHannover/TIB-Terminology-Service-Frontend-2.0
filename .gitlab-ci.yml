@@ -13,7 +13,7 @@ playwright:
     - export PATH="$BUN_INSTALL/bin:$PATH"
     - bun install --frozen-lockfile
   script:
-    - bunx playwright test --project=chromium
+    - bunx playwright test --project=chromium --reporter=list,html
   artifacts:
     when: always
     paths:
