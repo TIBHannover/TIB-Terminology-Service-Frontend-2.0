@@ -14,6 +14,7 @@ playwright:
     - export BUN_INSTALL="$HOME/.bun"
     - export PATH="$BUN_INSTALL/bin:$PATH"
     - bun install --frozen-lockfile
+    - bunx playwright install chromium
   script:
     - bunx playwright test --project=chromium --reporter=list,html
   artifacts:
