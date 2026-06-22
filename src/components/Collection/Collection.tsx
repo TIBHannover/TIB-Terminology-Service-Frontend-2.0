@@ -224,9 +224,11 @@ const Collections = () => {
       targetCollectionId &&
       document.getElementById("section_" + targetCollectionId)
     ) {
-      document
-        .getElementById("section_" + targetCollectionId)!
-        .scrollIntoView();
+      requestAnimationFrame(() => {
+        document
+          .getElementById("section_" + targetCollectionId)!
+          .scrollIntoView();
+      });
     }
   }, []);
 
