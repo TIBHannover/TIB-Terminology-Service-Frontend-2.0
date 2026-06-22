@@ -33,9 +33,10 @@ CSS and styling:
 
 Test:
 - Never changing the app while writing tests.
-- Do not use anything starts with `stour` as a selector. This is only fo rthe Tour feature. 
+- Do not use anything starts with `stour` as a selector. This is only for the Tour feature. 
 - Test stragety is `End to End`. Do not focus on unit tests unless asked to do so in the spec or via the prompt.
-- site uses a tour optins that overlay the pages. This conflicts with the test. Disable the tour feature before running the tests. Do it only for test not in the application itself. 
+- site uses a tour optins that overlay the pages. This conflicts with the test. Disable the tour feature before running the tests. Do it only for test and not in the application itself. 
+- There is a `tests/libs.ts` file that contains common functions for reuse in the tests. check this for resuseable functions. Also if a new function is reusable, it should be added to this file.
 
 
 
