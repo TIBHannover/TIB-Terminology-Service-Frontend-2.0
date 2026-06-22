@@ -1,30 +1,12 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { BASE_URL } from "./libs";
+import { gotoPath } from "./libs";
 
 const SEARCH_QUERY = "assay";
 const EMPTY_QUERY = "ddddddd";
 const OBI_TERM_ID = /OBI[:_]0000070/;
 
 async function gotoSearch(page: Page, params = `q=${SEARCH_QUERY}`) {
-  await page.addInitScript(() => {
-    window.localStorage.setItem(
-      "tour_profile",
-      JSON.stringify({
-        homepage: true,
-        ontoPageTabs: true,
-        ontoOverViewPage: true,
-        ontoClassTreePage: true,
-        ontoPropertyTreePage: true,
-        ontoIndividualPage: true,
-        ontoClassListPage: true,
-        ontoNotesPage: true,
-        ontoGithubPage: true,
-        ontoListPage: true,
-      }),
-    );
-    window.localStorage.setItem("cookie-show", "false");
-  });
-  await page.goto(`${BASE_URL}/search?${params}`);
+  await gotoPath(page, `/search?${params}`);
   await expect(resultHeading(page)).toBeVisible();
   await expect(page).toHaveURL(/includeimported=true/);
   await expect(page.locator(".is-loading-term-list")).toBeHidden();

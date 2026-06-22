@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { gotoPath } from "./libs";
 
-const BASE_URL = "http://localhost:3000";
 const TEST_ONTOLOGY = "VIBSO";
 const TEST_ROOT_CLASS_IRI = "http://purl.obolibrary.org/obo/BFO_0000001";
 const TEST_ROOT_CLASS_LABEL = "entity";
@@ -10,7 +10,7 @@ const TEST_ASSAY_CLASS_DESCRIPTION =
   "A planned process that has the objective to produce information about a material entity";
 
 test(`Ontology (${TEST_ONTOLOGY}) class tree root terms`, async ({ page }) => {
-  await page.goto(BASE_URL + "/ontologies/vibso/terms");
+  await gotoPath(page, "/ontologies/vibso/terms");
   const treeNodeLi = await page.locator(`[data-iri="${TEST_ROOT_CLASS_IRI}"]`);
   await expect(treeNodeLi).toBeVisible();
   // the test root class has children so the expand + icon has to be visible for it.
@@ -23,13 +23,7 @@ test(`Ontology (${TEST_ONTOLOGY}) class tree root terms`, async ({ page }) => {
 test(`Ontology (${TEST_ONTOLOGY}) class tree jump to assay`, async ({
   page,
 }) => {
-  await page.goto(BASE_URL + "/ontologies/vibso/terms");
-  await page.waitForTimeout(1500);
-  await page
-    .locator("#___reactour")
-    .getByRole("button", { name: "Close" })
-    .click();
-  await page.pause();
+  await gotoPath(page, "/ontologies/vibso/terms");
   const jumpToInput = page.getByPlaceholder("type your target term ...");
   await expect(jumpToInput).toBeVisible();
   await jumpToInput.fill(TEST_ASSAY_CLASS_LABEL);

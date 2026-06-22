@@ -1,5 +1,5 @@
 import { test, expect, type Locator, type Page } from "@playwright/test";
-import { BASE_URL } from "./libs";
+import { gotoPath } from "./libs";
 
 const TEST_ONTOLOGY = "VIBSO";
 const TEST_ASSAY_CLASS_IRI = "http://purl.obolibrary.org/obo/OBI_0000070";
@@ -18,8 +18,9 @@ function metadataValue(page: Page, label: string): Locator {
 test(`Ontology (${TEST_ONTOLOGY}) assay term detail table`, async ({
   page,
 }) => {
-  await page.goto(
-    `${BASE_URL}/ontologies/vibso/terms?iri=${encodeURIComponent(
+  await gotoPath(
+    page,
+    `/ontologies/vibso/terms?iri=${encodeURIComponent(
       TEST_ASSAY_CLASS_IRI,
     )}`,
   );

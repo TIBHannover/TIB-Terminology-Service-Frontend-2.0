@@ -1,26 +1,10 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
-import { BASE_URL } from "./libs";
+import { expect, test, type Page } from "@playwright/test";
+import { getBackgroundColor, gotoPath } from "./libs";
 
 const SEARCH_QUERY = "assay";
 
 async function gotoHome(page: Page) {
-  await page.addInitScript(() => {
-    window.localStorage.setItem(
-      "tour_profile",
-      JSON.stringify({
-        homepage: true,
-        ontoPageTabs: true,
-        ontoOverViewPage: true,
-        ontoClassTreePage: true,
-        ontoPropertyTreePage: true,
-        ontoIndividualPage: true,
-        ontoClassListPage: true,
-        ontoNotesPage: true,
-        ontoListPage: true,
-      }),
-    );
-  });
-  await page.goto(BASE_URL + process.env.REACT_APP_PROJECT_SUB_PATH);
+  await gotoPath(page);
   await expect(searchInput(page)).toBeVisible();
 }
 
@@ -40,12 +24,6 @@ async function typeSearchQuery(page: Page) {
   await searchInput(page).fill(SEARCH_QUERY);
   await expect(page.locator("#autocomplete-container")).toBeVisible();
   await expect(page.locator("#jumpresult-container")).toBeVisible();
-}
-
-async function getBackgroundColor(locator: Locator) {
-  return locator.evaluate(
-    (element) => getComputedStyle(element).backgroundColor,
-  );
 }
 
 test("header search form shows autocomplete and jump-to results for assay", async ({

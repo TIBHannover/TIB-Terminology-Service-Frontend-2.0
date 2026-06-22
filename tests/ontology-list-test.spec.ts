@@ -1,5 +1,12 @@
-import { test, expect, type Locator, type Page } from "@playwright/test";
-import { BASE_URL } from "./libs";
+import { test, expect, type Page } from "@playwright/test";
+import {
+  expectSortedAscending,
+  expectSortedDescending,
+  gotoPath,
+  locatorTexts,
+  numbersFromText,
+  visibleCards,
+} from "./libs";
 
 const ONTOLOGY_SUGGESTION_IS_ENABLED =
   process.env.REACT_APP_ONTOLOGY_SUGGESTION === "true";
@@ -22,7 +29,7 @@ async function gotoOntologyList(
   page: Page,
   params = "and=false&sortedBy=title&page=1&size=10",
 ) {
-  await page.goto(BASE_URL + `/ontologies?${params}`);
+  await gotoPath(page, `/ontologies?${params}`);
   await expect(ontologyListHeading(page)).toBeVisible();
 }
 
@@ -30,34 +37,6 @@ function ontologyListHeading(page: Page) {
   return page.locator("#ontologyList-wrapper-div h3", {
     hasText: "Browse Ontologies",
   });
-}
-
-async function visibleCards(page: Page) {
-  const cards = page.locator("div.result-card");
-  await expect(cards.first()).toBeVisible();
-  return cards;
-}
-
-async function cardTexts(cards: Locator, selector: string) {
-  return (await cards.locator(selector).allInnerTexts()).map((text) =>
-    text.trim(),
-  );
-}
-
-function numbersFromText(texts: string[]) {
-  return texts.map((text) => Number(text.replace(/\D/g, "")));
-}
-
-function expectSortedAscending(values: string[]) {
-  expect(values).toEqual(
-    [...values].sort((a, b) =>
-      a.localeCompare(b, "en", { sensitivity: "base" }),
-    ),
-  );
-}
-
-function expectSortedDescending(values: number[]) {
-  expect(values).toEqual([...values].sort((a, b) => b - a));
 }
 
 test("ontology list is loaded", async ({ page }) => {
@@ -157,13 +136,15 @@ test("ontology list sorting options are present and sort the list", async ({
 
   await sortDropdown.selectOption("ontologyId");
   await expect(page).toHaveURL(/sortedBy=ontologyId/);
-  expectSortedAscending(await cardTexts(await visibleCards(page), ONTOLOGY_ID_SELECTOR));
+  expectSortedAscending(
+    await locatorTexts(await visibleCards(page), ONTOLOGY_ID_SELECTOR),
+  );
 
   await sortDropdown.selectOption("numberOfClasses");
   await expect(page).toHaveURL(/sortedBy=numberOfClasses/);
   expectSortedDescending(
     numbersFromText(
-      await cardTexts(await visibleCards(page), ONTOLOGY_CLASS_COUNT_SELECTOR),
+      await locatorTexts(await visibleCards(page), ONTOLOGY_CLASS_COUNT_SELECTOR),
     ),
   );
 
@@ -171,7 +152,7 @@ test("ontology list sorting options are present and sort the list", async ({
   await expect(page).toHaveURL(/sortedBy=numberOfProperties/);
   expectSortedDescending(
     numbersFromText(
-      await cardTexts(
+      await locatorTexts(
         await visibleCards(page),
         ONTOLOGY_PROPERTY_COUNT_SELECTOR,
       ),
@@ -181,7 +162,7 @@ test("ontology list sorting options are present and sort the list", async ({
   await sortDropdown.selectOption("loaded");
   await expect(page).toHaveURL(/sortedBy=loaded/);
   expectSortedAscending(
-    (await cardTexts(await visibleCards(page), ONTOLOGY_LOADED_SELECTOR)).map(
+    (await locatorTexts(await visibleCards(page), ONTOLOGY_LOADED_SELECTOR)).map(
       (text) => text.replace("Loaded: ", ""),
     ),
   );
@@ -304,7 +285,9 @@ test("ontology list sort and page are set from URL and page change updates URL",
   await expect(page.locator(".pagination-middle-btn.selected-page")).toHaveText(
     "2",
   );
-  expectSortedAscending(await cardTexts(await visibleCards(page), ONTOLOGY_ID_SELECTOR));
+  expectSortedAscending(
+    await locatorTexts(await visibleCards(page), ONTOLOGY_ID_SELECTOR),
+  );
 
   await page.locator(".pagination-end").first().click();
   await expect(page).toHaveURL(/page=3/);
