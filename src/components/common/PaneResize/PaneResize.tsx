@@ -52,16 +52,16 @@ class PaneResize {
     ];
   }
 
-  onMouseDown(event: MouseEvent) {
+  onMouseDown = (event: MouseEvent) => {
     let targetElement = event.target as HTMLElement;
     if (!targetElement.classList.contains("page-resize-vertical-line")) {
       return null;
     }
     this.lastPagePositionX = event.clientX;
     this.isResizeOn = true;
-  }
+  };
 
-  moveToResize(event: MouseEvent) {
+  moveToResize = (event: MouseEvent) => {
     if (!this.isResizeOn || Date.now() - this.lastPagePositionX < 200) {
       return null;
     }
@@ -93,14 +93,14 @@ class PaneResize {
         graphElement.style.width = currentGraphWidth - addedWidth + "px";
       }
     });
-  }
+  };
 
-  releaseMouseFromResize(event: MouseEvent) {
+  releaseMouseFromResize = (event: MouseEvent) => {
     if (!this.isResizeOn) {
       return null;
     }
     this.isResizeOn = false;
-  }
+  };
 
   resetTheWidthToOrignial() {
     let pageLeftPane = document.getElementById("page-left-pane");

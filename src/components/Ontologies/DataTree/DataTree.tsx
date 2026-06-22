@@ -125,9 +125,15 @@ const DataTree = (props: DataTreeProps) => {
     }
 
     return () => {
-      document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
-      document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
-      document.body.addEventListener(
+      document.body.removeEventListener(
+        "mousedown",
+        paneResizeClass.onMouseDown,
+      );
+      document.body.removeEventListener(
+        "mousemove",
+        paneResizeClass.moveToResize,
+      );
+      document.body.removeEventListener(
         "mouseup",
         paneResizeClass.releaseMouseFromResize,
       );
