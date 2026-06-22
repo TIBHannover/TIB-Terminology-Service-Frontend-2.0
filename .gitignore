@@ -35,6 +35,7 @@ sonarqube/logs
 issues_notes
 temp.txt
 .idea/
+.agents/
 
 # Playwright
 node_modules/
