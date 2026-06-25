@@ -27,7 +27,7 @@ code structure:
 Stack:
 - React
 - Typescript
-- CSS/Bootstrap 5
+- CSS/Bootstrap 6
 
 
 
