@@ -1,0 +1,360 @@
+import React from "react";
+import SkosApi from "../../../api/skos";
+import TermApi from "../../../api/term";
+import TreeNodeController from "./TreeNode";
+import TermLib from "../../../Libs/TermLib";
+import type { ReactNode } from "react";
+import type { TreeTermNode } from "./types";
+
+export default class TreeHelper {
+  static autoExpandTargetNode(
+    nodeList: TreeTermNode[],
+    parentId: string,
+    targetIri: string,
+    targetHasChildren: boolean,
+  ) {
+    let subNodes: ReactNode[] = [];
+    let treeNode = new TreeNodeController();
+    for (let i = 0; i < nodeList.length; i++) {
+      let childNodeChildren: ReactNode[] = [];
+      if (nodeList[i].iri !== targetIri) {
+        let subUl = TreeHelper.autoExpandTargetNode(
+          nodeList[i].childrenList ?? [],
+          nodeList[i].id,
+          targetIri,
+          targetHasChildren,
+        );
+        childNodeChildren.push(subUl);
+      }
+      let isClicked = false;
+      let isExpanded = true;
+
+      if (nodeList[i].iri === targetIri) {
+        if (targetHasChildren) {
+          nodeList[i]["hasDirectChildren"] = true;
+          isExpanded = false;
+        } else {
+          isExpanded = false;
+          nodeList[i]["hasDirectChildren"] = false;
+        }
+        isClicked = true;
+      } else {
+        if (
+          nodeList[i].children &&
+          (nodeList[i].childrenList ?? []).length == 0
+        ) {
+          nodeList[i]["hasDirectChildren"] = true;
+          isExpanded = false;
+        } else if ((nodeList[i].childrenList ?? []).length != 0) {
+          isExpanded = true;
+          nodeList[i]["hasDirectChildren"] = true;
+        } else {
+          nodeList[i]["hasDirectChildren"] = false;
+        }
+      }
+
+      treeNode.children = childNodeChildren;
+      let childNode = treeNode.buildNodeWithReact({
+        nodeObject: nodeList[i],
+        nodeIsClicked: isClicked,
+        isExpanded: isExpanded,
+      });
+      subNodes.push(childNode);
+    }
+
+    let ul: ReactNode = React.createElement(
+      "ul",
+      { className: "tree-node-ul", id: "children_for_" + parentId },
+      subNodes,
+    );
+    if (nodeList.length === 0) {
+      ul = "";
+    }
+
+    return ul;
+  }
+
+  static async expandNode({
+    e,
+    ontologyId,
+    childExtractName,
+    isSkos,
+    lang,
+  }: {
+    e: HTMLElement;
+    ontologyId: string;
+    childExtractName: string;
+    isSkos: boolean;
+    lang: string;
+  }) {
+    let targetNodeIri = e.dataset.iri;
+    let Id = e.id;
+    let treeNode = new TreeNodeController();
+    if (e.classList.contains("closed")) {
+      // expand node
+      let res = [];
+      if (isSkos && childExtractName !== "properties") {
+        let skosApi = new SkosApi({
+          ontologyId: ontologyId,
+          iri: targetNodeIri,
+          lang: lang,
+        } as any);
+        res = await skosApi.fetchChildrenForSkosTerm();
+      } else {
+        let termApi = new TermApi(
+          ontologyId,
+          targetNodeIri,
+          childExtractName,
+          lang,
+        );
+        res = await termApi.getChildrenJsTree();
+      }
+      TreeHelper.sortTermsInTree(res);
+      let ul = document.createElement("ul");
+      ul.setAttribute("id", "children_for_" + Id);
+      ul.classList.add("tree-node-ul");
+      for (let node of res) {
+        let listItem = treeNode.buildNodeWithTradionalJs({
+          nodeObject: node,
+          isSkos: isSkos,
+          lang: lang,
+        });
+        ul.appendChild(listItem);
+      }
+      e.getElementsByTagName("i")[0].classList.remove("fa-plus");
+      e.getElementsByTagName("i")[0].classList.add("fa-minus");
+      e.classList.remove("closed");
+      e.classList.add("opened");
+      e.appendChild(ul);
+    } else if (!document.getElementById(Id)?.classList.contains("leaf-node")) {
+      // close an already expanded node
+      e.classList.remove("opened");
+      e.classList.add("closed");
+      e.getElementsByTagName("i")[0].classList.remove("fa-minus");
+      e.getElementsByTagName("i")[0].classList.add("fa-plus");
+      e.querySelector(`[id="children_for_${Id}"]`)?.remove();
+    }
+  }
+
+  static showSiblingsForRootNode(
+    nodes: TreeTermNode[],
+    selectedNodeIri: string,
+  ) {
+    let treeNode = new TreeNodeController();
+    TreeHelper.sortTermsInTree(nodes);
+    for (let i = 0; i < nodes.length; i++) {
+      if (
+        nodes[i].iri === selectedNodeIri ||
+        nodes[i].iri === "http://www.w3.org/2002/07/owl#Thing"
+      ) {
+        continue;
+      }
+      let node = treeNode.buildNodeWithTradionalJs({ nodeObject: nodes[i] });
+      document.getElementById("tree-root-ul")?.appendChild(node);
+    }
+  }
+
+  static async showSiblings(
+    targetNodes: HTMLCollectionOf<Element>,
+    ontologyId: string,
+    childExtractName: string,
+  ) {
+    let treeNode = new TreeNodeController();
+    for (let node of targetNodes) {
+      let parentUl = node.parentNode?.parentNode as HTMLElement | null;
+      if (!parentUl) continue;
+      let parentId = parentUl.id.split("children_for_")[1];
+      let iri = document.getElementById(parentId)?.dataset.iri;
+      let termApi = new TermApi(ontologyId, iri, childExtractName);
+      let res = await termApi.getChildrenJsTree();
+      TreeHelper.sortTermsInTree(res);
+      for (let i = 0; i < res.length; i++) {
+        if (
+          res[i].iri === (node.parentNode as HTMLElement | null)?.dataset.iri
+        ) {
+          continue;
+        }
+        let item = treeNode.buildNodeWithTradionalJs({ nodeObject: res[i] });
+        parentUl.appendChild(item);
+      }
+    }
+  }
+
+  static hideSiblingsForRootNode(selectedIri: string) {
+    let parentUl = document.getElementById("tree-root-ul");
+    let children = Array.from(parentUl?.childNodes ?? []) as HTMLElement[];
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].dataset.iri !== selectedIri) {
+        children[i].remove();
+      }
+    }
+  }
+
+  static hideSiblings(targetNodes: HTMLCollectionOf<Element>) {
+    for (let node of targetNodes) {
+      let parentUl = node.parentNode?.parentNode as HTMLElement | null;
+      let children = Array.from(parentUl?.childNodes ?? []) as HTMLElement[];
+      for (let i = 0; i < children.length; i++) {
+        if (
+          children[i].dataset.iri !==
+          (node.parentNode as HTMLElement | null)?.dataset.iri
+        ) {
+          children[i].remove();
+        }
+      }
+    }
+  }
+
+  static async nodeHasChildren(
+    ontology: string,
+    nodeIri: string,
+    mode: string,
+  ) {
+    let termType = "";
+    if (mode === "terms") {
+      termType = "terms";
+    } else if (mode === "property") {
+      termType = "properties";
+    } else {
+      return false;
+    }
+    let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
+    let tsTerm = await termApi.fetchTerm();
+    return Boolean(
+      (tsTerm as any)?.hasHierarchicalChildren ||
+      (tsTerm as any)?.hasDirectChildren,
+    );
+  }
+
+  static async nodeIsRoot(ontology: string, nodeIri: string, mode: string) {
+    let termType = mode === "terms" ? "classes" : "properties";
+    let termApi = new TermApi(ontology, encodeURIComponent(nodeIri), termType);
+    let tsTerm = await termApi.fetchTerm();
+    return (
+      !(tsTerm as any)?.hasDirectParents &&
+      !(tsTerm as any)?.hasHierarchicalParents
+    );
+  }
+
+  static setIsExpandedAndHasChildren(nodeObject: TreeTermNode) {
+    let hasChildren = false;
+    let isExpanded = false;
+    if (
+      (nodeObject.childrenList ?? []).length === 0 &&
+      !nodeObject.children &&
+      !nodeObject.opened
+    ) {
+      //  root node is a leaf
+      hasChildren = false;
+      isExpanded = false;
+    } else if (
+      (nodeObject.childrenList ?? []).length === 0 &&
+      nodeObject.children &&
+      !nodeObject.opened
+    ) {
+      // root is not leaf but does not include the target node on its sub-tree
+      hasChildren = true;
+      isExpanded = false;
+    } else {
+      // root is not leaf and include the target node on its sub-tree
+      hasChildren = true;
+      isExpanded = true;
+    }
+    return { hasChildren: hasChildren, isExpanded: isExpanded };
+  }
+
+  static getTheNodeSortKey(nodesList: TreeTermNode[]) {
+    if (nodesList.length !== 0) {
+      return nodesList[0].label ? "label" : "text";
+    }
+    return null;
+  }
+
+  static renderObsoletes(
+    obsoletes: TreeTermNode[],
+    resultArrayToPush: ReactNode[],
+    startIndex: number,
+    targetSelectedNodeIri: string | false | null,
+  ): [ReactNode[], number] {
+    let lastSelectedItemId = startIndex;
+    for (let i = 0; i < obsoletes.length; i++) {
+      if (targetSelectedNodeIri === obsoletes[i].iri) {
+        continue;
+      }
+      let treeNode = new TreeNodeController();
+      let nodeIsClicked = Boolean(
+        targetSelectedNodeIri && obsoletes[i].iri === targetSelectedNodeIri,
+      );
+      if (nodeIsClicked) {
+        lastSelectedItemId = i + startIndex;
+      }
+      let node = treeNode.buildNodeWithReact({
+        nodeObject: obsoletes[i],
+        nodeIsClicked: nodeIsClicked,
+      });
+      resultArrayToPush.push(node);
+    }
+
+    return [resultArrayToPush, lastSelectedItemId];
+  }
+
+  static sortTermsInTree(terms: TreeTermNode[]) {
+    let sortKey = TreeHelper.getTheNodeSortKey(terms);
+    if (sortKey) {
+      terms.sort((node1: TreeTermNode, node2: TreeTermNode) => {
+        let label1 = TermLib.extractLabel(node1);
+        let label2 = TermLib.extractLabel(node2);
+        if (label1 < label2) {
+          return -1;
+        }
+        return 1;
+      });
+    }
+  }
+
+  static buildTermTreeFromFlatList(terms: TreeTermNode[]) {
+    function getParentIris(
+      parentIrisList: Array<string | { value: string }> | undefined,
+    ) {
+      let parentIris: string[] = [];
+      if (!parentIrisList) {
+        return [];
+      }
+      for (let parentIri of parentIrisList) {
+        if (typeof parentIri === "string") {
+          parentIris.push(parentIri);
+        } else if ("value" in parentIri) {
+          parentIris.push(parentIri.value);
+        }
+      }
+      return parentIris;
+    }
+
+    for (let term of terms) {
+      for (let potentialChild of terms) {
+        let parentsIrisList =
+          potentialChild.type?.[0] === "class"
+            ? potentialChild["hierarchicalParent"]
+            : potentialChild["directParent"];
+        let parentsIris = getParentIris(parentsIrisList);
+        if (!parentsIris.length) {
+          // Thing class
+          continue;
+        }
+        if (parentsIris.includes(term.iri)) {
+          if (term.childrenList) {
+            term.childrenList.push(potentialChild);
+          } else {
+            term.childrenList = [potentialChild];
+          }
+        }
+      }
+      if (!term.childrenList) {
+        term.childrenList = [];
+      }
+    }
+    return terms.filter(
+      (term) => !term.hasHierarchicalParents && !term.hasDirectParents,
+    );
+  }
+}

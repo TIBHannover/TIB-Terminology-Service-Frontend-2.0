@@ -20,7 +20,7 @@ export class TsOntology {
   private _homepage: string;
   private _license: string;
   private _licenseUrl: string;
-  private _creator: string;
+  private _creator: string[];
   private _issueTrackerUrl: string;
   private _importedFrom: Array<string>;
   private _isSkos: boolean;
@@ -45,11 +45,17 @@ export class TsOntology {
     this._preferredPrefix = ontologyData.preferredPrefix ?? "";
     this._purl = ontologyData.ontologyPurl ?? "";
     this._loaded = ontologyData.loaded ?? "";
-    this._version = ontologyData["http://www.w3.org/2002/07/owl#versionInfo"] ?? "";
-    this._versionedUrl = ontologyData["versioned_url"] || ontologyData["http://www.w3.org/2002/07/owl#versionIRI"] || "";
+    this._version =
+      ontologyData["http://www.w3.org/2002/07/owl#versionInfo"] ?? "";
+    this._versionedUrl =
+      ontologyData["versioned_url"] ||
+      ontologyData["http://www.w3.org/2002/07/owl#versionIRI"] ||
+      "";
     this._numberOfClasses = parseInt(ontologyData.numberOfClasses ?? "0");
     this._numberOfProperties = parseInt(ontologyData.numberOfProperties ?? "0");
-    this._numberOfIndividuals = parseInt(ontologyData.numberOfIndividuals ?? "0");
+    this._numberOfIndividuals = parseInt(
+      ontologyData.numberOfIndividuals ?? "0",
+    );
     this._allowDownload = ontologyData.allow_download ?? false;
     this._collections = ontologyData.classifications?.[0].collection ?? [];
     this._subjects = ontologyData.classifications?.[1].subject ?? [];
@@ -140,7 +146,7 @@ export class TsOntology {
     return this._licenseUrl;
   }
 
-  get creator(): string {
+  get creator(): string[] {
     return this._creator;
   }
 
@@ -212,22 +218,37 @@ export class TsOntology {
     this._obsoleteProperties = input;
   }
 
-
-  private processCreators(ontology: OntologyData): string {
-    let creators = ontology["http://purl.org/dc/terms/creator"] || ontology["http://purl.org/dc/elements/1.1/creator"] || ontology['creator'];
-    if (!creators || creators.length === 0) {
-      return "N/A";
+  private processCreators(ontology: OntologyData): string[] {
+    try {
+      let creators =
+        ontology["http://purl.org/dc/terms/creator"] ||
+        ontology["http://purl.org/dc/elements/1.1/creator"] ||
+        ontology["creator"];
+      let processed_creators: string[] = [];
+      if (!creators || creators.length === 0) {
+        return [];
+      }
+      if (typeof creators === "string") {
+        processed_creators.push(creators);
+        return processed_creators;
+      }
+      if (Array.isArray(creators)) {
+        creators.forEach((creator: string | Record<any, any> | null) => {
+          if (!creator) {
+            return;
+          }
+          if (typeof creator === "string") {
+            processed_creators.push(creator);
+          } else if (creator["http://xmlns.com/foaf/0.1/name"]) {
+            processed_creators.push(creator["http://xmlns.com/foaf/0.1/name"]);
+          }
+        });
+      }
+      return processed_creators;
+    } catch (e) {
+      return [];
     }
-    if (typeof creators === "string") {
-      return creators;
-    }
-    let value = [];
-    for (let i = 0; i < creators.length; i++) {
-      value.push(creators[i]);
-    }
-    return value.join(",\n");
   }
-
 
   private processTitle(ontology: OntologyData): string {
     if (ontology.title) {
@@ -235,7 +256,6 @@ export class TsOntology {
     }
     return ontology.label?.[0].trim() ?? "";
   }
-
 
   private processAnnotations(ontology: OntologyData): Record<string, any> {
     try {
@@ -268,11 +288,22 @@ export class TsOntology {
   private getCleanTitle(): string {
     let title = this.ontologyJsonData["title"] ?? "";
     title = title.trim();
-    const stopWords = ["a", "an", "the", "and", "or", "but", "is", "are", "to", "of"];
-    let cleanedTitle = title.split(" ").filter((word: string) => !stopWords.includes(word.toLowerCase())).join(" ");
+    const stopWords = [
+      "a",
+      "an",
+      "the",
+      "and",
+      "or",
+      "but",
+      "is",
+      "are",
+      "to",
+      "of",
+    ];
+    let cleanedTitle = title
+      .split(" ")
+      .filter((word: string) => !stopWords.includes(word.toLowerCase()))
+      .join(" ");
     return cleanedTitle;
   }
-
-
 }
-

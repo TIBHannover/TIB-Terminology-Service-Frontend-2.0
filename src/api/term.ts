@@ -3,11 +3,10 @@ import Toolkit from "../Libs/Toolkit";
 import {
   OntologyTermDataV2,
   TermListData,
-  OntologyTermData
+  OntologyTermData,
 } from "./types/ontologyTypes";
 import { Ols3ApiResponse } from "./types/common";
 import { TsTerm, TermFactory } from "../concepts";
-
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_NUMBER = 1;
@@ -15,26 +14,28 @@ const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
 const INDIVIDUAL_TYPE_ID = "individuals";
 
-
 class TermApi {
-
   ontologyId: string = "";
   iri: string = "";
   term: OntologyTermDataV2 = {};
   termType: string = "";
   lang: string = "en";
 
-
-  constructor(ontologyId?: string, iri?: string, termType?: string, language?: string) {
+  constructor(
+    ontologyId?: string,
+    iri?: string,
+    termType?: string,
+    language?: string,
+  ) {
     this.ontologyId = ontologyId ? ontologyId : "";
     iri = iri ? iri : "";
-    this.iri = Toolkit.urlNotEncoded(iri) ? encodeURIComponent(encodeURIComponent(iri)) : encodeURIComponent(iri);
+    this.iri = Toolkit.urlNotEncoded(iri)
+      ? encodeURIComponent(encodeURIComponent(iri))
+      : encodeURIComponent(iri);
     this.setTermType(termType);
     this.term = {}; // this holds the term data from ols api.
     this.lang = language ? language : "en";
-
   }
-
 
   setTermType(termType?: string): void {
     if (termType === "term" || termType === "class" || termType === "terms") {
@@ -47,7 +48,6 @@ class TermApi {
       this.termType = termType ? termType : "";
     }
   }
-
 
   async fetchTerm(): Promise<TsTerm | null> {
     try {
@@ -69,16 +69,18 @@ class TermApi {
       this.term = {};
       return null;
     }
-
   }
 
-
-  async fetchListOfTerms(page: number | string = DEFAULT_PAGE_NUMBER, size: number | string = DEFAULT_PAGE_SIZE, obsoletes: boolean = false): Promise<TermListData | []> {
+  async fetchListOfTerms(
+    page: number | string = DEFAULT_PAGE_NUMBER,
+    size: number | string = DEFAULT_PAGE_SIZE,
+    obsoletes: boolean = false,
+  ): Promise<TermListData | []> {
     try {
       let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/${this.termType}?lang=${this.lang}&page=${page}&size=${size}&includeObsoleteEntities=${obsoletes}`;
       let result = await (await fetch(url, getCallSetting)).json();
-      let totalTermsCount = result['totalElements'];
-      result = result['elements'];
+      let totalTermsCount = result["totalElements"];
+      result = result["elements"];
       if (!result) {
         return [];
       }
@@ -87,36 +89,35 @@ class TermApi {
         let termObject = TermFactory.createTermForTS(term, []);
         refinedResults.push(termObject);
       }
-      return { "results": refinedResults, "totalTermsCount": totalTermsCount };
+      return { results: refinedResults, totalTermsCount: totalTermsCount };
     } catch (e) {
       //throw (e)
       return [];
     }
   }
 
-
-
   async getIndividualInstancesForClass(): Promise<any> {
     try {
       let baseUrl = process.env.REACT_APP_API_BASE_URL;
-      let callUrl = baseUrl + "/" + this.ontologyId + "/terms/" + this.iri + "/instances";
+      let callUrl =
+        baseUrl + "/" + this.ontologyId + "/terms/" + this.iri + "/instances";
       let result = await fetch(callUrl, getCallSetting);
       let apiResult: Ols3ApiResponse = await result.json();
-      let indvResult = apiResult['_embedded'];
-      if (!indvResult || typeof (indvResult['individuals']) === "undefined") {
+      let indvResult = apiResult["_embedded"];
+      if (!indvResult || typeof indvResult["individuals"] === "undefined") {
         return null;
       }
-      return indvResult['individuals'];
+      return indvResult["individuals"];
     } catch (e) {
       return null;
     }
   }
 
-
   async getNodeJsTree(): Promise<TsTerm[]> {
     try {
       let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-      let parentPath = this.termType === CLASS_TYPE_ID ? "hierarchicalAncestors" : "ancestors";
+      let parentPath =
+        this.termType === CLASS_TYPE_ID ? "hierarchicalAncestors" : "ancestors";
       let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${parentPath}?size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
       let listOfNodes = await (await fetch(url, getCallSetting)).json();
       let nodesList = listOfNodes["elements"] ?? [];
@@ -142,11 +143,11 @@ class TermApi {
     }
   }
 
-
   async getChildrenJsTree(lang: string = "en"): Promise<TsTerm[]> {
     const getChildren = async (lang: string) => {
       let OntologiesBaseServiceUrl = process.env.REACT_APP_API_URL;
-      let path = this.termType === CLASS_TYPE_ID ? "hierarchicalChildren" : "children";
+      let path =
+        this.termType === CLASS_TYPE_ID ? "hierarchicalChildren" : "children";
       let url = `${OntologiesBaseServiceUrl}/v2/ontologies/${this.ontologyId}/${this.termType}/${this.iri}/${path}?size=1000&lang=${lang}&includeObsoleteEntities=false`;
       let res = await (await fetch(url, getCallSetting)).json();
       let nodesList = res["elements"] ?? [];
@@ -156,7 +157,7 @@ class TermApi {
         results.push(tsTerm);
       }
       return results;
-    }
+    };
 
     const getHierarchicalChilren = async (lang: string) => {
       if (this.termType === CLASS_TYPE_ID) {
@@ -171,14 +172,15 @@ class TermApi {
         return results;
       }
       return [];
-    }
+    };
 
-    let [children, hierarchialChildren] = await Promise.all([getChildren(lang), getHierarchicalChilren(lang)]);
+    let [children, hierarchialChildren] = await Promise.all([
+      getChildren(lang),
+      getHierarchicalChilren(lang),
+    ]);
 
     return [...children, ...hierarchialChildren];
   }
-
-
 
   async fetchGraphData(): Promise<any> {
     try {
@@ -190,7 +192,33 @@ class TermApi {
       return null;
     }
   }
-}
 
+  async getTermIriByCurie(curie: string): Promise<string> {
+    try {
+      type ApiResult = {
+        elements: OntologyTermDataV2[];
+      };
+      if (!curie.includes("%")) {
+        curie = encodeURIComponent(curie);
+      }
+      let url = `${process.env.REACT_APP_API_URL}/v2/entities?page=0&size=20&lang=en&exclusive=false&option=LINEAR&searchFields=curie&boostFields=curie%5E100&exactMatch=false&includeObsoleteEntities=false`;
+      url += `&search=${curie}&ontology=${this.ontologyId}`;
+      let result = (await (
+        await fetch(url, getCallSetting)
+      ).json()) as ApiResult;
+      let terms = result.elements;
+      curie = decodeURIComponent(curie);
+      for (let term of terms) {
+        let tsTerm = new TsTerm(term);
+        if (tsTerm.curie === curie) {
+          return tsTerm.iri;
+        }
+      }
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
+}
 
 export default TermApi;

@@ -1,0 +1,33 @@
+Task:
+- Write tests for the search result page.
+- main target is `SearchResult.tsx`
+- search query is `assay`
+- Criteria:
+    - message should show there are atleast 4000 results. 
+    - Type, Ontologies, and Collections facet must be present and must be clickable.
+    - The number of results must reduce when clicking on the facet fields. 
+    - Language and Result Per Page dropdowns must be present and must be clickable.
+    - Pagination must be present and must be clickable.
+    - Each result card must contains: (check the result card that has `OBI:0000070` as the id tag)
+        - result type in `[class]`
+        - title
+        - id tag
+        - `Set` button for adding the term to the term set
+        - `Ontology:` that contains ontology id tag. must be `obi` 
+        - `Also in:` that contains ontology id tags. must contain `vibso`  
+        - description 
+        - iri link. the copy button must be present and function properly. (copy the iri to clipboard)
+        - result title must be clickable and lead to the ontology `obi` page. (its terms tree page)
+    - Ontologies facet must conatins a filter by keyword input.
+        - when typing `vibso`, the list must be filtered to show only the `vibso` ontology and its count. 
+        - when clicking on the `vibso` ontology, the search result must be filtered to show only the term which their `Ontology:` tag is `vibso`.
+        - unclicking the `vibso` ontology must remove the filter and show all the results.
+    - Ontologies facet must conatain a `show more` link that expands the list to show all the ontologies and turns to `show less` link when clicked.
+    - when clicking on the `NFDI4CHEM` collection, the search result count must reduce. 
+    - changes in the facets must be reflected in the url and vice versa.
+    - `clear all filters` button must be present and must be clickable. This must clear the filters and show all the results.
+    - when a facet is selected, there must be a tag with `x` button on top of the search results that shows the facet is selected. Clicking on the `x` must remove the facet filter.
+    - changing the search input from `assay` to `ddddddd` must update the search results. It must shows `No search results for "ddddddd"`
+
+Acceptance criteria:
+ -  use buxn to run test only for this spec and only for chromium

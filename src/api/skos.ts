@@ -7,7 +7,12 @@ class SkosApi {
   iri: string;
   skosRoot: any;
   lang: string;
-  constructor(props: { ontologyId: string, iri: string, skosRoot: any, lang: string }) {
+  constructor(props: {
+    ontologyId: string;
+    iri: string;
+    skosRoot: any;
+    lang: string;
+  }) {
     let { ontologyId, iri, skosRoot, lang } = props;
     this.ontologyId = ontologyId;
     this.iri = "";

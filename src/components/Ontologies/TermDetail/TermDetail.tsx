@@ -1,24 +1,26 @@
-import { useEffect, useState, useContext } from 'react';
-import { TermTabMetadata, TermDetailComPros, RenderTermDetailComProps } from './types';
-import NodePageTabConfig from './listOfComponentsTabs.json';
-import TermDetailTable from './TermDetailTable/TermDetailTable';
-import NoteList from '../Note/NoteList';
-import TermApi from '../../../api/term';
-import { Link } from 'react-router-dom';
-import { getNoteList } from '../../../api/note';
-import Graph from '../../common/Graph/Graph';
+import { useEffect, useRef, useState, useContext } from "react";
+import {
+  TermTabMetadata,
+  TermDetailComPros,
+  RenderTermDetailComProps,
+} from "./types";
+import NodePageTabConfig from "./listOfComponentsTabs.json";
+import TermDetailTable from "./TermDetailTable/TermDetailTable";
+import NoteList from "../Note/NoteList";
+import TermApi from "../../../api/term";
+import { Link } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import { getNoteList } from "../../../api/note";
+import Graph from "../../common/Graph/Graph";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
-import * as SiteUrlParamNames from '../../../UrlFactory/UrlParamNames';
-import CommonUrlFactory from '../../../UrlFactory/CommonUrlFactory';
-import { AddToTermsetModal } from '../../TermSet/AddTermToSet';
-import { TsTerm } from '../../../concepts';
-
-
+import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
+import { TsTerm } from "../../../concepts";
 
 const DETAIL_TAB_ID = 0;
 const NOTES_TAB_ID = 1;
 const GRAPH_TAB_ID = 2;
-
 
 const TermDetail = (props: TermDetailComPros) => {
   /*
@@ -35,17 +37,27 @@ const TermDetail = (props: TermDetailComPros) => {
   const [waiting, setWaiting] = useState(false);
   const [targetTerm, setTargetTerm] = useState<TsTerm>();
   const [notesCount, setNotesCount] = useState(0);
+  const [actionsCollapsed, setActionsCollapsed] = useState(false);
+  const tabActionRowRef = useRef<HTMLDivElement>(null);
+  const tabListRef = useRef<HTMLUListElement>(null);
+  const actionBarRef = useRef<HTMLDivElement>(null);
+  const expandedActionsWidthRef = useRef(0);
 
-  const showDataAsJsonBtnHref = process.env.REACT_APP_API_URL +
+  const showDataAsJsonBtnHref =
+    process.env.REACT_APP_API_URL +
     `/v2/ontologies/${targetTerm?.ontologyId ?? ""}/entities/${encodeURIComponent(encodeURIComponent(targetTerm?.iri ?? ""))}?lang=${ontologyPageContext.ontoLang}`;
 
   async function fetchTheTargetTerm() {
     let ontologyId = ontologyPageContext.ontology.ontologyId;
-    let termApi = new TermApi(ontologyId, encodeURIComponent(props.iri), props.extractKey, ontologyPageContext.ontoLang);
+    let termApi = new TermApi(
+      ontologyId,
+      encodeURIComponent(props.iri),
+      props.extractKey,
+      ontologyPageContext.ontoLang,
+    );
     let term = await termApi.fetchTerm();
     setTargetTerm(term ?? undefined);
   }
-
 
   async function fetchNoteCount() {
     try {
@@ -58,9 +70,11 @@ const TermDetail = (props: TermDetailComPros) => {
           pageNumber: 0,
           pageSize: 1,
           targetTerm: targetTerm,
-          onlyOntologyOriginalNotes: false
+          onlyOntologyOriginalNotes: false,
         });
-        countOfNotes = notes ? notes['stats']['total_number_of_records'] as number : 0;
+        countOfNotes = notes
+          ? (notes.stats.total_number_of_records as number)
+          : 0;
       }
       setNotesCount(countOfNotes);
     } catch {
@@ -68,14 +82,13 @@ const TermDetail = (props: TermDetailComPros) => {
     }
   }
 
-
   function setTabOnLoad() {
     let url = new URL(window.location.href);
     let requestedTab = url.searchParams.get("subtab");
     let activeTabId = activeTab;
-    if (requestedTab !== lastRequestedTab && requestedTab === 'notes') {
+    if (requestedTab !== lastRequestedTab && requestedTab === "notes") {
       activeTabId = NOTES_TAB_ID;
-    } else if (requestedTab !== lastRequestedTab && requestedTab === 'graph') {
+    } else if (requestedTab !== lastRequestedTab && requestedTab === "graph") {
       activeTabId = GRAPH_TAB_ID;
     } else if (requestedTab !== lastRequestedTab) {
       activeTabId = DETAIL_TAB_ID;
@@ -90,7 +103,9 @@ const TermDetail = (props: TermDetailComPros) => {
 
   function tabChangeHandler(e: React.MouseEvent<HTMLAnchorElement>) {
     try {
-      let selectedTabId = (e.currentTarget.dataset.value ?? DETAIL_TAB_ID) as number;
+      let selectedTabId = parseInt(
+        e.currentTarget.dataset.value ?? DETAIL_TAB_ID.toString(),
+      );
       setWaiting(true);
       setActiveTab(selectedTabId);
       setWaiting(false);
@@ -99,7 +114,6 @@ const TermDetail = (props: TermDetailComPros) => {
       setWaiting(false);
     }
   }
-
 
   useEffect(() => {
     setTabOnLoad();
@@ -111,32 +125,119 @@ const TermDetail = (props: TermDetailComPros) => {
     setWaiting(true);
     fetchTheTargetTerm();
     setWaiting(false);
-  }, [ontologyPageContext.ontoLang])
+  }, [ontologyPageContext.ontoLang]);
 
+  useEffect(() => {
+    const tabActionRow = tabActionRowRef.current;
+    const tabList = tabListRef.current;
+
+    if (!tabActionRow || !tabList) {
+      return;
+    }
+
+    function updateActionOverflow() {
+      const currentTabActionRow = tabActionRowRef.current;
+      const currentTabList = tabListRef.current;
+      const currentActionBar = actionBarRef.current;
+
+      if (!currentTabActionRow || !currentTabList) {
+        return;
+      }
+
+      const visibleActionsWidth = currentActionBar?.scrollWidth ?? 0;
+
+      if (visibleActionsWidth > 0) {
+        expandedActionsWidthRef.current = visibleActionsWidth;
+      }
+
+      const actionsWidth = expandedActionsWidthRef.current;
+      const rowStyles = window.getComputedStyle(currentTabActionRow);
+      const rowGap =
+        parseFloat(rowStyles.columnGap || rowStyles.gap || "0") || 0;
+      const nextCollapsed =
+        currentTabList.scrollWidth + actionsWidth + rowGap >
+        currentTabActionRow.clientWidth;
+
+      setActionsCollapsed(nextCollapsed);
+    }
+
+    updateActionOverflow();
+
+    const resizeObserver = new ResizeObserver(updateActionOverflow);
+    resizeObserver.observe(tabActionRow);
+    resizeObserver.observe(tabList);
+    if (actionBarRef.current) {
+      resizeObserver.observe(actionBarRef.current);
+    }
+    window.addEventListener("resize", updateActionOverflow);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateActionOverflow);
+    };
+  }, [actionsCollapsed, notesCount, targetTerm]);
+
+  const renderTermDetailActions = (isMenuContent = false) => (
+    <div
+      ref={isMenuContent ? undefined : actionBarRef}
+      className={
+        "d-flex justify-content-end mt-3 " +
+        (isMenuContent ? "term-detail-action-menu" : "term-detail-action-bar")
+      }
+    >
+      <AddToTermsetModal
+        modalId={"term-in-tree"}
+        term={targetTerm}
+        btnClass="term-detail-action-btn"
+      />
+      <a
+        href={showDataAsJsonBtnHref}
+        target="_blank"
+        rel="noreferrer"
+        className="borderless-btn rounded-1 term-detail-action-btn"
+        title="Show JSON"
+      >
+        <i className="bi bi-filetype-json"></i>
+        JSON
+      </a>
+    </div>
+  );
 
   return (
-    <div className='row'>
-      <div className='col-sm-12'>
-        <div className='term-detail-action-bar'>
-          <AddToTermsetModal modalId={"term-in-tree"} term={targetTerm} />
-          <a
-            href={showDataAsJsonBtnHref}
-            target='_blank'
-            rel="noreferrer"
-            className='btn btn-sm btn-dark download-ontology-btn'
-          >
-            <i className="bi bi-filetype-json"></i>
-            JSON
-          </a>
+    <div className="row">
+      <div className="col-sm-12">
+        <div className="row mb-3" ref={tabActionRowRef}>
+          <div className="col-sm-9">
+            <RenderTermDetailTab
+              componentIdentity={props.componentIdentity}
+              tabChangeHandler={tabChangeHandler}
+              activeTab={activeTab}
+              noteCount={notesCount}
+              tabListRef={tabListRef}
+            />
+          </div>
+          <div className="col-sm-3">
+            {!actionsCollapsed && renderTermDetailActions()}
+            {actionsCollapsed && (
+              <Dropdown
+                align="end"
+                autoClose="outside"
+                className="term-detail-action-dropdown"
+              >
+                <Dropdown.Toggle
+                  className="btn btn-sm btn-dark term-detail-action-menu-toggle"
+                  id="term-detail-action-menu"
+                  aria-label="Term detail actions"
+                >
+                  <i className="bi bi-list"></i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>{renderTermDetailActions(true)}</Dropdown.Menu>
+              </Dropdown>
+            )}
+          </div>
         </div>
-        <RenderTermDetailTab
-          componentIdentity={props.componentIdentity}
-          tabChangeHandler={tabChangeHandler}
-          activeTab={activeTab}
-          noteCount={notesCount}
-        />
         {waiting && <div className="isLoading-small"></div>}
-        {!waiting && (activeTab === DETAIL_TAB_ID) &&
+        {!waiting && activeTab === DETAIL_TAB_ID && (
           <TermDetailTable
             iri={props.iri}
             componentIdentity={props.componentIdentity}
@@ -144,65 +245,79 @@ const TermDetail = (props: TermDetailComPros) => {
             isIndividual={false}
             node={targetTerm ?? undefined}
           />
-        }
-        {!waiting && (activeTab === NOTES_TAB_ID) &&
+        )}
+        {!waiting && activeTab === NOTES_TAB_ID && (
           <NoteList
-            key={'notesPage'}
-            //@ts-ignore
-            term={targetTerm}
+            key={"notesPage"}
+            term={targetTerm as any}
             termType={props.typeForNote}
           />
-        }
-        {!waiting && (activeTab === GRAPH_TAB_ID) &&
+        )}
+        {!waiting && activeTab === GRAPH_TAB_ID && (
           <Graph
             ontologyId={ontologyPageContext.ontology.ontologyId}
             termIri={props.iri}
             isSkos={ontologyPageContext.isSkos}
             componentIdentity={props.componentIdentity}
           />
-        }
+        )}
       </div>
     </div>
   );
-}
-
+};
 
 const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
-
   const ontologyPageContext = useContext(OntologyPageContext);
   const UrlFactory = new CommonUrlFactory();
 
   function createTabs() {
     let result = [];
     for (let configItemKey in NodePageTabConfig as TermTabMetadata) {
-      //@ts-ignore
-      let configObject = NodePageTabConfig[configItemKey];
+      let configObject = (NodePageTabConfig as TermTabMetadata)[
+        configItemKey as keyof TermTabMetadata
+      ];
       let linkUrl = UrlFactory.setParam({
         name: SiteUrlParamNames.SubTabInTermTable,
-        //@ts-ignore
-        value: NodePageTabConfig[configItemKey]['urlEndPoint'],
-        updateUrl: false
+        value: configObject.urlEndPoint,
+        updateUrl: false,
       });
-      if (configItemKey === "Notes" && process.env.REACT_APP_NOTE_FEATURE !== "true") {
+      if (
+        configItemKey === "Notes" &&
+        process.env.REACT_APP_NOTE_FEATURE !== "true"
+      ) {
         continue;
       }
-      if (configItemKey === "GraphView" && (props.componentIdentity === "props" || (props.componentIdentity === "individuals" && !ontologyPageContext.isSkos))) {
+      if (
+        configItemKey === "GraphView" &&
+        (props.componentIdentity === "props" ||
+          (props.componentIdentity === "individuals" &&
+            !ontologyPageContext.isSkos))
+      ) {
         continue;
       }
 
       result.push(
-        <li className={"nav-item ontology-detail-nav-item stour-tree-table-" + configObject['id']}
-          key={configObject['keyForRenderAsTabItem']}>
+        <li
+          className={
+            "nav-item ontology-detail-nav-item stour-tree-table-" +
+            configObject["id"]
+          }
+          key={configObject["keyForRenderAsTabItem"]}
+        >
           <Link
             onClick={props.tabChangeHandler}
-            data-value={configObject['tabId']}
-            className={(props.activeTab === parseInt(configObject['tabId'])) ? "nav-link active" : "nav-link"}
+            data-value={configObject["tabId"]}
+            className={
+              props.activeTab === Number(configObject["tabId"])
+                ? "nav-link active"
+                : "nav-link"
+            }
             to={linkUrl}
           >
-            {configObject['tabTitle']}
+            {configObject["tabTitle"]}
             {configItemKey === "Notes" ? ` (${props.noteCount})` : ""}
           </Link>
-        </li>
+        </li>,
       );
     }
 
@@ -210,10 +325,10 @@ const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
   }
 
   return (
-    <ul className="nav nav-tabs nav-tabs-node">
+    <ul className="nav nav-tabs nav-tabs-node" ref={props.tabListRef}>
       {createTabs()}
     </ul>
   );
-}
+};
 
 export default TermDetail;
