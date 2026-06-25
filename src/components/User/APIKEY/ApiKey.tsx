@@ -3,14 +3,13 @@ import { fetchUserApiKeys, deleteApiKey } from "../../../api/user";
 import { ApiKey } from "../../../api/types/userTypes";
 import CreateApiKey from "./CreateApiKey";
 
-
 const UserApiKey = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [showCreateApiKey, setShowCreateApiKey] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
-    fetchUserApiKeys().then(res => {
+    fetchUserApiKeys().then((res) => {
       setApiKeys(res);
     });
   }, []);
@@ -19,11 +18,10 @@ const UserApiKey = () => {
     if (showCreateApiKey) {
       return;
     }
-    fetchUserApiKeys().then(res => {
+    fetchUserApiKeys().then((res) => {
       setApiKeys(res);
     });
   }, [showCreateApiKey, deleted]);
-
 
   function deleteKey(e: React.MouseEvent<HTMLElement>) {
     let id = e.currentTarget.dataset.id;
@@ -40,28 +38,44 @@ const UserApiKey = () => {
     });
   }
 
-
-
   return (
     <div className="row user-info-panel">
       <div className="col-sm-12">
-        {showCreateApiKey &&
+        {showCreateApiKey && (
           <>
-            <button className="btn btn-secondary mb-2" onClick={() => setShowCreateApiKey(false)}>Back to list</button>
+            <button
+              className="btn btn-secondary mb-2"
+              onClick={() => setShowCreateApiKey(false)}
+            >
+              Back to list
+            </button>
             <CreateApiKey />
           </>
-        }
-        {!showCreateApiKey &&
+        )}
+        {!showCreateApiKey && (
           <>
-            <button className="btn btn-secondary mb-2" onClick={() => setShowCreateApiKey(true)}>Create new API key</button>
-            <h5><b>Here you can see your API keys.</b></h5>
+            <button
+              className="btn btn-secondary mb-2"
+              onClick={() => setShowCreateApiKey(true)}
+            >
+              Create new API key
+            </button>
+            <h5>
+              <b>Here you can see your API keys.</b>
+            </h5>
             <table className="table table-striped">
               <tbody>
                 <tr>
                   <th scope="col" className="col-1"></th>
-                  <th scope="col" className="col-3">Title</th>
-                  <th scope="col" className="col-3">name</th>
-                  <th scope="col" className="col-5">Description</th>
+                  <th scope="col" className="col-3">
+                    Title
+                  </th>
+                  <th scope="col" className="col-3">
+                    name
+                  </th>
+                  <th scope="col" className="col-5">
+                    Description
+                  </th>
                 </tr>
                 {apiKeys.map((key: ApiKey) => {
                   return (
@@ -74,19 +88,25 @@ const UserApiKey = () => {
                           onClick={deleteKey}
                         />
                       </td>
-                      <td scope="col" className="col-3">{key.title}</td>
-                      <td scope="col" className="col-3">{key.name || "same as username"}</td>
-                      <td scope="col" className="col-5">{key.description}</td>
+                      <td scope="col" className="col-3">
+                        {key.title}
+                      </td>
+                      <td scope="col" className="col-3">
+                        {key.name || "same as username"}
+                      </td>
+                      <td scope="col" className="col-5">
+                        {key.description}
+                      </td>
                     </tr>
-                  )
+                  );
                 })}
               </tbody>
             </table>
           </>
-        }
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default UserApiKey;

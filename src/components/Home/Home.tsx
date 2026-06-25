@@ -1,31 +1,30 @@
-import { useState, useEffect } from 'react';
-import '../layout/home.css';
-import { createStatsBox } from './StatsBox';
+import { useState, useEffect } from "react";
+import "../layout/home.css";
+import { createStatsBox } from "./StatsBox";
 import { getCallSetting } from "../../api/constants";
-import RenderHomePage from './HomePageContent';
-
+import RenderHomePage from "./HomePageContent";
 
 const Home = () => {
-
   const [statsResult, setStatsResult] = useState<Record<string, number>>({});
 
   async function fetchStats() {
     try {
-      let res = await fetch(process.env.REACT_APP_STATS_API_URL as string, getCallSetting)
+      let res = await fetch(
+        process.env.REACT_APP_STATS_API_URL as string,
+        getCallSetting,
+      );
       let stats: Record<string, number> = {};
       stats = await res.json();
       setStatsResult(stats);
-
     } catch (e) {
       setStatsResult({});
     }
   }
 
-
   useEffect(() => {
     fetchStats();
-    document.documentElement.style.overflowX = 'inherit';
-    document.documentElement.style.scrollBehavior = 'inherit';
+    document.documentElement.style.overflowX = "inherit";
+    document.documentElement.style.scrollBehavior = "inherit";
   }, []);
 
   return (
@@ -40,5 +39,5 @@ const Home = () => {
       </div>
     </>
   );
-}
+};
 export default Home;

@@ -1,0 +1,82 @@
+import { useState } from "react";
+
+type CopyLinkButtonProps = {
+  tooltipText?: string;
+  valueToCopy: string;
+};
+
+type CopyLinkButtonMarkdownFormatProps = {
+  url?: string;
+  label: string;
+  tooltipText?: string;
+};
+
+const CopyLinkButton = (props: CopyLinkButtonProps) => {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      type="button"
+      aria-label="Copy to clipboard"
+      className="btn btn-sm copy-link-icon-btn borderless-btn"
+      key={"copy-btn"}
+      title={props.tooltipText ?? "Copy to clipboard"}
+      onClick={() => {
+        navigator.clipboard.writeText(props.valueToCopy);
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, 1000);
+      }}
+    >
+      <i className="fa fa-solid fa-copy"></i>{" "}
+      {copied && <i className="fa fa-check" aria-hidden="true"></i>}
+    </button>
+  );
+};
+
+export const CopyLinkButtonMarkdownFormat = (
+  props: CopyLinkButtonMarkdownFormatProps,
+) => {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      type="button"
+      aria-label="Copy to clipboard the term label in markdown format"
+      className="btn btn-secondary btn-sm copy-link-btn ml-1"
+      key={"copy-btn"}
+      onClick={() => {
+        let copyValue = document.createElement("a");
+        copyValue.href = props.url ?? "";
+        copyValue.textContent = props.label;
+        let holderDiv = document.createElement("div");
+        holderDiv.style.position = "absolute";
+        holderDiv.appendChild(copyValue);
+        document.body.appendChild(holderDiv);
+        let range = document.createRange();
+        range.selectNode(holderDiv);
+        let selection = window.getSelection();
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+          document.execCommand("copy");
+          selection.removeAllRanges();
+        }
+        document.body.removeChild(holderDiv);
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, 1000);
+      }}
+      data-toggle="tooltip"
+      data-placement="left"
+      title={props.tooltipText}
+    >
+      copy label as link{" "}
+      {copied && <i className="fa fa-check" aria-hidden="true"></i>}
+    </button>
+  );
+};
+
+export default CopyLinkButton;

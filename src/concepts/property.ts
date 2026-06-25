@@ -2,7 +2,6 @@ import { PropDomainRangeObj } from "./types";
 import { TsTerm } from "./term";
 
 export class TsProperty extends TsTerm {
-
   override get type(): string {
     return "property";
   }
@@ -23,7 +22,8 @@ export class TsProperty extends TsTerm {
         const listOfDomainObjects = [];
         for (let iri of domains) {
           let domainObj = { ontologyId: "", iri: iri, label: "" };
-          domainObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
+          domainObj.ontologyId =
+            this.term["linkedEntities"][iri]["definedBy"][0];
           domainObj.label = this.term["linkedEntities"][iri]["label"][0];
           listOfDomainObjects.push(domainObj);
         }
@@ -47,7 +47,8 @@ export class TsProperty extends TsTerm {
         let propertyRanges = [];
         for (let iri of ranges) {
           let rangeObj = { ontologyId: "", iri: iri, label: "" };
-          rangeObj.ontologyId = this.term["linkedEntities"][iri]["definedBy"][0];
+          rangeObj.ontologyId =
+            this.term["linkedEntities"][iri]["definedBy"][0];
           rangeObj.label = this.term["linkedEntities"][iri]["label"][0];
           propertyRanges.push(rangeObj);
         }
@@ -59,4 +60,3 @@ export class TsProperty extends TsTerm {
     }
   }
 }
-

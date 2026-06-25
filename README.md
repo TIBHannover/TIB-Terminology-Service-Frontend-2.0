@@ -12,22 +12,27 @@ Features:
 
 - Access the latest versions of the most relevant terminologies from chemistry, engineering, architecture and many more
   domains.
-- Explore domain knowledge via concept hierarchies, find synonyms, translations of terms (via API), look up definitions,
+- Explore domain knowledge via concept hierarchies, find synonyms, translations of terms, look up definitions,
   and retrieve a concept’s persistent identifier.
-- Use TIB Terminology Service data (JSON) in your own service or application via REST API.
-- Suggest your own or other ontologies to be indexed in TIB Terminology Service.
+- Use TIB Terminology Service data in your own service or application via **REST API**.
+- **Suggest** your own or other ontologies to be indexed in TIB Terminology Service.
+- Define Ontology **collections** to organize your ontologies and make them searchable.
+- Define **Termsets** to organize your terms and make them shareable.
+- Visualize your ontologies and terms in a **graph** view.
+- Check the history of changes to your ontologies and terms.
+
 
 ### Installation
 
 Install the dependencies by running:
 
-    npm install
+    bun run install
 
 ## Running
 
 After initiating the .env variables with proper values then run:
 
-    npm start 
+    bun run start 
 
 Open the browser and enter the URL of the application: http://localhost:3000/.
 
@@ -60,7 +65,7 @@ content with yours.
 As a general pattern, the contents are return values for some functions. One need to overwrite the return values to
 change the static contents.
 
-- Site Logo: Copy your site logo inside the *public* directory and name it **site_logo.png**
+- Site Logo: Copy your site logo inside the *public* directory and set the REACT_APP_SITE_LOGO environment variable to the name of the file.
 
 - HomePage: Inside the *src/components/Home* directory, replace **HomePageContent.jsx** with yours. **Note**, do not
   change the namings, just change the return value for the function **renderHomePage()**
@@ -78,21 +83,18 @@ change the static contents.
 
 ### Changing project environment
 
-The default value in the [.env](https://git.tib.eu/terminology/tib-terminology-service-2.0/-/blob/master/.env) file is "
-general" to display TIB Terminology service. However, users can see other projects in the TIB environment collection by
-changing the project ID to their desired project ( eg. NFDI4Chem, NFDI4Ing). In order to fully transition to a new
-project view, users can also change the API endpoints, see selected project stats and project-filtered ontologies in the
-.env file.
+The default value in the .env file.
 
 ### Run Test
 
-Playwright have been used for testing this application. To run test for Firefox:
+Playwright have been used for testing this application.
 
 ```
-npx playwright test --project=firefox
+bun run test:all
+bun run test:desktop
+bun run test:mobile
 ```
 
-you can also use **chromium** and **webkit** for Chrome and Safari. 
 
 
 

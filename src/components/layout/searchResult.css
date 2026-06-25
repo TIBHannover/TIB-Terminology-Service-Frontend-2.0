@@ -1,77 +1,109 @@
 #searchterm-wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding-top: 20px;
-    display: flex;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-top: 20px;
+  display: flex;
 }
 
 .searchresult-card-description {
-    margin-top: 30px;
+  margin-top: 30px;
+}
+
+.search-result-container .result-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.38)
+  ) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 8px;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+}
+
+#search-facet-container-box .facet-box {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.38)
+  ) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 8px;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
 }
 
 .search-result-container .search-result-title {
-    color: #5F6469;
-    display: inline;
+  color: #5f6469;
+  display: inline;
 }
 
 .search-result-title:hover {
-    color: #5F6469;
-    text-decoration: none;
+  color: #5f6469;
+  text-decoration: none;
 }
 
 .search-result-container .search-result-title > h4 {
-    display: inline;
+  display: inline;
 }
 
 .also-in-design {
-    display: inline-block;
+  display: inline-block;
 }
 
 .search-result-container .also-in-ontologies {
-    display: inline-block;
-    padding-bottom: 7px;
+  display: inline-block;
+  padding-bottom: 7px;
 }
 
 .dropdown-colour {
-    background-color: white;
+  background-color: white;
 }
 
 .search-result-container .form-check-inline-github-issue,
 .search-result-container .form-check-input-github-issue {
-    margin-top: 4px;
-    margin-left: 2px;
+  margin-top: 4px;
+  margin-left: 2px;
 }
 
 .show-more-btn {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .search-filter-tags {
-    padding: 4px;
-    background-color: white;
-    margin-right: 10px;
-    border-radius: 10px;
-    font-size: 12px;
-    margin-bottom: 5px;
-    margin-top: 10px;
-    width: fit-content;
-    display: inline-block;
+  padding: 4px;
+  background-color: white;
+  margin-right: 10px;
+  border-radius: 10px;
+  font-size: var(--font-size-sm);
+  margin-bottom: 5px;
+  margin-top: 10px;
+  width: fit-content;
+  display: inline-block;
 }
 
 .remove-tag-icon {
-    margin-left: 2px;
-    border: none !important;
-    font-size: 15px !important;
-    cursor: pointer;
+  margin-left: 2px;
+  border: none !important;
+  font-size: var(--font-size-base) !important;
+  cursor: pointer;
 }
 
 .action-btn {
-    font-size: 11px;
-    padding: 2px;
-    float: right;
-    font-weight: bold;
+  font-size: var(--font-size-sm);
+  padding: 2px;
+  float: right;
+  font-weight: bold;
 }
 
 .action-btn > i {
-    font-size: 9px;
+  font-size: var(--font-size-xs);
 }

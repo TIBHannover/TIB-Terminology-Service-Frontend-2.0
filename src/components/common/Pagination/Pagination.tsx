@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import "../../layout/pagination.css";
 
 type PaginationProps = {
@@ -7,121 +7,180 @@ type PaginationProps = {
   initialPageNumber: number | string;
 };
 
-const toInt = (value: number | string): number => {
-  const parsed = Number(value);
-  return Number.isNaN(parsed) ? 1 : parsed;
+type PaginationState = {
+  activePageNumber: number;
+  pageCount: number;
+  listOfPageNumbersToRender: number[];
+  middleButonsHtml: React.ReactNode;
 };
 
-const Pagination = (props: PaginationProps) => {
-  const [activePageNumber, setActivePageNumber] = useState(1);
-  const [pageCount, setPageCount] = useState(0);
+class Pagination extends React.Component<PaginationProps, PaginationState> {
+  constructor(props: PaginationProps) {
+    super(props);
+    this.state = {
+      activePageNumber: 1,
+      pageCount: 0,
+      listOfPageNumbersToRender: [],
+      middleButonsHtml: "",
+    };
+    this.createMiddleButtons = this.createMiddleButtons.bind(this);
+    this.setTheListOfPageNumbersToRender =
+      this.setTheListOfPageNumbersToRender.bind(this);
+    this.paginationClickHandler = this.paginationClickHandler.bind(this);
+  }
 
-  useEffect(() => {
-    setActivePageNumber(toInt(props.initialPageNumber));
-    setPageCount(toInt(props.count));
-  }, [props.initialPageNumber, props.count]);
-
-  const listOfPageNumbersToRender = useMemo(() => {
-    const numbersToRender: number[] = [];
-    if (pageCount === 1) {
+  setTheListOfPageNumbersToRender() {
+    let numbersToRender = [];
+    let currentPageNumebr = this.state.activePageNumber;
+    let totalPageCount = this.state.pageCount;
+    if (totalPageCount === 1) {
       numbersToRender.push(1);
-    } else if (pageCount === 2) {
-      numbersToRender.push(1, 2);
-    } else if (activePageNumber < pageCount - 1) {
-      numbersToRender.push(
-        activePageNumber,
-        activePageNumber + 1,
-        activePageNumber + 2,
-      );
-    } else if (activePageNumber + 1 === pageCount) {
-      numbersToRender.push(
-        activePageNumber - 1,
-        activePageNumber,
-        activePageNumber + 1,
-      );
-    } else if (activePageNumber === pageCount) {
-      numbersToRender.push(
-        activePageNumber - 2,
-        activePageNumber - 1,
-        activePageNumber,
+    } else if (totalPageCount === 2) {
+      numbersToRender.push(1);
+      numbersToRender.push(2);
+    } else if (currentPageNumebr < totalPageCount - 1) {
+      numbersToRender.push(currentPageNumebr);
+      numbersToRender.push(currentPageNumebr + 1);
+      numbersToRender.push(currentPageNumebr + 2);
+    } else if (currentPageNumebr + 1 === totalPageCount) {
+      numbersToRender.push(currentPageNumebr - 1);
+      numbersToRender.push(currentPageNumebr);
+      numbersToRender.push(currentPageNumebr + 1);
+    } else if (currentPageNumebr === totalPageCount) {
+      numbersToRender.push(currentPageNumebr - 2);
+      numbersToRender.push(currentPageNumebr - 1);
+      numbersToRender.push(currentPageNumebr);
+    }
+    this.setState(
+      {
+        listOfPageNumbersToRender: numbersToRender,
+      },
+      () => {
+        this.createMiddleButtons();
+      },
+    );
+  }
+
+  createMiddleButtons() {
+    let result: React.ReactNode[] = [];
+    let numbersToRender = this.state.listOfPageNumbersToRender;
+    let activeNumber = this.state.activePageNumber;
+    for (let number of numbersToRender) {
+      result.push(
+        <li
+          className={
+            "pagination-btn pagination-middle-btn " +
+            (activeNumber === number ? "selected-page" : "")
+          }
+          onClick={this.paginationClickHandler}
+          value={number}
+          key={number}
+        >
+          <a className="pagination-link">{number}</a>
+        </li>,
       );
     }
-    return numbersToRender;
-  }, [activePageNumber, pageCount]);
+    this.setState({ middleButonsHtml: result });
+  }
 
-  const previousButtonClickedValue = () => {
+  paginationClickHandler(e: React.MouseEvent<HTMLElement>) {
+    let activePageNumber = this.state.activePageNumber;
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("pagination-end")) {
+      activePageNumber = this.nextButtonClickedValue();
+    } else if (target.classList.contains("pagination-start")) {
+      activePageNumber = this.previousButtonClickedValue();
+    } else {
+      activePageNumber = this.middleButtonClickedValue(target);
+    }
+    this.setState(
+      {
+        activePageNumber: parseInt(String(activePageNumber)),
+      },
+      () => {
+        this.setTheListOfPageNumbersToRender();
+        this.props.clickHandler(activePageNumber);
+      },
+    );
+  }
+
+  previousButtonClickedValue() {
+    let activePageNumber = parseInt(String(this.state.activePageNumber));
     if (activePageNumber > 1) {
       return activePageNumber - 1;
     }
     return activePageNumber;
-  };
+  }
 
-  const nextButtonClickedValue = () => {
-    if (activePageNumber < toInt(props.count)) {
+  nextButtonClickedValue() {
+    let activePageNumber = parseInt(String(this.state.activePageNumber));
+    if (activePageNumber < parseInt(String(this.props.count))) {
       return activePageNumber + 1;
     }
     return activePageNumber;
-  };
+  }
 
-  const middleButtonClickedValue = (element: HTMLLIElement) => {
-    const valueAttr = element.getAttribute("data-value");
-    const value = valueAttr ? Number(valueAttr) : activePageNumber;
-    return Number.isNaN(value) ? activePageNumber : value;
-  };
-
-  const paginationClickHandler = (e: React.MouseEvent<HTMLElement>) => {
-    const clickedElement = e.target as HTMLElement;
-    const clickedLi = clickedElement.closest("li");
-    if (!clickedLi) {
-      return;
+  middleButtonClickedValue(element: HTMLElement) {
+    if (element.nodeName === "LI") {
+      return Number((element as HTMLLIElement).value);
     }
+    return Number((element.parentNode as HTMLLIElement).value);
+  }
 
-    let newActivePageNumber = activePageNumber;
-    if (clickedLi.classList.contains("pagination-end")) {
-      newActivePageNumber = nextButtonClickedValue();
-    } else if (clickedLi.classList.contains("pagination-start")) {
-      newActivePageNumber = previousButtonClickedValue();
-    } else {
-      newActivePageNumber = middleButtonClickedValue(clickedLi);
+  componentDidMount() {
+    this.setState(
+      {
+        activePageNumber: parseInt(String(this.props.initialPageNumber)),
+        pageCount: parseInt(String(this.props.count)),
+      },
+      () => {
+        this.setTheListOfPageNumbersToRender();
+      },
+    );
+  }
+
+  componentDidUpdate() {
+    let inCommingPageCount = parseInt(String(this.props.count));
+    let currentPageCount = parseInt(String(this.state.pageCount));
+    let inCommingPageNumber = parseInt(String(this.props.initialPageNumber));
+    let currentPageNumber = parseInt(String(this.state.activePageNumber));
+    if (
+      inCommingPageCount !== currentPageCount ||
+      inCommingPageNumber !== currentPageNumber
+    ) {
+      this.setState(
+        {
+          pageCount: parseInt(String(this.props.count)),
+          activePageNumber: parseInt(String(this.props.initialPageNumber)),
+        },
+        () => {
+          this.setTheListOfPageNumbersToRender();
+        },
+      );
     }
+  }
 
-    setActivePageNumber(newActivePageNumber);
-    props.clickHandler(newActivePageNumber);
-  };
-
-  const middleButtonsHtml = listOfPageNumbersToRender.map((number) => (
-    <li
-      className={
-        "pagination-btn pagination-middle-btn " +
-        (activePageNumber === number ? "selected-page" : "")
-      }
-      onClick={paginationClickHandler}
-      data-value={number}
-      key={number}
-    >
-      <a className="pagination-link">{number}</a>
-    </li>
-  ));
-
-  return (
-    <ul className="pagination-holder">
-      <li
-        className="pagination-btn pagination-start"
-        onClick={paginationClickHandler}
-        key={1}
-      >
-        <a className="pagination-link pagination-start">Previous</a>
-      </li>
-      {middleButtonsHtml}
-      <li
-        className="pagination-btn pagination-end"
-        onClick={paginationClickHandler}
-        key={2}
-      >
-        <a className="pagination-link pagination-end">Next</a>
-      </li>
-    </ul>
-  );
-};
+  render() {
+    return (
+      <ul className="pagination-holder">
+        <li
+          className="pagination-btn pagination-start"
+          onClick={this.paginationClickHandler}
+          key={1}
+        >
+          <a className="pagination-link pagination-start">Previous</a>
+        </li>
+        {this.state.middleButonsHtml}
+        <li
+          className="pagination-btn pagination-end"
+          onClick={this.paginationClickHandler}
+          key={2}
+        >
+          <a className="pagination-link pagination-end">Next</a>
+        </li>
+      </ul>
+    );
+  }
+}
 
 export default Pagination;

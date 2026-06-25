@@ -1,0 +1,91 @@
+import { useState, useEffect, useContext } from "react";
+import { getNoteDetail } from "../../../api/note";
+import { NotFoundErrorPage } from "../../common/ErrorPages/ErrorPages";
+import {
+  createHtmlFromEditorJson,
+  createTextEditorEmptyText,
+} from "../../common/TextEditor/TextEditor";
+import { NoteDetailRender } from "./renders/NoteDetailRender";
+import { OntologyPageContext } from "../../../context/OntologyPageContext";
+import { NoteContext } from "../../../context/NoteContext";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
+import type { NoteDetailResponse } from "../../../api/types/noteTypes";
+import type { Note, NoteContextValue } from "./types";
+
+const NoteDetail = () => {
+  /* 
+        This component is responsible for rendering the note detail page.
+        It uses the NoteContext to get the selected note id.
+        It uses the OntologyPageContext to get the ontology information.
+        It uses the getNoteDetail function to get the note detail from the backend.
+    */
+
+  const ontologyPageContext = useContext(OntologyPageContext);
+  const noteContext = useContext(NoteContext) as unknown as NoteContextValue;
+
+  const [note, setNote] = useState<Note>({} as Note);
+  const [noteContent, setNoteContent] = useState(createTextEditorEmptyText());
+  const [noteNotFound, setNoteNotFound] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+
+  const commonUrlFactory = new CommonUrlFactory();
+
+  function getTheNote() {
+    let noteId = noteContext.selectedNoteId;
+    getNoteDetail({
+      noteId: String(noteId),
+      ontologyId: ontologyPageContext.ontology.ontologyId,
+    }).then((result: NoteDetailResponse | {} | "404") => {
+      if (result === "404") {
+        setNoteNotFound(true);
+      } else {
+        const note = (result as NoteDetailResponse).note;
+        if (!note) {
+          setNoteNotFound(true);
+          return;
+        }
+        setNote(note);
+        noteContext.setSelectedNote(note);
+        setNoteContent(createHtmlFromEditorJson(note.content));
+        noteContext.setNumberOfPinned(
+          (result as NoteDetailResponse).number_of_pinned ?? 0,
+        );
+        setNoteNotFound(false);
+      }
+    });
+  }
+
+  function reloadNoteDetail() {
+    commonUrlFactory.deleteParam({ name: SiteUrlParamNames.CommentId });
+    setNote({} as Note);
+    setCurrentUrl(commonUrlFactory.getCurrentUrl());
+  }
+
+  useEffect(() => {
+    if (noteContext.selectedNoteId) {
+      getTheNote();
+    }
+  }, []);
+
+  useEffect(() => {
+    getTheNote();
+  }, [noteContext.selectedNoteId, currentUrl]);
+
+  if (process.env.REACT_APP_NOTE_FEATURE !== "true") {
+    return null;
+  }
+
+  if (noteNotFound) {
+    return <NotFoundErrorPage />;
+  }
+  return (
+    <NoteDetailRender
+      note={note}
+      noteContent={noteContent}
+      reloadNoteDetail={reloadNoteDetail}
+    />
+  );
+};
+
+export default NoteDetail;

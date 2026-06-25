@@ -1,13 +1,15 @@
-import { TermSet } from "../api/types/termsetTypes";
-import { OntologyTermDataV2 } from "../api/types/ontologyTypes";
+import { TermSet, TermWrapperInSet } from "../api/types/termsetTypes";
 import { ApiKey } from "../api/types/userTypes";
+import { TermFactory } from "./termFactory";
+import { TsTerm } from "./term";
 
 export class TsTermset {
   termsetData: TermSet;
   private _name: string;
   private _description: string;
   private _visibility: string;
-  private _terms: OntologyTermDataV2[];
+  private _terms: TsTerm[];
+  private _olsFormatTermWrappers: TermWrapperInSet[]; // this is for storing the original term data. We don't store TsTerm in this list.
   private _created_at: string;
   private _creator: ApiKey | undefined;
 
@@ -16,9 +18,12 @@ export class TsTermset {
     this._description = this.termsetData.description ?? "";
     this._name = this.termsetData.name;
     this._visibility = this.termsetData.visibility;
-    this._terms = this.termsetData.terms.map(twrapper => twrapper.json ?? {});
+    this._terms = this.termsetData.terms.map((twrapper) => {
+      return TermFactory.createTermForTS(twrapper.json);
+    });
     this._created_at = this.termsetData.created_at;
     this._creator = this.termsetData.creator ?? undefined;
+    this._olsFormatTermWrappers = this.termsetData.terms;
   }
 
   get id(): string {
@@ -59,7 +64,7 @@ export class TsTermset {
     return this._visibility;
   }
 
-  get terms(): OntologyTermDataV2[] {
+  get terms(): TsTerm[] {
     return this._terms;
   }
 
@@ -79,9 +84,20 @@ export class TsTermset {
     }
   }
 
-  set terms(input: OntologyTermDataV2[]) {
-    this._terms = input;
+  get olsFormatTermWrappers(): TermWrapperInSet[] {
+    return this._olsFormatTermWrappers;
   }
 
+  set terms(input: TsTerm[]) {
+    this._terms = input;
+    let originalTermsWrapper: TermWrapperInSet[] = [];
+    for (let term of this._terms) {
+      originalTermsWrapper.push({
+        iri: term.iri,
+        type: term.type,
+        json: term.term,
+      });
+    }
+    this._olsFormatTermWrappers = originalTermsWrapper;
+  }
 }
-

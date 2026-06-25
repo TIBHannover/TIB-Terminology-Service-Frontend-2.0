@@ -1,11 +1,11 @@
-import * as React from 'react';
-import AlertBox from '../components/common/Alerts/Alerts';
-import ContactForm from '../components/User/ContactForm/ContactForm';
+import * as React from "react";
+import AlertBox from "../components/common/Alerts/Alerts";
+import ContactForm from "../components/User/ContactForm/ContactForm";
 
 type CompState = {
   hasError: boolean;
   errorContent?: string;
-}
+};
 
 class ErrorBoundary extends React.Component {
   state: CompState;
@@ -21,7 +21,10 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error: Error) {
-    this.setState({ hasError: this.state.hasError, errorContent: error.message });
+    this.setState({
+      hasError: this.state.hasError,
+      errorContent: error.message,
+    });
   }
 
   render() {
@@ -29,8 +32,14 @@ class ErrorBoundary extends React.Component {
       // You can render any custom fallback UI
       return (
         <>
-          <AlertBox message="Something went wrong. If you’d like, please use the form below to let us know about this error." type='danger' />
-          <ContactForm appErrorUrl={window.location.href} appErrorContent={this.state.errorContent} />
+          <AlertBox
+            message="Something went wrong. If you’d like, please use the form below to let us know about this error."
+            type="danger"
+          />
+          <ContactForm
+            appErrorUrl={window.location.href}
+            appErrorContent={this.state.errorContent}
+          />
         </>
       );
     }

@@ -50,9 +50,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && node ./sitemap.mjs",
+    "build": "react-scripts build && bun ./sitemap.mjs",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:all": "playwright test",
+    "test:desktop": "playwright test --project=desktop-chromium --project=desktop-firefox --project=desktop-webkit",
+    "test:mobile": "playwright test --project=mobile-chrome --project=mobile-safari"
   },
   "eslintConfig": {
     "extends": [

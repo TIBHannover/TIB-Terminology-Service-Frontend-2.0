@@ -1,36 +1,61 @@
-import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import '../layout/collectionList.css';
-import { getCollectionsAndThierOntologies } from '../../api/collection';
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import "../layout/collectionList.css";
+import { getCollectionsAndThierOntologies } from "../../api/collection";
 import collectionsInfoJson from "../../assets/collectionsText.json";
-import Toolkit from '../../Libs/Toolkit';
-import CommonUrlFactory from '../../UrlFactory/CommonUrlFactory';
-import * as SiteUrlParamNames from '../../UrlFactory/UrlParamNames';
-import { Link } from 'react-router-dom';
+import Toolkit from "../../Libs/Toolkit";
+import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
+import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
+import { Link } from "react-router-dom";
+import { CollectionJsonData } from "./types";
 
+type CollectionsData = Record<string, CollectionJsonData>;
 
-type CollectionJsonData = {
-  id: string,
-  html_id: string,
-  name: string,
-  text: string,
-  logo: string,
-  ontology_list_url: string,
-  project_homepage?: string,
-  domain_ts_link?: string,
-  logo_width?: number,
-  logo_height?: number,
-  selection_criteria?: string
-}
+const DEFAULT_VISIBLE_ONTOLOGIES = 8;
 
-type CollectionsData = Record<string, CollectionJsonData>
+type CollectionOntologyListProps = {
+  ontologies: JSX.Element[];
+  isLoading: boolean;
+};
 
+const CollectionOntologyList = ({
+  ontologies,
+  isLoading,
+}: CollectionOntologyListProps) => {
+  const [showAll, setShowAll] = useState(false);
+  const visibleOntologies = showAll
+    ? ontologies
+    : ontologies.slice(0, DEFAULT_VISIBLE_ONTOLOGIES);
+  const hiddenCount = ontologies.length - DEFAULT_VISIBLE_ONTOLOGIES;
+
+  if (isLoading) {
+    return (
+      <span className="collection-ontologies-loading">
+        Loading ontologies ...
+      </span>
+    );
+  }
+
+  return (
+    <>
+      {visibleOntologies}
+      {hiddenCount > 0 && (
+        <button
+          type="button"
+          className="collection-ontologies-toggle"
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? "Show less" : "Show more"}
+        </button>
+      )}
+    </>
+  );
+};
 
 const Collections = () => {
-
   const collectionsWithOntologiesQuery = useQuery({
-    queryKey: ['allCollectionsWithTheirOntologiesInCollectionPage'],
-    queryFn: getCollectionsAndThierOntologies
+    queryKey: ["allCollectionsWithTheirOntologiesInCollectionPage"],
+    queryFn: getCollectionsAndThierOntologies,
   });
 
   let collectionOntologiesData: { [key: string]: JSX.Element[] } = {};
@@ -41,28 +66,51 @@ const Collections = () => {
       for (let onto of collectionsWithTheirOntologies[col]) {
         collectionOntologiesData[col].push(
           <Link
-            to={process.env.REACT_APP_PROJECT_SUB_PATH + '/ontologies/' + onto.ontologyId}
-            className='ontologies-link-tag'
+            key={onto.ontologyId}
+            to={
+              process.env.REACT_APP_PROJECT_SUB_PATH +
+              "/ontologies/" +
+              onto.ontologyId
+            }
+            className="ontologies-link-tag ontology-button"
             onClick={() => {
-              Toolkit.selectSiteNavbarOption("Ontologies")
-            }}>
+              Toolkit.selectSiteNavbarOption("Ontologies");
+            }}
+          >
             {onto.ontologyId}
-          </Link>
+          </Link>,
         );
       }
     }
   }
   const collectionOntologies = collectionOntologiesData;
+  const ontologiesAreLoading =
+    collectionsWithOntologiesQuery.isLoading &&
+    !collectionsWithOntologiesQuery.data;
 
-
-  function createCollectionCard(collectionId: string, collectionJson: CollectionJsonData): JSX.Element {
+  function createCollectionCard(
+    collectionId: string,
+    collectionJson: CollectionJsonData,
+  ): JSX.Element {
+    let collectionPageUrl =
+      process.env.REACT_APP_PROJECT_SUB_PATH + "/collections/";
+    collectionPageUrl += collectionJson.id.replaceAll(" ", "_").toLowerCase();
     return (
-      <div className='row collection-card-row' key={collectionId} id={"section_" + collectionJson["html_id"]}>
-        <div className='col-sm-3 text-center' key={collectionId + "_logo"}>
-          <Link to={process.env.REACT_APP_PROJECT_SUB_PATH + collectionJson["ontology_list_url"]}
-            className="collection-image-anchor">
+      <div
+        className="row collection-card-row"
+        key={collectionId}
+        id={"section_" + collectionJson["html_id"]}
+      >
+        <div className="col-sm-3 text-center" key={collectionId + "_logo"}>
+          <Link
+            to={
+              process.env.REACT_APP_PROJECT_SUB_PATH +
+              collectionJson["ontology_list_url"]
+            }
+            className="collection-image-anchor"
+          >
             <img
-              className='collection-logo-in-list img-fluid p-0'
+              className="collection-logo-in-list img-fluid p-0"
               alt="logo"
               src={collectionJson["logo"]}
               width={collectionJson["logo_width"] ?? 250}
@@ -70,53 +118,82 @@ const Collections = () => {
             />
           </Link>
         </div>
-        <div className='col-sm-9 collection-content'>
-          <div className='row' key={collectionId + "_name"}>
-            <div className='col-sm-12'>
-              <h4>{collectionJson["name"]}</h4>
+        <div className="col-sm-9 collection-content">
+          <div className="row" key={collectionId + "_name"}>
+            <div className="col-sm-12">
+              <Link to={collectionPageUrl}>
+                <h4>{collectionJson["name"]}</h4>
+              </Link>
             </div>
           </div>
-          <div className='row' key={collectionId + "_content"}>
-            <div className='col-sm-12'>
+          <div className="row" key={collectionId + "_content"}>
+            <div className="col-sm-12">
               <p className="text-justify">
-                <div dangerouslySetInnerHTML={{ __html: collectionJson["text"] }}></div>
+                {Toolkit.renderDangerousHtml(collectionJson["text"])}
               </p>
             </div>
           </div>
-          {collectionJson["project_homepage"] &&
-            <div className='row' key={collectionId + "_projectUrl"}>
-              <div className='col-sm-12 collection-ontologies-text'>
+          {collectionJson["project_homepage"] && (
+            <div className="row" key={collectionId + "_projectUrl"}>
+              <div className="col-sm-12 collection-ontologies-text">
                 <b>Project Homepage: </b>
-                <a href={collectionJson["project_homepage"]} target="_blank"
-                  rel="noreferrer">{collectionJson["project_homepage"]}</a>
+                <a
+                  href={collectionJson["project_homepage"]}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {collectionJson["project_homepage"]}
+                </a>
               </div>
             </div>
-          }
-          {collectionJson["domain_ts_link"] &&
-            <div className='row' key={collectionId + "_domainLink"}>
-              <div className='col-sm-12 collection-ontologies-text'>
+          )}
+          {collectionJson["domain_ts_link"] && (
+            <div className="row" key={collectionId + "_domainLink"}>
+              <div className="col-sm-12 collection-ontologies-text">
                 <b>Domain-specific terminology service: </b>
-                <a href={collectionJson["domain_ts_link"]} target="_blank"
-                  rel="noreferrer">{collectionJson["domain_ts_link"]}</a>
+                <a
+                  href={collectionJson["domain_ts_link"]}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {collectionJson["domain_ts_link"]}
+                </a>
               </div>
             </div>
-          }
-          {collectionJson["selection_criteria"] &&
-            <div className='row' key={collectionId + "_ontoList"}>
-              <div className='col-sm-12 collection-ontologies-text'>
+          )}
+          {collectionJson["selection_criteria"] && (
+            <div className="row" key={collectionId + "_ontoList"}>
+              <div className="col-sm-12 collection-ontologies-text">
                 <b>Ontology Selection Criteria:</b>
-                <div dangerouslySetInnerHTML={{ __html: collectionJson["selection_criteria"] }}></div>
+                {Toolkit.renderDangerousHtml(
+                  collectionJson["selection_criteria"],
+                )}
               </div>
             </div>
-          }
-          <div className='row' key={collectionId + "_ontoList"}>
-            <div className='col-sm-12 collection-ontologies-text'>
-              <b>Ontologies:</b>{collectionOntologies[collectionId] || ""}
+          )}
+          <div className="row" key={collectionId + "_ontoList"}>
+            <div className="col-sm-12 collection-ontologies-text">
+              <b>
+                Ontologies{" "}
+                {!ontologiesAreLoading &&
+                  "(" + (collectionOntologies[collectionId] || []).length + ")"}
+                :
+              </b>
+              <span className="collection-ontologies-list">
+                <CollectionOntologyList
+                  ontologies={collectionOntologies[collectionId] || []}
+                  isLoading={ontologiesAreLoading}
+                />
+              </span>
               <Link
-                className="btn btn-sm btn-secondary ms-2 pt-0 pb-0 pl-1 pr-1 ms-0 "
-                to={process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologysuggestion?col=" + collectionId}
+                className="btn btn-sm btn-secondary collection-suggest-ontology-btn"
+                to={
+                  process.env.REACT_APP_PROJECT_SUB_PATH +
+                  "/ontologysuggestion?col=" +
+                  collectionId
+                }
                 onClick={() => {
-                  Toolkit.selectSiteNavbarOption("Ontologies")
+                  Toolkit.selectSiteNavbarOption("Ontologies");
                 }}
               >
                 Suggest an ontology for this collection
@@ -126,9 +203,7 @@ const Collections = () => {
         </div>
       </div>
     );
-
   }
-
 
   function createCollectionList() {
     let result: JSX.Element[] = [];
@@ -140,27 +215,33 @@ const Collections = () => {
     return result;
   }
 
-
   useEffect(() => {
     let urlFactory = new CommonUrlFactory();
-    let targetCollectionId = urlFactory.getParam({ name: SiteUrlParamNames.CollectionId });
-    if (targetCollectionId && document.getElementById("section_" + targetCollectionId)) {
-      document.getElementById("section_" + targetCollectionId)!.scrollIntoView();
+    let targetCollectionId = urlFactory.getParam({
+      name: SiteUrlParamNames.CollectionId,
+    });
+    if (
+      targetCollectionId &&
+      document.getElementById("section_" + targetCollectionId)
+    ) {
+      requestAnimationFrame(() => {
+        document
+          .getElementById("section_" + targetCollectionId)!
+          .scrollIntoView();
+      });
     }
   }, []);
-
 
   return (
     <>
       {Toolkit.createHelmet("Collections")}
-      <div className='row'>
-        <div className='col-sm-12 collections-info-container'>
+      <div className="row">
+        <div className="col-sm-12 collections-info-container">
           {createCollectionList()}
         </div>
       </div>
     </>
   );
-}
-
+};
 
 export default Collections;
