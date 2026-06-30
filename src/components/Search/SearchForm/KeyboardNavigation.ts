@@ -10,6 +10,12 @@ export function keyboardNavigationForJumpto(event) {
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
       performArrowUp();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      performArrowRight();
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      performArrowLeft();
     } else if (event.key === "Enter") {
       event.preventDefault();
       performEnter();
@@ -17,6 +23,14 @@ export function keyboardNavigationForJumpto(event) {
   } catch (e) {
     // console.info(e);
   }
+}
+
+function performArrowRight() {
+  selectItemInOtherColumn(".jump-to-ontology-column");
+}
+
+function performArrowLeft() {
+  selectItemInOtherColumn(".jump-to-term-column");
 }
 
 function performArrowDown() {
@@ -42,13 +56,65 @@ function performArrowUp() {
   }
 }
 
+function selectItemInOtherColumn(columnSelector: string) {
+  let targetColumn = document.querySelector(columnSelector);
+  if (!targetColumn) {
+    return;
+  }
+
+  let targetItems = targetColumn.getElementsByClassName("item-for-navigation");
+  if (targetItems.length === 0) {
+    return;
+  }
+
+  let selectedElement = document.getElementsByClassName(
+    "selected-by-arrow-key",
+  );
+  let targetIndex = 0;
+  if (selectedElement.length !== 0) {
+    let currentColumn = selectedElement[0].closest(
+      ".jump-to-term-column, .jump-to-ontology-column",
+    );
+    if (currentColumn === targetColumn) {
+      return;
+    }
+    targetIndex = getItemIndexInColumn(selectedElement[0], currentColumn);
+    selectedElement[0].classList.remove("selected-by-arrow-key");
+  }
+
+  targetItems[Math.min(targetIndex, targetItems.length - 1)].classList.add(
+    "selected-by-arrow-key",
+  );
+}
+
+function getItemIndexInColumn(selectedElement, currentColumn) {
+  if (!currentColumn) {
+    return 0;
+  }
+  let currentItems = currentColumn.getElementsByClassName(
+    "item-for-navigation",
+  );
+  for (let i = 0; i < currentItems.length; i++) {
+    if (currentItems[i] === selectedElement) {
+      return i;
+    }
+  }
+  return 0;
+}
+
 function performEnter() {
   let selectedElement = document.getElementsByClassName(
     "selected-by-arrow-key",
   );
 
   if (selectedElement.length !== 0) {
-    selectedElement[0].parentNode.click();
+    let selectedLink =
+      selectedElement[0].closest("a") || selectedElement[0].querySelector("a");
+    if (selectedLink) {
+      selectedLink.click();
+    } else {
+      selectedElement[0].parentNode.click();
+    }
   }
 }
 

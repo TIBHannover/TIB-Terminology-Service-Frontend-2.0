@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, KeyboardEvent } from "react";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import Autosuggest from "react-autosuggest";
 import { getJumpToResult } from "../../../api/search";
@@ -50,6 +50,7 @@ const JumpTo = (props: JumpToProps) => {
     placeholder: "type your target term ...",
     value,
     onChange: onAutoCompleteTextBoxChange,
+    onKeyDown: onAutoCompleteKeyDown,
   };
 
   function onAutoCompleteTextBoxChange(
@@ -57,12 +58,21 @@ const JumpTo = (props: JumpToProps) => {
     { newValue }: { newValue: string },
   ) {
     setEnteredTerm(newValue);
+    if (!newValue.trim()) {
+      clearAutoComplete();
+    }
+  }
+
+  function onAutoCompleteKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      clearAutoComplete();
+    }
   }
 
   async function onAutoCompleteChange({ value }: { value: string }) {
     let enteredTerm = value;
     let type = TYPE_MAPP[props.targetType as keyof typeof TYPE_MAPP];
-    if (enteredTerm.length > 0) {
+    if (enteredTerm.trim().length > 0) {
       let inputForAutoComplete: any = {};
       inputForAutoComplete["searchQuery"] = value;
       inputForAutoComplete["ontologyIds"] =
@@ -75,6 +85,8 @@ const JumpTo = (props: JumpToProps) => {
         ontologyPageContext.ontoLang,
       );
       setResultList(autoCompleteResult as JumpToSuggestion[]);
+    } else {
+      clearAutoComplete();
     }
   }
 

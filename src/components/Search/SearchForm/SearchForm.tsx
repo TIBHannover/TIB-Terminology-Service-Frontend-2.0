@@ -3,7 +3,11 @@ import { useHistory, useLocation } from "react-router-dom";
 import RenderSearchForm from "./RenderSearchForm";
 import AdvancedSearch from "./AdvancedSearch";
 import { keyboardNavigationForJumpto } from "./KeyboardNavigation";
-import { getJumpToResult, getAutoCompleteResult } from "../../../api/search";
+import {
+  getJumpToResult,
+  getAutoCompleteResult,
+  getOntologyJumpToResult,
+} from "../../../api/search";
 import Toolkit from "../../../Libs/Toolkit";
 import OntologyLib from "../../../Libs/OntologyLib";
 import "../../layout/jumpTo.css";
@@ -12,6 +16,8 @@ import SearchUrlFactory from "../../../UrlFactory/SearchUrlFactory";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
 import SearchLib from "../../../Libs/searchLib";
+import { SuggestAndSelectApiInput } from "../../../api/types/searchApiTypes";
+import { TsOntology } from "../../../concepts";
 
 const SearchForm = () => {
   /* 
@@ -43,10 +49,14 @@ const SearchForm = () => {
   const [jumpToResult, setJumpToResult] = useState([]);
   const [advSearchEnabled, setAdvSearchEnabled] =
     useState(advSearchEnabledLoad);
+  const [ontologyJumpToResult, setOntologyJumpToResult] = useState<
+    TsOntology[]
+  >([]);
 
   const resultCount = 5;
   const autoCompleteRef = useRef(null);
   const jumptToRef = useRef(null);
+  const lastSearchQuery = useRef(searchQuery);
   const exact = searchUrlFactory.exact === "true";
 
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
@@ -54,11 +64,16 @@ const SearchForm = () => {
 
   const debouncingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  function closeResultBoxes() {
+    setAutoCompleteResult([]);
+    setJumpToResult([]);
+    setOntologyJumpToResult([]);
+  }
+
   async function runAutoCompleteAndJumpTo(searchQuery: string) {
-    let inputForAutoComplete = {};
+    let inputForAutoComplete: SuggestAndSelectApiInput = {};
     if (searchQuery.length === 0) {
-      setJumpToResult([]);
-      setAutoCompleteResult([]);
+      closeResultBoxes();
       return true;
     }
     setSearchQuery(searchQuery);
@@ -97,28 +112,43 @@ const SearchForm = () => {
     inputForAutoComplete["searchUnderIris"] = searchUnderIris;
     inputForAutoComplete["searchUnderAllIris"] = searchUnderAllIris;
 
-    let [autoCompleteResult, jumpToResult] = await Promise.all([
+    let [autoCompleteResult, jumpToResult, ontologyJumpToResult] =
+      await Promise.all([
       getAutoCompleteResult(inputForAutoComplete, resultCount),
       getJumpToResult(inputForAutoComplete, resultCount),
+      getOntologyJumpToResult(searchQuery),
     ]);
+    if (lastSearchQuery.current.trim() !== searchQuery.trim()) {
+      return;
+    }
     setJumpToResult(!ontologyId ? jumpToResult : []);
     setAutoCompleteResult(autoCompleteResult);
+    setOntologyJumpToResult(ontologyJumpToResult);
   }
 
   async function handleSearchInputChange(
     e: React.ChangeEvent<HTMLInputElement>,
   ) {
     const searchQuery = e.target.value;
+    setSearchQuery(searchQuery);
+    lastSearchQuery.current = searchQuery;
     if (debouncingTimer.current) {
       clearTimeout(debouncingTimer.current);
     }
+    if (!searchQuery.trim()) {
+      closeResultBoxes();
+      return;
+    }
     debouncingTimer.current = setTimeout(() => {
-      if (!searchQuery) return;
       runAutoCompleteAndJumpTo(searchQuery);
-    }, 300);
+    }, 200);
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Escape") {
+      closeResultBoxes();
+      return;
+    }
     if (document.getElementsByClassName("selected-by-arrow-key").length !== 0) {
       return;
     }
@@ -139,12 +169,12 @@ const SearchForm = () => {
   }
 
   function triggerSearch() {
-    if (searchQuery.length === 0) {
+    if (searchQuery.trim().length === 0) {
+      closeResultBoxes();
       return true;
     }
     let searchUrl = setSearchUrl(searchQuery);
-    setAutoCompleteResult([]);
-    setJumpToResult([]);
+    closeResultBoxes();
     navigator.push(searchUrl);
   }
 
@@ -154,8 +184,7 @@ const SearchForm = () => {
       setSearchQuery(selectedQuery);
       document.getElementById("s-field").value = selectedQuery;
     }
-    setAutoCompleteResult([]);
-    setJumpToResult([]);
+    closeResultBoxes();
   }
 
   function closeResultBoxWhenClickedOutside(e: MouseEvent) {
@@ -163,8 +192,13 @@ const SearchForm = () => {
       !autoCompleteRef.current?.contains(e.target) &&
       !jumptToRef.current?.contains(e.target)
     ) {
-      setAutoCompleteResult([]);
-      setJumpToResult([]);
+      closeResultBoxes();
+    }
+  }
+
+  function closeResultBoxOnEscape(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      closeResultBoxes();
     }
   }
 
@@ -203,6 +237,7 @@ const SearchForm = () => {
       true,
     );
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);
+    document.addEventListener("keydown", closeResultBoxOnEscape, false);
     if (Toolkit.getObsoleteFlagValue()) {
       document.getElementById("obsoletes-checkbox").checked = true;
     }
@@ -224,6 +259,7 @@ const SearchForm = () => {
         keyboardNavigationForJumpto,
         false,
       );
+      document.removeEventListener("keydown", closeResultBoxOnEscape, false);
     };
   }, []);
 
@@ -249,6 +285,7 @@ const SearchForm = () => {
         setSearchUrl={setSearchUrl}
         jumpToResult={jumpToResult}
         jumptToRef={jumptToRef}
+        ontologyJumpToResult={ontologyJumpToResult}
         handleExactCheckboxClick={handleExactCheckboxClick}
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         handleIncludeImprtedCheckboxClick={handleIncludeImprtedCheckboxClick}

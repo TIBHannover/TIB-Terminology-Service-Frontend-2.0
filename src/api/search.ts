@@ -8,6 +8,7 @@ import {
 } from "./types/searchApiTypes";
 import Toolkit from "../Libs/Toolkit";
 import { TermFactory } from "../concepts";
+import { TsOntology } from "../concepts";
 
 export async function olsSearch(
   inputData: SearchApiInput,
@@ -145,6 +146,27 @@ export async function getAutoCompleteResult(
     let searchResult: any = await fetch(url, getCallSetting);
     searchResult = (await searchResult.json())["response"]["docs"];
     return searchResult;
+  } catch (e) {
+    return [];
+  }
+}
+
+export async function getOntologyJumpToResult(
+  query: string,
+  size: number = 5,
+): Promise<TsOntology[]> {
+  try {
+    let apiBaseUrl: string = process.env.REACT_APP_API_URL!;
+    let searchUrl: string =
+      apiBaseUrl +
+      `/v2/entities?search=${query}&page=0&size=${size}&lang=en&exclusive=true&type=ontology`;
+    let resp = await fetch(searchUrl, getCallSetting);
+    let result = await resp.json();
+    let resultTerms: TsOntology[] = [];
+    for (let el of result["elements"]) {
+      resultTerms.push(new TsOntology(el));
+    }
+    return resultTerms;
   } catch (e) {
     return [];
   }

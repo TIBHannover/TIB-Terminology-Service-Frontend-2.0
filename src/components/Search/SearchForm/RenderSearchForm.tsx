@@ -4,6 +4,7 @@ import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
 import { Link } from "react-router-dom";
 import { BaseSearchSingleResult } from "../../../api/types/searchApiTypes";
+import { TsOntology } from "../../../concepts";
 
 type CmpProps = {
   ontologyId: string;
@@ -15,6 +16,7 @@ type CmpProps = {
   setSearchUrl: (label: string) => string;
   jumpToResult: any[];
   jumptToRef: any;
+  ontologyJumpToResult: TsOntology[];
   handleExactCheckboxClick: (e: React.MouseEvent<HTMLInputElement>) => void;
   handleObsoletesCheckboxClick: (e: React.MouseEvent<HTMLInputElement>) => void;
   handleIncludeImprtedCheckboxClick: (
@@ -55,6 +57,33 @@ const RenderSearchForm = (props: CmpProps) => {
         </Link>,
       );
       key++;
+    }
+    return resultList;
+  }
+
+  function renderOntologyJumpToResult() {
+    let resultList = [];
+    for (let result of props.ontologyJumpToResult) {
+      resultList.push(
+        <div className="row mb-3">
+          <div className="ontology-jump-to-result-item item-for-navigation">
+            <Link
+              to={
+                process.env.REACT_APP_PROJECT_SUB_PATH +
+                `/ontologies/${result.ontologyId}`
+              }
+              className="jumto-result-link container"
+              data-value={result.title}
+              onClick={(e) => {
+                props.optionClickCallback(e);
+              }}
+            >
+              {result.title}
+              <div className="jumpto-badge-onto">{result.ontologyId}</div>
+            </Link>
+          </div>
+        </div>,
+      );
     }
     return resultList;
   }
@@ -142,68 +171,70 @@ const RenderSearchForm = (props: CmpProps) => {
     <>
       <div className="row site-header-searchbox-holder">
         <div className="col-sm-8 search-bar-container stour-searchbox">
-          <div className="input-group">
-            {appContext.user &&
-              appContext.userSettings.activeCollection.title !== "" &&
-              !props.ontologyId && (
-                <div
-                  className="custom-collection-btn"
-                  title={createUserCollectionToggleTooltopText()}
-                >
-                  {appContext.userSettings.activeCollection.title}
-                  <i
-                    className="fa fa-close fa-borderless"
-                    onClick={handleUserCollectionClose}
-                  ></i>
-                </div>
-              )}
-            <input
-              type="text"
-              className="form-control search-input"
-              placeholder={setPlaceHolder()}
-              aria-describedby="basic-addon2"
-              onChange={props.handleSearchInputChange}
-              onKeyDown={props.handleKeyDown}
-              id="s-field"
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-secondary search-btn"
-                type="button"
-                onClick={props.triggerSearch}
-              >
-                Search
-              </button>
-            </div>
-          </div>
-          <div className="row search-overlay-box">
-            <div className="col-md-12">
-              <div className="row">
-                {props.autoCompleteResult.length !== 0 &&
-                  !props.advSearchEnabled && (
-                    <div
-                      id="autocomplete-container"
-                      className="col-md-12"
-                      ref={props.autoCompleteRef}
-                    >
-                      {renderAutoCompleteResult()}
-                    </div>
-                  )}
-              </div>
-              <div className="row">
-                {props.jumpToResult.length !== 0 && !props.ontologyId && (
+          <div className="search-input-overlay-wrapper">
+            <div className="input-group">
+              {appContext.user &&
+                appContext.userSettings.activeCollection.title !== "" &&
+                !props.ontologyId && (
                   <div
-                    ref={props.jumptToRef}
-                    className="col-md-12 justify-content-md-center jumpto-container jumpto-search-container"
-                    id="jumpresult-container"
+                    className="custom-collection-btn"
+                    title={createUserCollectionToggleTooltopText()}
                   >
-                    <div>
-                      <h4>Jump To</h4>
-                      {renderJumpToResult()}
-                    </div>
+                    {appContext.userSettings.activeCollection.title}
+                    <i
+                      className="fa fa-close fa-borderless"
+                      onClick={handleUserCollectionClose}
+                    ></i>
                   </div>
                 )}
+              <input
+                type="text"
+                className="form-control search-input"
+                placeholder={setPlaceHolder()}
+                aria-describedby="basic-addon2"
+                onChange={props.handleSearchInputChange}
+                onKeyDown={props.handleKeyDown}
+                id="s-field"
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-secondary search-btn"
+                  type="button"
+                  onClick={props.triggerSearch}
+                >
+                  Search
+                </button>
               </div>
+            </div>
+            <div className="search-overlay-box">
+              {props.autoCompleteResult.length !== 0 &&
+                !props.advSearchEnabled && (
+                  <div id="autocomplete-container" ref={props.autoCompleteRef}>
+                    {renderAutoCompleteResult()}
+                  </div>
+                )}
+              {props.jumpToResult.length !== 0 && !props.ontologyId && (
+                <div
+                  ref={props.jumptToRef}
+                  className="justify-content-md-center jumpto-container jumpto-search-container"
+                  id="jumpresult-container"
+                >
+                  <div>
+                    <div className="row">
+                      <div className="col-sm-6 jump-to-term-column">
+                        <p className="mb-2 fw-bold">Jump to terms</p>
+                        {renderJumpToResult()}
+                      </div>
+                      {props.ontologyJumpToResult.length !== 0 && (
+                        <div className="col-sm-6 jump-to-ontology-column">
+                          <p className="mb-2 fw-bold">Jump to ontologies</p>
+                          {renderOntologyJumpToResult()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
