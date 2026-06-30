@@ -17,13 +17,12 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
 import ChangesTimeline from "../../Ondet/ChangesTimeline";
-import {RouteComponentProps} from 'react-router-dom';
-import {TsOntology, TsClass, TsProperty, TsSkosTerm} from '../../../concepts';
+import { RouteComponentProps } from "react-router-dom";
+import { TsOntology, TsClass, TsProperty, TsSkosTerm } from "../../../concepts";
 import PublicationsLinks from "../PublicationsLinks/PublicationsLinks";
 import LinkedDatasets from "../LinkedDatasets/LinkedDatasets";
-import {getDatasetRepositories} from "../../../api/dataset_links";
-import {ErrorObject} from "../../../api/types/common";
-
+import { getDatasetRepositories } from "../../../api/dataset_links";
+import { ErrorObject } from "../../../api/types/common";
 
 const OVERVIEW_TAB_ID = 0;
 const TERM_TREE_TAB_ID = 1;
@@ -37,17 +36,17 @@ const PUBLICATIONS_LINKS_TAB_ID = 8;
 const LINKED_DATASETS_TAB_ID = 9;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
-    "": OVERVIEW_TAB_ID,
-    "terms": TERM_TREE_TAB_ID,
-    "props": PROPERTY_TREE_TAB_ID,
-    "individuals": INDIVIDUAL_LIST_TAB_ID,
-    "termList": TERM_LIST_TAB_ID,
-    "notes": NOTES_TAB_ID,
-    "gitpanel": GIT_ISSUE_LIST_ID,
-    "ondet": ONDET_TAB_ID,
-    "publications": PUBLICATIONS_LINKS_TAB_ID,
-    "linkedDatasets": LINKED_DATASETS_TAB_ID,
-}
+  "": OVERVIEW_TAB_ID,
+  terms: TERM_TREE_TAB_ID,
+  props: PROPERTY_TREE_TAB_ID,
+  individuals: INDIVIDUAL_LIST_TAB_ID,
+  termList: TERM_LIST_TAB_ID,
+  notes: NOTES_TAB_ID,
+  gitpanel: GIT_ISSUE_LIST_ID,
+  ondet: ONDET_TAB_ID,
+  publications: PUBLICATIONS_LINKS_TAB_ID,
+  linkedDatasets: LINKED_DATASETS_TAB_ID,
+};
 
 type CmpPropp = RouteComponentProps<{ ontologyId: string; tab?: string }>;
 export type ComponentIdentity = "terms" | "properties" | "individuals";
@@ -121,13 +120,13 @@ const OntologyPage = (props: CmpPropp) => {
       });
       skosIndividuals = await skosApi.fetchRootConcepts();
     }
-      let repos = await getDatasetRepositories(ontology.ontologyId);
-      if ("value" in repos) {
-          repos = [];
-      }
+    let repos = await getDatasetRepositories(ontology.ontologyId);
+    if ("value" in repos) {
+      repos = [];
+    }
 
     setOntology(ontology);
-      setRepositories(repos as string[]);
+    setRepositories(repos as string[]);
     setObsoleteTerms(ontology.obsoleteClasses);
     setObsoleteProps(ontology.obsoleteProperties);
     setRootTerms(ontology.rootClasses);
@@ -256,7 +255,7 @@ const OntologyPage = (props: CmpPropp) => {
       fullScreenMode: fullscreenMode,
       setFullscreenMode: setFullscreenMode,
       handleFullScreen: handleFullScreen,
-        repositories: repositories,
+      repositories: repositories,
     };
 
     return (
@@ -356,12 +355,16 @@ const OntologyPage = (props: CmpPropp) => {
                           return errorMessage;
                         }
                       })()}
-                    {!waiting && activeTab === PUBLICATIONS_LINKS_TAB_ID && process.env.REACT_APP_PUBLICATION_LINKS === "true" &&
-                        <PublicationsLinks/>
-                    }
-                      {!waiting && activeTab === LINKED_DATASETS_TAB_ID && process.env.REACT_APP_LINKED_DATASETS === "true" &&
-                        <LinkedDatasets/>
-                      }
+                    {!waiting &&
+                      activeTab === PUBLICATIONS_LINKS_TAB_ID &&
+                      process.env.REACT_APP_PUBLICATION_LINKS === "true" && (
+                        <PublicationsLinks />
+                      )}
+                    {!waiting &&
+                      activeTab === LINKED_DATASETS_TAB_ID &&
+                      process.env.REACT_APP_LINKED_DATASETS === "true" && (
+                        <LinkedDatasets />
+                      )}
                   </div>
                 </div>
               </div>
