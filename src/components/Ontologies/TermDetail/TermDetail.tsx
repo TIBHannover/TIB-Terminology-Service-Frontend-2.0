@@ -23,16 +23,22 @@ const DETAIL_TAB_ID = 0;
 const NOTES_TAB_ID = 1;
 const GRAPH_TAB_ID = 2;
 const LINKED_DATASETS_TAB_ID = 3;
+const TABS = {
+  "": DETAIL_TAB_ID,
+  notes: NOTES_TAB_ID,
+  graph: GRAPH_TAB_ID,
+  linked_datasets: LINKED_DATASETS_TAB_ID,
+};
 
 const TermDetail = (props: TermDetailComPros) => {
-    /*
+  /*
       This component is responsible for rendering the detail page of a term.
       It contains the term detail table, notes, and graph view.
       It also contains the tab navigation for switching between these components.
       It requires the ontologyPageContext to be available.
     */
 
-    const ontologyPageContext = useContext(OntologyPageContext);
+  const ontologyPageContext = useContext(OntologyPageContext);
 
   const [activeTab, setActiveTab] = useState(DETAIL_TAB_ID);
   const [lastRequestedTab, setLastRequestedTab] = useState("");
@@ -87,16 +93,8 @@ const TermDetail = (props: TermDetailComPros) => {
   function setTabOnLoad() {
     let url = new URL(window.location.href);
     let requestedTab = url.searchParams.get("subtab");
-    let activeTabId = activeTab;
-    if (requestedTab !== lastRequestedTab && requestedTab === "notes") {
-      activeTabId = NOTES_TAB_ID;
-    } else if (requestedTab !== lastRequestedTab && requestedTab === "graph") {
-      activeTabId = GRAPH_TAB_ID;
-    } else if (requestedTab !== lastRequestedTab) {
-      activeTabId = DETAIL_TAB_ID;
-    }
-
-    if (activeTabId !== activeTab) {
+    let activeTabId = TABS[requestedTab] ?? DETAIL_TAB_ID;
+    if (requestedTab !== lastRequestedTab && activeTabId !== activeTab) {
       setActiveTab(activeTabId);
       setWaiting(false);
       setLastRequestedTab(requestedTab ?? "");
@@ -263,9 +261,9 @@ const TermDetail = (props: TermDetailComPros) => {
             componentIdentity={props.componentIdentity}
           />
         )}
-          {!waiting && (activeTab === LINKED_DATASETS_TAB_ID) &&
-            <LinkedDatasets inputCurie={targetTerm?.curie}/>
-          }
+        {!waiting && activeTab === LINKED_DATASETS_TAB_ID && (
+          <LinkedDatasets inputCurie={targetTerm?.curie} />
+        )}
       </div>
     </div>
   );
