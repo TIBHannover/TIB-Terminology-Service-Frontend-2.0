@@ -3,8 +3,29 @@ import Toolkit from "../../../Libs/Toolkit";
 import { AppContext } from "../../../context/AppContext";
 import { storeUserSettings } from "../../../api/user";
 import { Link } from "react-router-dom";
+import { BaseSearchSingleResult } from "../../../api/types/searchApiTypes";
 
-const RenderSearchForm = (props) => {
+type CmpProps = {
+  ontologyId: string;
+  handleSearchInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleKeyDown: (e: React.KeyboardEvent) => void;
+  triggerSearch: () => void;
+  autoCompleteResult: any[];
+  autoCompleteRef: any;
+  setSearchUrl: (label: string) => string;
+  jumpToResult: any[];
+  jumptToRef: any;
+  handleExactCheckboxClick: (e: React.MouseEvent<HTMLInputElement>) => void;
+  handleObsoletesCheckboxClick: (e: React.MouseEvent<HTMLInputElement>) => void;
+  handleIncludeImprtedCheckboxClick: (
+    e: React.MouseEvent<HTMLInputElement>,
+  ) => void;
+  advSearchEnabled: boolean;
+  handleAdvancedSearchToggle: () => void;
+  optionClickCallback: (e: React.MouseEvent) => void;
+};
+
+const RenderSearchForm = (props: CmpProps) => {
   const appContext = useContext(AppContext);
 
   function setPlaceHolder() {
@@ -48,7 +69,7 @@ const RenderSearchForm = (props) => {
     return resultList;
   }
 
-  function setJumpResultButtons(resultItem) {
+  function setJumpResultButtons(resultItem: BaseSearchSingleResult) {
     let content = [];
     let obsoletes = Toolkit.getObsoleteFlagValue();
     let targetHref =

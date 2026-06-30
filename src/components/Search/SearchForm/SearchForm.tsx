@@ -52,7 +52,9 @@ const SearchForm = () => {
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
-  async function handleSearchInputChange(e) {
+  async function handleSearchInputChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) {
     let inputForAutoComplete = {};
     let searchQuery = e.target.value;
     if (searchQuery.length === 0) {
@@ -104,7 +106,7 @@ const SearchForm = () => {
     setAutoCompleteResult(autoCompleteResult);
   }
 
-  function handleKeyDown(e) {
+  function handleKeyDown(e: React.KeyboardEvent) {
     if (document.getElementsByClassName("selected-by-arrow-key").length !== 0) {
       return;
     }
@@ -113,7 +115,7 @@ const SearchForm = () => {
     }
   }
 
-  function setSearchUrl(label) {
+  function setSearchUrl(label: string) {
     let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     return searchUrlFactory.createSearchUrlForAutoSuggestItem({
       label: label.trim(),
@@ -134,7 +136,7 @@ const SearchForm = () => {
     navigator.push(searchUrl);
   }
 
-  function handleJumptoAutocompleteClick(e) {
+  function handleJumptoAutocompleteClick(e: React.MouseEvent) {
     let selectedQuery = e.currentTarget.getAttribute("data-value");
     if (selectedQuery) {
       setSearchQuery(selectedQuery);
@@ -144,7 +146,7 @@ const SearchForm = () => {
     setJumpToResult([]);
   }
 
-  function closeResultBoxWhenClickedOutside(e) {
+  function closeResultBoxWhenClickedOutside(e: MouseEvent) {
     if (
       !autoCompleteRef.current?.contains(e.target) &&
       !jumptToRef.current?.contains(e.target)
@@ -154,17 +156,21 @@ const SearchForm = () => {
     }
   }
 
-  function handleExactCheckboxClick(e) {
-    searchUrlFactory.setExact({ exact: e.target.checked });
+  function handleExactCheckboxClick(e: React.MouseEvent<HTMLInputElement>) {
+    searchUrlFactory.setExact({ exact: e.currentTarget.checked });
   }
 
-  function handleIncludeImprtedCheckboxClick(e) {
-    searchUrlFactory.setIncludeImported({ includeImported: e.target.checked });
-    appContext.setIncludeImportedTerms(e.target.checked);
+  function handleIncludeImprtedCheckboxClick(
+    e: React.MouseEvent<HTMLInputElement>,
+  ) {
+    searchUrlFactory.setIncludeImported({
+      includeImported: e.currentTarget.checked,
+    });
+    appContext.setIncludeImportedTerms(e.currentTarget.checked);
   }
 
-  function handleObsoletesCheckboxClick(e) {
-    Toolkit.setObsoleteInStorageAndUrl(e.target.checked);
+  function handleObsoletesCheckboxClick(e: React.MouseEvent<HTMLInputElement>) {
+    Toolkit.setObsoleteInStorageAndUrl(e.currentTarget.checked);
   }
 
   async function handleAdvancedSearchToggle() {
