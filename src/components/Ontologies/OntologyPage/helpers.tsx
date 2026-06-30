@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { useContext } from "react";
 import DropDown from "../../common/DropDown/DropDown";
-import { useState } from "react";
 
 export const OntologyPageTabs = (props) => {
   /* 
@@ -10,20 +9,26 @@ export const OntologyPageTabs = (props) => {
       The tab metadata comes from listOfComponentsAsTabs.json
   */
 
+  function skipTab(key: string): boolean {
+    switch (key) {
+      case "Notes":
+        return process.env.REACT_APP_NOTE_FEATURE !== "true";
+      case "IssueList":
+        return process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true";
+      case "Publications":
+        return process.env.REACT_APP_PUBLICATION_LINKS !== "true";
+      case "LinkedDatasets":
+        return process.env.REACT_APP_LINKED_DATASETS !== "true";
+      default:
+        return false;
+    }
+  }
+
   const ontologyPageContext = useContext(OntologyPageContext);
   let result = [];
   for (let configItemKey in props.tabMetadataJson) {
     let configObject = props.tabMetadataJson[configItemKey];
-    if (
-      process.env.REACT_APP_NOTE_FEATURE !== "true" &&
-      configItemKey === "Notes"
-    ) {
-      continue;
-    }
-    if (
-      process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true" &&
-      configItemKey === "IssueList"
-    ) {
+    if (skipTab(configItemKey)) {
       continue;
     }
     let activeClassName =

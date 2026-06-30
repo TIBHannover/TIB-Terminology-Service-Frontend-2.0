@@ -22,7 +22,6 @@ import { TsOntology, TsClass, TsProperty, TsSkosTerm } from "../../../concepts";
 import PublicationsLinks from "../PublicationsLinks/PublicationsLinks";
 import LinkedDatasets from "../LinkedDatasets/LinkedDatasets";
 import { getDatasetRepositories } from "../../../api/dataset_links";
-import { ErrorObject } from "../../../api/types/common";
 
 const OVERVIEW_TAB_ID = 0;
 const TERM_TREE_TAB_ID = 1;
