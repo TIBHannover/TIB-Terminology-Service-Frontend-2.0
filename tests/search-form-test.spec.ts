@@ -20,6 +20,14 @@ function jumpToRows(page: Page) {
   return page.locator("#jumpresult-container .jumto-result-link");
 }
 
+function termJumpToRows(page: Page) {
+  return page.locator(".jump-to-term-column .jumto-result-link");
+}
+
+function ontologyJumpToRows(page: Page) {
+  return page.locator(".jump-to-ontology-column .jumto-result-link");
+}
+
 async function typeSearchQuery(page: Page) {
   await searchInput(page).fill(SEARCH_QUERY);
   await expect(page.locator("#autocomplete-container")).toBeVisible();
@@ -35,12 +43,20 @@ test("header search form shows autocomplete and jump-to results for assay", asyn
   await typeSearchQuery(page);
 
   await expect(autocompleteItems(page)).toHaveCount(5);
-  await expect(jumpToRows(page)).toHaveCount(5);
+  await expect(jumpToRows(page)).toHaveCount(7);
+  await expect(termJumpToRows(page)).toHaveCount(5);
+  await expect(ontologyJumpToRows(page)).toHaveCount(2);
+  await expect(page.locator(".jump-to-term-column")).toContainText(
+    "Jump to terms",
+  );
+  await expect(page.locator(".jump-to-ontology-column")).toContainText(
+    "Jump to ontologies",
+  );
   expect(
     await autocompleteItems(page).filter({ hasText: SEARCH_QUERY }).count(),
   ).toBeGreaterThan(0);
 
-  const assayJumpToRow = jumpToRows(page)
+  const assayJumpToRow = termJumpToRows(page)
     .filter({ hasText: SEARCH_QUERY })
     .first();
   await expect(assayJumpToRow).toBeVisible();
@@ -54,7 +70,7 @@ test("header search form supports keyboard navigation through results", async ({
   await typeSearchQuery(page);
 
   const navigableItems = page.locator(".item-for-navigation");
-  await expect(navigableItems).toHaveCount(10);
+  await expect(navigableItems).toHaveCount(12);
 
   await page.keyboard.press("ArrowDown");
   await expect(navigableItems.nth(0)).toHaveClass(/selected-by-arrow-key/);
@@ -93,7 +109,7 @@ test("header search jump-to result is clickable and opens an ontology page", asy
   await gotoHome(page);
   await typeSearchQuery(page);
 
-  await jumpToRows(page).filter({ hasText: SEARCH_QUERY }).first().click();
+  await termJumpToRows(page).filter({ hasText: SEARCH_QUERY }).first().click();
   await expect(page).toHaveURL(/\/ontologies\/.+\/(terms|props|individuals)\?/);
 });
 
