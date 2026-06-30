@@ -17,7 +17,7 @@
 }
 
 .term-table thead,
-tbody tr {
+.term-table tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;

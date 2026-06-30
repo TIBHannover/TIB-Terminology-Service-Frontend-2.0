@@ -7,6 +7,6 @@
     - The problem originates from the "termList.css" file, where the "table-layout: fixed" rule is applied.
 */
 .class-list-table thead,
-tbody tr {
+.d2h-diff-table tbody tr {
   table-layout: auto !important;
 }
