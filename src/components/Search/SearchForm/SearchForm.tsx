@@ -52,11 +52,10 @@ const SearchForm = () => {
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
 
-  async function handleSearchInputChange(
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) {
+  const debouncingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  async function runAutoCompleteAndJumpTo(searchQuery: string) {
     let inputForAutoComplete = {};
-    let searchQuery = e.target.value;
     if (searchQuery.length === 0) {
       setJumpToResult([]);
       setAutoCompleteResult([]);
@@ -104,6 +103,19 @@ const SearchForm = () => {
     ]);
     setJumpToResult(!ontologyId ? jumpToResult : []);
     setAutoCompleteResult(autoCompleteResult);
+  }
+
+  async function handleSearchInputChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const searchQuery = e.target.value;
+    if (debouncingTimer.current) {
+      clearTimeout(debouncingTimer.current);
+    }
+    debouncingTimer.current = setTimeout(() => {
+      if (!searchQuery) return;
+      runAutoCompleteAndJumpTo(searchQuery);
+    }, 300);
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
