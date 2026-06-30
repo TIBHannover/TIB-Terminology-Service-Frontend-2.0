@@ -47,8 +47,51 @@
   margin-right: 50%;
 }
 
+.term-list-search-row {
+  padding: 0 15px 15px;
+}
+
+.term-table-toolbar {
+  margin: 0 0 10px;
+}
+
+.class-list-tablle-holder:not(.termset-detail-table-panel) .term-table-toolbar {
+  transform: rotateX(180deg);
+}
+
+.term-table-toolbar > [class*="col-"] {
+  display: flex;
+  align-items: center;
+}
+
+.term-table-toolbar .result-per-page-dropdown-container {
+  margin-left: 0;
+}
+
+.term-table-toolbar .site-dropdown-container {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.term-table-column-menu {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.term-table-column-menu .dropdown-item {
+  cursor: pointer;
+  font-size: var(--font-size-md);
+}
+
+.term-list-pagination-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .number-of-result-text-container {
-  padding-top: 8px;
+  font-size: var(--font-size-sm);
+  justify-content: flex-end;
 }
 
 .show-hidden-column {

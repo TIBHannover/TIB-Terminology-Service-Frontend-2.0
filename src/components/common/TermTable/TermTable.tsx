@@ -1,4 +1,5 @@
 import { useState, useEffect, ReactNode } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
 import Toolkit from "../../../Libs/Toolkit";
 
 type Column = {
@@ -18,7 +19,9 @@ type InputProp = {
   terms: Map<string, Term>[]; // !Attention!: id of this map has to be the id field in the Column
   tableIsLoading: boolean; // get the loading status from the parent component who provides the data
   setTableIsLoading: (isLoading: boolean) => void; // set the table is loading when an event is triggered inside the table
+  controlsBeforeColumnVisibility?: ReactNode;
   controlsAfterColumnTags?: ReactNode;
+  isInRotatedContainer?: boolean;
 };
 
 const TermTable = (props: InputProp) => {
@@ -114,33 +117,57 @@ const TermTable = (props: InputProp) => {
     return tableRows;
   }
 
-  function createShowColumnsTags() {
+  function createColumnVisibilityDropdown() {
     return [
-      <span>
-        {columns.map((col) => {
-          if (colVis.get(col.id)) {
-            return;
-          }
-          return (
-            <div
-              className="show-hidden-column"
-              onClick={showHideTableColumn}
-              data-value={col.id}
-            >
-              {col.text}
-              <i className="fa fa-eye fa-eye-table"></i>
-            </div>
-          );
-        })}
-      </span>,
+      <Dropdown autoClose="outside" className="term-table-column-dropdown">
+        <Dropdown.Toggle variant="secondary" id="term-table-column-visibility">
+          Column visibility
+        </Dropdown.Toggle>
+        <Dropdown.Menu className="term-table-column-menu">
+          {columns.map((col) => {
+            if (col.id === "action") {
+              return;
+            }
+            return (
+              <label className="dropdown-item" htmlFor={"column-" + col.id}>
+                <input
+                  type="checkbox"
+                  id={"column-" + col.id}
+                  className="form-check-input me-2"
+                  checked={colVis.get(col.id) ?? false}
+                  onChange={showHideTableColumn}
+                  data-value={col.id}
+                />
+                {col.text}
+              </label>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>,
     ];
   }
 
-  function showHideTableColumn(e: React.MouseEvent<HTMLDivElement>) {
+  function createTableControls() {
+    if (!props.controlsBeforeColumnVisibility && !props.controlsAfterColumnTags) {
+      return createColumnVisibilityDropdown();
+    }
+    return [
+      <div className="row term-table-toolbar align-items-center g-2">
+        {props.controlsBeforeColumnVisibility}
+        <div className="col-sm-3">
+          {createColumnVisibilityDropdown()}
+        </div>
+        {props.controlsAfterColumnTags}
+      </div>,
+    ];
+  }
+
+  function showHideTableColumn(
+    e: React.MouseEvent<HTMLDivElement> | React.ChangeEvent<HTMLInputElement>,
+  ) {
     try {
       props.setTableIsLoading(true);
-      let colId: string | undefined = "";
-      colId = (e?.currentTarget as HTMLDivElement).dataset?.value;
+      let colId = e.currentTarget.dataset?.value;
       if (!colId) {
         props.setTableIsLoading(false);
         return true;
@@ -176,7 +203,6 @@ const TermTable = (props: InputProp) => {
       className="table table-striped term-list-table term-table"
       id="class-list-table"
     >
-      {!props.controlsAfterColumnTags && columns && createShowColumnsTags()}
       {columns && createTableHeader()}
       <tbody>
         {tableIsLoading && (
@@ -187,17 +213,21 @@ const TermTable = (props: InputProp) => {
     </table>
   );
 
-  if (props.controlsAfterColumnTags) {
+  if (props.isInRotatedContainer) {
     return (
       <>
-        {columns && createShowColumnsTags()}
-        {props.controlsAfterColumnTags}
         {table}
+        {columns && createTableControls()}
       </>
     );
   }
 
-  return table;
+  return (
+    <>
+      {columns && createTableControls()}
+      {table}
+    </>
+  );
 };
 
 export default TermTable;

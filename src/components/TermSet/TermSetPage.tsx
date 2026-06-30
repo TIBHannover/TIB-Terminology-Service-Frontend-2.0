@@ -297,29 +297,31 @@ const TermSetPage = (props: TermsetPageComProps) => {
     }
   }, [page, size]);
 
+  function renderTermsetSearchControl() {
+    return (
+      <div className="col-sm-3 termset-table-action-item">
+        <label htmlFor="search-input-for-termset" className={"inline-label"}>
+          Search
+          <i
+            className="bi bi-question-circle-fill me-1 ms-1"
+            title="Search the table based on term label"
+          ></i>
+        </label>
+        <input
+          className={"form-control search-input-termset"}
+          type={"text"}
+          id={"search-input-for-termset"}
+          onChange={searchInputChangeHandler}
+          placeholder="type a label ..."
+        />
+      </div>
+    );
+  }
+
   function renderTermsetActionBar() {
     return (
-      <div
-        className="row termset-table-action-row"
-        id="termset-page-action-bar"
-      >
-        <div className="col-sm-4 mt-1">
-          <label htmlFor="search-input-for-termset" className={"inline-label"}>
-            Search
-            <i
-              className="bi bi-question-circle-fill me-1 ms-1"
-              title="Search the table based on term label"
-            ></i>
-          </label>
-          <input
-            className={"form-control search-input-termset"}
-            type={"text"}
-            id={"search-input-for-termset"}
-            onChange={searchInputChangeHandler}
-            placeholder="type a label ..."
-          />
-        </div>
-        <div className="col-sm-4">
+      <>
+        <div className="col-sm-3 termset-table-action-item">
           <DropDown
             options={PAGE_SIZES_FOR_DROPDOWN}
             dropDownId="list-result-per-page"
@@ -331,7 +333,16 @@ const TermSetPage = (props: TermsetPageComProps) => {
             }}
           />
         </div>
-        <div className="col-sm-2">
+        <div className="col-sm-3 termset-table-action-item termset-table-pagination-container">
+          <Pagination
+            clickHandler={(newPage: string) => {
+              setPage(parseInt(newPage) - 1);
+            }}
+            count={Math.ceil(totalTermsCount / size)}
+            initialPageNumber={page + 1}
+          />
+        </div>
+        <div className="col-sm-12 number-of-result-text-container">
           <b>
             {(totalTermsCount !== 0 ? page * size + 1 : 0) +
               " - " +
@@ -343,16 +354,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
               " terms"}
           </b>
         </div>
-        <div className="col-sm-2 text-right mt-1">
-          <Pagination
-            clickHandler={(newPage: string) => {
-              setPage(parseInt(newPage) - 1);
-            }}
-            count={Math.ceil(totalTermsCount / size)}
-            initialPageNumber={page + 1}
-          />
-        </div>
-      </div>
+      </>
     );
   }
 
@@ -451,6 +453,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
             columns={tableColumns}
             terms={rowDataForTable}
             tableIsLoading={isLoading}
+            controlsBeforeColumnVisibility={renderTermsetSearchControl()}
             controlsAfterColumnTags={renderTermsetActionBar()}
             setTableIsLoading={() => {}}
           />

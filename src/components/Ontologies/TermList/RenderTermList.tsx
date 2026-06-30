@@ -141,9 +141,82 @@ export const RenderTermList = (props) => {
     }
   }, [props.listOfTerms]);
 
+  function renderObsoleteCheckbox() {
+    if (props.iri) {
+      return;
+    }
+    return (
+      <div className="form-group form-check stour-class-list-obsolete-checkbox term-list-obsolete-checkbox">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          id="obsolte_check_term_list"
+          checked={props.isObsolete}
+          onChange={(e) => {
+            setTableHeaders(e.target.checked);
+            props.obsoletesCheckboxHandler(e);
+          }}
+        />
+        <label
+          className="form-check-label"
+          htmlFor="obsolte_check_term_list"
+        >
+          Include obsoletes terms
+        </label>
+      </div>
+    );
+  }
+
+  function renderTableControls() {
+    if (props.iri) {
+      return (
+        <div className="col-sm-3">
+          <button className="btn btn-secondary" onClick={props.resetList}>
+            Show All Classes
+          </button>
+        </div>
+      );
+    }
+    return (
+      <>
+        <div className="col-sm-3">
+          {renderObsoleteCheckbox()}
+        </div>
+        <div className="col-sm-3">
+          <DropDown
+            options={PAGE_SIZES_FOR_DROPDOWN}
+            dropDownId="list-result-per-page"
+            containerClass="result-per-page-dropdown-container"
+            dropDownTitle="Size"
+            dropDownValue={props.pageSize}
+            dropDownChangeHandler={props.handlePageSizeDropDownChange}
+          />
+        </div>
+        <div className="col-sm-3 term-list-pagination-container">
+          <Pagination
+            clickHandler={props.handlePagination}
+            count={props.pageCount()}
+            initialPageNumber={props.pageNumber + 1}
+          />
+        </div>
+        <div className="col-sm-12 number-of-result-text-container">
+          <b>
+            {"Showing " +
+              (props.pageNumber * props.pageSize + 1) +
+              " - " +
+              (props.pageNumber + 1) * props.pageSize +
+              " of " +
+              props.totalNumberOfTerms +
+              " Classes"}
+          </b>
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="tree-view-container">
-      <div className="row">
+      <div className="row align-items-center term-list-search-row">
         <div className="col-sm-12 stour-class-list-jumpto-box">
           <JumpTo
             targetType={"terms"}
@@ -151,74 +224,6 @@ export const RenderTermList = (props) => {
             handleJumtoSelection={props.handleJumtoSelection}
             obsoletes={props.isObsolete}
           />
-          <br></br>
-        </div>
-      </div>
-      <div className="row ps-3 pe-3">
-        {!props.iri && (
-          <div className="col-sm-3 mt-1">
-            <div className="termlist-jumpto-container">
-              <div className="form-group form-check stour-class-list-obsolete-checkbox">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="obsolte_check_term_list"
-                  onChange={(e) => {
-                    setTableHeaders(e.target.checked);
-                    props.obsoletesCheckboxHandler(e);
-                  }}
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor="obsolte_check_term_list"
-                >
-                  Include obsoletes terms
-                </label>
-              </div>
-            </div>
-          </div>
-        )}
-        <div className="col-sm-3">
-          {!props.iri && (
-            <DropDown
-              options={PAGE_SIZES_FOR_DROPDOWN}
-              dropDownId="list-result-per-page"
-              containerClass="result-per-page-dropdown-container"
-              dropDownTitle="Result Per Page"
-              dropDownValue={props.pageSize}
-              dropDownChangeHandler={props.handlePageSizeDropDownChange}
-            />
-          )}
-          {props.iri && (
-            <button
-              className="btn btn-secondary ms-2"
-              onClick={props.resetList}
-            >
-              Show All Classes
-            </button>
-          )}
-        </div>
-        <div className="col-sm-3 text-right mt-1">
-          {!props.iri && (
-            <b>
-              {"Showing " +
-                (props.pageNumber * props.pageSize + 1) +
-                " - " +
-                (props.pageNumber + 1) * props.pageSize +
-                " of " +
-                props.totalNumberOfTerms +
-                " Classes"}
-            </b>
-          )}
-        </div>
-        <div className="col-sm-3">
-          {!props.iri && (
-            <Pagination
-              clickHandler={props.handlePagination}
-              count={props.pageCount()}
-              initialPageNumber={props.pageNumber + 1}
-            />
-          )}
         </div>
       </div>
       <div className="row class-list-tablle-holder">
@@ -228,6 +233,8 @@ export const RenderTermList = (props) => {
             terms={rowDataForTable}
             tableIsLoading={props.tableIsLoading}
             setTableIsLoading={props.setTableIsLoading}
+            controlsAfterColumnTags={renderTableControls()}
+            isInRotatedContainer
           />
         )}
       </div>

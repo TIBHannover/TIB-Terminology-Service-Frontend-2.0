@@ -24,12 +24,6 @@
   margin-top: 2px;
 }
 
-#termset-page-action-bar {
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: 20px;
-}
-
 body .search-input-termset {
   width: 70%;
   height: 30px;
@@ -86,27 +80,18 @@ body .search-input-termset::placeholder {
   max-height: none;
 }
 
-.termset-table-action-row {
-  align-items: center;
-  margin: 10px 0 20px;
-  max-width: 100%;
-  min-width: 0;
-  width: 100%;
-}
-
-.termset-table-action-row > [class*="col-"] {
+.termset-table-action-item {
   align-items: center;
   display: flex;
   min-height: 42px;
 }
 
-.termset-table-action-row > [class*="col-"]:last-child {
+.termset-table-pagination-container {
   justify-content: flex-end;
 }
 
-.termset-table-action-row,
-.termset-table-action-row > [class*="col-"],
-.termset-table-action-row > [class*="col-"] > * {
+.termset-table-action-item,
+.termset-table-action-item > * {
   --bs-table-bg: transparent;
   background: transparent !important;
   background-color: transparent !important;
