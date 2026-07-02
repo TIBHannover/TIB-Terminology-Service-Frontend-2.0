@@ -273,6 +273,21 @@ const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
   const ontologyPageContext = useContext(OntologyPageContext);
   const UrlFactory = new CommonUrlFactory();
 
+  function skipTab(key: string): boolean {
+    switch (key) {
+      case "Notes":
+        return process.env.REACT_APP_NOTE_FEATURE !== "true";
+      case "IssueList":
+        return process.env.REACT_APP_GITHUB_ISSUE_LIST_FEATURE !== "true";
+      case "Publications":
+        return process.env.REACT_APP_PUBLICATION_LINKS !== "true";
+      case "LinkedDatasets":
+        return process.env.REACT_APP_LINKED_DATASETS !== "true";
+      default:
+        return false;
+    }
+  }
+
   function createTabs() {
     let result = [];
     for (let configItemKey in NodePageTabConfig as TermTabMetadata) {
@@ -284,12 +299,10 @@ const RenderTermDetailTab = (props: RenderTermDetailComProps) => {
         value: configObject.urlEndPoint,
         updateUrl: false,
       });
-      if (
-        configItemKey === "Notes" &&
-        process.env.REACT_APP_NOTE_FEATURE !== "true"
-      ) {
+      if (skipTab(configItemKey)) {
         continue;
       }
+
       if (
         configItemKey === "GraphView" &&
         (props.componentIdentity === "props" ||
