@@ -50,11 +50,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "mock-backend": "tsc tests/mockBackend.ts --outDir /tmp/tib-ts-mock-backend --module commonjs --target es2019 --esModuleInterop --types node --skipLibCheck && node /tmp/tib-ts-mock-backend/mockBackend.js",
     "build": "react-scripts build && bun ./sitemap.mjs",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test:all": "playwright test",
-    "test:desktop": "playwright test --project=desktop-chromium --project=desktop-firefox --project=desktop-webkit",
+    "test:desktop": "playwright test --project=chromium --project=desktop-firefox --project=desktop-webkit",
+    "test:one": "playwright test --project=chromium",
     "test:mobile": "playwright test --project=mobile-chrome --project=mobile-safari"
   },
   "eslintConfig": {

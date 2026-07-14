@@ -38,10 +38,18 @@ export default defineConfig({
       use: { ...devices["iPhone 12"] },
     },
   ],
-  webServer: {
-    command: "npm start",
-    port: 3000,
-    reuseExistingServer: !process.env.CI,
-    timeout: 60 * 1000,
-  },
+  webServer: [
+    {
+      command: "npm run mock-backend",
+      port: 3001,
+      reuseExistingServer: !process.env.CI,
+      timeout: 60 * 1000,
+    },
+    {
+      command: "npm start",
+      port: 3000,
+      reuseExistingServer: !process.env.CI,
+      timeout: 60 * 1000,
+    },
+  ],
 });

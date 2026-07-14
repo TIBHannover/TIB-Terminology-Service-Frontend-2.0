@@ -90,8 +90,11 @@ The default value in the .env file.
 Playwright have been used for testing this application.
 
 ```
+bun run mock-backend # to start the mock backend
+
 bun run test:all
 bun run test:desktop
+bun run test:one # only for chromium
 bun run test:mobile
 ```
 
