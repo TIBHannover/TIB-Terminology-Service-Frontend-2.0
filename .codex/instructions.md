@@ -22,6 +22,7 @@ General:
 - Check `src/components/common/` for reusable components. 
 - Reuse utilities and components as much as possible instead of creating new ones.
 - Do not build the project unless asked to do so. Only check typescript errors and warnings.
+- Ask if you want change something in the .env file.
 
 CSS and styling:
 - Look for css in `src/components/layout` directory.
@@ -37,6 +38,7 @@ Test:
 - Test stragety is `End to End`. Do not focus on unit tests unless asked to do so in the spec or via the prompt.
 - site uses a tour optins that overlay the pages. This conflicts with the test. Disable the tour feature before running the tests. Do it only for test and not in the application itself. 
 - There is a `tests/libs.ts` file that contains common functions for reuse in the tests. check this for resuseable functions. Also if a new function is reusable, it should be added to this file.
+- never change the .env file for tests.
 
 
 

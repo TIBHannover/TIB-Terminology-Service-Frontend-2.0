@@ -46,7 +46,7 @@ export default defineConfig({
       timeout: 60 * 1000,
     },
     {
-      command: "npm start",
+      command: "REACT_APP_MICRO_BACKEND_ENDPOINT=http://localhost:3001 npm start",
       port: 3000,
       reuseExistingServer: !process.env.CI,
       timeout: 60 * 1000,
