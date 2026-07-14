@@ -310,6 +310,7 @@ const Tree = (props: TreeProps) => {
     props.handleResetTreeInParent();
     setResetTreeFlag(true);
     setTreeDomContent("");
+    setIsLoading(true);
     setSiblingsVisible(false);
     setSiblingsButtonShow(false);
     setReload(true);
@@ -411,6 +412,13 @@ const Tree = (props: TreeProps) => {
     setIsLoading(true);
     setTreeDomContent("");
     setObsoletesShown(!obsoletesShown);
+  }
+
+  async function handlePreferredRootSwitch(
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    resetTree();
+    await props.handlePreferredRootChange?.(e.target.checked);
   }
 
   function processClick(e: MouseEvent<HTMLDivElement>) {
@@ -530,6 +538,26 @@ const Tree = (props: TreeProps) => {
               {btnLoading && <div className="isLoading-btn"></div>}
             </button>
           )}
+          {props.componentIdentity === "terms" &&
+            !ontologyPageContext.isSkos &&
+            props.handlePreferredRootChange && (
+              <div className="form-check form-switch d-flex align-items-center">
+                <input
+                  className="form-check-input preferred-root-switch"
+                  type="checkbox"
+                  role="switch"
+                  id="preferred-root-switch"
+                  checked={props.withPreferredRoots}
+                  onChange={handlePreferredRootSwitch}
+                />
+                <label
+                  className="form-check-label ms-2"
+                  htmlFor="preferred-root-switch"
+                >
+                  Preferred roots
+                </label>
+              </div>
+            )}
         </div>
       </div>,
     ];
@@ -562,7 +590,7 @@ const Tree = (props: TreeProps) => {
     setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
-  }, [resetTreeFlag, reload, props.rootNodesForSkos]);
+  }, [resetTreeFlag, reload, props.rootNodes, props.rootNodesForSkos]);
 
   useEffect(() => {
     if (props.jumpToIri) {

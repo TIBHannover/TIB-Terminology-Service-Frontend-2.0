@@ -161,6 +161,8 @@ const DataTree = (props: DataTreeProps) => {
                 handleResetTreeInParent={handleResetTreeEvent}
                 jumpToIri={jumpToIri}
                 handleJumtoSelection={handleJumtoSelection}
+                handlePreferredRootChange={props.handlePreferredRootChange}
+                withPreferredRoots={props.withPreferredRoots}
               />
             )}
           {(!loading && props.rootNodes.length === 0) ||

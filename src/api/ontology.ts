@@ -10,15 +10,21 @@ import { TsPluginHeader } from "./types/headerTypes";
 import { TsOntology, TsClass, TsProperty } from "../concepts";
 import { OntologyTermDataV2 } from "./types/ontologyTypes";
 
-type constructorProps = { ontologyId?: string; lang?: string };
+type constructorProps = {
+  ontologyId?: string;
+  lang?: string;
+  withPreferredRoots?: boolean;
+};
 
 class OntologyApi {
   ontologyId: string = "";
   lang: string = "en";
+  withPreferredRoots: boolean = false;
 
-  constructor({ ontologyId, lang }: constructorProps) {
+  constructor({ ontologyId, lang, withPreferredRoots }: constructorProps) {
     this.ontologyId = ontologyId ?? "";
     this.lang = lang ?? "en";
+    this.withPreferredRoots = withPreferredRoots ?? false;
   }
 
   async fetchOntologyList(collectionId: string = ""): Promise<TsOntology[]> {
@@ -75,15 +81,13 @@ class OntologyApi {
     obsoletes: TsClass[];
   }> {
     try {
-      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=false`;
+      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
+      if (this.withPreferredRoots) {
+        url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?size=1000&lang=${this.lang}&includeObsoleteEntities=false&isPreferredRoot=true`;
+      }
       let result = await fetch(url, getCallSetting);
       let respData = await result.json();
       let terms = respData["elements"] as OntologyTermDataV2[];
-      url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
-      result = await fetch(url, getCallSetting);
-      respData = await result.json();
-      let withObsoleteTerms = respData["elements"] as OntologyTermDataV2[];
-      terms = [...terms, ...withObsoleteTerms];
       let rootClasses: TsClass[] = [];
       let obsoleteClasses: TsClass[] = [];
       for (let term of terms) {

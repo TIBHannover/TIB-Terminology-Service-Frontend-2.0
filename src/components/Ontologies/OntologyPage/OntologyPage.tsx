@@ -96,6 +96,7 @@ const OntologyPage = (props: CmpPropp) => {
   const [ontoLang, setOntoLang] = useState<string>(language);
   const [fullscreenMode, setFullscreenMode] = useState(false);
   const [repositories, setRepositories] = useState<string[]>([]);
+  const [withPreferredRoots, setWithPreferredRoots] = useState(false);
   window.localStorage.setItem("language", ontoLang);
 
   async function loadOntologyData() {
@@ -103,6 +104,7 @@ const OntologyPage = (props: CmpPropp) => {
     let ontologyApi = new OntologyApi({
       ontologyId: ontologyId ?? "",
       lang: ontoLang,
+      withPreferredRoots: false,
     });
     let ontology = await ontologyApi.fetchOntology();
     if (!ontology) {
@@ -126,11 +128,26 @@ const OntologyPage = (props: CmpPropp) => {
 
     setOntology(ontology);
     setRepositories(repos as string[]);
+    setWithPreferredRoots(false);
     setObsoleteTerms(ontology.obsoleteClasses);
     setObsoleteProps(ontology.obsoleteProperties);
     setRootTerms(ontology.rootClasses);
     setRootProps(ontology.rootProperties);
     setSkosRootIndividuals(skosIndividuals as any);
+  }
+
+  async function handlePreferredRootChange(withPreferredRoots: boolean) {
+    let ontologyId = props.match.params.ontologyId;
+    let ontologyApi = new OntologyApi({
+      ontologyId: ontologyId ?? "",
+      lang: ontoLang,
+      withPreferredRoots,
+    });
+    let rootClasses = await ontologyApi.fetchRootClasses();
+    setWithPreferredRoots(withPreferredRoots);
+    if (rootClasses.roots.length) {
+      setRootTerms(rootClasses.roots);
+    }
   }
 
   async function setCountOfNotes() {
@@ -291,6 +308,8 @@ const OntologyPage = (props: CmpPropp) => {
                         componentIdentity={"terms"}
                         rootNodesForSkos={skosRootIndividuals}
                         key={"termTreePage"}
+                        withPreferredRoots={withPreferredRoots}
+                        handlePreferredRootChange={handlePreferredRootChange}
                       />
                     )}
 

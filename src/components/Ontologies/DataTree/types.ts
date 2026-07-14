@@ -33,6 +33,8 @@ export type DataTreeProps = {
   rootNodesForSkos: TreeTermNode[];
   componentIdentity: string;
   key?: string;
+  withPreferredRoots?: boolean;
+  handlePreferredRootChange?: (withPreferredRoots: boolean) => Promise<void>;
 };
 
 export type TreeProps = DataTreeProps & {
@@ -48,6 +50,8 @@ export type TreeProps = DataTreeProps & {
   rootNodeNotExist?: boolean;
   isIndividual?: boolean;
   showListSwitchEnabled?: boolean;
+  withPreferredRoots?: boolean;
+  handlePreferredRootChange?: (withPreferredRoots: boolean) => Promise<void>;
 };
 
 export type TreeDomContent =
