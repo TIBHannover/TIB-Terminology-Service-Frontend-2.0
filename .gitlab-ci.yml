@@ -16,7 +16,7 @@ playwright:
     - bun install --frozen-lockfile
     - bunx playwright install chromium
   script:
-    - bun run mock-backend
+    - nohup bun run mock-backend > mock-backend.log 2>&1 &
     - bun run test:one
     # - bunx playwright test --project=chromium --reporter=list,html
   artifacts:
