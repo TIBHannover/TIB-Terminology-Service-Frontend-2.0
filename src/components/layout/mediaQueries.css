@@ -81,7 +81,7 @@
 
   .graph-container {
     height: 500px;
-    width: 600px;
+    width: min(600px, 100%);
   }
 
   .jumpto-badge-onto {
@@ -198,7 +198,7 @@
 
   .graph-container {
     height: 400px;
-    width: 500px;
+    width: min(500px, 100%);
   }
 
   .jumpto-badge-onto {
@@ -223,26 +223,26 @@
   }
 
   body .nav-item:not(.ontology-detail-nav-item) {
-    font-size: var(--font-size-xxs) !important;
+    font-size: var(--font-size-xxs);
   }
 
   body .navbar-item {
-    font-size: var(--font-size-xxs) !important;
+    font-size: var(--font-size-xxs);
   }
 
   body .user-profile-dropdown {
-    width: 100px !important;
+    width: 100px;
   }
 
   body .btn-secondary:not(.extra-sm-btn):not(.search-btn),
   body .btn:not(.extra-sm-btn):not(.search-btn) {
-    font-size: var(--font-size-xxs) !important;
+    font-size: var(--font-size-xxs);
     padding: 2px;
     /*width: 50px;*/
   }
 
   body div {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
   }
 
   body .tree-text-container {
@@ -258,7 +258,7 @@
   }
 
   body .graph-container {
-    width: 450px;
+    width: min(450px, 100%);
   }
 
   body .form-check-label {
@@ -534,7 +534,7 @@
     min-width: 34px;
     min-height: 34px;
     padding: 5px 8px;
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   body .navbar-burger-menu:hover,
@@ -543,7 +543,7 @@
   body .login-btn-header:hover,
   body .login-btn-header:focus,
   body .login-btn-header:active {
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   body .site-navbar .navbar-collapse {
@@ -571,31 +571,31 @@
 
   body .navbar-item {
     float: none;
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
     padding: 4px 0;
   }
 
   body .nav-dropdown-title .dropdown-toggle {
     display: inline-block;
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
     text-align: left;
   }
 
   body .nav-dropdown-title .dropdown-menu {
-    position: static !important;
-    transform: none !important;
+    position: static;
+    transform: none;
     text-align: left;
   }
 
   body .site-header-user-col .mt-3 {
-    margin-top: 0 !important;
+    margin-top: 0;
   }
 
   body .user-profile-dropdown {
     margin-right: 0px;
-    width: 100% !important;
+    width: 100%;
     max-width: 92px;
     min-height: 34px;
     overflow: hidden;
@@ -604,12 +604,12 @@
   }
 
   body .login-btn-header {
-    width: 72px !important;
+    width: 72px;
     min-height: 34px;
-    margin-top: 0 !important;
+    margin-top: 0;
     padding: 5px 8px;
     white-space: nowrap;
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   body .orcid-login-btn .fa-orcid {
@@ -705,8 +705,8 @@
 
 @media only screen and (max-width: 699px) {
   .ontology-page-container {
-    width: 100% !important;
-    margin: auto !important;
+    width: 100%;
+    margin: auto;
   }
 
   body .ontology-list-results-column {
@@ -781,29 +781,29 @@
   body input,
   body textarea,
   body select {
-    font-size: var(--font-size-md) !important;
+    font-size: var(--font-size-md);
     line-height: 1.45;
   }
 
   body h1 {
-    font-size: 24px !important;
+    font-size: 24px;
     line-height: 1.25;
   }
 
   body h2 {
-    font-size: var(--font-size-xl) !important;
+    font-size: var(--font-size-xl);
     line-height: 1.3;
   }
 
   body h3 {
-    font-size: var(--font-size-lg) !important;
+    font-size: var(--font-size-lg);
     line-height: 1.35;
   }
 
   body h4,
   body h5,
   body h6 {
-    font-size: var(--font-size-base) !important;
+    font-size: var(--font-size-base);
     line-height: 1.35;
   }
 
@@ -813,7 +813,7 @@
   body .form-control,
   body .form-select,
   body .dropdown-item {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.35;
   }
 
@@ -829,18 +829,18 @@
   body .synonyms-button,
   body .pagination-link,
   body .pagination-btn {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
   }
 
   body .site-navbar .nav-link,
   body .site-navbar .navbar-item,
   body .site-navbar .nav-dropdown-title .dropdown-toggle {
-    font-size: var(--font-size-md) !important;
+    font-size: var(--font-size-md);
     line-height: 1.35;
   }
 
   body .ontology-page-container .ontology-detail-nav-item > .nav-link {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.35;
   }
 
@@ -864,11 +864,11 @@
   body .tree-view-container .tree-action-btn,
   body .term-detail-action-btn,
   body .graph-section .graph-ctl-btn {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
   }
 
   body .tree-container {
-    margin-top: 0 !important;
+    margin-top: 0;
   }
 
   body .tree-view-container .tree-action-btn {
@@ -880,12 +880,12 @@
 
   body .tree-view-container .tree-node-li,
   body .tree-view-container .li-label-text {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
   }
 
   body .tree-view-container .node-metadata-label {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
     line-height: 1.35;
   }
 
@@ -909,14 +909,14 @@
   }
 
   body .site-header-search-filters-container {
-    margin-top: 4px !important;
+    margin-top: 4px;
     align-items: center;
   }
 
   body .site-header-search-filters-container .search-form-checkbox-holders,
   body .site-header-search-filters-container .adv-search-title-holder,
   body .site-header-search-filters-container .form-check-label {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
     line-height: 1.2;
   }
 
@@ -948,17 +948,17 @@ body .tree-view-container .tree-node-li > i.fa-minus {
   body input,
   body textarea,
   body select {
-    font-size: var(--font-size-page) !important;
+    font-size: var(--font-size-page);
     line-height: 1.45;
   }
 
   body h1 {
-    font-size: var(--font-size-xl) !important;
+    font-size: var(--font-size-xl);
     line-height: 1.25;
   }
 
   body h2 {
-    font-size: var(--font-size-lg) !important;
+    font-size: var(--font-size-lg);
     line-height: 1.3;
   }
 
@@ -966,7 +966,7 @@ body .tree-view-container .tree-node-li > i.fa-minus {
   body h4,
   body h5,
   body h6 {
-    font-size: var(--font-size-base) !important;
+    font-size: var(--font-size-base);
     line-height: 1.35;
   }
 
@@ -976,7 +976,7 @@ body .tree-view-container .tree-node-li > i.fa-minus {
   body .form-control,
   body .form-select,
   body .dropdown-item {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.35;
   }
 
@@ -992,14 +992,14 @@ body .tree-view-container .tree-node-li > i.fa-minus {
   body .synonyms-button,
   body .pagination-link,
   body .pagination-btn {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
   }
 
   body .main-title,
   body .nav-link,
   body .navbar-item,
   body .nav-dropdown-title .dropdown-toggle {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.35;
   }
 
@@ -1022,6 +1022,6 @@ body .tree-view-container .tree-node-li > i.fa-minus {
   body .copy-link-icon-btn,
   body .term-detail-action-btn,
   body .graph-section .graph-ctl-btn {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
   }
 }

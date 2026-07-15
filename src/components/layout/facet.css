@@ -46,7 +46,7 @@ body .clear-filter-link-box {
 }
 
 .clear-filter-link-box > a {
-  text-decoration: underline !important;
+  text-decoration: underline;
   cursor: pointer;
 }
 
@@ -69,4 +69,53 @@ body .facet-switch-holder {
   text-align: center;
   margin-bottom: 25px;
   margin-top: 10px;
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1440px) {
+  body .facet-box {
+    padding: 10px 8px;
+    margin-bottom: 14px;
+  }
+
+  body .facet-item-row {
+    margin-bottom: 7px;
+  }
+
+  body .facet-item-label,
+  body .facet-item-text,
+  body .facet-switch-holder,
+  body .facet-switch-holder .form-check-label {
+    font-size: var(--font-size-sm);
+    line-height: 1.35;
+  }
+
+  body .facet-box .form-check-input:not(.toggle-input) {
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-top: 0.15rem;
+  }
+
+  body .facet-box .toggle-input {
+    width: 2em;
+    height: 1em;
+  }
+
+  body .facet-result-count {
+    padding: 3px 5px;
+    font-size: var(--font-size-xs);
+    line-height: 1;
+    min-width: 22px;
+  }
+
+  body .facet-btn {
+    padding: 2px 6px;
+    padding-right: 4px;
+    font-size: var(--font-size-xs);
+    line-height: 1.35;
+  }
+
+  body .facet-switch-holder {
+    margin-bottom: 18px;
+    margin-top: 6px;
+  }
 }

@@ -50,10 +50,67 @@ body .required_input::after {
 
 body .rdw-editor-wrapper {
   border: 1px solid rgb(218, 216, 216);
-  border-radius: 10px !important;
+  border-radius: 10px;
 }
 
 body .rdw-editor-main {
   height: 400px;
   padding: 10px;
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1440px) {
+  body .git-issue-card,
+  body .git-issue-card div,
+  body .git-issue-card small,
+  body .git-issue-title,
+  body .git-issue-tag-link {
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+  }
+
+  body .git-issue-card {
+    padding: 8px;
+    margin-bottom: 7px;
+  }
+
+  body .git-issue-label-tag {
+    padding: 2px 6px;
+    margin-left: 5px;
+    font-size: var(--font-size-xs);
+    line-height: 1.35;
+  }
+
+  body .form-check-inline-github-issue,
+  body .form-check-inline-github-issue .form-check-label,
+  body .stour-github-issue-status-dropdown,
+  body .pagination-holder,
+  body .pagination-link,
+  body .pagination-btn {
+    font-size: var(--font-size-xs);
+    line-height: 1.35;
+  }
+
+  body .form-check-input-github-issue {
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-top: 0.1rem;
+  }
+
+  body .issue-report-btn,
+  body .issue-report-btn:hover,
+  body .issue-report-btn:focus,
+  body .issue-report-btn:active {
+    font-size: var(--font-size-xs);
+    padding: 1px 4px;
+    line-height: 1.15;
+    margin-bottom: 7px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  body .rdw-editor-main {
+    height: 320px;
+    padding: 8px;
+    font-size: var(--font-size-sm);
+  }
 }

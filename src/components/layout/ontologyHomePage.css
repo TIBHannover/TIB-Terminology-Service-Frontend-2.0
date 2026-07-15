@@ -145,16 +145,16 @@ body .ontology-page-headbar {
 }
 
 .nav-item-active:hover {
-  background-color: #0e6668 !important;
+  background-color: #0e6668;
 }
 
 .nav-item-active > .nav-link {
-  color: white !important;
+  color: white;
   text-decoration: none;
 }
 
 .nav-item-active > .nav-link:hover {
-  color: white !important;
+  color: white;
   text-decoration: none;
 }
 
@@ -171,17 +171,37 @@ body .ontology-page-headbar {
   color: #0e6668;
 }
 
+.ontology-page-container .ontology-detail-nav-item.nav-item-active,
+.ontology-page-container .ontology-detail-nav-item.nav-item-active:hover {
+  background-color: #0e6668;
+}
+
+.ontology-page-container .ontology-detail-nav-item.nav-item-active > .nav-link,
+.ontology-page-container
+  .ontology-detail-nav-item.nav-item-active
+  > .nav-link:hover,
+.ontology-page-container
+  .ontology-detail-nav-item.nav-item-active
+  > .nav-link:focus,
+.ontology-page-container
+  .ontology-detail-nav-item.nav-item-active
+  > .nav-link:active {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 .issue-report-btn {
   margin-bottom: 10px;
 }
 
 .show-header-arrow-down {
-  margin-top: -45px !important;
+  margin-top: -45px;
 }
 
 #collectionSuggestionModalDialog {
-  max-width: 50% !important;
-  margin: auto !important;
+  max-width: 50%;
+  margin: auto;
 }
 
 /* Ontology Adopters (simple list look) ichrak part */
@@ -210,7 +230,7 @@ body .ontology-page-headbar {
   .ontology-page-headbar .fa-language,
   .ontology-page-headbar .fa-expand,
   .ontology-page-headbar .fa-compress {
-    font-size: var(--font-size-md) !important;
+    font-size: var(--font-size-md);
   }
 }
 
@@ -221,4 +241,80 @@ body .ontology-page-headbar {
 
 .adopters-modal .modal-body {
   padding: 16px;
+}
+
+.ontology-page-container button,
+.ontology-page-container button:hover,
+.ontology-page-container button:focus,
+.ontology-page-container button:active,
+.ontology-page-container .btn,
+.ontology-page-container .btn:hover,
+.ontology-page-container .btn:focus,
+.ontology-page-container .btn:active {
+  box-sizing: border-box;
+  font-weight: 400;
+  line-height: 1.35;
+  text-decoration: none;
+  transform: none;
+}
+
+.ontology-page-container .btn-secondary,
+.ontology-page-container .btn-secondary:hover,
+.ontology-page-container .btn-secondary:focus,
+.ontology-page-container .btn-secondary:active,
+.ontology-page-container .download-ontology-btn,
+.ontology-page-container .download-ontology-btn:hover,
+.ontology-page-container .download-ontology-btn:focus,
+.ontology-page-container .download-ontology-btn:active {
+  align-items: center;
+  background-color: #404040;
+  border: 1px solid #404040;
+  border-radius: 5px;
+  color: white;
+  display: inline-flex;
+  font-size: var(--font-size-sm);
+  justify-content: center;
+  line-height: 1.35;
+  padding: 5px;
+}
+
+.ontology-page-container .btn-sm,
+.ontology-page-container .btn-sm:hover,
+.ontology-page-container .btn-sm:focus,
+.ontology-page-container .btn-sm:active {
+  background-color: #404040;
+  border: 1px solid #404040;
+  color: white;
+  font-size: var(--font-size-xs);
+  line-height: 1.35;
+  padding: 1px;
+}
+
+.ontology-page-container .copy-link-icon-btn,
+.ontology-page-container .copy-link-icon-btn:hover,
+.ontology-page-container .copy-link-icon-btn:focus,
+.ontology-page-container .copy-link-icon-btn:active {
+  background-color: white;
+  border: none;
+  color: black;
+  font-size: var(--font-size-xs);
+  line-height: 1;
+  margin-left: 10px;
+  padding: 0;
+}
+
+.ontology-page-container .header-collapse-btn,
+.ontology-page-container .header-collapse-btn:hover,
+.ontology-page-container .header-collapse-btn:focus,
+.ontology-page-container .header-collapse-btn:active {
+  background-color: transparent;
+  border-bottom: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid white;
+  box-shadow: none;
+  color: black;
+  margin-bottom: 0;
+  margin-top: -40px;
+  padding: 0;
 }

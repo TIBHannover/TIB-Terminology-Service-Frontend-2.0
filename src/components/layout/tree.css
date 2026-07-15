@@ -290,7 +290,16 @@
 .term-detail-action-bar > button:hover,
 .term-detail-action-menu > button:hover,
 .term-detail-action-bar > a:hover,
-.term-detail-action-menu > a:hover {
+.term-detail-action-menu > a:hover,
+.term-detail-action-bar > button:focus,
+.term-detail-action-menu > button:focus,
+.term-detail-action-bar > a:focus,
+.term-detail-action-menu > a:focus,
+.term-detail-action-bar > button:active,
+.term-detail-action-menu > button:active,
+.term-detail-action-bar > a:active,
+.term-detail-action-menu > a:active {
+  box-sizing: border-box;
   padding: 1px 4px;
   color: white;
   background-color: black;
@@ -323,17 +332,17 @@
 
 @media only screen and (min-width: 901px) and (max-width: 1440px) {
   .tree-container {
-    margin-top: 0 !important;
+    margin-top: 0;
   }
 
   .tree-view-container button.btn.tree-action-btn,
   .tree-view-container .btn.tree-action-btn {
-    width: auto !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    padding: 1px 4px !important;
-    line-height: 1.15 !important;
-    font-size: var(--font-size-xs) !important;
+    width: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 1px 4px;
+    line-height: 1.15;
+    font-size: var(--font-size-xs);
     white-space: normal;
     overflow-wrap: anywhere;
   }
@@ -341,12 +350,12 @@
   .tree-view-container .tree-node-li,
   .tree-view-container .list-node-li,
   .tree-view-container .li-label-text {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
   }
 
   .tree-view-container .node-metadata-label {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
     line-height: 1.35;
   }
 
@@ -365,7 +374,7 @@
 
   .tree-view-container .tree-node-li > i.fa-plus,
   .tree-view-container .tree-node-li > i.fa-minus {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
     line-height: 1;
     vertical-align: top;
   }
@@ -375,7 +384,7 @@
   }
 
   .nav-tabs-node .ontology-detail-nav-item .nav-link {
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     padding: 4px 6px;
   }
 }

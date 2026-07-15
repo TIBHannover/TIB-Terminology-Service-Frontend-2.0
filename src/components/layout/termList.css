@@ -133,14 +133,14 @@
   width: 300px;
   text-align: left;
   font-size: var(--font-size-page);
-  padding: 20px !important;
+  padding: 20px;
   word-break: break-word;
 }
 
 .table-body-cell-small {
   width: 40px;
   font-size: var(--font-size-page);
-  padding: 0px !important;
+  padding: 0px;
   border-right: 1px #c4c0c0 solid;
 }
 
@@ -149,17 +149,26 @@
   cursor: pointer;
 }
 
-.termset-btn {
+.termset-btn,
+.termset-btn:hover,
+.termset-btn:focus,
+.termset-btn:active {
+  align-items: center;
+  box-sizing: border-box;
+  display: inline-flex;
   font-size: var(--font-size-sm);
+  gap: 4px;
   padding: 3px;
   margin-top: 50%;
   color: white;
   margin-left: 5px;
+  line-height: 1.35;
+  text-decoration: none;
 }
 
 .termset-btn .bi-plus-square,
 .termset-btn .bi-plus-square::before {
-  font-size: var(--font-size-xs) !important;
+  font-size: var(--font-size-xs);
   line-height: 1;
 }
 
@@ -183,22 +192,22 @@
   .table-header-cell,
   .table-body-cell {
     width: 220px;
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
   }
 
   .table-header-cell-small,
   .table-body-cell-small {
     width: 34px;
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
   }
 
   .table-body-cell {
-    padding: 8px !important;
+    padding: 8px;
   }
 
   .table-body-cell-small {
-    padding: 0 !important;
+    padding: 0;
   }
 
   .show-hidden-column,
@@ -206,7 +215,7 @@
   .term-table-toolbar,
   .term-list-obsolete-checkbox,
   .number-of-result-text-container {
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-size-xs);
     line-height: 1.35;
   }
 
@@ -216,16 +225,19 @@
     padding: 2px 6px;
   }
 
-  .termset-btn {
-    font-size: var(--font-size-xs) !important;
-    padding: 1px 4px !important;
+  .termset-btn,
+  .termset-btn:hover,
+  .termset-btn:focus,
+  .termset-btn:active {
+    font-size: var(--font-size-xs);
+    padding: 1px 4px;
     line-height: 1.15;
     margin-top: 0;
   }
 
   .termset-btn .bi-plus-square,
   .termset-btn .bi-plus-square::before {
-    font-size: var(--font-size-xxs) !important;
+    font-size: var(--font-size-xxs);
     line-height: 1;
   }
 

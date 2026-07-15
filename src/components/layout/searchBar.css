@@ -72,11 +72,19 @@ body .search-bar-container #autocomplete-container {
 }
 
 .search-bar-container .search-btn,
-.search-bar-container .search-btn:hover {
+.search-bar-container .search-btn:hover,
+.search-bar-container .search-btn:focus,
+.search-bar-container .search-btn:active {
   background-color: #404040;
+  border-color: #404040;
+  box-sizing: border-box;
   color: white;
   height: 36px;
   border-radius: 0 5px 5px 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.35;
+  padding: 5px;
+  text-decoration: none;
 }
 
 .search-in-box {
@@ -160,12 +168,12 @@ body .adv-search-container {
 }
 
 .multiSelectContainer li:hover {
-  background-color: #dfdddd !important;
-  color: black !important;
+  background-color: #dfdddd;
+  color: black;
 }
 
 .multiselect-container .chip {
-  background-color: #404040 !important;
+  background-color: #404040;
 }
 
 .custom-collection-btn {

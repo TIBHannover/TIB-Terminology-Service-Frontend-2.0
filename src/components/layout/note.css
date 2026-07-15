@@ -62,10 +62,11 @@ body .card-body {
 .note-header-container .note-dropdown-btn:hover,
 .note-header-container .note-dropdown-btn:active,
 .note-header-container .note-dropdown-btn:focus {
-  background-color: #f7f7f7 !important;
-  color: black !important;
-  border: none !important;
-  box-shadow: none !important;
+  background-color: #f7f7f7;
+  color: black;
+  border: none;
+  box-shadow: none;
+  box-sizing: border-box;
 }
 
 .note-header-container .note-header-container,
@@ -80,20 +81,22 @@ body .card-body {
 }
 
 .note-header-container .btn-delete-note,
-.note-header-container .btn-delete-note:hover {
+.note-header-container .btn-delete-note:hover,
+.note-header-container .btn-delete-note:focus,
+.note-header-container .btn-delete-note:active {
   background-color: white;
   border: none;
   color: red;
 }
 
-.note-header-container .note-action-menu-btn {
+.note-header-container .note-action-menu-btn,
+.note-header-container .note-action-menu-btn:hover,
+.note-header-container .note-action-menu-btn:focus,
+.note-header-container .note-action-menu-btn:active {
   border: none;
   background-color: white;
   color: black;
-}
-
-.note-header-container .note-action-menu-btn:hover {
-  color: black;
+  box-sizing: border-box;
 }
 
 .note-link-copy-message {

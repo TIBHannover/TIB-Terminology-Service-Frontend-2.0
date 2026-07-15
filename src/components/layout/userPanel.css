@@ -9,10 +9,10 @@ body .user-panel-item {
 }
 
 body .user-panel-item:hover {
-  text-decoration: none !important;
+  text-decoration: none;
   color: black;
 }
 
 body.dropdown-item:hover {
-  text-decoration: none !important;
+  text-decoration: none;
 }

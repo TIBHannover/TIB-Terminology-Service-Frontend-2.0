@@ -75,46 +75,61 @@ body button {
   border-color: #404040;
 }
 
+body button,
+body button:hover,
+body button:focus,
+body button:active,
+body .btn,
+body .btn:hover,
+body .btn:focus,
+body .btn:active {
+  box-sizing: border-box;
+  line-height: 1.35;
+  text-decoration: none;
+  transform: none;
+}
+
 body .btn-secondary,
-.btn-secondary:hover {
+body .btn-secondary:hover,
+body .btn-secondary:focus,
+body .btn-secondary:active {
   background-color: #404040;
-  border-color: #404040;
+  border: 1px solid #404040;
   text-decoration: none;
   border-radius: 5px;
   padding: 5px;
   color: white;
-  font-size: var(--font-size-sm);
 }
 
-body .btn-sm {
-  font-size: var(--font-size-xs);
+body .btn-sm,
+body .btn-sm:hover,
+body .btn-sm:focus,
+body .btn-sm:active {
   padding: 1px;
   background-color: #404040;
-  border-color: #404040;
+  border: 1px solid #404040;
   text-decoration: none;
   color: white;
 }
 
-body .btn-sm:hover {
-  font-size: var(--font-size-xs);
-  padding: 1px;
-  text-decoration: none;
-}
-
 body .btn-danger,
-body .btn-danger:hover {
+body .btn-danger:hover,
+body .btn-danger:focus,
+body .btn-danger:active {
   background-color: red;
 }
 
 body .close-btn-message-modal,
-.close-btn-message-modal:hover {
+body .close-btn-message-modal:hover,
+body .close-btn-message-modal:focus,
+body .close-btn-message-modal:active {
   background-color: white;
   color: #404040;
 }
 
 body .borderless-btn {
   border: none;
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 body .borderless-btn:active,
@@ -125,35 +140,41 @@ body .borderless-btn:focus {
 }
 
 body .term-button,
-.term-button:hover {
+body .term-button:hover,
+body .term-button:focus,
+body .term-button:active {
   background-color: #0e6668;
   color: white;
   margin-left: 15px;
   padding: 3px;
   margin-top: -5px;
   font-size: var(--font-size-sm);
-  border-color: #0e6668;
+  border: 1px solid #0e6668;
 }
 
 body .synonyms-button,
-.synonyms-button:hover {
+body .synonyms-button:hover,
+body .synonyms-button:focus,
+body .synonyms-button:active {
   background-color: #c2ba1c;
   color: white;
   margin-left: 15px;
   margin-top: 2px;
   padding: 3px;
   font-size: var(--font-size-sm);
-  border-color: #0e6668;
+  border: 1px solid #0e6668;
 }
 
 body .ontology-button,
-.ontology-button:hover {
+body .ontology-button:hover,
+body .ontology-button:focus,
+body .ontology-button:active {
   background-color: #bbae9e;
   color: black;
   padding: 3px;
   margin-right: 10px;
   font-size: var(--font-size-sm);
-  border-color: #bbae9e;
+  border: 1px solid #bbae9e;
   margin-top: 2px;
 }
 
@@ -393,19 +414,19 @@ body .nav-dropdown-title .dropdown-toggle:visited {
 body .nav-dropdown-title .navbar-item-dropdown,
 body .nav-dropdown-title .navbar-item-dropdown:hover {
   color: black;
-  text-decoration: none !important;
+  text-decoration: none;
   font-size: var(--font-size-md);
 }
 
 body .nav-dropdown-title .dropdown-item:hover {
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 body .nav-dropdown-title .dropdown-item:active,
 body .nav-dropdown-title .dropdown-item:focus {
   background-color: transparent;
   color: black;
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 body .nav-dropdown-title .dropdown-menu {
@@ -523,8 +544,8 @@ body .fa-orcid {
 }
 
 body .small-orcid-icon {
-  font-size: var(--font-size-xl) !important;
-  color: #a5cd39 !important;
+  font-size: var(--font-size-xl);
+  color: #a5cd39;
   margin-left: 5px;
 }
 
@@ -652,21 +673,24 @@ body .login-btn {
 
 body .github-login-btn,
 body .github-login-btn:hover,
-body .github-login-btn:focus {
+body .github-login-btn:focus,
+body .github-login-btn:active {
   background-color: black;
   border: 1px solid black;
 }
 
 body .gitlab-login-btn,
 body .gitlab-login-btn:hover,
-body .gitlab-login-btn:focus {
+body .gitlab-login-btn:focus,
+body .gitlab-login-btn:active {
   background-color: #cb4e18;
   border: 1px solid #cb4e18;
 }
 
 body .orcid-login-btn,
 body .orcid-login-btn:hover,
-body .orcid-login-btn:focus {
+body .orcid-login-btn:focus,
+body .orcid-login-btn:active {
   background-color: #a6ce39;
   border: 1px solid #a6ce39;
 }
@@ -696,9 +720,18 @@ body .result-card {
   font-size: var(--font-size-sm);
 }
 
+.graph-section {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
 .graph-container {
   height: 700px;
   border: 1px solid black;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
 }
 
 .graph-control-panel {
@@ -713,13 +746,17 @@ body .result-card {
 .graph-message-box {
   background-color: #d1ecf1;
   width: 800px;
+  max-width: 100%;
+  box-sizing: border-box;
   display: inline;
   margin-left: 10px;
   padding: 5px;
 }
 
 body .extra-sm-btn,
-body .extra-sm-btn:hover {
+body .extra-sm-btn:hover,
+body .extra-sm-btn:focus,
+body .extra-sm-btn:active {
   font-size: var(--font-size-xxs);
   padding: 1px;
 }
@@ -750,7 +787,7 @@ body .modal {
 }
 
 .warning-text {
-  color: rgb(253, 237, 9) !important;
+  color: rgb(253, 237, 9);
   font-size: var(--font-size-xxs);
   padding: 2px;
 }
@@ -788,6 +825,7 @@ body .site-tour-btn {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   cursor: pointer;
+  font-weight: bold;
   text-align: end;
   padding-top: 30px;
 
@@ -796,10 +834,15 @@ body .site-tour-btn {
   box-shadow:
     -4px -4px 10px rgba(0.3, 0.3, 0.3, 0.3),
     6px 6px 15px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-body .site-tour-btn:hover {
+body .site-tour-btn:hover,
+body .site-tour-btn:focus,
+body .site-tour-btn:active {
   background-color: #0e6668;
   font-weight: bold;
   color: white;
@@ -830,9 +873,9 @@ body .site-tour-btn:hover {
 }
 
 .copy-link-icon-btn {
-  padding: 0 !important;
-  margin-top: -2px !important;
-  margin-left: 5px !important;
+  padding: 0;
+  margin-top: -2px;
+  margin-left: 5px;
 }
 
 .bg-main-color {
@@ -878,12 +921,11 @@ body .nav-link:hover {
   text-decoration: underline;
 }
 
-
 .data-repo-tag {
-    background-color: #0e6668;
-    margin-right: 5px;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
+  background-color: #0e6668;
+  margin-right: 5px;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
 }

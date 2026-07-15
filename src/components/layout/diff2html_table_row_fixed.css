@@ -8,5 +8,5 @@
 */
 .class-list-table thead,
 .d2h-diff-table tbody tr {
-  table-layout: auto !important;
+  table-layout: auto;
 }

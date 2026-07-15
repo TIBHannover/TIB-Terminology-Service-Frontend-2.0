@@ -363,7 +363,9 @@ const CollectionPage = (props: CmpProps) => {
           {/*   <BioregistryPage bioregistryCollection={bioregistryCollection} /> */}
           {/* )} */}
           {activeTabId === ONTOLOGIES_TAB_ID && (
-            <div className="row p-4 bg-light">{renderOntologyList()}</div>
+            <div className="row p-4 ontology-list-container">
+              {renderOntologyList()}
+            </div>
           )}
           {activeTabId === API_TAB_ID && renderApiDoc()}
         </div>

@@ -14,7 +14,7 @@ body .autosuggest-jumpto-container {
 }
 
 body .autosuggest-sticky {
-  position: sticky !important;
+  position: sticky;
   top: 0;
   z-index: 1000;
 }
@@ -90,7 +90,7 @@ body .jumpto-result-text {
 }
 
 body .jumto-result-link {
-  text-decoration: none !important;
+  text-decoration: none;
   color: black;
 }
 
@@ -105,12 +105,20 @@ body .jumpto-result-text:hover {
   text-decoration: none;
 }
 
-body .button-in-jumpto:hover {
+body .button-in-jumpto,
+body .button-in-jumpto:hover,
+body .button-in-jumpto:focus,
+body .button-in-jumpto:active {
+  box-sizing: border-box;
   text-decoration: none;
   color: white;
 }
 
-body .jmp-ontology-button:hover {
+body .jmp-ontology-button,
+body .jmp-ontology-button:hover,
+body .jmp-ontology-button:focus,
+body .jmp-ontology-button:active {
+  box-sizing: border-box;
   text-decoration: none;
   background-color: #bbae9e;
   color: white;
