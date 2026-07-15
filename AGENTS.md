@@ -8,6 +8,8 @@ before starting:
 Tasks workflow:
 - Always look at the `.codex/specs/` unless you are instructed to do otherwise
 - inside the `.codex/specs` directory, there are .md files. Each of them is a task.
+- inside the `.codex/specs` there is `reports/` directory. If the spec asks for creating reports, put it as .md there.
+- If the spec is a report spec, do not change any code. Just create the report.
 - The task name has to be said in the prompt. If not, ask for it.
 - Do not run multiple tasks at the same time.
 - Each task has an accpentance criteria that has to be respected. 
