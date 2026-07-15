@@ -8,6 +8,7 @@ import {
 import { sendContactFrom } from "../../../api/user";
 import AlertBox from "../../common/Alerts/Alerts";
 import FormLib from "../../../Libs/FormLib";
+import "../../layout/userPanel.css";
 
 const ContactForm = (props) => {
   const { appErrorUrl, appErrorContent } = props;

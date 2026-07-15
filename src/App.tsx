@@ -1,23 +1,15 @@
-import { useState, useEffect } from "react";
-import Footer from "./components/common/Footer/Footer";
-import Header from "./components/common/Header/Header";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { MatomoWrapper } from "./components/Matomo/MatomoWrapper";
-import CookieBanner from "./components/common/CookieBanner/CookieBanner";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import {
   BackendIsDownMessage,
   setSiteTitleAndFavIcon,
-  InlineWrapperWithMargin,
 } from "./AppHelpers";
 import Auth from "./Libs/AuthLib";
-import AppRouter from "./Router";
 import { LoginLoadingAnimation } from "./components/User/Login/LoginLoading";
 import { AppContext } from "./context/AppContext";
 import { getReportList } from "./api/report";
 import LoadingPage from "./LoadingPage";
-import SiteTour from "./tours/Tour";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.min.css";
 import { olsIsUp } from "./api/system";
@@ -28,9 +20,15 @@ import "./components/layout/common.css";
 import "./components/layout/mediaQueries.css";
 import "./components/layout/custom.css";
 
+const Footer = lazy(() => import("./components/common/Footer/Footer"));
+const Header = lazy(() => import("./components/common/Header/Header"));
+const CookieBanner = lazy(
+  () => import("./components/common/CookieBanner/CookieBanner"),
+);
+const AppRouter = lazy(() => import("./Router"));
+const SiteTour = lazy(() => import("./tours/Tour"));
+
 const App = () => {
-  const SkeletonComponent = Skeleton as any;
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [isBackendDown, setIsBackendDown] = useState(false);
@@ -54,9 +52,12 @@ const App = () => {
     queryFn: olsIsUp,
     meta: { cache: false },
   });
-  if (olsIsUpQuery.isError) {
-    setIsBackendDown(true);
-  }
+
+  useEffect(() => {
+    if (olsIsUpQuery.isError) {
+      setIsBackendDown(true);
+    }
+  }, [olsIsUpQuery.isError]);
 
   useEffect(() => {
     setSiteTitleAndFavIcon();
@@ -102,10 +103,6 @@ const App = () => {
     } else {
       setShowLoadingPage(false);
     }
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
   }, []);
 
   const appContextData = {
@@ -130,39 +127,28 @@ const App = () => {
             <div className="row">
               <div className="col-sm-12">
                 <AppContext.Provider value={appContextData}>
-                  {showLoadingPage && <LoadingPage />}
+                  {showLoadingPage && (
+                    <Suspense fallback={<LoadingPage />}>
+                      <LoadingPage />
+                    </Suspense>
+                  )}
                   {!showLoadingPage && (
-                    <>
+                    <Suspense fallback={<LoadingPage />}>
                       <Header />
                       <div
                         className="application-content"
                         id="application_content"
                       >
-                        {loading && (
-                          <SkeletonComponent
-                            count={2}
-                            wrapper={InlineWrapperWithMargin}
-                            inline
-                            width={600}
-                            height={200}
-                            marginLeft={20}
-                            baseColor={"#f4f2f2"}
-                          />
-                        )}
-                        {!loading && (
-                          <>
-                            {isBackendDown && <BackendIsDownMessage />}
-                            <CookieBanner />
-                            <ErrorBoundary>
-                              <AppRouter />
-                            </ErrorBoundary>
-                          </>
-                        )}
+                        {isBackendDown && <BackendIsDownMessage />}
+                        <CookieBanner />
+                        <ErrorBoundary>
+                          <AppRouter />
+                        </ErrorBoundary>
                       </div>
                       {process.env.REACT_APP_SITE_TOUR === "true" &&
                         !showLoadingPage && <SiteTour />}
                       <Footer />
-                    </>
+                    </Suspense>
                   )}
                 </AppContext.Provider>
               </div>
