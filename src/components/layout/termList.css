@@ -29,7 +29,7 @@
 }
 
 .term-list-table {
-  margin-top: 30px;
+  margin-top: 40px;
   width: 100%;
 }
 
@@ -82,6 +82,15 @@
 .term-table-column-menu .dropdown-item {
   cursor: pointer;
   font-size: var(--font-size-md);
+}
+
+#term-table-column-visibility,
+#term-table-column-visibility:hover,
+#term-table-column-visibility:focus,
+#term-table-column-visibility:active {
+  font-size: var(--font-size-sm);
+  padding: 4px 8px;
+  line-height: 1.35;
 }
 
 .term-list-pagination-container {
@@ -146,4 +155,81 @@
   margin-top: 50%;
   color: white;
   margin-left: 5px;
+}
+
+.termset-btn .bi-plus-square,
+.termset-btn .bi-plus-square::before {
+  font-size: var(--font-size-xs) !important;
+  line-height: 1;
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1440px) {
+  .term-list-search-row {
+    padding: 0 10px 8px;
+  }
+
+  .class-list-tablle-holder {
+    padding: 10px;
+  }
+
+  .term-list-table {
+    margin-top: 10px;
+  }
+
+  .term-table tbody {
+    height: 780px;
+  }
+
+  .table-header-cell,
+  .table-body-cell {
+    width: 220px;
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.4;
+  }
+
+  .table-header-cell-small,
+  .table-body-cell-small {
+    width: 34px;
+    font-size: var(--font-size-xs) !important;
+  }
+
+  .table-body-cell {
+    padding: 8px !important;
+  }
+
+  .table-body-cell-small {
+    padding: 0 !important;
+  }
+
+  .show-hidden-column,
+  .term-table-column-menu .dropdown-item,
+  .term-table-toolbar,
+  .term-list-obsolete-checkbox,
+  .number-of-result-text-container {
+    font-size: var(--font-size-xs) !important;
+    line-height: 1.35;
+  }
+
+  .show-hidden-column {
+    width: auto;
+    min-width: 120px;
+    padding: 2px 6px;
+  }
+
+  .termset-btn {
+    font-size: var(--font-size-xs) !important;
+    padding: 1px 4px !important;
+    line-height: 1.15;
+    margin-top: 0;
+  }
+
+  .termset-btn .bi-plus-square,
+  .termset-btn .bi-plus-square::before {
+    font-size: var(--font-size-xxs) !important;
+    line-height: 1;
+  }
+
+  .term-list-pagination-container {
+    justify-content: flex-start;
+  }
 }

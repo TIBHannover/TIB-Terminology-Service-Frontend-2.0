@@ -256,7 +256,7 @@
   white-space: nowrap;
 }
 
-.term-detail-tab-action-row .nav-tabs-node {
+.nav-tabs-node {
   display: inline-flex;
   flex-wrap: nowrap;
   flex: 0 1 auto;
@@ -265,6 +265,17 @@
   margin-bottom: 0;
   overflow-x: auto;
   overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.nav-tabs-node .ontology-detail-nav-item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nav-tabs-node .ontology-detail-nav-item .nav-link {
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -280,11 +291,14 @@
 .term-detail-action-menu > button:hover,
 .term-detail-action-bar > a:hover,
 .term-detail-action-menu > a:hover {
-  padding: 3px;
+  padding: 1px 4px;
   color: white;
   background-color: black;
   margin-left: 5px;
-  font-weight: bold;
+}
+
+.term-detail-table-action-row {
+  margin-bottom: 5px;
 }
 
 .term-detail-action-btn {
@@ -293,7 +307,8 @@
   font-size: var(--font-size-xs);
   gap: 4px;
   justify-content: center;
-  width: 100px;
+  line-height: 1.15;
+  width: auto;
 }
 
 .term-detail-action-menu {
@@ -304,4 +319,63 @@
 
 .term-detail-action-menu-toggle {
   width: 36px;
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1440px) {
+  .tree-container {
+    margin-top: 0 !important;
+  }
+
+  .tree-view-container button.btn.tree-action-btn,
+  .tree-view-container .btn.tree-action-btn {
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 1px 4px !important;
+    line-height: 1.15 !important;
+    font-size: var(--font-size-xs) !important;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .tree-view-container .tree-node-li,
+  .tree-view-container .list-node-li,
+  .tree-view-container .li-label-text {
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.4;
+  }
+
+  .tree-view-container .node-metadata-label {
+    font-size: var(--font-size-xs) !important;
+    line-height: 1.35;
+  }
+
+  .tree-view-container .tree-node-li {
+    margin-bottom: 7px;
+  }
+
+  .tree-view-container .tree-node-li > .tree-node-ul {
+    margin-top: 6px;
+  }
+
+  .tree-view-container .tree-text-container {
+    margin-top: 0;
+    line-height: 1.2;
+  }
+
+  .tree-view-container .tree-node-li > i.fa-plus,
+  .tree-view-container .tree-node-li > i.fa-minus {
+    font-size: var(--font-size-xs) !important;
+    line-height: 1;
+    vertical-align: top;
+  }
+
+  .nav-tabs-node {
+    width: 100%;
+  }
+
+  .nav-tabs-node .ontology-detail-nav-item .nav-link {
+    font-size: var(--font-size-sm) !important;
+    padding: 4px 6px;
+  }
 }

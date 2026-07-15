@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   TermTabMetadata,
   TermDetailComPros,
@@ -9,7 +9,6 @@ import TermDetailTable from "./TermDetailTable/TermDetailTable";
 import NoteList from "../Note/NoteList";
 import TermApi from "../../../api/term";
 import { Link } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
 import { getNoteList } from "../../../api/note";
 import Graph from "../../common/Graph/Graph";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
@@ -45,11 +44,6 @@ const TermDetail = (props: TermDetailComPros) => {
   const [waiting, setWaiting] = useState(false);
   const [targetTerm, setTargetTerm] = useState<TsTerm>();
   const [notesCount, setNotesCount] = useState(0);
-  const [actionsCollapsed, setActionsCollapsed] = useState(false);
-  const tabActionRowRef = useRef<HTMLDivElement>(null);
-  const tabListRef = useRef<HTMLUListElement>(null);
-  const actionBarRef = useRef<HTMLDivElement>(null);
-  const expandedActionsWidthRef = useRef(0);
 
   const showDataAsJsonBtnHref =
     process.env.REACT_APP_API_URL +
@@ -127,64 +121,8 @@ const TermDetail = (props: TermDetailComPros) => {
     setWaiting(false);
   }, [ontologyPageContext.ontoLang]);
 
-  useEffect(() => {
-    const tabActionRow = tabActionRowRef.current;
-    const tabList = tabListRef.current;
-
-    if (!tabActionRow || !tabList) {
-      return;
-    }
-
-    function updateActionOverflow() {
-      const currentTabActionRow = tabActionRowRef.current;
-      const currentTabList = tabListRef.current;
-      const currentActionBar = actionBarRef.current;
-
-      if (!currentTabActionRow || !currentTabList) {
-        return;
-      }
-
-      const visibleActionsWidth = currentActionBar?.scrollWidth ?? 0;
-
-      if (visibleActionsWidth > 0) {
-        expandedActionsWidthRef.current = visibleActionsWidth;
-      }
-
-      const actionsWidth = expandedActionsWidthRef.current;
-      const rowStyles = window.getComputedStyle(currentTabActionRow);
-      const rowGap =
-        parseFloat(rowStyles.columnGap || rowStyles.gap || "0") || 0;
-      const nextCollapsed =
-        currentTabList.scrollWidth + actionsWidth + rowGap >
-        currentTabActionRow.clientWidth;
-
-      setActionsCollapsed(nextCollapsed);
-    }
-
-    updateActionOverflow();
-
-    const resizeObserver = new ResizeObserver(updateActionOverflow);
-    resizeObserver.observe(tabActionRow);
-    resizeObserver.observe(tabList);
-    if (actionBarRef.current) {
-      resizeObserver.observe(actionBarRef.current);
-    }
-    window.addEventListener("resize", updateActionOverflow);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", updateActionOverflow);
-    };
-  }, [actionsCollapsed, notesCount, targetTerm]);
-
-  const renderTermDetailActions = (isMenuContent = false) => (
-    <div
-      ref={isMenuContent ? undefined : actionBarRef}
-      className={
-        "d-flex justify-content-end mt-3 " +
-        (isMenuContent ? "term-detail-action-menu" : "term-detail-action-bar")
-      }
-    >
+  const renderTermDetailActions = () => (
+    <div className="d-flex justify-content-end term-detail-action-bar">
       <AddToTermsetModal
         modalId={"term-in-tree"}
         term={targetTerm}
@@ -206,34 +144,19 @@ const TermDetail = (props: TermDetailComPros) => {
   return (
     <div className="row">
       <div className="col-sm-12">
-        <div className="row mb-3" ref={tabActionRowRef}>
-          <div className="col-sm-9">
+        {!waiting && activeTab === DETAIL_TAB_ID && (
+          <div className="row term-detail-table-action-row">
+            <div className="col-sm-12">{renderTermDetailActions()}</div>
+          </div>
+        )}
+        <div className="row mb-2">
+          <div className="col-sm-12">
             <RenderTermDetailTab
               componentIdentity={props.componentIdentity}
               tabChangeHandler={tabChangeHandler}
               activeTab={activeTab}
               noteCount={notesCount}
-              tabListRef={tabListRef}
             />
-          </div>
-          <div className="col-sm-3">
-            {!actionsCollapsed && renderTermDetailActions()}
-            {actionsCollapsed && (
-              <Dropdown
-                align="end"
-                autoClose="outside"
-                className="term-detail-action-dropdown"
-              >
-                <Dropdown.Toggle
-                  className="btn btn-sm btn-dark term-detail-action-menu-toggle"
-                  id="term-detail-action-menu"
-                  aria-label="Term detail actions"
-                >
-                  <i className="bi bi-list"></i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>{renderTermDetailActions(true)}</Dropdown.Menu>
-              </Dropdown>
-            )}
           </div>
         </div>
         {waiting && <div className="isLoading-small"></div>}

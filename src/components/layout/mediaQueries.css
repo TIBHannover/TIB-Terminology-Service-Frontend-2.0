@@ -717,3 +717,311 @@
     order: 2;
   }
 }
+
+@media only screen and (min-width: 1441px) {
+  body {
+    font-size: var(--font-size-md);
+  }
+
+  body h1 {
+    font-size: var(--font-size-xxl);
+  }
+
+  body h2 {
+    font-size: 24px;
+  }
+
+  body h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  body h4,
+  body h5,
+  body h6 {
+    font-size: var(--font-size-base);
+  }
+
+  body button,
+  body .btn,
+  body .form-control,
+  body .form-select,
+  body .dropdown-item {
+    font-size: var(--font-size-md);
+    line-height: 1.35;
+  }
+
+  body .btn-sm,
+  body .extra-sm-btn,
+  body .term-button,
+  body .ontology-button,
+  body .synonyms-button {
+    font-size: var(--font-size-sm);
+  }
+
+  body .fa,
+  body .bi:not(.app-page-loading-spinner):not(.bi-file-earmark-excel-fill) {
+    font-size: var(--font-size-base);
+  }
+
+  body .fa-orcid,
+  body .fa-github,
+  body .fa-gitlab {
+    font-size: var(--font-size-xxl);
+  }
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1440px) {
+  body,
+  body div,
+  body p,
+  body li,
+  body td,
+  body th,
+  body label,
+  body input,
+  body textarea,
+  body select {
+    font-size: var(--font-size-md) !important;
+    line-height: 1.45;
+  }
+
+  body h1 {
+    font-size: 24px !important;
+    line-height: 1.25;
+  }
+
+  body h2 {
+    font-size: var(--font-size-xl) !important;
+    line-height: 1.3;
+  }
+
+  body h3 {
+    font-size: var(--font-size-lg) !important;
+    line-height: 1.35;
+  }
+
+  body h4,
+  body h5,
+  body h6 {
+    font-size: var(--font-size-base) !important;
+    line-height: 1.35;
+  }
+
+  body button,
+  body .btn,
+  body .btn-secondary,
+  body .form-control,
+  body .form-select,
+  body .dropdown-item {
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.35;
+  }
+
+  body .btn {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  body .btn-sm,
+  body .extra-sm-btn,
+  body .term-button,
+  body .ontology-button,
+  body .synonyms-button,
+  body .pagination-link,
+  body .pagination-btn {
+    font-size: var(--font-size-xs) !important;
+  }
+
+  body .site-navbar .nav-link,
+  body .site-navbar .navbar-item,
+  body .site-navbar .nav-dropdown-title .dropdown-toggle {
+    font-size: var(--font-size-md) !important;
+    line-height: 1.35;
+  }
+
+  body .ontology-page-container .ontology-detail-nav-item > .nav-link {
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.35;
+  }
+
+  body input::placeholder,
+  body textarea::placeholder {
+    font-size: var(--font-size-sm);
+  }
+
+  body .fa,
+  body .bi:not(.app-page-loading-spinner):not(.bi-file-earmark-excel-fill) {
+    font-size: var(--font-size-base);
+  }
+
+  body .fa-orcid,
+  body .fa-github,
+  body .fa-gitlab {
+    font-size: var(--font-size-xl);
+  }
+
+  body .copy-link-icon-btn,
+  body .tree-view-container .tree-action-btn,
+  body .term-detail-action-btn,
+  body .graph-section .graph-ctl-btn {
+    font-size: var(--font-size-xs) !important;
+  }
+
+  body .tree-container {
+    margin-top: 0 !important;
+  }
+
+  body .tree-view-container .tree-action-btn {
+    width: auto;
+    min-width: 80px;
+    padding: 2px 6px;
+    line-height: 1.25;
+  }
+
+  body .tree-view-container .tree-node-li,
+  body .tree-view-container .li-label-text {
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.4;
+  }
+
+  body .tree-view-container .node-metadata-label {
+    font-size: var(--font-size-xs) !important;
+    line-height: 1.35;
+  }
+
+  body .tree-view-container .tree-node-li {
+    margin-bottom: 7px;
+  }
+
+  body .tree-view-container .tree-node-li > .tree-node-ul {
+    margin-top: 6px;
+  }
+
+  body .tree-view-container .tree-text-container {
+    margin-top: 0;
+    line-height: 1.2;
+  }
+
+  body .tree-view-container .tree-node-li > i.fa-plus,
+  body .tree-view-container .tree-node-li > i.fa-minus {
+    vertical-align: top;
+    line-height: 1;
+  }
+
+  body .site-header-search-filters-container {
+    margin-top: 4px !important;
+    align-items: center;
+  }
+
+  body .site-header-search-filters-container .search-form-checkbox-holders,
+  body .site-header-search-filters-container .adv-search-title-holder,
+  body .site-header-search-filters-container .form-check-label {
+    font-size: var(--font-size-xs) !important;
+    line-height: 1.2;
+  }
+
+  body .site-header-search-filters-container .form-check-input {
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-top: 0.1rem;
+  }
+
+  body .site-header-search-filters-container .form-switch .form-check-input {
+    width: 1.5rem;
+  }
+}
+
+body .tree-view-container .tree-node-li > i.fa-plus,
+body .tree-view-container .tree-node-li > i.fa-minus {
+  font-size: var(--font-size-xs);
+  line-height: 1;
+}
+
+@media only screen and (max-width: 900px) {
+  body,
+  body div,
+  body p,
+  body li,
+  body td,
+  body th,
+  body label,
+  body input,
+  body textarea,
+  body select {
+    font-size: var(--font-size-page) !important;
+    line-height: 1.45;
+  }
+
+  body h1 {
+    font-size: var(--font-size-xl) !important;
+    line-height: 1.25;
+  }
+
+  body h2 {
+    font-size: var(--font-size-lg) !important;
+    line-height: 1.3;
+  }
+
+  body h3,
+  body h4,
+  body h5,
+  body h6 {
+    font-size: var(--font-size-base) !important;
+    line-height: 1.35;
+  }
+
+  body button,
+  body .btn,
+  body .btn-secondary,
+  body .form-control,
+  body .form-select,
+  body .dropdown-item {
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.35;
+  }
+
+  body .btn {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  body .btn-sm,
+  body .extra-sm-btn,
+  body .term-button,
+  body .ontology-button,
+  body .synonyms-button,
+  body .pagination-link,
+  body .pagination-btn {
+    font-size: var(--font-size-xs) !important;
+  }
+
+  body .main-title,
+  body .nav-link,
+  body .navbar-item,
+  body .nav-dropdown-title .dropdown-toggle {
+    font-size: var(--font-size-sm) !important;
+    line-height: 1.35;
+  }
+
+  body input::placeholder,
+  body textarea::placeholder {
+    font-size: var(--font-size-xs);
+  }
+
+  body .fa,
+  body .bi:not(.app-page-loading-spinner):not(.bi-file-earmark-excel-fill) {
+    font-size: var(--font-size-base);
+  }
+
+  body .fa-orcid,
+  body .fa-github,
+  body .fa-gitlab {
+    font-size: var(--font-size-xl);
+  }
+
+  body .copy-link-icon-btn,
+  body .term-detail-action-btn,
+  body .graph-section .graph-ctl-btn {
+    font-size: var(--font-size-xs) !important;
+  }
+}
