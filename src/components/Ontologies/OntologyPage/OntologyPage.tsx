@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import DataTree from "../DataTree/DataTree";
 import SkosApi from "../../../api/skos";
 import OntologyApi from "../../../api/ontology";
@@ -9,19 +9,22 @@ import ontologyPageTabConfig from "./listOfComponentsAsTabs.json";
 import { OntologyPageTabs, OntologyPageHeadSection } from "./helpers";
 import { getNoteList } from "../../../api/note";
 import Toolkit from "../../../Libs/Toolkit";
-import IssueList from "../IssueList/IssueList";
-import NoteList from "../Note/NoteList";
 import "../../layout/ontologyHomePage.css";
 import "../../layout/note.css";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
-import ChangesTimeline from "../../Ondet/ChangesTimeline";
 import { RouteComponentProps } from "react-router-dom";
 import { TsOntology, TsClass, TsProperty, TsSkosTerm } from "../../../concepts";
-import PublicationsLinks from "../PublicationsLinks/PublicationsLinks";
-import LinkedDatasets from "../LinkedDatasets/LinkedDatasets";
 import { getDatasetRepositories } from "../../../api/dataset_links";
+
+const ChangesTimeline = lazy(() => import("../../Ondet/ChangesTimeline"));
+const IssueList = lazy(() => import("../IssueList/IssueList"));
+const LinkedDatasets = lazy(() => import("../LinkedDatasets/LinkedDatasets"));
+const NoteList = lazy(() => import("../Note/NoteList"));
+const PublicationsLinks = lazy(
+  () => import("../PublicationsLinks/PublicationsLinks"),
+);
 
 const OVERVIEW_TAB_ID = 0;
 const TERM_TREE_TAB_ID = 1;
@@ -33,6 +36,7 @@ const GIT_ISSUE_LIST_ID = 6;
 const ONDET_TAB_ID = 7;
 const PUBLICATIONS_LINKS_TAB_ID = 8;
 const LINKED_DATASETS_TAB_ID = 9;
+const TAB_LOADER = <div className="isLoading-small"></div>;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
   "": OVERVIEW_TAB_ID,
@@ -337,13 +341,17 @@ const OntologyPage = (props: CmpPropp) => {
                       />
                     )}
                     {!waiting && activeTab === NOTES_TAB_ID && (
-                      <NoteList key={"notesPage"} />
+                      <Suspense fallback={TAB_LOADER}>
+                        <NoteList key={"notesPage"} />
+                      </Suspense>
                     )}
                     {!waiting && activeTab === GIT_ISSUE_LIST_ID && (
-                      <IssueList
-                        componentIdentity={"gitIssues"}
-                        key={"gitIssueList"}
-                      />
+                      <Suspense fallback={TAB_LOADER}>
+                        <IssueList
+                          componentIdentity={"gitIssues"}
+                          key={"gitIssueList"}
+                        />
+                      </Suspense>
                     )}
 
                     {!waiting &&
@@ -363,9 +371,11 @@ const OntologyPage = (props: CmpPropp) => {
 
                           return fileUrl.host === "raw.githubusercontent.com" ||
                             fileUrl.host === "gitlab.com" ? (
-                            <ChangesTimeline
-                              ontologyRawUrl={ontology.versionedUrl}
-                            />
+                            <Suspense fallback={TAB_LOADER}>
+                              <ChangesTimeline
+                                ontologyRawUrl={ontology.versionedUrl}
+                              />
+                            </Suspense>
                           ) : (
                             errorMessage
                           );
@@ -376,12 +386,16 @@ const OntologyPage = (props: CmpPropp) => {
                     {!waiting &&
                       activeTab === PUBLICATIONS_LINKS_TAB_ID &&
                       process.env.REACT_APP_PUBLICATION_LINKS === "true" && (
-                        <PublicationsLinks />
+                        <Suspense fallback={TAB_LOADER}>
+                          <PublicationsLinks />
+                        </Suspense>
                       )}
                     {!waiting &&
                       activeTab === LINKED_DATASETS_TAB_ID &&
                       process.env.REACT_APP_LINKED_DATASETS === "true" && (
-                        <LinkedDatasets />
+                        <Suspense fallback={TAB_LOADER}>
+                          <LinkedDatasets />
+                        </Suspense>
                       )}
                   </div>
                 </div>

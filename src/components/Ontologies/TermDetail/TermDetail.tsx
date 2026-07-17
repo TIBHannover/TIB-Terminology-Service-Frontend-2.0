@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { lazy, Suspense, useEffect, useState, useContext } from "react";
 import {
   TermTabMetadata,
   TermDetailComPros,
@@ -6,22 +6,24 @@ import {
 } from "./types";
 import NodePageTabConfig from "./listOfComponentsTabs.json";
 import TermDetailTable from "./TermDetailTable/TermDetailTable";
-import NoteList from "../Note/NoteList";
 import TermApi from "../../../api/term";
 import { Link } from "react-router-dom";
 import { getNoteList } from "../../../api/note";
-import Graph from "../../common/Graph/Graph";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
 import { TsTerm } from "../../../concepts";
-import LinkedDatasets from "../LinkedDatasets/LinkedDatasets";
+
+const Graph = lazy(() => import("../../common/Graph/Graph"));
+const LinkedDatasets = lazy(() => import("../LinkedDatasets/LinkedDatasets"));
+const NoteList = lazy(() => import("../Note/NoteList"));
 
 const DETAIL_TAB_ID = 0;
 const NOTES_TAB_ID = 1;
 const GRAPH_TAB_ID = 2;
 const LINKED_DATASETS_TAB_ID = 3;
+const TAB_LOADER = <div className="isLoading-small"></div>;
 const TABS = {
   "": DETAIL_TAB_ID,
   notes: NOTES_TAB_ID,
@@ -170,22 +172,28 @@ const TermDetail = (props: TermDetailComPros) => {
           />
         )}
         {!waiting && activeTab === NOTES_TAB_ID && (
-          <NoteList
-            key={"notesPage"}
-            term={targetTerm as any}
-            termType={props.typeForNote}
-          />
+          <Suspense fallback={TAB_LOADER}>
+            <NoteList
+              key={"notesPage"}
+              term={targetTerm as any}
+              termType={props.typeForNote}
+            />
+          </Suspense>
         )}
         {!waiting && activeTab === GRAPH_TAB_ID && (
-          <Graph
-            ontologyId={ontologyPageContext.ontology.ontologyId}
-            termIri={props.iri}
-            isSkos={ontologyPageContext.isSkos}
-            componentIdentity={props.componentIdentity}
-          />
+          <Suspense fallback={TAB_LOADER}>
+            <Graph
+              ontologyId={ontologyPageContext.ontology.ontologyId}
+              termIri={props.iri}
+              isSkos={ontologyPageContext.isSkos}
+              componentIdentity={props.componentIdentity}
+            />
+          </Suspense>
         )}
         {!waiting && activeTab === LINKED_DATASETS_TAB_ID && (
-          <LinkedDatasets inputCurie={targetTerm?.curie} />
+          <Suspense fallback={TAB_LOADER}>
+            <LinkedDatasets inputCurie={targetTerm?.curie} />
+          </Suspense>
         )}
       </div>
     </div>
