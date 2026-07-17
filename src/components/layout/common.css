@@ -55,6 +55,17 @@ body {
   margin: auto;
 }
 
+.app-shell-loading {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.loading-page {
+  margin-top: 20%;
+}
+
 p {
   text-align: justify;
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useCallback, useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { MatomoWrapper } from "./components/Matomo/MatomoWrapper";
 import {
@@ -44,8 +44,13 @@ const App = () => {
     activeSearchSetting: {},
     activeSearchSettingIsModified: false,
   });
-  const [showLoadingPage, setShowLoadingPage] = useState(true);
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [headerIsPainted, setHeaderIsPainted] = useState(false);
   const [includeImportedTerms, setIncludeImportedTerms] = useState(true);
+  const showLoadingPage = !appIsReady || !headerIsPainted;
+  const handleHeaderPaint = useCallback(() => {
+    setHeaderIsPainted(true);
+  }, []);
 
   const olsIsUpQuery = useQuery({
     queryKey: ["olsIsUpCall"],
@@ -98,10 +103,10 @@ const App = () => {
           });
 
         setUserSettings(settings);
-        setShowLoadingPage(false);
+        setAppIsReady(true);
       });
     } else {
-      setShowLoadingPage(false);
+      setAppIsReady(true);
     }
   }, []);
 
@@ -127,28 +132,42 @@ const App = () => {
             <div className="row">
               <div className="col-sm-12">
                 <AppContext.Provider value={appContextData}>
-                  {showLoadingPage && (
-                    <Suspense fallback={<LoadingPage />}>
-                      <LoadingPage />
-                    </Suspense>
-                  )}
-                  {!showLoadingPage && (
-                    <Suspense fallback={<LoadingPage />}>
-                      <Header />
+                  {showLoadingPage && <LoadingPage />}
+                  {appIsReady && (
+                    <div
+                      className={
+                        showLoadingPage
+                          ? "app-shell app-shell-loading"
+                          : "app-shell"
+                      }
+                    >
+                      <Suspense fallback={null}>
+                        <Header />
+                        <HeaderPaintObserver onPaint={handleHeaderPaint} />
+                      </Suspense>
                       <div
                         className="application-content"
                         id="application_content"
                       >
                         {isBackendDown && <BackendIsDownMessage />}
-                        <CookieBanner />
+                        <Suspense fallback={null}>
+                          <CookieBanner />
+                        </Suspense>
                         <ErrorBoundary>
-                          <AppRouter />
+                          <Suspense fallback={<LoadingPage />}>
+                            <AppRouter />
+                          </Suspense>
                         </ErrorBoundary>
                       </div>
-                      {process.env.REACT_APP_SITE_TOUR === "true" &&
-                        !showLoadingPage && <SiteTour />}
-                      <Footer />
-                    </Suspense>
+                      {process.env.REACT_APP_SITE_TOUR === "true" && (
+                        <Suspense fallback={null}>
+                          <SiteTour />
+                        </Suspense>
+                      )}
+                      <Suspense fallback={null}>
+                        <Footer />
+                      </Suspense>
+                    </div>
                   )}
                 </AppContext.Provider>
               </div>
@@ -158,6 +177,22 @@ const App = () => {
       </BrowserRouter>
     </div>
   );
+};
+
+const HeaderPaintObserver = ({ onPaint }: { onPaint: () => void }) => {
+  useEffect(() => {
+    let secondFrameId = 0;
+    let firstFrameId = requestAnimationFrame(() => {
+      secondFrameId = requestAnimationFrame(onPaint);
+    });
+
+    return () => {
+      cancelAnimationFrame(firstFrameId);
+      cancelAnimationFrame(secondFrameId);
+    };
+  }, [onPaint]);
+
+  return null;
 };
 
 export default App;

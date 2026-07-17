@@ -19,16 +19,66 @@
     inset 0 -1px 0 rgba(255, 255, 255, 0.24);
   padding: 10px;
   font-size: var(--font-size-sm);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 330px;
+  width: 100%;
 }
 
-.collection-logo {
-  /*width: 300px;*/
-  /*height: 200px;*/
+.home-collection-grid > div {
+  display: flex;
+}
+
+.collection-image-anchor {
+  align-items: center;
+  display: flex;
+  height: 210px;
+  justify-content: center;
+}
+
+.collection-card-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.collection-card-text .show-more-text-link {
+  margin-top: auto;
+}
+
+.home-reveal-item {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.home-reveal-item-visible {
+  animation: collectionCardAppear 400ms ease-out both;
+}
+
+.home-reveal-delay-1.home-reveal-item-visible {
+  animation-delay: 60ms;
+}
+
+.home-reveal-delay-2.home-reveal-item-visible {
+  animation-delay: 120ms;
+}
+
+.home-reveal-delay-3.home-reveal-item-visible {
+  animation-delay: 180ms;
+}
+
+.collection-card-logo {
+  max-height: 100%;
+  object-fit: contain;
   padding: 20px;
+  width: auto;
+  animation: collectionLogoAppear 260ms ease-out both;
 }
 
-.home-collection-grid .collection-card {
-  animation: collectionCardAppear 520ms ease-out both;
+.deprecated-collection-badge {
+  position: absolute;
+  z-index: 10;
 }
 
 @keyframes collectionCardAppear {
@@ -43,8 +93,27 @@
   }
 }
 
+@keyframes collectionLogoAppear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .home-collection-grid .collection-card {
+  .home-reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+
+  .home-reveal-item-visible {
+    animation: none;
+  }
+
+  .collection-card-logo {
     animation: none;
   }
 }
