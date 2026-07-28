@@ -167,16 +167,14 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
                 </Row>
               )}
 
-              {u.usageReportMetadata?.source && (
-                <Row label="Source">
-                  <LinkOrText href={u.usageReportMetadata.source}>
-                    {u.usageReportMetadata.source}
-                  </LinkOrText>
-                </Row>
+              {u.usedBy?.usageReportMetadata?.source && (
+                <Row label="Source">{u.usedBy.usageReportMetadata.source}</Row>
               )}
 
-              {u.usageReportMetadata?.created && (
-                <Row label="Created">{u.usageReportMetadata.created}</Row>
+              {u.usedBy?.usageReportMetadata?.created && (
+                <Row label="Created at">
+                  {u.usedBy.usageReportMetadata.created}
+                </Row>
               )}
             </div>
           );
