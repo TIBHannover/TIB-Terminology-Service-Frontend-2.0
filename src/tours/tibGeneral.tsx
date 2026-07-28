@@ -85,6 +85,25 @@ export function headerTourStepsTibGeneral() {
       selector: tourSelectorPrefix + "ontologies-navbar-item",
       content: "Checkout the list of available ontologies.",
     },
+    ...(process.env.REACT_APP_TERMSET_FEATURE === "true"
+      ? [
+          {
+            selector: tourSelectorPrefix + "termsets-navbar-item",
+            content: () => (
+              <>
+                <p>
+                  Browse termsets to explore curated groups of terms from
+                  available ontologies.
+                </p>
+                <p>
+                  Create your own termsets to collect terms for a specific task
+                  and download them when needed.
+                </p>
+              </>
+            ),
+          },
+        ]
+      : []),
     {
       selector: tourSelectorPrefix + "info-navbar-item",
       content:

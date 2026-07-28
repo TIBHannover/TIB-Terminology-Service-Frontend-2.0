@@ -82,7 +82,7 @@ const SiteNavbar = () => {
                   <Link
                     onClick={handleClick}
                     className={
-                      "nav-link navbar-item " +
+                      "nav-link navbar-item stour-termsets-navbar-item " +
                       (urlPath.includes("/termsets") ? "nav-clicked" : "")
                     }
                     to={basePath + "/termsets"}
