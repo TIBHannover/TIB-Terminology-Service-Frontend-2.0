@@ -13,7 +13,19 @@ Tasks workflow:
 - The task name has to be said in the prompt. If not, ask for it.
 - Do not run multiple tasks at the same time.
 - Each task has an accpentance criteria that has to be respected. 
-- After finishing a spec, move the spec to `spec/completed` directory.
+- A completed task need confimation from the user in prompt.
+- when the prompt confirmation is given:
+  - Spawn the `reviewer` subagent to review the completed implementation against:
+    - the original specification
+    - the current branch diff
+  - wait for the reviewer to finish.
+  - present the findings to the user.
+  - do not change any code until the user approves the requested changes in review.
+  - if user ask for changes, repeat the review process.
+  - If accpeted or user stated that task is done, continue with:
+    - Move the spec to `spec/completed` directory.
+    - commit the changes with a proper commit message.
+    - push the changes to the remote. The same branch that you are working on.
 
 code structure:
 - The components that holds app logic and rendering are in `src/components`
