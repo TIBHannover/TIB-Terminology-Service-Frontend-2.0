@@ -41,7 +41,7 @@ export class TsOntology {
     this._id = ontologyData.ontologyId ?? "";
     this._iri = ontologyData.iri ?? "";
     this._title = this.processTitle(ontologyData);
-    this._description = ontologyData.description ?? "";
+    this._description = this.processDescription(ontologyData.description);
     this._preferredPrefix = ontologyData.preferredPrefix ?? "";
     this._purl = ontologyData.ontologyPurl ?? "";
     this._loaded = ontologyData.loaded ?? "";
@@ -65,7 +65,9 @@ export class TsOntology {
     this._creator = this.processCreators(ontologyData);
     this._issueTrackerUrl = ontologyData.tracker ?? "";
     this._importedFrom = ontologyData.importsFrom ?? [];
-    this._isSkos = ontologyData.skos ?? false;
+    this._isSkos =
+      ((ontologyData.skos === true ||
+        ontologyData.skos === "true") as boolean) ?? false;
     this._annotations = this.processAnnotations(ontologyData);
     this._importsFrom = ontologyData["importsFrom"] ?? [];
     this._repo_url = ontologyData.repo_url ?? "";
@@ -305,5 +307,24 @@ export class TsOntology {
       .filter((word: string) => !stopWords.includes(word.toLowerCase()))
       .join(" ");
     return cleanedTitle;
+  }
+
+  private processDescription(description: string | string[]): string {
+    try {
+      if (typeof description === "string") {
+        return description;
+      }
+      if (!description || description.length === 0) {
+        return "";
+      }
+      let result = "";
+      for (let i = 0; i < description.length; i++) {
+        result += description[i];
+        result += "\n";
+      }
+      return result;
+    } catch (e) {
+      return "";
+    }
   }
 }

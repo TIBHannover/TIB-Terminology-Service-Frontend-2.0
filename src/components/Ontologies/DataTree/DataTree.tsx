@@ -139,6 +139,15 @@ const DataTree = (props: DataTreeProps) => {
       );
     };
   }, []);
+  // console.log(props.rootNodes.length === 0);
+  console.log(ontologyPageContext.isSkos);
+  console.log(props.rootNodesForSkos.length === 0);
+  console.log(props.componentIdentity !== "properties");
+  console.log(
+    ontologyPageContext.isSkos &&
+      props.rootNodesForSkos.length === 0 &&
+      props.componentIdentity !== "properties",
+  );
 
   return (
     <div className="tree-view-container resizable-container">

@@ -129,7 +129,6 @@ const OntologyPage = (props: CmpPropp) => {
     if ("value" in repos) {
       repos = [];
     }
-
     setOntology(ontology);
     setRepositories(repos as string[]);
     setWithPreferredRoots(false);

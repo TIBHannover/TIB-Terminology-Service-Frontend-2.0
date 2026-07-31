@@ -1,6 +1,5 @@
 import { resolveOrcidId } from "../api/general";
 import { createElement, ReactElement } from "react";
-import Toolkit from "./Toolkit";
 
 class OntologyLib {
   static getCurrentOntologyIdFromUrlPath() {

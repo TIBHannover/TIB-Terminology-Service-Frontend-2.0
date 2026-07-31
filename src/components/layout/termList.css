@@ -158,10 +158,8 @@
   display: inline-flex;
   font-size: var(--font-size-sm);
   gap: 4px;
-  padding: 3px;
   margin-top: 50%;
   color: white;
-  margin-left: 5px;
   line-height: 1.35;
   text-decoration: none;
 }
