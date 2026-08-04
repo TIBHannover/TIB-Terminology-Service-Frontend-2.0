@@ -24,6 +24,7 @@ export async function runLogin(
     let result: any = await fetch(baseUrl + "/user/login/", {
       method: "GET",
       headers: headers,
+      credentials: "include",
     });
     result = await result.json();
     result = result["_result"];
@@ -45,6 +46,7 @@ export async function logout(): Promise<boolean> {
     let result: any = await fetch(baseUrl + "/user/logout/", {
       method: "GET",
       headers: headers,
+      credentials: "include",
     });
     result = await result.json();
     result = result["_result"];
@@ -66,6 +68,7 @@ export async function isLogin(): Promise<boolean> {
     let result: any = await fetch(baseUrl + "/user/validate_login/", {
       method: "GET",
       headers: headers,
+      credentials: "include",
     });
     if (result.status !== 200) {
       return false;
@@ -92,6 +95,7 @@ export async function storeUserSettings(
     let result: any = await fetch(baseUrl + "/user/settings/", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(settings),
     });
     result = await result.json();
@@ -122,6 +126,7 @@ export async function storeSearchSettings(
     let result: any = await fetch(baseUrl + "/user/search_setting/", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(settingData),
     });
     result = await result.json();
@@ -146,6 +151,7 @@ export async function fetchSearchSettings(): Promise<
     let result: any = await fetch(baseUrl + "/user/search_setting/", {
       method: "GET",
       headers: headers,
+      credentials: "include",
     });
     result = await result.json();
     result = result["_result"]["settings"];
@@ -172,6 +178,7 @@ export async function updateSearchSettings(
       {
         method: "PUT",
         headers: headers,
+      credentials: "include",
         body: JSON.stringify(settingData),
       },
     );
@@ -199,6 +206,7 @@ export async function deleteSearchSetting(
       {
         method: "DELETE",
         headers: headers,
+      credentials: "include",
       },
     );
     result = await result.json();
@@ -221,6 +229,7 @@ export async function sendContactFrom(data: ContactFormData): Promise<boolean> {
     let result: any = await fetch(baseUrl + "/contact/create/", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(data),
     });
     if (result.status === 200) {
@@ -246,6 +255,7 @@ export async function fetchUserApiKeys(): Promise<ApiKey[]> {
     let result: any = await fetch(baseUrl + "/user/apikey/get/", {
       method: "GET",
       headers: headers,
+      credentials: "include",
     });
     result = (await result.json()) as _resp;
     result = result["_result"]["api_keys"];
@@ -278,6 +288,7 @@ export async function createApiKey(data: {
     let result: any = await fetch(baseUrl + "/user/apikey/create/", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(data),
     });
     result = (await result.json()) as _resp;
@@ -311,6 +322,7 @@ export async function updateApiKey(data: {
     let result: any = await fetch(baseUrl + "/user/apikey/update/", {
       method: "PUT",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(data),
     });
     result = (await result.json()) as _resp;
@@ -335,6 +347,7 @@ export async function deleteApiKey(id: string): Promise<boolean> {
     let result: any = await fetch(baseUrl + "/user/apikey/delete/", {
       method: "DELETE",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify({ id: id }),
     });
     result = (await result.json()) as _resp;

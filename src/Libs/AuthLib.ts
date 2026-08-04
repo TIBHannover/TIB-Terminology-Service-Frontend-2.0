@@ -40,10 +40,8 @@ class Auth {
     try {
       let authProvider = localStorage.getItem("authProvider");
       let user = new UserModel();
-      user.setJwt(response.jwt ?? "");
       user.setCsrf(response.csrf_token ?? "");
       user.setId(response["id"]);
-      user.setToken(response["token"]);
       user.setFullName(response["name"]);
       user.setUsername(response["ts_username"]);
       user.setSystemAdmin(response["system_admin"]);

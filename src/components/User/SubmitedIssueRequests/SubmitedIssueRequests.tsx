@@ -54,7 +54,7 @@ async function getIssueList() {
   let issueList = await fetch(
     process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/github/get_submited_issues",
-    { method: "GET", headers: headers },
+    { method: "GET", headers: headers, credentials: "include" },
   );
   issueList = await issueList.json();
   issueList = issueList["_result"];

@@ -56,10 +56,16 @@ export const DeleteModal = (props: DeleteModalProps) => {
       let postConfig: RequestInit = {
         method: "POST",
         headers: callHeaders,
+        credentials: "include",
         body: formData,
       };
       if (method === "DELETE") {
-        postConfig = { method: method, headers: callHeaders, body: formData };
+        postConfig = {
+          method: method,
+          headers: callHeaders,
+          credentials: "include",
+          body: formData,
+        };
       }
 
       let result = await fetch(deleteEndpoint, postConfig);

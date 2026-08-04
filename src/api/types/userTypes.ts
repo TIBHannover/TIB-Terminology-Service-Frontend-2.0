@@ -24,7 +24,6 @@ export type ApiKey = User & {
 export type LoginResponse = {
   id?: string;
   name?: string;
-  token?: string;
   ts_username?: string;
   system_admin?: boolean;
   company?: string;
@@ -33,7 +32,6 @@ export type LoginResponse = {
   orcid_id?: string;
   settings?: object;
   csrf_token?: string;
-  jwt?: string;
 };
 
 export type UserSettings = {
@@ -56,7 +54,6 @@ export type UserModelType = {
   systemAdmin?: boolean;
   settings?: UserSettings;
   csrf?: string;
-  jwt?: string;
 };
 
 export type SearchSettingPayload = {

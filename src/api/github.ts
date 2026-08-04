@@ -24,7 +24,7 @@ export async function getOntologyGithubIssueList(
     endpoint += "&size=" + resultCountPerPage;
     endpoint += "&page=" + pageNumber;
     let header: TsPluginHeader = getTsPluginHeaders({ withAccessToken: false });
-    let resp = await fetch(endpoint, { headers: header });
+    let resp = await fetch(endpoint, { headers: header, credentials: "include" });
     let result = (await resp.json()) as ResultType;
     return result["_result"].issues;
   } catch (e) {
@@ -51,6 +51,7 @@ export async function getGitRepoTemplates(props: {
     let resp = await fetch(url, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(formData),
     });
     if (!resp.ok) {
@@ -93,6 +94,7 @@ export async function submitGitIssue(props: {
     let resp = await fetch(url, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(data),
     });
     if (!resp.ok) {

@@ -12,6 +12,7 @@ export async function createPublicationLink(ontology_id: string, doi: string): P
         let resp = await fetch(url + "/pub_link/create/", {
             method: "POST",
             headers: headers,
+            credentials: "include",
             body: JSON.stringify({ontology_id: ontology_id, doi: doi})
         });
         if (!resp.ok) {
@@ -61,7 +62,8 @@ export async function deletePublicationLink(id: number): Promise<boolean> {
         let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
         let resp = await fetch(url + "/pub_link/delete/" + id + "/", {
             method: "DELETE",
-            headers: headers
+            headers: headers,
+            credentials: "include"
         });
         if (!resp.ok) {
             return false;

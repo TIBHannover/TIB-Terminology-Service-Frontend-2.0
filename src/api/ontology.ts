@@ -143,7 +143,7 @@ export async function runShapeTest(
       process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/ontologysuggestion/testshape?purl=" +
       ontologyPurl;
-    let result = await fetch(url, { method: "GET", headers: headers });
+    let result = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
     if (!result.ok) {
       return false;
     }
@@ -173,6 +173,7 @@ export async function submitOntologySuggestion(
     let result: any = await fetch(url, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(form),
     });
     if (result.status === 200) {
@@ -193,7 +194,7 @@ export async function checkSuggestionExist(purl: string): Promise<boolean> {
       process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/ontologysuggestion/suggestion_exist?purl=" +
       purl;
-    let result = await fetch(url, { method: "GET", headers: headers });
+    let result = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
     if (result.status !== 200) {
       return false;
     }
@@ -213,7 +214,7 @@ export async function checkOntologyPurlIsValidUrl(
       process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/ontologysuggestion/purl_is_valid?purl=" +
       purl;
-    let result = await fetch(url, { method: "GET", headers: headers });
+    let result = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
     if (result.status !== 200) {
       return { valid: false, reason: "unknown" };
     }
@@ -242,6 +243,7 @@ export async function submitAdopterRequest(formData: any): Promise<boolean> {
     let result: any = await fetch(url, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(form),
     });
 

@@ -20,7 +20,7 @@ export async function getUserTermsetList(userId: string): Promise<TsTermset[]> {
       withAccessToken: true,
     });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/";
-    let result = await fetch(url, { headers: headers });
+    let result = await fetch(url, { headers: headers, credentials: "include" });
     if (!result.ok) {
       return [];
     }
@@ -63,7 +63,7 @@ export async function getAllTermsetList(): Promise<TsTermset[]> {
       withAccessToken: true,
     });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/term_set/get/";
-    let result = await fetch(url, { headers: headers });
+    let result = await fetch(url, { headers: headers, credentials: "include" });
     if (!result.ok) {
       return [];
     }
@@ -96,7 +96,7 @@ export async function getTermset(termsetId: string): Promise<TsTermset | null> {
         "/term_set/get/" +
         termsetId +
         "/";
-      let result = await fetch(url, { headers: headers });
+      let result = await fetch(url, { headers: headers, credentials: "include" });
       if (!result.ok) {
         const error = new Error("Fetch failed");
         (error as any).status = result.status;
@@ -130,6 +130,7 @@ export async function createTermset(
     let result = await fetch(url, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(termset),
     });
     if (!result.ok) {
@@ -174,6 +175,7 @@ export async function updateTermset(
     let result = await fetch(url, {
       method: "PUT",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(termsetJson),
     });
     if (!result.ok) {
@@ -210,6 +212,7 @@ export async function addTermToMultipleSets(
       return fetch(url, {
         method: "PUT",
         headers: headers,
+        credentials: "include",
         body: JSON.stringify({ term: term }),
       }).then((res) => {
         if (!res.ok) {
@@ -250,7 +253,7 @@ export async function removeTermFromSet(
       termsetId +
       "/remove_term?termId=" +
       encodeURIComponent(termId);
-    let result = await fetch(url, { method: "DELETE", headers: headers });
+    let result = await fetch(url, { method: "DELETE", headers: headers, credentials: "include" });
     if (!result.ok) {
       return false;
     }

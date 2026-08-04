@@ -8,7 +8,6 @@ type UserSettings = {
 
 class UserModel {
   id: string;
-  token: string;
   fullName: string;
   username: string;
   authProvider: string;
@@ -16,13 +15,11 @@ class UserModel {
   gitHomeUrl: string;
   orcidId: string;
   csrf: string;
-  jwt: string;
   systemAdmin: boolean;
   settings: UserSettings;
 
   constructor() {
     this.id = "";
-    this.token = "";
     this.fullName = "";
     this.username = "";
     this.authProvider = "";
@@ -30,7 +27,6 @@ class UserModel {
     this.gitHomeUrl = "";
     this.orcidId = "";
     this.csrf = "";
-    this.jwt = "";
     this.systemAdmin = false;
     this.settings = {
       userCollectionEnabled: false,
@@ -47,14 +43,6 @@ class UserModel {
 
   setCsrf(token: string) {
     this.csrf = token;
-  }
-
-  setJwt(token: string) {
-    this.jwt = token;
-  }
-
-  setToken(token: string) {
-    this.token = token;
   }
 
   setUsername(username: string) {

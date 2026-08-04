@@ -19,6 +19,7 @@ export async function saveCollection(
     let result: any = await fetch(baseUrl + "/collection/create/", {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(collectionData),
     });
     result = await result.json();
@@ -40,7 +41,12 @@ export async function updateCollection(
     });
     let result: any = await fetch(
       baseUrl + "/collection/update/" + collectionId + "/",
-      { method: "PUT", headers: headers, body: JSON.stringify(collectionData) },
+      {
+        method: "PUT",
+        headers: headers,
+        credentials: "include",
+        body: JSON.stringify(collectionData),
+      },
     );
     result = await result.json();
     result = result["_result"]["collection"];
@@ -61,6 +67,7 @@ export async function fetchCollectionList(): Promise<
     let result: any = await fetch(baseUrl + "/collection/get_list/", {
       method: "GET",
       headers: headers,
+      credentials: "include",
     });
     result = await result.json();
     result = result["_result"]["collections"];

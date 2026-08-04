@@ -15,6 +15,11 @@ export async function getPageCount(apiEndpoint: string): Promise<number> {
   return Math.ceil(answer["page"]["totalElements"] / size);
 }
 
+export function microBackendUrl(path: string): string {
+  let baseUrl = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT || "/api";
+  return baseUrl + path;
+}
+
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

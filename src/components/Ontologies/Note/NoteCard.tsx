@@ -12,6 +12,7 @@ import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import Login from "../../User/Login/TS/Login";
 import Toolkit from "../../../Libs/Toolkit";
 import { getTsPluginHeaders } from "../../../api/header";
+import { microBackendUrl } from "../../../api/helper";
 import Dropdown from "react-bootstrap/Dropdown";
 import { AppContext } from "../../../context/AppContext";
 import type {
@@ -27,10 +28,8 @@ const VISIBILITY_HELP = {
   public: "Everyone on the Internet can see this Note.",
 };
 
-const deleteEndpoint =
-  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/note/delete/";
-const reportEndpoint =
-  process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/report/create/";
+const deleteEndpoint = microBackendUrl("/note/delete/");
+const reportEndpoint = microBackendUrl("/report/create/");
 
 export const NoteCard = (props: NoteCardProps) => {
   /*

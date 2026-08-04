@@ -5,6 +5,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
 import { getTsPluginHeaders } from "../../../api/header";
+import { microBackendUrl } from "../../../api/helper";
 import { getTourProfile } from "../../../tours/controller";
 import type { NoteListResponse } from "../../../api/types/noteTypes";
 import type {
@@ -111,13 +112,13 @@ const NoteList = (props: NoteListProps) => {
 
   async function checkIsOntologyAdmin() {
     let callHeaders = getTsPluginHeaders({ withAccessToken: true });
-    let url =
-      process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/admin/is_entity_admin/";
+    let url = microBackendUrl("/admin/is_entity_admin/");
     let formData: Record<string, string> = {};
     formData["ontologyId"] = ontologyPageContext.ontology.ontologyId;
-    let postConfig = {
+    let postConfig: RequestInit = {
       method: "POST",
       headers: callHeaders,
+      credentials: "include",
       body: JSON.stringify(formData),
     };
     try {

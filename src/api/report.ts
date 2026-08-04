@@ -26,6 +26,7 @@ export async function sendResolveRequest(props: {
     let resp = await fetch(resolveUrl, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(formData),
     });
     if (!resp.ok) {
@@ -47,7 +48,7 @@ export async function getReportList(): Promise<ContentReport[]> {
     };
     let headers = getTsPluginHeaders({ withAccessToken: true });
     let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/report/list/";
-    let resp = await fetch(url, { method: "GET", headers: headers });
+    let resp = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
     if (!resp.ok) {
       return [];
     }

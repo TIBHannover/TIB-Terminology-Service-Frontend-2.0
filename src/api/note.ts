@@ -14,6 +14,7 @@ import {
 import { getTsPluginHeaders } from "./header";
 import { TsPluginHeader } from "./types/headerTypes";
 import { TsNote } from "../concepts";
+import { microBackendUrl } from "./helper";
 
 export async function submitNote(
   noteData: NewNoteRequest,
@@ -24,13 +25,13 @@ export async function submitNote(
       isJson: true,
       withAccessToken: true,
     });
-    let url = process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
     let path = !editMode ? "/note/create/" : "/note/update/";
     let httpMethod = !editMode ? "POST" : "PUT";
     let extractKey = !editMode ? "note_created" : "note_updated";
-    let result: any = await fetch(url + path, {
+    let result: any = await fetch(microBackendUrl(path), {
       method: httpMethod,
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(noteData),
     });
     result = await result.json();
@@ -58,10 +59,7 @@ export async function getNoteList(
       isJson: true,
       withAccessToken: true,
     });
-    let url =
-      process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
-      "/note/list?ontology=" +
-      ontologyId;
+    let url = microBackendUrl("/note/list?ontology=" + ontologyId);
     url += "&page=" + pageNumber + "&size=" + pageSize;
     if (targetTerm) {
       url += "&artifact_iri=" + encodeURIComponent(targetTerm["iri"]);
@@ -73,8 +71,10 @@ export async function getNoteList(
     if (onlyOntologyOriginalNotes) {
       url += "&onlyOriginalNotes=true";
     }
-
-    let result: any = await fetch(url, { headers: headers });
+    let result: any = await fetch(url, {
+      headers: headers,
+      credentials: "include",
+    });
     result = await result.json();
     let notes: NoteListResponse = result["_result"];
     if (params.withoutLabelFetch) {
@@ -112,13 +112,13 @@ export async function getNoteDetail(
       isJson: true,
       withAccessToken: true,
     });
-    let url =
-      process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
-      "/note/get/" +
-      noteId +
-      "?withComments=True&ontology=" +
-      ontologyId;
-    let result: any = await fetch(url, { headers: headers });
+    let url = microBackendUrl(
+      "/note/get/" + noteId + "?withComments=True&ontology=" + ontologyId,
+    );
+    let result: any = await fetch(url, {
+      headers: headers,
+      credentials: "include",
+    });
     if (result.status === 404) {
       return "404";
     }
@@ -156,11 +156,11 @@ export async function submitNoteComment(
       isJson: true,
       withAccessToken: true,
     });
-    let url =
-      process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/note/create_comment/";
+    let url = microBackendUrl("/note/create_comment/");
     let result: any = await fetch(url, {
       method: "POST",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(params),
     });
     result = await result.json();
@@ -177,11 +177,11 @@ export async function editNoteComment(params: UpdateCommentParams) {
       isJson: true,
       withAccessToken: true,
     });
-    let url =
-      process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/note/update_comment/";
+    let url = microBackendUrl("/note/update_comment/");
     let result: any = await fetch(url, {
       method: "PUT",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(params),
     });
     result = await result.json();
@@ -198,11 +198,11 @@ export async function pinnNote(params: PinnNoteParams): Promise<boolean> {
       isJson: true,
       withAccessToken: true,
     });
-    let url =
-      process.env.REACT_APP_MICRO_BACKEND_ENDPOINT + "/note/update_pin/";
+    let url = microBackendUrl("/note/update_pin/");
     let result: any = await fetch(url, {
       method: "PUT",
       headers: headers,
+      credentials: "include",
       body: JSON.stringify(params),
     });
     return result.ok;

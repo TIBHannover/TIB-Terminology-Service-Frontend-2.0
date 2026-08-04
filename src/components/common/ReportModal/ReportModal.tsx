@@ -53,9 +53,10 @@ export const ReportModal = (props: ReportModalProps) => {
           "reportReason" + props.modalId,
         ) as HTMLTextAreaElement | null
       )?.value;
-      let postConfig = {
+      let postConfig: RequestInit = {
         method: "POST",
         headers: props.callHeaders,
+        credentials: "include",
         body: JSON.stringify(props.formData),
       };
       let result = await fetch(props.reportEndpoint, postConfig);
