@@ -14,17 +14,25 @@ type constructorProps = {
   ontologyId?: string;
   lang?: string;
   withPreferredRoots?: boolean;
+  withObsolete?: boolean;
 };
 
 class OntologyApi {
   ontologyId: string = "";
   lang: string = "en";
   withPreferredRoots: boolean = false;
+  withObsolete: boolean = false;
 
-  constructor({ ontologyId, lang, withPreferredRoots }: constructorProps) {
+  constructor({
+    ontologyId,
+    lang,
+    withPreferredRoots,
+    withObsolete,
+  }: constructorProps) {
     this.ontologyId = ontologyId ?? "";
     this.lang = lang ?? "en";
     this.withPreferredRoots = withPreferredRoots ?? false;
+    this.withObsolete = withObsolete ?? false;
   }
 
   async fetchOntologyList(collectionId: string = ""): Promise<TsOntology[]> {
@@ -81,9 +89,10 @@ class OntologyApi {
     obsoletes: TsClass[];
   }> {
     try {
-      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
+      let baseUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies`;
+      let url = `${baseUrl}/${this.ontologyId}/classes?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=${this.withObsolete}`;
       if (this.withPreferredRoots) {
-        url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/classes?size=1000&lang=${this.lang}&includeObsoleteEntities=false&isPreferredRoot=true`;
+        url = `${baseUrl}/${this.ontologyId}/classes?size=1000&lang=${this.lang}&includeObsoleteEntities=false&isPreferredRoot=true`;
       }
       let result = await fetch(url, getCallSetting);
       let respData = await result.json();
@@ -112,7 +121,8 @@ class OntologyApi {
     obsoletes: TsProperty[];
   }> {
     try {
-      let url = `${process.env.REACT_APP_API_URL}/v2/ontologies/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=true`;
+      let baseUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies`;
+      let url = `${baseUrl}/${this.ontologyId}/properties?hasDirectParents=false&size=1000&lang=${this.lang}&includeObsoleteEntities=${this.withObsolete}`;
       let result = await fetch(url, getCallSetting);
       let respData = await result.json();
       let terms = respData["elements"] as OntologyTermDataV2[];
@@ -143,7 +153,11 @@ export async function runShapeTest(
       process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/ontologysuggestion/testshape?purl=" +
       ontologyPurl;
-    let result = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
+    let result = await fetch(url, {
+      method: "GET",
+      headers: headers,
+      credentials: "include",
+    });
     if (!result.ok) {
       return false;
     }
@@ -194,7 +208,11 @@ export async function checkSuggestionExist(purl: string): Promise<boolean> {
       process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/ontologysuggestion/suggestion_exist?purl=" +
       purl;
-    let result = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
+    let result = await fetch(url, {
+      method: "GET",
+      headers: headers,
+      credentials: "include",
+    });
     if (result.status !== 200) {
       return false;
     }
@@ -214,7 +232,11 @@ export async function checkOntologyPurlIsValidUrl(
       process.env.REACT_APP_MICRO_BACKEND_ENDPOINT +
       "/ontologysuggestion/purl_is_valid?purl=" +
       purl;
-    let result = await fetch(url, { method: "GET", headers: headers, credentials: "include" });
+    let result = await fetch(url, {
+      method: "GET",
+      headers: headers,
+      credentials: "include",
+    });
     if (result.status !== 200) {
       return { valid: false, reason: "unknown" };
     }

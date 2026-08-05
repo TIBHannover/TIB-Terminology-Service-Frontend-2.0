@@ -129,11 +129,25 @@ const OntologyPage = (props: CmpPropp) => {
     if ("value" in repos) {
       repos = [];
     }
+    let obsoleteTerms: TsClass[] = [];
+    let obsoleteProps: TsProperty[] = [];
+    if (Toolkit.getObsoleteFlagValue()) {
+      let ontologyApi = new OntologyApi({
+        ontologyId: ontologyId ?? "",
+        lang: ontoLang,
+        withPreferredRoots: false,
+        withObsolete: true,
+      });
+      let rootClassesResp = await ontologyApi.fetchRootClasses();
+      let rootPropsResp = await ontologyApi.fetchRootProperties();
+      obsoleteTerms = rootClassesResp.obsoletes;
+      obsoleteProps = rootPropsResp.obsoletes;
+    }
     setOntology(ontology);
     setRepositories(repos as string[]);
     setWithPreferredRoots(false);
-    setObsoleteTerms(ontology.obsoleteClasses);
-    setObsoleteProps(ontology.obsoleteProperties);
+    setObsoleteTerms(obsoleteTerms);
+    setObsoleteProps(obsoleteProps);
     setRootTerms(ontology.rootClasses);
     setRootProps(ontology.rootProperties);
     setSkosRootIndividuals(skosIndividuals as any);
@@ -239,6 +253,22 @@ const OntologyPage = (props: CmpPropp) => {
     }
   }
 
+  async function handleObsoleteChange(showObsolete: boolean) {
+    console.log(showObsolete);
+    if (showObsolete) {
+      let ontologyApi = new OntologyApi({
+        ontologyId: ontology.ontologyId,
+        lang: ontoLang,
+        withPreferredRoots: withPreferredRoots,
+        withObsolete: true,
+      });
+      let rootClassesResp = await ontologyApi.fetchRootClasses();
+      let rootPropsResp = await ontologyApi.fetchRootProperties();
+      setObsoleteTerms(rootClassesResp.obsoletes);
+      setObsoleteProps(rootPropsResp.obsoletes);
+    }
+  }
+
   useEffect(() => {
     loadOntologyData();
     setCountOfNotes();
@@ -313,6 +343,7 @@ const OntologyPage = (props: CmpPropp) => {
                         key={"termTreePage"}
                         withPreferredRoots={withPreferredRoots}
                         handlePreferredRootChange={handlePreferredRootChange}
+                        handleObsoleteChange={handleObsoleteChange}
                       />
                     )}
 
@@ -323,6 +354,7 @@ const OntologyPage = (props: CmpPropp) => {
                         componentIdentity={"properties"}
                         key={"propertyTreePage"}
                         rootNodesForSkos={skosRootIndividuals}
+                        handleObsoleteChange={handleObsoleteChange}
                       />
                     )}
                     {!waiting && activeTab === INDIVIDUAL_LIST_TAB_ID && (

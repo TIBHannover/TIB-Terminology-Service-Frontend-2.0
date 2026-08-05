@@ -408,6 +408,7 @@ const Tree = (props: TreeProps) => {
 
   function showObsoletes() {
     Toolkit.setObsoleteInStorageAndUrl(!obsoletesShown);
+    props.handleObsoleteChange?.(!obsoletesShown);
     setReload(true);
     setIsLoading(true);
     setTreeDomContent("");
@@ -605,6 +606,13 @@ const Tree = (props: TreeProps) => {
   useEffect(() => {
     saveComponentStateInParent();
   }, [obsoletesShown, siblingsVisible, subTreeMode]);
+
+  useEffect(() => {
+    buildTheTree();
+    setTimeout(() => {
+      saveComponentStateInParent();
+    }, 2000);
+  }, [props.obsoleteTerms.length]);
 
   return (
     <div className="col-sm-12" onClick={(e) => processClick(e)}>

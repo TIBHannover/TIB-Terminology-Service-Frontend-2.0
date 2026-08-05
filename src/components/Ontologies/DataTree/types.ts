@@ -35,6 +35,7 @@ export type DataTreeProps = {
   key?: string;
   withPreferredRoots?: boolean;
   handlePreferredRootChange?: (withPreferredRoots: boolean) => Promise<void>;
+  handleObsoleteChange?: (showObsolete: boolean) => void;
 };
 
 export type TreeProps = DataTreeProps & {
@@ -52,6 +53,7 @@ export type TreeProps = DataTreeProps & {
   showListSwitchEnabled?: boolean;
   withPreferredRoots?: boolean;
   handlePreferredRootChange?: (withPreferredRoots: boolean) => Promise<void>;
+  handleObsoleteChange?: (showObsolete: boolean) => void;
 };
 
 export type TreeDomContent =
