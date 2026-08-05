@@ -132,7 +132,6 @@ export function individualMetadata(term: TsIndividual) {
   if (term.parentClasses) {
     metadata["Instance of"] = { value: term.parentClasses, isLink: false };
   }
-
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }

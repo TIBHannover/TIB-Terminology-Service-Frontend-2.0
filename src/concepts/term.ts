@@ -313,10 +313,7 @@ export class TsTerm {
         annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTPS];
       }
       for (let key in this.term) {
-        if (
-          !key.includes("purl.obolibrary.org") ||
-          key === TsTerm.CURATION_STATUS_PURL
-        ) {
+        if (key === TsTerm.CURATION_STATUS_PURL) {
           continue;
         }
         if (this.term["linkedEntities"]?.[key]?.["label"]?.length) {
