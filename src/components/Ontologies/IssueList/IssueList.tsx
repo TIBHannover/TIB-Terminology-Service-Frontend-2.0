@@ -26,7 +26,7 @@ const ISSUE_STATES_FOR_DROPDOWN = [
 
 const resultCountPerPage = 10;
 
-const IssueList = (props) => {
+const IssueList = () => {
   /* 
       This component is responsible for rendering the list of issues for the ontology.
       It uses the IssueListUrlFactory to get the selected state id, page number and issue type from the url.

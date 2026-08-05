@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import type { MouseEvent, ReactNode } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import TermApi from "../../../api/term";
@@ -36,10 +36,21 @@ const Tree = (props: TreeProps) => {
   */
 
   const ontologyPageContext = useContext(OntologyPageContext) as any;
+  const rootNodes =
+    props.componentIdentity === "properties"
+      ? ontologyPageContext.rootProps
+      : ontologyPageContext.rootTerms;
+  const obsoleteTerms =
+    props.isIndividual
+      ? []
+      : props.componentIdentity === "properties"
+      ? ontologyPageContext.obsoleteProps
+      : ontologyPageContext.obsoleteTerms;
   const lastState = ontologyPageContext.tabLastStates[
     props.componentIdentity
   ] as any;
   const urlFacory = new CommonUrlFactory();
+  const treeContainerRef = useRef<HTMLDivElement>(null);
 
   const [treeDomContent, setTreeDomContent] = useState<TreeDomContent>("");
   const [childExtractName, setChildExtractName] = useState(
@@ -82,7 +93,8 @@ const Tree = (props: TreeProps) => {
       noNodeExist,
     });
 
-    const componentHTML = document.getElementById("tree-root-ul")?.innerHTML;
+    const componentHTML =
+      treeContainerRef.current?.querySelector("#tree-root-ul")?.innerHTML;
     if (props.componentIdentity !== "individuals" && componentHTML) {
       ontologyPageContext.storeState(
         { _html_: componentHTML },
@@ -96,12 +108,13 @@ const Tree = (props: TreeProps) => {
 
   function setComponentData() {
     let extractName = props.componentIdentity;
-    if (props.rootNodes.length != 0 || resetTreeFlag || reload) {
+    if (rootNodes.length != 0 || resetTreeFlag || reload) {
       setChildExtractName(extractName);
       setReload(false);
       setNoNodeExist(false);
     } else if (
-      (props.rootNodes.length === 0 || props.rootNodesForSkos.length === 0) &&
+      (rootNodes.length === 0 ||
+        ontologyPageContext.skosRootIndividuals.length === 0) &&
       !noNodeExist &&
       props.componentIdentity !== "individuals"
     ) {
@@ -132,9 +145,9 @@ const Tree = (props: TreeProps) => {
         ontologyPageContext.isSkos &&
         props.componentIdentity !== "properties"
       ) {
-        result = buildTheTreeFirstLayer(props.rootNodesForSkos);
+        result = buildTheTreeFirstLayer(ontologyPageContext.skosRootIndividuals);
       } else {
-        result = buildTheTreeFirstLayer(props.rootNodes);
+        result = buildTheTreeFirstLayer(rootNodes);
       }
       treeList = result.treeDomContent;
       target = "";
@@ -210,7 +223,7 @@ const Tree = (props: TreeProps) => {
 
           if (obsoletesShown) {
             [childrenList, selectedItemId] = TreeHelper.renderObsoletes(
-              props.obsoleteTerms ?? [],
+              obsoleteTerms,
               childrenList,
               i,
               target,
@@ -290,7 +303,7 @@ const Tree = (props: TreeProps) => {
     }
     if (obsoletesShown) {
       [childrenList, selectedItemId] = TreeHelper.renderObsoletes(
-        props.obsoleteTerms ?? [],
+        obsoleteTerms,
         childrenList,
         i,
         targetSelectedNodeIri,
@@ -355,7 +368,7 @@ const Tree = (props: TreeProps) => {
       )
     ) {
       TreeHelper.showSiblingsForRootNode(
-        props.rootNodes,
+        rootNodes,
         (targetNodes[0].parentNode as HTMLElement).dataset.iri ?? "",
       );
     } else {
@@ -408,7 +421,9 @@ const Tree = (props: TreeProps) => {
 
   function showObsoletes() {
     Toolkit.setObsoleteInStorageAndUrl(!obsoletesShown);
-    props.handleObsoleteChange?.(!obsoletesShown);
+    if (!props.isIndividual) {
+      ontologyPageContext.handleObsoleteChange(!obsoletesShown);
+    }
     setReload(true);
     setIsLoading(true);
     setTreeDomContent("");
@@ -419,7 +434,7 @@ const Tree = (props: TreeProps) => {
     e: React.ChangeEvent<HTMLInputElement>,
   ) {
     resetTree();
-    await props.handlePreferredRootChange?.(e.target.checked);
+    await ontologyPageContext.handlePreferredRootChange(e.target.checked);
   }
 
   function processClick(e: MouseEvent<HTMLDivElement>) {
@@ -541,14 +556,15 @@ const Tree = (props: TreeProps) => {
           )}
           {props.componentIdentity === "terms" &&
             !ontologyPageContext.isSkos &&
-            props.handlePreferredRootChange && (
+            !props.isIndividual &&
+            ontologyPageContext.handlePreferredRootChange && (
               <div className="form-check form-switch d-flex align-items-center">
                 <input
                   className="form-check-input preferred-root-switch"
                   type="checkbox"
                   role="switch"
                   id="preferred-root-switch"
-                  checked={props.withPreferredRoots}
+                  checked={ontologyPageContext.withPreferredRoots}
                   onChange={handlePreferredRootSwitch}
                 />
                 <label
@@ -588,10 +604,16 @@ const Tree = (props: TreeProps) => {
 
   useEffect(() => {
     buildTheTree();
-    setTimeout(() => {
+    const timeoutId = window.setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
-  }, [resetTreeFlag, reload, props.rootNodes, props.rootNodesForSkos]);
+    return () => window.clearTimeout(timeoutId);
+  }, [
+    resetTreeFlag,
+    reload,
+    rootNodes,
+    ontologyPageContext.skosRootIndividuals,
+  ]);
 
   useEffect(() => {
     if (props.jumpToIri) {
@@ -609,10 +631,11 @@ const Tree = (props: TreeProps) => {
 
   useEffect(() => {
     buildTheTree();
-    setTimeout(() => {
+    const timeoutId = window.setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
-  }, [props.obsoleteTerms.length]);
+    return () => window.clearTimeout(timeoutId);
+  }, [obsoleteTerms.length]);
 
   return (
     <div className="col-sm-12" onClick={(e) => processClick(e)}>
@@ -638,12 +661,15 @@ const Tree = (props: TreeProps) => {
       {!isLoading && !noNodeExist && (
         <div className="row">
           {!(treeDomContent as any)._html_ ? (
-            <div className="col-sm-12 tree">{treeDomContent as ReactNode}</div>
+            <div className="col-sm-12 tree" ref={treeContainerRef}>
+              {treeDomContent as ReactNode}
+            </div>
           ) : (
             Toolkit.renderDangerousHtml(
               (treeDomContent as { _html_: string })._html_,
               {
                 className: "col-sm-12 tree",
+                ref: treeContainerRef,
               },
             )
           )}

@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
 import "../layout/diff2html_table_row_fixed.css";
-import PropTypes from "prop-types";
 import OndetApi from "../../api/ondet";
 import { OntologyPageContext } from "../../context/OntologyPageContext";
 import { useContext } from "react";
@@ -24,8 +23,9 @@ const customMarkdownComponents: any = {
   },
 };
 
-const ChangesTimeline = ({ ontologyRawUrl }) => {
+const ChangesTimeline = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
+  const ontologyRawUrl = ontologyPageContext.ontology.versionedUrl;
   const [ontologyCommits, setOntologyCommits] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -253,10 +253,6 @@ const ChangesTimeline = ({ ontologyRawUrl }) => {
       )}
     </div>
   );
-};
-
-ChangesTimeline.propTypes = {
-  ontologyRawUrl: PropTypes.string.isRequired,
 };
 
 export default ChangesTimeline;

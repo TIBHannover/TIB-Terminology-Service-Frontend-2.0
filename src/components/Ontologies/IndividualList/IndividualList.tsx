@@ -17,6 +17,8 @@ const IndividualsList = (props) => {
   */
 
   const ontologyPageContext = useContext(OntologyPageContext);
+  const rootNodes = ontologyPageContext.rootTerms;
+  const rootNodesForSkos = ontologyPageContext.skosRootIndividuals;
   const lastVisitedIri =
     ontologyPageContext.lastVisitedIri[props.componentIdentity];
 
@@ -145,16 +147,13 @@ const IndividualsList = (props) => {
     let result = [
       <div className="tree-container">
         <Tree
-          rootNodes={props.rootNodes}
-          obsoleteTerms={[]}
-          rootNodesForSkos={props.rootNodesForSkos}
           componentIdentity={"terms"}
           selectedNodeIri={selectedNodeIri}
           key={props.key}
           rootNodeNotExist={
             ontologyPageContext.isSkos
-              ? props.rootNodesForSkos.length === 0
-              : props.rootNodes.length === 0
+              ? rootNodesForSkos.length === 0
+              : rootNodes.length === 0
           }
           handleNodeSelectionInDataTree={handleNodeSelectionInTreeView}
           isIndividual={!ontologyPageContext.isSkos}
@@ -247,9 +246,9 @@ const IndividualsList = (props) => {
           />
         )}
         {!listView &&
-          (props.rootNodes.length !== 0 ||
+          (rootNodes.length !== 0 ||
             (ontologyPageContext.isSkos &&
-              props.rootNodesForSkos.length !== 0)) &&
+              rootNodesForSkos.length !== 0)) &&
           createIndividualTree()}
       </div>
       {showNodeDetailPage && paneResizeClass.generateVerticalResizeLine()}
@@ -269,8 +268,6 @@ const IndividualsList = (props) => {
 };
 
 IndividualsList.propTypes = {
-  rootNodes: PropTypes.array,
-  rootNodesForSkos: PropTypes.array,
   componentIdentity: PropTypes.string,
   key: PropTypes.string,
 };

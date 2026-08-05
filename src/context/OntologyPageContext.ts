@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { TsOntology } from "../concepts";
 import { ComponentIdentity } from "../components/Ontologies/OntologyPage/OntologyPage";
+import type { TreeTermNode } from "../components/Ontologies/DataTree/types";
 
 type Blueprint = {
   ontology: TsOntology;
@@ -19,7 +20,15 @@ type Blueprint = {
   fullScreenMode: boolean;
   setFullscreenMode: React.Dispatch<React.SetStateAction<boolean>>;
   handleFullScreen: () => void;
-  repositories: string[]
+  repositories: string[];
+  rootTerms: TreeTermNode[];
+  rootProps: TreeTermNode[];
+  skosRootIndividuals: TreeTermNode[];
+  obsoleteTerms: TreeTermNode[];
+  obsoleteProps: TreeTermNode[];
+  withPreferredRoots: boolean;
+  handlePreferredRootChange: (withPreferredRoots: boolean) => Promise<void>;
+  handleObsoleteChange: (showObsolete: boolean) => void;
 };
 
 const blueprint: Blueprint = {
@@ -39,7 +48,15 @@ const blueprint: Blueprint = {
   fullScreenMode: false,
   setFullscreenMode: function setFullscreenMode() {},
   handleFullScreen: function handleFullScreen() {},
-    repositories: []
+  repositories: [],
+  rootTerms: [],
+  rootProps: [],
+  skosRootIndividuals: [],
+  obsoleteTerms: [],
+  obsoleteProps: [],
+  withPreferredRoots: false,
+  handlePreferredRootChange: async function handlePreferredRootChange() {},
+  handleObsoleteChange: function handleObsoleteChange() {},
 };
 
 export const OntologyPageContext = createContext(blueprint);

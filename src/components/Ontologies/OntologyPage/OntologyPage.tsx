@@ -254,7 +254,6 @@ const OntologyPage = (props: CmpPropp) => {
   }
 
   async function handleObsoleteChange(showObsolete: boolean) {
-    console.log(showObsolete);
     if (showObsolete) {
       let ontologyApi = new OntologyApi({
         ontologyId: ontology.ontologyId,
@@ -305,6 +304,14 @@ const OntologyPage = (props: CmpPropp) => {
       setFullscreenMode: setFullscreenMode,
       handleFullScreen: handleFullScreen,
       repositories: repositories,
+      rootTerms: rootTerms,
+      rootProps: rootProps,
+      skosRootIndividuals: skosRootIndividuals,
+      obsoleteTerms: obsoleteTerms,
+      obsoleteProps: obsoleteProps,
+      withPreferredRoots: withPreferredRoots,
+      handlePreferredRootChange: handlePreferredRootChange,
+      handleObsoleteChange: handleObsoleteChange,
     };
 
     return (
@@ -336,40 +343,25 @@ const OntologyPage = (props: CmpPropp) => {
                     )}
                     {!waiting && activeTab === TERM_TREE_TAB_ID && (
                       <DataTree
-                        rootNodes={rootTerms}
-                        obsoleteTerms={obsoleteTerms}
                         componentIdentity={"terms"}
-                        rootNodesForSkos={skosRootIndividuals}
                         key={"termTreePage"}
-                        withPreferredRoots={withPreferredRoots}
-                        handlePreferredRootChange={handlePreferredRootChange}
-                        handleObsoleteChange={handleObsoleteChange}
                       />
                     )}
 
                     {!waiting && activeTab === PROPERTY_TREE_TAB_ID && (
                       <DataTree
-                        rootNodes={rootProps}
-                        obsoleteTerms={obsoleteProps}
                         componentIdentity={"properties"}
                         key={"propertyTreePage"}
-                        rootNodesForSkos={skosRootIndividuals}
-                        handleObsoleteChange={handleObsoleteChange}
                       />
                     )}
                     {!waiting && activeTab === INDIVIDUAL_LIST_TAB_ID && (
                       <IndividualsList
-                        rootNodes={rootTerms}
-                        rootNodesForSkos={skosRootIndividuals}
                         componentIdentity={"individuals"}
                         key={"individualsTreePage"}
                       />
                     )}
                     {!waiting && activeTab === TERM_LIST_TAB_ID && (
-                      <TermList
-                        componentIdentity={"termList"}
-                        key={"termListPage"}
-                      />
+                      <TermList key={"termListPage"} />
                     )}
                     {!waiting && activeTab === NOTES_TAB_ID && (
                       <Suspense fallback={TAB_LOADER}>
@@ -378,10 +370,7 @@ const OntologyPage = (props: CmpPropp) => {
                     )}
                     {!waiting && activeTab === GIT_ISSUE_LIST_ID && (
                       <Suspense fallback={TAB_LOADER}>
-                        <IssueList
-                          componentIdentity={"gitIssues"}
-                          key={"gitIssueList"}
-                        />
+                        <IssueList key={"gitIssueList"} />
                       </Suspense>
                     )}
 
@@ -403,9 +392,7 @@ const OntologyPage = (props: CmpPropp) => {
                           return fileUrl.host === "raw.githubusercontent.com" ||
                             fileUrl.host === "gitlab.com" ? (
                             <Suspense fallback={TAB_LOADER}>
-                              <ChangesTimeline
-                                ontologyRawUrl={ontology.versionedUrl}
-                              />
+                              <ChangesTimeline />
                             </Suspense>
                           ) : (
                             errorMessage

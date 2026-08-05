@@ -28,14 +28,11 @@ export type SelectedJumpTerm = {
 };
 
 export type DataTreeProps = {
-  rootNodes: TreeTermNode[];
-  obsoleteTerms?: TreeTermNode[];
-  rootNodesForSkos: TreeTermNode[];
   componentIdentity: string;
   key?: string;
-  withPreferredRoots?: boolean;
-  handlePreferredRootChange?: (withPreferredRoots: boolean) => Promise<void>;
-  handleObsoleteChange?: (showObsolete: boolean) => void;
+  rootNodes?: TreeTermNode[];
+  rootNodesForSkos?: TreeTermNode[];
+  obsoleteTerms?: TreeTermNode[];
 };
 
 export type TreeProps = DataTreeProps & {
@@ -51,9 +48,6 @@ export type TreeProps = DataTreeProps & {
   rootNodeNotExist?: boolean;
   isIndividual?: boolean;
   showListSwitchEnabled?: boolean;
-  withPreferredRoots?: boolean;
-  handlePreferredRootChange?: (withPreferredRoots: boolean) => Promise<void>;
-  handleObsoleteChange?: (showObsolete: boolean) => void;
 };
 
 export type TreeDomContent =

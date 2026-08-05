@@ -27,6 +27,10 @@ const DataTree = (props: DataTreeProps) => {
   */
 
   const ontologyPageContext = useContext(OntologyPageContext);
+  const rootNodes =
+    props.componentIdentity === "properties"
+      ? ontologyPageContext.rootProps
+      : ontologyPageContext.rootTerms;
 
   const [selectedNodeIri, setSelectedNodeIri] = useState("");
   const [showDetailTable, setShowDetailTable] = useState(false);
@@ -144,14 +148,11 @@ const DataTree = (props: DataTreeProps) => {
       <div className="tree-page-left-part" id="page-left-pane">
         <div className="tree-container">
           {!loading &&
-            (props.rootNodes.length !== 0 ||
+            (rootNodes.length !== 0 ||
               (ontologyPageContext.isSkos &&
-                props.rootNodesForSkos.length !== 0 &&
+                ontologyPageContext.skosRootIndividuals.length !== 0 &&
                 props.componentIdentity !== "properties")) && (
               <TreeComponent
-                rootNodes={props.rootNodes}
-                obsoleteTerms={props.obsoleteTerms}
-                rootNodesForSkos={props.rootNodesForSkos}
                 componentIdentity={props.componentIdentity}
                 selectedNodeIri={selectedNodeIri}
                 key={props.key}
@@ -160,14 +161,11 @@ const DataTree = (props: DataTreeProps) => {
                 handleResetTreeInParent={handleResetTreeEvent}
                 jumpToIri={jumpToIri}
                 handleJumtoSelection={handleJumtoSelection}
-                handlePreferredRootChange={props.handlePreferredRootChange}
-                withPreferredRoots={props.withPreferredRoots}
-                handleObsoleteChange={props.handleObsoleteChange}
               />
             )}
-          {(!loading && props.rootNodes.length === 0) ||
+          {(!loading && rootNodes.length === 0) ||
             (ontologyPageContext.isSkos &&
-              props.rootNodesForSkos.length === 0 &&
+              ontologyPageContext.skosRootIndividuals.length === 0 &&
               props.componentIdentity !== "properties" && (
                 <div className="no-node">
                   There is no term to load in this tree

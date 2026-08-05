@@ -4,14 +4,14 @@ import Toolkit from "../../../Libs/Toolkit";
 import { RenderTermList } from "./RenderTermList";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import TermListUrlFactory from "../../../UrlFactory/TermListUrlFactory";
-import PropTypes from "prop-types";
 import "../../layout/termList.css";
 import { getTourProfile } from "../../../tours/controller";
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_NUMBER = 1;
+const COMPONENT_IDENTITY = "termList";
 
-const TermList = (props) => {
+const TermList = () => {
   /* 
       This component is responsible for rendering the list of terms in the ontology.
       It requires the ontologyPageContext to be available.
@@ -158,7 +158,7 @@ const TermList = (props) => {
 
   return (
     <RenderTermList
-      componentIdentity={props.componentIdentity}
+      componentIdentity={COMPONENT_IDENTITY}
       iri={iri}
       pageSize={pageSize}
       handlePageSizeDropDownChange={handlePageSizeDropDownChange}
@@ -175,10 +175,6 @@ const TermList = (props) => {
       isObsolete={obsoletes}
     />
   );
-};
-
-TermList.propTypes = {
-  componentIdentity: PropTypes.string.isRequired,
 };
 
 export default TermList;
