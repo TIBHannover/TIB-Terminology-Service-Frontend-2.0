@@ -26,6 +26,10 @@ const PAGE_SIZES_FOR_DROPDOWN = [
 ];
 const DEFAUTL_ROWS_COUNT = 10;
 
+function annotationValue(annotation: any, key: string) {
+  return TsTerm.getAnnotationValue(annotation?.[key]);
+}
+
 const TermSetPage = (props: TermsetPageComProps) => {
   const termsetId = props.match.params.termsetId;
   const urlFactory = new CommonUrlFactory();
@@ -95,13 +99,11 @@ const TermSetPage = (props: TermsetPageComProps) => {
       termMap.set("shortForm", { value: term.shortForm, valueLink: "" });
       termMap.set("label", { value: term.label, valueLink: termTreeUrl });
       termMap.set("decs", {
-        value: term.definition ?? annotation?.definition,
+        value: term.definition ?? annotationValue(annotation, "definition"),
         valueLink: "",
       });
       termMap.set("altTerm", {
-        value: annotation["alternative label"]
-          ? annotation["alternative label"]
-          : "N/A",
+        value: annotationValue(annotation, "alternative label") ?? "N/A",
         valueLink: "",
       });
       if (term instanceof TsClass) {
@@ -124,18 +126,16 @@ const TermSetPage = (props: TermsetPageComProps) => {
         });
       }
       termMap.set("example", {
-        value: annotation["example of usage"]
-          ? annotation["example of usage"]
-          : "N/A",
+        value: annotationValue(annotation, "example of usage") ?? "N/A",
         valueLink: "",
       });
       termMap.set("seealso", {
-        value: annotation["seeAlso"] ? annotation["seeAlso"] : "N/A",
+        value: annotationValue(annotation, "seeAlso") ?? "N/A",
         valueLink: "",
       });
       termMap.set("contrib", { value: term.contributors, valueLink: "" });
       termMap.set("comment", {
-        value: annotation["comment"] ? annotation["comment"] : "N/A",
+        value: annotationValue(annotation, "comment") ?? "N/A",
         valueLink: "",
       });
       termMap.set("action", { value: DeleteBtn, valueLink: "" });
@@ -191,13 +191,13 @@ const TermSetPage = (props: TermsetPageComProps) => {
       let row = [];
       row.push(escapeForCSV(term["shortForm"]));
       row.push(escapeForCSV(term.label));
-      row.push(escapeForCSV(term.definition ?? annotation?.definition));
       row.push(
         escapeForCSV(
-          annotation["alternative label"]
-            ? annotation["alternative label"]
-            : "N/A",
+          term.definition ?? annotationValue(annotation, "definition"),
         ),
+      );
+      row.push(
+        escapeForCSV(annotationValue(annotation, "alternative label") ?? "N/A"),
       );
       if (term instanceof TsClass) {
         row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
@@ -207,18 +207,14 @@ const TermSetPage = (props: TermsetPageComProps) => {
         row.push(escapeForCSV("N/A"));
       }
       row.push(
-        escapeForCSV(
-          annotation["example of usage"]
-            ? annotation["example of usage"]
-            : "N/A",
-        ),
+        escapeForCSV(annotationValue(annotation, "example of usage") ?? "N/A"),
       );
       row.push(
-        escapeForCSV(annotation["seeAlso"] ? annotation["seeAlso"] : "N/A"),
+        escapeForCSV(annotationValue(annotation, "seeAlso") ?? "N/A"),
       );
       row.push(escapeForCSV(term.contributors));
       row.push(
-        escapeForCSV(annotation["comment"] ? annotation["comment"] : "N/A"),
+        escapeForCSV(annotationValue(annotation, "comment") ?? "N/A"),
       );
       rows.push(row);
     }

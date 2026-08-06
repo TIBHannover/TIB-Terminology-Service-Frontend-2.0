@@ -1,3 +1,5 @@
+import { MathFormulaWidget } from "@ts4nfdi/terminology-service-suite";
+import { QueryClient, QueryClientProvider } from "react-query";
 import TermLib from "../../../../Libs/TermLib";
 import Toolkit from "../../../../Libs/Toolkit";
 import { TableMetadata } from "../types";
@@ -15,11 +17,35 @@ const annotationKeyMap: Record<string, string> = {
   "smiles string": "SMILES",
 };
 
+const mathWidgetApi = "https://api.terminology.tib.eu/api/";
+const mathWidgetQueryClient = new QueryClient();
+
+function hasMathMlValue(value: any): boolean {
+  if (!value) {
+    return false;
+  }
+  if (typeof value === "string") {
+    return /<math[\s>]/i.test(value);
+  }
+  if (Array.isArray(value)) {
+    return value.some(hasMathMlValue);
+  }
+  if (typeof value === "object") {
+    return (
+      hasMathMlValue(value.value) ||
+      hasMathMlValue(value.label) ||
+      hasMathMlValue(value.format)
+    );
+  }
+  return false;
+}
+
 function createBaseMetadata(term: TsTerm): TableMetadata {
   let metadata: TableMetadata = {};
   metadata["Label"] = { value: term.label, isLink: false };
   metadata["Description"] = {
-    value: term.definition ?? term?.annotation?.definition,
+    value:
+      term.definition ?? TsTerm.getAnnotationValue(term?.annotation?.definition),
     isLink: false,
   };
   if (term.originalOntology !== term.ontologyId) {
@@ -52,6 +78,8 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
 function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
   // add custom annotation fields. Metadata key can be anything
   for (let key in term.annotation) {
+    const annotation = term.annotation[key];
+    const annotationValue = TsTerm.getAnnotationValue(annotation);
     if (key === "definition" || key === "has_dbxref") {
       continue;
     }
@@ -62,9 +90,25 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
     } else {
       annotKey = annotationKeyMap[key] ?? (key as string);
     }
-    if (Array.isArray(term.annotation[key])) {
+    if (hasMathMlValue(annotationValue)) {
+      metadata[annotKey] = {
+        value: (
+          <QueryClientProvider client={mathWidgetQueryClient}>
+            <MathFormulaWidget
+              api={mathWidgetApi}
+              iri={term.iri}
+              mathProperty={TsTerm.getAnnotationOriginalIri(annotation, key)}
+              ontologyId={term.ontologyId}
+            />
+          </QueryClientProvider>
+        ),
+        isLink: false,
+      };
+      continue;
+    }
+    if (Array.isArray(annotationValue)) {
       let res: string[] = [];
-      term.annotation[key].map((value: any) => {
+      annotationValue.map((value: any) => {
         if (typeof value === "object" && value.value) {
           res.push(Toolkit.transformLinksInStringToAnchor(value.value));
         } else {
@@ -72,19 +116,14 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
         }
       });
       metadata[annotKey] = { value: res, isLink: false };
-    } else if (
-      typeof term.annotation[key] === "object" &&
-      term.annotation[key].value
-    ) {
+    } else if (typeof annotationValue === "object" && annotationValue.value) {
       metadata[annotKey] = {
-        value: Toolkit.transformLinksInStringToAnchor(
-          term.annotation[key].value,
-        ),
+        value: Toolkit.transformLinksInStringToAnchor(annotationValue.value),
         isLink: false,
       };
     } else {
       metadata[annotKey] = {
-        value: Toolkit.transformLinksInStringToAnchor(term.annotation[key]),
+        value: Toolkit.transformLinksInStringToAnchor(annotationValue),
         isLink: false,
       };
     }
@@ -113,13 +152,11 @@ export function classMetaData(term: TsClass) {
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }
-  if (
-    term.annotation["has_dbxref"] &&
-    term.annotation["has_dbxref"].length > 0
-  ) {
+  const dbXref = TsTerm.getAnnotationValue(term.annotation["has_dbxref"]);
+  if (dbXref && dbXref.length > 0) {
     const xrefContent = `
         <ul>
-            ${term.annotation["has_dbxref"].map((xref: string) => `<li>${xref}</li>`).join("")}
+            ${dbXref.map((xref: string) => `<li>${xref}</li>`).join("")}
         </ul>
       `;
     metadata["has dbxref"] = { value: xrefContent, isLink: false };
@@ -181,13 +218,11 @@ export function skosTermMetaData(term: TsSkosTerm) {
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }
-  if (
-    term.annotation["has_dbxref"] &&
-    term.annotation["has_dbxref"].length > 0
-  ) {
+  const dbXref = TsTerm.getAnnotationValue(term.annotation["has_dbxref"]);
+  if (dbXref && dbXref.length > 0) {
     const xrefContent = `
         <ul>
-            ${term.annotation["has_dbxref"].map((xref: string) => `<li>${xref}</li>`).join("")}
+            ${dbXref.map((xref: string) => `<li>${xref}</li>`).join("")}
         </ul>
       `;
     metadata["has dbxref"] = { value: xrefContent, isLink: false };

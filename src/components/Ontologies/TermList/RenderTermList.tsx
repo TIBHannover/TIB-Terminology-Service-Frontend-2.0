@@ -6,6 +6,7 @@ import AlertBox from "../../common/Alerts/Alerts";
 import TermLib from "../../../Libs/TermLib";
 import TermTable from "../../common/TermTable/TermTable";
 import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
+import { TsTerm } from "../../../concepts";
 
 const PAGE_SIZES_FOR_DROPDOWN = [
   { label: "20", value: 20 },
@@ -79,13 +80,13 @@ export const RenderTermList = (props) => {
       termMap.set("shortForm", { value: term["shortForm"], valueLink: "" });
       termMap.set("label", { value: term["label"], valueLink: termTreeUrl });
       termMap.set("decs", {
-        value: term.definition ?? annotation?.definition,
+        value:
+          term.definition ?? TsTerm.getAnnotationValue(annotation?.definition),
         valueLink: "",
       });
       termMap.set("altTerm", {
-        value: annotation["alternative label"]
-          ? annotation["alternative label"]
-          : "N/A",
+        value:
+          TsTerm.getAnnotationValue(annotation["alternative label"]) ?? "N/A",
         valueLink: "",
       });
       termMap.set("subclass", {
@@ -99,15 +100,14 @@ export const RenderTermList = (props) => {
         valueIsHtml: true,
       });
       termMap.set("example", {
-        value: term["annotation"]["example of usage"]
-          ? term["annotation"]["example of usage"]
-          : "N/A",
+        value:
+          TsTerm.getAnnotationValue(term["annotation"]["example of usage"]) ??
+          "N/A",
         valueLink: "",
       });
       termMap.set("seealso", {
-        value: term["annotation"]["seeAlso"]
-          ? term["annotation"]["seeAlso"]
-          : "N/A",
+        value:
+          TsTerm.getAnnotationValue(term["annotation"]["seeAlso"]) ?? "N/A",
         valueLink: "",
       });
       termMap.set("contrib", {
@@ -115,9 +115,8 @@ export const RenderTermList = (props) => {
         valueLink: "",
       });
       termMap.set("comment", {
-        value: term["annotation"]["comment"]
-          ? term["annotation"]["comment"]
-          : "N/A",
+        value:
+          TsTerm.getAnnotationValue(term["annotation"]["comment"]) ?? "N/A",
         valueLink: "",
       });
       termMap.set("action", { value: addToSetButton, valueLink: "" });

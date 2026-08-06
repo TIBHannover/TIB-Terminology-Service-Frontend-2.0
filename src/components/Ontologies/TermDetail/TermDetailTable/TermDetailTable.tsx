@@ -1,3 +1,4 @@
+import { isValidElement } from "react";
 import {
   classMetaData,
   propertyMetaData,
@@ -130,6 +131,9 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
   ) {
     if (!props.node) {
       return;
+    }
+    if (isValidElement(metadataValue)) {
+      return metadataValue;
     }
     if (isLink) {
       return (

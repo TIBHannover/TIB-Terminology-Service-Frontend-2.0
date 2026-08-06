@@ -198,11 +198,11 @@ class TermLib {
 
   static getContributors(term) {
     if (term["annotation"]?.["contributor"]) {
-      return term["annotation"]["contributor"];
+      return TsTerm.getAnnotationValue(term["annotation"]["contributor"]);
     } else if (term["annotation"]?.["term editor"]) {
-      return term["annotation"]["term editor"];
+      return TsTerm.getAnnotationValue(term["annotation"]["term editor"]);
     } else if (term["annotation"]?.["creator"]) {
-      return term["annotation"]["creator"];
+      return TsTerm.getAnnotationValue(term["annotation"]["creator"]);
     } else {
       return "N/A";
     }
@@ -220,9 +220,10 @@ class TermLib {
       if (term["linkedEntities"][key]) {
         if (typeof term[key] === "object" && !Array.isArray(term[key])) {
           annotations[term["linkedEntities"][key]["label"][0]] =
-            term[key]?.value;
+            TsTerm.createAnnotation(key, term[key]?.value);
         } else {
-          annotations[term["linkedEntities"][key]["label"][0]] = term[key];
+          annotations[term["linkedEntities"][key]["label"][0]] =
+            TsTerm.createAnnotation(key, term[key]);
         }
       }
     }

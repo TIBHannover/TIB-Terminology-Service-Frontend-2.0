@@ -53,12 +53,21 @@ export class TsClass extends TsTerm {
       let annotations = {} as { [key: string]: any };
       let dbXref = this.createDbXrefAnnotation();
       if (dbXref && dbXref.length) {
-        annotations["has_dbxref"] = dbXref;
+        annotations["has_dbxref"] = TsTerm.createAnnotation(
+          TsTerm.DB_XREF_PURL,
+          dbXref,
+        );
       }
       if (this.term[TsClass.IDENTIFIER_PURL_HTTP]) {
-        annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTP];
+        annotations["Identifier"] = TsTerm.createAnnotation(
+          TsClass.IDENTIFIER_PURL_HTTP,
+          this.term[TsClass.IDENTIFIER_PURL_HTTP],
+        );
       } else if (this.term[TsClass.IDENTIFIER_PURL_HTTPS]) {
-        annotations["Identifier"] = this.term[TsClass.IDENTIFIER_PURL_HTTPS];
+        annotations["Identifier"] = TsTerm.createAnnotation(
+          TsClass.IDENTIFIER_PURL_HTTPS,
+          this.term[TsClass.IDENTIFIER_PURL_HTTPS],
+        );
       }
       for (let key in this.term) {
         if (TsTerm.ANNOTATION_EXPECTION.includes(key)) {
@@ -70,10 +79,10 @@ export class TsClass extends TsTerm {
             !Array.isArray(this.term[key])
           ) {
             annotations[this.term["linkedEntities"][key]["label"][0]] =
-              this.term[key]?.value;
+              TsTerm.createAnnotation(key, this.term[key]?.value);
           } else {
             annotations[this.term["linkedEntities"][key]["label"][0]] =
-              this.term[key];
+              TsTerm.createAnnotation(key, this.term[key]);
           }
         }
       }

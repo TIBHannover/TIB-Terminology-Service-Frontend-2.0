@@ -3,6 +3,11 @@ import Toolkit from "../Libs/Toolkit";
 import { buildHtmlAnchor } from "../Libs/htmlFactory";
 import { createElement } from "react";
 
+export type TsAnnotation = {
+  originalIri: string;
+  metadavalue: any;
+};
+
 export class TsTerm {
   static TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
   static ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
@@ -199,11 +204,11 @@ export class TsTerm {
 
   get contributors() {
     if (this.annotation?.["contributor"]) {
-      return this.annotation["contributor"];
+      return TsTerm.getAnnotationValue(this.annotation["contributor"]);
     } else if (this.annotation?.["term editor"]) {
-      return this.annotation["term editor"];
+      return TsTerm.getAnnotationValue(this.annotation["term editor"]);
     } else if (this.annotation?.["creator"]) {
-      return this.annotation["creator"];
+      return TsTerm.getAnnotationValue(this.annotation["creator"]);
     } else {
       return "N/A";
     }
@@ -308,9 +313,15 @@ export class TsTerm {
     try {
       let annotations: { [key: string]: any } = {};
       if (this.term[TsTerm.IDENTIFIER_PURL_HTTP]) {
-        annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTP];
+        annotations["Identifier"] = TsTerm.createAnnotation(
+          TsTerm.IDENTIFIER_PURL_HTTP,
+          this.term[TsTerm.IDENTIFIER_PURL_HTTP],
+        );
       } else if (this.term[TsTerm.IDENTIFIER_PURL_HTTPS]) {
-        annotations["Identifier"] = this.term[TsTerm.IDENTIFIER_PURL_HTTPS];
+        annotations["Identifier"] = TsTerm.createAnnotation(
+          TsTerm.IDENTIFIER_PURL_HTTPS,
+          this.term[TsTerm.IDENTIFIER_PURL_HTTPS],
+        );
       }
       for (let key in this.term) {
         if (key === TsTerm.CURATION_STATUS_PURL) {
@@ -322,10 +333,10 @@ export class TsTerm {
             !Array.isArray(this.term[key])
           ) {
             annotations[this.term?.["linkedEntities"][key]["label"][0]] =
-              this.term[key]?.value;
+              TsTerm.createAnnotation(key, this.term[key]?.value);
           } else {
             annotations[this.term?.["linkedEntities"][key]["label"][0]] =
-              this.term[key];
+              TsTerm.createAnnotation(key, this.term[key]);
           }
         }
       }
@@ -333,5 +344,32 @@ export class TsTerm {
     } catch (e) {
       return {};
     }
+  }
+
+  static createAnnotation(originalIri: string, metadavalue: any): TsAnnotation {
+    return { originalIri, metadavalue };
+  }
+
+  static getAnnotationValue(annotation: any) {
+    if (
+      annotation &&
+      typeof annotation === "object" &&
+      "originalIri" in annotation &&
+      "metadavalue" in annotation
+    ) {
+      return annotation.metadavalue;
+    }
+    return annotation;
+  }
+
+  static getAnnotationOriginalIri(annotation: any, fallback: string) {
+    if (
+      annotation &&
+      typeof annotation === "object" &&
+      "originalIri" in annotation
+    ) {
+      return annotation.originalIri;
+    }
+    return fallback;
   }
 }
