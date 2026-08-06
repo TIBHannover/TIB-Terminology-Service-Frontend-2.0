@@ -169,26 +169,28 @@ export class TsClass extends TsTerm {
       let ul = document.createElement("ul");
       for (let i = 0; i < data.length; i++) {
         let subClassData = data[i];
-        if (typeof subClassData === "object" && subClassData.value) {
-          subClassData = subClassData.value;
-        }
-        if (typeof subClassData === "string") {
-          if (!this.term["linkedEntities"][subClassData]) {
+        let [subClassIri, subClassIsIri] =
+          this.getStringValueIfPossible(subClassData);
+        if (subClassIsIri) {
+          if (!this.term["linkedEntities"][subClassIri]) {
             continue;
           }
           let parentLabel =
-            this.term["linkedEntities"][subClassData]["label"][0];
+            this.term["linkedEntities"][subClassIri]["label"][0];
+          let [parentLableString, _] =
+            this.getStringValueIfPossible(parentLabel);
           let parentLi = document.createElement("li");
-          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(subClassData)}`;
-          let parentAnchor = buildHtmlAnchor(parentUrl, parentLabel);
+          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(subClassIri)}`;
+          let parentAnchor = buildHtmlAnchor(parentUrl, parentLableString);
           parentLi.appendChild(parentAnchor);
           ul.appendChild(parentLi);
-          continue;
+        } else {
+          // subclassdata is object. Nees recursive processing
+          let li = document.createElement("li");
+          let content = this.recSubClass(subClassData)!;
+          li.appendChild(content);
+          ul.appendChild(li);
         }
-        let li = document.createElement("li");
-        let content = this.recSubClass(subClassData)!;
-        li.appendChild(content);
-        ul.appendChild(li);
       }
 
       return ul.outerHTML;
@@ -204,7 +206,9 @@ export class TsClass extends TsTerm {
       liContent.appendChild(buildOpenParanthesis());
       if (typeof relationObj[0] === "string") {
         let targetIri = relationObj[0];
-        let targetLabel = this.term["linkedEntities"][targetIri]["label"][0];
+        let [targetLabel, _] = this.getStringValueIfPossible(
+          this.term["linkedEntities"][targetIri]["label"][0],
+        );
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
         liContent.appendChild(targetAnchor);
@@ -218,7 +222,9 @@ export class TsClass extends TsTerm {
 
       if (typeof relationObj[1] === "string") {
         let targetIri = relationObj[1];
-        let targetLabel = this.term["linkedEntities"][targetIri]["label"][0];
+        let [targetLabel, _] = this.getStringValueIfPossible(
+          this.term["linkedEntities"][targetIri]["label"][0],
+        );
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
         liContent.appendChild(targetAnchor);
@@ -238,7 +244,9 @@ export class TsClass extends TsTerm {
         )!;
         return this.recSubClass(relationObj[relKey], relKey?.split("#")[1]);
       }
-      let propertyLabel = this.term["linkedEntities"][propertyIri]["label"][0];
+      let [propertyLabel, _] = this.getStringValueIfPossible(
+        this.term["linkedEntities"][propertyIri]["label"][0],
+      );
       let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
       let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
       let liContent = document.createElement("span");
@@ -261,7 +269,9 @@ export class TsClass extends TsTerm {
         }
         // the target is an iri
         let targetIri = relationObj[targetKey];
-        let targetLabel = this.term["linkedEntities"][targetIri]["label"][0];
+        let [targetLabel, _] = this.getStringValueIfPossible(
+          this.term["linkedEntities"][targetIri]["label"][0],
+        );
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
         liContent.appendChild(targetAnchor);
@@ -311,5 +321,19 @@ export class TsClass extends TsTerm {
       // console.log(e);
       return "";
     }
+  }
+
+  private getStringValueIfPossible(value: any): [string, boolean] {
+    if (typeof value === "string") {
+      return [value, true];
+    }
+    if (
+      typeof value === "object" &&
+      value.value &&
+      typeof value.value === "string"
+    ) {
+      return [value.value, true];
+    }
+    return [value, false];
   }
 }
