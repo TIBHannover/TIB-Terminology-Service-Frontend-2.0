@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Route } from "react-router-dom";
+import { Route } from "../../../Libs/reactRouterCompat";
 import UserPanel from "./UserPanel";
 import { AppContext } from "../../../context/AppContext";
 

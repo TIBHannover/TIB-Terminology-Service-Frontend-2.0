@@ -1,5 +1,5 @@
 import RequireLoginRoute from "./components/User/Login/RequireLoginRoute";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch } from "./Libs/reactRouterCompat";
 import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 import LoadingPage from "./LoadingPage";
