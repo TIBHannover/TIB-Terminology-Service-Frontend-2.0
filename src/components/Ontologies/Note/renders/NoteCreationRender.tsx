@@ -205,7 +205,7 @@ export const NoteCreationRender = (props: NoteCreationRenderProps) => {
               <TextEditor
                 editorState={props.editorState}
                 textChangeHandlerFunction={props.onTextAreaChange}
-                wrapperClassName=""
+                wrapperClassName="note-creation-text-editor"
                 editorClassName=""
                 placeholder="Note Content"
                 textSizeOptions={["Normal", "Blockquote", "Code"]}

@@ -53,7 +53,7 @@ body .rdw-editor-wrapper {
   border-radius: 10px;
 }
 
-body .rdw-editor-main {
+body .git-issue-content-box .rdw-editor-main {
   height: 400px;
   padding: 10px;
 }
@@ -108,7 +108,7 @@ body .rdw-editor-main {
     overflow-wrap: anywhere;
   }
 
-  body .rdw-editor-main {
+  body .git-issue-content-box .rdw-editor-main {
     height: 320px;
     padding: 8px;
     font-size: var(--font-size-sm);

@@ -3,7 +3,7 @@ import DropDown from "../../common/DropDown/DropDown";
 import TextEditor from "../../common/TextEditor/TextEditor";
 import {
   createHtmlFromEditorJson,
-  getTextEditorContent,
+  createTextEditorEmptyText,
 } from "../../common/TextEditor/TextEditor";
 import { sendContactFrom } from "../../../api/user";
 import AlertBox from "../../common/Alerts/Alerts";
@@ -13,7 +13,7 @@ import "../../layout/userPanel.css";
 const ContactForm = (props) => {
   const { appErrorUrl, appErrorContent } = props;
 
-  const [editorState, setEditorState] = useState(null);
+  const [editorState, setEditorState] = useState(createTextEditorEmptyText());
   const [contactType, setContactType] = useState(!appErrorUrl ? 0 : "2");
   const [typeHintTextShow, setTypeHintTextShow] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -179,7 +179,7 @@ const ContactForm = (props) => {
                   <TextEditor
                     editorState={editorState}
                     textChangeHandlerFunction={onTextAreaChange}
-                    wrapperClassName=""
+                    wrapperClassName="contact-form-text-editor"
                     editorClassName=""
                     placeholder="Enter your query here"
                     textSizeOptions={[
