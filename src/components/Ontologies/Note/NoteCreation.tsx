@@ -7,6 +7,7 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { AppContext } from "../../../context/AppContext";
 import { NoteContext } from "../../../context/NoteContext";
 import FormLib from "../../../Libs/FormLib";
+import { createTextEditorEmptyText } from "../../common/TextEditor/TextEditor";
 import type {
   EditorStateValue,
   InputChangeEvent,
@@ -44,7 +45,9 @@ const NoteCreation = (props: NoteCreationProps) => {
   const [visibility, setVisibility] = useState<number | string>(
     constantsVars.VISIBILITY_ONLY_ME,
   );
-  const [editorState, setEditorState] = useState<EditorStateValue>(null);
+  const [editorState, setEditorState] = useState<EditorStateValue>(
+    createTextEditorEmptyText(),
+  );
   const [selectedTermFromAutoComplete, setSelectedTermFromAutoComplete] =
     useState<SelectedTerm>(selectedTerm);
   const [parentOntology, setParentOntology] = useState<string | null>(null);
@@ -83,7 +86,7 @@ const NoteCreation = (props: NoteCreationProps) => {
   }
 
   function closeModal(newNoteId: boolean | string | object = true) {
-    setEditorState(null);
+    setEditorState(createTextEditorEmptyText());
     setSelectedTermFromAutoComplete({ iri: null, label: null });
     setParentOntology(null);
   }

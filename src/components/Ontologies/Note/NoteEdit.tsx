@@ -1,5 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import { createTextEditorStateFromJson } from "../../common/TextEditor/TextEditor";
+import {
+  createTextEditorEmptyText,
+  createTextEditorStateFromJson,
+} from "../../common/TextEditor/TextEditor";
 import * as constantsVars from "./Constants";
 import { submitNote } from "../../../api/note";
 import { NoteCreationRender } from "./renders/NoteCreationRender";
@@ -135,7 +138,7 @@ const NoteEdit = (props: NoteEditProps) => {
   }
 
   function closeModal(reloadPage: boolean | string | object = false) {
-    setEditorState(null);
+    setEditorState(createTextEditorEmptyText());
     setSelectedTermFromAutoComplete({ iri: null, label: null });
     if (reloadPage) {
       let searchParams = new URLSearchParams(window.location.search);

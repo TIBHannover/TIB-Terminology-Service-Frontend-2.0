@@ -4,7 +4,9 @@ import { EditorState, convertToRaw } from "draft-js";
 import { stateFromMarkdown } from "draft-js-import-markdown";
 import draftToMarkdown from "draftjs-to-markdown";
 import templatePath from "./termRequestTemplate.md";
-import TextEditor from "../../common/TextEditor/TextEditor";
+import TextEditor, {
+  createTextEditorEmptyText,
+} from "../../common/TextEditor/TextEditor";
 import { getGitRepoTemplates, submitGitIssue } from "../../../api/github";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import PropTypes from "prop-types";
@@ -27,7 +29,9 @@ const TermRequest = (props) => {
   const ontologyPageContext = useContext(OntologyPageContext);
   const appContext = useContext(AppContext);
 
-  const [editorState, setEditorState] = useState<any>(null);
+  const [editorState, setEditorState] = useState<any>(
+    createTextEditorEmptyText(),
+  );
   const [submitFinished, setSubmitFinished] = useState(false);
   const [errorInSubmit, setErrorInSubmit] = useState(false);
   const [newIssueUrl, setNewIssueUrl] = useState("");
@@ -176,7 +180,7 @@ const TermRequest = (props) => {
 
   function closeModal() {
     if (props.reportType === "general") {
-      setEditorState(null);
+      setEditorState(createTextEditorEmptyText());
     }
     setSubmitFinished(false);
     setErrorInSubmit(false);

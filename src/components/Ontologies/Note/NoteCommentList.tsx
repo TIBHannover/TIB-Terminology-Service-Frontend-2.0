@@ -93,7 +93,7 @@ const NoteCommentList = (props: NoteCommentListProps) => {
     submitNoteComment(data).then((result) => {
       if (result) {
         setNoteId(null);
-        setCommentEditorState(null);
+        setCommentEditorState(createTextEditorEmptyText());
         props.noteDetailReloader();
       }
     });
@@ -136,7 +136,7 @@ const NoteCommentList = (props: NoteCommentListProps) => {
     editNoteComment(data as any).then((result) => {
       if (result) {
         setNoteId(null);
-        setCommentEditorState(null);
+        setCommentEditorState(createTextEditorEmptyText());
         setEditCommentId(-1);
         setEditMode(false);
         props.noteDetailReloader();
@@ -146,7 +146,7 @@ const NoteCommentList = (props: NoteCommentListProps) => {
 
   function cancelEdit() {
     commonUrlFactory.deleteParam({ name: SiteUrlParamNames.CommentId });
-    setCommentEditorState(null);
+    setCommentEditorState(createTextEditorEmptyText());
     setEditCommentId(-1);
     setEditMode(false);
   }

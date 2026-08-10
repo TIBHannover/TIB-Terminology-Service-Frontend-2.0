@@ -4,7 +4,9 @@ import Multiselect from "multiselect-react-dropdown";
 import { useQuery } from "@tanstack/react-query";
 import { getCollectionsAndThierOntologies } from "../../../../api/collection";
 import { submitOntologySuggestion } from "../../../../api/ontology";
-import TextEditor from "../../../common/TextEditor/TextEditor";
+import TextEditor, {
+  createTextEditorEmptyText,
+} from "../../../common/TextEditor/TextEditor";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 import draftToMarkdown from "draftjs-to-markdown";
 import { convertToRaw } from "draft-js";
@@ -17,7 +19,7 @@ const CollectionSuggestion = (props) => {
   const ontoPageContext = useContext(OntologyPageContext);
 
   const [selectedCollections, setSelectedCollections] = useState([]);
-  const [editorState, setEditorState] = useState(null);
+  const [editorState, setEditorState] = useState(createTextEditorEmptyText());
   const [submitWait, setSubmitWait] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitSuccess, setFormSubmitSuccess] = useState(false);
@@ -65,7 +67,7 @@ const CollectionSuggestion = (props) => {
     if (
       !username ||
       !email ||
-      !editorState ||
+      !reason ||
       selectedCollections.length === 0
     ) {
       return;

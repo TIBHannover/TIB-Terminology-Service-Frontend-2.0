@@ -1,6 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import AlertBox from "../../common/Alerts/Alerts";
-import TextEditor from "../../common/TextEditor/TextEditor";
+import TextEditor, {
+  createTextEditorEmptyText,
+} from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
 import FormLib from "../../../Libs/FormLib";
@@ -36,7 +38,9 @@ const OntologySuggestion = () => {
   const [submitWait, setSubmitWait] = useState(false);
   const [runningTest, setRunningTest] = useState(false);
   const [testFailed, setTestFailed] = useState(false);
-  const [editorState, setEditorState] = useState<any>(null);
+  const [editorState, setEditorState] = useState<any>(
+    createTextEditorEmptyText(),
+  );
   const [progressStep, setProgressStep] = useState(
     ONTOLOGY_SUGGESTION_INTRO_STEP,
   );

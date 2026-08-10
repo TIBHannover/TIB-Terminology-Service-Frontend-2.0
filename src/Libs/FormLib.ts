@@ -24,12 +24,21 @@ class FormLib {
 
     let textEditorWrapper = document.getElementById(
       "rdw-wrapper-" + id,
-    ) as HTMLElement;
+    ) as HTMLElement | null;
+    if (!textEditorWrapper) {
+      return false;
+    }
     let textEditorTextBox = textEditorWrapper.getElementsByClassName(
       "rdw-editor-main",
     )[0] as HTMLElement;
-    if (!textEditorTextBox || !editorState) {
-      textEditorTextBox.style.border = "1px solid red";
+    if (
+      !textEditorTextBox ||
+      !editorState ||
+      typeof (editorState as any).getCurrentContent !== "function"
+    ) {
+      if (textEditorTextBox) {
+        textEditorTextBox.style.border = "1px solid red";
+      }
       return false;
     }
 
