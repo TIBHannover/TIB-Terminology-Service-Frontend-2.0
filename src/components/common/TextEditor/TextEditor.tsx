@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../layout/textEditor.css";
@@ -10,6 +10,7 @@ import {
   RichUtils,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import draftToMarkdown from "draftjs-to-markdown";
 import DOMPurify from "dompurify";
 
 type TextEditorProps = {
@@ -61,7 +62,11 @@ const TextEditor = (props: TextEditorProps) => {
   const [emptyEditorState] = useState(createTextEditorEmptyText);
   const [editorIsReady, setEditorIsReady] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const editorState = props.editorState ?? emptyEditorState;
+  const editorStateIsUsable = useMemo(
+    () => isUsableTextEditorState(props.editorState),
+    [props.editorState],
+  );
+  const editorState = editorStateIsUsable ? props.editorState : emptyEditorState;
   const editorStateRef = useRef(editorState);
   const fallbackTimeoutRef = useRef<number | null>(null);
 
@@ -271,8 +276,24 @@ const TextEditor = (props: TextEditorProps) => {
 };
 
 export function getTextEditorContent(editorState: any) {
-  let content = editorState.getCurrentContent();
-  return JSON.stringify(convertToRaw(content));
+  if (!isUsableTextEditorState(editorState)) {
+    return "";
+  }
+  try {
+    let content = editorState.getCurrentContent();
+    return JSON.stringify(convertToRaw(content));
+  } catch (e) {
+    return "";
+  }
+}
+
+export function getTextEditorMarkdownContent(editorState: any) {
+  try {
+    const content = getTextEditorContent(editorState);
+    return content ? draftToMarkdown(JSON.parse(content)) : "";
+  } catch (e) {
+    return "";
+  }
 }
 
 export function createTextEditorStateFromJson(jsonInput: string) {
@@ -299,6 +320,24 @@ export function createHtmlFromEditorJson(jsonInput: string) {
 
 export function createTextEditorEmptyText() {
   return EditorState.createWithContent(ContentState.createFromText(""));
+}
+
+function isUsableTextEditorState(editorState: any) {
+  if (!editorState || typeof editorState.getCurrentContent !== "function") {
+    return false;
+  }
+
+  try {
+    const content = editorState.getCurrentContent();
+    const blocks = content?.getBlockMap?.();
+    return (
+      typeof editorState.getSelection === "function" &&
+      typeof blocks?.every === "function" &&
+      blocks.every((block: any) => typeof block?.getKey === "function")
+    );
+  } catch (e) {
+    return false;
+  }
 }
 
 export default TextEditor;

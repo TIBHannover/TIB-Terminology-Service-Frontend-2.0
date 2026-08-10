@@ -43,6 +43,10 @@ class FormLib {
     }
 
     let content: any = getTextEditorContent(editorState);
+    if (!content) {
+      textEditorTextBox.style.border = "1px solid red";
+      return false;
+    }
     let contentJson = JSON.parse(content);
     let contentText: string = contentJson?.["blocks"]?.[0]?.["text"];
 

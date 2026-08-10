@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState } from "draft-js";
 import { stateFromMarkdown } from "draft-js-import-markdown";
-import draftToMarkdown from "draftjs-to-markdown";
 import templatePath from "./termRequestTemplate.md";
 import TextEditor, {
   createTextEditorEmptyText,
+  getTextEditorMarkdownContent,
 } from "../../common/TextEditor/TextEditor";
 import { getGitRepoTemplates, submitGitIssue } from "../../../api/github";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
@@ -118,8 +118,7 @@ const TermRequest = (props) => {
         "1px solid red";
       formIsValid = false;
     } else {
-      issueContent = editorState.getCurrentContent();
-      issueContent = draftToMarkdown(convertToRaw(issueContent));
+      issueContent = getTextEditorMarkdownContent(editorState);
     }
 
     if (!issueTitle || issueTitle === "") {

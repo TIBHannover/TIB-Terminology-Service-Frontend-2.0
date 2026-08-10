@@ -6,10 +6,9 @@ import { getCollectionsAndThierOntologies } from "../../../../api/collection";
 import { submitOntologySuggestion } from "../../../../api/ontology";
 import TextEditor, {
   createTextEditorEmptyText,
+  getTextEditorMarkdownContent,
 } from "../../../common/TextEditor/TextEditor";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
-import draftToMarkdown from "draftjs-to-markdown";
-import { convertToRaw } from "draft-js";
 import AlertBox from "../../../common/Alerts/Alerts";
 import FormLib from "../../../../Libs/FormLib";
 import Modal from "react-bootstrap/Modal";
@@ -77,8 +76,7 @@ const CollectionSuggestion = (props) => {
     for (let collectionId of selectedCollections) {
       collectionIds += collectionId + ",";
     }
-    reason = editorState.getCurrentContent();
-    reason = draftToMarkdown(convertToRaw(reason));
+    reason = getTextEditorMarkdownContent(editorState);
     const form = {
       username: username,
       email: email,

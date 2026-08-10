@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import AlertBox from "../../common/Alerts/Alerts";
 import TextEditor, {
   createTextEditorEmptyText,
+  getTextEditorMarkdownContent,
 } from "../../common/TextEditor/TextEditor";
 import Toolkit from "../../../Libs/Toolkit";
 import { OntologySuggestionContext } from "../../../context/OntologySuggestionContext";
@@ -12,8 +13,6 @@ import {
   checkSuggestionExist,
   checkOntologyPurlIsValidUrl,
 } from "../../../api/ontology";
-import draftToMarkdown from "draftjs-to-markdown";
-import { convertToRaw } from "draft-js";
 import { getCollectionsAndThierOntologies } from "../../../api/collection";
 import { useQuery } from "@tanstack/react-query";
 import Multiselect from "multiselect-react-dropdown";
@@ -239,8 +238,7 @@ const OntologySuggestion = () => {
     }
     setSubmitWait(true);
     let formData: any = form;
-    reason = editorState.getCurrentContent();
-    reason = draftToMarkdown(convertToRaw(reason));
+    reason = getTextEditorMarkdownContent(editorState);
     formData.reason = reason;
 
     submitOntologySuggestion(formData).then((result) => {
