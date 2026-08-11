@@ -9,6 +9,7 @@ import {
   TsProperty,
   TsTerm,
   TsSkosTerm,
+  ProcessedAxiom,
 } from "../../../../concepts";
 
 const annotationKeyMap: Record<string, string> = {
@@ -27,16 +28,6 @@ function hasMathMlValue(value: any): boolean {
   if (typeof value === "string") {
     return /<math[\s>]/i.test(value);
   }
-  if (Array.isArray(value)) {
-    return value.some(hasMathMlValue);
-  }
-  if (typeof value === "object") {
-    return (
-      hasMathMlValue(value.value) ||
-      hasMathMlValue(value.label) ||
-      hasMathMlValue(value.format)
-    );
-  }
   return false;
 }
 
@@ -45,7 +36,8 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
   metadata["Label"] = { value: term.label, isLink: false };
   metadata["Description"] = {
     value:
-      term.definition ?? TsTerm.getAnnotationValue(term?.annotation?.definition),
+      term.definition ??
+      TsTerm.getAnnotationValue(term?.annotation?.definition),
     isLink: false,
   };
   if (term.originalOntology !== term.ontologyId) {
@@ -75,6 +67,50 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
   return metadata;
 }
 
+function renderMathRelatedMetadata(
+  term: TsTerm,
+  metadata: TableMetadata,
+  key: string,
+) {
+  let annotation = term.annotation[key];
+  metadata[key] = {
+    value: (
+      <QueryClientProvider client={mathWidgetQueryClient}>
+        <MathFormulaWidget
+          api={mathWidgetApi}
+          iri={term.iri}
+          mathProperty={TsTerm.getAnnotationOriginalIri(annotation, key)}
+          ontologyId={term.ontologyId}
+        />
+      </QueryClientProvider>
+    ),
+    isLink: false,
+  };
+  let mathFormulaAxioms = term.mathFormulaAxioms();
+  if (mathFormulaAxioms.length) {
+    metadata["in defining formula"] = {
+      value: mathFormulaAxioms.map((axiom: ProcessedAxiom, index: number) => {
+        return (
+          <div className="row" key={index}>
+            <div className="col-md-3">
+              <QueryClientProvider client={mathWidgetQueryClient}>
+                <MathFormulaWidget api="" mathML={axiom.mathValue} />
+              </QueryClientProvider>
+            </div>
+            <div className="col-md-4">
+              <p>{axiom.relationLabel}</p>
+            </div>
+            <div className="col-md-5">
+              <p>{axiom.targetLabel}</p>
+            </div>
+          </div>
+        );
+      }),
+      isLink: false,
+    };
+  }
+}
+
 function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
   // add custom annotation fields. Metadata key can be anything
   for (let key in term.annotation) {
@@ -91,21 +127,10 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
       annotKey = annotationKeyMap[key] ?? (key as string);
     }
     if (hasMathMlValue(annotationValue)) {
-      metadata[annotKey] = {
-        value: (
-          <QueryClientProvider client={mathWidgetQueryClient}>
-            <MathFormulaWidget
-              api={mathWidgetApi}
-              iri={term.iri}
-              mathProperty={TsTerm.getAnnotationOriginalIri(annotation, key)}
-              ontologyId={term.ontologyId}
-            />
-          </QueryClientProvider>
-        ),
-        isLink: false,
-      };
+      renderMathRelatedMetadata(term, metadata, annotKey);
       continue;
     }
+
     if (Array.isArray(annotationValue)) {
       let res: string[] = [];
       annotationValue.map((value: any) => {

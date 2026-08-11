@@ -151,6 +151,7 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
         "Domain",
         "Range",
         "Description",
+        "in defining formula",
       ].includes(metadataLabel)
     ) {
       return metadataValue;

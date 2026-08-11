@@ -8,6 +8,17 @@ export type TsAnnotation = {
   metadavalue: any;
 };
 
+type AxiomObject = {
+  value?: string;
+  axioms?: Record<string, string>[];
+};
+export type ProcessedAxiom = {
+  mathValue: string;
+  relationLabel: string;
+  targetLabel: string;
+  targetIri: string;
+};
+
 export class TsTerm {
   static TYPE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
   static ON_PROPERTY_URI = "http://www.w3.org/2002/07/owl#onProperty";
@@ -23,6 +34,7 @@ export class TsTerm {
     "http://www.w3.org/2002/07/owl#equivalentClass";
   static DISJOINTWITH_PURL = "http://www.w3.org/2002/07/owl#disjointWith";
   static RULE_PURL = "http://www.w3.org/ns/shacl#rule";
+  static IN_DEFINING_FORMULA_PURL = "https://portal.mardi4nfdi.de/entity/P983";
   static ANNOTATION_EXPECTION = [
     TsTerm.IDENTIFIER_PURL_HTTP,
     TsTerm.IDENTIFIER_PURL_HTTPS,
@@ -371,5 +383,32 @@ export class TsTerm {
       return annotation.originalIri;
     }
     return fallback;
+  }
+
+  mathFormulaAxioms(): ProcessedAxiom[] {
+    let axioms: AxiomObject[] =
+      this.term[TsTerm.IN_DEFINING_FORMULA_PURL] ?? [];
+    if (!axioms.length) {
+      return [];
+    }
+    let results: ProcessedAxiom[] = [];
+    for (let axiom of axioms) {
+      let mathValue = axiom.value ?? "";
+      for (let item of axiom.axioms) {
+        let [axiomKey, axiomVal] = Object.entries(item)[0];
+        let relationLabel =
+          this.term?.["linkedEntities"]?.[axiomKey]?.label?.[0];
+        let targetLabel = this.term?.["linkedEntities"]?.[axiomVal]?.label?.[0];
+        if (relationLabel && targetLabel) {
+          results.push({
+            mathValue: mathValue,
+            relationLabel: relationLabel,
+            targetLabel: targetLabel,
+            targetIri: axiomVal,
+          });
+        }
+      }
+    }
+    return results;
   }
 }
